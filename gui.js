@@ -2674,6 +2674,20 @@ IDE_Morph.prototype.settingsMenu = function () {
 
     menu = new MenuMorph(this);
     menu.addItem(_('Language...'), 'languageMenu');
+    if (shiftClicked) {
+        menu.addItem(
+            _(
+                'Generate {{ filename }} file...',
+                'lang-' + SnapTranslator.language + '.js'
+            ),
+            'generateLanguageFile',
+            _('EXPERIMENTAL!') + ' ' + _(
+                'builds the {{ language }} translation file',
+                SnapTranslator.languageName(SnapTranslator.language)
+            ),
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem(
         _('Zoom blocks...'),
         'userSetBlocksScale'
@@ -4455,13 +4469,21 @@ IDE_Morph.prototype.saveFileAs = function (
     */
     var blobIsSupported = false,
         world = this.world(),
+        mimeType,
         fileExt,
         dialog;
 
     // fileType is a <kind>/<ext>;<charset> format.
-    fileExt = fileType.split('/')[1].split(';')[0];
+    mimeType = fileType.split(';')[0];
+
     // handle text/plain as a .txt file
-    fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
+    if (mimeType === 'text/plain') {
+        fileExt = '.txt';
+    } else if (mimeType === 'application/javascript') {
+        fileExt = '.js';
+    } else {
+        fileExt = '.' + mimeType.split('/')[1];
+    }
 
     function dataURItoBlob(text, mimeType) {
         var i,
@@ -4975,6 +4997,49 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     this.saveSetting('language', lang);
     if (callback) {callback.call(this); }
 };
+
+// IDE_Morph generate language file
+
+IDE_Morph.prototype.generateLanguageFile = function() {
+    var extractor = new LangExtractor(),
+        message,
+        lang = SnapTranslator.language,
+        filename = 'lang-' + lang + '.js',
+        myself = this;
+
+    message = this.showMessage(
+        _('Generating {{ filename }} file...', filename)
+    );
+    extractor.loadDependencies()
+        .then(function () {
+            return extractor.extractStrings();
+        })
+        .then(function (strings) {
+            var contents = extractor.generateFile(
+                strings,
+                lang,
+                SnapTranslator.dict[lang],
+                { escape: true }
+            );
+            message.destroy();
+            myself.saveFileAs(
+                contents,
+                'application/javascript',
+                'lang-' + lang
+            );
+        })
+        .catch(function (error) {
+            message.destroy();
+            console.log(error);
+            myself.inform(
+                _(
+                    'Generate {{ filename }} file...',
+                    'lang-' + SnapTranslator.language + '.js'
+                ),
+                _('Could not generate the language file')
+            );
+        });
+}
 
 // IDE_Morph blocks scaling
 

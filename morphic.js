@@ -1249,7 +1249,8 @@ function _(string, replacements) {
     return string;
 }
 
-function _nop(string) {
+function _nop(string, replacements) {
+    // override this function with custom localizations
     return string;
 }
 
@@ -1302,6 +1303,10 @@ function isObject(target) {
     return target !== null &&
         (typeof target === 'object' || target instanceof Object);
 }
+
+function isArray(target) {
+    return Object.prototype.toString.call(target) === '[object Array]';
+};
 
 function radians(degrees) {
     return degrees * Math.PI / 180;

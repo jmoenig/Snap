@@ -40,7 +40,8 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains, isObject, containsKey */
+/*global modules, contains, isObject, isArray, isNil, containsKey,
+Promise, acorn*/
 
 modules.locale = '2018-March-09';
 
@@ -49,10 +50,29 @@ modules.locale = '2018-March-09';
 var Localizer;
 var SnapTranslator = new Localizer();
 
+/**
+ * Translates a string and marks it as localizable (extraible).
+ * @param {string} string This must be a 'literal' string
+ * @param {string|Object|*} [replacements={}]
+ */
 function _(string, replacements) {
     return SnapTranslator.translate(string, replacements);
 }
 
+/**
+ * Does not translates this string but marks it as localizable (extraible).
+ * @param {string} string This must be a 'literal' string
+ * @param {string|Object|*} [replacements={}]
+ */
+function _nop(string, replacements) {
+    return string;
+}
+
+/**
+ * Translates a string but marks it as non-localizable (non-extraible).
+ * @param {string} string This shouldn't be 'literal'
+ * @param {string|Object|*} [replacements={}]
+ */
 function _expr(expression, replacements) {
     return SnapTranslator.translate(expression, replacements);
 }
@@ -64,10 +84,25 @@ function Localizer(language, dict) {
     this.dict = dict || { 'en': { strings: {} } };
 }
 
-Localizer.prototype.lookup = function (string) {
-    return this.dict[this.language].strings[string];
+/**
+ * Looks up for a translation of a string
+ * @param {string} string
+ * @param {language} [language] target language, current by default
+ * @returns {string|undefined}
+ */
+Localizer.prototype.lookup = function (string, language) {
+    var lang = language || this.language;
+    return this.dict[lang]
+        ? this.dict[lang].strings[string]
+        : undefined;
 }
 
+/**
+ * Interpolates a template with {{ replacement }} parts
+ * @param {string} template
+ * @param {string|Object} [vars={}]
+ * @returns {string}
+ */
 Localizer.prototype.renderTemplate = function (template, vars) {
     var replacements = isObject(vars)
         ? function(match, key) {
@@ -79,18 +114,26 @@ Localizer.prototype.renderTemplate = function (template, vars) {
     return ('' + template).replace(/\{\{\s*(\w+)\s*\}\}/g, replacements);
 }
 
-Localizer.prototype.translate = function (string, replacements) {
+/**
+ * Translates and renders a string
+ * @param {string} string
+ * @param {string} [replacements={}]
+ * @param {string} [language] target language, current by default
+ * @returns {string}
+ */
+Localizer.prototype.translate = function (string, replacements, language) {
     var original = '' + string,
         matches,
-        translation;
+        translation,
+        lang = language || this.language;
 
-    translation = this.lookup(original);
+    translation = this.lookup(original, lang);
     if (translation) {
         return this.renderTemplate(translation, replacements);
     }
 
     // if none found... try the same string without trailing symbols
-    matches = original.match(/(\.\.\.|:|\.)$/)
+    matches = original.match(/(\.\.\.|:)$/)
     if (matches) {
         original = original.slice(0, -matches[1].length);
         return this.translate(original, replacements) + matches[1];
@@ -147,6 +190,612 @@ Localizer.prototype.unload = function () {
         });
 };
 
+// LangExtractor ////////////////////////////////////////////////////////
+
+function LangExtractor() {}
+
+LangExtractor._dependenciesLoaded = false;
+LangExtractor._cachedExtractedStrings = null;
+
+/**
+ * Load the required dependencies
+ * @returns {Promise}
+ */
+LangExtractor.prototype.loadDependencies = function() {
+    function loadScriptAsync(src) {
+        return new Promise(function(resolve, reject) {
+            var tag = document.createElement('script');
+            tag.addEventListener('load', resolve, true);
+            tag.addEventListener('error', reject, true);
+            tag.src = src;
+            document.head.appendChild(tag);
+        });
+    }
+
+    if (LangExtractor._dependenciesLoaded) {
+        return Promise.resolve();
+    }
+    return loadScriptAsync('acorn.min.js')
+        .then(function() {
+            return loadScriptAsync('walk.min.js');
+        })
+        .then(function() {
+            LangExtractor._dependenciesLoaded = true;
+        });
+};
+
+/**
+ * Extract the localizable (extraible) strings from the Snap! source code.
+ * @returns {Promise.<Object.<String, Array>>}
+ */
+LangExtractor.prototype.extractStrings = function() {
+    if (LangExtractor._cachedExtractedStrings) {
+        return Promise.resolve(LangExtractor._cachedExtractedStrings);
+     }
+
+    function flatten(array) {
+        return array.reduce(function(acc, curr) {
+            return acc.concat(curr);
+        }, []);
+    }
+
+    function groupByString(snapStrings) {
+        function reducer(acc, curr) {
+            if (!containsKey(acc, curr.string)) {
+                acc[curr.string] = [];
+            }
+            acc[curr.string].push(curr.location);
+            return acc;
+        }
+        return snapStrings.reduce(reducer, {});
+    }
+
+    return Promise.all([
+        this._parseJsFile('blocks.js'),
+        this._parseJsFile('byob.js'),
+        this._parseJsFile('cloud.js'),
+        this._parseJsFile('gui.js'),
+        this._parseJsFile('lists.js'),
+        this._parseJsFile('morphic.js'),
+        this._parseJsFile('objects.js'),
+        this._parseJsFile('paint.js'),
+        this._parseJsFile('store.js'),
+        this._parseJsFile('symbols.js'),
+        this._parseJsFile('tables.js'),
+        this._parseJsFile('threads.js'),
+        this._parseJsFile('widgets.js'),
+        this._parseJsFile('xml.js'),
+        this._parseResourceFile('libraries/LIBRARIES'),
+        this._parseResourceFile('backgrounds/BACKGROUNDS'),
+        this._parseResourceFile('costumes/COSTUMES'),
+        this._parseResourceFile('sounds/SOUNDS'),
+    ]).then(function(extractedStrings) {
+        LangExtractor._cachedExtractedStrings =
+            groupByString(flatten(extractedStrings));
+        return LangExtractor._cachedExtractedStrings;
+    });
+ };
+
+ /**
+  * Downloads and parses a JS file
+  * @param {string} filename
+  * @returns {Promise.<Object>}
+  */
+ LangExtractor.prototype._parseJsFile = function(filename) {
+    var myself = this;
+
+    return new Promise(function(resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.addEventListener('load', function() {
+            resolve(myself._parseJsCode(request.responseText, filename));
+         });
+        request.addEventListener('error', reject);
+        request.open('GET', filename);
+        request.overrideMimeType('text/plain; charset=utf-8');
+        request.send();
+    });
+};
+
+/**
+ * Parses a JS snippet and extract localizable (extraible) strings
+ * @param {string} sourceCode
+ * @param {string} filename
+ * @returns {Array.<Object.<String, String>>}
+ */
+LangExtractor.prototype._parseJsCode = function(sourceCode, filename) {
+    var strings = [],
+        ast,
+        myself = this,
+        functions = ['_', '_nop'];
+
+    ast = acorn.parse(sourceCode, { locations: true });
+    acorn.walk.simple(ast, {
+        CallExpression: function (acornNode) {
+            var originalString;
+            if (contains(functions, acornNode.callee.name)
+                && acornNode.arguments.length >= 0)
+            {
+                originalString = myself._extract1stArg(sourceCode, acornNode);
+                strings.push({
+                    string: myself._canonicalString(eval(originalString)),
+                    location: filename + ':' + acornNode.loc.start.line
+                });
+            }
+        }
+    });
+
+    return strings;
+};
+
+/**
+ * Extracts the first argument of an acorn node
+ * @param {string} sourceCode
+ * @param {Acorn Node} node
+ * @returns {string}
+ */
+LangExtractor.prototype._extract1stArg = function(sourceCode, node) {
+    var firstArg = node.arguments[0];
+    var expr = sourceCode.slice(firstArg.start, firstArg.end);
+    return expr;
+};
+
+/**
+ * Builds a canonical string (without trailing '...', ':', etc...)
+ * @param {string} string
+ * @returns {string}
+ */
+LangExtractor.prototype._canonicalString = function (string) {
+    return string
+        .replace(/\.\.\.$/, '')
+        .replace(/:$/, '');
+};
+
+/**
+ * Parses a Snap! resource file extract localizable (extraible) strings
+ * @param {string} filename
+ * @returns {Promise.<Array.<Object.<String, String>>>}
+ */
+LangExtractor.prototype._parseResourceFile = function(filename) {
+    var myself = this;
+
+    return new Promise(function(resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.addEventListener('load', function() {
+            var strings = [];
+            request.responseText
+                .split(/\n/)
+                .forEach(function(line, lineNr) {
+                    var fields = line.split(/\t/);
+                    fields.shift();
+                    fields.forEach(function(field) {
+                        strings.push({
+                            string: myself._canonicalString(field),
+                            location: filename + ':' + (lineNr + 1)
+                        });
+                    });
+                });
+            resolve(strings);
+        });
+        request.addEventListener('error', reject);
+        request.open('GET', filename);
+        request.overrideMimeType('text/plain; charset=utf-8');
+        request.send();
+    });
+};
+
+/**
+ * Generates a language file
+ * @param {Object.<String, Array.<String>} snapStrings extracted strings
+ * @param {string} lang language being generated
+ * @param {Object} langDict target language dictionary (metadata, strings)
+ * @param {Object} options generation options
+ */
+LangExtractor.prototype.generateFile = function (
+    snapStrings,
+    lang,
+    langDict,
+    options
+) {
+    var output = '',
+        section,
+        repls = Object.assign({}, { lang: lang }, langDict.metadata),
+        myself = this,
+        opts = options || {};
+
+    function quote (string) {
+        var safeStr;
+
+        if (isNil(string)) {
+            return 'undefined';
+        }
+
+        safeStr = (opts.escape)
+            ? myself._escape(string)
+            : string.replace(/\n/g, '\\n');
+        return "'" + safeStr.replace(/\'/g, "\\'") + "'";
+    }
+
+    function entry(key, value, comment) {
+        var output = '';
+
+        if (isArray(value)) {
+            output += quote(key) + ': [';
+            if (comment) output += ' // ' + comment;
+            output += '\n';
+            output += indent(value.map(quote).join(',\n'));
+            output += '\n],';
+        } else {
+            output += quote(key) + ':';
+            if (comment) output += ' // ' + comment;
+            output += '\n';
+            output += indent(quote(value), 1) + ',';
+        }
+
+        return output;
+    }
+
+    function indent(string, size) {
+        size = isFinite(size) ? size : 1;
+        return string.replace(/^/mg, ' '.repeat(4 * size));
+    }
+
+    // Header and metadata
+
+    output = this._renderBoilerplate(repls) + '\n\n';
+
+    output += '/* global SnapTranslator */\n\n';
+
+    output += '// Copy the following code snippet ' +
+        'and paste it in the locale.js file:\n';
+    output += '// ✂ - - - - - - - - - - - - - - - - -  -   -\n';
+
+    output += 'SnapTranslator.dict.' + lang + ' = {\n';
+
+    section = 'metadata: {\n';
+    section += indent(entry(
+        'name',
+        langDict.metadata.name,
+        'the name as it should appear in the language menu'
+    )) + '\n';
+    section += indent(entry(
+        'english_name',
+        langDict.metadata.english_name,
+        'the english name of the language'
+    )) + '\n'
+     section += indent(entry(
+         'translators',
+         langDict.metadata.translators,
+         'translators authors for the Translators tab'
+     )) + '\n';
+    section += indent(entry(
+        'last_changed',
+        langDict.metadata.last_changed,
+        'this, too, will appear in the Translators tab'
+    )) + '\n';
+    section += '},';
+
+    output += indent(section) + '\n';
+
+    output += indent('strings: {},') + '\n';
+    output += '};\n';
+    output += '// ✂ - - - - - - - - - - - - - - - - -  -   -\n\n';
+
+    // Strings
+
+    output += 'SnapTranslator.dict.' + lang + '.strings = {\n';
+    Object.keys(snapStrings)
+        .forEach(function(key) {
+            var comment = snapStrings[key].join(' '),
+                value;
+
+            if (
+                containsKey(langDict.strings, key)
+                && !isNil(langDict.strings[key])
+            ) {
+                value = langDict.strings[key];
+            } else {
+                value = undefined;
+            }
+            output += indent(entry(key, value, comment)) + '\n';
+        });
+    output += '};\n';
+
+    // Deprecated strings
+
+    output += '\n// ✂ - - - - - - - - - - - - - - - - -  -   -\n';
+    output += '// The following are strings that were ' +
+        'used once by Snap! but not anymore\n';
+    output += '// (or just mispelled strings)\n';
+    output += '// Feel free to delete or keep them for future references\n';
+    output += 'SnapTranslator.dict.' + lang + '.deprecated = {\n';
+    Object.keys(langDict.strings)
+        .filter(function (key) {
+            return !isNil(langDict.strings[key])
+                && !containsKey(snapStrings, key);
+        })
+        .forEach(function (key) {
+            output += indent(entry(key, langDict.strings[key])) + '\n';
+        });
+    output += '};\n';
+
+    return output;
+};
+
+/**
+ * Renders the lang-XX.js boilerplate
+ * @param {Object} replacements
+ * @returns {string}
+ */
+LangExtractor.prototype._renderBoilerplate = function (replacements) {
+//>>
+/*
+
+    lang-{{ lang }}.js
+
+    {{ english_name }} translation for Snap!
+
+    originally written by Jens Mönig
+    rewritten by Alfonso Ruzafa
+
+    Copyright (C) 2013 by Jens Mönig
+
+    This file is part of Snap!.
+
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    Note to Translators:
+    --------------------
+    At this stage of development, Snap! can be translated to any LTR language
+    maintaining the current order of inputs (formal parameters in blocks).
+
+    Translating Snap! is easy:
+
+
+    1. Create a translation from scratch:
+
+    Switch to the english version of Snap! (or choose one of the available
+    languages you are more comfortable with):
+
+        Settings > Language... > English
+
+    While holding the shift key, press the Settings button again. A dev-only
+    option will be shown: "Generate lang-XX.js file...". Click it and you will
+    download a file containing all Snap! translatable strings along with the
+    available translations for the language you choosed above and "undefined"
+    for those strings not yet translated.
+
+    Note that the Snap! original strings are written in english so no english
+    translation file is needed. That's because the lang-en.js will be full of
+    "undefined" translations. This is a good start point if you want to start
+    translating Snap! from scratch!
+
+
+    2. Edit
+
+    Edit the translation file with a regular text editor, or with your
+    favorite JavaScript editor.
+
+    Replace all occurrences of the "XX" from SnapTranslator.dict["XX"]
+    in the file with the two-letter ISO 639-1 code for your language,
+    e.g.
+
+        fr - French => SnapTranslator.dict['fr'] = {
+        it - Italian => SnapTranslator.dict['it'] = {
+        pl - Polish => SnapTranslator.dict['pl'] = {
+        pt - Portuguese => SnapTranslator.dict['pt'] = {
+        es - Spanish => SnapTranslator.dict['es'] = {
+        el - Greek => => SnapTranslator.dict['el'] = {
+
+    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
+
+    Also change the header file fields and the metadata... language name,
+    name in english and your contact info using the following format
+    (only the name is mandatory):
+
+        Your name <your@email.com> (your.homepage.com)
+
+    IMPORTANT:
+
+        Once edited, you MUST copy the metadata definition snippet and
+        paste at the end of the locale.js file. This will activate the support
+        for your language.
+
+        Rename the file you downloaded to lang-XX.js, with XX being the two
+        letter code you used previously.
+
+        Go back to to Snap! and reload the page. An entry with the name of
+        your language should be shown under the Languages menu.
+
+
+    3. Translate
+
+    Then work through the dictionary, providing your own translations as
+    values for the english key strings. The dictionary is a straight-forward
+    JavaScript ad-hoc object, for review purposes it should be formatted
+    as follows:
+
+        {
+            'English string': // morphic.js:783
+                'Translation string',
+            'last key':
+                undefined,
+            'a key with a {{ placeholder }}':
+                'this translation a {{ placeholder }} has',
+        }
+
+    and you only edit the indented value strings. Note that each key-value
+    pair needs to be delimited by a comma, but that there shouldn't be a comma
+    after the last pair (again, just overwrite the template file and you'll be
+    fine).
+
+    Placeholders are strings automatically provided by Snap! in runtime.
+    You are allowed to place in the most natural way in your translation,
+    or even ignore it completely if it's justified.
+
+    Also, note that is OK if you left an english string untranslated, that is,
+    its value set to "undefined". So you don't need to delete that key/value
+    pairs. Maybe a future translator would find a suitable translation for it.
+
+    If something doesn't work, or if you're unsure about the formalities you
+    should check your file with
+
+        <http://JSLint.com>
+
+    This will inform you about any missed commas etc.
+
+
+    4. Accented characters
+
+    Depending on which text editor and which file encoding you use you can
+    directly enter special characters (e.g. Umlaut, accented characters) on
+    your keyboard. However, I've noticed that some browsers may not display
+    special characters correctly, even if other browsers do. So it's best to
+    check your results in several browsers. If you want to be on the safe
+    side, it's even better to escape these characters using Unicode.
+
+        see: <http://0xcc.net/jsescape/>
+        and: <https://r12a.github.io/apps/conversion/>
+
+
+    5. Block specs:
+
+    At this time your translation of block specs will only work
+    correctly, if the order of formal parameters and their types
+    are unchanged. Placeholders for inputs (formal parameters) are
+    indicated by a preceding % prefix and followed by a type
+    abbreviation.
+
+    For example:
+
+        'say %s for %n secs'
+
+    can currently not be changed into
+
+        'say %n secs long %s'
+
+    and still work as intended.
+
+    Similarly
+
+        'point towards %dst'
+
+    cannot be changed into
+
+        'point towards %cst'
+
+    without breaking its functionality.
+
+
+    6. Submit
+
+    When you're done, send the lang-XX.js file to me for inclusion in the
+    official Snap! distribution.
+    Once your translation has been included, Your name will the shown in the
+    "Translators" tab in the "About Snap!" dialog box, and you will be able to
+    directly launch a translated version of Snap! in your browser by appending
+
+        lang:XX
+
+    to the URL, XX representing your translations two-letter code.
+
+
+    7. Known issues
+
+    In some browsers accents or ornaments located in typographic ascenders
+    above the cap height are currently (partially) cut-off.
+
+    Enjoy!
+    -Jens
+
+*/
+//<<
+    var safeReplacements = Object.assign({}, replacements, {
+        'placeholder': '{{ placeholder }}'
+    });
+    var blob = this._renderBoilerplate.toString()
+        .replace(/(.|[\r\n])+\/\/>>[\r\n]*/, '')
+        .replace(/[\r\n]*\/\/<<(.|[\r\n])+/, '');
+    return Localizer.prototype.renderTemplate(blob, safeReplacements);
+};
+
+/**
+ * Escapes javascript characters
+ * @param {string} string
+ * @returns {string}
+ */
+LangExtractor.prototype._escape = function (string) {
+    // Borrowed from https://github.com/r12a/r12a.github.io
+    function dec2hex4 (string) {
+        var hexequiv = [
+            '0','1','2','3','4','5','6','7',
+            '8','9','A','B','C','D','E','F'
+        ];
+        return hexequiv[(string >> 12) & 0xF] +
+            hexequiv[(string >> 8) & 0xF] +
+            hexequiv[(string >> 4) & 0xF] +
+            hexequiv[string & 0xF];
+    }
+
+    var highsurrogate = 0,
+        suppCP, pad, i, cc,
+        output = '';
+    for (i = 0; i < string.length; i++) {
+        cc = string.charCodeAt(i);
+        if (highsurrogate != 0) { // this is a supp char, and cc contains the low surrogate
+            if (0xDC00 <= cc && cc <= 0xDFFF) {
+                suppCP = 0x10000 + ((highsurrogate - 0xD800) << 10) +
+                    (cc - 0xDC00);
+                suppCP -= 0x10000;
+                output += '\\u' + dec2hex4( 0xD800 | (suppCP >> 10)) + '\\u' +
+                     dec2hex4(0xDC00 | (suppCP & 0x3FF));
+                highsurrogate = 0;
+                continue;
+            } else {
+                highsurrogate = 0;
+            }
+        }
+        if (0xD800 <= cc && cc <= 0xDBFF) { // start of supplementary character
+            highsurrogate = cc;
+        }
+        else {
+            switch (cc) {
+                case 0: output += '\\0'; break;
+                case 8: output += '\\b'; break;
+                case 9: output += '\\t'; break;
+                case 10: output += '\\n'; break;
+                case 13: output += '\\r'; break;
+                case 11: output += '\\v'; break;
+                case 12: output += '\\f'; break;
+                case 34: output += '"'; break;
+                case 39: output += '\''; break;
+                case 92: output += '\\\\'; break;
+                default:
+                    if (cc > 0x1F && cc < 0x7F) {
+                        output += String.fromCharCode(cc);
+                    }
+                    else {
+                        pad = cc.toString(16).toUpperCase();
+                        while (pad.length < 4) { pad = '0' + pad; }
+                        output += '\\u' + pad ;
+                    }
+            }
+        }
+    }
+    return output;
+};
 // SnapTranslator initialization ///////////////////////////////////////
 
 SnapTranslator.dict.en = {
