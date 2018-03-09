@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-05';
+modules.threads = '2018-March-09';
 
 var ThreadManager;
 var Process;
@@ -3002,6 +3002,17 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
     return those;
 };
 
+Process.prototype.setHeading = function (direction) {
+    var thisObj = this.blockReceiver();
+
+    if (thisObj) {
+        if (this.inputOption(direction) === 'random') {
+            direction = this.reportRandom(1, 36000) / 100;
+        }
+		thisObj.setHeading(direction);
+    }
+};
+
 Process.prototype.doFaceTowards = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj;
@@ -3009,6 +3020,8 @@ Process.prototype.doFaceTowards = function (name) {
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
+        } if (this.inputOption(name) === 'random position') {
+        	thisObj.setHeading(this.reportRandom(1, 36000) / 100);
         } else {
             if (name instanceof List) {
                 thisObj.faceToXY(
@@ -3030,11 +3043,20 @@ Process.prototype.doFaceTowards = function (name) {
 
 Process.prototype.doGotoObject = function (name) {
     var thisObj = this.blockReceiver(),
-        thatObj;
+        thatObj,
+        stage;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
+        } else if (this.inputOption(name) === 'random position') {
+	        stage = thisObj.parentThatIsA(StageMorph);
+    	    if (stage) {
+         		thisObj.setCenter(new Point(
+					this.reportRandom(stage.left(), stage.right()),
+                    this.reportRandom(stage.top(), stage.bottom())
+                ));
+         	}
         } else {
             if (name instanceof List) {
                 thisObj.gotoXY(

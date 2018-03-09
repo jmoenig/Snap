@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process*/
 
-modules.objects = '2018-March-08';
+modules.objects = '2018-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -209,7 +209,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point towards %dst'
+            spec: 'point towards %trg'
         },
         gotoXY: {
             only: SpriteMorph,
@@ -222,7 +222,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to %dst'
+            spec: 'go to %trg'
         },
         doGlide: {
             only: SpriteMorph,

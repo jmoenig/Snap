@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-February-15';
+modules.blocks = '2018-March-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -938,7 +938,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     '(90) right' : 90,
                     '(-90) left' : -90,
                     '(0) up' : '0',
-                    '(180) down' : 180
+                    '(180) down' : 180,
+                    'random' : ['random']
                 }
             );
             part.setContents(90);
@@ -1092,6 +1093,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 'distancesMenu',
+                true
+            );
+            break;
+        case '%trg': // target selection
+            part = new InputSlotMorph(
+                null,
+                false,
+                'targetsMenu',
                 true
             );
             break;
@@ -2095,6 +2104,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %spr    - chameleon colored rectangular drop-down for object-names
     %col    - chameleon colored rectangular drop-down for collidables
     %dst    - chameleon colored rectangular drop-down for distances
+    %trg    - chameleon colored rectangular drop-down for target destinations
     %cst    - chameleon colored rectangular drop-down for costume-names
     %eff    - chameleon colored rectangular drop-down for graphic effects
     %snd    - chameleon colored rectangular drop-down for sound names
@@ -8430,6 +8440,17 @@ InputSlotMorph.prototype.distancesMenu = function () {
         });
     }
     return dict;
+};
+
+InputSlotMorph.prototype.targetsMenu = function () {
+    var dict = {
+            'random position' : ['random position']
+        },
+        dst = this.distancesMenu();
+    Object.keys(dst).forEach(function (dstName) {
+    	dict[dstName] = dst[dstName];
+    });
+	return dict;
 };
 
 InputSlotMorph.prototype.clonablesMenu = function () {

@@ -4015,3 +4015,7 @@ Translation Updates:
 ------
 * Objects: fixed #2053
 * GUI: fixed #2052
+
+180309
+------
+* Blocks, Objects, Threads: added "random" option for "go to", "point towards" and "point in direction" primitives
