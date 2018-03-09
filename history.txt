@@ -4019,3 +4019,5 @@ Translation Updates:
 180309
 ------
 * Blocks, Objects, Threads: added "random" option for "go to", "point towards" and "point in direction" primitives
+
+=== v4.1.2.4 maintenance release ===
