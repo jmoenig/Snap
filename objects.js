@@ -209,7 +209,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point towards %trg'
+            spec: 'point towards %dst'
         },
         gotoXY: {
             only: SpriteMorph,
@@ -222,7 +222,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to %trg'
+            spec: 'go to %dst'
         },
         doGlide: {
             only: SpriteMorph,

@@ -1096,14 +1096,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
-        case '%trg': // target selection
-            part = new InputSlotMorph(
-                null,
-                false,
-                'targetsMenu',
-                true
-            );
-            break;
         case '%cln': // clones
             part = new InputSlotMorph(
                 null,
@@ -2104,7 +2096,6 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %spr    - chameleon colored rectangular drop-down for object-names
     %col    - chameleon colored rectangular drop-down for collidables
     %dst    - chameleon colored rectangular drop-down for distances
-    %trg    - chameleon colored rectangular drop-down for target destinations
     %cst    - chameleon colored rectangular drop-down for costume-names
     %eff    - chameleon colored rectangular drop-down for graphic effects
     %snd    - chameleon colored rectangular drop-down for sound names
@@ -8419,12 +8410,16 @@ InputSlotMorph.prototype.collidablesMenu = function () {
 };
 
 InputSlotMorph.prototype.distancesMenu = function () {
-    var dict = {
-            'mouse-pointer' : ['mouse-pointer']
-        },
+	var block = this.parentThatIsA(BlockMorph),
+        dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
+
+	if (block && (block.selector !== 'reportRelationTo')) {
+	    dict['random position'] = ['random position'];
+ 	}
+	dict['mouse-pointer'] = ['mouse-pointer'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
@@ -8440,17 +8435,6 @@ InputSlotMorph.prototype.distancesMenu = function () {
         });
     }
     return dict;
-};
-
-InputSlotMorph.prototype.targetsMenu = function () {
-    var dict = {
-            'random position' : ['random position']
-        },
-        dst = this.distancesMenu();
-    Object.keys(dst).forEach(function (dstName) {
-    	dict[dstName] = dst[dstName];
-    });
-	return dict;
 };
 
 InputSlotMorph.prototype.clonablesMenu = function () {
