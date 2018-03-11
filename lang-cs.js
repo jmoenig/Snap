@@ -342,8 +342,8 @@ SnapTranslator.dict.cs = {
         'pomysli si %s',
     'Hello!':
         'Ahoj!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'změň efekt %eff o %n',
     'set %eff effect to %n':
@@ -364,8 +364,8 @@ SnapTranslator.dict.cs = {
         'jdi do popředí',
     'go back %n layers':
         'jdi do pozadí o %n úrovní',
-    'development mode \ndebugging primitives:':
-        'vývojový mód \nladění primitiv',
+    'development mode\ndebugging primitives':
+        'vývojový mód\nladění primitiv',
     'console log %mult%s':
         'výstup do konsole: %mult%s',
     'alert %mult%s':
@@ -643,8 +643,8 @@ SnapTranslator.dict.cs = {
 
     // menus
     // snap menu
-    'About...':
-        'O programu...',
+    'About':
+        'O programu',
     'Snap! website':
         'Stránky Snap!',
     'Download source':
@@ -661,37 +661,37 @@ SnapTranslator.dict.cs = {
         'Referenční příručka',
 
     // project menu
-    'Project notes...':
-        'Poznámky k projektu...',
+    'Project notes':
+        'Poznámky k projektu',
     'New':
         'Nový',
-    'Open...':
-        'Otevřít...',
+    'Open':
+        'Otevřít',
     'Save':
         'Uložit',
-    'Save As...':
-        'Uložit jako...',
-    'Import...':
-        'Importovat...',
+    'Save As':
+        'Uložit jako',
+    'Import':
+        'Importovat',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Načíst exportovaný projekt, '
             + 'knihovnu bloků, kostýmy nebo zvuky',
-    'Export project as plain text...':
-        'Exportovat projekt jako prostý text...',
-    'Export project...':
-        'Exportovat projekt...',
+    'Export project as plain text':
+        'Exportovat projekt jako prostý text',
+    'Export project':
+        'Exportovat projekt',
     'show project data as XML\nin a new browser window':
-        'zobrazit data projektu jako xml  XML\n v novém okně prohlížeče',
-    'Export blocks...':
-        'Exportovat bloky...',
+         'zobrazit data projektu jako xml XML\nv novém okně prohlížeče',
+    'Export blocks':
+        'Exportovat bloky',
     'show global custom block definitions as XML\nin a new browser window':
         'Zobrazit definici vlastních bloků jako\nXML v novém okně prohlížeče',
     'Import tools':
         'Importovat nástroje',
     'load the official library of\npowerful blocks':
         'nahraje oficialní knihovnu\npokročilých bloků',
-    'Libraries...':
-        'Knihovny...',
+    'Libraries':
+        'Knihovny',
     'Import library':
         'Importovat knihovnu',
         
@@ -701,37 +701,37 @@ SnapTranslator.dict.cs = {
         'Vyberte si zvuk z knihovny médií',
 
     // cloud menu
-    'Login...':
-        'Přihlásit...',
-    'Signup...':
-        'Vytvořit účet...',
-    'Reset Password...':
-        'Resetovat heslo...',
+    'Login':
+        'Přihlásit',
+    'Signup':
+        'Vytvořit účet',
+    'Reset Password':
+        'Resetovat heslo',
 
     'Sign in':
         'Přihlásit se',
-    'User name:':
-        'Uživatelské jméno:',
-    'Password:':
-        'Heslo:',
+    'User name':
+        'Uživatelské jméno',
+    'Password':
+        'Heslo',
     'stay signed in on this computer\nuntil logging out':
         'zůstaň přihlášen na tomto počítači\naž do odhlášení',
     'Reset password':
         'Resetuj heslo',
     'Sign up':
         'Vytvořit účet',
-    'Birth date:':
-        'Datum narození:',
-    'year:':
-        'rok:',
-    'E-mail address:':
-        'E-mailová adresa:',
-    'E-mail address of parent or guardian:':
-        'E-mailová adresa rodiče či opatrovníka:',
-    'Terms of Service...':
-        'Podmínky služby...',
-    'Privacy...':
-        'Politika soukromí...',
+    'Birth date':
+        'Datum narození',
+    'year':
+        'rok',
+    'E-mail address':
+        'E-mailová adresa',
+    'E-mail address of parent or guardian':
+        'E-mailová adresa rodiče či opatrovníka',
+    'Terms of Service':
+        'Podmínky služby',
+    'Privacy':
+        'Politika soukromí',
     'I have read and agree\nto the Terms of Service':
         'Četl jsem a souhlasím s podímkami služby',
     'January':
@@ -772,12 +772,12 @@ SnapTranslator.dict.cs = {
         'Hesla se neshodují.',
                         
     // settings menu
-    'Language...':
-        'Jazyk...',
-    'Zoom blocks...':
-        'Velikost bloků...',
-    'Stage size...':
-        'Velikost scény...',
+    'Language':
+        'Jazyk',
+    'Zoom blocks':
+        'Velikost bloků',
+    'Stage size':
+        'Velikost scény',
     'Stage size':
         'Velikost scény',
     'Stage width':
@@ -789,7 +789,7 @@ SnapTranslator.dict.cs = {
     'uncheck to use solid drop\nshadows and highlights':
         'odškrtnutím se použijí\nostré stíny a světla',
     'check to use blurred drop\nshadows and highlights':
-        'zaškrtni pro použití \nměkkých stínů a světel',
+        'zaškrtni pro použití\nměkkých stínů a světel',
     'Zebra coloring':
         'Střídavé barvy',
     'check to enable alternating\ncolors for nested blocks':
@@ -885,20 +885,20 @@ SnapTranslator.dict.cs = {
     // inputs
     'with inputs':
         's položkami',
-    'input names:':
-        'proměnné:',
-    'Input Names:':
-        'Proměnné:',
+    'input names':
+        'proměnné',
+    'Input Names':
+        'Proměnné',
 
     // context menus:
     'help':
         'nápověda',
 
     // blocks:
-    'help...':
-        'nápověda...',
-    'relabel...':
-            'Zaměnit blok za...',
+    'help':
+        'nápověda',
+    'relabel':
+            'Zaměnit blok za',
     'duplicate':
         'kopírovat',
     'make a copy\nand pick it up':
@@ -907,8 +907,8 @@ SnapTranslator.dict.cs = {
             'kopírovat pouze tento blok',
     'delete':
         'smazat',
-    'script pic...':
-        'obrázek skriptu...',
+    'script pic':
+        'obrázek skriptu',
     'open a new window\nwith a picture of this script':
         'otevřít nové okno\ns obrázkem tohoto skriptu',
     'ringify':
@@ -917,18 +917,18 @@ SnapTranslator.dict.cs = {
         'zrušit zabalení',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'smazat definici bloku',
-    'edit...':
-        'upravit...',
+    'edit':
+        'upravit',
 
     // sprites:
     'edit':
         'upravit',
     'move':
         'přesunout',
-    'export...':
-        'export...',
+    'export':
+        'export',
     'paint a new sprite':
         'nakreslit nový sprite',
 
@@ -943,8 +943,8 @@ SnapTranslator.dict.cs = {
         'zarovnat skripty vertikálně',
     'add comment':
         'přidat komentář',
-    'make a block...':
-        'vytvořit blok...',
+    'make a block':
+        'vytvořit blok',
 
     // costumes
     'rename':
@@ -1022,8 +1022,8 @@ SnapTranslator.dict.cs = {
         'Smazat projekt',
     'Are you sure you want to delete':
         'Jste si jisti, že chcete projekt smazat?',
-    'rename...':
-        'přejmenovat...',
+    'rename':
+        'přejmenovat',
 
     // costume editor
     'Costume Editor':
@@ -1042,8 +1042,8 @@ SnapTranslator.dict.cs = {
         'Nahradit stávající projekt novým?',
 
     // save project
-    'Save Project As...':
-        'Uložit projekt jako...',
+    'Save Project As':
+        'Uložit projekt jako',
 
     // export blocks
     'Export blocks':
@@ -1121,8 +1121,8 @@ SnapTranslator.dict.cs = {
         'Boolean\n(nevyhodnoceno)',
     'Single input.':
         'Jednoduchý vstup.',
-    'Default Value:':
-        'Výchozí hodnota:',
+    'Default Value':
+        'Výchozí hodnota',
     'Multiple inputs (value is list of inputs)':
         'Více vstupů (hodnoty v seznamu)',
     'Upvar - make internal variable visible to caller':
@@ -1131,20 +1131,20 @@ SnapTranslator.dict.cs = {
     // About Snap
     'About Snap':
         'O programu Snap',
-    'Back...':
-        'Zpět...',
-    'License...':
-        'Licence...',
-    'Modules...':
-        'Moduly...',
-    'Credits...':
-        'Přispěvatelé...',
-    'Translators...':
+    'Back':
+        'Zpět',
+    'License':
+        'Licence',
+    'Modules':
+        'Moduly',
+    'Credits':
+        'Přispěvatelé',
+    'Translators':
         'Překladatelé',
     'License':
         'Licence',
-    'current module versions:':
-        'aktuální verze modulů:',
+    'current module versions':
+        'aktuální verze modulů',
     'Contributors':
         'Přispěvatelé',
     'Translations':
@@ -1157,22 +1157,22 @@ SnapTranslator.dict.cs = {
         'velký',
     'slider':
         'posuvník',
-    'slider min...':
-        'minimum...',
-    'slider max...':
-        'maximum...',
+    'slider min':
+        'minimum',
+    'slider max':
+        'maximum',
     'Slider minimum value':
         'minimální hodnota posuvníku',
     'Slider maximum value':
         'Maximální hodnota posuvníku',
 
     // list watchers
-    'length: ':
-        'délka: ',
+    'length':
+        'délka',
 
     // coments
-    'add comment here...':
-        'přidat sem komentář...',
+    'add comment here':
+        'přidat sem komentář',
 
     // drow downs
     // directions
@@ -1295,8 +1295,8 @@ SnapTranslator.dict.cs = {
         '9',
 
     // messages
-    'new...':
-        'Nový...',
+    'new':
+        'Nový',
 
     // math functions
     'abs':

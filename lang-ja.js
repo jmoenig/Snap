@@ -339,8 +339,8 @@ SnapTranslator.dict.ja = {
         '%s と考える',
     'Hello!':
         'こんにちは!',
-    'Hmm...':
-        'うーん...',
+    'Hmm':
+        'うーん',
     'change %eff effect by %n':
         '%eff の効果を %n ずつ変える',
     'set %eff effect to %n':
@@ -362,8 +362,8 @@ SnapTranslator.dict.ja = {
     'go back %n layers':
         '%n 層下げる',
 
-    'development mode \ndebugging primitives:':
-        '開発者モード\nデバッグ用プリミティブ:',
+    'development mode\ndebugging primitives':
+        '開発者モード\nデバッグ用プリミティブ',
     'console log %mult%s':
         'コンソールログ %mult%s',
     'alert %mult%s':
@@ -600,8 +600,8 @@ SnapTranslator.dict.ja = {
 
     // menus
     // snap menu
-    'About...':
-        'Snap!について...',
+    'About':
+        'Snap!について',
     'Snap! website':
         'Snap!のWebサイト',
     'Download source':
@@ -616,30 +616,30 @@ SnapTranslator.dict.ja = {
         'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターを有効にする',
 
     // project menu
-    'Project notes...':
-        'プロジェクトのメモ...',
+    'Project notes':
+        'プロジェクトのメモ',
     'New':
         '新規',
-    'Open...':
-        '開く...',
+    'Open':
+        '開く',
     'Save':
         '保存',
-    'Save As...':
-        '名前をつけて保存...',
-    'Import...':
-        '読み込み...',
+    'Save As':
+        '名前をつけて保存',
+    'Import':
+        '読み込み',
     'load an exported project file\nor block library, a costume\nor a sound':
         'チェックするとレポーターをドラッグ&ドロップするとき\n'
 		+ '空のレポーターにフォーカスします\n\n'
 		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text...':
-        'テキストファイルとしてプロジェクトを書き出す...',
-    'Export project...':
-        'プロジェクトを書き出す...',
+    'Export project as plain text':
+        'テキストファイルとしてプロジェクトを書き出す',
+    'Export project':
+        'プロジェクトを書き出す',
     'show project data as XML\nin a new browser window':
         'プロジェクトのデータをXMLとして\nブラウザの新しいウインドウに表示する',
-    'Export blocks...':
-        'ブロックを書き出す...',
+    'Export blocks':
+        'ブロックを書き出す',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックの定義をXMLとして\nブラウザの新しいウインドウに表示する',
     'Import tools':
@@ -648,16 +648,16 @@ SnapTranslator.dict.ja = {
         '強力なブロックの公式\nライブラリを読み込む',
 
     // cloud menu
-    'Login...':
-        'ログイン...',
-    'Signup...':
-        'サインアップ...',
+    'Login':
+        'ログイン',
+    'Signup':
+        'サインアップ',
 
     // settings menu
-    'Language...':
-        '言語...',
-    'Zoom blocks...':
-        'ブロックをズーム...',
+    'Language':
+        '言語',
+    'Zoom blocks':
+        'ブロックをズーム',
     'Blurred shadows':
         '半透明の影',
     'uncheck to use solid drop\nshadows and highlights':
@@ -734,20 +734,20 @@ SnapTranslator.dict.ja = {
     // inputs
     'with inputs':
         '引数',
-    'input names:':
-        '引数名:',
-    'Input Names:':
-        '引数名:',
-    'input list:':
-        '引数リスト:',
+    'input names':
+        '引数名',
+    'Input Names':
+        '引数名',
+    'input list':
+        '引数リスト',
 
     // context menus:
     'help':
         'ヘルプ',
 
     // blocks:
-    'help...':
-        'ヘルプ...',
+    'help':
+        'ヘルプ',
     'duplicate':
         '複製',
     'make a copy\nand pick it up':
@@ -756,8 +756,8 @@ SnapTranslator.dict.ja = {
         'このブロックをコピーするだけ',
     'delete':
         '削除',
-    'script pic...':
-        'スクリプトの画像...',
+    'script pic':
+        'スクリプトの画像',
     'open a new window\nwith a picture of this script':
         'このスクリプトの画像を表示する新しいウィンドウを開きます',
     'ringify':
@@ -766,22 +766,22 @@ SnapTranslator.dict.ja = {
         '非リング化',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'ブロックの定義を削除',
-    'edit...':
-        '編集...',
+    'edit':
+        '編集',
 
     // sprites:
     'edit':
         '編集',
-    'export...':
-        '書き出し...',
+    'export':
+        '書き出し',
 
     // stage:
     'show all':
         'すべてを表示',
-    'pic...':
-        '画像...',
+    'pic':
+        '画像',
     'open a new window\nwith a picture of the stage':
         'このステージの画像で\n新しいウィンドウを開く',
 
@@ -792,8 +792,8 @@ SnapTranslator.dict.ja = {
         'スクリプトを\n縦に整列します',
     'add comment':
         'コメントを追加',
-    'make a block...':
-        'ブロックを作る...',
+    'make a block':
+        'ブロックを作る',
 
     // costumes
     'rename':
@@ -871,8 +871,8 @@ SnapTranslator.dict.ja = {
         'プロジェクトを削除',
     'Are you sure you want to delete':
         '本当に削除しますか',
-    'rename...':
-        '名前を変更...',
+    'rename':
+        '名前を変更',
 
     // costume editor
     'Costume Editor':
@@ -895,8 +895,8 @@ SnapTranslator.dict.ja = {
         'プロジェクトを開く',
 
     // save project
-    'Save Project As...':
-        '名前を付けてプロジェクトを保存...',
+    'Save Project As':
+        '名前を付けてプロジェクトを保存',
 
     // export blocks
     'Export blocks':
@@ -968,15 +968,15 @@ SnapTranslator.dict.ja = {
     'Command\n(inline)':
         'コマンド\n(インライン)',
     'Command\n(C-shape)':
-        'コマンド \n(C形)',
+        'コマンド\n(C形)',
     'Any\n(unevaluated)':
         '任意\n(未評価)',
     'Boolean\n(unevaluated)':
         '真偽値\n(未評価)',
     'Single input.':
         '単一引数.',
-    'Default Value:':
-        'デフォルト値:',
+    'Default Value':
+        'デフォルト値',
     'Multiple inputs (value is list of inputs)':
         '複数の引数 (値は引数のリスト)',
     'Upvar - make internal variable visible to caller':
@@ -985,22 +985,22 @@ SnapTranslator.dict.ja = {
    // About Snap
     'About Snap':
         'Snapについて',
-    'Back...':
-        '戻る...',
-    'License...':
-        'ライセンス...',
-    'Modules...':
-        'モジュール...',
-    'Credits...':
-        'クレジット...',
-    'Translators...':
+    'Back':
+        '戻る',
+    'License':
+        'ライセンス',
+    'Modules':
+        'モジュール',
+    'Credits':
+        'クレジット',
+    'Translators':
         '翻訳者',
     'License':
         'ライセンス',
-    'current module versions:':
-        '現在のモジュールのバージョン:',
+    'current module versions':
+        '現在のモジュールのバージョン',
     'Contributors':
-        '貢献者:',
+        '貢献者',
     'Translations':
         '翻訳',
 
@@ -1011,24 +1011,24 @@ SnapTranslator.dict.ja = {
         '大',
     'slider':
         'スライダー',
-    'slider min...':
-        'スライダーの最小値...',
-    'slider max...':
-        'スライダーの最大値...',
-    'import...':
-        '読み込み...',
+    'slider min':
+        'スライダーの最小値',
+    'slider max':
+        'スライダーの最大値',
+    'import':
+        '読み込み',
     'Slider minimum value':
         'スライダーの最小値',
     'Slider maximum value':
         'スライダーの最大値',
 
     // list watchers
-    'length: ':
-        '長さ: ',
+    'length':
+        '長さ',
 
     // coments
-    'add comment here...':
-        'ここにコメントを追加...',
+    'add comment here':
+        'ここにコメントを追加',
 
     // drow downs
     // directions
@@ -1144,8 +1144,8 @@ SnapTranslator.dict.ja = {
         '9',
 
     // messages
-    'new...':
-        '新規...',
+    'new':
+        '新規',
 
     // math functions
     'abs':
@@ -1196,22 +1196,22 @@ SnapTranslator.dict.ja = {
         'リファレンスマニュアル',
     'Sign in':
         'サインイン',
-    'User name:':
-        'ユーザー名:',
-    'Password:':
-        'パスワード:',
+    'User name':
+        'ユーザー名',
+    'Password':
+        'パスワード',
     'stay signed in on this computer\nuntil logging out':
         'ログアウトするまでこのコンピューターに\nサインインしたままにする',
     'Sign up':
         'サインアップ',
-    'User name:':
-        'ユーザー名:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        '誕生月:',
-    'Birth date:':
-        '年:',
+    'User name':
+        'ユーザー名',
+    'Password':
+        'パスワード',
+    'Birth date':
+        '誕生月',
+    'Birth date':
+        '年',
     'January':
         '1月',
     'February':
@@ -1238,12 +1238,12 @@ SnapTranslator.dict.ja = {
         '12月',
     '1993 or before':
         '1993年以前',
-    'E-mail address:':
-        '電子メールアドレス:',
-    'Terms of Service...':
-        'サービス利用規約...',
-    'Privacy...':
-        '個人情報...',
+    'E-mail address':
+        '電子メールアドレス',
+    'Terms of Service':
+        'サービス利用規約',
+    'Privacy':
+        '個人情報',
     'I have read and agree\nto the Terms of Service':
         'サービス利用規約を読み\nそれに同意します',
 

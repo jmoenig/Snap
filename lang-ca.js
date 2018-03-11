@@ -342,8 +342,8 @@ SnapTranslator.dict.ca = {
         'pensa %s',
     'Hello!':
         'Hola!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'augmenta l\'efecte %eff en %n',
     'set %eff effect to %n':
@@ -365,8 +365,8 @@ SnapTranslator.dict.ca = {
     'go back %n layers':
         'vés %n capes darrera',
 
-    'development mode \ndebugging primitives:':
-        'mode de desenvolupament \nprimitives de depuració',
+    'development mode\ndebugging primitives':
+        'mode de desenvolupament\nprimitives de depuració',
     'console log %mult%s':
         'log per consola: %mult%s',
     'alert %mult%s':
@@ -659,7 +659,7 @@ SnapTranslator.dict.ca = {
 
     // menus
     // snap menu
-    'About...':
+    'About':
         'Sobre Snap!',
     'Reference manual':
         'Manual de referència',
@@ -677,12 +677,12 @@ SnapTranslator.dict.ca = {
         'habilita els menús\ncontextuals de\nMorphic i inspectors,\nmode expert!',
 
     // project menu
-    'Project notes...':
-        'Notes del projecte...',
+    'Project notes':
+        'Notes del projecte',
     'New':
         'Nou',
-    'Open...':
-        'Obre...',
+    'Open':
+        'Obre',
     'Save':
         'Desa',
     'Save to disk':
@@ -690,26 +690,26 @@ SnapTranslator.dict.ca = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'desa aquest projecte\na la carpeta de descàrregues\n'
             + '(en navegadors que ho suportin)',
-    'Save As...':
-        'Anomena i desa...',
-    'Import...':
-        'Importa...',
+    'Save As':
+        'Anomena i desa',
+    'Import':
+        'Importa',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Importa projectes, blocs,\nimatges o sons',
 
 
-    'Export project as plain text...':
-        'Exporta el projecte...',
-    'Export project...':
-        'Exporta el projecte...',
+    'Export project as plain text':
+        'Exporta el projecte',
+    'Export project':
+        'Exporta el projecte',
     'show project data as XML\nin a new browser window':
         'mostra tot el projecte en format XML\nen una altra finestra del navegador',
-    'Export blocks...':
-        'Exporta els blocs...',
+    'Export blocks':
+        'Exporta els blocs',
     'show global custom block definitions as XML\nin a new browser window':
         'exporta els blocs personalitzats que triis\nen un arxiu en format XML',
-    'Unused blocks...':
-        'Blocs no utilitzats...',
+    'Unused blocks':
+        'Blocs no utilitzats',
     'find unused global custom blocks\nand remove their definitions':
         'cerca els blocs personalitzats globals\nque no s\'utilitzan per poder esborrar-los',
     'Remove unused blocks':
@@ -718,9 +718,9 @@ SnapTranslator.dict.ca = {
         'no hi ha cap bloc\npersonalitzat no utilitzat\nen aquest projecte',
     'unused block(s) removed':
         'bloc(s) personalitzats no utilitzats esborrats',
-    'Export summary...':
-        'Exporta el resum...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Exporta el resum',
+    'open a new browser browser window\nwith a summary of this project':
         'Obre una finestra del navegador\namb un resum d\'aquest projecte',
 
     'Contents':
@@ -739,24 +739,24 @@ SnapTranslator.dict.ca = {
         'Importa eines',
     'load the official library of\npowerful blocks':
         'Carrega la llibreria\noficial de blocs avançats',
-    'Libraries...':
-        'Llibreries...',
+    'Libraries':
+        'Llibreries',
     'Import library':
         'Importa una llibreria',
 
     // cloud menu
-    'Login...':
-        'Inicia la sessió...',
-    'Signup...':
-        'Registra\'t...',
+    'Login':
+        'Inicia la sessió',
+    'Signup':
+        'Registra\'t',
 
     // settings menu
-    'Language...':
-        'Llengua...',
-    'Zoom blocks...':
-        'Mida dels blocs...',
-    'Stage size...':
-        'Mida de l\'escenari...',
+    'Language':
+        'Llengua',
+    'Zoom blocks':
+        'Mida dels blocs',
+    'Stage size':
+        'Mida de l\'escenari',
     'Stage size':
         'Mida de l\'escenari',
     'Stage width':
@@ -875,12 +875,12 @@ SnapTranslator.dict.ca = {
     // inputs
     'with inputs':
         'amb entrades',
-    'input names:':
-        'noms d\'entrades:',
-    'Input Names:':
-        'Noms d\'entrades:',
-    'input list:':
-        'llista d\'entrades:',
+    'input names':
+        'noms d\'entrades',
+    'Input Names':
+        'Noms d\'entrades',
+    'input list':
+        'llista d\'entrades',
 
     // context menus:
     'help':
@@ -895,10 +895,10 @@ SnapTranslator.dict.ca = {
         'mostra els blocs primitius',
 
     // blocks:
-    'help...':
-        'ajuda...',
-    'relabel...':
-        'blocs similars...',
+    'help':
+        'ajuda',
+    'relabel':
+        'blocs similars',
     'duplicate':
         'duplica\'m',
     'make a copy\nand pick it up':
@@ -907,8 +907,8 @@ SnapTranslator.dict.ca = {
         'duplica només aquest bloc',
     'delete':
         'esborra\'m',
-    'script pic...':
-        'mostra la meva imatge...',
+    'script pic':
+        'mostra la meva imatge',
     'open a new window\nwith a picture of this script':
         'obre una nova finestra\namb una imatge d\'aquest programa',
     'ringify':
@@ -925,10 +925,10 @@ SnapTranslator.dict.ca = {
         'nova línia',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'esborra la definició d\'aquest bloc',
-    'edit...':
-        'edita...',
+    'edit':
+        'edita',
 
     // sprites:
     'edit':
@@ -945,10 +945,10 @@ SnapTranslator.dict.ca = {
         'desenganxa de',
     'detach all parts':
         'desenganxa totes les parts',
-    'export...':
-        'exporta...',
-    'parent...':
-        'pare...',
+    'export':
+        'exporta',
+    'parent':
+        'pare',
     'current parent':
         'pare actual',
     'release':
@@ -959,8 +959,8 @@ SnapTranslator.dict.ca = {
     // stage:
     'show all':
         'mostra\'ls tots',
-    'pic...':
-        'exporta com a imatge...',
+    'pic':
+        'exporta com a imatge',
     'open a new window\nwith a picture of the stage':
         'obre una nova finestra\namb una foto de l\'escenari',
 
@@ -979,12 +979,12 @@ SnapTranslator.dict.ca = {
         'refés',
     'use the keyboard\nto enter blocks':
     	'utilitza el teclat\nper escriure els blocs',
-    'scripts pic...':
-        'exporta com a imatge...',
+    'scripts pic':
+        'exporta com a imatge',
     'open a new window\nwith a picture of all scripts':
         'obre una nova finestra\namb la imatge d\'aquests programes',
-    'make a block...':
-        'crea un bloc...',
+    'make a block':
+        'crea un bloc',
 
     // costumes
     'rename':
@@ -1007,12 +1007,12 @@ SnapTranslator.dict.ca = {
         'canvia el nom del so',
 
     // lists and tables
-    'list view...':
-        'vista en format de llista...',
-    'table view...':
-        'vista en format de taula...',
-    'open in dialog...':
-        'obre en una finestra...',
+    'list view':
+        'vista en format de llista',
+    'table view':
+        'vista en format de taula',
+    'open in dialog':
+        'obre en una finestra',
     'reset columns':
         'reinicialitza les columnes',
     'items':
@@ -1072,8 +1072,8 @@ SnapTranslator.dict.ca = {
         'Esborra un projecte',
     'Are you sure you want to delete':
         'Segur que vols esborrar',
-    'rename...':
-        'canvia el nom...',
+    'rename':
+        'canvia el nom',
 
     // costume editor
     'Costume Editor':
@@ -1092,8 +1092,8 @@ SnapTranslator.dict.ca = {
         'Vols substituir el projecte actual per un de nou?',
 
     // save project
-    'Save Project As...':
-        'Anomena i desa el projecte...',
+    'Save Project As':
+        'Anomena i desa el projecte',
 
     // export blocks
     'Export blocks':
@@ -1116,8 +1116,8 @@ SnapTranslator.dict.ca = {
     // variables refactoring
     'rename only\nthis reporter':
         'reanomena només\naquesta instància',
-    'rename all...':
-        'reanomena arreu...',
+    'rename all':
+        'reanomena arreu',
     'rename all blocks that\naccess this variable':
         'reanomena totes les instàncies\nd\'aquesta variable',
 
@@ -1182,8 +1182,8 @@ SnapTranslator.dict.ca = {
         'Booleà\n(sense avaluar)',
     'Single input.':
         'Entrada única.',
-    'Default Value:':
-        'Valor predeterminat:',
+    'Default Value':
+        'Valor predeterminat',
     'Multiple inputs (value is list of inputs)':
         'Entrades múltiples (el valor és una llista d\'entrades)',
     'Upvar - make internal variable visible to caller':
@@ -1192,19 +1192,19 @@ SnapTranslator.dict.ca = {
     // About Snap
     'About Snap':
         'Sobre Snap',
-    'Back...':
-        'Enrere...',
-    'License...':
-        'Llicència...',
-    'Modules...':
-        'Mòduls...',
-    'Credits...':
-        'Crèdits...',
-    'Translators...':
+    'Back':
+        'Enrere',
+    'License':
+        'Llicència',
+    'Modules':
+        'Mòduls',
+    'Credits':
+        'Crèdits',
+    'Translators':
         'Traductors',
     'License':
         'Llicència',
-    'current module versions:':
+    'current module versions':
         'versions actuals dels mòduls',
     'Contributors':
         'Col·laboradors',
@@ -1218,24 +1218,24 @@ SnapTranslator.dict.ca = {
         'gran',
     'slider':
         'lliscador',
-    'slider min...':
-        'valor mínim del lliscador...',
-    'slider max...':
-        'valor màxim del lliscador...',
-    'import...':
-        'importa...',
+    'slider min':
+        'valor mínim del lliscador',
+    'slider max':
+        'valor màxim del lliscador',
+    'import':
+        'importa',
     'Slider minimum value':
-        'Valor mínim del lliscador...',
+        'Valor mínim del lliscador',
     'Slider maximum value':
-        'Valor màxim del lliscador...',
+        'Valor màxim del lliscador',
 
     // list watchers
-    'length: ':
-        'longitud: ',
+    'length':
+        'longitud',
 
     // coments
-    'add comment here...':
-        'afegeix un comentari aquí...',
+    'add comment here':
+        'afegeix un comentari aquí',
 
     // drow downs
     // directions
@@ -1373,8 +1373,8 @@ SnapTranslator.dict.ca = {
         '9',
 
     // messages
-    'new...':
-        'nou...',
+    'new':
+        'nou',
 
     // math functions
     'abs':
@@ -1486,7 +1486,7 @@ SnapTranslator.dict.ca = {
     'inherited':
         'heretat',
     'check to inherit\nfrom':
-        'marqueu per heretar\n de',
+        'marqueu per heretar\nde',
     'uncheck to\ndisinherit':
         'desmarqueu per a\ndesheretar',
 
@@ -1503,11 +1503,11 @@ SnapTranslator.dict.ca = {
         'Objectes de primera classe',
     'uncheck to disable support\nfor first-class sprites':
         'desmarqueu per deshabilitar el suport\nals objectes de primera classe.',
-    'check to enable support\n for first-class sprite':
+    'check to enable support\nfor first-class sprite':
         'marqueu per habilitar el suport\nals objectes de primera classe.',
     'Live coding support':
         'Suport per a la programació dinàmica',
-    'EXPERIMENTAL! check to enable\n live custom control structures':
+    'EXPERIMENTAL! check to enable\nlive custom control structures':
         'EXPERIMENTAL! marqueu per habilitar\nel control dinàmic d\'estructures personalitzades.',
     'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
         'EXPERIMENTAL! desmarqueu per deshabilitar\nel control dinàmic d\'estructures personalitzades.',
@@ -1525,8 +1525,8 @@ SnapTranslator.dict.ca = {
         'invertir ↔',
     'flip ↕':
         'invertir ↕',
-    'Export all scripts as pic...':
-        'Exporta tots els programes com una imatge…',
+    'Export all scripts as pic':
+        'Exporta tots els programes com una imatge',
     'show a picture of all scripts\nand block definitions':
         'mostra una imatge de tots els programes\ni les definicions de blocs',
     'current %dates':
@@ -1547,8 +1547,8 @@ SnapTranslator.dict.ca = {
         'segon',
     'time in milliseconds':
         'temps (milisegons)',
-    'find blocks...':
-        'cerca blocs…',
+    'find blocks':
+        'cerca blocs',
     'costume name':
         'nom del vestit',
     'Open':
@@ -1559,10 +1559,10 @@ SnapTranslator.dict.ca = {
         'Núvol d\'Snap!',
     'Cloud':
         'Núvol',
-    'could not connect to:':
-        'no es pot connectar a:',
-    'Service:':
-        'Servei:',
+    'could not connect to':
+        'no es pot connectar a',
+    'Service':
+        'Servei',
     'login':
         'autenticació',
     'ERROR: INVALID PASSWORD':
@@ -1577,8 +1577,8 @@ SnapTranslator.dict.ca = {
         'Inicia la sessió',
     'Logout':
         'Surt',
-    'Change Password...':
-        'Canvia la contrasenya…',
+    'Change Password':
+        'Canvia la contrasenya',
     'Change Password':
         'Canvia la contrasenya',
     'Account created.':
@@ -1591,20 +1591,20 @@ SnapTranslator.dict.ca = {
         'desconnectats.',
     'Reset password':
         'Recupera la contrasenya',
-    'Reset Password...':
-        'Recupera la contrasenya…',
-    'User name:':
-        'Nom d\'usuari:',
-    'Password:':
-        'Contrasenya:',
-    'Old password:':
-        'Contrasenya actual:',
-    'New password:':
-        'Nova contrasenya:',
-    'Repeat new password:':
-        'Torna a escriure la nova contrasenya:',
-    'Birth date:':
-        'Data de naixement:',
+    'Reset Password':
+        'Recupera la contrasenya',
+    'User name':
+        'Nom d\'usuari',
+    'Password':
+        'Contrasenya',
+    'Old password':
+        'Contrasenya actual',
+    'New password':
+        'Nova contrasenya',
+    'Repeat new password':
+        'Torna a escriure la nova contrasenya',
+    'Birth date':
+        'Data de naixement',
     'January':
         'gener',
     'February':
@@ -1629,18 +1629,18 @@ SnapTranslator.dict.ca = {
         'novembre',
     'December':
         'desembre',
-    'year:':
-        'any:',
-    ' or before':
-        ' o abans de',
-    'E-mail address:':
-        'Adreça de correu electrònic:',
-    'E-mail address of parent or guardian:':
-        'Adreça de correu electrònic del tutor o educador:',
-    'Terms of Service...':
-        'Condicions d\'ús…',
-    'Privacy...':
-        'Privacitat…',
+    'year':
+        'any',
+    'or before':
+        'o abans de',
+    'E-mail address':
+        'Adreça de correu electrònic',
+    'E-mail address of parent or guardian':
+        'Adreça de correu electrònic del tutor o educador',
+    'Terms of Service':
+        'Condicions d\'ús',
+    'Privacy':
+        'Privacitat',
     'I have read and agree\nto the Terms of Service':
         'He llegit i accepto\nles condicions d\'ús',
     'stay signed in on this computer\nuntil logging out':
@@ -1661,14 +1661,14 @@ SnapTranslator.dict.ca = {
         'Exemples',
     'You are not logged in':
         'No esteu validats',
-    'Updating\nproject list...':
-        'Actualizant \nla llista de projectes…',
-    'Opening project...':
-        'Obrint el projecte…',
-    'Fetching project\nfrom the cloud...':
-        'Descarregant el projecte\ndes del núvol…',
-    'Saving project\nto the cloud...':
-        'Desant el projecte\nal núvol…',
+    'Updating\nproject list':
+        'Actualizant\nla llista de projectes',
+    'Opening project':
+        'Obrint el projecte',
+    'Fetching project\nfrom the cloud':
+        'Descarregant el projecte\ndes del núvol',
+    'Saving project\nto the cloud':
+        'Desant el projecte\nal núvol',
     'Sprite Nesting':
         'Ancoratge d\'objectes',
     'uncheck to disable\nsprite composition':
@@ -1679,8 +1679,8 @@ SnapTranslator.dict.ca = {
         'marqueu per habilitar les funcionalitats\nde mapeig de blocs en codi',
     'saved.':
         'desat.',
-    'options...':
-        'opcions…',
+    'options':
+        'opcions',
     'read-only':
         'només de lectura',
     'Input Slot Options':
@@ -1699,8 +1699,8 @@ SnapTranslator.dict.ca = {
         'Transforma SVG en mapa de bits',
     'check to rasterize\nSVGs on import':
         'marqueu per transformar els\nSVG a mapa de bits en importar',
-    'comment pic...':
-        'imatge del comentari…',
+    'comment pic':
+        'imatge del comentari',
     'open a new window\nwith a picture of this comment':
         'obre una finestra\namb una imatge del comentari',
     'undo':
@@ -1813,8 +1813,8 @@ SnapTranslator.dict.ca = {
         'contorn de fletxa a la dreta',
     'robot':
         'robot',
-    'turn pen trails into new costume...':
-        'crea un nou vestit amb la imatge dibuixada…',
+    'turn pen trails into new costume':
+        'crea un nou vestit amb la imatge dibuixada',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'crea un nou vestit per l\'actual objecte\namb la imatge dibuixada',
     'pen':
@@ -1833,10 +1833,10 @@ SnapTranslator.dict.ca = {
         'Comparteix el Projecte',
     'Unshare Project':
         'Deixa de compartir el Projecte',
-    'sharing\nproject...':
-        'compartint\nel projecte…',
-    'unsharing\nproject...':
-        'deixant de compartir\nel projecte…',
+    'sharing\nproject':
+        'compartint\nel projecte',
+    'unsharing\nproject':
+        'deixant de compartir\nel projecte',
     'shared.':
         'compartit.',
     'unshared.':
@@ -1849,10 +1849,10 @@ SnapTranslator.dict.ca = {
         'els vestits SVG encara\no són suportats\per tots els navegadors',
     'Save Project':
         'Desa el Projecte',
-    'script pic with result...':
-        'imatge del programa i del resultat…',
+    'script pic with result':
+        'imatge del programa i del resultat',
     'open a new window\nwith a picture of both\nthis script and its result':
-        'obre una finestra\n amb el programa i el resultat',
+        'obre una finestra\namb el programa i el resultat',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript function ( %mult%s ) { %code }',
     'Select categories of additional blocks to add to this project.':
@@ -1865,10 +1865,10 @@ SnapTranslator.dict.ca = {
         'Importa',
     'Select a costume from the media library':
         'Trieu un vestit de la biblioteca',
-    'edit rotation point only...':
-        'edita només el centre de rotació…',
-    'Export Project As...':
-        'Exporta el Projecte com…',
+    'edit rotation point only':
+        'edita només el centre de rotació',
+    'Export Project As':
+        'Exporta el Projecte com',
     'a variable of name \'':
         'una variable de nom \'',
     '\'\ndoes not exist in this context':
@@ -1879,10 +1879,10 @@ SnapTranslator.dict.ca = {
         'esperant',
     'input(s), but getting':
         'com a entrada(s), però s\'ha rebut',
-    'parent...':
-        'pare…',
-    'Dragging threshold...':
-        'Llindar per l\'arrossegament…',
+    'parent':
+        'pare',
+    'Dragging threshold':
+        'Llindar per l\'arrossegament',
     'Cache Inputs':
         'Entrades a la Memòria Cau',
     'uncheck to stop caching\ninputs (for debugging the evaluator)':
@@ -1895,40 +1895,40 @@ SnapTranslator.dict.ca = {
         'marqueu per habilitar\nles dades del projecte a la URL',
     'uncheck to disable\nproject data in URLs':
         'desmarqueu per deshabilitar\nles dades del projecte a la URL',
-    'export project media only...':
-        'exporta només els sons i imatges del projecte…',
-    'export project without media...':
-        'exporta el projecte sense sons ni imatges…',
-    'export project as cloud data...':
-        'exporta el projecte com a dades en el núvol…',
-    'open shared project from cloud...':
-        'obre un projecte compartit en el núvol…',
-    'url...':
-        'URL…',
-    'Export summary with drop-shadows...':
-        'Exporta el resum amb les imatges ombrejades…',
+    'export project media only':
+        'exporta només els sons i imatges del projecte',
+    'export project without media':
+        'exporta el projecte sense sons ni imatges',
+    'export project as cloud data':
+        'exporta el projecte com a dades en el núvol',
+    'open shared project from cloud':
+        'obre un projecte compartit en el núvol',
+    'url':
+        'URL',
+    'Export summary with drop-shadows':
+        'Exporta el resum amb les imatges ombrejades',
     'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
-        'Obre una finestra del navegador\namb un resum del projecte i\namb totes les imatges ombrejades.\n No tots els navegadors suporten aquesta funcionalitat',
+        'Obre una finestra del navegador\namb un resum del projecte i\namb totes les imatges ombrejades.\nNo tots els navegadors suporten aquesta funcionalitat',
     'specify the distance the hand has to move\nbefore it picks up an object':
         'especifica a què distància\ns\'han d\'arrossegar els blocs\nper a que es moguin',
-    'block variables...':
-        'variables del bloc…',
-    'remove block variables...':
-        'resborra les variables del bloc…',
+    'block variables':
+        'variables del bloc',
+    'remove block variables':
+        'resborra les variables del bloc',
     'block variables':
         'variables del bloc',
     'experimental -\nunder construction':
         'Experimental -\nen construcció',
     'Table view':
         'Vista de tabla',
-    'open in another dialog...':
-        'obriu en un altre formulari…',
+    'open in another dialog':
+        'obriu en un altre formulari',
     'check for multi-column\nlist view support':
         'marqueu per habilitar el suport\na la vista de llista amb multicolumnes',
     'uncheck to disable\nmulti-column list views':
         'desmarqueu per a deshabilitar\nla vista de llista amb multicolumnes',
     'check for higher contrast\ntable views':
-        'marqueu per obtenir un contrast més alt\n a la vista de taula',
+        'marqueu per obtenir un contrast més alt\na la vista de taula',
     'uncheck for less contrast\nmulti-column list views':
         'desmarqueu per a tenir un baix contrast\na la vista de llista amb multicolumnes',
     '(in a new window)':
@@ -1957,10 +1957,10 @@ SnapTranslator.dict.ca = {
         'codi',
     'header':
         'capçalera',
-    'header mapping...':
-        'mapejant la capçalera…',
-    'code mapping...':
-        'mapejant el codi…',
+    'header mapping':
+        'mapejant la capçalera',
+    'code mapping':
+        'mapejant el codi',
     'Code mapping':
         'Mapeig del codi',
     'Header mapping':
@@ -2017,8 +2017,8 @@ SnapTranslator.dict.ca = {
 //costumes and backgrounds
 	'rename background':
 		'canvia el nom del fons',
-	'turn pen trails into new background...':
-		'crea un nou fons amb la imatge dibuixada…',
+	'turn pen trails into new background':
+		'crea un nou fons amb la imatge dibuixada',
 	'turn all pen trails and stamps\ninto a new background for the stage':
 		'crea un nou fons d\'escenari\namb la imatge dibuixada',
 
@@ -2029,7 +2029,7 @@ SnapTranslator.dict.ca = {
 		'desmarqueu per restringir\nl\'englobament de blocs a les piles senceres',
 	'check to enable auto-wrapping\ninside nested block stacks':
 		'marqueu per habilitar\nl\'englobament de blocs interns',
-	'check to turn on\n visible stepping (slow)':
+	'check to turn on\nvisible stepping (slow)':
 		'marqueu per monitoritzar la\nprogramació per pas a pas (alenteix)',
 	'uncheck to turn off\nvisible stepping':
 		'desmarqueu per deshabilitar\nla monitorització pas a pas',
@@ -2056,22 +2056,22 @@ SnapTranslator.dict.ca = {
 		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
 
 //Developer mode menus
-	'user features...':
-		'opcions d\'usuari...',
-	'color...':
-		'color...',
-	'\ncolor:':
-		'\ncolor:',
-	'choose another color \nfor this morph':
+	'user features':
+		'opcions d\'usuari',
+	'color':
+		'color',
+	'\ncolor':
+		'\ncolor',
+	'choose another color\nfor this morph':
 		'trieu un altre color\nper aquest \'morph\'',
-	'transparency...':
-		'transparència...',
-	'\nalpha\nvalue:':
-		'\nvalor del\ncanal alfa:',
+	'transparency':
+		'transparència',
+	'\nalpha\nvalue':
+		'\nvalor del\ncanal alfa',
 	'set this morph\'s\nalpha value':
 		'fixeu el valor del canal\nalfa per aquest \'morph\'',
-	'resize...':
-		'redimensiona...',
+	'resize':
+		'redimensiona',
 	'show a handle\nwhich can be dragged\nto change this morph\'s extent':
 		'mostra una nansa per\npoder-la arrossegar i canviar\nla mida d\'aquest \'morph\'',
 	'duplicate':
@@ -2080,22 +2080,22 @@ SnapTranslator.dict.ca = {
 		'fés una còpia\ni pren-la',
 	'pick up':
 		'pren aquest \'morph\'',
-	'detach and put \ninto the hand':
+	'detach and put\ninto the hand':
 		'arrossega i mou\namb el punter',
-	'attach...':
-		'enganxa...',
+	'attach':
+		'enganxa',
 	'stick this morph\nto another one':
 		'enganxa aquest \'morph\' a un altre',
-	'move...':
-		'mou...',
+	'move':
+		'mou',
 	'show a handle\nwhich can be dragged\nto move this morph':
 		'mostra una nansa per\npoder-la arrossegar i\nmoure aquest \'morph\'',
-	'inspect...':
-		'examina...',
+	'inspect':
+		'examina',
 	'open a window\non all properties':
 		'obre una finestra\namb totes les propietats',
-	'pic...':
-		'imatge...',
+	'pic':
+		'imatge',
 	'open a new window\nwith a picture of this morph':
 		'obre una finestra amb\nuna imatge d\'aquest \'morph\'',
 	'lock':
@@ -2106,45 +2106,45 @@ SnapTranslator.dict.ca = {
 		'desbloqueja',
 	'make this morph\nmovable':
 		'fés que aquest \'morph\'\nes pugui moure',
-	'World...':
-		'Món...',
+	'World':
+		'Món',
 	'show the\nWorld\'s menu':
 		'mostra el menú del Món',
 	//World options
-	'demo...':
-		'exemple...',
+	'demo':
+		'exemple',
 	'sample morphs':
 		'crea un \'morph\' de mostra',
-	'hide all...':
+	'hide all':
 		'amaga-ho tot',
-	'show all...':
+	'show all':
 		'mostra-ho tot',
-	'move all inside...':
+	'move all inside':
 		'mou tot a dins',
 	'keep all submorphs\nwithin and visible':
 		'manté tots els \'submorphs\'\na dins i visibles',
 	'open a window on\nall properties':
 		'obre una finestra\namb totes les propietats',
-	'screenshot...':
-		'captura de pantalla...',
+	'screenshot':
+		'captura de pantalla',
 	'open a new window\nwith a picture of this morph':
-		'obre una finestra\n amb la imatge del Món',
+		'obre una finestra\namb la imatge del Món',
 	'restore display':
 		'reestableix la visualització',
 	'redraw the\nscreen once':
 		'repinta la pantalla\nuna vegada',
-	'fill page...':
-		'omple la finestra...',
+	'fill page':
+		'omple la finestra',
 	'let the World automatically\nadjust to browser resizing':
 		'permet que el Món s\'ajusti\nautomàticament al canvi de mida de la finestra',
-	'sharp shadows...':
-		'ombres contrastades...',
+	'sharp shadows':
+		'ombres contrastades',
 	'sharp drop shadows\nuse for old browsers':
 		'utilitza ombres contrastades\nper a navegadors antics',
-	'blurred shadows...':
-		'ombres degradades...',
-	'blurry shades,\n use for new browsers':
-		'utilitza ombres degradades\n per a navegadors moderns',
+	'blurred shadows':
+		'ombres degradades',
+	'blurry shades,\nuse for new browsers':
+		'utilitza ombres degradades\nper a navegadors moderns',
 	'choose the World\'s\nbackground color':
 		'tria el color de\nfons del Món',
 	'touch screen settings':
@@ -2155,14 +2155,14 @@ SnapTranslator.dict.ca = {
 		'configuració estàndard',
 	'smaller menu fonts\nand sliders':
 		'fa més petits els lliscadors i els menús',
-	'user mode...':
-		'mode d\'usuari...',
+	'user mode':
+		'mode d\'usuari',
 	'disable developers\'\ncontext menus':
 		'desabilita els menús\ndel mode de desenvolupament',
-	'development mode...':
+	'development mode':
 		'mode de desenvolupament',
-	'about morphic.js...':
-		'sobre morphic.js...',
+	'about morphic.js':
+		'sobre morphic.js',
 	//Make a Morph
 	'make a morph':
 		'crea un \'morph\'',

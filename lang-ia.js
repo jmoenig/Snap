@@ -349,8 +349,8 @@ SnapTranslator.dict.ia = {
         'pensa %s',
     'Hello!':
         'Hallo!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'cambia %eff effecto per %n',
     'set %eff effect to %n':
@@ -372,7 +372,7 @@ SnapTranslator.dict.ia = {
     'go back %n layers':
         'ir detra %n strato',
 
-    'development mode \ndebugging primitives:':
+    'development mode\ndebugging primitives':
         'disveloppa modo \n'
 	+ 'anti-defacto primitives',
     'console log %mult%s':
@@ -641,10 +641,10 @@ SnapTranslator.dict.ia = {
 
     // menus
     // snap menu
-    'About...':
-        'In re Snap!...',  
+    'About':
+        'In re Snap!',  
     'Reference manual':
-        'Manual referentia ',
+        'Manual referentia',
     'Snap! website':
         'Snap! sito web',
     'Download source':
@@ -663,12 +663,12 @@ SnapTranslator.dict.ia = {
 		+ 'non amicabile de usatores',
 
     // project menu
-    'Project notes...':
-        'Annotos de projecto...',
+    'Project notes':
+        'Annotos de projecto',
     'New':
         'Nova',
-    'Open...':
-        'Aperte...',
+    'Open':
+        'Aperte',
     'Save':
         'Salvo', // 'Secur'
     'Save to disk':
@@ -677,22 +677,22 @@ SnapTranslator.dict.ia = {
         'Pone esti projecto\n'
         + 'in dossier discarga\n'
         + '(per navigators sustene)',
-    'Save As...':
-        'Salvo como nomine...',
-    'Import...':
-        'Importa...',
+    'Save As':
+        'Salvo como nomine',
+    'Import':
+        'Importa',
     'load an exported project file\nor block library, a costume\nor a sound':
-        'Importa insinua per menu de file ',
-    'Export project as plain text...':
-        'Exporta projecto in texto simple...',
-    'Export project...':
-        'Exporta projecto...',
+        'Importa insinua per menu de file',
+    'Export project as plain text':
+        'Exporta projecto in texto simple',
+    'Export project':
+        'Exporta projecto',
     'show project data as XML\nin a new browser window':
         'Expone dato de projecto in XML\n'
         + 'immane nove fenestra de navigator',
         // vitrina
-    'Export blocks...':
-        'Exporta blocos...',
+    'Export blocks':
+        'Exporta blocos',
     'show global custom block definitions as XML\nin a new browser window':
         'Expone blocos artificiose global como XML\n'
         + 'immane nove fenestra de navigator',
@@ -700,24 +700,24 @@ SnapTranslator.dict.ia = {
         'Importa utensiles',
     'load the official library of\npowerful blocks':
         'Incarga bibliotheca official de blocos potente',
-    'Libraries...':
-        'Bibliothecas...',
+    'Libraries':
+        'Bibliothecas',
     'Import library':
         'Importa bibliotheca',
 
     // cloud menu
-    'Login...':
-        'Authenticar se...',
-    'Signup...':
-        'Abonamento...',
+    'Login':
+        'Authenticar se',
+    'Signup':
+        'Abonamento',
 
     // settings menu
-    'Language...':
-        'Lingua...',
-    'Zoom blocks...':
-        'Zoom blocos...',
-    'Stage size...':
-        'Scena dimensiones...',
+    'Language':
+        'Lingua',
+    'Zoom blocks':
+        'Zoom blocos',
+    'Stage size':
+        'Scena dimensiones',
     'Stage size':
         'Scena dimensiones',
     'Stage width':
@@ -765,7 +765,7 @@ SnapTranslator.dict.ia = {
         'Face plan le etiquettas prototypic',
     'uncheck to always show (+) symbols\nin block prototype labels':
         'dismarca a expone (+) symbolos\n'
-        + 'in etiquettas prototypic per blocos ',
+        + 'in etiquettas prototypic per blocos',
     'check to hide (+) symbols\nin block prototype labels':
         'marca a cella (+) symbols\n'
         + 'in etiquettas prototypic per blocos',
@@ -810,7 +810,7 @@ SnapTranslator.dict.ia = {
         'dismarca a comencia scriptes\n'
         + 'a velocitate normal', // 'celeritate'
     'check to enable\nIDE animations':
-        'marca a activar \nIDE animations',
+        'marca a activar\nIDE animations',
     'Thread safe scripts':
         'Filo secur scriptes',
     'uncheck to allow\nscript reentrance':
@@ -836,12 +836,12 @@ SnapTranslator.dict.ia = {
     // inputs
     'with inputs':
         'Con entratas',
-    'input names:':
-        'Entrata nomines:',
-    'Input Names:':
-        'Entrata nomines:',
-    'input list:':
-        'Entrata Listes:',
+    'input names':
+        'Entrata nomines',
+    'Input Names':
+        'Entrata nomines',
+    'input list':
+        'Entrata Listes',
 
     // context menus:
     'help':
@@ -854,10 +854,10 @@ SnapTranslator.dict.ia = {
         'expone primativos',
 
     // blocks:
-    'help...':
-        'adjunta...',
-    'relabel...':
-        'redacto etiquettas...',
+    'help':
+        'adjunta',
+    'relabel':
+        'redacto etiquettas',
     'duplicate':
         'duplica',
     'make a copy\nand pick it up':
@@ -866,8 +866,8 @@ SnapTranslator.dict.ia = {
         'duploca solo esto bloco',
     'delete':
         'dele',
-    'script pic...':
-        'scripte pictura...',
+    'script pic':
+        'scripte pictura',
     'open a new window\nwith a picture of this script':
         'Aperte fenestra nove\n'
         + 'con pictura de este scripte',
@@ -877,10 +877,10 @@ SnapTranslator.dict.ia = {
         'Disanulamento',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'dele definition del bloco',
-    'edit...':
-        'edita...',
+    'edit':
+        'edita',
 
     // sprites:
     'edit':
@@ -891,14 +891,14 @@ SnapTranslator.dict.ia = {
         'distacca de',
     'detach all parts':
         'distacca omni partes',
-    'export...':
-        'exporta...',
+    'export':
+        'exporta',
 
     // stage:
     'show all':
         'monstra omni',
-    'pic...':
-        'pictura...',
+    'pic':
+        'pictura',
     'open a new window\nwith a picture of the stage':
         'expone nove fenestra\n'
 		+ 'con pictura del scena',
@@ -915,13 +915,13 @@ SnapTranslator.dict.ia = {
     'undo the last\nblock drop\nin this pane':
         'disfacer bloco depone antea\n'
 		+ 'in este pannello',
-    'scripts pic...':
-        'scriptes pictura...',
+    'scripts pic':
+        'scriptes pictura',
     'open a new window\nwith a picture of all scripts':
         'expone nove fenestra\n'
 		+ 'con pictura del omni scriptes',
-    'make a block...':
-        'face un bloco...',
+    'make a block':
+        'face un bloco',
 
     // costumes
     'rename':
@@ -997,8 +997,8 @@ SnapTranslator.dict.ia = {
         'Dele Projecto',
     'Are you sure you want to delete':
         'A certe que vos vole a dele?',
-    'rename...':
-        'Edita le nomine...',
+    'rename':
+        'Edita le nomine',
 
     // costume editor
     'Costume Editor':
@@ -1018,8 +1018,8 @@ SnapTranslator.dict.ia = {
         'A surroga le projecto existente pro un nove?',
 
     // save project
-    'Save Project As...':
-        'Secur Projecto Como...',
+    'Save Project As':
+        'Secur Projecto Como',
 
     // export blocks
     'Export blocks':
@@ -1097,8 +1097,8 @@ SnapTranslator.dict.ia = {
         'Ver o False\n(non-evaluta)',
     'Single input.':
         'Sol entrata',
-    'Default Value:':
-        'Valor predefiniva:', // normal
+    'Default Value':
+        'Valor predefiniva', // normal
     'Multiple inputs (value is list of inputs)':
         'entrata plure (valor es lista)',  // 'aliquot'
     'Upvar - make internal variable visible to caller':
@@ -1107,19 +1107,19 @@ SnapTranslator.dict.ia = {
     // About Snap
     'About Snap':
         'in re Snap',
-    'Back...':
-        'a retro!...',
-    'License...':
-        'Licentia...',
-    'Modules...':
-        'Modulos...',
-    'Credits...':
-        'Credito...',
-    'Translators...':
-        'Traductores...',
+    'Back':
+        'a retro!',
     'License':
         'Licentia',
-    'current module versions:':
+    'Modules':
+        'Modulos',
+    'Credits':
+        'Credito',
+    'Translators':
+        'Traductores',
+    'License':
+        'Licentia',
+    'current module versions':
         'currente modulo versiones',
     'Contributors':
         'Contribuentes',
@@ -1133,23 +1133,23 @@ SnapTranslator.dict.ia = {
         'grande',
     'slider':
         'glissator',
-    'slider min...':
-        'glissator minime...',
-    'slider max...':
-        'glissator maxime...',
-    'import...':
-        'importa...',
+    'slider min':
+        'glissator minime',
+    'slider max':
+        'glissator maxime',
+    'import':
+        'importa',
     'Slider minimum value':
         'glissator minime valor',
     'Slider maximum value':
         'glissator maxime valor',
 
     // list watchers
-    'length: ':
-        'Longor: ',
+    'length':
+        'Longor',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'adde commento hic',
 
     // drow downs
@@ -1274,8 +1274,8 @@ SnapTranslator.dict.ia = {
         '9',
 
     // messages
-    'new...':
-        'Nove...',
+    'new':
+        'Nove',
 
     // math functions
     'abs':

@@ -341,8 +341,8 @@ SnapTranslator.dict.si = {
         'misli %s',
     'Hello!':
         'Halo!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'spremeni u\u010Dinek %eff za %n',
     'set %eff effect to %n':
@@ -364,8 +364,8 @@ SnapTranslator.dict.si = {
     'go back %n layers':
         'prestavi %n ravnin nazaj',
 
-    'development mode \ndebugging primitives:':
-        'razvojni na\u010Din \nrazhro\u0161\u010Devanje gradnikov',
+    'development mode\ndebugging primitives':
+        'razvojni na\u010Din\nrazhro\u0161\u010Devanje gradnikov',
     'console log %mult%s':
         'izpi\u0161i na konzolo: %mult%s',
     'alert %mult%s':
@@ -417,7 +417,7 @@ SnapTranslator.dict.si = {
     'when %greenflag clicked':
         'ko kliknemo na %greenflag',
     'when %keyHat key pressed':
-        'ko pritisnemo na tipko %keyHat ',
+        'ko pritisnemo na tipko %keyHat',
     'when I am %interaction':
         'Ko je %interaction',
     'clicked':
@@ -475,11 +475,11 @@ SnapTranslator.dict.si = {
     'pause all %pause':
         'pavziraj vse %pause',
     'run %cmdRing %inputs':
-        'izvajaj %cmdRing  %inputs',
+         'izvajaj %cmdRing %inputs',
     'launch %cmdRing %inputs':
         'po\u017Eeni %cmdRing %inputs',
     'call %repRing %inputs':
-        'pokli\u010Di %repRing  %inputs',
+         'pokli\u010Di %repRing %inputs',
     'run %cmdRing w/continuation':
         'izvajaj %cmdRing z nadaljevanjem',
     'call %cmdRing w/continuation':
@@ -648,8 +648,8 @@ SnapTranslator.dict.si = {
 
     // menus
     // snap menu
-    'About...':
-        'Nekaj o Snap!...',
+    'About':
+        'Nekaj o Snap!',
     'Reference manual':
         'Uporabni\u0161ka navodila',
     'Snap! website':
@@ -663,15 +663,15 @@ SnapTranslator.dict.si = {
     'Switch to dev mode':
         'preklop na razvojni na\u010Din',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'omogo\u010Di  Morphic menuje in in\u0161pektorje, \ni uporabniku prijazno',
+         'omogo\u010Di Morphic menuje in in\u0161pektorje,\ni uporabniku prijazno',
 
     // project menu
-    'Project notes...':
-        'Opis projekta...',
+    'Project notes':
+        'Opis projekta',
     'New':
         'Nov',
-    'Open...':
-        'Odpri...',
+    'Open':
+        'Odpri',
     'Save':
         'Shrani',
     'Save to disk':
@@ -679,26 +679,26 @@ SnapTranslator.dict.si = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'shrani v mapo Prenosi\n'
             + '(ni na voljo v vseh brkljalnika)',
-    'Save As...':
-        'Shrani kot...',
-    'Import...':
-        'Uvozi...',
+    'Save As':
+        'Shrani kot',
+    'Import':
+        'Uvozi',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Nalaganje izvo\u017Eenega projekta,\nknji\u017Enice z '
             + 'bloki\n'
             + 'obleko ali zvokom',
-    'Export project as plain text...':
-        'Izvozi projekt kot navadno besedilo...',
-    'Export project...':
-        'Izvozi projekt...',
+    'Export project as plain text':
+        'Izvozi projekt kot navadno besedilo',
+    'Export project':
+        'Izvozi projekt',
     'show project data as XML\nin a new browser window':
         'Prikaz projekta kot XML\nv novem oknu brkljalnika',
-    'Export blocks...':
+    'Export blocks':
         'Izvozi bloke',
     'show global custom block definitions as XML\nin a new browser window':
         'Prikaz definicij globalnih lastnih blokov kot XML\nv novem oknu brkljalnika',
-    'Unused blocks...':
-          'Neuporabljeni bloki...',
+    'Unused blocks':
+          'Neuporabljeni bloki',
     'find unused global custom blocks\nand remove their definitions':
         'najdi in odstrani uporabni\u0161ke neuporabljene globalne bloke',
     'Remove unused blocks':
@@ -707,32 +707,32 @@ SnapTranslator.dict.si = {
         'trenutno ni neuporabljenih globalnih blokov v tem projektu',
     'unused block(s) removed':
         'neuporabljeni bloki so bili odstranjeni',
-    'Export summary...':
-        'Povzetek izvoza...',
+    'Export summary':
+        'Povzetek izvoza',
     'Import tools':
         'Uvozi orodja',
     'load the official library of\npowerful blocks':
         'uvozi uradni modul z naprednimi bloki',
-    'Libraries...':
-        'Knji\u017Enice...',
+    'Libraries':
+        'Knji\u017Enice',
     'Import library':
         'Nalo\u017Ei knji\u017Enico',
 
     // cloud menu
-    'Login...':
-        'Prijava...',
-    'Signup...':
-        'Registracija...',
-    'Reset Password...':
-        'Pozabljeno geslo...',
+    'Login':
+        'Prijava',
+    'Signup':
+        'Registracija',
+    'Reset Password':
+        'Pozabljeno geslo',
 
     // settings menu
-    'Language...':
-        'Jezik...',
-    'Zoom blocks...':
-        'Pove\u010Daj bloke...',
-    'Stage size...':
-        'Velikost scene...',
+    'Language':
+        'Jezik',
+    'Zoom blocks':
+        'Pove\u010Daj bloke',
+    'Stage size':
+        'Velikost scene',
     'Stage size':
         'Velikost scene',
     'Stage width':
@@ -828,16 +828,16 @@ SnapTranslator.dict.si = {
     // inputs
     'with inputs':
         'z vhodi',
-    'input names:':
-        'imena vhodov:',
-    'Input Names:':
-        'imena vhodov:',
-    'input list:':
-        'vhodni seznam:',
+    'input names':
+        'imena vhodov',
+    'Input Names':
+        'imena vhodov',
+    'input list':
+        'vhodni seznam',
 
     // context menus:
     'help':
-        'Pomo\u010D...',
+        'Pomo\u010D',
 
     // palette:
     'hide primitives':
@@ -846,10 +846,10 @@ SnapTranslator.dict.si = {
         'poka\u017Ei osnovne bloke',
 
     // blocks:
-    'help...':
-        'pomo\u010D...',
-    'relabel...':
-        'spremeni tip...',
+    'help':
+        'pomo\u010D',
+    'relabel':
+        'spremeni tip',
     'duplicate':
         'podvoji',
     'make a copy\nand pick it up':
@@ -858,8 +858,8 @@ SnapTranslator.dict.si = {
         'podvoji ta blok',
     'delete':
         'bri\u0161i',
-    'script pic...':
-        'slika skript...',
+    'script pic':
+        'slika skript',
     'open a new window\nwith a picture of this script':
         'odpri novo okno s sliko tega skripta',
     'ringify':
@@ -870,10 +870,10 @@ SnapTranslator.dict.si = {
         'se ne shranjuje',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'bri\u0161i definicijo bloka',
-    'edit...':
-        'uredi...',
+    'edit':
+        'uredi',
 
     // sprites:
     'edit':
@@ -884,14 +884,14 @@ SnapTranslator.dict.si = {
         'odklopi',
     'detach all parts':
         'odklopi vse dele',
-    'export...':
-        'izvozi...',
+    'export':
+        'izvozi',
 
     // stage:
     'show all':
-        'prila\u017Ei vse ',
-    'pic...':
-        'izvozi sliko...',
+        'prila\u017Ei vse',
+    'pic':
+        'izvozi sliko',
     'open a new window\nwith a picture of the stage':
         'odpri novo okno s sliko te scene',
 
@@ -906,12 +906,12 @@ SnapTranslator.dict.si = {
         'ponovno povle\u010Di',
     'undo the last\nblock drop\nin this pane':
         'prekli\u010Di dodajanje zadnjega bloka v tem okviru',
-    'scripts pic...':
-        'slika skript...',
+    'scripts pic':
+        'slika skript',
     'open a new window\nwith a picture of all scripts':
         'odpri novo okno s sliko vseh skript',
-    'make a block...':
-        'Gradnja novega bloka...',
+    'make a block':
+        'Gradnja novega bloka',
 
     // costumes
     'rename':
@@ -934,11 +934,11 @@ SnapTranslator.dict.si = {
         'Preimenuj zvok',
 
     // lists and tables
-    'list view...':
-        'prika\u017Ei kot seznam...',
-    'table view...':
+    'list view':
+        'prika\u017Ei kot seznam',
+    'table view':
         'prika\u017Ei kot tabelo',
-    'open in dialog...':
+    'open in dialog':
         'odpri v novem oknu',
     'items':
         'elementi',
@@ -997,8 +997,8 @@ SnapTranslator.dict.si = {
         'Zbri\u0161i projekt',
     'Are you sure you want to delete':
         'Ste prepri\u010Dani da \u017Eelite izbrisati?',
-    'rename...':
-        'preimenuj...',
+    'rename':
+        'preimenuj',
 
     // costume editor
     'Costume Editor':
@@ -1017,8 +1017,8 @@ SnapTranslator.dict.si = {
         'Zamenjam trenutni projekt z novim?',
 
     // save project
-    'Save Project As...':
-        'Shrani projekt kot...',
+    'Save Project As':
+        'Shrani projekt kot',
 
     // export blocks
     'Export blocks':
@@ -1098,8 +1098,8 @@ SnapTranslator.dict.si = {
         'Boolova spr.\n(neovrednotena)',
     'Single input.':
         'En vnos.',
-    'Default Value:':
-        'Privzeta vrednost:',
+    'Default Value':
+        'Privzeta vrednost',
     'Multiple inputs (value is list of inputs)':
         'Ve\u010D vnosov (kot seznam)',
     'Upvar - make internal variable visible to caller':
@@ -1108,19 +1108,19 @@ SnapTranslator.dict.si = {
     // About Snap
     'About Snap':
         'nekaj o Snap',
-    'Back...':
-        'Nazaj...',
-    'License...':
-        'Licenca...',
-    'Modules...':
-        'Komponente...',
-    'Credits...':
-        'Sodelujo\u010Di...',
-    'Translators...':
+    'Back':
+        'Nazaj',
+    'License':
+        'Licenca',
+    'Modules':
+        'Komponente',
+    'Credits':
+        'Sodelujo\u010Di',
+    'Translators':
         'Prevajalci',
     'License':
         'Licenca',
-    'current module versions:':
+    'current module versions':
         'Verzije komponent',
     'Contributors':
         'Prispevali',
@@ -1134,23 +1134,23 @@ SnapTranslator.dict.si = {
         'velik',
     'slider':
         'drsnik',
-    'slider min...':
-        'min vrednost...',
-    'slider max...':
-        'maks vrednost...',
-    'import...':
-        'uvozi...',
+    'slider min':
+        'min vrednost',
+    'slider max':
+        'maks vrednost',
+    'import':
+        'uvozi',
     'Slider minimum value':
         'Minimalna vrednost drsnika',
     'Slider maximum value':
         'Maksimalna vrednost drsnika',
 
     // list watchers
-    'length: ':
-        'Dol\u017Eina: ',
+    'length':
+        'Dol\u017Eina',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'tu vnese\u0161 komentar',
 
     // drow downs
@@ -1272,8 +1272,8 @@ SnapTranslator.dict.si = {
         '9',
 
     // messages
-    'new...':
-        'nov...',
+    'new':
+        'nov',
 
     // math functions
     'abs':

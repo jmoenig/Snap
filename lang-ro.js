@@ -338,8 +338,8 @@ SnapTranslator.dict.ro = {
         'gandeste %s',
     'Hello!':
         'Salut!',
-    'Hmm...':
-        'Hmmm...',
+    'Hmm':
+        'Hmmm',
     'change %eff effect by %n':
         'modifica efectul %eff cu %n',
     'set %eff effect to %n':
@@ -361,8 +361,8 @@ SnapTranslator.dict.ro = {
     'go back %n layers':
         'muta spre spate %n niveluri',
 
-    'development mode \ndebugging primitives:':
-        'Modul dezvoltare \nprimitive de debug:',
+    'development mode\ndebugging primitives':
+        'Modul dezvoltare\nprimitive de debug',
     'console log %mult%s':
         'jurnal consola: %mult%',
     'alert %mult%s':
@@ -398,7 +398,7 @@ SnapTranslator.dict.ro = {
     'change pen color by %n':
         'modifica culoarea stiloului cu %n',
     'set pen color to %n':
-        'schimba culoarea stiloului in  %n',
+         'schimba culoarea stiloului in %n',
     'change pen shade by %n':
         'modifica umbra stiloului cu %n',
     'set pen shade to %n':
@@ -584,7 +584,7 @@ SnapTranslator.dict.ro = {
     'Variable name':
         'numele variabilei',
     'Script variable name':
-        'variabila script ',
+        'variabila script',
     'Delete a variable':
         'sterge o variabila',
 
@@ -629,8 +629,8 @@ SnapTranslator.dict.ro = {
 
     // menus
     // snap menu
-    'About...':
-        'Despre Snap!...',
+    'About':
+        'Despre Snap!',
     'Reference manual':
         'Manual utilizator',
     'Snap! website':
@@ -647,36 +647,36 @@ SnapTranslator.dict.ro = {
         'Afiseaza meniuri morfice in locul celor simplificate',
 
     // project menu
-    'Project notes...':
-        'Note de proiect...',
+    'Project notes':
+        'Note de proiect',
     'New':
         'Nou',
-    'Open...':
-        'Deschide...',
+    'Open':
+        'Deschide',
     'Save':
         'Salveaza',
     'Save to disk':
         'Salveaza pe disc',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Salveaza proiectul\nin meniul Descarcari\n(functie de browser)',
-    'Save As...':
-        'Salveaza sub numele...',
-    'Import...':
-        'Importa...',
+    'Save As':
+        'Salveaza sub numele',
+    'Import':
+        'Importa',
     'load an exported project file\nor block library, a costume\nor a sound':
         'indiciu import meniul fisiere',
-    'Export project as plain text...':
-        'Exporta proiectul ca text...',
-    'Export project...':
-        'Exporta proiectul...',
+    'Export project as plain text':
+        'Exporta proiectul ca text',
+    'Export project':
+        'Exporta proiectul',
     'show project data as XML\nin a new browser window':
         'afiseaza continut proiect ca XML\nin fereastra noua de browser',
-    'Export blocks...':
-        'Exporta blocurile...',
+    'Export blocks':
+        'Exporta blocurile',
     'show global custom block definitions as XML\nin a new browser window':
-        ' afiseaza definitiile blocurilor ca XML\n intr-o fereastra noua de browser',
-    'Unused blocks...':
-          'Blocuri nefolosite...',
+        'afiseaza definitiile blocurilor ca XML\nintr-o fereastra noua de browser',
+    'Unused blocks':
+          'Blocuri nefolosite',
     'find unused global custom blocks\nand remove their definitions':
         'cauta blocuri utilizator nefolosite\nsi sterge-le',
     'Remove unused blocks':
@@ -685,9 +685,9 @@ SnapTranslator.dict.ro = {
         'nu exista blocuri utilizator nefolosite\nin acest proiect',
     'unused block(s) removed':
         'blocuri nefolosite eliminate',
-    'Export summary...':
-        'Exporta sumarul...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Exporta sumarul',
+    'open a new browser browser window\nwith a summary of this project':
         'Deschide o noua fereastra de browser\ncu sumarul acestui proiect',
     'Contents':
         'Continut',
@@ -705,24 +705,24 @@ SnapTranslator.dict.ro = {
         'Importa unelte',
     'load the official library of\npowerful blocks':
         'incarca biblioteca oficiala\nde blocuri importante',
-    'Libraries...':
-        'Biblioteci...',
+    'Libraries':
+        'Biblioteci',
     'Import library':
         'Importa biblioteca',
 
     // cloud menu
-    'Login...':
-        'Autentificare...',
-    'Signup...':
-        'Creaza-ti cont...',
+    'Login':
+        'Autentificare',
+    'Signup':
+        'Creaza-ti cont',
 
     // settings menu
-    'Language...':
-        'Selecteaza limba...',
-    'Zoom blocks...':
-        'Marimeblocuri...',
-    'Stage size...':
-        'Marime scena...',
+    'Language':
+        'Selecteaza limba',
+    'Zoom blocks':
+        'Marimeblocuri',
+    'Stage size':
+        'Marime scena',
     'Stage size':
         'Marime scena',
     'Stage width':
@@ -748,7 +748,7 @@ SnapTranslator.dict.ro = {
     'uncheck to disable dynamic\nlabels for variadic inputs':
         'debifeaza pentru a renunta la\netichete dinamice pentru intrari variabile',
     'check to enable dynamic\nlabels for variadic inputs':
-        'difeaza pentru a folosi etichete\n dinamice pentru intrari variabile',
+        'difeaza pentru a folosi etichete\ndinamice pentru intrari variabile',
     'Prefer empty slot drops':
         'Foloseste slot drops goale',
     'check to focus on empty slots\nwhen dragging & dropping reporters':
@@ -760,13 +760,13 @@ SnapTranslator.dict.ro = {
     'Plain prototype labels':
         'Etichete simple',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'debifeaza pentru a folosi (+) \nin blocurile eticheta',
+        'debifeaza pentru a folosi (+)\nin blocurile eticheta',
     'check to hide (+) symbols\nin block prototype labels':
-        'bifeaza pentru a ascunde (+) \nin blocurile eticheta',
+        'bifeaza pentru a ascunde (+)\nin blocurile eticheta',
     'check to always show slot\ntypes in the input dialog':
-        'bifeaza pentru a afisa tipuri slot\N in dialoguri de intrare',
+        'bifeaza pentru a afisa tipuri slot\nin dialoguri de intrare',
     'uncheck to use the input\ndialog in short form':
-        'debifeaza pentru a afisa dialoguri\n de intrare in forma scurta',
+        'debifeaza pentru a afisa dialoguri\nde intrare in forma scurta',
     'Virtual keyboard':
         'Tastatura pe ecran',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
@@ -784,7 +784,7 @@ SnapTranslator.dict.ro = {
     'uncheck to turn\nblock clicking\nsound off':
         'debifeaza pentru a opri\nsunete la schimbarea blocurilor',
     'check to turn\nblock clicking\nsound on':
-        'bifeaza pentru sunete\n la schimbare blocuri',
+        'bifeaza pentru sunete\nla schimbare blocuri',
     'Animations':
         'Animatii',
     'uncheck to disable\nIDE animations':
@@ -812,7 +812,7 @@ SnapTranslator.dict.ro = {
     'uncheck for greater speed\nat variable frame rates':
         'debifeaza pentru viteza mai mare\nin detrimentul afisarii pe ecran',
     'check for smooth, predictable\nanimations across computers':
-        'bifeaza pentru afisare fluida pe ecran\n in detrimentul vitezei',
+        'bifeaza pentru afisare fluida pe ecran\nin detrimentul vitezei',
     'Flat line ends':
         'Sfarsit de linii cu colturi',
     'check for flat ends of lines':
@@ -825,12 +825,12 @@ SnapTranslator.dict.ro = {
     // inputs
     'with inputs':
         'cu intrari',
-    'input names:':
-        'numele intrarii:',
-    'Input Names:':
-        'Numele intrarii:',
-    'input list:':
-        'lista intrare:',
+    'input names':
+        'numele intrarii',
+    'Input Names':
+        'Numele intrarii',
+    'input list':
+        'lista intrare',
 
     // context menus:
     'help':
@@ -843,10 +843,10 @@ SnapTranslator.dict.ro = {
         'Afiseaza primitivele',
 
     // blocks:
-    'help...':
-        'ajutor...',
-    'relabel...':
-        'redenumeste...',
+    'help':
+        'ajutor',
+    'relabel':
+        'redenumeste',
     'duplicate':
         'duplica',
     'make a copy\nand pick it up':
@@ -855,8 +855,8 @@ SnapTranslator.dict.ro = {
         'duplica doar acest bloc',
     'delete':
         'sterge',
-    'script pic...':
-        'imagine script...',
+    'script pic':
+        'imagine script',
     'open a new window\nwith a picture of this script':
         'deschide fereastra noua\ncu imaginea acestui script',
     'ringify':
@@ -865,10 +865,10 @@ SnapTranslator.dict.ro = {
         'unringify',
 
     // custom blocks:
-    'delete block definition...':
-        'sterge definitia blocului....',
-    'edit...':
-        'modifica...',
+    'delete block definition':
+        'sterge definitia blocului.',
+    'edit':
+        'modifica',
 
     // sprites:
     'edit':
@@ -879,14 +879,14 @@ SnapTranslator.dict.ro = {
         'desparte',
     'detach all parts':
         'desparte toate bucatile',
-    'export...':
-        'exporta...',
+    'export':
+        'exporta',
 
     // stage:
     'show all':
         'afiseaza tot',
-    'pic...':
-        'imagine...',
+    'pic':
+        'imagine',
     'open a new window\nwith a picture of the stage':
         'deschide o imagine a scenei\nintr-o fereastra noua',
 
@@ -901,12 +901,12 @@ SnapTranslator.dict.ro = {
         'undrop',
     'undo the last\nblock drop\nin this pane':
         'renunta la ultimul drop\nde block in aceasta fereastra',
-    'scripts pic...':
-        'imagine scripturi...',
+    'scripts pic':
+        'imagine scripturi',
     'open a new window\nwith a picture of all scripts':
         'afiseaza imaginea scripturilor\nintr-o noua fereastra',
-    'make a block...':
-        'creaza bloc...',
+    'make a block':
+        'creaza bloc',
 
     // costumes
     'rename':
@@ -982,8 +982,8 @@ SnapTranslator.dict.ro = {
         'Sterge proiect',
     'Are you sure you want to delete':
         'Esti sigur ca vrei sa stergi?',
-    'rename...':
-        'redenumeste...',
+    'rename':
+        'redenumeste',
 
     // costume editor
     'Costume Editor':
@@ -1002,8 +1002,8 @@ SnapTranslator.dict.ro = {
         'Inlocuieste proiectul cu un altul?',
 
     // save project
-    'Save Project As...':
-        'Salveaza proiectul sub alt nume...',
+    'Save Project As':
+        'Salveaza proiectul sub alt nume',
 
     // export blocks
     'Export blocks':
@@ -1080,8 +1080,8 @@ SnapTranslator.dict.ro = {
         'Boolean\n(necalculat)',
     'Single input.':
         'Intrare.',
-    'Default Value:':
-        'Valoare implicita:',
+    'Default Value':
+        'Valoare implicita',
     'Multiple inputs (value is list of inputs)':
         'Intrari multiple (dintr-o lista)',
     'Upvar - make internal variable visible to caller':
@@ -1090,20 +1090,20 @@ SnapTranslator.dict.ro = {
     // About Snap
     'About Snap':
         'Despre Snap',
-    'Back...':
-        'Inapoi...',
-    'License...':
-        'Licenta...',
-    'Modules...':
-        'Componente...',
-    'Credits...':
-        'Multumiri...',
-    'Translators...':
+    'Back':
+        'Inapoi',
+    'License':
+        'Licenta',
+    'Modules':
+        'Componente',
+    'Credits':
+        'Multumiri',
+    'Translators':
         'Traducatori',
     'License':
         'Licenta',
-    'current module versions:':
-        'versiuni componente:',
+    'current module versions':
+        'versiuni componente',
     'Contributors':
         'Contribuitori',
     'Translations':
@@ -1116,24 +1116,24 @@ SnapTranslator.dict.ro = {
         'mare',
     'slider':
         'slider',
-    'slider min...':
-        'slider minim...',
-    'slider max...':
-        'slider maxim...',
-    'import...':
-        'importa...',
+    'slider min':
+        'slider minim',
+    'slider max':
+        'slider maxim',
+    'import':
+        'importa',
     'Slider minimum value':
         'Valoare minima slidere',
     'Slider maximum value':
         'Valoare maxima slidere',
 
     // list watchers
-    'length: ':
-        'lungime: ',
+    'length':
+        'lungime',
 
     // coments
-    'add comment here...':
-        'adauga comentariu...',
+    'add comment here':
+        'adauga comentariu',
 
     // drow downs
     // directions
@@ -1257,8 +1257,8 @@ SnapTranslator.dict.ro = {
         '9',
 
     // messages
-    'new...':
-        'nou...',
+    'new':
+        'nou',
 
     // math functions
     'abs':

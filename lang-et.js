@@ -162,8 +162,8 @@ SnapTranslator.dict.et = {
         'mõtle %s',
     'Hello!':
         'Tere!',
-    'Hmm...':
-        'Hmm ...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'muuda efekti %eff %n võrra',
     'set %eff effect to %n':
@@ -185,8 +185,8 @@ SnapTranslator.dict.et = {
     'go back %n layers':
         'vii %n kihti tahapoole',
 
-    'development mode \ndebugging primitives:':
-        'Arendusrežiimi \nsilumismeetodid:',
+    'development mode\ndebugging primitives':
+        'Arendusrežiimi\nsilumismeetodid',
     'console log %mult%s':
         'Kirjuta konsoolile: %mult%s',
     'alert %mult%s':
@@ -457,8 +457,8 @@ SnapTranslator.dict.et = {
 
     // menus
     // snap menu
-    'About...':
-        'Snap! info ...',
+    'About':
+        'Snap! info',
     'Reference manual':
         'Reference manual',
     'Snap! website':
@@ -475,36 +475,36 @@ SnapTranslator.dict.et = {
         'Lülitab sisse Morphic kontekstmenüüd\nja inspektorid. See pole kasutajale.',
 
     // project menu
-    'Project notes...':
-        'Projekti märkmed ...',
+    'Project notes':
+        'Projekti märkmed',
     'New':
         'Uus',
-    'Open...':
-        'Ava ...',
+    'Open':
+        'Ava',
     'Save':
         'Salvesta',
     'Save to disk':
         'Salvesta kettale',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Salvestab selle projekti\nallalaadimiste kausta\n(kui brauser seda toetab).\n',
-    'Save As...':
-        'Salvesta kui ...',
-    'Import...':
-        'Import ...',
+    'Save As':
+        'Salvesta kui',
+    'Import':
+        'Import',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Eksporditud projekti,\nplokkide teegi, kostüümi\nvõi heli laadimine.',
-    'Export project as plain text...':
-        'Ekspordi projekt tavatekstiks ...',
-    'Export project...':
-        'Ekspordi projekt ...',
+    'Export project as plain text':
+        'Ekspordi projekt tavatekstiks',
+    'Export project':
+        'Ekspordi projekt',
     'show project data as XML\nin a new browser window':
         'Näitab uues brauseri aknas\nXML vormingus projekti.',
-    'Export blocks...':
-        'Ekspordi plokid ...',
+    'Export blocks':
+        'Ekspordi plokid',
     'show global custom block definitions as XML\nin a new browser window':
         'Näitab uues brauseri aknas XML vormingus\nkasutaja loodud plokkide definitsioone.',
-    'Unused blocks...':
-        'Kasutamata plokid ...',
+    'Unused blocks':
+        'Kasutamata plokid',
     'find unused global custom blocks\nand remove their definitions':
         'Otsib projektist üles kasutamata kasutaja loodud\nplokid ja eemaldab nende definitsioonid.',
     'Remove unused blocks':
@@ -513,9 +513,9 @@ SnapTranslator.dict.et = {
         'Selles projektis pole hetkel\nkasutaja loodud kasutamata plokke.',
     'unused block(s) removed':
         'Kasutamata plokid on eemaldatud.',
-    'Export summary...':
-        'Ekspordi kokkuvõte ...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Ekspordi kokkuvõte',
+    'open a new browser browser window\nwith a summary of this project':
         'Avab uue brauseriakna selle\nprojekti kokkuvõttega.',
     'Contents':
         'Sisu',
@@ -533,24 +533,24 @@ SnapTranslator.dict.et = {
         'Impordi tööriistad',
     'load the official library of\npowerful blocks':
         'Laadib juurde ametliku võimalusterohke\nplokkide teegi.',
-    'Libraries...':
-        'Teegid ...',
+    'Libraries':
+        'Teegid',
     'Import library':
         'Impordi teek',
 
     // cloud menu
-    'Login...':
-        'Logi sisse ...',
-    'Signup...':
-        'Tekita konto ...',
+    'Login':
+        'Logi sisse',
+    'Signup':
+        'Tekita konto',
 
     // settings menu
-    'Language...':
-        'Keel ...',
-    'Zoom blocks...':
-        'Plokkide suurendus ...',
-    'Stage size...':
-        'Lava suurus ...',
+    'Language':
+        'Keel',
+    'Zoom blocks':
+        'Plokkide suurendus',
+    'Stage size':
+        'Lava suurus',
     'Stage size':
         'Lava suurus',
     'Stage width':
@@ -657,12 +657,12 @@ SnapTranslator.dict.et = {
     // inputs
     'with inputs':
         'with inputs',
-    'input names:':
-        'input names:',
-    'Input Names:':
-        'Input Names:',
-    'input list:':
-        'input list:',
+    'input names':
+        'input names',
+    'Input Names':
+        'Input Names',
+    'input list':
+        'input list',
 
     // context menus:
     'help':
@@ -675,10 +675,10 @@ SnapTranslator.dict.et = {
         'Näita primitiive',
 
     // blocks:
-    'help...':
-        'Abi ...',
-    'relabel...':
-        'Nimeta ümber ...',
+    'help':
+        'Abi',
+    'relabel':
+        'Nimeta ümber',
     'duplicate':
         'Kopeeri',
     'make a copy\nand pick it up':
@@ -687,8 +687,8 @@ SnapTranslator.dict.et = {
         'Kopeerib ainult selle ploki',
     'delete':
         'Kustuta',
-    'script pic...':
-        'Skripti pilt ...',
+    'script pic':
+        'Skripti pilt',
     'open a new window\nwith a picture of this script':
         'Avab uue akna vaid selle skripti pildiga',
     'ringify':
@@ -703,10 +703,10 @@ SnapTranslator.dict.et = {
         'Sisu projekti mitte salvestamiseks lülita see sisse.',
 
     // custom blocks:
-    'delete block definition...':
-        'Kustuta ploki definitsioon ...',
-    'edit...':
-        'Muuda ...',
+    'delete block definition':
+        'Kustuta ploki definitsioon',
+    'edit':
+        'Muuda',
 
     // sprites:
     'edit':
@@ -717,14 +717,14 @@ SnapTranslator.dict.et = {
         'Eralda',
     'detach all parts':
         'Eralda kõik osad',
-    'export...':
-        'Eksport ...',
+    'export':
+        'Eksport',
 
     // stage:
     'show all':
         'Näita kõiki',
-    'pic...':
-        'Pilt ...',
+    'pic':
+        'Pilt',
     'open a new window\nwith a picture of the stage':
         'Avab uues aknas lava pildi.',
 
@@ -739,12 +739,12 @@ SnapTranslator.dict.et = {
         'Tõsta üles',
     'undo the last\nblock drop\nin this pane':
         'Tõstab viimase asetatud\nploki uuesti üles.',
-    'scripts pic...':
-        'Skriptide pilt ...',
+    'scripts pic':
+        'Skriptide pilt',
     'open a new window\nwith a picture of all scripts':
         'Avab uues aknas pildi\nkõigi skriptidega.',
-    'make a block...':
-        'Tekita uus plokk ...',
+    'make a block':
+        'Tekita uus plokk',
 
     // costumes
     'rename':
@@ -767,12 +767,12 @@ SnapTranslator.dict.et = {
         'Nimeta ümber',
 
     // lists and tables
-    'list view...':
-        'Nimekirja vaade ...',
-    'table view...':
-        'Tabeli vaade ...',
-    'open in dialog...':
-        'Ava dialoogis ...',
+    'list view':
+        'Nimekirja vaade',
+    'table view':
+        'Tabeli vaade',
+    'open in dialog':
+        'Ava dialoogis',
     'reset columns':
         'Lähtesta veerud',
     'items':
@@ -832,8 +832,8 @@ SnapTranslator.dict.et = {
         'Kustuta projekt',
     'Are you sure you want to delete':
         'Oled kindel, et soovid projekti kustutada?',
-    'rename...':
-        'Nimeta ümber ...',
+    'rename':
+        'Nimeta ümber',
 
     // costume editor
     'Costume Editor':
@@ -852,8 +852,8 @@ SnapTranslator.dict.et = {
         'Kas asendada see projekt uuega?',
 
     // save project
-    'Save Project As...':
-        'Salvesta projekt kui ...',
+    'Save Project As':
+        'Salvesta projekt kui',
 
     // export blocks
     'Export blocks':
@@ -931,8 +931,8 @@ SnapTranslator.dict.et = {
         'Tõeväärtus\n(eo arvestata)',
     'Single input.':
         'Üksik sisend.',
-    'Default Value:':
-        'Vaikeväärtus:',
+    'Default Value':
+        'Vaikeväärtus',
     'Multiple inputs (value is list of inputs)':
         'Mitu sisendit (sisendite loend)',
     'Upvar - make internal variable visible to caller':
@@ -941,20 +941,20 @@ SnapTranslator.dict.et = {
     // About Snap
     'About Snap':
         'Snap! info',
-    'Back...':
-        'Tagasi ...',
-    'License...':
-        'Litsents ...',
-    'Modules...':
-        'Moodulid ...',
-    'Credits...':
-        'Tänud ...',
-    'Translators...':
-        'Tõlkijad ...',
+    'Back':
+        'Tagasi',
     'License':
         'Litsents',
-    'current module versions:':
-        'Hetkel kasutusel olevad moodulid:',
+    'Modules':
+        'Moodulid',
+    'Credits':
+        'Tänud',
+    'Translators':
+        'Tõlkijad',
+    'License':
+        'Litsents',
+    'current module versions':
+        'Hetkel kasutusel olevad moodulid',
     'Contributors':
         'Kaastööd teinud',
     'Translations':
@@ -967,24 +967,24 @@ SnapTranslator.dict.et = {
         'Suur',
     'slider':
         'Liugur',
-    'slider min...':
-        'Miinimum ...',
-    'slider max...':
-        'Maksimum ...',
-    'import...':
-        'Import ...',
+    'slider min':
+        'Miinimum',
+    'slider max':
+        'Maksimum',
+    'import':
+        'Import',
     'Slider minimum value':
         'Liuguri miinimumväärtus',
     'Slider maximum value':
         'Liuguri maksimumväärtus',
 
     // list watchers
-    'length: ':
-        'pikkus: ',
+    'length':
+        'pikkus',
 
     // coments
-    'add comment here...':
-        'Kommentaarid kirjuta siia ...',
+    'add comment here':
+        'Kommentaarid kirjuta siia',
 
     // drow downs
     // directions
@@ -1110,8 +1110,8 @@ SnapTranslator.dict.et = {
         '9',
 
     // messages
-    'new...':
-        'Uus ...',
+    'new':
+        'Uus',
 
     // math functions
     'abs':
@@ -1182,8 +1182,8 @@ SnapTranslator.dict.et = {
         'Flipi ↔',
     'flip ↕':
         'Flipi ↕',
-    'Export all scripts as pic...':
-        'Ekspordi kõik skriptid pilti ...',
+    'Export all scripts as pic':
+        'Ekspordi kõik skriptid pilti',
     'show a picture of all scripts\nand block definitions':
         'Näitab pilti kõigi skriptide\nja plokkide definitsioonidega.',
     'current %dates':
@@ -1204,8 +1204,8 @@ SnapTranslator.dict.et = {
         'second',
     'time in milliseconds':
         'aeg (ms)',
-    'find blocks...':
-        'Otsi plokke ...',
+    'find blocks':
+        'Otsi plokke',
     'costume name':
         'kostüümi nimi',
     'Open':
@@ -1216,10 +1216,10 @@ SnapTranslator.dict.et = {
         'Snap! pilv',
     'Cloud':
         'Pilv',
-    'could not connect to:':
-        'Ühendust ei õnnestunud luua:',
-    'Service:':
-        'Teenus:',
+    'could not connect to':
+        'Ühendust ei õnnestunud luua',
+    'Service':
+        'Teenus',
     'login':
         'login',
     'ERROR: INVALID PASSWORD':
@@ -1234,8 +1234,8 @@ SnapTranslator.dict.et = {
         'Logi sisse',
     'Logout':
         'Logi välja',
-    'Change Password...':
-        'Muuda parooli ...',
+    'Change Password':
+        'Muuda parooli',
     'Change Password':
         'Parooli muutmine',
     'Account created.':
@@ -1248,20 +1248,20 @@ SnapTranslator.dict.et = {
         'disconnected.',
     'Reset password':
         'Parooli lähtestamine',
-    'Reset Password...':
-        'Lähtesta parool ...',
-    'User name:':
-        'Kasutajanimi:',
-    'Password:':
-        'Parool:',
-    'Old password:':
-        'Kehtiv parool:',
-    'New password:':
-        'Uus parool:',
-    'Repeat new password:':
-        'Uue parooli kordus:',
-    'Birth date:':
-        'Sünnikuupäev:',
+    'Reset Password':
+        'Lähtesta parool',
+    'User name':
+        'Kasutajanimi',
+    'Password':
+        'Parool',
+    'Old password':
+        'Kehtiv parool',
+    'New password':
+        'Uus parool',
+    'Repeat new password':
+        'Uue parooli kordus',
+    'Birth date':
+        'Sünnikuupäev',
     'January':
         'jaanuar',
     'February':
@@ -1286,18 +1286,18 @@ SnapTranslator.dict.et = {
         'november',
     'December':
         'detsember',
-    'year:':
-        'aasta:',
-    ' or before':
-        ' or before',
-    'E-mail address:':
-        'E-posti aadress:',
-    'E-mail address of parent or guardian:':
-        'Lapsevanema või hooldaja e-posti aadress:',
-    'Terms of Service...':
-        'Teenuse Tingimused ...',
-    'Privacy...':
-        'Privaatsus ...',
+    'year':
+        'aasta',
+    'or before':
+        'or before',
+    'E-mail address':
+        'E-posti aadress',
+    'E-mail address of parent or guardian':
+        'Lapsevanema või hooldaja e-posti aadress',
+    'Terms of Service':
+        'Teenuse Tingimused',
+    'Privacy':
+        'Privaatsus',
     'I have read and agree\nto the Terms of Service':
         'Ma olen Teenuse Tingimusi lugenud\nja nendega nõustunud',
     'stay signed in on this computer\nuntil logging out':
@@ -1318,14 +1318,14 @@ SnapTranslator.dict.et = {
         'Näited',
     'You are not logged in':
         'Sa pole end sisse loginud',
-    'Updating\nproject list...':
-        'Projektide nimekirja uuendamine ...',
-    'Opening project...':
-        'Projekti avamine ...',
-    'Fetching project\nfrom the cloud...':
-        'Projekti allalaadimine\npilvest ...',
-    'Saving project\nto the cloud...':
-        'Projekti salvestamine\npilve ...',
+    'Updating\nproject list':
+        'Projektide nimekirja uuendamine',
+    'Opening project':
+        'Projekti avamine',
+    'Fetching project\nfrom the cloud':
+        'Projekti allalaadimine\npilvest',
+    'Saving project\nto the cloud':
+        'Projekti salvestamine\npilve',
     'Sprite Nesting':
         'Sprite Nesting',
     'uncheck to disable\nsprite composition':
@@ -1336,8 +1336,8 @@ SnapTranslator.dict.et = {
         'Kui soovid kasutada plokkide tekstiks\nteisendamist, lülita see sisse.',
     'saved.':
         'salvestatud.',
-    'options...':
-        'valikud ...',
+    'options':
+        'valikud',
     'read-only':
         'ainult loetav',
     'Input Slot Options':
@@ -1358,8 +1358,8 @@ SnapTranslator.dict.et = {
         'SVG-de rasteriseerimine',
     'check to rasterize\nSVGs on import':
         'SVG graafika rasteriseerimiseks\nimpordil lülita see sisse.',
-    'comment pic...':
-        'megjegyzés képe…',
+    'comment pic':
+        'megjegyzés képe',
     'open a new window\nwith a picture of this comment':
         'új ablak megnyitása\nennek a megjegyzésnek a képével',
     'undo':
@@ -1474,8 +1474,8 @@ SnapTranslator.dict.et = {
         'arrowRightOutline',
     'robot':
         'robot',
-    'turn pen trails into new costume...':
-        'turn pen trails into new costume...',
+    'turn pen trails into new costume':
+        'turn pen trails into new costume',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite',
     'pen':
@@ -1494,10 +1494,10 @@ SnapTranslator.dict.et = {
         'Projekti jagamine',
     'Unshare Project':
         'Projekti jagamise lõpetamine',
-    'sharing\nproject...':
-        'Projekti\njagamine ...',
-    'unsharing\nproject...':
-        'Projekti jagamise\nlõpetamine ...',
+    'sharing\nproject':
+        'Projekti\njagamine',
+    'unsharing\nproject':
+        'Projekti jagamise\nlõpetamine',
     'shared.':
         'jagatud.',
     'unshared.':
@@ -1510,8 +1510,8 @@ SnapTranslator.dict.et = {
         'SVG kostüümid pole veel kõigis brauserites täielikult toetatud.',
     'Save Project':
         'Projekti salvestamine',
-    'script pic with result...':
-        'script pic with result...',
+    'script pic with result':
+        'script pic with result',
     'open a new window\nwith a picture of both\nthis script and its result':
         'open a new window\nwith a picture of both\nthis script and its result',
     'JavaScript function ( %mult%s ) { %code }':
@@ -1526,10 +1526,10 @@ SnapTranslator.dict.et = {
         'Import -',
     'Select a costume from the media library':
         'Kostüümi valimine meediateegist.',
-    'edit rotation point only...':
-        'edit rotation point only...',
-    'Export Project As...':
-        'Projekti eksport kui ...',
+    'edit rotation point only':
+        'edit rotation point only',
+    'Export Project As':
+        'Projekti eksport kui',
     'a variable of name \'':
         'muutujat nimega „',
     '\'\ndoes not exist in this context':
@@ -1562,10 +1562,10 @@ SnapTranslator.dict.et = {
         'kood',
     'header':
         'päis',
-    'header mapping...':
-        'header mapping...',
-    'code mapping...':
-        'code mapping...',
+    'header mapping':
+        'header mapping',
+    'code mapping':
+        'code mapping',
     'Code mapping':
         'Code mapping',
     'Header mapping':

@@ -340,8 +340,8 @@ SnapTranslator.dict.ar = {
         ' %s فكـر',
     'Hello!':
         '!مـرحبـا',
-    'Hmm...':
-        'هممم...',
+    'Hmm':
+        'هممم',
     'change %eff effect by %n':
         ' %eff التأثير قيمـة %n بمقدار غيّر',
     'set %eff effect to %n':
@@ -363,7 +363,7 @@ SnapTranslator.dict.ar = {
     'go back %n layers':
         'طبقات  %n بمقدار الخلف الي انتقل',
 
-    'development mode \ndebugging primitives:':
+    'development mode\ndebugging primitives':
         'نمط البرمجه \nو تصحيح الاخطاء',
     'console log %mult%s':
         'console log %mult%s',
@@ -630,8 +630,8 @@ SnapTranslator.dict.ar = {
 
      // menus
     // snap menu
-    'About...':
-        'عن SNAP!...',
+    'About':
+        'عن SNAP!',
     'Reference manual':
         'دليل التشغيل',
     'Snap! website':
@@ -648,37 +648,37 @@ SnapTranslator.dict.ar = {
         'user-friendlyعرض القوائم تعطيل ',
         
      // project menu
-    'Project notes...':
-        'ملاحظات عن المشروع...',
+    'Project notes':
+        'ملاحظات عن المشروع',
     'New':
         'جديد',
-    'Open...':
-        'فتح...',
+    'Open':
+        'فتح',
     'Save':
         'حفظ',
     'Save to disk':
         'حفظ في المستعرض',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'حفظ المشروع فى مجلد التنزيلات الخاص بالمتصفح المحدد',
-    'Save As...':
-        'حفظ بأسم ...',
-    'Import...':
-        'استيراد...',
+    'Save As':
+        'حفظ بأسم ',
+    'Import':
+        'استيراد',
     'load an exported project file\nor block library, a costume\nor a sound':
         'استيراد مشروع تم تصديره من قبل',
-    'Export project as plain text...':
-        'تصدير المشروع كمستند نصي ...',
-    'Export project...':
-        'تصدير المشروع...',
+    'Export project as plain text':
+        'تصدير المشروع كمستند نصي ',
+    'Export project':
+        'تصدير المشروع',
     'show project data as XML\nin a new browser window':
         'عرض المشروع في صيغة XML',
-    'Export blocks...':
-        'تصدير اللبنات...',
+    'Export blocks':
+        'تصدير اللبنات',
     'show global custom block definitions as XML\nin a new browser window':
         'عرض جميع اللبنات المخصصة في صيغة XML',
 		
-	'Unused blocks...':
-          'لبنات غير مستخدمة...',
+	'Unused blocks':
+          'لبنات غير مستخدمة',
     'find unused global custom blocks\nand remove their definitions':
         'إيجاد اللبنات المخصصة الغير مستخدمة لحذفها من المشروع',
     'Remove unused blocks':
@@ -687,9 +687,9 @@ SnapTranslator.dict.ar = {
         'لايوجد لبنات مخصصة غير مستخدمة في هذا المشروع',
     'unused block(s) removed':
         'تم ازالة اللبنات الغير مستخدمة',
-    'Export summary...':
-        'تصدير ملخص المشروع...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'تصدير ملخص المشروع',
+    'open a new browser browser window\nwith a summary of this project':
         'عرض ملخص المشروع فى نافذة مستعرض جديدة',
     'Contents':
         'محتويات',
@@ -707,24 +707,24 @@ SnapTranslator.dict.ar = {
         'استيراد أدوات',
     'load the official library of\npowerful blocks':
         'تحميل مكتبة اللبنات الرسمية لمزيد من التحكم',
-    'Libraries...':
-        'المكتبات...',
+    'Libraries':
+        'المكتبات',
     'Import library':
         'استيراد مكتبة',
         
     // cloud menu
-    'Login...':
-        'تسجيل دخول...',
-    'Signup...':
-        'تسجيل خروج...',
+    'Login':
+        'تسجيل دخول',
+    'Signup':
+        'تسجيل خروج',
         
     // settings menu
-    'Language...':
-        'تغيير اللغة...',
-    'Zoom blocks...':
-        'التحكم فى حجم اللبنات...',
-    'Stage size...':
-        'مساحة المنصة...',
+    'Language':
+        'تغيير اللغة',
+    'Zoom blocks':
+        'التحكم فى حجم اللبنات',
+    'Stage size':
+        'مساحة المنصة',
     'Stage width':
         'عرض المنصة',
     'Stage height':
@@ -829,11 +829,11 @@ SnapTranslator.dict.ar = {
     // inputs
     'with inputs':
         'مستخدماً القيم التالية',
-    'input names:':
+    'input names':
         'مع المدخلات',
-    'Input Names:':
+    'Input Names':
         'أسماء المدخلات',
-    'input list:':
+    'input list':
         'قائمة المدخلات',
 
     // context menus:
@@ -847,10 +847,10 @@ SnapTranslator.dict.ar = {
         'إظهار اللبنات',
 
     // blocks:
-    'help...':
-        'مساعدة...',
-    'relabel...':
-        'اعادة تسمية...',
+    'help':
+        'مساعدة',
+    'relabel':
+        'اعادة تسمية',
     'duplicate':
         'مضاعفة',
     'make a copy\nand pick it up':
@@ -859,8 +859,8 @@ SnapTranslator.dict.ar = {
         'ضاعف هذا البلوك فقط',
     'delete':
         'حذف',
-    'script pic...':
-        'صورة نقطية للبلوك...',
+    'script pic':
+        'صورة نقطية للبلوك',
     'open a new window\nwith a picture of this script':
         'افتح نافذه جديده و اعرض النص البرمجي خلالها',
     'ringify':
@@ -869,10 +869,10 @@ SnapTranslator.dict.ar = {
         'عدم احاطة',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'حذف تعريف البلوك',
-    'edit...':
-        'تحرير...',
+    'edit':
+        'تحرير',
 
     // sprites:
     'edit':
@@ -883,14 +883,14 @@ SnapTranslator.dict.ar = {
         'افصل عن',
     'detach all parts':
         'افصل كل الاجزاء',
-    'export...':
-        'تصدير...',
+    'export':
+        'تصدير',
 
     // stage:
     'show all':
         'إظهار الكل',
-    'pic...':
-        'الصورة المصدره...',
+    'pic':
+        'الصورة المصدره',
     'open a new window\nwith a picture of the stage':
         'فتح نافذه جديده مع لقطه من المسرح',
 
@@ -905,12 +905,12 @@ SnapTranslator.dict.ar = {
         'تراجع عن الافلات',
     'undo the last\nblock drop\nin this pane':
         'تراجع عن الافلات الاخير للبلوك',
-    'scripts pic...':
-        'تصوير لقطة من الاسكربت...',
+    'scripts pic':
+        'تصوير لقطة من الاسكربت',
     'open a new window\nwith a picture of all scripts':
         'فتح نافذه جديده\n مع صورة لجميع الاسكربتات',
-    'make a block...':
-        'أنشئ لَبِـنَة جديدة...',
+    'make a block':
+        'أنشئ لَبِـنَة جديدة',
 
     // costumes
     'rename':
@@ -986,8 +986,8 @@ SnapTranslator.dict.ar = {
         'حذف مشروع',
     'Are you sure you want to delete':
         'هل انت متأكد من رغبتك في الحذف?',
-    'rename...':
-        'اعاده تسميه...',
+    'rename':
+        'اعاده تسميه',
 
     // costume editor
     'Costume Editor':
@@ -1006,8 +1006,8 @@ SnapTranslator.dict.ar = {
         'استبدال المشروع الحالي بأخر جديد?',
 
     // save project
-    'Save Project As...':
-        'حفظ المشروع باسم...',
+    'Save Project As':
+        'حفظ المشروع باسم',
 
     // export blocks
     'Export blocks':
@@ -1084,8 +1084,8 @@ SnapTranslator.dict.ar = {
         'منطقي\n(خام لم يُقَيَّم)',
     'Single input.':
         'ادخال مفرد.',
-    'Default Value:':
-        'القيمة الافتراضية:',
+    'Default Value':
+        'القيمة الافتراضية',
     'Multiple inputs (value is list of inputs)':
         'متعدد الادخالات (عبارة عن لائحة او مصفوفة من المدخلات)',
     'Upvar - make internal variable visible to caller':
@@ -1094,19 +1094,19 @@ SnapTranslator.dict.ar = {
     // About Snap
     'About Snap':
         'عن Snap',
-    'Back...':
-        'للخلف...',
-    'License...':
-        'الترخيص...',
-    'Modules...':
-        'البرمجه...',
-    'Credits...':
-        'الاشارات...',
-    'Translators...':
+    'Back':
+        'للخلف',
+    'License':
+        'الترخيص',
+    'Modules':
+        'البرمجه',
+    'Credits':
+        'الاشارات',
+    'Translators':
         'المترجمون',
     'License':
         'الترخيص',
-    'current module versions:':
+    'current module versions':
         'الاصدار الحالي',
     'Contributors':
         'المساهمون',
@@ -1120,23 +1120,23 @@ SnapTranslator.dict.ar = {
         'كبير',
     'slider':
         'شريط التمرير',
-    'slider min...':
-        'ادني حد...',
-    'slider max...':
-        'اقصي حد...',
-    'import...':
-        'استيراد...',
+    'slider min':
+        'ادني حد',
+    'slider max':
+        'اقصي حد',
+    'import':
+        'استيراد',
     'Slider minimum value':
         'القيمة الصغري لشريط التمرير',
     'Slider maximum value':
         'القيمة العظمي لشريط التمرير',
 
     // list watchers
-    'length: ':
+    'length':
         'الطول: ',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'اضف تعليق هنا',
 
     // drow downs
@@ -1261,8 +1261,8 @@ SnapTranslator.dict.ar = {
         '9',
 
     // messages
-    'new...':
-        'جديد...',
+    'new':
+        'جديد',
 
     // math functions
     'abs':
@@ -1324,10 +1324,10 @@ SnapTranslator.dict.ar = {
 		
 		
 		// miscellaneous
-	'find blocks...':
-		'البحث عن لبنة...',
+	'find blocks':
+		'البحث عن لبنة',
 	
-	'Reset Password...':
+	'Reset Password':
 		'إعادة تعيين كلمة المرور',
 	
 	'Codification support':

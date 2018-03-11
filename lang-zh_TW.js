@@ -299,21 +299,21 @@ SnapTranslator.dict.zh_TW = {
     'point in direction %dir':
         '面向 %dir 度',
     'point towards %dst':
-        '面向 %dst ',
+        '面向 %dst',
     'go to x: %n y: %n':
-        '移到 x: %n  y: %n ',
+         '移到 x: %n y: %n',
     'go to %dst':
-        '移到 %dst ',
+        '移到 %dst',
     'glide %n secs to x: %n y: %n':
-        ' %n 秒內，移到 x: %n y: %n ',
+        '%n 秒內，移到 x: %n y: %n',
     'change x by %n':
-        '增加 x 座標 %n ',
+        '增加 x 座標 %n',
     'set x to %n':
-        '設定 x 座標為 %n ',
+        '設定 x 座標為 %n',
     'change y by %n':
-        '增加 y 座標 %n ',
+        '增加 y 座標 %n',
     'set y to %n':
-        '設定 y 座標為 %n ',
+        '設定 y 座標為 %n',
     'if on edge, bounce':
         '碰到邊緣就反彈',
     'x position':
@@ -325,33 +325,33 @@ SnapTranslator.dict.zh_TW = {
 
     // looks:
     'switch to costume %cst':
-        '切換到造型 %cst ',
+        '切換到造型 %cst',
     'next costume':
         '下一個造型',
     'costume #':
         '造型編號',
     'say %s for %n secs':
-        '說 %s  %n 秒',
+         '說 %s %n 秒',
     'say %s':
-        '說 %s ',
+        '說 %s',
     'think %s for %n secs':
-        '思考 %s  %n 秒',
+         '思考 %s %n 秒',
     'think %s':
-        '思考 %s ',
+        '思考 %s',
     'Hello!':
         '你好！',
-    'Hmm...':
-        '嗯...',
+    'Hmm':
+        '嗯',
     'change %eff effect by %n':
-        '將 %eff 特效增加 %n ',
+        '將 %eff 特效增加 %n',
     'set %eff effect to %n':
-        '將 %eff 特效設定為 %n ',
+        '將 %eff 特效設定為 %n',
     'clear graphic effects':
         '清除所有圖形特效',
     'change size by %n':
-        '增加角色的大小 %n ',
+        '增加角色的大小 %n',
     'set size to %n %':
-        '設定角色的大小為 %n ',
+        '設定角色的大小為 %n',
     'size':
         '大小',
     'show':
@@ -363,8 +363,8 @@ SnapTranslator.dict.zh_TW = {
     'go back %n layers':
         '下移 %n 層',
 
-    'development mode \ndebugging primitives:':
-        '開發模式\n調式程式語言:',
+    'development mode\ndebugging primitives':
+        '開發模式\n調式程式語言',
     'console log %mult%s':
         '控制臺日誌 %mult%s',
     'alert %mult%s':
@@ -372,7 +372,7 @@ SnapTranslator.dict.zh_TW = {
 
     // sound:
     'play sound %snd':
-        '播放聲音 %snd ',
+        '播放聲音 %snd',
     'play sound %snd until done':
         '播放聲音 %snd 直到播放完畢',
     'stop all sounds':
@@ -380,7 +380,7 @@ SnapTranslator.dict.zh_TW = {
     'rest for %n beats':
         '停止 %n 秒',
     'play note %n for %n beats':
-        '彈奏 %n  %n 拍',
+         '彈奏 %n %n 拍',
     'change tempo by %n':
         '加快節奏 %n',
     'set tempo to %n bpm':
@@ -396,19 +396,19 @@ SnapTranslator.dict.zh_TW = {
     'pen up':
         '抬筆',
     'set pen color to %clr':
-        '設定畫筆顏色為 %clr ',
+        '設定畫筆顏色為 %clr',
     'change pen color by %n':
-        '增加畫筆顏色值 %n ',
+        '增加畫筆顏色值 %n',
     'set pen color to %n':
-        '設定畫筆顏色值為 %n ',
+        '設定畫筆顏色值為 %n',
     'change pen shade by %n':
-        '增加畫筆色度 %n ',
+        '增加畫筆色度 %n',
     'set pen shade to %n':
-        '設定畫筆色度為 %n ',
+        '設定畫筆色度為 %n',
     'change pen size by %n':
-        '增加畫筆粗細 %n ',
+        '增加畫筆粗細 %n',
     'set pen size to %n':
-        '設定畫筆的粗細為 %n ',
+        '設定畫筆的粗細為 %n',
     'stamp':
         '圖章',
 
@@ -422,7 +422,7 @@ SnapTranslator.dict.zh_TW = {
     'when I receive %msgHat':
         '當接收到 %msgHat',
     'broadcast %msg':
-        '廣播 %msg ',
+        '廣播 %msg',
     'broadcast %msg and wait':
         '廣播 %msg 並等待',
     'Message name':
@@ -434,15 +434,15 @@ SnapTranslator.dict.zh_TW = {
     'forever %c':
         '重複執行 %c',
     'repeat %n %c':
-        '重複執行 %n  %c',
+         '重複執行 %n %c',
     'repeat until %b %c':
-        '重複執行直到 %b  %c',
+         '重複執行直到 %b %c',
     'if %b %c':
-        '如果 %b  %c',
+         '如果 %b %c',
     'if %b %c else %c':
-        '如果 %b  %c 否則 %c',
+         '如果 %b %c 否則 %c',
     'report %s':
-        '報告 %s ',
+        '報告 %s',
     'stop block':
         '停止程式塊',
     'stop script':
@@ -450,15 +450,15 @@ SnapTranslator.dict.zh_TW = {
     'stop all %stop':
         '全部停止 %stop',
     'run %cmdRing %inputs':
-        ' 行 %cmdRing %inputs ',
+        '行 %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        '啟動 %cmdRing  %inputs ',
+         '啟動 %cmdRing %inputs',
     'call %repRing %inputs':
-        '調用 %repRing  %inputs ',
+         '調用 %repRing %inputs',
     'run %cmdRing/continuation':
-        '持續執行 %cmdRing ',
+        '持續執行 %cmdRing',
     'call %cmdRing w/continuation':
-        '持續調用 %cmdRing ',
+        '持續調用 %cmdRing',
     'warp %c':
         '直接運行 %c',
     'when I start as a clone':
@@ -472,9 +472,9 @@ SnapTranslator.dict.zh_TW = {
 
     // sensing:
     'touching %col ?':
-        '碰到 %col ',
+        '碰到 %col',
     'touching %clr ?':
-        '碰到顏色 %clr ',
+        '碰到顏色 %clr',
     'color %clr is touching %clr ?':
         '顏色 %clr 碰到了顏色 %clr ？',
     'ask %s and wait':
@@ -505,7 +505,7 @@ SnapTranslator.dict.zh_TW = {
         '設置 Turbo 模式 %b',
 
     'filtered for %clr':
-        '選擇顏色  %clr ',
+         '選擇顏色 %clr',
     'stack size':
         '堆疊大小',
     'frames':
@@ -561,13 +561,13 @@ SnapTranslator.dict.zh_TW = {
         '刪除變數',
 
     'set %var to %s':
-        '設定變數 %var 的值為 %s ',
+        '設定變數 %var 的值為 %s',
     'change %var by %n':
-        '增加變數 %var 的值 %n ',
+        '增加變數 %var 的值 %n',
     'show variable %var':
-        '顯示變數 %var ',
+        '顯示變數 %var',
     'hide variable %var':
-        '隱藏變數 %var ',
+        '隱藏變數 %var',
     'script variables %scriptVars':
         '腳本變數 %scriptVars',
 
@@ -579,21 +579,21 @@ SnapTranslator.dict.zh_TW = {
     'item %idx of %l':
         '第 %idx 項在 %l 中',
     'all but first of %l':
-        ' %l 中除第一項之外內容',
+        '%l 中除第一項之外內容',
     'length of %l':
-        ' %l 的大小',
+        '%l 的大小',
     '%l contains %s':
-        ' %l 包含 %s ',
+        '%l 包含 %s',
     'thing':
         '事項',
     'add %s to %l':
-        '將 %s 加入 %l ',
+        '將 %s 加入 %l',
     'delete %ida of %l':
         '刪除 %ida 第 %l 項',
     'insert %s at %idx of %l':
         '插入 %s 到第 %idx 項在 %l 中',
     'replace item %idx of %l with %s':
-        '替換第 %idx 項在 %l 中為 %s ',
+        '替換第 %idx 項在 %l 中為 %s',
 
     // other
     'Make a block':
@@ -601,8 +601,8 @@ SnapTranslator.dict.zh_TW = {
 
     // menus
     // snap menu
-    'About...':
-        '關於Snap!...',
+    'About':
+        '關於Snap!',
     'Reference manual':
         '參考手冊',
     'Snap! website':
@@ -620,30 +620,30 @@ SnapTranslator.dict.zh_TW = {
 
 
     // project menu
-    'Project notes...':
-        '專案說明...',
+    'Project notes':
+        '專案說明',
     'New':
         '新建',
-    'Open...':
-        '打開...',
+    'Open':
+        '打開',
     'Save':
         '存',
-    'Save As...':
-        '另存為...',
-    'Import...':
-        '導入...',
+    'Save As':
+        '另存為',
+    'Import':
+        '導入',
     'load an exported project file\nor block library, a costume\nor a sound':
         '當你拖動到系統，注意查看檢查報告\n'
 		+ '要注意檢查報告為空\n\n'
 		+ '有一些流覽器不支持這一功能',
-    'Export project as plain text...':
-        '純文本格式導出專案...',
-    'Export project...':
-        '導出項目...',
+    'Export project as plain text':
+        '純文本格式導出專案',
+    'Export project':
+        '導出項目',
     'show project data as XML\nin a new browser window':
         '新瀏覽視窗以XML格式顯示專案',
-    'Export blocks...':
-        '輸出程式塊...',
+    'Export blocks':
+        '輸出程式塊',
     'show global custom block definitions as XML\nin a new browser window':
         '新瀏覽視窗以XML格式顯示全局自定義程式塊',
     'Import tools':
@@ -652,15 +652,15 @@ SnapTranslator.dict.zh_TW = {
         '載入官方庫和強大的程式塊',
 
     // cloud menu
-    'Login...':
-        '登錄...',
-    'Signup...':
-        '註冊...',
+    'Login':
+        '登錄',
+    'Signup':
+        '註冊',
     // settings menu
-    'Language...':
-        '語言選擇...',
-    'Zoom blocks...':
-        '放大程式塊...',
+    'Language':
+        '語言選擇',
+    'Zoom blocks':
+        '放大程式塊',
     'Blurred shadows':
         '半透明陰影',
     'uncheck to use solid drop\nshadows and highlights':
@@ -737,22 +737,22 @@ SnapTranslator.dict.zh_TW = {
     // inputs
     'with inputs':
         '參數',
-    'input names:':
-        '參數名:',
-    'Input Names:':
-        '參數名:',
-    'input list:':
-        '輸入列表:',
+    'input names':
+        '參數名',
+    'Input Names':
+        '參數名',
+    'input list':
+        '輸入列表',
 
     // context menus:
     'help':
         '説明',
 
     // blocks:
-    'help...':
-        '説明...',
-    'relabel...':
-        '重新標記...',
+    'help':
+        '説明',
+    'relabel':
+        '重新標記',
     'duplicate':
         '複製',
     'make a copy\nand pick it up':
@@ -761,8 +761,8 @@ SnapTranslator.dict.zh_TW = {
         '只複製此塊',
     'delete':
         '刪除',
-    'script pic...':
-        '將腳本存為圖像...',
+    'script pic':
+        '將腳本存為圖像',
     'open a new window\nwith a picture of this script':
         '新流覽視窗中打開腳本的圖片',
     'ringify':
@@ -771,21 +771,21 @@ SnapTranslator.dict.zh_TW = {
         '刪除環',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         '刪除自定義程式塊',
-    'edit...':
-        '編輯...',
+    'edit':
+        '編輯',
 
     // sprites:
     'edit':
         '編輯',
-    'export...':
-        '導出...',
+    'export':
+        '導出',
 
     'show all':
         '顯示所有',
-    'pic...':
-        '導出圖像...',
+    'pic':
+        '導出圖像',
     'open a new window\nwith a picture of the stage':
         '打開一張圖片舞臺的新視窗，',
     // scripting area
@@ -795,8 +795,8 @@ SnapTranslator.dict.zh_TW = {
         '整理腳本，垂直排列',
     'add comment':
         '添加注釋',
-    'make a block...':
-        '創建程式塊...',
+    'make a block':
+        '創建程式塊',
 
     // costumes
     'rename':
@@ -870,8 +870,8 @@ SnapTranslator.dict.zh_TW = {
         '刪除項目',
     'Are you sure you want to delete':
         '你確定要刪除嗎？',
-    'rename...':
-        '重命名...',
+    'rename':
+        '重命名',
     // costume editor
     'Costume Editor':
         '造型編輯器',
@@ -893,8 +893,8 @@ SnapTranslator.dict.zh_TW = {
         '打開項目',
 
     // save project
-    'Save Project As...':
-        '項目另存為...',
+    'Save Project As':
+        '項目另存為',
 
     // export blocks
     'Export blocks':
@@ -973,8 +973,8 @@ SnapTranslator.dict.zh_TW = {
         '布林（評價）',
     'Single input.':
         '單一參數.',
-    'Default Value:':
-        '預設值:',
+    'Default Value':
+        '預設值',
     'Multiple inputs (value is list of inputs)':
         '多行輸入（值為參數列表）',
     'Upvar - make internal variable visible to caller':
@@ -983,22 +983,22 @@ SnapTranslator.dict.zh_TW = {
     // About Snap
     'About Snap':
         '關於 Snap',
-    'Back...':
-        '返回...',
-    'License...':
-        '許可...',
-    'Modules...':
-        '模組...',
-    'Credits...':
-        '光榮榜...',
-    'Translators...':
+    'Back':
+        '返回',
+    'License':
+        '許可',
+    'Modules':
+        '模組',
+    'Credits':
+        '光榮榜',
+    'Translators':
         '翻譯者',
     'License':
         '版權',
-    'current module versions:':
-        '目前模組版本:',
+    'current module versions':
+        '目前模組版本',
     'Contributors':
-        '貢獻者:',
+        '貢獻者',
     'Translations':
         '翻譯者',
 
@@ -1009,24 +1009,24 @@ SnapTranslator.dict.zh_TW = {
         '大型',
     'slider':
         '滑塊',
-    'slider min...':
-        '滑塊的最小值...',
-    'slider max...':
-        '滑塊的最大值...',
-    'import...':
-        '導入...',
+    'slider min':
+        '滑塊的最小值',
+    'slider max':
+        '滑塊的最大值',
+    'import':
+        '導入',
     'Slider minimum value':
         '滑塊的最小值',
     'Slider maximum value':
         '滑塊的最大值',
 
     // list watchers
-    'length: ':
-        '長度: ',
+    'length':
+        '長度',
 
     // coments
-    'add comment here...':
-        '在這裏添加注釋...',
+    'add comment here':
+        '在這裏添加注釋',
 
     // drow downs
     // directions
@@ -1140,8 +1140,8 @@ SnapTranslator.dict.zh_TW = {
         '9',
 
     // messages
-    'new...':
-        '新增...',
+    'new':
+        '新增',
 
     // math functions
     'abs':
@@ -1204,8 +1204,8 @@ SnapTranslator.dict.zh_TW = {
         '確定要刪除嗎？',
     'unringify':
         '刪除環',
-    'rename...':
-        '重命名為...',
+    'rename':
+        '重命名為',
     '(180) down':
         '(180) 下',
     'Ok':

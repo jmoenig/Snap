@@ -250,9 +250,9 @@ SnapTranslator.dict.fr = {
     'don\'t rotate':
         'le lutin ne pivote jamais',
     'can rotate':
-        'le lutin pivote \nautour de son centre de rotation',
+        'le lutin pivote\nautour de son centre de rotation',
     'only face left/right':
-        'le lutin reste en position horizontale \nsoit vers la gauche soit vers la droite ',
+        'le lutin reste en position horizontale\nsoit vers la gauche soit vers la droite',
 
     // new sprite button:
     'add a new sprite':
@@ -262,9 +262,9 @@ SnapTranslator.dict.fr = {
 
     // tab help
     'import a picture from another web page or from\na file on your computer by dropping it here':
-        'Importer une image depuis votre ordinateur ou une page web \npar un presser-glisser-d\u00E9poser dans l\u0027aire des costumes',
+        'Importer une image depuis votre ordinateur ou une page web\npar un presser-glisser-d\u00E9poser dans l\u0027aire des costumes',
     'import a sound from your computer\nby dragging it into here':
-        'Importer un son depuis votre ordinateur \npar un presser-glisser-d\u00E9poser dans l\u0027aire des sons',
+        'Importer un son depuis votre ordinateur\npar un presser-glisser-d\u00E9poser dans l\u0027aire des sons',
 
     // primitive blocks:
 
@@ -352,8 +352,8 @@ SnapTranslator.dict.fr = {
         'penser %s',
     'Hello!':
         'Salut !',
-    'Hmm...':
-        'Mmmh...',
+    'Hmm':
+        'Mmmh',
     'change %eff effect by %n':
         'ajouter \u00E0 l\u0027effet %eff %n',
     'set %eff effect to %n':
@@ -375,8 +375,8 @@ SnapTranslator.dict.fr = {
     'go back %n layers':
         'd\u00E9placer de %n plan arri\u00E8re',
 
-    'development mode \ndebugging primitives:':
-        'mode d\u00E9veloppement \ndebugging primitives:',
+    'development mode\ndebugging primitives':
+        'mode d\u00E9veloppement\ndebugging primitives',
     'console log %mult%s':
         'console log %mult%s',
     'alert %mult%s':
@@ -414,11 +414,11 @@ SnapTranslator.dict.fr = {
     'set pen color to %n':
         'choisir la couleur %n pour le stylo',
     'change pen shade by %n':
-        'ajouter %n \u00E0 l\u0027intensit\u00E9 du stylo ',
+        'ajouter %n \u00E0 l\u0027intensit\u00E9 du stylo',
     'set pen shade to %n':
         'choisir l\u0027intensit\u00E9 %n pour le stylo',
     'change pen size by %n':
-        'ajouter %n \u00E0 la taille du stylo ',
+        'ajouter %n \u00E0 la taille du stylo',
     'set pen size to %n':
         'choisir la taille %n pour le stylo',
     'stamp':
@@ -432,7 +432,7 @@ SnapTranslator.dict.fr = {
     'when %keyHat key pressed':
         'Quand %keyHat est press\u00E9',
     'when I am clicked':
-        'Quand je suis press\u00E9 ',
+        'Quand je suis press\u00E9',
   'when I am %interaction':
     'Quand je suis %interaction',
     'when I receive %msgHat':
@@ -470,7 +470,7 @@ SnapTranslator.dict.fr = {
     'stop all %stop':
         'arr\u00EAter tout %stop',
     'run %cmdRing %inputs':
-        'ex\u00E9cute %cmdRing  %inputs',
+         'ex\u00E9cute %cmdRing %inputs',
     'launch %cmdRing %inputs':
         'lance %cmdRing %inputs',
     'call %repRing %inputs':
@@ -637,8 +637,8 @@ SnapTranslator.dict.fr = {
 
    // menus
     // snap menu
-    'About...':
-        '\u00C0 propos de Snap!...',
+    'About':
+        '\u00C0 propos de Snap!',
     'Reference manual':
         'Manuel de r\u00E9f\u00E9rence',
     'Snap! website':
@@ -655,36 +655,36 @@ SnapTranslator.dict.fr = {
         'activer la fonction morphic',
 
     // project menu
-    'Project notes...':
-        'Notes du projet...',
+    'Project notes':
+        'Notes du projet',
     'New':
         'Nouveau',
-    'Open...':
-        'Ouvrir...',
+    'Open':
+        'Ouvrir',
     'Save':
         'Sauvegarder',
-    'Save As...':
-        'Sauvegarder sous...',
-    'Import...':
-        'Importer...',
+    'Save As':
+        'Sauvegarder sous',
+    'Import':
+        'Importer',
     'load an exported project file\nor block library, a costume\nor a sound':
         'importer un projet export\u00E9,\nune biblioth\u00E8que de '
             + 'blocs\n'
             + 'un costume ou un son',
-    'Export project as plain text...':
-        'Exporter le projet comme texte...',
-    'Export project...':
-        'Exporter le projet...',
+    'Export project as plain text':
+        'Exporter le projet comme texte',
+    'Export project':
+        'Exporter le projet',
     'save project data as XML\nto your downloads folder':
         'sauvegarder le projet au\nformat XML dans votre\ndossier T\u00E9l\u00E9chargements',
     'show project data as XML\nin a new browser window':
         'ouvrir le projet au format XML\ndans une nouvelle fen\u00EAtre de votre navigateur',
-    'Export blocks...':
-        'Exporter les blocs ',
+    'Export blocks':
+        'Exporter les blocs',
     'show global custom block definitions as XML\nin a new browser window':
-        'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML \ndans une nouvelle fen\u00EAtre de navigateur',
-    'Unused blocks...':
-        'Blocs inutilis\u00E9s...',
+        'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML\ndans une nouvelle fen\u00EAtre de navigateur',
+    'Unused blocks':
+        'Blocs inutilis\u00E9s',
     'find unused global custom blocks\nand remove their definitions':
         'trouver et supprimer les blocs personnalis\u00E9s inutilis\u00E9s',
     'Remove unused blocks':
@@ -693,34 +693,34 @@ SnapTranslator.dict.fr = {
         'Aucun bloc inutilis\u00E9 dans ce projet',
     'unused block(s) removed':
         'bloc(s) inutilis\u00E9(s) supprim\u00E9(s)',
-    'Export summary...':
-        'Exporter un r\u00E9sum\u00E9...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Exporter un r\u00E9sum\u00E9',
+    'open a new browser browser window\nwith a summary of this project':
         'voir un résumé de ce projet dans\nune nouvelle fenêtre du navigateur',
     'Import tools':
         'Importer les outils',
     'load the official library of\npowerful blocks':
         'Importer la biblioth\u00E8que officielle\nd\'outils avanc\u00E9s',
-    'Libraries...':
-        'Biblioth\u00E8ques...',
+    'Libraries':
+        'Biblioth\u00E8ques',
     'Import library':
         'Importer une biblioth\u00E8que',
 
     // settings menu
-    'Language...':
-        'Langue...',
+    'Language':
+        'Langue',
     'Blurred shadows':
         'Ombres floues',
     'uncheck to use solid drop\nshadows and highlights':
-        'D\u00E9cocher pour utiliser des rehauts et des ombres \n port\u00E9es floues',
+        'D\u00E9cocher pour utiliser des rehauts et des ombres\nport\u00E9es floues',
     'check to use blurred drop\nshadows and highlights':
-        'cocher pour utiliser des rehauts et des ombres \n port\u00E9es pleines',
+        'cocher pour utiliser des rehauts et des ombres\nport\u00E9es pleines',
     'Zebra coloring':
         'Colorations altern\u00E9es',
     'check to enable alternating\ncolors for nested blocks':
-        'cocher pour activer des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
+        'cocher pour activer des couleurs altern\u00E9es\npour les blocs embo\u00EEt\u00E9s',
     'uncheck to disable alternating\ncolors for nested block':
-        'd\u00E9cocher pour d\u00E9sactiver des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
+        'd\u00E9cocher pour d\u00E9sactiver des couleurs altern\u00E9es\npour les blocs embo\u00EEt\u00E9s',
     'Prefer empty slot drops':
         'Pr\u00E9f\u00E9rer des entr\u00E9es vides',
     'check to focus on empty slots\nwhen dragging & dropping reporters':
@@ -732,21 +732,21 @@ SnapTranslator.dict.fr = {
     'Long form input dialog':
         'Bo\u00EEte d\u0027entr\u00E9e en mode d\u00E9taill\u00E9',
     'check to always show slot\ntypes in the input dialog':
-        'cocher pour toujours ouvrir la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode d\u00E9taill\u00E9 : avec tous les types de blocs',
+        'cocher pour toujours ouvrir la bo\u00EEte de dialogue\nd\u0027entr\u00E9e en mode d\u00E9taill\u00E9 : avec tous les types de blocs',
     'uncheck to use the input\ndialog in short form':
-        'd\u00E9cocher pour utiliser la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode simple ',
+        'd\u00E9cocher pour utiliser la bo\u00EEte de dialogue\nd\u0027entr\u00E9e en mode simple',
     'Virtual keyboard':
         'Clavier virtuel',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'd\u00E9cocher pour d\u00E9sactiver le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
+        'd\u00E9cocher pour d\u00E9sactiver le clavier virtuel pour\nles tablettes et smartphones : mobile devices',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'cocher pour activer le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
+        'cocher pour activer le clavier virtuel pour\nles tablettes et smartphones : mobile devices',
     'Input sliders':
         'Entr\u00E9e curseurs',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'd\u00E9cocher pour d\u00E9sactiver le curseur coulissant \ndans le champ de saisie',
+        'd\u00E9cocher pour d\u00E9sactiver le curseur coulissant\ndans le champ de saisie',
     'check to enable\ninput sliders for\nentry fields':
-        'cocher pour activer un curseur coulissant \ndans le champ de saisie ',
+        'cocher pour activer un curseur coulissant\ndans le champ de saisie',
     'Clicking sound':
         'Cliquetis',
     'uncheck to turn\nblock clicking\nsound off':
@@ -791,10 +791,10 @@ SnapTranslator.dict.fr = {
     // inputs
     'with inputs':
         'avec entr\u00E9es',
-    'input names:':
-        'renseigner un nom :',
-    'Input Names:':
-        'Renseigner un nom :',
+    'input names':
+        'renseigner un nom',
+    'Input Names':
+        'Renseigner un nom',
 
     // context menus:
     'help':
@@ -807,30 +807,30 @@ SnapTranslator.dict.fr = {
         'Afficher les blocs de base',
 
     // blocks:
-    'help...':
-        'Aide...',
+    'help':
+        'Aide',
     'duplicate':
         'dupliquer',
     'make a copy\nand pick it up':
-        'faire une copie\n et le d\u00E9placer',
+        'faire une copie\net le d\u00E9placer',
     'only duplicate this block':
         'ne dupliquer que ce bloc',
     'delete':
         'supprimer',
-    'script pic...':
-        'image du script...',
+    'script pic':
+        'image du script',
     'open a new window\nwith a picture of this script':
-        'ouvrir une nouvelle fen\u00EAtre avec une \nimage .png de ce script',
+        'ouvrir une nouvelle fen\u00EAtre avec une\nimage .png de ce script',
     'ringify':
         'entourer',
     'unringify':
         'd\u00E9tourer',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'supprimer les d\u00E9finitions de bloc',
-    'edit...':
-        '\u00E9diter...',
+    'edit':
+        '\u00E9diter',
 
     // sprites:
     'edit':
@@ -841,8 +841,8 @@ SnapTranslator.dict.fr = {
         'D\u00E9tacher de',
     'detach all parts':
         'D\u00E9tacher toutes les parties',
-    'export...':
-        'Exporter...',
+    'export':
+        'Exporter',
     'paint a new sprite':
         'dessiner un nouveau lutin',
 
@@ -853,8 +853,8 @@ SnapTranslator.dict.fr = {
         'arrange scripts\nvertically',
     'add comment':
         'ajouter un commentaire',
-    'make a block...':
-        'cr\u00E9er un nouveau bloc...',
+    'make a block':
+        'cr\u00E9er un nouveau bloc',
 
     // costumes
     'rename':
@@ -914,14 +914,14 @@ SnapTranslator.dict.fr = {
         'Supprimer un projet',
     'Are you sure you want to delete':
         'Souhaitez-vous vraiment supprimer ?',
-    'rename...':
-        'Renommer...',
+    'rename':
+        'Renommer',
 
      // costume editor
     'Costume Editor':
         '\u00EAditeur de costumes',
     'click or drag crosshairs to move the rotation center':
-        'cliquez ou faites d\u00EAfiler la ligne de mire  pour d\u00EAfinir le centre de rotation du costume',
+         'cliquez ou faites d\u00EAfiler la ligne de mire pour d\u00EAfinir le centre de rotation du costume',
 
     // project notes
     'Project Notes':
@@ -938,14 +938,14 @@ SnapTranslator.dict.fr = {
         'Ouvrir un projet',
 
     // save project
-    'Save Project As...':
-        'Sauvegarder le projet sous...',
+    'Save Project As':
+        'Sauvegarder le projet sous',
 
     // export blocks
     'Export blocks':
         'exporter des blocs',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'ce projet ne contient pas \nde bloc global personnalis\u00E9',
+        'ce projet ne contient pas\nde bloc global personnalis\u00E9',
     'select':
         's\u00E9lectionner',
     'all':
@@ -1017,8 +1017,8 @@ SnapTranslator.dict.fr = {
         'Bool\u00E9en\n(non \u00E9valu\u00E9e)',
     'Single input.':
         'Entr\u00E9e unique.',
-    'Default Value:':
-        'Valeur par d\u00E9faut :',
+    'Default Value':
+        'Valeur par d\u00E9faut',
     'Multiple inputs (value is list of inputs)':
         'Entr\u00E9es multiples (la valeur est une liste des entr\u00E9es)',
     'Upvar - make internal variable visible to caller':
@@ -1038,20 +1038,20 @@ SnapTranslator.dict.fr = {
     // About Snap
     'About Snap':
         '\u00C0 propos de Snap',
-    'Back...':
-        'Retour...',
-    'License...':
-        'Licence...',
-    'Modules...':
-        'Modules...',
-    'Credits...':
-        'Contributeurs...',
-    'Translators...':
-        'Traducteurs...',
+    'Back':
+        'Retour',
+    'License':
+        'Licence',
+    'Modules':
+        'Modules',
+    'Credits':
+        'Contributeurs',
+    'Translators':
+        'Traducteurs',
     'License':
         'License',
-    'current module versions:':
-        'Versions du module courant :',
+    'current module versions':
+        'Versions du module courant',
     'Contributors':
         'Contributeurs',
     'Translations':
@@ -1064,21 +1064,21 @@ SnapTranslator.dict.fr = {
         'grand',
     'slider':
         'curseur',
-    'slider min...':
-        'min...',
-    'slider max...':
-        'max...',
+    'slider min':
+        'min',
+    'slider max':
+        'max',
     'Slider minimum value':
         'Valeur minimale du curseur',
     'Slider maximum value':
         'Valeur maximale du curseur',
 
     // list watchers
-    'length: ':
-        'Longueur : ',
+    'length':
+        'Longueur',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'ajoute un commentaire ici',
 
     // drow downs
@@ -1215,8 +1215,8 @@ SnapTranslator.dict.fr = {
         '9',
 
      // messages
-    'new...':
-        'nouveau...',
+    'new':
+        'nouveau',
 
     // math functions
     'abs':
@@ -1263,32 +1263,32 @@ SnapTranslator.dict.fr = {
         'n\u0027importe quel',
 
     // miscellaneous
-    'find blocks...':
-        'chercher des blocs...',
+    'find blocks':
+        'chercher des blocs',
     'hide primitives':
         'cacher les primitives',
     'show primitives':
         'montrer les primitives',
-    'Login...':
-        'Connexion...',
-    'Signup...':
-        'S\u0027enregistrer...',
-    'Reset Password...':
-        'Remise \u00E0 z\u00E9ro du mot de passe...',
+    'Login':
+        'Connexion',
+    'Signup':
+        'S\u0027enregistrer',
+    'Reset Password':
+        'Remise \u00E0 z\u00E9ro du mot de passe',
     'show all':
         'tout montrer',
-    'pic...':
-        'image...',
+    'pic':
+        'image',
     'open a new window\nwith a picture of the stage':
         'ouvre une nouvelle fen\u00EAtre\navec une image de la sc\u00E8ne',
-    'scripts pic...':
-        'image des scripts...',
+    'scripts pic':
+        'image des scripts',
     'open a new window\nwith a picture of all scripts':
         'ouvre une nouvelle fen\u00EAtre\navec une image de tous les scripts',
-    'Stage size...':
-        'Taille de la sc\u00E8ne...',
-    'Zoom blocks...':
-        'Agrandir les blocs...',
+    'Stage size':
+        'Taille de la sc\u00E8ne',
+    'Zoom blocks':
+        'Agrandir les blocs',
 
     'Plain prototype labels':
         '\u00C9tiquettes simples de d\u00E9finition',

@@ -337,8 +337,8 @@ SnapTranslator.dict.ru = {
         'думать %s',
     'Hello!':
         'Привет!',
-    'Hmm...':
-        'Хмм...',
+    'Hmm':
+        'Хмм',
     'change %eff effect by %n':
         'изменить эффект %eff на %n',
     'set %eff effect to %n':
@@ -360,8 +360,8 @@ SnapTranslator.dict.ru = {
     'go back %n layers':
         'переместиться на %n слоёв назад',
 
-    'development mode \ndebugging primitives:':
-        'Разрабатываемая версия \nотладка примитивов:',
+    'development mode\ndebugging primitives':
+        'Разрабатываемая версия\nотладка примитивов',
     'console log %mult%s':
         'консоль-регистрация %mult%',
     'alert %mult%s':
@@ -594,7 +594,7 @@ SnapTranslator.dict.ru = {
     'length of %s':
         'длина %s',
     'unicode of %s':
-        'Unicode  буквы %s',
+         'Unicode буквы %s',
     'unicode %n as letter':
         'буква с Unicode %n',
     'is %s a %typ ?':
@@ -657,13 +657,13 @@ SnapTranslator.dict.ru = {
     // other
     'Make a block':
         'Новый блок',
-    'find blocks...':
-        'Найти блоки...',
+    'find blocks':
+        'Найти блоки',
 
     // menus
     // snap menu
-    'About...':
-        'О программе...',
+    'About':
+        'О программе',
     'Snap! website':
         'Веб-сайт программы Snap!',
     'Download source':
@@ -678,46 +678,46 @@ SnapTranslator.dict.ru = {
         'включить Morphic\nконтекст меню',
 
     // project menu
-    'Project notes...':
-        'Проектные Записки...',
+    'Project notes':
+        'Проектные Записки',
     'New':
         'Новый проект',
-    'Open...':
-        'Открыть...',
+    'Open':
+        'Открыть',
     'Save':
         'Сохранить',
-    'Save As...':
-        'Сохранить как...',
-    'Import...':
-        'Импорт...',
+    'Save As':
+        'Сохранить как',
+    'Import':
+        'Импорт',
     'load an exported project file\nor block library, a costume\nor a sound':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
-    'Export project as plain text...':
-        'Экспортировать проект как текстовый файл...',
-    'Export project...':
-        'Экспортировать проект...',
+    'Export project as plain text':
+        'Экспортировать проект как текстовый файл',
+    'Export project':
+        'Экспортировать проект',
     'save project data as XML\nto your downloads folder':
         'сохранить и скачать проект в виде XML файла',
-    'Export summary...':
-        'Экспортируемая информация...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Экспортируемая информация',
+    'open a new browser browser window\nwith a summary of this project':
         'представить проектные данные как XML\nв новом окне браузера',
-    'Export blocks...':
-        'Экспортировать блоки...',
+    'Export blocks':
+        'Экспортировать блоки',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
-    'Unused blocks...':
-        'Неиспользуемые блоки...',
+    'Unused blocks':
+        'Неиспользуемые блоки',
     'find unused global custom blocks\nand remove their definitions':
         'поиск и удаление неиспользуемых блоков',
     'Import tools':
         'Импортировать сервисные ср-ва',
     'load the official library of\npowerful blocks':
         'загрузить служебную библиотеку блоков',
-    'Backgrounds...':
-        'Фоны...',
-    'Libraries...':
-        'Библиотеки...',
+    'Backgrounds':
+        'Фоны',
+    'Libraries':
+        'Библиотеки',
     'Select categories of additional blocks to add to this project.':
         'выбрать дополнительные библиотеки блоков\nдля добавления к проекту',
     'Select a costume from the media library':
@@ -726,12 +726,12 @@ SnapTranslator.dict.ru = {
         'Выбор звука из медиа-библиотеки',
 
     // settings menu
-    'Language...':
-        'Язык...',
-    'Zoom blocks...':
-        'Увеличение блоков кода...',
-    'Stage size...':
-        'Размер сцены...',
+    'Language':
+        'Язык',
+    'Zoom blocks':
+        'Увеличение блоков кода',
+    'Stage size':
+        'Размер сцены',
     'Retina display support':
         'Поддержка технологии Retina display',
     'uncheck for lower resolution,\nsaves computing resources':
@@ -832,7 +832,7 @@ SnapTranslator.dict.ru = {
         'отметьте, чтобы линии таблицы в окне отображения таблиц\nстали более контрасными',
     'Visible stepping':
         'Отображение шагов выполнения',
-    'check to turn on\n visible stepping (slow)':
+    'check to turn on\nvisible stepping (slow)':
         'отметьте, чтобы отображались\nшаги выполнения скрипта (медленно)',
     'uncheck to turn off\nvisible stepping':
         'снимите флажок, чтобы отключить отображение\nшагов выполнения скрипта',
@@ -870,22 +870,22 @@ SnapTranslator.dict.ru = {
     // inputs
     'with inputs':
         'с вводимыми данными',
-    'input names:':
-        'имена вводимых данных:',
-    'Input Names:':
-        'Имена Вводимых Данных:',
-    'input list:':
-        'вводимый список:',
+    'input names':
+        'имена вводимых данных',
+    'Input Names':
+        'Имена Вводимых Данных',
+    'input list':
+        'вводимый список',
 
     // context menus:
     'help':
         'Справка',
 
     // blocks:
-    'help...':
-        'справка...',
-    'relabel...':
-        'переобозначить...',
+    'help':
+        'справка',
+    'relabel':
+        'переобозначить',
     'duplicate':
         'продублировать',
     'make a copy\nand pick it up':
@@ -894,8 +894,8 @@ SnapTranslator.dict.ru = {
         'продублировать только данный блок',
     'delete':
         'удалить',
-    'script pic...':
-        'изображение скрипта...',
+    'script pic':
+        'изображение скрипта',
     'open a new window\nwith a picture of this script':
         'представить изображение скрипта\nна новой странице',
     'ringify':
@@ -910,10 +910,10 @@ SnapTranslator.dict.ru = {
         'отобразить стандартные блоки',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'удалить определение блока',
-    'edit...':
-        'редактировать...',
+    'edit':
+        'редактировать',
 
     // sprites:
     'edit':
@@ -922,10 +922,10 @@ SnapTranslator.dict.ru = {
         'переместить',
     'clone':
         'клонировать',
-    'export...':
-        'экспорт...',
-    'parent...':
-        'родитель...',
+    'export':
+        'экспорт',
+    'parent':
+        'родитель',
     'release':
         'освободить',
     'make temporary and\nhide in the sprite corral':
@@ -946,8 +946,8 @@ SnapTranslator.dict.ru = {
     // stage:
     'show all':
         'показать все',
-    'pic...':
-        'картинка...',
+    'pic':
+        'картинка',
     'open a new window\nwith a picture of the stage':
         'преобразовать вид текущей сцены\nв картинку',
 
@@ -958,12 +958,12 @@ SnapTranslator.dict.ru = {
         'размещать скрипты\nвертикально',
     'add comment':
         'добавить комментарий',
-    'scripts pic...':
-        'скрипты в картинку...',
+    'scripts pic':
+        'скрипты в картинку',
     'open a new window\nwith a picture of all scripts':
         'преобразовать скрипты на листе\nв картинку',
-    'make a block...':
-        'новый блок...',
+    'make a block':
+        'новый блок',
     'use the keyboard\nto enter blocks':
         'использовать клавиатуру\nдля работы с блоками',
     'undrop':
@@ -1002,8 +1002,8 @@ SnapTranslator.dict.ru = {
         'Табличный вид',
     'Save project':
         'Сохранение проекта',
-    'Export Project As...':
-        'Экспортировать проект как...',
+    'Export Project As':
+        'Экспортировать проект как',
     'Cloud':
         'Облако',
     'Browser':
@@ -1047,8 +1047,8 @@ SnapTranslator.dict.ru = {
         'Удалить Проект',
     'Are you sure you want to delete':
         'Вы уверены вы хотите удалить?',
-    'rename...':
-        'переименовать...',
+    'rename':
+        'переименовать',
 
     // costume editor
     'Costume Editor':
@@ -1067,8 +1067,8 @@ SnapTranslator.dict.ru = {
         'Заменить данный проект на новый?',
 
     // save project
-    'Save Project As...':
-        'Сохранить Проект как...',
+    'Save Project As':
+        'Сохранить Проект как',
 
     // export blocks
     'Export blocks':
@@ -1103,17 +1103,17 @@ SnapTranslator.dict.ru = {
         'Редактор Блоков',
     'Apply':
         'Применить',
-    'translations...':
+    'translations':
         'переводы',
-    'block variables...':
-        'переменные блока...',
-    'rename all...':
-        'переименовать все...',
+    'block variables':
+        'переменные блока',
+    'rename all':
+        'переименовать все',
     'block variables':
         'переменные блока',
     'Block variable name':
         'Имя переменной блока',
-    'remove block variables...':
+    'remove block variables':
         'убрать переменные блока',
 
     // block deletion dialog
@@ -1157,8 +1157,8 @@ SnapTranslator.dict.ru = {
         'Булев\n(неопределенный)',
     'Single input.':
         'Единичный ввод.',
-    'Default Value:':
-        'Значение по умолчанию:',
+    'Default Value':
+        'Значение по умолчанию',
     'Multiple inputs (value is list of inputs)':
         'Многократный ввод (список)',
     'Upvar - make internal variable visible to caller':
@@ -1167,19 +1167,19 @@ SnapTranslator.dict.ru = {
     // About Snap
     'About Snap':
         'О программе',
-    'Back...':
-        'Bозврат...',
-    'License...':
-        'Лицензия...',
-    'Modules...':
-        'Модули...',
-    'Credits...':
-        'Сотрудники...',
-    'Translators...':
+    'Back':
+        'Bозврат',
+    'License':
+        'Лицензия',
+    'Modules':
+        'Модули',
+    'Credits':
+        'Сотрудники',
+    'Translators':
         'Переводчики',
     'License':
         'Лицензия',
-    'current module versions:':
+    'current module versions':
         'Komponenten-Versionen',
     'Contributors':
         'Участники',
@@ -1195,32 +1195,32 @@ SnapTranslator.dict.ru = {
         'масштабированный',
     'slider':
         'бегунок',
-    'slider min...':
-        'бегунок min...',
-    'slider max...':
-        'бегунок max...',
-    'import...':
-        'импорт...',
+    'slider min':
+        'бегунок min',
+    'slider max':
+        'бегунок max',
+    'import':
+        'импорт',
     'Slider minimum value':
         'Бегунок - min значение',
     'Slider maximum value':
         'Бегунок - max значение',
 
     // list watchers
-    'length: ':
-        'длина: ',
-    'list view...':
-        'в виде списка...',
-    'table view...':
-        'в виде таблицы...',
-    'open in dialog...':
-        'открыть в отдельном окне...',
-    'open in another dialog...':
-        'открыть в ещё одном окне...',
+    'length':
+        'длина',
+    'list view':
+        'в виде списка',
+    'table view':
+        'в виде таблицы',
+    'open in dialog':
+        'открыть в отдельном окне',
+    'open in another dialog':
+        'открыть в ещё одном окне',
 
     // coments
-    'add comment here...':
-        'добавьте комментарий сюда...',
+    'add comment here':
+        'добавьте комментарий сюда',
 
     // drow downs
     // directions
@@ -1244,8 +1244,8 @@ SnapTranslator.dict.ru = {
     // costumes
     'Turtle':
         'Стрела',
-    'Opening Costumes...':
-        'Загрузка костюмов...',
+    'Opening Costumes':
+        'Загрузка костюмов',
     'pen':
         'перо',
     'tip':
@@ -1368,8 +1368,8 @@ SnapTranslator.dict.ru = {
         '9',
 
     // messages
-    'new...':
-        'новый...',
+    'new':
+        'новый',
 
     // math functions
     'abs':
@@ -1522,8 +1522,8 @@ SnapTranslator.dict.ru = {
         'Камера',
     'Camera not supported':
         'Камера не поддерживается',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Пожалуйста, проверьте, что Ваш браузер обновлён до последней версии\nи Ваша камера правильно сконфигурирована. \n\nНекоторые браузеры требуют протокола HTTPS\nдля доступа к СНАП к камере.\n\nПопробуйте заменить "http://" в адресной строке\nВашего браузера на "https://" и попробуйте ещё раз.',
+    'Please make sure your web browser is up to date\nand your camera is properly configured.\n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlease replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Пожалуйста, проверьте, что Ваш браузер обновлён до последней версии\nи Ваша камера правильно сконфигурирована.\n\nНекоторые браузеры требуют протокола HTTPS\nдля доступа к СНАП к камере.\n\nПопробуйте заменить "http://" в адресной строке\nВашего браузера на "https://" и попробуйте ещё раз.',
     'current %dates':
         'сейчас %dates',
     'year':

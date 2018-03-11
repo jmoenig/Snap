@@ -342,8 +342,8 @@ SnapTranslator.dict.hr = {
         'razmi\u0161ljaj %s',
     'Hello!':
         'Pozdrav!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'promijeni efekt %eff za %n',
     'set %eff effect to %n':
@@ -365,8 +365,8 @@ SnapTranslator.dict.hr = {
     'go back %n layers':
         'idi natrag %n slojeva',
 
-    'development mode \ndebugging primitives:':
-        'razvojni na\u010Din \ndebagiranje osnovnih blokova',
+    'development mode\ndebugging primitives':
+        'razvojni na\u010Din\ndebagiranje osnovnih blokova',
     'console log %mult%s':
         'ispi\u0161i na konzolu %mult%s',
     'alert %mult%s':
@@ -476,11 +476,11 @@ SnapTranslator.dict.hr = {
     'pause all %pause':
         'pauziraj sve %pause',
     'run %cmdRing %inputs':
-        'pokreni %cmdRing  %inputs',
+         'pokreni %cmdRing %inputs',
     'launch %cmdRing %inputs':
         'startaj %cmdRing %inputs',
     'call %repRing %inputs':
-        'pozovi %repRing  %inputs',
+         'pozovi %repRing %inputs',
     'run %cmdRing w/continuation':
         'pokreni %cmdRing s nastavkom',
     'call %cmdRing w/continuation':
@@ -633,8 +633,8 @@ SnapTranslator.dict.hr = {
 
     // menus
     // snap menu
-    'About...':
-        'O programu...',
+    'About':
+        'O programu',
     'Reference manual':
         'Korisni\u010Dki priru\u010Dnik',
     'Snap! website':
@@ -651,12 +651,12 @@ SnapTranslator.dict.hr = {
         'omogu\u0107i Morphic\nkontekstne menije\ni inspektore,\nnisu ba\u0161 user-friendly',
 
     // project menu
-    'Project notes...':
-        'Napomene o projektu...',
+    'Project notes':
+        'Napomene o projektu',
     'New':
         'Novi',
-    'Open...':
-        'Otvori...',
+    'Open':
+        'Otvori',
     'Save':
         'Spremi',
     'Save to disk':
@@ -664,25 +664,25 @@ SnapTranslator.dict.hr = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'spremi ovaj projekt u Download mapu'
             + '(nije podr\u017Eano ba\u0161 kod svih preglednika)',
-    'Save As...':
-        'Spremi kao...',
-    'Import...':
-        'Uvezi...',
+    'Save As':
+        'Spremi kao',
+    'Import':
+        'Uvezi',
     'load an exported project file\nor block library, a costume\nor a sound':
         'uvoz izvezenog projekta tj.\nbiblioteke s '
             + 'blokovima, '
             + 'kostimima i/ili zvukovima',
-    'Export project as plain text...':
-        'Izvezi projekt kao obi\u010Dni tekst...',
-    'Export project...':
-        'Izvoz projekta...',
+    'Export project as plain text':
+        'Izvezi projekt kao obi\u010Dni tekst',
+    'Export project':
+        'Izvoz projekta',
     'show project data as XML\nin a new browser window':
         'prikaz projekta u XML obliku\nu novom prozoru preglednika',
-    'Export blocks...':
+    'Export blocks':
         'Izvoz blokova',
     'show global custom block definitions as XML\nin a new browser window':
         'prikaz globalnih definicija korisni\u010Dkih blokova u XML obliku\nu novom prozoru preglednika',
-    'Unused blocks...':
+    'Unused blocks':
         'Nekori\u0161teni blokovi',
 	'find unused global custom blocks\nand remove their definitions':
         'Napravljeni blokovi - nekori\u0161teni',
@@ -692,32 +692,32 @@ SnapTranslator.dict.hr = {
         'nema nekori\u0161tenih blokova\nu ovom projektu',
     'unused block(s) removed':
         'nekori\u0161tenih blokova izbrisano',
-	'Export summary...':
-        'Izvezi sa\u017Eetak...',
-    'open a new browser browser window\n with a summary of this project':
+	'Export summary':
+        'Izvezi sa\u017Eetak',
+    'open a new browser browser window\nwith a summary of this project':
         'otvara novi prozor preglednika\nsa sa\u017Eetkom projekta',
 	'Import tools':
         'Uvezi alate',
     'load the official library of\npowerful blocks':
         'u\u010Ditaj slu\u017Ebenu biblioteku\ns naprednim blokovima',
-    'Libraries...':
-        'Biblioteke...',
+    'Libraries':
+        'Biblioteke',
     'Import library':
         'Uvezi bibloteku',
 
     // cloud menu
-    'Login...':
-        'Prijava...',
-    'Signup...':
-        'Registracija ra\u010Duna...',
+    'Login':
+        'Prijava',
+    'Signup':
+        'Registracija ra\u010Duna',
 
     // settings menu
-    'Language...':
-        'Jezik...',
-    'Zoom blocks...':
-        'Zumiraj blokove...',
-    'Stage size...':
-        'Veli\u010Dina scene...',
+    'Language':
+        'Jezik',
+    'Zoom blocks':
+        'Zumiraj blokove',
+    'Stage size':
+        'Veli\u010Dina scene',
     'Stage size':
         'Veli\u010Dina scene',
     'Stage width':
@@ -743,7 +743,7 @@ SnapTranslator.dict.hr = {
     'uncheck to disable dynamic\nlabels for variadic inputs':
         'odzna\u010Di za isklju\u010Diti\ndinami\u010Dke oznake',
     'check to enable dynamic\nlabels for variadic inputs':
-        'ozna\u010Di za omogu\u0107iti \ndinami\u010Dke oznake',
+        'ozna\u010Di za omogu\u0107iti\ndinami\u010Dke oznake',
     'Prefer empty slot drops':
         'Preferiraj spu\u0161tanje u prazne utore',
     'check to focus on empty slots\nwhen dragging & dropping reporters':
@@ -774,7 +774,7 @@ SnapTranslator.dict.hr = {
     'uncheck to disable\ninput sliders for\nentry fields':
         'odzna\u010Di da isklju\u010Di\u0161\nkliza\u010De vrijednosti\nkod parametara',
     'check to enable\ninput sliders for\nentry fields':
-        'ozna\u010Di da uklju\u010Di\u0161\nkliza\u010De vrijednosti\n kod parametara',
+        'ozna\u010Di da uklju\u010Di\u0161\nkliza\u010De vrijednosti\nkod parametara',
     'Clicking sound':
         'Zvuk klikanja',
     'uncheck to turn\nblock clicking\nsound off':
@@ -829,12 +829,12 @@ SnapTranslator.dict.hr = {
     // inputs
     'with inputs':
         's parametrima',
-    'input names:':
-        'imena parametara:',
-    'Input Names:':
-        'Imena parametara:',
-    'input list:':
-        'lista parametara:',
+    'input names':
+        'imena parametara',
+    'Input Names':
+        'Imena parametara',
+    'input list':
+        'lista parametara',
 
     // context menus:
     'help':
@@ -847,10 +847,10 @@ SnapTranslator.dict.hr = {
         'poka\u017Ei osnovne blokove',
 
     // blocks:
-    'help...':
-        'pomo\u0107...',
-    'relabel...':
-        'promijeni tip...',
+    'help':
+        'pomo\u0107',
+    'relabel':
+        'promijeni tip',
     'duplicate':
         'dupliciraj',
     'make a copy\nand pick it up':
@@ -859,8 +859,8 @@ SnapTranslator.dict.hr = {
         'dupliciraj samo taj blok',
     'delete':
         'izbri\u0161i',
-    'script pic...':
-        'slikaj skriptu...',
+    'script pic':
+        'slikaj skriptu',
     'open a new window\nwith a picture of this script':
         'otvori novi prozor\nsa slikom te skripte',
     'ringify':
@@ -869,10 +869,10 @@ SnapTranslator.dict.hr = {
         'odstrani obru\u010D',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'obri\u0161i definiciju bloka',
-    'edit...':
-        'uredi...',
+    'edit':
+        'uredi',
 
     // sprites:
     'edit':
@@ -883,14 +883,14 @@ SnapTranslator.dict.hr = {
         'odlijepi od',
     'detach all parts':
         'odlijepi sve dijelove',
-    'export...':
-        'izvezi...',
+    'export':
+        'izvezi',
 
     // stage:
     'show all':
         'poka\u017Ei sve',
-    'pic...':
-        'slikaj...',
+    'pic':
+        'slikaj',
     'open a new window\nwith a picture of the stage':
         'otvori novi prozor\nsa slikom scene',
 
@@ -905,12 +905,12 @@ SnapTranslator.dict.hr = {
         'poni\u0161ti ispu\u0161tanje',
     'undo the last\nblock drop\nin this pane':
         'poni\u0161ti zadnje ispu\u0161tanje\nbloka u tom okviru',
-    'scripts pic...':
-        'slikaj skriptu...',
+    'scripts pic':
+        'slikaj skriptu',
     'open a new window\nwith a picture of all scripts':
         'otvori novi prozor\nsa slikom svih skripti',
-    'make a block...':
-        'napravi novi blok...',
+    'make a block':
+        'napravi novi blok',
 
     // costumes
     'rename':
@@ -986,8 +986,8 @@ SnapTranslator.dict.hr = {
         'Izbrisati projekt',
     'Are you sure you want to delete':
         'Jesi siguran da \u017Eeli\u0161 izbrisati?',
-    'rename...':
-        'preimenuj...',
+    'rename':
+        'preimenuj',
 
     // costume editor
     'Costume Editor':
@@ -1006,8 +1006,8 @@ SnapTranslator.dict.hr = {
         'Zamijeniti trenutni projekt s novim?',
 
     // save project
-    'Save Project As...':
-        'Spremi projekt kao...',
+    'Save Project As':
+        'Spremi projekt kao',
 
     // export blocks
     'Export blocks':
@@ -1085,8 +1085,8 @@ SnapTranslator.dict.hr = {
         'Logi\u010Dki\n(neizra\u010Dunat)',
     'Single input.':
         'Jedan parametar.',
-    'Default Value:':
-        'Default vrijednost:',
+    'Default Value':
+        'Default vrijednost',
     'Multiple inputs (value is list of inputs)':
         'Vi\u0161e parametara (vrijednost je lista parametara)',
     'Upvar - make internal variable visible to caller':
@@ -1095,20 +1095,20 @@ SnapTranslator.dict.hr = {
     // About Snap
     'About Snap':
         'O Snap-u',
-    'Back...':
-        'Natrag...',
-    'License...':
-        'Licenca...',
-    'Modules...':
-        'Moduli...',
-    'Credits...':
-        'Suradnici...',
-    'Translators...':
+    'Back':
+        'Natrag',
+    'License':
+        'Licenca',
+    'Modules':
+        'Moduli',
+    'Credits':
+        'Suradnici',
+    'Translators':
         'Prevoditelji',
     'License':
         'Licenca',
-    'current module versions:':
-        'Verzije u\u010Ditanih modula:',
+    'current module versions':
+        'Verzije u\u010Ditanih modula',
     'Contributors':
         'Doprinijeli',
     'Translations':
@@ -1121,24 +1121,24 @@ SnapTranslator.dict.hr = {
         'veliko',
     'slider':
         'kliza\u010D',
-    'slider min...':
-        'kliza\u010D min...',
-    'slider max...':
-        'kliza\u010D max...',
-    'import...':
-        'uvezi...',
+    'slider min':
+        'kliza\u010D min',
+    'slider max':
+        'kliza\u010D max',
+    'import':
+        'uvezi',
     'Slider minimum value':
         'Minimalna vrijednost kliza\u010Da',
     'Slider maximum value':
         'Maksimalna vrijednost kliza\u010Da',
 
     // list watchers
-    'length: ':
-        'duljina: ',
+    'length':
+        'duljina',
 
     // coments
-    'add comment here...':
-        'ovdje napi\u0161i komentar...',
+    'add comment here':
+        'ovdje napi\u0161i komentar',
 
     // drow downs
     // directions
@@ -1262,8 +1262,8 @@ SnapTranslator.dict.hr = {
         '9',
 
     // messages
-    'new...':
-        'novo...',
+    'new':
+        'novo',
 
     // math functions
     'abs':
@@ -1332,8 +1332,8 @@ SnapTranslator.dict.hr = {
         'izvrni ↔',
     'flip ↕':
         'izvrni ↕',
-    'Export all scripts as pic...':
-        'Izvezi sve skripte kao sliku...',
+    'Export all scripts as pic':
+        'Izvezi sve skripte kao sliku',
     'show a picture of all scripts\nand block definitions':
         'pokaž \u017Ei sliku svih skripti\ni definicija blokova',
     'current %dates':
@@ -1354,8 +1354,8 @@ SnapTranslator.dict.hr = {
         'sekunda',
     'time in milliseconds':
         'vrijeme u ms',
-    'find blocks...':
-        'na\u0111i blokove...',
+    'find blocks':
+        'na\u0111i blokove',
     'costume name':
         'ime kostima',
     'Open':
@@ -1366,10 +1366,10 @@ SnapTranslator.dict.hr = {
         'Snap!Cloud',
     'Cloud':
         'Oblak',
-    'could not connect to:':
-        'ne mo\u017Ee se spojiti na:',
-    'Service:':
-        'Servis:',
+    'could not connect to':
+        'ne mo\u017Ee se spojiti na',
+    'Service':
+        'Servis',
     'login':
         'prijava',
     'ERROR: INVALID PASSWORD':
@@ -1384,8 +1384,8 @@ SnapTranslator.dict.hr = {
         'Prijava',
     'Logout':
         'Odjava',
-    'Change Password...':
-        'Promjena zaporke…',
+    'Change Password':
+        'Promjena zaporke',
     'Change Password':
         'Promjena zaporke',
     'Account created.':
@@ -1398,20 +1398,20 @@ SnapTranslator.dict.hr = {
         'odspojen.',
     'Reset password':
         'Obnova zaporke',
-    'Reset Password...':
-        'Obnova zaporke…',
-    'User name:':
-        'Korisni\u010Dko ime:',
-    'Password:':
-        'Zaporka:',
-    'Old password:':
-        'Stara zaporka:',
-    'New password:':
-        'Nova zaporka:',
-    'Repeat new password:':
-        'Ponovi novu zaporku:',
-    'Birth date:':
-        'Datum ro\u0111enja:',
+    'Reset Password':
+        'Obnova zaporke',
+    'User name':
+        'Korisni\u010Dko ime',
+    'Password':
+        'Zaporka',
+    'Old password':
+        'Stara zaporka',
+    'New password':
+        'Nova zaporka',
+    'Repeat new password':
+        'Ponovi novu zaporku',
+    'Birth date':
+        'Datum ro\u0111enja',
     'January':
         'Sije\u010Danj',
     'February':
@@ -1436,18 +1436,18 @@ SnapTranslator.dict.hr = {
         'Studeni',
     'December':
         'Prosinac',
-    'year:':
-        'godina:',
-    ' or before':
-        ' ili prije',
-    'E-mail address:':
-        'E-mail adresa:',
-    'E-mail address of parent or guardian:':
-        'E-mail adresa roditelja ili staratelja:',
-    'Terms of Service...':
-        'Uvjeti kori\u0161tenja...',
-    'Privacy...':
-        'Privatnost...',
+    'year':
+        'godina',
+    'or before':
+        'ili prije',
+    'E-mail address':
+        'E-mail adresa',
+    'E-mail address of parent or guardian':
+        'E-mail adresa roditelja ili staratelja',
+    'Terms of Service':
+        'Uvjeti kori\u0161tenja',
+    'Privacy':
+        'Privatnost',
     'I have read and agree\nto the Terms of Service':
         'Pro\u010Ditao/la sam i sla\u017Eem se\ns uvjetima kori\u0161tenja',
     'stay signed in on this computer\nuntil logging out':
@@ -1468,14 +1468,14 @@ SnapTranslator.dict.hr = {
         'Primjeri',
     'You are not logged in':
         'Niste prijavljeni',
-    'Updating\nproject list...':
-        'Osvje\u017Eavam\nlistu projekata...',
-    'Opening project...':
-        'Otvaram projekt...',
-    'Fetching project\nfrom the cloud...':
-        'Povla\u010Denje projekta\niz oblaka...',
-    'Saving project\nto the cloud...':
-        'Spremanje projekta\nu oblak...',
+    'Updating\nproject list':
+        'Osvje\u017Eavam\nlistu projekata',
+    'Opening project':
+        'Otvaram projekt',
+    'Fetching project\nfrom the cloud':
+        'Povla\u010Denje projekta\niz oblaka',
+    'Saving project\nto the cloud':
+        'Spremanje projekta\nu oblak',
     'Sprite Nesting':
         'Ugnje\u017E\u0111ivanje objekata',
     'uncheck to disable\nsprite composition':
@@ -1486,8 +1486,8 @@ SnapTranslator.dict.hr = {
         'označi za pretvaranje\nblokova u kod',
     'saved.':
         'spremljeno.',
-    'options...':
-        'opcije...',
+    'options':
+        'opcije',
     'read-only':
         'samo za \u010Ditanje',
     'Input Slot Options':
@@ -1610,8 +1610,8 @@ SnapTranslator.dict.hr = {
         'obris strelice desno',
     'robot':
         'robot',
-    'turn pen trails into new costume...':
-        'pretvori trag olovke u novi kostim...',
+    'turn pen trails into new costume':
+        'pretvori trag olovke u novi kostim',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'pretvori sve tragove olovke\ni \u017Eigove u novi kostim\nza trenutni objekt',
     'pen':

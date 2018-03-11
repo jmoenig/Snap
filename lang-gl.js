@@ -341,8 +341,8 @@ SnapTranslator.dict.gl = {
         'pensar %s',
     'Hello!':
         'Ola!',
-    'Hmm...':
-        'mmm...',
+    'Hmm':
+        'mmm',
     'change %eff effect by %n':
         'engade ao efecto %eff o valor %n',
     'set %eff effect to %n':
@@ -364,8 +364,8 @@ SnapTranslator.dict.gl = {
     'go back %n layers':
         'enviar atrás %n capas',
 
-    'development mode \ndebugging primitives:':
-        'primitivas de depuración \ndo modo de desenvolvemento:',
+    'development mode\ndebugging primitives':
+        'primitivas de depuración\ndo modo de desenvolvemento',
     'console log %mult%s':
         'rexistra %mult%s na consola',
     'alert %mult%s':
@@ -638,8 +638,8 @@ SnapTranslator.dict.gl = {
 
     // menus
     // snap menu
-    'About...':
-        'Acerca do Snap!...',
+    'About':
+        'Acerca do Snap!',
     'Reference manual':
         'Manual de referencia',
     'Snap! website':
@@ -649,18 +649,18 @@ SnapTranslator.dict.gl = {
     'Switch back to user mode':
         'Volver ao modo usuario/a',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'Desactivar menús de contexto do Morphic\n e mostrar menús amigables.',
+        'Desactivar menús de contexto do Morphic\ne mostrar menús amigables.',
     'Switch to dev mode':
         'Pasar a modo de desenvolvemento',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'Activar menús de contexto do Morphic non amigables.',
 
     // project menu
-    'Project notes...':
+    'Project notes':
         'Notas deste proxecto',
     'New':
         'Novo proxecto',
-    'Open...':
+    'Open':
         'Abrir un proxecto',
     'Save':
         'Gardar',
@@ -669,26 +669,26 @@ SnapTranslator.dict.gl = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Gardar este proxecto\nno directorio de descargas\n'
             + '(em navegadores que o suportem).',
-    'Save As...':
-        'Gardar como...',
-    'Import...':
-        'Importar...',
+    'Save As':
+        'Gardar como',
+    'Import':
+        'Importar',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Abrir un proxecto exportado,\nsubstituíndo o proxecto actual, ou\n'
             + 'importar unha biblioteca de bloques, unha\n'
             + 'vestimenta ou um son para o proxecto actual.',
-    'Export project as plain text...':
-        'Exportar proxecto como texto...',
-    'Export project...':
-        'Exportar proxecto...',
+    'Export project as plain text':
+        'Exportar proxecto como texto',
+    'Export project':
+        'Exportar proxecto',
     'show project data as XML\nin a new browser window':
         'mostrar información do proxecto como XML\nnunha nova xanela',
-    'Export blocks...':
-        'Exportar bloques...',
+    'Export blocks':
+        'Exportar bloques',
     'show global custom block definitions as XML\nin a new browser window':
         'mostrar definicións de bloques globais personalizados como XML\nnunha nova xanela',
-    'Unused blocks...':
-          'Bloques non utilizados...',
+    'Unused blocks':
+          'Bloques non utilizados',
     'find unused global custom blocks\nand remove their definitions':
         'Atopar bloques globais personalizados sen usar\ne borrar as súas definicións',
     'Remove unused blocks':
@@ -697,9 +697,9 @@ SnapTranslator.dict.gl = {
         'Actualmente non hai bloques globais\npersonalizados sen usar neste proxecto',
     'unused block(s) removed':
         'Borrados os bloques non utilizados',
-    'Export summary...':
-        'Sumario da exportación...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Sumario da exportación',
+    'open a new browser browser window\nwith a summary of this project':
         'Abra o navegador cun resumo deste proxecto',
     'Contents':
         'Índice',
@@ -717,24 +717,24 @@ SnapTranslator.dict.gl = {
         'Importar ferramentas',
     'load the official library of\npowerful blocks':
         'cargar a biblioteca oficial de\nbloques',
-    'Libraries...':
-        'Bibliotecas...',
+    'Libraries':
+        'Bibliotecas',
     'Import library':
-        'Importar biblioteca...',
+        'Importar biblioteca',
 
     // cloud menu
-    'Login...':
-        'Entrar na súa conta...',
-    'Signup...':
-        'Rexistrar unha nova conta...',
+    'Login':
+        'Entrar na súa conta',
+    'Signup':
+        'Rexistrar unha nova conta',
 
     // settings menu
-    'Language...':
-        'Língua...',
-    'Zoom blocks...':
-        'Ampliación dos bloques...',
-    'Stage size...':
-        'Tamaño do escenario...',
+    'Language':
+        'Língua',
+    'Zoom blocks':
+        'Ampliación dos bloques',
+    'Stage size':
+        'Tamaño do escenario',
     'Stage size':
         'Tamaño do escenario',
     'Stage width':
@@ -790,13 +790,13 @@ SnapTranslator.dict.gl = {
     'uncheck to disable\ninput sliders for\nentry fields':
         'Desmarcar para desactivar\nos controis de entrada deslizantes.',
     'check to enable\ninput sliders for\nentry fields':
-        'Marcar para activar\n os controis de entrada deslizantes',
+        'Marcar para activar\nos controis de entrada deslizantes',
     'Clicking sound':
         'Son de clic',
     'uncheck to turn\nblock clicking\nsound off':
-        'Desmarcar para desactivar\n o son ao facer clic',
+        'Desmarcar para desactivar\no son ao facer clic',
     'check to turn\nblock clicking\nsound on':
-        'marcar para activar o son\n ao facer clic',
+        'marcar para activar o son\nao facer clic',
     'Animations':
         'Animacións',
     'uncheck to disable\nIDE animations':
@@ -843,12 +843,12 @@ SnapTranslator.dict.gl = {
     // inputs
     'with inputs':
         'con argumentos',
-    'input names:':
-        'nomes dos parámetros:',
-    'Input Names:':
-        'Parámetros:',
-    'input list:':
-        'Lista de entradas:',
+    'input names':
+        'nomes dos parámetros',
+    'Input Names':
+        'Parámetros',
+    'input list':
+        'Lista de entradas',
 
     // context menus:
     'help':
@@ -861,20 +861,20 @@ SnapTranslator.dict.gl = {
         'Mostrar bloques primitivos',
 
     // blocks:
-    'help...':
-        'axuda...',
-    'relabel...':
-        'renomear...',
+    'help':
+        'axuda',
+    'relabel':
+        'renomear',
     'duplicate':
         'duplicar',
     'make a copy\nand pick it up':
-        'Facer unha copia do bloque\n e suxeitala',
+        'Facer unha copia do bloque\ne suxeitala',
     'only duplicate this block':
         'Duplicar só este bloque',
     'delete':
         'Eliminar',
-    'script pic...':
-        'Fotografía do programa...',
+    'script pic':
+        'Fotografía do programa',
     'open a new window\nwith a picture of this script':
         'Abrir unha nova xanela\ncunha foto deste programa',
     'ringify':
@@ -889,10 +889,10 @@ SnapTranslator.dict.gl = {
         'marcar para non gardar\no contido no proxecto',
 
     // custom blocks:
-    'delete block definition...':
-        'Eliminar definición do bloque...',
-    'edit...':
-        'Editar...',
+    'delete block definition':
+        'Eliminar definición do bloque',
+    'edit':
+        'Editar',
 
     // sprites:
     'edit':
@@ -903,14 +903,14 @@ SnapTranslator.dict.gl = {
         'soltar de',
     'detach all parts':
         'soltar todas as partes',
-    'export...':
-        'exportar...',
+    'export':
+        'exportar',
 
     // stage:
     'show all':
         'mostrar todos',
-    'pic...':
-        'fotografía...',
+    'pic':
+        'fotografía',
     'open a new window\nwith a picture of the stage':
         'Abrir unha nova xanela cunha fotografía do escenario',
 
@@ -925,12 +925,12 @@ SnapTranslator.dict.gl = {
         'Desfacer a última acción',
     'undo the last\nblock drop\nin this pane':
         'Desfacer a última acción nun bloque neste separador',
-    'scripts pic...':
+    'scripts pic':
         'Fotografíar os programas',
     'open a new window\nwith a picture of all scripts':
         'Afre unha nova xanela cunha\nfotografía de todos os programas',
-    'make a block...':
-        'Crear un bloque...',
+    'make a block':
+        'Crear un bloque',
 
     // costumes
     'rename':
@@ -953,12 +953,12 @@ SnapTranslator.dict.gl = {
         'renomear son',
 
     // lists and tables
-    'list view...':
-        'Vista de lista...',
-    'table view...':
-        'vista de táboa...',
-    'open in dialog...':
-        'abrir na caixa de diálogo...',
+    'list view':
+        'Vista de lista',
+    'table view':
+        'vista de táboa',
+    'open in dialog':
+        'abrir na caixa de diálogo',
     'reset columns':
         'reiniciar columnas',
     'items':
@@ -1018,8 +1018,8 @@ SnapTranslator.dict.gl = {
         'Eliminar proxecto',
     'Are you sure you want to delete':
         'Seguro de que queres eliminalo?',
-    'rename...':
-        'renomear...',
+    'rename':
+        'renomear',
 
     // costume editor
     'Costume Editor':
@@ -1038,8 +1038,8 @@ SnapTranslator.dict.gl = {
         'Substituír este proxecto por un novo?',
 
     // save project
-    'Save Project As...':
-        'Gardar proxecto como...',
+    'Save Project As':
+        'Gardar proxecto como',
 
     // export blocks
     'Export blocks':
@@ -1116,8 +1116,8 @@ SnapTranslator.dict.gl = {
         'Booleano\n(sen avaliar)',
     'Single input.':
         'Parámetro único',
-    'Default Value:':
-        'Valor por defecto:',
+    'Default Value':
+        'Valor por defecto',
     'Multiple inputs (value is list of inputs)':
         'Múltiples argumentos (o valor do parámetro é a lista de argumentos)',
     'Upvar - make internal variable visible to caller':
@@ -1126,19 +1126,19 @@ SnapTranslator.dict.gl = {
     // About Snap
     'About Snap':
         'Acerca de Snap',
-    'Back...':
-        'Atrás...',
-    'License...':
-        'Licenza...',
-    'Modules...':
-        'Módulos...',
-    'Credits...':
-        'Créditos...',
-    'Translators...':
+    'Back':
+        'Atrás',
+    'License':
+        'Licenza',
+    'Modules':
+        'Módulos',
+    'Credits':
+        'Créditos',
+    'Translators':
         'Tradutores',
     'License':
         'Licenza',
-    'current module versions:':
+    'current module versions':
         'Versións actuais dos módulos',
     'Contributors':
         'Contribuidores',
@@ -1152,24 +1152,24 @@ SnapTranslator.dict.gl = {
         'grande',
     'slider':
         'potenciómetro',
-    'slider min...':
-        'mínimo do potenciómetro...',
-    'slider max...':
-        'máximo do potenciómetro...',
-    'import...':
-        'importar...',
+    'slider min':
+        'mínimo do potenciómetro',
+    'slider max':
+        'máximo do potenciómetro',
+    'import':
+        'importar',
     'Slider minimum value':
         'Valor mínimo do potenciómetro',
     'Slider maximum value':
         'Valor máximo do potenciómetro',
 
     // list watchers
-    'length: ':
-        'lonxitude: ',
+    'length':
+        'lonxitude',
 
     // coments
-    'add comment here...':
-        'Engade aquí un comentario...',
+    'add comment here':
+        'Engade aquí un comentario',
 
     // drow downs
     // directions
@@ -1307,8 +1307,8 @@ SnapTranslator.dict.gl = {
         '9',
 
     // messages
-    'new...':
-        'Nova...',
+    'new':
+        'Nova',
 
     // math functions
     'abs':
@@ -1420,11 +1420,11 @@ SnapTranslator.dict.gl = {
         'Obxectos de primeira clase',
     'uncheck to disable support\nfor first-class sprites':
         'Desmarcar para desactivar o soporte\nde obxectos de primeira clase.',
-    'check to enable support\n for first-class sprite':
+    'check to enable support\nfor first-class sprite':
         'Marcar para activar o soporte\nde obxectos de primeira clase.',
     'Live coding support':
         'Soporte de programación ao vivo',
-    'EXPERIMENTAL! check to enable\n live custom control structures':
+    'EXPERIMENTAL! check to enable\nlive custom control structures':
         'EXPERIMENTAL! Marcar para activar estruturas\nde control personalizadas ao vivo.',
     'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
         'EXPERIMENTAL! Desmarcar para desactivar estruturas\nde control personalizadas ao vivo.',
@@ -1442,8 +1442,8 @@ SnapTranslator.dict.gl = {
         'inverter ↔',
     'flip ↕':
         'inverter ↕',
-    'Export all scripts as pic...':
-        'Exportar todos os obxectos como fotografia…',
+    'Export all scripts as pic':
+        'Exportar todos os obxectos como fotografia',
     'show a picture of all scripts\nand block definitions':
         'Mostra unha imaxe con todos\nos obxectos e defincións de bloques',
     'current %dates':
@@ -1464,8 +1464,8 @@ SnapTranslator.dict.gl = {
         'segundo',
     'time in milliseconds':
         'tempo (en milisegundos)',
-    'find blocks...':
-        'buscar bloques…',
+    'find blocks':
+        'buscar bloques',
     'costume name':
         'nome da vestimenta',
     'Open':
@@ -1476,10 +1476,10 @@ SnapTranslator.dict.gl = {
         'Snap!Nube',
     'Cloud':
         'Nube',
-    'could not connect to:':
-        'Non foi posible conectar con:',
-    'Service:':
-        'Servizo:',
+    'could not connect to':
+        'Non foi posible conectar con',
+    'Service':
+        'Servizo',
     'login':
         'autenticación',
     'ERROR: INVALID PASSWORD':
@@ -1494,8 +1494,8 @@ SnapTranslator.dict.gl = {
         'Entrar',
     'Logout':
         'Saír',
-    'Change Password...':
-        'Cambiar contrasinal…',
+    'Change Password':
+        'Cambiar contrasinal',
     'Change Password':
         'Cambiar contrasinal',
     'Account created.':
@@ -1508,20 +1508,20 @@ SnapTranslator.dict.gl = {
         'saíu.',
     'Reset password':
         'Recuperar contrasinal',
-    'Reset Password...':
-        'Recuperar contrasinal…',
-    'User name:':
-        'Nome de usuario/a:',
-    'Password:':
-        'contrasinal:',
-    'Old password:':
-        'contrasinal actual:',
-    'New password:':
-        'Novo contrasinal:',
-    'Repeat new password:':
-        'Repita o contrasinal:',
-    'Birth date:':
-        'Data de nacemento:',
+    'Reset Password':
+        'Recuperar contrasinal',
+    'User name':
+        'Nome de usuario/a',
+    'Password':
+        'contrasinal',
+    'Old password':
+        'contrasinal actual',
+    'New password':
+        'Novo contrasinal',
+    'Repeat new password':
+        'Repita o contrasinal',
+    'Birth date':
+        'Data de nacemento',
     'January':
         'Xaneiro',
     'February':
@@ -1546,18 +1546,18 @@ SnapTranslator.dict.gl = {
         'Novembro',
     'December':
         'Decembro',
-    'year:':
-        'ano:',
-    ' or before':
-        ' ou antes',
-    'E-mail address:':
-        'Enderezo de correo electrónico:',
-    'E-mail address of parent or guardian:':
-        'Enderezo do titor ou titora:',
-    'Terms of Service...':
-        'Termos do Servizo…',
-    'Privacy...':
-        'Privacidade…',
+    'year':
+        'ano',
+    'or before':
+        'ou antes',
+    'E-mail address':
+        'Enderezo de correo electrónico',
+    'E-mail address of parent or guardian':
+        'Enderezo do titor ou titora',
+    'Terms of Service':
+        'Termos do Servizo',
+    'Privacy':
+        'Privacidade',
     'I have read and agree\nto the Terms of Service':
         'Lin e declaro concordar\ncos Termos do Servizo',
     'stay signed in on this computer\nuntil logging out':
@@ -1578,14 +1578,14 @@ SnapTranslator.dict.gl = {
         'Exemplos',
     'You are not logged in':
         'Aínda non se autenticou',
-    'Updating\nproject list...':
-        'Actualizando a\nlista de proxectos…',
-    'Opening project...':
-        'Abrindo o proxecto…',
-    'Fetching project\nfrom the cloud...':
-        'Obtendo o proxecto\nda nube…',
-    'Saving project\nto the cloud...':
-        'Gardando o proxecto\nna nube…',
+    'Updating\nproject list':
+        'Actualizando a\nlista de proxectos',
+    'Opening project':
+        'Abrindo o proxecto',
+    'Fetching project\nfrom the cloud':
+        'Obtendo o proxecto\nda nube',
+    'Saving project\nto the cloud':
+        'Gardando o proxecto\nna nube',
     'Sprite Nesting':
         'Obxectos compostos',
     'uncheck to disable\nsprite composition':
@@ -1596,8 +1596,8 @@ SnapTranslator.dict.gl = {
         'Desmarcar para funcionalidades\nde mapeamento entre bloques e texto.',
     'saved.':
         'gardado.',
-    'options...':
-        'opcións…',
+    'options':
+        'opcións',
     'read-only':
         'só lectura',
     'Input Slot Options':
@@ -1616,8 +1616,8 @@ SnapTranslator.dict.gl = {
         'Transformar SVG em mapas de bits',
     'check to rasterize\nSVGs on import':
         'Marcar para transformar os arquivos SVG\nen mapas de bits durante a importación.',
-    'comment pic...':
-        'fotografia do comentario…',
+    'comment pic':
+        'fotografia do comentario',
     'open a new window\nwith a picture of this comment':
         'Abrir unha nova xanela cunha\nfotografia deste comentario.',
     'undo':
@@ -1730,8 +1730,8 @@ SnapTranslator.dict.gl = {
         'contorno de frecha direita',
     'robot':
         'robot',
-    'turn pen trails into new costume...':
-        'transformar trazos do lapis em nova vestimenta…',
+    'turn pen trails into new costume':
+        'transformar trazos do lapis em nova vestimenta',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'Transforma todos os trazos do lapis\ne selos nunha nova vestimenta\n'
             + 'do obxecto seleccionado neste momento',
@@ -1751,10 +1751,10 @@ SnapTranslator.dict.gl = {
         'Compartir o proxecto',
     'Unshare Project':
         'Deixar de compartir o proxecto',
-    'sharing\nproject...':
-        'compartindo\nproxecto…',
-    'unsharing\nproject...':
-        'deixando de compartir\nproxecto…',
+    'sharing\nproject':
+        'compartindo\nproxecto',
+    'unsharing\nproject':
+        'deixando de compartir\nproxecto',
     'shared.':
         'compartindo.',
     'unshared.':
@@ -1767,8 +1767,8 @@ SnapTranslator.dict.gl = {
         'vestimentas SVG aínda non\nson totalmente soportadas\nen todos os navegadores',
     'Save Project':
         'Gardar proxecto',
-    'script pic with result...':
-        'fotografia do programa incluíndo resultado…',
+    'script pic with result':
+        'fotografia do programa incluíndo resultado',
     'open a new window\nwith a picture of both\nthis script and its result':
         'Abrir unha nova xanela cunha\nfotografia tanto deste programa\ncomo do seu resultado.',
     'JavaScript function ( %mult%s ) { %code }':
@@ -1783,10 +1783,10 @@ SnapTranslator.dict.gl = {
         'Importar',
     'Select a costume from the media library':
         'Seleccionar unha vestimenta da biblioteca de media.',
-    'edit rotation point only...':
-        'editar só o ponto de rotación…',
-    'Export Project As...':
-        'Exportar Proxecto Como…',
+    'edit rotation point only':
+        'editar só o ponto de rotación',
+    'Export Project As':
+        'Exportar Proxecto Como',
     'a variable of name \'':
         'Non existe unha variable «',
     '\'\ndoes not exist in this context':
@@ -1797,12 +1797,12 @@ SnapTranslator.dict.gl = {
         'esperando',
     'input(s), but getting':
         'argumento(s), pero pasaron',
-    'parent...':
-        'proxenitor…',
+    'parent':
+        'proxenitor',
     'current parent':
         'proxenitor actual',
-    'Dragging threshold...':
-        'Limiar de arrastre…',
+    'Dragging threshold':
+        'Limiar de arrastre',
     'Cache Inputs':
         'Memorizar entradas',
     'uncheck to stop caching\ninputs (for debugging the evaluator)':
@@ -1815,35 +1815,35 @@ SnapTranslator.dict.gl = {
         'Marcar para activar datos\ndo proxecto nos URL.',
     'uncheck to disable\nproject data in URLs':
         'Desmarcar para desactivar\ndatos do proxecto nos URL.',
-    'export project media only...':
-        'Exportar só os media do proxecto…',
-    'export project without media...':
-        'Exportar proxecto sen os media…',
-    'export project as cloud data...':
-        'Exportar proxecto como datos da nube…',
-    'open shared project from cloud...':
-        'Abrir proxecto compartido a partir da nube…',
-    'url...':
-        'URL…',
-    'Export summary with drop-shadows...':
-        'Exportar resumo con sombreamento…',
+    'export project media only':
+        'Exportar só os media do proxecto',
+    'export project without media':
+        'Exportar proxecto sen os media',
+    'export project as cloud data':
+        'Exportar proxecto como datos da nube',
+    'open shared project from cloud':
+        'Abrir proxecto compartido a partir da nube',
+    'url':
+        'URL',
+    'Export summary with drop-shadows':
+        'Exportar resumo con sombreamento',
     'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
         'Abrir unha nova xanela no navegador\ncontendo un resumo deste proxecto\n'
         + 'con sombreamento en todas as imaxes\n(non soportado en todos os navegadores)',
     'specify the distance the hand has to move\nbefore it picks up an object':
         'Especificar a distancia que a man tem que se\nmover antes de agarrar algún obxecto',
-    'block variables...':
-        'adicionar variables de bloque…',
-    'remove block variables...':
-        'eliminar variables de bloque…',
+    'block variables':
+        'adicionar variables de bloque',
+    'remove block variables':
+        'eliminar variables de bloque',
     'block variables':
         'con variables de bloque',
     'experimental -\nunder construction':
         'Experimental – en construción',
     'Table view':
         'Vista de táboa',
-    'open in another dialog...':
-        'abrir noutra caixa de diálogo…',
+    'open in another dialog':
+        'abrir noutra caixa de diálogo',
     'check for multi-column\nlist view support':
         'Marcar para soporte de\nvistas multicolumna de listas.',
     'uncheck to disable\nmulti-column list views':
@@ -1878,10 +1878,10 @@ SnapTranslator.dict.gl = {
         'código',
     'header':
         'encabezamento',
-    'header mapping...':
-        'mapeamento para encabezamento…',
-    'code mapping...':
-        'mapeamento para código…',
+    'header mapping':
+        'mapeamento para encabezamento',
+    'code mapping':
+        'mapeamento para código',
     'Code mapping':
         'Mapeamento para código',
     'Header mapping':

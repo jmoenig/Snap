@@ -339,8 +339,8 @@ SnapTranslator.dict.ja_HIRA = {
         '%s とかんがえる',
     'Hello!':
         'こんにちは!',
-    'Hmm...':
-        'うーん...',
+    'Hmm':
+        'うーん',
     'change %eff effect by %n':
         '%eff のこうかを %n ずつかえる',
     'set %eff effect to %n':
@@ -362,8 +362,8 @@ SnapTranslator.dict.ja_HIRA = {
     'go back %n layers':
         '%n そうさげる',
 
-    'development mode \ndebugging primitives:':
-        'かいはつしゃモード\nデバッグようプリミティブ:',
+    'development mode\ndebugging primitives':
+        'かいはつしゃモード\nデバッグようプリミティブ',
     'console log %mult%s':
         'コンソールログ %mult%s',
     'alert %mult%s':
@@ -600,8 +600,8 @@ SnapTranslator.dict.ja_HIRA = {
 
     // menus
     // snap menu
-    'About...':
-        'Snap!について...',
+    'About':
+        'Snap!について',
     'Snap! website':
         'Snap!のWebサイト',
     'Download source':
@@ -616,30 +616,30 @@ SnapTranslator.dict.ja_HIRA = {
         'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターをゆうこうにする',
 
     // project menu
-    'Project notes...':
-        'プロジェクトのメモ...',
+    'Project notes':
+        'プロジェクトのメモ',
     'New':
         'しんき',
-    'Open...':
-        'ひらく...',
+    'Open':
+        'ひらく',
     'Save':
         'ほぞん',
-    'Save As...':
-        'なまえをつけてほぞん...',
-    'Import...':
-        'よみこみ...',
+    'Save As':
+        'なまえをつけてほぞん',
+    'Import':
+        'よみこみ',
     'load an exported project file\nor block library, a costume\nor a sound':
         'チェックするとレポーターをドラッグ&ドロップするとき\n'
 		+ 'そらのレポーターにフォーカスします\n\n'
 		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text...':
-        'テキストファイルとしてプロジェクトをかきだす...',
-    'Export project...':
-        'プロジェクトをかきだす...',
+    'Export project as plain text':
+        'テキストファイルとしてプロジェクトをかきだす',
+    'Export project':
+        'プロジェクトをかきだす',
     'show project data as XML\nin a new browser window':
         'プロジェクトのデータをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Export blocks...':
-        'ブロックをかきだす...',
+    'Export blocks':
+        'ブロックをかきだす',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックのていぎをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
     'Import tools':
@@ -648,16 +648,16 @@ SnapTranslator.dict.ja_HIRA = {
         'きょうりょくなブロックのこうしき\nライブラリをよみこむ',
 
     // cloud menu
-    'Login...':
-        'ログイン...',
-    'Signup...':
-        'サインアップ...',
+    'Login':
+        'ログイン',
+    'Signup':
+        'サインアップ',
 
     // settings menu
-    'Language...':
-        'げんご...',
-    'Zoom blocks...':
-        'ブロックをズーム...',
+    'Language':
+        'げんご',
+    'Zoom blocks':
+        'ブロックをズーム',
     'Blurred shadows':
         'はんとうめいのかげ',
     'uncheck to use solid drop\nshadows and highlights':
@@ -734,20 +734,20 @@ SnapTranslator.dict.ja_HIRA = {
     // inputs
     'with inputs':
         'ひきすう',
-    'input names:':
-        'ひきすうめい:',
-    'Input Names:':
-        'ひきすうめい:',
-    'input list:':
-        'ひきすうリスト:',
+    'input names':
+        'ひきすうめい',
+    'Input Names':
+        'ひきすうめい',
+    'input list':
+        'ひきすうリスト',
 
     // context menus:
     'help':
         'ヘルプ',
 
     // blocks:
-    'help...':
-        'ヘルプ...',
+    'help':
+        'ヘルプ',
     'duplicate':
         'ふくせい',
     'make a copy\nand pick it up':
@@ -756,8 +756,8 @@ SnapTranslator.dict.ja_HIRA = {
         'このブロックをコピーするだけ',
     'delete':
         'さくじょ',
-    'script pic...':
-        'スクリプトのがぞう...',
+    'script pic':
+        'スクリプトのがぞう',
     'open a new window\nwith a picture of this script':
         'このスクリプトのがぞうをひょうじするあたらしいウィンドウをひらきます',
     'ringify':
@@ -766,22 +766,22 @@ SnapTranslator.dict.ja_HIRA = {
         'ひリングか',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'ブロックのていぎをさくじょ',
-    'edit...':
-        'へんしゅう...',
+    'edit':
+        'へんしゅう',
 
     // sprites:
     'edit':
         'へんしゅう',
-    'export...':
-        'かきだし...',
+    'export':
+        'かきだし',
 
     // stage:
     'show all':
         'すべてをひょうじ',
-    'pic...':
-        'がぞう...',
+    'pic':
+        'がぞう',
     'open a new window\nwith a picture of the stage':
         'このステージのがぞうで\nあたらしいウィンドウをひらく',
 
@@ -792,8 +792,8 @@ SnapTranslator.dict.ja_HIRA = {
         'スクリプトを\nたてにせいれつします',
     'add comment':
         'コメントをついか',
-    'make a block...':
-        'ブロックをつくる...',
+    'make a block':
+        'ブロックをつくる',
 
     // costumes
     'rename':
@@ -871,8 +871,8 @@ SnapTranslator.dict.ja_HIRA = {
         'プロジェクトをさくじょ',
     'Are you sure you want to delete':
         'ほんとうにさくじょしますか',
-    'rename...':
-        'なまえをへんこう...',
+    'rename':
+        'なまえをへんこう',
 
     // costume editor
     'Costume Editor':
@@ -895,8 +895,8 @@ SnapTranslator.dict.ja_HIRA = {
         'プロジェクトをひらく',
 
     // save project
-    'Save Project As...':
-        'なまえをつけてプロジェクトをほぞん...',
+    'Save Project As':
+        'なまえをつけてプロジェクトをほぞん',
 
     // export blocks
     'Export blocks':
@@ -968,15 +968,15 @@ SnapTranslator.dict.ja_HIRA = {
     'Command\n(inline)':
         'コマンド\n(インライン)',
     'Command\n(C-shape)':
-        'コマンド \n(Cけい)',
+        'コマンド\n(Cけい)',
     'Any\n(unevaluated)':
         'にんい\n(みひょうか)',
     'Boolean\n(unevaluated)':
         'しんぎち\n(みひょうか)',
     'Single input.':
         'たんいつひきすう.',
-    'Default Value:':
-        'デフォルトち:',
+    'Default Value':
+        'デフォルトち',
     'Multiple inputs (value is list of inputs)':
         'ふくすうのひきすう (あたいはひきすうのリスト)',
     'Upvar - make internal variable visible to caller':
@@ -985,22 +985,22 @@ SnapTranslator.dict.ja_HIRA = {
    // About Snap
     'About Snap':
         'Snapについて',
-    'Back...':
-        'もどる...',
-    'License...':
-        'ライセンス...',
-    'Modules...':
-        'モジュール...',
-    'Credits...':
-        'クレジット...',
-    'Translators...':
+    'Back':
+        'もどる',
+    'License':
+        'ライセンス',
+    'Modules':
+        'モジュール',
+    'Credits':
+        'クレジット',
+    'Translators':
         'ほんやくしゃ',
     'License':
         'ライセンス',
-    'current module versions:':
-        'げんざいのモジュールのバージョン:',
+    'current module versions':
+        'げんざいのモジュールのバージョン',
     'Contributors':
-        'こうけんしゃ:',
+        'こうけんしゃ',
     'Translations':
         'ほんやく',
 
@@ -1011,24 +1011,24 @@ SnapTranslator.dict.ja_HIRA = {
         'だい',
     'slider':
         'スライダー',
-    'slider min...':
-        'スライダーのさいしょうち...',
-    'slider max...':
-        'スライダーのさいだいち...',
-    'import...':
-        'よみこみ...',
+    'slider min':
+        'スライダーのさいしょうち',
+    'slider max':
+        'スライダーのさいだいち',
+    'import':
+        'よみこみ',
     'Slider minimum value':
         'スライダーのさいしょうち',
     'Slider maximum value':
         'スライダーのさいだいち',
 
     // list watchers
-    'length: ':
-        'ながさ: ',
+    'length':
+        'ながさ',
 
     // coments
-    'add comment here...':
-        'ここにコメントをついか...',
+    'add comment here':
+        'ここにコメントをついか',
 
     // drow downs
     // directions
@@ -1144,8 +1144,8 @@ SnapTranslator.dict.ja_HIRA = {
         '9',
 
     // messages
-    'new...':
-        'しんき...',
+    'new':
+        'しんき',
 
     // math functions
     'abs':
@@ -1196,22 +1196,22 @@ SnapTranslator.dict.ja_HIRA = {
         'リファレンスマニュアル',
     'Sign in':
         'サインイン',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
+    'User name':
+        'ユーザーめい',
+    'Password':
+        'パスワード',
     'stay signed in on this computer\nuntil logging out':
         'ログアウトするまでこのコンピューターに\nサインインしたままにする',
     'Sign up':
         'サインアップ',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        'たんじょうづき:',
-    'Birth date:':
-        'とし:',
+    'User name':
+        'ユーザーめい',
+    'Password':
+        'パスワード',
+    'Birth date':
+        'たんじょうづき',
+    'Birth date':
+        'とし',
     'January':
         '１がつ',
     'February':
@@ -1238,12 +1238,12 @@ SnapTranslator.dict.ja_HIRA = {
         '１２がつ',
     '1993 or before':
         '１９９３ねんいぜん',
-    'E-mail address:':
-        'でんしメールアドレス:',
-    'Terms of Service...':
-        'サービスりようきやく...',
-    'Privacy...':
-        'こじんじょうほう...',
+    'E-mail address':
+        'でんしメールアドレス',
+    'Terms of Service':
+        'サービスりようきやく',
+    'Privacy':
+        'こじんじょうほう',
     'I have read and agree\nto the Terms of Service':
         'サービスりようきやくをよみ\nそれにどういします',
 

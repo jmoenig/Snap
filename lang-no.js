@@ -341,8 +341,8 @@ SnapTranslator.dict.no = {
         'tenk %s',
     'Hello!':
         'Heisann!',
-    'Hmm...':
-        'Vel...',
+    'Hmm':
+        'Vel',
     'change %eff effect by %n':
         'endre %eff -effekt med %n',
     'set %eff effect to %n':
@@ -364,8 +364,8 @@ SnapTranslator.dict.no = {
     'go back %n layers':
         'g\u00E5 %n lag tilbake',
 
-    'development mode \ndebugging primitives:':
-        'utviklermodus \nDebugging av blokker',
+    'development mode\ndebugging primitives':
+        'utviklermodus\nDebugging av blokker',
     'console log %mult%s':
         'skrive i konsoll: %mult%s',
     'alert %mult%s':
@@ -609,8 +609,8 @@ SnapTranslator.dict.no = {
 
     // menus
     // snap menu
-    'About...':
-        'Om Snap!...',
+    'About':
+        'Om Snap!',
     'Snap! website':
         'Snap! websiden',
     'Download source':
@@ -625,52 +625,52 @@ SnapTranslator.dict.no = {
         'inn i Morphic funksjoner\nog inspektorer,\nikke brukervennlig',
 
     // project menu
-    'Project notes...':
-        'Prosjektnotater...',
+    'Project notes':
+        'Prosjektnotater',
     'New':
         'Nytt',
-    'Open...':
-        '\u00C5pne...',
+    'Open':
+        '\u00C5pne',
     'Save':
         'Lagre',
-    'Save As...':
-        'Lagre som...',
-    'Import...':
-        'Importer...',
+    'Save As':
+        'Lagre som',
+    'Import':
+        'Importer',
     'load an exported project file\nor block library, a costume\nor a sound':
         'laster inn eksportertes prosjekt,\net bibliotek med '
             + 'blokker\n'
             + 'et kostym eller en lyd',
-    'Export project as plain text ...':
-        'Eksporter prosjekt som ren tekst...',
-    'Export project...':
-        'Eksporter prosjekt...',
+    'Export project as plain text':
+        'Eksporter prosjekt som ren tekst',
+    'Export project':
+        'Eksporter prosjekt',
     'show project data as XML\nin a new browser window':
         'vis prosjektdata som XML\ni et nytt nettleser vindu',
-    'Export blocks...':
-        'Eksporter blokker...',
+    'Export blocks':
+        'Eksporter blokker',
     'show global custom block definitions as XML\nin a new browser window':
         'viser globale blokkdefinisjoner fra bruker\nsom XML i et nytt nettleser vindu',
-    'Import tools...':
-        'Importer verkt\u00F8y...',
+    'Import tools':
+        'Importer verkt\u00F8y',
     'load the official library of\npowerful blocks':
         'last ned snap-bibliotek med ekstra blokker',
-    'Libraries...':
-        'Biblioteker...',
+    'Libraries':
+        'Biblioteker',
     'Import library':
         'Importer biblioteker',
 
  // cloud menu
-    'Login...':
-        'Logg inn...',
-    'Registrer deg...':
-        'Registrering...',
+    'Login':
+        'Logg inn',
+    'Registrer deg':
+        'Registrering',
 
     // settings menu
-    'Language...':
-        'Spr\u00E5k...',
-    'Zoom blocks...':
-        'Zoom blokkene...',
+    'Language':
+        'Spr\u00E5k',
+    'Zoom blocks':
+        'Zoom blokkene',
     'Blurred shadows':
         'Mjuke skygger (blurred)',
     'uncheck to use solid drop\nshadows and highlights':
@@ -709,7 +709,7 @@ SnapTranslator.dict.no = {
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'kryss av for \u00E5 sl\u00E5 p\u00E5 virtuelt\ntastatur p\u00E5 mobile enheter',
     'Input sliders':
-        'Skyveknapp inndata ',
+        'Skyveknapp inndata',
     'uncheck to disable\ninput sliders for\nentry fields':
         'kryss vekk for \u00E5 sl\u00E5 av\nskyveknapper i inndatafelt',
     'check to enable\ninput sliders for\nentry fields':
@@ -743,32 +743,32 @@ SnapTranslator.dict.no = {
 // inputs
     'with inputs':
         'med inndata',
-    'input names:':
-        'inndata navn:',
-    'Input Names:':
-        'Inndata navn:',
-    'input list:':
-        'inndata liste:',
+    'input names':
+        'inndata navn',
+    'Input Names':
+        'Inndata navn',
+    'input list':
+        'inndata liste',
 
     // context menus:
     'help':
         'hjelp',
 
     // blocks:
-    'hjelp...':
-        'hjelp...',
-    'relabel...':
-        'gi nytt navn...',
+    'hjelp':
+        'hjelp',
+    'relabel':
+        'gi nytt navn',
     'duplicate':
         'dupliser',
     'make a copy\nand pick it up':
-        'lag kopi\n og plukk opp',
+        'lag kopi\nog plukk opp',
     'only duplicate this block':
         'dupliser kun denne blokk',
     'delete':
         'slette',
-    'script pic...':
-        'skript bilde...',
+    'script pic':
+        'skript bilde',
     'open a new window\nwith a picture of this script':
         '\u00E5pne nytt vindu med bildet av dette skriptet',
     'ringify':
@@ -777,16 +777,16 @@ SnapTranslator.dict.no = {
         'fjerne ringen rundt',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'slett blokk definisjoner',
-    'edit...':
-        'rediger...',
+    'edit':
+        'rediger',
 
     // sprites:
     'edit':
         'redigere',
-    'export...':
-        'eksporter...',
+    'export':
+        'eksporter',
 
     // stage:
     'show all':
@@ -799,8 +799,8 @@ SnapTranslator.dict.no = {
         'sett opp skriptene\nvertikalt',
     'add comment':
         'legg til kommentar',
-    'make a block...':
-        'lag ny blokk...',
+    'make a block':
+        'lag ny blokk',
 
     // costumes
     'rename':
@@ -852,8 +852,8 @@ SnapTranslator.dict.no = {
         'Slett prosjekt',
     'Are you sure you want to delete':
         'Vil du virkelig slette?',
-    'rename...':
-        'nytt navn...',
+    'rename':
+        'nytt navn',
 
     // costume editor
     'Costume Editor':
@@ -872,8 +872,8 @@ SnapTranslator.dict.no = {
         'Erstatt n\u00E5v\u00E6rende prosjekt med nytt prosjekt?',
 
     // save project
-    'Save Project As...':
-        'Lagre prosjekt som...',
+    'Save Project As':
+        'Lagre prosjekt som',
 
     // export blocks
     'Export blocks':
@@ -953,8 +953,8 @@ SnapTranslator.dict.no = {
         'Boolsk\n(uevaluert)',
     'Single input.':
         'Singel inndata.',
-    'Default Value:':
-        'Standardverdi:',
+    'Default Value':
+        'Standardverdi',
     'Multiple inputs (value is list of inputs)':
         'Fler-inndata (verdi er liste over inndata)',
     'Upvar - make internal variable visible to caller':
@@ -963,19 +963,19 @@ SnapTranslator.dict.no = {
     // About Snap
     'About Snap':
         'Om Snap',
-    'Back...':
-        'Tilbake...',
-    'License...':
-        'Lisens...',
-    'Modules...':
-        'Moduler...',
-    'Credits...':
-        'Takk til...',
-    'Translators...':
+    'Back':
+        'Tilbake',
+    'License':
+        'Lisens',
+    'Modules':
+        'Moduler',
+    'Credits':
+        'Takk til',
+    'Translators':
         'Oversettere',
     'License':
         'Lisens',
-    'current module versions:':
+    'current module versions':
         'Komponent-versjoner',
     'Contributors':
         'Bidragsytere',
@@ -989,24 +989,24 @@ SnapTranslator.dict.no = {
         'stor',
     'slider':
         'skyveknapp',
-    'slider min...':
-        'skyveknapp min...',
-    'slider max...':
-        'skyveknapp max...',
-    'import...':
-        'importer...',
+    'slider min':
+        'skyveknapp min',
+    'slider max':
+        'skyveknapp max',
+    'import':
+        'importer',
     'Slider minimum value':
         'Skyveknapp - minimumsverdi',
     'Slider maximum value':
         'Skyveknapp - maksimumsverdi',
 
     // list watchers
-    'length: ':
-        'lengde: ',
+    'length':
+        'lengde',
 
     // coments
-    'add comment here...':
-        'legg til kommentar her...',
+    'add comment here':
+        'legg til kommentar her',
 
     // drow downs
     // directions
@@ -1120,8 +1120,8 @@ SnapTranslator.dict.no = {
         '9',
 
     // messages
-    'new...':
-        'ny...',
+    'new':
+        'ny',
 
     // math functions
     'abs':

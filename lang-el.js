@@ -339,8 +339,8 @@ SnapTranslator.dict.el = {
         'σκέψου %s',
     'Hello!':
         'Γεια!',
-    'Hmm...':
-        'Μμμ...',
+    'Hmm':
+        'Μμμ',
     'change %eff effect by %n':
         'άλλαξε το εφέ %eff κατά %n',
     'set %eff effect to %n':
@@ -362,8 +362,8 @@ SnapTranslator.dict.el = {
     'go back %n layers':
         'πήγαινε πίσω %n στρώματα',
 
-    'development mode \ndebugging primitives:':
-        'λειτουργία ανάπτυξης \nαρχέτυπα debugging',
+    'development mode\ndebugging primitives':
+        'λειτουργία ανάπτυξης\nαρχέτυπα debugging',
     'console log %mult%s':
         'γράψτε στην κονσόλα: %mult%s',
     'alert %mult%s':
@@ -610,8 +610,8 @@ SnapTranslator.dict.el = {
 
     // menus
     // snap menu
-    'About...':
-        'Περί του Snap!…',
+    'About':
+        'Περί του Snap!',
     'Reference manual':
         'Εγχειρίδιο αναφοράς',
     'Snap! website':
@@ -628,64 +628,64 @@ SnapTranslator.dict.el = {
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
-    'Project notes...':
-        'Σημειώσης πάνω στην εργασία...',
+    'Project notes':
+        'Σημειώσης πάνω στην εργασία',
     'New':
         'Νέο',
-    'Open...':
-        'Άνοιγμα...',
+    'Open':
+        'Άνοιγμα',
     'Save':
         'Αποθήκευση',
-    'Save As...':
-        'Αποθήκευση Ως...',
-    'Import...':
-        'Εισαγωγή...',
+    'Save As':
+        'Αποθήκευση Ως',
+    'Import':
+        'Εισαγωγή',
     'load an exported project file\nor block library, a costume\nor a sound':
         'μπορείτε να φορτώσετε ένα αρχείο από το browser σας στον\n κατάλογο του ήχου η των' +
-            'κοστουμιών που ',
-    'Export project as plain text...':
-        'Εξαγωγη της εργασίας ως σκέτο κείμενο...',
-    'Export project...':
-        'Εξαγωγή εργασίας...',
+            'κοστουμιών που',
+    'Export project as plain text':
+        'Εξαγωγη της εργασίας ως σκέτο κείμενο',
+    'Export project':
+        'Εξαγωγή εργασίας',
     'show project data as XML\nin a new browser window':
         'εμφάνιση δεδομένων εργασίας ως XML\nσε καινούριο παράθυρο του browser',
-    'Export blocks...':
-        'Εξαγωγή των μπλοκ...',
+    'Export blocks':
+        'Εξαγωγή των μπλοκ',
     'show global custom block definitions as XML\nin a new browser window':
         'Εμφάνιση παγκοσμίων προσαρμοσμένων ορισμών των μπλοκ ως XML\nσε καινούριο' +
             'παράθυρο του browser',
     'Import tools':
         'Εισαγωγή εργαλείων',
     'load the official library of\npowerful blocks':
-        'Φόρτωση της επίσημης βιβλιοθήκης\n των δυναμικών μπλοκ',
-    'Libraries...':
-        'Βιβλιοθήκες...',
+        'Φόρτωση της επίσημης βιβλιοθήκης\nτων δυναμικών μπλοκ',
+    'Libraries':
+        'Βιβλιοθήκες',
     'Import library':
         'Εισαγωγή βιβλιοθήκης',
 
     // cloud menu
-    'Login...':
-        'Σύνδεση...',
-    'Signup...':
-        'Εγγραφή...',
+    'Login':
+        'Σύνδεση',
+    'Signup':
+        'Εγγραφή',
 
     // settings menu
-    'Language...':
-        'Γλώσσα...',
-    'Zoom blocks...':
-        'Μεγέθυνση των μπλοκ…',
+    'Language':
+        'Γλώσσα',
+    'Zoom blocks':
+        'Μεγέθυνση των μπλοκ',
     'Blurred shadows':
         'Θολές σκιές',
     'uncheck to use solid drop\nshadows and highlights':
-        'απενεργοποιήστε για να εμφανίσετε\n την σκίαση και τα στερεά σήματα',
+        'απενεργοποιήστε για να εμφανίσετε\nτην σκίαση και τα στερεά σήματα',
     'check to use blurred drop\nshadows and highlights':
-        'ενεργοποιήστε για να εμφανίσετε\n την σκίαση και τα θολά σήματα',
+        'ενεργοποιήστε για να εμφανίσετε\nτην σκίαση και τα θολά σήματα',
     'Zebra coloring':
         'Χρωματισμός ζέβρα',
     'check to enable alternating\ncolors for nested blocks':
-        'ενεργοποιήστε για να εμφανίσετε εναλασσόμενα\n χρώματα για τα ένθετα μπλοκ',
+        'ενεργοποιήστε για να εμφανίσετε εναλασσόμενα\nχρώματα για τα ένθετα μπλοκ',
     'uncheck to disable alternating\ncolors for nested block':
-        'απενεργοποιήστε για να εξαφανίσετε τα εναλασσόμενα\n χρώματα για τα ένθετα μπλοκ',
+        'απενεργοποιήστε για να εξαφανίσετε τα εναλασσόμενα\nχρώματα για τα ένθετα μπλοκ',
     'Dynamic input labels':
         'Ετικέτες για τις δυναμικές τιμές',
     'uncheck to disable dynamic\nlabels for variadic inputs':
@@ -750,12 +750,12 @@ SnapTranslator.dict.el = {
     // inputs
     'with inputs':
         'με τιμές',
-    'input names:':
-        'ονόματα τιμών:',
-    'Input Names:':
-        'Ονόματα τιμών:',
-    'input list:':
-        'λίστα τιμών:',
+    'input names':
+        'ονόματα τιμών',
+    'Input Names':
+        'Ονόματα τιμών',
+    'input list':
+        'λίστα τιμών',
 
     // context menus:
     'help':
@@ -768,20 +768,20 @@ SnapTranslator.dict.el = {
         'Εμφάνιση αρχέτυπων',
 
     // blocks:
-    'help...':
-        'βοήθεια...',
-    'relabel...':
-        'μετονόμαση...',
+    'help':
+        'βοήθεια',
+    'relabel':
+        'μετονόμαση',
     'duplicate':
         'διπλασίαση',
     'make a copy\nand pick it up':
-        'δημιουργία αντίγραφου\n και κράτηση του',
+        'δημιουργία αντίγραφου\nκαι κράτηση του',
     'only duplicate this block':
         'διπλασίαση μόνο αυτού του μπλοκ',
     'delete':
         'διαγραφή',
-    'script pic...':
-        'εικόνα του κώδικα...',
+    'script pic':
+        'εικόνα του κώδικα',
     'open a new window\nwith a picture of this script':
         'άνοιγμα νέου παραθύρου\nμε την εικόνα αυτού του κώδικα',
     'ringify':
@@ -790,10 +790,10 @@ SnapTranslator.dict.el = {
         'εξαγωγή από το δαχτυλίδι',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'διαγραφή του προσαρμοσμένου μπλοκ',
-    'edit...':
-        'επεξεργασία...',
+    'edit':
+        'επεξεργασία',
 
     // sprites:
     'edit':
@@ -802,14 +802,14 @@ SnapTranslator.dict.el = {
         'αποσύνδεση από',
     'detach all parts':
         'αποσύνδεση όλων των κομματιών',
-    'export...':
-        'εξαγωγή...',
+    'export':
+        'εξαγωγή',
 
     // stage:
     'show all':
         'εμφάνιση όλων',
-    'pic...':
-        'εικόνα...',
+    'pic':
+        'εικόνα',
     'open a new window\nwith a picture of the stage':
         'άνοιγμα νέου παραθύρου\nμε την εικόνα της σκηνής',
 
@@ -824,12 +824,12 @@ SnapTranslator.dict.el = {
         'επενακράτηση',
     'undo the last\nblock drop\nin this pane':
         'αναίρεση του τελευταίου\nμπλοκ που αφήσατε μέσα\nσε αυτό το παράθυρο',
-    'scripts pic...':
-        'εικόνα του κώδικα...',
+    'scripts pic':
+        'εικόνα του κώδικα',
     'open a new window\nwith a picture of all scripts':
         'άνοιγμα νέου παραθύρου\nμε μια εικόνα όλου του κώδικα',
-    'make a block...':
-        'δημιουργία ενός μπλοκ...',
+    'make a block':
+        'δημιουργία ενός μπλοκ',
 
     // costumes
     'rename':
@@ -905,8 +905,8 @@ SnapTranslator.dict.el = {
         'Διαγραφή Εργασίας',
     'Are you sure you want to delete':
         'Είστε σίγουροι ότι θέλετε να γίνει διαγραφή?',
-    'rename...':
-        'μετονόμαση...',
+    'rename':
+        'μετονόμαση',
 
     // costume editor
     'Costume Editor':
@@ -925,8 +925,8 @@ SnapTranslator.dict.el = {
         'Θέλετε να αντικαταστήσετε την τρέχουσα εργασία με μία καινούρια?',
 
     // save project
-    'Save Project As...':
-        'Αποθήκευση Εργασίας Ως...',
+    'Save Project As':
+        'Αποθήκευση Εργασίας Ως',
 
     // export blocks
     'Export blocks':
@@ -993,7 +993,7 @@ SnapTranslator.dict.el = {
     'List':
         'Λίστα',
     'Any type':
-        'Οποιουδήποτε τύπου ',
+        'Οποιουδήποτε τύπου',
     'Boolean (T/F)':
         'Boolean Σωστό/Λάθος (Σ/Λ)',
     'Command\n(inline)':
@@ -1006,8 +1006,8 @@ SnapTranslator.dict.el = {
         'Boolean(σωστό/λάθος)\n(δεν έχει αξιολογηθεί)',
     'Single input.':
         'Μία τιμή.',
-    'Default Value:':
-        'Προεπιλογή:',
+    'Default Value':
+        'Προεπιλογή',
     'Multiple inputs (value is list of inputs)':
         'Πολλές τιμές (η αξία είναι η λίστα με τις τιμές)',
     'Upvar - make internal variable visible to caller':
@@ -1016,19 +1016,19 @@ SnapTranslator.dict.el = {
     // About Snap
     'About Snap':
         'Πληροφορίες για το Snap',
-    'Back...':
-        'Πίσω...',
-    'License...':
-        'Άδιεα...',
-    'Modules...':
-        'Ενότητες...',
-    'Credits...':
-        'Συντελεστές...',
-    'Translators...':
-        'Μεταφραστές...',
+    'Back':
+        'Πίσω',
+    'License':
+        'Άδιεα',
+    'Modules':
+        'Ενότητες',
+    'Credits':
+        'Συντελεστές',
+    'Translators':
+        'Μεταφραστές',
     'License':
         'Άδεια',
-    'current module versions:':
+    'current module versions':
         'Τρέχουσα έκδοση των ενοτήτων',
     'Contributors':
         'Συντελεστές',
@@ -1042,24 +1042,24 @@ SnapTranslator.dict.el = {
         'μεγάλο',
     'slider':
         'Ρυθμιστής',
-    'slider min...':
-        'ελάχιστη αξία...',
-    'slider max...':
-        'μέγιστη αξία...',
-    'import...':
-        'εισαγωγή...',
+    'slider min':
+        'ελάχιστη αξία',
+    'slider max':
+        'μέγιστη αξία',
+    'import':
+        'εισαγωγή',
     'Slider minimum value':
         'Ελάχιστη τιμή του ρυθμιστή',
     'Slider maximum value':
         'Μέγιστη τιμή του ρυθμιστή',
 
     // list watchers
-    'length: ':
-        'μήκος: ',
+    'length':
+        'μήκος',
 
     // coments
-    'add comment here...':
-        'πρόσθεσε κάποιο σχόλιο εδώ...',
+    'add comment here':
+        'πρόσθεσε κάποιο σχόλιο εδώ',
 
     // drow downs
     // directions
@@ -1175,8 +1175,8 @@ SnapTranslator.dict.el = {
         '9',
 
     // messages
-    'new...':
-        'νέο...',
+    'new':
+        'νέο',
 
     // math functions
     'abs':

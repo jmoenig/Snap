@@ -247,7 +247,7 @@ SnapTranslator.dict.bg = {
     'import a picture from another web page or from\na file on your computer by dropping it here':
         'импортирай изображения от друг уеб-сайт\nили от твоя компютър пускайки ги тук',
     'import a sound from your computer\nby dragging it into here':
-        'добави звуци от твоя компютър\nпускайки ги тук ',
+        'добави звуци от твоя компютър\nпускайки ги тук',
 
     // primitive blocks:
 
@@ -288,7 +288,7 @@ SnapTranslator.dict.bg = {
     'move %n steps':
         'напред с %n стъпки',
     'turn %clockwise %n degrees':
-        ' %clockwise с %n градуса',
+        '%clockwise с %n градуса',
     'turn %counterclockwise %n degrees':
         'завърти %counterclockwise с %n градуса',
     'point in direction %dir':
@@ -335,8 +335,8 @@ SnapTranslator.dict.bg = {
         'мисли %s',
     'Hello!':
         'Здрасти!',
-    'Hmm...':
-        'Хмм...',
+    'Hmm':
+        'Хмм',
     'change %eff effect by %n':
         'смени %eff ефект с %n',
     'set %eff effect to %n':
@@ -358,8 +358,8 @@ SnapTranslator.dict.bg = {
     'go back %n layers':
         'премини с %n слоя назад',
 
-    'development mode \ndebugging primitives:':
-        'Режим за програмисти \nпримитиви за дебъгиране:',
+    'development mode\ndebugging primitives':
+        'Режим за програмисти\nпримитиви за дебъгиране',
     'console log %mult%s':
         'напиши в конзолата %mult%s',
     'alert %mult%s':
@@ -584,7 +584,7 @@ SnapTranslator.dict.bg = {
 
     // menus
     // snap menu
-    'About...':
+    'About':
         'За Snap!',
     'Snap! website':
         'Уебсайт на Snap!',
@@ -600,28 +600,28 @@ SnapTranslator.dict.bg = {
         'включи Morphic\nконтекст менюта\nи инспектори,\nмното сложно!',
 
     // project menu
-    'Project notes...':
-        'Записки по проекта...',
+    'Project notes':
+        'Записки по проекта',
     'New':
         'Нов проект',
-    'Open...':
-        'Отвори...',
+    'Open':
+        'Отвори',
     'Save':
         'Запиши',
-    'Save As...':
-        'Запиши като...',
-    'Import...':
-        'Импорт...',
+    'Save As':
+        'Запиши като',
+    'Import':
+        'Импорт',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Зареди проект,\nблокова библиотека,\nспрайт или звук',
-    'Export project as plain text...':
-        'Експорт проекта како текст файл...',
-    'Export project...':
-        'Експорт на проект...',
+    'Export project as plain text':
+        'Експорт проекта како текст файл',
+    'Export project':
+        'Експорт на проект',
     'show project data as XML\nin a new browser window':
         'Покажи XML данните на проекта\nв нов прозорец на браузъра',
-    'Export blocks...':
-        'Експорт на блокове...',
+    'Export blocks':
+        'Експорт на блокове',
     'show global custom block definitions as XML\nin a new browser window':
         'Покажи XML дефинициите на custom блокове\nв нов прозорец на браузъра',
     'Import tools':
@@ -630,8 +630,8 @@ SnapTranslator.dict.bg = {
         'Зареди официалната библиотеката от мощните блокове',
 
     // settings menu
-    'Language...':
-        'Език...',
+    'Language':
+        'Език',
     'Blurred shadows':
         'Размити сенки',
     'uncheck to use solid drop\nshadows and highlights':
@@ -696,22 +696,22 @@ SnapTranslator.dict.bg = {
     // inputs
     'with inputs':
         'с вход на данни',
-    'input names:':
-        'имена на входните данни:',
-    'Input Names:':
-        'Имена на входните данни:',
-    'input list:':
-        'Вход на списък:',
+    'input names':
+        'имена на входните данни',
+    'Input Names':
+        'Имена на входните данни',
+    'input list':
+        'Вход на списък',
 
     // context menus:
     'help':
         'помощ',
 
     // blocks:
-    'help...':
-        'помощ...',
-    'relabel...':
-        'смени етикета...',
+    'help':
+        'помощ',
+    'relabel':
+        'смени етикета',
     'duplicate':
         'дупликация',
     'make a copy\nand pick it up':
@@ -720,26 +720,26 @@ SnapTranslator.dict.bg = {
         'копирай само този блок',
     'delete':
         'изтрий',
-    'script pic...':
-        'изображение на скрипта...',
+    'script pic':
+        'изображение на скрипта',
     'open a new window\nwith a picture of this script':
-        'отвори нов екран\n с изображение на скрипта',
+        'отвори нов екран\nс изображение на скрипта',
     'ringify':
         'ringify',
     'unringify':
         'unringify',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'изтрий дефиницията на блока',
-    'edit...':
-        'редактирай...',
+    'edit':
+        'редактирай',
 
     // sprites:
     'edit':
         'редактирай',
-    'export...':
-        'експорт...',
+    'export':
+        'експорт',
 
     // stage:
     'show all':
@@ -752,8 +752,8 @@ SnapTranslator.dict.bg = {
         'вертикално подреждане на скриптовере',
     'add comment':
         'добави коментар',
-    'make a block...':
-        'нов блок...',
+    'make a block':
+        'нов блок',
 
     // costumes
     'rename':
@@ -805,8 +805,8 @@ SnapTranslator.dict.bg = {
         'Изтрий Проект',
     'Are you sure you want to delete':
         'Сирурен ли си че искаш да изтриеш?',
-    'rename...':
-        'Преименуване...',
+    'rename':
+        'Преименуване',
 
     // costume editor
     'Costume Editor':
@@ -825,8 +825,8 @@ SnapTranslator.dict.bg = {
         'Замени проекта с нов?',
 
     // save project
-    'Save Project As...':
-        'Запиши проекта като...',
+    'Save Project As':
+        'Запиши проекта като',
 
     // export blocks
     'Export blocks':
@@ -905,8 +905,8 @@ SnapTranslator.dict.bg = {
         'Булев\n(unevaluated)',
     'Single input.':
         'Единичен вход',
-    'Default Value:':
-        'Default стойност:',
+    'Default Value':
+        'Default стойност',
     'Multiple inputs (value is list of inputs)':
         'Множество входни (спиък от данни)',
     'Upvar - make internal variable visible to caller':
@@ -915,19 +915,19 @@ SnapTranslator.dict.bg = {
     // About Snap
     'About Snap':
         'За Snap!',
-    'Back...':
-        'Назад...',
-    'License...':
-        'Лиценз...',
-    'Modules...':
-        'Модули...',
-    'Credits...':
-        'Кредити...',
-    'Translators...':
+    'Back':
+        'Назад',
+    'License':
+        'Лиценз',
+    'Modules':
+        'Модули',
+    'Credits':
+        'Кредити',
+    'Translators':
         'Преводачи',
     'License':
         'Лиценз',
-    'current module versions:':
+    'current module versions':
         'Версии на модулие',
     'Contributors':
         'Участници',
@@ -941,24 +941,24 @@ SnapTranslator.dict.bg = {
         'голям',
     'slider':
         'слайдер',
-    'slider min...':
-        'слайдер min...',
-    'slider max...':
-        'слайдер max...',
-    'import...':
-        'импорт...',
+    'slider min':
+        'слайдер min',
+    'slider max':
+        'слайдер max',
+    'import':
+        'импорт',
     'Slider minimum value':
         'Слайдер с min стойност',
     'Slider maximum value':
         'Слайдер с max стойност',
 
     // list watchers
-    'length: ':
-        'дължина: ',
+    'length':
+        'дължина',
 
     // coments
-    'add comment here...':
-        'добави коментар тук...',
+    'add comment here':
+        'добави коментар тук',
 
     // drow downs
     // directions
@@ -1072,8 +1072,8 @@ SnapTranslator.dict.bg = {
         '9',
 
     // messages
-    'new...':
-        'нов...',
+    'new':
+        'нов',
 
     // math functions
     'abs':

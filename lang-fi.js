@@ -340,8 +340,8 @@ SnapTranslator.dict.fi = {
         'ajattele %s',
     'Hello!':
         'Hei!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'muuta efekti\u00e4 %eff %n yksikk\u00f6\u00e4',
     'set %eff effect to %n':
@@ -364,8 +364,8 @@ SnapTranslator.dict.fi = {
     'go back %n layers':
         'siirry %n kerrosta taakse',
 
-    'development mode \ndebugging primitives:':
-        'Kehitysmoodin \ndebuggauskomennot:',
+    'development mode\ndebugging primitives':
+        'Kehitysmoodin\ndebuggauskomennot',
     'console log %mult%s':
         'kirjoita konsoliin: %mult%s',
     'alert %mult%s':
@@ -623,8 +623,8 @@ SnapTranslator.dict.fi = {
 
     // menus
     // snap menu
-    'About...':
-        'Tietoa Snapista...',
+    'About':
+        'Tietoa Snapista',
     'Reference manual':
         'K\u00e4ytt\u00f6ohje',
     'Snap! website':
@@ -643,28 +643,28 @@ SnapTranslator.dict.fi = {
             + 'ei kovin helppok\u00e4ytt\u00f6isi\u00e4',
 
     // project menu
-    'Project notes...':
-        'Projektimerkint\u00f6j\u00e4...',
+    'Project notes':
+        'Projektimerkint\u00f6j\u00e4',
     'New':
         'Uusi',
-    'Open...':
-        'Avaa...',
+    'Open':
+        'Avaa',
     'Save':
         'Tallenna',
-    'Save As...':
-        'Tallenna nimell\u00e4...',
-    'Import...':
-        'Tuo...',
+    'Save As':
+        'Tallenna nimell\u00e4',
+    'Import':
+        'Tuo',
     'load an exported project file\nor block library, a costume\nor a sound':
         'lataa viety projekti,\npalikkakirjasto, asu\ntai \u00e4\u00e4ni',
-    'Export project as plain text...':
-        'Vie projekti tekstin\u00e4...',
-    'Export project...':
-        'Vie projekti...',
+    'Export project as plain text':
+        'Vie projekti tekstin\u00e4',
+    'Export project':
+        'Vie projekti',
     'show project data as XML\nin a new browser window':
         'n\u00e4yt\u00e4 projekti XML-muodossa\nuudessa selainikkunassa',
-    'Export blocks...':
-        'Vie palikoita...',
+    'Export blocks':
+        'Vie palikoita',
     'show global custom block definitions as XML\nin a new browser window':
         'n\u00e4yt\u00e4 yhteiset palikkam\u00e4\u00e4rittelyt\n'
             + 'XML-muodossa uudessa selainikkunassa',
@@ -672,24 +672,24 @@ SnapTranslator.dict.fi = {
         'Tuo ty\u00f6kaluja',
     'load the official library of\npowerful blocks':
         'lataa virallinen tehopalikoiden kirjasto',
-    'Libraries...':
-        'Kirjastot...',
+    'Libraries':
+        'Kirjastot',
     'Import library':
         'Tuo kirjasto',
 
     // cloud menu
-    'Login...':
-        'Kirjaudu...',
-    'Signup...':
-        'Luo k\u00e4ytt\u00e4j\u00e4tili...',
+    'Login':
+        'Kirjaudu',
+    'Signup':
+        'Luo k\u00e4ytt\u00e4j\u00e4tili',
 
     // settings menu
-    'Language...':
-        'Kieli...',
-    'Zoom blocks...':
-        'Suurenna palikoita...',
-    'Stage size...':
-        'Esiintymislavan koko...',
+    'Language':
+        'Kieli',
+    'Zoom blocks':
+        'Suurenna palikoita',
+    'Stage size':
+        'Esiintymislavan koko',
     'Stage size':
         'Esiintymislavan koko',
     'Stage width':
@@ -793,12 +793,12 @@ SnapTranslator.dict.fi = {
     // inputs
     'with inputs':
         'sy\u00f6tteill\u00e4',
-    'input names:':
-        'sy\u00f6tteet:',
-    'Input Names:':
-        'Sy\u00f6tteet:',
-    'input list:':
-        'sy\u00f6telista:',
+    'input names':
+        'sy\u00f6tteet',
+    'Input Names':
+        'Sy\u00f6tteet',
+    'input list':
+        'sy\u00f6telista',
 
     // context menus:
     'help':
@@ -811,10 +811,10 @@ SnapTranslator.dict.fi = {
         'n\u00e4yt\u00e4 peruspalikat',
 
     // blocks:
-    'help...':
-        'apua...',
-    'relabel...':
-        'nime\u00e4 uudestaan...',
+    'help':
+        'apua',
+    'relabel':
+        'nime\u00e4 uudestaan',
     'duplicate':
         'kopioi',
     'make a copy\nand pick it up':
@@ -823,8 +823,8 @@ SnapTranslator.dict.fi = {
         'kopioi vain t\u00e4m\u00e4 palikka',
     'delete':
         'poista',
-    'script pic...':
-        'kuva skriptist\u00e4...',
+    'script pic':
+        'kuva skriptist\u00e4',
     'open a new window\nwith a picture of this script':
         'avaa kuva t\u00e4st\u00e4 skriptist\u00e4\nuudessa selainikkunassa',
     'ringify':
@@ -833,10 +833,10 @@ SnapTranslator.dict.fi = {
         'poista ympyr\u00f6inti',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'poista palikkam\u00e4\u00e4rittely',
-    'edit...':
-        'muokkaa...',
+    'edit':
+        'muokkaa',
 
     // sprites:
     'edit':
@@ -845,14 +845,14 @@ SnapTranslator.dict.fi = {
         'irrota',
     'detach all parts':
         'irrota kaikki osat',
-    'export...':
-        'Vie...',
+    'export':
+        'Vie',
 
     // stage:
     'show all':
         'N\u00e4yt\u00e4 kaikki',
-    'pic...':
-        'Vie kuva...',
+    'pic':
+        'Vie kuva',
     'open a new window\nwith a picture of the stage':
         'Avaa esiintymislavan kuva\nuuteen selainikkunaan',
 
@@ -867,12 +867,12 @@ SnapTranslator.dict.fi = {
         'peruuta asetus',
     'undo the last\nblock drop\nin this pane':
         'peruuta viimeisin\npalikan asetus',
-    'scripts pic...':
-        'kuva skripteist\u00e4...',
+    'scripts pic':
+        'kuva skripteist\u00e4',
     'open a new window\nwith a picture of all scripts':
         'avaa kuva\nkaikista skripteist\u00e4\nuudessa selainikkunassa',
-    'make a block...':
-        'tee uusi palikka...',
+    'make a block':
+        'tee uusi palikka',
 
     // costumes
     'rename':
@@ -948,8 +948,8 @@ SnapTranslator.dict.fi = {
         'Poista projekti',
     'Are you sure you want to delete':
         'Poistetaanko varmasti?',
-    'rename...':
-        'nime\u00e4 uusiksi...',
+    'rename':
+        'nime\u00e4 uusiksi',
 
     // costume editor
     'Costume Editor':
@@ -970,8 +970,8 @@ SnapTranslator.dict.fi = {
         'Korvataanko nykyinen projekti uudella?',
 
     // save project
-    'Save Project As...':
-        'Tallenna projekti nimell\u00e4...',
+    'Save Project As':
+        'Tallenna projekti nimell\u00e4',
 
     // export blocks
     'Export blocks':
@@ -1012,7 +1012,7 @@ SnapTranslator.dict.fi = {
     'Delete Custom Block':
         'Poista palikka',
     'Are you sure you want to delete this\ncustom block and all its instances?':
-        'Poistetaanko t\u00e4m\u00e4 palikka\n ja kaikki sen esiintym\u00e4t?',
+        'Poistetaanko t\u00e4m\u00e4 palikka\nja kaikki sen esiintym\u00e4t?',
 
 
     // input dialog
@@ -1050,8 +1050,8 @@ SnapTranslator.dict.fi = {
         'Totuusarvo\n(sitaatti)',
     'Single input.':
         'Yksi sy\u00f6te.',
-    'Default Value:':
-        'Oletusarvo:',
+    'Default Value':
+        'Oletusarvo',
     'Multiple inputs (value is list of inputs)':
         'Useita sy\u00f6tteit\u00e4 (listana)',
     'Upvar - make internal variable visible to caller':
@@ -1060,20 +1060,20 @@ SnapTranslator.dict.fi = {
     // About Snap
     'About Snap':
         'Tietoa Snapista',
-    'Back...':
-        'Takaisin...',
-    'License...':
-        'Tekij\u00e4noikeudet...',
-    'Modules...':
-        'Osat...',
-    'Credits...':
-        'Kiitokset...',
-    'Translators...':
-        'K\u00e4\u00e4nt\u00e4j\u00e4t...',
+    'Back':
+        'Takaisin',
     'License':
         'Tekij\u00e4noikeudet',
-    'current module versions:':
-        'Osien versiot:',
+    'Modules':
+        'Osat',
+    'Credits':
+        'Kiitokset',
+    'Translators':
+        'K\u00e4\u00e4nt\u00e4j\u00e4t',
+    'License':
+        'Tekij\u00e4noikeudet',
+    'current module versions':
+        'Osien versiot',
     'Contributors':
         'Osallistujat',
     'Translations':
@@ -1086,24 +1086,24 @@ SnapTranslator.dict.fi = {
         'suuri',
     'slider':
         'liukus\u00e4\u00e4din',
-    'slider min...':
-        'minimiarvo...',
-    'slider max...':
-        'maksimiarvo...',
-    'import...':
-        'tuo...',
+    'slider min':
+        'minimiarvo',
+    'slider max':
+        'maksimiarvo',
+    'import':
+        'tuo',
     'Slider minimum value':
         'Liukus\u00e4\u00e4timen minimiarvo',
     'Slider maximum value':
         'Liukus\u00e4\u00e4timen maksimiarvo',
 
     // list watchers
-    'length: ':
-        'pituus: ',
+    'length':
+        'pituus',
 
     // coments
-    'add comment here...':
-        'Kirjoita kommentti t\u00e4h\u00e4n...',
+    'add comment here':
+        'Kirjoita kommentti t\u00e4h\u00e4n',
 
     // drow downs
     // directions
@@ -1219,8 +1219,8 @@ SnapTranslator.dict.fi = {
         '9',
 
     // messages
-    'new...':
-        'uusi...',
+    'new':
+        'uusi',
 
     // math functions
     'abs':

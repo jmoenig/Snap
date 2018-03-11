@@ -343,8 +343,8 @@ SnapTranslator.dict.dk = {
         't\u00E6nk %s',
     'Hello!':
         'Hej!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         '\u00E6ndr effekten %eff med %n',
     'set %eff effect to %n':
@@ -366,8 +366,8 @@ SnapTranslator.dict.dk = {
     'go back %n layers':
         'smut %n lag tilbage',
 
-    'development mode \ndebugging primitives:':
-        'udviklertilstand \nfejlfindingsenheder',
+    'development mode\ndebugging primitives':
+        'udviklertilstand\nfejlfindingsenheder',
     'console log %mult%s':
         'skriv i konsollen: %mult%s',
     'alert %mult%s':
@@ -463,7 +463,7 @@ SnapTranslator.dict.dk = {
     'call %repRing %inputs':
         'kald %repRing %inputs',
     'run %cmdRing w/continuation':
-        'k\u00F8r %cmdRing med forts\u00E6ttelse ',
+        'k\u00F8r %cmdRing med forts\u00E6ttelse',
     'call %cmdRing w/continuation':
         'kald %cmdRing med forts\u00E6ttelse',
     'warp %c':
@@ -613,8 +613,8 @@ SnapTranslator.dict.dk = {
 
     // menus
     // snap menu
-    'About...':
-        'Om...',
+    'About':
+        'Om',
     'Reference manual':
         'Referencemanual',
     'Snap! website':
@@ -624,65 +624,65 @@ SnapTranslator.dict.dk = {
     'Switch back to user mode':
         'Skift tilbage til brugertilstand',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'sl\u00E5 deep-Morphics kontekstmenuer fra \nog vis brugervenlige \ni stedet',
+        'sl\u00E5 deep-Morphics kontekstmenuer fra\nog vis brugervenlige\ni stedet',
     'Switch to dev mode':
         'Skift til udviklertilstand',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        's\u00E6t deep-Morphics kontekstmenuer til \nog vis brugervenlige \ni stedet',
+        's\u00E6t deep-Morphics kontekstmenuer til\nog vis brugervenlige\ni stedet',
 
     // project menu
-    'Project Notes...':
-        'Projektnoter...',
+    'Project Notes':
+        'Projektnoter',
     'New':
         'Ny',
-    'Open...':
-        '\u00C5bn...',
+    'Open':
+        '\u00C5bn',
     'Save':
         'Gem',
-    'Save As...':
-        'Gem som...',
-    'Import...':
-        'Importer...',
+    'Save As':
+        'Gem som',
+    'Import':
+        'Importer',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Importer et eksporteret projekt,'
             + 'et blokbibliotek, et kostume'
             + 'eller en lydfil',
-    'Export project as plain text ...':
-        'Eksporter projekt som ren tekst...',
-    'Export project...':
-        'Eksporter projekt...',
-    'Export summary...':
-        'Eksporter opsummering...',
+    'Export project as plain text':
+        'Eksporter projekt som ren tekst',
+    'Export project':
+        'Eksporter projekt',
+    'Export summary':
+        'Eksporter opsummering',
     'show project data as XML\nin a new browser window':
         'Vis projekt som XML\ni et nyt browservindue',
-    'Export blocks ...':
-        'Eksporter blokke...',
+    'Export blocks':
+        'Eksporter blokke',
     'show global custom block definitions as XML\nin a new browser window':
         'Vis globale tilpassede blokdefinitioner som XML\ni et nyt browser-vindue',
     'Import tools':
-        'Importer v\u00E6rkt\u00F8jer...',
+        'Importer v\u00E6rkt\u00F8jer',
     'load the official library of\npowerful blocks':
-        'Indl\u00E6s det officielle bibliotek med \nkraftfulde blokke',
-    'Libraries...':
-        'Biblioteker...',
+        'Indl\u00E6s det officielle bibliotek med\nkraftfulde blokke',
+    'Libraries':
+        'Biblioteker',
     'Import library':
         'Importer bibliotek',
 
     // cloud menu
-    'Login...':
-        'Login...',
-    'Signup...':
-        'Registrer...',
-    'Reset Password...':
-        'Nulstil kodeord...',
+    'Login':
+        'Login',
+    'Signup':
+        'Registrer',
+    'Reset Password':
+        'Nulstil kodeord',
 
     // settings menu
-    'Language...':
-        'Sprog...',
-    'Zoom blocks...':
-        'Forst\u00F8r blokke...',
-    'Stage size...':
-        'Scenest\u00F8rrelse...',
+    'Language':
+        'Sprog',
+    'Zoom blocks':
+        'Forst\u00F8r blokke',
+    'Stage size':
+        'Scenest\u00F8rrelse',
     'Stage size':
         'Scenest\u00F8rrelse',
     'Stage width':
@@ -694,20 +694,20 @@ SnapTranslator.dict.dk = {
     'uncheck to use solid drop\nshadows and highlights':
         'afmarker for at bruge h\u00E5rde skygger og fremh\u00E6velser',
     'check to use blurred drop\nshadows and highlights':
-        'marker for at bruge bl\u00F8de \nskygger og fremh\u00E6velser',
+        'marker for at bruge bl\u00F8de\nskygger og fremh\u00E6velser',
     'Zebra coloring':
         'Zebrafarvning',
     'check to enable alternating\ncolors for nested blocks':
-        'marker for at vise skiftende \nfarver for blokke inden i hinanden',
+        'marker for at vise skiftende\nfarver for blokke inden i hinanden',
     'uncheck to disable alternating\ncolors for nested block':
-        'afmarker for ikke at vise skiftende \nfarver for blokke inden i hinanden',
+        'afmarker for ikke at vise skiftende\nfarver for blokke inden i hinanden',
     'Dynamic input labels':
         'Dynamiske inputm\u00E6rkater',
     'uncheck to disable dynamic\nlabels for variadic inputs':
 // what does variadic even mean?
-        'afmarker for ikke at vise dynamiske \nm\u00E6rkater til varierende input',
+        'afmarker for ikke at vise dynamiske\nm\u00E6rkater til varierende input',
     'check to enable dynamic\nlabels for variadic inputs':
-        'marker for at vise dynamiske \nm\u00E6rkater til varierende input',
+        'marker for at vise dynamiske\nm\u00E6rkater til varierende input',
     'Prefer empty slot drops':
         'Foretr\u00E6k tomme hylstre',
     'check to focus on empty slots\nwhen dragging & dropping reporters':
@@ -719,25 +719,25 @@ SnapTranslator.dict.dk = {
     'Plain prototype labels':
         'Klare prototypem\u00E6rkater',
     'check to always show slot\ntypes in the input dialog':
-        'marker for \naltid at vise hylstertyper i inputdialog',
+        'marker for\naltid at vise hylstertyper i inputdialog',
     'uncheck to use the input\ndialog in short form':
         'afmarker for at bruge inputsdialogen i kort form',
     'Virtual keyboard':
         'Virtuelt tastatur',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'afmarker for at fjerne underst\u00F8ttelse \naf virtuelt tastetur til mobile enheder',
+        'afmarker for at fjerne underst\u00F8ttelse\naf virtuelt tastetur til mobile enheder',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marker for at bruge underst\u00F8ttelse \naf virtuelt tastetur til mobile enheder ',
+        'marker for at bruge underst\u00F8ttelse\naf virtuelt tastetur til mobile enheder',
     'Input sliders':
         'Indtastningsskydeknapper',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'afmarker \nfor at fjerne \nskydeknapper i inputfelter',
+        'afmarker\nfor at fjerne\nskydeknapper i inputfelter',
     'check to enable\ninput sliders for\nentry fields':
-        'marker \nfor at vise \nskydeknapper i inputfelter',
+        'marker\nfor at vise\nskydeknapper i inputfelter',
     'Clicking sound':
         'Kliklyd',
     'uncheck to turn\nblock clicking\nsound off':
-        'afmarker for \nat slukke for blokkliklyd',
+        'afmarker for\nat slukke for blokkliklyd',
     'check to turn\nblock clicking\nsound on':
         'marker til for at t\u00E6nde for blokkliklyd',
     'Animations':
@@ -795,22 +795,22 @@ SnapTranslator.dict.dk = {
     // inputs
     'with inputs':
         'med input',
-    'input names:':
-        'inputnavne:',
-    'Input Names:':
-        'Inputnavne:',
-    'input list:':
-        'inputliste:',
+    'input names':
+        'inputnavne',
+    'Input Names':
+        'Inputnavne',
+    'input list':
+        'inputliste',
 
     // context menus:
     'help':
         'hj\u00E6lp',
 
     // blocks:
-    'help...':
-        'hj\u00E6lp...',
-    'relabel...':
-        'nyt m\u00E6rkat...',
+    'help':
+        'hj\u00E6lp',
+    'relabel':
+        'nyt m\u00E6rkat',
     'duplicate':
         'dupliker',
     'make a copy\nand pick it up':
@@ -819,20 +819,20 @@ SnapTranslator.dict.dk = {
         'dupliker kun denne blok',
     'delete':
         'slet',
-    'script pic...':
-        'scriptbillede...',
+    'script pic':
+        'scriptbillede',
     'open a new window\nwith a picture of this script':
-        '\u00E5bn et nyt vindue \nmed et billede af dette script',
+        '\u00E5bn et nyt vindue\nmed et billede af dette script',
     'ringify':
         'omring',
     'unringify':
         'fjern omringning',
 
     // custom blocks:
-    'delete block definition...':
-        'slet blokdefinitionen...',
-    'edit...':
-        'rediger...',
+    'delete block definition':
+        'slet blokdefinitionen',
+    'edit':
+        'rediger',
 
     // sprites:
     'edit':
@@ -843,8 +843,8 @@ SnapTranslator.dict.dk = {
         'l\u00F8sriv fra',
     'detach all parts':
         'L\u00F8sriv alle dele',
-    'export...':
-        'eksporter...',
+    'export':
+        'eksporter',
     'paint a new sprite':
         'mal en ny figur',
 
@@ -856,11 +856,11 @@ SnapTranslator.dict.dk = {
     'clean up':
         'ryd op',
     'arrange scripts\nvertically':
-        'arranger scripts \nlodret',
+        'arranger scripts\nlodret',
     'add comment':
         'tilf\u00F8j kommentar',
-    'make a block...':
-        'lav en blok...',
+    'make a block':
+        'lav en blok',
 
     // costumes
     'rename':
@@ -912,8 +912,8 @@ SnapTranslator.dict.dk = {
         'Slet projekt',
     'Are you sure you want to delete':
         'Er du sikker p\u00E5 at du vil slette',
-    'rename...':
-        'skift navn...',
+    'rename':
+        'skift navn',
 
     // costume editor
     'Costume Editor':
@@ -922,8 +922,8 @@ SnapTranslator.dict.dk = {
         'klik eller tr\00E6k med sigtekornet for at flytte omdrejningspunktet',
 
     // project notes
-    'Project notes...':
-        'Projektnoter...',
+    'Project notes':
+        'Projektnoter',
 
     // new project
     'New Project':
@@ -932,8 +932,8 @@ SnapTranslator.dict.dk = {
         'Erstat det nuv\u00E6rende projekt med et nyt et?',
 
     // save project
-    'Save Project As...':
-        'Gem projekt som...',
+    'Save Project As':
+        'Gem projekt som',
 
     // export blocks
     'Export blocks':
@@ -1012,8 +1012,8 @@ SnapTranslator.dict.dk = {
         'Boolsk\n(uevalueret)',
     'Single input.':
         'Enkel input.',
-    'Default Value:':
-        'V\u00E6rdi som udgangspunkt:',
+    'Default Value':
+        'V\u00E6rdi som udgangspunkt',
     'Multiple inputs (value is list of inputs)':
         'Flere inputs (v\u00E6rdi er liste af inputs)',
     'Upvar - make internal variable visible to caller':
@@ -1022,19 +1022,19 @@ SnapTranslator.dict.dk = {
     // About Snap
     'About Snap':
         'Om Snap',
-    'Back...':
-        'Tilbage...',
-    'License...':
-        'Lisens...',
-    'Modules...':
-        'Moduler...',
-    'Credits...':
-        'Anerkendelse...',
-    'Translators...':
+    'Back':
+        'Tilbage',
+    'License':
+        'Lisens',
+    'Modules':
+        'Moduler',
+    'Credits':
+        'Anerkendelse',
+    'Translators':
         'Overs\u00E6ttere',
     'License':
         'Licens',
-    'current module versions:':
+    'current module versions':
         'Nuv\u00E6rende modulversioner',
     'Contributors':
         'Bidragydere',
@@ -1048,24 +1048,24 @@ SnapTranslator.dict.dk = {
         'stor',
     'slider':
         'skydeknap',
-    'slider min...':
-        'skydeknap minimum...',
-    'slider max...':
-        'skydeknap maksimum...',
-    'import...':
-        'importer...',
+    'slider min':
+        'skydeknap minimum',
+    'slider max':
+        'skydeknap maksimum',
+    'import':
+        'importer',
     'Slider minimum value':
-        'skydeknap minimumsv\u00E6rdi:',
+        'skydeknap minimumsv\u00E6rdi',
     'Slider maximum value':
-        'skydeknap maksimumsv\u00E6rdi:',
+        'skydeknap maksimumsv\u00E6rdi',
 
     // list watchers
-    'length: ':
-        'l\u00E6ngde: ',
+    'length':
+        'l\u00E6ngde',
 
     // coments
-    'add comment here...':
-        'tilf\u00F8j kommentar her...',
+    'add comment here':
+        'tilf\u00F8j kommentar her',
 
     // drow downs
     // directions
@@ -1201,8 +1201,8 @@ SnapTranslator.dict.dk = {
         '9',
 
     // messages
-    'new...':
-        'ny...',
+    'new':
+        'ny',
 
     // math functions
     'abs':

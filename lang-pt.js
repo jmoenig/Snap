@@ -342,8 +342,8 @@ SnapTranslator.dict.pt = {
         'pensa %s',
     'Hello!':
         'Olá!',
-    'Hmm...':
-        'Hmm…',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'adiciona ao efeito %eff o valor %n',
     'set %eff effect to %n':
@@ -365,8 +365,8 @@ SnapTranslator.dict.pt = {
     'go back %n layers':
         'recua %n camadas',
 
-    'development mode \ndebugging primitives:':
-        'primitivas de depuração \ndo modo de desenvolvimento:',
+    'development mode\ndebugging primitives':
+        'primitivas de depuração\ndo modo de desenvolvimento',
     'console log %mult%s':
         'regista %mult%s na consola',
     'alert %mult%s':
@@ -679,8 +679,8 @@ SnapTranslator.dict.pt = {
 
     // menus
     // snap menu
-    'About...':
-        'Acerca do Snap!…',
+    'About':
+        'Acerca do Snap!',
     'Reference manual':
         'Ler o Manual de referência',
     'Snap! website':
@@ -697,12 +697,12 @@ SnapTranslator.dict.pt = {
         'Activar menus de contexto\ne inspectores não\namigáveis do Morphic!',
 
     // menu de projecto
-    'Project notes...':
-        'Notas deste projecto…',
+    'Project notes':
+        'Notas deste projecto',
     'New':
         'Criar um novo projecto',
-    'Open...':
-        'Abrir um projecto…',
+    'Open':
+        'Abrir um projecto',
     'Save':
         'Guardar este projecto',
     'Save to disk':
@@ -710,26 +710,26 @@ SnapTranslator.dict.pt = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Guardar este projecto\nna sua pasta de descargas\n'
             + '(em navegadores que o suportem).',
-    'Save As...':
-        'Guardar este projecto como…',
-    'Import...':
-        'Importar…',
+    'Save As':
+        'Guardar este projecto como',
+    'Import':
+        'Importar',
     'load an exported project file\nor block library, a costume\nor a sound':
         'Abrir um projecto exportado,\nsubstitundo o projecto corrente, ou\n'
             + 'importar uma biblioteca de blocos, um\n'
             + 'traje ou um som para o projecto corrente.',
-    'Export project as plain text...':
-        'Exportar este projecto como texto simples…',
-    'Export project...':
-        'Exportar este projecto…',
+    'Export project as plain text':
+        'Exportar este projecto como texto simples',
+    'Export project':
+        'Exportar este projecto',
     'show project data as XML\nin a new browser window':
         'Mostrar os dados do projecto no\nformato XML numa nova janela do navegador.',
-    'Export blocks...':
-        'Exportar blocos deste projecto…',
+    'Export blocks':
+        'Exportar blocos deste projecto',
     'show global custom block definitions as XML\nin a new browser window':
         'Mostrar as definições de blocos\npersonalizados globais no formato\nXML numa nova janela do navegador.',
-    'Unused blocks...':
-          'Blocos não usados…',
+    'Unused blocks':
+          'Blocos não usados',
     'find unused global custom blocks\nand remove their definitions':
         'Procurar os blocos personalizados globais\nnão usados e remover as suas definições',
     'Remove unused blocks':
@@ -738,9 +738,9 @@ SnapTranslator.dict.pt = {
         'de momento não há blocos personalizados\nglobais não usados neste projecto',
     'unused block(s) removed':
         'blocos não usados removidos',
-    'Export summary...':
-        'Exportar resumo…',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Exportar resumo',
+    'open a new browser browser window\nwith a summary of this project':
         'Abrir uma nova janela no navegador\ncontendo um resumo deste projecto',
 
     'Contents':
@@ -759,24 +759,24 @@ SnapTranslator.dict.pt = {
         'Importar as ferramentas oficiais para este projecto',
     'load the official library of\npowerful blocks':
         'Importar para este projecto\na biblioteca oficial de blocos.',
-    'Libraries...':
-        'Bibliotecas...',
+    'Libraries':
+        'Bibliotecas',
     'Import library':
         'Importar biblioteca',
 
     // menu da nuvem
-    'Login...':
-        'Entrar na sua conta…',
-    'Signup...':
-        'Registar uma nova conta…',
+    'Login':
+        'Entrar na sua conta',
+    'Signup':
+        'Registar uma nova conta',
 
     // menu de preferências
-    'Language...':
-        'Língua…',
-    'Zoom blocks...':
-        'Ampliação dos blocos…',
-    'Stage size...':
-        'Tamanho do palco…',
+    'Language':
+        'Língua',
+    'Zoom blocks':
+        'Ampliação dos blocos',
+    'Stage size':
+        'Tamanho do palco',
     'Stage size':
         'Tamanho do palco',
     'Stage width':
@@ -897,11 +897,11 @@ SnapTranslator.dict.pt = {
     // entradas
     'with inputs':
         'com argumentos',
-    'input names:':
+    'input names':
         'com parâmetros',
-    'Input Names:':
-        'Parâmetros:',
-    'input list:':
+    'Input Names':
+        'Parâmetros',
+    'input list':
         'os itens de',
 
     // menus de contexto:
@@ -917,10 +917,10 @@ SnapTranslator.dict.pt = {
         'mostrar blocos primitivos',
 
     // blocos:
-    'help...':
-        'ajuda…',
-    'relabel...':
-        'mudar para outro bloco…',
+    'help':
+        'ajuda',
+    'relabel':
+        'mudar para outro bloco',
     'duplicate':
         'duplicar',
     'make a copy\nand pick it up':
@@ -929,8 +929,8 @@ SnapTranslator.dict.pt = {
         'Duplicar apenas este bloco.',
     'delete':
         'remover',
-    'script pic...':
-        'fotografia do guião…',
+    'script pic':
+        'fotografia do guião',
     'open a new window\nwith a picture of this script':
         'Abrir uma nova janela com\numa fotografia deste guião.',
     'ringify':
@@ -947,10 +947,10 @@ SnapTranslator.dict.pt = {
         'nova linha',
 
     // blocos personalizados:
-    'delete block definition...':
-        'remover definição do bloco…',
-    'edit...':
-        'editar…',
+    'delete block definition':
+        'remover definição do bloco',
+    'edit':
+        'editar',
 
     // actores:
     'edit':
@@ -967,10 +967,10 @@ SnapTranslator.dict.pt = {
         'soltar de',
     'detach all parts':
         'soltar todas as partes',
-    'export...':
-        'exportar…',
-    'parent...':
-        'progenitor…',
+    'export':
+        'exportar',
+    'parent':
+        'progenitor',
     'current parent':
         'progenitor actual',
     'release':
@@ -981,8 +981,8 @@ SnapTranslator.dict.pt = {
     // palco:
     'show all':
         'mostrar todos os actores',
-    'pic...':
-        'fotografia…',
+    'pic':
+        'fotografia',
     'open a new window\nwith a picture of the stage':
         'Abrir uma nova janela com\numa fotografia do palco.',
 
@@ -1001,12 +1001,12 @@ SnapTranslator.dict.pt = {
         'refazer última largada',
     'use the keyboard\nto enter blocks':
         'usar o teclado\npara introduzir blocos',
-    'scripts pic...':
-        'fotografia dos guiões…',
+    'scripts pic':
+        'fotografia dos guiões',
     'open a new window\nwith a picture of all scripts':
         'Abrir uma nova janela com\numa fotografia de todos os guiões.',
-    'make a block...':
-        'criar um bloco…',
+    'make a block':
+        'criar um bloco',
 
     // trajes:
     'rename':
@@ -1029,12 +1029,12 @@ SnapTranslator.dict.pt = {
         'Qual o novo nome do som?',
 
     // lists and tables
-    'list view...':
-        'vista de lista…',
-    'table view...':
-        'vista de tabela…',
-    'open in dialog...':
-        'abrir em caixa de diálogo…',
+    'list view':
+        'vista de lista',
+    'table view':
+        'vista de tabela',
+    'open in dialog':
+        'abrir em caixa de diálogo',
     'reset columns':
         'reiniciar colunas',
     'items':
@@ -1094,8 +1094,8 @@ SnapTranslator.dict.pt = {
         'Remover Projecto',
     'Are you sure you want to delete':
         'Quer mesmo remover',
-    'rename...':
-        'alterar o nome…',
+    'rename':
+        'alterar o nome',
 
     // editor de trajes
     'Costume Editor':
@@ -1114,8 +1114,8 @@ SnapTranslator.dict.pt = {
         'Substituir este projecto por um novo projecto?',
 
     // guardar projecto
-    'Save Project As...':
-        'Guardar Projecto Como…',
+    'Save Project As':
+        'Guardar Projecto Como',
 
     // exportar blocos
     'Export blocks':
@@ -1138,8 +1138,8 @@ SnapTranslator.dict.pt = {
     // refactorização de variáveis
     'rename only\nthis reporter':
         'alterar o nome\napenas neste repórter',
-    'rename all...':
-        'alterar o nome em todo o lado…',
+    'rename all':
+        'alterar o nome em todo o lado',
     'rename all blocks that\naccess this variable':
         'alterar todos os blocos que\nusam esta variável',
 
@@ -1204,8 +1204,8 @@ SnapTranslator.dict.pt = {
         'Predicado\n(forma especial)',
     'Single input.':
         'Parâmetro único.',
-    'Default Value:':
-        'Valor em caso de omissão do argumento:',
+    'Default Value':
+        'Valor em caso de omissão do argumento',
     'Multiple inputs (value is list of inputs)':
         'Múltiplos argumentos (o valor do parâmetro é a lista dos argumentos).',
     'Upvar - make internal variable visible to caller':
@@ -1214,19 +1214,19 @@ SnapTranslator.dict.pt = {
     // Acerca do Snap
     'About Snap':
         'Sobre o Snap!',
-    'Back...':
-        'Para trás…',
-    'License...':
-        'Licença…',
-    'Modules...':
-        'Módulos…',
-    'Credits...':
-        'Créditos…',
-    'Translators...':
-        'Tradutores…',
+    'Back':
+        'Para trás',
     'License':
         'Licença',
-    'current module versions:':
+    'Modules':
+        'Módulos',
+    'Credits':
+        'Créditos',
+    'Translators':
+        'Tradutores',
+    'License':
+        'Licença',
+    'current module versions':
         'versões actuais dos módulos',
     'Contributors':
         'Contribuidores',
@@ -1240,24 +1240,24 @@ SnapTranslator.dict.pt = {
         'grande',
     'slider':
         'potenciómetro',
-    'slider min...':
-        'mínimo do potenciómetro…',
-    'slider max...':
-        'máximo do potenciómetro…',
-    'import...':
-        'importar…',
+    'slider min':
+        'mínimo do potenciómetro',
+    'slider max':
+        'máximo do potenciómetro',
+    'import':
+        'importar',
     'Slider minimum value':
         'Valor mínimo do potenciómetro',
     'Slider maximum value':
         'Valor máximo do potenciómetro',
 
     // monitores de listas
-    'length: ':
-        'comprimento: ',
+    'length':
+        'comprimento',
 
     // comentários
-    'add comment here...':
-        'colocar aqui um comentário…',
+    'add comment here':
+        'colocar aqui um comentário',
 
     // drop downs
     // direcções
@@ -1395,8 +1395,8 @@ SnapTranslator.dict.pt = {
         '9',
 
     // messagens
-    'new...':
-        'Nova…',
+    'new':
+        'Nova',
 
     // funções matemáticas
     'abs':
@@ -1525,11 +1525,11 @@ SnapTranslator.dict.pt = {
         'Actores de primeira classe',
     'uncheck to disable support\nfor first-class sprites':
         'Desassinalar para desactivar o suporte\nde actores de primeira classe.',
-    'check to enable support\n for first-class sprite':
+    'check to enable support\nfor first-class sprite':
         'Assinalar para activar o suporte\nde actores de primeira classe.',
     'Live coding support':
         'Suporte de programação ao vivo',
-    'EXPERIMENTAL! check to enable\n live custom control structures':
+    'EXPERIMENTAL! check to enable\nlive custom control structures':
         'EXPERIMENTAL! Assinalar para activar estruturas\nde controlo personalizadas ao vivo.',
     'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
         'EXPERIMENTAL! Desassinalar para desactivar estruturas\nde controlo personalizadas ao vivo.',
@@ -1547,12 +1547,12 @@ SnapTranslator.dict.pt = {
         'inverter ↔',
     'flip ↕':
         'inverter ↕',
-    'Export all scripts as pic...':
-        'Exportar todos os guiões como fotografia…',
+    'Export all scripts as pic':
+        'Exportar todos os guiões como fotografia',
     'show a picture of all scripts\nand block definitions':
         'Mostra uma imagem com todos\nos guiões e definições de blocos',
-    'find blocks...':
-        'procurar blocos…',
+    'find blocks':
+        'procurar blocos',
     'costume name':
         'o nome do traje',
     'Open':
@@ -1563,10 +1563,10 @@ SnapTranslator.dict.pt = {
         'Snap!Nuvem',
     'Cloud':
         'Nuvem',
-    'could not connect to:':
-        'Não foi possível ligar a:',
-    'Service:':
-        'Serviço:',
+    'could not connect to':
+        'Não foi possível ligar a',
+    'Service':
+        'Serviço',
     'login':
         'autenticação',
     'ERROR: INVALID PASSWORD':
@@ -1581,8 +1581,8 @@ SnapTranslator.dict.pt = {
         'Entrar',
     'Logout':
         'Sair',
-    'Change Password...':
-        'Alterar palavra-passe…',
+    'Change Password':
+        'Alterar palavra-passe',
     'Change Password':
         'Alterar palavra-passe',
     'Account created.':
@@ -1595,20 +1595,20 @@ SnapTranslator.dict.pt = {
         'saiu.',
     'Reset password':
         'Recuperar palavra-passe',
-    'Reset Password...':
-        'Recuperar palavra-passe…',
-    'User name:':
-        'Nome de utilizador:',
-    'Password:':
-        'Palavra-passe:',
-    'Old password:':
-        'Palavra-passe actual:',
-    'New password:':
-        'Nova palavra-passe:',
-    'Repeat new password:':
-        'Repita a nova palavra-passe:',
-    'Birth date:':
-        'Data de nascimento:',
+    'Reset Password':
+        'Recuperar palavra-passe',
+    'User name':
+        'Nome de utilizador',
+    'Password':
+        'Palavra-passe',
+    'Old password':
+        'Palavra-passe actual',
+    'New password':
+        'Nova palavra-passe',
+    'Repeat new password':
+        'Repita a nova palavra-passe',
+    'Birth date':
+        'Data de nascimento',
     'January':
         'Janeiro',
     'February':
@@ -1633,18 +1633,18 @@ SnapTranslator.dict.pt = {
         'Novembro',
     'December':
         'Dezembro',
-    'year:':
-        'ano:',
-    ' or before':
-        ' ou antes',
-    'E-mail address:':
-        'Endereço de correio electrónico:',
-    'E-mail address of parent or guardian:':
-        'Endereço de encarregado de educação:',
-    'Terms of Service...':
-        'Termos do Serviço…',
-    'Privacy...':
-        'Privacidade…',
+    'year':
+        'ano',
+    'or before':
+        'ou antes',
+    'E-mail address':
+        'Endereço de correio electrónico',
+    'E-mail address of parent or guardian':
+        'Endereço de encarregado de educação',
+    'Terms of Service':
+        'Termos do Serviço',
+    'Privacy':
+        'Privacidade',
     'I have read and agree\nto the Terms of Service':
         'Li e declaro concordar\ncom os Termos do Serviço',
     'stay signed in on this computer\nuntil logging out':
@@ -1665,14 +1665,14 @@ SnapTranslator.dict.pt = {
         'Exemplos',
     'You are not logged in':
         'Ainda não se autenticou',
-    'Updating\nproject list...':
-        'Actualizando a\nlista de projectos…',
-    'Opening project...':
-        'Abrindo o projecto…',
-    'Fetching project\nfrom the cloud...':
-        'Obtendo o projecto\nda nuvem…',
-    'Saving project\nto the cloud...':
-        'Guardando o projecto\nna nuvem…',
+    'Updating\nproject list':
+        'Actualizando a\nlista de projectos',
+    'Opening project':
+        'Abrindo o projecto',
+    'Fetching project\nfrom the cloud':
+        'Obtendo o projecto\nda nuvem',
+    'Saving project\nto the cloud':
+        'Guardando o projecto\nna nuvem',
     'Sprite Nesting':
         'Actores compostos',
     'uncheck to disable\nsprite composition':
@@ -1681,8 +1681,8 @@ SnapTranslator.dict.pt = {
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
     'saved.':
         'guardado.',
-    'options...':
-        'opções…',
+    'options':
+        'opções',
     'read-only':
         'apenas leitura',
     'Input Slot Options':
@@ -1701,8 +1701,8 @@ SnapTranslator.dict.pt = {
         'Transformar SVG em mapas de bits',
     'check to rasterize\nSVGs on import':
         'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
-    'comment pic...':
-        'fotografia do comentário…',
+    'comment pic':
+        'fotografia do comentário',
     'open a new window\nwith a picture of this comment':
         'Abrir uma nova janela com\numa fotografia deste comentário.',
     'undo':
@@ -1815,8 +1815,8 @@ SnapTranslator.dict.pt = {
         'contorno de seta para a direita',
     'robot':
         'robot',
-    'turn pen trails into new costume...':
-        'transformar traços da caneta em novo traje…',
+    'turn pen trails into new costume':
+        'transformar traços da caneta em novo traje',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'Transforma todos os traços da caneta\ne carimbagens num novo traje\n'
             + 'do actor seleccionado neste momento',
@@ -1836,10 +1836,10 @@ SnapTranslator.dict.pt = {
         'Partilhar Projecto',
     'Unshare Project':
         'Deixar de Partilhar Projecto',
-    'sharing\nproject...':
-        'partilhando\nprojecto…',
-    'unsharing\nproject...':
-        'deixando de partilhar\nprojecto…',
+    'sharing\nproject':
+        'partilhando\nprojecto',
+    'unsharing\nproject':
+        'deixando de partilhar\nprojecto',
     'shared.':
         'partilhado.',
     'unshared.':
@@ -1852,8 +1852,8 @@ SnapTranslator.dict.pt = {
         'trajes SVG ainda não\nsão totalmente suportados\nem todos os navegadores',
     'Save Project':
         'Guardar Projecto',
-    'script pic with result...':
-        'fotografia do guião incluindo resultado…',
+    'script pic with result':
+        'fotografia do guião incluindo resultado',
     'open a new window\nwith a picture of both\nthis script and its result':
         'Abrir uma nova janela com\numa fotografia tanto deste guião\ncomo do seu resultado.',
     'Select categories of additional blocks to add to this project.':
@@ -1866,10 +1866,10 @@ SnapTranslator.dict.pt = {
         'Importar',
     'Select a costume from the media library':
         'Seleccionar um traje da biblioteca de média.',
-    'edit rotation point only...':
-        'editar apenas ponto de rotação…',
-    'Export Project As...':
-        'Exportar Projecto Como…',
+    'edit rotation point only':
+        'editar apenas ponto de rotação',
+    'Export Project As':
+        'Exportar Projecto Como',
     'a variable of name \'':
         'não existe uma variável «',
     '\'\ndoes not exist in this context':
@@ -1880,8 +1880,8 @@ SnapTranslator.dict.pt = {
         'esperavam-se',
     'input(s), but getting':
         'argumento(s), mas foram passados',
-    'Dragging threshold...':
-        'Limiar de arrastamento…',
+    'Dragging threshold':
+        'Limiar de arrastamento',
     'Cache Inputs':
         'Memorizar entradas',
     'uncheck to stop caching\ninputs (for debugging the evaluator)':
@@ -1894,35 +1894,35 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar dados\ndo projecto nos URL.',
     'uncheck to disable\nproject data in URLs':
         'Desassinalar para desactivar\ndados do projecto nos URL.',
-    'export project media only...':
-        'Exportar apenas os média do projecto…',
-    'export project without media...':
-        'Exportar projecto sem os média…',
-    'export project as cloud data...':
-        'Exportar projecto como dados da nuvem…',
-    'open shared project from cloud...':
-        'Abrir projecto partilhado a partir da nuvem…',
-    'url...':
-        'URL…',
-    'Export summary with drop-shadows...':
-        'Exportar resumo com sombreamento…',
+    'export project media only':
+        'Exportar apenas os média do projecto',
+    'export project without media':
+        'Exportar projecto sem os média',
+    'export project as cloud data':
+        'Exportar projecto como dados da nuvem',
+    'open shared project from cloud':
+        'Abrir projecto partilhado a partir da nuvem',
+    'url':
+        'URL',
+    'Export summary with drop-shadows':
+        'Exportar resumo com sombreamento',
     'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
         'Abrir uma nova janela no navegador\ncontendo um resumo deste projecto\n'
         + 'com sombreamento em todas as imagens\n(não suportado em todos os navegadores)',
     'specify the distance the hand has to move\nbefore it picks up an object':
         'Especificar a distância que mão tem de se\nmover antes de agarrar algum objecto',
-    'block variables...':
-        'adicionar variáveis de bloco…',
-    'remove block variables...':
-        'remover variáveis de bloco…',
+    'block variables':
+        'adicionar variáveis de bloco',
+    'remove block variables':
+        'remover variáveis de bloco',
     'block variables':
         'com variáveis de bloco',
     'experimental -\nunder construction':
         'Experimental – em construção',
     'Table view':
         'Vista de tabela',
-    'open in another dialog...':
-        'abrir noutra caixa de diálogo…',
+    'open in another dialog':
+        'abrir noutra caixa de diálogo',
     'check for multi-column\nlist view support':
         'Assinalar para suporte de\nvistas multicoluna de listas.',
     'uncheck to disable\nmulti-column list views':
@@ -1959,10 +1959,10 @@ SnapTranslator.dict.pt = {
         'código',
     'header':
         'cabeçalho',
-    'header mapping...':
-        'mapeamento para cabeçalho…',
-    'code mapping...':
-        'mapeamento para código…',
+    'header mapping':
+        'mapeamento para cabeçalho',
+    'code mapping':
+        'mapeamento para código',
     'Code mapping':
         'Mapeamento para código',
     'Header mapping':

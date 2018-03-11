@@ -342,8 +342,8 @@ SnapTranslator.dict.de = {
         'denke %s',
     'Hello!':
         'Hallo!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         '\u00e4ndere %eff -Effekt um %n',
     'set %eff effect to %n':
@@ -365,8 +365,8 @@ SnapTranslator.dict.de = {
     'go back %n layers':
         'gehe %n Ebenen zur\u00fcck',
 
-    'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+    'development mode\ndebugging primitives':
+        'Hackermodus\nDebugging-Bl\u00f6cke',
     'console log %mult%s':
         'schreibe in die Konsole: %mult%s',
     'alert %mult%s':
@@ -687,8 +687,8 @@ SnapTranslator.dict.de = {
 
     // menus
     // snap menu
-    'About...':
-        '\u00dcber Snap!...',
+    'About':
+        '\u00dcber Snap!',
     'Reference manual':
         'Handbuch lesen',
     'Snap! website':
@@ -705,12 +705,12 @@ SnapTranslator.dict.de = {
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
-    'Project notes...':
-        'Projektanmerkungen...',
+    'Project notes':
+        'Projektanmerkungen',
     'New':
         'Neu',
-    'Open...':
-        '\u00d6ffnen...',
+    'Open':
+        '\u00d6ffnen',
     'Save':
         'Sichern',
     'Save to disk':
@@ -718,26 +718,26 @@ SnapTranslator.dict.de = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'dieses Projekt herunterladen\nund lokal speichern\n'
             + '(nicht von allen Browsern unters\u00fctzt)',
-    'Save As...':
-        'Sichern als...',
-    'Import...':
-        'Importieren...',
+    'Save As':
+        'Sichern als',
+    'Import':
+        'Importieren',
     'load an exported project file\nor block library, a costume\nor a sound':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
-    'Export project...':
-        'Projekt exportieren...',
+    'Export project as plain text':
+        'Projekt als normalen Text exportieren',
+    'Export project':
+        'Projekt exportieren',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
-    'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+    'Export blocks':
+        'Bl\u00f6cke exportieren',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
-    'Unused blocks...':
-          'Ungebrauchte Bl\u00f6cke...',
+    'Unused blocks':
+          'Ungebrauchte Bl\u00f6cke',
     'find unused global custom blocks\nand remove their definitions':
         'nicht verwendete Bl\u00f6cke finden\nund entfernen',
     'Remove unused blocks':
@@ -746,9 +746,9 @@ SnapTranslator.dict.de = {
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
         'ungebrauchte Bl\u00f6cke entfernt',
-    'Export summary...':
-        'Zusammenfassung exportieren...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Zusammenfassung exportieren',
+    'open a new browser browser window\nwith a summary of this project':
         'eine Zusammenfassung diese Projects\nin einem neuen Browserfenster'
             + 'anzeigen',
     'Contents':
@@ -767,24 +767,24 @@ SnapTranslator.dict.de = {
         'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
-    'Libraries...':
-        'Module...',
+    'Libraries':
+        'Module',
     'Import library':
         'Modul laden',
 
     // cloud menu
-    'Login...':
-        'Anmelden...',
-    'Signup...':
-        'Benutzerkonto einrichten...',
+    'Login':
+        'Anmelden',
+    'Signup':
+        'Benutzerkonto einrichten',
 
     // settings menu
-    'Language...':
-        'Sprache...',
-    'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
-    'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
+    'Language':
+        'Sprache',
+    'Zoom blocks':
+        'Bl\u00f6cke vergr\u00f6\u00dfern',
+    'Stage size':
+        'B\u00fchnengr\u00f6\u00dfe',
     'Stage size':
         'B\u00fchnengr\u00f6\u00dfe',
     'Stage width':
@@ -888,7 +888,7 @@ SnapTranslator.dict.de = {
     'Prefer smooth animations':
         'Fixe Framerate',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'ausschalten, um Animationen\ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
         'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
@@ -905,12 +905,12 @@ SnapTranslator.dict.de = {
     // inputs
     'with inputs':
         'mit Eingaben',
-    'input names:':
-        'Eingaben:',
-    'Input Names:':
-        'Eingaben:',
-    'input list:':
-        'Eingabeliste:',
+    'input names':
+        'Eingaben',
+    'Input Names':
+        'Eingaben',
+    'input list':
+        'Eingabeliste',
 
     // context menus:
     'help':
@@ -925,10 +925,10 @@ SnapTranslator.dict.de = {
         'Basisbl\u00f6cke anzeigen',
 
     // blocks:
-    'help...':
-        'Hilfe...',
-    'relabel...':
-        'Umbenennen...',
+    'help':
+        'Hilfe',
+    'relabel':
+        'Umbenennen',
     'duplicate':
         'Duplizieren',
     'make a copy\nand pick it up':
@@ -937,8 +937,8 @@ SnapTranslator.dict.de = {
         'nur diesen Block duplizieren',
     'delete':
         'L\u00f6schen',
-    'script pic...':
-        'Skriptbild...',
+    'script pic':
+        'Skriptbild',
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
     'ringify':
@@ -955,10 +955,10 @@ SnapTranslator.dict.de = {
         'neue Zeile',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'Blockdefinition l\u00f6schen',
-    'edit...':
-        'Bearbeiten...',
+    'edit':
+        'Bearbeiten',
 
     // sprites:
     'edit':
@@ -977,10 +977,10 @@ SnapTranslator.dict.de = {
         'Abtrennen von',
     'detach all parts':
         'Alle Teile abtrennen',
-    'export...':
-        'Exportieren...',
-    'parent...':
-        'Vorfahr...',
+    'export':
+        'Exportieren',
+    'parent':
+        'Vorfahr',
     'current parent':
         'aktueller Vorfahr',
     'release':
@@ -991,8 +991,8 @@ SnapTranslator.dict.de = {
     // stage:
     'show all':
         'Alles zeigen',
-    'pic...':
-        'Bild exportieren...',
+    'pic':
+        'Bild exportieren',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
@@ -1011,12 +1011,12 @@ SnapTranslator.dict.de = {
         'Wiederherstellen',
     'use the keyboard\nto enter blocks':
     	'Blöcke per Tastatur\neingeben',
-    'scripts pic...':
-        'Bild aller Skripte...',
+    'scripts pic':
+        'Bild aller Skripte',
     'open a new window\nwith a picture of all scripts':
         'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
-    'make a block...':
-        'Neuen Block bauen...',
+    'make a block':
+        'Neuen Block bauen',
 
     // costumes
     'rename':
@@ -1039,11 +1039,11 @@ SnapTranslator.dict.de = {
         'Klang umbenennen',
 
     // lists and tables
-    'list view...':
-        'Listenansicht...',
-    'table view...':
-        'tabellarische Ansicht...',
-    'open in dialog...':
+    'list view':
+        'Listenansicht',
+    'table view':
+        'tabellarische Ansicht',
+    'open in dialog':
         'in neuem Fenster \u00f6ffnen',
     'reset columns':
         'Spaltenbreiten zur\u00fccksetzen',
@@ -1106,8 +1106,8 @@ SnapTranslator.dict.de = {
         'Projekt l\u00f6schen',
     'Are you sure you want to delete':
         'Wirklich l\u00f6schen?',
-    'rename...':
-        'Umbenennen...',
+    'rename':
+        'Umbenennen',
 
     // costume editor
     'Costume Editor':
@@ -1126,8 +1126,8 @@ SnapTranslator.dict.de = {
         'Das aktuelle Projekt durch ein neues ersetzen?',
 
     // save project
-    'Save Project As...':
-        'Projekt Sichern Als...',
+    'Save Project As':
+        'Projekt Sichern Als',
 
     // export blocks
     'Export blocks':
@@ -1150,8 +1150,8 @@ SnapTranslator.dict.de = {
     // variables refactoring
     'rename only\nthis reporter':
         'nur diesen Block\numbenennen',
-    'rename all...':
-        'alle umbenennen...',
+    'rename all':
+        'alle umbenennen',
     'rename all blocks that\naccess this variable':
         'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
 
@@ -1216,8 +1216,8 @@ SnapTranslator.dict.de = {
         'Boolsch\n(zitiert)',
     'Single input.':
         'Einzeleingabe.',
-    'Default Value:':
-        'Standardwert:',
+    'Default Value':
+        'Standardwert',
     'Multiple inputs (value is list of inputs)':
         'Mehrere Eingaben (als Liste)',
     'Upvar - make internal variable visible to caller':
@@ -1226,19 +1226,19 @@ SnapTranslator.dict.de = {
     // About Snap
     'About Snap':
         '\u00dcber Snap',
-    'Back...':
-        'Zur\u00fcck...',
-    'License...':
-        'Lizenz...',
-    'Modules...':
-        'Komponenten...',
-    'Credits...':
-        'Mitwirkende...',
-    'Translators...':
+    'Back':
+        'Zur\u00fcck',
+    'License':
+        'Lizenz',
+    'Modules':
+        'Komponenten',
+    'Credits':
+        'Mitwirkende',
+    'Translators':
         '\u00dcbersetzer',
     'License':
         'Lizenz',
-    'current module versions:':
+    'current module versions':
         'Komponenten-Versionen',
     'Contributors':
         'Mitwirkende',
@@ -1252,23 +1252,23 @@ SnapTranslator.dict.de = {
         'gro\u00df',
     'slider':
         'Regler',
-    'slider min...':
-        'Minimalwert...',
-    'slider max...':
-        'Maximalwert...',
-    'import...':
-        'Importieren...',
+    'slider min':
+        'Minimalwert',
+    'slider max':
+        'Maximalwert',
+    'import':
+        'Importieren',
     'Slider minimum value':
         'Minimalwert des Reglers',
     'Slider maximum value':
         'Maximalwert des Reglers',
 
     // list watchers
-    'length: ':
-        'L\u00e4nge: ',
+    'length':
+        'L\u00e4nge',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'Anmerkung hier hinzuf\u00fcgen',
 
     // drow downs
@@ -1411,8 +1411,8 @@ SnapTranslator.dict.de = {
         '9',
 
     // messages
-    'new...':
-        'Neu...',
+    'new':
+        'Neu',
 
     // math functions
     'abs':

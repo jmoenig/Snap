@@ -334,8 +334,8 @@ SnapTranslator.dict.nl = {
         'denk %s',
     'Hello!':
         'Hallo!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         'verander %eff -effect met %n',
     'set %eff effect to %n':
@@ -357,8 +357,8 @@ SnapTranslator.dict.nl = {
     'go back %n layers':
         'ga %n lagen terug',
 
-    'development mode \ndebugging primitives:':
-        'ontwikkelmodus \ndebugging basisblokken',
+    'development mode\ndebugging primitives':
+        'ontwikkelmodus\ndebugging basisblokken',
     'console log %mult%s':
         'console log %mult%s',
     'alert %mult%s':
@@ -630,8 +630,8 @@ SnapTranslator.dict.nl = {
 
     // menus
     // snap menu
-    'About...':
-        'Over...',
+    'About':
+        'Over',
     'Reference manual':
         'Handleiding',
     'Snap! website':
@@ -648,36 +648,36 @@ SnapTranslator.dict.nl = {
         'gebruik Morphic\nniet gebruikersvriendelijk!',
 
     // project menu
-    'Project notes...':
-        'Notities...',
+    'Project notes':
+        'Notities',
     'New':
         'Nieuw',
-    'Open...':
-        'Openen...',
+    'Open':
+        'Openen',
     'Save':
         'opslaan',
     'Save to disk':
         'Opslaan op schijf',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Sla dit projekt op\nin de downloads folder\n(allen voor browsers die dit ondersteunen)',
-    'Save As...':
-        'Opslaan als...',
-    'Import...':
-        'Importeren...',
+    'Save As':
+        'Opslaan als',
+    'Import':
+        'Importeren',
     'load an exported project file\nor block library, a costume\nor a sound':
         'importeer een project,\neen bibliotheek met blokken,\neen uiterlijk of een geluid',
-    'Export project as plain text...':
-        'Project exporteren als tekst...',
-    'Export project...':
-        'Project exporteren...',
+    'Export project as plain text':
+        'Project exporteren als tekst',
+    'Export project':
+        'Project exporteren',
     'show project data as XML\nin a new browser window':
         'Toon projectdata als XML\nin een nieuw browservenster',
-    'Export blocks...':
-        'Blokken exporteren...',
+    'Export blocks':
+        'Blokken exporteren',
     'show global custom block definitions as XML\nin a new browser window':
         'toon globale aangepaste blokdefinities\nals XML in browser',
-    'Unused blocks...':
-          'Ongebruikte blokken...',
+    'Unused blocks':
+          'Ongebruikte blokken',
     'find unused global custom blocks\nand remove their definitions':
         'zoek ongebruikte globale aangepaste blokken\nen ruim ze op',
     'Remove unused blocks':
@@ -686,9 +686,9 @@ SnapTranslator.dict.nl = {
         'er zijn nu geen ongebruikge globale\naangepaste blokkenin dit project',
     'unused block(s) removed':
         'ongebruikte blokken opgeruimd',
-    'Export summary...':
-        'Exporteer samenvatting...',
-    'open a new browser browser window\n with a summary of this project':
+    'Export summary':
+        'Exporteer samenvatting',
+    'open a new browser browser window\nwith a summary of this project':
         'open een nieuw browser scherm\nmet een samenvatting van dit project',
     'Contents':
         'inhoud',
@@ -706,24 +706,24 @@ SnapTranslator.dict.nl = {
         'Importeer tools',
     'load the official library of\npowerful blocks':
         'laad de officiele bibliotheek\nmet krachtige blokken',
-    'Libraries...':
-        'Bibliotheken...',
+    'Libraries':
+        'Bibliotheken',
     'Import library':
         'Importeer bibliotheek',
 
     // cloud menu
-    'Login...':
-        'Inloggen...',
-    'Signup...':
-        'Registeren...',
+    'Login':
+        'Inloggen',
+    'Signup':
+        'Registeren',
 
     // settings menu
-    'Language...':
-        'Taal...',
-    'Zoom blocks...':
-        'Blokken inzoomen...',
-    'Stage size...':
-        'Afmeting speelveld...',
+    'Language':
+        'Taal',
+    'Zoom blocks':
+        'Blokken inzoomen',
+    'Stage size':
+        'Afmeting speelveld',
     'Stage size':
         'Sspeelveld afmeting',
     'Stage width':
@@ -755,7 +755,7 @@ SnapTranslator.dict.nl = {
     'check to focus on empty slots\nwhen dragging & dropping reporters':
         'lege plaatshouders in instellingenmenu',
     'uncheck to allow dropped\nreporters to kick out others':
-        'uitschakelen om lege functies\n anderen uit te sluiten',
+        'uitschakelen om lege functies\nanderen uit te sluiten',
     'Long form input dialog':
         'Lang formulier-invoerscherm',
     'Plain prototype labels':
@@ -815,7 +815,7 @@ SnapTranslator.dict.nl = {
     'uncheck to allow\nscript reentrance':
         'uitvinken om niet-\nafgewerkte scripts opnieuw\nte starten',
     'check to disallow\nscript reentrance':
-        'aanvinken om niet-\nafgewerkte scripts niet opnieuw\n te starten',
+        'aanvinken om niet-\nafgewerkte scripts niet opnieuw\nte starten',
     'Prefer smooth animations':
         'Voorkeur voor vloeiende animatie',
     'uncheck for greater speed\nat variable frame rates':
@@ -834,12 +834,12 @@ SnapTranslator.dict.nl = {
     // inputs
     'with inputs':
         'met invoer',
-    'input names:':
-        'invoernamen:',
-    'Input Names:':
-        'Invoernamen:',
-    'input list:':
-        'invoerlijst:',
+    'input names':
+        'invoernamen',
+    'Input Names':
+        'Invoernamen',
+    'input list':
+        'invoerlijst',
 
     // context menus:
     'help':
@@ -852,10 +852,10 @@ SnapTranslator.dict.nl = {
         'basisblokken tonen',
 
     // blocks:
-    'help...':
-        'help...',
-    'relabel...':
-        'label hernoemen...',
+    'help':
+        'help',
+    'relabel':
+        'label hernoemen',
     'duplicate':
         'kopieer',
     'make a copy\nand pick it up':
@@ -864,8 +864,8 @@ SnapTranslator.dict.nl = {
         'alleen dit blok kopi\u00EBren',
     'delete':
         'verwijder',
-    'script pic...':
-        'scriptafbeelding...',
+    'script pic':
+        'scriptafbeelding',
     'open a new window\nwith a picture of this script':
         'open een nieuw venster\nmet de afbeelding van dit script',
     'ringify':
@@ -880,10 +880,10 @@ SnapTranslator.dict.nl = {
         'aanvinken om te verhinderen dat\nde inhoud wordt opgeslagen',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'verwijder blokdefinitie',
-    'edit...':
-        'bewerken...',
+    'edit':
+        'bewerken',
 
     // sprites:
     'edit':
@@ -894,14 +894,14 @@ SnapTranslator.dict.nl = {
         'losmaken van',
     'detach all parts':
         'alle onderdelen losmaken',
-    'export...':
-        'exporteren...',
+    'export':
+        'exporteren',
 
     // stage:
     'show all':
         'toon alles',
-    'pic...':
-        'afbeelding...',
+    'pic':
+        'afbeelding',
     'open a new window\nwith a picture of the stage':
         'open een nieuw\nbrowservenster met een\nafbeelding van het\nspeelveld',
 
@@ -918,12 +918,12 @@ SnapTranslator.dict.nl = {
         'de laatste blokbeweging\nongedaan maken',
     'redrop':
         'opnieuw uitvoeren',
-    'scripts pic...':
-        'scripts-afbeelding...',
+    'scripts pic':
+        'scripts-afbeelding',
     'open a new window\nwith a picture of all scripts':
         'open een nieuw venster\nmet een afbeelding\nvan alle scripts',
-    'make a block...':
-        'maak een blok...',
+    'make a block':
+        'maak een blok',
 
     // costumes
     'rename':
@@ -946,12 +946,12 @@ SnapTranslator.dict.nl = {
         'geluid hernoemen',
 
     // lists and tables
-    'list view...':
-        'lijstweergave...',
-    'table view...':
-        'tabelweergave...',
-    'open in dialog...':
-        'in nieuw venster openen...',
+    'list view':
+        'lijstweergave',
+    'table view':
+        'tabelweergave',
+    'open in dialog':
+        'in nieuw venster openen',
     'reset columns':
         'kolommen terugzetten',
     'items':
@@ -1011,8 +1011,8 @@ SnapTranslator.dict.nl = {
         'Projekt verwijderen',
     'Are you sure you want to delete':
         'Weet je zeker dat je wilt verwijderen?',
-    'rename...':
-        'hernoemen...',
+    'rename':
+        'hernoemen',
 
     // costume editor
     'Costume Editor':
@@ -1031,8 +1031,8 @@ SnapTranslator.dict.nl = {
         'Vervang het huidige project door een nieuwe?',
 
     // save project
-    'Save Project As...':
-        'Project opslaan als...',
+    'Save Project As':
+        'Project opslaan als',
 
     // export blocks
     'Export blocks':
@@ -1040,7 +1040,7 @@ SnapTranslator.dict.nl = {
     'Import blocks':
         'Importeer blokken',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'dit project\nbevat nog geen \nglobale blokken',
+        'dit project\nbevat nog geen\nglobale blokken',
     'select':
         'selecteer',
     'all':
@@ -1057,8 +1057,8 @@ SnapTranslator.dict.nl = {
     // variables refactoring
     'rename only\nthis reporter':
         'hernoem alleen\ndit blok',
-    'rename all...':
-        'hernoem alle...',
+    'rename all':
+        'hernoem alle',
     'rename all blocks that\naccess this variable':
         'alle blokken hernoemen,\ndie naar deze variabele verwijzen',
 
@@ -1119,8 +1119,8 @@ SnapTranslator.dict.nl = {
         'Booleaans\n(onge\u00EBvalueerd)',
     'Single input.':
         'Enkelvoudige invoer.',
-    'Default Value:':
-        'Standaardwaarde:',
+    'Default Value':
+        'Standaardwaarde',
     'Multiple inputs (value is list of inputs)':
         'Meervoudige invoer (als lijst)',
     'Upvar - make internal variable visible to caller':
@@ -1129,19 +1129,19 @@ SnapTranslator.dict.nl = {
     // About Snap
     'About Snap':
         'Over Snap',
-    'Back...':
-        'Vorige...',
-    'License...':
-        'Licentie...',
-    'Modules...':
-        'Module...',
-    'Credits...':
-        'Credits...',
-    'Translators...':
-        'Vertalers...',
+    'Back':
+        'Vorige',
     'License':
         'Licentie',
-    'current module versions:':
+    'Modules':
+        'Module',
+    'Credits':
+        'Credits',
+    'Translators':
+        'Vertalers',
+    'License':
+        'Licentie',
+    'current module versions':
         'huidige moduleversies',
     'Contributors':
         'Bijdragers',
@@ -1155,23 +1155,23 @@ SnapTranslator.dict.nl = {
         'groot',
     'slider':
         'schuifbalk',
-    'slider min...':
-        'schuif min...',
-    'slider max...':
-        'schuif max...',
-    'import...':
-        'importeren...',
+    'slider min':
+        'schuif min',
+    'slider max':
+        'schuif max',
+    'import':
+        'importeren',
     'Slider minimum value':
         'Minimumwaarde van schuifbalk',
     'Slider maximum value':
         'Maximumwaarde van schuifbalk',
 
     // list watchers
-    'length: ':
-        'lengte: ',
+    'length':
+        'lengte',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'hier commentaar invoegen',
 
     // drow downs
@@ -1310,8 +1310,8 @@ SnapTranslator.dict.nl = {
         '9',
 
     // messages
-    'new...':
-        'nieuw...',
+    'new':
+        'nieuw',
 
     // math functions
     'abs':

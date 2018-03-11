@@ -342,8 +342,8 @@ SnapTranslator.dict.eo = {
         'pensi %s',
     'Hello!':
         'Saluton!',
-    'Hmm...':
-        'Hmm...',
+    'Hmm':
+        'Hmm',
     'change %eff effect by %n':
         '\u015dan\u011di %eff efekton je %n',
     'set %eff effect to %n':
@@ -365,8 +365,8 @@ SnapTranslator.dict.eo = {
     'go back %n layers':
         'iri %n tavolojn malanta\u016den',
 
-    'development mode \ndebugging primitives:':
-        'programada re\u011dimo \nsencimigadaj bazelementoj:',
+    'development mode\ndebugging primitives':
+        'programada re\u011dimo\nsencimigadaj bazelementoj',
     'console log %mult%s':
         'konzola protokolo: %mult%oj',
     'alert %mult%s':
@@ -636,8 +636,8 @@ SnapTranslator.dict.eo = {
 
     // menus
     // snap menu
-    'About...':
-        'Pri...',
+    'About':
+        'Pri',
     'Reference manual':
         'Manlibro',
     'Snap! website':
@@ -651,15 +651,15 @@ SnapTranslator.dict.eo = {
     'Switch to dev mode':
         '\u015can\u011di al programada re\u011dimo',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '\u015dalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
+        '\u015dalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn,\nne la afablajn!',
 
     // project menu
-    'Project notes...':
-        'Projektonotoj...',
+    'Project notes':
+        'Projektonotoj',
     'New':
         'Nova',
-    'Open...':
-        'Malfermi...',
+    'Open':
+        'Malfermi',
     'Save':
         'Konservi',
     'Save to disk':
@@ -667,24 +667,24 @@ SnapTranslator.dict.eo = {
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'konservi tiun \u0109i projekton\nen lokal el\u015dutan dosierujon\n'
             + '(ne \u0109iuj foliumiloj tion apogas)',
-    'Save As...':
-        'Konservi kiel...',
-    'Import...':
-        'Importi...',
+    'Save As':
+        'Konservi kiel',
+    'Import':
+        'Importi',
     'load an exported project file\nor block library, a costume\nor a sound':
         'el\u015dutu dosieron kun blokoj sonoj a\u016d kostumoj',
-    'Export project as plain text...':
-        'Eksporti projekton en plata teksta formo...',
-    'Export project...':
-        'Eksporti projekton...',
+    'Export project as plain text':
+        'Eksporti projekton en plata teksta formo',
+    'Export project':
+        'Eksporti projekton',
     'show project data as XML\nin a new browser window':
         'prezenti projekton kiel XML\nen nova fenestro de retumilo',
-    'Export blocks...':
-        'Eksporti blokojn...',
+    'Export blocks':
+        'Eksporti blokojn',
     'show global custom block definitions as XML\nin a new browser window':
         'prezenti mallokajn difinojn de propraj blokoj kiel XML\nen nova fenestro de retumilo',
-    'Unused blocks...':
-          'Neuzataj blokoj...',
+    'Unused blocks':
+          'Neuzataj blokoj',
     'find unused global custom blocks\nand remove their definitions':
         'trovi neuzatajn proprajn blokojn\nkaj forigi iliajn difinojn',
     'Remove unused blocks':
@@ -693,9 +693,9 @@ SnapTranslator.dict.eo = {
         'aktuale estas neniu neuzata\nmalloka propra bloko en tiu \u0109i projekto',
     'unused block(s) removed':
         'neuzata(j) bloko(j) forigitaj',
-    'Export summary...':
+    'Export summary':
         'Eksportresumo',
-    'open a new browser browser window\n with a summary of this project':
+    'open a new browser browser window\nwith a summary of this project':
         'malfermi projektresumon\nen nova fenestro de foliumilo',
     'Contents':
         'Enhavo',
@@ -713,24 +713,24 @@ SnapTranslator.dict.eo = {
         'Importi ilaron',
     'load the official library of\npowerful blocks':
         'importi oficialan bibliotekon\nde potencaj blokoj',
-    'Libraries...':
-        'Bibliotekoj...',
+    'Libraries':
+        'Bibliotekoj',
     'Import library':
         'Importi bibliotekon',
 
     // cloud menu
-    'Login...':
-        'Ensaluti...',
-    'Signup...':
-        'Krei konton...',
+    'Login':
+        'Ensaluti',
+    'Signup':
+        'Krei konton',
 
     // settings menu
-    'Language...':
-        'Lingvo...',
-    'Zoom blocks...':
-        'Zomi blokojn...',
-    'Stage size...':
-        'Grandeco de scenejo...',
+    'Language':
+        'Lingvo',
+    'Zoom blocks':
+        'Zomi blokojn',
+    'Stage size':
+        'Grandeco de scenejo',
     'Stage size':
         'Grandeco de scenejo',
     'Stage width':
@@ -748,9 +748,9 @@ SnapTranslator.dict.eo = {
     'Zebra coloring':
         'Zebra kolorigado',
     'check to enable alternating\ncolors for nested blocks':
-        '\u015daltu por ebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
+        '\u015daltu por ebligi diferencigadon\nde koloroj de stake kolektitaj blokoj',
     'uncheck to disable alternating\ncolors for nested block':
-        'mal\u015daltu por malebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
+        'mal\u015daltu por malebligi diferencigadon\nde koloroj de stake kolektitaj blokoj',
     'Dynamic input labels':
         'Dinamikaj enigoetikedoj',
     'uncheck to disable dynamic\nlabels for variadic inputs':
@@ -841,12 +841,12 @@ SnapTranslator.dict.eo = {
     // inputs
     'with inputs':
         'kun enigoj',
-    'input names:':
-        'enigonomoj:',
-    'Input Names:':
-        'Enigonomoj:',
-    'input list:':
-        'enigolisto:',
+    'input names':
+        'enigonomoj',
+    'Input Names':
+        'Enigonomoj',
+    'input list':
+        'enigolisto',
 
     // context menus:
     'help':
@@ -859,10 +859,10 @@ SnapTranslator.dict.eo = {
         'montri bazelementojn',
 
     // blocks:
-    'help...':
-        'helpo...',
-    'relabel...':
-        'Reetikedi...',
+    'help':
+        'helpo',
+    'relabel':
+        'Reetikedi',
     'duplicate':
         'duobligi',
     'make a copy\nand pick it up':
@@ -871,8 +871,8 @@ SnapTranslator.dict.eo = {
         'duobligi nur tiun \u0109i blokon',
     'delete':
         'forigi',
-    'script pic...':
-        'bildo de skripto...',
+    'script pic':
+        'bildo de skripto',
     'open a new window\nwith a picture of this script':
         'malfermi novan fenestron\nkun bildo de \u0109i tiu skripto',
     'ringify':
@@ -887,10 +887,10 @@ SnapTranslator.dict.eo = {
         '\u015daltu por malebligi konservon de la enhavo\nen al projekton',
 
     // custom blocks:
-    'delete block definition...':
-        'forigi blokodifinon...',
-    'edit...':
-        'redakti...',
+    'delete block definition':
+        'forigi blokodifinon',
+    'edit':
+        'redakti',
 
     // sprites:
     'edit':
@@ -901,14 +901,14 @@ SnapTranslator.dict.eo = {
         'malligi de',
     'detach all parts':
         'malligi \u0109iujn partojn',
-    'export...':
-        'eksporti...',
+    'export':
+        'eksporti',
 
     // stage:
     'show all':
         'montri \u0109ion',
-    'pic...':
-        'bildo...',
+    'pic':
+        'bildo',
     'open a new window\nwith a picture of the stage':
         'malfermi novan fenestron\nkun bildon de scenejo',
 
@@ -925,12 +925,12 @@ SnapTranslator.dict.eo = {
         'malfari la alstan\ndemeton de bloko\nen tiu \u0109i panelo',
     'redrop':
         'redemeti',
-    'scripts pic...':
-        'bildo de skriptoj...',
+    'scripts pic':
+        'bildo de skriptoj',
     'open a new window\nwith a picture of all scripts':
         'malfermi novan fenestron\nkun bildo de \u0109iuj skriptoj',
-    'make a block...':
-        'krei blokon...',
+    'make a block':
+        'krei blokon',
 
     // costumes
     'rename':
@@ -953,12 +953,12 @@ SnapTranslator.dict.eo = {
         'renomi sonon',
 
     // lists and tables
-    'list view...':
+    'list view':
         'lista vidigo',
-    'table view...':
+    'table view':
         'tabela vidigo',
-    'open in dialog...':
-        'malfermi en formularo...',
+    'open in dialog':
+        'malfermi en formularo',
     'reset columns':
         'nuligi kolumnojn',
     'items':
@@ -1020,8 +1020,8 @@ SnapTranslator.dict.eo = {
         'Forigi projekton',
     'Are you sure you want to delete':
         '\u0108u vi certe volas forigi?',
-    'rename...':
-        'alinomi...',
+    'rename':
+        'alinomi',
 
     // costume editor
     'Costume Editor':
@@ -1040,8 +1040,8 @@ SnapTranslator.dict.eo = {
         'Anstata\u016di la aktualan projekton per la nova?',
 
     // save project
-    'Save Project As...':
-        'Konservi projekton kiel...',
+    'Save Project As':
+        'Konservi projekton kiel',
 
     // export blocks
     'Export blocks':
@@ -1064,7 +1064,7 @@ SnapTranslator.dict.eo = {
     // variables refactoring
     'rename only\nthis reporter':
         '',
-    'rename all...':
+    'rename all':
         '',
     'rename all blocks that\naccess this variable':
         '',
@@ -1127,8 +1127,8 @@ SnapTranslator.dict.eo = {
         'Buleo\n(nekalkulita)',
     'Single input.':
         'Unuopa enigo.',
-    'Default Value:':
-        'Defa\u016dlta valoro:',
+    'Default Value':
+        'Defa\u016dlta valoro',
     'Multiple inputs (value is list of inputs)':
         'Pluraj enigoj (valoro estas listo de enigoj)',
     'Upvar - make internal variable visible to caller':
@@ -1137,20 +1137,20 @@ SnapTranslator.dict.eo = {
     // About Snap
     'About Snap':
         'Pri Snap',
-    'Back...':
-        'Reen...',
-    'License...':
-        'Licenco...',
-    'Modules...':
-        'Moduloj...',
-    'Credits...':
-        'Honoroj...',
-    'Translators...':
-        'Tradukantoj...',
+    'Back':
+        'Reen',
     'License':
         'Licenco',
-    'current module versions:':
-        'versioj de aktualaj moduloj:',
+    'Modules':
+        'Moduloj',
+    'Credits':
+        'Honoroj',
+    'Translators':
+        'Tradukantoj',
+    'License':
+        'Licenco',
+    'current module versions':
+        'versioj de aktualaj moduloj',
     'Contributors':
         'Kontribuantoj',
     'Translations':
@@ -1163,24 +1163,24 @@ SnapTranslator.dict.eo = {
         'lar\u011de',
     'slider':
         '\u015dovilo',
-    'slider min...':
-        '\u015dovilo min...',
-    'slider max...':
-        '\u015dovilo maks...',
-    'import...':
-        'importi...',
+    'slider min':
+        '\u015dovilo min',
+    'slider max':
+        '\u015dovilo maks',
+    'import':
+        'importi',
     'Slider minimum value':
         'Minimuma valoro de \u015dovilo',
     'Slider maximum value':
         'Maksimuma valoro de \u015dovilo',
 
     // list watchers
-    'length: ':
-        'longeco: ',
+    'length':
+        'longeco',
 
     // coments
-    'add comment here...':
-        'aldonu komenton \u0109i tie...',
+    'add comment here':
+        'aldonu komenton \u0109i tie',
 
     // drow downs
     // directions
@@ -1318,8 +1318,8 @@ SnapTranslator.dict.eo = {
         '9',
 
     // messages
-    'new...':
-        'nova...',
+    'new':
+        'nova',
 
     // math functions
     'abs':

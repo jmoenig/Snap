@@ -250,7 +250,7 @@ SnapTranslator.dict.ml = {
     'import a picture from another web page or from\na file on your computer by dropping it here':
          'വേഷം ലഘുപട്ടിക സഹായം',
     'import a sound from your computer\nby dragging it into here':
-        'കമ്പ്യൂട്ടറില്‍ നിന്നും ശബ്തം ഇറക്കുമതി\n ഇവിടെ വലിച്ചിട്ടുക',
+        'കമ്പ്യൂട്ടറില്‍ നിന്നും ശബ്തം ഇറക്കുമതി\nഇവിടെ വലിച്ചിട്ടുക',
 
     // primitive blocks:
 
@@ -339,8 +339,8 @@ SnapTranslator.dict.ml = {
         '%s ചിന്തിക്കുക',
     'Hello!':
         'ഹലോ!',
-    'Hmm...':
-        'ഹ് മ് മും...',
+    'Hmm':
+        'ഹ് മ് മും',
     'change %eff effect by %n':
         '%eff നെ %n കൊണ്ട് മാറ്റുക',
     'set %eff effect to %n':
@@ -362,8 +362,8 @@ SnapTranslator.dict.ml = {
     'go back %n layers':
         '%n പാളി അകത്തേക്ക് പോവുക',
 
-    'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+    'development mode\ndebugging primitives':
+        'Hackermodus\nDebugging-Bl\u00f6cke',
     'console log %mult%s':
         'schreibe in die Konsole: %mult%s',
     'alert %mult%s':
@@ -451,7 +451,7 @@ SnapTranslator.dict.ml = {
     'all':
         'എല്ലാ',
     'this script':
-        'ഈ സീരിയല്‍ ',
+        'ഈ സീരിയല്‍',
     'this block':
         'ഈ ബ്ലോക്കുകള്‍',
     'stop %stopOthersChoices':
@@ -620,8 +620,8 @@ SnapTranslator.dict.ml = {
 
     // menus
     // snap menu
-    'About...':
-        '\u00dcber Snap!...',
+    'About':
+        '\u00dcber Snap!',
     'Reference manual':
         'Handbuch lesen',
     'Snap! website':
@@ -638,54 +638,54 @@ SnapTranslator.dict.ml = {
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
-    'Project notes...':
-        'പ്രോജെക്റ്റ്‌ കുറിപ്പുകള്‍....',
+    'Project notes':
+        'പ്രോജെക്റ്റ്‌ കുറിപ്പുകള്‍.',
     'New':
         'പുതിയ',
-    'Open...':
-        'ഓപ്പണ്‍ ചെയ്യുക...',
+    'Open':
+        'ഓപ്പണ്‍ ചെയ്യുക',
     'Save':
         'സേവ് ചെയ്യുക',
-    'Save As...':
-        'എന്ന് സേവ് ചെയ്യുക...',
-    'Import...':
-        'കൊണ്ടുവരിക...',
+    'Save As':
+        'എന്ന് സേവ് ചെയ്യുക',
+    'Import':
+        'കൊണ്ടുവരിക',
     'load an exported project file\nor block library, a costume\nor a sound':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
-    'Export project...':
-        'Projekt exportieren...',
+    'Export project as plain text':
+        'Projekt als normalen Text exportieren',
+    'Export project':
+        'Projekt exportieren',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
-    'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+    'Export blocks':
+        'Bl\u00f6cke exportieren',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
     'Import tools':
         'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
-    'Libraries...':
-        'Module...',
+    'Libraries':
+        'Module',
     'Import library':
         'Modul laden',
 
     // cloud menu
-    'Login...':
-        'Anmelden...',
-    'Signup...':
-        'Benutzerkonto einrichten...',
+    'Login':
+        'Anmelden',
+    'Signup':
+        'Benutzerkonto einrichten',
 
     // settings menu
-    'Language...':
-        'ഭാഷ...',
-    'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
-    'Stage size...':
-        'സ്റ്റേജ് വലിപ്...',
+    'Language':
+        'ഭാഷ',
+    'Zoom blocks':
+        'Bl\u00f6cke vergr\u00f6\u00dfern',
+    'Stage size':
+        'സ്റ്റേജ് വലിപ്',
     'Stage size':
         'സ്റ്റേജ് വലിപ്',
     'Stage width':
@@ -773,7 +773,7 @@ SnapTranslator.dict.ml = {
     'Prefer smooth animations':
         'Fixe Framerate',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'ausschalten, um Animationen\ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
         'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
@@ -786,12 +786,12 @@ SnapTranslator.dict.ml = {
     // inputs
     'with inputs':
         'mit Eingaben',
-    'input names:':
-        'Eingaben:',
-    'Input Names:':
-        'Eingaben:',
-    'input list:':
-        'Eingabeliste:',
+    'input names':
+        'Eingaben',
+    'Input Names':
+        'Eingaben',
+    'input list':
+        'Eingabeliste',
 
     // context menus:
     'help':
@@ -804,10 +804,10 @@ SnapTranslator.dict.ml = {
         'Basisbl\u00f6cke anzeigen',
 
     // blocks:
-    'help...':
-        'സഹായ...',
-    'relabel...':
-        'Umbenennen...',
+    'help':
+        'സഹായ',
+    'relabel':
+        'Umbenennen',
     'duplicate':
         'ഡ്യൂപ്ലിക്കേറ്റ്‌',
     'make a copy\nand pick it up':
@@ -816,8 +816,8 @@ SnapTranslator.dict.ml = {
         'nur diesen Block duplizieren',
     'delete':
         'ഡിലീറ്റ് ചെയ്യുക',
-    'script pic...':
-        'Skriptbild...',
+    'script pic':
+        'Skriptbild',
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
     'ringify':
@@ -826,10 +826,10 @@ SnapTranslator.dict.ml = {
         'Entringen',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'Blockdefinition l\u00f6schen',
-    'edit...':
-        'Bearbeiten...',
+    'edit':
+        'Bearbeiten',
 
     // sprites:
     'edit':
@@ -840,14 +840,14 @@ SnapTranslator.dict.ml = {
         'Abtrennen von',
     'detach all parts':
         'Alle Teile abtrennen',
-    'export...':
-        'കൊടുത്തയയ്ക്കുക...',
+    'export':
+        'കൊടുത്തയയ്ക്കുക',
 
     // stage:
     'show all':
         'Alles zeigen',
-    'pic...':
-        'Bild exportieren...',
+    'pic':
+        'Bild exportieren',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
@@ -862,12 +862,12 @@ SnapTranslator.dict.ml = {
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
         'Setzen des letzten Blocks\nwiderrufen',
-    'scripts pic...':
-        'Bild aller Scripte...',
+    'scripts pic':
+        'Bild aller Scripte',
     'open a new window\nwith a picture of all scripts':
         'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
-    'make a block...':
-        'Neuen Block bauen...',
+    'make a block':
+        'Neuen Block bauen',
 
     // costumes
     'rename':
@@ -943,8 +943,8 @@ SnapTranslator.dict.ml = {
         'Projekt l\u00f6schen',
     'Are you sure you want to delete':
         'Wirklich l\u00f6schen?',
-    'rename...':
-        'Umbenennen...',
+    'rename':
+        'Umbenennen',
 
     // costume editor
     'Costume Editor':
@@ -963,8 +963,8 @@ SnapTranslator.dict.ml = {
         'Das aktuelle Projekt durch ein neues ersetzen?',
 
     // save project
-    'Save Project As...':
-        'Projekt Sichern Als...',
+    'Save Project As':
+        'Projekt Sichern Als',
 
     // export blocks
     'Export blocks':
@@ -1042,8 +1042,8 @@ SnapTranslator.dict.ml = {
         'Boolsch\n(zitiert)',
     'Single input.':
         'Einzeleingabe.',
-    'Default Value:':
-        'Standardwert:',
+    'Default Value':
+        'Standardwert',
     'Multiple inputs (value is list of inputs)':
         'Mehrere Eingaben (als Liste)',
     'Upvar - make internal variable visible to caller':
@@ -1052,19 +1052,19 @@ SnapTranslator.dict.ml = {
     // About Snap
     'About Snap':
         '\u00dcber Snap',
-    'Back...':
-        'Zur\u00fcck...',
-    'License...':
-        'Lizenz...',
-    'Modules...':
-        'Komponenten...',
-    'Credits...':
-        'Mitwirkende...',
-    'Translators...':
+    'Back':
+        'Zur\u00fcck',
+    'License':
+        'Lizenz',
+    'Modules':
+        'Komponenten',
+    'Credits':
+        'Mitwirkende',
+    'Translators':
         '\u00dcbersetzer',
     'License':
         'Lizenz',
-    'current module versions:':
+    'current module versions':
         'Komponenten-Versionen',
     'Contributors':
         'Mitwirkende',
@@ -1078,23 +1078,23 @@ SnapTranslator.dict.ml = {
         'gro\u00df',
     'slider':
         'Regler',
-    'slider min...':
-        'Minimalwert...',
-    'slider max...':
-        'Maximalwert...',
-    'import...':
-        'Importieren...',
+    'slider min':
+        'Minimalwert',
+    'slider max':
+        'Maximalwert',
+    'import':
+        'Importieren',
     'Slider minimum value':
         'Minimalwert des Reglers',
     'Slider maximum value':
         'Maximalwert des Reglers',
 
     // list watchers
-    'length: ':
-        'L\u00e4nge: ',
+    'length':
+        'L\u00e4nge',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'Anmerkung hier hinzuf\u00fcgen',
 
     // drow downs
@@ -1219,8 +1219,8 @@ SnapTranslator.dict.ml = {
         '9',
 
     // messages
-    'new...':
-        'Neu...',
+    'new':
+        'Neu',
 
     // math functions
     'abs':

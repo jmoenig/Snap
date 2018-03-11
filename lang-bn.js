@@ -240,7 +240,7 @@ SnapTranslator.dict.bn = {
     'can rotate':
         'ঘোরতে পারে',
     'only face left/right':
-        'একমাত্র  ডানে/বামে মুখ',
+         'একমাত্র ডানে/বামে মুখ',
 
     // new sprite button:
     'add a new sprite':
@@ -250,7 +250,7 @@ SnapTranslator.dict.bn = {
     'import a picture from another web page or from\na file on your computer by dropping it here':
         '\nনতুন/অতিরিক্ত পরিচ্ছদ ব্যবহারের জন্য প্রথমে ডান দিকের নিচের পরিচ্ছদ আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n'
     	+'\n\n'+
-    	'নতুন/অতিরিক্ত স্পাইট ব্যবহারের জন্য প্রথমে ডান দিকের নিচের স্পাইট আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n',
+    	'নতুন/অতিরিক্ত স্পাইট ব্যবহারের জন্য প্রথমে ডান দিকের নিচের স্পাইট আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর\n',
     'import a sound from your computer\nby dragging it into here':
         '\nশব্দ ব্যবহারের জন্য কম্পিউটার থেকে প্রত্যাশিত শব্দের ফাইল নির্বাচন করে এখানে আনয়ন করতে পার',
 
@@ -298,15 +298,15 @@ SnapTranslator.dict.bn = {
     'turn %counterclockwise %n degrees':
         'বামদিকে %counterclockwise %n ডিগ্রীকোণে ঘোর',
     'point in direction %dir':
-        'দিক নির্ধারণ কর  %dir',
+         'দিক নির্ধারণ কর %dir',
     'point towards %dst':
-        'প্রতি নির্দেশ কর  %dst',
+         'প্রতি নির্দেশ কর %dst',
     'go to x: %n y: %n':
         'x: %n y: %n অবস্থানে যাও',
     'go to %dst':
         '%dst দুরত্বে যাও',
     'glide %n secs to x: %n y: %n':
-        'গড়িয়ে চল x: %n y: %n অবস্থানে  %n সেকেন্ড  ',
+         'গড়িয়ে চল x: %n y: %n অবস্থানে %n সেকেন্ড',
     'change x by %n':
         'x পরিবর্তন কর %n দ্বারা',
     'set x to %n':
@@ -314,45 +314,45 @@ SnapTranslator.dict.bn = {
     'change y by %n':
         'y পরিবর্তন কর %n দ্বারা',
     'set y to %n':
-        'y নির্ধারণ কর  %n',
+         'y নির্ধারণ কর %n',
     'if on edge, bounce':
         'প্রান্ত স্পর্শ করলে উল্টো ফিরে আস',
     'x position':
-        'এর  x অবস্থান',
+         'এর x অবস্থান',
     'y position':
-        'এর  y অবস্থান',
+         'এর y অবস্থান',
     'direction':
         'এর গতিপথ',
 
     // looks:
     'switch to costume %cst':
-        'পরিচ্ছদ বদল  কর  %cst',
+          'পরিচ্ছদ বদল কর %cst',
     'next costume':
         'পরবর্তী পরিচ্ছদ',
     'costume #':
         'এর পরিচ্ছদ #',
     'say %s for %n secs':
-        'বল  %s %n সেকেন্ড পর্যন্ত',
+         'বল %s %n সেকেন্ড পর্যন্ত',
     'say %s':
-        'বল  %s',
+         'বল %s',
     'think %s for %n secs':
-        'ভাব  %s %n সেকেন্ড পর্যন্ত',
+         'ভাব %s %n সেকেন্ড পর্যন্ত',
     'think %s':
-        'ভাব  %s',
+         'ভাব %s',
     'Hello!':
         'হ্যালো!',
-    'Hmm...':
-        'হুম ...',
+    'Hmm':
+        'হুম',
     'change %eff effect by %n':
-        'প্রভাব   %eff পরিবর্তন করো  %n দ্বারা ',
+           'প্রভাব %eff পরিবর্তন করো %n দ্বারা',
     'set %eff effect to %n':
-        'প্রভাব  %eff %n গুণ নির্ধারণ কর',
+         'প্রভাব %eff %n গুণ নির্ধারণ কর',
     'clear graphic effects':
         'চিত্রলেখ প্রভাব পরিষ্কার কর',
     'change size by %n':
-        'আকার    %n গুণ পরিবর্তন কর',
+           'আকার %n গুণ পরিবর্তন কর',
     'set size to %n %':
-        'আকার   %n % নির্ধারণ কর',
+          'আকার %n % নির্ধারণ কর',
     'size':
         'এর আকার',
     'show':
@@ -364,8 +364,8 @@ SnapTranslator.dict.bn = {
     'go back %n layers':
         'পশ্চাতে যাও %n স্তর',
 
-    'development mode \ndebugging primitives:':
-        'উন্নয়ন মোড \n ডিবাগিং প্রিমিটিভ',
+    'development mode\ndebugging primitives':
+        'উন্নয়ন মোড\nডিবাগিং প্রিমিটিভ',
     'console log %mult%s':
         'কনসোল লগ: %mult%s',
     'alert %mult%s':
@@ -373,7 +373,7 @@ SnapTranslator.dict.bn = {
 
     // sound:
     'play sound %snd':
-        'শব্দ বাজাও  %snd',
+         'শব্দ বাজাও %snd',
     'play sound %snd until done':
         '%snd শব্দ বাজাও যতক্ষণ না',
     'stop all sounds':
@@ -381,7 +381,7 @@ SnapTranslator.dict.bn = {
     'rest for %n beats':
         'নীরব থাক %n স্বরকম্প পর্যন্ত',
     'play note %n for %n beats':
-        'মন্তব্য %n বাজাও  %n স্বরকম্প',
+         'মন্তব্য %n বাজাও %n স্বরকম্প',
     'change tempo by %n':
         'শব্দের কম্পনমাত্রা %n পরিবর্তন কর',
     'set tempo to %n bpm':
@@ -415,17 +415,17 @@ SnapTranslator.dict.bn = {
         
     // control:
     'when %greenflag clicked':
-        'যখন  %greenflag ক্লিক কর',
+         'যখন %greenflag ক্লিক কর',
     'when %keyHat key pressed':
-        'যখন   %keyHat ক্লিক কর',
+          'যখন %keyHat ক্লিক কর',
     'when I am clicked':
         'যখন আমাকে ক্লিক কর',
     'when I receive %msgHat':
-        'যখন আমি গ্রহণ করি  %msgHat',
+         'যখন আমি গ্রহণ করি %msgHat',
     'broadcast %msg':
-        'বার্তা সম্প্রচার কর  %msg',
+         'বার্তা সম্প্রচার কর %msg',
     'broadcast %msg and wait':
-        'বার্তা সম্প্রচার করে   %msg অপেক্ষা কর',
+          'বার্তা সম্প্রচার করে %msg অপেক্ষা কর',
     'Message name':
         'বার্তা লিখ',
     'message':
@@ -440,19 +440,19 @@ SnapTranslator.dict.bn = {
         'পুল',
         
     'wait %n secs':
-        'অপেক্ষা কর   %n সেকেণড',
+          'অপেক্ষা কর %n সেকেণড',
     'wait until %b':
-        'অপেক্ষা কর  %b যতক্ষণ না',
+         'অপেক্ষা কর %b যতক্ষণ না',
     'forever %c':
         'অনন্তকাল কর %c',
     'repeat %n %c':
-        'পুনরাবৃত্তি কর  %n বার  %c ',
+          'পুনরাবৃত্তি কর %n বার %c',
     'repeat until %b %c':
-        'পুনরায় কর যতক্ষণ না  %b %c',
+         'পুনরায় কর যতক্ষণ না %b %c',
     'if %b %c':
-        'যদি হয়  %b %c',
+         'যদি হয় %b %c',
     'if %b %c else %c':
-        'যদি হয়  %b %c অন্যথায়  %c',
+          'যদি হয় %b %c অন্যথায় %c',
     'report %s':
         'প্রতিবেদন %s',
     'stop block':
@@ -460,7 +460,7 @@ SnapTranslator.dict.bn = {
     'stop script':
         'বর্ণনা বন্ধ কর',
     'stop all %stop':
-        'সব বন্ধ কর  %stop',
+         'সব বন্ধ কর %stop',
     'pause all %pause':
         'সব স্থগিত কর %pause',
     'run %cmdRing %inputs':
@@ -470,11 +470,11 @@ SnapTranslator.dict.bn = {
     'call %repRing %inputs':
         'আহ্বান কর %repRing %inputs',
     'run %cmdRing w/continuation':
-        'চালনা কর  %cmdRing ধারাবাহিকতার সঙ্গে',
+         'চালনা কর %cmdRing ধারাবাহিকতার সঙ্গে',
     'call %cmdRing w/continuation':
-        'আহ্বান কর  %cmdRing ধারাবাহিকতার সঙ্গে',
+         'আহ্বান কর %cmdRing ধারাবাহিকতার সঙ্গে',
     'warp %c':
-        'একত্রিত কর  %c',
+         'একত্রিত কর %c',
     'when I start as a clone':
         'যখন আমি একটি ক্লোন হিসেবে শুরু করি',
     'create a clone of %cln':
@@ -488,9 +488,9 @@ SnapTranslator.dict.bn = {
     'touching %col ?':
         'স্পর্শ করেছে কিনা %col ?',
     'touching %clr ?':
-        'স্পর্শ রঙ  %clr কিনা?',
+         'স্পর্শ রঙ %clr কিনা?',
     'color %clr is touching %clr ?':
-        '%clr রঙ  %clr রঙ গামী কিনা?',
+         '%clr রঙ %clr রঙ গামী কিনা?',
     'ask %s and wait':
         '%s জিজ্ঞাসা করে অপেক্ষা কর',
     'what\'s your name?':
@@ -512,16 +512,16 @@ SnapTranslator.dict.bn = {
     'timer':
         'সময় নির্ণায়ক',
     '%att of %spr':
-        '%att লক্ষণ  %spr এর',    
+           '%att লক্ষণ %spr এর ', 
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'টার্বো মোড কিনা?',
      'set turbo mode to %b':
-        'টার্বো মোডকে  %b নির্ধারণ কর',
+         'টার্বো মোডকে %b নির্ধারণ কর',
 
     'filtered for %clr':
-        'ফিল্টার করা  হয়েছে  %clr এর জন্য',
+          'ফিল্টার করা হয়েছে %clr এর জন্য',
     'stack size':
         'স্ট্যাকের আকার',
     'frames':
@@ -529,17 +529,17 @@ SnapTranslator.dict.bn = {
 
     // operators:
     '%n mod %n':
-        '%n ভাগ  %n এর অবশিষ্ট',
+         '%n ভাগ %n এর অবশিষ্ট',
     'round %n':
         '%n এর নিকটতম পূর্ণসংখ্যা',
     '%fun of %n':
-        '%fun নির্ণয় কর  %n',
+         '%fun নির্ণয় কর %n',
     'pick random %n to %n':
-        'যে কোনো একটি সংখ্যা  %n থেকে   %n পর্যন্ত',
+           'যে কোনো একটি সংখ্যা %n থেকে %n পর্যন্ত',
     '%b and %b':
         '%b এবং %b',
     '%b or %b':
-        '%b অথবা  %b',
+         '%b অথবা %b',
     'not %b':
         'না %b',
     'true':
@@ -547,30 +547,30 @@ SnapTranslator.dict.bn = {
     'false':
         'মিথ্যা',
     'join %words':
-        'সংযুক্ত কর  %words',
+         'সংযুক্ত কর %words',
     'hello':
         'হ্যালো',
     'world':
         'পৃথিবী',
     'letter %n of %s':
-        '%n -তম বর্ণ    %s এর',
+           '%n -তম বর্ণ %s এর',
     'length of %s':
-        '%s এর বর্ণদৈর্ঘ্য ',
+        '%s এর বর্ণদৈর্ঘ্য',
     'unicode of %s':
         '%s বর্ণের ইউনিকোড',
     'unicode %n as letter':
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
-        '%s এই  প্রকারের কিনা %typ ?',
+         '%s এই প্রকারের কিনা %typ ?',
     'is %s identical to %s ?':
-        '%s এর সমতুল্য  %s কিনা?',
+         '%s এর সমতুল্য %s কিনা?',
 
     'type of %s':
         '%s এর প্রকারে',
 
     // variables:
     'Make a variable':
-        'একটি   চলক তৈরী কর',
+          'একটি চলক তৈরী কর',
     'Variable name':
         'চলকের নাম',
     'Delete a variable':
@@ -578,36 +578,36 @@ SnapTranslator.dict.bn = {
     'set %var to %s':
         '%var চলকটি মান %s নির্ধারণ কর',
     'change %var by %n':
-        '%var চলকটি মান  %n দ্বারা পরিবর্তন কর',
+         '%var চলকটি মান %n দ্বারা পরিবর্তন কর',
     'show variable %var':
         '%var চলকটি প্রদর্শন কর',
     'hide variable %var':
         '%var চলকটি গোপন কর',
     'script variables %scriptVars':
-        'স্ক্রিপ্ট চলকসমূহ  %scriptVars',
+         'স্ক্রিপ্ট চলকসমূহ %scriptVars',
 
     'list %exp':
     	'তালিকা %exp',
     '%s in front of %l':
     	'%s %l তালিকার সামনে',
     'item %idx of %l':
-    	'%idx উপাদানটি  %l তালিকার',
+    	 '%idx উপাদানটি %l তালিকার',
     'all but first of %l':
     	'%l তালিকার সব কিন্তু প্রথমটি বাদে',
     'length of %l':
      	'%l তালিকার দৈর্ঘ্য',
     '%l contains %s':
-    	'%l তালিকা  %s উপাদানটি ধারণ করে',
+    	 '%l তালিকা %s উপাদানটি ধারণ করে',
     'thing':
     	'বিষয়',
     'add %s to %l':
-    	'%s কে  %l তে সংযুক্ত কর',
+    	 '%s কে %l তে সংযুক্ত কর',
     'delete %ida of %l':
-    	'%ida কে  %l থেকে মুছে ফেল',
+    	 '%ida কে %l থেকে মুছে ফেল',
     'insert %s at %idx of %l':
-     	'%s কে  %idx স্থানে  %l তালিকায় সন্নিবেশিত কর',
+     	  '%s কে %idx স্থানে %l তালিকায় সন্নিবেশিত কর',
      'replace item %idx of %l with %s':
-    	'%idx স্থানের  %l তালিকার উপাদানটি  %s দ্বারা প্রতিস্থাপন কর',
+    	  '%idx স্থানের %l তালিকার উপাদানটি %s দ্বারা প্রতিস্থাপন কর',
 
     // other
     'Make a block':
@@ -615,8 +615,8 @@ SnapTranslator.dict.bn = {
 
     // menus
     // snap menu
-    'About...':
-        'Snap! সম্পর্কিত তথ্য...',
+    'About':
+        'Snap! সম্পর্কিত তথ্য',
      'Reference manual':
         'Snap! রেফারেন্স ম্যানুয়াল',
     'Snap! website':
@@ -633,57 +633,57 @@ SnapTranslator.dict.bn = {
         'মরফিক প্রসঙ্গ তালিকা এবংপরিদর্শক সক্রিয় কর,তবে এটি ব্যবহারকারী বান্ধব নহে!',
 
     // project menu
-    'Project notes...':
-        'প্রকল্প সম্পর্কিত মন্তব্য...',
+    'Project notes':
+        'প্রকল্প সম্পর্কিত মন্তব্য',
     'New':
         'নতুন প্রকল্প তৈরী কর',
-    'Open...':
-        'সংরক্ষিত প্রকল্প খোল...',
+    'Open':
+        'সংরক্ষিত প্রকল্প খোল',
     'Save':
         'প্রকল্পটি সংরক্ষণ কর',
-    'Save As...':
-        'প্রকল্পটির নামান্তর কর...',
-    'Import...':
-        'প্রকল্প ইম্পোর্ট কর...',
+    'Save As':
+        'প্রকল্পটির নামান্তর কর',
+    'Import':
+        'প্রকল্প ইম্পোর্ট কর',
     'load an exported project file\nor block library, a costume\nor a sound':
         'XMLফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
-    'Export project as plain text...':
-        'প্রকল্পটি প্লেইন টেক্সট হিসাবে এক্সপোর্ট কর ...',
-    'Export project...':
-        'প্রকল্পটি এক্সপোর্ট কর...',
+    'Export project as plain text':
+        'প্রকল্পটি প্লেইন টেক্সট হিসাবে এক্সপোর্ট কর',
+    'Export project':
+        'প্রকল্পটি এক্সপোর্ট কর',
     'show project data as XML\nin a new browser window':
         'প্রকল্প উপাত্ত একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
-    'Export blocks...':
-        'ব্লকসমূহ এক্সপোর্ট কর...',
+    'Export blocks':
+        'ব্লকসমূহ এক্সপোর্ট কর',
     'show global custom block definitions as XML\nin a new browser window':
         'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
     'Import tools':
         'যন্ত্রপাতি ইম্পোর্ট কর',
-     'Libraries...':
+     'Libraries':
         'লাইব্রেরি লোড কর',
-     'Costumes...':
+     'Costumes':
         'পরিচ্ছদ লোড কর',
-     'Sounds...':
+     'Sounds':
         'শব্দের ফাইল লোড কর',
     'load the official library of\npowerful blocks':
         'শক্তিশালী ব্লকের অফিসিয়াল লাইব্রেরি লোড কর',
 
     // cloud menu
-    'Login...':
-        'ক্লাউড লগ ইন...',
-    'Signup...':
-        'ক্লাউড সাইন আপ...',
-    'Reset Password...':
-        'পাসওয়ার্ড পরিবর্তন কর...',
+    'Login':
+        'ক্লাউড লগ ইন',
+    'Signup':
+        'ক্লাউড সাইন আপ',
+    'Reset Password':
+        'পাসওয়ার্ড পরিবর্তন কর',
             
         
     // settings menu
-    'Language...':
-        'ভাষা পরিবর্তন কর...',
-    'Zoom blocks...':
-        'ব্লকসমূহ জুম্ কর...',
-    'Stage size...':
-        'দৃশ্যস্থলের আকার পরিবর্তন কর...',
+    'Language':
+        'ভাষা পরিবর্তন কর',
+    'Zoom blocks':
+        'ব্লকসমূহ জুম্ কর',
+    'Stage size':
+        'দৃশ্যস্থলের আকার পরিবর্তন কর',
     'Blurred shadows':
         'ঝাপসা ছায়া',
     'uncheck to use solid drop\nshadows and highlights':
@@ -697,11 +697,11 @@ SnapTranslator.dict.bn = {
     'uncheck to disable alternating\ncolors for nested block':
         'নেস্টেড ব্লকের পরিবর্তিত রঙ নিস্ক্রিয় করার জন্য আনচেক কর',
     'Dynamic input labels':
-        'গতিশীল  ইনপুট লেবেল',
+         'গতিশীল ইনপুট লেবেল',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ভারিয়াদিক  ইনপুট এর গতিশীল লেবেল নিস্ক্রিয় করার জন্য আনচেক কর',
+         'ভারিয়াদিক ইনপুট এর গতিশীল লেবেল নিস্ক্রিয় করার জন্য আনচেক কর',
     'check to enable dynamic\nlabels for variadic inputs':
-        'ভারিয়াদিক  ইনপুট এর গতিশীল লেবেল সক্রিয় করার জন্য চেক কর',
+         'ভারিয়াদিক ইনপুট এর গতিশীল লেবেল সক্রিয় করার জন্য চেক কর',
     'Prefer empty slot drops':
         'খালি স্লট ড্রপ পছন্দ কর',
     'check to focus on empty slots\nwhen dragging & dropping reporters':
@@ -750,43 +750,43 @@ SnapTranslator.dict.bn = {
     'uncheck to allow\nscript reentrancy':
         'বর্ণনা পুনপ্রবেশ অনুমোদন করার জন্য আনচেক কর',
     'check to disallow\nscript reentrancy':
-        'বর্ণনা পুনপ্রবেশ অনুমোদন না  করার জন্য চেক কর',
+         'বর্ণনা পুনপ্রবেশ অনুমোদন না করার জন্য চেক কর',
     'Prefer smooth animations':
        'মসৃণ অ্যানিমেশন পছন্দ কর',
     'Flat line ends':
         'ফ্লাট লাইনের সমাপ্তি',
     'Codification support':
-        'সারসংগ্রহ সমর্থন',   
+         'সারসংগ্রহ সমর্থন ', 
         
     // inputs
     'with inputs':
         'ইনপুট দ্বারা',
-    'input names:':
-        'ইনপুট নাম:',
-    'Input Names:':
-        'ইনপুট নাম:',
-    'input list:':
-        'ইনপুট তালিকা:',
+    'input names':
+        'ইনপুট নাম',
+    'Input Names':
+        'ইনপুট নাম',
+    'input list':
+        'ইনপুট তালিকা',
 
     // context menus:
     'help':
         'সাহায্য কর',
 
     // blocks:
-    'help...':
-        'সাহায্য কর...',
-    'relabel...':
-        'নামান্তর কর...',
+    'help':
+        'সাহায্য কর',
+    'relabel':
+        'নামান্তর কর',
     'duplicate':
         'এটির প্রতিলিপি তৈরী কর',
     'make a copy\nand pick it up':
-        'এটি কপি কর এবং  নির্বাচন কর',
+         'এটি কপি কর এবং নির্বাচন কর',
     'only duplicate this block':
         'শুধুমাত্র এই ব্লকের প্রতিলিপি তৈরী কর',
     'delete':
         'এটি মুছে ফেল',
-    'script pic...':
-        'স্ক্রিপ্ট ছবি...',
+    'script pic':
+        'স্ক্রিপ্ট ছবি',
     'open a new window\nwith a picture of this script':
         'এই স্ক্রিপ্টর ছবি দিয়ে একটা নতুন উইন্ডো খোল',
     'ringify':
@@ -795,16 +795,16 @@ SnapTranslator.dict.bn = {
         'পরিবেষ্টনমুক্ত করা',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         'ব্লক সংজ্ঞা মুছে ফেল',
-    'edit...':
-        'সম্পাদন কর...',
+    'edit':
+        'সম্পাদন কর',
 
     // sprites:
     'edit':
         'সম্পাদন কর',
-    'export...':
-        'প্রেরণ কর...',
+    'export':
+        'প্রেরণ কর',
 
     // stage:
     'show all':
@@ -814,11 +814,11 @@ SnapTranslator.dict.bn = {
     'clean up':
         'পরিষ্কার-পরিচ্ছন্ন কর',
     'arrange scripts\nvertically':
-        'উল্লম্বভাবে \nস্ক্রিপ্টস সুবিন্যস্ত কর',
+        'উল্লম্বভাবে\nস্ক্রিপ্টস সুবিন্যস্ত কর',
     'add comment':
         'মন্তব্য যোগ কর',
-    'make a block...':
-        'একটি ব্লক তৈরী কর...',
+    'make a block':
+        'একটি ব্লক তৈরী কর',
 
     // costumes
     'rename':
@@ -878,8 +878,8 @@ SnapTranslator.dict.bn = {
         'প্রকল্প মুছে ফেল',
     'Are you sure you want to delete':
         'তুমি কি মুছে দেওয়ার বিষয়ে নিশ্চিত?',
-    'rename...':
-        'নতুন নামকরণ কর...',
+    'rename':
+        'নতুন নামকরণ কর',
 
     // costume editor
     'Costume Editor':
@@ -898,8 +898,8 @@ SnapTranslator.dict.bn = {
         'বর্তমান প্রকল্পটি নতুন প্রকল্প দ্বারা প্রতিস্থাপন করতে চাও?',
 
     // save project
-    'Save Project As...':
-        'প্রকল্পটি নামান্তর কর...',
+    'Save Project As':
+        'প্রকল্পটি নামান্তর কর',
 
     // export blocks
     'Export blocks':
@@ -969,17 +969,17 @@ SnapTranslator.dict.bn = {
     'Boolean (T/F)':
         'বুলিয়ান (সত্য/মিথ্যা)',
     'Command\n(inline)':
-        'আদেশ \n(ইনলাইন)',
+        'আদেশ\n(ইনলাইন)',
     'Command\n(C-shape)':
-        'আদেশ \n(C-আকৃতি)',
+        'আদেশ\n(C-আকৃতি)',
     'Any\n(unevaluated)':
-        'যেকোন \n(সংখ্যা অনির্ণয় করা)',
+        'যেকোন\n(সংখ্যা অনির্ণয় করা)',
     'Boolean\n(unevaluated)':
-        'বুলিয়ান \n(সংখ্যা অনির্ণয় করা)',
+        'বুলিয়ান\n(সংখ্যা অনির্ণয় করা)',
     'Single input.':
         'একক ইনপুট',
-    'Default Value:':
-        'ডিফল্ট (অনুপস্থিত)মান:',
+    'Default Value':
+        'ডিফল্ট (অনুপস্থিত)মান',
     'Multiple inputs (value is list of inputs)':
         'একাধিক ইনপুট (মান ইনপুট তালিকা)',
     'Upvar - make internal variable visible to caller':
@@ -988,19 +988,19 @@ SnapTranslator.dict.bn = {
     // About Snap
     'About Snap':
         'Snap! সম্পর্কিত তথ্য',
-    'Back...':
-        'প্রত্যাবর্তন কর...',
-    'License...':
-        'লাইসেন্স...',
-    'Modules...':
-        'মডিউল...',
-    'Credits...':
-        'স্বীকৃতি...',
-    'Translators...':
+    'Back':
+        'প্রত্যাবর্তন কর',
+    'License':
+        'লাইসেন্স',
+    'Modules':
+        'মডিউল',
+    'Credits':
+        'স্বীকৃতি',
+    'Translators':
         'ভাষান্তরিকবৃন্দ',
     'License':
         'লাইসেন্স',
-    'current module versions:':
+    'current module versions':
         'বর্তমান মডিউল সংস্করণ',
     'Contributors':
         'সাহায্যকারীবৃন্দ',
@@ -1014,21 +1014,21 @@ SnapTranslator.dict.bn = {
         'বৃহৎ',
     'slider':
         'স্লাইডার',
-    'slider min...':
-        'স্লাইডার সর্বনিম্ন...',
-    'slider max...':
-        'স্লাইডার সর্বোচ্চ...',
+    'slider min':
+        'স্লাইডার সর্বনিম্ন',
+    'slider max':
+        'স্লাইডার সর্বোচ্চ',
     'Slider minimum value':
         'স্লাইডারের সর্বনিম্ন মান',
     'Slider maximum value':
         'স্লাইডারের সর্বোচ্চ মান',
 
     // list watchers
-    'length: ':
-        'দৈর্ঘ্য: ',
+    'length':
+        'দৈর্ঘ্য',
 
     // coments
-    'add comment here...':
+    'add comment here':
         'এখানে মন্তব্য যোগ কর',
 
     // drow downs
@@ -1143,8 +1143,8 @@ SnapTranslator.dict.bn = {
         '9',
 
     // messages
-    'new...':
-        'নতুন বার্তা লিখ...',
+    'new':
+        'নতুন বার্তা লিখ',
 
     // math functions
     'পরমমান':

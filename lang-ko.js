@@ -259,7 +259,7 @@ SnapTranslator.dict.ko = {
         '다른 웹페이지나 컴퓨터에 있는 이미지 파일을\n'
             + '여기로 드래그해서 가져옵니다.',
     'import a sound from your computer\nby dragging it into here':
-        '컴퓨터에 있는 소리 파일을\n 여기로 드래그해서 가져옵니다.',
+        '컴퓨터에 있는 소리 파일을\n여기로 드래그해서 가져옵니다.',
 
     // primitive blocks:
 
@@ -347,8 +347,8 @@ SnapTranslator.dict.ko = {
         '%s 생각하기',
     'Hello!':
         '안녕!',
-    'Hmm...':
-        '흠…',
+    'Hmm':
+        '흠',
     'change %eff effect by %n':
         '%eff 효과를 %n 만큼 바꾸기',
     'set %eff effect to %n':
@@ -370,8 +370,8 @@ SnapTranslator.dict.ko = {
     'go back %n layers':
         '%n 번째로 물러나기',
 
-    'development mode \ndebugging primitives:':
-        '개발자 모드\n디버깅 프리미티브:',
+    'development mode\ndebugging primitives':
+        '개발자 모드\n디버깅 프리미티브',
     'console log %mult%s':
         '콘솔 로그 %mult%s',
     'alert %mult%s':
@@ -618,7 +618,7 @@ SnapTranslator.dict.ko = {
     'list %exp':
         '리스트 %exp',
     '%s in front of %l':
-        '%s 을(를) 리스트 %l 의 맨 앞에 추가하기 ',
+        '%s 을(를) 리스트 %l 의 맨 앞에 추가하기',
     'item %idx of %l':
         '%idx 번째 항목 (리스트 %l 에 대한)',
     'all but first of %l':
@@ -630,7 +630,7 @@ SnapTranslator.dict.ko = {
     'thing':
         '어떤 것',
     'add %s to %l':
-        '%s 을(를) 리스트 %l 의 마지막에 추가하기 ',
+        '%s 을(를) 리스트 %l 의 마지막에 추가하기',
     'delete %ida of %l':
         '%ida 번째 항목 삭제하기 (리스트 %l 에 대한)',
     'insert %s at %idx of %l':
@@ -682,8 +682,8 @@ SnapTranslator.dict.ko = {
 
     // menus
     // snap menu
-    'About...':
-        'Snap! 에 대해서...',
+    'About':
+        'Snap! 에 대해서',
     'Reference manual':
         '참고자료 다운로드',
     'Snap! website':
@@ -700,75 +700,75 @@ SnapTranslator.dict.ko = {
         '모픽 컨텍스트 메뉴와 인스펙터를 사용할 수 있으나, 사용자 친화적이지 않습니다!',
 
     // project menu
-    'Project notes...':
-        '프로젝트 메모...',
+    'Project notes':
+        '프로젝트 메모',
     'New':
         '새로 만들기',
-    'Open...':
-        '열기...',
+    'Open':
+        '열기',
     'Save':
         '저장하기',
     'Save to disk':
         '내 컴퓨터에 저장하기',
     'experimental - store this project\nin your downloads folder':
-        '실험적 - 이 프로젝트를\n 다운로드 폴더에 저장합니다.',
-    'Save As...':
-        '다른 이름으로 저장하기...',
-    'Import...':
-        '가져오기...',
+        '실험적 - 이 프로젝트를\n다운로드 폴더에 저장합니다.',
+    'Save As':
+        '다른 이름으로 저장하기',
+    'Import':
+        '가져오기',
     'load an exported project file\nor block library, a costume\nor a sound':
         '내보낸 프로젝트 파일, 블록 라이브러리\n'
 		+ '스프라이트 모양 또는 소리를 가져옵니다.',
-    'Export project as plain text...':
-        '프로젝트를 텍스트 파일로 내보내기...',
-    'Export project...':
-        '프로젝트 내보내기...',
+    'Export project as plain text':
+        '프로젝트를 텍스트 파일로 내보내기',
+    'Export project':
+        '프로젝트 내보내기',
     'show project data as XML\nin a new browser window':
         '프로젝트 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export blocks...':
-        '블록 내보내기...',
+    'Export blocks':
+        '블록 내보내기',
     'show global custom block definitions as XML\nin a new browser window':
         '새롭게 정의한 전역 블록 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export all scripts as pic...':
+    'Export all scripts as pic':
         '모든 스크립트를 그림파일로 내보내기',
     'show a picture of all scripts\nand block definitions':
         '모든 스크립트와 정의된 블록을 그림파일로 보여줍니다.',
     'Import tools':
         '추가 도구 가져오기',
     'load the official library of\npowerful blocks':
-        '강력한 기능을 제공하는\n 블록들을 가져옵니다.',
-    'Libraries...':
-        '라이브러리...',
+        '강력한 기능을 제공하는\n블록들을 가져옵니다.',
+    'Libraries':
+        '라이브러리',
     'Select categories of additional blocks to add to this project.':
-        '추가적인 블록을 선택해서\n 사용할 수 있습니다.',
+        '추가적인 블록을 선택해서\n사용할 수 있습니다.',
     'Import library':
         '라이브러리 가져오기',
 
     // cloud menu
-    'Login...':
-        '로그인...',
-    'Signup...':
-        '계정만들기...',
-    'Reset Password...':
-        '비밀번호 재설정...',
-    'url...':
-        'url...',
-    'export project media only...':
-        'export project media only...',
-    'export project without media...':
-        'export project without media...',
-    'export project as cloud data...':
-        'export project as cloud data...',
-    'open shared project from cloud...':
-        'open shared project from cloud...',
+    'Login':
+        '로그인',
+    'Signup':
+        '계정만들기',
+    'Reset Password':
+        '비밀번호 재설정',
+    'url':
+        'url',
+    'export project media only':
+        'export project media only',
+    'export project without media':
+        'export project without media',
+    'export project as cloud data':
+        'export project as cloud data',
+    'open shared project from cloud':
+        'open shared project from cloud',
 
     // settings menu
-    'Language...':
-        '언어선택...',
-    'Zoom blocks...':
-        '블록 크기 설정...',
-    'Stage size...':
-        '무대 크기 설정...',
+    'Language':
+        '언어선택',
+    'Zoom blocks':
+        '블록 크기 설정',
+    'Stage size':
+        '무대 크기 설정',
     'Stage size':
         '무대 크기',
     'Stage width':
@@ -816,9 +816,9 @@ SnapTranslator.dict.ko = {
     'Plain prototype labels':
         '새로 만든 블록 인수 설정',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        '체크해제하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 보입니다.',
+        '체크해제하면, 블록 편집기에서\n블록 인수 추가 버튼(+)을\n보입니다.',
     'check to hide (+) symbols\nin block prototype labels':
-        '체크하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 숨깁니다.',
+        '체크하면, 블록 편집기에서\n블록 인수 추가 버튼(+)을\n숨깁니다.',
     
     'Virtual keyboard':
         '가상 키보드',
@@ -844,21 +844,21 @@ SnapTranslator.dict.ko = {
     'Animations':
         '애니메이션',
     'uncheck to disable\nIDE animations':
-        '체크해제하면, IDE 애니메이션을\n 사용할 수 없습니다.',
+        '체크해제하면, IDE 애니메이션을\n사용할 수 없습니다.',
     
     'Turbo mode':
         '터보 모드',
     'check to prioritize\nscript execution':
-        '체크하면, 스크립트를\n 빠르게 실행합니다.',
+        '체크하면, 스크립트를\n빠르게 실행합니다.',
     'uncheck to run scripts\nat normal speed':
-        '체크해제하면, 스크립트 실행 속도를\n 보통으로 합니다.',
+        '체크해제하면, 스크립트 실행 속도를\n보통으로 합니다.',
     
     'Flat design':
         '플랫(Flat) 디자인',
     'uncheck for default\nGUI design':
-        '체크해제하면,\n 기본 GUI 디자인으로\n 변경합니다.',
+        '체크해제하면,\n기본 GUI 디자인으로\n변경합니다.',
     'check for alternative\nGUI design':
-        '체크하면, 플랫(Flat)\n 디자인으로 변경합니다.',
+        '체크하면, 플랫(Flat)\n디자인으로 변경합니다.',
     
     'Sprite Nesting':
         'Sprite Nesting',
@@ -877,16 +877,16 @@ SnapTranslator.dict.ko = {
     'Prefer smooth animations':
         '자연스러운 애니메이션',
     'uncheck for greater speed\nat variable frame rates':
-        '체크해제하면, 프레임\n 전환 비율이 빨라집니다.',
+        '체크해제하면, 프레임\n전환 비율이 빨라집니다.',
     'check for smooth, predictable\nanimations across computers':
-        '체크하면, 애니메이션이\n 자연스러워 집니다.',
+        '체크하면, 애니메이션이\n자연스러워 집니다.',
     
     'Flat line ends':
         '선 끝을 평평하게 만들기',
     'check for flat ends of lines':
-        '체크하면, 선 끝을\n 평평하게 만듭니다.',
+        '체크하면, 선 끝을\n평평하게 만듭니다.',
     'uncheck for round ends of lines':
-        '체크해제하면, 선 끝을\n 둥글게 만듭니다.',
+        '체크해제하면, 선 끝을\n둥글게 만듭니다.',
     
     'Codification support':
         '체계화 지원',
@@ -898,36 +898,36 @@ SnapTranslator.dict.ko = {
     // inputs
     'with inputs':
         '매개변수',
-    'input names:':
-        '매개변수이름:',
-    'Input Names:':
-        '매개변수이름:',
+    'input names':
+        '매개변수이름',
+    'Input Names':
+        '매개변수이름',
 
     // context menus:
     'help':
         '도움말',
     
     // palette:
-    'find blocks...':
-        '블록 찾기...',
+    'find blocks':
+        '블록 찾기',
     'hide primitives':
         '기본 블록 숨기기',
     'show primitives':
         '기본 블록 보이기',
 
     // blocks:
-    'help...':
-        '블록 도움말...',
-    'relabel...':
-        '블록 바꾸기...',
+    'help':
+        '블록 도움말',
+    'relabel':
+        '블록 바꾸기',
     'duplicate':
         '복사하기',
     'make a copy\nand pick it up':
         '복사해서\n들고 있습니다.',
     'delete':
         '삭제하기',
-    'script pic...':
-        '이 스크립트를 그림파일로 내보내기...',
+    'script pic':
+        '이 스크립트를 그림파일로 내보내기',
     'open a new window\nwith a picture of this script':
         '이 스크립트 그림을\n새로운 윈도우에서 엽니다.',
     'ringify':
@@ -936,22 +936,22 @@ SnapTranslator.dict.ko = {
         'unringify',
 
     // custom blocks:
-    'delete block definition...':
+    'delete block definition':
         '블록 삭제하기',
-    'edit...':
-        '편집…',
+    'edit':
+        '편집',
 
     // sprites:
     'edit':
         '스크립트 편집하기',
-    'export...':
-        '내보내기...',
+    'export':
+        '내보내기',
 
     // stage:
     'show all':
         '모든 스프라이트 나타내기',
-    'pic...':
-        '그림파일로 내보내기...',
+    'pic':
+        '그림파일로 내보내기',
     'open a new window\nwith a picture of the stage':
         '새로운 창을 열고\n무대의 화면을\n그림파일로 저장한다.',
 
@@ -965,13 +965,13 @@ SnapTranslator.dict.ko = {
     'undrop':
         '마지막으로 가져온 블록',
     'undo the last\nblock drop\nin this pane':
-        '마지막으로\n 가져온 블록을\n 확인한다.',
-    'scripts pic...':
-        '모든 스크립트를 그림파일로 내보내기...',
+        '마지막으로\n가져온 블록을\n확인한다.',
+    'scripts pic':
+        '모든 스크립트를 그림파일로 내보내기',
     'open a new window\nwith a picture of all scripts':
-        '새로운 창을 열어서\n 모든 스크립트를\n 그림으로 저장한다.',
-    'make a block...':
-        '블록 만들기...',
+        '새로운 창을 열어서\n모든 스크립트를\n그림으로 저장한다.',
+    'make a block':
+        '블록 만들기',
 
     // costumes
     'rename':
@@ -1052,8 +1052,8 @@ SnapTranslator.dict.ko = {
         '프로젝트 열기',
 
     // save project
-    'Save Project As...':
-        '프로젝트 저장...',
+    'Save Project As':
+        '프로젝트 저장',
 
     // export blocks
     'Export blocks':
@@ -1093,7 +1093,7 @@ SnapTranslator.dict.ko = {
     'Delete Custom Block':
         '블록 삭제하기',
     'Are you sure you want to delete this\ncustom block and all its instances?':
-        '이 블록과 모든 인스턴스를\n 삭제해도 괜찮습니까?',
+        '이 블록과 모든 인스턴스를\n삭제해도 괜찮습니까?',
 
     // input dialog
     'Create input name':
@@ -1121,15 +1121,15 @@ SnapTranslator.dict.ko = {
     'Command\n(inline)':
         '커맨드\n(인라인)',
     'Command\n(C-shape)':
-        '커맨드 \n(C-모양)',
+        '커맨드\n(C-모양)',
     'Any\n(unevaluated)':
         '아무값\n(평가되지 않음)',
     'Boolean\n(unevaluated)':
         '불리언\n(평가되지 않음)',
     'Single input.':
         '단일 입력',
-    'Default Value:':
-        '기본 값:',
+    'Default Value':
+        '기본 값',
     'Multiple inputs (value is list of inputs)':
         '다중 입력 (값은 리스트의 입력값입니다)',
     'Upvar - make internal variable visible to caller':
@@ -1138,22 +1138,22 @@ SnapTranslator.dict.ko = {
     // About Snap
     'About Snap':
         'Snap에 대해서',
-    'Back...':
-        '뒤로…',
-    'License...':
-        '라이센스...',
-    'Modules...':
-        '모듈...',
-    'Credits...':
-        '크레디트...',
-    'Translators...':
+    'Back':
+        '뒤로',
+    'License':
+        '라이센스',
+    'Modules':
+        '모듈',
+    'Credits':
+        '크레디트',
+    'Translators':
         '번역자',
     'License':
         '라이센스',
-    'current module versions:':
-        '현재 모듈 버전:',
+    'current module versions':
+        '현재 모듈 버전',
     'Contributors':
-        '기여자:',
+        '기여자',
     'Translations':
         '번역',
 
@@ -1164,24 +1164,24 @@ SnapTranslator.dict.ko = {
         '크게 보기',
     'slider':
         '슬라이더',
-    'slider min...':
-        '슬라이더 최소값 설정...',
-    'slider max...':
-        '슬라이더 최대값 설정...',
+    'slider min':
+        '슬라이더 최소값 설정',
+    'slider max':
+        '슬라이더 최대값 설정',
     'Slider minimum value':
         '슬라이더 최소값 설정',
     'Slider maximum value':
         '슬라이더 최대값 설정',
 
     // list watchers
-    'length: ':
-        '길이: ',
+    'length':
+        '길이',
 
     // coments
-    'add comment here...':
-        '여기에 주석 추가…',
-    'comment pic...':
-        '주석을 그림파일로 내보내기...',
+    'add comment here':
+        '여기에 주석 추가',
+    'comment pic':
+        '주석을 그림파일로 내보내기',
 
     // drow downs
     // directions
@@ -1306,8 +1306,8 @@ SnapTranslator.dict.ko = {
         '9',
 
     // messages
-    'new...':
-        '새로 만들기...',
+    'new':
+        '새로 만들기',
 
     // math functions
     'abs':
@@ -1384,8 +1384,8 @@ SnapTranslator.dict.ko = {
         '정말로 삭제합니까?',
     'unringify':
         '블록형태변환 취소하기',
-    'rename...':
-        '이름수정...',
+    'rename':
+        '이름수정',
     '(180) down':
         '(180) 아래',
     'Ok':
