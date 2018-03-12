@@ -1,5 +1,5 @@
-/*globals nop, SnapCloud, SERVER_URL, SERVER_ADDRESS, Context, SpriteMorph, StageMorph, SnapActions,
-  DialogBoxMorph, IDE_Morph, RoomEditorMorph, isObject, NetsBloxSerializer,
+/*globals nop, SnapCloud, SERVER_URL, SERVER_ADDRESS, Context, SpriteMorph,
+  StageMorph, SnapActions, DialogBoxMorph, IDE_Morph, isObject, NetsBloxSerializer,
   localize*/
 // WebSocket Manager
 
@@ -13,6 +13,7 @@ var WebSocketManager = function (ide) {
     this.url = this._protocol + '//' + SERVER_ADDRESS;
     this._connectWebSocket();
     this.version = Date.now();
+    this.serverVersion = null;
 
     this.errored = false;
     this.hasConnected = false;
@@ -26,8 +27,14 @@ WebSocketManager.MessageHandlers = {
         this.inActionRequest = false;
     },
 
-    'new-version-available': function() {
-        this.ide.showUpdateNotification();
+    'report-version': function(msg) {
+        var version = msg.body;
+        if (!this.serverVersion) {
+            this.serverVersion = version;
+        }
+        if (this.serverVersion !== version) {
+            this.ide.showUpdateNotification();
+        }
     },
 
     // Receive an assigned uuid
@@ -363,7 +370,6 @@ WebSocketManager.prototype.onConnect = function() {
                 myself.websocket.send(myself.messages.shift());
             }
 
-            myself.reportClientVersion();
             SnapActions.requestMissingActions();
         };
 
@@ -373,14 +379,6 @@ WebSocketManager.prototype.onConnect = function() {
         afterConnect();
     }
     this.inActionRequest = false;
-};
-
-WebSocketManager.prototype.reportClientVersion = function() {
-    var msg = JSON.stringify({
-        type: 'report-version',
-        version: NetsBloxSerializer.prototype.version
-    });
-    this.send(msg);
 };
 
 WebSocketManager.prototype.updateRoomInfo = function() {

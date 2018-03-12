@@ -1417,7 +1417,7 @@ NetsBloxMorph.prototype.createCloudAccount = function () {
 };
 
 NetsBloxMorph.prototype.showUpdateNotification = function () {
-    var msgText = 'Newer Version of NetsBlox Available: Please Save and Refresh';
+    var msgText = localize('Newer Version of NetsBlox Available: Please Save and Refresh');
     var notification = new MenuMorph(null, msgText);
     var world = this.world();
 
@@ -1429,4 +1429,5 @@ NetsBloxMorph.prototype.showUpdateNotification = function () {
     notification.addShadow(new Point(2, 2), 80);
 
     world.add(notification);
+    notification.drawNew();
 };
