@@ -1,27 +1,28 @@
 /*
 
-	lang-ja_HIRA.js
+    lang-ja_HIRA.js
 
-	Japanese Hiragana translation for SNAP!
+    Japanese (Hiragana) translation for Snap!
 
-	written by Jens Mönig
+    originally written by Jens Mönig
+    rewritten by Alfonso Ruzafa
 
-	Copyright (C) 2012 by Jens Mönig
+    Copyright (C) 2013 by Jens Mönig
 
-	This file is part of Snap!.
+    This file is part of Snap!.
 
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -33,19 +34,23 @@
     Translating Snap! is easy:
 
 
-    1. Download
+    1. Create a translation from scratch:
 
-    Download the sources and extract them into a local folder on your
-    computer:
+    Switch to the english version of Snap! (or choose one of the available
+    languages you are more comfortable with):
 
-        <http://snap.berkeley.edu/snapsource/snap.zip>
+        Settings > Language... > English
 
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
+    While holding the shift key, press the Settings button again. A dev-only
+    option will be shown: "Generate lang-XX.js file...". Click it and you will
+    download a file containing all Snap! translatable strings along with the
+    available translations for the language you choosed above and "undefined"
+    for those strings not yet translated.
+
+    Note that the Snap! original strings are written in english so no english
+    translation file is needed. That's because the lang-en.js will be full of
+    "undefined" translations. This is a good start point if you want to start
+    translating Snap! from scratch!
 
 
     2. Edit
@@ -53,36 +58,66 @@
     Edit the translation file with a regular text editor, or with your
     favorite JavaScript editor.
 
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
+    Replace all occurrences of the "XX" from SnapTranslator.dict["XX"]
+    in the file with the two-letter ISO 639-1 code for your language,
     e.g.
 
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
+        fr - French => SnapTranslator.dict['fr'] = {
+        it - Italian => SnapTranslator.dict['it'] = {
+        pl - Polish => SnapTranslator.dict['pl'] = {
+        pt - Portuguese => SnapTranslator.dict['pt'] = {
+        es - Spanish => SnapTranslator.dict['es'] = {
+        el - Greek => => SnapTranslator.dict['el'] = {
 
     etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
+
+    Also change the header file fields and the metadata... language name,
+    name in english and your contact info using the following format
+    (only the name is mandatory):
+
+        Your name <your@email.com> (your.homepage.com)
+
+    IMPORTANT:
+
+        Once edited, you MUST copy the metadata definition snippet and
+        paste at the end of the locale.js file. This will activate the support
+        for your language.
+
+        Rename the file you downloaded to lang-XX.js, with XX being the two
+        letter code you used previously.
+
+        Go back to to Snap! and reload the page. An entry with the name of
+        your language should be shown under the Languages menu.
 
 
     3. Translate
 
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
+    Then work through the dictionary, providing your own translations as
+    values for the english key strings. The dictionary is a straight-forward
+    JavaScript ad-hoc object, for review purposes it should be formatted
+    as follows:
 
         {
-            'English string':
+            'English string': // morphic.js:783
                 'Translation string',
             'last key':
-        }       'last value'
+                undefined,
+            'a key with a {{ placeholder }}':
+                'this translation a {{ placeholder }} has',
+        }
 
     and you only edit the indented value strings. Note that each key-value
     pair needs to be delimited by a comma, but that there shouldn't be a comma
     after the last pair (again, just overwrite the template file and you'll be
     fine).
+
+    Placeholders are strings automatically provided by Snap! in runtime.
+    You are allowed to place in the most natural way in your translation,
+    or even ignore it completely if it's justified.
+
+    Also, note that is OK if you left an english string untranslated, that is,
+    its value set to "undefined". So you don't need to delete that key/value
+    pairs. Maybe a future translator would find a suitable translation for it.
 
     If something doesn't work, or if you're unsure about the formalities you
     should check your file with
@@ -102,6 +137,7 @@
     side, it's even better to escape these characters using Unicode.
 
         see: <http://0xcc.net/jsescape/>
+        and: <https://r12a.github.io/apps/conversion/>
 
 
     5. Block specs:
@@ -135,24 +171,15 @@
 
     6. Submit
 
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
+    When you're done, send the lang-XX.js file to me for inclusion in the
+    official Snap! distribution.
     Once your translation has been included, Your name will the shown in the
     "Translators" tab in the "About Snap!" dialog box, and you will be able to
     directly launch a translated version of Snap! in your browser by appending
 
-        lang:xx
+        lang:XX
 
-    to the URL, xx representing your translations two-letter code.
+    to the URL, XX representing your translations two-letter code.
 
 
     7. Known issues
@@ -162,1089 +189,2463 @@
 
     Enjoy!
     -Jens
+
 */
 
-/*global SnapTranslator*/
+/* global SnapTranslator */
 
+// Copy the following code snippet and paste it in the locale.js file:
+// ✂ - - - - - - - - - - - - - - - - -  -   -
 SnapTranslator.dict.ja_HIRA = {
+    metadata: {
+        'name': // the name as it should appear in the language menu
+            '\u306B\u307B\u3093\u3054',
+        'english_name': // the english name of the language
+            'Japanese (Hiragana)',
+        'translators': [ // translators authors for the Translators tab
+            'Kazuhiro Abe <abee@squeakland.jp>'
+        ],
+        'last_changed': // this, too, will appear in the Translators tab
+            '2013-04-02',
+    },
+    strings: {},
+};
+// ✂ - - - - - - - - - - - - - - - - -  -   -
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
+SnapTranslator.dict.ja_HIRA.strings = {
+    '0': // blocks.js:1178
+        '0',
+    '1': // blocks.js:1179
+        '1',
+    '2': // blocks.js:1180
+        '2',
+    '3': // blocks.js:1181
+        '3',
+    '4': // blocks.js:1182
+        '4',
+    '5': // blocks.js:1183
+        '5',
+    '6': // blocks.js:1184
+        '6',
+    '7': // blocks.js:1185
+        '7',
+    '8': // blocks.js:1186
+        '8',
+    '9': // blocks.js:1187
+        '9',
+    'cached inputs size do not match': // blocks.js:341
+        undefined,
+    'cached input does not match': // blocks.js:347
+        undefined,
+    'pen trails': // blocks.js:820 blocks.js:8393 objects.js:578 objects.js:7436
+        '\u30DA\u30F3\u306E\u304D\u305B\u304D',
+    'stage image': // blocks.js:821
+        undefined,
+    'with inputs': // blocks.js:831
+        '\u3072\u304D\u3059\u3046',
+    'block variables': // blocks.js:840 byob.js:1053
+        undefined,
+    'Input Names': // blocks.js:844
+        '\u3072\u304D\u3059\u3046\u3081\u3044',
+    'input names': // blocks.js:850
+        '\u3072\u304D\u3059\u3046\u3081\u3044',
+    'Input name': // blocks.js:902 blocks.js:5344
+        '\u3072\u304D\u3059\u3046\u3081\u3044',
+    '(90) right': // blocks.js:935 morphic.js:4888
+        '(90) \u307F\u304E',
+    '(-90) left': // blocks.js:936 morphic.js:4889
+        '(-90) \u3072\u3060\u308A',
+    '(0) up': // blocks.js:937 morphic.js:4890
+        '(0) \u3058\u3087\u3046',
+    '(180) down': // blocks.js:938 morphic.js:4891
+        '(180) \u304B',
+    'random': // blocks.js:939
+        undefined,
+    '(1) sine': // blocks.js:956
+        undefined,
+    '(2) square': // blocks.js:957
+        undefined,
+    '(3) sawtooth': // blocks.js:958
+        undefined,
+    '(4) triangle': // blocks.js:959
+        undefined,
+    'January': // blocks.js:968 widgets.js:1941
+        '\uFF11\u304C\u3064',
+    'February': // blocks.js:969 widgets.js:1942
+        '\uFF12\u304C\u3064',
+    'March': // blocks.js:970 widgets.js:1943
+        '\uFF13\u304C\u3064',
+    'April': // blocks.js:971 widgets.js:1944
+        '\uFF14\u304C\u3064',
+    'May': // blocks.js:972 widgets.js:1945
+        '\uFF15\u304C\u3064',
+    'June': // blocks.js:973 widgets.js:1946
+        '\uFF16\u304C\u3064',
+    'July': // blocks.js:974 widgets.js:1947
+        '\uFF17\u304C\u3064',
+    'August': // blocks.js:975 widgets.js:1948
+        '\uFF18\u304C\u3064',
+    'September': // blocks.js:976 widgets.js:1949
+        '\uFF19\u304C\u3064',
+    'October': // blocks.js:977 widgets.js:1950
+        '\uFF11\uFF10\u304C\u3064',
+    'November': // blocks.js:978 widgets.js:1951
+        '\uFF11\uFF11\u304C\u3064',
+    'December': // blocks.js:979 widgets.js:1952
+        '\uFF11\uFF12\u304C\u3064',
+    'clicked': // blocks.js:988
+        undefined,
+    'pressed': // blocks.js:989
+        undefined,
+    'dropped': // blocks.js:990
+        undefined,
+    'mouse-entered': // blocks.js:991
+        undefined,
+    'mouse-departed': // blocks.js:992
+        undefined,
+    'scrolled-up': // blocks.js:993
+        undefined,
+    'scrolled-down': // blocks.js:994
+        undefined,
+    'year': // blocks.js:1004 widgets.js:2063
+        undefined,
+    'month': // blocks.js:1005
+        undefined,
+    'date': // blocks.js:1006
+        undefined,
+    'day of week': // blocks.js:1007
+        undefined,
+    'hour': // blocks.js:1008
+        undefined,
+    'minute': // blocks.js:1009
+        undefined,
+    'second': // blocks.js:1010
+        undefined,
+    'time in milliseconds': // blocks.js:1011
+        undefined,
+    'letter': // blocks.js:1021
+        undefined,
+    'whitespace': // blocks.js:1022
+        undefined,
+    'line': // blocks.js:1023 symbols.js:113
+        undefined,
+    'tab': // blocks.js:1024
+        undefined,
+    'cr': // blocks.js:1025
+        undefined,
+    'csv': // blocks.js:1026
+        undefined,
+    'last': // blocks.js:1036 blocks.js:1048
+        '\u3055\u3044\u3054',
+    'all': // blocks.js:1038 blocks.js:1265 byob.js:3874
+        '\u3059\u3079\u3066',
+    'any': // blocks.js:1049
+        '\u306B\u3093\u3044',
+    'distance': // blocks.js:1058
+        undefined,
+    'direction': // blocks.js:1059 blocks.js:2483 blocks.js:8556 objects.js:300
+        '\u3080\u304D',
+    'color': // blocks.js:1117 morphic.js:4132 morphic.js:4135 morphic.js:12219 morphic.js:12222
+        undefined,
+    'fisheye': // blocks.js:1118
+        undefined,
+    'whirl': // blocks.js:1119
+        undefined,
+    'pixelate': // blocks.js:1120
+        undefined,
+    'mosaic': // blocks.js:1121
+        undefined,
+    'duplicate': // blocks.js:1122 blocks.js:2545 blocks.js:11904 gui.js:7368 gui.js:7710 morphic.js:4167 objects.js:3236
+        '\u3075\u304F\u305B\u3044',
+    'negative': // blocks.js:1123
+        undefined,
+    'comic': // blocks.js:1124
+        undefined,
+    'confetti': // blocks.js:1125
+        undefined,
+    'saturation': // blocks.js:1126
+        undefined,
+    'brightness': // blocks.js:1127
+        undefined,
+    'ghost': // blocks.js:1128
+        '\u3086\u3046\u308C\u3044',
+    'any key': // blocks.js:1146
+        undefined,
+    'up arrow': // blocks.js:1147
+        '\u3046\u308F\u3080\u304D\u3084\u3058\u308B\u3057',
+    'down arrow': // blocks.js:1148
+        '\u3057\u305F\u3080\u304D\u3084\u3058\u308B\u3057',
+    'right arrow': // blocks.js:1149
+        '\u307F\u304E\u3080\u304D\u3084\u3058\u308B\u3057',
+    'left arrow': // blocks.js:1150
+        '\u3072\u3060\u308A\u3080\u304D\u3084\u3058\u308B\u3057',
+    'space': // blocks.js:1151
+        '\u30B9\u30DA\u30FC\u30B9',
+    'a': // blocks.js:1152
+        'a',
+    'b': // blocks.js:1153
+        'b',
+    'c': // blocks.js:1154
+        'c',
+    'd': // blocks.js:1155
+        'd',
+    'e': // blocks.js:1156
+        'e',
+    'f': // blocks.js:1157
+        'f',
+    'g': // blocks.js:1158
+        'g',
+    'h': // blocks.js:1159
+        'h',
+    'i': // blocks.js:1160
+        'i',
+    'j': // blocks.js:1161
+        'j',
+    'k': // blocks.js:1162
+        'k',
+    'l': // blocks.js:1163
+        'l',
+    'm': // blocks.js:1164
+        'm',
+    'n': // blocks.js:1165
+        'n',
+    'o': // blocks.js:1166
+        'o',
+    'p': // blocks.js:1167
+        'p',
+    'q': // blocks.js:1168
+        'q',
+    'r': // blocks.js:1169
+        'r',
+    's': // blocks.js:1170
+        's',
+    't': // blocks.js:1171
+        't',
+    'u': // blocks.js:1172
+        'u',
+    'v': // blocks.js:1173
+        'v',
+    'w': // blocks.js:1174
+        'w',
+    'x': // blocks.js:1175
+        'x',
+    'y': // blocks.js:1176
+        'y',
+    'z': // blocks.js:1177
+        'z',
+    'abs': // blocks.js:1226
+        '\u305C\u3063\u305F\u3044\u3061',
+    'ceiling': // blocks.js:1227 morphic.js:7085 morphic.js:7088
+        undefined,
+    'floor': // blocks.js:1228 morphic.js:7069 morphic.js:7072
+        undefined,
+    'sqrt': // blocks.js:1229
+        '\u3078\u3044\u307B\u3046\u3053\u3093',
+    'sin': // blocks.js:1230
+        'sin',
+    'cos': // blocks.js:1231
+        'cos',
+    'tan': // blocks.js:1232
+        'tan',
+    'asin': // blocks.js:1233
+        'asin',
+    'acos': // blocks.js:1234
+        'acos',
+    'atan': // blocks.js:1235
+        'atan',
+    'ln': // blocks.js:1236
+        'ln',
+    'log': // blocks.js:1237
+        undefined,
+    'e^': // blocks.js:1238
+        'e^',
+    '10^': // blocks.js:1239
+        undefined,
+    'encode URI': // blocks.js:1249
+        undefined,
+    'decode URI': // blocks.js:1250
+        undefined,
+    'encode URI component': // blocks.js:1251
+        undefined,
+    'decode URI component': // blocks.js:1252
+        undefined,
+    'XML escape': // blocks.js:1253
+        undefined,
+    'XML unescape': // blocks.js:1254
+        undefined,
+    'hex sha512 hash': // blocks.js:1255
+        undefined,
+    'this script': // blocks.js:1266
+        undefined,
+    'this block': // blocks.js:1267
+        undefined,
+    'all but this script': // blocks.js:1268
+        undefined,
+    'other scripts in sprite': // blocks.js:1269
+        undefined,
+    'String': // blocks.js:1290
+        undefined,
+    'Number': // blocks.js:1291 byob.js:3286
+        '\u304B\u305A',
+    'true': // blocks.js:1292 blocks.js:9529 blocks.js:9919 objects.js:2979
+        '\u306F\u3044',
+    'false': // blocks.js:1293 blocks.js:9544 blocks.js:9930 objects.js:2979
+        '\u3044\u3044\u3048',
+    'code': // blocks.js:1334
+        undefined,
+    'header': // blocks.js:1335
+        undefined,
+    'list': // blocks.js:1408 blocks.js:8487
+        '\u30EA\u30B9\u30C8',
+    'item': // blocks.js:1409
+        undefined,
+    'delimiter': // blocks.js:1410
+        undefined,
+    'collection': // blocks.js:1419
+        undefined,
+    'variables': // blocks.js:1420
+        undefined,
+    'parameters': // blocks.js:1421
+        undefined,
+    'untitled': // blocks.js:1993 blocks.js:2604 blocks.js:6443 blocks.js:11919 byob.js:1037 byob.js:3910 gui.js:979 gui.js:4036 store.js:296
+        '\u3081\u3044\u3057\u3087\u3046\u307F\u305B\u3063\u3066\u3044',
+    '{{ projectName }} script pic': // blocks.js:1993 blocks.js:2602 blocks.js:6441 byob.js:1035
+        undefined,
+    'script target cannot be found for orphaned block': // blocks.js:2203
+        undefined,
+    'a {{ className }} ("{{ value }}...")': // blocks.js:2207 morphic.js:8466 morphic.js:9146
+        undefined,
+    'Variable name': // blocks.js:2377 blocks.js:3262 objects.js:2179 objects.js:7304
+        '\u3078\u3093\u3059\u3046\u3081\u3044',
+    'help': // blocks.js:2386 objects.js:1851 objects.js:2308
+        '\u30D8\u30EB\u30D7',
+    'script pic with result': // blocks.js:2393
+        undefined,
+    'open a new window\nwith a picture of both\nthis script and its result': // blocks.js:2397
+        undefined,
+    'rename': // blocks.js:2409 blocks.js:2458 blocks.js:2521 gui.js:7708 gui.js:8409 morphic.js:7656
+        '\u306A\u307E\u3048\u3092\u3078\u3093\u3053\u3046',
+    'rename only\nthis reporter': // blocks.js:2413 blocks.js:2462 blocks.js:2523
+        undefined,
+    'rename all': // blocks.js:2416 blocks.js:2465
+        undefined,
+    'rename all blocks that\naccess this variable': // blocks.js:2418 blocks.js:2467
+        undefined,
+    'inherited': // blocks.js:2426 blocks.js:2437 blocks.js:2490 blocks.js:6370 byob.js:1099 byob.js:1121
+        undefined,
+    'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
+        undefined,
+    'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
+        undefined,
+    'transient': // blocks.js:2450
+        undefined,
+    'uncheck to save contents\nin the project': // blocks.js:2453
+        undefined,
+    'check to prevent contents\nfrom being saved': // blocks.js:2454
+        undefined,
+    'hide': // blocks.js:2472 morphic.js:4214 objects.js:394
+        '\u304B\u304F\u3059',
+    'x position': // blocks.js:2481 blocks.js:8554 objects.js:288
+        'x\u3056\u3072\u3087\u3046',
+    'y position': // blocks.js:2482 blocks.js:8555 objects.js:294
+        'y\u3056\u3072\u3087\u3046',
+    'size': // blocks.js:2484 blocks.js:8559 objects.js:382
+        '\u304A\u304A\u304D\u3055',
+    'costume #': // blocks.js:2485 blocks.js:8557 blocks.js:8561 objects.js:317
+        '\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0\u306E\u3070\u3093\u3054\u3046',
+    'header mapping': // blocks.js:2507 blocks.js:2677
+        undefined,
+    'code mapping': // blocks.js:2511 blocks.js:2681
+        undefined,
+    'relabel': // blocks.js:2527 blocks.js:2538
+        undefined,
+    'make a copy\nand pick it up': // blocks.js:2564 blocks.js:11908 morphic.js:4171
+        '\u30B3\u30D4\u30FC\u3092\u3064\u304F\u3063\u3066\n\u305D\u308C\u3092\u3064\u304B\u307F\u307E\u3059',
+    'only duplicate this block': // blocks.js:2586
+        '\u3053\u306E\u30D6\u30ED\u30C3\u30AF\u3092\u30B3\u30D4\u30FC\u3059\u308B\u3060\u3051',
+    'delete': // blocks.js:2590 blocks.js:11910 gui.js:7372 gui.js:7711 gui.js:8410 morphic.js:4215 objects.js:3242
+        '\u3055\u304F\u3058\u3087',
+    'script pic': // blocks.js:2594 byob.js:1030
+        '\u30B9\u30AF\u30EA\u30D7\u30C8\u306E\u304C\u305E\u3046',
+    'open a new window\nwith a picture of this script': // blocks.js:2608 byob.js:1041
+        '\u3053\u306E\u30B9\u30AF\u30EA\u30D7\u30C8\u306E\u304C\u305E\u3046\u3092\u3072\u3087\u3046\u3058\u3059\u308B\u3042\u305F\u3089\u3057\u3044\u30A6\u30A3\u30F3\u30C9\u30A6\u3092\u3072\u3089\u304D\u307E\u3059',
+    'download script': // blocks.js:2612
+        undefined,
+    '{{ name }} script': // blocks.js:2622
+        undefined,
+    'download this script\nas an XML file': // blocks.js:2627
+        undefined,
+    'unringify': // blocks.js:2657
+        '\u3072\u30EA\u30F3\u30B0\u304B',
+    'ringify': // blocks.js:2661 blocks.js:2673
+        '\u30EA\u30F3\u30B0\u304B',
+    'delete block': // blocks.js:2691
+        undefined,
+    'spec': // blocks.js:2692 blocks.js:2699
+        undefined,
+    'Help': // blocks.js:2980 blocks.js:2997
+        '\u30D8\u30EB\u30D7',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.': // blocks.js:3026
+        undefined,
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).': // blocks.js:3029
+        undefined,
+    'Header mapping': // blocks.js:3043
+        undefined,
+    'Code mapping': // blocks.js:3072
+        undefined,
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.': // blocks.js:3077
+        undefined,
+    'Variable exists': // blocks.js:3292
+        undefined,
+    'A variable with this name already exists in this context.': // blocks.js:3294
+        undefined,
+    'A variable with this name already exists as a global variable.': // blocks.js:3396
+        undefined,
+    'A variable with this name already exists as a sprite local variable.': // blocks.js:3455
+        undefined,
+    'Block variable name': // blocks.js:5346
+        undefined,
+    'Script variable name': // blocks.js:5348
+        undefined,
+    'undrop': // blocks.js:6320 blocks.js:6709
+        undefined,
+    'undo the last\nblock drop\nin this pane': // blocks.js:6324
+        undefined,
+    'redrop': // blocks.js:6335 blocks.js:6722
+        undefined,
+    'redo the last undone\nblock drop\nin this pane': // blocks.js:6339
+        undefined,
+    'clear undrop queue': // blocks.js:6345
+        undefined,
+    'forget recorded block drops\non this pane': // blocks.js:6351
+        undefined,
+    'clean up': // blocks.js:6359
+        '\u304D\u308C\u3044\u306B\u3059\u308B',
+    'arrange scripts\nvertically': // blocks.js:6359
+        '\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\n\u305F\u3066\u306B\u305B\u3044\u308C\u3064\u3057\u307E\u3059',
+    'add comment': // blocks.js:6360
+        '\u30B3\u30E1\u30F3\u30C8\u3092\u3064\u3044\u304B',
+    'scripts pic': // blocks.js:6362
+        undefined,
+    'open a new window\nwith a picture of all scripts': // blocks.js:6364
+        undefined,
+    'make a block': // blocks.js:6380
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u3064\u304F\u308B',
+    'Make a block': // blocks.js:6398 objects.js:2303 objects.js:2352 objects.js:2411
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u3064\u304F\u308B',
+    'nothing to undrop': // blocks.js:6549
+        undefined,
+    'unsupported action for {{ morph }}': // blocks.js:6640
+        undefined,
+    'use the keyboard\nto enter blocks': // blocks.js:6747
+        undefined,
+    'script target cannot be found for orphaned scripts': // blocks.js:6925
+        undefined,
+    'choose new parent': // blocks.js:7225 morphic.js:4253
+        undefined,
+    'new message': // blocks.js:8338 blocks.js:8370
+        undefined,
+    'Message name': // blocks.js:8345 blocks.js:8377
+        '\u30E1\u30C3\u30BB\u30FC\u30B8\u3081\u3044',
+    'any message': // blocks.js:8360
+        undefined,
+    'mouse-pointer': // blocks.js:8391 blocks.js:8420
+        '\u30DE\u30A6\u30B9\u306E\u30DD\u30A4\u30F3\u30BF\u30FC',
+    'edge': // blocks.js:8392
+        '\u306F\u3057',
+    'random position': // blocks.js:8418
+        undefined,
+    'myself': // blocks.js:8445
+        '\u3058\u3076\u3093\u3058\u3057\u3093',
+    'number': // blocks.js:8484
+        '\u304B\u305A',
+    'text': // blocks.js:8485 morphic.js:12305
+        '\u30C6\u30AD\u30B9\u30C8',
+    'Boolean': // blocks.js:8486
+        '\u3057\u3093\u304E\u3061',
+    'sprite': // blocks.js:8490
+        undefined,
+    'costume': // blocks.js:8492 objects.js:3069
+        undefined,
+    'sound': // blocks.js:8493
+        undefined,
+    'command': // blocks.js:8494
+        '\u30B3\u30DE\u30F3\u30C9',
+    'reporter': // blocks.js:8495
+        '\u30EC\u30DD\u30FC\u30BF\u30FC',
+    'predicate': // blocks.js:8496
+        '\u3058\u3085\u3064\u3054',
+    'neighbors': // blocks.js:8502
+        undefined,
+    'self': // blocks.js:8503
+        undefined,
+    'other sprites': // blocks.js:8504
+        undefined,
+    'clones': // blocks.js:8505
+        undefined,
+    'other clones': // blocks.js:8506
+        undefined,
+    'parts': // blocks.js:8508
+        undefined,
+    'anchor': // blocks.js:8509
+        undefined,
+    'stage': // blocks.js:8511 symbols.js:95
+        undefined,
+    'children': // blocks.js:8513
+        undefined,
+    'parent': // blocks.js:8514 gui.js:7178 gui.js:7385
+        undefined,
+    'temporary?': // blocks.js:8516
+        undefined,
+    'name': // blocks.js:8519
+        undefined,
+    'costumes': // blocks.js:8520
+        undefined,
+    'sounds': // blocks.js:8521
+        undefined,
+    'dangling?': // blocks.js:8522
+        undefined,
+    'rotation x': // blocks.js:8523
+        undefined,
+    'rotation y': // blocks.js:8524
+        undefined,
+    'center x': // blocks.js:8525
+        undefined,
+    'center y': // blocks.js:8526
+        undefined,
+    'costume name': // blocks.js:8558 blocks.js:8562
+        undefined,
+    'Turtle': // blocks.js:8582 gui.js:7941 objects.js:3166 threads.js:3349
+        '\u30BF\u30FC\u30C8\u30EB',
+    'Empty': // blocks.js:8584 gui.js:7941 objects.js:3166 threads.js:3350
+        '\u305D\u3089',
+    'code number mapping': // blocks.js:8835
+        undefined,
+    'code string mapping': // blocks.js:8840
+        undefined,
+    'String <#1>': // blocks.js:8864
+        undefined,
+    'Code mapping - {{ type }}': // blocks.js:8864 blocks.js:8879
+        undefined,
+    'Number <#1>': // blocks.js:8879
+        undefined,
+    'code true mapping': // blocks.js:9500
+        undefined,
+    'code false mapping': // blocks.js:9505
+        undefined,
+    'Code mapping - {{ name }}': // blocks.js:9529 blocks.js:9544 blocks.js:10662
+        undefined,
+    'code list mapping': // blocks.js:10619
+        undefined,
+    'code item mapping': // blocks.js:10623
+        undefined,
+    'code delimiter mapping': // blocks.js:10627
+        undefined,
+    'list item delimiter': // blocks.js:10642
+        undefined,
+    'list contents <#1>': // blocks.js:10646
+        undefined,
+    'list item <#1>': // blocks.js:10650
+        undefined,
+    'input list': // blocks.js:10750
+        '\u3072\u304D\u3059\u3046\u30EA\u30B9\u30C8',
+    'add comment here': // blocks.js:11762
+        '\u3053\u3053\u306B\u30B3\u30E1\u30F3\u30C8\u3092\u3064\u3044\u304B',
+    'comment pic': // blocks.js:11912
+        undefined,
+    '{{ projectName }} comment pic': // blocks.js:11917
+        undefined,
+    'open a new window\nwith a picture of this comment': // blocks.js:11923
+        undefined,
+    'Change block': // byob.js:885
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u3078\u3093\u3053\u3046',
+    '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
+        undefined,
+    'translations': // byob.js:1044
+        undefined,
+    'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
+        undefined,
+    'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
+        undefined,
+    'remove block variables': // byob.js:1061
+        undefined,
+    'duplicate block definition': // byob.js:1079
+        undefined,
+    'delete block definition': // byob.js:1089 byob.js:1133 byob.js:1147
+        '\u30D6\u30ED\u30C3\u30AF\u306E\u3066\u3044\u304E\u3092\u3055\u304F\u3058\u3087',
+    'edit': // byob.js:1157 gui.js:7699 morphic.js:8730 morphic.js:9477 objects.js:3255 objects.js:3261 objects.js:7422
+        '\u3078\u3093\u3057\u3085\u3046',
+    'Delete Custom Block': // byob.js:1228
+        '\u30AB\u30B9\u30BF\u30E0\u30D6\u30ED\u30C3\u30AF\u3092\u3055\u304F\u3058\u3087',
+    'Are you sure you want to delete this\ncustom block and all its instances?': // byob.js:1229
+        '\u3053\u306E\u30AB\u30B9\u30BF\u30E0\u30D6\u30ED\u30C3\u30AF\u3068\u3059\u3079\u3066\u306E\u30A4\u30F3\u30B9\u30BF\u30F3\u30B9\u3092\n\u3055\u304F\u3058\u3087\u3057\u3066\u3082\u3088\u3044\u3067\u3059\u304B?',
+    'OK': // byob.js:1648 byob.js:2117 byob.js:3237 byob.js:3848 gui.js:3713 morphic.js:3958 morphic.js:4028 morphic.js:4054 objects.js:8312 paint.js:161 tables.js:1212 widgets.js:1574 widgets.js:1708 widgets.js:1791 widgets.js:1874 widgets.js:2155 widgets.js:2434
+        'OK',
+    'Cancel': // byob.js:1649 byob.js:2120 byob.js:3243 byob.js:3849 gui.js:3371 gui.js:3714 gui.js:5941 gui.js:6843 gui.js:8996 gui.js:9134 morphic.js:4031 morphic.js:4057 objects.js:8313 paint.js:162 widgets.js:1709 widgets.js:1792 widgets.js:1887 widgets.js:2156
+        '\u30AD\u30E3\u30F3\u30BB\u30EB',
+    'Command': // byob.js:1770
+        '\u30B3\u30DE\u30F3\u30C9',
+    'Reporter': // byob.js:1779 byob.js:3290
+        '\u30E2\u30CB\u30BF\u30FC',
+    'Predicate': // byob.js:1788 byob.js:3291
+        '\u3058\u3085\u3064\u3054',
+    'for all sprites': // byob.js:1850 byob.js:3662
+        '\u3059\u3079\u3066\u306E\u30B9\u30D7\u30E9\u30A4\u30C8\u3088\u3046',
+    'for this sprite only': // byob.js:1855 byob.js:3667
+        '\u3053\u306E\u30B9\u30D7\u30E9\u30A4\u30C8\u3088\u3046',
+    'Block Editor': // byob.js:2065
+        '\u30D6\u30ED\u30C3\u30AF\u30A8\u30C7\u30A3\u30BF\u30FC',
+    'Method Editor': // byob.js:2066
+        undefined,
+    'Apply': // byob.js:2119
+        '\u3066\u304D\u3088\u3046',
+    'Local Block(s) in Global Definition': // byob.js:2204
+        undefined,
+    'This global block definition contains one or more\nlocal custom blocks which must be removed first.': // byob.js:2205
+        undefined,
+    'Same Named Blocks': // byob.js:2221
+        undefined,
+    'Another custom block with this name exists.\nWould you like to replace it?': // byob.js:2222
+        undefined,
+    'Custom Block Translations': // byob.js:2373
+        undefined,
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs': // byob.js:2379
+        undefined,
+    'Edit label fragment': // byob.js:2752
+        '\u30E9\u30D9\u30EB\u306E\u3060\u3093\u307A\u3093\u3092\u3078\u3093\u3057\u3085\u3046',
+    'Create input name': // byob.js:2754
+        '\u3072\u304D\u3059\u3046\u3081\u3044\u3092\u3055\u304F\u305B\u3044',
+    'Edit input name': // byob.js:2755
+        '\u3072\u304D\u3059\u3046\u3081\u3044\u3092\u3078\u3093\u3057\u3085\u3046',
+    'new line': // byob.js:2800 byob.js:3266
+        undefined,
+    'Title text': // byob.js:3061
+        '\u30BF\u30A4\u30C8\u30EB\u30C6\u30AD\u30B9\u30C8',
+    'Delete': // byob.js:3239 gui.js:5940
+        '\u3055\u304F\u3058\u3087',
+    'Object': // byob.js:3283
+        '\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8',
+    'Text': // byob.js:3284
+        '\u30C6\u30AD\u30B9\u30C8',
+    'List': // byob.js:3285
+        '\u30EA\u30B9\u30C8',
+    'Any type': // byob.js:3287
+        '\u305C\u3093\u30BF\u30A4\u30D7',
+    'Boolean (T/F)': // byob.js:3288
+        '\u3057\u3093\u304E\u3061 (\u306F\u3044/\u3044\u3044\u3048)',
+    'Command\n(inline)': // byob.js:3289
+        '\u30B3\u30DE\u30F3\u30C9\n(\u30A4\u30F3\u30E9\u30A4\u30F3)',
+    'Command\n(C-shape)': // byob.js:3292
+        '\u30B3\u30DE\u30F3\u30C9\n(C\u3051\u3044)',
+    'Any\n(unevaluated)': // byob.js:3293
+        '\u306B\u3093\u3044\n(\u307F\u3072\u3087\u3046\u304B)',
+    'Boolean\n(unevaluated)': // byob.js:3294
+        '\u3057\u3093\u304E\u3061\n(\u307F\u3072\u3087\u3046\u304B)',
+    'Single input': // byob.js:3299
+        '\u305F\u3093\u3044\u3064\u3072\u304D\u3059\u3046',
+    'Multiple inputs (value is list of inputs)': // byob.js:3304
+        '\u3075\u304F\u3059\u3046\u306E\u3072\u304D\u3059\u3046 (\u3042\u305F\u3044\u306F\u3072\u304D\u3059\u3046\u306E\u30EA\u30B9\u30C8)',
+    'Upvar - make internal variable visible to caller': // byob.js:3309
+        'Upvar - \u3088\u3073\u3060\u3057\u3082\u3068\u304B\u3089\u307F\u3048\u308B\u306A\u3044\u3076\u3066\u304D\u306A\u3078\u3093\u3059\u3046',
+    'Default Value': // byob.js:3314
+        '\u30C7\u30D5\u30A9\u30EB\u30C8\u3061',
+    'options': // byob.js:3570
+        undefined,
+    'read-only': // byob.js:3573
+        undefined,
+    'Input Slot Options': // byob.js:3593
+        undefined,
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42': // byob.js:3597
+        undefined,
+    'Export blocks': // byob.js:3776 byob.js:3914 gui.js:3187 gui.js:3835
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u304B\u304D\u3060\u3057',
+    'select': // byob.js:3873
+        '\u305B\u3093\u305F\u304F',
+    'none': // byob.js:3875 objects.js:5421 objects.js:5427
+        '\u306A\u3057',
+    '{{ projectName }} blocks': // byob.js:3910
+        undefined,
+    'no blocks were selected': // byob.js:3915 byob.js:4009 byob.js:4102
+        undefined,
+    'Import blocks': // byob.js:3962 byob.js:3963 byob.js:4008
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u3088\u307F\u3053\u307F',
+    'Imported Blocks Module': // byob.js:4002 byob.js:4003 gui.js:4355
+        undefined,
+    'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
+        undefined,
+    '{{ count }} unused block(s) removed': // byob.js:4096
+        undefined,
+    'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
+        undefined,
+    'Cloud Error': // cloud.js:159
+        undefined,
+    'You are not logged in': // cloud.js:188 cloud.js:436
+        undefined,
+    'Could not retrieve current user': // cloud.js:237
+        undefined,
+    'Could not retrieve user': // cloud.js:247
+        undefined,
+    'logout failed': // cloud.js:258
+        undefined,
+    'login failed': // cloud.js:280
+        undefined,
+    'signup failed': // cloud.js:303
+        undefined,
+    'Could not change password': // cloud.js:323
+        undefined,
+    'Password reset request failed': // cloud.js:334
+        undefined,
+    'Could not send verification email': // cloud.js:344
+        undefined,
+    'Cannot Save Project': // cloud.js:378
+        undefined,
+    'The media inside this project exceeds {{ size }}.\nPlease reduce the size of costumes or sounds.\n': // cloud.js:379
+        undefined,
+    'Project media exceeds {{ size }} size limit': // cloud.js:387
+        undefined,
+    'Serialization of program data failed': // cloud.js:398 cloud.js:401
+        undefined,
+    'Serialization of media failed': // cloud.js:409 cloud.js:412
+        undefined,
+    'Uploading {{ size }}': // cloud.js:419
+        undefined,
+    'Project could not be saved': // cloud.js:429
+        undefined,
+    'Could not fetch projects': // cloud.js:456 cloud.js:490
+        undefined,
+    'Could not fetch thumbnail': // cloud.js:509
+        undefined,
+    'Could not fetch project {{ name }}': // cloud.js:520 cloud.js:536
+        undefined,
+    'Could not fetch metadata for {{ name }}': // cloud.js:552
+        undefined,
+    'Could not delete project': // cloud.js:568
+        undefined,
+    'Could not share project': // cloud.js:586
+        undefined,
+    'Could not unshare project': // cloud.js:604
+        undefined,
+    'Could not publish project': // cloud.js:622
+        undefined,
+    'Could not unpublish project': // cloud.js:640
+        undefined,
+    'Could not update project notes': // cloud.js:655
+        undefined,
+    'Unverified account': // gui.js:281 gui.js:5252
+        undefined,
+    'Your account is still unverified.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.': // gui.js:282
+        undefined,
+    'unable to retrieve {{ resource }}': // gui.js:337 gui.js:5689 gui.js:5700 morphic.js:11546
+        undefined,
+    'unable to retrieve project': // gui.js:339
+        undefined,
+    'Fetching project\nfrom the cloud': // gui.js:417 gui.js:458 gui.js:494 gui.js:2612 gui.js:6391
+        undefined,
+    'Opening project': // gui.js:430 gui.js:470 gui.js:2627 gui.js:4222
+        undefined,
+    'Saved project\n{{ name }}': // gui.js:506
+        undefined,
+    'Visible stepping': // gui.js:716 gui.js:2756
+        undefined,
+    'development mode': // gui.js:990 morphic.js:12252
+        '\u304B\u3044\u306F\u3064\u3057\u3083\u30E2\u30FC\u30C9',
+    'don\'t rotate': // gui.js:1222
+        '\u304B\u3044\u3066\u3093\u3057\u306A\u3044',
+    'can rotate': // gui.js:1223
+        '\u304B\u3044\u3066\u3093\u3059\u308B',
+    'only face left/right': // gui.js:1224
+        '\u3055\u3086\u3046\u306B\u306F\u3093\u3066\u3093\u3059\u308B\u3060\u3051',
+    'draggable': // gui.js:1329
+        '\u30C9\u30E9\u30C3\u30B0\u304B\u306E\u3046',
+    'Scripts': // gui.js:1371 gui.js:4179
+        '\u30B9\u30AF\u30EA\u30D7\u30C8',
+    'Costumes': // gui.js:1391 gui.js:3252 gui.js:3255 gui.js:4156
+        '\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0',
+    'Backgrounds': // gui.js:1392 gui.js:3252 gui.js:3255
+        undefined,
+    'Sounds': // gui.js:1411 gui.js:3262 gui.js:3264 gui.js:4167
+        '\u304A\u3068',
+    'add a new Turtle sprite': // gui.js:1545
+        undefined,
+    'paint a new sprite': // gui.js:1567
+        undefined,
+    'take a camera snapshot and\nimport it as a new sprite': // gui.js:1592
+        undefined,
+    'Unable to import this image': // gui.js:1906
+        undefined,
+    'The picture you wish to import has been\ntainted by a restrictive cross-origin policy\nmaking it unusable for costumes in {{ appName }}.\n\nTry downloading this picture first to your\ncomputer, and import it from there.': // gui.js:1907
+        undefined,
+    'Serialization failed': // gui.js:2138 gui.js:4684 gui.js:4980 gui.js:5139
+        undefined,
+    'recording': // gui.js:2353
+        undefined,
+    'About': // gui.js:2471
+        'Snap!\u306B\u3064\u3044\u3066',
+    'Reference manual': // gui.js:2474
+        '\u30EA\u30D5\u30A1\u30EC\u30F3\u30B9\u30DE\u30CB\u30E5\u30A2\u30EB',
+    '{{ site }} website': // gui.js:2481
+        '{{ site }}\u306EWeb\u30B5\u30A4\u30C8',
+    'Download source': // gui.js:2487
+        '\u30BD\u30FC\u30B9\u3092\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9',
+    'Switch back to user mode': // gui.js:2498
+        '\u30E6\u30FC\u30B6\u30FC\u30E2\u30FC\u30C9\u306B\u304D\u308A\u304B\u3048',
+    'disable deep-Morphic\ncontext menus\nand show user-friendly ones': // gui.js:2500
+        '\u3053\u3046\u3069\u306A\u30E2\u30FC\u30D5\u30A3\u30C3\u30AF\u30B3\u30F3\u30C6\u30AF\u30B9\u30C8\u30E1\u30CB\u30E5\u30FC\u3092\u3080\u3053\u3046\u306B\u3057\u3066\n\u30E6\u30FC\u30B6\u30FC\u30D5\u30EC\u30F3\u30C9\u30EA\u30FC\u306A\u30E1\u30CB\u30E5\u30FC\u3092\u3072\u3087\u3046\u3058\u3059\u308B',
+    'Switch to dev mode': // gui.js:2507
+        '\u304B\u3044\u306F\u3064\u3057\u3083\u30E2\u30FC\u30C9\u306B\u304D\u308A\u304B\u3048\u308B',
+    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!': // gui.js:2509
+        '\u30E6\u30FC\u30B6\u30FC\u30D5\u30EC\u30F3\u30C9\u30EA\u30FC\u3067\u306F\u306A\u3044\n\u30E2\u30FC\u30D5\u30A3\u30C3\u30AF\u30B3\u30F3\u30C6\u30AF\u30B9\u30C8\u30E1\u30CB\u30E5\u30FC\u3068\n\u30A4\u30F3\u30B9\u30DA\u30AF\u30BF\u30FC\u3092\u3086\u3046\u3053\u3046\u306B\u3059\u308B',
+    'Cloud URL': // gui.js:2527 gui.js:5654
+        undefined,
+    'Login': // gui.js:2536
+        '\u30ED\u30B0\u30A4\u30F3',
+    'Signup': // gui.js:2540
+        '\u30B5\u30A4\u30F3\u30A2\u30C3\u30D7',
+    'Reset Password': // gui.js:2544
+        undefined,
+    'Resend Verification Email': // gui.js:2548
+        undefined,
+    'Logout {{ username }}': // gui.js:2553
+        undefined,
+    'Change Password': // gui.js:2557 gui.js:5420
+        undefined,
+    'Export project media only': // gui.js:2564
+        undefined,
+    'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
+        undefined,
+    'Export project without media': // gui.js:2578
+        undefined,
+    'Export project as cloud data': // gui.js:2592
+        undefined,
+    'Open shared project from cloud': // gui.js:2607
+        undefined,
+    'Author name': // gui.js:2609
+        undefined,
+    'Project name': // gui.js:2610
+        undefined,
+    'Language': // gui.js:2676
+        '\u3052\u3093\u3054',
+    'Generate {{ filename }} file': // gui.js:2679 gui.js:5035
+        undefined,
+    'builds the {{ language }} translation file': // gui.js:2684
+        undefined,
+    'Zoom blocks': // gui.js:2692 gui.js:5120
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u30BA\u30FC\u30E0',
+    'Stage size': // gui.js:2696 gui.js:5163
+        undefined,
+    'Dragging threshold': // gui.js:2701 gui.js:5226
+        undefined,
+    'specify the distance the hand has to move\nbefore it picks up an object': // gui.js:2703
+        undefined,
+    'Retina display support': // gui.js:2725
+        undefined,
+    'uncheck for lower resolution,\nsaves computing resources': // gui.js:2728
+        undefined,
+    'check for higher resolution,\nuses more computing resources': // gui.js:2729
+        undefined,
+    'Input sliders': // gui.js:2733
+        '\u306B\u3085\u3046\u308A\u3087\u304F\u30B9\u30E9\u30A4\u30C0\u30FC',
+    'uncheck to disable\ninput sliders for\nentry fields': // gui.js:2736
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u306B\u3085\u3046\u308A\u3087\u304F\u30D5\u30A3\u30FC\u30EB\u30C9\u306E\u30B9\u30E9\u30A4\u30C0\u30FC\u3092\u3080\u3053\u3046\u306B\u3057\u307E\u3059',
+    'check to enable\ninput sliders for\nentry fields': // gui.js:2737
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u306B\u3085\u3046\u308A\u3087\u304F\u30D5\u30A3\u30FC\u30EB\u30C9\u306E\u30B9\u30E9\u30A4\u30C0\u30FC\u3092\u3086\u3046\u3053\u3046\u306B\u3057\u307E\u3059',
+    'Execute on slider change': // gui.js:2741
+        undefined,
+    'uncheck to suppress\nrunning scripts\nwhen moving the slider': // gui.js:2744
+        undefined,
+    'check to run\nthe edited script\nwhen moving the slider': // gui.js:2745
+        undefined,
+    'Turbo mode': // gui.js:2749
+        '\u30BF\u30FC\u30DC\u30E2\u30FC\u30C9',
+    'uncheck to run scripts\nat normal speed': // gui.js:2752
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\n\u3064\u3046\u3058\u3087\u3046\u306E\u305D\u304F\u3069\u3067\u3058\u3063\u3053\u3046\u3057\u307E\u3059',
+    'check to prioritize\nscript execution': // gui.js:2753
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u30B9\u30AF\u30EA\u30D7\u30C8\u306E\n\u3057\u3087\u308A\u3092\u3086\u3046\u305B\u3093\u3057\u307E\u3059',
+    'uncheck to turn off\nvisible stepping': // gui.js:2759
+        undefined,
+    'check to turn on\nvisible stepping (slow)': // gui.js:2760
+        undefined,
+    'Ternary Boolean slots': // gui.js:2764
+        undefined,
+    'uncheck to limit\nBoolean slots to true / false': // gui.js:2770
+        undefined,
+    'check to allow\nempty Boolean slots': // gui.js:2771
+        undefined,
+    'Camera support': // gui.js:2775
+        undefined,
+    'uncheck to disable\ncamera support': // gui.js:2778
+        undefined,
+    'check to enable\ncamera support': // gui.js:2779
+        undefined,
+    'Blurred shadows': // gui.js:2784
+        '\u306F\u3093\u3068\u3046\u3081\u3044\u306E\u304B\u3052',
+    'uncheck to use solid drop\nshadows and highlights': // gui.js:2787
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u305F\u3093\u3057\u3087\u304F\u306E\u304B\u3052\u3068\n\u30CF\u30A4\u30E9\u30A4\u30C8\u306B\u306A\u308A\u307E\u3059',
+    'check to use blurred drop\nshadows and highlights': // gui.js:2788
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u306F\u3093\u3068\u3046\u3081\u3044\u306E\u304B\u3052\u3068\n\u30CF\u30A4\u30E9\u30A4\u30C8\u306B\u306A\u308A\u307E\u3059',
+    'Zebra coloring': // gui.js:2792
+        '\u3058\u307E\u3005\u3067\u3072\u3087\u3046\u3058',
+    'uncheck to disable alternating\ncolors for nested block': // gui.js:2795
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u3044\u308C\u3053\u306B\u306A\u3063\u305F\n\u30D6\u30ED\u30C3\u30AF\u3092\u3075\u3064\u3046\u306B\u3072\u3087\u3046\u3058\u3057\u307E\u3059',
+    'check to enable alternating\ncolors for nested blocks': // gui.js:2796
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u3044\u308C\u3053\u306B\u306A\u3063\u305F\n\u30D6\u30ED\u30C3\u30AF\u3092\u3058\u307E\u3005\u3067\u3072\u3087\u3046\u3058\u3057\u307E\u3059',
+    'Dynamic input labels': // gui.js:2800
+        '\u3069\u3046\u3066\u304D\u306A\u306B\u3085\u3046\u308A\u3087\u304F\u30E9\u30D9\u30EB',
+    'uncheck to disable dynamic\nlabels for variadic inputs': // gui.js:2803
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u304B\u3078\u3093\u3053\u3072\u304D\u3059\u3046\u306E\n\u3069\u3046\u3066\u304D\u30E9\u30D9\u30EB\u3092\u3075\u304B\u306B\u3057\u307E\u3059',
+    'check to enable dynamic\nlabels for variadic inputs': // gui.js:2804
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u304B\u3078\u3093\u3053\u3072\u304D\u3059\u3046\u306E\n\u3069\u3046\u3066\u304D\u30E9\u30D9\u30EB\u3092\u304B\u306E\u3046\u306B\u3057\u307E\u3059',
+    'Prefer empty slot drops': // gui.js:2808
+        '\u305D\u3089\u306E\u30B9\u30ED\u30C3\u30C8\u306E\u30C9\u30ED\u30C3\u30D7\u3092\u3086\u308B\u3059',
+    'uncheck to allow dropped\nreporters to kick out others': // gui.js:2811
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30C9\u30ED\u30C3\u30D7\u3057\u305F\u30EC\u30DD\u30FC\u30BF\u30FC\u304C\n\u307B\u304B\u3092\u304A\u3057\u3060\u305B\u308B\u3088\u3046\u306B\u306A\u308A\u307E\u3059',
+    'check to focus on empty slots\nwhen dragging & dropping reporters': // gui.js:2812
+        '\u305B\u3063\u3066\u3044\u30E1\u30CB\u30E5\u30FC\u304C\u305D\u3089\u306E\u30B9\u30ED\u30C3\u30C8\u306E\u30D2\u30F3\u30C8\u3092\u3086\u308B\u3057\u307E\u3059',
+    'Long form input dialog': // gui.js:2816
+        '\u3072\u304D\u3059\u3046\u30C0\u30A4\u30A2\u30ED\u30B0\u3092\u306A\u304C\u3044\u3051\u3044\u3057\u304D\u306B\u3059\u308B',
+    'uncheck to use the input\ndialog in short form': // gui.js:2819
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u3072\u304D\u3059\u3046\u30C0\u30A4\u30A2\u30ED\u30B0\u3092\u307F\u3058\u304B\u304F\u3072\u3087\u3046\u3058\u3057\u307E\u3059',
+    'check to always show slot\ntypes in the input dialog': // gui.js:2820
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u3072\u304D\u3059\u3046\u30C0\u30A4\u30A2\u30ED\u30B0\u306B\n\u3064\u306D\u306B\u30B9\u30ED\u30C3\u30C8\u306E\u304B\u305F\u3092\u3072\u3087\u3046\u3058\u3057\u307E\u3059',
+    'Plain prototype labels': // gui.js:2823
+        undefined,
+    'uncheck to always show (+) symbols\nin block prototype labels': // gui.js:2826
+        undefined,
+    'check to hide (+) symbols\nin block prototype labels': // gui.js:2827
+        undefined,
+    'Virtual keyboard': // gui.js:2830
+        '\u304B\u305D\u3046\u30AD\u30FC\u30DC\u30FC\u30C9',
+    'uncheck to disable\nvirtual keyboard support\nfor mobile devices': // gui.js:2833
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30E2\u30D0\u30A4\u30EB\u304D\u304D\u3088\u3046\u306E\n\u304B\u305D\u3046\u30AD\u30FC\u30DC\u30FC\u30C9\u3092\u3080\u3053\u3046\u306B\u3057\u307E\u3059',
+    'check to enable\nvirtual keyboard support\nfor mobile devices': // gui.js:2834
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u30E2\u30D0\u30A4\u30EB\u304D\u304D\u3088\u3046\u306E\n\u304B\u305D\u3046\u30AD\u30FC\u30DC\u30FC\u30C9\u3092\u3086\u3046\u3053\u3046\u306B\u3057\u307E\u3059',
+    'Clicking sound': // gui.js:2838
+        '\u30AF\u30EA\u30C3\u30AF\u304A\u3093',
+    'uncheck to turn\nblock clicking\nsound off': // gui.js:2848
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30D6\u30ED\u30C3\u30AF\u306E\n\u30AF\u30EA\u30C3\u30AF\u304A\u3093\u3092\u304D\u308A\u307E\u3059',
+    'check to turn\nblock clicking\nsound on': // gui.js:2849
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30D6\u30ED\u30C3\u30AF\u306E\n\u30AF\u30EA\u30C3\u30AF\u304A\u3093\u3092\u3044\u308C\u307E\u3059',
+    'Animations': // gui.js:2852
+        '\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3',
+    'uncheck to disable\nIDE animations': // gui.js:2855
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068IDE\u306E\n\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3092\u304D\u308A\u307E\u3059',
+    'check to enable\nIDE animations': // gui.js:2856
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068IDE\u306E\n\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3092\u3044\u308C\u307E\u3059',
+    'Cache Inputs': // gui.js:2860
+        undefined,
+    'uncheck to stop caching\ninputs (for debugging the evaluator)': // gui.js:2866
+        undefined,
+    'check to cache inputs\nboosts recursion': // gui.js:2867
+        undefined,
+    'Rasterize SVGs': // gui.js:2871
+        undefined,
+    'uncheck for smooth\nscaling of vector costumes': // gui.js:2877
+        undefined,
+    'check to rasterize\nSVGs on import': // gui.js:2878
+        undefined,
+    'Flat design': // gui.js:2882
+        undefined,
+    'uncheck for default\nGUI design': // gui.js:2890
+        undefined,
+    'check for alternative\nGUI design': // gui.js:2891
+        undefined,
+    'Nested auto-wrapping': // gui.js:2895
+        undefined,
+    'uncheck to confine auto-wrapping\nto top-level block stacks': // gui.js:2906
+        undefined,
+    'check to enable auto-wrapping\ninside nested block stacks': // gui.js:2907
+        undefined,
+    'Project URLs': // gui.js:2911
+        undefined,
+    'uncheck to disable\nproject data in URLs': // gui.js:2921
+        undefined,
+    'check to enable\nproject data in URLs': // gui.js:2922
+        undefined,
+    'Sprite Nesting': // gui.js:2926
+        undefined,
+    'uncheck to disable\nsprite composition': // gui.js:2932
+        undefined,
+    'check to enable\nsprite composition': // gui.js:2933
+        undefined,
+    'First-Class Sprites': // gui.js:2937
+        undefined,
+    'uncheck to disable support\nfor first-class sprites': // gui.js:2946
+        undefined,
+    'check to enable support\nfor first-class sprite': // gui.js:2947
+        undefined,
+    'Keyboard Editing': // gui.js:2951
+        undefined,
+    'uncheck to disable\nkeyboard editing support': // gui.js:2963
+        undefined,
+    'check to enable\nkeyboard editing support': // gui.js:2964
+        undefined,
+    'Table support': // gui.js:2968
+        undefined,
+    'uncheck to disable\nmulti-column list views': // gui.js:2979
+        undefined,
+    'check for multi-column\nlist view support': // gui.js:2980
+        undefined,
+    'Table lines': // gui.js:2985
+        undefined,
+    'uncheck for less contrast\nmulti-column list views': // gui.js:2996
+        undefined,
+    'check for higher contrast\ntable views': // gui.js:2997
+        undefined,
+    'Live coding support': // gui.js:3002
+        undefined,
+    'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
+        undefined,
+    'uncheck to disable live\ncustom control structures': // gui.js:3009
+        undefined,
+    'check to enable\nlive custom control structures': // gui.js:3011
+        undefined,
+    'JIT compiler support': // gui.js:3015
+        undefined,
+    'uncheck to disable live\nsupport for compiling': // gui.js:3025
+        undefined,
+    'check to enable\nsupport for compiling': // gui.js:3027
+        undefined,
+    'Thread safe scripts': // gui.js:3032
+        '\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\u30B9\u30EC\u30C3\u30C9\u30BB\u30FC\u30D5\u306B\u3059\u308B',
+    'uncheck to allow\nscript reentrance': // gui.js:3035
+        undefined,
+    'check to disallow\nscript reentrance': // gui.js:3036
+        undefined,
+    'Prefer smooth animations': // gui.js:3039
+        '\u306A\u3081\u3089\u304B\u306A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u306B\u3059\u308B',
+    'uncheck for greater speed\nat variable frame rates': // gui.js:3042
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30D5\u30EC\u30FC\u30E0\u30EC\u30FC\u30C8\n\u3042\u305F\u308A\u306E\u305D\u304F\u3069\u3092\u3042\u3052\u307E\u3059',
+    'check for smooth, predictable\nanimations across computers': // gui.js:3043
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u304B\u3093\u3067\n\u306A\u3081\u3089\u304B\u3067\u3088\u305D\u304F\u304B\u306E\u3046\u306A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u306B\u3057\u307E\u3059',
+    'Flat line ends': // gui.js:3047
+        undefined,
+    'uncheck for round ends of lines': // gui.js:3053
+        undefined,
+    'check for flat ends of lines': // gui.js:3054
+        undefined,
+    'Codification support': // gui.js:3057
+        undefined,
+    'uncheck to disable\nblock to text mapping features': // gui.js:3066
+        undefined,
+    'check for block\nto text mapping features': // gui.js:3067
+        undefined,
+    'Inheritance support': // gui.js:3071
+        undefined,
+    'uncheck to disable\nsprite inheritance features': // gui.js:3080
+        undefined,
+    'check for sprite\ninheritance features': // gui.js:3081
+        undefined,
+    'Persist linked sublist IDs': // gui.js:3085
+        undefined,
+    'uncheck to disable\nsaving linked sublist identities': // gui.js:3091
+        undefined,
+    'check to enable\nsaving linked sublist identities': // gui.js:3092
+        undefined,
+    'Project notes': // gui.js:3107
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30E1\u30E2',
+    'New': // gui.js:3109
+        '\u3057\u3093\u304D',
+    'Open': // gui.js:3110 gui.js:5924
+        '\u3072\u3089\u304F',
+    'Save': // gui.js:3111 gui.js:5927 gui.js:8995 gui.js:9133
+        '\u307B\u305E\u3093',
+    'Save As': // gui.js:3112
+        '\u306A\u307E\u3048\u3092\u3064\u3051\u3066\u307B\u305E\u3093',
+    'Import': // gui.js:3115 gui.js:3370 gui.js:6842
+        '\u3088\u307F\u3053\u307F',
+    'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u30EC\u30DD\u30FC\u30BF\u30FC\u3092\u30C9\u30E9\u30C3\u30B0&\u30C9\u30ED\u30C3\u30D7\u3059\u308B\u3068\u304D\n\u305D\u3089\u306E\u30EC\u30DD\u30FC\u30BF\u30FC\u306B\u30D5\u30A9\u30FC\u30AB\u30B9\u3057\u307E\u3059\n\n\u3044\u304F\u3064\u304B\u306E\u30D6\u30E9\u30A6\u30B6\u30FC\u3067\u306F\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u307E\u305B\u3093',
+    'Export project (in a new window)': // gui.js:3153
+        undefined,
+    'show project data as XML\nin a new browser window': // gui.js:3164
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30C7\u30FC\u30BF\u3092XML\u3068\u3057\u3066\n\u30D6\u30E9\u30A6\u30B6\u306E\u3042\u305F\u3089\u3057\u3044\u30A6\u30A4\u30F3\u30C9\u30A6\u306B\u3072\u3087\u3046\u3058\u3059\u308B',
+    'Export project as plain text': // gui.js:3170
+        '\u30C6\u30AD\u30B9\u30C8\u30D5\u30A1\u30A4\u30EB\u3068\u3057\u3066\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u304B\u304D\u3060\u3059',
+    'Export project': // gui.js:3171
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u304B\u304D\u3060\u3059',
+    'save project data as XML\nto your downloads folder': // gui.js:3181
+        undefined,
+    'show global custom block definitions as XML\nin a new browser window': // gui.js:3189
+        '\u30B0\u30ED\u30FC\u30D0\u30EB\u30AB\u30B9\u30BF\u30E0\u30D6\u30ED\u30C3\u30AF\u306E\u3066\u3044\u304E\u3092XML\u3068\u3057\u3066\n\u30D6\u30E9\u30A6\u30B6\u306E\u3042\u305F\u3089\u3057\u3044\u30A6\u30A4\u30F3\u30C9\u30A6\u306B\u3072\u3087\u3046\u3058\u3059\u308B',
+    'Unused blocks': // gui.js:3193
+        undefined,
+    'find unused global custom blocks\nand remove their definitions': // gui.js:3195
+        undefined,
+    'Export summary': // gui.js:3201
+        undefined,
+    'open a new browser browser window\nwith a summary of this project': // gui.js:3203
+        undefined,
+    'Export summary with drop-shadows': // gui.js:3208
+        undefined,
+    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers': // gui.js:3210
+        undefined,
+    'Export all scripts as pic': // gui.js:3217
+        undefined,
+    'show a picture of all scripts\nand block definitions': // gui.js:3219
+        undefined,
+    'Import tools': // gui.js:3226
+        '\u30C4\u30FC\u30EB\u3092\u3088\u307F\u3053\u3080',
+    'load the official library of\npowerful blocks': // gui.js:3235
+        '\u304D\u3087\u3046\u308A\u3087\u304F\u306A\u30D6\u30ED\u30C3\u30AF\u306E\u3053\u3046\u3057\u304D\n\u30E9\u30A4\u30D6\u30E9\u30EA\u3092\u3088\u307F\u3053\u3080',
+    'Libraries': // gui.js:3238
+        undefined,
+    'select categories of additional blocks to add to this project': // gui.js:3248
+        undefined,
+    'Select a costume from the media library': // gui.js:3259
+        undefined,
+    'Select a sound from the media library': // gui.js:3266
+        undefined,
+    'Opening {{ resource }}': // gui.js:3341
+        undefined,
+    'License': // gui.js:3529 gui.js:3630
+        '\u30E9\u30A4\u30BB\u30F3\u30B9',
+    'Contributors': // gui.js:3548
+        '\u3053\u3046\u3051\u3093\u3057\u3083',
+    'current module versions': // gui.js:3574
+        '\u3052\u3093\u3056\u3044\u306E\u30E2\u30B8\u30E5\u30FC\u30EB\u306E\u30D0\u30FC\u30B8\u30E7\u30F3',
+    'Translations': // gui.js:3578
+        '\u307B\u3093\u3084\u304F',
+    'About Snap': // gui.js:3581
+        'Snap\u306B\u3064\u3044\u3066',
+    'Translators': // gui.js:3597
+        '\u307B\u3093\u3084\u304F\u3057\u3083',
+    'Back': // gui.js:3613
+        '\u3082\u3069\u308B',
+    'Modules': // gui.js:3646
+        '\u30E2\u30B8\u30E5\u30FC\u30EB',
+    'Credits': // gui.js:3662
+        '\u30AF\u30EC\u30B8\u30C3\u30C8',
+    'Project Notes': // gui.js:3709
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30E1\u30E2',
+    'Saving': // gui.js:3770
+        undefined,
+    'Saved': // gui.js:3788 gui.js:3796
+        '\u307B\u305E\u3093\u3057\u307E\u3057\u305F',
+    'Save failed': // gui.js:3790
+        undefined,
+    'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
+        undefined,
+    'Exported': // gui.js:3816 gui.js:5471 gui.js:5497 gui.js:5507 gui.js:5527 gui.js:5539
+        undefined,
+    'Export failed': // gui.js:3819 gui.js:5475 gui.js:5500 gui.js:5530
+        undefined,
+    'this project doesn\'t have any\ncustom global blocks yet': // gui.js:3836
+        '\u3053\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306F\u30AB\u30B9\u30BF\u30E0\u30B0\u30ED\u30FC\u30D0\u30EB\u30D6\u30ED\u30C3\u30AF\u3092\u3082\u3063\u3066\u3044\u307E\u305B\u3093',
+    'there are currently no unused\nglobal custom blocks in this project': // gui.js:3873
+        undefined,
+    'Untitled': // gui.js:3937 gui.js:8190 store.js:368 store.js:1651
+        '\u3081\u3044\u3057\u3087\u3046\u307F\u305B\u3063\u3066\u3044',
+    'Variables': // gui.js:3968 objects.js:153
+        '\u3078\u3093\u3059\u3046',
+    'Blocks': // gui.js:4000
+        undefined,
+    'Contents': // gui.js:4103
+        undefined,
+    'Kind of {{ name }}': // gui.js:4132
+        undefined,
+    'Part of {{ name }}': // gui.js:4139
+        undefined,
+    'Parts': // gui.js:4144
+        undefined,
+    'For all Sprites': // gui.js:4197 gui.js:4201
+        undefined,
+    'Load failed': // gui.js:4251 gui.js:4302 gui.js:4341 gui.js:4384 gui.js:4394 gui.js:4427
+        undefined,
+    'Opening project\n{{ size }}': // gui.js:4269
+        undefined,
+    'Opening blocks': // gui.js:4322
+        undefined,
+    'Imported Blocks Module: {{ name }}': // gui.js:4354
+        undefined,
+    'Opening sprite': // gui.js:4368
+        undefined,
+    'Imported Media Module': // gui.js:4398
+        undefined,
+    'Opening script': // gui.js:4406
+        undefined,
+    'Imported Script': // gui.js:4442
+        undefined,
+    'opening project\n{{ name }}': // gui.js:4448
+        undefined,
+    'Could not export {{ name }}': // gui.js:4519
+        undefined,
+    'This item could not be exported from {{ appName }}.\nIt\'s likely that your project may contain a lot of media (sounds and images) or that you are using an older browser.\nPlease try using a recent version of Chrome, Firefox, or Safari.': // gui.js:4520
+        undefined,
+    'entering user mode': // gui.js:4585
+        undefined,
+    'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.': // gui.js:4604
+        undefined,
+    'Replace the current project with a new one?': // gui.js:4914
+        '\u3052\u3093\u3056\u3044\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u3042\u305F\u3089\u3057\u3044\u3082\u306E\u3067\u304A\u304D\u304B\u3048\u307E\u3059\u304B?',
+    'New Project': // gui.js:4915
+        '\u3042\u305F\u3089\u3057\u3044\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8',
+    'Generating {{ filename }} file': // gui.js:5011
+        undefined,
+    'Could not generate the language file': // gui.js:5039
+        undefined,
+    'build': // gui.js:5057
+        '\u3064\u304F\u308D\u3046',
+    'your own': // gui.js:5060
+        '\u3042\u306A\u305F\u3058\u3057\u3093\u306E',
+    'blocks': // gui.js:5064
+        '\u30D6\u30ED\u30C3\u30AF\u3092',
+    'normal (1x)': // gui.js:5106
+        '\u30CE\u30FC\u30DE\u30EB (1x)',
+    'demo (1.2x)': // gui.js:5107
+        '\u30C7\u30E2 (1.2x)',
+    'presentation (1.4x)': // gui.js:5108
+        '\u30D7\u30EC\u30BC\u30F3\u30C6\u30FC\u30B7\u30E7\u30F3 (1.4x)',
+    'big (2x)': // gui.js:5109
+        '\u3060\u3044 (2x)',
+    'huge (4x)': // gui.js:5110
+        '\u3068\u304F\u3060\u3044 (4x)',
+    'giant (8x)': // gui.js:5111
+        '\u304D\u3087\u3060\u3044 (8x)',
+    'monstrous (10x)': // gui.js:5112
+        '\u3061\u3087\u3046\u304D\u3087\u3060\u3044 (10x)',
+    'Stage width': // gui.js:5166
+        undefined,
+    'Stage height': // gui.js:5167
+        undefined,
+    '{{ count }} days left': // gui.js:5253
+        undefined,
+    'You are now logged in, and your account\nis enabled for three days.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.\n\nYou have {{ count }} days left.': // gui.js:5254
+        undefined,
+    'Sign in': // gui.js:5277
+        '\u30B5\u30A4\u30F3\u30A4\u30F3',
+    'stay signed in on this computer\nuntil logging out': // gui.js:5283
+        '\u30ED\u30B0\u30A2\u30A6\u30C8\u3059\u308B\u307E\u3067\u3053\u306E\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u306B\n\u30B5\u30A4\u30F3\u30A4\u30F3\u3057\u305F\u307E\u307E\u306B\u3059\u308B',
+    'You can now log in': // gui.js:5305
+        undefined,
+    'Sign up': // gui.js:5314
+        '\u30B5\u30A4\u30F3\u30A2\u30C3\u30D7',
+    'Terms of Service': // gui.js:5317
+        '\u30B5\u30FC\u30D3\u30B9\u308A\u3088\u3046\u304D\u3084\u304F',
+    'Privacy': // gui.js:5319
+        '\u3053\u3058\u3093\u3058\u3087\u3046\u307B\u3046',
+    'I have read and agree\nto the Terms of Service': // gui.js:5320
+        '\u30B5\u30FC\u30D3\u30B9\u308A\u3088\u3046\u304D\u3084\u304F\u3092\u3088\u307F\n\u305D\u308C\u306B\u3069\u3046\u3044\u3057\u307E\u3059',
+    'An e-mail with a link to\nreset your password\nhas been sent to the address provided': // gui.js:5340
+        undefined,
+    'Reset password': // gui.js:5352
+        undefined,
+    'An e-mail with a link to\nverify your account\nhas been sent to the address provided': // gui.js:5378
+        undefined,
+    'Resend verification email': // gui.js:5390
+        undefined,
+    'password has been changed': // gui.js:5414
+        undefined,
+    'disconnected': // gui.js:5437 gui.js:5440
+        undefined,
+    'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
+        undefined,
+    'saved': // gui.js:5452 gui.js:6481
+        undefined,
+    '{{ projectName }} media': // gui.js:5468
+        undefined,
+    'Cloud Connection': // gui.js:5552
+        undefined,
+    'Successfully connected to\n{{ url }}': // gui.js:5553
+        undefined,
+    '{{ server }} (secure)': // gui.js:5646
+        undefined,
+    'Save Project': // gui.js:5799
+        undefined,
+    'Open Project': // gui.js:5800
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u3072\u3089\u304F',
+    'Cloud': // gui.js:5836
+        undefined,
+    'Browser': // gui.js:5837
+        undefined,
+    'Examples': // gui.js:5840 gui.js:6198 gui.js:6254 gui.js:6378
+        undefined,
+    'Share': // gui.js:5930
+        undefined,
+    'Unshare': // gui.js:5931
+        undefined,
+    '(no matches)': // gui.js:6095
+        undefined,
+    'Updating\nproject list': // gui.js:6119
+        undefined,
+    'last changed\n{{ date }}': // gui.js:6314
+        undefined,
+    'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
+        undefined,
+    'Replace Project': // gui.js:6438 gui.js:6456
+        undefined,
+    'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
+        '\u307B\u3093\u3068\u3046\u306B\u3055\u304F\u3058\u3087\u3057\u307E\u3059\u304B\n"{{ projectName }}"?',
+    'Delete Project': // gui.js:6500 gui.js:6524
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u3055\u304F\u3058\u3087',
+    'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
+        undefined,
+    'Share Project': // gui.js:6544
+        undefined,
+    'sharing\nproject': // gui.js:6546
+        undefined,
+    'shared': // gui.js:6563
+        undefined,
+    'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
+        undefined,
+    'Unshare Project': // gui.js:6592
+        undefined,
+    'unsharing\nproject': // gui.js:6594
+        undefined,
+    'unshared': // gui.js:6612
+        undefined,
+    'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
+        undefined,
+    'Publish Project': // gui.js:6634
+        undefined,
+    'publishing\nproject': // gui.js:6636
+        undefined,
+    'published': // gui.js:6651
+        undefined,
+    'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
+        undefined,
+    'Unpublish Project': // gui.js:6679
+        undefined,
+    'unpublishing\nproject': // gui.js:6681
+        undefined,
+    'unpublished': // gui.js:6696
+        undefined,
+    'Import library': // gui.js:6828
+        undefined,
+    'Loading {{ resource }}': // gui.js:6926 gui.js:7059
+        undefined,
+    'Imported {{ resource }}': // gui.js:7054
+        undefined,
+    'pic': // gui.js:7353 morphic.js:4194 objects.js:7425
+        '\u304C\u305E\u3046',
+    'open a new window\nwith a picture of the stage': // gui.js:7361 objects.js:7432
+        '\u3053\u306E\u30B9\u30C6\u30FC\u30B8\u306E\u304C\u305E\u3046\u3067\n\u3042\u305F\u3089\u3057\u3044\u30A6\u30A3\u30F3\u30C9\u30A6\u3092\u3072\u3089\u304F',
+    'show': // gui.js:7366 morphic.js:7568 objects.js:388
+        '\u3072\u3087\u3046\u3058\u3059\u308B',
+    'clone': // gui.js:7370 objects.js:3238
+        undefined,
+    'release': // gui.js:7388
+        undefined,
+    'make temporary and\nhide in the sprite corral': // gui.js:7390
+        undefined,
+    'detach from {{ name }}': // gui.js:7396 objects.js:3266
+        undefined,
+    'detach all parts': // gui.js:7402 objects.js:3271
+        undefined,
+    'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
+        '\u304B\u304D\u3060\u3057',
+    'edit rotation point only': // gui.js:7702
+        undefined,
+    'rename costume': // gui.js:7755
+        '\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0\u306E\u306A\u307E\u3048\u3092\u3078\u3093\u3053\u3046',
+    'rename background': // gui.js:7756
+        undefined,
+    'default': // gui.js:7893
+        undefined,
+    'pen': // gui.js:7975 morphic.js:12402
+        undefined,
+    'tip': // gui.js:7982
+        undefined,
+    'middle': // gui.js:7991
+        undefined,
+    'Paint a new costume': // gui.js:8085
+        undefined,
+    'Import a new costume from your webcam': // gui.js:8110
+        undefined,
+    'import a picture from another web page or from\na file on your computer by dropping it here': // gui.js:8134
+        '\u307B\u304B\u306EWeb\u30DA\u30FC\u30B8\u3084\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u3058\u3087\u3046\u306E\u304C\u305E\u3046\u3092\n\u3053\u3053\u306B\u30C9\u30ED\u30C3\u30D7\u3057\u3066\u3088\u307F\u3053\u307F\u307E\u3059',
+    'Stop': // gui.js:8345 gui.js:8367
+        '\u3066\u3044\u3057',
+    'Play': // gui.js:8345 gui.js:8375
+        '\u3055\u3044\u305B\u3044',
+    'Play sound': // gui.js:8348 gui.js:8376
+        '\u304A\u3068\u3092\u306A\u3089\u3059',
+    'Stop sound': // gui.js:8368
+        '\u304A\u3068\u3092\u3068\u3081\u308B',
+    'rename sound': // gui.js:8432
+        '\u304A\u3068\u306E\u306A\u307E\u3048\u3092\u3078\u3093\u3053\u3046',
+    'import a sound from your computer\nby dragging it into here': // gui.js:8526
+        '\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u3058\u3087\u3046\u306E\u30B5\u30A6\u30F3\u30C9\u3092\n\u3053\u3053\u306B\u30C9\u30E9\u30C3\u30B0\u3057\u3066\u3088\u307F\u3053\u307F\u307E\u3059',
+    'Record a new sound': // gui.js:8549
+        undefined,
+    'Please make sure your web browser is up to date\nand your camera is properly configured.\n\nSome browsers also require you to access {{ appName }}\nthrough HTTPS to use the camera.\n\nPlease replace the "http://" part of the address\nin your browser by "https://" and try again.': // gui.js:8874
+        undefined,
+    'Camera': // gui.js:8905
+        undefined,
+    'Camera not supported': // gui.js:8917
+        undefined,
+    'Sound Recorder': // gui.js:9067
+        undefined,
+    'a {{ className }} [{{ count }} elements]': // lists.js:123
+        undefined,
+    'cdr isn\'t a list': // lists.js:143
+        undefined,
+    'items': // lists.js:264
+        undefined,
+    'length': // lists.js:492 lists.js:703
+        '\u306A\u304C\u3055',
+    'table view': // lists.js:807
+        undefined,
+    'open in dialog': // lists.js:810 tables.js:1036
+        undefined,
+    'Retina Display Support Problem': // morphic.js:1614
+        undefined,
+    'Called {{ function }} with {{ count }} arguments': // morphic.js:1676
+        undefined,
+    'a {{ className }}[{{ count }}]': // morphic.js:2681
+        undefined,
+    'a {{ className }} {{ count }} {{ bounds }}': // morphic.js:2904
+        undefined,
+    'user features': // morphic.js:4128
+        undefined,
+    'choose another color\nfor this morph': // morphic.js:4141
+        undefined,
+    'transparency': // morphic.js:4144
+        undefined,
+    'alpha value': // morphic.js:4147
+        undefined,
+    'set this morph\'s\nalpha value': // morphic.js:4157
+        undefined,
+    'resize': // morphic.js:4160
+        undefined,
+    'show a handle\nwhich can be dragged\nto change this morph\'s extent': // morphic.js:4162
+        undefined,
+    'pick up': // morphic.js:4174
+        undefined,
+    'detach and put\ninto the hand': // morphic.js:4176
+        undefined,
+    'attach': // morphic.js:4179
+        undefined,
+    'stick this morph\nto another one': // morphic.js:4181
+        undefined,
+    'move': // morphic.js:4184 objects.js:3243
+        undefined,
+    'show a handle\nwhich can be dragged\nto move this morph': // morphic.js:4186
+        undefined,
+    'inspect': // morphic.js:4189 morphic.js:7608 morphic.js:12183
+        undefined,
+    'open a window\non all properties': // morphic.js:4191
+        undefined,
+    'open a new window\nwith a picture of this morph': // morphic.js:4198 morphic.js:12192
+        undefined,
+    'lock': // morphic.js:4203
+        undefined,
+    'make this morph\nunmovable': // morphic.js:4205
+        undefined,
+    'unlock': // morphic.js:4209
+        undefined,
+    'make this morph\nmovable': // morphic.js:4211
+        undefined,
+    'World': // morphic.js:4219
+        undefined,
+    'show the\n{{ WorldMorph }}\'s menu': // morphic.js:4223
+        undefined,
+    'choose target': // morphic.js:4721 morphic.js:5102 morphic.js:6562 morphic.js:7200
+        undefined,
+    'set rotation': // morphic.js:4868
+        undefined,
+    'interactively turn this morph\nusing a dial widget': // morphic.js:4870
+        undefined,
+    'set target': // morphic.js:5092 morphic.js:6552 morphic.js:7118
+        undefined,
+    'choose another morph\nwhose color property\nwill be controlled by this one': // morphic.js:5094
+        undefined,
+    'choose target property': // morphic.js:5122 morphic.js:6582 morphic.js:7220
+        undefined,
+    'border width': // morphic.js:5895 morphic.js:5898
+        undefined,
+    'set the border\'s\nline size': // morphic.js:5908
+        undefined,
+    'border color': // morphic.js:5911 morphic.js:5914
+        undefined,
+    'set the border\'s\nline color': // morphic.js:5920
+        undefined,
+    'corner size': // morphic.js:5923 morphic.js:5926
+        undefined,
+    'set the corner\'s\nradius': // morphic.js:5936
+        undefined,
+    'select another morph\nwhose numerical property\nwill be controlled by this one': // morphic.js:6554 morphic.js:7120
+        undefined,
+    'horizontal': // morphic.js:6701
+        undefined,
+    'toggle the\norientation': // morphic.js:6703 morphic.js:6709
+        undefined,
+    'vertical': // morphic.js:6707
+        undefined,
+    'show value': // morphic.js:7064
+        undefined,
+    'display a dialog box\nshowing the selected number': // morphic.js:7066
+        undefined,
+    'set the minimum value\nwhich can be selected': // morphic.js:7082
+        undefined,
+    'set the maximum value\nwhich can be selected': // morphic.js:7098
+        undefined,
+    'button size': // morphic.js:7101 morphic.js:7104
+        undefined,
+    'set the range\ncovered by\nthe slider button': // morphic.js:7114
+        undefined,
+    'un-mark own': // morphic.js:7595
+        undefined,
+    'mark own': // morphic.js:7595
+        undefined,
+    'highlight\n\'own\' properties': // morphic.js:7600
+        undefined,
+    'in new inspector': // morphic.js:7614
+        undefined,
+    'here': // morphic.js:7627
+        undefined,
+    '{{ name }}\nis not inspectable': // morphic.js:7635
+        undefined,
+    'save': // morphic.js:7653
+        undefined,
+    'accept changes': // morphic.js:7653
+        undefined,
+    'add property': // morphic.js:7655
+        undefined,
+    'remove': // morphic.js:7657
+        undefined,
+    'close': // morphic.js:7664 morphic.js:7948
+        undefined,
+    'new property name': // morphic.js:7789
+        undefined,
+    'property': // morphic.js:7802
+        undefined,
+    'property name': // morphic.js:7810
+        undefined,
+    'font size': // morphic.js:8732 morphic.js:8735 morphic.js:9479 morphic.js:9482
+        undefined,
+    'set this String\'s\nfont point size': // morphic.js:8745
+        undefined,
+    'serif': // morphic.js:8748 morphic.js:9505
+        undefined,
+    'sans-serif': // morphic.js:8751 morphic.js:9508
+        undefined,
+    'normal weight': // morphic.js:8754 morphic.js:9511
+        undefined,
+    'bold': // morphic.js:8756 morphic.js:9513
+        undefined,
+    'normal style': // morphic.js:8759 morphic.js:9516
+        undefined,
+    'italic': // morphic.js:8761 morphic.js:9518
+        undefined,
+    'hide blanks': // morphic.js:8764
+        undefined,
+    'show blanks': // morphic.js:8766
+        undefined,
+    'show characters': // morphic.js:8769
+        undefined,
+    'hide characters': // morphic.js:8771
+        undefined,
+    'set this Text\'s\nfont point size': // morphic.js:9492
+        undefined,
+    'align left': // morphic.js:9495
+        undefined,
+    'align right': // morphic.js:9498
+        undefined,
+    'align center': // morphic.js:9501
+        undefined,
+    'do it': // morphic.js:9563
+        undefined,
+    'evaluate the\nselected expression': // morphic.js:9565
+        undefined,
+    'show it': // morphic.js:9568
+        undefined,
+    'evaluate the\nselected expression\nand show the result': // morphic.js:9570
+        undefined,
+    'inspect it': // morphic.js:9573
+        undefined,
+    'evaluate the\nselected expression\nand inspect the result': // morphic.js:9575
+        undefined,
+    'select all': // morphic.js:9578
+        undefined,
+    'move all inside': // morphic.js:10303 morphic.js:12178
+        undefined,
+    'keep all submorphs\nwithin and visible': // morphic.js:10305 morphic.js:12180
+        undefined,
+    'auto line wrap off': // morphic.js:10685
+        undefined,
+    'turn automatic\nline wrapping\noff': // morphic.js:10687
+        undefined,
+    'auto line wrap on': // morphic.js:10691
+        undefined,
+    'enable automatic\nline wrapping': // morphic.js:10693
+        undefined,
+    '(empty)': // morphic.js:10781
+        '(\u305D\u3089)',
+    'Are you sure you want to leave?': // morphic.js:12110
+        undefined,
+    'demo': // morphic.js:12173
+        undefined,
+    'sample morphs': // morphic.js:12173
+        undefined,
+    'hide all': // morphic.js:12175
+        undefined,
+    'show all': // morphic.js:12176 objects.js:7423
+        '\u3059\u3079\u3066\u3092\u3072\u3087\u3046\u3058',
+    'open a window on\nall properties': // morphic.js:12185
+        undefined,
+    'screenshot': // morphic.js:12188 objects.js:413
+        undefined,
+    'restore display': // morphic.js:12196
+        undefined,
+    'redraw the\nscreen once': // morphic.js:12198
+        undefined,
+    'fill page': // morphic.js:12201
+        undefined,
+    'let the World automatically\nadjust to browser resizing': // morphic.js:12203
+        undefined,
+    'sharp shadows': // morphic.js:12207
+        undefined,
+    'sharp drop shadows\nuse for old browsers': // morphic.js:12209
+        undefined,
+    'blurred shadows': // morphic.js:12213
+        undefined,
+    'blurry shades\nuse for new browsers': // morphic.js:12215
+        undefined,
+    'choose the World\'s\nbackground color': // morphic.js:12228
+        undefined,
+    'touch screen settings': // morphic.js:12232
+        undefined,
+    'bigger menu fonts\nand sliders': // morphic.js:12234
+        undefined,
+    'standard settings': // morphic.js:12238
+        undefined,
+    'smaller menu fonts\nand sliders': // morphic.js:12240
+        undefined,
+    'user mode': // morphic.js:12247
+        undefined,
+    'disable developers\'\ncontext menus': // morphic.js:12249
+        undefined,
+    'about {{ resource }}': // morphic.js:12254
+        undefined,
+    'make a morph': // morphic.js:12266
+        undefined,
+    'rectangle': // morphic.js:12267 symbols.js:109
+        undefined,
+    'box': // morphic.js:12270
+        undefined,
+    'circle box': // morphic.js:12273
+        undefined,
+    'slider': // morphic.js:12277 objects.js:9461
+        '\u30B9\u30E9\u30A4\u30C0\u30FC',
+    'dial': // morphic.js:12280
+        undefined,
+    'frame': // morphic.js:12284
+        undefined,
+    'scroll frame': // morphic.js:12289
+        undefined,
+    'handle': // morphic.js:12296
+        undefined,
+    'string': // morphic.js:12300
+        undefined,
+    'Hello, World!': // morphic.js:12301 morphic.js:12329
+        undefined,
+    'speech bubble': // morphic.js:12328
+        undefined,
+    'gray scale palette': // morphic.js:12333
+        undefined,
+    'color palette': // morphic.js:12336
+        undefined,
+    'color picker': // morphic.js:12339
+        undefined,
+    'sensor demo': // morphic.js:12343
+        undefined,
+    'animation demo': // morphic.js:12353
+        undefined,
+    'modules': // morphic.js:12444
+        undefined,
+    'a lively Web GUI\ninspired by Squeak': // morphic.js:12451
+        undefined,
+    'written by {{ author }}\n{{ email }}': // morphic.js:12453
+        undefined,
+    'Motion': // objects.js:146
+        '\u3046\u3054\u304D',
+    'Control': // objects.js:147
+        '\u305B\u3044\u304E\u3087',
+    'Looks': // objects.js:148
+        '\u307F\u305F\u3081',
+    'Sensing': // objects.js:149
+        '\u3057\u3089\u3079\u308B',
+    'Sound': // objects.js:150 objects.js:8570
+        '\u304A\u3068',
+    'Operators': // objects.js:151
+        '\u3048\u3093\u3056\u3093',
+    'Pen': // objects.js:152
+        '\u30DA\u30F3',
+    'Lists': // objects.js:154
+        '\u30EA\u30B9\u30C8',
+    'Other': // objects.js:155
+        '\u305D\u306E\u305F',
+    'move %n steps': // objects.js:201
+        '%n \u307B\u3046\u3054\u304B\u3059',
+    'turn %clockwise %n degrees': // objects.js:208
+        '%clockwise %n \u3069\u307E\u308F\u3059',
+    'turn %counterclockwise %n degrees': // objects.js:215
+        '%counterclockwise %n \u3069\u307E\u308F\u3059',
+    'point in direction %dir': // objects.js:222
+        '%dir \u3069\u306B\u3080\u3051\u308B',
+    'point towards %dst': // objects.js:228
+        '%dst \u3078\u3080\u3051\u308B',
+    'go to x: %n y: %n': // objects.js:234
+        'x\u3056\u3072\u3087\u3046\u3092 %n \u3001y\u3056\u3072\u3087\u3046\u3092 %n \u306B\u3059\u308B',
+    'go to %dst': // objects.js:241
+        '%dst \u3078\u3044\u304F',
+    'glide %n secs to x: %n y: %n': // objects.js:247
+        '%n \u3073\u3087\u3046\u3067x\u3056\u3072\u3087\u3046\u3092 %n \u306B\u3001y\u3056\u3072\u3087\u3046\u3092 %n \u306B\u304B\u3048\u308B',
+    'change x by %n': // objects.js:254
+        'x\u3056\u3072\u3087\u3046\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set x to %n': // objects.js:261
+        'x\u3056\u3072\u3087\u3046\u3092 %n \u306B\u3059\u308B',
+    'change y by %n': // objects.js:268
+        'y\u3056\u3072\u3087\u3046\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set y to %n': // objects.js:275
+        '\u3056\u3072\u3087\u3046\u3092 %n \u306B\u3059\u308B',
+    'if on edge, bounce': // objects.js:282
+        '\u3082\u3057\u306F\u3057\u306B\u3064\u3044\u305F\u3089\u3001\u306F\u306D\u304B\u3048\u308B',
+    'switch to costume %cst': // objects.js:307
+        '\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0\u3092 %cst \u306B\u3059\u308B',
+    'next costume': // objects.js:312
+        '\u3064\u304E\u306E\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0\u306B\u3059\u308B',
+    'say %s for %n secs': // objects.js:323
+        '%s \u3068 %n \u3073\u3087\u3046\u3044\u3046',
+    'Hello!': // objects.js:324 objects.js:331
+        '\u3053\u3093\u306B\u3061\u306F!',
+    'say %s': // objects.js:330
+        '%s \u3068\u3044\u3046',
+    'think %s for %n secs': // objects.js:337
+        '%s \u3068 %n \u3073\u3087\u3046\u304B\u3093\u304C\u3048\u308B',
+    'Hmm': // objects.js:338 objects.js:345
+        '\u3046\u30FC\u3093',
+    'think %s': // objects.js:344
+        '%s \u3068\u304B\u3093\u304C\u3048\u308B',
+    'change %eff effect by %n': // objects.js:350
+        '%eff \u306E\u3053\u3046\u304B\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set %eff effect to %n': // objects.js:356
+        '%eff \u306E\u3053\u3046\u304B\u3092 %n \u306B\u3059\u308B',
+    'clear graphic effects': // objects.js:362
+        '\u304C\u305E\u3046\u3053\u3046\u304B\u3092\u306A\u304F\u3059',
+    'change size by %n': // objects.js:368
+        '\u304A\u304A\u304D\u3055\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set size to %n %': // objects.js:375
+        '\u304A\u304A\u304D\u3055\u3092 %n \u306B\u3059\u308B',
+    'go to front': // objects.js:400
+        '\u307E\u3048\u306B\u3060\u3059',
+    'go back %n layers': // objects.js:406
+        '%n \u305D\u3046\u3055\u3052\u308B',
+    'save %imgsource as costume named %s': // objects.js:412
+        undefined,
+    'wardrobe': // objects.js:421
+        undefined,
+    'alert %mult%s': // objects.js:428
+        '\u3051\u3044\u3053\u304F: %mult%s',
+    'console log %mult%s': // objects.js:434
+        '\u30B3\u30F3\u30BD\u30FC\u30EB\u30ED\u30B0 %mult%s',
+    'play sound %snd': // objects.js:441
+        '%snd \u306E\u304A\u3068\u3092\u306A\u3089\u3059',
+    'play sound %snd until done': // objects.js:446
+        '\u304A\u308F\u308B\u307E\u3067 %snd \u306E\u304A\u3068\u3092\u306A\u3089\u3059',
+    'stop all sounds': // objects.js:451
+        '\u3059\u3079\u3066\u306E\u304A\u3068\u3092\u3068\u3081\u308B',
+    'rest for %n beats': // objects.js:456
+        '%n \u306F\u304F\u3084\u3059\u3080',
+    'play note %note for %n beats': // objects.js:462
+        undefined,
+    'set instrument to %inst': // objects.js:468
+        undefined,
+    'change tempo by %n': // objects.js:474
+        '\u30C6\u30F3\u30DD\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set tempo to %n bpm': // objects.js:480
+        '\u30C6\u30F3\u30DD\u3092 %n BPM\u306B\u3059\u308B',
+    'tempo': // objects.js:486
+        '\u30C6\u30F3\u30DD',
+    'jukebox': // objects.js:494
+        undefined,
+    'clear': // objects.js:501 paint.js:230
+        '\u3051\u3059',
+    'pen down': // objects.js:507
+        '\u30DA\u30F3\u3092\u304A\u308D\u3059',
+    'pen up': // objects.js:513
+        '\u30DA\u30F3\u3092\u3042\u3052\u308B',
+    'set pen color to %clr': // objects.js:519
+        '\u30DA\u30F3\u306E\u3044\u308D\u3092 %clr \u306B\u3059\u308B',
+    'change pen color by %n': // objects.js:525
+        '\u30DA\u30F3\u306E\u3044\u308D\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set pen color to %n': // objects.js:532
+        '\u30DA\u30F3\u306E\u3044\u308D\u3092 %n \u306B\u3059\u308B',
+    'change pen shade by %n': // objects.js:539
+        '\u30DA\u30F3\u306E\u3053\u3055\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set pen shade to %n': // objects.js:546
+        '\u30DA\u30F3\u306E\u3053\u3055\u3092 %n \u306B\u3059\u308B',
+    'change pen size by %n': // objects.js:553
+        '\u30DA\u30F3\u306E\u3075\u3068\u3055\u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'set pen size to %n': // objects.js:560
+        '\u30DA\u30F3\u306E\u3075\u3068\u3055\u3092 %n \u306B\u3059\u308B',
+    'stamp': // objects.js:567
+        '\u30B9\u30BF\u30F3\u30D7',
+    'fill': // objects.js:573
+        undefined,
+    'when %greenflag clicked': // objects.js:585
+        '%greenflag \u304C\u304A\u3055\u308C\u305F\u3068\u304D',
+    'when %keyHat key pressed': // objects.js:590
+        '%keyHat \u304C\u304A\u3055\u308C\u305F\u3068\u304D',
+    'when I am %interaction': // objects.js:595
+        undefined,
+    'when I receive %msgHat': // objects.js:601
+        '%msgHat \u3092\u3046\u3051\u3068\u3063\u305F\u3068\u304D',
+    'when %b': // objects.js:606
+        undefined,
+    'broadcast %msg': // objects.js:611
+        '%msg \u3092\u304A\u304F\u308B',
+    'broadcast %msg and wait': // objects.js:616
+        '%msg \u3092\u304A\u304F\u3063\u3066\u307E\u3064',
+    'message': // objects.js:621
+        undefined,
+    'wait %n secs': // objects.js:626
+        '%n \u3073\u3087\u3046\u307E\u3064',
+    'wait until %b': // objects.js:632
+        '%b \u307E\u3067\u307E\u3064',
+    'forever %c': // objects.js:637
+        '\u305A\u3063\u3068 %c',
+    'repeat %n %c': // objects.js:642
+        '%n \u304B\u3044\u304F\u308A\u304B\u3048\u3059 %c',
+    'repeat until %b %c': // objects.js:648
+        '%b \u307E\u3067\u304F\u308A\u304B\u3048\u3059 %c',
+    'if %b %c': // objects.js:653
+        '\u3082\u3057 %b \u306A\u3089 %c',
+    'if %b %c else %c': // objects.js:658
+        '\u3082\u3057 %b \u306A\u3089 %c \u3067\u306A\u3051\u308C\u3070 %c',
+    'stop %stopChoices': // objects.js:678
+        undefined,
+    'run %cmdRing %inputs': // objects.js:693
+        '%cmdRing \u3092 %inputs \u3067\u3058\u3063\u3053\u3046\u3059\u308B',
+    'launch %cmdRing %inputs': // objects.js:698
+        '%cmdRing \u3092 %inputs \u3067\u304D\u3069\u3046\u3059\u308B',
+    'call %repRing %inputs': // objects.js:703
+        '%repRing \u3092 %inputs \u3067\u3088\u3076',
+    'report %s': // objects.js:708
+        '%s \u3092\u304B\u3048\u3059',
+    'run %cmdRing w/continuation': // objects.js:720
+        '\u3051\u3044\u305E\u304F\u3064\u304D\u3067 %cmdRing \u3092\u3058\u3063\u3053\u3046\u3059\u308B',
+    'call %cmdRing w/continuation': // objects.js:725
+        '\u3051\u3044\u305E\u304F\u3064\u304D\u3067 %cmdRing \u3092\u3088\u3076',
+    'warp %c': // objects.js:730
+        '\u30EF\u30FC\u30D7\u3059\u308B %c',
+    'tell %spr to %cmdRing %inputs': // objects.js:739
+        undefined,
+    'ask %spr for %repRing %inputs': // objects.js:744
+        undefined,
+    'when I start as a clone': // objects.js:752
+        '\u30AF\u30ED\u30FC\u30F3\u3055\u308C\u305F\u3068\u304D',
+    'create a clone of %cln': // objects.js:757
+        '%cln \u306E\u30AF\u30ED\u30FC\u30F3\u3092\u3064\u304F\u308B',
+    'a new clone of %cln': // objects.js:762
+        undefined,
+    'delete this clone': // objects.js:768
+        '\u3053\u306E\u30AF\u30ED\u30FC\u30F3\u3092\u3055\u304F\u3058\u3087\u3059\u308B',
+    'pause all %pause': // objects.js:776
+        undefined,
+    'touching %col ?': // objects.js:785
+        '%col \u306B\u3075\u308C\u305F',
+    'touching %clr ?': // objects.js:791
+        '%clr \u3044\u308D\u306B\u3075\u308C\u305F',
+    'color %clr is touching %clr ?': // objects.js:797
+        '%clr \u3044\u308D\u304C %clr \u3044\u308D\u306B\u3075\u308C\u305F',
+    'filtered for %clr': // objects.js:803
+        '%clr \u3044\u308D\u3092\u3061\u3085\u3046\u3057\u3085\u3064',
+    'stack size': // objects.js:809
+        '\u30B9\u30BF\u30C3\u30AF\u306E\u304A\u304A\u304D\u3055',
+    'frames': // objects.js:815
+        '\u30D5\u30EC\u30FC\u30E0',
+    'processes': // objects.js:821
+        undefined,
+    'ask %s and wait': // objects.js:826
+        '%s \u3068\u304D\u3044\u3066\u307E\u3064',
+    'what\'s your name?': // objects.js:827
+        '\u3042\u306A\u305F\u306E\u306A\u307E\u3048\u306F\u306A\u3093\u3067\u3059\u304B?',
+    'answer': // objects.js:833 objects.js:838
+        '\u3053\u305F\u3048',
+    'mouse x': // objects.js:843
+        '\u30DE\u30A6\u30B9\u306Ex\u3056\u3072\u3087\u3046',
+    'mouse y': // objects.js:848
+        '\u30DE\u30A6\u30B9\u306Ey\u3056\u3072\u3087\u3046',
+    'mouse down?': // objects.js:853
+        '\u30DE\u30A6\u30B9\u304C\u304A\u3055\u308C\u305F',
+    'key %key pressed?': // objects.js:858
+        '%key \u304C\u304A\u3055\u308C\u305F',
+    '%rel to %dst': // objects.js:871
+        undefined,
+    'reset timer': // objects.js:877
+        '\u30BF\u30A4\u30DE\u30FC\u3092\u30EA\u30BB\u30C3\u30C8',
+    'timer': // objects.js:883 objects.js:888
+        '\u30BF\u30A4\u30DE\u30FC',
+    '%att of %spr': // objects.js:893
+        undefined,
+    'url %s': // objects.js:899
+        undefined,
+    'turbo mode?': // objects.js:905
+        '\u30BF\u30FC\u30DC\u30E2\u30FC\u30C9?',
+    'set turbo mode to %b': // objects.js:910
+        '\u30BF\u30FC\u30DC\u30FC\u30E2\u30FC\u30C9\u3092 %b \u306B\u3059\u308B',
+    'current %dates': // objects.js:915
+        undefined,
+    'my %get': // objects.js:920
+        undefined,
+    'round %n': // objects.js:968
+        '%n \u3092\u307E\u308B\u3081\u308B',
+    '%fun of %n': // objects.js:973
+        '%fun %n',
+    '%n mod %n': // objects.js:979
+        '%n \u3092 %n \u3067\u308F\u3063\u305F\u3042\u307E\u308A',
+    'pick random %n to %n': // objects.js:984
+        '%n \u304B\u3089 %n \u307E\u3067\u306E\u3089\u3093\u3059\u3046',
+    '%b and %b': // objects.js:1005
+        '%b \u304B\u3064 %b',
+    '%b or %b': // objects.js:1010
+        '%b \u307E\u305F\u306F %b',
+    'not %b': // objects.js:1015
+        '%b \u3067\u306F\u306A\u3044',
+    'join %words': // objects.js:1033
+        '%words \u3092\u3064\u306A\u3050',
+    'hello': // objects.js:1034 objects.js:1075
+        '\u30CF\u30ED\u30FC',
+    'world': // objects.js:1034 objects.js:1040 objects.js:1046 objects.js:1075
+        '\u30EF\u30FC\u30EB\u30C9',
+    'letter %n of %s': // objects.js:1039
+        '%n \u3082\u3058\u3081\u306E\u3082\u3058 %s',
+    'length of %s': // objects.js:1045
+        '%s \u306E\u306A\u304C\u3055',
+    'unicode of %s': // objects.js:1051
+        '%s \u306EUnicode',
+    'unicode %n as letter': // objects.js:1057
+        'Unicode\u3067 %n \u306E\u3082\u3058',
+    'is %s a %typ ?': // objects.js:1063
+        '%s \u306F %typ \u304C\u305F',
+    'is %s identical to %s ?': // objects.js:1069
+        '%s \u306F %s \u3068\u3069\u3046\u3044\u3064',
+    'split %s by %delim': // objects.js:1074
+        undefined,
+    'JavaScript function ( %mult%s ) { %code }': // objects.js:1080
+        undefined,
+    'type of %s': // objects.js:1086
+        '%s \u306E\u304B\u305F',
+    '%txtfun of %s': // objects.js:1093
+        undefined,
+    'compile %repRing': // objects.js:1099
+        undefined,
+    'set %var to %s': // objects.js:1119
+        '%var \u3092 %s \u306B\u3059\u308B',
+    'change %var by %n': // objects.js:1125
+        '%var \u3092 %n \u305A\u3064\u304B\u3048\u308B',
+    'show variable %var': // objects.js:1131
+        '%var \u3072\u3087\u3046\u3058\u3059\u308B',
+    'hide variable %var': // objects.js:1136
+        '%var \u3092\u304B\u304F\u3059',
+    'script variables %scriptVars': // objects.js:1141
+        '\u30B9\u30AF\u30EA\u30D7\u30C8\u3078\u3093\u3059\u3046 %scriptVars',
+    'inherit %shd': // objects.js:1148
+        undefined,
+    'list %exp': // objects.js:1155
+        '\u30EA\u30B9\u30C8 %exp',
+    '%s in front of %l': // objects.js:1160
+        '%s \u3092 %l \u306E\u305B\u3093\u3068\u3046\u306B\u304A\u304F',
+    'item %idx of %l': // objects.js:1165
+        '%idx \u3070\u3093\u3081 %l',
+    'all but first of %l': // objects.js:1171
+        '%l \u306E\u305B\u3093\u3068\u3046\u3044\u304C\u3044',
+    'length of %l': // objects.js:1176
+        '%l \u306E\u306A\u304C\u3055',
+    '%l contains %s': // objects.js:1181
+        '%l \u306B %s \u304C\u3075\u304F\u307E\u308C\u3066\u3044\u308B\u304B',
+    'thing': // objects.js:1182 objects.js:1188 objects.js:1200 objects.js:1206
+        '\u306A\u306B\u304B',
+    'add %s to %l': // objects.js:1187
+        '%s \u3092 %l \u306B\u3064\u3044\u304B\u3059\u308B',
+    'delete %ida of %l': // objects.js:1193
+        '%ida \u3092 %l \u304B\u3089\u3055\u304F\u3058\u3087\u3059\u308B',
+    'insert %s at %idx of %l': // objects.js:1199
+        '%s \u3092 %idx \u3070\u3093\u3081\u306B\u305D\u3046\u306B\u3085\u3046\u3059\u308B %l',
+    'replace item %idx of %l with %s': // objects.js:1205
+        '%idx \u3070\u3093\u3081 %l \u3092 %s \u3067\u304A\u304D\u304B\u3048\u308B',
+    'map %repRing over %l': // objects.js:1214
+        undefined,
+    'for %upvar in %l %cl': // objects.js:1220
+        undefined,
+    'each item': // objects.js:1221
+        undefined,
+    'show table %l': // objects.js:1230
+        undefined,
+    'map %cmdRing to %codeKind %code': // objects.js:1237
+        undefined,
+    'map %mapValue to code %code': // objects.js:1242
+        undefined,
+    'map %codeListPart of %codeListKind to code %code': // objects.js:1256
+        undefined,
+    'code of %cmdRing': // objects.js:1261
+        undefined,
+    'Sprite': // objects.js:1404
+        '\u30B9\u30D7\u30E9\u30A4\u30C8',
+    'that name is already in use': // objects.js:1859 objects.js:7047
+        undefined,
+    'development mode\ndebugging primitives': // objects.js:1932 objects.js:2089 objects.js:2155 objects.js:2268 objects.js:7085 objects.js:7214 objects.js:7280 objects.js:7376
+        '\u304B\u3044\u306F\u3064\u3057\u3083\u30E2\u30FC\u30C9\n\u30C7\u30D0\u30C3\u30B0\u3088\u3046\u30D7\u30EA\u30DF\u30C6\u30A3\u30D6',
+    'Make a variable': // objects.js:2184 objects.js:7309
+        '\u3042\u305F\u3089\u3057\u3044\u3078\u3093\u3059\u3046\u3092\u3064\u304F\u308B',
+    'Delete a variable': // objects.js:2205 objects.js:7327
+        '\u3078\u3093\u3059\u3046\u3092\u3055\u304F\u3058\u3087',
+    'find blocks': // objects.js:2398 objects.js:2469
+        undefined,
+    'hide primitives': // objects.js:2476
+        undefined,
+    'show primitives': // objects.js:2494
+        undefined,
+    'rotate': // objects.js:3244
+        undefined,
+    'pivot': // objects.js:3247
+        undefined,
+    'edit the costume\'s\nrotation center': // objects.js:3249
+        undefined,
+    'make permanent and\nshow in the sprite corral': // objects.js:3257
+        undefined,
+    'exceeding maximum number of clones': // objects.js:3355
+        undefined,
+    'Costume': // objects.js:4338
+        undefined,
+    'setting the rotation center requires a costume': // objects.js:4679
+        undefined,
+    'current parent': // objects.js:5420
+        undefined,
+    'Stage': // objects.js:6315
+        '\u30B9\u30C6\u30FC\u30B8',
+    'stop': // objects.js:6770 costumes/COSTUMES:486
+        undefined,
+    'terminate all running threads': // objects.js:6774
+        undefined,
+    'Stage selected:\nno motion primitives': // objects.js:7060
+        '\u305B\u3093\u305F\u304F\u3055\u308C\u305F\u30B9\u30C6\u30FC\u30B8:\n\u3046\u3054\u304D\u306E\u30D7\u30EA\u30DF\u30C6\u30A3\u30D6\u304C\u3042\u308A\u307E\u305B\u3093',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite': // objects.js:7445
+        undefined,
+    'turn all pen trails and stamps\ninto a new background for the stage': // objects.js:7447
+        undefined,
+    'Background': // objects.js:7817
+        undefined,
+    'a {{ className }}({{ name }})': // objects.js:8096
+        undefined,
+    'click or drag crosshairs to move the rotation center': // objects.js:8296
+        '\u30AF\u30EA\u30C3\u30AF\u304B\u30C9\u30E9\u30C3\u30B0\u3067\u304B\u3044\u3066\u3093\u3061\u3085\u3046\u3057\u3093\u3092\u3044\u3069\u3046\u3059\u308B',
+    'Costume Editor': // objects.js:8308
+        '\u30B3\u30B9\u30C1\u30E5\u30FC\u30E0\u30A8\u30C7\u30A3\u30BF\u30FC',
+    'an {{ className }}({{ name }})': // objects.js:8395
+        undefined,
+    'Web Audio API is not supported\nin this browser': // objects.js:8629
+        undefined,
+    'normal': // objects.js:9452
+        '\u3064\u3046\u3058\u3087\u3046',
+    'large': // objects.js:9456
+        '\u3060\u3044',
+    'slider min': // objects.js:9466
+        '\u30B9\u30E9\u30A4\u30C0\u30FC\u306E\u3055\u3044\u3057\u3087\u3046\u3061',
+    'slider max': // objects.js:9470
+        '\u30B9\u30E9\u30A4\u30C0\u30FC\u306E\u3055\u3044\u3060\u3044\u3061',
+    'import': // objects.js:9475
+        '\u3088\u307F\u3053\u307F',
+    'Unable to import': // objects.js:9501
+        undefined,
+    '{{ appName }} can only import "text" files.\nYou selected a file of type "{{ type }}".': // objects.js:9502
+        undefined,
+    'Slider minimum value': // objects.js:9588
+        '\u30B9\u30E9\u30A4\u30C0\u30FC\u306E\u3055\u3044\u3057\u3087\u3046\u3061',
+    'Slider maximum value': // objects.js:9604
+        '\u30B9\u30E9\u30A4\u30C0\u30FC\u306E\u3055\u3044\u3060\u3044\u3061',
+    'Paint Editor': // paint.js:111
+        undefined,
+    'Paintbrush tool\n(free draw)': // paint.js:172
+        undefined,
+    'Stroked Rectangle\n(shift: square)': // paint.js:174
+        undefined,
+    'Stroked Ellipse\n(shift: circle)': // paint.js:176
+        undefined,
+    'Eraser tool': // paint.js:178
+        undefined,
+    'Set the rotation center': // paint.js:180
+        undefined,
+    'Line tool\n(shift: vertical/horizontal)': // paint.js:183
+        undefined,
+    'Filled Rectangle\n(shift: square)': // paint.js:185
+        undefined,
+    'Filled Ellipse\n(shift: circle)': // paint.js:187
+        undefined,
+    'Fill a region': // paint.js:189
+        undefined,
+    'Pipette tool\n(pick a color anywhere)': // paint.js:191
+        undefined,
+    'undo': // paint.js:225
+        undefined,
+    'grow': // paint.js:239
+        undefined,
+    'shrink': // paint.js:243
+        undefined,
+    'flip \u2194': // paint.js:247
+        undefined,
+    'flip \u2195': // paint.js:251
+        undefined,
+    'Constrain proportions of shapes?\n(you can also hold shift)': // paint.js:407
+        undefined,
+    'Brush size': // paint.js:413
+        undefined,
+    'loading should be implemented in heir of XML_Serializer': // store.js:235
+        undefined,
+    '{{ appName }} Project': // store.js:328
+        undefined,
+    'This project has been created by a different app:\n\n{{ appName }}\n\nand may be incompatible or fail to load here.': // store.js:329
+        undefined,
+    'Project uses newer version of Serializer': // store.js:351
+        undefined,
+    'Module uses newer version of Serializer': // store.js:630 store.js:662 store.js:743
+        undefined,
+    'expecting a command but getting a reporter': // store.js:1076
+        undefined,
+    'Obsolete!': // store.js:1198
+        undefined,
+    'expecting a reference id': // store.js:1282
+        undefined,
+    'square': // symbols.js:85
+        undefined,
+    'pointRight': // symbols.js:86
+        undefined,
+    'stepForward': // symbols.js:87
+        undefined,
+    'gears': // symbols.js:88
+        undefined,
+    'file': // symbols.js:89
+        undefined,
+    'fullScreen': // symbols.js:90
+        undefined,
+    'normalScreen': // symbols.js:91
+        undefined,
+    'smallStage': // symbols.js:92
+        undefined,
+    'normalStage': // symbols.js:93
+        undefined,
+    'turtle': // symbols.js:94
+        undefined,
+    'turtleOutline': // symbols.js:96
+        undefined,
+    'pause': // symbols.js:97
+        undefined,
+    'flag': // symbols.js:98
+        undefined,
+    'octagon': // symbols.js:99
+        undefined,
+    'cloud': // symbols.js:100 costumes/COSTUMES:170
+        undefined,
+    'cloudOutline': // symbols.js:101
+        undefined,
+    'cloudGradient': // symbols.js:102
+        undefined,
+    'turnRight': // symbols.js:103
+        undefined,
+    'turnLeft': // symbols.js:104
+        undefined,
+    'storage': // symbols.js:105
+        undefined,
+    'poster': // symbols.js:106
+        undefined,
+    'flash': // symbols.js:107
+        undefined,
+    'brush': // symbols.js:108
+        undefined,
+    'rectangleSolid': // symbols.js:110
+        undefined,
+    'circle': // symbols.js:111
+        undefined,
+    'circleSolid': // symbols.js:112
+        undefined,
+    'cross': // symbols.js:114
+        undefined,
+    'crosshairs': // symbols.js:115
+        undefined,
+    'paintbucket': // symbols.js:116
+        undefined,
+    'eraser': // symbols.js:117
+        undefined,
+    'pipette': // symbols.js:118
+        undefined,
+    'speechBubble': // symbols.js:119
+        undefined,
+    'speechBubbleOutline': // symbols.js:120
+        undefined,
+    'turnBack': // symbols.js:121
+        undefined,
+    'turnForward': // symbols.js:122
+        undefined,
+    'arrowUp': // symbols.js:123
+        undefined,
+    'arrowUpOutline': // symbols.js:124
+        undefined,
+    'arrowLeft': // symbols.js:125
+        undefined,
+    'arrowLeftOutline': // symbols.js:126
+        undefined,
+    'arrowDown': // symbols.js:127
+        undefined,
+    'arrowDownOutline': // symbols.js:128
+        undefined,
+    'arrowRight': // symbols.js:129
+        undefined,
+    'arrowRightOutline': // symbols.js:130
+        undefined,
+    'robot': // symbols.js:131
+        undefined,
+    'magnifyingGlass': // symbols.js:132
+        undefined,
+    'magnifierOutline': // symbols.js:133
+        undefined,
+    'notes': // symbols.js:134
+        undefined,
+    'camera': // symbols.js:135
+        undefined,
+    'location': // symbols.js:136
+        undefined,
+    'footprints': // symbols.js:137
+        undefined,
+    'keyboard': // symbols.js:138
+        undefined,
+    'keyboardFilled': // symbols.js:139
+        undefined,
+    'reset columns': // tables.js:1024 tables.js:1032
+        undefined,
+    'open in another dialog': // tables.js:1027
+        undefined,
+    'list view': // tables.js:1034
+        undefined,
+    'Table view': // tables.js:1186
+        undefined,
+    'expecting a receiver but getting {{ actual }}': // threads.js:145
+        undefined,
+    'expecting a block or ring but getting {{ actual }}': // threads.js:160
+        undefined,
+    'a synchronous {{ appName }} script has timed out': // threads.js:172
+        undefined,
+    'the predicate takes\ntoo long for a\ncustom hat block': // threads.js:428
+        undefined,
+    'compiling does not yet support\nvariables that are not\nformal parameters': // threads.js:758
+        undefined,
+    'compiling does not yet support\ncustom blocks': // threads.js:785
+        undefined,
+    'compiling does not yet support\nimplicit parameters\n(empty input slots)': // threads.js:818
+        undefined,
+    'compiling does not yet support\ninputs of type\n{{ type }}': // threads.js:845
+        undefined,
+    'compiling does not yet support\ninput slots of type\n{{ type }}': // threads.js:858
+        undefined,
+    'reporter didn\'t report': // threads.js:1087
+        undefined,
+    'Inside': // threads.js:1100
+        undefined,
+    'a custom block definition is missing': // threads.js:1107
+        undefined,
+    'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
+        undefined,
+    'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
+        undefined,
+    'continuations cannot be forked': // threads.js:1312
+        undefined,
+    'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
+        undefined,
+    'cannot operate on a deleted sprite': // threads.js:2546
+        undefined,
+    'expecting text instead of a {{ type }}': // threads.js:2862
+        undefined,
+    'expecting a text delimiter instead of a {{ type }}': // threads.js:2868
+        undefined,
+    'unsupported attribute': // threads.js:3448
+        undefined,
+    'unable to nest\n(disabled or circular?)': // threads.js:3462
+        undefined,
+    '"{{ name }}" is read-only': // threads.js:3505
+        undefined,
+    '"{{ name }}"\nis not a valid option': // threads.js:3642
+        undefined,
+    'unsupported data type {{ type }}': // threads.js:3677
+        undefined,
+    '{{ className }} >> {{ expression }} {{ variables }}': // threads.js:3958
+        undefined,
+    'a transient {{ className }} [{{ value }}]': // threads.js:4122
+        undefined,
+    'a {{ className }} [{{ value }}]': // threads.js:4123
+        undefined,
+    'a {{ className }} {{{ value }}}': // threads.js:4139
+        undefined,
+    'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
+        undefined,
+    'Yes': // widgets.js:1607
+        '\u306F\u3044',
+    'No': // widgets.js:1608
+        '\u3044\u3044\u3048',
+    'Default': // widgets.js:1882
+        undefined,
+    '{{ year }} or before': // widgets.js:2024
+        '{{ year }} \u306D\u3093\u3044\u305C\u3093',
+    'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
+        '\u30E6\u30FC\u30B6\u30FC\u3081\u3044',
+    'Birth date': // widgets.js:2061
+        '\u3068\u3057',
+    'Password': // widgets.js:2071 widgets.js:2078
+        '\u30D1\u30B9\u30EF\u30FC\u30C9',
+    'Repeat Password': // widgets.js:2073
+        undefined,
+    'Old password': // widgets.js:2083
+        undefined,
+    'New password': // widgets.js:2085
+        undefined,
+    'Repeat new password': // widgets.js:2087
+        undefined,
+    'please fill out\nthis field': // widgets.js:2196
+        undefined,
+    'User name must be four\ncharacters or longer': // widgets.js:2201
+        undefined,
+    'please provide a valid\nemail address': // widgets.js:2206
+        undefined,
+    'password must be six\ncharacters or longer': // widgets.js:2212
+        undefined,
+    'passwords do\nnot match': // widgets.js:2216
+        undefined,
+    'please agree to\nthe TOS': // widgets.js:2222
+        undefined,
+    'E-mail address of parent or guardian': // widgets.js:2258
+        undefined,
+    'E-mail address': // widgets.js:2259
+        '\u3067\u3093\u3057\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9',
+    'Missing required element <{{ tagName }}>!': // xml.js:186
+        undefined,
+    'Expected "=" after attribute name': // xml.js:341
+        undefined,
+    'Expected single- or double-quoted attribute value': // xml.js:347
+        undefined,
+    'Expected ">" after "/" in empty tag': // xml.js:361
+        undefined,
+    'Expected ">" after tag name and attributes': // xml.js:367
+        undefined,
+    'Expected to close {{ tagName }}': // xml.js:379
+        undefined,
+    'Tools': // libraries/LIBRARIES:1
+        undefined,
+    'Standard library of powerful blocks (for, map, etc.)': // libraries/LIBRARIES:1
+        undefined,
+    'Iteration, composition': // libraries/LIBRARIES:2
+        undefined,
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.': // libraries/LIBRARIES:2
+        undefined,
+    'List utilities': // libraries/LIBRARIES:3
+        undefined,
+    'Some standard functions on lists (append, reverse, etc.)': // libraries/LIBRARIES:3
+        undefined,
+    'Streams (lazy lists)': // libraries/LIBRARIES:4
+        undefined,
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.)': // libraries/LIBRARIES:4
+        undefined,
+    'Variadic reporters': // libraries/LIBRARIES:5
+        undefined,
+    'Versions of +, x, AND, and OR that take more than two inputs.': // libraries/LIBRARIES:5
+        undefined,
+    'Web services access (https)': // libraries/LIBRARIES:6
+        undefined,
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.': // libraries/LIBRARIES:6
+        undefined,
+    'Words, sentences': // libraries/LIBRARIES:7
+        undefined,
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library (along with the JOIN WORDS block in the Tools library) brings back that idea.': // libraries/LIBRARIES:7
+        undefined,
+    'Multi-branched conditional (switch)': // libraries/LIBRARIES:8
+        undefined,
+    'Like "switch" in C-like languages or "cond" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!': // libraries/LIBRARIES:8
+        undefined,
+    'LEAP Motion controller': // libraries/LIBRARIES:9
+        undefined,
+    'Report hand positions from LEAP Motion controller (leapmotion.com).': // libraries/LIBRARIES:9
+        undefined,
+    'Set RGB or HSV pen color': // libraries/LIBRARIES:10
+        undefined,
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).': // libraries/LIBRARIES:10
+        undefined,
+    'Catch errors in a script': // libraries/LIBRARIES:11
+        undefined,
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.': // libraries/LIBRARIES:11
+        undefined,
+    'Allow multi-line text input to a block': // libraries/LIBRARIES:12
+        undefined,
+    'In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.': // libraries/LIBRARIES:12
+        undefined,
+    'Provide getters and setters for all GUI-controlled global settings': // libraries/LIBRARIES:13
+        undefined,
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.': // libraries/LIBRARIES:13
+        undefined,
+    'Infinite precision integers, exact rationals, complex': // libraries/LIBRARIES:14
+        undefined,
+    'The full Scheme numeric tower. "USE BIGNUMS <True>" to enable.': // libraries/LIBRARIES:14
+        undefined,
+    'Provide 100 selected colors': // libraries/LIBRARIES:15
+        undefined,
+    'to use instead of hue for better selection': // libraries/LIBRARIES:15
+        undefined,
+    'Text to speech': // libraries/LIBRARIES:16
+        undefined,
+    'output text using speech synthesis.': // libraries/LIBRARIES:16
+        undefined,
+    'Animation': // libraries/LIBRARIES:17
+        undefined,
+    'glide, grow and rotate using easing functions.': // libraries/LIBRARIES:17
+        undefined,
+    'Pixels': // libraries/LIBRARIES:18
+        undefined,
+    'manipulate costumes pixel-wise.': // libraries/LIBRARIES:18
+        undefined,
+    'Audio Comp': // libraries/LIBRARIES:19
+        undefined,
+    'analyze, manipulate and generate sound samples.': // libraries/LIBRARIES:19
+        undefined,
+};
 
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'にほんご', // the name as it should appear in the language menu
-    'language_translator':
-        'Kazuhiro Abe', // your name for the Translators tab
-    'translator_e-mail':
-        'abee@squeakland.jp', // optional
-    'last_changed':
-        '2013-04-02', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'めいしょうみせってい',
-    'development mode':
-        'かいはつしゃモード',
-
-    // categories:
-    'Motion':
-        'うごき',
-    'Looks':
-        'みため',
-    'Sound':
-        'おと',
-    'Pen':
-        'ペン',
-    'Control':
-        'せいぎょ',
-    'Sensing':
-        'しらべる',
-    'Operators':
-        'えんざん',
-    'Variables':
-        'へんすう',
-    'Lists':
-        'リスト',
-    'Other':
-        'そのた',
-
-    // editor:
-    'draggable':
-        'ドラッグかのう',
-
-    // tabs:
-    'Scripts':
-        'スクリプト',
-    'Costumes':
-        'コスチューム',
-    'Sounds':
-        'おと',
-
-    // names:
-    'Sprite':
-        'スプライト',
-    'Stage':
-        'ステージ',
-
-    // rotation styles:
-    'don\'t rotate':
-        'かいてんしない',
-    'can rotate':
-        'かいてんする',
-    'only face left/right':
-        'さゆうにはんてんするだけ',
-
-    // new sprite button:
+// ✂ - - - - - - - - - - - - - - - - -  -   -
+// The following are strings that were used once by Snap! but not anymore
+// (or just mispelled strings)
+// Feel free to delete or keep them for future references
+SnapTranslator.dict.ja_HIRA.deprecated = {
     'add a new sprite':
-        'あたらしいスプライトをついかする',
-
-    // tab help
-    'costumes tab help':
-        'ほかのWebページやコンピューターじょうのがぞうを\n'
-            + 'ここにドロップしてよみこみます',
-    'import a sound from your computer\nby dragging it into here':
-        'コンピューターじょうのサウンドを\nここにドラッグしてよみこみます',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'せんたくされたステージ:\nうごきのプリミティブがありません',
-
-    'move %n steps':
-        '%n ほうごかす',
-    'turn %clockwise %n degrees':
-        '%clockwise %n どまわす',
-    'turn %counterclockwise %n degrees':
-        '%counterclockwise %n どまわす',
-    'point in direction %dir':
-        '%dir どにむける',
-    'point towards %dst':
-        '%dst へむける',
-    'go to x: %n y: %n':
-        'xざひょうを %n 、yざひょうを %n にする',
-    'go to %dst':
-        '%dst へいく',
-    'glide %n secs to x: %n y: %n':
-        '%n びょうでxざひょうを %n に、yざひょうを %n にかえる',
-    'change x by %n':
-        'xざひょうを %n ずつかえる',
-    'set x to %n':
-        'xざひょうを %n にする',
-    'change y by %n':
-        'yざひょうを %n ずつかえる',
-    'set y to %n':
-        'ざひょうを %n にする',
-    'if on edge, bounce':
-        'もしはしについたら、はねかえる',
-    'x position':
-        'xざひょう',
-    'y position':
-        'yざひょう',
-    'direction':
-        'むき',
-
-    // looks:
-    'switch to costume %cst':
-        'コスチュームを %cst にする',
-    'next costume':
-        'つぎのコスチュームにする',
-    'costume #':
-        'コスチュームのばんごう',
-    'say %s for %n secs':
-        '%s と %n びょういう',
-    'say %s':
-        '%s という',
-    'think %s for %n secs':
-        '%s と %n びょうかんがえる',
-    'think %s':
-        '%s とかんがえる',
-    'Hello!':
-        'こんにちは!',
-    'Hmm...':
-        'うーん...',
-    'change %eff effect by %n':
-        '%eff のこうかを %n ずつかえる',
-    'set %eff effect to %n':
-        '%eff のこうかを %n にする',
-    'clear graphic effects':
-        'がぞうこうかをなくす',
-    'change size by %n':
-        'おおきさを %n ずつかえる',
-    'set size to %n %':
-        'おおきさを %n にする',
-    'size':
-        'おおきさ',
-    'show':
-        'ひょうじする',
-    'hide':
-        'かくす',
-    'go to front':
-        'まえにだす',
-    'go back %n layers':
-        '%n そうさげる',
-
-    'development mode \ndebugging primitives:':
-        'かいはつしゃモード\nデバッグようプリミティブ:',
-    'console log %mult%s':
-        'コンソールログ %mult%s',
-    'alert %mult%s':
-        'けいこく: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd のおとをならす',
-    'play sound %snd until done':
-        'おわるまで %snd のおとをならす',
-    'stop all sounds':
-        'すべてのおとをとめる',
-    'rest for %n beats':
-        '%n はくやすむ',
+        '\u3042\u305F\u3089\u3057\u3044\u30B9\u30D7\u30E9\u30A4\u30C8\u3092\u3064\u3044\u304B\u3059\u308B',
     'play note %n for %n beats':
-        '%n のおんぷを %n はくならす',
-    'change tempo by %n':
-        'テンポを %n ずつかえる',
-    'set tempo to %n bpm':
-        'テンポを %n BPMにする',
-    'tempo':
-        'テンポ',
-
-    // pen:
-    'clear':
-        'けす',
-    'pen down':
-        'ペンをおろす',
-    'pen up':
-        'ペンをあげる',
-    'set pen color to %clr':
-        'ペンのいろを %clr にする',
-    'change pen color by %n':
-        'ペンのいろを %n ずつかえる',
-    'set pen color to %n':
-        'ペンのいろを %n にする',
-    'change pen shade by %n':
-        'ペンのこさを %n ずつかえる',
-    'set pen shade to %n':
-        'ペンのこさを %n にする',
-    'change pen size by %n':
-        'ペンのふとさを %n ずつかえる',
-    'set pen size to %n':
-        'ペンのふとさを %n にする',
-    'stamp':
-        'スタンプ',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag がおされたとき',
-    'when %keyHat key pressed':
-        '%keyHat がおされたとき',
+        '%n \u306E\u304A\u3093\u3077\u3092 %n \u306F\u304F\u306A\u3089\u3059',
     'when I am clicked':
-        'じぶんがクリックされたとき',
-    'when I receive %msgHat':
-        '%msgHat をうけとったとき',
-    'broadcast %msg':
-        '%msg をおくる',
-    'broadcast %msg and wait':
-        '%msg をおくってまつ',
-    'Message name':
-        'メッセージめい',
-    'wait %n secs':
-        '%n びょうまつ',
-    'wait until %b':
-        '%b までまつ',
-    'forever %c':
-        'ずっと %c',
-    'repeat %n %c':
-        '%n かいくりかえす %c',
-    'repeat until %b %c':
-        '%b までくりかえす %c',
-    'if %b %c':
-        'もし %b なら %c',
-    'if %b %c else %c':
-        'もし %b なら %c でなければ %c',
-    'report %s':
-        '%s をかえす',
+        '\u3058\u3076\u3093\u304C\u30AF\u30EA\u30C3\u30AF\u3055\u308C\u305F\u3068\u304D',
     'stop block':
-        'ブロックをとめる',
+        '\u30D6\u30ED\u30C3\u30AF\u3092\u3068\u3081\u308B',
     'stop script':
-        'スクリプトをとめる',
+        '\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\u3068\u3081\u308B',
     'stop all %stop':
-        'すべてをとめる %stop',
-    'run %cmdRing %inputs':
-        '%cmdRing を %inputs でじっこうする',
-    'launch %cmdRing %inputs':
-        '%cmdRing を %inputs できどうする',
-    'call %repRing %inputs':
-        '%repRing を %inputs でよぶ',
-    'run %cmdRing w/continuation':
-        'けいぞくつきで %cmdRing をじっこうする',
-    'call %cmdRing w/continuation':
-        'けいぞくつきで %cmdRing をよぶ',
-    'warp %c':
-        'ワープする %c',
-    'when I start as a clone':
-        'クローンされたとき',
-    'create a clone of %cln':
-        '%cln のクローンをつくる',
-    'myself':
-        'じぶんじしん',
-    'delete this clone':
-        'このクローンをさくじょする',
-
-    // sensing:
-    'touching %col ?':
-        '%col にふれた',
-    'touching %clr ?':
-        '%clr いろにふれた',
-    'color %clr is touching %clr ?':
-        '%clr いろが %clr いろにふれた',
-    'ask %s and wait':
-        '%s ときいてまつ',
-    'what\'s your name?':
-        'あなたのなまえはなんですか?',
-    'answer':
-        'こたえ',
-    'mouse x':
-        'マウスのxざひょう',
-    'mouse y':
-        'マウスのyざひょう',
-    'mouse down?':
-        'マウスがおされた',
-    'key %key pressed?':
-        '%key がおされた',
+        '\u3059\u3079\u3066\u3092\u3068\u3081\u308B %stop',
     'distance to %dst':
-        '%dst までのきょり',
-    'reset timer':
-        'タイマーをリセット',
-    'timer':
-        'タイマー',
+        '%dst \u307E\u3067\u306E\u304D\u3087\u308A',
     'http:// %s':
         'http:// %s',
-    'turbo mode?':
-        'ターボモード?',
-    'set turbo mode to %b':
-        'ターボーモードを %b にする',
-
-    'filtered for %clr':
-        '%clr いろをちゅうしゅつ',
-    'stack size':
-        'スタックのおおきさ',
-    'frames':
-        'フレーム',
-
-    // operators:
-    '%n mod %n':
-        '%n を %n でわったあまり',
-    'round %n':
-        '%n をまるめる',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        '%n から %n までのらんすう',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
-    'not %b':
-        '%b ではない',
-    'true':
-        'はい',
-    'false':
-        'いいえ',
-    'join %words':
-        '%words をつなぐ',
-    'hello':
-        'ハロー',
-    'world':
-        'ワールド',
-    'letter %n of %s':
-        '%n もじめのもじ %s',
-    'length of %s':
-        '%s のながさ',
-    'unicode of %s':
-        '%s のUnicode',
-    'unicode %n as letter':
-        'Unicodeで %n のもじ',
-    'is %s a %typ ?':
-        '%s は %typ がた',
-    'is %s identical to %s ?':
-        '%s は %s とどういつ',
-
-    'type of %s':
-        '%s のかた',
-
-    // variables:
-    'Make a variable':
-        'あたらしいへんすうをつくる',
-    'Variable name':
-        'へんすうめい',
-    'Delete a variable':
-        'へんすうをさくじょ',
-
-    'set %var to %s':
-        '%var を %s にする',
-    'change %var by %n':
-        '%var を %n ずつかえる',
-    'show variable %var':
-        '%var ひょうじする',
-    'hide variable %var':
-        '%var をかくす',
-    'script variables %scriptVars':
-        'スクリプトへんすう %scriptVars',
-
-    // lists:
-    'list %exp':
-        'リスト %exp',
-    '%s in front of %l':
-        '%s を %l のせんとうにおく',
-    'item %idx of %l':
-        '%idx ばんめ %l',
-    'all but first of %l':
-        '%l のせんとういがい',
-    'length of %l':
-        '%l のながさ',
-    '%l contains %s':
-        '%l に %s がふくまれているか',
-    'thing':
-        'なにか',
-    'add %s to %l':
-        '%s を %l についかする',
-    'delete %ida of %l':
-        '%ida を %l からさくじょする',
-    'insert %s at %idx of %l':
-        '%s を %idx ばんめにそうにゅうする %l',
-    'replace item %idx of %l with %s':
-        '%idx ばんめ %l を %s でおきかえる',
-
-    // other
-    'Make a block':
-        'ブロックをつくる',
-
-    // menus
-    // snap menu
-    'About...':
-        'Snap!について...',
     'Snap! website':
-        'Snap!のWebサイト',
-    'Download source':
-        'ソースをダウンロード',
-    'Switch back to user mode':
-        'ユーザーモードにきりかえ',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'こうどなモーフィックコンテクストメニューをむこうにして\nユーザーフレンドリーなメニューをひょうじする',
-    'Switch to dev mode':
-        'かいはつしゃモードにきりかえる',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターをゆうこうにする',
-
-    // project menu
-    'Project notes...':
-        'プロジェクトのメモ...',
-    'New':
-        'しんき',
-    'Open...':
-        'ひらく...',
-    'Save':
-        'ほぞん',
-    'Save As...':
-        'なまえをつけてほぞん...',
-    'Import...':
-        'よみこみ...',
-    'file menu import hint':
-        'チェックするとレポーターをドラッグ&ドロップするとき\n'
-		+ 'そらのレポーターにフォーカスします\n\n'
-		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text...':
-        'テキストファイルとしてプロジェクトをかきだす...',
-    'Export project...':
-        'プロジェクトをかきだす...',
-    'show project data as XML\nin a new browser window':
-        'プロジェクトのデータをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Export blocks...':
-        'ブロックをかきだす...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'グローバルカスタムブロックのていぎをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Import tools':
-        'ツールをよみこむ',
-    'load the official library of\npowerful blocks':
-        'きょうりょくなブロックのこうしき\nライブラリをよみこむ',
-
-    // cloud menu
-    'Login...':
-        'ログイン...',
-    'Signup...':
-        'サインアップ...',
-
-    // settings menu
-    'Language...':
-        'げんご...',
-    'Zoom blocks...':
-        'ブロックをズーム...',
-    'Blurred shadows':
-        'はんとうめいのかげ',
-    'uncheck to use solid drop\nshadows and highlights':
-        'チェックをはずすとたんしょくのかげと\nハイライトになります',
-    'check to use blurred drop\nshadows and highlights':
-        'チェックするとはんとうめいのかげと\nハイライトになります',
-    'Zebra coloring':
-        'じま々でひょうじ',
-    'check to enable alternating\ncolors for nested blocks':
-        'チェックするといれこになった\nブロックをじま々でひょうじします',
-    'uncheck to disable alternating\ncolors for nested block':
-        'チェックをはずすといれこになった\nブロックをふつうにひょうじします',
-    'Dynamic input labels':
-        'どうてきなにゅうりょくラベル',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'チェックをはずすとかへんこひきすうの\nどうてきラベルをふかにします',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'チェックするとかへんこひきすうの\nどうてきラベルをかのうにします',
-    'Prefer empty slot drops':
-        'そらのスロットのドロップをゆるす',
-    'settings menu prefer empty slots hint':
-        'せっていメニューがそらのスロットのヒントをゆるします',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'チェックをはずすとドロップしたレポーターが\nほかをおしだせるようになります',
-    'Long form input dialog':
-        'ひきすうダイアログをながいけいしきにする',
-    'check to always show slot\ntypes in the input dialog':
-        'チェックするとひきすうダイアログに\nつねにスロットのかたをひょうじします',
-    'uncheck to use the input\ndialog in short form':
-        'チェックをはずすとひきすうダイアログをみじかくひょうじします',
-    'Virtual keyboard':
-        'かそうキーボード',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'チェックをはずすとモバイルききようの\nかそうキーボードをむこうにします',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'チェックするとモバイルききようの\nかそうキーボードをゆうこうにします',
-    'Input sliders':
-        'にゅうりょくスライダー',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'チェックをはずすとにゅうりょくフィールドのスライダーをむこうにします',
-    'check to enable\ninput sliders for\nentry fields':
-        'チェックするとにゅうりょくフィールドのスライダーをゆうこうにします',
-    'Clicking sound':
-        'クリックおん',
-    'uncheck to turn\nblock clicking\nsound off':
-        'チェックをはずすとブロックの\nクリックおんをきります',
-    'check to turn\nblock clicking\nsound on':
-        'チェックをはずすとブロックの\nクリックおんをいれます',
-    'Animations':
-        'アニメーション',
-    'uncheck to disable\nIDE animations':
-        'チェックをはずすとIDEの\nアニメーションをきります',
-    'check to prioritize\nscript execution':
-        'チェックするとスクリプトの\nしょりをゆうせんします',
-    'uncheck to run scripts\nat normal speed':
-        'チェックをはずすとスクリプトを\nつうじょうのそくどでじっこうします',
-    'check to enable\nIDE animations':
-        'チェックするとIDEの\nアニメーションをいれます',
-    'Turbo mode':
-        'ターボモード',
-    'Thread safe scripts':
-        'スクリプトをスレッドセーフにする',
+        'Snap!\u306EWeb\u30B5\u30A4\u30C8',
     'uncheck to allow\nscript reentrancy':
-        'チェックをはずすとスクリプトを\nさいにゅうかのうにします',
+        '\u30C1\u30A7\u30C3\u30AF\u3092\u306F\u305A\u3059\u3068\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\n\u3055\u3044\u306B\u3085\u3046\u304B\u306E\u3046\u306B\u3057\u307E\u3059',
     'check to disallow\nscript reentrancy':
-        'チェックするとスクリプトを\nさいにゅうふのうにします',
-    'Prefer smooth animations':
-        'なめらかなアニメーションにする',
-    'uncheck for greater speed\nat variable frame rates':
-        'チェックをはずすとフレームレート\nあたりのそくどをあげます',
-    'check for smooth, predictable\nanimations across computers':
-        'チェックするとコンピューターかんで\nなめらかでよそくかのうなアニメーションにします',
-
-    // inputs
-    'with inputs':
-        'ひきすう',
-    'input names:':
-        'ひきすうめい:',
-    'Input Names:':
-        'ひきすうめい:',
-    'input list:':
-        'ひきすうリスト:',
-
-    // context menus:
-    'help':
-        'ヘルプ',
-
-    // blocks:
-    'help...':
-        'ヘルプ...',
-    'duplicate':
-        'ふくせい',
-    'make a copy\nand pick it up':
-        'コピーをつくって\nそれをつかみます',
-    'only duplicate this block':
-        'このブロックをコピーするだけ',
-    'delete':
-        'さくじょ',
-    'script pic...':
-        'スクリプトのがぞう...',
-    'open a new window\nwith a picture of this script':
-        'このスクリプトのがぞうをひょうじするあたらしいウィンドウをひらきます',
-    'ringify':
-        'リングか',
-    'unringify':
-        'ひリングか',
-
-    // custom blocks:
-    'delete block definition...':
-        'ブロックのていぎをさくじょ',
-    'edit...':
-        'へんしゅう...',
-
-    // sprites:
-    'edit':
-        'へんしゅう',
-    'export...':
-        'かきだし...',
-
-    // stage:
-    'show all':
-        'すべてをひょうじ',
-    'pic...':
-        'がぞう...',
-    'open a new window\nwith a picture of the stage':
-        'このステージのがぞうで\nあたらしいウィンドウをひらく',
-
-    // scripting area
-    'clean up':
-        'きれいにする',
-    'arrange scripts\nvertically':
-        'スクリプトを\nたてにせいれつします',
-    'add comment':
-        'コメントをついか',
-    'make a block...':
-        'ブロックをつくる...',
-
-    // costumes
-    'rename':
-        'なまえをへんこう',
-    'export':
-        'かきだし',
-    'rename costume':
-        'コスチュームのなまえをへんこう',
-
-    // sounds
-    'Play sound':
-        'おとをならす',
-    'Stop sound':
-        'おとをとめる',
-    'Stop':
-        'ていし',
-    'Play':
-        'さいせい',
-    'rename sound':
-        'おとのなまえをへんこう',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
+        '\u30C1\u30A7\u30C3\u30AF\u3059\u308B\u3068\u30B9\u30AF\u30EA\u30D7\u30C8\u3092\n\u3055\u3044\u306B\u3085\u3046\u3075\u306E\u3046\u306B\u3057\u307E\u3059',
     'Ok':
         'OK',
-    'Cancel':
-        'キャンセル',
-    'Yes':
-        'はい',
-    'No':
-        'いいえ',
-
-    // help
-    'Help':
-        'ヘルプ',
-
-    // zoom blocks
-    'Zoom blocks':
-        'ブロックをズーム',
-    'build':
-        'つくろう',
-    'your own':
-        'あなたじしんの',
-    'blocks':
-        'ブロックを',
-    'normal (1x)':
-        'ノーマル (1x)',
-    'demo (1.2x)':
-        'デモ (1.2x)',
-    'presentation (1.4x)':
-        'プレゼンテーション (1.4x)',
-    'big (2x)':
-        'だい (2x)',
-    'huge (4x)':
-        'とくだい (4x)',
-    'giant (8x)':
-        'きょだい (8x)',
-    'monstrous (10x)':
-        'ちょうきょだい (10x)',
-
-    // Project Manager
-    'Untitled':
-        'めいしょうみせってい',
-    'Open Project':
-        'プロジェクトをひらく',
-    'Open':
-        'ひらく',
-    '(empty)':
-        '(そら)',
     'Saved!':
-        'ほぞんしました!',
-    'Delete Project':
-        'プロジェクトをさくじょ',
+        '\u307B\u305E\u3093\u3057\u307E\u3057\u305F!',
     'Are you sure you want to delete':
-        'ほんとうにさくじょしますか',
-    'rename...':
-        'なまえをへんこう...',
-
-    // costume editor
-    'Costume Editor':
-        'コスチュームエディター',
-    'click or drag crosshairs to move the rotation center':
-        'クリックかドラッグでかいてんちゅうしんをいどうする',
-
-    // project notes
-    'Project Notes':
-        'プロジェクトのメモ',
-
-    // new project
-    'New Project':
-        'あたらしいプロジェクト',
-    'Replace the current project with a new one?':
-        'げんざいのプロジェクトをあたらしいものでおきかえますか?',
-
-    // open project
+        '\u307B\u3093\u3068\u3046\u306B\u3055\u304F\u3058\u3087\u3057\u307E\u3059\u304B',
     'Open Projekt':
-        'プロジェクトをひらく',
-
-    // save project
-    'Save Project As...':
-        'なまえをつけてプロジェクトをほぞん...',
-
-    // export blocks
-    'Export blocks':
-        'ブロックをかきだし',
-    'Import blocks':
-        'ブロックをよみこみ',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'このプロジェクトはカスタムグローバルブロックをもっていません',
-    'select':
-        'せんたく',
-    'all':
-        'すべて',
-    'none':
-        'なし',
-
-    // variable dialog
-    'for all sprites':
-        'すべてのスプライトよう',
-    'for this sprite only':
-        'このスプライトよう',
-
-    // block dialog
-    'Change block':
-        'ブロックをへんこう',
-    'Command':
-        'コマンド',
-    'Reporter':
-        'モニター',
-    'Predicate':
-        'じゅつご',
-
-    // block editor
-    'Block Editor':
-        'ブロックエディター',
-    'Apply':
-        'てきよう',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'カスタムブロックをさくじょ',
-    'block deletion dialog text':
-        'このカスタムブロックとすべてのインスタンスを\nさくじょしてもよいですか?',
-
-    // input dialog
-    'Create input name':
-        'ひきすうめいをさくせい',
-    'Edit input name':
-        'ひきすうめいをへんしゅう',
-    'Edit label fragment':
-        'ラベルのだんぺんをへんしゅう',
-    'Title text':
-        'タイトルテキスト',
-    'Input name':
-        'ひきすうめい',
-    'Delete':
-        'さくじょ',
-    'Object':
-        'オブジェクト',
-    'Number':
-        'かず',
-    'Text':
-        'テキスト',
-    'List':
-        'リスト',
-    'Any type':
-        'ぜんタイプ',
-    'Boolean (T/F)':
-        'しんぎち (はい/いいえ)',
-    'Command\n(inline)':
-        'コマンド\n(インライン)',
-    'Command\n(C-shape)':
-        'コマンド \n(Cけい)',
-    'Any\n(unevaluated)':
-        'にんい\n(みひょうか)',
-    'Boolean\n(unevaluated)':
-        'しんぎち\n(みひょうか)',
+        '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u3072\u3089\u304F',
+    'Save Project As':
+        '\u306A\u307E\u3048\u3092\u3064\u3051\u3066\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u307B\u305E\u3093',
     'Single input.':
-        'たんいつひきすう.',
-    'Default Value:':
-        'デフォルトち:',
-    'Multiple inputs (value is list of inputs)':
-        'ふくすうのひきすう (あたいはひきすうのリスト)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - よびだしもとからみえるないぶてきなへんすう',
-
-   // About Snap
-    'About Snap':
-        'Snapについて',
-    'Back...':
-        'もどる...',
-    'License...':
-        'ライセンス...',
-    'Modules...':
-        'モジュール...',
-    'Credits...':
-        'クレジット...',
-    'Translators...':
-        'ほんやくしゃ',
-    'License':
-        'ライセンス',
-    'current module versions:':
-        'げんざいのモジュールのバージョン:',
-    'Contributors':
-        'こうけんしゃ:',
-    'Translations':
-        'ほんやく',
-
-    // variable watchers
-    'normal':
-        'つうじょう',
-    'large':
-        'だい',
-    'slider':
-        'スライダー',
-    'slider min...':
-        'スライダーのさいしょうち...',
-    'slider max...':
-        'スライダーのさいだいち...',
-    'import...':
-        'よみこみ...',
-    'Slider minimum value':
-        'スライダーのさいしょうち',
-    'Slider maximum value':
-        'スライダーのさいだいち',
-
-    // list watchers
-    'length: ':
-        'ながさ: ',
-
-    // coments
-    'add comment here...':
-        'ここにコメントをついか...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) みぎ',
-    '(-90) left':
-        '(-90) ひだり',
-    '(0) up':
-        '(0) じょう',
-    '(180) down':
-        '(180) か',
-
-    // collision detection
-    'mouse-pointer':
-        'マウスのポインター',
-    'edge':
-        'はし',
-    'pen trails':
-        'ペンのきせき',
-
-    // costumes
-    'Turtle':
-        'タートル',
-    'Empty':
-        'そら',
-
-    // graphical effects
-    'ghost':
-        'ゆうれい',
-
-    // keys
-    'space':
-        'スペース',
-    'up arrow':
-        'うわむきやじるし',
-    'down arrow':
-        'したむきやじるし',
-    'right arrow':
-        'みぎむきやじるし',
-    'left arrow':
-        'ひだりむきやじるし',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'しんき...',
-
-    // math functions
-    'abs':
-        'ぜったいち',
-    'sqrt':
-        'へいほうこん',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        'かず',
-    'text':
-        'テキスト',
-    'Boolean':
-        'しんぎち',
-    'list':
-        'リスト',
-    'command':
-        'コマンド',
-    'reporter':
-        'レポーター',
-    'predicate':
-        'じゅつご',
-
-    // list indices
-    'last':
-        'さいご',
-    'any':
-        'にんい',
-
-    // missing entries
-    'Reference manual':
-        'リファレンスマニュアル',
-    'Sign in':
-        'サインイン',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'stay signed in on this computer\nuntil logging out':
-        'ログアウトするまでこのコンピューターに\nサインインしたままにする',
-    'Sign up':
-        'サインアップ',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        'たんじょうづき:',
-    'Birth date:':
-        'とし:',
-    'January':
-        '１がつ',
-    'February':
-        '２がつ',
-    'March':
-        '３がつ',
-    'April':
-        '４がつ',
-    'May':
-        '５がつ',
-    'June':
-        '６がつ',
-    'July':
-        '７がつ',
-    'August':
-        '８がつ',
-    'September':
-        '９がつ',
-    'October':
-        '１０がつ',
-    'November':
-        '１１がつ',
-    'December':
-        '１２がつ',
+        '\u305F\u3093\u3044\u3064\u3072\u304D\u3059\u3046.',
+    'new':
+        '\u3057\u3093\u304D',
     '1993 or before':
-        '１９９３ねんいぜん',
-    'E-mail address:':
-        'でんしメールアドレス:',
-    'Terms of Service...':
-        'サービスりようきやく...',
-    'Privacy...':
-        'こじんじょうほう...',
-    'I have read and agree\nto the Terms of Service':
-        'サービスりようきやくをよみ\nそれにどういします',
-
+        '\uFF11\uFF19\uFF19\uFF13\u306D\u3093\u3044\u305C\u3093',
 };

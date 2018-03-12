@@ -1,27 +1,28 @@
 /*
 
-	lang-cs.js
+    lang-cs.js
 
-	Czech translation for SNAP!
+    Czech translation for Snap!
 
-	written by Michal Moc
+    originally written by Jens Mönig
+    rewritten by Alfonso Ruzafa
 
-	Copyright (C) 2012 by Michal Moc
+    Copyright (C) 2013 by Jens Mönig
 
-	This file is part of Snap!.
+    This file is part of Snap!.
 
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -33,19 +34,23 @@
     Translating Snap! is easy:
 
 
-    1. Download
+    1. Create a translation from scratch:
 
-    Download the sources and extract them into a local folder on your
-    computer:
+    Switch to the english version of Snap! (or choose one of the available
+    languages you are more comfortable with):
 
-        <http://snap.berkeley.edu/snapsource/snap.zip>
+        Settings > Language... > English
 
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
+    While holding the shift key, press the Settings button again. A dev-only
+    option will be shown: "Generate lang-XX.js file...". Click it and you will
+    download a file containing all Snap! translatable strings along with the
+    available translations for the language you choosed above and "undefined"
+    for those strings not yet translated.
+
+    Note that the Snap! original strings are written in english so no english
+    translation file is needed. That's because the lang-en.js will be full of
+    "undefined" translations. This is a good start point if you want to start
+    translating Snap! from scratch!
 
 
     2. Edit
@@ -53,36 +58,66 @@
     Edit the translation file with a regular text editor, or with your
     favorite JavaScript editor.
 
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
+    Replace all occurrences of the "XX" from SnapTranslator.dict["XX"]
+    in the file with the two-letter ISO 639-1 code for your language,
     e.g.
 
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
+        fr - French => SnapTranslator.dict['fr'] = {
+        it - Italian => SnapTranslator.dict['it'] = {
+        pl - Polish => SnapTranslator.dict['pl'] = {
+        pt - Portuguese => SnapTranslator.dict['pt'] = {
+        es - Spanish => SnapTranslator.dict['es'] = {
+        el - Greek => => SnapTranslator.dict['el'] = {
 
     etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
+
+    Also change the header file fields and the metadata... language name,
+    name in english and your contact info using the following format
+    (only the name is mandatory):
+
+        Your name <your@email.com> (your.homepage.com)
+
+    IMPORTANT:
+
+        Once edited, you MUST copy the metadata definition snippet and
+        paste at the end of the locale.js file. This will activate the support
+        for your language.
+
+        Rename the file you downloaded to lang-XX.js, with XX being the two
+        letter code you used previously.
+
+        Go back to to Snap! and reload the page. An entry with the name of
+        your language should be shown under the Languages menu.
 
 
     3. Translate
 
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
+    Then work through the dictionary, providing your own translations as
+    values for the english key strings. The dictionary is a straight-forward
+    JavaScript ad-hoc object, for review purposes it should be formatted
+    as follows:
 
         {
-            'English string':
+            'English string': // morphic.js:783
                 'Translation string',
             'last key':
-        }       'last value'
+                undefined,
+            'a key with a {{ placeholder }}':
+                'this translation a {{ placeholder }} has',
+        }
 
     and you only edit the indented value strings. Note that each key-value
     pair needs to be delimited by a comma, but that there shouldn't be a comma
     after the last pair (again, just overwrite the template file and you'll be
     fine).
+
+    Placeholders are strings automatically provided by Snap! in runtime.
+    You are allowed to place in the most natural way in your translation,
+    or even ignore it completely if it's justified.
+
+    Also, note that is OK if you left an english string untranslated, that is,
+    its value set to "undefined". So you don't need to delete that key/value
+    pairs. Maybe a future translator would find a suitable translation for it.
 
     If something doesn't work, or if you're unsure about the formalities you
     should check your file with
@@ -102,6 +137,7 @@
     side, it's even better to escape these characters using Unicode.
 
         see: <http://0xcc.net/jsescape/>
+        and: <https://r12a.github.io/apps/conversion/>
 
 
     5. Block specs:
@@ -135,24 +171,15 @@
 
     6. Submit
 
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
+    When you're done, send the lang-XX.js file to me for inclusion in the
+    official Snap! distribution.
     Once your translation has been included, Your name will the shown in the
     "Translators" tab in the "About Snap!" dialog box, and you will be able to
     directly launch a translated version of Snap! in your browser by appending
 
-        lang:xx
+        lang:XX
 
-    to the URL, xx representing your translations two-letter code.
+    to the URL, XX representing your translations two-letter code.
 
 
     7. Known issues
@@ -162,1187 +189,2450 @@
 
     Enjoy!
     -Jens
+
 */
 
-/*global SnapTranslator*/
+/* global SnapTranslator */
 
+// Copy the following code snippet and paste it in the locale.js file:
+// ✂ - - - - - - - - - - - - - - - - -  -   -
 SnapTranslator.dict.cs = {
+    metadata: {
+        'name': // the name as it should appear in the language menu
+            '\u010Cesky',
+        'english_name': // the english name of the language
+            'Czech',
+        'translators': [ // translators authors for the Translators tab
+            'Michal Moc <info@iguru.eu>',
+            'Jan Tomsa <jan.tomsa.1976@gmail.com>'
+        ],
+        'last_changed': // this, too, will appear in the Translators tab
+            '2015-11-16',
+    },
+    strings: {},
+};
+// ✂ - - - - - - - - - - - - - - - - -  -   -
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Česky', // the name as it should appear in the language menu
-    'language_translator':
-        'Michal Moc, Jan Tomsa', // your name for the Translators tab
-    'translator_e-mail':
-        'info@iguru.eu, jan.tomsa.1976@gmail.com', // optional
-    'last_changed':
-        '2015-11-16', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'Bez názvu',
-    'development mode':
-        'Vývojový mód',
-
-    // categories:
-    'Motion':
-        'Pohyb',
-    'Looks':
-        'Vzhled',
-    'Sound':
-        'Zvuk',
-    'Pen':
-        'Pero',
-    'Control':
-        'Ovládání',
-    'Sensing':
-        'Vnímání',
-    'Operators':
-        'Operátory',
-    'Variables':
-        'Proměnné',
-    'Lists':
-        'Seznamy',
-    'Other':
-        'Ostatní',
-
-    // editor:
-    'draggable':
-        'přetahovatelný',
-
-    // tabs:
-    'Scripts':
-        'Skripty',
-    'Costumes':
-        'Kostýmy',
-    'Sounds':
-        'Zvuky',
-
-    // names:
-    'Sprite':
-        'Sprite',
-    'Stage':
-        'Scéna',
-
-    // rotation styles:
-    'don\'t rotate':
-        'neotáčet',
-    'can rotate':
-        'lze otočit',
-    'only face left/right':
-        'jen vlevo/vpravo',
-
-    // new sprite button:
-    'add a new sprite':
-        'přidat nový sprite',
-    'add a new Turtle sprite':
-        'přidat nový sprite želvy',
-
-    // tab help
-    'costumes tab help':
-        'Nahrajte obrázek odjinud z webu\n'
-            + 'nebo nahrajte soubor z Vašeho počítače přetažením sem.',
-    'import a sound from your computer\nby dragging it into here':
-        'Nahrajte zvuk z Vašeho počítače přetažením sem.',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Vybraná scéna:'
-            + 'žádné pohybové bloky',
-
-    'move %n steps':
-        'posuň se o %n kroků',
-    'turn %clockwise %n degrees':
-        'otoč se o %clockwise %n stupňů',
-    'turn %counterclockwise %n degrees':
-        'otoč se o %counterclockwise %n stupňů',
-    'point in direction %dir':
-        'zamiř směrem %dir',
-    'point towards %dst':
-        'zamiř k %dst',
-    'go to x: %n y: %n':
-        'jdi na pozici x: %n y: %n',
-    'go to %dst':
-        'jdi na %dst',
-    'glide %n secs to x: %n y: %n':
-        'plachti %n sekund na pozici x: %n y: %n',
-    'change x by %n':
-        'změň x o %n',
-    'set x to %n':
-        'nastav x na %n',
-    'change y by %n':
-        'změň y o %n',
-    'set y to %n':
-        'nastav y na %n',
-    'if on edge, bounce':
-        'pokud narazíš na okraj, odskoč',
-    'x position':
-        'pozice x',
-    'y position':
-        'pozice y',
-    'direction':
-        'směr',
-
-    // looks:
-    'switch to costume %cst':
-        'oblékni kostým %cst',
-    'next costume':
-        'další kostým',
-    'costume #':
-        'kostým číslo',
-    'say %s for %n secs':
-        'povídej %s příštích %n sekund',
-    'say %s':
-        'povídej %s',
-    'think %s for %n secs':
-        'pomysli si %s dalších %n sekund',
-    'think %s':
-        'pomysli si %s',
-    'Hello!':
-        'Ahoj!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        'změň efekt %eff o %n',
-    'set %eff effect to %n':
-        'nastav efekt %eff na %n',
-    'clear graphic effects':
-        'odstraň grafické efekty',
-    'change size by %n':
-        'změň velikost o %n',
-    'set size to %n %':
-        'změň velikost na %n %',
-    'size':
-        'velikost',
-    'show':
-        'ukaž se',
-    'hide':
-        'schovej se',
-    'go to front':
-        'jdi do popředí',
-    'go back %n layers':
-        'jdi do pozadí o %n úrovní',
-    'development mode \ndebugging primitives:':
-        'vývojový mód \nladění primitiv',
-    'console log %mult%s':
-        'výstup do konsole: %mult%s',
-    'alert %mult%s':
-        'Upozornění: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'hraj zvuk %snd',
-    'play sound %snd until done':
-        'hraj zvuk %snd a počkej',
-    'stop all sounds':
-        'vypni všechny zvuky',
-    'rest for %n beats':
-            'pauza %n dob(y)',
-        'play note %n for %n beats':
-            'zahraj tón %n po %n dob(y)',
-        'change tempo by %n':
-            'změň tempo o %n',
-        'set tempo to %n bpm':
-            'nastav tempo na %n bpm.',
-        'tempo':
-            'tempo',
-
-    // pen:
-    'clear':
-        'smaž',
-    'pen down':
-        'pero dolů',
-    'pen up':
-        'pero nahoru',
-    'set pen color to %clr':
-        'nastavit barvu pera na %clr',
-    'change pen color by %n':
-        'změň barvu pera o %n',
-    'set pen color to %n':
-        'nastav barvu pera na %n',
-    'change pen shade by %n':
-        'změň odstín pera o %n',
-    'set pen shade to %n':
-        'nastav odstín pera na %n',
-    'change pen size by %n':
-        'změň tloušťku pera o %n',
-    'set pen size to %n':
-        'nastav tloušťku pera na %n',
-    'stamp':
-        'razítko',
-
-    // control:
-    'when %greenflag clicked':
-        'Po klepnutí na %greenflag',
-    'when %keyHat key pressed':
-        'po stisku klávesy %keyHat',
-    'when I am %interaction':
-        'když %interaction',
-    'clicked':
-        'na mě kliknou',
-    'pressed':
-        'mě stisknou',
-    'dropped':
-        'mě upustí',
-    'mouse-entered':
-        'na mě najede myš',
-    'mouse-departed':
-        'ze mě sjede myš',
-    'when I receive %msgHat':
-        'po přijetí zprávy %msgHat',
-    'broadcast %msg':
-        'poslat všem %msg',
-    'broadcast %msg and wait':
-        'poslat všem %msg a čekat',
-    'Message name':
-        'název zprávy',
-    'message':
-        'zpráva',
-    'any message':
-        'jakákoli zpráva',
-    'wait %n secs':
-        'čekej %n sekund',
-    'wait until %b':
-        'čekej dokud nenastane %b',
-    'forever %c':
-        'stále opakuj %c',
-    'repeat %n %c':
-        'opakuj %n krát %c',
-    'repeat until %b %c':
-        'opakuj dokud nenastane %b %c',
-    'if %b %c':
-        'když %b %c',
-    'if %b %c else %c':
-        'když %b %c jinak %c',
-    'report %s':
-        'vrátit %s',
-    'stop %stopChoices':
-        'stop %stopChoices',
-    'all':
-        'vše',
-    'this script':
+SnapTranslator.dict.cs.strings = {
+    '0': // blocks.js:1178
+        '0',
+    '1': // blocks.js:1179
+        '1',
+    '2': // blocks.js:1180
+        '2',
+    '3': // blocks.js:1181
+        '3',
+    '4': // blocks.js:1182
+        '4',
+    '5': // blocks.js:1183
+        '5',
+    '6': // blocks.js:1184
+        '6',
+    '7': // blocks.js:1185
+        '7',
+    '8': // blocks.js:1186
+        '8',
+    '9': // blocks.js:1187
+        '9',
+    'cached inputs size do not match': // blocks.js:341
+        undefined,
+    'cached input does not match': // blocks.js:347
+        undefined,
+    'pen trails': // blocks.js:820 blocks.js:8393 objects.js:578 objects.js:7436
+        'stopa pera',
+    'stage image': // blocks.js:821
+        undefined,
+    'with inputs': // blocks.js:831
+        's polo\u017Ekami',
+    'block variables': // blocks.js:840 byob.js:1053
+        undefined,
+    'Input Names': // blocks.js:844
+        'Prom\u011Bnn\u00E9',
+    'input names': // blocks.js:850
+        'prom\u011Bnn\u00E9',
+    'Input name': // blocks.js:902 blocks.js:5344
+        'Vstup',
+    '(90) right': // blocks.js:935 morphic.js:4888
+        '(90) doprava',
+    '(-90) left': // blocks.js:936 morphic.js:4889
+        '(-90) doleva',
+    '(0) up': // blocks.js:937 morphic.js:4890
+        '(0) nahoru',
+    '(180) down': // blocks.js:938 morphic.js:4891
+        '(180) dol\u016F',
+    'random': // blocks.js:939
+        undefined,
+    '(1) sine': // blocks.js:956
+        undefined,
+    '(2) square': // blocks.js:957
+        undefined,
+    '(3) sawtooth': // blocks.js:958
+        undefined,
+    '(4) triangle': // blocks.js:959
+        undefined,
+    'January': // blocks.js:968 widgets.js:1941
+        'leden',
+    'February': // blocks.js:969 widgets.js:1942
+        '\u00FAnor',
+    'March': // blocks.js:970 widgets.js:1943
+        'b\u0159ezen',
+    'April': // blocks.js:971 widgets.js:1944
+        'duben',
+    'May': // blocks.js:972 widgets.js:1945
+        'kv\u011Bten',
+    'June': // blocks.js:973 widgets.js:1946
+        '\u010Derven',
+    'July': // blocks.js:974 widgets.js:1947
+        '\u010Dervenec',
+    'August': // blocks.js:975 widgets.js:1948
+        'srpen',
+    'September': // blocks.js:976 widgets.js:1949
+        'z\u00E1\u0159\u00ED',
+    'October': // blocks.js:977 widgets.js:1950
+        '\u0159\u00EDjen',
+    'November': // blocks.js:978 widgets.js:1951
+        'listopad',
+    'December': // blocks.js:979 widgets.js:1952
+        'prosinec',
+    'clicked': // blocks.js:988
+        'na m\u011B kliknou',
+    'pressed': // blocks.js:989
+        'm\u011B stisknou',
+    'dropped': // blocks.js:990
+        'm\u011B upust\u00ED',
+    'mouse-entered': // blocks.js:991
+        'na m\u011B najede my\u0161',
+    'mouse-departed': // blocks.js:992
+        'ze m\u011B sjede my\u0161',
+    'scrolled-up': // blocks.js:993
+        undefined,
+    'scrolled-down': // blocks.js:994
+        undefined,
+    'year': // blocks.js:1004 widgets.js:2063
+        'rok',
+    'month': // blocks.js:1005
+        'm\u011Bs\u00EDc',
+    'date': // blocks.js:1006
+        'datum',
+    'day of week': // blocks.js:1007
+        'den v t\u00FDdnu',
+    'hour': // blocks.js:1008
+        'hodina',
+    'minute': // blocks.js:1009
+        'minuta',
+    'second': // blocks.js:1010
+        'sekunda',
+    'time in milliseconds': // blocks.js:1011
+        '\u010Das v milisekund\u00E1ch',
+    'letter': // blocks.js:1021
+        undefined,
+    'whitespace': // blocks.js:1022
+        undefined,
+    'line': // blocks.js:1023 symbols.js:113
+        undefined,
+    'tab': // blocks.js:1024
+        undefined,
+    'cr': // blocks.js:1025
+        undefined,
+    'csv': // blocks.js:1026
+        undefined,
+    'last': // blocks.js:1036 blocks.js:1048
+        'posledn\u00ED',
+    'all': // blocks.js:1038 blocks.js:1265 byob.js:3874
+        'v\u0161e',
+    'any': // blocks.js:1049
+        'kter\u00E1koli',
+    'distance': // blocks.js:1058
+        undefined,
+    'direction': // blocks.js:1059 blocks.js:2483 blocks.js:8556 objects.js:300
+        'sm\u011Br',
+    'color': // blocks.js:1117 morphic.js:4132 morphic.js:4135 morphic.js:12219 morphic.js:12222
+        undefined,
+    'fisheye': // blocks.js:1118
+        undefined,
+    'whirl': // blocks.js:1119
+        undefined,
+    'pixelate': // blocks.js:1120
+        undefined,
+    'mosaic': // blocks.js:1121
+        undefined,
+    'duplicate': // blocks.js:1122 blocks.js:2545 blocks.js:11904 gui.js:7368 gui.js:7710 morphic.js:4167 objects.js:3236
+        'kop\u00EDrovat',
+    'negative': // blocks.js:1123
+        'negativ',
+    'comic': // blocks.js:1124
+        'moar\u00E9',
+    'confetti': // blocks.js:1125
+        'barevnost',
+    'saturation': // blocks.js:1126
+        undefined,
+    'brightness': // blocks.js:1127
+        'jas',
+    'ghost': // blocks.js:1128
+        'duch',
+    'any key': // blocks.js:1146
+        undefined,
+    'up arrow': // blocks.js:1147
+        '\u0161ipka nahoru',
+    'down arrow': // blocks.js:1148
+        '\u0161ipka dol\u016F',
+    'right arrow': // blocks.js:1149
+        '\u0161ipka doprava',
+    'left arrow': // blocks.js:1150
+        '\u0161ipka doleva',
+    'space': // blocks.js:1151
+        'mezern\u00EDk',
+    'a': // blocks.js:1152
+        'a',
+    'b': // blocks.js:1153
+        'b',
+    'c': // blocks.js:1154
+        'c',
+    'd': // blocks.js:1155
+        'd',
+    'e': // blocks.js:1156
+        'e',
+    'f': // blocks.js:1157
+        'f',
+    'g': // blocks.js:1158
+        'g',
+    'h': // blocks.js:1159
+        'h',
+    'i': // blocks.js:1160
+        'i',
+    'j': // blocks.js:1161
+        'j',
+    'k': // blocks.js:1162
+        'k',
+    'l': // blocks.js:1163
+        'l',
+    'm': // blocks.js:1164
+        'm',
+    'n': // blocks.js:1165
+        'n',
+    'o': // blocks.js:1166
+        'o',
+    'p': // blocks.js:1167
+        'p',
+    'q': // blocks.js:1168
+        'q',
+    'r': // blocks.js:1169
+        'r',
+    's': // blocks.js:1170
+        's',
+    't': // blocks.js:1171
+        't',
+    'u': // blocks.js:1172
+        'u',
+    'v': // blocks.js:1173
+        'v',
+    'w': // blocks.js:1174
+        'w',
+    'x': // blocks.js:1175
+        'x',
+    'y': // blocks.js:1176
+        'y',
+    'z': // blocks.js:1177
+        'z',
+    'abs': // blocks.js:1226
+        'absolutn\u00ED hodnota',
+    'ceiling': // blocks.js:1227 morphic.js:7085 morphic.js:7088
+        'zaokrouhlit nahoru',
+    'floor': // blocks.js:1228 morphic.js:7069 morphic.js:7072
+        'zaokrouhlit dol\u016F',
+    'sqrt': // blocks.js:1229
+        'odmocnina',
+    'sin': // blocks.js:1230
+        'sin',
+    'cos': // blocks.js:1231
+        'cos',
+    'tan': // blocks.js:1232
+        'tan',
+    'asin': // blocks.js:1233
+        'asin',
+    'acos': // blocks.js:1234
+        'acos',
+    'atan': // blocks.js:1235
+        'atan',
+    'ln': // blocks.js:1236
+        'ln',
+    'log': // blocks.js:1237
+        undefined,
+    'e^': // blocks.js:1238
+        'e^',
+    '10^': // blocks.js:1239
+        undefined,
+    'encode URI': // blocks.js:1249
+        undefined,
+    'decode URI': // blocks.js:1250
+        undefined,
+    'encode URI component': // blocks.js:1251
+        undefined,
+    'decode URI component': // blocks.js:1252
+        undefined,
+    'XML escape': // blocks.js:1253
+        undefined,
+    'XML unescape': // blocks.js:1254
+        undefined,
+    'hex sha512 hash': // blocks.js:1255
+        undefined,
+    'this script': // blocks.js:1266
         'tento skript',
-    'this block':
+    'this block': // blocks.js:1267
         'tento blok',
+    'all but this script': // blocks.js:1268
+        'v\u0161e krom\u011B tohoto skriptu',
+    'other scripts in sprite': // blocks.js:1269
+        'ostatn\u00ED skripty tohoto objektu',
+    'String': // blocks.js:1290
+        undefined,
+    'Number': // blocks.js:1291 byob.js:3286
+        '\u010C\u00EDslo',
+    'true': // blocks.js:1292 blocks.js:9529 blocks.js:9919 objects.js:2979
+        'pravda',
+    'false': // blocks.js:1293 blocks.js:9544 blocks.js:9930 objects.js:2979
+        'nepravda',
+    'code': // blocks.js:1334
+        undefined,
+    'header': // blocks.js:1335
+        undefined,
+    'list': // blocks.js:1408 blocks.js:8487
+        'seznam',
+    'item': // blocks.js:1409
+        undefined,
+    'delimiter': // blocks.js:1410
+        undefined,
+    'collection': // blocks.js:1419
+        undefined,
+    'variables': // blocks.js:1420
+        undefined,
+    'parameters': // blocks.js:1421
+        undefined,
+    'untitled': // blocks.js:1993 blocks.js:2604 blocks.js:6443 blocks.js:11919 byob.js:1037 byob.js:3910 gui.js:979 gui.js:4036 store.js:296
+        'Bez n\u00E1zvu',
+    '{{ projectName }} script pic': // blocks.js:1993 blocks.js:2602 blocks.js:6441 byob.js:1035
+        undefined,
+    'script target cannot be found for orphaned block': // blocks.js:2203
+        undefined,
+    'a {{ className }} ("{{ value }}...")': // blocks.js:2207 morphic.js:8466 morphic.js:9146
+        undefined,
+    'Variable name': // blocks.js:2377 blocks.js:3262 objects.js:2179 objects.js:7304
+        'Jm\u00E9no prom\u011Bnn\u00E9',
+    'help': // blocks.js:2386 objects.js:1851 objects.js:2308
+        'n\u00E1pov\u011Bda',
+    'script pic with result': // blocks.js:2393
+        undefined,
+    'open a new window\nwith a picture of both\nthis script and its result': // blocks.js:2397
+        undefined,
+    'rename': // blocks.js:2409 blocks.js:2458 blocks.js:2521 gui.js:7708 gui.js:8409 morphic.js:7656
+        'p\u0159ejmenovat',
+    'rename only\nthis reporter': // blocks.js:2413 blocks.js:2462 blocks.js:2523
+        undefined,
+    'rename all': // blocks.js:2416 blocks.js:2465
+        undefined,
+    'rename all blocks that\naccess this variable': // blocks.js:2418 blocks.js:2467
+        undefined,
+    'inherited': // blocks.js:2426 blocks.js:2437 blocks.js:2490 blocks.js:6370 byob.js:1099 byob.js:1121
+        undefined,
+    'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
+        undefined,
+    'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
+        undefined,
+    'transient': // blocks.js:2450
+        undefined,
+    'uncheck to save contents\nin the project': // blocks.js:2453
+        undefined,
+    'check to prevent contents\nfrom being saved': // blocks.js:2454
+        undefined,
+    'hide': // blocks.js:2472 morphic.js:4214 objects.js:394
+        'schovej se',
+    'x position': // blocks.js:2481 blocks.js:8554 objects.js:288
+        'pozice x',
+    'y position': // blocks.js:2482 blocks.js:8555 objects.js:294
+        'pozice y',
+    'size': // blocks.js:2484 blocks.js:8559 objects.js:382
+        'velikost',
+    'costume #': // blocks.js:2485 blocks.js:8557 blocks.js:8561 objects.js:317
+        'kost\u00FDm \u010D\u00EDslo',
+    'header mapping': // blocks.js:2507 blocks.js:2677
+        undefined,
+    'code mapping': // blocks.js:2511 blocks.js:2681
+        undefined,
+    'relabel': // blocks.js:2527 blocks.js:2538
+        'Zam\u011Bnit blok za',
+    'make a copy\nand pick it up': // blocks.js:2564 blocks.js:11908 morphic.js:4171
+        'vytvo\u0159it kopii a dr\u017Eet ji',
+    'only duplicate this block': // blocks.js:2586
+        'kop\u00EDrovat pouze tento blok',
+    'delete': // blocks.js:2590 blocks.js:11910 gui.js:7372 gui.js:7711 gui.js:8410 morphic.js:4215 objects.js:3242
+        'smazat',
+    'script pic': // blocks.js:2594 byob.js:1030
+        'obr\u00E1zek skriptu',
+    'open a new window\nwith a picture of this script': // blocks.js:2608 byob.js:1041
+        'otev\u0159\u00EDt nov\u00E9 okno\ns obr\u00E1zkem tohoto skriptu',
+    'download script': // blocks.js:2612
+        undefined,
+    '{{ name }} script': // blocks.js:2622
+        undefined,
+    'download this script\nas an XML file': // blocks.js:2627
+        undefined,
+    'unringify': // blocks.js:2657
+        'zru\u0161it zabalen\u00ED',
+    'ringify': // blocks.js:2661 blocks.js:2673
+        'obalit',
+    'delete block': // blocks.js:2691
+        undefined,
+    'spec': // blocks.js:2692 blocks.js:2699
+        undefined,
+    'Help': // blocks.js:2980 blocks.js:2997
+        'N\u00E1pov\u011Bda',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.': // blocks.js:3026
+        undefined,
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).': // blocks.js:3029
+        undefined,
+    'Header mapping': // blocks.js:3043
+        undefined,
+    'Code mapping': // blocks.js:3072
+        undefined,
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.': // blocks.js:3077
+        undefined,
+    'Variable exists': // blocks.js:3292
+        undefined,
+    'A variable with this name already exists in this context.': // blocks.js:3294
+        undefined,
+    'A variable with this name already exists as a global variable.': // blocks.js:3396
+        undefined,
+    'A variable with this name already exists as a sprite local variable.': // blocks.js:3455
+        undefined,
+    'Block variable name': // blocks.js:5346
+        undefined,
+    'Script variable name': // blocks.js:5348
+        'Jm\u00E9no skriptov\u00E9 prom\u011Bnn\u00E9',
+    'undrop': // blocks.js:6320 blocks.js:6709
+        undefined,
+    'undo the last\nblock drop\nin this pane': // blocks.js:6324
+        undefined,
+    'redrop': // blocks.js:6335 blocks.js:6722
+        undefined,
+    'redo the last undone\nblock drop\nin this pane': // blocks.js:6339
+        undefined,
+    'clear undrop queue': // blocks.js:6345
+        undefined,
+    'forget recorded block drops\non this pane': // blocks.js:6351
+        undefined,
+    'clean up': // blocks.js:6359
+        'Srovnat',
+    'arrange scripts\nvertically': // blocks.js:6359
+        'zarovnat skripty vertik\u00E1ln\u011B',
+    'add comment': // blocks.js:6360
+        'p\u0159idat koment\u00E1\u0159',
+    'scripts pic': // blocks.js:6362
+        undefined,
+    'open a new window\nwith a picture of all scripts': // blocks.js:6364
+        undefined,
+    'make a block': // blocks.js:6380
+        'vytvo\u0159it blok',
+    'Make a block': // blocks.js:6398 objects.js:2303 objects.js:2352 objects.js:2411
+        'Vytvo\u0159 blok',
+    'nothing to undrop': // blocks.js:6549
+        undefined,
+    'unsupported action for {{ morph }}': // blocks.js:6640
+        undefined,
+    'use the keyboard\nto enter blocks': // blocks.js:6747
+        undefined,
+    'script target cannot be found for orphaned scripts': // blocks.js:6925
+        undefined,
+    'choose new parent': // blocks.js:7225 morphic.js:4253
+        undefined,
+    'new message': // blocks.js:8338 blocks.js:8370
+        undefined,
+    'Message name': // blocks.js:8345 blocks.js:8377
+        'n\u00E1zev zpr\u00E1vy',
+    'any message': // blocks.js:8360
+        'jak\u00E1koli zpr\u00E1va',
+    'mouse-pointer': // blocks.js:8391 blocks.js:8420
+        'kurzor my\u0161i',
+    'edge': // blocks.js:8392
+        'okraj',
+    'random position': // blocks.js:8418
+        undefined,
+    'myself': // blocks.js:8445
+        'sama sebe',
+    'number': // blocks.js:8484
+        '\u010D\u00EDslo',
+    'text': // blocks.js:8485 morphic.js:12305
+        'text',
+    'Boolean': // blocks.js:8486
+        'boolean',
+    'sprite': // blocks.js:8490
+        undefined,
+    'costume': // blocks.js:8492 objects.js:3069
+        undefined,
+    'sound': // blocks.js:8493
+        undefined,
+    'command': // blocks.js:8494
+        'blok p\u0159\u00EDkaz\u016F',
+    'reporter': // blocks.js:8495
+        'blok funkc\u00ED',
+    'predicate': // blocks.js:8496
+        'podm\u00EDnky',
+    'neighbors': // blocks.js:8502
+        undefined,
+    'self': // blocks.js:8503
+        undefined,
+    'other sprites': // blocks.js:8504
+        undefined,
+    'clones': // blocks.js:8505
+        undefined,
+    'other clones': // blocks.js:8506
+        undefined,
+    'parts': // blocks.js:8508
+        undefined,
+    'anchor': // blocks.js:8509
+        undefined,
+    'stage': // blocks.js:8511 symbols.js:95
+        undefined,
+    'children': // blocks.js:8513
+        undefined,
+    'parent': // blocks.js:8514 gui.js:7178 gui.js:7385
+        undefined,
+    'temporary?': // blocks.js:8516
+        undefined,
+    'name': // blocks.js:8519
+        undefined,
+    'costumes': // blocks.js:8520
+        undefined,
+    'sounds': // blocks.js:8521
+        undefined,
+    'dangling?': // blocks.js:8522
+        undefined,
+    'rotation x': // blocks.js:8523
+        undefined,
+    'rotation y': // blocks.js:8524
+        undefined,
+    'center x': // blocks.js:8525
+        undefined,
+    'center y': // blocks.js:8526
+        undefined,
+    'costume name': // blocks.js:8558 blocks.js:8562
+        undefined,
+    'Turtle': // blocks.js:8582 gui.js:7941 objects.js:3166 threads.js:3349
+        '\u017Eelva',
+    'Empty': // blocks.js:8584 gui.js:7941 objects.js:3166 threads.js:3350
+        undefined,
+    'code number mapping': // blocks.js:8835
+        undefined,
+    'code string mapping': // blocks.js:8840
+        undefined,
+    'String <#1>': // blocks.js:8864
+        undefined,
+    'Code mapping - {{ type }}': // blocks.js:8864 blocks.js:8879
+        undefined,
+    'Number <#1>': // blocks.js:8879
+        undefined,
+    'code true mapping': // blocks.js:9500
+        undefined,
+    'code false mapping': // blocks.js:9505
+        undefined,
+    'Code mapping - {{ name }}': // blocks.js:9529 blocks.js:9544 blocks.js:10662
+        undefined,
+    'code list mapping': // blocks.js:10619
+        undefined,
+    'code item mapping': // blocks.js:10623
+        undefined,
+    'code delimiter mapping': // blocks.js:10627
+        undefined,
+    'list item delimiter': // blocks.js:10642
+        undefined,
+    'list contents <#1>': // blocks.js:10646
+        undefined,
+    'list item <#1>': // blocks.js:10650
+        undefined,
+    'input list': // blocks.js:10750
+        undefined,
+    'add comment here': // blocks.js:11762
+        'p\u0159idat sem koment\u00E1\u0159',
+    'comment pic': // blocks.js:11912
+        undefined,
+    '{{ projectName }} comment pic': // blocks.js:11917
+        undefined,
+    'open a new window\nwith a picture of this comment': // blocks.js:11923
+        undefined,
+    'Change block': // byob.js:885
+        'Zm\u011Bnit blok',
+    '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
+        undefined,
+    'translations': // byob.js:1044
+        undefined,
+    'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
+        undefined,
+    'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
+        undefined,
+    'remove block variables': // byob.js:1061
+        undefined,
+    'duplicate block definition': // byob.js:1079
+        undefined,
+    'delete block definition': // byob.js:1089 byob.js:1133 byob.js:1147
+        'smazat definici bloku',
+    'edit': // byob.js:1157 gui.js:7699 morphic.js:8730 morphic.js:9477 objects.js:3255 objects.js:3261 objects.js:7422
+        'upravit',
+    'Delete Custom Block': // byob.js:1228
+        'smazat vlastn\u00ED blok',
+    'Are you sure you want to delete this\ncustom block and all its instances?': // byob.js:1229
+        'Smaz\u00E1n\u00EDm tohoto bloku se odstran\u00ED v\u0161echna jeho pou\u017Eit\u00ED.\nOpravdu chcete tento blok smazat?',
+    'OK': // byob.js:1648 byob.js:2117 byob.js:3237 byob.js:3848 gui.js:3713 morphic.js:3958 morphic.js:4028 morphic.js:4054 objects.js:8312 paint.js:161 tables.js:1212 widgets.js:1574 widgets.js:1708 widgets.js:1791 widgets.js:1874 widgets.js:2155 widgets.js:2434
+        'OK',
+    'Cancel': // byob.js:1649 byob.js:2120 byob.js:3243 byob.js:3849 gui.js:3371 gui.js:3714 gui.js:5941 gui.js:6843 gui.js:8996 gui.js:9134 morphic.js:4031 morphic.js:4057 objects.js:8313 paint.js:162 widgets.js:1709 widgets.js:1792 widgets.js:1887 widgets.js:2156
+        'Zru\u0161it',
+    'Command': // byob.js:1770
+        'P\u0159\u00EDkaz',
+    'Reporter': // byob.js:1779 byob.js:3290
+        'Funkce',
+    'Predicate': // byob.js:1788 byob.js:3291
+        'Podm\u00EDnka',
+    'for all sprites': // byob.js:1850 byob.js:3662
+        'pro v\u0161echny sprite',
+    'for this sprite only': // byob.js:1855 byob.js:3667
+        'pouze pro tento sprite',
+    'Block Editor': // byob.js:2065
+        'Editor blok\u016F',
+    'Method Editor': // byob.js:2066
+        undefined,
+    'Apply': // byob.js:2119
+        'Pou\u017E\u00EDt',
+    'Local Block(s) in Global Definition': // byob.js:2204
+        undefined,
+    'This global block definition contains one or more\nlocal custom blocks which must be removed first.': // byob.js:2205
+        undefined,
+    'Same Named Blocks': // byob.js:2221
+        undefined,
+    'Another custom block with this name exists.\nWould you like to replace it?': // byob.js:2222
+        undefined,
+    'Custom Block Translations': // byob.js:2373
+        undefined,
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs': // byob.js:2379
+        undefined,
+    'Edit label fragment': // byob.js:2752
+        'Upravit n\u00E1pis',
+    'Create input name': // byob.js:2754
+        'Vytvo\u0159it vstup',
+    'Edit input name': // byob.js:2755
+        'Upravit vstup',
+    'new line': // byob.js:2800 byob.js:3266
+        undefined,
+    'Title text': // byob.js:3061
+        'Nadpis',
+    'Delete': // byob.js:3239 gui.js:5940
+        'Smazat',
+    'Object': // byob.js:3283
+        'Objekt',
+    'Text': // byob.js:3284
+        'Text',
+    'List': // byob.js:3285
+        'Seznam',
+    'Any type': // byob.js:3287
+        'Libovoln\u00FD',
+    'Boolean (T/F)': // byob.js:3288
+        'Boolean (P/N)',
+    'Command\n(inline)': // byob.js:3289
+        'P\u0159\u00EDkaz\n(vno\u0159en\u00FD)',
+    'Command\n(C-shape)': // byob.js:3292
+        'P\u0159\u00EDkaz\n(C-tvar)',
+    'Any\n(unevaluated)': // byob.js:3293
+        'Cokoliv\n(nevyhodnoceno)',
+    'Boolean\n(unevaluated)': // byob.js:3294
+        'Boolean\n(nevyhodnoceno)',
+    'Single input': // byob.js:3299
+        'Jednoduch\u00FD vstup',
+    'Multiple inputs (value is list of inputs)': // byob.js:3304
+        'V\u00EDce vstup\u016F (hodnoty v seznamu)',
+    'Upvar - make internal variable visible to caller': // byob.js:3309
+        'Vnit\u0159n\u00ED prom\u011Bnn\u00E1 viditeln\u00E1 pro vol\u00E1n\u00ED',
+    'Default Value': // byob.js:3314
+        'V\u00FDchoz\u00ED hodnota',
+    'options': // byob.js:3570
+        undefined,
+    'read-only': // byob.js:3573
+        undefined,
+    'Input Slot Options': // byob.js:3593
+        undefined,
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42': // byob.js:3597
+        undefined,
+    'Export blocks': // byob.js:3776 byob.js:3914 gui.js:3187 gui.js:3835
+        'Export blok\u016F',
+    'select': // byob.js:3873
+        'vybrat',
+    'none': // byob.js:3875 objects.js:5421 objects.js:5427
+        'nic',
+    '{{ projectName }} blocks': // byob.js:3910
+        undefined,
+    'no blocks were selected': // byob.js:3915 byob.js:4009 byob.js:4102
+        undefined,
+    'Import blocks': // byob.js:3962 byob.js:3963 byob.js:4008
+        undefined,
+    'Imported Blocks Module': // byob.js:4002 byob.js:4003 gui.js:4355
+        undefined,
+    'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
+        undefined,
+    '{{ count }} unused block(s) removed': // byob.js:4096
+        undefined,
+    'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
+        undefined,
+    'Cloud Error': // cloud.js:159
+        undefined,
+    'You are not logged in': // cloud.js:188 cloud.js:436
+        undefined,
+    'Could not retrieve current user': // cloud.js:237
+        undefined,
+    'Could not retrieve user': // cloud.js:247
+        undefined,
+    'logout failed': // cloud.js:258
+        undefined,
+    'login failed': // cloud.js:280
+        undefined,
+    'signup failed': // cloud.js:303
+        undefined,
+    'Could not change password': // cloud.js:323
+        undefined,
+    'Password reset request failed': // cloud.js:334
+        undefined,
+    'Could not send verification email': // cloud.js:344
+        undefined,
+    'Cannot Save Project': // cloud.js:378
+        undefined,
+    'The media inside this project exceeds {{ size }}.\nPlease reduce the size of costumes or sounds.\n': // cloud.js:379
+        undefined,
+    'Project media exceeds {{ size }} size limit': // cloud.js:387
+        undefined,
+    'Serialization of program data failed': // cloud.js:398 cloud.js:401
+        undefined,
+    'Serialization of media failed': // cloud.js:409 cloud.js:412
+        undefined,
+    'Uploading {{ size }}': // cloud.js:419
+        undefined,
+    'Project could not be saved': // cloud.js:429
+        undefined,
+    'Could not fetch projects': // cloud.js:456 cloud.js:490
+        undefined,
+    'Could not fetch thumbnail': // cloud.js:509
+        undefined,
+    'Could not fetch project {{ name }}': // cloud.js:520 cloud.js:536
+        undefined,
+    'Could not fetch metadata for {{ name }}': // cloud.js:552
+        undefined,
+    'Could not delete project': // cloud.js:568
+        undefined,
+    'Could not share project': // cloud.js:586
+        undefined,
+    'Could not unshare project': // cloud.js:604
+        undefined,
+    'Could not publish project': // cloud.js:622
+        undefined,
+    'Could not unpublish project': // cloud.js:640
+        undefined,
+    'Could not update project notes': // cloud.js:655
+        undefined,
+    'Unverified account': // gui.js:281 gui.js:5252
+        undefined,
+    'Your account is still unverified.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.': // gui.js:282
+        undefined,
+    'unable to retrieve {{ resource }}': // gui.js:337 gui.js:5689 gui.js:5700 morphic.js:11546
+        undefined,
+    'unable to retrieve project': // gui.js:339
+        undefined,
+    'Fetching project\nfrom the cloud': // gui.js:417 gui.js:458 gui.js:494 gui.js:2612 gui.js:6391
+        undefined,
+    'Opening project': // gui.js:430 gui.js:470 gui.js:2627 gui.js:4222
+        undefined,
+    'Saved project\n{{ name }}': // gui.js:506
+        undefined,
+    'Visible stepping': // gui.js:716 gui.js:2756
+        undefined,
+    'development mode': // gui.js:990 morphic.js:12252
+        'V\u00FDvojov\u00FD m\u00F3d',
+    'don\'t rotate': // gui.js:1222
+        'neot\u00E1\u010Det',
+    'can rotate': // gui.js:1223
+        'lze oto\u010Dit',
+    'only face left/right': // gui.js:1224
+        'jen vlevo/vpravo',
+    'draggable': // gui.js:1329
+        'p\u0159etahovateln\u00FD',
+    'Scripts': // gui.js:1371 gui.js:4179
+        'Skripty',
+    'Costumes': // gui.js:1391 gui.js:3252 gui.js:3255 gui.js:4156
+        'Kost\u00FDmy',
+    'Backgrounds': // gui.js:1392 gui.js:3252 gui.js:3255
+        undefined,
+    'Sounds': // gui.js:1411 gui.js:3262 gui.js:3264 gui.js:4167
+        'Zvuky',
+    'add a new Turtle sprite': // gui.js:1545
+        'p\u0159idat nov\u00FD sprite \u017Eelvy',
+    'paint a new sprite': // gui.js:1567
+        'nakreslit nov\u00FD sprite',
+    'take a camera snapshot and\nimport it as a new sprite': // gui.js:1592
+        undefined,
+    'Unable to import this image': // gui.js:1906
+        undefined,
+    'The picture you wish to import has been\ntainted by a restrictive cross-origin policy\nmaking it unusable for costumes in {{ appName }}.\n\nTry downloading this picture first to your\ncomputer, and import it from there.': // gui.js:1907
+        undefined,
+    'Serialization failed': // gui.js:2138 gui.js:4684 gui.js:4980 gui.js:5139
+        undefined,
+    'recording': // gui.js:2353
+        undefined,
+    'About': // gui.js:2471
+        'O programu',
+    'Reference manual': // gui.js:2474
+        'Referen\u010Dn\u00ED p\u0159\u00EDru\u010Dka',
+    '{{ site }} website': // gui.js:2481
+        'Str\u00E1nky {{ site }}',
+    'Download source': // gui.js:2487
+        'St\u00E1hnout zdrojov\u00E9 k\u00F3dy',
+    'Switch back to user mode': // gui.js:2498
+        'p\u0159epnout zp\u011Bt do u\u017Eivatelsk\u00E9ho m\u00F3du',
+    'disable deep-Morphic\ncontext menus\nand show user-friendly ones': // gui.js:2500
+        'zobrazovat jednoduch\u00E9 menu',
+    'Switch to dev mode': // gui.js:2507
+        'p\u0159epnout do v\u00FDvoj\u00E1\u0159sk\u00E9ho m\u00F3du',
+    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!': // gui.js:2509
+        'zobrazovat pokro\u010Dil\u00E9 menu',
+    'Cloud URL': // gui.js:2527 gui.js:5654
+        undefined,
+    'Login': // gui.js:2536
+        'P\u0159ihl\u00E1sit',
+    'Signup': // gui.js:2540
+        'Vytvo\u0159it \u00FA\u010Det',
+    'Reset Password': // gui.js:2544
+        'Resetovat heslo',
+    'Resend Verification Email': // gui.js:2548
+        undefined,
+    'Logout {{ username }}': // gui.js:2553
+        undefined,
+    'Change Password': // gui.js:2557 gui.js:5420
+        undefined,
+    'Export project media only': // gui.js:2564
+        undefined,
+    'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
+        undefined,
+    'Export project without media': // gui.js:2578
+        undefined,
+    'Export project as cloud data': // gui.js:2592
+        undefined,
+    'Open shared project from cloud': // gui.js:2607
+        undefined,
+    'Author name': // gui.js:2609
+        undefined,
+    'Project name': // gui.js:2610
+        undefined,
+    'Language': // gui.js:2676
+        'Jazyk',
+    'Generate {{ filename }} file': // gui.js:2679 gui.js:5035
+        undefined,
+    'builds the {{ language }} translation file': // gui.js:2684
+        undefined,
+    'Zoom blocks': // gui.js:2692 gui.js:5120
+        'Velikost blok\u016F',
+    'Stage size': // gui.js:2696 gui.js:5163
+        'Velikost sc\u00E9ny',
+    'Dragging threshold': // gui.js:2701 gui.js:5226
+        undefined,
+    'specify the distance the hand has to move\nbefore it picks up an object': // gui.js:2703
+        undefined,
+    'Retina display support': // gui.js:2725
+        undefined,
+    'uncheck for lower resolution,\nsaves computing resources': // gui.js:2728
+        undefined,
+    'check for higher resolution,\nuses more computing resources': // gui.js:2729
+        undefined,
+    'Input sliders': // gui.js:2733
+        'Posuvn\u00EDky',
+    'uncheck to disable\ninput sliders for\nentry fields': // gui.js:2736
+        'od\u0161krtnut\u00ED vypne pou\u017Eit\u00ED posuvn\u00EDk\u016F pro vstupn\u00ED pole',
+    'check to enable\ninput sliders for\nentry fields': // gui.js:2737
+        'za\u0161krtnutn\u00ED povol\u00ED pou\u017Eit\u00ED posuvn\u00EDk\u016F pro vstupn\u00ED pole',
+    'Execute on slider change': // gui.js:2741
+        undefined,
+    'uncheck to suppress\nrunning scripts\nwhen moving the slider': // gui.js:2744
+        undefined,
+    'check to run\nthe edited script\nwhen moving the slider': // gui.js:2745
+        undefined,
+    'Turbo mode': // gui.js:2749
+        'Turbo m\u00F3d',
+    'uncheck to run scripts\nat normal speed': // gui.js:2752
+        'od\u0161krtnut\u00ED spust\u00ED skript\nnorm\u00E1ln\u00ED rychlost\u00ED',
+    'check to prioritize\nscript execution': // gui.js:2753
+        'za\u0161krtnut\u00ED spust\u00ED skripty\nzv\u00FD\u0161enou rychlost\u00ED',
+    'uncheck to turn off\nvisible stepping': // gui.js:2759
+        undefined,
+    'check to turn on\nvisible stepping (slow)': // gui.js:2760
+        undefined,
+    'Ternary Boolean slots': // gui.js:2764
+        undefined,
+    'uncheck to limit\nBoolean slots to true / false': // gui.js:2770
+        undefined,
+    'check to allow\nempty Boolean slots': // gui.js:2771
+        undefined,
+    'Camera support': // gui.js:2775
+        undefined,
+    'uncheck to disable\ncamera support': // gui.js:2778
+        undefined,
+    'check to enable\ncamera support': // gui.js:2779
+        undefined,
+    'Blurred shadows': // gui.js:2784
+        'M\u011Bkk\u00E9 st\u00EDny',
+    'uncheck to use solid drop\nshadows and highlights': // gui.js:2787
+        'od\u0161krtnut\u00EDm se pou\u017Eij\u00ED\nostr\u00E9 st\u00EDny a sv\u011Btla',
+    'check to use blurred drop\nshadows and highlights': // gui.js:2788
+        'za\u0161krtni pro pou\u017Eit\u00ED\nm\u011Bkk\u00FDch st\u00EDn\u016F a sv\u011Btel',
+    'Zebra coloring': // gui.js:2792
+        'St\u0159\u00EDdav\u00E9 barvy',
+    'uncheck to disable alternating\ncolors for nested block': // gui.js:2795
+        'Od\u0161krtnut\u00ED zru\u0161\u00ED pou\u017Eit\u00ED st\u0159\u00EDdav\u00FDch barev pro vlo\u017Een\u00E9 bloky',
+    'check to enable alternating\ncolors for nested blocks': // gui.js:2796
+        'Za\u0161krtnut\u00ED zapne st\u0159\u00EDdav\u00E9\nbarvy pro vlo\u017Een\u00E9 bloky',
+    'Dynamic input labels': // gui.js:2800
+        undefined,
+    'uncheck to disable dynamic\nlabels for variadic inputs': // gui.js:2803
+        undefined,
+    'check to enable dynamic\nlabels for variadic inputs': // gui.js:2804
+        undefined,
+    'Prefer empty slot drops': // gui.js:2808
+        'Preferovat pr\u00E1zdn\u00FD slot pro pu\u0161t\u011Bn\u00ED',
+    'uncheck to allow dropped\nreporters to kick out others': // gui.js:2811
+        'od\u0161krtnut\u00EDm bude up\u0159ednost\u0148ov\u00E1no nahrazen\u00ED cel\u00E9 podm\u00EDnky',
+    'check to focus on empty slots\nwhen dragging & dropping reporters': // gui.js:2812
+        'Za\u0161krtnut\u00EDm bude preferov\u00E1no pr\u00E1zdn\u00E9 m\u00EDsto na um\u00EDst\u011Bn\u00ED',
+    'Long form input dialog': // gui.js:2816
+        'Velk\u00E9 formul\u00E1\u0159e',
+    'uncheck to use the input\ndialog in short form': // gui.js:2819
+        'od\u0161krtnut\u00ED pou\u017Eije vstupn\u00ED dialogy v kr\u00E1tk\u00E9 form\u011B',
+    'check to always show slot\ntypes in the input dialog': // gui.js:2820
+        'Za\u0161krtnut\u00EDm povolit zobrazov\u00E1n\u00ED typ\u016F slot\u016F ve vstupn\u00EDm dialogu',
+    'Plain prototype labels': // gui.js:2823
+        'Prost\u00E9 nadpisy prototyp\u016F',
+    'uncheck to always show (+) symbols\nin block prototype labels': // gui.js:2826
+        'od\u0161krtn\u011Bte pro pou\u017E\u00EDv\u00E1n\u00ED symbol\u016F (+) v editoru blok\u016F',
+    'check to hide (+) symbols\nin block prototype labels': // gui.js:2827
+        'za\u0161krtn\u011Bte pro skryt\u00ED symbol\u016F (+) v editoru blok\u016F',
+    'Virtual keyboard': // gui.js:2830
+        'Virtu\u00E1ln\u00ED kl\u00E1vesnice',
+    'uncheck to disable\nvirtual keyboard support\nfor mobile devices': // gui.js:2833
+        'od\u0161krtnut\u00ED zak\u00E1\u017Ee\npodporu virtu\u00E1ln\u00ED kl\u00E1vesnice\nna mobiln\u00EDch za\u0159\u00EDzen\u00EDch',
+    'check to enable\nvirtual keyboard support\nfor mobile devices': // gui.js:2834
+        'za\u0161krtnut\u00ED povol\u00ED pou\u017Eit\u00ED virtu\u00E1ln\u00ED kl\u00E1vesnice\nna mobiln\u00EDch za\u0159\u00EDzen\u00EDch',
+    'Clicking sound': // gui.js:2838
+        'Zvuk kliknut\u00ED',
+    'uncheck to turn\nblock clicking\nsound off': // gui.js:2848
+        'od\u0161krtnut\u00ED vypne zvuk p\u0159i p\u0159icvaknut\u00ED bloku',
+    'check to turn\nblock clicking\nsound on': // gui.js:2849
+        'za\u0161krtnut\u00ED zapne zvuk p\u0159icvaknut\u00ED bloku',
+    'Animations': // gui.js:2852
+        undefined,
+    'uncheck to disable\nIDE animations': // gui.js:2855
+        undefined,
+    'check to enable\nIDE animations': // gui.js:2856
+        undefined,
+    'Cache Inputs': // gui.js:2860
+        undefined,
+    'uncheck to stop caching\ninputs (for debugging the evaluator)': // gui.js:2866
+        undefined,
+    'check to cache inputs\nboosts recursion': // gui.js:2867
+        undefined,
+    'Rasterize SVGs': // gui.js:2871
+        undefined,
+    'uncheck for smooth\nscaling of vector costumes': // gui.js:2877
+        undefined,
+    'check to rasterize\nSVGs on import': // gui.js:2878
+        undefined,
+    'Flat design': // gui.js:2882
+        'Ploch\u00FD design',
+    'uncheck for default\nGUI design': // gui.js:2890
+        'od\u0161krtn\u011Bte pro v\u00FDchoz\u00ED design GUI',
+    'check for alternative\nGUI design': // gui.js:2891
+        'za\u0161krtn\u011Bte pro alternativn\u00ED design GUI',
+    'Nested auto-wrapping': // gui.js:2895
+        undefined,
+    'uncheck to confine auto-wrapping\nto top-level block stacks': // gui.js:2906
+        undefined,
+    'check to enable auto-wrapping\ninside nested block stacks': // gui.js:2907
+        undefined,
+    'Project URLs': // gui.js:2911
+        undefined,
+    'uncheck to disable\nproject data in URLs': // gui.js:2921
+        undefined,
+    'check to enable\nproject data in URLs': // gui.js:2922
+        undefined,
+    'Sprite Nesting': // gui.js:2926
+        undefined,
+    'uncheck to disable\nsprite composition': // gui.js:2932
+        undefined,
+    'check to enable\nsprite composition': // gui.js:2933
+        undefined,
+    'First-Class Sprites': // gui.js:2937
+        undefined,
+    'uncheck to disable support\nfor first-class sprites': // gui.js:2946
+        undefined,
+    'check to enable support\nfor first-class sprite': // gui.js:2947
+        undefined,
+    'Keyboard Editing': // gui.js:2951
+        'Editace kl\u00E1vesnic\u00ED',
+    'uncheck to disable\nkeyboard editing support': // gui.js:2963
+        'od\u0161krtn\u011Bte pro vypnut\u00ED podpory editace kl\u00E1vesnic\u00ED',
+    'check to enable\nkeyboard editing support': // gui.js:2964
+        'za\u0161krtn\u011Bte pro podporu editace kl\u00E1vesnic\u00ED',
+    'Table support': // gui.js:2968
+        undefined,
+    'uncheck to disable\nmulti-column list views': // gui.js:2979
+        undefined,
+    'check for multi-column\nlist view support': // gui.js:2980
+        undefined,
+    'Table lines': // gui.js:2985
+        undefined,
+    'uncheck for less contrast\nmulti-column list views': // gui.js:2996
+        undefined,
+    'check for higher contrast\ntable views': // gui.js:2997
+        undefined,
+    'Live coding support': // gui.js:3002
+        undefined,
+    'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
+        undefined,
+    'uncheck to disable live\ncustom control structures': // gui.js:3009
+        undefined,
+    'check to enable\nlive custom control structures': // gui.js:3011
+        undefined,
+    'JIT compiler support': // gui.js:3015
+        undefined,
+    'uncheck to disable live\nsupport for compiling': // gui.js:3025
+        undefined,
+    'check to enable\nsupport for compiling': // gui.js:3027
+        undefined,
+    'Thread safe scripts': // gui.js:3032
+        'Vl\u00E1knov\u011B bezpe\u010Dn\u00E9 skripty',
+    'uncheck to allow\nscript reentrance': // gui.js:3035
+        'od\u0161krtnut\u00ED povol\u00ED v\u00EDce vl\u00E1ken',
+    'check to disallow\nscript reentrance': // gui.js:3036
+        'za\u0161krtnut\u00ED zak\u00E1\u017Ee v\u00EDce vl\u00E1ken',
+    'Prefer smooth animations': // gui.js:3039
+        'Zapnout plynulou animaci',
+    'uncheck for greater speed\nat variable frame rates': // gui.js:3042
+        'od\u0161krtn\u011Bte pro vy\u0161\u0161\u00ED rychlost',
+    'check for smooth, predictable\nanimations across computers': // gui.js:3043
+        'za\u0161krtn\u011Bte pro plynul\u00E9, p\u0159edv\u00EDdateln\u00E9\nanimace nap\u0159\u00ED\u010D po\u010D\u00EDta\u010Di',
+    'Flat line ends': // gui.js:3047
+        'Ploch\u00E9 konce \u010Dar',
+    'uncheck for round ends of lines': // gui.js:3053
+        'od\u0161krtn\u011Bte pro zakulacen\u00E9 konce \u010Dar',
+    'check for flat ends of lines': // gui.js:3054
+        'za\u0161krtn\u011Bte pro ploch\u00E9 konce \u010Dar',
+    'Codification support': // gui.js:3057
+        'Podpora kodifikace',
+    'uncheck to disable\nblock to text mapping features': // gui.js:3066
+        'od\u0161krtn\u011Bte pro vypnut\u00ED funkc\u00ED\nmapov\u00E1n\u00ED blok\u016F na text',
+    'check for block\nto text mapping features': // gui.js:3067
+        'za\u0161krtn\u011Bte pro funkce\nmapov\u00E1n\u00ED blok\u016F na text',
+    'Inheritance support': // gui.js:3071
+        'Podpora d\u011Bdi\u010Dnosti',
+    'uncheck to disable\nsprite inheritance features': // gui.js:3080
+        'od\u0161krtn\u011Bte pro vypnut\u00ED funkc\u00ED\nd\u011Bdi\u010Dnosti sprit\u016F',
+    'check for sprite\ninheritance features': // gui.js:3081
+        'za\u0161krtn\u011Bte pro funkce\nd\u011Bdi\u010Dnosti sprit\u016F',
+    'Persist linked sublist IDs': // gui.js:3085
+        undefined,
+    'uncheck to disable\nsaving linked sublist identities': // gui.js:3091
+        undefined,
+    'check to enable\nsaving linked sublist identities': // gui.js:3092
+        undefined,
+    'Project notes': // gui.js:3107
+        'Pozn\u00E1mky k projektu',
+    'New': // gui.js:3109
+        'Nov\u00FD',
+    'Open': // gui.js:3110 gui.js:5924
+        'Otev\u0159\u00EDt',
+    'Save': // gui.js:3111 gui.js:5927 gui.js:8995 gui.js:9133
+        'Ulo\u017Eit',
+    'Save As': // gui.js:3112
+        'Ulo\u017Eit jako',
+    'Import': // gui.js:3115 gui.js:3370 gui.js:6842
+        'Importovat',
+    'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
+        'Na\u010D\u00EDst exportovan\u00FD projekt, knihovnu blok\u016F, kost\u00FDmy nebo zvuky',
+    'Export project (in a new window)': // gui.js:3153
+        undefined,
+    'show project data as XML\nin a new browser window': // gui.js:3164
+        'zobrazit data projektu jako xml XML\nv nov\u00E9m okn\u011B prohl\u00ED\u017Ee\u010De',
+    'Export project as plain text': // gui.js:3170
+        'Exportovat projekt jako prost\u00FD text',
+    'Export project': // gui.js:3171
+        'Exportovat projekt',
+    'save project data as XML\nto your downloads folder': // gui.js:3181
+        undefined,
+    'show global custom block definitions as XML\nin a new browser window': // gui.js:3189
+        'Zobrazit definici vlastn\u00EDch blok\u016F jako\nXML v nov\u00E9m okn\u011B prohl\u00ED\u017Ee\u010De',
+    'Unused blocks': // gui.js:3193
+        undefined,
+    'find unused global custom blocks\nand remove their definitions': // gui.js:3195
+        undefined,
+    'Export summary': // gui.js:3201
+        undefined,
+    'open a new browser browser window\nwith a summary of this project': // gui.js:3203
+        undefined,
+    'Export summary with drop-shadows': // gui.js:3208
+        undefined,
+    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers': // gui.js:3210
+        undefined,
+    'Export all scripts as pic': // gui.js:3217
+        undefined,
+    'show a picture of all scripts\nand block definitions': // gui.js:3219
+        undefined,
+    'Import tools': // gui.js:3226
+        'Importovat n\u00E1stroje',
+    'load the official library of\npowerful blocks': // gui.js:3235
+        'nahraje oficialn\u00ED knihovnu\npokro\u010Dil\u00FDch blok\u016F',
+    'Libraries': // gui.js:3238
+        'Knihovny',
+    'select categories of additional blocks to add to this project': // gui.js:3248
+        undefined,
+    'Select a costume from the media library': // gui.js:3259
+        'Vyberte kost\u00FDm z knihovny m\u00E9di\u00ED',
+    'Select a sound from the media library': // gui.js:3266
+        'Vyberte si zvuk z knihovny m\u00E9di\u00ED',
+    'Opening {{ resource }}': // gui.js:3341
+        undefined,
+    'License': // gui.js:3529 gui.js:3630
+        'Licence',
+    'Contributors': // gui.js:3548
+        'P\u0159isp\u011Bvatel\u00E9',
+    'current module versions': // gui.js:3574
+        'aktu\u00E1ln\u00ED verze modul\u016F',
+    'Translations': // gui.js:3578
+        'P\u0159eklady',
+    'About Snap': // gui.js:3581
+        'O programu Snap',
+    'Translators': // gui.js:3597
+        'P\u0159ekladatel\u00E9',
+    'Back': // gui.js:3613
+        'Zp\u011Bt',
+    'Modules': // gui.js:3646
+        'Moduly',
+    'Credits': // gui.js:3662
+        'P\u0159isp\u011Bvatel\u00E9',
+    'Project Notes': // gui.js:3709
+        'Pozn\u00E1mky k projektu',
+    'Saving': // gui.js:3770
+        undefined,
+    'Saved': // gui.js:3788 gui.js:3796
+        'Ulo\u017Eeno',
+    'Save failed': // gui.js:3790
+        undefined,
+    'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
+        undefined,
+    'Exported': // gui.js:3816 gui.js:5471 gui.js:5497 gui.js:5507 gui.js:5527 gui.js:5539
+        undefined,
+    'Export failed': // gui.js:3819 gui.js:5475 gui.js:5500 gui.js:5530
+        undefined,
+    'this project doesn\'t have any\ncustom global blocks yet': // gui.js:3836
+        'Tento projekt nyn\u00ED nem\u00E1 \u017E\u00E1dn\u00E9 glob\u00E1ln\u00ED bloky',
+    'there are currently no unused\nglobal custom blocks in this project': // gui.js:3873
+        undefined,
+    'Untitled': // gui.js:3937 gui.js:8190 store.js:368 store.js:1651
+        'Nepojmenovan\u00FD',
+    'Variables': // gui.js:3968 objects.js:153
+        'Prom\u011Bnn\u00E9',
+    'Blocks': // gui.js:4000
+        undefined,
+    'Contents': // gui.js:4103
+        undefined,
+    'Kind of {{ name }}': // gui.js:4132
+        undefined,
+    'Part of {{ name }}': // gui.js:4139
+        undefined,
+    'Parts': // gui.js:4144
+        undefined,
+    'For all Sprites': // gui.js:4197 gui.js:4201
+        undefined,
+    'Load failed': // gui.js:4251 gui.js:4302 gui.js:4341 gui.js:4384 gui.js:4394 gui.js:4427
+        undefined,
+    'Opening project\n{{ size }}': // gui.js:4269
+        undefined,
+    'Opening blocks': // gui.js:4322
+        undefined,
+    'Imported Blocks Module: {{ name }}': // gui.js:4354
+        undefined,
+    'Opening sprite': // gui.js:4368
+        undefined,
+    'Imported Media Module': // gui.js:4398
+        undefined,
+    'Opening script': // gui.js:4406
+        undefined,
+    'Imported Script': // gui.js:4442
+        undefined,
+    'opening project\n{{ name }}': // gui.js:4448
+        undefined,
+    'Could not export {{ name }}': // gui.js:4519
+        undefined,
+    'This item could not be exported from {{ appName }}.\nIt\'s likely that your project may contain a lot of media (sounds and images) or that you are using an older browser.\nPlease try using a recent version of Chrome, Firefox, or Safari.': // gui.js:4520
+        undefined,
+    'entering user mode': // gui.js:4585
+        undefined,
+    'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.': // gui.js:4604
+        undefined,
+    'Replace the current project with a new one?': // gui.js:4914
+        'Nahradit st\u00E1vaj\u00EDc\u00ED projekt nov\u00FDm?',
+    'New Project': // gui.js:4915
+        'Nov\u00FD projekt',
+    'Generating {{ filename }} file': // gui.js:5011
+        undefined,
+    'Could not generate the language file': // gui.js:5039
+        undefined,
+    'build': // gui.js:5057
+        'vytvo\u0159 si',
+    'your own': // gui.js:5060
+        'sv\u00E9 vlastn\u00ED',
+    'blocks': // gui.js:5064
+        'bloky',
+    'normal (1x)': // gui.js:5106
+        'norm\u00E1ln\u00ED (1x)',
+    'demo (1.2x)': // gui.js:5107
+        'demo (1.2x)',
+    'presentation (1.4x)': // gui.js:5108
+        'prezentace (1.4x)',
+    'big (2x)': // gui.js:5109
+        'velk\u00E9 (2x)',
+    'huge (4x)': // gui.js:5110
+        'obrovsk\u00E9 (4x)',
+    'giant (8x)': // gui.js:5111
+        'gigantick\u00E9 (8x)',
+    'monstrous (10x)': // gui.js:5112
+        'monstr\u00F3zn\u00ED (10x)',
+    'Stage width': // gui.js:5166
+        '\u0160\u00ED\u0159ka sc\u00E9ny',
+    'Stage height': // gui.js:5167
+        'V\u00FD\u0161ka sc\u00E9ny',
+    '{{ count }} days left': // gui.js:5253
+        undefined,
+    'You are now logged in, and your account\nis enabled for three days.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.\n\nYou have {{ count }} days left.': // gui.js:5254
+        undefined,
+    'Sign in': // gui.js:5277
+        'P\u0159ihl\u00E1sit se',
+    'stay signed in on this computer\nuntil logging out': // gui.js:5283
+        'z\u016Fsta\u0148 p\u0159ihl\u00E1\u0161en na tomto po\u010D\u00EDta\u010Di\na\u017E do odhl\u00E1\u0161en\u00ED',
+    'You can now log in': // gui.js:5305
+        undefined,
+    'Sign up': // gui.js:5314
+        'Vytvo\u0159it \u00FA\u010Det',
+    'Terms of Service': // gui.js:5317
+        'Podm\u00EDnky slu\u017Eby',
+    'Privacy': // gui.js:5319
+        'Politika soukrom\u00ED',
+    'I have read and agree\nto the Terms of Service': // gui.js:5320
+        '\u010Cetl jsem a souhlas\u00EDm s pod\u00EDmkami slu\u017Eby',
+    'An e-mail with a link to\nreset your password\nhas been sent to the address provided': // gui.js:5340
+        undefined,
+    'Reset password': // gui.js:5352
+        'Resetuj heslo',
+    'An e-mail with a link to\nverify your account\nhas been sent to the address provided': // gui.js:5378
+        undefined,
+    'Resend verification email': // gui.js:5390
+        undefined,
+    'password has been changed': // gui.js:5414
+        undefined,
+    'disconnected': // gui.js:5437 gui.js:5440
+        undefined,
+    'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
+        undefined,
+    'saved': // gui.js:5452 gui.js:6481
+        undefined,
+    '{{ projectName }} media': // gui.js:5468
+        undefined,
+    'Cloud Connection': // gui.js:5552
+        undefined,
+    'Successfully connected to\n{{ url }}': // gui.js:5553
+        undefined,
+    '{{ server }} (secure)': // gui.js:5646
+        undefined,
+    'Save Project': // gui.js:5799
+        undefined,
+    'Open Project': // gui.js:5800
+        'Otev\u0159\u00EDt projekt',
+    'Cloud': // gui.js:5836
+        undefined,
+    'Browser': // gui.js:5837
+        undefined,
+    'Examples': // gui.js:5840 gui.js:6198 gui.js:6254 gui.js:6378
+        undefined,
+    'Share': // gui.js:5930
+        undefined,
+    'Unshare': // gui.js:5931
+        undefined,
+    '(no matches)': // gui.js:6095
+        undefined,
+    'Updating\nproject list': // gui.js:6119
+        undefined,
+    'last changed\n{{ date }}': // gui.js:6314
+        undefined,
+    'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
+        undefined,
+    'Replace Project': // gui.js:6438 gui.js:6456
+        undefined,
+    'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
+        'Jste si jisti, \u017Ee chcete projekt smazat?\n"{{ projectName }}"?',
+    'Delete Project': // gui.js:6500 gui.js:6524
+        'Smazat projekt',
+    'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
+        undefined,
+    'Share Project': // gui.js:6544
+        undefined,
+    'sharing\nproject': // gui.js:6546
+        undefined,
+    'shared': // gui.js:6563
+        undefined,
+    'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
+        undefined,
+    'Unshare Project': // gui.js:6592
+        undefined,
+    'unsharing\nproject': // gui.js:6594
+        undefined,
+    'unshared': // gui.js:6612
+        undefined,
+    'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
+        undefined,
+    'Publish Project': // gui.js:6634
+        undefined,
+    'publishing\nproject': // gui.js:6636
+        undefined,
+    'published': // gui.js:6651
+        undefined,
+    'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
+        undefined,
+    'Unpublish Project': // gui.js:6679
+        undefined,
+    'unpublishing\nproject': // gui.js:6681
+        undefined,
+    'unpublished': // gui.js:6696
+        undefined,
+    'Import library': // gui.js:6828
+        'Importovat knihovnu',
+    'Loading {{ resource }}': // gui.js:6926 gui.js:7059
+        undefined,
+    'Imported {{ resource }}': // gui.js:7054
+        undefined,
+    'pic': // gui.js:7353 morphic.js:4194 objects.js:7425
+        undefined,
+    'open a new window\nwith a picture of the stage': // gui.js:7361 objects.js:7432
+        undefined,
+    'show': // gui.js:7366 morphic.js:7568 objects.js:388
+        'uka\u017E se',
+    'clone': // gui.js:7370 objects.js:3238
+        undefined,
+    'release': // gui.js:7388
+        undefined,
+    'make temporary and\nhide in the sprite corral': // gui.js:7390
+        undefined,
+    'detach from {{ name }}': // gui.js:7396 objects.js:3266
+        undefined,
+    'detach all parts': // gui.js:7402 objects.js:3271
+        undefined,
+    'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
+        'exportovat',
+    'edit rotation point only': // gui.js:7702
+        undefined,
+    'rename costume': // gui.js:7755
+        'p\u0159ejmenovat kost\u00FDm',
+    'rename background': // gui.js:7756
+        undefined,
+    'default': // gui.js:7893
+        undefined,
+    'pen': // gui.js:7975 morphic.js:12402
+        undefined,
+    'tip': // gui.js:7982
+        undefined,
+    'middle': // gui.js:7991
+        undefined,
+    'Paint a new costume': // gui.js:8085
+        'Nakresli nov\u00FD kost\u00FDm',
+    'Import a new costume from your webcam': // gui.js:8110
+        undefined,
+    'import a picture from another web page or from\na file on your computer by dropping it here': // gui.js:8134
+        'Nahrajte obr\u00E1zek odjinud z webu\nnebo nahrajte soubor z Va\u0161eho po\u010D\u00EDta\u010De p\u0159eta\u017Een\u00EDm sem.',
+    'Stop': // gui.js:8345 gui.js:8367
+        'zastavit',
+    'Play': // gui.js:8345 gui.js:8375
+        'spustit',
+    'Play sound': // gui.js:8348 gui.js:8376
+        'spustit p\u0159ehr\u00E1v\u00E1n\u00ED',
+    'Stop sound': // gui.js:8368
+        'zastavit p\u0159ehr\u00E1v\u00E1n\u00ED',
+    'rename sound': // gui.js:8432
+        'p\u0159ejmenovat zvuk',
+    'import a sound from your computer\nby dragging it into here': // gui.js:8526
+        'Nahrajte zvuk z Va\u0161eho po\u010D\u00EDta\u010De p\u0159eta\u017Een\u00EDm sem.',
+    'Record a new sound': // gui.js:8549
+        undefined,
+    'Please make sure your web browser is up to date\nand your camera is properly configured.\n\nSome browsers also require you to access {{ appName }}\nthrough HTTPS to use the camera.\n\nPlease replace the "http://" part of the address\nin your browser by "https://" and try again.': // gui.js:8874
+        undefined,
+    'Camera': // gui.js:8905
+        undefined,
+    'Camera not supported': // gui.js:8917
+        undefined,
+    'Sound Recorder': // gui.js:9067
+        undefined,
+    'a {{ className }} [{{ count }} elements]': // lists.js:123
+        undefined,
+    'cdr isn\'t a list': // lists.js:143
+        undefined,
+    'items': // lists.js:264
+        undefined,
+    'length': // lists.js:492 lists.js:703
+        'd\u00E9lka',
+    'table view': // lists.js:807
+        undefined,
+    'open in dialog': // lists.js:810 tables.js:1036
+        undefined,
+    'Retina Display Support Problem': // morphic.js:1614
+        undefined,
+    'Called {{ function }} with {{ count }} arguments': // morphic.js:1676
+        undefined,
+    'a {{ className }}[{{ count }}]': // morphic.js:2681
+        undefined,
+    'a {{ className }} {{ count }} {{ bounds }}': // morphic.js:2904
+        undefined,
+    'user features': // morphic.js:4128
+        undefined,
+    'choose another color\nfor this morph': // morphic.js:4141
+        undefined,
+    'transparency': // morphic.js:4144
+        undefined,
+    'alpha value': // morphic.js:4147
+        undefined,
+    'set this morph\'s\nalpha value': // morphic.js:4157
+        undefined,
+    'resize': // morphic.js:4160
+        undefined,
+    'show a handle\nwhich can be dragged\nto change this morph\'s extent': // morphic.js:4162
+        undefined,
+    'pick up': // morphic.js:4174
+        undefined,
+    'detach and put\ninto the hand': // morphic.js:4176
+        undefined,
+    'attach': // morphic.js:4179
+        undefined,
+    'stick this morph\nto another one': // morphic.js:4181
+        undefined,
+    'move': // morphic.js:4184 objects.js:3243
+        'p\u0159esunout',
+    'show a handle\nwhich can be dragged\nto move this morph': // morphic.js:4186
+        undefined,
+    'inspect': // morphic.js:4189 morphic.js:7608 morphic.js:12183
+        undefined,
+    'open a window\non all properties': // morphic.js:4191
+        undefined,
+    'open a new window\nwith a picture of this morph': // morphic.js:4198 morphic.js:12192
+        undefined,
+    'lock': // morphic.js:4203
+        undefined,
+    'make this morph\nunmovable': // morphic.js:4205
+        undefined,
+    'unlock': // morphic.js:4209
+        undefined,
+    'make this morph\nmovable': // morphic.js:4211
+        undefined,
+    'World': // morphic.js:4219
+        undefined,
+    'show the\n{{ WorldMorph }}\'s menu': // morphic.js:4223
+        undefined,
+    'choose target': // morphic.js:4721 morphic.js:5102 morphic.js:6562 morphic.js:7200
+        undefined,
+    'set rotation': // morphic.js:4868
+        undefined,
+    'interactively turn this morph\nusing a dial widget': // morphic.js:4870
+        undefined,
+    'set target': // morphic.js:5092 morphic.js:6552 morphic.js:7118
+        undefined,
+    'choose another morph\nwhose color property\nwill be controlled by this one': // morphic.js:5094
+        undefined,
+    'choose target property': // morphic.js:5122 morphic.js:6582 morphic.js:7220
+        undefined,
+    'border width': // morphic.js:5895 morphic.js:5898
+        undefined,
+    'set the border\'s\nline size': // morphic.js:5908
+        undefined,
+    'border color': // morphic.js:5911 morphic.js:5914
+        undefined,
+    'set the border\'s\nline color': // morphic.js:5920
+        undefined,
+    'corner size': // morphic.js:5923 morphic.js:5926
+        undefined,
+    'set the corner\'s\nradius': // morphic.js:5936
+        undefined,
+    'select another morph\nwhose numerical property\nwill be controlled by this one': // morphic.js:6554 morphic.js:7120
+        undefined,
+    'horizontal': // morphic.js:6701
+        undefined,
+    'toggle the\norientation': // morphic.js:6703 morphic.js:6709
+        undefined,
+    'vertical': // morphic.js:6707
+        undefined,
+    'show value': // morphic.js:7064
+        undefined,
+    'display a dialog box\nshowing the selected number': // morphic.js:7066
+        undefined,
+    'set the minimum value\nwhich can be selected': // morphic.js:7082
+        undefined,
+    'set the maximum value\nwhich can be selected': // morphic.js:7098
+        undefined,
+    'button size': // morphic.js:7101 morphic.js:7104
+        undefined,
+    'set the range\ncovered by\nthe slider button': // morphic.js:7114
+        undefined,
+    'un-mark own': // morphic.js:7595
+        undefined,
+    'mark own': // morphic.js:7595
+        undefined,
+    'highlight\n\'own\' properties': // morphic.js:7600
+        undefined,
+    'in new inspector': // morphic.js:7614
+        undefined,
+    'here': // morphic.js:7627
+        undefined,
+    '{{ name }}\nis not inspectable': // morphic.js:7635
+        undefined,
+    'save': // morphic.js:7653
+        undefined,
+    'accept changes': // morphic.js:7653
+        undefined,
+    'add property': // morphic.js:7655
+        undefined,
+    'remove': // morphic.js:7657
+        undefined,
+    'close': // morphic.js:7664 morphic.js:7948
+        undefined,
+    'new property name': // morphic.js:7789
+        undefined,
+    'property': // morphic.js:7802
+        undefined,
+    'property name': // morphic.js:7810
+        undefined,
+    'font size': // morphic.js:8732 morphic.js:8735 morphic.js:9479 morphic.js:9482
+        undefined,
+    'set this String\'s\nfont point size': // morphic.js:8745
+        undefined,
+    'serif': // morphic.js:8748 morphic.js:9505
+        undefined,
+    'sans-serif': // morphic.js:8751 morphic.js:9508
+        undefined,
+    'normal weight': // morphic.js:8754 morphic.js:9511
+        undefined,
+    'bold': // morphic.js:8756 morphic.js:9513
+        undefined,
+    'normal style': // morphic.js:8759 morphic.js:9516
+        undefined,
+    'italic': // morphic.js:8761 morphic.js:9518
+        undefined,
+    'hide blanks': // morphic.js:8764
+        undefined,
+    'show blanks': // morphic.js:8766
+        undefined,
+    'show characters': // morphic.js:8769
+        undefined,
+    'hide characters': // morphic.js:8771
+        undefined,
+    'set this Text\'s\nfont point size': // morphic.js:9492
+        undefined,
+    'align left': // morphic.js:9495
+        undefined,
+    'align right': // morphic.js:9498
+        undefined,
+    'align center': // morphic.js:9501
+        undefined,
+    'do it': // morphic.js:9563
+        undefined,
+    'evaluate the\nselected expression': // morphic.js:9565
+        undefined,
+    'show it': // morphic.js:9568
+        undefined,
+    'evaluate the\nselected expression\nand show the result': // morphic.js:9570
+        undefined,
+    'inspect it': // morphic.js:9573
+        undefined,
+    'evaluate the\nselected expression\nand inspect the result': // morphic.js:9575
+        undefined,
+    'select all': // morphic.js:9578
+        undefined,
+    'move all inside': // morphic.js:10303 morphic.js:12178
+        undefined,
+    'keep all submorphs\nwithin and visible': // morphic.js:10305 morphic.js:12180
+        undefined,
+    'auto line wrap off': // morphic.js:10685
+        undefined,
+    'turn automatic\nline wrapping\noff': // morphic.js:10687
+        undefined,
+    'auto line wrap on': // morphic.js:10691
+        undefined,
+    'enable automatic\nline wrapping': // morphic.js:10693
+        undefined,
+    '(empty)': // morphic.js:10781
+        '(pr\u00E1zdn\u00FD)',
+    'Are you sure you want to leave?': // morphic.js:12110
+        undefined,
+    'demo': // morphic.js:12173
+        undefined,
+    'sample morphs': // morphic.js:12173
+        undefined,
+    'hide all': // morphic.js:12175
+        undefined,
+    'show all': // morphic.js:12176 objects.js:7423
+        'Zobrazit v\u0161e',
+    'open a window on\nall properties': // morphic.js:12185
+        undefined,
+    'screenshot': // morphic.js:12188 objects.js:413
+        undefined,
+    'restore display': // morphic.js:12196
+        undefined,
+    'redraw the\nscreen once': // morphic.js:12198
+        undefined,
+    'fill page': // morphic.js:12201
+        undefined,
+    'let the World automatically\nadjust to browser resizing': // morphic.js:12203
+        undefined,
+    'sharp shadows': // morphic.js:12207
+        undefined,
+    'sharp drop shadows\nuse for old browsers': // morphic.js:12209
+        undefined,
+    'blurred shadows': // morphic.js:12213
+        undefined,
+    'blurry shades\nuse for new browsers': // morphic.js:12215
+        undefined,
+    'choose the World\'s\nbackground color': // morphic.js:12228
+        undefined,
+    'touch screen settings': // morphic.js:12232
+        undefined,
+    'bigger menu fonts\nand sliders': // morphic.js:12234
+        undefined,
+    'standard settings': // morphic.js:12238
+        undefined,
+    'smaller menu fonts\nand sliders': // morphic.js:12240
+        undefined,
+    'user mode': // morphic.js:12247
+        undefined,
+    'disable developers\'\ncontext menus': // morphic.js:12249
+        undefined,
+    'about {{ resource }}': // morphic.js:12254
+        undefined,
+    'make a morph': // morphic.js:12266
+        undefined,
+    'rectangle': // morphic.js:12267 symbols.js:109
+        undefined,
+    'box': // morphic.js:12270
+        undefined,
+    'circle box': // morphic.js:12273
+        undefined,
+    'slider': // morphic.js:12277 objects.js:9461
+        'posuvn\u00EDk',
+    'dial': // morphic.js:12280
+        undefined,
+    'frame': // morphic.js:12284
+        undefined,
+    'scroll frame': // morphic.js:12289
+        undefined,
+    'handle': // morphic.js:12296
+        undefined,
+    'string': // morphic.js:12300
+        undefined,
+    'Hello, World!': // morphic.js:12301 morphic.js:12329
+        undefined,
+    'speech bubble': // morphic.js:12328
+        undefined,
+    'gray scale palette': // morphic.js:12333
+        undefined,
+    'color palette': // morphic.js:12336
+        undefined,
+    'color picker': // morphic.js:12339
+        undefined,
+    'sensor demo': // morphic.js:12343
+        undefined,
+    'animation demo': // morphic.js:12353
+        undefined,
+    'modules': // morphic.js:12444
+        undefined,
+    'a lively Web GUI\ninspired by Squeak': // morphic.js:12451
+        undefined,
+    'written by {{ author }}\n{{ email }}': // morphic.js:12453
+        undefined,
+    'Motion': // objects.js:146
+        'Pohyb',
+    'Control': // objects.js:147
+        'Ovl\u00E1d\u00E1n\u00ED',
+    'Looks': // objects.js:148
+        'Vzhled',
+    'Sensing': // objects.js:149
+        'Vn\u00EDm\u00E1n\u00ED',
+    'Sound': // objects.js:150 objects.js:8570
+        'Zvuk',
+    'Operators': // objects.js:151
+        'Oper\u00E1tory',
+    'Pen': // objects.js:152
+        'Pero',
+    'Lists': // objects.js:154
+        'Seznamy',
+    'Other': // objects.js:155
+        'Ostatn\u00ED',
+    'move %n steps': // objects.js:201
+        'posu\u0148 se o %n krok\u016F',
+    'turn %clockwise %n degrees': // objects.js:208
+        'oto\u010D se o %clockwise %n stup\u0148\u016F',
+    'turn %counterclockwise %n degrees': // objects.js:215
+        'oto\u010D se o %counterclockwise %n stup\u0148\u016F',
+    'point in direction %dir': // objects.js:222
+        'zami\u0159 sm\u011Brem %dir',
+    'point towards %dst': // objects.js:228
+        'zami\u0159 k %dst',
+    'go to x: %n y: %n': // objects.js:234
+        'jdi na pozici x: %n y: %n',
+    'go to %dst': // objects.js:241
+        'jdi na %dst',
+    'glide %n secs to x: %n y: %n': // objects.js:247
+        'plachti %n sekund na pozici x: %n y: %n',
+    'change x by %n': // objects.js:254
+        'zm\u011B\u0148 x o %n',
+    'set x to %n': // objects.js:261
+        'nastav x na %n',
+    'change y by %n': // objects.js:268
+        'zm\u011B\u0148 y o %n',
+    'set y to %n': // objects.js:275
+        'nastav y na %n',
+    'if on edge, bounce': // objects.js:282
+        'pokud naraz\u00ED\u0161 na okraj, odsko\u010D',
+    'switch to costume %cst': // objects.js:307
+        'obl\u00E9kni kost\u00FDm %cst',
+    'next costume': // objects.js:312
+        'dal\u0161\u00ED kost\u00FDm',
+    'say %s for %n secs': // objects.js:323
+        'pov\u00EDdej %s p\u0159\u00ED\u0161t\u00EDch %n sekund',
+    'Hello!': // objects.js:324 objects.js:331
+        'Ahoj!',
+    'say %s': // objects.js:330
+        'pov\u00EDdej %s',
+    'think %s for %n secs': // objects.js:337
+        'pomysli si %s dal\u0161\u00EDch %n sekund',
+    'Hmm': // objects.js:338 objects.js:345
+        'Hmm',
+    'think %s': // objects.js:344
+        'pomysli si %s',
+    'change %eff effect by %n': // objects.js:350
+        'zm\u011B\u0148 efekt %eff o %n',
+    'set %eff effect to %n': // objects.js:356
+        'nastav efekt %eff na %n',
+    'clear graphic effects': // objects.js:362
+        'odstra\u0148 grafick\u00E9 efekty',
+    'change size by %n': // objects.js:368
+        'zm\u011B\u0148 velikost o %n',
+    'set size to %n %': // objects.js:375
+        'zm\u011B\u0148 velikost na %n %',
+    'go to front': // objects.js:400
+        'jdi do pop\u0159ed\u00ED',
+    'go back %n layers': // objects.js:406
+        'jdi do pozad\u00ED o %n \u00FArovn\u00ED',
+    'save %imgsource as costume named %s': // objects.js:412
+        undefined,
+    'wardrobe': // objects.js:421
+        undefined,
+    'alert %mult%s': // objects.js:428
+        'Upozorn\u011Bn\u00ED: %mult%s',
+    'console log %mult%s': // objects.js:434
+        'v\u00FDstup do konsole: %mult%s',
+    'play sound %snd': // objects.js:441
+        'hraj zvuk %snd',
+    'play sound %snd until done': // objects.js:446
+        'hraj zvuk %snd a po\u010Dkej',
+    'stop all sounds': // objects.js:451
+        'vypni v\u0161echny zvuky',
+    'rest for %n beats': // objects.js:456
+        'pauza %n dob(y)',
+    'play note %note for %n beats': // objects.js:462
+        undefined,
+    'set instrument to %inst': // objects.js:468
+        undefined,
+    'change tempo by %n': // objects.js:474
+        'zm\u011B\u0148 tempo o %n',
+    'set tempo to %n bpm': // objects.js:480
+        'nastav tempo na %n bpm.',
+    'tempo': // objects.js:486
+        'tempo',
+    'jukebox': // objects.js:494
+        undefined,
+    'clear': // objects.js:501 paint.js:230
+        'sma\u017E',
+    'pen down': // objects.js:507
+        'pero dol\u016F',
+    'pen up': // objects.js:513
+        'pero nahoru',
+    'set pen color to %clr': // objects.js:519
+        'nastavit barvu pera na %clr',
+    'change pen color by %n': // objects.js:525
+        'zm\u011B\u0148 barvu pera o %n',
+    'set pen color to %n': // objects.js:532
+        'nastav barvu pera na %n',
+    'change pen shade by %n': // objects.js:539
+        'zm\u011B\u0148 odst\u00EDn pera o %n',
+    'set pen shade to %n': // objects.js:546
+        'nastav odst\u00EDn pera na %n',
+    'change pen size by %n': // objects.js:553
+        'zm\u011B\u0148 tlou\u0161\u0165ku pera o %n',
+    'set pen size to %n': // objects.js:560
+        'nastav tlou\u0161\u0165ku pera na %n',
+    'stamp': // objects.js:567
+        'raz\u00EDtko',
+    'fill': // objects.js:573
+        undefined,
+    'when %greenflag clicked': // objects.js:585
+        'Po klepnut\u00ED na %greenflag',
+    'when %keyHat key pressed': // objects.js:590
+        'po stisku kl\u00E1vesy %keyHat',
+    'when I am %interaction': // objects.js:595
+        'kdy\u017E %interaction',
+    'when I receive %msgHat': // objects.js:601
+        'po p\u0159ijet\u00ED zpr\u00E1vy %msgHat',
+    'when %b': // objects.js:606
+        undefined,
+    'broadcast %msg': // objects.js:611
+        'poslat v\u0161em %msg',
+    'broadcast %msg and wait': // objects.js:616
+        'poslat v\u0161em %msg a \u010Dekat',
+    'message': // objects.js:621
+        'zpr\u00E1va',
+    'wait %n secs': // objects.js:626
+        '\u010Dekej %n sekund',
+    'wait until %b': // objects.js:632
+        '\u010Dekej dokud nenastane %b',
+    'forever %c': // objects.js:637
+        'st\u00E1le opakuj %c',
+    'repeat %n %c': // objects.js:642
+        'opakuj %n kr\u00E1t %c',
+    'repeat until %b %c': // objects.js:648
+        'opakuj dokud nenastane %b %c',
+    'if %b %c': // objects.js:653
+        'kdy\u017E %b %c',
+    'if %b %c else %c': // objects.js:658
+        'kdy\u017E %b %c jinak %c',
+    'stop %stopChoices': // objects.js:678
+        'stop %stopChoices',
+    'run %cmdRing %inputs': // objects.js:693
+        'spus\u0165 %cmdRing %inputs',
+    'launch %cmdRing %inputs': // objects.js:698
+        'zah\u00E1jit %cmdRing %inputs',
+    'call %repRing %inputs': // objects.js:703
+        'zavolat %repRing %inputs',
+    'report %s': // objects.js:708
+        'vr\u00E1tit %s',
+    'run %cmdRing w/continuation': // objects.js:720
+        'spustit %cmdRing s pokra\u010Dov\u00E1n\u00EDm',
+    'call %cmdRing w/continuation': // objects.js:725
+        'zavolat %cmdRing s pokra\u010Dov\u00E1n\u00EDm',
+    'warp %c': // objects.js:730
+        'obal %c',
+    'tell %spr to %cmdRing %inputs': // objects.js:739
+        undefined,
+    'ask %spr for %repRing %inputs': // objects.js:744
+        undefined,
+    'when I start as a clone': // objects.js:752
+        'za\u010D\u00EDt po naklonov\u00E1n\u00ED',
+    'create a clone of %cln': // objects.js:757
+        'vytvo\u0159it klon %cln',
+    'a new clone of %cln': // objects.js:762
+        undefined,
+    'delete this clone': // objects.js:768
+        'odstranit klon',
+    'pause all %pause': // objects.js:776
+        'zastavit v\u0161e %pause',
+    'touching %col ?': // objects.js:785
+        'dot\u00FDk\u00E1 se %col ?',
+    'touching %clr ?': // objects.js:791
+        'dot\u00FDk\u00E1 se barvy %clr ?',
+    'color %clr is touching %clr ?': // objects.js:797
+        'barva %clr je na barv\u011B %clr ?',
+    'filtered for %clr': // objects.js:803
+        'filtrovan\u00FD pro %clr',
+    'stack size': // objects.js:809
+        'velikost z\u00E1sobn\u00EDku',
+    'frames': // objects.js:815
+        'sn\u00EDmky',
+    'processes': // objects.js:821
+        undefined,
+    'ask %s and wait': // objects.js:826
+        'zeptej se %s a \u010Dekej',
+    'what\'s your name?': // objects.js:827
+        'Jak se jmenuje\u0161?',
+    'answer': // objects.js:833 objects.js:838
+        'odpov\u011B\u010F',
+    'mouse x': // objects.js:843
+        'sou\u0159adnice my\u0161i x',
+    'mouse y': // objects.js:848
+        'sou\u0159adnice my\u0161i y',
+    'mouse down?': // objects.js:853
+        'stisknuto tla\u010D\u00EDtko my\u0161i?',
+    'key %key pressed?': // objects.js:858
+        'stisknuta kl\u00E1vesa %key ?',
+    '%rel to %dst': // objects.js:871
+        undefined,
+    'reset timer': // objects.js:877
+        'vynulovat stopky',
+    'timer': // objects.js:883 objects.js:888
+        'stopky',
+    '%att of %spr': // objects.js:893
+        '%att z %spr',
+    'url %s': // objects.js:899
+        undefined,
+    'turbo mode?': // objects.js:905
+        'turbo m\u00F3d?',
+    'set turbo mode to %b': // objects.js:910
+        'nastavit turbo m\u00F3d na %b',
+    'current %dates': // objects.js:915
+        'aktu\u00E1ln\u00ED %dates',
+    'my %get': // objects.js:920
+        undefined,
+    'round %n': // objects.js:968
+        'zaokrouhli %n',
+    '%fun of %n': // objects.js:973
+        '%fun z %n',
+    '%n mod %n': // objects.js:979
+        '%n modulo %n',
+    'pick random %n to %n': // objects.js:984
+        'zvol n\u00E1hodn\u00E9 \u010D\u00EDslo od %n do %n',
+    '%b and %b': // objects.js:1005
+        '%b a %b',
+    '%b or %b': // objects.js:1010
+        '%b nebo %b',
+    'not %b': // objects.js:1015
+        'nen\u00ED %b',
+    'join %words': // objects.js:1033
+        'spoj %words',
+    'hello': // objects.js:1034 objects.js:1075
+        'ahoj',
+    'world': // objects.js:1034 objects.js:1040 objects.js:1046 objects.js:1075
+        'sv\u011Bte',
+    'letter %n of %s': // objects.js:1039
+        'p\u00EDsmeno %n z %s',
+    'length of %s': // objects.js:1045
+        'd\u00E9lka %s',
+    'unicode of %s': // objects.js:1051
+        'Unicode %s',
+    'unicode %n as letter': // objects.js:1057
+        'Unicode %n jako znak',
+    'is %s a %typ ?': // objects.js:1063
+        'je %s typu %typ ?',
+    'is %s identical to %s ?': // objects.js:1069
+        'je %s stejn\u00FD jako %s ?',
+    'split %s by %delim': // objects.js:1074
+        'rozd\u011Bl %s podle %delim',
+    'JavaScript function ( %mult%s ) { %code }': // objects.js:1080
+        undefined,
+    'type of %s': // objects.js:1086
+        'Typ %s',
+    '%txtfun of %s': // objects.js:1093
+        undefined,
+    'compile %repRing': // objects.js:1099
+        undefined,
+    'set %var to %s': // objects.js:1119
+        'nastav %var na %s',
+    'change %var by %n': // objects.js:1125
+        'zm\u011B\u0148 %var o %n',
+    'show variable %var': // objects.js:1131
+        'uka\u017E prom\u011Bnnou %var',
+    'hide variable %var': // objects.js:1136
+        'schovej prom\u011Bnnou %var',
+    'script variables %scriptVars': // objects.js:1141
+        'Vytvo\u0159 skriptov\u00E9 prom\u011Bnn\u00E9 %scriptVars',
+    'inherit %shd': // objects.js:1148
+        undefined,
+    'list %exp': // objects.js:1155
+        'seznam %exp',
+    '%s in front of %l': // objects.js:1160
+        '%s na za\u010D\u00E1tek %l',
+    'item %idx of %l': // objects.js:1165
+        'polo\u017Eka %idx z %l',
+    'all but first of %l': // objects.js:1171
+        'v\u0161e krom\u011B prvn\u00ED polo\u017Eky z %l',
+    'length of %l': // objects.js:1176
+        'd\u00E9lka %l',
+    '%l contains %s': // objects.js:1181
+        '%l obsahuje %s',
+    'thing': // objects.js:1182 objects.js:1188 objects.js:1200 objects.js:1206
+        'v\u011Bc',
+    'add %s to %l': // objects.js:1187
+        'p\u0159idat %s do %l',
+    'delete %ida of %l': // objects.js:1193
+        'smazat %ida z %l',
+    'insert %s at %idx of %l': // objects.js:1199
+        'vlo\u017Eit %s na %idx pozici v %l',
+    'replace item %idx of %l with %s': // objects.js:1205
+        'nahra\u010F polo\u017Eku %idx v %l hodnotou %s',
+    'map %repRing over %l': // objects.js:1214
+        undefined,
+    'for %upvar in %l %cl': // objects.js:1220
+        undefined,
+    'each item': // objects.js:1221
+        undefined,
+    'show table %l': // objects.js:1230
+        undefined,
+    'map %cmdRing to %codeKind %code': // objects.js:1237
+        undefined,
+    'map %mapValue to code %code': // objects.js:1242
+        undefined,
+    'map %codeListPart of %codeListKind to code %code': // objects.js:1256
+        undefined,
+    'code of %cmdRing': // objects.js:1261
+        undefined,
+    'Sprite': // objects.js:1404
+        'Sprite',
+    'that name is already in use': // objects.js:1859 objects.js:7047
+        undefined,
+    'development mode\ndebugging primitives': // objects.js:1932 objects.js:2089 objects.js:2155 objects.js:2268 objects.js:7085 objects.js:7214 objects.js:7280 objects.js:7376
+        'v\u00FDvojov\u00FD m\u00F3d\nlad\u011Bn\u00ED primitiv',
+    'Make a variable': // objects.js:2184 objects.js:7309
+        'Vytvo\u0159 prom\u011Bnnou',
+    'Delete a variable': // objects.js:2205 objects.js:7327
+        'Sma\u017E prom\u011Bnnou',
+    'find blocks': // objects.js:2398 objects.js:2469
+        undefined,
+    'hide primitives': // objects.js:2476
+        undefined,
+    'show primitives': // objects.js:2494
+        undefined,
+    'rotate': // objects.js:3244
+        undefined,
+    'pivot': // objects.js:3247
+        undefined,
+    'edit the costume\'s\nrotation center': // objects.js:3249
+        undefined,
+    'make permanent and\nshow in the sprite corral': // objects.js:3257
+        undefined,
+    'exceeding maximum number of clones': // objects.js:3355
+        undefined,
+    'Costume': // objects.js:4338
+        undefined,
+    'setting the rotation center requires a costume': // objects.js:4679
+        undefined,
+    'current parent': // objects.js:5420
+        undefined,
+    'Stage': // objects.js:6315
+        'Sc\u00E9na',
+    'stop': // objects.js:6770 costumes/COSTUMES:486
+        undefined,
+    'terminate all running threads': // objects.js:6774
+        undefined,
+    'Stage selected:\nno motion primitives': // objects.js:7060
+        'Vybran\u00E1 sc\u00E9na:\u017E\u00E1dn\u00E9 pohybov\u00E9 bloky',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite': // objects.js:7445
+        undefined,
+    'turn all pen trails and stamps\ninto a new background for the stage': // objects.js:7447
+        undefined,
+    'Background': // objects.js:7817
+        undefined,
+    'a {{ className }}({{ name }})': // objects.js:8096
+        undefined,
+    'click or drag crosshairs to move the rotation center': // objects.js:8296
+        'klikni nebo p\u0159et\u00E1hni k\u0159\u00ED\u017E pro p\u0159esunut\u00ED centra ot\u00E1\u010Den\u00ED',
+    'Costume Editor': // objects.js:8308
+        'Editor kost\u00FDm\u016F',
+    'an {{ className }}({{ name }})': // objects.js:8395
+        undefined,
+    'Web Audio API is not supported\nin this browser': // objects.js:8629
+        undefined,
+    'normal': // objects.js:9452
+        'norm\u00E1ln\u00ED',
+    'large': // objects.js:9456
+        'velk\u00FD',
+    'slider min': // objects.js:9466
+        'minimum',
+    'slider max': // objects.js:9470
+        'maximum',
+    'import': // objects.js:9475
+        undefined,
+    'Unable to import': // objects.js:9501
+        undefined,
+    '{{ appName }} can only import "text" files.\nYou selected a file of type "{{ type }}".': // objects.js:9502
+        undefined,
+    'Slider minimum value': // objects.js:9588
+        'minim\u00E1ln\u00ED hodnota posuvn\u00EDku',
+    'Slider maximum value': // objects.js:9604
+        'Maxim\u00E1ln\u00ED hodnota posuvn\u00EDku',
+    'Paint Editor': // paint.js:111
+        undefined,
+    'Paintbrush tool\n(free draw)': // paint.js:172
+        undefined,
+    'Stroked Rectangle\n(shift: square)': // paint.js:174
+        undefined,
+    'Stroked Ellipse\n(shift: circle)': // paint.js:176
+        undefined,
+    'Eraser tool': // paint.js:178
+        undefined,
+    'Set the rotation center': // paint.js:180
+        undefined,
+    'Line tool\n(shift: vertical/horizontal)': // paint.js:183
+        undefined,
+    'Filled Rectangle\n(shift: square)': // paint.js:185
+        undefined,
+    'Filled Ellipse\n(shift: circle)': // paint.js:187
+        undefined,
+    'Fill a region': // paint.js:189
+        undefined,
+    'Pipette tool\n(pick a color anywhere)': // paint.js:191
+        undefined,
+    'undo': // paint.js:225
+        undefined,
+    'grow': // paint.js:239
+        undefined,
+    'shrink': // paint.js:243
+        undefined,
+    'flip \u2194': // paint.js:247
+        undefined,
+    'flip \u2195': // paint.js:251
+        undefined,
+    'Constrain proportions of shapes?\n(you can also hold shift)': // paint.js:407
+        undefined,
+    'Brush size': // paint.js:413
+        undefined,
+    'loading should be implemented in heir of XML_Serializer': // store.js:235
+        undefined,
+    '{{ appName }} Project': // store.js:328
+        undefined,
+    'This project has been created by a different app:\n\n{{ appName }}\n\nand may be incompatible or fail to load here.': // store.js:329
+        undefined,
+    'Project uses newer version of Serializer': // store.js:351
+        undefined,
+    'Module uses newer version of Serializer': // store.js:630 store.js:662 store.js:743
+        undefined,
+    'expecting a command but getting a reporter': // store.js:1076
+        undefined,
+    'Obsolete!': // store.js:1198
+        undefined,
+    'expecting a reference id': // store.js:1282
+        undefined,
+    'square': // symbols.js:85
+        undefined,
+    'pointRight': // symbols.js:86
+        undefined,
+    'stepForward': // symbols.js:87
+        undefined,
+    'gears': // symbols.js:88
+        undefined,
+    'file': // symbols.js:89
+        undefined,
+    'fullScreen': // symbols.js:90
+        undefined,
+    'normalScreen': // symbols.js:91
+        undefined,
+    'smallStage': // symbols.js:92
+        undefined,
+    'normalStage': // symbols.js:93
+        undefined,
+    'turtle': // symbols.js:94
+        undefined,
+    'turtleOutline': // symbols.js:96
+        undefined,
+    'pause': // symbols.js:97
+        undefined,
+    'flag': // symbols.js:98
+        undefined,
+    'octagon': // symbols.js:99
+        undefined,
+    'cloud': // symbols.js:100 costumes/COSTUMES:170
+        undefined,
+    'cloudOutline': // symbols.js:101
+        undefined,
+    'cloudGradient': // symbols.js:102
+        undefined,
+    'turnRight': // symbols.js:103
+        undefined,
+    'turnLeft': // symbols.js:104
+        undefined,
+    'storage': // symbols.js:105
+        undefined,
+    'poster': // symbols.js:106
+        undefined,
+    'flash': // symbols.js:107
+        undefined,
+    'brush': // symbols.js:108
+        undefined,
+    'rectangleSolid': // symbols.js:110
+        undefined,
+    'circle': // symbols.js:111
+        undefined,
+    'circleSolid': // symbols.js:112
+        undefined,
+    'cross': // symbols.js:114
+        undefined,
+    'crosshairs': // symbols.js:115
+        undefined,
+    'paintbucket': // symbols.js:116
+        undefined,
+    'eraser': // symbols.js:117
+        undefined,
+    'pipette': // symbols.js:118
+        undefined,
+    'speechBubble': // symbols.js:119
+        undefined,
+    'speechBubbleOutline': // symbols.js:120
+        undefined,
+    'turnBack': // symbols.js:121
+        undefined,
+    'turnForward': // symbols.js:122
+        undefined,
+    'arrowUp': // symbols.js:123
+        undefined,
+    'arrowUpOutline': // symbols.js:124
+        undefined,
+    'arrowLeft': // symbols.js:125
+        undefined,
+    'arrowLeftOutline': // symbols.js:126
+        undefined,
+    'arrowDown': // symbols.js:127
+        undefined,
+    'arrowDownOutline': // symbols.js:128
+        undefined,
+    'arrowRight': // symbols.js:129
+        undefined,
+    'arrowRightOutline': // symbols.js:130
+        undefined,
+    'robot': // symbols.js:131
+        undefined,
+    'magnifyingGlass': // symbols.js:132
+        undefined,
+    'magnifierOutline': // symbols.js:133
+        undefined,
+    'notes': // symbols.js:134
+        undefined,
+    'camera': // symbols.js:135
+        undefined,
+    'location': // symbols.js:136
+        undefined,
+    'footprints': // symbols.js:137
+        undefined,
+    'keyboard': // symbols.js:138
+        undefined,
+    'keyboardFilled': // symbols.js:139
+        undefined,
+    'reset columns': // tables.js:1024 tables.js:1032
+        undefined,
+    'open in another dialog': // tables.js:1027
+        undefined,
+    'list view': // tables.js:1034
+        undefined,
+    'Table view': // tables.js:1186
+        undefined,
+    'expecting a receiver but getting {{ actual }}': // threads.js:145
+        undefined,
+    'expecting a block or ring but getting {{ actual }}': // threads.js:160
+        undefined,
+    'a synchronous {{ appName }} script has timed out': // threads.js:172
+        undefined,
+    'the predicate takes\ntoo long for a\ncustom hat block': // threads.js:428
+        undefined,
+    'compiling does not yet support\nvariables that are not\nformal parameters': // threads.js:758
+        undefined,
+    'compiling does not yet support\ncustom blocks': // threads.js:785
+        undefined,
+    'compiling does not yet support\nimplicit parameters\n(empty input slots)': // threads.js:818
+        undefined,
+    'compiling does not yet support\ninputs of type\n{{ type }}': // threads.js:845
+        undefined,
+    'compiling does not yet support\ninput slots of type\n{{ type }}': // threads.js:858
+        undefined,
+    'reporter didn\'t report': // threads.js:1087
+        undefined,
+    'Inside': // threads.js:1100
+        undefined,
+    'a custom block definition is missing': // threads.js:1107
+        undefined,
+    'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
+        undefined,
+    'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
+        undefined,
+    'continuations cannot be forked': // threads.js:1312
+        undefined,
+    'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
+        undefined,
+    'cannot operate on a deleted sprite': // threads.js:2546
+        undefined,
+    'expecting text instead of a {{ type }}': // threads.js:2862
+        undefined,
+    'expecting a text delimiter instead of a {{ type }}': // threads.js:2868
+        undefined,
+    'unsupported attribute': // threads.js:3448
+        undefined,
+    'unable to nest\n(disabled or circular?)': // threads.js:3462
+        undefined,
+    '"{{ name }}" is read-only': // threads.js:3505
+        undefined,
+    '"{{ name }}"\nis not a valid option': // threads.js:3642
+        undefined,
+    'unsupported data type {{ type }}': // threads.js:3677
+        undefined,
+    '{{ className }} >> {{ expression }} {{ variables }}': // threads.js:3958
+        undefined,
+    'a transient {{ className }} [{{ value }}]': // threads.js:4122
+        undefined,
+    'a {{ className }} [{{ value }}]': // threads.js:4123
+        undefined,
+    'a {{ className }} {{{ value }}}': // threads.js:4139
+        undefined,
+    'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
+        undefined,
+    'Yes': // widgets.js:1607
+        'Ano',
+    'No': // widgets.js:1608
+        'Ne',
+    'Default': // widgets.js:1882
+        undefined,
+    '{{ year }} or before': // widgets.js:2024
+        undefined,
+    'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
+        'U\u017Eivatelsk\u00E9 jm\u00E9no',
+    'Birth date': // widgets.js:2061
+        'Datum narozen\u00ED',
+    'Password': // widgets.js:2071 widgets.js:2078
+        'Heslo',
+    'Repeat Password': // widgets.js:2073
+        undefined,
+    'Old password': // widgets.js:2083
+        undefined,
+    'New password': // widgets.js:2085
+        undefined,
+    'Repeat new password': // widgets.js:2087
+        undefined,
+    'please fill out\nthis field': // widgets.js:2196
+        'pros\u00EDm vypl\u0148te\ntoto pole',
+    'User name must be four\ncharacters or longer': // widgets.js:2201
+        'U\u017Eivatelsk\u00E9 jm\u00E9no mus\u00ED b\u00FDt\ndlouh\u00E9 alespo\u0148 \u010Dty\u0159i znaky.',
+    'please provide a valid\nemail address': // widgets.js:2206
+        'Zadejte, pros\u00EDm, platnou emailovou adresu.',
+    'password must be six\ncharacters or longer': // widgets.js:2212
+        'Heslo mus\u00ED b\u00FDt dlouh\u00E9\nalespo\u0148 \u0161est znak\u016F.',
+    'passwords do\nnot match': // widgets.js:2216
+        'Hesla se neshoduj\u00ED.',
+    'please agree to\nthe TOS': // widgets.js:2222
+        'pros\u00EDm za\u0161krtn\u011Bte souhlas\ns Podm\u00EDnkami slu\u017Eby',
+    'E-mail address of parent or guardian': // widgets.js:2258
+        'E-mailov\u00E1 adresa rodi\u010De \u010Di opatrovn\u00EDka',
+    'E-mail address': // widgets.js:2259
+        'E-mailov\u00E1 adresa',
+    'Missing required element <{{ tagName }}>!': // xml.js:186
+        undefined,
+    'Expected "=" after attribute name': // xml.js:341
+        undefined,
+    'Expected single- or double-quoted attribute value': // xml.js:347
+        undefined,
+    'Expected ">" after "/" in empty tag': // xml.js:361
+        undefined,
+    'Expected ">" after tag name and attributes': // xml.js:367
+        undefined,
+    'Expected to close {{ tagName }}': // xml.js:379
+        undefined,
+    'Tools': // libraries/LIBRARIES:1
+        undefined,
+    'Standard library of powerful blocks (for, map, etc.)': // libraries/LIBRARIES:1
+        undefined,
+    'Iteration, composition': // libraries/LIBRARIES:2
+        undefined,
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.': // libraries/LIBRARIES:2
+        undefined,
+    'List utilities': // libraries/LIBRARIES:3
+        undefined,
+    'Some standard functions on lists (append, reverse, etc.)': // libraries/LIBRARIES:3
+        undefined,
+    'Streams (lazy lists)': // libraries/LIBRARIES:4
+        undefined,
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.)': // libraries/LIBRARIES:4
+        undefined,
+    'Variadic reporters': // libraries/LIBRARIES:5
+        undefined,
+    'Versions of +, x, AND, and OR that take more than two inputs.': // libraries/LIBRARIES:5
+        undefined,
+    'Web services access (https)': // libraries/LIBRARIES:6
+        undefined,
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.': // libraries/LIBRARIES:6
+        undefined,
+    'Words, sentences': // libraries/LIBRARIES:7
+        undefined,
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library (along with the JOIN WORDS block in the Tools library) brings back that idea.': // libraries/LIBRARIES:7
+        undefined,
+    'Multi-branched conditional (switch)': // libraries/LIBRARIES:8
+        undefined,
+    'Like "switch" in C-like languages or "cond" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!': // libraries/LIBRARIES:8
+        undefined,
+    'LEAP Motion controller': // libraries/LIBRARIES:9
+        undefined,
+    'Report hand positions from LEAP Motion controller (leapmotion.com).': // libraries/LIBRARIES:9
+        undefined,
+    'Set RGB or HSV pen color': // libraries/LIBRARIES:10
+        undefined,
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).': // libraries/LIBRARIES:10
+        undefined,
+    'Catch errors in a script': // libraries/LIBRARIES:11
+        undefined,
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.': // libraries/LIBRARIES:11
+        undefined,
+    'Allow multi-line text input to a block': // libraries/LIBRARIES:12
+        undefined,
+    'In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.': // libraries/LIBRARIES:12
+        undefined,
+    'Provide getters and setters for all GUI-controlled global settings': // libraries/LIBRARIES:13
+        undefined,
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.': // libraries/LIBRARIES:13
+        undefined,
+    'Infinite precision integers, exact rationals, complex': // libraries/LIBRARIES:14
+        undefined,
+    'The full Scheme numeric tower. "USE BIGNUMS <True>" to enable.': // libraries/LIBRARIES:14
+        undefined,
+    'Provide 100 selected colors': // libraries/LIBRARIES:15
+        undefined,
+    'to use instead of hue for better selection': // libraries/LIBRARIES:15
+        undefined,
+    'Text to speech': // libraries/LIBRARIES:16
+        undefined,
+    'output text using speech synthesis.': // libraries/LIBRARIES:16
+        undefined,
+    'Animation': // libraries/LIBRARIES:17
+        undefined,
+    'glide, grow and rotate using easing functions.': // libraries/LIBRARIES:17
+        undefined,
+    'Pixels': // libraries/LIBRARIES:18
+        undefined,
+    'manipulate costumes pixel-wise.': // libraries/LIBRARIES:18
+        undefined,
+    'Audio Comp': // libraries/LIBRARIES:19
+        undefined,
+    'analyze, manipulate and generate sound samples.': // libraries/LIBRARIES:19
+        undefined,
+};
+
+// ✂ - - - - - - - - - - - - - - - - -  -   -
+// The following are strings that were used once by Snap! but not anymore
+// (or just mispelled strings)
+// Feel free to delete or keep them for future references
+SnapTranslator.dict.cs.deprecated = {
+    'add a new sprite':
+        'p\u0159idat nov\u00FD sprite',
+    'play note %n for %n beats':
+        'zahraj t\u00F3n %n po %n dob(y)',
     'stop %stopOthersChoices':
         'stop %stopOthersChoices',
-    'run %cmdRing %inputs':
-        'spusť %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'zahájit %cmdRing %inputs',
-    'call %repRing %inputs':
-        'zavolat %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'spustit %cmdRing s pokračováním',
-    'call %cmdRing w/continuation':
-        'zavolat %cmdRing s pokračováním',
-    'warp %c':
-        'obal %c',
-    'when I start as a clone':
-        'začít po naklonování',
-    'create a clone of %cln':
-        'vytvořit klon %cln',
-    'myself':
-        'sama sebe',
-    'delete this clone':
-        'odstranit klon',
-    'all but this script':
-        'vše kromě tohoto skriptu',
-    'other scripts in sprite':
-        'ostatní skripty tohoto objektu',
-    'pause all %pause':
-        'zastavit vše %pause',
-
-
-    // sensing:
-    'touching %col ?':
-        'dotýká se %col ?',
-    'touching %clr ?':
-        'dotýká se barvy %clr ?',
-    'color %clr is touching %clr ?':
-        'barva %clr je na barvě %clr ?',
-    'ask %s and wait':
-        'zeptej se %s a čekej',
-    'what\'s your name?':
-        'Jak se jmenuješ?',
-    'answer':
-        'odpověď',
-    'mouse x':
-        'souřadnice myši x',
-    'mouse y':
-        'souřadnice myši y',
-    'mouse down?':
-        'stisknuto tlačítko myši?',
-    'key %key pressed?':
-        'stisknuta klávesa %key ?',
     'distance to %dst':
-        'vzdálenost od %dst',
-    'reset timer':
-        'vynulovat stopky',
-    'timer':
-        'stopky',
-    '%att of %spr':
-        '%att z %spr',
+        'vzd\u00E1lenost od %dst',
     'http:// %s':
         'http:// %s',
-    'turbo mode?':
-        'turbo mód?',
-    'set turbo mode to %b':
-        'nastavit turbo mód na %b',
-    'current %dates':
-        'aktuální %dates',
-            'year' : 'rok',
-            'month' : 'měsíc',
-            'date' : 'datum',
-            'day of week' : 'den v týdnu',
-            'hour' : 'hodina',
-            'minute' : 'minuta',
-            'second' : 'sekunda',
-            'time in milliseconds' : 'čas v milisekundách',
-
-    'filtered for %clr':
-        'filtrovaný pro %clr',
-    'stack size':
-        'velikost zásobníku',
-    'frames':
-        'snímky',
-
-    // operators:
-    '%n mod %n':
-        '%n modulo %n',
-    'round %n':
-        'zaokrouhli %n',
-    '%fun of %n':
-        '%fun z %n',
-    'pick random %n to %n':
-        'zvol náhodné číslo od %n do %n',
-    '%b and %b':
-        '%b a %b',
-    '%b or %b':
-        '%b nebo %b',
-    'not %b':
-        'není %b',
-    'true':
-        'pravda',
-    'false':
-        'nepravda',
-    'join %words':
-        'spoj %words',
-    'hello':
-        'ahoj',
-    'world':
-        'světe',
-    'split %s by %delim':
-        'rozděl %s podle %delim',
-    'letter %n of %s':
-        'písmeno %n z %s',
-    'length of %s':
-        'délka %s',
-    'unicode of %s':
-        'Unicode %s',
-    'unicode %n as letter':
-        'Unicode %n jako znak',
-    'is %s a %typ ?':
-        'je %s typu %typ ?',
-    'is %s identical to %s ?':
-        'je %s stejný jako %s ?',
-
-    'type of %s':
-        'Typ %s',
-
-    // variables:
-    'Make a variable':
-        'Vytvoř proměnnou',
-    'Variable name':
-        'Jméno proměnné',
-    'Script variable name':
-        'Jméno skriptové proměnné',
-    'Delete a variable':
-        'Smaž proměnnou',
-
-    'set %var to %s':
-        'nastav %var na %s',
-    'change %var by %n':
-        'změň %var o %n',
-    'show variable %var':
-        'ukaž proměnnou %var',
-    'hide variable %var':
-        'schovej proměnnou %var',
-    'script variables %scriptVars':
-        'Vytvoř skriptové proměnné %scriptVars',
-
-    // lists:
-    'list %exp':
-        'seznam %exp',
-    '%s in front of %l':
-        '%s na začátek %l',
-    'item %idx of %l':
-        'položka %idx z %l',
-    'all but first of %l':
-        'vše kromě první položky z %l',
-    'length of %l':
-        'délka %l',
-    '%l contains %s':
-        '%l obsahuje %s',
-    'thing':
-        'věc',
-    'add %s to %l':
-        'přidat %s do %l',
-    'delete %ida of %l':
-        'smazat %ida z %l',
-    'insert %s at %idx of %l':
-        'vložit %s na %idx pozici v %l',
-    'replace item %idx of %l with %s':
-        'nahraď položku %idx v %l hodnotou %s',
-
-    // other
-    'Make a block':
-        'Vytvoř blok',
-
-    // menus
-    // snap menu
-    'About...':
-        'O programu...',
     'Snap! website':
-        'Stránky Snap!',
-    'Download source':
-        'Stáhnout zdrojové kódy',
-    'Switch back to user mode':
-        'přepnout zpět do uživatelského módu',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'zobrazovat jednoduché menu',
-    'Switch to dev mode':
-        'přepnout do vývojářského módu',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'zobrazovat pokročilé menu',
-    'Reference manual':
-        'Referenční příručka',
-
-    // project menu
-    'Project notes...':
-        'Poznámky k projektu...',
-    'New':
-        'Nový',
-    'Open...':
-        'Otevřít...',
-    'Save':
-        'Uložit',
-    'Save As...':
-        'Uložit jako...',
-    'Import...':
-        'Importovat...',
-    'file menu import hint':
-        'Načíst exportovaný projekt, '
-            + 'knihovnu bloků, kostýmy nebo zvuky',
-    'Export project as plain text...':
-        'Exportovat projekt jako prostý text...',
-    'Export project...':
-        'Exportovat projekt...',
-    'show project data as XML\nin a new browser window':
-        'zobrazit data projektu jako xml  XML\n v novém okně prohlížeče',
-    'Export blocks...':
-        'Exportovat bloky...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'Zobrazit definici vlastních bloků jako\nXML v novém okně prohlížeče',
-    'Import tools':
-        'Importovat nástroje',
-    'load the official library of\npowerful blocks':
-        'nahraje oficialní knihovnu\npokročilých bloků',
-    'Libraries...':
-        'Knihovny...',
-    'Import library':
-        'Importovat knihovnu',
-        
-	  'Select a costume from the media library':
-		    'Vyberte kostým z knihovny médií',
-    'Select a sound from the media library':
-        'Vyberte si zvuk z knihovny médií',
-
-    // cloud menu
-    'Login...':
-        'Přihlásit...',
-    'Signup...':
-        'Vytvořit účet...',
-    'Reset Password...':
-        'Resetovat heslo...',
-
-    'Sign in':
-        'Přihlásit se',
-    'User name:':
-        'Uživatelské jméno:',
-    'Password:':
-        'Heslo:',
-    'stay signed in on this computer\nuntil logging out':
-        'zůstaň přihlášen na tomto počítači\naž do odhlášení',
-    'Reset password':
-        'Resetuj heslo',
-    'Sign up':
-        'Vytvořit účet',
-    'Birth date:':
-        'Datum narození:',
-    'year:':
-        'rok:',
-    'E-mail address:':
-        'E-mailová adresa:',
-    'E-mail address of parent or guardian:':
-        'E-mailová adresa rodiče či opatrovníka:',
-    'Terms of Service...':
-        'Podmínky služby...',
-    'Privacy...':
-        'Politika soukromí...',
-    'I have read and agree\nto the Terms of Service':
-        'Četl jsem a souhlasím s podímkami služby',
-    'January':
-        'leden',
-    'February':
-        'únor',
-    'March':
-        'březen',
-    'April':
-        'duben',
-    'May':
-        'květen',
-    'June':
-        'červen',
-    'July':
-        'červenec',
-    'August':
-        'srpen',
-    'September':
-        'září',
-    'October':
-        'říjen',
-    'November':
-        'listopad',
-    'December':
-        'prosinec',
-    'please fill out\nthis field':
-        'prosím vyplňte\ntoto pole',
-    'please agree to\nthe TOS':
-        'prosím zaškrtněte souhlas\ns Podmínkami služby',
-    'User name must be four\ncharacters or longer':
-        'Uživatelské jméno musí být\ndlouhé alespoň čtyři znaky.',
-    'please provide a valid\nemail address':
-        'Zadejte, prosím, platnou emailovou adresu.',
-    'password must be six\ncharacters or longer':
-        'Heslo musí být dlouhé\nalespoň šest znaků.',
-    'passwords do\nnot match':
-        'Hesla se neshodují.',
-                        
-    // settings menu
-    'Language...':
-        'Jazyk...',
-    'Zoom blocks...':
-        'Velikost bloků...',
-    'Stage size...':
-        'Velikost scény...',
-    'Stage size':
-        'Velikost scény',
-    'Stage width':
-        'Šířka scény',
-    'Stage height':
-        'Výška scény',
-    'Blurred shadows':
-        'Měkké stíny',
-    'uncheck to use solid drop\nshadows and highlights':
-        'odškrtnutím se použijí\nostré stíny a světla',
-    'check to use blurred drop\nshadows and highlights':
-        'zaškrtni pro použití \nměkkých stínů a světel',
-    'Zebra coloring':
-        'Střídavé barvy',
-    'check to enable alternating\ncolors for nested blocks':
-        'Zaškrtnutí zapne střídavé\nbarvy pro vložené bloky',
-    'uncheck to disable alternating\ncolors for nested block':
-        'Odškrtnutí zruší použití střídavých barev pro vložené bloky',
-    'Prefer empty slot drops':
-        'Preferovat prázdný slot pro puštění',
-    'settings menu prefer empty slots hint':
-        'Zaškrtnutím bude preferováno prázdné místo na umístění',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'odškrtnutím bude upřednostňováno nahrazení celé podmínky',
-    'Long form input dialog':
-        'Velké formuláře',
-    'check to always show slot\ntypes in the input dialog':
-        'Zaškrtnutím povolit zobrazování typů slotů ve vstupním dialogu',
-    'uncheck to use the input\ndialog in short form':
-        'odškrtnutí použije vstupní dialogy v krátké formě',
-    'Plain prototype labels':
-        'Prosté nadpisy prototypů',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'odškrtněte pro používání symbolů (+) v editoru bloků',
-    'check to hide (+) symbols\nin block prototype labels':
-        'zaškrtněte pro skrytí symbolů (+) v editoru bloků',
-    'Virtual keyboard':
-        'Virtuální klávesnice',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'odškrtnutí zakáže\npodporu virtuální klávesnice\n'
-            + 'na mobilních zařízeních',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'zaškrtnutí povolí použití virtuální klávesnice\nna mobilních zařízeních',
-    'Input sliders':
-        'Posuvníky',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'odškrtnutí vypne použití posuvníků pro vstupní pole',
-    'check to enable\ninput sliders for\nentry fields':
-        'zaškrtnutní povolí použití posuvníků pro vstupní pole',
-    'Clicking sound':
-        'Zvuk kliknutí',
-    'uncheck to turn\nblock clicking\nsound off':
-        'odškrtnutí vypne zvuk při přicvaknutí bloku',
-    'check to turn\nblock clicking\nsound on':
-        'zaškrtnutí zapne zvuk přicvaknutí bloku',
-    'Thread safe scripts':
-        'Vláknově bezpečné skripty',
-    'uncheck to allow\nscript reentrance':
-        'odškrtnutí povolí více vláken',
-    'check to disallow\nscript reentrance':
-        'zaškrtnutí zakáže více vláken',
-    'Turbo mode':
-        'Turbo mód',
-    'uncheck to run scripts\nat normal speed':
-        'odškrtnutí spustí skript\nnormální rychlostí',
-    'check to prioritize\nscript execution':
-        'zaškrtnutí spustí skripty\nzvýšenou rychlostí',
-    'Flat design':
-        'Plochý design',
-    'check for alternative\nGUI design':
-        'zaškrtněte pro alternativní design GUI',
-    'uncheck for default\nGUI design':
-        'odškrtněte pro výchozí design GUI',
-    'Keyboard Editing':
-        'Editace klávesnicí',
-    'uncheck to disable\nkeyboard editing support':
-        'odškrtněte pro vypnutí podpory editace klávesnicí',
-    'check to enable\nkeyboard editing support':
-        'zaškrtněte pro podporu editace klávesnicí',
-    'Prefer smooth animations':
-        'Zapnout plynulou animaci',
-    'uncheck for greater speed\nat variable frame rates':
-        'odškrtněte pro vyšší rychlost',
-    'check for smooth, predictable\nanimations across computers':
-        'zaškrtněte pro plynulé, předvídatelné\nanimace napříč počítači',
-    'Flat line ends':
-        'Ploché konce čar',
-    'check for flat ends of lines':
-        'zaškrtněte pro ploché konce čar',
-    'uncheck for round ends of lines':
-        'odškrtněte pro zakulacené konce čar',
-    'Codification support':
-        'Podpora kodifikace',
-    'uncheck to disable\nblock to text mapping features':
-        'odškrtněte pro vypnutí funkcí\nmapování bloků na text',
-    'check for block\nto text mapping features':
-        'zaškrtněte pro funkce\nmapování bloků na text',
-    'Inheritance support':
-        'Podpora dědičnosti',
-    'uncheck to disable\nsprite inheritance features':
-        'odškrtněte pro vypnutí funkcí\ndědičnosti spritů',
-    'check for sprite\ninheritance features':
-        'zaškrtněte pro funkce\ndědičnosti spritů',
-
-    // inputs
-    'with inputs':
-        's položkami',
-    'input names:':
-        'proměnné:',
-    'Input Names:':
-        'Proměnné:',
-
-    // context menus:
-    'help':
-        'nápověda',
-
-    // blocks:
-    'help...':
-        'nápověda...',
-    'relabel...':
-            'Zaměnit blok za...',
-    'duplicate':
-        'kopírovat',
-    'make a copy\nand pick it up':
-        'vytvořit kopii a držet ji',
-    'only duplicate this block':
-            'kopírovat pouze tento blok',
-    'delete':
-        'smazat',
-    'script pic...':
-        'obrázek skriptu...',
-    'open a new window\nwith a picture of this script':
-        'otevřít nové okno\ns obrázkem tohoto skriptu',
-    'ringify':
-        'obalit',
-    'unringify':
-        'zrušit zabalení',
-
-    // custom blocks:
-    'delete block definition...':
-        'smazat definici bloku',
-    'edit...':
-        'upravit...',
-
-    // sprites:
-    'edit':
-        'upravit',
-    'move':
-        'přesunout',
-    'export...':
-        'export...',
-    'paint a new sprite':
-        'nakreslit nový sprite',
-
-      // stage:
-    'show all':
-        'Zobrazit vše',
-
-    // scripting area
-    'clean up':
-        'Srovnat',
-    'arrange scripts\nvertically':
-        'zarovnat skripty vertikálně',
-    'add comment':
-        'přidat komentář',
-    'make a block...':
-        'vytvořit blok...',
-
-    // costumes
-    'rename':
-        'přejmenovat',
-    'export':
-        'exportovat',
-    'rename costume':
-        'přejmenovat kostým',
-    'Paint a new costume':
-        'Nakresli nový kostým',
-
-    // sounds
-    'Play sound':
-        'spustit přehrávání',
-    'Stop sound':
-        'zastavit přehrávání',
-    'Stop':
-        'zastavit',
-    'Play':
-        'spustit',
-    'rename sound':
-        'přejmenovat zvuk',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
+        'Str\u00E1nky Snap!',
     'Ok':
         'OK',
-    'Cancel':
-        'Zrušit',
-    'Yes':
-        'Ano',
-    'No':
-        'Ne',
-
-    // help
-    'Help':
-        'Nápověda',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Velikost bloků',
-    'build':
-        'vytvoř si',
-    'your own':
-        'své vlastní',
-    'blocks':
-        'bloky',
-    'normal (1x)':
-        'normální (1x)',
-    'demo (1.2x)':
-        'demo (1.2x)',
-    'presentation (1.4x)':
-        'prezentace (1.4x)',
-    'big (2x)':
-        'velké (2x)',
-    'huge (4x)':
-        'obrovské (4x)',
-    'giant (8x)':
-        'gigantické (8x)',
-    'monstrous (10x)':
-        'monstrózní (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Nepojmenovaný',
-    'Open Project':
-        'Otevřít projekt',
-    '(empty)':
-        '(prázdný)',
     'Saved!':
-        'Uloženo!',
-    'Delete Project':
-        'Smazat projekt',
+        'Ulo\u017Eeno!',
     'Are you sure you want to delete':
-        'Jste si jisti, že chcete projekt smazat?',
-    'rename...':
-        'přejmenovat...',
-
-    // costume editor
-    'Costume Editor':
-        'Editor kostýmů',
-    'click or drag crosshairs to move the rotation center':
-        'klikni nebo přetáhni kříž pro přesunutí centra otáčení',
-
-    // project notes
-    'Project Notes':
-        'Poznámky k projektu',
-
-    // new project
-    'New Project':
-        'Nový projekt',
-    'Replace the current project with a new one?':
-        'Nahradit stávající projekt novým?',
-
-    // save project
-    'Save Project As...':
-        'Uložit projekt jako...',
-
-    // export blocks
-    'Export blocks':
-        'Export bloků',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'Tento projekt nyní nemá žádné globální bloky',
-    'select':
-        'vybrat',
-    'all':
-        'vše',
-    'none':
-        'nic',
-
-    // variable dialog
-    'for all sprites':
-        'pro všechny sprite',
-    'for this sprite only':
-        'pouze pro tento sprite',
-
-    // block dialog
-    'Change block':
-        'Změnit blok',
-    'Command':
-        'Příkaz',
-    'Reporter':
-        'Funkce',
-    'Predicate':
-        'Podmínka',
-
-    // block editor
-    'Block Editor':
-        'Editor bloků',
-    'Apply':
-        'Použít',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'smazat vlastní blok',
-    'block deletion dialog text':
-        'Smazáním tohoto bloku se odstraní všechna jeho použití.\n' +
-            'Opravdu chcete tento blok smazat?',
-
-    // input dialog
-    'Create input name':
-        'Vytvořit vstup',
-    'Edit input name':
-        'Upravit vstup',
-    'Edit label fragment':
-        'Upravit nápis',
-    'Title text':
-        'Nadpis',
-    'Input name':
-        'Vstup',
-    'Delete':
-        'Smazat',
-    'Object':
-        'Objekt',
-    'Number':
-        'Číslo',
-    'Text':
-        'Text',
-    'List':
-        'Seznam',
-    'Any type':
-        'Libovolný',
-    'Boolean (T/F)':
-        'Boolean (P/N)',
-    'Command\n(inline)':
-        'Příkaz\n(vnořený)',
-    'Command\n(C-shape)':
-        'Příkaz\n(C-tvar)',
-    'Any\n(unevaluated)':
-        'Cokoliv\n(nevyhodnoceno)',
-    'Boolean\n(unevaluated)':
-        'Boolean\n(nevyhodnoceno)',
+        'Jste si jisti, \u017Ee chcete projekt smazat?',
+    'Save Project As':
+        'Ulo\u017Eit projekt jako',
     'Single input.':
-        'Jednoduchý vstup.',
-    'Default Value:':
-        'Výchozí hodnota:',
-    'Multiple inputs (value is list of inputs)':
-        'Více vstupů (hodnoty v seznamu)',
-    'Upvar - make internal variable visible to caller':
-        'Vnitřní proměnná viditelná pro volání',
-
-    // About Snap
-    'About Snap':
-        'O programu Snap',
-    'Back...':
-        'Zpět...',
-    'License...':
-        'Licence...',
-    'Modules...':
-        'Moduly...',
-    'Credits...':
-        'Přispěvatelé...',
-    'Translators...':
-        'Překladatelé',
-    'License':
-        'Licence',
-    'current module versions:':
-        'aktuální verze modulů:',
-    'Contributors':
-        'Přispěvatelé',
-    'Translations':
-        'Překlady',
-
-    // variable watchers
-    'normal':
-        'normální',
-    'large':
-        'velký',
-    'slider':
-        'posuvník',
-    'slider min...':
-        'minimum...',
-    'slider max...':
-        'maximum...',
-    'Slider minimum value':
-        'minimální hodnota posuvníku',
-    'Slider maximum value':
-        'Maximální hodnota posuvníku',
-
-    // list watchers
-    'length: ':
-        'délka: ',
-
-    // coments
-    'add comment here...':
-        'přidat sem komentář...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) doprava',
-    '(-90) left':
-        '(-90) doleva',
-    '(0) up':
-        '(0) nahoru',
-    '(180) down':
-        '(180) dolů',
-
-    // collision detection
-    'mouse-pointer':
-        'kurzor myši',
-    'edge':
-        'okraj',
-    'pen trails':
-        'stopa pera',
-
-    // costumes
-    'Turtle':
-        'želva',
-
-    // graphical effects
-    'brightness':
-        'jas',
-    'ghost':
-        'duch',
-    'negative':
-        'negativ',
-    'comic':
-        'moaré',
-    'confetti':
-        'barevnost',
-
-
-    // keys
-    'space':
-        'mezerník',
-    'up arrow':
-        'šipka nahoru',
-    'down arrow':
-        'šipka dolů',
-    'right arrow':
-        'šipka doprava',
-    'left arrow':
-        'šipka doleva',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'Nový...',
-
-    // math functions
-    'abs':
-        'absolutní hodnota',
-    'ceiling':
-        'zaokrouhlit nahoru',
-    'floor':
-        'zaokrouhlit dolů',
-    'sqrt':
-        'odmocnina',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        'číslo',
-    'text':
-        'text',
-    'Boolean':
-        'boolean',
-    'list':
-        'seznam',
-    'command':
-        'blok příkazů',
-    'reporter':
-        'blok funkcí',
-    'predicate':
-        'podmínky',
-
-    // list indices
-    'last':
-        'poslední',
-    'any':
-        'kterákoli'
+        'Jednoduch\u00FD vstup.',
+    'new':
+        'Nov\u00FD',
 };

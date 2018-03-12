@@ -81,7 +81,7 @@
 
 /*global TriggerMorph, modules, Color, Point, BoxMorph, radians,
 newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
-HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
+HTMLCanvasElement, fontHeight, SymbolMorph, _, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
@@ -467,7 +467,7 @@ PushButtonMorph.prototype.createLabel = function () {
         this.label.drawNew();
     } else {
         this.label = new StringMorph(
-            localize(this.labelString),
+            this.labelString,
             this.fontSize,
             this.fontStyle,
             true,
@@ -861,7 +861,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
             this.trueStateLabel = this.labelString[1].fullCopy();
         } else {
             this.label = new StringMorph(
-                localize(this.labelString[0]),
+                this.labelString[0],
                 this.fontSize,
                 this.fontStyle,
                 true,
@@ -872,7 +872,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 this.labelColor
             );
             this.trueStateLabel = new StringMorph(
-                localize(this.labelString[1]),
+                this.labelString[1],
                 this.fontSize,
                 this.fontStyle,
                 true,
@@ -897,7 +897,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
             this.label = this.labelString.fullCopy();
         } else {
             this.label = new StringMorph(
-                localize(this.labelString),
+                this.labelString,
                 this.fontSize,
                 this.fontStyle,
                 true,
@@ -1184,7 +1184,7 @@ ToggleMorph.prototype.createLabel = function () {
     if (this.label === null) {
         if (this.captionString) {
             this.label = new TextMorph(
-                localize(this.captionString),
+                this.captionString,
                 this.fontSize,
                 this.fontStyle,
                 true
@@ -1194,7 +1194,7 @@ ToggleMorph.prototype.createLabel = function () {
     }
     if (this.tick === null) {
         this.tick = new StringMorph(
-            localize(this.labelString),
+            this.labelString,
             this.fontSize,
             this.fontStyle,
             true,
@@ -1571,7 +1571,7 @@ DialogBoxMorph.prototype.inform = function (
     if (textString) {
         this.addBody(txt);
     }
-    this.addButton('ok', 'OK');
+    this.addButton('ok', _('OK'));
     this.drawNew();
     this.fixLayout();
     this.popUp(world);
@@ -1604,8 +1604,8 @@ DialogBoxMorph.prototype.askYesNo = function (
     this.createLabel();
     if (pic) {this.setPicture(pic); }
     this.addBody(txt);
-    this.addButton('ok', 'Yes');
-    this.addButton('cancel', 'No');
+    this.addButton('ok', _('Yes'));
+    this.addButton('cancel', _('No'));
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -1705,8 +1705,8 @@ DialogBoxMorph.prototype.prompt = function (
 
     this.addBody(txt);
     txt.drawNew();
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
+    this.addButton('ok', _('OK'));
+    this.addButton('cancel', _('Cancel'));
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -1731,7 +1731,7 @@ DialogBoxMorph.prototype.promptCode = function (
 
     function remarkText(string) {
         return new TextMorph(
-            localize(string),
+            string,
             10,
             null, // style
             false, // bold
@@ -1788,8 +1788,8 @@ DialogBoxMorph.prototype.promptCode = function (
     frame.drawNew();
     bdy.drawNew();
 
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
+    this.addButton('ok', _('OK'));
+    this.addButton('cancel', _('Cancel'));
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -1817,7 +1817,7 @@ DialogBoxMorph.prototype.promptVector = function (
 
     function labelText(string) {
         return new TextMorph(
-            localize(string),
+            string,
             10,
             null, // style
             false, // bold
@@ -1871,7 +1871,7 @@ DialogBoxMorph.prototype.promptVector = function (
     yInp.drawNew();
     bdy.fixLayout();
 
-    this.addButton('ok', 'OK');
+    this.addButton('ok', _('OK'));
 
     if (deflt instanceof Point) {
         this.addButton(
@@ -1879,12 +1879,12 @@ DialogBoxMorph.prototype.promptVector = function (
                 xInp.setContents(deflt.x.toString());
                 yInp.setContents(deflt.y.toString());
             },
-            'Default'
+            _('Default')
 
         );
     }
 
-    this.addButton('cancel', 'Cancel');
+    this.addButton('cancel', _('Cancel'));
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -1935,11 +1935,26 @@ DialogBoxMorph.prototype.promptCredentials = function (
         years = {},
         currentYear = new Date().getFullYear(),
         firstYear = currentYear - 20,
-        myself = this;
+        myself = this,
+        monthDict = {},
+        monthNames = [
+            _('January'),
+            _('February'),
+            _('March'),
+            _('April'),
+            _('May'),
+            _('June'),
+            _('July'),
+            _('August'),
+            _('September'),
+            _('October'),
+            _('November'),
+            _('December')
+        ];
 
     function labelText(string) {
         return new TextMorph(
-            localize(string),
+            string,
             10,
             null, // style
             false, // bold
@@ -1958,7 +1973,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             function () {
                 window.open(url);
             },
-            '  ' + localize(label) + '  '
+            '  ' + label + '  '
         );
         btn.fontSize = 10;
         btn.corner = myself.buttonCorner;
@@ -1985,20 +2000,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (isNaN(year)) {
             year = 0;
         }
-        month = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-        ].indexOf(monthName);
+        month = monthNames.indexOf(monthName);
         if (isNaN(month)) {
             month = 0;
         }
@@ -2006,29 +2008,20 @@ DialogBoxMorph.prototype.promptCredentials = function (
         return today - birthday;
     }
 
+    monthNames.forEach(function(name) {
+        monthDict[name] = [name]
+    });
+
     bmn = new InputFieldMorph(
         null, // text
         false, // numeric?
-        {
-            'January' : ['January'],
-            'February' : ['February'],
-            'March' : ['March'],
-            'April' : ['April'],
-            'May' : ['May'],
-            'June' : ['June'],
-            'July' : ['July'],
-            'August' : ['August'],
-            'September' : ['September'],
-            'October' : ['October'],
-            'November' : ['November'],
-            'December' : ['December']
-        },
+        monthDict,
         true // read-only
     );
     for (currentYear; currentYear > firstYear; currentYear -= 1) {
         years[currentYear.toString() + ' '] = currentYear;
     }
-    years[firstYear + ' ' + localize('or before')] = '< ' + currentYear;
+    years[_('{{ year }} or before', firstYear)] = '< ' + currentYear;
     byr = new InputFieldMorph(
         null, // text
         false, // numeric?
@@ -2058,16 +2051,16 @@ DialogBoxMorph.prototype.promptCredentials = function (
     opw.contents().text.toggleIsPassword();
 
     if (purpose === 'login') {
-        inp.add(labelText('User name:'));
+        inp.add(labelText(_('User name:')));
         inp.add(usr);
     }
 
     if (purpose === 'signup') {
-        inp.add(labelText('User name:'));
+        inp.add(labelText(_('User name:')));
         inp.add(usr);
-        mCol.add(labelText('Birth date:'));
+        mCol.add(labelText(_('Birth date:')));
         mCol.add(bmn);
-        yCol.add(labelText('year:'));
+        yCol.add(labelText(_('year:')));
         yCol.add(byr);
         dof.add(mCol);
         dof.add(yCol);
@@ -2075,28 +2068,28 @@ DialogBoxMorph.prototype.promptCredentials = function (
         emlLabel = labelText('foo');
         inp.add(emlLabel);
         inp.add(eml);
-        inp.add(labelText('Password:'));
+        inp.add(labelText(_('Password:')));
         inp.add(pw1);
-        inp.add(labelText('Repeat Password:'));
+        inp.add(labelText(_('Repeat Password:')));
         inp.add(pw2);
     }
 
     if (purpose === 'login') {
-        inp.add(labelText('Password:'));
+        inp.add(labelText(_('Password:')));
         inp.add(pw1);
     }
 
     if (purpose === 'changePassword') {
-        inp.add(labelText('Old password:'));
+        inp.add(labelText(_('Old password:')));
         inp.add(opw);
-        inp.add(labelText('New password:'));
+        inp.add(labelText(_('New password:')));
         inp.add(pw1);
-        inp.add(labelText('Repeat new password:'));
+        inp.add(labelText(_('Repeat new password:')));
         inp.add(pw2);
     }
 
     if (purpose === 'resetPassword' || purpose === 'resendVerification') {
-        inp.add(labelText('User name:'));
+        inp.add(labelText(_('User name:')));
         inp.add(usr);
     }
 
@@ -2159,8 +2152,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
     eml.drawNew();
     bdy.fixLayout();
 
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
+    this.addButton('ok', _('OK'));
+    this.addButton('cancel', _('Cancel'));
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -2171,7 +2164,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             em = eml.getValue();
 
         function indicate(morph, string) {
-            var bubble = new SpeechBubbleMorph(localize(string));
+            var bubble = new SpeechBubbleMorph(string);
             bubble.isPointingRight = false;
             bubble.drawNew();
             bubble.popUp(
@@ -2200,33 +2193,33 @@ DialogBoxMorph.prototype.promptCredentials = function (
             }
         );
         if (empty) {
-            indicate(empty, 'please fill out\nthis field');
+            indicate(empty, _('please fill out\nthis field'));
             return false;
         }
         if (purpose === 'signup') {
             if (usr.getValue().length < 4) {
-                indicate(usr, 'User name must be four\ncharacters or longer');
+                indicate(usr, _('User name must be four\ncharacters or longer'));
                 return false;
             }
             if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
                     || em.indexOf('.') === -1 || em.length < 5) {
-                indicate(eml, 'please provide a valid\nemail address');
+                indicate(eml, _('please provide a valid\nemail address'));
                 return false;
             }
         }
         if (purpose === 'changePassword' || purpose === 'signup') {
             if (pw1.getValue().length < 6) {
-                indicate(pw1, 'password must be six\ncharacters or longer');
+                indicate(pw1, _('password must be six\ncharacters or longer'));
                 return false;
             }
             if (pw1.getValue() !== pw2.getValue()) {
-                indicate(pw2, 'passwords do\nnot match');
+                indicate(pw2, _('passwords do\nnot match'));
                 return false;
             }
         }
         if (purpose === 'signup') {
             if (!agree) {
-                indicate(chk, 'please agree to\nthe TOS');
+                indicate(chk, _('please agree to\nthe TOS'));
                 return false;
             }
         }
@@ -2261,10 +2254,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.reactToChoice = function () {
         if (purpose === 'signup') {
             emlLabel.changed();
-            emlLabel.text = age() <= 13 ?
-                    'E-mail address of parent or guardian:'
-                        : 'E-mail address:';
-            emlLabel.text = localize(emlLabel.text);
+            emlLabel.text = age() <= 13
+                ? _('E-mail address of parent or guardian:')
+                : _('E-mail address:');
+            emlLabel.text = emlLabel.text;
             emlLabel.drawNew();
             emlLabel.changed();
         }
@@ -2411,7 +2404,7 @@ DialogBoxMorph.prototype.createLabel = function () {
     }
     if (this.labelString) {
         this.label = new StringMorph(
-            localize(this.labelString),
+            this.labelString,
             this.titleFontSize,
             this.fontStyle,
             true,
@@ -2438,7 +2431,7 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
     var button = new PushButtonMorph(
         this,
         action || 'ok',
-        '  ' + localize((label || 'OK')) + '  '
+        '  ' + label || _('OK') + '  '
     );
     button.fontSize = this.buttonFontSize;
     button.corner = this.buttonCorner;
@@ -3366,7 +3359,7 @@ PianoMenuMorph.prototype.init = function (
     var choices, key;
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
-    choices = {
+    choices = { // @i18n?
         'C (48)' : 48,
         'D (50)' : 50,
         'C# (49)' : 49,

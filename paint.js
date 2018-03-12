@@ -71,7 +71,7 @@
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
 Color, SymbolMorph, newCanvas, Morph, TextMorph, Costume, SpriteMorph, nop,
-localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
+_, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
 BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
 StageMorph, isNil*/
 
@@ -108,7 +108,7 @@ PaintEditorMorph.prototype.init = function () {
     PaintEditorMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.labelString = "Paint Editor";
+    this.labelString = _('Paint Editor');
     this.createLabel();
 
     // build contents:
@@ -158,8 +158,8 @@ PaintEditorMorph.prototype.buildContents = function () {
     };
     this.populatePropertiesMenu();
 
-    this.addButton("ok", "OK");
-    this.addButton("cancel", "Cancel");
+    this.addButton("ok", _('OK'));
+    this.addButton("cancel", _('Cancel'));
 
     this.refreshToolButtons();
     this.fixLayout();
@@ -169,26 +169,26 @@ PaintEditorMorph.prototype.buildContents = function () {
 PaintEditorMorph.prototype.buildToolbox = function () {
     var tools = {
             brush:
-                "Paintbrush tool\n(free draw)",
+                _('Paintbrush tool\n(free draw)'),
             rectangle:
-                "Stroked Rectangle\n(shift: square)",
+                _('Stroked Rectangle\n(shift: square)'),
             circle:
-                "Stroked Ellipse\n(shift: circle)",
+                _('Stroked Ellipse\n(shift: circle)'),
             eraser:
-                "Eraser tool",
+                _('Eraser tool'),
             crosshairs:
-                "Set the rotation center",
+                _('Set the rotation center'),
 
             line:
-                "Line tool\n(shift: vertical/horizontal)",
+                _('Line tool\n(shift: vertical/horizontal)'),
             rectangleSolid:
-                "Filled Rectangle\n(shift: square)",
+                _('Filled Rectangle\n(shift: square)'),
             circleSolid:
-                "Filled Ellipse\n(shift: circle)",
+                _('Filled Ellipse\n(shift: circle)'),
             paintbucket:
-                "Fill a region",
+                _('Fill a region'),
             pipette:
-                "Pipette tool\n(pick a color anywhere)"
+                _('Pipette tool\n(pick a color anywhere)')
         },
         myself = this,
         left = this.toolbox.left(),
@@ -222,12 +222,12 @@ PaintEditorMorph.prototype.buildEdits = function () {
     var paper = this.paper;
 
     this.edits.add(this.pushButton(
-        "undo",
+        _('undo'),
         function () {paper.undo(); }
     ));
 
     this.edits.add(this.pushButton(
-        "clear",
+        _('clear'),
         function () {paper.clearCanvas(); }
     ));
     this.edits.fixLayout();
@@ -236,19 +236,19 @@ PaintEditorMorph.prototype.buildEdits = function () {
 PaintEditorMorph.prototype.buildScaleBox = function () {
     var paper = this.paper;
     this.scaleBox.add(this.pushButton(
-        "grow",
+        _('grow'),
         function () {paper.scale(0.05, 0.05); }
     ));
     this.scaleBox.add(this.pushButton(
-        "shrink",
+        _('shrink'),
         function () {paper.scale(-0.05, -0.05); }
     ));
     this.scaleBox.add(this.pushButton(
-        "flip ↔",
+        _('flip ↔'),
         function () {paper.scale(-2, 0); }
     ));
     this.scaleBox.add(this.pushButton(
-        "flip ↕",
+        _('flip ↕'),
         function () {paper.scale(0, -2); }
     ));
     this.scaleBox.fixLayout();
@@ -404,13 +404,13 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         "checkbox",
         this,
         function () {myself.shift = !myself.shift; },
-        "Constrain proportions of shapes?\n(you can also hold shift)",
+        _('Constrain proportions of shapes?\n(you can also hold shift)'),
         function () {return myself.shift; }
     );
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
-    c.add(new TextMorph(localize("Brush size")));
+    c.add(new TextMorph(_('Brush size')));
     c.add(alpen);
     c.add(pc.constrain);
 };

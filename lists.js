@@ -58,7 +58,7 @@
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, _,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
@@ -120,7 +120,13 @@ List.prototype.enableTables = false; // default, to not confuse NYC teachers
 // List printing
 
 List.prototype.toString = function () {
-    return 'a List [' + this.length() + ' elements]';
+    return _(
+        'a {{ className }} [{{ count }} elements]',
+        {
+            className: 'List',
+            count: this.length()
+        }
+    );
 };
 
 // List updating:
@@ -134,7 +140,7 @@ List.prototype.changed = function () {
 List.prototype.cons = function (car, cdr) {
     var answer = new List();
     if (!(cdr instanceof List || isNil(cdr))) {
-        throw new Error("cdr isn't a list: " + cdr);
+        throw new Error(_('cdr isn\'t a list:') + ' ' + cdr);
     }
     answer.first = isNil(car) ? null : car;
     answer.rest = cdr || null;
@@ -255,7 +261,7 @@ List.prototype.get = function (col, row) {
         if (row > this.rows()) {return null; }
         return this.rowName(row);
     } else if (!row) {
-        if (this.cols() === 1) {return localize('items'); }
+        if (this.cols() === 1) {return _('items'); }
         return this.colName(col);
     }
     r = this.at(row);
@@ -483,7 +489,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
 
     // elements declarations
     this.label = new StringMorph(
-        localize('length: ') + this.list.length(),
+        _('length:') + ' ' + this.list.length(),
         SyntaxElementMorph.prototype.fontSize,
         null,
         false,
@@ -694,7 +700,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
 };
 
 ListWatcherMorph.prototype.updateLength = function (notDone) {
-    this.label.text = localize('length: ') + this.list.length();
+    this.label.text = _('length:') + ' ' + this.list.length();
     if (notDone) {
         this.label.color = new Color(0, 0, 100);
     } else {
@@ -798,10 +804,10 @@ ListWatcherMorph.prototype.userMenu = function () {
     }
     var menu = new MenuMorph(this),
         myself = this;
-    menu.addItem('table view...', 'showTableView');
+    menu.addItem(_('table view...'), 'showTableView');
     menu.addLine();
     menu.addItem(
-        'open in dialog...',
+        _('open in dialog...'),
         function () {
             new TableDialogMorph(myself.list).popUp(myself.world());
         }
