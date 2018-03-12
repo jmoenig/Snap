@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-December-01';
+modules.threads = '2018-March-09';
 
 var ThreadManager;
 var Process;
@@ -151,6 +151,8 @@ function invoke(
         );
     } else if (action.evaluate) {
         return action.evaluate();
+    } else if (action instanceof Function) {
+    	return action.apply(receiver, contextArgs.asArray());
     } else {
         throw new Error('expecting a block or ring but getting ' + action);
     }
@@ -525,6 +527,7 @@ Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 // Process.prototype.enableJS = false;
 
@@ -694,7 +697,9 @@ Process.prototype.evaluateContext = function () {
 };
 
 Process.prototype.evaluateBlock = function (block, argCount) {
-    var selector = block.selector;
+    var rcvr, inputs,
+    	selector = block.selector;
+
     // check for special forms
     if (selector === 'reportOr' ||
             selector ===  'reportAnd' ||
@@ -703,8 +708,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     }
 
     // first evaluate all inputs, then apply the primitive
-    var rcvr = this.context.receiver || this.receiver,
-        inputs = this.context.inputs;
+    rcvr = this.context.receiver || this.receiver;
+    inputs = this.context.inputs;
 
     if (argCount > inputs.length) {
         this.evaluateNextInput(block);
@@ -728,6 +733,131 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             );
             this.popContext();
         }
+    }
+};
+
+// Process: Compile simple, side-effect free Reporters
+// with only explicit formal parameters (no empty input slots)
+// ** highly experimental and heavily under construction **
+
+Process.prototype.reportCompiled = function (context) {
+	this.assertType(context, ['reporter', 'predicate']);
+	return this.compileFunction(context.expression, context.inputs);
+};
+
+Process.prototype.compileFunction = function (block, parameters) {
+	// first test for unbound variables
+ 	block.allChildren().forEach(function (morph) {
+  		if (morph.selector === 'reportGetVar' &&
+        	!contains(parameters, morph.blockSpec)
+        ) {
+	        throw new Error(
+    	        'compiling does not yet support\n' +
+        	    'variables that are not\nformal parameters'
+        	);
+        }
+    });
+	return Function.apply(
+    	null,
+    	parameters.concat(['return ' + this.compileExpression(block)])
+    );
+};
+
+Process.prototype.compileExpression = function (block) {
+    var selector = block.selector,
+		inputs = block.inputs(),
+		src,
+		rcvr,
+		args;
+
+    // first check for special forms and infix operators
+    switch (selector) {
+    case 'reportOr':
+		return this.compileInfix('||', inputs);
+    case 'reportAnd':
+        return this.compileInfix('&&', inputs);
+    case 'evaluateCustomBlock':
+        throw new Error(
+            'compiling does not yet support\n' +
+            'custom blocks'
+        );
+    default:
+        src = this[selector] ? this : (this.context.receiver || this.receiver);
+        rcvr = src.constructor.name + '.prototype';
+        args = this.compileInputs(inputs);
+	    return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+    }
+};
+
+Process.prototype.compileInfix = function (operator, inputs) {
+	return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
+ 	   this.compileInput(inputs[1]) +')';
+};
+
+Process.prototype.compileInputs = function (array) {
+    var args = '',
+        myself = this;
+
+    array.forEach(function (inp) {
+        if (args.length) {
+            args += ', ';
+        }
+		args += myself.compileInput(inp);
+    });
+    return args;
+};
+
+Process.prototype.compileInput = function (inp) {
+     var value, type;
+
+    if (inp.isEmptySlot && inp.isEmptySlot()) {
+        // implicit parameter - unsupported for now
+    	throw new Error(
+        	'compiling does not yet support\n' +
+            'implicit parameters\n(empty input slots)'
+    	);
+    } else if (inp instanceof MultiArgMorph) {
+        if (inp.isStatic) {
+            return 'new List([' + this.compileInputs(inp.inputs()) + '])';
+          } else {
+            return '' + this.compileInputs(inp.inputs());
+           }
+    } else if (inp instanceof ArgMorph) {
+        // literal - evaluate inline
+        value = inp.evaluate();
+        type = this.reportTypeOf(value);
+        switch (type) {
+        case 'number':
+        case 'Boolean':
+            return '' + value;
+        case 'text':
+            // enclose in double quotes
+            return '"' + value + '"';
+        case 'list':
+            return 'new List([' + this.compileInputs(value) + '])';
+        default:
+        	if (value instanceof Array) {
+         		return '"' + value[0] + '"';
+         	}
+            throw new Error(
+                'compiling does not yet support\n' +
+                'inputs of type\n' +
+                 type
+            );
+        }
+    } else if (inp instanceof BlockMorph) {
+        if (inp.selector === 'reportGetVar') {
+            // un-quoted string:
+            return inp.blockSpec;
+        } else {
+            return this.compileExpression(inp);
+        }
+    } else {
+        throw new Error(
+            'compiling does not yet support\n' +
+            'input slots of type\n' +
+            inp.constructor.name
+        );
     }
 };
 
@@ -2354,6 +2484,10 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
+        this.context.activeSends.forEach(function (proc) {
+        	// optimize for atomic sub-routines
+            proc.runStep();
+        });
     }
     this.context.activeSends = this.context.activeSends.filter(
         function (proc) {
@@ -2690,12 +2824,20 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str = (string || '').toString()[0];
-    return str ? str.charCodeAt(0) : 0;
+    var str = isNil(string) ? '\u0000' : string.toString();
+
+    if (str.codePointAt) { // support for Unicode in newer browsers.
+        return str.codePointAt(0);
+    }
+    return str.charCodeAt(0);
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = +(num || 0);
+
+    if (String.fromCodePoint) { // support for Unicode in newer browsers.
+        return String.fromCodePoint(code);
+    }
     return String.fromCharCode(code);
 };
 
@@ -2860,6 +3002,17 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
     return those;
 };
 
+Process.prototype.setHeading = function (direction) {
+    var thisObj = this.blockReceiver();
+
+    if (thisObj) {
+        if (this.inputOption(direction) === 'random') {
+            direction = this.reportRandom(1, 36000) / 100;
+        }
+		thisObj.setHeading(direction);
+    }
+};
+
 Process.prototype.doFaceTowards = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj;
@@ -2867,6 +3020,8 @@ Process.prototype.doFaceTowards = function (name) {
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
+        } if (this.inputOption(name) === 'random position') {
+        	thisObj.setHeading(this.reportRandom(1, 36000) / 100);
         } else {
             if (name instanceof List) {
                 thisObj.faceToXY(
@@ -2888,11 +3043,20 @@ Process.prototype.doFaceTowards = function (name) {
 
 Process.prototype.doGotoObject = function (name) {
     var thisObj = this.blockReceiver(),
-        thatObj;
+        thatObj,
+        stage;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
+        } else if (this.inputOption(name) === 'random position') {
+	        stage = thisObj.parentThatIsA(StageMorph);
+    	    if (stage) {
+         		thisObj.setCenter(new Point(
+					this.reportRandom(stage.left(), stage.right()),
+                    this.reportRandom(stage.top(), stage.bottom())
+                ));
+         	}
         } else {
             if (name instanceof List) {
                 thisObj.gotoXY(
@@ -3058,6 +3222,17 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     return false;
 };
 
+Process.prototype.reportRelationTo = function (relation, name) {
+	var rel = this.inputOption(relation);
+ 	if (rel === 'distance') {
+  		return this.reportDistanceTo(name);
+  	}
+    if (rel === 'direction') {
+    	return this.reportDirectionTo(name);
+    }
+    return 0;
+};
+
 Process.prototype.reportDistanceTo = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj,
@@ -3084,6 +3259,32 @@ Process.prototype.reportDistanceTo = function (name) {
     return 0;
 };
 
+Process.prototype.reportDirectionTo = function (name) {
+    var thisObj = this.blockReceiver(),
+        thatObj;
+
+    if (thisObj) {
+        if (this.inputOption(name) === 'mouse-pointer') {
+            return thisObj.angleToXY(this.reportMouseX(), this.reportMouseY());
+        }
+        if (name instanceof List) {
+            return thisObj.angleToXY(
+                name.at(1),
+                name.at(2)
+            );
+        }
+        thatObj = this.getOtherObject(name, this.homeContext.receiver);
+        if (thatObj) {
+            return thisObj.angleToXY(
+                thatObj.xPosition(),
+                thatObj.yPosition()
+            );
+        }
+        return thisObj.direction();
+    }
+    return 0;
+};
+
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
         thatObj,
@@ -3099,6 +3300,16 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
         if (thatObj) {
             this.assertAlive(thatObj);
+            if (attribute instanceof BlockMorph) { // a "wish"
+            	return this.reportContextFor(
+             	   this.reify(
+                		thatObj.getMethod(attribute.semanticSpec)
+                        	.blockInstance(),
+                		new List()
+                	),
+                 	thatObj
+                );
+            }
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);
             }
@@ -3685,6 +3896,7 @@ Process.prototype.unflash = function () {
     startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
+    activeSends		forked processes waiting to be completed
     isCustomBlock   marker for return ops
     emptySlots      caches the number of empty slots for reification
     tag             string or number to optionally identify the Context,
@@ -3712,6 +3924,7 @@ function Context(
     this.pc = 0;
     this.isContinuation = false;
     this.startTime = null;
+    this.activeSends = null;
     this.activeAudio = null;
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
@@ -4045,7 +4258,8 @@ VariableFrame.prototype.names = function () {
     return names;
 };
 
-VariableFrame.prototype.allNamesDict = function () {
+VariableFrame.prototype.allNamesDict = function (upTo) {
+	// "upTo" is an optional parent frame at which to stop, e.g. globals
     var dict = {}, current = this;
 
     function addKeysToDict(srcDict, trgtDict) {
@@ -4057,19 +4271,20 @@ VariableFrame.prototype.allNamesDict = function () {
         }
     }
 
-    while (current) {
+    while (current && (current !== upTo)) {
         addKeysToDict(current.vars, dict);
         current = current.parentFrame;
     }
     return dict;
 };
 
-VariableFrame.prototype.allNames = function () {
+VariableFrame.prototype.allNames = function (upTo) {
 /*
     only show the names of the lexical scope, hybrid scoping is
     reserved to the daring ;-)
+	"upTo" is an optional parent frame at which to stop, e.g. globals
 */
-    var answer = [], each, dict = this.allNamesDict();
+    var answer = [], each, dict = this.allNamesDict(upTo);
 
     for (each in dict) {
         if (Object.prototype.hasOwnProperty.call(dict, each)) {
