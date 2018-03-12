@@ -764,7 +764,7 @@ SnapTranslator.dict.ko.strings = {
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        '\uC2E4\uD5D8\uC801',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
         undefined,
     'remove block variables': // byob.js:1061
@@ -842,7 +842,7 @@ SnapTranslator.dict.ko.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\uBD88\uB9AC\uC5B8\n(\uD3C9\uAC00\uB418\uC9C0 \uC54A\uC74C)',
     'Single input': // byob.js:3299
-        undefined,
+        '\uB2E8\uC77C \uC785\uB825',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\uB2E4\uC911 \uC785\uB825 (\uAC12\uC740 \uB9AC\uC2A4\uD2B8\uC758 \uC785\uB825\uAC12\uC785\uB2C8\uB2E4)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.ko.strings = {
     'Reference manual': // gui.js:2474
         '\uCC38\uACE0\uC790\uB8CC \uB2E4\uC6B4\uB85C\uB4DC',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} \uC6F9\uC0AC\uC774\uD2B8',
     'Download source': // gui.js:2487
         '\uC18C\uC2A4\uCF54\uB4DC \uB2E4\uC6B4\uB85C\uB4DC',
     'Switch back to user mode': // gui.js:2498
@@ -1290,7 +1290,7 @@ SnapTranslator.dict.ko.strings = {
     'Libraries': // gui.js:3238
         '\uB77C\uC774\uBE0C\uB7EC\uB9AC',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        '\uCD94\uAC00\uC801\uC778 \uBE14\uB85D\uC744 \uC120\uD0DD\uD574\uC11C\n\uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.',
     'Select a costume from the media library': // gui.js:3259
         undefined,
     'Select a sound from the media library': // gui.js:3266
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.ko.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\uC800\uC7A5\uD588\uC2B5\uB2C8\uB2E4',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.ko.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\uC815\uB9D0\uB85C \uC0AD\uC81C\uD569\uB2C8\uAE4C?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\uD504\uB85C\uC81D\uD2B8 \uC0AD\uC81C',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

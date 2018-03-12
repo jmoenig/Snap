@@ -842,7 +842,7 @@ SnapTranslator.dict.ar.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u0645\u0646\u0637\u0642\u064A\n(\u062E\u0627\u0645 \u0644\u0645 \u064A\u064F\u0642\u064E\u064A\u064E\u0651\u0645)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u0627\u062F\u062E\u0627\u0644 \u0645\u0641\u0631\u062F',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u0645\u062A\u0639\u062F\u062F \u0627\u0644\u0627\u062F\u062E\u0627\u0644\u0627\u062A (\u0639\u0628\u0627\u0631\u0629 \u0639\u0646 \u0644\u0627\u0626\u062D\u0629 \u0627\u0648 \u0645\u0635\u0641\u0648\u0641\u0629 \u0645\u0646 \u0627\u0644\u0645\u062F\u062E\u0644\u0627\u062A)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.ar.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         '\u062D\u0630\u0641 \u0627\u0644\u0644\u0628\u0646\u0627\u062A \u0627\u0644\u0645\u062E\u0635\u0635\u0629 \u0627\u0644\u063A\u064A\u0631 \u0645\u0633\u062A\u062E\u062F\u0645\u0629',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} \u062A\u0645 \u0627\u0632\u0627\u0644\u0629 \u0627\u0644\u0644\u0628\u0646\u0627\u062A \u0627\u0644\u063A\u064A\u0631 \u0645\u0633\u062A\u062E\u062F\u0645\u0629',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.ar.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u062A\u0645 \u0627\u0644\u062D\u0641\u0638',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1342,9 +1342,9 @@ SnapTranslator.dict.ar.strings = {
     'Contents': // gui.js:4103
         '\u0645\u062D\u062A\u0648\u064A\u0627\u062A',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        '\u0646\u0648\u0639 \u0645\u0646 \u0623\u0646\u0648\u0627\u0639 {{ name }',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        '\u062C\u0632\u0621 \u0645\u0646 {{ name }}',
     'Parts': // gui.js:4144
         '\u0623\u062C\u0632\u0627\u0621',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.ar.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u0647\u0644 \u0627\u0646\u062A \u0645\u062A\u0623\u0643\u062F \u0645\u0646 \u0631\u063A\u0628\u062A\u0643 \u0641\u064A \u0627\u0644\u062D\u0630\u0641?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u062D\u0630\u0641 \u0645\u0634\u0631\u0648\u0639',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.ar.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        '\u0627\u0641\u0635\u0644 \u0639\u0646 {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         '\u0627\u0641\u0635\u0644 \u0643\u0644 \u0627\u0644\u0627\u062C\u0632\u0627\u0621',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

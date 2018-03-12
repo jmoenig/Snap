@@ -842,7 +842,7 @@ SnapTranslator.dict.bg.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u0411\u0443\u043B\u0435\u0432\n(unevaluated)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u0415\u0434\u0438\u043D\u0438\u0447\u0435\u043D \u0432\u0445\u043E\u0434',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u041C\u043D\u043E\u0436\u0435\u0441\u0442\u0432\u043E \u0432\u0445\u043E\u0434\u043D\u0438 (\u0441\u043F\u0438\u044A\u043A \u043E\u0442 \u0434\u0430\u043D\u043D\u0438)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.bg.strings = {
     'Reference manual': // gui.js:2474
         undefined,
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '\u0423\u0435\u0431\u0441\u0430\u0439\u0442 \u043D\u0430 {{ site }}',
     'Download source': // gui.js:2487
         '\u0418\u0437\u0434\u044A\u0440\u043F\u0430\u0439 \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043D\u0438\u044F \u043A\u043E\u0434',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.bg.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u0417\u0430\u043F\u0438\u0441\u0430\u043D',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.bg.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u0421\u0438\u0440\u0443\u0440\u0435\u043D \u043B\u0438 \u0441\u0438 \u0447\u0435 \u0438\u0441\u043A\u0430\u0448 \u0434\u0430 \u0438\u0437\u0442\u0440\u0438\u0435\u0448?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u0418\u0437\u0442\u0440\u0438\u0439 \u041F\u0440\u043E\u0435\u043A\u0442',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

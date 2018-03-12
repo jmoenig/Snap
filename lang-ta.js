@@ -984,7 +984,7 @@ SnapTranslator.dict.ta.strings = {
     'Reference manual': // gui.js:2474
         'Handbuch lesen',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} Webseite',
     'Download source': // gui.js:2487
         'Quellcode runterladen',
     'Switch back to user mode': // gui.js:2498

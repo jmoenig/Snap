@@ -725,9 +725,9 @@ SnapTranslator.dict.zh_CN.strings = {
     'code string mapping': // blocks.js:8840
         '\u5B57\u7B26\u4E32\u5BF9\u5E94\u7684\u4EE3\u7801',
     'String <#1>': // blocks.js:8864
-        undefined,
+        '\u5B57\u7B26\u4E32 <#1>',
     'Code mapping - {{ type }}': // blocks.js:8864 blocks.js:8879
-        undefined,
+        '\u5BF9\u5E94\u7684\u4EE3\u7801 - {{ type }}',
     'Number <#1>': // blocks.js:8879
         undefined,
     'code true mapping': // blocks.js:9500
@@ -743,11 +743,11 @@ SnapTranslator.dict.zh_CN.strings = {
     'code delimiter mapping': // blocks.js:10627
         '\u5217\u8868\u9879\u5206\u9694\u7B26\u5BF9\u5E94\u7684\u4EE3\u7801',
     'list item delimiter': // blocks.js:10642
-        undefined,
+        '\u5217\u8868\u9879\u5206\u9694\u7B26',
     'list contents <#1>': // blocks.js:10646
-        undefined,
+        '\u5217\u8868\u5185\u5BB9 <#1>',
     'list item <#1>': // blocks.js:10650
-        undefined,
+        '\u5217\u8868\u9879 <#1>',
     'input list': // blocks.js:10750
         '\u8F93\u5165\u5217\u8868\uFF1A',
     'add comment here': // blocks.js:11762
@@ -761,7 +761,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Change block': // byob.js:885
         '\u4FEE\u6539\u79EF\u6728',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (\u4E34\u65F6)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
@@ -843,7 +843,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u5E03\u5C14\uFF08\u4E0D\u8BA1\u7B97\uFF09',
     'Single input': // byob.js:3299
-        undefined,
+        '\u8F93\u5165\u5355\u4E2A\u503C',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u8F93\u5165\u591A\u4E2A\u503C\uFF08\u5217\u8868\uFF09',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -875,7 +875,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         '\u5220\u9664\u6CA1\u7528\u5230\u7684\u79EF\u6728',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }}\u5220\u6389\u4E86\u6CA1\u7528\u5230\u7684\u79EF\u6728',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -985,7 +985,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Reference manual': // gui.js:2474
         '\u53C2\u8003\u624B\u518C',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }}\u5B98\u65B9\u7F51\u7AD9',
     'Download source': // gui.js:2487
         '\u4E0B\u8F7D\u6E90\u4EE3\u7801',
     'Switch back to user mode': // gui.js:2498
@@ -1007,19 +1007,19 @@ SnapTranslator.dict.zh_CN.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        '\u767B\u51FA{{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         '\u4FEE\u6539\u5BC6\u7801',
     'Export project media only': // gui.js:2564
-        undefined,
+        '\u4EC5\u5BFC\u51FA\u9879\u76EE\u4E2D\u7684\u5A92\u4F53\u6587\u4EF6',
     'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
         '\u628A\u9879\u76EE\u5BFC\u51FA\u5230',
     'Export project without media': // gui.js:2578
-        undefined,
+        '\u5BFC\u51FA\u9879\u76EE\uFF0C\u4E0D\u542B\u5A92\u4F53',
     'Export project as cloud data': // gui.js:2592
-        undefined,
+        '\u628A\u9879\u76EE\u4EE5\u4E91\u7AEF\u6570\u636E\u683C\u5F0F\u5BFC\u51FA',
     'Open shared project from cloud': // gui.js:2607
-        undefined,
+        '\u6253\u5F00\u5171\u4EAB\u5728\u4E91\u7AEF\u7684\u9879\u76EE',
     'Author name': // gui.js:2609
         undefined,
     'Project name': // gui.js:2610
@@ -1053,7 +1053,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Execute on slider change': // gui.js:2741
         '\u6E38\u6807\u6539\u53D8\u65F6\u8FD0\u884C\u811A\u672C',
     'uncheck to suppress\nrunning scripts\nwhen moving the slider': // gui.js:2744
-        undefined,
+        '\u5173\uFF1A\u6ED1\u52A8\u6E38\u6807\u65F6\u6682\u505C\u8FD0\u884C\u811A\u672C',
     'check to run\nthe edited script\nwhen moving the slider': // gui.js:2745
         '\u5F00\uFF1A\u6ED1\u52A8\u6E38\u6807\u65F6\u8FD0\u884C\u6539\u53D8\u7684\u811A\u672C',
     'Turbo mode': // gui.js:2749
@@ -1257,7 +1257,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
         '\u52A0\u8F7D\u5BFC\u51FA\u7684\u9879\u76EE\u3001\u79EF\u6728\u5E93\u3001\u9020\u578B\u6216\u58F0\u97F3',
     'Export project (in a new window)': // gui.js:3153
-        undefined,
+        '\u5BFC\u51FA\u9879\u76EE (\uFF08\u6253\u5F00\u65B0\u7A97\u53E3\uFF09)',
     'show project data as XML\nin a new browser window': // gui.js:3164
         '\u6253\u5F00\u65B0\u7A97\u53E3\uFF0C\u5C55\u793A\u9879\u76EE\u7684XML\u6570\u636E',
     'Export project as plain text': // gui.js:3170
@@ -1291,7 +1291,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Libraries': // gui.js:3238
         '\u79EF\u6728\u5E93',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        '\u6311\u9009\u66F4\u591A\u79EF\u6728\uFF0C\u6DFB\u52A0\u5230\u9879\u76EE\u4E2D\u3002',
     'Select a costume from the media library': // gui.js:3259
         '\u4ECE\u5A92\u4F53\u5E93\u4E2D\u6311\u9009\u4E00\u4E2A\u9020\u578B',
     'Select a sound from the media library': // gui.js:3266
@@ -1321,13 +1321,13 @@ SnapTranslator.dict.zh_CN.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u5DF2\u4FDD\u5B58',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
         undefined,
     'Exported': // gui.js:3816 gui.js:5471 gui.js:5497 gui.js:5507 gui.js:5527 gui.js:5539
-        undefined,
+        '\u5BFC\u51FA\u597D\u4E86',
     'Export failed': // gui.js:3819 gui.js:5475 gui.js:5500 gui.js:5530
         undefined,
     'this project doesn\'t have any\ncustom global blocks yet': // gui.js:3836
@@ -1343,9 +1343,9 @@ SnapTranslator.dict.zh_CN.strings = {
     'Contents': // gui.js:4103
         '\u5185\u5BB9',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        '\u7C7B\u578B\uFF1A{{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        '\u5C5E\u4E8E\uFF1A{{ name }}',
     'Parts': // gui.js:4144
         '\u7EC4\u4EF6',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1435,13 +1435,13 @@ SnapTranslator.dict.zh_CN.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        '\u5BC6\u7801\u6539\u597D\u4E86',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        '\u5DF2\u7ECF\u4ECE\u4E91\u7AEF\u767B\u51FA',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         '\u628A\u9879\u76EE\u4FDD\u5B58\u5230\u4E91\u7AEF',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        '\u9879\u76EE\u5DF2\u4FDD\u5B58',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1469,13 +1469,13 @@ SnapTranslator.dict.zh_CN.strings = {
     'Updating\nproject list': // gui.js:6119
         '\u6B63\u5728\u66F4\u65B0\u9879\u76EE\u5217\u8868',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        '\u6700\u540E\u4FEE\u6539\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u4F60\u786E\u5B9A\u8981\u5220\u9664\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u5220\u9664\u9879\u76EE',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1485,7 +1485,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'sharing\nproject': // gui.js:6546
         '\u6B63\u5728\u5206\u4EAB\u9879\u76EE',
     'shared': // gui.js:6563
-        undefined,
+        '\u9879\u76EE\u5DF2\u5206\u4EAB\u7ED9\u5176\u4ED6\u4EBA',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1493,9 +1493,9 @@ SnapTranslator.dict.zh_CN.strings = {
     'unsharing\nproject': // gui.js:6594
         '\u6B63\u5728\u53D6\u6D88\u9879\u76EE\u5206\u4EAB',
     'unshared': // gui.js:6612
-        undefined,
+        '\u5176\u4ED6\u4EBA\u5DF2\u770B\u4E0D\u5230\u9879\u76EE',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        '\u786E\u5B9A\u8BA9\u5176\u4ED6\u4EBA\u770B\u5230\u9879\u76EE\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1503,7 +1503,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        '\u786E\u5B9A\u4E0D\u8BA9\u5176\u4ED6\u4EBA\u770B\u5230\u9879\u76EE\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1529,7 +1529,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        '\u8131\u79BB {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         '\u62C6\u9664\u6240\u6709\u7EC4\u4EF6',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -1603,7 +1603,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'transparency': // morphic.js:4144
         '\u900F\u660E\u5EA6',
     'alpha value': // morphic.js:4147
-        undefined,
+        'alpha\u901A\u9053\u503C\uFF1A',
     'set this morph\'s\nalpha value': // morphic.js:4157
         '\u8BBE\u7F6Emorph\u7684alpha\u901A\u9053\u503C',
     'resize': // morphic.js:4160
@@ -1613,7 +1613,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'pick up': // morphic.js:4174
         '\u6293\u8D77',
     'detach and put\ninto the hand': // morphic.js:4176
-        undefined,
+        '\u65AD\u5F00\u8FDE\u63A5\u62FF\u8D77morph',
     'attach': // morphic.js:4179
         '\u8FDE\u63A5\u5230',
     'stick this morph\nto another one': // morphic.js:4181
@@ -1639,7 +1639,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'World': // morphic.js:4219
         'World',
     'show the\n{{ WorldMorph }}\'s menu': // morphic.js:4223
-        undefined,
+        '\u663E\u793A{{ WorldMorph }}\u83DC\u5355',
     'choose target': // morphic.js:4721 morphic.js:5102 morphic.js:6562 morphic.js:7200
         undefined,
     'set rotation': // morphic.js:4868
@@ -1793,7 +1793,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'fill page': // morphic.js:12201
         '\u586B\u6EE1\u9875\u9762',
     'let the World automatically\nadjust to browser resizing': // morphic.js:12203
-        undefined,
+        '\u8BA9World\u968F\u6D4F\u89C8\u5668\u6539\u53D8\u5927\u5C0F',
     'sharp shadows': // morphic.js:12207
         '\u9510\u5229\u7684\u9634\u5F71',
     'sharp drop shadows\nuse for old browsers': // morphic.js:12209
@@ -1801,7 +1801,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'blurred shadows': // morphic.js:12213
         '\u6A21\u7CCA\u7684\u9634\u5F71',
     'blurry shades\nuse for new browsers': // morphic.js:12215
-        undefined,
+        '\u5BF9\u65B0\u6D4F\u89C8\u5668\n\u4F7F\u7528\u6A21\u7CCA\u7684\u9634\u5F71',
     'choose the World\'s\nbackground color': // morphic.js:12228
         '\u9009\u62E9World\u7684\u80CC\u666F\u989C\u8272',
     'touch screen settings': // morphic.js:12232
@@ -1817,7 +1817,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'disable developers\'\ncontext menus': // morphic.js:12249
         '\u7981\u7528\u5F00\u53D1\u8005\u5FEB\u6377\u83DC\u5355',
     'about {{ resource }}': // morphic.js:12254
-        undefined,
+        '\u5173\u4E8E{{ resource }}',
     'make a morph': // morphic.js:12266
         '\u521B\u5EFAmorph',
     'rectangle': // morphic.js:12267 symbols.js:109
@@ -2447,7 +2447,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        '\u6B64\u5904\u8981\u6C42\u586B\u5199{{ expected }}\u4E2A\u8F93\u5165\u9879\uFF0C\u4F46\u5B9E\u9645\u5F97\u5230\u8F93\u5165\u9879\u4E2A\u6570\u662F{{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2477,7 +2477,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        '\u8FD9\u4E2A\u4E0A\u4E0B\u6587\u4E2D\u4E0D\u5B58\u5728\u201C{{ name }}\u201D\u8FD9\u4E2A\u53D8\u91CF',
     'Yes': // widgets.js:1607
         '\u662F',
     'No': // widgets.js:1608
@@ -2485,7 +2485,7 @@ SnapTranslator.dict.zh_CN.strings = {
     'Default': // widgets.js:1882
         '\u9ED8\u8BA4',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }}\u6216\u66F4\u65E9',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         '\u7528\u6237\u540D\uFF1A',
     'Birth date': // widgets.js:2061

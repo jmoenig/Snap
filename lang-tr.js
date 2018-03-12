@@ -843,7 +843,7 @@ SnapTranslator.dict.tr.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Mant\u0131ksal\n(de\u011Ferlendirilmemi\u015F)',
     'Single input': // byob.js:3299
-        undefined,
+        'Tek girdi',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u00C7oklu girdi (liste olarak)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -985,7 +985,7 @@ SnapTranslator.dict.tr.strings = {
     'Reference manual': // gui.js:2474
         'El kitap\u00E7\u0131\u011F\u0131',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} web sitesi',
     'Download source': // gui.js:2487
         'Indirilebilir kaynak',
     'Switch back to user mode': // gui.js:2498
@@ -1321,7 +1321,7 @@ SnapTranslator.dict.tr.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Kaydedildi',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1475,7 +1475,7 @@ SnapTranslator.dict.tr.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Silmek istedi\u011Finize emin misiniz?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Projeyi sil',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1529,7 +1529,7 @@ SnapTranslator.dict.tr.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'par\u00E7ay\u0131 ay\u0131r {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         't\u00FCm par\u00E7alar\u0131 ay\u0131r',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

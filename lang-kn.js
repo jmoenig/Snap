@@ -842,7 +842,7 @@ SnapTranslator.dict.kn.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u0CAC\u0CC2\u0CB2\u0CBF\u0CAF\u0CA8\u0CCD\n(\u0CAE\u0CCC\u0CB2\u0CCD\u0CAF\u0CC0\u0C95\u0CB0\u0CBF\u0CB8\u0CA6)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u0C92\u0C82\u0CA6\u0CC7 \u0C92\u0C82\u0CA6\u0CC1 \u0C8A\u0CA1\u0CBF\u0C95\u0CC6',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u0CAC\u0CB9\u0CC1\u0CB0\u0CC0\u0CA4\u0CBF\u0CAF \u0C8A\u0CA1\u0CBF\u0C95\u0CC6 (\u0CAE\u0CCC\u0CB2\u0CCD\u0CAF\u0CB5\u0CC1 \u0C92\u0C82\u0CA6\u0C95\u0CBF\u0C82\u0CA4 \u0CB9\u0CC6\u0C9A\u0CCD\u0C9A\u0CBE\u0C97\u0CBF\u0CA6\u0CC6)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.kn.strings = {
     'Reference manual': // gui.js:2474
         '\u0C89\u0CB2\u0CCD\u0CB2\u0CC7\u0C96 \u0C95\u0CC8\u0CAA\u0CBF\u0CA1\u0CBF',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} \u0C9C\u0CBE\u0CB2\u0CA4\u0CBE\u0CA3',
     'Download source': // gui.js:2487
         '\u0C86\u0CA7\u0CBE\u0CB0\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1 \u0C87\u0CB3\u0CBF\u0CB8\u0CC1',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.kn.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u0C89\u0CB3\u0CBF\u0CB8\u0CB2\u0CBE\u0C97\u0CBF\u0CA6\u0CC6',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1470,7 +1470,7 @@ SnapTranslator.dict.kn.strings = {
     'last changed\n{{ date }}': // gui.js:6314
         undefined,
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
-        undefined,
+        '\u0CA8\u0CC0\u0CB5\u0CC1 \u0C85\u0CB3\u0CBF\u0CB8\u0CB2\u0CC1 \u0CB8\u0CBF\u0CA6\u0CCD\u0CA7\u0CB5\u0CBE\u0C97\u0CBF\u0CA6\u0CCD\u0CA6\u0CBF\u0CB0\u0CBE?\n"{{ projectName }}"?',
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.kn.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        '\u0C87\u0CA6\u0CB0\u0CBF\u0C82\u0CA6 \u0C85\u0C97\u0CC1\u0CB2\u0CBF\u0CB8\u0CC1 {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         '\u0C8E\u0CB2\u0CCD\u0CB2\u0CBE \u0CAD\u0CBE\u0C97\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0C85\u0C97\u0CC1\u0CB2\u0CBF\u0CB8\u0CC1 ',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

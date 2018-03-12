@@ -842,7 +842,7 @@ SnapTranslator.dict.hr.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Logi\u010Dki\n(neizra\u010Dunat)',
     'Single input': // byob.js:3299
-        undefined,
+        'Jedan parametar',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Vi\u0161e parametara (vrijednost je lista parametara)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.hr.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Makni nekori\u0161tene blokove',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} nekori\u0161tenih blokova izbrisano',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.hr.strings = {
     'Reference manual': // gui.js:2474
         'Korisni\u010Dki priru\u010Dnik',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} web stranica',
     'Download source': // gui.js:2487
         'Skini izvorni kod',
     'Switch back to user mode': // gui.js:2498
@@ -1006,7 +1006,7 @@ SnapTranslator.dict.hr.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Odjava {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Promjena zaporke',
     'Export project media only': // gui.js:2564
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.hr.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Spremljeno',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1436,11 +1436,11 @@ SnapTranslator.dict.hr.strings = {
     'password has been changed': // gui.js:5414
         undefined,
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'odspojen',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Spremanje projekta\nu oblak',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'spremljeno',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1468,13 +1468,13 @@ SnapTranslator.dict.hr.strings = {
     'Updating\nproject list': // gui.js:6119
         'Osvje\u017Eavam\nlistu projekata',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'zadnja promjena\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Jesi siguran da \u017Eeli\u0161 izbrisati?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Izbrisati projekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.hr.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'odlijepi od {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'odlijepi sve dijelove',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.hr.strings = {
     'Default': // widgets.js:1882
         'Default',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} ili prije',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Korisni\u010Dko ime',
     'Birth date': // widgets.js:2061

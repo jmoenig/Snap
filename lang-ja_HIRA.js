@@ -842,7 +842,7 @@ SnapTranslator.dict.ja_HIRA.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u3057\u3093\u304E\u3061\n(\u307F\u3072\u3087\u3046\u304B)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u305F\u3093\u3044\u3064\u3072\u304D\u3059\u3046',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u3075\u304F\u3059\u3046\u306E\u3072\u304D\u3059\u3046 (\u3042\u305F\u3044\u306F\u3072\u304D\u3059\u3046\u306E\u30EA\u30B9\u30C8)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.ja_HIRA.strings = {
     'Reference manual': // gui.js:2474
         '\u30EA\u30D5\u30A1\u30EC\u30F3\u30B9\u30DE\u30CB\u30E5\u30A2\u30EB',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }}\u306EWeb\u30B5\u30A4\u30C8',
     'Download source': // gui.js:2487
         '\u30BD\u30FC\u30B9\u3092\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.ja_HIRA.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u307B\u305E\u3093\u3057\u307E\u3057\u305F',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.ja_HIRA.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u307B\u3093\u3068\u3046\u306B\u3055\u304F\u3058\u3087\u3057\u307E\u3059\u304B\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u3055\u304F\u3058\u3087',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.ja_HIRA.strings = {
     'Default': // widgets.js:1882
         undefined,
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} \u306D\u3093\u3044\u305C\u3093',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         '\u30E6\u30FC\u30B6\u30FC\u3081\u3044',
     'Birth date': // widgets.js:2061

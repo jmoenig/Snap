@@ -842,7 +842,7 @@ SnapTranslator.dict.ja.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u771F\u507D\u5024\n(\u672A\u8A55\u4FA1)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u5358\u4E00\u5F15\u6570',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u8907\u6570\u306E\u5F15\u6570 (\u5024\u306F\u5F15\u6570\u306E\u30EA\u30B9\u30C8)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.ja.strings = {
     'Reference manual': // gui.js:2474
         '\u30EA\u30D5\u30A1\u30EC\u30F3\u30B9\u30DE\u30CB\u30E5\u30A2\u30EB',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }}\u306EWeb\u30B5\u30A4\u30C8',
     'Download source': // gui.js:2487
         '\u30BD\u30FC\u30B9\u3092\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.ja.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u4FDD\u5B58\u3057\u307E\u3057\u305F',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.ja.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u672C\u5F53\u306B\u524A\u9664\u3057\u307E\u3059\u304B\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3092\u524A\u9664',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.ja.strings = {
     'Default': // widgets.js:1882
         undefined,
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} \u5E74\u4EE5\u524D',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         '\u30E6\u30FC\u30B6\u30FC\u540D',
     'Birth date': // widgets.js:2061

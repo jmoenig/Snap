@@ -842,7 +842,7 @@ SnapTranslator.dict.fi.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Totuusarvo\n(sitaatti)',
     'Single input': // byob.js:3299
-        undefined,
+        'Yksi sy\u00F6te',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Useita sy\u00F6tteit\u00E4 (listana)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.fi.strings = {
     'Reference manual': // gui.js:2474
         'K\u00E4ytt\u00F6ohje',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} kotisivu',
     'Download source': // gui.js:2487
         'Lataa l\u00E4hdekoodi',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.fi.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Tallennettu',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.fi.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Poistetaanko varmasti?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Poista projekti',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.fi.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'irrota {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'irrota kaikki osat',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

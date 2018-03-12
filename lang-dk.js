@@ -843,7 +843,7 @@ SnapTranslator.dict.dk.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolsk\n(uevalueret)',
     'Single input': // byob.js:3299
-        undefined,
+        'Enkel input',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Flere inputs (v\u00E6rdi er liste af inputs)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -985,7 +985,7 @@ SnapTranslator.dict.dk.strings = {
     'Reference manual': // gui.js:2474
         'Referencemanual',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} hjemmeside',
     'Download source': // gui.js:2487
         'Hent kildekode',
     'Switch back to user mode': // gui.js:2498
@@ -1147,9 +1147,9 @@ SnapTranslator.dict.dk.strings = {
     'Flat design': // gui.js:2882
         'Fladt udseende',
     'uncheck for default\nGUI design': // gui.js:2890
-        undefined,
+        'afmarker for\ns\u00E6dvanlig brugerflade',
     'check for alternative\nGUI design': // gui.js:2891
-        undefined,
+        'marker for alternativ\ngrafisk brugerflade',
     'Nested auto-wrapping': // gui.js:2895
         'Automatisk omklamring',
     'uncheck to confine auto-wrapping\nto top-level block stacks': // gui.js:2906
@@ -1321,7 +1321,7 @@ SnapTranslator.dict.dk.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Gemt',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1475,7 +1475,7 @@ SnapTranslator.dict.dk.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Er du sikker p\u00E5 at du vil slette\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Slet projekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1529,7 +1529,7 @@ SnapTranslator.dict.dk.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'l\u00F8sriv fra {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'L\u00F8sriv alle dele',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

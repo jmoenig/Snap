@@ -844,7 +844,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boole\u00E0\n(sense avaluar)',
     'Single input': // byob.js:3299
-        undefined,
+        'Entrada \u00FAnica',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Entrades m\u00FAltiples (el valor \u00E9s una llista d\'entrades)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -876,7 +876,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Esborra blocs no utilitzats',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} bloc(s) personalitzats no utilitzats esborrats',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -986,7 +986,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'Reference manual': // gui.js:2474
         'Manual de refer\u00E8ncia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Web de {{ site }}',
     'Download source': // gui.js:2487
         'Descarrega el codi font',
     'Switch back to user mode': // gui.js:2498
@@ -1322,7 +1322,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Guardat',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1344,9 +1344,9 @@ SnapTranslator.dict.ca_VA.strings = {
     'Contents': // gui.js:4103
         'Continguts',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Esp\u00E8cie de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Part de {{ name }}',
     'Parts': // gui.js:4144
         'Parts',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1476,7 +1476,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Segur que vols esborrar\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Esborra un projecte',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1530,7 +1530,7 @@ SnapTranslator.dict.ca_VA.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'desenganxa de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'desenganxa totes les parts',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

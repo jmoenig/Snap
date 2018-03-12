@@ -842,7 +842,7 @@ SnapTranslator.dict.eo.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Buleo\n(nekalkulita)',
     'Single input': // byob.js:3299
-        undefined,
+        'Unuopa enigo',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Pluraj enigoj (valoro estas listo de enigoj)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.eo.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Forigi neuzatajn blokojn',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} neuzata(j) bloko(j) forigitaj',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.eo.strings = {
     'Reference manual': // gui.js:2474
         'Manlibro',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} pa\u011Daro',
     'Download source': // gui.js:2487
         'El\u015Duti fontokodon',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.eo.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Konservita',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1342,9 +1342,9 @@ SnapTranslator.dict.eo.strings = {
     'Contents': // gui.js:4103
         'Enhavo',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Speco de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Parto de {{ name }}',
     'Parts': // gui.js:4144
         'Partoj',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.eo.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u0108u vi certe volas forigi?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Forigi projekton',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.eo.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'malligi de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'malligi \u0109iujn partojn',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

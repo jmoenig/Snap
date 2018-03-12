@@ -536,7 +536,7 @@ SnapTranslator.dict.de.strings = {
     'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
         'ausschalten, um \nnicht mehr zu erben',
     'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
-        undefined,
+        'einschalten, um zu erben\nvon {{ name }}',
     'transient': // blocks.js:2450
         'nicht persistent',
     'uncheck to save contents\nin the project': // blocks.js:2453
@@ -842,7 +842,7 @@ SnapTranslator.dict.de.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolsch\n(zitiert)',
     'Single input': // byob.js:3299
-        undefined,
+        'Einzeleingabe',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Mehrere Eingaben (als Liste)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.de.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Ungebrauchte Bl\u00F6cke entfernen',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} ungebrauchte Bl\u00F6cke entfernt',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.de.strings = {
     'Reference manual': // gui.js:2474
         'Handbuch lesen',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} Webseite',
     'Download source': // gui.js:2487
         'Quellcode runterladen',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.de.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Gesichert',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1342,9 +1342,9 @@ SnapTranslator.dict.de.strings = {
     'Contents': // gui.js:4103
         'Inhalt',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Eine Art {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Ein Teil von {{ name }}',
     'Parts': // gui.js:4144
         'Teile',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.de.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Wirklich l\u00F6schen?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Projekt l\u00F6schen',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.de.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         'tempor\u00E4r machen\nund Icon verstecken',
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'Abtrennen von {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'Alle Teile abtrennen',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

@@ -842,7 +842,7 @@ SnapTranslator.dict.ia.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Ver o False\n(non-evaluta)',
     'Single input': // byob.js:3299
-        undefined,
+        'Sol entrata',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'entrata plure (valor es lista)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.ia.strings = {
     'Reference manual': // gui.js:2474
         'Manual referentia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} sito web',
     'Download source': // gui.js:2487
         'Discarga fonte',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.ia.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Secur',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.ia.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'A certe que vos vole a dele?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Dele Projecto',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.ia.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'distacca de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'distacca omni partes',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

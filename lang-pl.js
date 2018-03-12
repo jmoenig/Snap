@@ -538,7 +538,7 @@ SnapTranslator.dict.pl.strings = {
     'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
         'odznacz, \u017Ceby\nnie dziedziczy\u0107',
     'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
-        undefined,
+        'zaznacz, \u017Ceby dziedziczy\u0107\nod {{ name }}',
     'transient': // blocks.js:2450
         'chwilowo',
     'uncheck to save contents\nin the project': // blocks.js:2453
@@ -844,7 +844,7 @@ SnapTranslator.dict.pl.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Logiczny\n(nieokre\u015Blony)',
     'Single input': // byob.js:3299
-        undefined,
+        'Jeden parametr',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Wiele parametr\u00F3w (jako lista)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -876,7 +876,7 @@ SnapTranslator.dict.pl.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Usu\u0144 niewykorzystane bloki',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} usuni\u0119to niewykorzystane bloki',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -986,7 +986,7 @@ SnapTranslator.dict.pl.strings = {
     'Reference manual': // gui.js:2474
         'Podr\u0119cznik',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Strona {{ site }}',
     'Download source': // gui.js:2487
         'Pobierz \u017Ar\u00F3d\u0142o',
     'Switch back to user mode': // gui.js:2498
@@ -1322,7 +1322,7 @@ SnapTranslator.dict.pl.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Zapisane',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1344,9 +1344,9 @@ SnapTranslator.dict.pl.strings = {
     'Contents': // gui.js:4103
         'Zawarto\u015B\u0107',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Rodzaj {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Cz\u0119\u015B\u0107 {{ name }}',
     'Parts': // gui.js:4144
         'Cz\u0119\u015Bci',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1442,7 +1442,7 @@ SnapTranslator.dict.pl.strings = {
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Zapisywanie projektu\ndo chmury',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'Projekt zapisany',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1470,13 +1470,13 @@ SnapTranslator.dict.pl.strings = {
     'Updating\nproject list': // gui.js:6119
         'Aktualizowanie\nlisty projekt\u00F3w',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'ostatnio zmieniony\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Czy napewno chcesz usun\u0105\u0107\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Usu\u0144 projekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1486,7 +1486,7 @@ SnapTranslator.dict.pl.strings = {
     'sharing\nproject': // gui.js:6546
         'Udost\u0119pnianie\nprojektu',
     'shared': // gui.js:6563
-        undefined,
+        'Projekt udost\u0119pniony',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1494,9 +1494,9 @@ SnapTranslator.dict.pl.strings = {
     'unsharing\nproject': // gui.js:6594
         'Wy\u0142\u0105czanie\nudost\u0119pniania projektu',
     'unshared': // gui.js:6612
-        undefined,
+        'Udost\u0119pnianie wy\u0142\u0105czone',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Czy na pewno chcesz opublikowa\u0107 projekt\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1504,7 +1504,7 @@ SnapTranslator.dict.pl.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Czy na pewno chcesz wy\u0142\u0105czy\u0107 publikowanie projektu\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1530,7 +1530,7 @@ SnapTranslator.dict.pl.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         'zr\u00F3b tymczasowy\ni ukryj ikon\u0119',
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'od\u0142\u0105cz od {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'od\u0142\u0105cz wszystkie cz\u0119\u015Bci',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

@@ -842,7 +842,7 @@ SnapTranslator.dict.sv.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolean\n(oevaluerad)',
     'Single input': // byob.js:3299
-        undefined,
+        'Enkel indata',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Flera indata (v\u00E4rdet \u00E4r en lista av indata)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.sv.strings = {
     'Reference manual': // gui.js:2474
         'Referensbok',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} webbsida',
     'Download source': // gui.js:2487
         'Ladda ner k\u00E4llkoden',
     'Switch back to user mode': // gui.js:2498
@@ -1290,7 +1290,7 @@ SnapTranslator.dict.sv.strings = {
     'Libraries': // gui.js:3238
         'Bibliotek',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'v\u00E4lj grupper av extrablock att l\u00E4gga till i projektet',
     'Select a costume from the media library': // gui.js:3259
         'v\u00E4lj en kostym fr\u00E5n mediabiblioteket',
     'Select a sound from the media library': // gui.js:3266
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.sv.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Sparat',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.sv.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u00C4r du s\u00E4ker p\u00E5 att du vill radera\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Radera projekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.sv.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'koppla bort {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'koppla bort alla delar',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

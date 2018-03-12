@@ -760,13 +760,13 @@ SnapTranslator.dict.gl.strings = {
     'Change block': // byob.js:885
         'Cambiar tipo de bloque',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (temporal)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'Experimental',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'en construci\u00F3n',
     'remove block variables': // byob.js:1061
         'eliminar variables de bloque',
     'duplicate block definition': // byob.js:1079
@@ -842,7 +842,7 @@ SnapTranslator.dict.gl.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Booleano\n(sen avaliar)',
     'Single input': // byob.js:3299
-        undefined,
+        'Par\u00E1metro \u00FAnico',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'M\u00FAltiples argumentos (o valor do par\u00E1metro \u00E9 a lista de argumentos)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.gl.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Borrar bloques non utilizados',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} borrados os bloques non utilizados',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.gl.strings = {
     'Reference manual': // gui.js:2474
         'Manual de referencia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Ir \u00E1 web de {{ site }}',
     'Download source': // gui.js:2487
         'Descargar o c\u00F3digo fonte',
     'Switch back to user mode': // gui.js:2498
@@ -1006,19 +1006,19 @@ SnapTranslator.dict.gl.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Sa\u00EDr {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Cambiar contrasinal',
     'Export project media only': // gui.js:2564
-        undefined,
+        'Exportar s\u00F3 os media do proxecto',
     'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
         'Exportar Proxecto Como',
     'Export project without media': // gui.js:2578
-        undefined,
+        'Exportar proxecto sen os media',
     'Export project as cloud data': // gui.js:2592
-        undefined,
+        'Exportar proxecto como datos da nube',
     'Open shared project from cloud': // gui.js:2607
-        undefined,
+        'Abrir proxecto compartido a partir da nube',
     'Author name': // gui.js:2609
         undefined,
     'Project name': // gui.js:2610
@@ -1194,11 +1194,11 @@ SnapTranslator.dict.gl.strings = {
     'Live coding support': // gui.js:3002
         'Soporte de programaci\u00F3n ao vivo',
     'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
-        undefined,
+        'EXPERIMENTAL!',
     'uncheck to disable live\ncustom control structures': // gui.js:3009
-        undefined,
+        'Desmarcar para desactivar estruturas\nde control personalizadas ao vivo',
     'check to enable\nlive custom control structures': // gui.js:3011
-        undefined,
+        'Marcar para activar estruturas\nde control personalizadas ao vivo',
     'JIT compiler support': // gui.js:3015
         undefined,
     'uncheck to disable live\nsupport for compiling': // gui.js:3025
@@ -1256,7 +1256,7 @@ SnapTranslator.dict.gl.strings = {
     'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
         'Abrir un proxecto exportado,\nsubstitu\u00EDndo o proxecto actual, ou\nimportar unha biblioteca de bloques, unha\nvestimenta ou um son para o proxecto actual.',
     'Export project (in a new window)': // gui.js:3153
-        undefined,
+        'Exportar proxecto (nunha nova xanela)',
     'show project data as XML\nin a new browser window': // gui.js:3164
         'mostrar informaci\u00F3n do proxecto como XML\nnunha nova xanela',
     'Export project as plain text': // gui.js:3170
@@ -1290,7 +1290,7 @@ SnapTranslator.dict.gl.strings = {
     'Libraries': // gui.js:3238
         'Bibliotecas',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'Seleccionar categor\u00EDas de bloques adicionais a engadir a este proxecto',
     'Select a costume from the media library': // gui.js:3259
         'Seleccionar unha vestimenta da biblioteca de media.',
     'Select a sound from the media library': // gui.js:3266
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.gl.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Gardado',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1342,9 +1342,9 @@ SnapTranslator.dict.gl.strings = {
     'Contents': // gui.js:4103
         '\u00CDndice',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Do tipo de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Unha parte de {{ name }}',
     'Parts': // gui.js:4144
         'Partes',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1434,13 +1434,13 @@ SnapTranslator.dict.gl.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        'o seu contrasinal foi alterado',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'sa\u00EDu',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Gardando o proxecto\nna nube',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'gardado',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1468,7 +1468,7 @@ SnapTranslator.dict.gl.strings = {
     'Updating\nproject list': // gui.js:6119
         'Actualizando a\nlista de proxectos',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'cambiado por \u00FAltima vez en\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
@@ -1484,7 +1484,7 @@ SnapTranslator.dict.gl.strings = {
     'sharing\nproject': // gui.js:6546
         'compartindo\nproxecto',
     'shared': // gui.js:6563
-        undefined,
+        'compartindo.',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1492,9 +1492,9 @@ SnapTranslator.dict.gl.strings = {
     'unsharing\nproject': // gui.js:6594
         'deixando de compartir\nproxecto',
     'unshared': // gui.js:6612
-        undefined,
+        'deixado de compartir.',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Queres publicar?\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1502,7 +1502,7 @@ SnapTranslator.dict.gl.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Queres deixar de publicar?\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.gl.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'soltar de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'soltar todas as partes',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2446,7 +2446,7 @@ SnapTranslator.dict.gl.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'esperando {{ expected }} argumento(s), pero pasaron {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2476,7 +2476,7 @@ SnapTranslator.dict.gl.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'Non existe unha variable \u00AB{{ name }}\u00BB\nneste contexto',
     'Yes': // widgets.js:1607
         'Si',
     'No': // widgets.js:1608
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.gl.strings = {
     'Default': // widgets.js:1882
         'Normal',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} ou antes',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Nome de usuario/a',
     'Birth date': // widgets.js:2061

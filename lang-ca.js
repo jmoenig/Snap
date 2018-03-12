@@ -537,7 +537,7 @@ SnapTranslator.dict.ca.strings = {
     'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
         'desmarqueu per a\ndesheretar',
     'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
-        undefined,
+        'marqueu per heretar\nde {{ name }}',
     'transient': // blocks.js:2450
         'no persistent',
     'uncheck to save contents\nin the project': // blocks.js:2453
@@ -615,7 +615,7 @@ SnapTranslator.dict.ca.strings = {
     'redrop': // blocks.js:6335 blocks.js:6722
         'ref\u00E9s',
     'redo the last undone\nblock drop\nin this pane': // blocks.js:6339
-        undefined,
+        'ref\u00E9s l\'\u00FAltim moviment\nde blocs desfet',
     'clear undrop queue': // blocks.js:6345
         undefined,
     'forget recorded block drops\non this pane': // blocks.js:6351
@@ -761,13 +761,13 @@ SnapTranslator.dict.ca.strings = {
     'Change block': // byob.js:885
         'Canvia el bloc',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (temporal)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'experimental',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'under construction',
     'remove block variables': // byob.js:1061
         'resborra les variables del bloc',
     'duplicate block definition': // byob.js:1079
@@ -843,7 +843,7 @@ SnapTranslator.dict.ca.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boole\u00E0\n(sense avaluar)',
     'Single input': // byob.js:3299
-        undefined,
+        'Entrada \u00FAnica',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Entrades m\u00FAltiples (el valor \u00E9s una llista d\'entrades)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -875,7 +875,7 @@ SnapTranslator.dict.ca.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Esborra blocs no utilitzats',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} bloc(s) personalitzats no utilitzats esborrats',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -985,7 +985,7 @@ SnapTranslator.dict.ca.strings = {
     'Reference manual': // gui.js:2474
         'Manual de refer\u00E8ncia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Web de {{ site }}',
     'Download source': // gui.js:2487
         'Descarrega el codi font',
     'Switch back to user mode': // gui.js:2498
@@ -1007,19 +1007,19 @@ SnapTranslator.dict.ca.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Surt {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Canvia la contrasenya',
     'Export project media only': // gui.js:2564
-        undefined,
+        'Exporta nom\u00E9s els sons i imatges del projecte',
     'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
         'Exporta el Projecte com',
     'Export project without media': // gui.js:2578
-        undefined,
+        'Exporta el projecte sense sons ni imatges',
     'Export project as cloud data': // gui.js:2592
-        undefined,
+        'Exporta el projecte com a dades en el n\u00FAvol',
     'Open shared project from cloud': // gui.js:2607
-        undefined,
+        'Obre un projecte compartit en el n\u00FAvol',
     'Author name': // gui.js:2609
         undefined,
     'Project name': // gui.js:2610
@@ -1195,11 +1195,11 @@ SnapTranslator.dict.ca.strings = {
     'Live coding support': // gui.js:3002
         'Suport per a la programaci\u00F3 din\u00E0mica',
     'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
-        undefined,
+        'EXPERIMENTAL!',
     'uncheck to disable live\ncustom control structures': // gui.js:3009
-        undefined,
+        'desmarqueu per deshabilitar\nel control din\u00E0mic d\'estructures personalitzades',
     'check to enable\nlive custom control structures': // gui.js:3011
-        undefined,
+        'marqueu per habilitar\nel control din\u00E0mic d\'estructures personalitzades',
     'JIT compiler support': // gui.js:3015
         undefined,
     'uncheck to disable live\nsupport for compiling': // gui.js:3025
@@ -1257,7 +1257,7 @@ SnapTranslator.dict.ca.strings = {
     'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
         'Importa projectes, blocs,\nimatges o sons',
     'Export project (in a new window)': // gui.js:3153
-        undefined,
+        'Exporta el projecte (dins una nova finestra)',
     'show project data as XML\nin a new browser window': // gui.js:3164
         'mostra tot el projecte en format XML\nen una altra finestra del navegador',
     'Export project as plain text': // gui.js:3170
@@ -1291,7 +1291,7 @@ SnapTranslator.dict.ca.strings = {
     'Libraries': // gui.js:3238
         'Llibreries',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'Trieu conjunts de blocs addicionals per afegir a aquest projecte.',
     'Select a costume from the media library': // gui.js:3259
         'Trieu un vestit de la biblioteca',
     'Select a sound from the media library': // gui.js:3266
@@ -1321,7 +1321,7 @@ SnapTranslator.dict.ca.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Desat',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1343,9 +1343,9 @@ SnapTranslator.dict.ca.strings = {
     'Contents': // gui.js:4103
         'Continguts',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Esp\u00E8cie de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Part de {{ name }}',
     'Parts': // gui.js:4144
         'Parts',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1435,13 +1435,13 @@ SnapTranslator.dict.ca.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        's\'ha canviat la contrasenya',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'desconnectats',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Desant el projecte\nal n\u00FAvol',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'desat',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1469,13 +1469,13 @@ SnapTranslator.dict.ca.strings = {
     'Updating\nproject list': // gui.js:6119
         'Actualizant\nla llista de projectes',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'el darrer modificat\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Segur que vols esborrar\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Esborra un projecte',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1485,7 +1485,7 @@ SnapTranslator.dict.ca.strings = {
     'sharing\nproject': // gui.js:6546
         'compartint\nel projecte',
     'shared': // gui.js:6563
-        undefined,
+        'compartit',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1493,9 +1493,9 @@ SnapTranslator.dict.ca.strings = {
     'unsharing\nproject': // gui.js:6594
         'deixant de compartir\nel projecte',
     'unshared': // gui.js:6612
-        undefined,
+        'no compartit',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Segur que vols compartir-ho?\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1503,7 +1503,7 @@ SnapTranslator.dict.ca.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Segur que vols deixar-ho de compartir?\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1513,9 +1513,9 @@ SnapTranslator.dict.ca.strings = {
     'Import library': // gui.js:6828
         'Importa una llibreria',
     'Loading {{ resource }}': // gui.js:6926 gui.js:7059
-        undefined,
+        'S\'est\u00E0 carregant {{ resource }}',
     'Imported {{ resource }}': // gui.js:7054
-        undefined,
+        'S\'ha importat {{ resource }}',
     'pic': // gui.js:7353 morphic.js:4194 objects.js:7425
         'imatge',
     'open a new window\nwith a picture of the stage': // gui.js:7361 objects.js:7432
@@ -1529,7 +1529,7 @@ SnapTranslator.dict.ca.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         'transforma\'l en temporal i\ntreu-lo de l\'\u00E0rea dels objectes',
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'desenganxa de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'desenganxa totes les parts',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -1603,7 +1603,7 @@ SnapTranslator.dict.ca.strings = {
     'transparency': // morphic.js:4144
         'transpar\u00E8ncia',
     'alpha value': // morphic.js:4147
-        undefined,
+        'valor del\ncanal alfa',
     'set this morph\'s\nalpha value': // morphic.js:4157
         'fixeu el valor del canal\nalfa per aquest \'morph\'',
     'resize': // morphic.js:4160
@@ -1639,7 +1639,7 @@ SnapTranslator.dict.ca.strings = {
     'World': // morphic.js:4219
         'M\u00F3n',
     'show the\n{{ WorldMorph }}\'s menu': // morphic.js:4223
-        undefined,
+        'mostra el men\u00FA del {{ WorldMorph }}',
     'choose target': // morphic.js:4721 morphic.js:5102 morphic.js:6562 morphic.js:7200
         undefined,
     'set rotation': // morphic.js:4868
@@ -1801,7 +1801,7 @@ SnapTranslator.dict.ca.strings = {
     'blurred shadows': // morphic.js:12213
         'ombres degradades',
     'blurry shades\nuse for new browsers': // morphic.js:12215
-        undefined,
+        'utilitza ombres degradades\nper a navegadors moderns',
     'choose the World\'s\nbackground color': // morphic.js:12228
         'tria el color de\nfons del M\u00F3n',
     'touch screen settings': // morphic.js:12232
@@ -1817,7 +1817,7 @@ SnapTranslator.dict.ca.strings = {
     'disable developers\'\ncontext menus': // morphic.js:12249
         'desabilita els men\u00FAs\ndel mode de desenvolupament',
     'about {{ resource }}': // morphic.js:12254
-        undefined,
+        'sobre {{ resource }}',
     'make a morph': // morphic.js:12266
         'crea un \'morph\'',
     'rectangle': // morphic.js:12267 symbols.js:109
@@ -2447,7 +2447,7 @@ SnapTranslator.dict.ca.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'esperant {{ expected }} com a entrada(s), per\u00F2 s\'ha rebut {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2477,7 +2477,7 @@ SnapTranslator.dict.ca.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'una variable de nom \'{{ name }}\'\nno existeix en aquest context',
     'Yes': // widgets.js:1607
         'S\u00ED',
     'No': // widgets.js:1608
@@ -2485,7 +2485,7 @@ SnapTranslator.dict.ca.strings = {
     'Default': // widgets.js:1882
         'Per defecte',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} o abans de',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Nom d\'usuari',
     'Birth date': // widgets.js:2061

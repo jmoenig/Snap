@@ -760,7 +760,7 @@ SnapTranslator.dict.et.strings = {
     'Change block': // byob.js:885
         'Ploki muutmine',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (ajutine)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
@@ -842,7 +842,7 @@ SnapTranslator.dict.et.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'T\u00F5ev\u00E4\u00E4rtus\n(eo arvestata)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u00DCksik sisend',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Mitu sisendit (sisendite loend)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.et.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Eemalda kasutamata plokid',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} kasutamata plokid on eemaldatud.',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.et.strings = {
     'Reference manual': // gui.js:2474
         'Reference manual',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} koduleht',
     'Download source': // gui.js:2487
         'Laadi l\u00E4htekood alla',
     'Switch back to user mode': // gui.js:2498
@@ -1006,7 +1006,7 @@ SnapTranslator.dict.et.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Logi v\u00E4lja {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Parooli muutmine',
     'Export project media only': // gui.js:2564
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.et.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Salvestatud',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1434,13 +1434,13 @@ SnapTranslator.dict.et.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        'parool on muudetud',
     'disconnected': // gui.js:5437 gui.js:5440
         undefined,
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Projekti salvestamine\npilve',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'salvestatud',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1468,7 +1468,7 @@ SnapTranslator.dict.et.strings = {
     'Updating\nproject list': // gui.js:6119
         'Projektide nimekirja uuendamine',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'Viimati muudetud\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
@@ -1484,7 +1484,7 @@ SnapTranslator.dict.et.strings = {
     'sharing\nproject': // gui.js:6546
         'Projekti\njagamine',
     'shared': // gui.js:6563
-        undefined,
+        'jagatud',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1492,9 +1492,9 @@ SnapTranslator.dict.et.strings = {
     'unsharing\nproject': // gui.js:6594
         'Projekti jagamise\nl\u00F5petamine',
     'unshared': // gui.js:6612
-        undefined,
+        'jagamine l\u00F5petatud',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Oled sa kindel, et soovid avaldalda?\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1502,7 +1502,7 @@ SnapTranslator.dict.et.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Oled sa kindel, et soovid avaldamise l\u00F5petada?\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.et.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'Eralda {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'Eralda k\u00F5ik osad',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2446,7 +2446,7 @@ SnapTranslator.dict.et.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'Oodati {{ expected }} sisendit/sisendeid, kuid saadi {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2476,7 +2476,7 @@ SnapTranslator.dict.et.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'muutujat nimega \u201E{{ name }}\u201C\nselles kontekstis ei eksisteeri',
     'Yes': // widgets.js:1607
         'Jah',
     'No': // widgets.js:1608

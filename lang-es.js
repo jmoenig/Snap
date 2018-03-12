@@ -236,9 +236,9 @@ SnapTranslator.dict.es.strings = {
     '9': // blocks.js:1187
         '9',
     'cached inputs size do not match': // blocks.js:341
-        undefined,
+        'El tama\u00F1o de las entradas cacheadas no coincide',
     'cached input does not match': // blocks.js:347
-        undefined,
+        'Las entradas cacheadas no coinciden',
     'pen trails': // blocks.js:820 blocks.js:8393 objects.js:578 objects.js:7436
         'rastro del l\u00E1piz',
     'stage image': // blocks.js:821
@@ -262,7 +262,7 @@ SnapTranslator.dict.es.strings = {
     '(180) down': // blocks.js:938 morphic.js:4891
         '(180) abajo',
     'random': // blocks.js:939
-        undefined,
+        'aleatorio',
     '(1) sine': // blocks.js:956
         '(1) \u223F\u223F (onda sinusoidal)',
     '(2) square': // blocks.js:957
@@ -488,7 +488,7 @@ SnapTranslator.dict.es.strings = {
     'String': // blocks.js:1290
         'String',
     'Number': // blocks.js:1291 byob.js:3286
-        'n\u00FAmero',
+        'N\u00FAmero',
     'true': // blocks.js:1292 blocks.js:9529 blocks.js:9919 objects.js:2979
         'verdadero',
     'false': // blocks.js:1293 blocks.js:9544 blocks.js:9930 objects.js:2979
@@ -512,9 +512,9 @@ SnapTranslator.dict.es.strings = {
     'untitled': // blocks.js:1993 blocks.js:2604 blocks.js:6443 blocks.js:11919 byob.js:1037 byob.js:3910 gui.js:979 gui.js:4036 store.js:296
         'Sin t\u00EDtulo',
     '{{ projectName }} script pic': // blocks.js:1993 blocks.js:2602 blocks.js:6441 byob.js:1035
-        undefined,
+        'imagen de programa de {{ projectName }}',
     'script target cannot be found for orphaned block': // blocks.js:2203
-        undefined,
+        'No se pudo encontrar el programa objetivo para el bloque hu\u00E9rfano',
     'a {{ className }} ("{{ value }}...")': // blocks.js:2207 morphic.js:8466 morphic.js:9146
         undefined,
     'Variable name': // blocks.js:2377 blocks.js:3262 objects.js:2179 objects.js:7304
@@ -538,9 +538,9 @@ SnapTranslator.dict.es.strings = {
     'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
         'desmarcar para no heredar',
     'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
-        undefined,
+        'marcar para heredar\nde {{ name }}',
     'transient': // blocks.js:2450
-        'excluir al guardar',
+        'transitoria',
     'uncheck to save contents\nin the project': // blocks.js:2453
         'desmarcar para guardar\nel contenido junto con el proyecto',
     'check to prevent contents\nfrom being saved': // blocks.js:2454
@@ -574,7 +574,7 @@ SnapTranslator.dict.es.strings = {
     'download script': // blocks.js:2612
         'descargar programa',
     '{{ name }} script': // blocks.js:2622
-        undefined,
+        'programa {{ name }}',
     'download this script\nas an XML file': // blocks.js:2627
         'descarga este programa en XML',
     'unringify': // blocks.js:2657
@@ -598,15 +598,15 @@ SnapTranslator.dict.es.strings = {
     'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.': // blocks.js:3077
         'Escribe el c\u00F3digo correspondiente a la implementaci\u00F3n del bloque\n(normalmente una \u00FAnica llamada a funci\u00F3n).\nUsa <#n> para referenciar los argumentos aqu\u00ED mostrados.',
     'Variable exists': // blocks.js:3292
-        undefined,
+        'Variable ya existente',
     'A variable with this name already exists in this context.': // blocks.js:3294
-        undefined,
+        'Ya existe una variable con este nombre en este contexto.',
     'A variable with this name already exists as a global variable.': // blocks.js:3396
-        undefined,
+        'Ya existe una variable con este nombre como variable global.',
     'A variable with this name already exists as a sprite local variable.': // blocks.js:3455
-        undefined,
+        'Ya existe una variable con este nombre como variable local de objeto',
     'Block variable name': // blocks.js:5346
-        undefined,
+        'Nombre de variable de bloque',
     'Script variable name': // blocks.js:5348
         'Nombre de variable de programa',
     'undrop': // blocks.js:6320 blocks.js:6709
@@ -636,17 +636,17 @@ SnapTranslator.dict.es.strings = {
     'Make a block': // blocks.js:6398 objects.js:2303 objects.js:2352 objects.js:2411
         'Crear bloque',
     'nothing to undrop': // blocks.js:6549
-        undefined,
+        'nada que deshacer',
     'unsupported action for {{ morph }}': // blocks.js:6640
-        undefined,
+        'Acci\u00F3n no soportada para {{ morph }}',
     'use the keyboard\nto enter blocks': // blocks.js:6747
         'permite utilizar el teclado\npara escribir bloques',
     'script target cannot be found for orphaned scripts': // blocks.js:6925
-        undefined,
+        'No se encuentra el programa objetivo para los programas hu\u00E9rfanos',
     'choose new parent': // blocks.js:7225 morphic.js:4253
-        undefined,
+        'elegir nuevo padre',
     'new message': // blocks.js:8338 blocks.js:8370
-        undefined,
+        'nuevo mensaje',
     'Message name': // blocks.js:8345 blocks.js:8377
         'Nombre de mensaje',
     'any message': // blocks.js:8360
@@ -656,7 +656,7 @@ SnapTranslator.dict.es.strings = {
     'edge': // blocks.js:8392
         'borde del escenario',
     'random position': // blocks.js:8418
-        undefined,
+        'posición aleatoria',
     'myself': // blocks.js:8445
         'm\u00ED mismo',
     'number': // blocks.js:8484
@@ -722,33 +722,33 @@ SnapTranslator.dict.es.strings = {
     'Empty': // blocks.js:8584 gui.js:7941 objects.js:3166 threads.js:3350
         'Vac\u00EDo',
     'code number mapping': // blocks.js:8835
-        undefined,
+        'mapear n\u00FAmero a c\u00F3digo',
     'code string mapping': // blocks.js:8840
-        undefined,
+        'mapear cadena de caracteres a c\u00F3digo',
     'String <#1>': // blocks.js:8864
-        undefined,
+        'Cadena de caracteres <#1>',
     'Code mapping - {{ type }}': // blocks.js:8864 blocks.js:8879
-        undefined,
+        'Mapeo a c\u00F3digo - {{ type }}',
     'Number <#1>': // blocks.js:8879
-        undefined,
+        'N\u00FAmero <#1>',
     'code true mapping': // blocks.js:9500
-        undefined,
+        'mapear verdadero a c\u00F3digo',
     'code false mapping': // blocks.js:9505
-        undefined,
+        'mapear falso a c\u00F3digo',
     'Code mapping - {{ name }}': // blocks.js:9529 blocks.js:9544 blocks.js:10662
-        undefined,
+        'Mapeo a c\u00F3digo - {{ name }}',
     'code list mapping': // blocks.js:10619
-        undefined,
+        'mapear lista a c\u00F3digo',
     'code item mapping': // blocks.js:10623
-        undefined,
+        'mapear elemento a c\u00F3digo',
     'code delimiter mapping': // blocks.js:10627
-        undefined,
+        'mapear delimitador a c\u00F3digo',
     'list item delimiter': // blocks.js:10642
-        undefined,
+        'delimitador de elemento de lista',
     'list contents <#1>': // blocks.js:10646
-        undefined,
+        'contenido de lista <#1>',
     'list item <#1>': // blocks.js:10650
-        undefined,
+        'elemento de lista <#1>',
     'input list': // blocks.js:10750
         'con lista de argumentos',
     'add comment here': // blocks.js:11762
@@ -756,23 +756,23 @@ SnapTranslator.dict.es.strings = {
     'comment pic': // blocks.js:11912
         'imagen de comentario',
     '{{ projectName }} comment pic': // blocks.js:11917
-        undefined,
+        'imagen de comentario de {{ projectName }}',
     'open a new window\nwith a picture of this comment': // blocks.js:11923
         'abre una nueva ventana\ncon una imagen de este comentario',
     'Change block': // byob.js:885
         'Cambiar bloque',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (temporal)',
     'translations': // byob.js:1044
         'traducciones',
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'experimental',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'en construcción',
     'remove block variables': // byob.js:1061
         'eliminar variables de bloque',
     'duplicate block definition': // byob.js:1079
-        undefined,
+        'duplicar definici\u00F3n de bloque',
     'delete block definition': // byob.js:1089 byob.js:1133 byob.js:1147
         'eliminar definici\u00F3n de bloque',
     'edit': // byob.js:1157 gui.js:7699 morphic.js:8730 morphic.js:9477 objects.js:3255 objects.js:3261 objects.js:7422
@@ -802,13 +802,13 @@ SnapTranslator.dict.es.strings = {
     'Apply': // byob.js:2119
         'Aplicar',
     'Local Block(s) in Global Definition': // byob.js:2204
-        undefined,
+        'Bloque(s) local(es) en definici\u00F3n global',
     'This global block definition contains one or more\nlocal custom blocks which must be removed first.': // byob.js:2205
-        undefined,
+        'Esta definici\u00F3n de bloque global contiene\nuno o m\u00E1s bloques personalizados locales que deben ser eliminados primero.',
     'Same Named Blocks': // byob.js:2221
-        undefined,
+        'Bloques con mismo nombre',
     'Another custom block with this name exists.\nWould you like to replace it?': // byob.js:2222
-        undefined,
+        'Ya existe otro bloque personalizado con este nombre.\n\u00BFQuieres reemplazarlo?',
     'Custom Block Translations': // byob.js:2373
         'Traducciones del bloque personalizado',
     'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs': // byob.js:2379
@@ -844,7 +844,7 @@ SnapTranslator.dict.es.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Booleano\n(no evaluado)',
     'Single input': // byob.js:3299
-        undefined,
+        'Entrada simple',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Entrada m\u00FAltiple (valores accesibles como lista)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -866,87 +866,87 @@ SnapTranslator.dict.es.strings = {
     'none': // byob.js:3875 objects.js:5421 objects.js:5427
         'ninguno',
     '{{ projectName }} blocks': // byob.js:3910
-        undefined,
+        'bloques de {{ projectName }}',
     'no blocks were selected': // byob.js:3915 byob.js:4009 byob.js:4102
         'No se ha seleccionado ning\u00FAn bloque',
     'Import blocks': // byob.js:3962 byob.js:3963 byob.js:4008
         'Importar bloques',
     'Imported Blocks Module': // byob.js:4002 byob.js:4003 gui.js:4355
-        undefined,
+        'M\u00F3dulo de bloques importado',
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
-        'Borrar bloques no utilizados',
+        'Eliminar bloques no utilizados',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        'Eliminado(s) {{ count }} bloque(s) no utilizado(s)',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
-        undefined,
+        'Ocurri\u00F3 un error mientras se intentaba acceder\na un servicio de {{ cloudName }}.\nPor favor, int\u00E9ntalo de nuevo m\u00E1s tarde',
     'Cloud Error': // cloud.js:159
-        undefined,
+        'Error de la nube',
     'You are not logged in': // cloud.js:188 cloud.js:436
         'No has iniciado sesi\u00F3n',
     'Could not retrieve current user': // cloud.js:237
-        undefined,
+        'No se pudo recuperar el usuario actual',
     'Could not retrieve user': // cloud.js:247
-        undefined,
+        'No se pudo recuperar el usuario',
     'logout failed': // cloud.js:258
-        undefined,
+        'Fallo al cerrar sesi\u00F3n',
     'login failed': // cloud.js:280
-        undefined,
+        'Fallo al iniciar sesi\u00F3n',
     'signup failed': // cloud.js:303
-        undefined,
+        'Fallo al registrarse',
     'Could not change password': // cloud.js:323
-        undefined,
+        'No se pudo cambiar la contrase\u00F1a',
     'Password reset request failed': // cloud.js:334
-        undefined,
+        'Fallo al solicitar el reinicio de contrase\u00F1a',
     'Could not send verification email': // cloud.js:344
-        undefined,
+        'No se pudo enviar el correo de verificaci\u00F3n',
     'Cannot Save Project': // cloud.js:378
-        undefined,
+        'No se pudo guardar el proyecto',
     'The media inside this project exceeds {{ size }}.\nPlease reduce the size of costumes or sounds.\n': // cloud.js:379
-        undefined,
+        'Los medios de este proyecto exceden los {{ size }}.\nPor favor, reduce el tama\u00F1o de disfraces y sonidos',
     'Project media exceeds {{ size }} size limit': // cloud.js:387
-        undefined,
+        'Los medios del proyecto exceden el l\u00EDmite de {{ size }}',
     'Serialization of program data failed': // cloud.js:398 cloud.js:401
-        undefined,
+        'Fallo en la serializaci\u00F3n de los datos de programa',
     'Serialization of media failed': // cloud.js:409 cloud.js:412
-        undefined,
+        'Fallo en la serializaci\u00F3n de los medios del programa',
     'Uploading {{ size }}': // cloud.js:419
-        undefined,
+        'Subiendo {{ size }}',
     'Project could not be saved': // cloud.js:429
-        undefined,
+        'No se pudo guardar el proyecto',
     'Could not fetch projects': // cloud.js:456 cloud.js:490
-        undefined,
+        'No se pudieron recuperar los proyectos',
     'Could not fetch thumbnail': // cloud.js:509
-        undefined,
+        'No se pudo recuperar la miniatura',
     'Could not fetch project {{ name }}': // cloud.js:520 cloud.js:536
-        undefined,
+        'No se pudo recuperar el proyecto {{ name }}',
     'Could not fetch metadata for {{ name }}': // cloud.js:552
-        undefined,
+        'No se pudieron recuperar los metadatos para {{ name }}',
     'Could not delete project': // cloud.js:568
-        undefined,
+        'No se pudo eliminar el proyecto',
     'Could not share project': // cloud.js:586
-        undefined,
+        'No se pudo compartir el proyecto',
     'Could not unshare project': // cloud.js:604
-        undefined,
+        'No se pudo dejar de compartir el proyecto',
     'Could not publish project': // cloud.js:622
-        undefined,
+        'No se pudo publicar el proyecto',
     'Could not unpublish project': // cloud.js:640
-        undefined,
+        'No se pudo dejar de publicar el proyecto',
     'Could not update project notes': // cloud.js:655
-        undefined,
+        'No se pudieron actualizar las notas del proyecto',
     'Unverified account': // gui.js:281 gui.js:5252
-        undefined,
+        'Cuenta no verificada',
     'Your account is still unverified.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.': // gui.js:282
-        undefined,
+        'Tu cuenta a\u00FAn no ha sido verificada.\nPor favor, usa el enlace de verificaci\u00F3n\nque fue enviado a tu direcci\u00F3n de correo\ncuando te registraste.\n\nSi no puedes encontrar dicho correo, por favor,\ncomprueba tu carpeta de spam.\nSi a\u00FAn as\u00ED no lo puedes encontrar, por favor,\nutiliza la opci\u00F3n "Reenviar correo de verificaci\u00F3n..."\nen el men\u00FA de nube.',
     'unable to retrieve {{ resource }}': // gui.js:337 gui.js:5689 gui.js:5700 morphic.js:11546
-        undefined,
+        'No se pudo recuperar {{ resource }}',
     'unable to retrieve project': // gui.js:339
-        undefined,
+        'No se pudo recuperar el proyecto',
     'Fetching project\nfrom the cloud': // gui.js:417 gui.js:458 gui.js:494 gui.js:2612 gui.js:6391
         'Descargando proyecto\ndesde la nube',
     'Opening project': // gui.js:430 gui.js:470 gui.js:2627 gui.js:4222
         'Abriendo proyecto',
     'Saved project\n{{ name }}': // gui.js:506
-        undefined,
+        'Proyecto guardado\n{{ name }}',
     'Visible stepping': // gui.js:716 gui.js:2756
         'Depuraci\u00F3n paso a paso',
     'development mode': // gui.js:990 morphic.js:12252
@@ -972,21 +972,21 @@ SnapTranslator.dict.es.strings = {
     'paint a new sprite': // gui.js:1567
         'dibuja un nuevo objeto',
     'take a camera snapshot and\nimport it as a new sprite': // gui.js:1592
-        'hace una captura de c\u00E1mara\ny la importa como nuevo objeto',
+        'hace una captura de c\u00E1mara\n y la importa como nuevo objeto',
     'Unable to import this image': // gui.js:1906
-        undefined,
+        'No se pudo importar esta imagen',
     'The picture you wish to import has been\ntainted by a restrictive cross-origin policy\nmaking it unusable for costumes in {{ appName }}.\n\nTry downloading this picture first to your\ncomputer, and import it from there.': // gui.js:1907
-        undefined,
+        'La imagen que quieres importar ha sido corrompida\npor una pol\u00EDtica restrictiva de control de acceso,\nhaci\u00E9ndola inutilizable para disfraces en {{ appName }}.\n\nPrueba a descargar esta imagen primero a tu ordenador\ne imp\u00F3rtala desde ah\u00ED.',
     'Serialization failed': // gui.js:2138 gui.js:4684 gui.js:4980 gui.js:5139
-        undefined,
+        'Fallo en la serializaci\u00F3n',
     'recording': // gui.js:2353
-        undefined,
+        'Grabaci\u00F3n',
     'About': // gui.js:2471
         'Acerca de',
     'Reference manual': // gui.js:2474
         'Manual de referencia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Sitio web de {{ site }}',
     'Download source': // gui.js:2487
         'Descargar c\u00F3digo fuente',
     'Switch back to user mode': // gui.js:2498
@@ -996,7 +996,7 @@ SnapTranslator.dict.es.strings = {
     'Switch to dev mode': // gui.js:2507
         'Cambiar a modo desarrollador',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!': // gui.js:2509
-        'activa los menus contextuales\ne inspectores de Morphic\n(\u00A1no son f\u00E1ciles de utilizar)',
+        'activa los menus contextuales\n e inspectores de Morphic\n(\u00A1no son f\u00E1ciles de utilizar)',
     'Cloud URL': // gui.js:2527 gui.js:5654
         'URL de la nube',
     'Login': // gui.js:2536
@@ -1008,29 +1008,29 @@ SnapTranslator.dict.es.strings = {
     'Resend Verification Email': // gui.js:2548
         'Reenviar correo de verificaci\u00F3n',
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Cerrar sesi\u00F3n {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Cambiar contrase\u00F1a',
     'Export project media only': // gui.js:2564
-        undefined,
+        'Exportar s\u00F3lo medios del proyecto',
     'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
         'Exportar proyecto como',
     'Export project without media': // gui.js:2578
-        undefined,
+        'Exportar proyecto sin medios',
     'Export project as cloud data': // gui.js:2592
-        undefined,
+        'Exportar proyecto como datos de la nube',
     'Open shared project from cloud': // gui.js:2607
-        undefined,
+        'Abrir proyecto compartido en la nube',
     'Author name': // gui.js:2609
-        undefined,
+        'Nombre de autor',
     'Project name': // gui.js:2610
         'Nombre del proyecto',
     'Language': // gui.js:2676
         'Idioma',
     'Generate {{ filename }} file': // gui.js:2679 gui.js:5035
-        undefined,
+        'Generar fichero {{ filename }}',
     'builds the {{ language }} translation file': // gui.js:2684
-        undefined,
+        'construye el fichero de traducci\u00F3n al {{ language }}',
     'Zoom blocks': // gui.js:2692 gui.js:5120
         'Tama\u00F1o de bloque',
     'Stage size': // gui.js:2696 gui.js:5163
@@ -1076,9 +1076,9 @@ SnapTranslator.dict.es.strings = {
     'Camera support': // gui.js:2775
         'Soporte para c\u00E1mara',
     'uncheck to disable\ncamera support': // gui.js:2778
-        'desmarcar para desactivar\nel soporte de c\u00E1mara',
+        'desmarcar para desactivar\nel soporte para c\u00E1mara',
     'check to enable\ncamera support': // gui.js:2779
-        'marcar para activar\nel soporte de c\u00E1mara',
+        'marcar para activar\nel soporte para c\u00E1mara',
     'Blurred shadows': // gui.js:2784
         'Sombras difuminadas',
     'uncheck to use solid drop\nshadows and highlights': // gui.js:2787
@@ -1118,9 +1118,9 @@ SnapTranslator.dict.es.strings = {
     'Virtual keyboard': // gui.js:2830
         'Teclado virtual',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices': // gui.js:2833
-        'desmarcar para desactivar\nel soporte de teclado virtual\npara dispositivos m\u00F3viles',
+        'desmarcar para desactivar\nel soporte para teclado virtual\npara dispositivos m\u00F3viles',
     'check to enable\nvirtual keyboard support\nfor mobile devices': // gui.js:2834
-        'marcar para activar\nel soporte de teclado virtual\npara dispositivos m\u00F3viles',
+        'marcar para activar\nel soporte para teclado virtual\npara dispositivos m\u00F3viles',
     'Clicking sound': // gui.js:2838
         'Sonido de clic',
     'uncheck to turn\nblock clicking\nsound off': // gui.js:2848
@@ -1172,15 +1172,15 @@ SnapTranslator.dict.es.strings = {
     'First-Class Sprites': // gui.js:2937
         'Objetos de primera clase',
     'uncheck to disable support\nfor first-class sprites': // gui.js:2946
-        'desmarcar para desactivar\nel soporte de objetos de primera clase',
+        'desmarcar para desactivar\nel soporte para objetos de primera clase',
     'check to enable support\nfor first-class sprite': // gui.js:2947
-        'marcar para activar\nel soporte de objetos de primera clase',
+        'marcar para activar\nel soporte para objetos de primera clase',
     'Keyboard Editing': // gui.js:2951
         'Edici\u00F3n de teclado',
     'uncheck to disable\nkeyboard editing support': // gui.js:2963
-        'desmarcar para desactivar\nel soporte de edici\u00F3n de teclado',
+        'desmarcar para desactivar\nel soporte para edici\u00F3n de teclado',
     'check to enable\nkeyboard editing support': // gui.js:2964
-        'marcar para activar\nel soporte de edici\u00F3n de teclado',
+        'marcar para activar\nel soporte para edici\u00F3n de teclado',
     'Table support': // gui.js:2968
         'Soporte para tablas',
     'uncheck to disable\nmulti-column list views': // gui.js:2979
@@ -1190,23 +1190,23 @@ SnapTranslator.dict.es.strings = {
     'Table lines': // gui.js:2985
         'L\u00EDneas de tablas',
     'uncheck for less contrast\nmulti-column list views': // gui.js:2996
-        'desmarcar para ver tablas\ncon un menor contraste',
+        'desmarcar para ver tablas\n con un menor contraste',
     'check for higher contrast\ntable views': // gui.js:2997
         'marcar para ver tablas\ncon un mayor contraste',
     'Live coding support': // gui.js:3002
         'Soporte para programaci\u00F3n en vivo',
     'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
-        undefined,
+        '\u00A1EXPERIMENTAL!',
     'uncheck to disable live\ncustom control structures': // gui.js:3009
-        undefined,
+        'desmarcar para desactivar las\nestructuras de control personalizadas en vivo',
     'check to enable\nlive custom control structures': // gui.js:3011
-        undefined,
+        'marcar para activar las\nestructuras de control personalizadas en vivo',
     'JIT compiler support': // gui.js:3015
-        undefined,
+        'Soporte para compilaci\u00F3n JIT',
     'uncheck to disable live\nsupport for compiling': // gui.js:3025
-        undefined,
+        'desmarcar para desactivar\nel soporte para compilaci\u00F3n en tiempo de ejecuci\u00F3n',
     'check to enable\nsupport for compiling': // gui.js:3027
-        undefined,
+        'marcar para activar\nel soporte para compilaci\u00F3n en tiempo de ejecuci\u00F3n',
     'Thread safe scripts': // gui.js:3032
         'Hilos de ejecuci\u00F3n seguros',
     'uncheck to allow\nscript reentrance': // gui.js:3035
@@ -1226,17 +1226,17 @@ SnapTranslator.dict.es.strings = {
     'check for flat ends of lines': // gui.js:3054
         'marcar para dibujar\nl\u00EDneas con extremos rectos',
     'Codification support': // gui.js:3057
-        'Soporte de codificaci\u00F3n',
+        'Soporte para mapeo a c\u00F3digo',
     'uncheck to disable\nblock to text mapping features': // gui.js:3066
-        'desmarcar para desactivar el soporte\nde conversi\u00F3n de bloques a c\u00F3digo',
+        'desmarcar para desactivar el soporte\npara conversi\u00F3n de bloques a c\u00F3digo',
     'check for block\nto text mapping features': // gui.js:3067
-        'marcar para activar el soporte\nde conversi\u00F3n de bloques a c\u00F3digo',
+        'marcar para activar el soporte\npara conversi\u00F3n de bloques a c\u00F3digo',
     'Inheritance support': // gui.js:3071
-        'Soporte de herencia',
+        'Soporte para herencia',
     'uncheck to disable\nsprite inheritance features': // gui.js:3080
-        'desmarcar para desactivar\nel soporte de herencia de objetos',
+        'desmarcar para desactivar\nel soporte para herencia de objetos',
     'check for sprite\ninheritance features': // gui.js:3081
-        'marcar para activar\nel soporte de herencia de objetos',
+        'marcar para activar\nel soporte para herencia de objetos',
     'Persist linked sublist IDs': // gui.js:3085
         'IDs de sublistas enlazadas persistentes',
     'uncheck to disable\nsaving linked sublist identities': // gui.js:3091
@@ -1258,7 +1258,7 @@ SnapTranslator.dict.es.strings = {
     'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
         'importa proyectos, bloques,\ndisfraces o sonidos',
     'Export project (in a new window)': // gui.js:3153
-        undefined,
+        'Exportar proyecto (en una nueva ventana)',
     'show project data as XML\nin a new browser window': // gui.js:3164
         'muestra el proyecto en XML\nen una nueva ventana del navegador',
     'Export project as plain text': // gui.js:3170
@@ -1292,13 +1292,13 @@ SnapTranslator.dict.es.strings = {
     'Libraries': // gui.js:3238
         'Bibliotecas',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'a\u00F1ade bloques adicionales\npor categor\u00EDas a este proyecto',
     'Select a costume from the media library': // gui.js:3259
         'a\u00F1ade un disfraz desde la biblioteca',
     'Select a sound from the media library': // gui.js:3266
         'a\u00F1ade un sonido desde la biblioteca',
     'Opening {{ resource }}': // gui.js:3341
-        undefined,
+        'Abriendo {{ resource }}',
     'License': // gui.js:3529 gui.js:3630
         'Licencia',
     'Contributors': // gui.js:3548
@@ -1320,17 +1320,17 @@ SnapTranslator.dict.es.strings = {
     'Project Notes': // gui.js:3709
         'Notas del proyecto',
     'Saving': // gui.js:3770
-        undefined,
+        'Guardando',
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Guardado',
     'Save failed': // gui.js:3790
-        undefined,
+        'Fallo al guardar',
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
-        undefined,
+        'Exportando',
     'Exported': // gui.js:3816 gui.js:5471 gui.js:5497 gui.js:5507 gui.js:5527 gui.js:5539
-        undefined,
+        'Exportado',
     'Export failed': // gui.js:3819 gui.js:5475 gui.js:5500 gui.js:5530
-        undefined,
+        'Fallo al exportar',
     'this project doesn\'t have any\ncustom global blocks yet': // gui.js:3836
         'este proyecto no tiene ning\u00FAn bloque personalizado todav\u00EDa',
     'there are currently no unused\nglobal custom blocks in this project': // gui.js:3873
@@ -1344,35 +1344,35 @@ SnapTranslator.dict.es.strings = {
     'Contents': // gui.js:4103
         'Contenido',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Clase de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Parte de {{ name }}',
     'Parts': // gui.js:4144
         'Partes',
     'For all Sprites': // gui.js:4197 gui.js:4201
         'Para todos los objetos',
     'Load failed': // gui.js:4251 gui.js:4302 gui.js:4341 gui.js:4384 gui.js:4394 gui.js:4427
-        undefined,
+        'Fallo al cargar',
     'Opening project\n{{ size }}': // gui.js:4269
-        undefined,
+        'Abriendo proyecto\n{{ size }}',
     'Opening blocks': // gui.js:4322
         'Abriendo bloques',
     'Imported Blocks Module: {{ name }}': // gui.js:4354
-        undefined,
+        'M\u00F3dulo de bloques importado: {{ name }}',
     'Opening sprite': // gui.js:4368
-        undefined,
+        'Abriendo objeto',
     'Imported Media Module': // gui.js:4398
-        undefined,
+        'M\u00F3dulo de medios importado',
     'Opening script': // gui.js:4406
-        undefined,
+        'Abriendo programa',
     'Imported Script': // gui.js:4442
-        undefined,
+        'Programa importado',
     'opening project\n{{ name }}': // gui.js:4448
-        undefined,
+        'Abriendo proyecto\n{{ name }}',
     'Could not export {{ name }}': // gui.js:4519
-        undefined,
+        'No se pudo exportar {{ name }}',
     'This item could not be exported from {{ appName }}.\nIt\'s likely that your project may contain a lot of media (sounds and images) or that you are using an older browser.\nPlease try using a recent version of Chrome, Firefox, or Safari.': // gui.js:4520
-        undefined,
+        'No se pudo exportar este elemento desde {{ appName }}.\nParece que tu proyecto contiene muchos medios (sonidos e im\u00E1genes)\no que est\u00E1s utilizando un navegador antiguo.\nPor favor, prueba con una versi\u00F3n reciente de Chrome, Firefox o Safari.',
     'entering user mode': // gui.js:4585
         'Se ha activado el modo usuario.',
     'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.': // gui.js:4604
@@ -1382,9 +1382,9 @@ SnapTranslator.dict.es.strings = {
     'New Project': // gui.js:4915
         'Nuevo proyecto',
     'Generating {{ filename }} file': // gui.js:5011
-        undefined,
+        'Generando fichero {{ filename }}',
     'Could not generate the language file': // gui.js:5039
-        undefined,
+        'No se pudo general el fichero de idioma',
     'build': // gui.js:5057
         'construye',
     'your own': // gui.js:5060
@@ -1410,15 +1410,15 @@ SnapTranslator.dict.es.strings = {
     'Stage height': // gui.js:5167
         'Altura del escenario',
     '{{ count }} days left': // gui.js:5253
-        undefined,
+        '{{ count }} d\u00EDas restantes',
     'You are now logged in, and your account\nis enabled for three days.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.\n\nYou have {{ count }} days left.': // gui.js:5254
-        undefined,
+        '{{ count }} d\u00EDas restantes',
     'Sign in': // gui.js:5277
         'Iniciar sesi\u00F3n',
     'stay signed in on this computer\nuntil logging out': // gui.js:5283
         'Mantener la sesi\u00F3n iniciada en este ordenador',
     'You can now log in': // gui.js:5305
-        undefined,
+        'Ahora puedes iniciar sesi\u00F3n',
     'Sign up': // gui.js:5314
         'Registro',
     'Terms of Service': // gui.js:5317
@@ -1426,31 +1426,31 @@ SnapTranslator.dict.es.strings = {
     'Privacy': // gui.js:5319
         'Privacidad',
     'I have read and agree\nto the Terms of Service': // gui.js:5320
-        'He le\u00EDdo y acepto los t\u00E9rminos\ny condiciones de uso',
+        'He le\u00EDdo y acepto los t\u00E9rminos\n y condiciones de uso',
     'An e-mail with a link to\nreset your password\nhas been sent to the address provided': // gui.js:5340
-        undefined,
+        'Se ha enviado un correo a la direcci\u00F3n facilitada\ncon un enlace para reiniciar tu contrase\u00F1a',
     'Reset password': // gui.js:5352
         'Reiniciar contrase\u00F1a',
     'An e-mail with a link to\nverify your account\nhas been sent to the address provided': // gui.js:5378
-        undefined,
+        'Se ha enviado un correo a la direcci\u00F3n facilitada\ncon un enlace para verificar tu cuenta',
     'Resend verification email': // gui.js:5390
         'Reenviar correo de verificaci\u00F3n',
     'password has been changed': // gui.js:5414
-        undefined,
+        'La contrase\u00F1a ha sido cambiada',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'Desconectado',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Guardando proyecto\nen la nube',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'Guardado',
     '{{ projectName }} media': // gui.js:5468
-        undefined,
+        'medio de {{ projectName }}',
     'Cloud Connection': // gui.js:5552
         'Conexi\u00F3n con la nube',
     'Successfully connected to\n{{ url }}': // gui.js:5553
-        undefined,
+        'Conectado correctamente a\n{{ url }}',
     '{{ server }} (secure)': // gui.js:5646
-        undefined,
+        '{{ server }} (seguro)',
     'Save Project': // gui.js:5799
         'Guardar proyecto',
     'Open Project': // gui.js:5800
@@ -1470,53 +1470,53 @@ SnapTranslator.dict.es.strings = {
     'Updating\nproject list': // gui.js:6119
         'Actualizando\nlista de proyectos',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        '\u00FAltima modificaci\u00F3n\n{{ date\u00A0}}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
-        undefined,
+        '\u00BFSeguro que quieres reemplazar\n"{{ projectName }}"?',
     'Replace Project': // gui.js:6438 gui.js:6456
-        undefined,
+        'Reemplazar proyecto',
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u00BFSeguro que quieres eliminar\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Eliminar proyecto',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
-        undefined,
+        '\u00BFSeguro que quieres compartir\n"{{ projectName }}"?',
     'Share Project': // gui.js:6544
         'Compartir',
     'sharing\nproject': // gui.js:6546
         'Compartiendo proyecto',
     'shared': // gui.js:6563
-        undefined,
+        'Compartido',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
-        undefined,
+        '\u00BFSeguro que quieres dejar de compartir\n"{{ projectName }}"?',
     'Unshare Project': // gui.js:6592
         'Dejar de compartir',
     'unsharing\nproject': // gui.js:6594
         'Dejando de compartir',
     'unshared': // gui.js:6612
-        undefined,
+        'No compartido',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        '\u00BFSeguro que quieres publicar\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         'Publicar proyecto',
     'publishing\nproject': // gui.js:6636
         'Publicando proyecto',
     'published': // gui.js:6651
-        undefined,
+        'Publicado',
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        '\u00BFSeguro que quieres dejar de publicar\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         'Dejar de publicar',
     'unpublishing\nproject': // gui.js:6681
         'Cancelando publicaci\u00F3n',
     'unpublished': // gui.js:6696
-        undefined,
+        'No publicado',
     'Import library': // gui.js:6828
         'Importar biblioteca',
     'Loading {{ resource }}': // gui.js:6926 gui.js:7059
-        undefined,
+        'Cargando {{ resource }}',
     'Imported {{ resource }}': // gui.js:7054
-        undefined,
+        '{{ resource }} importado',
     'pic': // gui.js:7353 morphic.js:4194 objects.js:7425
         'imagen',
     'open a new window\nwith a picture of the stage': // gui.js:7361 objects.js:7432
@@ -1530,9 +1530,9 @@ SnapTranslator.dict.es.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         'lo hace temporal y oculta\nen el corral de objetos',
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'desenganchar de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
-        'desvincular todo',
+        'desenganchar todo',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
         'exportar',
     'edit rotation point only': // gui.js:7702
@@ -1542,7 +1542,7 @@ SnapTranslator.dict.es.strings = {
     'rename background': // gui.js:7756
         'Renombrar disfraz',
     'default': // gui.js:7893
-        undefined,
+        'predeterminado',
     'pen': // gui.js:7975 morphic.js:12402
         'tortuga',
     'tip': // gui.js:7982
@@ -1570,7 +1570,7 @@ SnapTranslator.dict.es.strings = {
     'Record a new sound': // gui.js:8549
         'grabar un nuevo sonido',
     'Please make sure your web browser is up to date\nand your camera is properly configured.\n\nSome browsers also require you to access {{ appName }}\nthrough HTTPS to use the camera.\n\nPlease replace the "http://" part of the address\nin your browser by "https://" and try again.': // gui.js:8874
-        undefined,
+        'Por favor, comprueba que tu navegador est\u00E9 actualizado\ny tu c\u00E1mara configurada correctamente.\n\nAlgunos navegadores necesitan que accedas a {{ appName }}\na trav\u00E9s de HTTPS para usar la c\u00E1mara.\n\nPor favor, reemplaza el "http://" en la barra de direcciones\nde tu navegador por "https://" y vuelve a intentarlo.',
     'Camera': // gui.js:8905
         'C\u00E1mara',
     'Camera not supported': // gui.js:8917
@@ -1580,7 +1580,7 @@ SnapTranslator.dict.es.strings = {
     'a {{ className }} [{{ count }} elements]': // lists.js:123
         undefined,
     'cdr isn\'t a list': // lists.js:143
-        undefined,
+        'cdr no es una lista',
     'items': // lists.js:264
         'elementos',
     'length': // lists.js:492 lists.js:703
@@ -1590,21 +1590,21 @@ SnapTranslator.dict.es.strings = {
     'open in dialog': // lists.js:810 tables.js:1036
         'abrir en di\u00E1logo',
     'Retina Display Support Problem': // morphic.js:1614
-        undefined,
+        'Problema de soporta para pantallas Retina',
     'Called {{ function }} with {{ count }} arguments': // morphic.js:1676
-        undefined,
+        'Se llam\u00F3 a {{ function }} con {{ count }} arguments',
     'a {{ className }}[{{ count }}]': // morphic.js:2681
         undefined,
     'a {{ className }} {{ count }} {{ bounds }}': // morphic.js:2904
         undefined,
     'user features': // morphic.js:4128
-        'opciones de usuario',
+        'men\u00FA de usuario',
     'choose another color\nfor this morph': // morphic.js:4141
-        'cambia el color\nde este morph',
+        'permite cambiar\nel color de este morph',
     'transparency': // morphic.js:4144
         'transparencia',
     'alpha value': // morphic.js:4147
-        undefined,
+        'valor alfa',
     'set this morph\'s\nalpha value': // morphic.js:4157
         'establece el valor alfa\nde este morph',
     'resize': // morphic.js:4160
@@ -1616,7 +1616,7 @@ SnapTranslator.dict.es.strings = {
     'detach and put\ninto the hand': // morphic.js:4176
         'permite moverlo a otro lugar',
     'attach': // morphic.js:4179
-        'vincular',
+        'enganchar',
     'stick this morph\nto another one': // morphic.js:4181
         'pega este morph a otro',
     'move': // morphic.js:4184 objects.js:3243
@@ -1640,79 +1640,79 @@ SnapTranslator.dict.es.strings = {
     'World': // morphic.js:4219
         'Mundo',
     'show the\n{{ WorldMorph }}\'s menu': // morphic.js:4223
-        undefined,
+        'muestra el men\u00FA de {{ WorldMorph }}',
     'choose target': // morphic.js:4721 morphic.js:5102 morphic.js:6562 morphic.js:7200
-        undefined,
+        'elegir objetivo',
     'set rotation': // morphic.js:4868
         'rotar',
     'interactively turn this morph\nusing a dial widget': // morphic.js:4870
         'gira este morph\nutilizando un control de disco',
     'set target': // morphic.js:5092 morphic.js:6552 morphic.js:7118
-        undefined,
+        'establecer objetivo',
     'choose another morph\nwhose color property\nwill be controlled by this one': // morphic.js:5094
-        undefined,
+        'elige otro morph\ncuya propiedad "color"\nser\u00E1 controlada por este',
     'choose target property': // morphic.js:5122 morphic.js:6582 morphic.js:7220
-        undefined,
+        'elige la propiedad objetivo',
     'border width': // morphic.js:5895 morphic.js:5898
-        undefined,
+        'anchura de borde',
     'set the border\'s\nline size': // morphic.js:5908
-        undefined,
+        'establece el tama\u00F1o\ndel borde',
     'border color': // morphic.js:5911 morphic.js:5914
-        undefined,
+        'color de borde',
     'set the border\'s\nline color': // morphic.js:5920
-        undefined,
+        'establece el color\ndel borde',
     'corner size': // morphic.js:5923 morphic.js:5926
-        undefined,
+        'tama\u00F1o de esquina',
     'set the corner\'s\nradius': // morphic.js:5936
-        undefined,
+        'establece el\nradio de la esquina',
     'select another morph\nwhose numerical property\nwill be controlled by this one': // morphic.js:6554 morphic.js:7120
-        undefined,
+        'elige otro morph\ncuya propiedad num\u00E9rica\nser\u00E1 controlada por este',
     'horizontal': // morphic.js:6701
-        undefined,
+        'horizontal',
     'toggle the\norientation': // morphic.js:6703 morphic.js:6709
-        undefined,
+        'intercambia la\norientaci\u00F3n',
     'vertical': // morphic.js:6707
-        undefined,
+        'vertical',
     'show value': // morphic.js:7064
-        undefined,
+        'mostrar valor',
     'display a dialog box\nshowing the selected number': // morphic.js:7066
-        undefined,
+        'muestra un cuadro de di\u00E1logo\nmostrando el n\u00FAmero seleccionado',
     'set the minimum value\nwhich can be selected': // morphic.js:7082
-        undefined,
+        'establece el m\u00EDnimo\nvalor seleccionable',
     'set the maximum value\nwhich can be selected': // morphic.js:7098
-        undefined,
+        'establece el m\u00E1ximo\nvalor seleccionable',
     'button size': // morphic.js:7101 morphic.js:7104
-        undefined,
+        'tama\u00F1o de bot\u00F3n',
     'set the range\ncovered by\nthe slider button': // morphic.js:7114
-        undefined,
+        'establece el rango\ncubierto por este deslizador',
     'un-mark own': // morphic.js:7595
-        undefined,
+        'desmarcar propios',
     'mark own': // morphic.js:7595
-        undefined,
+        'marcar propios',
     'highlight\n\'own\' properties': // morphic.js:7600
-        undefined,
+        'resaltar propiedades propias',
     'in new inspector': // morphic.js:7614
-        undefined,
+        'en un nuevo inspector',
     'here': // morphic.js:7627
-        undefined,
+        'aqu\u00ED',
     '{{ name }}\nis not inspectable': // morphic.js:7635
-        undefined,
+        '{{ name }}\nno es inspeccionable',
     'save': // morphic.js:7653
-        undefined,
+        'guardar',
     'accept changes': // morphic.js:7653
-        undefined,
+        'aceptar cambios',
     'add property': // morphic.js:7655
-        undefined,
+        'a\u00F1adir propiedad',
     'remove': // morphic.js:7657
-        undefined,
+        'eliminar',
     'close': // morphic.js:7664 morphic.js:7948
-        undefined,
+        'cerrar',
     'new property name': // morphic.js:7789
-        undefined,
+        'nombre de nueva propiedad',
     'property': // morphic.js:7802
-        undefined,
+        'propiedad',
     'property name': // morphic.js:7810
-        undefined,
+        'nombre de propiedad',
     'font size': // morphic.js:8732 morphic.js:8735 morphic.js:9479 morphic.js:9482
         'tama\u00F1o de fuente',
     'set this String\'s\nfont point size': // morphic.js:8745
@@ -1738,27 +1738,27 @@ SnapTranslator.dict.es.strings = {
     'hide characters': // morphic.js:8771
         'ocultar caracteres',
     'set this Text\'s\nfont point size': // morphic.js:9492
-        undefined,
+        'establece el\ntama\u00F1o de fuente\nde este Text',
     'align left': // morphic.js:9495
-        undefined,
+        'alinear a la izquierda',
     'align right': // morphic.js:9498
-        undefined,
+        'alinear a la derecha',
     'align center': // morphic.js:9501
-        undefined,
+        'centrado',
     'do it': // morphic.js:9563
-        undefined,
+        'evaluar',
     'evaluate the\nselected expression': // morphic.js:9565
-        undefined,
+        'evalua la expresi\u00F3n seleccionada',
     'show it': // morphic.js:9568
-        undefined,
+        'mostrar',
     'evaluate the\nselected expression\nand show the result': // morphic.js:9570
-        undefined,
+        'evalua la expresi\u00F3n seleccionada\ny muestra el resultado',
     'inspect it': // morphic.js:9573
-        undefined,
+        'inspeccionar',
     'evaluate the\nselected expression\nand inspect the result': // morphic.js:9575
-        undefined,
+        'evalua la expresi\u00F3n seleccionada\ne inspecciona el resultado',
     'select all': // morphic.js:9578
-        undefined,
+        'seleccionar todo',
     'move all inside': // morphic.js:10303 morphic.js:12178
         'mover todos dentro',
     'keep all submorphs\nwithin and visible': // morphic.js:10305 morphic.js:12180
@@ -1774,7 +1774,7 @@ SnapTranslator.dict.es.strings = {
     '(empty)': // morphic.js:10781
         '(vac\u00EDo)',
     'Are you sure you want to leave?': // morphic.js:12110
-        undefined,
+        '\u00BFSeguro que quieres salir?',
     'demo': // morphic.js:12173
         'demo',
     'sample morphs': // morphic.js:12173
@@ -1798,11 +1798,11 @@ SnapTranslator.dict.es.strings = {
     'sharp shadows': // morphic.js:12207
         'sombras n\u00EDtidas',
     'sharp drop shadows\nuse for old browsers': // morphic.js:12209
-        'sombras n\u00EDtidas\n(para navegadores antiguos)',
+        'usar sombras n\u00EDtidas\npara navegadores antiguos',
     'blurred shadows': // morphic.js:12213
         'sombras difuminadas',
     'blurry shades\nuse for new browsers': // morphic.js:12215
-        undefined,
+        'usar sombras difuminadas\npara navegadores modernos',
     'choose the World\'s\nbackground color': // morphic.js:12228
         'selecciona el color\nde fondo del Mundo',
     'touch screen settings': // morphic.js:12232
@@ -1818,7 +1818,7 @@ SnapTranslator.dict.es.strings = {
     'disable developers\'\ncontext menus': // morphic.js:12249
         'desactiva los men\u00FAs\ncontextuales de desarrollador',
     'about {{ resource }}': // morphic.js:12254
-        undefined,
+        'acerca de {{ resource }}',
     'make a morph': // morphic.js:12266
         'crear un morph',
     'rectangle': // morphic.js:12267 symbols.js:109
@@ -1854,11 +1854,11 @@ SnapTranslator.dict.es.strings = {
     'animation demo': // morphic.js:12353
         'demo: animaci\u00F3n',
     'modules': // morphic.js:12444
-        undefined,
+        'm\u00F3dulos',
     'a lively Web GUI\ninspired by Squeak': // morphic.js:12451
-        undefined,
+        'una interfaz web animada\ninspirada por Squeak',
     'written by {{ author }}\n{{ email }}': // morphic.js:12453
-        undefined,
+        'escrito por {{ author }}\n{{ email }}',
     'Motion': // objects.js:146
         'Movimiento',
     'Control': // objects.js:147
@@ -2098,7 +2098,7 @@ SnapTranslator.dict.es.strings = {
     '%n mod %n': // objects.js:979
         '%n m\u00F3dulo %n',
     'pick random %n to %n': // objects.js:984
-        'n\u00FAmero al azar entre %n y %n',
+        'n\u00FAmero aleatorio entre %n y %n',
     '%b and %b': // objects.js:1005
         '%b y %b',
     '%b or %b': // objects.js:1010
@@ -2172,7 +2172,7 @@ SnapTranslator.dict.es.strings = {
     'for %upvar in %l %cl': // objects.js:1220
         'para %upvar en %l %cl',
     'each item': // objects.js:1221
-        undefined,
+        'cada elemento',
     'show table %l': // objects.js:1230
         'mostrar tabla %l',
     'map %cmdRing to %codeKind %code': // objects.js:1237
@@ -2186,7 +2186,7 @@ SnapTranslator.dict.es.strings = {
     'Sprite': // objects.js:1404
         'Objeto',
     'that name is already in use': // objects.js:1859 objects.js:7047
-        undefined,
+        'ese nombre ya est\u00E1 en uso',
     'development mode\ndebugging primitives': // objects.js:1932 objects.js:2089 objects.js:2155 objects.js:2268 objects.js:7085 objects.js:7214 objects.js:7280 objects.js:7376
         'primitivas de depuraci\u00F3n\ndel modo desarrollador',
     'Make a variable': // objects.js:2184 objects.js:7309
@@ -2208,11 +2208,11 @@ SnapTranslator.dict.es.strings = {
     'make permanent and\nshow in the sprite corral': // objects.js:3257
         'lo hace permanente y\nlo muestra en el corral de objetos',
     'exceeding maximum number of clones': // objects.js:3355
-        undefined,
+        'Se ha excedido el n\u00FAmero m\u00E1ximo de clones',
     'Costume': // objects.js:4338
-        undefined,
+        'Disfraz',
     'setting the rotation center requires a costume': // objects.js:4679
-        undefined,
+        'Se necesita un disfraz para establecer el centro de rotaci\u00F3n',
     'current parent': // objects.js:5420
         'padre actual',
     'Stage': // objects.js:6315
@@ -2228,7 +2228,7 @@ SnapTranslator.dict.es.strings = {
     'turn all pen trails and stamps\ninto a new background for the stage': // objects.js:7447
         'convierte todo rastro del l\u00E1piz\nen un nuevo fondo para el escenario',
     'Background': // objects.js:7817
-        undefined,
+        'Escenario',
     'a {{ className }}({{ name }})': // objects.js:8096
         undefined,
     'click or drag crosshairs to move the rotation center': // objects.js:8296
@@ -2238,7 +2238,7 @@ SnapTranslator.dict.es.strings = {
     'an {{ className }}({{ name }})': // objects.js:8395
         undefined,
     'Web Audio API is not supported\nin this browser': // objects.js:8629
-        undefined,
+        'Este navegador no tiene soporte\npara Web Audio API',
     'normal': // objects.js:9452
         'normal',
     'large': // objects.js:9456
@@ -2250,9 +2250,9 @@ SnapTranslator.dict.es.strings = {
     'import': // objects.js:9475
         'importar',
     'Unable to import': // objects.js:9501
-        undefined,
+        'No se pudo importar',
     '{{ appName }} can only import "text" files.\nYou selected a file of type "{{ type }}".': // objects.js:9502
-        undefined,
+        '{{ appName }} s\u00F3lo puede importar ficheros de texto.\nEl que has seleccionado es de tipo {{ type }}.',
     'Slider minimum value': // objects.js:9588
         'M\u00EDnimo valor del deslizador',
     'Slider maximum value': // objects.js:9604
@@ -2294,21 +2294,21 @@ SnapTranslator.dict.es.strings = {
     'Brush size': // paint.js:413
         'Tama\u00F1o de pincel',
     'loading should be implemented in heir of XML_Serializer': // store.js:235
-        undefined,
+        'La carga deber\u00EDa de implementarse en la clase derivada de XML_Serializer',
     '{{ appName }} Project': // store.js:328
-        undefined,
+        'Proyecto de {{ appName }}',
     'This project has been created by a different app:\n\n{{ appName }}\n\nand may be incompatible or fail to load here.': // store.js:329
-        undefined,
+        'Este proyecto ha sido creado con una aplicaci\u00F3n diferente:\n\n{{ appName }}\n\ny puede ser incompatible o imposible de cargar aqu\u00ED.',
     'Project uses newer version of Serializer': // store.js:351
-        undefined,
+        'El proyecto usa una versi\u00F3n m\u00E1s reciente de Serializer',
     'Module uses newer version of Serializer': // store.js:630 store.js:662 store.js:743
-        undefined,
+        'El m\u00F3dulo usa una versi\u00F3n m\u00E1s moderna de Serializer',
     'expecting a command but getting a reporter': // store.js:1076
-        undefined,
+        'Se esperaba un comando pero se obtuvo un reportero',
     'Obsolete!': // store.js:1198
-        undefined,
+        '\u00A1Obsoleto!',
     'expecting a reference id': // store.js:1282
-        undefined,
+        'se esperaba un ID de referencia',
     'square': // symbols.js:85
         'cuadrado',
     'pointRight': // symbols.js:86
@@ -2422,53 +2422,53 @@ SnapTranslator.dict.es.strings = {
     'Table view': // tables.js:1186
         'Visor de tablas',
     'expecting a receiver but getting {{ actual }}': // threads.js:145
-        undefined,
+        'Se esperaba un receptor pero se obtuvo {{ actual }}',
     'expecting a block or ring but getting {{ actual }}': // threads.js:160
-        undefined,
+        'Se esperaba un bloque o c\u00E1psula pero se obtuvo {{ actual }}',
     'a synchronous {{ appName }} script has timed out': // threads.js:172
-        undefined,
+        'Un programa s\u00EDncrono de {{ appName }} ha expirado',
     'the predicate takes\ntoo long for a\ncustom hat block': // threads.js:428
-        undefined,
+        'El predicado tarda demasiado\npara ser un bloque sombrero personalizado',
     'compiling does not yet support\nvariables that are not\nformal parameters': // threads.js:758
-        undefined,
+        'La compilaci\u00F3n a\u00FAn no soporta variables\nque no sean par\u00E1metros formales',
     'compiling does not yet support\ncustom blocks': // threads.js:785
-        undefined,
+        'La compilaci\u00F3n a\u00FAn no soporta\nbloques personalizados',
     'compiling does not yet support\nimplicit parameters\n(empty input slots)': // threads.js:818
-        undefined,
+        'La compilaci\u00F3n a\u00FAn no soporta\npar\u00E1metros impl\u00EDcitos\n(huecos vac\u00EDos)',
     'compiling does not yet support\ninputs of type\n{{ type }}': // threads.js:845
-        undefined,
+        'La compilaci\u00F3n a\u00FAn no soporta\nentradas de tipo\n{{ type }}',
     'compiling does not yet support\ninput slots of type\n{{ type }}': // threads.js:858
-        undefined,
+        'La compilaci\u00F3n a\u00FAn no soporta\nhuecos de tipo\n{{ type }}',
     'reporter didn\'t report': // threads.js:1087
-        undefined,
+        'El reportero no report\u00F3 nada',
     'Inside': // threads.js:1100
-        undefined,
+        'Dentro de',
     'a custom block definition is missing': // threads.js:1107
-        undefined,
+        'No se encuentra la definici\u00F3n un bloque personalizado',
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
-        undefined,
+        'Se esperaba una c\u00E1psula pero se obtuvo {{ actual }}',
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'Se esperaba(n) {{ expected }} entrada(s) pero se obtuvo/ieron {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
-        undefined,
+        'Las continuaciones no pueden ser bifurcadas',
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
-        undefined,
+        'Se esperaba {{ expected }} pero se obtuvo {{ actual }}',
     'cannot operate on a deleted sprite': // threads.js:2546
-        undefined,
+        'No se puede operar sobre un objeto borrado',
     'expecting text instead of a {{ type }}': // threads.js:2862
-        undefined,
+        'Se esperaba texto en lugar de un {{ type }}',
     'expecting a text delimiter instead of a {{ type }}': // threads.js:2868
-        undefined,
+        'Se esperaba un delimitador de texto en lugar de un {{ type }}',
     'unsupported attribute': // threads.js:3448
-        undefined,
+        'Attributo no soportado',
     'unable to nest\n(disabled or circular?)': // threads.js:3462
-        undefined,
+        'No se pudo anidar\n(\u00BFdesactivado o circular?)',
     '"{{ name }}" is read-only': // threads.js:3505
-        undefined,
+        '"{{ name }}" es de s\u00F3lo lectura',
     '"{{ name }}"\nis not a valid option': // threads.js:3642
-        undefined,
+        '"{{ name }}"\nno es una opci\u00F3n v\u00E1lida',
     'unsupported data type {{ type }}': // threads.js:3677
-        undefined,
+        'Tipo de dato {{ type }} no soportado',
     '{{ className }} >> {{ expression }} {{ variables }}': // threads.js:3958
         undefined,
     'a transient {{ className }} [{{ value }}]': // threads.js:4122
@@ -2478,7 +2478,7 @@ SnapTranslator.dict.es.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'No existe ninguna variable\nllamada "{{ name }}" en este contexto',
     'Yes': // widgets.js:1607
         'S\u00ED',
     'No': // widgets.js:1608
@@ -2486,7 +2486,7 @@ SnapTranslator.dict.es.strings = {
     'Default': // widgets.js:1882
         'Predeterminado',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} o antes',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Nombre de usuario',
     'Birth date': // widgets.js:2061
@@ -2518,17 +2518,17 @@ SnapTranslator.dict.es.strings = {
     'E-mail address': // widgets.js:2259
         'Correo electr\u00F3nico',
     'Missing required element <{{ tagName }}>!': // xml.js:186
-        undefined,
+        'No se encuentra el elemento requerido <{{ tagName }}>',
     'Expected "=" after attribute name': // xml.js:341
-        undefined,
+        'Se esperaba "=" tras el nombre de atributo',
     'Expected single- or double-quoted attribute value': // xml.js:347
-        undefined,
+        'Se esperaba un valor de atributo simple o doblemente entrecomillado',
     'Expected ">" after "/" in empty tag': // xml.js:361
-        undefined,
+        'Se esperaba ">" tras "/" en etiqueta vac\u00EDa',
     'Expected ">" after tag name and attributes': // xml.js:367
-        undefined,
+        'Se esperaba ">" tras el nombre de etiqueta y atributos',
     'Expected to close {{ tagName }}': // xml.js:379
-        undefined,
+        'Se esperaba que se cerrase {{ tagName }}',
     'Tools': // libraries/LIBRARIES:1
         'Utilidades',
     'Standard library of powerful blocks (for, map, etc.)': // libraries/LIBRARIES:1
@@ -2590,9 +2590,9 @@ SnapTranslator.dict.es.strings = {
     'to use instead of hue for better selection': // libraries/LIBRARIES:15
         'Para seleccionar un color por nombre en lugar de por su matiz.',
     'Text to speech': // libraries/LIBRARIES:16
-        undefined,
+        'Texto a voz',
     'output text using speech synthesis.': // libraries/LIBRARIES:16
-        undefined,
+        'Salida de texto utilizando s\u00EDntesis de voz',
     'Animation': // libraries/LIBRARIES:17
         'Animaci\u00F3n',
     'glide, grow and rotate using easing functions.': // libraries/LIBRARIES:17

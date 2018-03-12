@@ -842,7 +842,7 @@ SnapTranslator.dict.no.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolsk\n(uevaluert)',
     'Single input': // byob.js:3299
-        undefined,
+        'Singel inndata',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Fler-inndata (verdi er liste over inndata)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.no.strings = {
     'Reference manual': // gui.js:2474
         undefined,
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} websiden',
     'Download source': // gui.js:2487
         'Last ned kildekoden',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.no.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Lagret',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.no.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Vil du virkelig slette?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Slett prosjekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

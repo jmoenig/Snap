@@ -842,7 +842,7 @@ SnapTranslator.dict.zh_TW.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u5E03\u6797\uFF08\u8A55\u50F9\uFF09',
     'Single input': // byob.js:3299
-        undefined,
+        '\u55AE\u4E00\u53C3\u6578',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u591A\u884C\u8F38\u5165\uFF08\u503C\u70BA\u53C3\u6578\u5217\u8868\uFF09',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.zh_TW.strings = {
     'Reference manual': // gui.js:2474
         '\u53C3\u8003\u624B\u518A',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }}\u5B98\u65B9\u7DB2\u7AD9',
     'Download source': // gui.js:2487
         '\u4E0B\u8F09\u6E90\u78BC',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.zh_TW.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u5DF2\u4FDD\u5B58',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.zh_TW.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u78BA\u5B9A\u8981\u522A\u9664\u55CE\uFF1F\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u522A\u9664\u9805\u76EE',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

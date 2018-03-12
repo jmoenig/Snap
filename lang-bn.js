@@ -842,7 +842,7 @@ SnapTranslator.dict.bn.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         '\u09AC\u09C1\u09B2\u09BF\u09AF\u09BC\u09BE\u09A8\n(\u09B8\u0982\u0996\u09CD\u09AF\u09BE \u0985\u09A8\u09BF\u09B0\u09CD\u09A3\u09AF\u09BC \u0995\u09B0\u09BE)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u098F\u0995\u0995 \u0987\u09A8\u09AA\u09C1\u099F',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u098F\u0995\u09BE\u09A7\u09BF\u0995 \u0987\u09A8\u09AA\u09C1\u099F (\u09AE\u09BE\u09A8 \u0987\u09A8\u09AA\u09C1\u099F \u09A4\u09BE\u09B2\u09BF\u0995\u09BE)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.bn.strings = {
     'Reference manual': // gui.js:2474
         'Snap! \u09B0\u09C7\u09AB\u09BE\u09B0\u09C7\u09A8\u09CD\u09B8 \u09AE\u09CD\u09AF\u09BE\u09A8\u09C1\u09AF\u09BC\u09BE\u09B2',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} \u0993\u09DF\u09C7\u09AC\u09B8\u09BE\u0987\u099F',
     'Download source': // gui.js:2487
         'Snap! \u09B8\u09CB\u09B0\u09CD\u09B8\u0995\u09CB\u09A1',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.bn.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u09B8\u0982\u09B0\u0995\u09CD\u09B7\u09BF\u09A4 \u09B9\u09DF\u09C7\u099B\u09C7',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.bn.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u09A4\u09C1\u09AE\u09BF \u0995\u09BF \u09AE\u09C1\u099B\u09C7 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u09AC\u09BF\u09B7\u09AF\u09BC\u09C7 \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u09AA\u09CD\u09B0\u0995\u09B2\u09CD\u09AA \u09AE\u09C1\u099B\u09C7 \u09AB\u09C7\u09B2',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

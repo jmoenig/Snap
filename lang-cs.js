@@ -843,7 +843,7 @@ SnapTranslator.dict.cs.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolean\n(nevyhodnoceno)',
     'Single input': // byob.js:3299
-        undefined,
+        'Jednoduch\u00FD vstup',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'V\u00EDce vstup\u016F (hodnoty v seznamu)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -985,7 +985,7 @@ SnapTranslator.dict.cs.strings = {
     'Reference manual': // gui.js:2474
         'Referen\u010Dn\u00ED p\u0159\u00EDru\u010Dka',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Str\u00E1nky {{ site }}',
     'Download source': // gui.js:2487
         'St\u00E1hnout zdrojov\u00E9 k\u00F3dy',
     'Switch back to user mode': // gui.js:2498
@@ -1321,7 +1321,7 @@ SnapTranslator.dict.cs.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Ulo\u017Eeno',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1475,7 +1475,7 @@ SnapTranslator.dict.cs.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Jste si jisti, \u017Ee chcete projekt smazat?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Smazat projekt',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542

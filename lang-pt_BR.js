@@ -764,7 +764,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'Experimental',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
         undefined,
     'remove block variables': // byob.js:1061
@@ -842,7 +842,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Predicado\n(forma especial)',
     'Single input': // byob.js:3299
-        undefined,
+        'Par\u00E2metro \u00FAnico',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'M\u00FAltiplos argumentos (o valor do par\u00E2metro \u00E9 a lista dos argumentos).',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -940,7 +940,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'unable to retrieve project': // gui.js:339
         undefined,
     'Fetching project\nfrom the cloud': // gui.js:417 gui.js:458 gui.js:494 gui.js:2612 gui.js:6391
-        undefined,
+        'Obtendo o\nprojeto da nuvem',
     'Opening project': // gui.js:430 gui.js:470 gui.js:2627 gui.js:4222
         'Abrindo o projeto',
     'Saved project\n{{ name }}': // gui.js:506
@@ -984,7 +984,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'Reference manual': // gui.js:2474
         'Manual de Refer\u00EAncia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Site do {{ site }}',
     'Download source': // gui.js:2487
         'Baixar c\u00F3digo fonte',
     'Switch back to user mode': // gui.js:2498
@@ -1056,7 +1056,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'check to run\nthe edited script\nwhen moving the slider': // gui.js:2745
         undefined,
     'Turbo mode': // gui.js:2749
-        undefined,
+        'Modo turbo',
     'uncheck to run scripts\nat normal speed': // gui.js:2752
         'Desmarque para executar os roteiros\nna\uFFFD velocidade normal.',
     'check to prioritize\nscript execution': // gui.js:2753
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Salvo',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1436,11 +1436,11 @@ SnapTranslator.dict.pt_BR.strings = {
     'password has been changed': // gui.js:5414
         undefined,
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'saiu',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
-        undefined,
+        'Salvando o\nprojeto na nuvem',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'salvo',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Tem certeza que deseja apagar?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Apague Projeto',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'desencaixe de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'desencaixe todas as partes',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.pt_BR.strings = {
     'Default': // widgets.js:1882
         undefined,
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} ou antes',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Nome de usu\u00E1rio',
     'Birth date': // widgets.js:2061

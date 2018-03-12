@@ -842,7 +842,7 @@ SnapTranslator.dict.el.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Boolean(\u03C3\u03C9\u03C3\u03C4\u03CC/\u03BB\u03AC\u03B8\u03BF\u03C2)\n(\u03B4\u03B5\u03BD \u03AD\u03C7\u03B5\u03B9 \u03B1\u03BE\u03B9\u03BF\u03BB\u03BF\u03B3\u03B7\u03B8\u03B5\u03AF)',
     'Single input': // byob.js:3299
-        undefined,
+        '\u039C\u03AF\u03B1 \u03C4\u03B9\u03BC\u03AE',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         '\u03A0\u03BF\u03BB\u03BB\u03AD\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 (\u03B7 \u03B1\u03BE\u03AF\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B7 \u03BB\u03AF\u03C3\u03C4\u03B1 \u03BC\u03B5 \u03C4\u03B9\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.el.strings = {
     'Reference manual': // gui.js:2474
         '\u0395\u03B3\u03C7\u03B5\u03B9\u03C1\u03AF\u03B4\u03B9\u03BF \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} \u0399\u03C3\u03C4\u03BF\u03C3\u03B5\u03BB\u03AF\u03B4\u03B1',
     'Download source': // gui.js:2487
         '\u039A\u03B1\u03C4\u03AD\u03B2\u03B1\u03C3\u03B5 \u03C4\u03B7\u03BD \u03C0\u03B7\u03B3\u03AE',
     'Switch back to user mode': // gui.js:2498
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.el.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        '\u0391\u03C0\u03BF\u03B8\u03B7\u03BA\u03B5\u03CD\u03C4\u03B7\u03BA\u03B5',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1474,7 +1474,7 @@ SnapTranslator.dict.el.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        '\u0395\u03AF\u03C3\u03C4\u03B5 \u03C3\u03AF\u03B3\u03BF\u03C5\u03C1\u03BF\u03B9 \u03CC\u03C4\u03B9 \u03B8\u03AD\u03BB\u03B5\u03C4\u03B5 \u03BD\u03B1 \u03B3\u03AF\u03BD\u03B5\u03B9 \u03B4\u03B9\u03B1\u03B3\u03C1\u03B1\u03C6\u03AE?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         '\u0394\u03B9\u03B1\u03B3\u03C1\u03B1\u03C6\u03AE \u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\u03C2',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.el.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        '\u03B1\u03C0\u03BF\u03C3\u03CD\u03BD\u03B4\u03B5\u03C3\u03B7 \u03B1\u03C0\u03CC {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         '\u03B1\u03C0\u03BF\u03C3\u03CD\u03BD\u03B4\u03B5\u03C3\u03B7 \u03CC\u03BB\u03C9\u03BD \u03C4\u03C9\u03BD \u03BA\u03BF\u03BC\u03BC\u03B1\u03C4\u03B9\u03CE\u03BD',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

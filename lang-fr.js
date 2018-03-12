@@ -845,7 +845,7 @@ SnapTranslator.dict.fr.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Bool\u00E9en\n(non \u00E9valu\u00E9e)',
     'Single input': // byob.js:3299
-        undefined,
+        'Entr\u00E9e unique',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'Entr\u00E9es multiples (la valeur est une liste des entr\u00E9es)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -877,7 +877,7 @@ SnapTranslator.dict.fr.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Supprimer les blocs inutilis\u00E9s',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} bloc(s) inutilis\u00E9(s) supprim\u00E9(s)',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -987,7 +987,7 @@ SnapTranslator.dict.fr.strings = {
     'Reference manual': // gui.js:2474
         'Manuel de r\u00E9f\u00E9rence',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        '{{ site }} le site web',
     'Download source': // gui.js:2487
         'T\u00E9l\u00E9charger le code source',
     'Switch back to user mode': // gui.js:2498
@@ -1323,7 +1323,7 @@ SnapTranslator.dict.fr.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Enregistr\u00EA',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1477,7 +1477,7 @@ SnapTranslator.dict.fr.strings = {
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Souhaitez-vous vraiment supprimer?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Supprimer un projet',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1531,7 +1531,7 @@ SnapTranslator.dict.fr.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'D\u00E9tacher de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'D\u00E9tacher toutes les parties',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542

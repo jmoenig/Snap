@@ -536,7 +536,7 @@ SnapTranslator.dict.pt.strings = {
     'uncheck to\ndisinherit': // blocks.js:2431 blocks.js:2495 blocks.js:6375 byob.js:1113
         'desassinalar para\nn\u00E3o herdar',
     'check to inherit\nfrom {{ name }}': // blocks.js:2443 blocks.js:2496 blocks.js:6376 byob.js:1125
-        undefined,
+        'assinalar para\nherdar de {{ name }}',
     'transient': // blocks.js:2450
         'transiente',
     'uncheck to save contents\nin the project': // blocks.js:2453
@@ -760,13 +760,13 @@ SnapTranslator.dict.pt.strings = {
     'Change block': // byob.js:885
         'Alterar tipo de bloco',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (tempor\u00E1ria)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'Experimental',
     'under construction': // byob.js:1048 byob.js:1057 byob.js:1065
-        undefined,
+        'em constru\u00E7\u00E3o',
     'remove block variables': // byob.js:1061
         'remover vari\u00E1veis de bloco',
     'duplicate block definition': // byob.js:1079
@@ -842,7 +842,7 @@ SnapTranslator.dict.pt.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Predicado\n(forma especial)',
     'Single input': // byob.js:3299
-        undefined,
+        'Par\u00E2metro \u00FAnico',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'M\u00FAltiplos argumentos (o valor do par\u00E2metro \u00E9 a lista dos argumentos).',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -874,7 +874,7 @@ SnapTranslator.dict.pt.strings = {
     'Remove unused blocks': // byob.js:4056 byob.js:4057 byob.js:4101 gui.js:3872
         'Remover blocos n\u00E3o usados',
     '{{ count }} unused block(s) removed': // byob.js:4096
-        undefined,
+        '{{ count }} blocos n\u00E3o usados removidos',
     'There was an error while trying to access\na {{ cloudName }} service. Please try again later.': // cloud.js:90
         undefined,
     'Cloud Error': // cloud.js:159
@@ -984,7 +984,7 @@ SnapTranslator.dict.pt.strings = {
     'Reference manual': // gui.js:2474
         'Ler o Manual de refer\u00EAncia',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'Ir para o s\u00EDtio Web do {{ site }}',
     'Download source': // gui.js:2487
         'Descarregar o c\u00F3digo fonte',
     'Switch back to user mode': // gui.js:2498
@@ -1006,19 +1006,19 @@ SnapTranslator.dict.pt.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Sair {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Alterar palavra-passe',
     'Export project media only': // gui.js:2564
-        undefined,
+        'Exportar apenas os m\u00E9dia do projecto',
     'Export Project As': // gui.js:2569 gui.js:2583 gui.js:2597 gui.js:3158 gui.js:3176
         'Exportar Projecto Como',
     'Export project without media': // gui.js:2578
-        undefined,
+        'Exportar projecto sem os m\u00E9dia',
     'Export project as cloud data': // gui.js:2592
-        undefined,
+        'Exportar projecto como dados da nuvem',
     'Open shared project from cloud': // gui.js:2607
-        undefined,
+        'Abrir projecto partilhado a partir da nuvem',
     'Author name': // gui.js:2609
         undefined,
     'Project name': // gui.js:2610
@@ -1194,11 +1194,11 @@ SnapTranslator.dict.pt.strings = {
     'Live coding support': // gui.js:3002
         'Suporte de programa\u00E7\u00E3o ao vivo',
     'EXPERIMENTAL!': // gui.js:3008 gui.js:3010 gui.js:3024 gui.js:3026
-        undefined,
+        'EXPERIMENTAL!',
     'uncheck to disable live\ncustom control structures': // gui.js:3009
-        undefined,
+        'Desassinalar para desactivar estruturas\nde controlo personalizadas ao vivo',
     'check to enable\nlive custom control structures': // gui.js:3011
-        undefined,
+        'Assinalar para activar estruturas\nde controlo personalizadas ao vivo',
     'JIT compiler support': // gui.js:3015
         undefined,
     'uncheck to disable live\nsupport for compiling': // gui.js:3025
@@ -1256,7 +1256,7 @@ SnapTranslator.dict.pt.strings = {
     'load an exported project file\nor block library, a costume\nor a sound': // gui.js:3146
         'Abrir um projecto exportado,\nsubstitundo o projecto corrente, ou\nimportar uma biblioteca de blocos, um\ntraje ou um som para o projecto corrente.',
     'Export project (in a new window)': // gui.js:3153
-        undefined,
+        'Exportar este projecto (numa nova janela)',
     'show project data as XML\nin a new browser window': // gui.js:3164
         'Mostrar os dados do projecto no\nformato XML numa nova janela do navegador.',
     'Export project as plain text': // gui.js:3170
@@ -1290,7 +1290,7 @@ SnapTranslator.dict.pt.strings = {
     'Libraries': // gui.js:3238
         'Bibliotecas',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'Seleccionar categorias de blocos adicionais a acrescentar a este projecto.',
     'Select a costume from the media library': // gui.js:3259
         'Seleccionar um traje da biblioteca de m\u00E9dia.',
     'Select a sound from the media library': // gui.js:3266
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.pt.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Guardado',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1342,9 +1342,9 @@ SnapTranslator.dict.pt.strings = {
     'Contents': // gui.js:4103
         '\u00CDndice',
     'Kind of {{ name }}': // gui.js:4132
-        undefined,
+        'Do tipo de {{ name }}',
     'Part of {{ name }}': // gui.js:4139
-        undefined,
+        'Uma parte de {{ name }}',
     'Parts': // gui.js:4144
         'Partes',
     'For all Sprites': // gui.js:4197 gui.js:4201
@@ -1434,13 +1434,13 @@ SnapTranslator.dict.pt.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        'a sua palavra-passe foi alterada',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'saiu',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Guardando o projecto\nna nuvem',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'guardado',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1468,13 +1468,13 @@ SnapTranslator.dict.pt.strings = {
     'Updating\nproject list': // gui.js:6119
         'Actualizando a\nlista de projectos',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'alterado pela \u00FAltima vez em\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Quer mesmo remover\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Remover Projecto',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1484,7 +1484,7 @@ SnapTranslator.dict.pt.strings = {
     'sharing\nproject': // gui.js:6546
         'partilhando\nprojecto',
     'shared': // gui.js:6563
-        undefined,
+        'partilhado',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1492,9 +1492,9 @@ SnapTranslator.dict.pt.strings = {
     'unsharing\nproject': // gui.js:6594
         'deixando de partilhar\nprojecto',
     'unshared': // gui.js:6612
-        undefined,
+        'deixado de partilhar',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Quer mesmo publicar\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1502,7 +1502,7 @@ SnapTranslator.dict.pt.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Quer mesmo deixar de publicar\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.pt.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         'tornar tempor\u00E1rio e\nesconder da lista de actores',
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'soltar de {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'soltar todas as partes',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2446,7 +2446,7 @@ SnapTranslator.dict.pt.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'esperavam-se {{ expected }} argumento(s), mas foram passados {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2476,7 +2476,7 @@ SnapTranslator.dict.pt.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'n\u00E3o existe uma vari\u00E1vel \u00AB{{ name }}\u00BB\nneste contexto',
     'Yes': // widgets.js:1607
         'Sim',
     'No': // widgets.js:1608
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.pt.strings = {
     'Default': // widgets.js:1882
         'Normal',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} ou antes',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Nome de utilizador',
     'Birth date': // widgets.js:2061

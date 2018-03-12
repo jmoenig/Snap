@@ -760,7 +760,7 @@ SnapTranslator.dict.hu.strings = {
     'Change block': // byob.js:885
         'Blokk v\u00E1ltoztat\u00E1sa',
     '{{ varName }} (temporary)': // byob.js:1011 objects.js:9431 threads.js:1670
-        undefined,
+        '{{ varName }} (ideiglenes)',
     'translations': // byob.js:1044
         undefined,
     'experimental': // byob.js:1048 byob.js:1057 byob.js:1065
@@ -842,7 +842,7 @@ SnapTranslator.dict.hu.strings = {
     'Boolean\n(unevaluated)': // byob.js:3294
         'Logikai(nem ki\u00E9rt\u00E9kelt)',
     'Single input': // byob.js:3299
-        undefined,
+        'Egyszer\u0171 bevitel',
     'Multiple inputs (value is list of inputs)': // byob.js:3304
         'T\u00F6bb \u00E9rt\u00E9k bevitele (az \u00E9rt\u00E9k a bevitelek list\u00E1ja)',
     'Upvar - make internal variable visible to caller': // byob.js:3309
@@ -984,7 +984,7 @@ SnapTranslator.dict.hu.strings = {
     'Reference manual': // gui.js:2474
         'K\u00E9zik\u00F6nyv',
     '{{ site }} website': // gui.js:2481
-        undefined,
+        'A {{ site }} webhelye',
     'Download source': // gui.js:2487
         'A forr\u00E1sk\u00F3d let\u00F6lt\u00E9se',
     'Switch back to user mode': // gui.js:2498
@@ -1006,7 +1006,7 @@ SnapTranslator.dict.hu.strings = {
     'Resend Verification Email': // gui.js:2548
         undefined,
     'Logout {{ username }}': // gui.js:2553
-        undefined,
+        'Kijelentkez\u00E9s {{ username }}',
     'Change Password': // gui.js:2557 gui.js:5420
         'Jelsz\u00F3 megv\u00E1ltoztat\u00E1sa',
     'Export project media only': // gui.js:2564
@@ -1290,7 +1290,7 @@ SnapTranslator.dict.hu.strings = {
     'Libraries': // gui.js:3238
         'Modulk\u00F6nyvt\u00E1rak',
     'select categories of additional blocks to add to this project': // gui.js:3248
-        undefined,
+        'V\u00E1lassza ki a projekthez adand\u00F3 blokkok kateg\u00F3ri\u00E1it',
     'Select a costume from the media library': // gui.js:3259
         'V\u00E1lasszon ki egy jelmezt a m\u00E9diak\u00F6nyvt\u00E1rb\u00F3l.',
     'Select a sound from the media library': // gui.js:3266
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.hu.strings = {
     'Saving': // gui.js:3770
         undefined,
     'Saved': // gui.js:3788 gui.js:3796
-        undefined,
+        'Mentve',
     'Save failed': // gui.js:3790
         undefined,
     'Exporting': // gui.js:3811 gui.js:5464 gui.js:5493 gui.js:5503 gui.js:5521 gui.js:5533
@@ -1434,13 +1434,13 @@ SnapTranslator.dict.hu.strings = {
     'Resend verification email': // gui.js:5390
         undefined,
     'password has been changed': // gui.js:5414
-        undefined,
+        'a jelsz\u00F3 megv\u00E1ltozott',
     'disconnected': // gui.js:5437 gui.js:5440
-        undefined,
+        'lev\u00E1lasztva',
     'Saving project\nto the cloud': // gui.js:5448 gui.js:6476
         'Projekt ment\u00E9se\na felh\u0151be',
     'saved': // gui.js:5452 gui.js:6481
-        undefined,
+        'mentve',
     '{{ projectName }} media': // gui.js:5468
         undefined,
     'Cloud Connection': // gui.js:5552
@@ -1468,13 +1468,13 @@ SnapTranslator.dict.hu.strings = {
     'Updating\nproject list': // gui.js:6119
         'A projeklista friss\u00EDt\u00E9se',
     'last changed\n{{ date }}': // gui.js:6314
-        undefined,
+        'utolj\u00E1ra v\u00E1ltoztatva\n{{ date }}',
     'Are you sure you want to replace\n"{{ projectName }}"?': // gui.js:6436 gui.js:6454
         undefined,
     'Replace Project': // gui.js:6438 gui.js:6456
         undefined,
     'Are you sure you want to delete\n"{{ projectName }}"?': // gui.js:6498 gui.js:6522
-        undefined,
+        'Biztos, hogy t\u00F6rl\u00F6d?\n"{{ projectName }}"?',
     'Delete Project': // gui.js:6500 gui.js:6524
         'Projekt t\u00F6rl\u00E9se',
     'Are you sure you want to share\n"{{ projectName }}"?': // gui.js:6542
@@ -1484,7 +1484,7 @@ SnapTranslator.dict.hu.strings = {
     'sharing\nproject': // gui.js:6546
         'a projekt\nmegoszt\u00E1sa',
     'shared': // gui.js:6563
-        undefined,
+        'megosztva',
     'Are you sure you want to unshare\n"{{ projectName }}"?': // gui.js:6590
         undefined,
     'Unshare Project': // gui.js:6592
@@ -1492,9 +1492,9 @@ SnapTranslator.dict.hu.strings = {
     'unsharing\nproject': // gui.js:6594
         'a projekt megoszt\u00E1s\u00E1nak\nmegsz\u00FCntet\u00E9se',
     'unshared': // gui.js:6612
-        undefined,
+        'nincs megosztva',
     'Are you sure you want to publish\n"{{ projectName }}"?': // gui.js:6632
-        undefined,
+        'Biztosan nyilv\u00E1noss\u00E1 teszi\n"{{ projectName }}"?',
     'Publish Project': // gui.js:6634
         undefined,
     'publishing\nproject': // gui.js:6636
@@ -1502,7 +1502,7 @@ SnapTranslator.dict.hu.strings = {
     'published': // gui.js:6651
         undefined,
     'Are you sure you want to unpublish\n"{{ projectName }}"?': // gui.js:6677
-        undefined,
+        'Biztos, hogy nemnyilv\u00E1noss\u00E1 teszi\n"{{ projectName }}"?',
     'Unpublish Project': // gui.js:6679
         undefined,
     'unpublishing\nproject': // gui.js:6681
@@ -1528,7 +1528,7 @@ SnapTranslator.dict.hu.strings = {
     'make temporary and\nhide in the sprite corral': // gui.js:7390
         undefined,
     'detach from {{ name }}': // gui.js:7396 objects.js:3266
-        undefined,
+        'lev\u00E1laszt\u00E1s err\u0151l {{ name }}',
     'detach all parts': // gui.js:7402 objects.js:3271
         'minden r\u00E9sz sz\u00E9tv\u00E1laszt\u00E1sa',
     'export': // gui.js:7406 gui.js:7713 objects.js:3273 objects.js:9542
@@ -2446,7 +2446,7 @@ SnapTranslator.dict.hu.strings = {
     'expecting a ring but getting {{ actual }}': // threads.js:1202 threads.js:1316
         undefined,
     'expecting {{ expected }} input(s), but getting {{ actual }}': // threads.js:1265 threads.js:1366
-        undefined,
+        'k\u00F6telez\u0151 {{ expected }} adatbevitel, de ez \u00E9rkezett {{ actual }}',
     'continuations cannot be forked': // threads.js:1312
         undefined,
     'expecting {{ expected }} but getting {{ actual }}': // threads.js:2538
@@ -2476,7 +2476,7 @@ SnapTranslator.dict.hu.strings = {
     'a {{ className }} {{{ value }}}': // threads.js:4139
         undefined,
     'a variable of name "{{ name }}"\ndoes not exist in this context': // threads.js:4176 threads.js:4257
-        undefined,
+        'ilyen nev\u0171 v\u00E1ltoz\u00F3 \u00AB{{ name }}\u00BB\nnincs ebben a k\u00F6rnyezetben',
     'Yes': // widgets.js:1607
         'Igen',
     'No': // widgets.js:1608
@@ -2484,7 +2484,7 @@ SnapTranslator.dict.hu.strings = {
     'Default': // widgets.js:1882
         'Alap\u00E9rt\u00E9k',
     '{{ year }} or before': // widgets.js:2024
-        undefined,
+        '{{ year }} vagy el\u0151tte',
     'User name': // widgets.js:2054 widgets.js:2059 widgets.js:2092
         'Felhaszn\u00E1l\u00F3i n\u00E9v',
     'Birth date': // widgets.js:2061
