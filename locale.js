@@ -265,10 +265,11 @@ LangExtractor.prototype.extractStrings = function() {
         this._parseJsFile('threads.js'),
         this._parseJsFile('widgets.js'),
         this._parseJsFile('xml.js'),
-        this._parseResourceFile('libraries/LIBRARIES'),
-        this._parseResourceFile('backgrounds/BACKGROUNDS'),
-        this._parseResourceFile('costumes/COSTUMES'),
-        this._parseResourceFile('sounds/SOUNDS'),
+        this._parseResourceFile('libraries/LIBRARIES')
+        // deactivated for the moment
+        // this._parseResourceFile('backgrounds/BACKGROUNDS'),
+        // this._parseResourceFile('costumes/COSTUMES'),
+        // this._parseResourceFile('sounds/SOUNDS'),
     ]).then(function(extractedStrings) {
         LangExtractor._cachedExtractedStrings =
             groupByString(flatten(extractedStrings));
