@@ -4021,3 +4021,7 @@ Translation Updates:
 * Blocks, Objects, Threads: added "random" option for "go to", "point towards" and "point in direction" primitives
 
 === v4.1.2.4 maintenance release ===
+
+180313
+------
+* Objects: draw a "dot" pentrail when moving zero steps while the pen is down
