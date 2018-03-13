@@ -23,9 +23,10 @@ BlockMorph.prototype.showHelp = function() {
         // service description will go here
         // if a method is selected append rpc specific description
         if (methodName !== '') {
-            help = metadata[methodName].description;
+            metadata = metadata.rpcs[methodName];
+            help = metadata.description;
             // add argument descriptions, if available
-            var args = metadata[methodName].args;
+            var args = metadata.args;
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
                 if (arg.description) {
@@ -33,6 +34,8 @@ BlockMorph.prototype.showHelp = function() {
                     help += '\n' + arg.name + ': ' + arg.description + ' ' + optionalStr;
                 }
             }
+        } else {  // get service description
+            help = metadata.description;
         }
         if (!help) help = 'Description not available';
     } else {
@@ -306,7 +309,7 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
     if (rpc) {
         // stores information on a specific service's rpcs
         try {
-            this.fieldsFor = JSON.parse(this.getURL('/rpc/' + rpc));
+            this.fieldsFor = JSON.parse(this.getURL('/rpc/' + rpc)).rpcs;
         } catch (e) {
             throw new Error('Service "' + rpc + '" is not available');
         }
