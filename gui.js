@@ -9116,6 +9116,11 @@ SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
 };
 
 SoundRecorderDialogMorph.prototype.record = function () {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+        this.stop();
+        return;
+    }
+
     this.mediaRecorder.start();
     this.recordButton.label.setColor(new Color(255, 0, 0));
     this.playButton.label.setColor(new Color(0, 0, 0));
