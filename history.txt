@@ -4025,3 +4025,5 @@ Translation Updates:
 180313
 ------
 * Objects: draw a "dot" pentrail when moving zero steps while the pen is down
+
+=== v4.1.2.5 maintenance release ===
