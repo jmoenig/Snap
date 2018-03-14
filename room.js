@@ -1572,6 +1572,7 @@ EditRoleMorph.prototype.init = function(room, name, users) {
         if (name !== this.room.role()) {
             this.addButton('moveToRole', 'Move to');
         }
+        this.addButton('inviteUser', 'Invite User');
 
         if (name !== this.room.role() &&  // can't evict own role
             (this.room.isOwner() || this.room.isGuest(users))) {
