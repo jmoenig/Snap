@@ -4031,3 +4031,6 @@ Translation Updates:
 180314
 ------
 * Threads: changed testing order for type inferral, speeds up list operations significantly
+* Cloud: remix project method, thanks, Bernat!
+
+=== v4.1.2.6 maintenance release ===
