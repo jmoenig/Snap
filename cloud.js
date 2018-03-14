@@ -624,6 +624,23 @@ Cloud.prototype.unpublishProject = function (
     );
 };
 
+Cloud.prototype.remixProject = function (
+    projectName,
+    username,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/' + encodeURIComponent(username) +
+            '/' + encodeURIComponent(projectName) +
+            '/remix',
+        onSuccess,
+        onError,
+        'Could not remix project'
+    );
+};
+
 Cloud.prototype.updateNotes = function (
 	projectName,
     notes,
