@@ -369,8 +369,6 @@ WebSocketManager.prototype.onConnect = function() {
             while (myself.messages.length) {
                 myself.websocket.send(myself.messages.shift());
             }
-
-            SnapActions.requestMissingActions();
         };
 
     if (SnapCloud.username) {  // Reauthenticate if needed
@@ -394,6 +392,9 @@ WebSocketManager.prototype.updateRoomInfo = function() {
     if (owner) {
         msg.type = 'join-room';
         msg.owner = owner;
+        // Implicitly request actions
+        msg.actionId = SnapActions.lastSeen;
+        this.inActionRequest = true;
     }
     this.sendMessage(msg);
 };
