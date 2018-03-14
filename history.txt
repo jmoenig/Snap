@@ -4027,3 +4027,7 @@ Translation Updates:
 * Objects: draw a "dot" pentrail when moving zero steps while the pen is down
 
 === v4.1.2.5 maintenance release ===
+
+180314
+------
+* Threads: changed testing order for type inferral, speeds up list operations significantly

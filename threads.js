@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-09';
+modules.threads = '2018-March-14';
 
 var ThreadManager;
 var Process;
@@ -2545,14 +2545,14 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
+    if (thing instanceof List) {
+        return 'list';
+    }
     if (!isNaN(+thing)) {
         return 'number';
     }
     if (isString(thing)) {
         return 'text';
-    }
-    if (thing instanceof List) {
-        return 'list';
     }
     if (thing instanceof SpriteMorph) {
         return 'sprite';
