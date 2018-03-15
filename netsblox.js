@@ -1048,6 +1048,7 @@ NetsBloxMorph.prototype.submitBugReport = function (desc, error) {
     report.timestamp = new Date();
     report.userAgent = navigator.userAgent;
     report.version = version;
+    report.clientUuid = this.sockets.uuid;
 
     // Add screenshot
     report.screenshot = canvas.toDataURL('image/png');
