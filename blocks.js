@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -144,11 +144,11 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
+CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-November-16';
+modules.blocks = '2018-March-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -934,10 +934,12 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 true,
                 {
+                	'§_dir': null,
                     '(90) right' : 90,
                     '(-90) left' : -90,
                     '(0) up' : '0',
-                    '(180) down' : 180
+                    '(180) down' : 180,
+                    'random' : ['random']
                 }
             );
             part.setContents(90);
@@ -993,7 +995,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'pressed' : ['pressed'],
                     'dropped' : ['dropped'],
                     'mouse-entered' : ['mouse-entered'],
-                    'mouse-departed' : ['mouse-departed']
+                    'mouse-departed' : ['mouse-departed'],
+                    'scrolled-up' : ['scrolled-up'],
+                    'scrolled-down' : ['scrolled-down']
                 },
                 true // read-only
             );
@@ -1056,6 +1060,17 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 }
             );
             part.setContents(1);
+            break;
+        case '%rel':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'distance' : ['distance'],
+                    'direction' : ['direction']
+                },
+                true // read-only
+            );
             break;
         case '%spr':
             part = new InputSlotMorph(
@@ -1592,8 +1607,8 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         lines = [],
         space = this.isPrototype ?
                 1 : Math.floor(fontHeight(this.fontSize) / 3),
-        ico = this.isCustomBlock && !this.isGlobal ?
-                this.methodIconExtent().x + space : 0,
+        ico = this instanceof BlockMorph && this.hasLocationPin() ?
+        	this.methodIconExtent().x + space : 0,
         bottomCorrection,
         initialExtent = this.extent();
 
@@ -1827,8 +1842,8 @@ SyntaxElementMorph.prototype.fixHighlight = function () {
 SyntaxElementMorph.prototype.methodIconExtent = function () {
     // answer the span of the icon for the "local method" indicator
     var ico = this.fontSize * 1.2;
-    return this.isCustomBlock && !this.isGlobal ?
-            new Point(ico * 0.66, ico) : new Point(0, 0);
+    return this.hasLocationPin() ? new Point(ico * 0.66, ico)
+    		: new Point(0, 0);
 };
 
 // SyntaxElementMorph evaluating:
@@ -1939,7 +1954,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     if (ide && (ide.currentSprite !== target)) {
         if (target instanceof StageMorph) {
             anchor = ide.corral.stageIcon;
-        } else {
+        } else if (target) {
         	if (target.isTemporary) {
          		target = detect(
 					target.allExemplars(),
@@ -1950,6 +1965,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                 ide.corral.frame.contents.children,
                 function (icon) {return icon.object === target; }
             );
+        } else {
+        	target = ide;
         }
         pos = anchor.center();
     }
@@ -2075,6 +2092,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %ida    - white roundish type-in slot with drop-down for list indices
     %idx    - white roundish type-in slot for indices incl. "any"
     %obj    - specially drawn slot for object reporters
+    %rel    - chameleon colored rectangular drop-down for relation options
     %spr    - chameleon colored rectangular drop-down for object-names
     %col    - chameleon colored rectangular drop-down for collidables
     %dst    - chameleon colored rectangular drop-down for distances
@@ -3462,10 +3480,12 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
                 true
             );
             stage.globalBlocks.forEach(function (eachBlock) {
-                eachBlock.body.expression.refactorVarInStack(
-                    oldName,
-                    newName
-                );
+                if (eachBlock.body) {
+                    eachBlock.body.expression.refactorVarInStack(
+                        oldName,
+                        newName
+                    );
+                }
             });
             stage.forAllChildren(function (child) {
                 if (child instanceof SpriteMorph) {
@@ -3542,6 +3562,10 @@ BlockMorph.prototype.eraseHoles = function (context) {
         );
     });
 
+};
+
+BlockMorph.prototype.hasLocationPin = function () {
+	return (this.isCustomBlock && !this.isGlobal) || this.isLocalVarTemplate;
 };
 
 // BlockMorph highlighting
@@ -3835,6 +3859,11 @@ BlockMorph.prototype.fullCopy = function () {
 };
 
 BlockMorph.prototype.reactToTemplateCopy = function () {
+    if (this.isLocalVarTemplate) {
+    	this.isLocalVarTemplate = null;
+        this.drawNew();
+        this.fixLayout();
+    }
     this.forceNormalColoring();
 };
 
@@ -3857,7 +3886,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
         return this.selectForEdit().focus(); // enable coopy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
-        return top.mouseClickLeft();
+        return; // top.mouseClickLeft();
     }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
@@ -4042,6 +4071,9 @@ BlockMorph.prototype.situation = function () {
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
     var myself = this;
+    this.allInputs().forEach(function (input) {
+        delete input.bindingID;
+    });
     this.allComments().forEach(function (comment) {
         comment.startFollowing(myself, hand.world);
     });
@@ -4613,8 +4645,8 @@ CommandBlockMorph.prototype.drawNew = function () {
         */
     }
 
-    // draw method icon if applicable
-    if (this.isCustomBlock && !this.isGlobal) {
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
         this.drawMethodIcon(context);
     }
 
@@ -5168,6 +5200,7 @@ ReporterBlockMorph.prototype.init = function (isPredicate, silently) {
     this.isPredicate = isPredicate || false;
     this.setExtent(new Point(200, 80), silently);
     this.cachedSlotSpec = null; // don't serialize
+    this.isLocalVarTemplate = null; // don't serialize
 };
 
 // ReporterBlockMorph drag & drop:
@@ -5389,10 +5422,11 @@ ReporterBlockMorph.prototype.drawNew = function () {
         this.drawRounded(context);
     }
 
-    // draw method icon if applicable
-    if (this.isCustomBlock && !this.isGlobal) {
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
         this.drawMethodIcon(context);
     }
+
     // erase CommandSlots
     this.eraseHoles(context);
 };
@@ -5839,6 +5873,8 @@ RingMorph.prototype.vanishForSimilar = function () {
     }
     if (block.selector === 'reportGetVar' ||
         block.selector === 'reportJSFunction' ||
+        block.selector == 'reportAttributeOf' ||
+        block.selector == 'reportCompiled' ||
         (block instanceof RingMorph)
     ) {
         this.parent.silentReplaceInput(this, block);
@@ -8116,6 +8152,8 @@ InputSlotMorph.prototype.init = function (
     contents.isShowingBlanks = true;
     contents.drawNew();
 
+	this.selectedBlock = null;
+
     this.isUnevaluated = false;
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
@@ -8161,13 +8199,22 @@ InputSlotMorph.prototype.arrow = function () {
     );
 };
 
-InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
+InputSlotMorph.prototype.setContents = function (data) {
+	// data can be a String, Float, or "wish" Block
     var cnts = this.contents(),
-        dta = aStringOrFloat,
+        dta = data,
         isConstant = dta instanceof Array;
+
+	if (this.selectedBlock) {
+   		this.selectedBlock = null;
+	}
+
     if (isConstant) {
         dta = localize(dta[0]);
         cnts.isItalic = !this.isReadOnly;
+    } else if (dta instanceof BlockMorph) {
+    	this.selectedBlock = dta;
+      	dta = ''; // make sure the contents text emptied
     } else { // assume dta is a localizable choice if it's a key in my choices
         cnts.isItalic = false;
         if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
@@ -8188,7 +8235,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
     }
 
     // remember the constant, if any
-    this.constant = isConstant ? aStringOrFloat : null;
+    this.constant = isConstant ? data : null;
 };
 
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
@@ -8218,13 +8265,19 @@ InputSlotMorph.prototype.menuFromDict = function (
     noEmptyOption,
     enableKeyboard)
 {
-    var key,
+    var key, dial,
+    	myself = this,
         menu = new MenuMorph(
             this.userSetContents,
             null,
             this,
             this.fontSize
         );
+
+	function update (num) {
+    	myself.setContents(num);
+        myself.reactToSliderEdit();
+ 	}
 
     if (choices instanceof Function) {
         choices = choices.call(this);
@@ -8241,8 +8294,19 @@ InputSlotMorph.prototype.menuFromDict = function (
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
-            // } else if (key.indexOf('§_def') === 0) {
-            //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (key.indexOf('§_def') === 0) {
+                menu.addItem(choices[key], choices[key]);
+            } else if (key.indexOf('§_dir') === 0) {
+			    dial = new DialMorph();
+    			dial.rootForGrab = function () {return this; };
+    			dial.target = this;
+       			dial.action = update;
+       			dial.fillColor = this.parent.color;
+          		dial.setRadius(this.fontSize * 3);
+				dial.setValue(this.evaluate(), false, true);
+       			menu.addLine();
+			    menu.items.push(dial);
+            	menu.addLine();
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
@@ -8346,12 +8410,16 @@ InputSlotMorph.prototype.collidablesMenu = function () {
 };
 
 InputSlotMorph.prototype.distancesMenu = function () {
-    var dict = {
-            'mouse-pointer' : ['mouse-pointer']
-        },
+	var block = this.parentThatIsA(BlockMorph),
+        dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
+
+	if (block && (block.selector !== 'reportRelationTo')) {
+	    dict['random position'] = ['random position'];
+ 	}
+	dict['mouse-pointer'] = ['mouse-pointer'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
@@ -8506,11 +8574,9 @@ InputSlotMorph.prototype.attributesMenu = function () {
             dict[name] = name;
         });
     }
-    /*
-    obj.customBlocks.forEach(function (def, i) {
-        dict['§_def' + i] = def
+    obj.allBlocks(true).forEach(function (def, i) {
+        dict['§_def' + i] = def.blockInstance(true); // include translations
     });
-    */
     return dict;
 };
 
@@ -8656,26 +8722,36 @@ InputSlotMorph.prototype.fixLayout = function () {
     }
     arrowWidth = arrow.isVisible ? arrow.width() : 0;
 
-    height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
-    if (this.isNumeric) {
-        width = contents.width()
-            + Math.floor(arrowWidth * 0.5)
-            + height
+	// determine slot dimensions
+    if (this.selectedBlock) { // a "wish" in the OF-block's left slot
+        height = this.selectedBlock.height() + this.edge * 2;
+         width = this.selectedBlock.width()
+            + arrowWidth
+            + this.edge * 2
             + this.typeInPadding * 2;
-    } else {
-        width = Math.max(
-            contents.width()
-                + arrowWidth
-                + this.edge * 2
-                + this.typeInPadding * 2,
-            contents.rawHeight ? // single vs. multi-line contents
-                        contents.rawHeight() + arrowWidth
-                                : fontHeight(contents.fontSize) / 1.3
-                                    + arrowWidth,
-            this.minWidth // for text-type slots
-        );
+     } else {
+    	height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
+        if (this.isNumeric) {
+            width = contents.width()
+                + Math.floor(arrowWidth * 0.5)
+                + height
+                + this.typeInPadding * 2;
+        } else {
+            width = Math.max(
+                contents.width()
+                    + arrowWidth
+                    + this.edge * 2
+                    + this.typeInPadding * 2,
+                contents.rawHeight ? // single vs. multi-line contents
+                            contents.rawHeight() + arrowWidth
+                                    : fontHeight(contents.fontSize) / 1.3
+                                        + arrowWidth,
+                this.minWidth // for text-type slots
+            );
+        }
     }
     this.setExtent(new Point(width, height));
+
     if (this.isNumeric) {
         contents.setPosition(new Point(
             Math.floor(height / 2),
@@ -8837,16 +8913,21 @@ InputSlotMorph.prototype.mappedCode = function () {
 
 InputSlotMorph.prototype.evaluate = function () {
 /*
-    answer my content's text string. If I am numerical convert that
-    string to a number. If the conversion fails answer the string
+    answer my contents, which can be a "wish", i.e. a block that refers to
+    another sprite's local method, or a text string. If I am numerical convert
+    that string to a number. If the conversion fails answer the string
     (e.g. for special choices like 'any', 'all' or 'last') otherwise
     the numerical value.
 */
-    var num,
-        contents = this.contents();
+    var num, contents;
+
+ 	if (this.selectedBlock) {
+  		return this.selectedBlock;
+  	}
     if (this.constant) {
         return this.constant;
     }
+    contents = this.contents();
     if (this.isNumeric) {
         num = parseFloat(contents.text || '0');
         if (!isNaN(num)) {
@@ -8944,6 +9025,16 @@ InputSlotMorph.prototype.drawNew = function () {
             this.drawRoundBorder(context);
         }
     }
+
+	// draw my "wish" block, if any
+	if (this.selectedBlock) {
+ 		context.drawImage(
+        	this.selectedBlock.fullImageClassic(),
+            this.edge + this.typeInPadding,
+            this.edge
+        );
+ 	}
+
 };
 
 InputSlotMorph.prototype.drawRectBorder = function (context) {
@@ -9136,10 +9227,6 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     );
     context.stroke();
 };
-
-
-
-
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
 

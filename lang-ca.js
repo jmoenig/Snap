@@ -1578,7 +1578,7 @@ SnapTranslator.dict.ca = {
     'Logout':
         'Surt',
     'Change Password...':
-        'Canvia la contrassenya…',
+        'Canvia la contrasenya…',
     'Change Password':
         'Canvia la contrasenya',
     'Account created.':
