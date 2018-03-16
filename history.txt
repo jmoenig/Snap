@@ -4034,3 +4034,7 @@ Translation Updates:
 * Cloud: remix project method, thanks, Bernat!
 
 === v4.1.2.6 maintenance release ===
+
+180316
+------
+* Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots

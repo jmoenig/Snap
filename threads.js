@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-14';
+modules.threads = '2018-March-16';
 
 var ThreadManager;
 var Process;
@@ -519,6 +519,7 @@ ThreadManager.prototype.toggleSingleStepping = function () {
                         invocations can catch them
     flashingContext     for single stepping
     isInterrupted       boolean, indicates intra-step flashing of blocks
+    gensyms				temporary dictionary for experimental compiling
 */
 
 Process.prototype = {};
@@ -556,6 +557,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.procedureCount = 0;
     this.flashingContext = null; // experimental, for single-stepping
     this.isInterrupted = false; // experimental, for single-stepping
+    this.gensyms = {}; // experimental, for compiling to JS
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -737,7 +739,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 };
 
 // Process: Compile simple, side-effect free Reporters
-// with only explicit formal parameters (no empty input slots)
+// with either only explicit formal parameters or a single
+// implicit formal parameter mapped to all empty input slots
 // ** highly experimental and heavily under construction **
 
 Process.prototype.reportCompiled = function (context) {
@@ -746,21 +749,54 @@ Process.prototype.reportCompiled = function (context) {
 };
 
 Process.prototype.compileFunction = function (block, parameters) {
-	// first test for unbound variables
- 	block.allChildren().forEach(function (morph) {
-  		if (morph.selector === 'reportGetVar' &&
-        	!contains(parameters, morph.blockSpec)
+	var func,
+    	parms = [],
+     	hasEmptySlots = false,
+     	myself = this;
+	
+     // scan for unbound variables and empty input slots
+     block.allChildren().forEach(function (morph) {
+    	if (morph.selector === 'reportGetVar' &&
+            !contains(parameters, morph.blockSpec)
         ) {
-	        throw new Error(
-    	        'compiling does not yet support\n' +
-        	    'variables that are not\nformal parameters'
-        	);
+            throw new Error(
+                'compiling does not yet support\n' +
+                'variables that are not\nformal parameters'
+            );
+        } else if (morph.isEmptySlot && morph.isEmptySlot()) {
+        	hasEmptySlots = true;
         }
     });
-	return Function.apply(
-    	null,
-    	parameters.concat(['return ' + this.compileExpression(block)])
+
+    // translate formal parameters into gensyms
+    this.gensyms = {};
+    if (parameters.length) {
+		// test for conflicts
+    	if (hasEmptySlots) {
+	        throw new Error(
+    	        'compiling does not yet support\n' +
+        	    'mixing explicit formal parameters\n' +
+                'with empty input slots'
+        	);
+     	}
+		// map explicit formal parameters
+    	parameters.forEach(function (pName, idx) {
+    		var pn = 'p' + idx;
+     		parms.push(pn);
+    		myself.gensyms[pName] = pn;
+    	});
+    } else if (hasEmptySlots) {
+    	// allow for a single implicit formal parameter
+    	parms = ['p0'];
+    }
+ 
+	// compile using gensyms
+    func = Function.apply(
+        null,
+        parms.concat(['return ' + this.compileExpression(block)])
     );
+    this.gensyms = {};
+	return func;
 };
 
 Process.prototype.compileExpression = function (block) {
@@ -811,11 +847,8 @@ Process.prototype.compileInput = function (inp) {
      var value, type;
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
-        // implicit parameter - unsupported for now
-    	throw new Error(
-        	'compiling does not yet support\n' +
-            'implicit parameters\n(empty input slots)'
-    	);
+		// implicit formal parameter
+  		return 'p0';
     } else if (inp instanceof MultiArgMorph) {
         if (inp.isStatic) {
             return 'new List([' + this.compileInputs(inp.inputs()) + '])';
@@ -847,8 +880,8 @@ Process.prototype.compileInput = function (inp) {
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
-            // un-quoted string:
-            return inp.blockSpec;
+            // un-quoted gensym:
+            return this.gensyms[inp.blockSpec];
         } else {
             return this.compileExpression(inp);
         }
