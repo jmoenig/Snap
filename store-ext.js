@@ -7,7 +7,7 @@ NetsBloxSerializer.uber = SnapSerializer.prototype;
 
 SnapSerializer.prototype.isSavingHistory = true;
 
-NetsBloxSerializer.prototype.version = '1.6.11';  // Make this version automatic
+NetsBloxSerializer.prototype.version = '1.7.0';
 NetsBloxSerializer.prototype.app = 'NetsBlox ' +
     NetsBloxSerializer.prototype.version + ', http://netsblox.org';
 
