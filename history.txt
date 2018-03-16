@@ -1626,7 +1626,7 @@ ______
 
 130415
 ------
-* Blocks: place sticky comments on World layer on dragging their anchor block 
+* Blocks: place sticky comments on World layer on dragging their anchor block
 
 130416
 ------
@@ -1704,7 +1704,7 @@ ______
 130514
 ------
 * paint.js: Paint editor, first version, contributed by Kartik Chandra, Yay!!
-* Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher 
+* Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher
 
 130515
 ------
@@ -1726,7 +1726,7 @@ ______
 
 130605
 ------
-* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives 
+* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives
 
 130606
 ------
@@ -1837,7 +1837,7 @@ ______
 130801
 ------
 * Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
-* Blocks: Italicize editable input options (e.g. for the SPLT block) 
+* Blocks: Italicize editable input options (e.g. for the SPLT block)
 * Blocks: Undrop Reporters feature (in script areas' context menus)
 
 130802
@@ -2245,7 +2245,7 @@ ______
 * Objects, GUI: duplicate and clone nested sprites
 * GUI, Store: export and import nested sprites
 * Objects: double clicking on a sprite in the stage selects it in the IDE
-* Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable” 
+* Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable”
 * updated Portuguese translation, thanks, Manuel!
 * updated German translation
 * Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
@@ -2285,7 +2285,7 @@ ______
 
 140930
 ------
-* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
+* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers
 * BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
 * Morphic: allow negative min/max values for sliders (fix #285), thanks, @Gubolin!!
 * Objects: fixed #378 (disable context menus for boolean representations)
@@ -2927,7 +2927,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Updated Simplified Chinese translation, thanks to @ubertao!
 * Media import dialog with thumbnail, thanks to @ubertao!
 
-== v4.0.7.2 ==== 
+== v4.0.7.2 ====
 
 160714
 ------
@@ -3050,7 +3050,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 160924
 ------
-* don’t update the recursion cache when updating a custom block definition 
+* don’t update the recursion cache when updating a custom block definition
 
 160929
 ------
@@ -3167,7 +3167,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 161206
 ------
-* GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.) 
+* GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.)
 * Morphic: Added support for dropping links to SVGs from other web pages onto the World
 * GUI: Support importing unrasterized SVG_Costumes from the “Costumes” and “Backgrounds” dialog
 
@@ -3348,7 +3348,7 @@ Fixes:
 
 170201
 ------
-* GUI: let costume icons indicate svg costumes 
+* GUI: let costume icons indicate svg costumes
 
 170202
 ------
@@ -3508,7 +3508,7 @@ Fixes:
 170707
 ------
 * Objects, GUI, Store: tweak naming of instantiating to “clone”, enable inheritance by default
-* Objects, GUI: run “When I start as clone” scripts when manually cloning a sprite, only position at hand pointer if no such scripts exist 
+* Objects, GUI: run “When I start as clone” scripts when manually cloning a sprite, only position at hand pointer if no such scripts exist
 * Morphic, Objects: confine turtle direction readout to 0-360 degrees, thanks, Cynthia for the bug report!!
 
 170708
@@ -3518,7 +3518,7 @@ Fixes:
 
 170709
 ------
-* Objects, Threads: added experimental (only shown in dev mode) “tell ... to ..." and “ask ... for ...” primitives 
+* Objects, Threads: added experimental (only shown in dev mode) “tell ... to ..." and “ask ... for ...” primitives
 
 170711
 ------
@@ -3759,14 +3759,14 @@ v4.1 Features:
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
-* prevent Snap from “hanging” when encountering certain errors in visible stepping 
+* prevent Snap from “hanging” when encountering certain errors in visible stepping
 * only mark implicit parameters if no formal ones exist
 * optimized thread-launch and script highlighting to a single frame instead of formerly two
 * changed direction attribute of sprites to automatically confine to 0-360 degrees
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
 * fixed “fill” block crash when applying the same color twice
-* fixed occasional empty drop-down menu items named “close” 
+* fixed occasional empty drop-down menu items named “close”
 * fixed some typos
 * limited sprites' direction and coordinates to finite numbers
 * made block vars transient for block libraries
@@ -3810,11 +3810,231 @@ Fixes:
 
 === v4.1.0.5 maintenance release ===
 
-*** in development ***
-
 171201
 ------
 * GUI: started development on v 4.1.1
 * BYOB, Store, Threads: Localization support for custom blocks (experimental)
 * Tools: German translation of tools (experimental)
 
+171212
+------
+* fixed #1963
+
+180102
+------
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+
+180104
+------
+* Morphic: scroll menus if they are taller than the world
+* Morphic: added keyboard navigation for menus that scroll
+* added "width" and "height" selectors to Pixels library
+
+180104
+------
+* Objects: fixed #1979 - make sure to always re-focus the world-canvas
+
+180117
+------
+* Objects: made keyboard events always be thread safe (same as in Scratch nowadays)
+
+180118
+------
+* Blocks, Threads, BYOB, Store: included local methods in the OF-block's left drop-down menu
+
+180119
+------
+* merged a bunch of pull requests (unicode support for emojis, translation updates)
+
+180121
+------
+* Threads: fixed a scope-glitch in the new OF-block's drop-down mechanism
+* Blocks: made the OF-block auto-unringify when dropped on ring-slots
+* Blocks: disabled firing the Custom-Block-Dialog when accidentall clicking on a custom block definition script
+
+180122
+------
+* Morphic: fixed occasional stuck cursors, thanks, Bernat!
+* Paint: fixed a flood-fill alpha issue, thanks, Bernat!I
+* Blocks, GUI: minor fixes, contributed by the community
+* various Translation updates, contributed by the community
+* Blocks, Objects, Threads: separated global and local variables in the palette, marked local ones with location pin
+* Blocks, Objects: added scroll events, thanks, Bernat!
+
+180123
+------
+* fixed #1972, thanks, Joan!
+* Objects, GUI: When deleting a temporary clone, detach all its parts and delete the temporary ones
+
+180125
+------
+* Morphic: new DialMorph widget
+* Blocks: added dial widget to POINT IN DIRECTION's drop-down menu
+* Objects: added "rotate" option to Sprite context menu
+* Threads, Blocks: fixed Joan's fix for #1972, because it broke HOFs
+* new Sound Recorder, yay!! Thanks, Bernat!
+* Blocks: fixed a glitch in the error-bubble handling mechanism
+
+180201
+------
+* GUI: encode recorded sounds to base64
+* snap.html: added version queries to script urls
+
+180202
+------
+* Libraries: Crayons library, thanks, Brian!
+
+180205
+------
+* Russian translation update, thanks, temap!
+* release
+
+=== v4.1.1 minor release ===
+
+v4.1.1 New Features:
+* translation support for custom blocks
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+* included local methods in the OF-block's left drop-down menu
+* added "width" and "height" selectors to Pixels library
+* added scroll events, thanks, Bernat!
+* new dial widget POINT IN DIRECTION's drop-down menu
+* new "rotate" option for sprite context menu
+* new sound recorder, thanks, Bernat!
+* new "Crayons" library, thanks, Brian!
+
+Notable Changes:
+* global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
+* keyboard events are now always thread safe (the same as in Scratch nowadays)
+* the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
+* accidentally clicking on a custom block definition no longer fires up the Block Dialog
+
+Notable Fixes:
+* scroll menus if they are taller than the world
+* enabled color picker for pen trails on stage
+* track keyboard events after accepting ASK using the keyboard
+* improved support for emojis, thanks, Michael!
+* avoid occasional stuck text cursors, thanks, Bernat!
+* paint editor flood fill alpha issue, thanks, Bernat!
+* implicit parameter binding in visible stepping, thanks, Joan!
+* when deleting a temporary clone, detach all its parts and delete the temporary ones
+* new release protocol to avoid browser caching related version conflicts
+
+Translation Updates:
+* German
+* Greek
+* Turkish
+* Chinese
+* Spanish
+* Russian
+
+180206
+------
+* GUI: start developing v4.1.2
+* Morphic: roll back temporary rectangle filling workaround for a bug in Chrome v57
+
+180208
+------
+* Cloud, GUI, Widgets: New Cloud API, thanks, Bernat!
+* GUI: fixed a url-bar refresh bug introduced by the new cloud mechanism
+* GUI: made sure user names are lower case when sent to the cloud
+* Cloud: made sure project thumbnails are normalized when saved
+* Cloud: warn user if overwriting an existing project with another one
+
+180209
+------
+* Store, GUI: small tweaks
+* new Valencian Catalan translation, thanks, Jose A. Múrcia!!
+
+180212
+------
+* Threads: Allow JS-functions for invoke()
+* Threads, Objects: Small compilation experiment
+
+180215
+------
+* Threads, Blocks, Objects: experimental JIT compiler
+
+180217
+------
+release
+
+=== v4.1.2 minor release ===
+
+v4.1.2 Notable Changes:
+* new cloud backend
+
+New Features:
+* experimental JIT compiler (in progress)
+
+Translation Updates:
+* new Catalan-Valencia translation
+* Catalan
+* German
+
+180219
+------
+* GUI, snap.html: started v4.1.2.1 development
+* Threads: optimized "broadcast and wait" for atomic subroutines
+* Spanish translation update
+
+180220
+------
+* Libraries: Changed LeapMotion library source to https
+* account verification
+* release
+
+=== v4.1.2.1 maintenance release ===
+
+v4.1.2.1 Notable Changes:
+* account verification
+* optimized "broadcast and wait" for atomic subroutines
+* changed leap motion library to https
+
+Translation Updates:
+* Spanish
+
+180222
+------
+* crayons library: fixed "nearest crayon to" reporter
+* release
+
+=== v4.1.2.2 maintenance release ===
+
+180305
+------
+* cloud tweaks, thanks, Bernat and Michael!
+* fixed "join words" in the tools, library, thanks, Brian, for reporting the bug!
+* added new "text to speech" library
+* made sure sound data is always stored in the project (not referenced)
+* added capability to compile input slot options to experimental JIT
+* Spanish and German translation updates
+
+=== v4.1.2.3 maintenance release ===
+
+180308
+------
+* Objects: fixed #2053
+* GUI: fixed #2052
+
+180309
+------
+* Blocks, Objects, Threads: added "random" option for "go to", "point towards" and "point in direction" primitives
+
+=== v4.1.2.4 maintenance release ===
+
+180313
+------
+* Objects: draw a "dot" pentrail when moving zero steps while the pen is down
+
+=== v4.1.2.5 maintenance release ===
+
+180314
+------
+* Threads: changed testing order for type inferral, speeds up list operations significantly
+* Cloud: remix project method, thanks, Bernat!
+
+=== v4.1.2.6 maintenance release ===
+
+180316
+------
+* Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots

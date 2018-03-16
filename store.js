@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-December-01';
+modules.store = '2018-March-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1101,10 +1101,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes,
                 'var'
             )) {
-            return SpriteMorph.prototype.variableBlock(
+            block = SpriteMorph.prototype.variableBlock(
                 model.attributes['var']
             );
-        }
+        } else {
         /*
         // disable JavaScript functions, commented out for now
         if (model.attributes.s === 'reportJSFunction' &&
@@ -1116,10 +1116,11 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             }
         }
         */
-        block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
-        migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
-        if (migration) {
-            migrationOffset = migration.offset;
+            block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+            migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+            if (migration) {
+                migrationOffset = migration.offset;
+            }
         }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
@@ -1148,7 +1149,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
           		: null
           	);
         }
-        if (!info) {
+        if (!info || !contains(
+        		// catch other forks' blocks
+        		SpriteMorph.prototype.categories, info.category
+        )) {
             return this.obsoleteBlock(isReporter);
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(
@@ -1242,6 +1246,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
 SnapSerializer.prototype.loadValue = function (model, object) {
     // private
     var v, i, lst, items, el, center, image, name, audio, option, bool, origin,
+    	wish, def,
         myself = this;
 
     function record() {
@@ -1279,6 +1284,10 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         bool = model.childNamed('bool');
         if (bool) {
             return this.loadValue(bool);
+        }
+        wish = model.childNamed('wish');
+        if (wish) {
+            return this.loadValue(wish);
         }
         return model.contents;
     case 'bool':
@@ -1497,6 +1506,13 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         record();
         return v;
+    case 'wish':
+    	def = new CustomBlockDefinition(model.attributes.s);
+     	def.type = model.attributes.type;
+      	def.category = model.attributes.category;
+       	def.storedSemanticSpec = model.attributes.s;
+        def.updateTranslations(model.contents);
+        return def.blockInstance(true); // include translations
     }
     return undefined;
 };
@@ -1898,10 +1914,20 @@ BlockMorph.prototype.toBlockXML = function (serializer) {
 };
 
 ReporterBlockMorph.prototype.toXML = function (serializer) {
-    return this.selector === 'reportGetVar' ? serializer.format(
-        '<block var="@"/>',
-        this.blockSpec
-    ) : this.toBlockXML(serializer);
+    if (this.selector === 'reportGetVar') {
+        if (!this.comment) {
+            return serializer.format(
+                '<block var="@"/>',
+                this.blockSpec);
+        } else {
+            return serializer.format(
+                '<block var="@">%</block>',
+                this.blockSpec,
+                this.comment.toXML(serializer));
+        }
+    } else {
+        return this.toBlockXML(serializer);
+    }
 };
 
 ReporterBlockMorph.prototype.toScriptXML = function (
@@ -2018,6 +2044,16 @@ BooleanSlotMorph.prototype.toXML = function () {
 };
 
 InputSlotMorph.prototype.toXML = function (serializer) {
+	if (this.selectedBlock) {
+ 		return serializer.format(
+        	'<l><wish s="@" type="@" category="@">@</wish></l>',
+            this.selectedBlock.semanticSpec,
+         	this.selectedBlock instanceof CommandBlockMorph ? 'command'
+          		: (this.selectedBlock.isPredicate ? 'predicate' : 'reporter'),
+            this.selectedBlock.category,
+            this.selectedBlock.storedTranslations
+        );
+ 	}
     if (this.constant) {
         return serializer.format(
             '<l><option>$</option></l>',
