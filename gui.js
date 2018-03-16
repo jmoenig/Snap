@@ -4495,6 +4495,14 @@ IDE_Morph.prototype.saveFileAs = function (
             while (i--) {
                 data[i] = text.charCodeAt(i);
             }
+        } else if (hasTypeStr) {
+            // not base64 encoded
+            text = text.replace(/^data:image\/.*?, */, '');
+            data = new Uint8Array(text.length);
+            i = text.length;
+            while (i--) {
+                data[i] = text.charCodeAt(i);
+            }
         }
         return new Blob([data], {type: mimeType });
     }
@@ -7654,15 +7662,21 @@ CostumeIconMorph.prototype.userMenu = function () {
 
 CostumeIconMorph.prototype.editCostume = function () {
     this.disinherit();
-    if (this.object instanceof SVG_Costume) {
-        this.object.editRotationPointOnly(this.world());
-    } else {
-        this.object.edit(
-            this.world(),
-            this.parentThatIsA(IDE_Morph),
-            false // not a new costume, retain existing rotation center
-        );
+
+    if (this.object instanceof SVG_Costume && this.object.shapes.length === 0) {
+        try {
+            this.object.parseShapes();
+        } catch (e) {
+            this.editRotationPointOnly();
+            return;
+        }
     }
+
+    this.object.edit(
+        this.world(),
+        this.parentThatIsA(IDE_Morph),
+        false // not a new costume, retain existing rotation center
+    );
 };
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {

@@ -1921,6 +1921,19 @@ Color.prototype.toString = function () {
         this.a + ')';
 };
 
+Color.prototype.toRGBstring = function () {
+    return 'rgb(' +
+        Math.round(this.r) + ',' +
+        Math.round(this.g) + ',' +
+        Math.round(this.b) + ')';
+};
+
+Color.fromString = function (aString) {
+    // I parse rgb/rgba strings into a Color object
+    var components = aString.split(/[\(),]/).slice(1,5);
+    return new Color(components[0], components[1], components[2], components[3]);
+};
+
 // Color copying:
 
 Color.prototype.copy = function () {
