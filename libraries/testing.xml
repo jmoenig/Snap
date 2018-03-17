@@ -1,0 +1,726 @@
+<blocks app="Snap! 4.1, http://snap.berkeley.edu" version="1">
+    <block-definition s="arbitrary %&apos;type&apos;" type="reporter" category="other">
+        <comment collapsed="false">Generates an arbitrary value.&#xD;Allows to restrict the type of the value to be a number, text, boolean or list.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ arbitrario&#xD;</translations>
+        <inputs>
+            <input type="%txt" readonly="true"><options>number
+text
+boolean
+list</options></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>type</l>
+                        </list>
+                        <l>function oneOf(list) {&#xD;  return list[Math.floor(Math.random() * list.length)];&#xD;}&#xD;&#xD;function randomInt(max) {&#xD;  return Math.floor(max * Math.random());&#xD;}&#xD;&#xD;function arbitraryInt() {&#xD;  var perc = Math.random();&#xD;  if (perc &lt; 0.0675) {&#xD;    return 0;&#xD;  }&#xD;  if (perc &lt; 0.125) {&#xD;    return -1;&#xD;  }&#xD;  return Math.floor((Math.random() - 0.5) * 4294967296);&#xD;}&#xD;&#xD;function arbitraryBoolean() {&#xD;  return Math.random() &gt;= 0.5;&#xD;}&#xD;&#xD;function arbitraryArray(maxLength, generator) {&#xD;  var i,&#xD;      length = randomInt(maxLength),&#xD;      array = [];&#xD;  for (i = 0; i &lt; length; ++i) {&#xD;    array.push(generator());&#xD;  }&#xD;  return array;&#xD;}&#xD;&#xD;function arbitraryString(maxLength) {&#xD;  if (Math.random() &lt; 0.125) {&#xD;    return &apos;&apos;;&#xD;  }&#xD;  return String.fromCharCode.apply(this,&#xD;    arbitraryArray(maxLength, function() {&#xD;      return oneOf(arbitraryString.characters);&#xD;    })&#xD;  );&#xD;}&#xD;&#xD;arbitraryString.characters = (function() {&#xD;    var charcodes = [9,10,13];&#xD;    for (var i = 32; i &lt; 256; ++i){&#xD;        charcodes.push(i);&#xD;    }&#xD;    return charcodes;&#xD;})();&#xD;&#xD;function arbitraryList(maxLength) {&#xD;  if (Math.random() &lt; 0.125) {&#xD;    return new List();&#xD;  }&#xD;  return new List(arbitraryArray(maxLength, function() {&#xD;    return arbitraryOf(oneOf([&apos;number&apos;, &apos;text&apos;, &apos;boolean&apos;]));&#xD;  }));&#xD;}&#xD;&#xD;function arbitraryOf(type) {&#xD;  switch (type) {&#xD;    case &apos;number&apos;:&#xD;      return arbitraryInt();&#xD;    case &apos;text&apos;:&#xD;      return arbitraryString(255);&#xD;    case &apos;boolean&apos;:&#xD;      return arbitraryBoolean();&#xD;    case &apos;list&apos;:&#xD;      return arbitraryList(255);&#xD;  }&#xD;}&#xD;&#xD;function arbitrary() {&#xD;  return arbitraryOf(oneOf([&apos;number&apos;, &apos;text&apos;, &apos;boolean&apos;, &apos;list&apos;]));&#xD;}&#xD;&#xD;return (type === &apos;&apos;)&#xD;  ? arbitrary()&#xD;  : arbitraryOf(type);</l>
+                    </block>
+                    <list>
+                        <block var="type"/>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="one of %&apos;args&apos;" type="reporter" category="other">
+        <comment collapsed="false">Chooses one amongst all input values.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:uno de _&#xD;</translations>
+        <inputs>
+            <input type="%mult%s"></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>arglist</l>
+                        </list>
+                        <l>var args = (arglist.isLinked)&#xD;  ? [arglist.first].concat(arglist.rest.contents)&#xD;  : arglist.contents;&#xD;&#xD;return args[Math.floor(Math.random() * args.length)];</l>
+                    </block>
+                    <list>
+                        <block var="args"/>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="set variable %&apos;value&apos; to %&apos;input&apos;" type="command" category="other">
+        <comment collapsed="false">Declares and initializes a test variable.&#xD;Use the &quot;value&quot; in asserts.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:declarar _ con _&#xD;</translations>
+        <inputs>
+            <input type="%upvar"></input>
+            <input type="%s"></input>
+        </inputs>
+        <script>
+            <block s="doSetVar">
+                <l>value</l>
+                <block var="input"/></block>
+        </script>
+    </block-definition>
+
+    <block-definition s="test %&apos;testcases&apos; %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that all asserts are valid.
+Drag the &quot;fail&quot; upvar to each assert&apos;s &quot;otherwise&quot; field&quot;</comment>
+        <header></header>
+        <code></code>
+        <translations>es:testar _ _&#xD;</translations>
+        <inputs>
+            <input type="%cs"></input>
+            <input type="%upvar"></input>
+        </inputs>
+        <script>
+            <block s="doCallCC">
+                <block s="reifyScript">
+                    <script>
+                        <block s="doSetVar">
+                            <l>fail</l>
+                            <block s="reifyScript">
+                                <script>
+                                    <custom-block s="show %s">
+                                        <block var="fail message"/>
+                                    </custom-block>
+                                    <block s="doRun">
+                                        <block var="cont"/>
+                                        <list></list>
+                                    </block>
+                                </script>
+                                <list>
+                                    <l>fail message</l>
+                                </list>
+                            </block>
+                        </block>
+                        <block s="doRun">
+                            <block var="testcases"/>
+                            <list></list>
+                        </block>
+                        <custom-block s="show %s">
+                            <custom-block s="success %mult%s">
+                                <list>
+                                    <l>All tests passed successfully!</l>
+                                </list>
+                            </custom-block>
+                        </custom-block>
+                        <block s="doRun">
+                            <block var="cont"/>
+                            <list></list>
+                        </block>
+                    </script>
+                    <list>
+                        <l>cont</l>
+                    </list>
+                </block>
+            </block>
+            <block s="doWarp">
+                <script></script>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="for all %&apos;body&apos; %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that all asserts are valid for all arbitrary values.
+Drag the &quot;fail&quot; upvar to the assert&apos;s &quot;otherwise&quot; field&quot;</comment>
+        <header></header>
+        <code></code>
+        <translations>es:para todo _ _&#xD;</translations>
+        <inputs>
+            <input type="%cs"></input>
+            <input type="%upvar"></input>
+        </inputs>
+        <script>
+            <block s="doCallCC">
+                <block s="reifyScript">
+                    <script>
+                        <block s="doSetVar">
+                            <l>fail</l>
+                            <block s="reifyScript">
+                                <script>
+                                    <custom-block s="show %s">
+                                        <block var="fail message"/>
+                                    </custom-block>
+                                    <block s="doRun">
+                                        <block var="cont"/>
+                                        <list></list>
+                                    </block>
+                                </script>
+                                <list>
+                                    <l>fail message</l>
+                                </list>
+                            </block>
+                        </block>
+                        <custom-block s="show %s">
+                            <custom-block s="message %mult%s">
+                                <list>
+                                    <l>Running...</l>
+                                </list>
+                            </custom-block>
+                        </custom-block>
+                        <block s="doRepeat">
+                            <l>100</l>
+                            <script>
+                                <block s="doRun">
+                                    <block var="body"/>
+                                    <list></list>
+                                </block>
+                            </script>
+                        </block>
+                        <custom-block s="show %s">
+                            <custom-block s="success %mult%s">
+                                <list>
+                                    <l>Properties stand for all values!</l>
+                                </list>
+                            </custom-block>
+                        </custom-block>
+                        <block s="doRun">
+                            <block var="cont"/>
+                            <list></list>
+                        </block>
+                    </script>
+                    <list>
+                        <l>cont</l>
+                    </list>
+                </block>
+            </block>
+            <block s="doWarp">
+                <script></script>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should %&apos;assert&apos; otherwise %&apos;fail&apos; with message %&apos;fail message&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that the reporter&apos;s reported value satisfies a predicate. Otherwise runs a fail handler passing a message.&#xD;The message receives the actual reporter value as argument.&#xD;Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de _ en otro caso _ con mensaje _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%predRing"></input>
+            <input type="%cmdRing"></input>
+            <input type="%repRing"></input>
+        </inputs>
+        <script>
+            <block s="doCallCC">
+                <block s="reifyScript">
+                    <script>
+                        <block s="doDeclareVariables">
+                            <list>
+                                <l>actual</l>
+                            </list>
+                        </block>
+                        <block s="doSetVar">
+                            <l>actual</l>
+                            <block s="evaluate">
+                                <block var="reporter"/>
+                                <list></list>
+                            </block>
+                        </block>
+                        <block s="doIfElse">
+                            <block s="evaluate">
+                                <block var="assert"/>
+                                <list>
+                                    <block var="actual"/>
+                                </list>
+                            </block>
+                            <script>
+                                <block s="doRun">
+                                    <block var="cont"/>
+                                    <list></list>
+                                </block>
+                            </script>
+                            <script>
+                                <block s="doRun">
+                                    <block var="fail"/>
+                                    <list>
+                                        <block s="evaluate">
+                                            <block var="fail message"/>
+                                            <list>
+                                                <block var="actual"/>
+                                            </list>
+                                        </block>
+                                    </list>
+                                </block>
+                            </script>
+                        </block>
+                    </script>
+                    <list>
+                        <l>cont</l>
+                    </list>
+                </block>
+            </block>
+            <block s="doWarp">
+                <script></script>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be equal to %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is equal (==) to an expected one.&#xD;Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser igual a _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual == expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l>should be equal to</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be identical to %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is identical (===) to an expected one.
+        Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser idéntico a _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual === expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l>should be identical to</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be less than %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is less to an expected one.
+        Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser menor que _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual &lt; expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l> should be less than</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be less or equal than %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is less or equal to an expected one.
+        Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser menor o igual que _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual &lt;= expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l>should be less or equal than</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be greater or equal than %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is greater or equal to an expected one.
+        Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser mayor o igual que _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual &gt;= expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l>should be greater or equal than</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="%&apos;reporter&apos; should be greater than %&apos;expected&apos; otherwise %&apos;fail&apos;" type="command" category="other">
+        <comment collapsed="false">Checks that a reporter reports a value which is greater to an expected one.&#xD;Use this block in a TEST or FOR ALL environment and drag &amp; drop its "fail" handler to this block&apos;s &quot;otherwise&quot; field.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:_ debería de ser mayor que _ en otro caso _&#xD;</translations>
+        <inputs>
+            <input type="%repRing"></input>
+            <input type="%s"></input>
+            <input type="%cmdRing"></input>
+        </inputs>
+        <script>
+            <custom-block s="%repRing should %predRing otherwise %cmdRing with message %repRing">
+                <block var="reporter"/>
+                <block s="reifyPredicate">
+                    <autolambda>
+                        <block s="evaluate">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>expected</l>
+                                    <l>actual</l>
+                                </list>
+                                <l>return actual &gt; expected;</l>
+                            </block>
+                            <list>
+                                <block var="expected"/>
+                                <block var="actual"/>
+                            </list>
+                        </block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+                <block var="fail"/>
+                <block s="reifyReporter">
+                    <autolambda>
+                        <custom-block s="failure %mult%s">
+                            <list>
+                                <block var="reporter"/>
+                                <l>should be greater than</l>
+                                <block var="expected"/>
+                                <l>but it was</l>
+                                <block var="actual"/>
+                            </list>
+                        </custom-block>
+                    </autolambda>
+                    <list>
+                        <l>actual</l>
+                    </list>
+                </block>
+            </custom-block>
+        </script>
+    </block-definition>
+
+    <block-definition s="message %&apos;args&apos;" type="reporter" category="other">
+        <comment collapsed="false">Creates a message.&#xD;Use the SHOW block to show the message.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:mensaje _&#xD;</translations>
+        <inputs>
+            <input type="%mult%s"></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>arglist</l>
+                            <l>context</l>
+                        </list>
+                        <l>var message = new AlignmentMorph();&#xD;var morph;&#xD;var args = (arglist.isLinked)&#xD;  ? [arglist.first].concat(arglist.rest.contents)&#xD;  : arglist.contents;&#xD;&#xD;args.forEach(function(arg) {&#xD;  if (arg.expression) {&#xD;    morph = arg.expression;&#xD;  } else if (typeof arg === &apos;boolean&apos;) {&#xD;    morph = new BooleanSlotMorph(arg);&#xD;    morph.isStatic = true;&#xD;    morph.drawNew();&#xD;  } else if (typeof arg === &apos;number&apos;) {&#xD;    morph = new TextMorph(&apos; &apos; + arg.toString() + &apos; &apos;);&#xD;  } else if (arg instanceof List) {&#xD;    morph = new ListWatcherMorph(arg);&#xD;  } else {&#xD;    morph = new TextMorph(&apos; &apos; + arg.toString() + &apos; &apos;);&#xD;  }&#xD;  message.add(morph);&#xD;});&#xD;message.color = new Color(230, 230, 230);&#xD;message.fixLayout();&#xD;return message;</l>
+                    </block>
+                    <list>
+                        <block var="args"/>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="failure %&apos;args&apos;" type="reporter" category="other">
+        <comment collapsed="false">Creates a failure message.&#xD;Use the SHOW block to show the message.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:fallo _&#xD;</translations>
+        <inputs>
+            <input type="%mult%s"></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>message</l>
+                            <l>context</l>
+                        </list>
+                        <l>//message.addChildFirst(new TextMorph("❌"));&#xD;message.color = new Color(226, 186, 181);&#xD;message.fixLayout();&#xD;return message;</l>
+                    </block>
+                    <list>
+                        <custom-block s="message %mult%s">
+                            <block var="args"/>
+                        </custom-block>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="property failure %&apos;args&apos;" type="reporter" category="other">
+        <comment collapsed="false">Creates a property failure message.&#xD;Use the SHOW block to show the message.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:propiedad fallida _</translations>
+        <inputs>
+            <input type="%mult%s"></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>message</l>
+                            <l>args</l>
+                        </list>
+                        <l>message.addChildFirst(new TextMorph("Properties failed for:"));&#xD;message.fixLayout();&#xD;return message;</l>
+                    </block>
+                    <list>
+                        <custom-block s="failure %mult%s">
+                            <block var="args"/>
+                        </custom-block>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="success %&apos;args&apos;" type="reporter" category="other">
+        <comment collapsed="false">Creates a success message.&#xD;Use the SHOW block to show the message.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:satisfactorio _&#xD;</translations>
+        <inputs>
+            <input type="%mult%s"></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>message</l>
+                            <l>context</l>
+                        </list>
+                        <l>// message.addChildFirst(new TextMorph("✅"));&#xD;message.color = new Color(186, 226, 181);&#xD;message.fixLayout();&#xD;return message;</l>
+                    </block>
+                    <list>
+                        <custom-block s="message %mult%s">
+                            <block var="args"/>
+                        </custom-block>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+
+    <block-definition s="show %&apos;message&apos;" type="command" category="other">
+        <comment collapsed="false">Shows a message.</comment>
+        <header></header>
+        <code></code>
+        <translations>es:mostrar _&#xD;</translations>
+        <inputs>
+            <input type="%s"></input>
+        </inputs>
+        <script>
+            <block s="doRun">
+                <block s="reportJSFunction">
+                    <list>
+                        <l>message</l>
+                        <l>context</l>
+                    </list>
+                    <l>var popup = new SpeechBubbleMorph(message);&#xD;popup.color = message.color;&#xD;popup.popUp(&#xD;  context.receiver.world(),&#xD;  new Point(&#xD;    context.topBlock.bounds.corner.x,&#xD;    context.topBlock.bounds.origin.y&#xD;  )&#xD;);</l>
+                </block>
+                <list>
+                    <block var="message"/>
+                </list>
+            </block>
+        </script>
+    </block-definition>
+</blocks>

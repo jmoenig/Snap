@@ -17,3 +17,4 @@ speech_module.xml	Text to speech	output text using speech synthesis.
 animation_module.xml	Animation	glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
+testing.xml	Unit and property-based testing	Test whether a reporter works correctly by providing both known inputs and the expected output value. Also test properties of reporters with generated, random input values.
