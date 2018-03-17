@@ -244,6 +244,15 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
     if (noCache) {
         url += '&t=' + Date.now();
     }
+    if (typeof params === 'string') {  // Converting from old querystring style args
+        var pairs = params.split('&').map(function(pair) {
+            return pair.split('=');
+        });
+        params = {};
+        pairs.forEach(function(pair) {
+            params[pair[0]] = pair[1];
+        });
+    }
 
     if (!this.rpcRequest) {
         this.rpcRequest = new XMLHttpRequest();
@@ -300,8 +309,7 @@ NetsProcess.prototype.getCostumeFromRPC = function (rpc, action, params) {
 
     // Create the costume (analogous to reportURL)
     if (!this.rpcRequest || this.rpcRequest.readyState !== 4) {
-        var fullRPC = ['', rpc, action].join('/');
-        return this.callRPC(fullRPC, params, true);
+        return this.callRPC(rpc, params, true);
     } else if (!this.requestedImage) {
         var rawPNG = this.rpcRequest.response;
         var contentType = this.rpcRequest.getResponseHeader('content-type');
