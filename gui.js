@@ -5204,7 +5204,9 @@ IDE_Morph.prototype.initializeCloud = function () {
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
-                            'Unverified account: ' + response.days_left + ' days left',
+                            'Unverified account: ' +
+                            response.days_left +
+                            ' days left',
                             'You are now logged in, and your account\n' +
                             'is enabled for three days.\n' +
                             'Please use the verification link that\n' +

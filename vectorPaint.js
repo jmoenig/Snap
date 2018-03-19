@@ -46,9 +46,12 @@
     Bernat Romagosa rewrote most of the code in 2017
 */
 
-/*global Point, Object, Rectangle, ToggleButtonMorph, AlignmentMorph, Morph,
-    PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
-    TextMorph, Image, VectorPaintEditorMorph, newCanvas */
+/*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
+PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
+TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
+localize, PaintCanvasMorph, detect, modules*/
+
+modules.vectorPaint = '2018-March-19';
 
 // Declarations
 
@@ -64,13 +67,13 @@ var VectorPaintCanvasMorph;
 
 // VectorShape
 
-VectorShape.prototype = new Object();
+VectorShape.prototype = {};
 VectorShape.prototype.constructor = VectorShape;
 VectorShape.uber = Object.prototype;
 
 function VectorShape (borderWidth, borderColor, fillColor) {
     this.init(borderWidth, borderColor, fillColor);
-};
+}
 
 VectorShape.prototype.init = function (borderWidth, borderColor, fillColor) {
     this.borderWidth = (borderColor && borderColor.a) ? borderWidth : 0;
@@ -226,7 +229,7 @@ VectorRectangle.uber = VectorShape.prototype;
 function VectorRectangle (borderWidth, borderColor, fillColor, origin, destination) {
     VectorRectangle.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(origin, destination);
-};
+}
 
 VectorRectangle.prototype.init = function (origin, destination) {
     this.origin = origin;
@@ -331,7 +334,7 @@ VectorLine.uber = VectorShape.prototype;
 function VectorLine (borderWidth, borderColor, origin, destination) {
     VectorLine.uber.init.call(this, borderWidth, borderColor);
     this.init(origin, destination);
-};
+}
 
 VectorLine.prototype.init = function(origin, destination) {
     this.origin = origin;
@@ -433,7 +436,7 @@ VectorEllipse.uber = VectorShape.prototype;
 function VectorEllipse (borderWidth, borderColor, fillColor, origin, destination) {
     VectorEllipse.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(origin, destination);
-};
+}
 
 VectorEllipse.prototype.init = function (origin, destination) {
     this.origin = origin;
@@ -497,7 +500,7 @@ VectorEllipse.prototype.bounds = function () {
 
 VectorEllipse.prototype.containsPoint = function (aPoint) {
     return (Math.pow(aPoint.x - this.origin.x, 2) / Math.pow(this.hRadius() + this.borderWidth / 2, 2) +
-            Math.pow(aPoint.y - this.origin.y, 2) / Math.pow(this.vRadius() + this.borderWidth / 2, 2)) < 1
+            Math.pow(aPoint.y - this.origin.y, 2) / Math.pow(this.vRadius() + this.borderWidth / 2, 2)) < 1;
 };
 
 VectorEllipse.prototype.asSVG = function () {
@@ -553,7 +556,7 @@ VectorPolygon.uber = VectorShape.prototype;
 function VectorPolygon (borderWidth, borderColor, fillColor, points, isClosed, isFreeHand) {
     VectorPolygon.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(points, isClosed, isFreeHand);
-};
+}
 
 VectorPolygon.prototype.init = function (points, isClosed, isFreeHand) {
     this.points = points || [ ];
@@ -583,7 +586,7 @@ VectorPolygon.fromSVG = function (svg) {
 
             points, // points
             points[0].eq(points[points.length - 1]), // isClosed
-            false, // isFreeHand, does only matter when drawing it
+            false // isFreeHand, does only matter when drawing it
         );
 };
 
@@ -765,10 +768,10 @@ function VectorSelection (origin, destination) {
         this,
         1, // borderWidth
         new Color(0, 0, 0, 255), // borderColor
-        null, // fillColor
+        null // fillColor
     );
     this.init(origin, destination);
-};
+}
 
 VectorSelection.prototype.init = function (origin, destination) {
     VectorSelection.uber.init.call(this, origin, destination);
@@ -795,8 +798,6 @@ VectorSelection.prototype.cornerAt = function (aPoint) {
 };
 
 VectorSelection.prototype.cornerOppositeTo = function (aPoint) {
-    var threshold = this.threshold;
-
     return this.corners().reduce(function(a, b) {
         return (aPoint.distanceTo(a) > aPoint.distanceTo(b)) ? a : b;
     });
@@ -829,7 +830,7 @@ VectorSelection.prototype.drawOn = function (aCanvasMorph) {
             2 * Math.PI
         );
         context.stroke();
-    };
+    }
 
     drawCircle(bounds.left(), bounds.top());
     drawCircle(bounds.left(), bounds.bottom());
@@ -848,7 +849,7 @@ Crosshair.uber = VectorShape.prototype;
 
 function Crosshair (center, paper) {
     this.init(center, paper);
-};
+}
 
 Crosshair.prototype.init = function (center, paper) {
     this.center = center;
@@ -880,11 +881,9 @@ VectorPaintEditorMorph.uber = PaintEditorMorph.prototype;
 
 function VectorPaintEditorMorph() {
     this.init();
-};
+}
 
 VectorPaintEditorMorph.prototype.init = function () {
-    var myself = this;
-
     // additional properties:
     this.paper = null; // paint canvas
     this.shapes = [];
@@ -1061,7 +1060,7 @@ VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callbac
             /* Ctrl + Z */
                 if (this.ctrl) {
                     this.undo();
-                };
+                }
             break;
             case 67:
             /* Ctrl + C */
@@ -1079,7 +1078,7 @@ VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callbac
                 if (this.ctrl && this.paper.bounds.containsPoint(pos)) {
                     this.paper.pasteAt(pos);
                     this.updateHistory();
-                };
+                }
             break;
             case 65:
             /* Ctrl + A */
@@ -1135,7 +1134,7 @@ VectorPaintEditorMorph.prototype.buildContents = function() {
     this.refreshToolButtons();
     this.fixLayout();
     this.drawNew();
-}
+};
 
 VectorPaintEditorMorph.prototype.buildToolbox = function () {
     var tools = {
@@ -1194,7 +1193,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     var c = this.controls,
         myself = this,
         pc = this.propertiesControls,
-        alpen = new AlignmentMorph("row", this.padding);
+        alpen = new AlignmentMorph("row", this.padding),
         alignColor = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
@@ -1233,7 +1232,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     pc.penSizeField = new InputFieldMorph("3", true, null, false);
     pc.penSizeField.contents().minWidth = 20;
     pc.penSizeField.setWidth(25);
-    pc.penSizeField.accept = function () {
+    pc.penSizeField.accept = function (num) {
         var val = parseFloat(pc.penSizeField.getValue());
         pc.penSizeSlider.value = val;
         pc.penSizeSlider.drawNew();
@@ -1277,11 +1276,12 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
 
 VectorPaintEditorMorph.prototype.selectColor = function (color, isSecondary) {
     var myself = this,
-        isSecondary = isSecondary || this.paper.isShiftPressed(),
         propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
         ni = newCanvas(this.propertiesControls[propertyName + 'Viewer'].extent()),
         ctx = ni.getContext('2d'),
         i, j;
+
+	if (!isSecondary) {isSecondary = this.paper.isShiftPressed(); }
 
     this.paper.settings[(propertyName)] = color;
 
@@ -1306,7 +1306,7 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, isSecondary) {
     } else {
         ctx.fillStyle = color.toString();
         ctx.fillRect(0, 0, 180, 15);
-    };
+    }
 
     //Brush size
     ctx.strokeStyle = 'black';
@@ -1362,8 +1362,7 @@ VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
 };
 
 VectorPaintEditorMorph.prototype.dragSelection = function (pos) {
-    var myself = this,
-        origin,
+    var origin,
         ratio,
         delta;
 
@@ -1461,7 +1460,7 @@ VectorPaintEditorMorph.prototype.getSVG = function () {
 VectorPaintEditorMorph.prototype.getBounds = function (shapeCollection) {
     var shapeBounds = shapeCollection.map(function(each) { return each.bounds(); });
 
-    if (shapeBounds.length == 0) { return null; }
+    if (shapeBounds.length === 0) { return null; }
 
     return shapeBounds.reduce(
         function(previous, current) {
@@ -1496,7 +1495,7 @@ VectorPaintEditorMorph.prototype.ok = function () {
         return;
     }
 
-    shapeOrigin = this.getBounds(this.shapes).origin,
+    shapeOrigin = this.getBounds(this.shapes).origin;
     originDelta = shapeOrigin.subtract(this.paper.bounds.origin);
 
     this.paper.updateAutomaticCenter();
@@ -1525,11 +1524,13 @@ VectorPaintEditorMorph.prototype.undo = function () {
         oldSum = this.checksum(),
         newSum = oldSum;
 
+	function draw(shape) {
+ 		shape.drawOn(paper);
+ 	}
+
     while (this.shapes.length && oldSum == newSum) {
         this.shapes = this.history.pop() || [];
-        this.shapes.forEach(function (shape) {
-            shape.drawOn(paper);
-        });
+        this.shapes.forEach(draw);
         newSum = this.checksum();
     }
 
@@ -1552,7 +1553,7 @@ VectorPaintCanvasMorph.uber = PaintCanvasMorph.prototype;
 
 function VectorPaintCanvasMorph (shift) {
     this.init(shift);
-};
+}
 
 VectorPaintCanvasMorph.prototype.init = function (shift) {
     VectorPaintCanvasMorph.uber.init.call(this, shift);
@@ -1566,8 +1567,7 @@ VectorPaintCanvasMorph.prototype.init = function (shift) {
 };
 
 VectorPaintCanvasMorph.prototype.calculateCanvasCenter = function () {
-    var editor = this.parentThatIsA(VectorPaintEditorMorph);
-        canvasBounds = this.bounds;
+    var canvasBounds = this.bounds;
 
     // Can't use canvasBounds.center(), it rounds down.
     return new Point(
@@ -1632,7 +1632,7 @@ VectorPaintCanvasMorph.prototype.drawNew = function () {
     this.merge(this.paper, canvas);
 
     editor.shapes.forEach(function(each) {
-        myself.merge(each.image, canvas)
+        myself.merge(each.image, canvas);
     });
 
     if (editor.currentShape) {

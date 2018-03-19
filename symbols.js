@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-26';
+modules.symbols = '2018-March-19';
 
 var SymbolMorph;
 
@@ -1608,7 +1608,8 @@ SymbolMorph.prototype.drawSymbolOctagonOutline = function (canvas, color) {
     return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolClosedBrushPath = SymbolMorph.prototype.drawSymbolCloudOutline;
+SymbolMorph.prototype.drawSymbolClosedBrushPath =
+	SymbolMorph.prototype.drawSymbolCloudOutline;
 
 SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
     // answer a canvas showing two musical notes

@@ -81,7 +81,7 @@ modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
-AlignmentMorph, Process*/
+AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
 modules.objects = '2018-March-19';
 
@@ -8449,14 +8449,20 @@ SVG_Costume.prototype.parseShapes = function () {
 
     element.parseString(contents);
 
-    if (this.shapes.length == 0 && element.attributes['snap']) {
+    if (this.shapes.length === 0 && element.attributes.snap) {
         this.shapes = element.children.map(function (child) {
             return window[child.attributes.prototype].fromSVG(child);
-        })
+        });
     }
 };
 
-SVG_Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
+SVG_Costume.prototype.edit = function (
+	aWorld,
+    anIDE,
+    isnew,
+    oncancel,
+    onsubmit
+) {
     var myself = this,
         editor;
 
@@ -8478,7 +8484,7 @@ SVG_Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit)
             myself.version = Date.now();
             aWorld.changed();
             if (anIDE) {
-                if (isnew) { anIDE.currentSprite.addCostume(myself) };
+                if (isnew) {anIDE.currentSprite.addCostume(myself); }
                 anIDE.currentSprite.wearCostume(myself);
                 anIDE.hasChangedMedia = true;
             }
