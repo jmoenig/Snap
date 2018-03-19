@@ -4042,3 +4042,4 @@ Translation Updates:
 180319
 ------
 * Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
+* Objects: remove obsolete STOP primitive from the stage's palette
