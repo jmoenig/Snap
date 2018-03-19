@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-16';
+modules.threads = '2018-March-19';
 
 var ThreadManager;
 var Process;
@@ -557,7 +557,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.procedureCount = 0;
     this.flashingContext = null; // experimental, for single-stepping
     this.isInterrupted = false; // experimental, for single-stepping
-    this.gensyms = {}; // experimental, for compiling to JS
+    this.gensyms = null; // experimental, for compiling to JS
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =

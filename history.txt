@@ -4038,3 +4038,7 @@ Translation Updates:
 180316
 ------
 * Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots
+
+180319
+------
+* Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
