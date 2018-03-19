@@ -4043,3 +4043,11 @@ Translation Updates:
 ------
 * Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
 * Objects: remove obsolete STOP primitive from the stage's palette
+
+=== v4.1.2.7 maintenance release ===
+
+in development:
+
+180319
+------
+* new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
