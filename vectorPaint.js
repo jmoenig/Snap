@@ -1274,14 +1274,13 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     c.add(pc.constrain);
 };
 
-VectorPaintEditorMorph.prototype.selectColor = function (color, isSecondary) {
+VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
     var myself = this,
+        isSecondary = secondary || this.paper.isShiftPressed(),
         propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
         ni = newCanvas(this.propertiesControls[propertyName + 'Viewer'].extent()),
         ctx = ni.getContext('2d'),
         i, j;
-
-	if (!isSecondary) {isSecondary = this.paper.isShiftPressed(); }
 
     this.paper.settings[(propertyName)] = color;
 
