@@ -4051,3 +4051,7 @@ in development:
 180319
 ------
 * new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
+
+180320
+------
+* Threads: refactored experimental JS-Compiler
