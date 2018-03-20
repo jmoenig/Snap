@@ -4230,8 +4230,7 @@ JSCompiler.prototype.toString = function () {
 };
 
 JSCompiler.prototype.compileFunction = function (aContext) {
-    var func,
-		block = aContext.expression,
+    var block = aContext.expression,
   		parameters = aContext.inputs,
         parms = [],
         hasEmptySlots = false,
@@ -4239,36 +4238,28 @@ JSCompiler.prototype.compileFunction = function (aContext) {
 
 	this.source = aContext;
 
-     // scan for unbound variables and empty input slots
-     block.allChildren().forEach(function (morph) {
-        if (morph.selector === 'reportGetVar' &&
-            !contains(parameters, morph.blockSpec)
-        ) {
-            throw new Error(
-                'compiling does not yet support\n' +
-                'variables that are not\nformal parameters'
-            );
-        } else if (morph.isEmptySlot && morph.isEmptySlot()) {
-            hasEmptySlots = true;
-        }
-    });
+	// scan for empty input slots
+ 	hasEmptySlots = !isNil(detect(
+  		block.allChildren(),
+    	function (morph) {return morph.isEmptySlot && morph.isEmptySlot(); }
+    ));
 
     // translate formal parameters into gensyms
     this.gensyms = {};
     if (parameters.length) {
         // test for conflicts
         if (hasEmptySlots) {
-            throw new Error(
+        	throw new Error(
                 'compiling does not yet support\n' +
                 'mixing explicit formal parameters\n' +
                 'with empty input slots'
             );
-         }
+        }
         // map explicit formal parameters
         parameters.forEach(function (pName, idx) {
-            var pn = 'p' + idx;
-             parms.push(pn);
-            myself.gensyms[pName] = pn;
+        	var pn = 'p' + idx;
+            parms.push(pn);
+        	myself.gensyms[pName] = pn;
         });
     } else if (hasEmptySlots) {
         // allow for a single implicit formal parameter
@@ -4276,12 +4267,10 @@ JSCompiler.prototype.compileFunction = function (aContext) {
     }
  
     // compile using gensyms
-    func = Function.apply(
+    return Function.apply(
         null,
         parms.concat(['return ' + this.compileExpression(block)])
     );
-    this.gensyms = {};
-    return func;
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -4366,11 +4355,16 @@ JSCompiler.prototype.compileInput = function (inp) {
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
-            // un-quoted gensym:
-            return this.gensyms[inp.blockSpec];
-        } else {
-            return this.compileExpression(inp);
+        	if (contains(this.source.inputs, inp.blockSpec)) {
+            	// un-quoted gensym:
+            	return this.gensyms[inp.blockSpec];
+        	}
+         	// redirect var query to process
+            return 'arguments[arguments.length - 1].getVarNamed("' +
+            	inp.blockSpec +
+            	'")';
         }
+        return this.compileExpression(inp);
     } else {
         throw new Error(
             'compiling does not yet support\n' +

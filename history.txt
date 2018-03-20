@@ -4054,4 +4054,5 @@ in development:
 
 180320
 ------
-* Threads: refactored experimental JS-Compiler
+* Threads: refactored experimental JS-compiler
+* Threads: enabled variables access for experimental JS-compiler
