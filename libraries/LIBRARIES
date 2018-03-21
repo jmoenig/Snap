@@ -7,12 +7,13 @@ httpBlocks.xml	Web services access (https)	An extended version of the HTTP:// bl
 word-sentence.xml	Words, sentences	One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.
 cases.xml	Multi-branched conditional (switch)	Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!
 leap-library.xml	LEAP Motion controller	Report hand positions from LEAP Motion controller (leapmotion.com).
-setrgb.xml	Set RGB or HSV pen color	Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value).
+setrgb.xml	Set RGB or HSV pen color	Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).
 try-catch.xml	Catch errors in a script	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
 multiline.xml	Allow multi-line text input to a block	In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
 Eisenbergification.xml	Provide getters and setters for all GUI-controlled global settings	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
 bignumbers.xml	Infinite precision integers, exact rationals, complex	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
 crayons.xml	Provide 100 selected colors	to use instead of hue for better selection
+speech_module.xml	Text to speech	output text using speech synthesis.
 animation_module.xml	Animation	glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.

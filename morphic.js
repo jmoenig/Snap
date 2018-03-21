@@ -1163,7 +1163,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2018-January-25';
+var morphicVersion = '2018-March-19';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1919,6 +1919,19 @@ Color.prototype.toString = function () {
         Math.round(this.g) + ',' +
         Math.round(this.b) + ',' +
         this.a + ')';
+};
+
+Color.prototype.toRGBstring = function () {
+    return 'rgb(' +
+        Math.round(this.r) + ',' +
+        Math.round(this.g) + ',' +
+        Math.round(this.b) + ')';
+};
+
+Color.fromString = function (aString) {
+    // I parse rgb/rgba strings into a Color object
+    var components = aString.split(/[\(),]/).slice(1,5);
+    return new Color(components[0], components[1], components[2], components[3]);
 };
 
 // Color copying:
@@ -3251,31 +3264,7 @@ Morph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
-
-    /*
-        Chrome issue:
-
-            when filling a rectangular area, versions of Chrome beginning with
-            57.0.2987.133 start introducing vertical transparent stripes
-            to the right of the rectangle.
-            The following code replaces the original fillRect() call with
-            an explicit almost-rectangular path that miraculously  makes
-            sure the whole rectangle gets filled correctly.
-
-        Important: This needs to be monitored in the future so we can
-        revert to sane code once this Chrome issue has been resolved again.
-    */
-
-    // context.fillRect(0, 0, this.width(), this.height()); // taken out
-
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(this.image.width, 0);
-    context.lineTo(this.image.width, this.image.height);
-    context.lineTo(0, this.image.height + 0.0001); // yeah, I luv Chrome!
-    context.closePath();
-    context.fill();
-
+    context.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
         this.drawCachedTexture();
     } else if (this.texture) {

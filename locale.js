@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2018-January-25';
+modules.locale = '2018-March-09';
 
 // Global stuff
 
@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2018-01-25'
+        '2018-03-09'
 };
 
 SnapTranslator.dict.it = {
@@ -281,18 +281,18 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru',
     'last_changed':
-        '2017-09-01'
+        '2018-02-05'
 };
 
 SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales',
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
     'translator_e-mail':
-        'victor.muratalla@yahoo.com',
+        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2018-01-22'
+        '2018-02-19'
 };
 
 SnapTranslator.dict.nl = {
@@ -370,6 +370,17 @@ SnapTranslator.dict.ca = {
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
         '2017-11-15'
+};
+
+SnapTranslator.dict.ca_VA = {
+    'language_name':
+    	'Català - Valencià',
+    'language_translator':
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid',
+    'translator_e-mail':
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es',
+    'last_changed':
+        '2018-02-08'
 };
 
 SnapTranslator.dict.fi = {

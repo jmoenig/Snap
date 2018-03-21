@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-January-25';
+modules.blocks = '2018-March-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -938,7 +938,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     '(90) right' : 90,
                     '(-90) left' : -90,
                     '(0) up' : '0',
-                    '(180) down' : 180
+                    '(180) down' : 180,
+                    'random' : ['random']
                 }
             );
             part.setContents(90);
@@ -5873,6 +5874,7 @@ RingMorph.prototype.vanishForSimilar = function () {
     if (block.selector === 'reportGetVar' ||
         block.selector === 'reportJSFunction' ||
         block.selector == 'reportAttributeOf' ||
+        block.selector == 'reportCompiled' ||
         (block instanceof RingMorph)
     ) {
         this.parent.silentReplaceInput(this, block);
@@ -8408,12 +8410,16 @@ InputSlotMorph.prototype.collidablesMenu = function () {
 };
 
 InputSlotMorph.prototype.distancesMenu = function () {
-    var dict = {
-            'mouse-pointer' : ['mouse-pointer']
-        },
+	var block = this.parentThatIsA(BlockMorph),
+        dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
+
+	if (block && (block.selector !== 'reportRelationTo')) {
+	    dict['random position'] = ['random position'];
+ 	}
+	dict['mouse-pointer'] = ['mouse-pointer'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {

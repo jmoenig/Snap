@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-January-18';
+modules.store = '2018-March-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1101,10 +1101,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes,
                 'var'
             )) {
-            return SpriteMorph.prototype.variableBlock(
+            block = SpriteMorph.prototype.variableBlock(
                 model.attributes['var']
             );
-        }
+        } else {
         /*
         // disable JavaScript functions, commented out for now
         if (model.attributes.s === 'reportJSFunction' &&
@@ -1116,10 +1116,11 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             }
         }
         */
-        block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
-        migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
-        if (migration) {
-            migrationOffset = migration.offset;
+            block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+            migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+            if (migration) {
+                migrationOffset = migration.offset;
+            }
         }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
@@ -1148,7 +1149,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
           		: null
           	);
         }
-        if (!info) {
+        if (!info || !contains(
+        		// catch other forks' blocks
+        		SpriteMorph.prototype.categories, info.category
+        )) {
             return this.obsoleteBlock(isReporter);
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(
@@ -1910,10 +1914,20 @@ BlockMorph.prototype.toBlockXML = function (serializer) {
 };
 
 ReporterBlockMorph.prototype.toXML = function (serializer) {
-    return this.selector === 'reportGetVar' ? serializer.format(
-        '<block var="@"/>',
-        this.blockSpec
-    ) : this.toBlockXML(serializer);
+    if (this.selector === 'reportGetVar') {
+        if (!this.comment) {
+            return serializer.format(
+                '<block var="@"/>',
+                this.blockSpec);
+        } else {
+            return serializer.format(
+                '<block var="@">%</block>',
+                this.blockSpec,
+                this.comment.toXML(serializer));
+        }
+    } else {
+        return this.toBlockXML(serializer);
+    }
 };
 
 ReporterBlockMorph.prototype.toScriptXML = function (

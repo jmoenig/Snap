@@ -81,9 +81,9 @@ modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
-AlignmentMorph*/
+AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-January-25';
+modules.objects = '2018-March-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -717,14 +717,12 @@ SpriteMorph.prototype.initBlocks = function () {
         // Message passing - very experimental
 
         doTellTo: {
-            dev: true,
             type: 'command',
             category: 'control',
             // spec: 'tell %spr to %cl' // I liked this version much better, -Jens
             spec: 'tell %spr to %cmdRing %inputs'
         },
         reportAskFor: {
-            dev: true,
             type: 'reporter',
             category: 'control',
             spec: 'ask %spr for %repRing %inputs'
@@ -1078,6 +1076,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
+        },
+        reportCompiled: { // experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: 'compile %repRing'
         },
 
     /*
@@ -2128,6 +2131,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         if (true) { // (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            if (Process.prototype.enableCompiling) {
+	            blocks.push(block('reportCompiled'));
+            }
         }
 
     // for debugging: ///////////////
@@ -4422,9 +4428,20 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
 
 SpriteMorph.prototype.forward = function (steps) {
     var dest,
-        dist = steps * this.parent.scale || 0;
+        dist = steps * this.parent.scale || 0,
+        dot = 0.1;
 
-    if (dist >= 0) {
+	if (dist === 0 && this.isDown) { // draw a dot
+ 		// dot = Math.min(this.size, 1);
+ 		this.isDown = false;
+        this.forward(dot * -0.5);
+        this.isDown = true;
+        this.forward(dot);
+        this.isDown = false;
+        this.forward(dot * -0.5);
+        this.isDown = true;
+     	return;
+ 	} else if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
     } else {
         dest = this.position().distanceAngle(
@@ -7146,7 +7163,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAll'));
     */
         blocks.push(block('doStopThis'));
+    /*
+        // migrated to doStopThis, now redundant
         blocks.push(block('doStopOthers'));
+    */
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -7261,6 +7281,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         if (true) { // (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            if (Process.prototype.enableCompiling) {
+                blocks.push(block('reportCompiled'));
+            }
         }
 
     // for debugging: ///////////////
@@ -8268,7 +8291,8 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
-        }
+        },
+        anIDE
     );
 };
 
@@ -8372,6 +8396,7 @@ SVG_Costume.uber = Costume.prototype;
 
 function SVG_Costume(svgImage, name, rotationCenter) {
     this.contents = svgImage;
+    this.shapes = [];
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
@@ -8391,6 +8416,7 @@ SVG_Costume.prototype.copy = function () {
     img.src = this.contents.src;
     cpy = new SVG_Costume(img, this.name ? copy(this.name) : null);
     cpy.rotationCenter = this.rotationCenter.copy();
+    cpy.shapes = this.shapes.map(function (shape) { return shape.copy(); });
     return cpy;
 };
 
@@ -8409,6 +8435,64 @@ SVG_Costume.prototype.shrinkToFit = function (extentPoint) {
     // overridden for unrasterized SVGs
     nop(extentPoint);
     return;
+};
+
+SVG_Costume.prototype.parseShapes = function () {
+    // I try to parse my SVG as an editable collection of shapes
+    var element = new XML_Element(),
+        // remove 'data:image/svg+xml, ' from src
+        contents = this.contents.src.replace(/^data:image\/.*?, */, '');
+
+    if (this.contents.src.indexOf('base64') > -1) {
+        contents = atob(contents);
+    }
+
+    element.parseString(contents);
+
+    if (this.shapes.length === 0 && element.attributes.snap) {
+        this.shapes = element.children.map(function (child) {
+            return window[child.attributes.prototype].fromSVG(child);
+        });
+    }
+};
+
+SVG_Costume.prototype.edit = function (
+	aWorld,
+    anIDE,
+    isnew,
+    oncancel,
+    onsubmit
+) {
+    var myself = this,
+        editor;
+
+    editor = new VectorPaintEditorMorph();
+
+    editor.oncancel = oncancel || nop;
+    editor.openIn(
+        aWorld,
+        isnew ?
+        newCanvas(StageMorph.prototype.dimensions) :
+        this.contents,
+        isnew ?
+        new Point(240, 180) :
+        myself.rotationCenter,
+        function (img, rc, shapes) {
+            myself.contents = img;
+            myself.rotationCenter = rc;
+            myself.shapes = shapes;
+            myself.version = Date.now();
+            aWorld.changed();
+            if (anIDE) {
+                if (isnew) {anIDE.currentSprite.addCostume(myself); }
+                anIDE.currentSprite.wearCostume(myself);
+                anIDE.hasChangedMedia = true;
+            }
+            (onsubmit || nop)();
+        },
+        anIDE,
+        this.shapes || []
+    );
 };
 
 // CostumeEditorMorph ////////////////////////////////////////////////////////

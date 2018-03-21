@@ -42,6 +42,7 @@
         Context
         Variable
         VariableFrame
+        JSCompiler
 
 
     credits
@@ -61,12 +62,14 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-January-25';
+modules.threads = '2018-March-20';
 
 var ThreadManager;
 var Process;
 var Context;
+var Variable;
 var VariableFrame;
+var JSCompiler;
 
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
@@ -112,7 +115,8 @@ function invoke(
     receiver, // sprite or environment, optional for contexts
     timeout, // msecs
     timeoutErrorMsg, // string
-    suppressErrors // bool
+    suppressErrors, // bool
+    callerProcess // optional for JS-functions
 ) {
     // execute the given block or context synchronously without yielding.
     // Apply context (not a block) to a list of optional arguments.
@@ -151,6 +155,11 @@ function invoke(
         );
     } else if (action.evaluate) {
         return action.evaluate();
+    } else if (action instanceof Function) {
+        return action.apply(
+            receiver,
+            contextArgs.asArray().concat(callerProcess)
+        );
     } else {
         throw new Error('expecting a block or ring but getting ' + action);
     }
@@ -525,6 +534,7 @@ Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 // Process.prototype.enableJS = false;
 
@@ -694,7 +704,9 @@ Process.prototype.evaluateContext = function () {
 };
 
 Process.prototype.evaluateBlock = function (block, argCount) {
-    var selector = block.selector;
+    var rcvr, inputs,
+    	selector = block.selector;
+
     // check for special forms
     if (selector === 'reportOr' ||
             selector ===  'reportAnd' ||
@@ -703,8 +715,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     }
 
     // first evaluate all inputs, then apply the primitive
-    var rcvr = this.context.receiver || this.receiver,
-        inputs = this.context.inputs;
+    rcvr = this.context.receiver || this.receiver;
+    inputs = this.context.inputs;
 
     if (argCount > inputs.length) {
         this.evaluateNextInput(block);
@@ -2354,6 +2366,10 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
+        this.context.activeSends.forEach(function (proc) {
+        	// optimize for atomic sub-routines
+            proc.runStep();
+        });
     }
     this.context.activeSends = this.context.activeSends.filter(
         function (proc) {
@@ -2411,14 +2427,14 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
+    if (thing instanceof List) {
+        return 'list';
+    }
     if (!isNaN(+thing)) {
         return 'number';
     }
     if (isString(thing)) {
         return 'text';
-    }
-    if (thing instanceof List) {
-        return 'list';
     }
     if (thing instanceof SpriteMorph) {
         return 'sprite';
@@ -2868,6 +2884,17 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
     return those;
 };
 
+Process.prototype.setHeading = function (direction) {
+    var thisObj = this.blockReceiver();
+
+    if (thisObj) {
+        if (this.inputOption(direction) === 'random') {
+            direction = this.reportRandom(1, 36000) / 100;
+        }
+		thisObj.setHeading(direction);
+    }
+};
+
 Process.prototype.doFaceTowards = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj;
@@ -2875,6 +2902,8 @@ Process.prototype.doFaceTowards = function (name) {
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
+        } if (this.inputOption(name) === 'random position') {
+        	thisObj.setHeading(this.reportRandom(1, 36000) / 100);
         } else {
             if (name instanceof List) {
                 thisObj.faceToXY(
@@ -2896,11 +2925,20 @@ Process.prototype.doFaceTowards = function (name) {
 
 Process.prototype.doGotoObject = function (name) {
     var thisObj = this.blockReceiver(),
-        thatObj;
+        thatObj,
+        stage;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
+        } else if (this.inputOption(name) === 'random position') {
+	        stage = thisObj.parentThatIsA(StageMorph);
+    	    if (stage) {
+         		thisObj.setCenter(new Point(
+					this.reportRandom(stage.left(), stage.right()),
+                    this.reportRandom(stage.top(), stage.bottom())
+                ));
+         	}
         } else {
             if (name instanceof List) {
                 thisObj.gotoXY(
@@ -3712,6 +3750,40 @@ Process.prototype.unflash = function () {
     }
 };
 
+// Process: Compile simple, side-effect free Reporters to JS
+
+/*
+	with either only explicit formal parameters or a single
+	implicit formal parameter mapped to all empty input slots
+	*** highly experimental and heavily under construction ***
+*/
+
+Process.prototype.reportCompiled = function (context) {
+    this.assertType(context, ['reporter', 'predicate']);
+    return new JSCompiler(this).compileFunction(context);
+};
+
+Process.prototype.getVarNamed = function (name) {
+    // private - special form for compiled expressions
+    // DO NOT use except in compiled methods!
+    // first check script vars, then global ones
+    var frame = this.homeContext.variables.silentFind(name) ||
+            this.context.variables.silentFind(name),
+        value;
+    if (frame) {
+        value = frame.vars[name].value;
+        return (value === 0 ? 0
+                : value === false ? false
+                        : value === '' ? ''
+                            : value || 0); // don't return null
+    }
+    throw new Error(
+        localize('a variable of name \'')
+            + name
+            + localize('\'\ndoes not exist in this context')
+    );
+};
+
 // Context /////////////////////////////////////////////////////////////
 
 /*
@@ -3740,6 +3812,7 @@ Process.prototype.unflash = function () {
     startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
+    activeSends		forked processes waiting to be completed
     isCustomBlock   marker for return ops
     emptySlots      caches the number of empty slots for reification
     tag             string or number to optionally identify the Context,
@@ -3767,6 +3840,7 @@ function Context(
     this.pc = 0;
     this.isContinuation = false;
     this.startTime = null;
+    this.activeSends = null;
     this.activeAudio = null;
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
@@ -4135,3 +4209,169 @@ VariableFrame.prototype.allNames = function (upTo) {
     }
     return answer;
 };
+
+// JSCompiler /////////////////////////////////////////////////////////////////
+
+/*
+	Compile simple, side-effect free Reporters
+	with either only explicit formal parameters or a single
+	implicit formal parameter mapped to all empty input slots
+	*** highly experimental and heavily under construction ***
+*/
+
+function JSCompiler(aProcess) {
+	this.process = aProcess;
+	this.source = null; // a context
+ 	this.gensyms = null; // temp dictionary for parameter substitutions
+}
+
+JSCompiler.prototype.toString = function () {
+    return 'a JSCompiler';
+};
+
+JSCompiler.prototype.compileFunction = function (aContext) {
+    var block = aContext.expression,
+  		parameters = aContext.inputs,
+        parms = [],
+        hasEmptySlots = false,
+        myself = this;
+
+	this.source = aContext;
+
+	// scan for empty input slots
+ 	hasEmptySlots = !isNil(detect(
+  		block.allChildren(),
+    	function (morph) {return morph.isEmptySlot && morph.isEmptySlot(); }
+    ));
+
+    // translate formal parameters into gensyms
+    this.gensyms = {};
+    if (parameters.length) {
+        // test for conflicts
+        if (hasEmptySlots) {
+        	throw new Error(
+                'compiling does not yet support\n' +
+                'mixing explicit formal parameters\n' +
+                'with empty input slots'
+            );
+        }
+        // map explicit formal parameters
+        parameters.forEach(function (pName, idx) {
+        	var pn = 'p' + idx;
+            parms.push(pn);
+        	myself.gensyms[pName] = pn;
+        });
+    } else if (hasEmptySlots) {
+        // allow for a single implicit formal parameter
+        parms = ['p0'];
+    }
+ 
+    // compile using gensyms
+    return Function.apply(
+        null,
+        parms.concat(['return ' + this.compileExpression(block)])
+    );
+};
+
+JSCompiler.prototype.compileExpression = function (block) {
+    var selector = block.selector,
+        inputs = block.inputs(),
+        target,
+        rcvr,
+        args;
+
+    // first check for special forms and infix operators
+    switch (selector) {
+    case 'reportOr':
+        return this.compileInfix('||', inputs);
+    case 'reportAnd':
+        return this.compileInfix('&&', inputs);
+    case 'evaluateCustomBlock':
+        throw new Error(
+            'compiling does not yet support\n' +
+            'custom blocks'
+        );
+    default:
+        target = this.process[selector] ? this.process
+            : (this.source.receiver || this.process.receiver);
+        rcvr = target.constructor.name + '.prototype';
+        args = this.compileInputs(inputs);
+        return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+    }
+};
+
+JSCompiler.prototype.compileInfix = function (operator, inputs) {
+    return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
+        this.compileInput(inputs[1]) +')';
+};
+
+JSCompiler.prototype.compileInputs = function (array) {
+    var args = '',
+        myself = this;
+
+    array.forEach(function (inp) {
+        if (args.length) {
+            args += ', ';
+        }
+        args += myself.compileInput(inp);
+    });
+    return args;
+};
+
+JSCompiler.prototype.compileInput = function (inp) {
+     var value, type;
+
+    if (inp.isEmptySlot && inp.isEmptySlot()) {
+        // implicit formal parameter
+          return 'p0';
+    } else if (inp instanceof MultiArgMorph) {
+        if (inp.isStatic) {
+            return 'new List([' + this.compileInputs(inp.inputs()) + '])';
+          } else {
+            return '' + this.compileInputs(inp.inputs());
+           }
+    } else if (inp instanceof ArgMorph) {
+        // literal - evaluate inline
+        value = inp.evaluate();
+        type = this.process.reportTypeOf(value);
+        switch (type) {
+        case 'number':
+        case 'Boolean':
+            return '' + value;
+        case 'text':
+            // enclose in double quotes
+            return '"' + value + '"';
+        case 'list':
+            return 'new List([' + this.compileInputs(value) + '])';
+        default:
+            if (value instanceof Array) {
+                 return '"' + value[0] + '"';
+             }
+            throw new Error(
+                'compiling does not yet support\n' +
+                'inputs of type\n' +
+                 type
+            );
+        }
+    } else if (inp instanceof BlockMorph) {
+        if (inp.selector === 'reportGetVar') {
+        	if (contains(this.source.inputs, inp.blockSpec)) {
+            	// un-quoted gensym:
+            	return this.gensyms[inp.blockSpec];
+        	}
+         	// redirect var query to process
+            return 'arguments[arguments.length - 1].getVarNamed("' +
+            	inp.blockSpec +
+            	'")';
+        }
+        return this.compileExpression(inp);
+    } else {
+        throw new Error(
+            'compiling does not yet support\n' +
+            'input slots of type\n' +
+            inp.constructor.name
+        );
+    }
+};
+
+
