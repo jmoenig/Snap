@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-20';
+modules.threads = '2018-March-22';
 
 var ThreadManager;
 var Process;
@@ -3758,9 +3758,13 @@ Process.prototype.unflash = function () {
 	*** highly experimental and heavily under construction ***
 */
 
-Process.prototype.reportCompiled = function (context) {
+Process.prototype.reportCompiled = function (context, implicitParamCount) {
+	// implicitParamCount is optional and indicates the number of
+ 	// expected parameters, if any. This is only used to handle
+  	// implicit (empty slot) parameters and can otherwise be
+   	// ignored
     this.assertType(context, ['reporter', 'predicate']);
-    return new JSCompiler(this).compileFunction(context);
+    return new JSCompiler(this).compileFunction(context, implicitParamCount);
 };
 
 Process.prototype.getVarNamed = function (name) {
@@ -4223,20 +4227,24 @@ function JSCompiler(aProcess) {
 	this.process = aProcess;
 	this.source = null; // a context
  	this.gensyms = null; // temp dictionary for parameter substitutions
+  	this.implicitParams = null;
+   	this.paramCount = null;
 }
 
 JSCompiler.prototype.toString = function () {
     return 'a JSCompiler';
 };
 
-JSCompiler.prototype.compileFunction = function (aContext) {
+JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     var block = aContext.expression,
   		parameters = aContext.inputs,
         parms = [],
         hasEmptySlots = false,
-        myself = this;
+        myself = this,
+        i;
 
 	this.source = aContext;
+    this.implicitParams = implicitParamCount || 1;
 
 	// scan for empty input slots
  	hasEmptySlots = !isNil(detect(
@@ -4246,6 +4254,7 @@ JSCompiler.prototype.compileFunction = function (aContext) {
 
     // translate formal parameters into gensyms
     this.gensyms = {};
+    this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
         if (hasEmptySlots) {
@@ -4262,8 +4271,14 @@ JSCompiler.prototype.compileFunction = function (aContext) {
         	myself.gensyms[pName] = pn;
         });
     } else if (hasEmptySlots) {
-        // allow for a single implicit formal parameter
-        parms = ['p0'];
+    	if (this.implicitParams > 1) {
+        	for (i = 0; i < this.implicitParams; i += 1) {
+         		parms.push('p' + i);
+         	}
+     	} else {
+        	// allow for a single implicit formal parameter
+        	parms = ['p0'];
+        }
     }
  
     // compile using gensyms
@@ -4323,7 +4338,18 @@ JSCompiler.prototype.compileInput = function (inp) {
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
-          return 'p0';
+        if (this.implicitParams > 1) {
+         	if (this.paramCount < this.implicitParams) {
+            	this.paramCount += 1;
+             	return 'p' + (this.paramCount - 1);
+        	}
+            throw new Error(
+                localize('expecting') + ' ' + this.implicitParams + ' '
+                    + localize('input(s), but getting') + ' '
+                    + this.paramCount
+            );
+        }
+		return 'p0';
     } else if (inp instanceof MultiArgMorph) {
         if (inp.isStatic) {
             return 'new List([' + this.compileInputs(inp.inputs()) + '])';

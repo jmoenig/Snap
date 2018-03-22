@@ -4056,3 +4056,7 @@ in development:
 ------
 * Threads: refactored experimental JS-compiler
 * Threads: enabled variables access for experimental JS-compiler
+
+180322
+------
+* Threads: extended implicit parameters handling for experimental JS-Compiler
