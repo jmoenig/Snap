@@ -4060,3 +4060,4 @@ in development:
 180322
 ------
 * Threads: extended implicit parameters handling for experimental JS-Compiler
+* Threads: new experimental atomic HOFs utilizing JIT compilation (MAP, KEEP, SORT)

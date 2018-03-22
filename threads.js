@@ -3753,8 +3753,8 @@ Process.prototype.unflash = function () {
 // Process: Compile simple, side-effect free Reporters to JS
 
 /*
-	with either only explicit formal parameters or a single
-	implicit formal parameter mapped to all empty input slots
+	with either only explicit formal parameters or a specified number of
+	implicit formal parameters mapped to empty input slots
 	*** highly experimental and heavily under construction ***
 */
 
@@ -3785,6 +3785,112 @@ Process.prototype.getVarNamed = function (name) {
         localize('a variable of name \'')
             + name
             + localize('\'\ndoes not exist in this context')
+    );
+};
+
+// Process: Atomic HOFs using experimental JIT-compilation
+
+Process.prototype.reportAtomicMap = function (reporter, list) {
+    this.assertType(list, 'list');
+	var result = [],
+    	src = list.asArray(),
+    	len = src.length,
+     	func,
+    	i;
+
+	// try compiling the reporter into generic JavaScript
+ 	// fall back to the morphic reporter if unsuccessful
+    try {
+    	func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+     	func = reporter;
+    }
+
+	// iterate over the data in a single frame:
+ 	// to do: Insert some kind of user escape mechanism
+	for (i = 0; i < len; i += 1) {
+  		result.push(
+        	invoke(
+            	func,
+                new List([src[i]]),
+                null,
+                null,
+                null,
+                null,
+                this // process
+            )
+        );
+	}
+	return new List(result);
+};
+
+Process.prototype.reportAtomicKeep = function (reporter, list) {
+    this.assertType(list, 'list');
+    var result = [],
+        src = list.asArray(),
+        len = src.length,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+        func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+    for (i = 0; i < len; i += 1) {
+    	if (
+        	invoke(
+            	func,
+                new List([src[i]]),
+                null,
+                null,
+                null,
+                null,
+                this // process
+            )
+        ) {
+     		result.push(src[i]);
+     	}
+    }
+    return new List(result);
+};
+
+Process.prototype.reportAtomicSort = function (list, reporter) {
+    this.assertType(list, 'list');
+    var myself = this,
+    	func;
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+    	func = this.reportCompiled(reporter, 2); // two inputs expected
+    } catch (err) {
+        console.log(err.message);
+        func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+	return new List(
+  		list.asArray().slice().sort(
+    		function (a, b) {
+      			return invoke(
+                	func,
+                    new List([a, b]),
+                    null,
+                    null,
+                    null,
+                    null,
+                    myself // process
+                ) ? -1 : 1;
+            }
+        )
     );
 };
 
@@ -4218,8 +4324,8 @@ VariableFrame.prototype.allNames = function (upTo) {
 
 /*
 	Compile simple, side-effect free Reporters
-	with either only explicit formal parameters or a single
-	implicit formal parameter mapped to all empty input slots
+    with either only explicit formal parameters or a specified number of
+    implicit formal parameters mapped to empty input slots
 	*** highly experimental and heavily under construction ***
 */
 
