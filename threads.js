@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-22';
+modules.threads = '2018-March-23';
 
 var ThreadManager;
 var Process;
@@ -3862,6 +3862,44 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
     return new List(result);
 };
 
+Process.prototype.reportAtomicCombine = function (reporter, list) {
+    this.assertType(list, 'list');
+    var result = '',
+        src = list.asArray(),
+        len = src.length,
+        func,
+        i;
+
+	if (len === 0) {
+ 		return result;
+ 	}
+  	result = src[0];
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+        func = this.reportCompiled(reporter, 2); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+        func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+    for (i = 1; i < len; i += 1) {
+    	result = invoke(
+        	func,
+            new List([result, src[i]]),
+            null,
+            null,
+            null,
+            null,
+            this // process
+        );
+    }
+    return result;
+};
+
 Process.prototype.reportAtomicSort = function (list, reporter) {
     this.assertType(list, 'list');
     var myself = this,
@@ -4457,11 +4495,9 @@ JSCompiler.prototype.compileInput = function (inp) {
         }
 		return 'p0';
     } else if (inp instanceof MultiArgMorph) {
-        if (inp.isStatic) {
-            return 'new List([' + this.compileInputs(inp.inputs()) + '])';
-          } else {
-            return '' + this.compileInputs(inp.inputs());
-           }
+        return 'new List([' + this.compileInputs(inp.inputs()) + '])';
+    } else if (inp instanceof ArgLabelMorph) {
+    	return this.compileInput(inp.argMorph());
     } else if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
@@ -4478,7 +4514,7 @@ JSCompiler.prototype.compileInput = function (inp) {
         default:
             if (value instanceof Array) {
                  return '"' + value[0] + '"';
-             }
+            }
             throw new Error(
                 'compiling does not yet support\n' +
                 'inputs of type\n' +
