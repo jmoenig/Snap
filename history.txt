@@ -4068,3 +4068,4 @@ in development:
 * Threads: new experimental atomic COMBINE utilizing JIT compiler
 * added atomic COMBINE to new experimental "Bigger Data" library
 * removed unused blocks from the audio comp library
+* added atomic FOR EACH to new experimental "Bigger Data" library
