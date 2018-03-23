@@ -4066,3 +4066,5 @@ in development:
 180323
 ------
 * Threads: new experimental atomic COMBINE utilizing JIT compiler
+* added atomic COMBINE to new experimental "Bigger Data" library
+* removed unused blocks from the audio comp library
