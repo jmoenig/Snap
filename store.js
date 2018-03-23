@@ -2365,6 +2365,7 @@ Context.prototype.toXML = function (serializer) {
     if (this.isContinuation) { // continuations are transient in Snap!
         return '';
     }
+
     return serializer.format(
         '<context ~><inputs>%</inputs><variables>%</variables>' +
             '%<receiver>%</receiver>%</context>',
