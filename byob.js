@@ -363,9 +363,7 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
     var parts = [], word = '', i, quoted = false, c;
     for (i = 0; i < spec.length; i += 1) {
         c = spec[i];
-        if (c === "'") {
-            quoted = !quoted;
-        } else if (c === ' ' && !quoted) {
+        if (c === ' ' && !quoted) {
             parts.push(word);
             word = '';
         } else {
