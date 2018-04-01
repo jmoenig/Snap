@@ -98,23 +98,6 @@ RoomMorph.prototype.init = function(ide) {
 
     this.isDraggable = false;
 
-    // update on login (changing room name if default)
-    // TODO: this should be on the server...?
-    SnapCloud.onLogin = function() {
-        myself.update();
-        if (myself.name === localize(RoomMorph.DEFAULT_ROOM)) {
-            myself.ide.sockets.sendMessage({type: 'request-new-name'});
-        }
-    };
-
-    // change room name if default on passive login
-    SnapCloud.onPassiveLogin = function() {
-        if (myself.name === localize(RoomMorph.DEFAULT_ROOM)) {
-            myself.ide.sockets.sendMessage({type: 'request-new-name'});
-        }
-        myself.update();
-    };
-
     // Set the initial values
     // Shared messages array for when messages are sent to unoccupied roles
     this.sharedMsgs = [];

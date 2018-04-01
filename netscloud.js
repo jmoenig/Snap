@@ -3,7 +3,6 @@ NetCloud.prototype = new Cloud();
 
 function NetCloud(url) {
     Cloud.call(this, url);
-    this.onLogin = nop;
 }
 
 NetCloud.prototype.login = function (
@@ -48,7 +47,6 @@ NetCloud.prototype.login = function (
                     if (myself.api.logout) {
                         myself.username = username;
                         myself.password = password;
-                        myself.onLogin();
                         callBack.call(null, myself.api, 'NetsBlox Cloud');
                     } else {
                         errorCall.call(
