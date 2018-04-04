@@ -2635,10 +2635,24 @@ Process.prototype.reportMonadic = function (fname, n) {
     case '10^':
         result = Math.pow(10, x);
         break;
+    case 'factorial':
+	result = this.reportFactorial(x);
+	break;
     default:
         nop();
     }
     return result;
+};
+Process.prototype.reportFactorial = function(n){
+	if (n>999){
+		var result = this.reportFactorial(999);
+		for(var i = 999; i<n; i++){
+			result = this.reportProduct(result, i+1);
+		};
+		return result
+	} else{
+		return snapEquals(n, '0') ? 1 : this.reportProduct(n, this.reportFactorial(this.reportDifference(n, 1)));
+	};
 };
 
 Process.prototype.reportTextFunction = function (fname, string) {
