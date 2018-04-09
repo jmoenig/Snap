@@ -29,21 +29,6 @@ NetsBloxSerializer.prototype.loadMessageType = function (stage, model) {
     });
 };
 
-NetsBloxSerializer.prototype.openProject = function (project, ide) {
-    // Only load the projectName if the current name is the default
-    var projectName = ide.projectName;
-
-    project = NetsBloxSerializer.uber.openProject.call(this, project, ide);
-
-    if (projectName === 'myRole') {
-        ide.setProjectName(project.name);
-    } else {
-        ide.projectName = projectName;
-    }
-
-    return project;
-};
-
 NetsBloxSerializer.prototype.loadCustomBlock = function (element, isGlobal) {
     if (element.attributes.category === 'services') {
         element.attributes.category = 'network';
