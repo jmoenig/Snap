@@ -1,5 +1,6 @@
 /* globals ProjectDialogMorph, ensureFullUrl, localize, nop,
-   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph, DialogBoxMorph
+   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph, DialogBoxMorph,
+   detect
    */
 
 ProjectDialogMorph.prototype._deleteProject =
@@ -127,6 +128,65 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
         myself.ide.cloudError()
     );
     this.destroy();
+};
+
+ProjectDialogMorph.prototype.saveProject = function () {
+    var name = this.nameField.contents().text.text,
+        notes = this.notesText.text,
+        myself = this;
+
+    this.ide.projectNotes = notes || this.ide.projectNotes;
+    if (/[\.@]+/.test(name)) {
+        this.ide.inform(
+            'Invalid Project Name',
+            'Could not save project because\n' +
+            'the provided name contains illegal characters.',
+            this.world()
+        );
+        return;
+    }
+
+    if (this.source === 'cloud') {
+        if (detect(
+                this.projectList,
+                function (item) {return item.ProjectName === name; }
+            )) {
+            this.ide.confirm(
+                localize(
+                    'Are you sure you want to replace'
+                ) + '\n"' + name + '"?',
+                'Replace Project',
+                function () {
+                    myself.saveCloudProject(name);
+                }
+            );
+        } else {
+            myself.saveCloudProject(name);
+        }
+    } else { // 'local'
+        if (detect(
+                this.projectList,
+                function (item) {return item.name === name; }
+            )) {
+            this.ide.confirm(
+                localize(
+                    'Are you sure you want to replace'
+                ) + '\n"' + name + '"?',
+                'Replace Project',
+                function () {
+                    myself.ide.room.name = name;
+                    myself.ide.source = 'local';
+                    myself.ide.saveProject(name);
+                    myself.destroy();
+                }
+            );
+        } else {
+            this.ide.room.name = name;
+            myself.ide.source = 'local';
+            this.ide.saveProject(name);
+            this.destroy();
+        }
+    }
 };
 
 ////////////////////////////////////////////////////

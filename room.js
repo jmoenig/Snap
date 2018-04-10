@@ -163,6 +163,10 @@ RoomMorph.prototype.getRoleCount = function() {
     return this.getRoles().length;
 };
 
+RoomMorph.prototype.hasMultipleRoles = function() {
+    return this.getRoleCount() > 1;
+};
+
 RoomMorph.prototype.getCurrentOccupants = function(name) {
     name = name || this.getCurrentRoleName();
     var role = this.getRole(name);
@@ -572,9 +576,9 @@ RoomMorph.prototype.editRoleName = function(role) {
 };
 
 RoomMorph.prototype.moveToRole = function(dstId) {
-    var myself = this,
-        myRole = this.ide.projectName;
+    var myself = this;
 
+    myself.ide.showMessage('moving to ' + dstId);
     SnapCloud.moveToRole(
         function(args) {
             myself.ide.showMessage('moved to ' + dstId + '!');
@@ -602,7 +606,7 @@ RoomMorph.prototype.moveToRole = function(dstId) {
         function (err, lbl) {
             myself.ide.cloudError().call(null, err, lbl);
         },
-        [dstId, myRole, this.ownerId, this.name]
+        [dstId, this.ownerId, this.name]
     );
 };
 
@@ -1608,8 +1612,45 @@ EditRoleMorph.prototype.deleteRole = function() {
 };
 
 EditRoleMorph.prototype.moveToRole = function() {
-    this.room.moveToRole(this.name);
-    this.destroy();
+    var myself = this,
+        ide = this.room.ide,
+        dialog,
+        currentRole = this.room.getCurrentRoleName(),
+        callback = function() {
+            myself.room.moveToRole(myself.name);
+        };
+
+    myself.destroy();
+
+    if (SnapActions.lastSeen > 0) {  // Prompt about saving the current role
+        dialog = new DialogBoxMorph(null);
+
+        // Prompt the user about saving the role...
+        dialog.accept = function() {
+            SnapCloud.saveProject(
+                ide,
+                function () {
+                    ide.showMessage('Saved ' + currentRole + ' to cloud!', 2);
+                    callback();
+                },
+                ide.cloudError()
+            );
+            dialog.destroy();
+        };
+
+        dialog.cancel = function() {  // don't overwrite
+            callback();
+            dialog.destroy();
+        };
+        dialog.askYesNo(
+            localize('Save Current Role'),
+            localize('Would you like to save changes to') + ' ' + currentRole +
+                ' ' + localize('before moving to') + ' ' + myself.name + '?',
+            myself.world()
+        );
+    } else {
+        callback();
+    }
 };
 
 EditRoleMorph.prototype.evictUser = function() {
