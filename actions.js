@@ -2599,7 +2599,7 @@ ActionManager.prototype.onOpenProject = function(str) {
     });
 
     this.lastSeen = event.id;  // don't reset lastSeen
-    this.completeAction();
+    this.completeAction(null, project);
 
     if (!this.ide().isReplayMode) {
         // Load the replay and action manager state from project

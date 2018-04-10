@@ -261,7 +261,7 @@ NetsBloxMorph.prototype.createControlBar = function () {
 NetsBloxMorph.prototype.loadNextRoom = function () {
     if (this.room.nextRoom) {
         var next = this.room.nextRoom;
-        this.room.setRoomName(next.roomName);
+        this.room.silentSetRoomName(next.roomName);
         this.room.ownerId = next.ownerId;
         this.silentSetProjectName(next.roleId);
 
@@ -754,6 +754,22 @@ NetsBloxMorph.prototype.droppedText = function (aString, name) {
     } else if (aString.indexOf('<room') === 0) {
         location.hash = '';
         return this.openRoomString(aString);
+    } else if (aString.indexOf('<project') === 0) {
+        this.exitReplayMode();
+        var myself = this,
+            msg = this.showMessage('Opening role...'),
+            app = aString.split('app="')[1].split(' ')[0];
+
+        return SnapActions.openProject(aString)
+            .accept(function(project) {
+                var name = project.name;
+                if (app === myself.serializer.appName && myself.room.getRoleCount() > 1) {
+                    myself.room.setRoleName(name);
+                } else {
+                    myself.room.setRoomName(name);
+                }
+                msg.destroy();
+            });
     } else {
         return IDE_Morph.prototype.droppedText.call(this, aString, name);
     }
