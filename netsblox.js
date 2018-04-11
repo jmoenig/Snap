@@ -698,9 +698,33 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
             // Netsblox addition: start
             function () {myself.showMessage('Saved ' + contentName + ' to cloud!', 2); },
             // Netsblox addition: end
-            this.cloudError()
+            this.cloudSaveError()
         );
     }
+};
+
+NetsBloxMorph.prototype.cloudSaveError = function () {
+    var myself = this;
+    return function(response, url) {
+        if (myself.shield) {
+            myself.shield.destroy();
+            myself.shield = null;
+        }
+        if (response.length > 50) {
+            response = response.substring(0, 50) + '...';
+        }
+
+        new DialogBoxMorph().inform(
+            'NetsBlox Cloud',
+            (url ? url + '\n' : '')
+                + response,
+            myself.world(),
+            myself.cloudIcon(null, new Color(180, 0, 0))
+        );
+
+        var explanation = 'Unable to save. Please export project if the problem persists.';
+        myself.showMessage(explanation);
+    };
 };
 
 NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
@@ -725,7 +749,7 @@ NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
                         myself.showMessage('Saved as ' + myself.room.name, 2);
                     }
                 },
-                myself.cloudError(),
+                myself.cloudSaveError(),
                 overwrite,
                 name
             );
@@ -755,7 +779,7 @@ NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
                 );
             }
         },
-        myself.cloudError()
+        this.cloudSaveError()
     );
 };
 
