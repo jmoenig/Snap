@@ -574,7 +574,7 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
     });
     role = room.children[0].attributes.name;
 
-    this.showMessage('Opening room...', 3);
+    this.showMessage('Opening project...', 3);
     // Create a room with the new name
     this.newProject(role);
 
