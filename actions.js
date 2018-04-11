@@ -2977,7 +2977,7 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
 };
 
 ActionManager.prototype.onMessage = function(msg) {
-    var accepted = true;
+    var socket = this.ide().sockets;
 
     if (msg.type === 'rank') {
         this.rank = msg.value;
@@ -3002,7 +3002,7 @@ ActionManager.prototype.onMessage = function(msg) {
     } else if (msg.type === 'session-id') {
         this.sessionId = msg.value;
         location.hash = 'collaborate=' + this.sessionId;
-    } else if (this.isLeader) {
+    } else if (this.isLeader && !socket.inActionRequest) {
         // Verify that the lastSeen value is the same as the current
         if (this.isNextAction(msg)) {
             this.acceptEvent(msg);
