@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-March-23';
+modules.threads = '2018-April-12';
 
 var ThreadManager;
 var Process;
@@ -3037,7 +3037,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
                 return true;
             }
             if (isSnapObject(name)) {
-                return thisObj.isTouching(name);
+                return name.isVisible && thisObj.isTouching(name);
             }
             if (name instanceof List) { // assume all elements to be sprites
                 those = name.itemsArray();
@@ -3045,7 +3045,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
                 those = this.getObjectsNamed(name, thisObj, stage); // clones
             }
             if (those.some(function (any) {
-                    return thisObj.isTouching(any);
+                    return any.isVisible && thisObj.isTouching(any);
                 })) {
                 return true;
             }
