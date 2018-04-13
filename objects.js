@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-March-19';
+modules.objects = '2018-April-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -1080,7 +1080,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCompiled: { // experimental
             type: 'reporter',
             category: 'operators',
-            spec: 'compile %repRing'
+            spec: 'compile %repRing for %n args',
+            defaults: [null, 0]
         },
 
     /*

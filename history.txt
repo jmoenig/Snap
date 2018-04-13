@@ -4073,3 +4073,7 @@ in development:
 180412
 ------
 * Threads: disable detecting collision with hidden sprites
+
+180413
+------
+* Objects: added implicit parameter count to experimental JIT compile reporter
