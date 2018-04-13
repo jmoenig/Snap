@@ -563,15 +563,17 @@ RoomMorph.prototype.editRoleName = function(role) {
     // Ask for a new role name
     var myself = this;
     this.ide.prompt('New Role Name', function (roleName) {
-        myself.validateRoleName(roleName, function() {
-            if (role !== roleName){
-                myself.ide.sockets.sendMessage({
-                    type: 'rename-role',
-                    role: role,
-                    name: roleName
-                });
-            }
-        });
+        if (roleName !== this.getCurrentRoleName()) {
+            myself.validateRoleName(roleName, function() {
+                if (role !== roleName){
+                    myself.ide.sockets.sendMessage({
+                        type: 'rename-role',
+                        role: role,
+                        name: roleName
+                    });
+                }
+            });
+        }
     }, null, 'editRoleName');
 };
 
