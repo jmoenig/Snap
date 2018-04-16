@@ -4077,3 +4077,7 @@ in development:
 180413
 ------
 * Objects: added implicit parameter count to experimental JIT compile reporter
+
+180416
+------
+* Blocks: only preserve filled rings when collapsing ring-typed multi-arg-slots
