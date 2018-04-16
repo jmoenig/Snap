@@ -4081,3 +4081,4 @@ in development:
 180416
 ------
 * Blocks: only preserve filled rings when collapsing ring-typed multi-arg-slots
+* Blocks: minor tweaks
