@@ -342,6 +342,8 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
         var i1 = tabOrder.indexOf(tab1.labelString),
             i2 = tabOrder.indexOf(tab2.labelString);
 
+        i1 = i1 === -1 ? Infinity : i1;
+        i2 = i2 === -1 ? Infinity : i2;
         return i1 < i2 ? -1 : 1;
     });
 
