@@ -683,26 +683,6 @@ NetsBloxMorph.prototype.saveACopy = function () {
     }, this.cloudError());
 };
 
-IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var myself = this,
-        contentName = this.room.hasMultipleRoles() ?
-            this.room.getCurrentRoleName() : this.room.name;
-
-    if (name) {
-        this.showMessage('Saving ' + contentName + '\nto the cloud...');
-        // Netsblox addition: start
-        this.room.name = name;
-        // Netsblox addition: end
-        SnapCloud.saveProject(
-            this,
-            // Netsblox addition: start
-            function () {myself.showMessage('Saved ' + contentName + ' to cloud!', 2); },
-            // Netsblox addition: end
-            this.cloudSaveError()
-        );
-    }
-};
-
 NetsBloxMorph.prototype.cloudSaveError = function () {
     var myself = this;
     return function(response, url) {

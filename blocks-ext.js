@@ -379,66 +379,6 @@ HintInputSlotMorph.prototype.changed = function() {
     return InputSlotMorph.prototype.changed.call(this);
 };
 
-// Adding struct support to replacing default inputs
-SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
-    var idx = this.parts().indexOf(arg),
-        inp = this.inputs().indexOf(arg),
-        deflt = new InputSlotMorph();
-
-    // Netsblox addition: start
-    // Update idx for struct support
-    var structs = this.parts().filter(function(part) {
-            return part instanceof StructInputSlotMorph;
-        }),
-        specOffset = structs.reduce(function(offset, struct) {
-            return offset + struct.fields.length;
-        }, 0);
-
-    idx = idx !== -1 ? idx - specOffset : idx;
-    // Netsblox addition: end
-    if (idx !== -1) {
-        if (this instanceof BlockMorph) {
-            deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
-            if (deflt instanceof InputSlotMorph && this.definition) {
-                deflt.setChoices.apply(
-                    deflt,
-                    this.definition.inputOptionsOfIdx(inp)
-                );
-                deflt.setContents(
-                    this.definition.defaultValueOfInputIdx(inp)
-                );
-            }
-        } else if (this instanceof MultiArgMorph) {
-            deflt = this.labelPart(this.slotSpec);
-        } else if (this instanceof ReporterSlotMorph) {
-            deflt = this.emptySlot();
-        }
-    }
-
-    // Try to set to the old value, first. If there is no old value,
-    // then (potentially) try to set the default value
-    var lastValue = SnapActions.getFieldValue(this, inp);
-    if (lastValue !== undefined) {
-        deflt.setContents(lastValue);
-    } else if (!noValues) {  // set default value
-        if (inp !== -1) {
-            if (deflt instanceof MultiArgMorph) {
-                deflt.setContents(this.defaults);
-                deflt.defaults = this.defaults;
-            } else if (!isNil(this.defaults[inp])) {
-                deflt.setContents(this.defaults[inp]);
-            }
-        }
-    }
-    this.silentReplaceInput(arg, deflt);
-    if (deflt instanceof MultiArgMorph) {
-        deflt.refresh();
-    } else if (deflt instanceof RingMorph) {
-        deflt.fixBlockColor();
-    }
-    this.cachedInputs = null;
-};
-
 var addStructReplaceSupport = function(fn) {
     return function(arg) {
         var structInput,

@@ -3937,7 +3937,7 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
 };
 
 IDE_Morph.prototype.exportGlobalBlocks = function () {
-    if (this.stage.globalBlocks.length > 0) {
+    if (this.stage.globalBlocks.length > 0 || this.stage.deletableMessageNames().length) {
         new BlockExportDialogMorph(
             this.serializer,
             this.stage.globalBlocks,
@@ -3945,9 +3945,9 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
         ).popUp(this.world());
     } else {
         this.inform(
-            'Export blocks',
+            'Export blocks/msg types',
             'this project doesn\'t have any\n'
-                + 'custom global blocks yet'
+                + 'custom global blocks or message types yet'
         );
     }
 };
@@ -5535,14 +5535,17 @@ IDE_Morph.prototype.logout = function () {
 };
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var myself = this;
+    var myself = this,
+        contentName = this.room.hasMultipleRoles() ?
+            this.room.getCurrentRoleName() : this.room.name;
+
     if (name) {
-        this.showMessage('Saving project\nto the cloud...');
-        this.setProjectName(name);
+        this.showMessage('Saving ' + contentName + '\nto the cloud...');
+        this.room.name = name;
         SnapCloud.saveProject(
             this,
-            function () {myself.showMessage('saved.', 2); },
-            this.cloudError()
+            function () {myself.showMessage('Saved ' + contentName + ' to cloud!', 2); },
+            this.cloudSaveError()
         );
     }
 };
@@ -6624,12 +6627,10 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 ) + '\n"' + name + '"?',
                 'Replace Project',
                 function () {
-                    myself.ide.setProjectName(name);
                     myself.saveCloudProject(name);
                 }
             );
         } else {
-            this.ide.setProjectName(name);
             myself.saveCloudProject(name);
         }
     } else { // 'local'

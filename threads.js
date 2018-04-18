@@ -195,7 +195,8 @@ ThreadManager.prototype.startProcess = function (
     exportResult,
     callback,
     isClicked,
-    rightAway
+    rightAway,
+    context
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -207,7 +208,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback, rightAway);
+    newProc = new NetsProcess(block.topBlock(), callback, rightAway, context);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     if (!newProc.homeContext.receiver.isClone) {

@@ -564,6 +564,16 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
         inp = this.inputs().indexOf(arg),
         deflt = new InputSlotMorph();
 
+    // Update idx for struct support
+    var structs = this.parts().filter(function(part) {
+            return part instanceof StructInputSlotMorph;
+        }),
+        specOffset = structs.reduce(function(offset, struct) {
+            return offset + struct.fields.length;
+        }, 0);
+
+    idx = idx !== -1 ? idx - specOffset : idx;
+
     if (idx !== -1) {
         if (this instanceof BlockMorph) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);

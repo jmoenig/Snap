@@ -1751,6 +1751,21 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         SnapActions.deleteVariable(name, myself.id);
     }
 
+    function addMessageType(desc) {
+        var stage = myself.parentThatIsA(StageMorph);
+
+        desc.fields = desc.fields.filter(function(field) {
+            return !!field;
+        });
+
+        // Check that the message type doesn't already exist
+        if (stage.messageTypes.getMsgType(desc.name)) {
+            myself.inform('that name is already in use');
+        } else {
+            SnapActions.addMessageType(desc.name, desc.fields);
+        }
+    }
+
     if (cat === 'motion') {
 
         blocks.push(block('forward'));
@@ -1874,6 +1889,59 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
         blocks.push(block('floodFill'));
+
+    } else if (cat === 'network') {
+        blocks.push(block('receiveSocketMessage'));
+        blocks.push(block('doSocketMessage'));
+        blocks.push('-');
+
+        blocks.push(block('doSocketRequest'));
+        blocks.push(block('doSocketResponse'));
+        blocks.push('-');
+
+        blocks.push(block('getJSFromRPCStruct'));
+        blocks.push(watcherToggle('reportRPCError'));
+        blocks.push(block('reportRPCError'));
+        blocks.push('-');
+        blocks.push(block('getProjectIds'));
+        blocks.push(block('getProjectId'));
+
+        // Add custom message types
+        button = new PushButtonMorph(
+            null,
+            function () {
+                new MessageCreatorMorph(
+                    myself,
+                    addMessageType
+                ).popUp();
+            },
+            'Make a message type'
+        );
+        blocks.push(button);
+
+        // Add delete message type block
+        if (this.deletableMessageNames().length > 0) {
+            button = new PushButtonMorph(
+                null,
+                function () {
+                    var menu = new MenuMorph(
+                        function(name) {
+                            SnapActions.deleteMessageType(name);
+                        },
+                        null
+                    );
+                    myself.deletableMessageNames().forEach(function (name) {
+                        menu.addItem(name, name);
+                    });
+                    menu.popUpAtHand(myself.world());
+                },
+                'Delete a message type'
+            );
+            button.userMenu = helpMenu;
+            button.selector = 'deleteMessageType';
+            button.showHelp = BlockMorph.prototype.showHelp;
+            blocks.push(button);
+        }
 
     } else if (cat === 'control') {
 
@@ -2192,6 +2260,34 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.selector = 'addCustomBlock';
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
+    } else if (cat === 'custom') {
+        button = new PushButtonMorph(
+            null,
+            function () {
+                new BlockDialogMorph(
+                    null,
+                    function (definition) {
+                        if (definition.spec !== '') {
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
+                        }
+                    },
+                    myself
+                ).prompt(
+                    'Make a block',
+                    null,
+                    myself.world()
+                );
+            },
+            'Make a block'
+        );
+        button.userMenu = helpMenu;
+        button.selector = 'addCustomBlock';
+        button.showHelp = BlockMorph.prototype.showHelp;
+        blocks.push(button);
     }
     return blocks;
 };
@@ -2371,48 +2467,32 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     // global custom blocks:
 
-    if (stage) {
-        y += unit * 1.6;
+    if (category === 'custom') {
+        if (stage) {
+            y += unit * 1.6;
 
-        stage.globalBlocks.forEach(function (definition) {
-            var block;
-            if (definition.category === category ||
-                    (category === 'variables'
-                        && contains(
-                            ['lists', 'other'],
-                            definition.category
-                        ))) {
-                block = definition.templateInstance();
+            stage.globalBlocks.forEach(function (definition) {
+                var block = definition.templateInstance();
                 y += unit * 0.3;
                 block.setPosition(new Point(x, y));
                 palette.addContents(block);
                 x = 0;
                 y += block.height();
-            }
-        });
-    }
+            });
+        }
 
-    // local custom blocks:
+        // local custom blocks:
 
-    y += unit * 1.6;
-    this.customBlocks.forEach(function (definition) {
-        var block;
-        if (definition.category === category ||
-                (category === 'variables'
-                    && contains(
-                        ['lists', 'other'],
-                        definition.category
-                    ))) {
-            block = definition.templateInstance();
+        y += unit * 1.6;
+        this.customBlocks.forEach(function (definition) {
+            var block = definition.templateInstance();
             y += unit * 0.3;
             block.setPosition(new Point(x, y));
             palette.addContents(block);
             x = 0;
             y += block.height();
-        }
-    });
-
-    //layout
+        });
+    }
 
     palette.scrollX(palette.padding);
     palette.scrollY(palette.padding);
@@ -4952,10 +5032,16 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        xOffset = (extentPoint.x - (src.width * scale)) / 2,
-        yOffset = (extentPoint.y - (src.height * scale)) / 2,
-        trg = newCanvas(extentPoint),
-        ctx = trg.getContext('2d');
+        xOffset,
+        yOffset,
+        trg,
+        ctx;
+
+    extentPoint = new Point(src.width * scale, src.height * scale);
+    xOffset = (extentPoint.x - (src.width * scale)) / 2,
+    yOffset = (extentPoint.y - (src.height * scale)) / 2,
+    trg = newCanvas(extentPoint);
+    ctx = trg.getContext('2d');
 
     function xOut(style, alpha, width) {
         var inset = Math.min(extentPoint.x, extentPoint.y) / 10;
@@ -6072,6 +6158,21 @@ StageMorph.prototype.blockTemplates = function (category) {
         SnapActions.deleteVariable(name, myself.id);
     }
 
+    function addMessageType(desc) {
+        var stage = myself.parentThatIsA(StageMorph);
+
+        desc.fields = desc.fields.filter(function(field) {
+            return !!field;
+        });
+
+        // Check that the message type doesn't already exist
+        if (stage.messageTypes.getMsgType(desc.name)) {
+            myself.inform('that name is already in use');
+        } else {
+            SnapActions.addMessageType(desc.name, desc.fields);
+        }
+    }
+
     if (cat === 'motion') {
 
         txt = new TextMorph(localize(
@@ -6148,6 +6249,57 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+
+    } else if (cat === 'network') {
+        blocks.push(block('receiveSocketMessage'));
+        blocks.push(block('doSocketMessage'));
+        blocks.push('-');
+        blocks.push(block('doSocketRequest'));
+        blocks.push(block('doSocketResponse'));
+        blocks.push('-');
+
+        blocks.push(block('getJSFromRPCStruct'));
+        blocks.push(watcherToggle('reportRPCError'));
+        blocks.push(block('reportRPCError'));
+        blocks.push('-');
+        blocks.push(block('getProjectIds'));
+        blocks.push(block('getProjectId'));
+
+        // Add custom message types
+        button = new PushButtonMorph(
+            null,
+            function () {
+                new MessageCreatorMorph(
+                    myself,
+                    addMessageType
+                ).popUp();
+            },
+            'Make a message type'
+        );
+        blocks.push(button);
+
+        // Add delete message type block
+        if (this.deletableMessageNames().length > 0) {
+            button = new PushButtonMorph(
+                null,
+                function () {
+                    var menu = new MenuMorph(
+                        function(name) {
+                            SnapActions.deleteMessageType(name);
+                        },
+                        null
+                    );
+                    myself.deletableMessageNames().forEach(function (name) {
+                        menu.addItem(name, name);
+                    });
+                    menu.popUpAtHand(myself.world());
+                },
+                'Delete a message type'
+            );
+            button.selector = 'deleteMessageType';
+            button.showHelp = BlockMorph.prototype.showHelp;
+            blocks.push(button);
+        }
 
     } else if (cat === 'control') {
 
@@ -6439,6 +6591,31 @@ StageMorph.prototype.blockTemplates = function (category) {
             'Make a block'
         );
         blocks.push(button);
+    } else if (cat === 'custom') {
+        button = new PushButtonMorph(
+            null,
+            function () {
+                new BlockDialogMorph(
+                    null,
+                    function (definition) {
+                        if (definition.spec !== '') {
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
+                        }
+                    },
+                    myself
+                ).prompt(
+                    'Make a block',
+                    null,
+                    myself.world()
+                );
+            },
+            'Make a block'
+        );
+        blocks.push(button);
     }
     return blocks;
 };
@@ -6531,10 +6708,14 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        trg = newCanvas(extentPoint),
-        ctx = trg.getContext('2d'),
+        trg,
+        ctx,
         fb,
         fimg;
+
+    extentPoint = new Point(src.width * scale, src.height * scale);
+    trg = newCanvas(extentPoint);
+    ctx = trg.getContext('2d');
 
     ctx.scale(scale, scale);
     ctx.drawImage(

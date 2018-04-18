@@ -1,38 +1,6 @@
 /* global ThreadManager, ensureFullUrl, Process, Context, IDE_Morph, Costume, StageMorph,
    List, SnapActions, isObject, newCanvas, Point */
 
-ThreadManager.prototype.startProcess = function (
-    block,
-    isThreadSafe,
-    exportResult,
-    callback,
-    isClicked,
-    rightAway,
-    context
-) {
-    var active = this.findProcess(block),
-        top = block.topBlock(),
-        newProc;
-    if (active) {
-        if (isThreadSafe) {
-            return active;
-        }
-        active.stop();
-        this.removeTerminatedProcesses();
-    }
-    newProc = new NetsProcess(block.topBlock(), callback, rightAway, context);
-    newProc.exportResult = exportResult;
-    newProc.isClicked = isClicked || false;
-    if (!newProc.homeContext.receiver.isClone) {
-        top.addHighlight();
-    }
-    this.processes.push(newProc);
-    if (rightAway) {
-        newProc.runStep();
-    }
-    return newProc;
-};
-
 // NetsProcess Overrides
 NetsProcess.prototype = new Process();
 NetsProcess.prototype.constructor = NetsProcess;

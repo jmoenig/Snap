@@ -130,85 +130,9 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     this.destroy();
 };
 
-ProjectDialogMorph.prototype.saveProject = function () {
-    var name = this.nameField.contents().text.text,
-        notes = this.notesText.text,
-        myself = this;
-
-    this.ide.projectNotes = notes || this.ide.projectNotes;
-    if (/[\.@]+/.test(name)) {
-        this.ide.inform(
-            'Invalid Project Name',
-            'Could not save project because\n' +
-            'the provided name contains illegal characters.',
-            this.world()
-        );
-        return;
-    }
-
-    if (this.source === 'cloud') {
-        if (detect(
-                this.projectList,
-                function (item) {return item.ProjectName === name; }
-            )) {
-            this.ide.confirm(
-                localize(
-                    'Are you sure you want to replace'
-                ) + '\n"' + name + '"?',
-                'Replace Project',
-                function () {
-                    myself.saveCloudProject(name);
-                }
-            );
-        } else {
-            myself.saveCloudProject(name);
-        }
-    } else { // 'local'
-        if (detect(
-                this.projectList,
-                function (item) {return item.name === name; }
-            )) {
-            this.ide.confirm(
-                localize(
-                    'Are you sure you want to replace'
-                ) + '\n"' + name + '"?',
-                'Replace Project',
-                function () {
-                    myself.ide.room.name = name;
-                    myself.ide.source = 'local';
-                    myself.ide.saveProject(name);
-                    myself.destroy();
-                }
-            );
-        } else {
-            this.ide.room.name = name;
-            myself.ide.source = 'local';
-            this.ide.saveProject(name);
-            this.destroy();
-        }
-    }
-};
-
 ////////////////////////////////////////////////////
 // Override submodule for exporting of message types
 ////////////////////////////////////////////////////
-
-IDE_Morph.prototype.exportGlobalBlocks = function () {
-    if (this.stage.globalBlocks.length > 0 || this.stage.deletableMessageNames().length) {
-        new BlockExportDialogMorph(
-            this.serializer,
-            this.stage.globalBlocks,
-            this.stage
-        ).popUp(this.world());
-    } else {
-        this.inform(
-            'Export blocks/msg types',
-            'this project doesn\'t have any\n'
-                + 'custom global blocks or message types yet'
-        );
-    }
-};
-
 
 IDE_Morph.prototype._getURL = IDE_Morph.prototype.getURL;
 IDE_Morph.prototype.getURL = function (url, callback) {
