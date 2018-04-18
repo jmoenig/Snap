@@ -5544,7 +5544,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         this.room.name = name;
         SnapCloud.saveProject(
             this,
-            function () {myself.showMessage('Saved ' + contentName + ' to cloud!', 2); },
+            function () {myself.showMessage('Saved ' + contentName + ' to the cloud!', 2); },
             this.cloudSaveError()
         );
     }
