@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript">
-    if (window.location) {
-      window.location = 'snap.html' + window.location.hash;
-    }
-    </script> 
-    <meta HTTP-EQUIV="REFRESH" content="0.1; url=snap.html">
-    <title>Redirecting to Snap!</title> 
-  </head>
-  <body>
-    <p>If you are not automatically redirected to Snap<i>!</i>,
-      <a href="snap.html">please click here.</a> </p> 
-  </body> 
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Snap! Build Your Own Blocks 4.1.3 - dev -</title>
+		<link rel="shortcut icon" href="media/favicon.ico">
+        <script type="text/javascript" src="dist/snap.min.js"></script>
+        <script type="text/javascript" src="src/locale.js"></script>
+		<script type="text/javascript">
+			var world;
+			window.onload = function () {
+				world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
+				new IDE_Morph().openIn(world);
+        		loop();
+			};
+			function loop() {
+        		requestAnimationFrame(loop);
+				world.doOneCycle();
+			}
+		</script>
+	</head>
+	<body style="margin: 0;">
+		<canvas id="world" tabindex="1" style="position: absolute;" />
+	</body>
 </html>
-
