@@ -228,7 +228,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.projectName = '';
     this.projectNotes = '';
 
-    this.logoURL = this.resourceURL('snap_logo_sm.png');
+    this.logoURL = this.resourceURL('media', 'snap_logo_sm.png');
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
@@ -3231,7 +3231,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Libraries...',
         function() {
             myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
+                myself.resourceURL('media', 'libs', 'LIBRARIES'),
                 function (txt) {
                     var libraries = myself.parseResourceFile(txt);
                     new LibraryImportDialogMorph(myself, libraries).popUp();
@@ -3272,7 +3272,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // based on the contents file.
     // If no callback is specified, synchronously return the list of files
     // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+    var url = this.resourceURL('media', dirname.toLowerCase(), dirname.toUpperCase()),
         async = callback instanceof Function,
         myself = this,
         data;
@@ -3299,7 +3299,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
     // A Resource File lists all the files that could be loaded in a submenu
-    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
+    // Examples are media/libs/LIBRARIES, media/costumes/COSTUMES, etc
     // The file format is tab-delimited, with unix newlines:
     // file-name, Display Name, Help Text (optional)
     var parts,
@@ -3414,7 +3414,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
     items.forEach(function (item) {
         // Caution: creating very many thumbnails can take a long time!
-        var url = myself.resourceURL(folderName, item.fileName),
+        var url = myself.resourceURL('media', folderName.toLowerCase(), item.fileName),
             img = new Image(),
             suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
             isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
@@ -6140,7 +6140,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                myself.ide.resourceURL('Examples', item.fileName)
+                myself.ide.resourceURL('media', 'examples', item.fileName)
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -6320,7 +6320,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
-        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
+        src = this.ide.getURL(this.ide.resourceURL('media', 'examples', proj.fileName));
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
@@ -6879,7 +6879,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
                 localize('Loading') + '\n' + localize(item.name)
             );
             myself.ide.getURL(
-                myself.ide.resourceURL('libraries', item.fileName),
+                myself.ide.resourceURL('media', 'libs', item.fileName),
                 function(libraryXML) {
                     myself.cacheLibrary(
                         item.fileName,
@@ -7007,7 +7007,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     } else {
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
-            ide.resourceURL('libraries', selectedLibrary),
+            ide.resourceURL('media', 'libs', selectedLibrary),
             function(libraryText) {
                 ide.droppedText(libraryText, libraryName);
             }
