@@ -3006,7 +3006,7 @@ BlockMorph.prototype.showHelp = function () {
             block.fullImage()
         );
     } else {
-        pic.src = ide.resourceURL('help', spec + '.png');
+        pic.src = ide.resourceURL('docs', 'help', spec + '.png');
     }
 };
 

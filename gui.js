@@ -2484,7 +2484,7 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addItem(
         'Reference manual',
         function () {
-            var url = myself.resourceURL('help', 'SnapManual.pdf');
+            var url = myself.resourceURL('docs', 'help', 'SnapManual.pdf');
             window.open(url, 'SnapReferenceManual');
         }
     );
