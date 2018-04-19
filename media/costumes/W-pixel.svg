@@ -1,8 +1,1 @@
-<svg version="1.1" width="26" height="36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.33958038967102766" transform="matrix(1.02816903591156, 0, 0, 1.02816903591156, 0, -0.05)">
-    <path id="ID0.43867557402700186" fill="#39B54A" d="M 42 84 L 63 84 L 63 105 L 42 105 L 42 84 Z " transform="matrix(0.24149660766124725, 0, 0, 0.24149660766124725, 0.15, 0.5)"/>
-    <path id="ID0.3298597251996398" fill="#39B54A" d="M 21 105 L 42 105 L 42 126 L 21 126 L 21 147 L 0 147 L 0 0 L 21 0 L 21 105 " transform="matrix(0.24149660766124725, 0, 0, 0.24149660766124725, 0.15, 0.5)"/>
-    <path id="ID0.07024952163919806" fill="#39B54A" d="M 105 0 L 105 147 L 84 147 L 84 126 L 63 126 L 63 105 L 84 105 L 84 0 L 105 0 " transform="matrix(0.24149660766124725, 0, 0, 0.24149660766124725, 0.15, 0.5)"/>
-  </g>
-</svg>
+<svg width="26" height="36" xmlns="http://www.w3.org/2000/svg"><g fill="#39B54A"><path d="M10.583 21.321h5.214v5.215h-5.214V21.32zm-5.214 5.215h5.214v5.214H5.369v5.214H.154V.464H5.37v26.072"/><path d="M26.226.464v36.5H21.01V31.75h-5.214v-5.214h5.214V.464h5.215"/></g></svg>

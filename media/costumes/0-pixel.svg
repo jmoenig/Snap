@@ -1,8 +1,1 @@
-<svg version="1.1" width="26" height="37" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.038030187133699656">
-    <path id="ID0.6170409843325615" fill="#39B54A" d="M 105 21 L 105 126 L 84 126 L 84 42 L 63 42 L 63 21 L 21 21 L 21 0 L 84 0 L 84 21 L 105 21 " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
-    <path id="ID0.1062387116253376" fill="#39B54A" d="M 42 42 L 63 42 L 63 105 L 42 105 L 42 42 Z " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
-    <path id="ID0.4762702202424407" fill="#39B54A" d="M 84 126 L 84 147 L 21 147 L 21 126 L 0 126 L 0 21 L 21 21 L 21 105 L 42 105 L 42 126 L 84 126 " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
-  </g>
-</svg>
+<svg width="26" height="37" xmlns="http://www.w3.org/2000/svg"><g fill="#39B54A"><path d="M25.744 5.739v25.444h-5.089V10.828h-5.088v-5.09H5.389V.65h15.266v5.089h5.09"/><path d="M10.478 10.828h5.089v15.266h-5.09V10.828z"/><path d="M20.655 31.183v5.089H5.39v-5.089H.3V5.739h5.089v20.355h5.089v5.089h10.177"/></g></svg>
