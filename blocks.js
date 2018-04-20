@@ -1072,6 +1072,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true // read-only
             );
             break;
+        case '%vartype':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'script' : ['script'],
+                    'sprite-local' : ['sprite-local'],
+                    'global' : ['global']
+                },
+                true // read-only
+            );
+            break;
         case '%spr':
             part = new InputSlotMorph(
                 null,

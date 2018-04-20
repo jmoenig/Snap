@@ -1445,11 +1445,21 @@ Process.prototype.evaluateCustomBlock = function () {
 
 // Process variables primitives
 
-Process.prototype.doDeclareVariables = function (varNames) {
-    var varFrame = this.context.outerContext.variables;
-    varNames.asArray().forEach(function (name) {
-        varFrame.addVar(name);
-    });
+Process.prototype.doDeclareVariables = function (type, varNames) {
+	if (type == 'script') {
+	    var varFrame = this.context.outerContext.variables;
+    	varNames.asArray().forEach(function (name) {
+        	varFrame.addVar(name);
+	    });
+	} else {
+		var rcvr = this.blockReceiver();
+        varNames.asArray().forEach(function (name) {
+			rcvr.addVariable(name, (type == 'global'));
+		});
+        var ide = rcvr.parentThatIsA(IDE_Morph);
+        ide.flushBlocksCache('variables'); // b/c of inheritance
+        ide.refreshPalette();
+	};
 };
 
 Process.prototype.doSetVar = function (varName, value) {
