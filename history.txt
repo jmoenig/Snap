@@ -4082,3 +4082,7 @@ in development:
 ------
 * Blocks: only preserve filled rings when collapsing ring-typed multi-arg-slots
 * Blocks: minor tweaks
+
+180424
+------
+* added 'name' selector to pixel library
