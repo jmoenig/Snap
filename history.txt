@@ -4086,3 +4086,7 @@ in development:
 180424
 ------
 * added 'name' selector to pixel library
+
+180425
+------
+* GUI: fixed rearranging sound icons in the jukebox
