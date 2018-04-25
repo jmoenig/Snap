@@ -8517,7 +8517,7 @@ JukeboxMorph.prototype.updateList = function () {
         myself.addContents(icon);
         y = icon.bottom() + padding;
     });
-    this.soundsVersion = this.sprite.costumes.lastChanged;
+    this.soundsVersion = this.sprite.sounds.lastChanged;
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();

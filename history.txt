@@ -4090,3 +4090,4 @@ in development:
 180425
 ------
 * GUI: fixed rearranging sound icons in the jukebox
+* GUI: fixed scrolling for the jukebox (updating the sounds list version)
