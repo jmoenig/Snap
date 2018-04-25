@@ -2293,9 +2293,11 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.stage.add(sprite);
 
     // randomize sprite properties
-    sprite.setHue(rnd.call(this, 0, 100));
-    sprite.setBrightness(rnd.call(this, 50, 100));
-    sprite.turn(rnd.call(this, 1, 360));
+    if (this.world().currentKey !== 16) { // shift-click
+        sprite.setHue(rnd.call(this, 0, 100));
+        sprite.setBrightness(rnd.call(this, 50, 100));
+        sprite.turn(rnd.call(this, 1, 360));
+    }
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
 
