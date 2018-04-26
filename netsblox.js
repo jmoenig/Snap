@@ -885,6 +885,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
 
     this.source = 'cloud';
     project.Owner = project.Owner || SnapCloud.username;
+    this.updateUrlQueryString(newRoom, isPublic === 'true');
     if (project.SourceCode) {
         this.room.nextRoom = {
             ownerId: project.Owner,
@@ -902,7 +903,6 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
             this.showMessage(localize('A new role has been created for you at') + ' ' + newRoom);
         }
     }
-    this.updateUrlQueryString(newRoom, isPublic === 'true');
 };
 
 NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExample) {
