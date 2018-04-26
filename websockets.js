@@ -11,6 +11,7 @@ var WebSocketManager = function (ide) {
     this.processes = [];  // Queued processes to start
     this._protocol = SERVER_URL.substring(0,5) === 'https' ? 'wss:' : 'ws:';
     this.url = this._protocol + '//' + SERVER_ADDRESS;
+    this.lastSocketActivity = Date.now();
     this._connectWebSocket();
     this.version = Date.now();
     this.serverVersion = null;
@@ -22,6 +23,7 @@ var WebSocketManager = function (ide) {
     this.serializer = new NetsBloxSerializer();
 };
 
+WebSocketManager.HEARTBEAT_INTERVAL = 25*1000;  // 25 seconds
 WebSocketManager.MessageHandlers = {
     'request-actions-complete': function() {
         this.inActionRequest = false;
@@ -193,9 +195,38 @@ WebSocketManager.MessageHandlers = {
             }
         }
     },
+    'ping': function() {
+        this.sendMessage({type: 'pong'});
+    },
     'user-action': function(msg) {
         SnapActions.onMessage(msg.action);
     }
+};
+
+WebSocketManager.prototype.isConnected = function() {
+    return this.websocket.readyState === this.websocket.OPEN;
+};
+
+WebSocketManager.prototype.isStale = function() {
+    var sinceLastMsg = Date.now() - this.lastSocketActivity;
+    // if stale, assume that the connection has broken
+    return sinceLastMsg > 2*WebSocketManager.HEARTBEAT_INTERVAL;
+};
+
+WebSocketManager.prototype.checkAlive = function() {
+    if (this.isStale()) {
+        if (this.websocket.readyState !== this.websocket.CONNECTING) {
+            this.lastSocketActivity = Date.now();
+            this.disconnect();  // reconnect should start automatically
+        }
+        return false;
+    }
+    return true;
+};
+
+WebSocketManager.prototype.disconnect = function() {
+    this.websocket.close();
+    this.onClose();  // ensure onClose is called
 };
 
 WebSocketManager.prototype._connectWebSocket = function() {
@@ -205,7 +236,7 @@ WebSocketManager.prototype._connectWebSocket = function() {
 
     // Don't connect if the already connected
     if (isReconnectAttempt) {
-        if (this.websocket.readyState === this.websocket.OPEN) {
+        if (this.isConnected()) {
             return;
         } else if (this.websocket.readyState === this.websocket.CONNECTING) {
             // Check if successful in 500 ms
@@ -221,6 +252,11 @@ WebSocketManager.prototype._connectWebSocket = function() {
             self.ide.showMessage((self.hasConnected ? 're' : '') + 'connected!', 2);
             self.errored = false;
         }
+        if (!self.hasConnected) {
+            setInterval(self.checkAlive.bind(self), WebSocketManager.HEARTBEAT_INTERVAL);
+        }
+
+        self.lastSocketActivity = Date.now();
         self.hasConnected = true;
         self.connected = true;
 
@@ -230,7 +266,6 @@ WebSocketManager.prototype._connectWebSocket = function() {
         } else {
             self.sendMessage({type: 'request-uuid'});
         }
-
     };
 
     // Set up message events
@@ -239,6 +274,7 @@ WebSocketManager.prototype._connectWebSocket = function() {
         var msg = JSON.parse(rawMsg.data),
             type = msg.type;
 
+        this.lastSocketActivity = Date.now();
         if (WebSocketManager.MessageHandlers[type]) {
             WebSocketManager.MessageHandlers[type].call(self, msg);
         } else {
@@ -247,27 +283,31 @@ WebSocketManager.prototype._connectWebSocket = function() {
     };
 
     this.websocket.onclose = function() {
-        var errMsg;
-
-        if (self.connected) {
-            self.version = Date.now();
-            self.connected = false;
-        }
-
-        if (!self.errored && Date.now() - self.version > 5000) {  // tried connecting for 5 seconds
-            errMsg = self.hasConnected ?
-                'Temporarily disconnected.\nSome network functionality may be ' +
-                'nonfunctional.\nTrying to reconnect...' :
-
-                'Could not fully connect to NetsBlox.\nPlease try refreshing ' +
-                'your browser or try a different browser';
-
-            self.ide.showMessage(errMsg);
-            self.errored = true;
-        }
-
-        setTimeout(self._connectWebSocket.bind(self), 500);
+        self.onClose();
     };
+};
+
+WebSocketManager.prototype.onClose = function() {
+    var errMsg;
+
+    if (this.connected) {
+        this.version = Date.now();
+        this.connected = false;
+    }
+
+    if (!this.errored && Date.now() - this.version > 5000) {  // tried connecting for 5 seconds
+        errMsg = this.hasConnected ?
+            'Temporarily disconnected.\nSome network functionality may be ' +
+            'nonfunctional.\nTrying to reconnect...' :
+
+            'Could not fully connect to NetsBlox.\nPlease try refreshing ' +
+            'your browser or try a different browser';
+
+        this.ide.showMessage(errMsg);
+        this.errored = true;
+    }
+
+    setTimeout(this._connectWebSocket.bind(this), 500);
 };
 
 WebSocketManager.prototype.sendJSON = function(message) {
@@ -275,8 +315,8 @@ WebSocketManager.prototype.sendJSON = function(message) {
 };
 
 WebSocketManager.prototype.send = function(message) {
-    var state = this.websocket.readyState;
-    if (state === this.websocket.OPEN) {
+    this.checkAlive();
+    if (this.isConnected()) {
         this.websocket.send(message);
     } else {
         this.messages.push(message);
@@ -284,7 +324,6 @@ WebSocketManager.prototype.send = function(message) {
 };
 
 WebSocketManager.prototype.sendMessage = function(message) {
-    message.namespace = 'netsblox';
     message = this.serializeMessage(message);
     this.send(message);
 };
