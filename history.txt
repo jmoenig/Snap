@@ -4092,3 +4092,7 @@ in development:
 * GUI: fixed rearranging sound icons in the jukebox
 * GUI: fixed scrolling for the jukebox (updating the sounds list version)
 * GUI: only randomize position when shift-clicking on new turtle-sprite button
+
+180427
+------
+* GUI: when creating a new sprite only randomize color and direction when shift-clicking
