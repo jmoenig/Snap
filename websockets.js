@@ -274,7 +274,7 @@ WebSocketManager.prototype._connectWebSocket = function() {
         var msg = JSON.parse(rawMsg.data),
             type = msg.type;
 
-        this.lastSocketActivity = Date.now();
+        self.lastSocketActivity = Date.now();
         if (WebSocketManager.MessageHandlers[type]) {
             WebSocketManager.MessageHandlers[type].call(self, msg);
         } else {
