@@ -6878,9 +6878,142 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
-    if (evt === 'esc') {
+    if (evt === 'ctrl esc') {
         return this.fireStopAllEvent();
     }
+    if (evt === 'ctrl q') { 
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.addComment(); }
+        return;
+        
+    }
+    if (evt === 'ctrl y') { 
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.cleanUp(); }
+        return;
+    }
+    if (evt === 'ctrl u') { 
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.undrop(); }
+        return;
+    }
+    if (evt === 'ctrl d') {
+        if (!ide.isAppMode) {
+            ide.spriteEditor.contents.lastDroppedBlock.destroy();
+            ide.spriteEditor.contents.lastDroppedBlock = null;
+        }
+        return;
+    }
+    if (evt === 'ctrl r') {
+        if (!ide.isAppMode) {
+            ide.spriteEditor.contents.lastDroppedBlock.ringify(); 
+        }
+        return;
+    }
+    if (evt === 'ctrl e') {
+        var block = myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock;
+        if (block.parentThatIsA(RingMorph) && (!ide.isAppMode)) {
+            block.unringify();
+        }
+        return;
+    }
+    if (evt === 'esc') {
+        if (ide.isAppMode) {ide.controlBar.appModeButton.trigger(); }
+        return;
+    }
+    if (evt === 'ctrl c') { 
+        if (!ide.isAppMode) {
+            var toCopy = ide.spriteEditor.contents.lastDroppedBlock; 
+            var copy = function (input) {
+                var dup = input.fullCopy(),
+                    ide = input.parentThatIsA(IDE_Morph);
+                dup.pickUp(world);
+                if (ide) {
+                        world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+            }
+            return copy(toCopy);
+        } else {
+            return;
+        }
+    }
+
+    if (evt === 'ctrl l') {
+        var libraries = function () {
+            // read a list of libraries from an external file,
+            var world = ide.world();
+            var pos = myself.parentThatIsA(IDE_Morph).controlBar
+                .projectButton.bottomLeft();
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                    'LIBRARIES';
+
+            function loadLib(name) {
+                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                        + name
+                        + '.xml';
+                myself.parentThatIsA(IDE_Morph).droppedText(myself.getURL(url), name);
+            }
+
+            myself.parentThatIsA(IDE_Morph).getURL(libUrl).split('\n')
+                .forEach(function (line) {
+                if (line.length > 0) {
+                    libMenu.addItem(
+                        line.substring(line.indexOf('\t') + 1),
+                        function () {
+                            loadLib(
+                                line.substring(0, line.indexOf('\t'))
+                            );
+                        }
+                    );
+                }
+            });
+        libMenu.popup(world, pos);
+        }
+        if (!ide.isAppMode) {return libraries(); }
+        return;
+    }
+    if (evt === 'ctrl i') {
+        var import_tools = function () {
+            myself.parentThatIsA(IDE_Morph).droppedText(
+                myself.parentThatIsA(IDE_Morph).getURLsbeOrRelative(
+                    'tools.xml'
+                ),
+                'tools'
+            );
+        };
+        if (!ide.isAppMode) {return import_tools(); }
+        return;
+    }
+
+    if (evt === 'ctrl b') {
+        var new_block = function () {
+            new BlockDialogMorph(
+                null,
+                function (definition) {
+                    if (definition.spec !== '') {
+                        if (definition.isGlobal) {
+                            myself.globalBlocks.push(definition);
+                        } else {
+                            myself.customBlocks.push(definition);
+                        }
+                        myself.parentThatIsA(IDE_Morph).flushPaletteCache();
+                        myself.parentThatIsA(IDE_Morph).refreshPalette();
+                        new BlockEditorMorph(definition, myself).popUp();
+                    }
+                },
+                myself
+            ).prompt(
+                'Make a block',
+                null,
+                myself.world()
+            );
+        }
+        if (!ide.isAppMode) {return new_block(); }
+        return;
+    }
+
     this.children.concat(this).forEach(function (morph) {
         if (isSnapObject(morph)) {
             morph.allHatBlocksForKey(evt).forEach(function (block) {
