@@ -1483,6 +1483,8 @@ SnapTranslator.dict.de = {
         'beliebig',
 
     // attributes
+    'my':
+        'Attribut',
     'neighbors':
         'Nachbarn',
     'self':

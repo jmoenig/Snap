@@ -1454,18 +1454,20 @@ Process.prototype.doDeclareVariables = function (varNames) {
 
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
-        name = varName,
-        rcvr;
+        name = varName;
     if (name instanceof Context) {
-        rcvr = this.blockReceiver();
         if (name.expression.selector === 'reportGetVar') {
             name.variables.setVar(
                 name.expression.blockSpec,
                 value,
-                rcvr
+                this.blockReceiver()
             );
             return;
         }
+        this.doSet(name, value);
+        return;
+    }
+    if (name instanceof Array) {
         this.doSet(name, value);
         return;
     }
@@ -3311,16 +3313,16 @@ Process.prototype.reportGet = function (query) {
 Process.prototype.doSet = function (attribute, value) {
     // experimental, manipulate sprites' attributes
     var name, rcvr;
-    if (!(attribute instanceof Context)) {
-        return;
-    }
     rcvr = this.blockReceiver();
     this.assertAlive(rcvr);
-    if (!(attribute instanceof Context) ||
-            attribute.expression.selector !== 'reportGet') {
+    if (!(attribute instanceof Context || attribute instanceof Array) ||
+        (attribute instanceof Context &&
+            attribute.expression.selector !== 'reportGet')) {
         throw new Error(localize('unsupported attribute'));
     }
-    name = attribute.expression.inputs()[0].evaluate();
+    name = attribute instanceof Context ?
+            attribute.expression.inputs()[0].evaluate()
+                : attribute;
     if (name instanceof Array) {
         name = name[0];
     }
