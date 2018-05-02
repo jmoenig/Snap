@@ -4101,3 +4101,4 @@ in development:
 ------
 * Blocks, Threads: added "center" to drop-down options of location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
 * updated German translation
+* disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode

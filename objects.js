@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-April-13';
+modules.objects = '2018-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -6844,7 +6844,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         myself = this;
 
     this.keysPressed[evt] = true;
-    if (evt === 'ctrl enter') {
+    if (evt === 'ctrl enter' && !ide.isAppMode) {
         return this.fireGreenFlagEvent();
     }
     if (evt === 'shift enter') {
@@ -6878,7 +6878,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
-    if (evt === 'esc') {
+    if (evt === 'esc' && !ide.isAppMode) {
         return this.fireStopAllEvent();
     }
     this.children.concat(this).forEach(function (morph) {
