@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-April-16';
+modules.blocks = '2018-May-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8421,6 +8421,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
 	    dict['random position'] = ['random position'];
  	}
 	dict['mouse-pointer'] = ['mouse-pointer'];
+    dict['center'] = ['center'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {

@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-April-12';
+modules.threads = '2018-May-02';
 
 var ThreadManager;
 var Process;
@@ -2900,9 +2900,11 @@ Process.prototype.doFaceTowards = function (name) {
         thatObj;
 
     if (thisObj) {
-        if (this.inputOption(name) === 'mouse-pointer') {
+        if (this.inputOption(name) === 'center') {
+            thisObj.faceToXY(0, 0);
+        } else if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
-        } if (this.inputOption(name) === 'random position') {
+        } else if (this.inputOption(name) === 'random position') {
         	thisObj.setHeading(this.reportRandom(1, 36000) / 100);
         } else {
             if (name instanceof List) {
@@ -2929,7 +2931,9 @@ Process.prototype.doGotoObject = function (name) {
         stage;
 
     if (thisObj) {
-        if (this.inputOption(name) === 'mouse-pointer') {
+        if (this.inputOption(name) === 'center') {
+            thisObj.gotoXY(0, 0);
+        } else if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else if (this.inputOption(name) === 'random position') {
 	        stage = thisObj.parentThatIsA(StageMorph);
@@ -3127,6 +3131,9 @@ Process.prototype.reportDistanceTo = function (name) {
         point = rc;
         if (this.inputOption(name) === 'mouse-pointer') {
             point = thisObj.world().hand.position();
+        } else if (this.inputOption(name) === 'center') {
+            return new Point(thisObj.xPosition(), thisObj.yPosition())
+                .distanceTo(new Point(0, 0));
         } else if (name instanceof List) {
             return new Point(thisObj.xPosition(), thisObj.yPosition())
                 .distanceTo(new Point(name.at(1), name.at(2)));
@@ -3148,6 +3155,9 @@ Process.prototype.reportDirectionTo = function (name) {
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             return thisObj.angleToXY(this.reportMouseX(), this.reportMouseY());
+        }
+        if (this.inputOption(name) === 'center') {
+            return thisObj.angleToXY(0, 0);
         }
         if (name instanceof List) {
             return thisObj.angleToXY(

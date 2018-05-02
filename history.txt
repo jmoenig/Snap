@@ -4096,3 +4096,7 @@ in development:
 180427
 ------
 * GUI: when creating a new sprite only randomize color and direction when shift-clicking
+
+180502
+------
+* Blocks, Threads: added "center" to drop-down options of location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
