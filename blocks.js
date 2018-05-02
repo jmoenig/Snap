@@ -8421,7 +8421,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
 	    dict['random position'] = ['random position'];
  	}
 	dict['mouse-pointer'] = ['mouse-pointer'];
-    dict['center'] = ['center'];
+    dict.center = ['center'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
