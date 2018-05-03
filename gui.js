@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-April-27';
+modules.gui = '2018-May-03';
 
 // Declarations
 
@@ -2293,13 +2293,14 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.stage.add(sprite);
 
     // randomize sprite properties
-    if (this.world().currentKey === 16) { // shift-click
-        sprite.setHue(rnd.call(this, 0, 100));
-        sprite.setBrightness(rnd.call(this, 50, 100));
-        sprite.turn(rnd.call(this, 1, 360));
-    }
+    sprite.setHue(rnd.call(this, 0, 100));
+    sprite.setBrightness(rnd.call(this, 50, 100));
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
+
+    if (this.world().currentKey === 16) { // shift-click
+        sprite.turn(rnd.call(this, 1, 360));
+    }
 
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);

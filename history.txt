@@ -4103,3 +4103,7 @@ in development:
 * updated German translation
 * disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
 * Blocks, Threads: added options for sprite attributes to the SET block
+
+180503
+------
+* GUI: (again) randomize pen color when creating a new sprite
