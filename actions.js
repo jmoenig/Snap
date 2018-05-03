@@ -442,8 +442,11 @@ ActionManager.prototype._isBatchEvent = function(msg) {
 
 ActionManager.prototype.onReceiveAction = function(msg) {
     if (this.isPreviousAction(msg)) return;
-    if (this.isUserAction(msg) && !SnapUndo.contains(msg)) {
-        return SnapUndo.record(msg);
+    if (this.isUserAction(msg)) {
+        if (!SnapUndo.contains(msg)) {
+            SnapUndo.record(msg);
+        }
+        return;
     }
 
     if (this.isNextAction(msg) && !this.isApplyingAction) {
