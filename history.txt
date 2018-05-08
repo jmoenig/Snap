@@ -4107,3 +4107,7 @@ in development:
 180503
 ------
 * GUI: (again) randomize pen color when creating a new sprite
+
+180508
+------
+* Threads: tweaked JS-Compiler to better handle process related ops

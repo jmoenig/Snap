@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-May-02';
+modules.threads = '2018-May-08';
 
 var ThreadManager;
 var Process;
@@ -4467,7 +4467,13 @@ JSCompiler.prototype.compileExpression = function (block) {
             : (this.source.receiver || this.process.receiver);
         rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
-        return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+        if (isSnapObject(target)) {
+            return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+        } else {
+            return 'arguments[arguments.length - 1].' +
+                selector +
+                '.apply(arguments[arguments.length - 1], [' + args +'])';
+        }
     }
 };
 
