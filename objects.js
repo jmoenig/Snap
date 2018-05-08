@@ -2036,6 +2036,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportUsername'));
+        blocks.push('-');
+        blocks.push(block('reportLatitude'));
+        blocks.push(block('reportLongitude'));
+        blocks.push('-');
+        blocks.push(block('reportStageHeight'));
+        blocks.push(block('reportStageWidth'));
 
     // for debugging: ///////////////
 
@@ -6386,6 +6393,13 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportUsername'));
+        blocks.push('-');
+        blocks.push(block('reportLatitude'));
+        blocks.push(block('reportLongitude'));
+        blocks.push('-');
+        blocks.push(block('reportStageHeight'));
+        blocks.push(block('reportStageWidth'));
 
     // for debugging: ///////////////
 
