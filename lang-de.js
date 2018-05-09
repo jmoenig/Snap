@@ -250,10 +250,10 @@ SnapTranslator.dict.de = {
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'Bilder durch Hereinziehen von einer anderen\n'
+            + 'Webseite oder vom Computer importieren',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'Kl\u00e4nge durch Hereinziehen importieren',
 
     // primitive blocks:
 
@@ -847,6 +847,10 @@ SnapTranslator.dict.de = {
         'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
     'Retina display support':
         'Retina Bildschirmauflösung',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'ausschalten um eine niedrigere Auflösung zu erhalten\nund weniger Rechenleistung zu benötigen',
+    'check for higher resolution,\nuses more computing resources':
+        'einschalten um eine höhere Auflösung zu erhalten,\nbenötigt mehr Rechenleistung',
     'Codification support':
         'Kodifikation',
     'Clicking sound':
@@ -1114,6 +1118,14 @@ SnapTranslator.dict.de = {
         'Kost\u00fcmeditor',
     'click or drag crosshairs to move the rotation center':
         'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+    //'grow':
+    //    'größer',
+    //'shrink':
+    //    'kleiner',
+    //'flip ↔':
+    //    'drehen ↔',
+    //'flip ↕':
+    //    'drehen ↕',
 
     // project notes
     'Project Notes':
