@@ -247,6 +247,13 @@ SnapTranslator.dict.de = {
     // new sprite button:
     'add a new sprite':
         'ein neues Objekt\nhinzuf\u00fcgen',
+    'add a new Turtle sprite':
+        'neues Objekt hinzufügen',
+    'paint a new sprite':
+        'neues Objekt zeichnen',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'neues Objekt mit Webcam-Kostüm hinzufügen',
+    
 
     // tab help
     'costumes tab help':
@@ -724,7 +731,7 @@ SnapTranslator.dict.de = {
         'Importieren...',
     'file menu import hint':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
+            + 'Bl\u00f6cken,\n'
             + 'ein Kost\u00fcm oder einen Klang',
     'Export project as plain text...':
         'Projekt als normalen Text exportieren...',
@@ -737,19 +744,19 @@ SnapTranslator.dict.de = {
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
     'Unused blocks...':
-          'Ungebrauchte Bl\u00f6cke...',
+          'nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
         'nicht verwendete Bl\u00f6cke finden\nund entfernen',
     'Remove unused blocks':
-        'Ungebrauchte Bl\u00f6cke entfernen',
+        'nicht verwendete Bl\u00f6cke entfernen',
     'there are currently no unused\nglobal custom blocks in this project':
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
-        'ungebrauchte Bl\u00f6cke entfernt',
+        'nicht verwendete Bl\u00f6cke entfernt',
     'Export summary...':
         'Zusammenfassung exportieren...',
     'open a new browser browser window\n with a summary of this project':
-        'eine Zusammenfassung diese Projects\nin einem neuen Browserfenster'
+        'eine Zusammenfassung dieses Projekts\nin einem neuen Browserfenster'
             + 'anzeigen',
     'Contents':
         'Inhalt',
@@ -777,6 +784,15 @@ SnapTranslator.dict.de = {
         'Anmelden...',
     'Signup...':
         'Benutzerkonto einrichten...',
+    'Logout':
+        'Abmelden',
+    'Change Password...':
+        'Passwort ändern...',
+    'Reset Password...':
+        'Passwort zurücksetzen...',
+    'Resend Verification Email...':
+        'Bestätigungsmail nochmal senden...',
+    
 
     // settings menu
     'Language...':
@@ -1116,8 +1132,38 @@ SnapTranslator.dict.de = {
     // costume editor
     'Costume Editor':
         'Kost\u00fcmeditor',
+    'Paint Editor':
+        'Kostümeditor',
     'click or drag crosshairs to move the rotation center':
         'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+    'undo':
+        'rückgängig',
+    'Vector':
+        'Vektor',
+    'Paintbrush tool\n(free draw)':
+        'Pinsel\n(freies Zeichnen)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rechteck\n(Shift: Quadrat)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Ellipse\n(Shift: Kreis)',
+    'Eraser tool':
+        'Radiergummi',
+    'Set the rotation center':
+        'Drehpunkt setzen',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Linie\n(Shift: vertikal/horizontal)',
+    'Filled Rectangle\n(shift: square)':
+        'gefülltes Rechteck\n(Shift: Quadrat)',
+    'Filled Ellipse\n(shift: circle)':
+        'gefüllte Ellipse\n(Shift: Kreis)',
+    'Fill a region':
+        'fülle einen Bereich mit\nder gewählten Farbe',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipette (klicke irgendwo auf die gewünschte\nFarbe, um sie aufzunehmen)',
+    'Brush size':
+        'Pinselstärke',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Proportionen festlegen\n(auch über Shift-Taste)',
     //'grow':
     //    'größer',
     //'shrink':
@@ -1126,6 +1172,36 @@ SnapTranslator.dict.de = {
     //    'drehen ↔',
     //'flip ↕':
     //    'drehen ↕',
+    
+    'Vector Paint Editor':
+        'Vektor-Editor',
+    'Rectangle\n(shift: square)':
+        'Rechteck\n(Shift: Quadrat)',
+    'Ellipse\n(shift: circle)':
+        'Ellipse\n(Shift: Kreis)',
+    'Selection tool':
+        'Auswählen',
+    'Line tool\n(shift: constrain to 45º)':
+        'Linie\n(Shift: Vielfache von 45°)',
+    'Closed brush\n(free draw)':
+        'geschlossene, gefüllte Form\n(freies Zeichnen)',
+    'Paint a shape\n(shift: secondary color)':
+        'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
+    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+        'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
+    'Primary color      Secondary color':
+        'Primärfarbe          Sekundärfarbe',
+    
+    
+   // 'Top':
+   //     'oben',
+   // 'Bottom':
+   //     'unten',
+   // 'Up':
+   //     'nach oben',
+   // 'Down':
+   //     'nach unten',
+
 
     // project notes
     'Project Notes':
