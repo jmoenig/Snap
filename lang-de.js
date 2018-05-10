@@ -1389,6 +1389,13 @@ SnapTranslator.dict.de = {
         'Richtungszeiger',
     'Empty':
         'Leer',
+    'Paint a new costume':
+        'neues Kostüm zeichnen',
+    'Import a new costume from your webcam':
+        'neues Kostüm mit der Webcam aufnehmen',
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Überprüfe, ob der Browser auf dem aktuellsten Stand \nund die Webcam korrekt konfiguriert ist.\n\nFür einige Browser muss Snap! mit HTTPS geöffnet\nwerden, um auf die Kamera zuzugreifen.\n\nErsetze dafür den "http://"-Teil\n in der Adresszeile mit"https://"',
+    
 
     // graphical effects
     'color':
