@@ -50,7 +50,59 @@ Cloud.prototype.init = function (url) {
     this.username = null;
 };
 
-SnapCloud = new Cloud('https://cloud.snap.berkeley.edu');
+Cloud.knownDomains = {
+    'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
+    'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
+    'Snap!Cloud (staging)': 'https://snap-staging.cs10.org',
+    'localhost': 'http://localhost:8080',
+    'localhost (secure)': 'https://localhost:4431'
+};
+
+Cloud.determineCloudDomain = function () {
+    // We dynamically determine the domain of the cloud server.
+    // Thise allows for easy mirrors and development servers.
+    // The domain is determined by:
+    // 1. <meta name='snap-cloud-domain' domain="X"> in snap.html.
+    // 2. The current page's domain
+    var defaultDomain = Cloud.knownDomains['Snap!Cloud'],
+        currentDomain = window.location.host, // host includes the port.
+        metaTag = document.head.querySelector("name='snap-cloud-domain'"),
+        cloudDomain;
+
+    if (metaTag.length > 0) {
+        return metaTag.location;
+    }
+
+    Object.values(this.knownDomains).some(function (server) {
+        if (Cloud.isMatchingDomain(currentDomain, server)) {
+            cloudDomain = server;
+            return true;
+        }
+        return false;
+    });
+
+    if (cloudDomain) { return cloudDomain; }
+    return defaultDomain;
+}
+
+Cloud.isMatchingDomain = function (client, server) {
+    // A matching domain means that the client-server are not subject to
+    // 3rd party cookie restrictions.
+    // see https://tools.ietf.org/html/rfc6265#section-5.1.3
+    // This matches a domain at end of a subdomain URL.
+    var position = server.indexOf(client);
+    switch (position) {
+        case -1:
+            return false;
+        case 0:
+            return client === server;
+        default:
+            return /[\.\/]/.test(server[position - 1]) &&
+                server.length === position + client.length;
+    }
+}
+
+SnapCloud = new Cloud(Cloud.determineCloudDomain());
 
 // Dictionary handling
 
