@@ -6214,7 +6214,24 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 function (proj) { return proj.ispublished; }
             ]
         ],
-        function () { myself.ok(); }
+        function () { myself.ok(); },
+        function () {
+            var item = this,
+                menu = new MenuMorph(myself, 'Project Recovery');
+            menu.addItem(
+                'Previous save',
+                function () {
+                    // fetch project with delta -1 (previous save)
+                    myself.openCloudProject(myself.listField.selected, -1); }
+            );
+            menu.addItem(
+                'Last save before today',
+                function () {
+                    // fetch project with delta -2 (last save before today)
+                    myself.openCloudProject(myself.listField.selected, -2); }
+            );
+            return menu;
+        }
     );
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -6319,22 +6336,23 @@ ProjectDialogMorph.prototype.openProject = function () {
     }
 };
 
-ProjectDialogMorph.prototype.openCloudProject = function (project) {
+ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
     var myself = this;
     myself.ide.nextSteps([
         function () {
             myself.ide.showMessage('Fetching project\nfrom the cloud...');
         },
         function () {
-            myself.rawOpenCloudProject(project);
+            myself.rawOpenCloudProject(project, delta);
         }
     ]);
 };
 
-ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
+ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
     var myself = this;
     SnapCloud.getProject(
         proj.projectname,
+        delta,
         function (clouddata) {
             myself.ide.source = 'cloud';
             myself.ide.nextSteps([

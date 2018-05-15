@@ -494,10 +494,11 @@ Cloud.prototype.getThumbnail = function (
     );
 };
 
-Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
+Cloud.prototype.getProject = function (projectName, delta, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
-        '/projects/%username/' + encodeURIComponent(projectName),
+        '/projects/%username/' +
+            encodeURIComponent(projectName) + (delta ? '?delta=' + delta : ''),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,

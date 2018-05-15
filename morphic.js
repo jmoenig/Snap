@@ -7906,7 +7906,8 @@ MenuMorph.prototype.addItem = function (
     bold, // bool
     italic, // bool
     doubleClickAction, // optional, when used as list contents
-    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    userMenu // optional context menu
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -7924,7 +7925,8 @@ MenuMorph.prototype.addItem = function (
         bold || false,
         italic || false,
         doubleClickAction,
-        shortcut]);
+        shortcut,
+        userMenu]);
 };
 
 MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {
@@ -8026,7 +8028,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[4], // bold
                 tuple[5], // italic
                 tuple[6], // doubleclick action
-                tuple[7] // shortcut
+                tuple[7], // shortcut
+                tuple[8]  // user menu
             );
         }
         if (isLine) {
@@ -9861,11 +9864,13 @@ function MenuItemMorph(
     bold,
     italic,
     doubleClickAction, // optional when used as list morph item
-    shortcut // optional string, Morph, Canvas or tuple: [icon, string]
+    shortcut, // optional string, Morph, Canvas or tuple: [icon, string]
+    userMenu // optional context menu
 ) {
     // additional properties:
     this.shortcutString = shortcut || null;
     this.shortcut = null;
+    this.userMenu = userMenu;
 
     // initialize inherited properties:
     this.init(
@@ -10667,7 +10672,7 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format, doubleClickAction) {
+function ListMorph(elements, labelGetter, format, doubleClickAction, userMenu) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -10700,7 +10705,8 @@ function ListMorph(elements, labelGetter, format, doubleClickAction) {
             return element.toString();
         },
         format || [],
-        doubleClickAction // optional callback
+        doubleClickAction, // optional callback
+        userMenu // optional per-item context menu
     );
 }
 
@@ -10708,7 +10714,8 @@ ListMorph.prototype.init = function (
     elements,
     labelGetter,
     format,
-    doubleClickAction
+    doubleClickAction,
+    userMenu
 ) {
     ListMorph.uber.init.call(this);
 
@@ -10724,6 +10731,7 @@ ListMorph.prototype.init = function (
     this.active = null; // menu item representing the selected element
     this.action = null;
     this.doubleClickAction = doubleClickAction || null;
+    this.userMenu = userMenu || null;
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -10764,7 +10772,9 @@ ListMorph.prototype.buildListContents = function () {
             color,
             bold,
             italic,
-            myself.doubleClickAction
+            myself.doubleClickAction,
+            null, // shortcut
+            myself.userMenu
         );
     });
     this.listContents.isListContents = true;
