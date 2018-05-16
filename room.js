@@ -563,7 +563,7 @@ RoomMorph.prototype.editRoleName = function(role) {
     // Ask for a new role name
     var myself = this;
     this.ide.prompt('New Role Name', function (roleName) {
-        if (roleName !== this.getCurrentRoleName()) {
+        if (roleName !== myself.getCurrentRoleName()) {
             myself.validateRoleName(roleName, function() {
                 if (role !== roleName){
                     myself.ide.sockets.sendMessage({
