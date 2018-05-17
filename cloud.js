@@ -32,7 +32,7 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2018-March-02';
+modules.cloud = '2018-March-14';
 
 // Global stuff
 
@@ -622,6 +622,23 @@ Cloud.prototype.unpublishProject = function (
         onSuccess,
         onError,
         'Could not unpublish project'
+    );
+};
+
+Cloud.prototype.remixProject = function (
+    projectName,
+    username,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/' + encodeURIComponent(username) +
+            '/' + encodeURIComponent(projectName) +
+            '/remix',
+        onSuccess,
+        onError,
+        'Could not remix project'
     );
 };
 

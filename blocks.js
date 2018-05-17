@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-March-09';
+modules.blocks = '2018-May-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -613,6 +613,18 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         tempVars.forEach(function (name) {
             dict[name] = name;
         });
+        if (block.selector === 'doSetVar') {
+            // add settable object attributes
+            dict['~'] = null;
+            dict.my = {
+                'anchor' : ['anchor'],
+                'parent' : ['parent'],
+                // 'temporary?' : ['temporary?'],
+                'dangling?' : ['dangling?'],
+                'rotation x' : ['rotation x'],
+                'rotation y' : ['rotation y']
+            };
+        }
         return dict;
     }
     return {};
@@ -5872,9 +5884,10 @@ RingMorph.prototype.vanishForSimilar = function () {
         return null;
     }
     if (block.selector === 'reportGetVar' ||
+        // block.selector === 'reportListItem' ||
         block.selector === 'reportJSFunction' ||
-        block.selector == 'reportAttributeOf' ||
-        block.selector == 'reportCompiled' ||
+        block.selector === 'reportAttributeOf' ||
+        block.selector === 'reportCompiled' ||
         (block instanceof RingMorph)
     ) {
         this.parent.silentReplaceInput(this, block);
@@ -8420,6 +8433,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
 	    dict['random position'] = ['random position'];
  	}
 	dict['mouse-pointer'] = ['mouse-pointer'];
+    dict.center = ['center'];
 
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
@@ -10558,7 +10572,8 @@ MultiArgMorph.prototype.removeInput = function () {
     if (this.children.length > 1) {
         oldPart = this.children[this.children.length - 2];
         this.removeChild(oldPart);
-        if (oldPart instanceof BlockMorph) {
+        if (oldPart instanceof BlockMorph &&
+                !(oldPart instanceof RingMorph && !oldPart.contents())) {
             scripts = this.parentThatIsA(ScriptsMorph);
             if (scripts) {
                 scripts.add(oldPart);

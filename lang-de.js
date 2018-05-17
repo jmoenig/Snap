@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2018-03-09', // this, too, will appear in the Translators tab
+        '2018-05-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1293,6 +1293,8 @@ SnapTranslator.dict.de = {
         'Kante',
     'pen trails':
         'Malspuren',
+    'center':
+        'Mitte',
 
     // costumes
     'Turtle':
@@ -1481,6 +1483,8 @@ SnapTranslator.dict.de = {
         'beliebig',
 
     // attributes
+    'my':
+        'Attribut',
     'neighbors':
         'Nachbarn',
     'self':

@@ -1163,7 +1163,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2018-February-06';
+var morphicVersion = '2018-March-19';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1919,6 +1919,19 @@ Color.prototype.toString = function () {
         Math.round(this.g) + ',' +
         Math.round(this.b) + ',' +
         this.a + ')';
+};
+
+Color.prototype.toRGBstring = function () {
+    return 'rgb(' +
+        Math.round(this.r) + ',' +
+        Math.round(this.g) + ',' +
+        Math.round(this.b) + ')';
+};
+
+Color.fromString = function (aString) {
+    // I parse rgb/rgba strings into a Color object
+    var components = aString.split(/[\(),]/).slice(1,5);
+    return new Color(components[0], components[1], components[2], components[3]);
 };
 
 // Color copying:

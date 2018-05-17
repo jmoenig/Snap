@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-March-13';
+modules.gui = '2018-May-03';
 
 // Declarations
 
@@ -2295,9 +2295,12 @@ IDE_Morph.prototype.addNewSprite = function () {
     // randomize sprite properties
     sprite.setHue(rnd.call(this, 0, 100));
     sprite.setBrightness(rnd.call(this, 50, 100));
-    sprite.turn(rnd.call(this, 1, 360));
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
+
+    if (this.world().currentKey === 16) { // shift-click
+        sprite.turn(rnd.call(this, 1, 360));
+    }
 
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
@@ -3499,7 +3502,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1.2.5\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.1.3 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4495,6 +4498,14 @@ IDE_Morph.prototype.saveFileAs = function (
             while (i--) {
                 data[i] = text.charCodeAt(i);
             }
+        } else if (hasTypeStr) {
+            // not base64 encoded
+            text = text.replace(/^data:image\/.*?, */, '');
+            data = new Uint8Array(text.length);
+            i = text.length;
+            while (i--) {
+                data[i] = text.charCodeAt(i);
+            }
         }
         return new Blob([data], {type: mimeType });
     }
@@ -5196,7 +5207,9 @@ IDE_Morph.prototype.initializeCloud = function () {
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
-                            'Unverified account: ' + response.days_left + ' days left',
+                            'Unverified account: ' +
+                            response.days_left +
+                            ' days left',
                             'You are now logged in, and your account\n' +
                             'is enabled for three days.\n' +
                             'Please use the verification link that\n' +
@@ -7672,15 +7685,21 @@ CostumeIconMorph.prototype.userMenu = function () {
 
 CostumeIconMorph.prototype.editCostume = function () {
     this.disinherit();
-    if (this.object instanceof SVG_Costume) {
-        this.object.editRotationPointOnly(this.world());
-    } else {
-        this.object.edit(
-            this.world(),
-            this.parentThatIsA(IDE_Morph),
-            false // not a new costume, retain existing rotation center
-        );
+
+    if (this.object instanceof SVG_Costume && this.object.shapes.length === 0) {
+        try {
+            this.object.parseShapes();
+        } catch (e) {
+            this.editRotationPointOnly();
+            return;
+        }
     }
+
+    this.object.edit(
+        this.world(),
+        this.parentThatIsA(IDE_Morph),
+        false // not a new costume, retain existing rotation center
+    );
 };
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
@@ -8395,7 +8414,7 @@ SoundIconMorph.prototype.renameSound = function () {
 
 SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
-        idx = this.parent.children.indexOf(this + 1);
+        idx = this.parent.children.indexOf(this) - 1;
     jukebox.removeSound(idx);
 };
 
@@ -8519,7 +8538,7 @@ JukeboxMorph.prototype.updateList = function () {
         myself.addContents(icon);
         y = icon.bottom() + padding;
     });
-    this.soundsVersion = this.sprite.costumes.lastChanged;
+    this.soundsVersion = this.sprite.sounds.lastChanged;
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();

@@ -81,9 +81,9 @@ modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
-AlignmentMorph, Process*/
+AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-March-13';
+modules.objects = '2018-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1080,7 +1080,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCompiled: { // experimental
             type: 'reporter',
             category: 'operators',
-            spec: 'compile %repRing'
+            spec: 'compile %repRing for %n args',
+            defaults: [null, 0]
         },
 
     /*
@@ -6843,7 +6844,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         myself = this;
 
     this.keysPressed[evt] = true;
-    if (evt === 'ctrl enter') {
+    if (evt === 'ctrl enter' && !ide.isAppMode) {
         return this.fireGreenFlagEvent();
     }
     if (evt === 'shift enter') {
@@ -6877,7 +6878,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
-    if (evt === 'esc') {
+    if (evt === 'esc' && !ide.isAppMode) {
         return this.fireStopAllEvent();
     }
     this.children.concat(this).forEach(function (morph) {
@@ -7163,7 +7164,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAll'));
     */
         blocks.push(block('doStopThis'));
+    /*
+        // migrated to doStopThis, now redundant
         blocks.push(block('doStopOthers'));
+    */
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -8288,7 +8292,8 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
-        }
+        },
+        anIDE
     );
 };
 
@@ -8392,6 +8397,7 @@ SVG_Costume.uber = Costume.prototype;
 
 function SVG_Costume(svgImage, name, rotationCenter) {
     this.contents = svgImage;
+    this.shapes = [];
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
@@ -8411,6 +8417,7 @@ SVG_Costume.prototype.copy = function () {
     img.src = this.contents.src;
     cpy = new SVG_Costume(img, this.name ? copy(this.name) : null);
     cpy.rotationCenter = this.rotationCenter.copy();
+    cpy.shapes = this.shapes.map(function (shape) { return shape.copy(); });
     return cpy;
 };
 
@@ -8429,6 +8436,64 @@ SVG_Costume.prototype.shrinkToFit = function (extentPoint) {
     // overridden for unrasterized SVGs
     nop(extentPoint);
     return;
+};
+
+SVG_Costume.prototype.parseShapes = function () {
+    // I try to parse my SVG as an editable collection of shapes
+    var element = new XML_Element(),
+        // remove 'data:image/svg+xml, ' from src
+        contents = this.contents.src.replace(/^data:image\/.*?, */, '');
+
+    if (this.contents.src.indexOf('base64') > -1) {
+        contents = atob(contents);
+    }
+
+    element.parseString(contents);
+
+    if (this.shapes.length === 0 && element.attributes.snap) {
+        this.shapes = element.children.map(function (child) {
+            return window[child.attributes.prototype].fromSVG(child);
+        });
+    }
+};
+
+SVG_Costume.prototype.edit = function (
+	aWorld,
+    anIDE,
+    isnew,
+    oncancel,
+    onsubmit
+) {
+    var myself = this,
+        editor;
+
+    editor = new VectorPaintEditorMorph();
+
+    editor.oncancel = oncancel || nop;
+    editor.openIn(
+        aWorld,
+        isnew ?
+        newCanvas(StageMorph.prototype.dimensions) :
+        this.contents,
+        isnew ?
+        new Point(240, 180) :
+        myself.rotationCenter,
+        function (img, rc, shapes) {
+            myself.contents = img;
+            myself.rotationCenter = rc;
+            myself.shapes = shapes;
+            myself.version = Date.now();
+            aWorld.changed();
+            if (anIDE) {
+                if (isnew) {anIDE.currentSprite.addCostume(myself); }
+                anIDE.currentSprite.wearCostume(myself);
+                anIDE.hasChangedMedia = true;
+            }
+            (onsubmit || nop)();
+        },
+        anIDE,
+        this.shapes || []
+    );
 };
 
 // CostumeEditorMorph ////////////////////////////////////////////////////////

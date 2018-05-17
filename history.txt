@@ -4027,3 +4027,87 @@ Translation Updates:
 * Objects: draw a "dot" pentrail when moving zero steps while the pen is down
 
 === v4.1.2.5 maintenance release ===
+
+180314
+------
+* Threads: changed testing order for type inferral, speeds up list operations significantly
+* Cloud: remix project method, thanks, Bernat!
+
+=== v4.1.2.6 maintenance release ===
+
+180316
+------
+* Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots
+
+180319
+------
+* Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
+* Objects: remove obsolete STOP primitive from the stage's palette
+
+=== v4.1.2.7 maintenance release ===
+
+in development:
+
+180319
+------
+* new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
+
+180320
+------
+* Threads: refactored experimental JS-compiler
+* Threads: enabled variables access for experimental JS-compiler
+
+180322
+------
+* Threads: extended implicit parameters handling for experimental JS-Compiler
+* Threads: new experimental atomic HOFs utilizing JIT compilation (MAP, KEEP, SORT)
+* new experimental "Big Data" library using JIT compiler
+
+180323
+------
+* Threads: new experimental atomic COMBINE utilizing JIT compiler
+* added atomic COMBINE to new experimental "Bigger Data" library
+* removed unused blocks from the audio comp library
+* added and removed atomic FOR EACH to new experimental "Bigger Data" library
+
+180412
+------
+* Threads: disable detecting collision with hidden sprites
+
+180413
+------
+* Objects: added implicit parameter count to experimental JIT compile reporter
+
+180416
+------
+* Blocks: only preserve filled rings when collapsing ring-typed multi-arg-slots
+* Blocks: minor tweaks
+
+180424
+------
+* added 'name' selector to pixel library
+
+180425
+------
+* GUI: fixed rearranging sound icons in the jukebox
+* GUI: fixed scrolling for the jukebox (updating the sounds list version)
+* GUI: only randomize position when shift-clicking on new turtle-sprite button
+
+180427
+------
+* GUI: when creating a new sprite only randomize color and direction when shift-clicking
+
+180502
+------
+* Blocks, Threads: added "center" to drop-down options of location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
+* updated German translation
+* disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
+* Blocks, Threads: added options for sprite attributes to the SET block
+
+180503
+------
+* GUI: (again) randomize pen color when creating a new sprite
+
+180508
+------
+* Threads: tweaked JS-Compiler to better handle process related ops
