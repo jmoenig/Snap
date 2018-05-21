@@ -369,9 +369,10 @@ NetCloud.prototype.callService = function (
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 var responseList = [];
-                // FIXME: This should use error codes
-                if (request.responseText &&
-                        request.responseText.indexOf('ERROR') === 0) {
+                var hasErrorContent = request.responseText &&
+                        request.responseText.indexOf('ERROR') === 0;
+                var isErrorStatus = request.status < 200 || request.status > 399;
+                if (isErrorStatus || hasErrorContent) {
                     errorCall.call(
                         this,
                         request.responseText,
