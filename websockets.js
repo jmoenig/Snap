@@ -171,7 +171,7 @@ WebSocketManager.MessageHandlers = {
                 dialog.ok = function() {
                     var ide = myself.ide.root().children[0].parentThatIsA(IDE_Morph);
                     SnapActions.addMessageType(msg.name, msg.fields)
-                        .accept(function() {
+                        .then(function() {
                             // format fields
                             var fields = [];
                             for (var i = 0; i < msg.fields.length; i++) {

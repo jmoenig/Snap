@@ -11,8 +11,7 @@ function ActionManager() {
     this.id = null;
     this.rank = null;
     this.isLeader = false;
-    this._onAccept = {};
-    this._onReject = {};
+    this._pendingLocalActions = {};
     this.initialize();
 }
 
@@ -289,36 +288,26 @@ ActionManager.prototype.completeAction = function(err, result) {
         SnapUndo.record(action);
     }
 
-    // Call 'success' or 'reject', if relevant
-    var fn;
+    // Resolve/reject actions
     if (action.user === this.id) {
-        if (err) {
-            if (this._onReject[action.id]) {
-                fn = this._onReject[action.id];
-                delete this._onReject[action.id];
-                delete this._onAccept[action.id];
-                fn(err);
-            }
-        } else if (this._onAccept[action.id]){
-            fn = this._onAccept[action.id];
-            delete this._onAccept[action.id];
-            delete this._onReject[action.id];
-            fn(result);
-        }
-
         // Ensure that the handlers are removed
-        delete this._onAccept[action.id];
-        delete this._onReject[action.id];
+        action = this._pendingLocalActions[action.id] || action;
+        delete this._pendingLocalActions[action.id];
 
         // We can call reject for any ids less than the given id...
+        var earlierAction;
         for (var i = action.id; i--;) {
-            if (this._onReject[i]) {
-                this._onReject[i](result);
-                delete this._onReject[i];
+            earlierAction = this._pendingLocalActions[i];
+            if (earlierAction && earlierAction.reject) {
+                earlierAction.reject(result);
+                delete this._pendingLocalActions[i];
             }
         }
-        if (err && this._onReject[i]) {
-            this._onReject[action.id](result);
+
+        if (err) {
+            action.reject(err);
+        } else {
+            action.resolve(result);
         }
     }
     this.afterActionApplied(action);
@@ -366,19 +355,24 @@ ActionManager.prototype._joinSession = function(sessionId, error) {
     this.onconnect = null;
 };
 
-function Action(manager, event) {
-    this._manager = manager;
+function Action(event) {
     this.id = event.id;
+    this.resolve = null;
+    this.reject = null;
+
+    var self = this;
+    this.promise = new Promise(function(resolve, reject) {
+        self.resolve = resolve;
+        self.reject = reject;
+    });
 }
 
-Action.prototype.accept = function(fn) {
-    this._manager._onAccept[this.id] = fn;
-    return this;
+Action.prototype.then = function(fn) {
+    return this.promise.then(fn);
 };
 
-Action.prototype.reject = function(fn) {
-    this._manager._onReject[this.id] = fn;
-    return this;
+Action.prototype.catch = function(fn) {
+    return this.promise.catch(fn);
 };
 
 ActionManager.prototype.applyEvent = function(event) {
@@ -399,7 +393,9 @@ ActionManager.prototype.applyEvent = function(event) {
         this.submitIfAllowed(event);
     }
 
-    return new Action(this, event);
+    var action = new Action(event);
+    this._pendingLocalActions[action.id] = action;
+    return action;
 };
 
 ActionManager.prototype.submitIfAllowed = function(event) {

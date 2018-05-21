@@ -442,7 +442,7 @@ IDE_Morph.prototype.openIn = function (world) {
                         function () {
                             var action = myself.droppedText(projectData);
                             if (action) {
-                                action.accept(function () {
+                                action.then(function () {
                                     myself.hasChangedMedia = true;
                                     myself.shield.destroy();
                                     myself.shield = null;
@@ -477,7 +477,7 @@ IDE_Morph.prototype.openIn = function (world) {
                         function () {nop(); }, // yield (bug in Chrome)
                         function () {
                             var action = SnapActions.openProject(projectData);
-                            action.accept(function() {
+                            action.then(function() {
                                 myself.hasChangedMedia = true;
                                 myself.shield.destroy();
                                 myself.shield = null;
@@ -533,7 +533,7 @@ IDE_Morph.prototype.openIn = function (world) {
                 function () {
                     var action = myself.droppedText(projectData);
                     if (action) {
-                        action.accept(function () {
+                        action.then(function () {
                             myself.hasChangedMedia = true;
                             myself.shield.destroy();
                             myself.shield = null;
@@ -566,7 +566,7 @@ IDE_Morph.prototype.openIn = function (world) {
                                     msg.destroy();
                                     var action = myself.rawLoadCloudProject(response[0]);
                                     if (action) {
-                                        action.accept(function() {
+                                        action.then(function() {
                                             applyFlags(dict);
                                         });
                                     } else {

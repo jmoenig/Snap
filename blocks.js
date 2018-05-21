@@ -6109,7 +6109,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     null,
                     function (definition) {
                         SnapActions.addCustomBlock(definition, obj)
-                            .accept(function(def) {
+                            .then(function(def) {
                                 var editor = new BlockEditorMorph(def, obj);
                                 editor.popUp();
                             });
@@ -6407,8 +6407,8 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
         hand.grabOrigin.origin.add(block);
         return SnapActions.moveBlock(dup, target)
             // if that succeeds, remove them from the current editor
-            .accept(function() {
-                SnapActions.removeBlock(block);
+            .then(function() {
+                return SnapActions.removeBlock(block);
             });
     } else {  // basic moveBlock
         SnapActions.moveBlock(block, target);
@@ -6450,8 +6450,8 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
 
             return SnapActions.addBlock(dup, this, position, ownerId)
                 // if that succeeds, remove them from the current editor
-                .accept(function() {
-                    SnapActions.removeBlock(block);
+                .then(function() {
+                    return SnapActions.removeBlock(block);
                 });
         }
     }
@@ -11183,7 +11183,7 @@ ColorSlotMorph.prototype.getUserColor = function () {
     hand.processMouseUp = function () {
         if (myself.parentThatIsA(ScriptsMorph)) {
             SnapActions.setColorField(myself, myself.color)
-                .reject(function() {
+                .catch(function() {
                     myself.setColor(oldClr);
                 });
         } else {
@@ -13243,7 +13243,7 @@ ScriptFocusMorph.prototype.trigger = function () {
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {
             SnapActions.addListInput(current)
-                .accept(function() {
+                .then(function() {
                     myself.fixLayout();
                 });
         }
@@ -13262,7 +13262,7 @@ ScriptFocusMorph.prototype.trigger = function () {
         current.updateFieldValue = function() {
             var action = oldFieldUpdate.apply(this, arguments);
             if (action) {
-                action.accept(function() {
+                action.then(function() {
                     myself.fixLayout();
                 });
             }
@@ -13307,7 +13307,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
             SnapActions.removeBlock(current)
-                .accept(function() {
+                .then(function() {
                     myself.element = myself.editor;
                     myself.atEnd = false;
                     myself.editor.adjustBounds();
@@ -13327,7 +13327,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {
             SnapActions.removeBlock(current)
-                .accept(function() {
+                .then(function() {
                     myself.lastElement();
                     myself.editor.adjustBounds();
                     myself.fixLayout();
@@ -13338,7 +13338,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
         if (this.atEnd) {
             newBlock = current.parent;
             SnapActions.removeBlock(current, true)
-                .accept(function() {
+                .then(function() {
                     myself.element = newBlock;
                     myself.editor.adjustBounds();
                     myself.fixLayout();
@@ -13352,7 +13352,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
     }
 
     if (action) {
-        action.accept(function() {
+        action.then(function() {
             myself.editor.adjustBounds();
             myself.fixLayout();
         });
@@ -13439,7 +13439,7 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
         }
     }
 
-    action.accept(function(block) {
+    action.then(function(block) {
         if (isAtEnd) {
             myself.atEnd = true;
         }
@@ -13669,7 +13669,7 @@ ScriptFocusMorph.prototype.shiftScript = function (deltaPoint) {
         if (tb && !(tb instanceof PrototypeHatBlockMorph)) {
             position = tb.topLeft().add(deltaPoint);
             SnapActions.setBlockPosition(tb, position)
-                .accept(function() {
+                .then(function() {
                     myself.editor.adjustBounds();
                     myself.fixLayout();
                 });

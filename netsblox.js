@@ -779,7 +779,7 @@ NetsBloxMorph.prototype.droppedText = function (aString, name) {
             app = aString.split('app="')[1].split(' ')[0];
 
         return SnapActions.openProject(aString)
-            .accept(function(project) {
+            .then(function(project) {
                 var name = project.name;
                 if (app === myself.serializer.appName && myself.room.getRoleCount() > 1) {
                     myself.room.setRoleName(name);

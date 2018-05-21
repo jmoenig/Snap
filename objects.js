@@ -2248,7 +2248,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     function (definition) {
                         if (definition.spec !== '') {
                             SnapActions.addCustomBlock(definition, myself)
-                                .accept(function(def) {
+                                .then(function(def) {
                                     var editor = new BlockEditorMorph(def, myself);
                                     editor.popUp();
                                 });
@@ -2276,7 +2276,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     function (definition) {
                         if (definition.spec !== '') {
                             SnapActions.addCustomBlock(definition, myself)
-                                .accept(function(def) {
+                                .then(function(def) {
                                     var editor = new BlockEditorMorph(def, myself);
                                     editor.popUp();
                                 });
@@ -6589,7 +6589,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     function (definition) {
                         if (definition.spec !== '') {
                             SnapActions.addCustomBlock(definition, myself)
-                                .accept(function(def) {
+                                .then(function(def) {
                                     var editor = new BlockEditorMorph(def, myself);
                                     editor.popUp();
                                 });
@@ -6614,7 +6614,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     function (definition) {
                         if (definition.spec !== '') {
                             SnapActions.addCustomBlock(definition, myself)
-                                .accept(function(def) {
+                                .then(function(def) {
                                     var editor = new BlockEditorMorph(def, myself);
                                     editor.popUp();
                                 });
@@ -9580,8 +9580,8 @@ ReplayControls.prototype.applyEvent = function(event, next) {
     }
 
     return SnapActions.applyEvent(event)
-        .accept(next)
-        .reject(function() {
+        .then(next)
+        .catch(function() {
             throw Error('Could not apply event: ' + JSON.stringify(event, null, 2));
         });
 };
