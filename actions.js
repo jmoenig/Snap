@@ -289,7 +289,7 @@ ActionManager.prototype.completeAction = function(err, result) {
     }
 
     // Resolve/reject actions
-    if (action.user === this.id) {
+    if (!action.user || action.user === this.id) {
         // Ensure that the handlers are removed
         action = this._pendingLocalActions[action.id] || action;
         delete this._pendingLocalActions[action.id];
