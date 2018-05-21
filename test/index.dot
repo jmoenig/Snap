@@ -1,0 +1,88 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>NetsBlox Client Tests</title>
+  <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body style="margin: 0;">
+  <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>
+  <!-- Add the testing things -->
+  <div id="tests-modal" class="modal">
+      <div class="model-content">
+          <div id="mocha"></div>
+      </div>
+  </div>
+  <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#tests-modal" style="position: absolute; bottom: 24px; right: 24px;"><i class="material-icons">check</i></a>
+
+  <script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
+  <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+
+  <!-- Set up NetsBlox -->
+  <script type="text/javascript" >
+      var SERVER_URL = window.location.origin,
+          SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, '');
+
+      /* Uncomment the following to add a console log at the start of each test
+        var oit = it;
+        it = function(desc, test) {
+            if (test.length) {
+                return oit.call(this, desc, function(done) {
+                    console.log('starting test:', desc);
+                    return test(done);
+                });
+            } else {
+                return oit.call(this, desc, function() {
+                    console.log('starting test:', desc);
+                    return test();
+                });
+            }
+        };
+      */
+  </script>
+  <script type="text/javascript" src="/dist/app.min.js"></script>
+  <script src="./snap-driver.js"></script>
+  <script src="./room.spec.js"></script>
+  <script src="./messages.spec.js"></script>
+  <script src="./blocks.spec.js"></script>
+  <script src="./actions.spec.js"></script>
+  <script src="./accounts.spec.js"></script>
+  <script src="./ide.spec.js"></script>
+  <script src="./variables.spec.js"></script>
+  <script src="./sprites.spec.js"></script>
+  <script src="./xml.spec.js"></script>
+  <script type="text/javascript">
+    {{ if (it.username) { }}
+        SnapCloud.username = '{{= it.username }}';
+        SnapCloud.password = true;
+    {{ } }}
+      var world;
+      var driver;
+      window.onload = function () {
+          world = new WorldMorph(document.getElementById('world'));
+          world.worldCanvas.focus();
+          new NetsBloxMorph().openIn(world);
+          loop();
+
+          /* start the tests */
+          driver = new SnapDriver(world);
+          mocha.run();
+      };
+      function loop() {
+          requestAnimationFrame(loop);
+          world.doOneCycle();
+      }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('.modal').modal();
+      $('.modal').modal('open');
+    });
+  </script>
+</body>
+</html>
