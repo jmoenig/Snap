@@ -9883,7 +9883,7 @@ function MenuItemMorph(
     // additional properties:
     this.shortcutString = shortcut || null;
     this.shortcut = null;
-    this.userMenu = userMenu;
+    this.userMenu = userMenu || nop;
 
     // initialize inherited properties:
     this.init(
@@ -10744,7 +10744,7 @@ ListMorph.prototype.init = function (
     this.active = null; // menu item representing the selected element
     this.action = null;
     this.doubleClickAction = doubleClickAction || null;
-    this.userMenu = userMenu || null;
+    this.userMenu = userMenu || nop;
     this.acceptsDrops = false;
     this.buildListContents();
 };

@@ -537,6 +537,22 @@ Cloud.prototype.getProjectMetadata = function (
     );
 };
 
+Cloud.prototype.getProjectVersionMetadata = function (
+        projectName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'GET',
+        '/projects/%username/' +
+            encodeURIComponent(projectName) +
+            '/versions',
+        onSuccess,
+        onError,
+        'Could not fetch versions for project ' + projectName
+    );
+};
+
 Cloud.prototype.deleteProject = function (
 	projectName,
     username,
