@@ -1616,6 +1616,12 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         if (target instanceof RingMorph) {
             this.__clearBlockRecords(target.id);
         }
+        var isReplacingReporter = block instanceof ReporterBlockMorph &&
+            target instanceof ReporterBlockMorph;
+
+        if (isReplacingReporter) {
+            this.__recordTarget(block.id, this._getCurrentTarget(target));
+        }
     } else {
         logger.error('Unsupported "onMoveBlock":', block);
     }

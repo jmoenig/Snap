@@ -95,7 +95,6 @@ SnapDriver.prototype.addBlock = function(spec, position) {
         SpriteMorph.prototype.blockForSelector(spec, true) : spec;
     var sprite = this.ide().currentSprite;
 
-    console.log('adding', spec);
     position = position || new Point(400, 400);
     let action = SnapActions.addBlock(block, sprite.scripts, position);
     return action;

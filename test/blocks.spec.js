@@ -1,5 +1,5 @@
 /* globals SnapActions, expect, driver, Point, CustomBlockDefinition,
- CustomCommandBlockMorph, ScriptsMorph */
+ CustomCommandBlockMorph, ScriptsMorph, SnapUndo */
 describe('blocks', function() {
     var position = new Point(400, 400);
 
@@ -62,7 +62,7 @@ describe('blocks', function() {
             SnapActions.addCustomBlock(definition, sprite).then(() => {
                 driver.selectCategory('custom');
                 let block = driver.palette().contents.children
-                .find(item => item instanceof CustomCommandBlockMorph);
+                    .find(item => item instanceof CustomCommandBlockMorph);
 
                 // Edit the custom block
                 driver.rightClick(block);
@@ -74,7 +74,7 @@ describe('blocks', function() {
                 driver.rightClick(editor);
 
                 let addCmtBtn = driver.dialog().children
-                .find(item => item.action === 'addComment');
+                    .find(item => item.action === 'addComment');
 
                 driver.click(addCmtBtn);
 
@@ -101,7 +101,7 @@ describe('blocks', function() {
             SnapActions.addCustomBlock(definition, sprite).then(() => {
                 driver.selectCategory('custom');
                 let block = driver.palette().contents.children
-                .find(item => item instanceof CustomCommandBlockMorph);
+                    .find(item => item instanceof CustomCommandBlockMorph);
 
                 // Edit the custom block
                 driver.rightClick(block);
@@ -112,7 +112,7 @@ describe('blocks', function() {
                 // moveBlock
                 driver.selectCategory('motion');
                 let forwardBlock = driver.palette().contents.children
-                .find(item => item.selector === 'forward');
+                    .find(item => item.selector === 'forward');
 
                 let editor = driver.dialog();
 
@@ -132,33 +132,36 @@ describe('blocks', function() {
         });
     });
 
-    describe.skip('moveBlock', function() {
+    describe('moveBlock', function() {
         before(done => driver.reset(done));
 
         it('should not create infinite loop on undo', function() {
             // Create three blocks (1, 2, 3)
-            // TODO
-            // 3 -> 1
-            // TODO
-            // 2 in place of 3
-            // TODO
-            // 3 -> 2
-            // TODO
-            // 2 -> 1
-            // TODO
-            // disconnect 2
-            // TODO
-            // undo three times
-            // TODO
-            let specs = ['reportSum', 'reportDifference', 'reportQuotient'];
-            let blocks = [];
-            let promise = specs.reduce((promise, spec) => {
-                return promise.then(
-                    () => driver.addBlock(spec).then(block => blocks.push(block))
-                );
-            }, Promise.resolve());
-            return promise.then(() => console.log('done'));
+            const specs = ['reportSum', 'reportDifference', 'reportQuotient'];
+            driver.ide().showMessage('starting to make blocks', 1);
+            const createBlocks = specs
+                .reduce((promise, spec) => {
+                    const index = specs.indexOf(spec)+1;
+                    let point = new Point(300, 300 + index*100);
+                    return promise.then(() => driver.addBlock(spec, point))
+                        .then(block => SnapActions.setField(block.inputs()[1], index));
+                }, Promise.resolve());
+            const spriteScriptId = driver.ide().currentSprite.id + '/scripts';
 
+            return createBlocks
+                .then(() => {
+                    const [block1, block2, block3] = driver.ide().currentSprite.scripts.children;
+                    driver.ide().showMessage('blocks created.', 1);
+                    // 3 -> 1
+                    return SnapActions.moveBlock(block3, block1.inputs()[0])
+                        .then(() => SnapActions.moveBlock(block2, block3))
+                        .then(() => SnapActions.setBlockPosition(block2, new Point(550, 300)));
+                })
+                .then(() => SnapUndo.undo(spriteScriptId))
+                .catch(err => {
+                    driver.ide().showMessage(err.message);
+                    throw err;
+                });
         });
     });
 
