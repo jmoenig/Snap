@@ -5735,6 +5735,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.deleteButton = null;
     this.shareButton = null;
     this.unshareButton = null;
+    this.recoverButton = null;
 
     // initialize inherited properties:
     ProjectDialogMorph.uber.init.call(
@@ -5870,8 +5871,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
-        this.addButton('recoveryDialog', 'Recover');
         this.action = 'openProject';
+        this.recoverButton = this.addButton('recoveryDialog', 'Recover');
+        this.recoverButton.hide();
     } else { // 'save'
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
@@ -6162,6 +6164,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.body.add(this.listField);
     this.shareButton.hide();
     this.unshareButton.hide();
+    this.recoverButton.hide();
     /*
     this.publishButton.hide();
     this.unpublishButton.hide();
@@ -6313,6 +6316,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         myself.edit();
     };
     this.body.add(this.listField);
+    this.recoverButton.show();
     this.shareButton.show();
     this.unshareButton.hide();
     this.deleteButton.show();
