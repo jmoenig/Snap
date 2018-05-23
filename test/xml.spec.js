@@ -4,7 +4,7 @@ describe('xml', function() {
         var str = '<test><![CDATA[<dontparse>embedded xml contents</dontparse>]]></test>';
         var xml = new XML_Element();
         xml.parseString(str);
-        expect(xml.toString()).to.be(str);
+        expect(xml.toString()).toBe(str);
     });
 
     it('should deserialize (escaped) contents element', function() {
@@ -12,6 +12,6 @@ describe('xml', function() {
         let str = `<test>${XML_Element.prototype.escape(contents)}</test>`;
         let xml = new XML_Element();
         xml.parseString(str);
-        expect(xml.toString()).to.be(str);
+        expect(xml.toString()).toBe(str);
     });
 });

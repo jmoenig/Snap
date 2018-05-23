@@ -18,7 +18,7 @@ describe('messages', function() {
 
             btn.mouseClickLeft();
             var dialog = world.children[world.children.length-1];
-            expect(dialog instanceof MessageCreatorMorph).to.be(true);
+            expect(dialog instanceof MessageCreatorMorph).toBe(true);
         });
 
         it('should show delete msg type btn after create msg type', function(done) {
@@ -30,7 +30,7 @@ describe('messages', function() {
                     item.labelString === 'Delete a message type';
                 var btn = palette.contents.children.find(isDelMsgTypeBtn);
 
-                expect(!!btn).to.be(true);
+                expect(!!btn).toBe(true);
                 done();
             })
             .catch(err => done(err));

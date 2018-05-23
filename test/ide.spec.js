@@ -58,7 +58,7 @@ describe('ide', function() {
                     driver.ide().setLanguage('en');
                     setTimeout(function() {  // give the project time to load
                         try {
-                            expect(SnapUndo.allEvents.length).to.be(len);
+                            expect(SnapUndo.allEvents.length).toBe(len);
                         } catch(e) {
                             err = e;
                         } finally {
@@ -77,7 +77,7 @@ describe('ide', function() {
                     driver.ide().refreshIDE();
                     setTimeout(function() {  // give the project time to load
                         try {
-                            expect(SnapUndo.allEvents.length).to.be(len);
+                            expect(SnapUndo.allEvents.length).toBe(len);
                         } catch(e) {
                             err = e;
                         } finally {
@@ -96,7 +96,7 @@ describe('ide', function() {
                     driver.ide().toggleDynamicInputLabels();
                     setTimeout(function() {  // give the project time to load
                         try {
-                            expect(SnapUndo.allEvents.length).to.be(len);
+                            expect(SnapUndo.allEvents.length).toBe(len);
                         } catch(e) {
                             err = e;
                         } finally {
@@ -114,8 +114,8 @@ describe('ide', function() {
             var validate = function() {
                 var spriteIds = ide.sprites.asArray().map(sprite => sprite.id);
                 try {
-                    expect(spriteIds.length).to.be(2);
-                    expect(spriteIds[0]).to.not.be(spriteIds[1]);
+                    expect(spriteIds.length).toBe(2);
+                    expect(spriteIds[0]).toNotBe(spriteIds[1]);
                     done();
                 } catch (e) {
                     ide.setLanguage('en');
@@ -152,11 +152,11 @@ describe('ide', function() {
                     dialog.ok();
 
                     dialog = driver.dialog();
-                    expect(dialog).to.not.be(null);
+                    expect(dialog).toNotBe(null);
 
                     setTimeout(() => {
                         try {
-                            expect(driver.ide().room.name).to.not.be(name);
+                            expect(driver.ide().room.name).toNotBe(name);
                             done();
                         } catch (e) {
                             done(e);
@@ -172,11 +172,11 @@ describe('ide', function() {
                     dialog.accept();
 
                     dialog = driver.dialog();
-                    expect(dialog).to.not.be(null);
+                    expect(dialog).toNotBe(null);
 
                     setTimeout(() => {
                         try {
-                            expect(driver.ide().room.name).to.not.be(name);
+                            expect(driver.ide().room.name).toNotBe(name);
                             done();
                         } catch (e) {
                             done(e);
@@ -196,11 +196,11 @@ describe('ide', function() {
                 dialog.ok();
 
                 dialog = driver.dialog();
-                expect(dialog).to.not.be(null);
+                expect(dialog).toNotBe(null);
                 // verify that the role name didn't change
                 setTimeout(() => {
                     try {
-                        expect(driver.ide().spriteEditor.room.getRole(name)).to.be(undefined);
+                        expect(driver.ide().spriteEditor.room.getRole(name)).toBe(undefined);
                         done();
                     } catch (e) {
                         done(e);
@@ -223,11 +223,11 @@ describe('ide', function() {
                     dialog.ok();
 
                     dialog = driver.dialog();
-                    expect(dialog).to.not.be(null);
+                    expect(dialog).toNotBe(null);
                     // verify that the role name didn't change
                     setTimeout(() => {
                         try {
-                            expect(driver.ide().spriteEditor.room.getRole(name)).to.be(undefined);
+                            expect(driver.ide().spriteEditor.room.getRole(name)).toBe(undefined);
                             done();
                         } catch (e) {
                             done(e);
@@ -262,7 +262,7 @@ describe('ide', function() {
             driver.click(ide.controlBar.projectButton);
             var dialog = driver.dialog();
             var saveACopyBtn = dialog.items.find(item => item[1] === 'saveACopy');
-            expect(saveACopyBtn).to.not.be(undefined);
+            expect(saveACopyBtn).toNotBe(undefined);
         });
     });
 
@@ -298,15 +298,15 @@ describe('ide', function() {
         describe('SERVER_URL', () => {
 
             it('should be set', () => {
-                expect(SERVER_URL).to.not.be(undefined);
+                expect(SERVER_URL).toNotBe(undefined);
             });
 
             it('should be set to localhost', () => {
-                expect(SERVER_URL.substring(0,10)).to.be(EXPECTED_SURL.substring(0,10));
+                expect(SERVER_URL.substring(0,10)).toBe(EXPECTED_SURL.substring(0,10));
             });
 
             it('should set server address', () => {
-                expect(SERVER_ADDRESS).to.be(EXPECTED_SURL.match(/:\/\/(.*)$/)[1]);
+                expect(SERVER_ADDRESS).toBe(EXPECTED_SURL.match(/:\/\/(.*)$/)[1]);
             });
 
         });
@@ -314,19 +314,19 @@ describe('ide', function() {
         describe('ensureFullUrl', () => {
             it('should convert relative path', () => {
                 const url = 'api/hello';
-                expect(ensureFullUrl(url)).to.be(`${EXPECTED_SURL}/api/hello`);
+                expect(ensureFullUrl(url)).toBe(`${EXPECTED_SURL}/api/hello`);
             });
 
             it('should convert absolute path', () => {
                 const url = '/api/hello';
-                expect(ensureFullUrl(url)).to.be(`${EXPECTED_SURL}/api/hello`);
+                expect(ensureFullUrl(url)).toBe(`${EXPECTED_SURL}/api/hello`);
             });
         });
 
         describe('getURL', () => {
             it('should support relative addresses', () => {
                 let response = driver.ide().getURL('lang-ca.js');
-                expect(response.startsWith('/*')).to.be(true);
+                expect(response.startsWith('/*')).toBe(true);
             });
         });
 
@@ -346,7 +346,7 @@ describe('ide', function() {
             var importBtn = dialog.children.find(child => child.labelString === 'Import tools');
 
             driver.click(importBtn);
-            expect(importBtn).to.not.be(undefined);
+            expect(importBtn).toNotBe(undefined);
 
             // Try to run the "label" block?
             var runLabel = () => {
@@ -387,7 +387,7 @@ describe('ide', function() {
             let entityId = driver.ide().getActiveEntity();
             let ownerId = entityId.split('/').shift();
             let owner = SnapActions.getOwnerFromId(ownerId);
-            expect(owner).to.not.be(undefined);
+            expect(owner).toNotBe(undefined);
         });
 
         it('should return a string starting with the custom block id', function(done) {
@@ -414,7 +414,7 @@ describe('ide', function() {
                 let entityId = driver.ide().getActiveEntity();
                 let ownerId = entityId.split('/').shift();
                 let customBlock = SnapActions.getBlockFromId(ownerId);
-                expect(customBlock).to.not.be(undefined);
+                expect(customBlock).toNotBe(undefined);
                 done();
             });
         });

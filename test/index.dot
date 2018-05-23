@@ -2,9 +2,9 @@
 <head>
   <meta charset="utf-8">
   <title>NetsBlox Client Tests</title>
-  <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+  <link href="lib/mocha.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="lib/material-icons.css" rel="stylesheet">
 </head>
 <body style="margin: 0;">
   <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>
@@ -16,9 +16,9 @@
   </div>
   <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#tests-modal" style="position: absolute; bottom: 24px; right: 24px;"><i class="material-icons">check</i></a>
 
-  <script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
-  <script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
-  <script src="https://cdn.rawgit.com/mochajs/mocha/5.2.0/mocha.js"></script>
+  <script src="lib/jquery-2.2.4.min.js"></script>
+  <script src="lib/expect.min.js"></script>
+  <script src="lib/mocha.js"></script>
   <script>mocha.setup('bdd')</script>
 
   <!-- Set up NetsBlox -->
@@ -76,7 +76,7 @@
           world.doOneCycle();
       }
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script src="lib/materialize.min.js"></script>
 
   <script>
     $(document).ready(function(){

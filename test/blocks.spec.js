@@ -13,7 +13,7 @@ describe('blocks', function() {
     it('should create block', function(done) {
         driver.addBlock('doIfElse', position)
             .then(block => {
-                expect(!!block).to.be(true);
+                expect(!!block).toBe(true);
                 done();
             })
             .catch(err => done(err));

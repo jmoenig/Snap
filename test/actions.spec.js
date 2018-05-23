@@ -44,9 +44,9 @@ describe('actions', function() {
 
         SnapActions.currentEvent = {replayType: 1};
         driver.selectSprite('Sprite');
-        expect(!!SnapActions.canAnimate(stage)).to.be(false);
+        expect(!!SnapActions.canAnimate(stage)).toBe(false);
         driver.selectStage();
-        expect(!!SnapActions.canAnimate(stage)).to.be(true);
+        expect(!!SnapActions.canAnimate(stage)).toBe(true);
     });
 
     describe('collaboration', function() {
@@ -67,15 +67,15 @@ describe('actions', function() {
             occupants.push({username: 'test', uuid: 'ad'});
 
             role.setOccupants(occupants);
-            expect(SnapActions.isCollaborating()).to.be(true);
+            expect(SnapActions.isCollaborating()).toBe(true);
         });
 
         it('should detect not collaborating if only user in role', function() {
-            expect(SnapActions.isCollaborating()).to.be(false);
+            expect(SnapActions.isCollaborating()).toBe(false);
         });
 
         it('should detect leader by default', function() {
-            expect(driver.ide().room.isLeader()).to.be(true);
+            expect(driver.ide().room.isLeader()).toBe(true);
         });
 
         it('should detect leader based off of uuid', function(done) {
@@ -88,7 +88,7 @@ describe('actions', function() {
 
                 role.setOccupants(occupants);
 
-                expect(driver.ide().room.isLeader()).to.be(false);
+                expect(driver.ide().room.isLeader()).toBe(false);
                 done();
             }, 50);
         });
@@ -151,7 +151,7 @@ describe('actions', function() {
         it('should get unique id with newId', function() {
             let id = SnapActions.newId();
             let owner = SnapActions.getOwnerFromId(id);
-            expect(owner).to.be(undefined);
+            expect(owner).toBe(undefined);
         });
     });
 
@@ -190,7 +190,7 @@ describe('actions', function() {
             SnapActions.addActionToQueue({id: 3});
             SnapActions.addActionToQueue({id: 2});
             SnapActions.queuedActions.forEach((action, index) => {
-                expect(action.id).to.be(index);
+                expect(action.id).toBe(index);
             });
         });
 
