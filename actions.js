@@ -11,7 +11,8 @@ function ActionManager() {
     this.id = null;
     this.rank = null;
     this.isLeader = false;
-    this._pendingLocalActions = {};
+    this._pendingLocalActions = [];
+    this._attemptedLocalActions = [];
     this.initialize();
 }
 
@@ -289,25 +290,16 @@ ActionManager.prototype.completeAction = function(err, result) {
     }
 
     // Resolve/reject actions
-    if (!action.user || action.user === this.id) {
+    if (this.isOwnAction(action)) {
         // Ensure that the handlers are removed
-        action = this._pendingLocalActions[action.id] || action;
-        delete this._pendingLocalActions[action.id];
+        var localAction = this.rejectPredecessorsInQueue(this._pendingLocalActions, action);
 
-        // We can call reject for any ids less than the given id...
-        var earlierAction;
-        for (var i = action.id; i--;) {
-            earlierAction = this._pendingLocalActions[i];
-            if (earlierAction && earlierAction.reject) {
-                earlierAction.reject(result);
-                delete this._pendingLocalActions[i];
+        if (localAction) {
+            if (err) {
+                localAction.reject(err);
+            } else {
+                localAction.resolve(result);
             }
-        }
-
-        if (err) {
-            action.reject(err);
-        } else {
-            action.resolve(result);
         }
     }
     this.afterActionApplied(action);
@@ -316,6 +308,10 @@ ActionManager.prototype.completeAction = function(err, result) {
     if (this.queuedActions.length && this.isNextAction(this.queuedActions[0])) {
         setTimeout(this._applyEvent.bind(this), 0, this.queuedActions.shift());
     }
+};
+
+ActionManager.prototype.isOwnAction = function(action) {
+    return !action.user || action.user === this.id;
 };
 
 ActionManager.prototype.isNextAction = function(action) {
@@ -357,6 +353,7 @@ ActionManager.prototype._joinSession = function(sessionId, error) {
 
 function Action(event) {
     this.id = event.id;
+    this.data = event;
     this.resolve = null;
     this.reject = null;
 
@@ -366,6 +363,19 @@ function Action(event) {
         self.reject = reject;
     });
 }
+
+Action.prototype.equals = function(data) {
+    var self = this,
+        fieldsToCheck = ['id', 'user', 'time'];
+
+    if (data instanceof Action) {
+        data = data.data;
+    }
+
+    return fieldsToCheck.reduce(function(matches, field) {
+        return matches && data[field] === self.data[field];
+    }, true);
+};
 
 ActionManager.prototype.applyEvent = function(event) {
     event.user = this.id;
@@ -385,8 +395,9 @@ ActionManager.prototype.applyEvent = function(event) {
         this.submitIfAllowed(event);
     }
 
+    // Record that the action has been submitted
     var action = new Action(event);
-    this._pendingLocalActions[action.id] = action;
+    this._attemptedLocalActions.push(action);
     return action.promise;
 };
 
@@ -395,7 +406,7 @@ ActionManager.prototype.submitIfAllowed = function(event) {
         ide = this.ide();
 
     if (event.type === 'openProject') {
-        this.submitAction(event);
+        return this.submitAction(event);
     } else if (ide.isReplayMode && !event.isReplay) {
         ide.promptExitReplay(function() {
             myself.submitIfAllowed(event);
@@ -437,10 +448,37 @@ ActionManager.prototype.onReceiveAction = function(msg) {
         return;
     }
 
+    // Record the action as pending and remove any earlier *submitted* actions
+    if (this.isOwnAction(msg)) {
+        var action = this.rejectPredecessorsInQueue(this._attemptedLocalActions, msg);
+
+        if (action) {
+            this._pendingLocalActions.push(action);
+        } else {
+            console.error('missing local action for', msg);
+        }
+    }
+
     if (this.isNextAction(msg) && !this.isApplyingAction) {
         this._applyEvent(msg);
     } else {
         this.addActionToQueue(msg);
+    }
+};
+
+ActionManager.prototype.rejectPredecessorsInQueue = function(queue, event) {
+    var action = queue.find(action => action.equals(event));
+
+    // ensure that we found the given action
+    if (action) {
+        var next = queue.shift();
+        while (next !== action) {
+            next.reject();
+            next = queue.shift();
+        }
+        return action;
+    } else {
+        console.error('could not find local action in queue', event);
     }
 };
 
@@ -485,11 +523,12 @@ ActionManager.prototype._rawApplyEvent = function(event) {
     }
 };
 
-ActionManager.prototype.submitAction = function(action) {
-    if (this.isLeader || !this.isCollaborating() || action.type === 'openProject') {
-        return this.acceptEvent(action);
+ActionManager.prototype.submitAction = function(event) {
+
+    if (this.isLeader || !this.isCollaborating() || event.type === 'openProject') {
+        this.acceptEvent(event);
     } else {
-        return this.send(action);
+        this.send(event);
     }
 };
 
