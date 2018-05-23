@@ -137,12 +137,16 @@ RoomMorph.prototype.setRoomName = function(name) {
 RoomMorph.prototype.getDefaultRoles = function() {
     var roleInfo = {},
         name = this.getCurrentRoleName(),
-        myRoleInfo = {
+        occupant = {
             uuid: this.myUuid(),
             username: SnapCloud.username || 'me'
         };
 
-    roleInfo[name] = [myRoleInfo];
+    roleInfo[name] = {
+        name: name,
+        occupants: [occupant]
+    };
+
     return roleInfo;
 };
 
@@ -301,26 +305,33 @@ RoomMorph.prototype.updateRoles = function(roleInfo) {
     var myself = this,
         roles = this.getRoles(),
         changed = false,
-        names;
+        occupants,
+        ids;
 
     roles.forEach(function(role) {
-        if (!roleInfo[role.name]) {
+        if (!roleInfo[role.id]) {
             role.destroy();
             changed = true;
         } else {
             // Update the occupants
-            if (!RoomMorph.sameOccupants(role.users, roleInfo[role.name])) {
-                role.setOccupants(roleInfo[role.name]);
+            occupants = roleInfo[role.id].occupants;
+            if (!RoomMorph.sameOccupants(role.users, occupants)) {
+                role.setOccupants(occupants);
             }
-            delete roleInfo[role.name];
+
+            // Update the name
+            role.setName(roleInfo[role.id].name);
+
+            delete roleInfo[role.id];
         }
     });
 
-    names = Object.keys(roleInfo);
-    names.forEach(function(name) {
+    ids = Object.keys(roleInfo);
+    ids.forEach(function(id) {
         var role = new RoleMorph(
-            name,
-            roleInfo[name]
+            id,
+            roleInfo[id].name,
+            roleInfo[id].occupants
         );
         myself.add(role);
         changed = true;
@@ -1345,12 +1356,13 @@ RoleMorph.COLORS = [
 });
 
 // The role morph needs to know where to draw itself
-function RoleMorph(name, user) {
-    this.init(name, user);
+function RoleMorph(id, name, user) {
+    this.init(id, name, user);
 }
 
-RoleMorph.prototype.init = function(name, users) {
+RoleMorph.prototype.init = function(id, name, users) {
     RoleMorph.uber.init.call(this, true);
+    this.id = id;
     this.name = name;
     this.users = [];
 
@@ -1398,6 +1410,12 @@ RoleMorph.prototype.init = function(name, users) {
     this.acceptsDrops = true;
     this.setOccupants(users);
     this.drawNew();
+};
+
+RoleMorph.prototype.setName = function(name) {
+    this.name = name;
+    this.label.text = name;
+    this.label.drawNew();
 };
 
 RoleMorph.prototype.wantsDropOf = function(aMorph) {

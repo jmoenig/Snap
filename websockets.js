@@ -80,7 +80,7 @@ WebSocketManager.MessageHandlers = {
         this.ide.room.update(
             msg.owner,
             msg.name,
-            msg.occupants,
+            msg.roles,
             msg.collaborators
         );
     },
