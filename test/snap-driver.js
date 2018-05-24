@@ -3,14 +3,6 @@ function SnapDriver(world) {
     this._world = world;
 }
 
-// Wait for the client to have a websocket id
-SnapDriver.prototype.waitUntilReady = function(cb) {
-    if (this.ide().sockets.uuid) {
-        return setTimeout(cb);
-    }
-    setTimeout(this.waitUntilReady.bind(this, cb));
-};
-
 // Convenience Getters
 SnapDriver.prototype.world = function() {
     return this._world;
@@ -31,7 +23,7 @@ SnapDriver.prototype.dialog = function() {
 };
 
 // Controlling the IDE
-SnapDriver.prototype.reset = function(cb) {
+SnapDriver.prototype.reset = function() {
     var world = this.world();
 
     // Close all open dialogs
@@ -39,11 +31,8 @@ SnapDriver.prototype.reset = function(cb) {
     dialogs.forEach(dialog => dialog.destroy());
 
     this.ide().exitReplayMode();
-    this.waitUntilReady(function() {
-        return SnapActions.openProject()
-            .then(() => cb())
-            .catch(err => console.error(`could not reset ide: ${err}`));
-    });
+    return this.waitUntilReady()
+        .then(() => SnapActions.openProject());
 };
 
 SnapDriver.prototype.selectCategory = function(cat) {
@@ -143,17 +132,42 @@ SnapDriver.prototype.dragAndDrop = function(srcMorph, position) {
     this.mouseUp(position);
 };
 
-SnapDriver.prototype.waitUntil = function(fn, callback, maxWait) {
+SnapDriver.prototype.waitUntil = function(fn, maxWait) {
+    let resolve, reject;
+    let promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+    });
+
     var startTime = Date.now();
     var check = function() {
-        if (fn() || Date.now()-startTime > maxWait) {
-            callback(fn());
+        let result = fn();
+        if (result || Date.now()-startTime > maxWait) {
+            if (result) {
+                resolve(result);
+            } else {
+                reject(result);
+            }
         } else {
             setTimeout(check, 25);
         }
     };
     maxWait = maxWait || 4000;
     check();
+
+    return promise;
+};
+
+SnapDriver.prototype.expect = function(fn, msg) {
+    return this.waitUntil(fn)
+        .catch(() => {
+            throw new Error(msg);
+        });
+};
+
+// Wait for the client to have a websocket id
+SnapDriver.prototype.waitUntilReady = function() {
+    return this.waitUntil(() => this.ide().sockets.uuid);
 };
 
 // netsblox additions

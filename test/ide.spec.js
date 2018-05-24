@@ -1,8 +1,8 @@
-/*globals driver, expect, SERVER_URL, SERVER_ADDRESS, ensureFullUrl, NetsBloxMorph, SnapUndo, SnapActions, SnapCloud */
+/*globals driver, expect, SERVER_URL, SERVER_ADDRESS, ensureFullUrl,
+  SnapUndo, SnapActions, SnapCloud, CustomBlockDefinition, CustomCommandBlockMorph */
 describe('ide', function() {
-    before(function(done) {
-        driver.reset(done);
-    });
+    this.timeout(5000);
+    before(() => driver.reset());
 
     describe('export', function() {
         it('should export locally if only one role', function(done) {
@@ -19,7 +19,8 @@ describe('ide', function() {
             var local = null;
             ide.exportRoom = function(str) {
                 // ignore the version number (client version may not match server version)
-                str = str.replace(/NetsBlox \d+\.\d+\.\d+,/, 'NetsBlox');
+                str = str.replace(/NetsBlox \d+\.\d+\.\d+,/, 'NetsBlox')
+                    .replace(/ \(\d+\)" app="NetsBlox/, '" app="NetsBlox');
                 if (!local) {
                     return local = str;
                 }
@@ -41,9 +42,7 @@ describe('ide', function() {
 
     describe('lang', function() {
 
-        beforeEach(function(done) {
-            driver.reset(done);
-        });
+        beforeEach(() => driver.reset());
 
         afterEach(function() {
             driver.ide().saveSetting('language', 'en');
@@ -128,16 +127,14 @@ describe('ide', function() {
                     .then(() => {
                         validate();
                     })
-                    .catch(() => done('addNewSprite action catched!'));
+                    .catch(() => done('addNewSprite action caught!'));
             }, 150);
         });
     });
 
     describe('name', function() {
         const BAD_CHARS = ['.', '@'];
-        beforeEach(function(done) {
-            driver.reset(done);
-        });
+        beforeEach(() => driver.reset());
 
         BAD_CHARS.forEach(badChar => {
             describe('naming project with ' + badChar + ' symbol', function() {
@@ -240,9 +237,7 @@ describe('ide', function() {
 
     describe('saveACopy', function() {
         let username;
-        before(function(done) {
-            driver.reset(done);
-        });
+        before(() => driver.reset());
 
         after(function() {
             SnapCloud.username = username;
@@ -267,9 +262,7 @@ describe('ide', function() {
     });
 
     describe('replay', function() {
-        before(function(done) {
-            driver.reset(done);
-        });
+        before(() => driver.reset());
 
         describe('bug reports', function() {
             it('should play the openProject event', function(done) {
@@ -279,21 +272,23 @@ describe('ide', function() {
                     if (ide.replayControls.actionIndex === -1) err = `did not apply openProject!`;
                     done(err);
                 };
-                driver.addBlock('forward').then(() => {
-                    var events = SnapUndo.allEvents;
-                    driver.reset(() => {
-                        ide.replayEvents(events);
-                        ide.replayControls.jumpToEnd();
-                        setTimeout(checkAtEnd, 400);
+                driver.addBlock('forward')
+                    .then(() => {
+                        const events = SnapUndo.allEvents;
+                        return driver.reset()
+                            .then(() => {
+                                ide.replayEvents(events);
+                                ide.replayControls.jumpToEnd();
+                                setTimeout(checkAtEnd, 400);
+                            });
                     });
-                });
             });
         });
     });
 
     describe('server connection', () => {
         const EXPECTED_SURL = window.location.origin;
-        beforeEach(done => driver.reset(done));
+        beforeEach(() => driver.reset());
 
         describe('SERVER_URL', () => {
 
@@ -333,9 +328,9 @@ describe('ide', function() {
     });
 
     describe('tools', function() {
-        beforeEach(done => driver.reset(done));
+        beforeEach(() => driver.reset());
 
-        it('should be able to run the label block', function(done) {
+        it('should be able to run the label block', function() {
             this.timeout(10000);
             // Import the tools
             var ide = driver.ide();
@@ -348,28 +343,25 @@ describe('ide', function() {
             driver.click(importBtn);
             expect(importBtn).toNotBe(undefined);
 
-            // Try to run the "label" block?
-            var runLabel = () => {
-                driver.selectCategory('Custom');
-                var labelBlock = driver.palette().children[0].children
-                    .find(item => item.blockSpec === 'label %txt of size %n');
+            return driver.waitUntil(() => driver.dialog())
+                .then(() => {  // run the label block
+                    driver.selectCategory('Custom');
+                    var labelBlock = driver.palette().children[0].children
+                        .find(item => item.blockSpec === 'label %txt of size %n');
 
-                if (!labelBlock) return done(`Could not find label block!`);
+                    if (!labelBlock) throw new Error(`Could not find label block!`);
 
-                driver.click(labelBlock);
+                    driver.click(labelBlock);
 
-                // Wait for some sort of result
-                var sprite = driver.ide().sprites.at(1);
-                var startX = sprite.xPosition();
-                driver.waitUntil(
-                    () => driver.dialog() || sprite.xPosition() !== startX,
-                    () => {
-                        if (driver.dialog()) return done('label block failed to execute');
-                        done();
-                    }
-                );
-            };
-            driver.waitUntil(() => driver.dialog(), runLabel, 5000);
+                    // Wait for some sort of result
+                    var sprite = driver.ide().sprites.at(1);
+                    var startX = sprite.xPosition();
+                    return driver.waitUntil(
+                        () => driver.dialog() || sprite.xPosition() !== startX
+                    ).then(() => {
+                        if (driver.dialog()) throw new Error('label block failed to execute');
+                    });
+                });
         });
     });
 
@@ -380,7 +372,7 @@ describe('ide', function() {
             }
         }
         return -1;
-    };
+    }
 
     describe('getActiveEntity', function() {
         it('should return a string starting with the id', function() {
@@ -401,7 +393,7 @@ describe('ide', function() {
             SnapActions.addCustomBlock(definition, sprite).then(function() {
                 driver.selectCategory('custom');
                 let block = driver.palette().contents.children
-                .find(item => item instanceof CustomCommandBlockMorph);
+                    .find(item => item instanceof CustomCommandBlockMorph);
 
                 // Edit the custom block
                 driver.rightClick(block);
@@ -421,20 +413,13 @@ describe('ide', function() {
     });
 
     describe('replay slider', function() {
-        before(function(done) {
-            driver.reset(err => {
-                if (err) return done(err);
-
+        before(function() {
+            return driver.reset()
                 // Add a couple blocks, change the stage size, etc
-                driver.addBlock('forward').then(() => {
-                    SnapActions.setStageSize(500, 500).then(() => {
-                        driver.addBlock('bubble').then(() => {
-                            driver.ide().replayEvents();  // enter replay mode
-                            done();
-                        });
-                    });
-                });
-            });
+                .then(() => driver.addBlock('forward'))
+                .then(() => SnapActions.setStageSize(500, 500))
+                .then(() => driver.addBlock('bubble'))
+                .then(() => driver.ide().replayEvents());  // enter replay mode
         });
 
         it('should be able to undo all events', function(done) {

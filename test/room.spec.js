@@ -3,10 +3,10 @@ describe('room', function() {
     this.timeout(10000);
     describe('new', function() {
         const name = 'newRoleName';
-        before(done => {
-            driver.reset(() => {
-                // Select the room tab
-                driver.addBlock('forward').then(() => {
+        before(() => {
+            return driver.reset()
+                .then(() => driver.addBlock('forward'))
+                .then(() => {
                     driver.selectTab('Room');
                     let btn = driver.ide().spriteEditor.addRoleBtn;
 
@@ -18,14 +18,8 @@ describe('room', function() {
 
                     // wait for it to show up
                     let room = driver.ide().room;
-                    driver.waitUntil(() => {
-                        return room.getRole(name);
-                    }, found => {
-                        if (found) return done();
-                        done(`could not create role "${name}"`);
-                    });
+                    return driver.waitUntil(() => room.getRole(name));
                 });
-            });
         });
 
         describe('moveToRole', function() {
@@ -33,59 +27,51 @@ describe('room', function() {
                 driver.moveToRole(name);
             });
 
-            it('should be able to move to new role', function(done) {
+            it('should be able to move to new role', function() {
                 // wait for the project name to change
-                driver.waitUntil(() => {
+                return driver.expect(() => {
                     return driver.ide().projectName === name;
-                }, found => {
-                    if (found) return done();
-                    done(`could move to role "${name}"`);
-                });
+                }, `could not move to ${name} role`);
             });
 
-            it('should be an empty role', function(done) {
+            it('should be an empty role', function() {
                 // Check for existing blocks
-                driver.waitUntil(() => {
+                return driver.expect(() => {
                     return !driver.ide().currentSprite.scripts.children.length;
-                }, foundNoBlocks => {
-                    if (foundNoBlocks) return done();
-                    done(`did not load empty role "${name}"`);
-                });
+                }, `did not load empty role "${name}"`);
             });
         });
     });
 
     describe('rename', function() {
         const newName = 'newRoleName';
-        before(done => {
-            driver.reset(() => {
-                driver.selectTab('Room');
+        before(() => {
+            return driver.reset()
+                .then(()=> {
+                    driver.selectTab('Room');
 
-                const roleName = driver.ide().projectName;
-                const role = driver.ide().room.getRole(roleName);
+                    const roleName = driver.ide().projectName;
+                    const role = driver.ide().room.getRole(roleName);
 
-                // rename the role
-                driver.click(role.label);
-                driver.keys(newName);
-                driver.dialog().ok();
-                done();
-            });
+                    // rename the role
+                    driver.click(role.label);
+                    driver.keys(newName);
+                    driver.dialog().ok();
+                });
         });
 
-        it('should change role name in room tab', function(done) {
-            driver.waitUntil(() => {
+        it('should change role name in room tab', function() {
+            return driver.expect(() => {
                 return driver.ide().room.getRole(newName);
-            }, passed => {
-                if (passed) return done();
-                done('role did not change names');
-            });
+            }, 'role did not change names');
         });
     });
 
     describe('duplicate', function() {
-        before(done => {
-            driver.reset(() => {
-                driver.addBlock('forward').then(() => {
+        before(() => {
+            return driver.reset()
+                .then(() => driver.addBlock('forward'))
+                .then(() => {
                     driver.selectTab('Room');
 
                     const roleName = driver.ide().projectName;
@@ -96,22 +82,17 @@ describe('room', function() {
                     const dupBtn = driver.dialog().buttons.children
                         .find(btn => btn.action === 'createRoleClone');
                     driver.click(dupBtn);
-                    done();
                 });
-            });
         });
 
-        it('should create a new role', function(done) {
-            driver.waitUntil(() => {
+        it('should create a new role', function() {
+            return driver.expect(() => {
                 const roleNames = driver.ide().room.getRoleNames();
                 return roleNames.length === 2;
-            }, passed => {
-                if (passed) return done();
-                done('new role did not appear');
-            });
+            }, 'new role did not appear');
         });
 
-        it('should contain the same blocks', function(done) {
+        it('should contain the same blocks', function() {
             const roleName = driver.ide().projectName;
             const roleNames = driver.ide().room.getRoleNames();
             const newRoleName = roleNames.find(name => name !== roleName);
@@ -119,52 +100,45 @@ describe('room', function() {
 
             // Move to the role and check the blocks
             driver.moveToRole(newRoleName);
-            driver.waitUntil(() => {
+            return driver.expect(() => {
                 return driver.ide().currentSprite.scripts.children.length === currentBlockCount;
-            }, passed => {
-                if (passed) return done();
-                done('role does not contain expected blocks');
-            });
+            }, 'role does not contain expected blocks');
         });
     });
 
     describe('remove', function() {
         const newRoleName = 'testRole';
 
-        before(function(done) {
+        before(function() {
             driver.newRole(newRoleName);
 
-            driver.waitUntil(() => {
-                return driver.ide().room.getRole(newRoleName);
-            }, passed => {
-                if (!passed) return done('new role did not show up');
+            return driver.waitUntil(() => driver.ide().room.getRole(newRoleName))
+                .catch(() => {
+                    throw new Error('new role did not show up');
+                })
+                .then(() => {
+                    const role = driver.ide().room.getRole(newRoleName);
+                    // duplicate the role
+                    driver.click(role);
+                    const delBtn = driver.dialog().buttons.children
+                        .find(btn => btn.action === 'deleteRole');
 
-                const role = driver.ide().room.getRole(newRoleName);
-                // duplicate the role
-                driver.click(role);
-                const delBtn = driver.dialog().buttons.children
-                    .find(btn => btn.action === 'deleteRole');
-
-                driver.click(delBtn);
-                done();
-            });
+                    driver.click(delBtn);
+                });
         });
 
-        it('should remove the role', function(done) {
-            driver.waitUntil(() => {
+        it('should remove the role', function() {
+            return driver.expect(() => {
                 const roleNames = driver.ide().room.getRoleNames();
                 return roleNames.includes(newRoleName);
-            }, passed => {
-                if (passed) return done();
-                done('could not remove new role');
-            });
+            }, 'could not remove new role');
         });
     });
 
     describe('rename project', function() {
         const newName = 'newProjectName';
 
-        it('should be able to rename the project', function(done) {
+        it('should be able to rename the project', function() {
             const room = driver.ide().room;
 
             driver.selectTab('room');
@@ -173,12 +147,9 @@ describe('room', function() {
             driver.keys(newName);
             driver.dialog().ok();
 
-            driver.waitUntil(() => {
+            return driver.expect(() => {
                 return room.name.startsWith(newName);  // may have (2) or (3) appended
-            }, passed => {
-                if (passed) return done();
-                done('did not rename project: ' + room.name);
-            });
+            }, 'did not rename project: ' + room.name);
         });
     });
 });

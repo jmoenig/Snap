@@ -45,7 +45,9 @@
   </script>
   <script type="text/javascript" src="/dist/app.min.js"></script>
   <script src="./snap-driver.js"></script>
+  <script src="./test-utils.js"></script>
   <script src="./room.spec.js"></script>
+  <script src="./save.spec.js"></script>
   <script src="./messages.spec.js"></script>
   <script src="./blocks.spec.js"></script>
   <script src="./actions.spec.js"></script>
@@ -69,6 +71,7 @@
 
           /* start the tests */
           driver = new SnapDriver(world);
+          /* create test user if needed */
           mocha.run();
       };
       function loop() {

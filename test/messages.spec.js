@@ -2,11 +2,9 @@
 describe('messages', function() {
 
     describe('message type', function() {
-        beforeEach(function(done) {
-            driver.reset(() => {
-                driver.selectCategory('network');
-                done();
-            });
+        beforeEach(function() {
+            return driver.reset()
+                .then(() => driver.selectCategory('network'));
         });
 
         it('should be able to open the msg type dialog', function() {
@@ -21,19 +19,17 @@ describe('messages', function() {
             expect(dialog instanceof MessageCreatorMorph).toBe(true);
         });
 
-        it('should show delete msg type btn after create msg type', function(done) {
+        it('should show delete msg type btn after create msg type', function() {
             var action = SnapActions.addMessageType('test', ['field1', 'field2']);
 
-            action.then(() => {
+            return action.then(() => {
                 var palette = driver.palette();
                 var isDelMsgTypeBtn = item => item instanceof PushButtonMorph &&
                     item.labelString === 'Delete a message type';
                 var btn = palette.contents.children.find(isDelMsgTypeBtn);
 
                 expect(!!btn).toBe(true);
-                done();
-            })
-            .catch(err => done(err));
+            });
         });
     });
 });

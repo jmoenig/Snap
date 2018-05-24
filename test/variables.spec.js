@@ -1,11 +1,9 @@
 /* globals driver, SnapActions, SnapUndo */
 describe('variables', function() {
-    before(function(done) {
-        driver.reset(done);
-    });
+    before(() => driver.reset());
 
-    it('should be able to undo add global variable (after serializing)', function(done) {
-        SnapActions.addVariable('testVar', true)
+    it('should be able to undo add global variable (after serializing)', function() {
+        return SnapActions.addVariable('testVar', true)
             .then(() => {
                 // Get the serialized event and try to apply it
                 var serializer = driver.ide().serializer;
@@ -18,8 +16,7 @@ describe('variables', function() {
 
                 // undo the last event
                 var event = SnapUndo.getInverseEvent(SnapUndo.allEvents.pop());
-                SnapActions.applyEvent(event)
-                    .then(() => done());
+                return SnapActions.applyEvent(event);
             });
     });
 });

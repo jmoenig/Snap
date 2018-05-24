@@ -3,44 +3,40 @@
 describe('actions', function() {
     var position = new Point(600, 600);
 
-    beforeEach(function(done) {
-        driver.reset(done);
+    beforeEach(() => driver.reset());
+
+    it('should have default color w/ setColorField', function() {
+        return driver.addBlock('setColor', position)
+            .then(block => SnapActions.setColorField(block.inputs()[0]));
     });
 
-    it('should have default color w/ setColorField', function(done) {
-        var action = driver.addBlock('setColor', position);
-        action.then(block => {
-            SnapActions.setColorField(block.inputs()[0])
-                .then(() => done());
-        });
-    });
-
-    it('should not animate move block when not focused', function(done) {
-        var action = driver.addBlock('forward', position);
-
+    it('should not animate move block when not focused', function() {
         // Create two blocks. Connect one to another then change to the stage and undo/redo
-        action.then(block => {
-            driver.addBlock('forward', new Point(800, 800))
-                .then(block2 => {
-                    // connect block to block2
-                    var target = {
-                        element: block2,
-                        point: new Point(800, 800),
-                        loc: 'bottom'
-                    };
-                    driver.selectStage();
-                    SnapActions.moveBlock(block, target)
-                        .then(() => {
-                            var id = Object.keys(SnapUndo.eventHistory)[0];
-                            SnapUndo.undo(id)
-                                .then(() => SnapUndo.redo(id).then(() => done()));
-                        });
-                });
-        });
+        let block1 = null;
+        let id = null;
+        return driver.addBlock('forward', position)
+            .then(block => {
+                block1 = block;
+                return driver.addBlock('forward', new Point(800, 800));
+            })
+            .then(block2 => {
+                id = Object.keys(SnapUndo.eventHistory)[0];
+
+                // connect block to block2
+                const target = {
+                    element: block2,
+                    point: new Point(800, 800),
+                    loc: 'bottom'
+                };
+                driver.selectStage();
+                return SnapActions.moveBlock(block1, target);
+            })
+            .then(() => SnapUndo.undo(id))
+            .then(() => SnapUndo.redo(id));
     });
 
     it('should only animate if focused', function() {
-        var stage = driver.ide().stage;
+        const stage = driver.ide().stage;
 
         SnapActions.currentEvent = {replayType: 1};
         driver.selectSprite('Sprite');
@@ -78,19 +74,19 @@ describe('actions', function() {
             expect(driver.ide().room.isLeader()).toBe(true);
         });
 
-        it('should detect leader based off of uuid', function(done) {
+        it('should detect leader based off of uuid', function() {
             SnapCloud.username = 'test';
-            setTimeout(() => {
-                let room = driver.ide().room;
-                let role = room.getRole(room.getCurrentRoleName());
-                let occupants = role.users;
-                occupants.unshift({username: SnapCloud.username, uuid: 'ad'});
+            return Promise.resolve()
+                .then(() => {
+                    let room = driver.ide().room;
+                    let role = room.getRole(room.getCurrentRoleName());
+                    let occupants = role.users;
+                    occupants.unshift({username: SnapCloud.username, uuid: 'ad'});
 
-                role.setOccupants(occupants);
+                    role.setOccupants(occupants);
 
-                expect(driver.ide().room.isLeader()).toBe(false);
-                done();
-            }, 50);
+                    expect(driver.ide().room.isLeader()).toBe(false);
+                });
         });
     });
 
@@ -106,26 +102,25 @@ describe('actions', function() {
     });
 
     describe('openProject', function() {
-        beforeEach(function(done) {
-            driver.reset(done);
-        });
+        beforeEach(() => driver.reset());
 
         afterEach(function() {
             driver.ide().exitReplayMode();
         });
 
-        it('should allow opening projects from replay mode', function(done) {
+        it('should allow opening projects from replay mode', function() {
             // Enter replay mode
-            SnapActions.setStageSize(500, 500)
+            return SnapActions.setStageSize(500, 500)
                 .then(function() {
                     driver.ide().replayEvents();
 
                     // try to open a new project...
                     SnapActions.openProject();
 
-                    var dialog = driver.dialog();
-                    if (dialog) return done('openProject action blocked during replay!');
-                    done();
+                    return driver.expect(
+                        () => !driver.dialog(),
+                        'openProject action blocked during replay!'
+                    );
                 });
         });
 
@@ -133,19 +128,20 @@ describe('actions', function() {
             var room = driver.ide().room;
             var isEditable = room.isEditable;
 
-            driver.addBlock('forward').then(() => {
-                room.isEditable = () => false;
-                var action = SnapActions.openProject();
+            driver.addBlock('forward')
+                .then(() => {
+                    room.isEditable = () => false;
+                    SnapActions.openProject();
 
-                setTimeout(function() {
-                    room.isEditable = isEditable;
-                    // make sure there is no block
-                    let sprite = driver.ide().currentSprite;
-                    let blocks = sprite.scripts.children;
-                    if (blocks.length) return done('Could not openProject');
-                    done();
-                }, 150);
-            });
+                    setTimeout(function() {
+                        room.isEditable = isEditable;
+                        // make sure there is no block
+                        let sprite = driver.ide().currentSprite;
+                        let blocks = sprite.scripts.children;
+                        if (blocks.length) return done('Could not openProject');
+                        done();
+                    }, 150);
+                });
         });
 
         it('should get unique id with newId', function() {
@@ -203,7 +199,7 @@ describe('actions', function() {
     });
 
     describe('then/catch', function() {
-        beforeEach(done => driver.reset(done));
+        beforeEach(() => driver.reset());
 
         it('should clear catch handler on accepted action', function(done) {
             SnapActions.setStageSize(500, 500)
@@ -215,7 +211,7 @@ describe('actions', function() {
     });
 
     describe('traverse', function() {
-        beforeEach(done => driver.reset(done));
+        beforeEach(() => driver.reset());
 
         it('should include input lists', function(done) {
             // Create a call block and add the 'input list' option
@@ -252,7 +248,7 @@ describe('actions', function() {
                 driver.addBlock('reifyScript').then(ring => {
                     driver.addBlock('doFaceTowards').then(block => {
                         const slot = ring.inputs()
-                            .find(child => child instanceof RingCommandSlotMorph)
+                            .find(child => child instanceof RingCommandSlotMorph);
                         let target = slot.attachTargets().pop();
 
                         SnapActions.moveBlock(block, target).then(() => {

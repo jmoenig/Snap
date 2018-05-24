@@ -3,41 +3,28 @@
 describe('blocks', function() {
     var position = new Point(400, 400);
 
-    beforeEach(function(done) {
-        driver.reset(() => {
-            driver.selectCategory('control');
-            done();
-        });
+    beforeEach(function() {
+        return driver.reset()
+            .then(() => driver.selectCategory('control'));
     });
 
-    it('should create block', function(done) {
-        driver.addBlock('doIfElse', position)
-            .then(block => {
-                expect(!!block).toBe(true);
-                done();
-            })
-            .catch(err => done(err));
+    it('should create block', function() {
+        return driver.addBlock('doIfElse', position)
+            .then(block => expect(!!block).toBe(true));
     });
 
-    it('should relabel if-else block to if', function(done) {
-        var fail = () => done('action catched!');
-        driver.addBlock('doIfElse', position)
-            .then(block => SnapActions.setSelector(block, 'doIf')
-                .then(() => done())
-                .catch(fail)
-            )
-            .catch(fail);
+    it('should relabel if-else block to if', function() {
+        return driver.addBlock('doIfElse', position)
+            .then(block => SnapActions.setSelector(block, 'doIf'));
     });
 
     describe('custom', function() {
-        beforeEach(done => {
-            driver.reset(() => {
-                driver.selectCategory('custom');
-                done();
-            });
+        beforeEach(() => {
+            return driver.reset()
+                .then(() => driver.selectCategory('custom'));
         });
 
-        it('should create (sprite) custom block', function(done) {
+        it('should create (sprite) custom block', function() {
             // Create a custom block definition
             var sprite = driver.ide().currentSprite,
                 spec = 'sprite block %s',
@@ -45,95 +32,93 @@ describe('blocks', function() {
 
             // Get the sprite
             definition.category = 'motion';
-            SnapActions.addCustomBlock(definition, sprite)
+            return SnapActions.addCustomBlock(definition, sprite)
+                .then(() => driver.addBlock(definition.blockInstance(), position));
+        });
+
+        it('should be able to attach comment to prototype hat block', function() {
+            var sprite = driver.ide().currentSprite,
+                spec = 'sprite block %s',
+                definition = new CustomBlockDefinition(spec, sprite);
+
+            // Get the sprite
+            definition.category = 'motion';
+            return SnapActions.addCustomBlock(definition, sprite)
                 .then(() => {
-                    driver.addBlock(definition.blockInstance(), position)
-                        .then(() => done());
+                    driver.selectCategory('custom');
+                    let block = driver.palette().contents.children
+                        .find(item => item instanceof CustomCommandBlockMorph);
+
+                    // Edit the custom block
+                    driver.rightClick(block);
+                    let editBtn = driver.dialog().children.find(item => item.action === 'edit');
+                    driver.click(editBtn);
+
+                    // add comment to the prototype hat morph
+                    let editor = driver.dialog();
+                    driver.rightClick(editor);
+
+                    let addCmtBtn = driver.dialog().children
+                        .find(item => item.action === 'addComment');
+
+                    driver.click(addCmtBtn);
+
+                    // drop it on the prototype hat block
+                    let scripts = editor.body.children.find(child => child instanceof ScriptsMorph);
+                    let hatBlock = scripts.children[0];
+                    driver.click(hatBlock);
+                    return driver.expect(
+                        () => !!hatBlock.comment,
+                        'hat block has no comment set!'
+                    );
                 });
         });
 
-        it('should be able to attach comment to prototype hat block', function(done) {
-            var sprite = driver.ide().currentSprite,
-                spec = 'sprite block %s',
-                definition = new CustomBlockDefinition(spec, sprite);
-
-            // Get the sprite
-            definition.category = 'motion';
-            SnapActions.addCustomBlock(definition, sprite).then(() => {
-                driver.selectCategory('custom');
-                let block = driver.palette().contents.children
-                    .find(item => item instanceof CustomCommandBlockMorph);
-
-                // Edit the custom block
-                driver.rightClick(block);
-                let editBtn = driver.dialog().children.find(item => item.action === 'edit');
-                driver.click(editBtn);
-
-                // add comment to the prototype hat morph
-                let editor = driver.dialog();
-                driver.rightClick(editor);
-
-                let addCmtBtn = driver.dialog().children
-                    .find(item => item.action === 'addComment');
-
-                driver.click(addCmtBtn);
-
-                // drop it on the prototype hat block
-                let scripts = editor.body.children.find(child => child instanceof ScriptsMorph);
-                let hatBlock = scripts.children[0];
-                driver.click(hatBlock);
-                setTimeout(() => {
-                    // Verify that the hatBlock.comment value is set
-                    if (!hatBlock.comment) return done('hat block has no comment set!');
-                    done();
-                }, 10);
-            });
-        });
-
         // Test attaching a command block to the proto hat block
-        it('should be able to attach cmd to prototype hat block', function(done) {
+        it('should be able to attach cmd to prototype hat block', function() {
             var sprite = driver.ide().currentSprite,
                 spec = 'sprite block %s',
                 definition = new CustomBlockDefinition(spec, sprite);
 
             // Get the sprite
             definition.category = 'motion';
-            SnapActions.addCustomBlock(definition, sprite).then(() => {
-                driver.selectCategory('custom');
-                let block = driver.palette().contents.children
-                    .find(item => item instanceof CustomCommandBlockMorph);
+            return SnapActions.addCustomBlock(definition, sprite)
+                .then(() => {
+                    driver.selectCategory('custom');
+                    let block = driver.palette().contents.children
+                        .find(item => item instanceof CustomCommandBlockMorph);
 
-                // Edit the custom block
-                driver.rightClick(block);
-                let editBtn = driver.dialog().children.find(item => item.action === 'edit');
-                driver.click(editBtn);
+                    // Edit the custom block
+                    driver.rightClick(block);
+                    let editBtn = driver.dialog().children.find(item => item.action === 'edit');
+                    driver.click(editBtn);
 
-                // add block to the prototype hat morph
-                // moveBlock
-                driver.selectCategory('motion');
-                let forwardBlock = driver.palette().contents.children
-                    .find(item => item.selector === 'forward');
+                    // add block to the prototype hat morph
+                    // moveBlock
+                    driver.selectCategory('motion');
+                    let forwardBlock = driver.palette().contents.children
+                        .find(item => item.selector === 'forward');
 
-                let editor = driver.dialog();
+                    let editor = driver.dialog();
 
-                // drop it on the prototype hat block
-                let scripts = editor.body.contents;
-                let hatBlock = scripts.children[0];
-                let dropPosition = hatBlock.bottomAttachPoint()
-                    .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
-                    .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
+                    // drop it on the prototype hat block
+                    let scripts = editor.body.contents;
+                    let hatBlock = scripts.children[0];
+                    let dropPosition = hatBlock.bottomAttachPoint()
+                        .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
+                        .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
 
-                driver.dragAndDrop(forwardBlock, dropPosition);
-                setTimeout(() => {
-                    if (!hatBlock.nextBlock()) return done('block not connected!');
-                    done();
-                }, 10);
-            });
+                    driver.dragAndDrop(forwardBlock, dropPosition);
+                    return driver.expect(
+                        () => hatBlock.nextBlock(),
+                        'block not connected'
+                    );
+                });
         });
     });
 
     describe('moveBlock', function() {
-        before(done => driver.reset(done));
+        before(() => driver.reset());
 
         it('should not create infinite loop on undo', function() {
             // Create three blocks (1, 2, 3)
@@ -166,25 +151,29 @@ describe('blocks', function() {
     });
 
     describe('rpc', function() {
-        before(done => {
-            driver.reset(done);
-        });
+        before(() => driver.reset());
 
-        it('should populate method with `setField`', function(done) {
+        it('should populate method with `setField`', function() {
             // create rpc block
-            driver.addBlock('getJSFromRPCStruct').then(block => {
-                var serviceField = block.inputs()[0];
-                // set the service to weather
-                SnapActions.setField(serviceField, 'Weather').then(() => {
+            let block = null;
+            return driver.addBlock('getJSFromRPCStruct')
+                .then(_block => {
+                    block = _block;
+                    const serviceField = block.inputs()[0];
+                    // set the service to weather
+                    return SnapActions.setField(serviceField, 'Weather');
+                })
+                .then(() => {
                     var methodField = block.inputs()[1];
                     // set the method to `humidity`
-                    SnapActions.setField(methodField, 'humidity').then(() => {
-                        var err = null;
-                        if (block.inputs().length < 3) err = `argument inputs not created!`;
-                        done(err);
-                    });
-                });
-            });
+                    return SnapActions.setField(methodField, 'humidity');
+                })
+                .then(() => {
+                    return driver.expect(
+                        () => block.inputs().length >= 3,
+                        `argument inputs not created!`
+                    );
+                })
         });
     });
 });
