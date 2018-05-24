@@ -4111,3 +4111,7 @@ in development:
 180508
 ------
 * Threads: tweaked JS-Compiler to better handle process related ops
+
+180524
+------
+* Blocks: fixed rendering and layout of variadic C-shaped input slots
