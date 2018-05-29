@@ -6906,12 +6906,24 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
     SnapCloud.getProjectVersionMetadata(
         this.projectName,
         function (versions) {
+            var today = new Date(),
+                yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
             myself.versions = versions;
+            myself.versions.forEach(function (version) {
+                var date = new Date(new Date().getTime() - version.lastupdated * 1000);
+                if (date.toDateString() === today.toDateString()) {
+                    version.lastupdated = localize('Today, ') + date.toLocaleTimeString();
+                } else if (date.toDateString() === yesterday.toDateString()) {
+                    version.lastupdated = localize('Yesterday, ') + date.toLocaleTimeString();
+                } else {
+                    version.lastupdated = date.toLocaleString();
+                }
+            });
             myself.listField.elements =
-                versions.map(function (version) {
+                myself.versions.map(function (version) {
                     return version.lastupdated;
                 });
-
             myself.clearDetails();
             myself.listField.buildListContents();
             myself.fixListFieldItemColors();
