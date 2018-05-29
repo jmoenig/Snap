@@ -252,7 +252,11 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
             this.rpcRequest = null;
             return response;
         }
+    } else if (this.readyToTerminate) {  // abort the RPC invocation
+        this.rpcRequest.abort();
+        this.rpcRequest = null;
     }
+
     this.pushContext('doYield');
     this.pushContext();
 };
