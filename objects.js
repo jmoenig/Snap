@@ -4525,6 +4525,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
         return null;
     }
     watcher = this.findVariableWatcher(varName);
+    SnapActions.toggleVariableWatcher(varName, isGlobal, watcher && watcher.isVisible)
     if (watcher !== null) {
         if (watcher.isVisible) {
             watcher.hide();
@@ -4590,6 +4591,7 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
         others;
     if (!stage) { return; }
     watcher = this.watcherFor(stage, selector);
+    SnapActions.toggleWatcher(selector, watcher && watcher.isVisible);
     if (watcher) {
         if (watcher.isVisible) {
             watcher.hide();

@@ -1424,7 +1424,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('scripts'); },
+        function () {
+            SnapActions.selectTab('scripts');
+            tabBar.tabTo('scripts');
+        },
         localize('Scripts'), // label
         function () {  // query
             return myself.currentTab === 'scripts';
@@ -1443,7 +1446,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('costumes'); },
+        function () {
+            SnapActions.selectTab('costumes');
+            tabBar.tabTo('costumes');
+        },
         localize(this.currentSprite instanceof SpriteMorph ?
             'Costumes' : 'Backgrounds'
         ),
@@ -1464,7 +1470,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('sounds'); },
+        function () {
+            SnapActions.selectTab('sounds');
+            tabBar.tabTo('sounds');
+        },
         localize('Sounds'), // label
         function () {  // query
             return myself.currentTab === 'sounds';
@@ -7266,6 +7275,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         var ide = myself.parentThatIsA(IDE_Morph);
 
         if (ide) {
+            SnapActions.selectSprite(myself.object);
             ide.selectSprite(myself.object);
         }
     };

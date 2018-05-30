@@ -86,6 +86,14 @@ ActionManager.prototype.addUserActions = function() {
     });
 };
 
+ActionManager.prototype._selectTab = function(tabString) {
+    return [tabString, this.ide().currentTab];
+};
+
+ActionManager.prototype._selectSprite = function(sprite) {
+    return [sprite.id, this.ide().currentSprite.id];
+};
+
 ActionManager.prototype.isUserAction = function(event) {
     return event.isUserAction;
 };
@@ -157,6 +165,10 @@ ActionManager.prototype.initializeEventMethods = function() {
     );
 
     this.addUserActions(
+        'selectTab',
+        'selectSprite',
+        'toggleWatcher',
+        'toggleVariableWatcher',
         'pressStart',
         'stopAllScripts',
         'startScript',

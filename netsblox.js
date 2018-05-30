@@ -350,7 +350,10 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('room'); },
+        function () {
+            SnapActions.selectTab('room');
+            tabBar.tabTo('room');
+        },
         localize('Room'), // label
         function () {  // query
             return myself.currentTab === 'room';
