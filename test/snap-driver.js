@@ -132,21 +132,39 @@ SnapDriver.prototype.dragAndDrop = function(srcMorph, position) {
     this.mouseUp(position);
 };
 
-SnapDriver.prototype.waitUntil = function(fn, maxWait) {
+SnapDriver.prototype.sleep = function(duration) {
+    const deferred = this._defer();
+
+    setTimeout(deferred.resolve, duration);
+
+    return deferred.promise;
+};
+
+SnapDriver.prototype._defer = function() {
     let resolve, reject;
     let promise = new Promise((res, rej) => {
         resolve = res;
         reject = rej;
     });
 
+    return {
+        resolve,
+        reject,
+        promise
+    };
+};
+
+SnapDriver.prototype.waitUntil = function(fn, maxWait) {
+    const deferred = this._defer();
+
     var startTime = Date.now();
     var check = function() {
         let result = fn();
         if (result || Date.now()-startTime > maxWait) {
             if (result) {
-                resolve(result);
+                deferred.resolve(result);
             } else {
-                reject(result);
+                deferred.reject(result);
             }
         } else {
             setTimeout(check, 25);
@@ -155,7 +173,7 @@ SnapDriver.prototype.waitUntil = function(fn, maxWait) {
     maxWait = maxWait || 4000;
     check();
 
-    return promise;
+    return deferred.promise;
 };
 
 SnapDriver.prototype.expect = function(fn, msg) {

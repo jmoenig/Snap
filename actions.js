@@ -401,15 +401,15 @@ ActionManager.prototype.applyEvent = function(event) {
     }
 
     // if in replay mode, check that the event is a replay event
+    var action = new Action(event);
     if (this.isUserAction(event)) {
         this.submitAction(event);
     } else {
+        // Record that the action has been submitted
+        this._attemptedLocalActions.push(action);
         this.submitIfAllowed(event);
     }
 
-    // Record that the action has been submitted
-    var action = new Action(event);
-    this._attemptedLocalActions.push(action);
     return action.promise;
 };
 
@@ -547,7 +547,10 @@ ActionManager.prototype.submitAction = function(event) {
 ActionManager.prototype.send = function(json) {
     var canSend = this._ws && this._ws.readyState === WebSocket.OPEN;
     json.id = json.id || this.lastSeen + 1;
-    this.lastSent = json.id;
+
+    if (!this.isUserAction(json)) {
+        this.lastSent = json.id;
+    }
     if (this.isCollaborating() && json.type !== 'openProject' && canSend) {
         this._ws.send(JSON.stringify(json));
     }

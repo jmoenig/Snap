@@ -72,7 +72,9 @@ SnapActions.send = function(event) {
 
     // Netsblox addition: end
     event.id = event.id || this.lastSeen + 1;
-    this.lastSent = event.id;
+    if (!this.isUserAction(event)) {
+        this.lastSent = event.id;
+    }
     if (event.type !== 'openProject') {
         // Netsblox addition: start
         socket.send(JSON.stringify({
