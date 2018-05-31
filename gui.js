@@ -1993,6 +1993,9 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
         SnapUndo.reset();
         return this.openProjectString(aString);
     }
+    if (aString.indexOf('<replay') === 0) {
+        return this.openReplayString(aString);
+    }
     if (aString.indexOf('<snapdata') === 0) {
         SnapActions.disableCollaboration();
         SnapUndo.reset();
@@ -2155,6 +2158,7 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     if (this.currentSprite && this.currentSprite.scripts.focus) {
         this.currentSprite.scripts.focus.stopEditing();
     }
+
     this.currentSprite = sprite;
     this.createPalette();
     this.createSpriteBar();
@@ -3095,18 +3099,6 @@ IDE_Morph.prototype.projectMenu = function () {
         });
     if (shiftClicked) {
         menu.addItem(
-            localize('Download replay events'),
-            function() {
-                myself.saveFileAs(
-                    JSON.stringify(SnapUndo.allEvents, null, 2),
-                    'text/json;charset=utf-8',
-                    'replay-actions'
-                );
-            },
-            'download events for debugging and troubleshooting',
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
             localize('Replay events from file'),
             function() {
                 var inp = document.createElement('input');
@@ -3136,7 +3128,7 @@ IDE_Morph.prototype.projectMenu = function () {
                         myself.filePicker = null;
 
                         reader.onloadend = function(result) {
-                            return myself.loadSnapActions(result.target.result);
+                            return myself.loadReplayFromXml(result.target.result);
                         };
                         reader.readAsText(inp.files[0]);
                     },
@@ -3146,7 +3138,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 myself.filePicker = inp;
                 inp.click();
             },
-            'download events for debugging and troubleshooting',
+            'Load project replay from the beginning',
             new Color(100, 0, 0)
         );
     }
@@ -3325,18 +3317,8 @@ IDE_Morph.prototype.projectMenu = function () {
     return menu;
 };
 
-IDE_Morph.prototype.loadSnapActions = function (text) {
-    try {
-        var actions = JSON.parse(text);
-    } catch (e) {
-        this.showMessage('action load failed: invalid json');
-        return;
-    }
-    this.replayEvents(actions);
-};
-
-IDE_Morph.prototype.replayEvents = function (actions) {
-    var atEnd = false;
+IDE_Morph.prototype.replayEvents = function (actions, atEnd) {
+    atEnd = !!atEnd;
 
     if (!actions) {  // If no actions, use current session
         atEnd = true;

@@ -37,6 +37,13 @@ NetsBloxSerializer.prototype.loadCustomBlock = function (element, isGlobal) {
     return NetsBloxSerializer.uber.loadCustomBlock.call(this, element, isGlobal);
 };
 
+SnapSerializer.prototype.getInitialStageSpriteIds = function (model) {
+    var stageId = model.childNamed('stage').attributes.collabId,
+        firstSpriteId = stageId.split('_').slice(0, 2).join('_');
+
+    return [stageId, firstSpriteId];
+};
+
 MessageFrame.prototype.toXML = function (serializer) {
     var myself = this,
         msgTypes = this.names().map(function(name) {

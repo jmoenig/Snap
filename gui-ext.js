@@ -179,3 +179,35 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
 
     return this._rawOpenBlocksString(str, name, silently);
 };
+
+IDE_Morph.prototype.loadReplayFromXml = function (str) {
+    // Extract the replay from the project xml and load it
+    var xml = this.serializer.parse(str);
+
+    if (xml.tag === 'room') {
+        // grab the first role for now
+        xml = xml.children[0].childNamed('project');
+    }
+
+    if (xml.tag === 'project') {
+        // Update ids of sprite, stage, if needed
+        var ids = this.serializer.getInitialStageSpriteIds(xml),
+            stageId = ids[0],
+            spriteId = ids[1],
+            sprite = this.sprites.at(1);
+
+        SnapActions.registerOwner(this.stage, stageId);
+        SnapActions.registerOwner(sprite, spriteId);
+        xml = xml.childNamed('replay');
+    }
+
+    return this.droppedText(xml.toString());
+};
+
+IDE_Morph.prototype.openReplayString = function (str) {
+    var replay = this.serializer.parse(str);
+    this.serializer.loadReplayHistory(replay);
+
+    this.replayEvents(JSON.parse(JSON.stringify(SnapUndo.allEvents)), false);
+};
+
