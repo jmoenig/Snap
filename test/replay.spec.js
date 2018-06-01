@@ -1,15 +1,19 @@
-/*global driver*/
+/*global driver, SnapUndo*/
 describe('replay', function() {
-    beforeEach(function() {
+    const newProjectWithActions = function() {
         return driver.reset()
             // Add a couple blocks, change the stage size, etc
             .then(() => driver.addBlock('forward'))
             .then(() => SnapActions.setStageSize(500, 500))
-            .then(() => driver.addBlock('bubble'))
-            .then(() => driver.ide().replayEvents());  // enter replay mode
-    });
+            .then(() => driver.addBlock('bubble'));
+    };
 
-    describe('basic undo/redo', function() {
+    describe('undo/redo', function() {
+        beforeEach(function() {
+            return newProjectWithActions()
+                .then(() => driver.ide().replayEvents());  // enter replay mode
+        });
+
         it('should be able to undo all events', function(done) {
             const replayer = driver.ide().replayControls;
             replayer.jumpToBeginning();
@@ -33,6 +37,11 @@ describe('replay', function() {
     });
 
     describe('user actions', function() {
+        beforeEach(function() {
+            return newProjectWithActions()
+                .then(() => driver.ide().replayEvents());  // enter replay mode
+        });
+
         it('should still undo after current user actions during replay', function() {
             const replayer = driver.ide().replayControls;
             replayer.jumpToEnd();
@@ -45,6 +54,42 @@ describe('replay', function() {
                     () => driver.ide().currentSprite.scripts.children.length === 0,
                     'blocks were not undone!'
                 ));
+        });
+    });
+
+    describe('error handling', function() {
+        let reportedBugs = [];
+        beforeEach(function() {
+            // exit replay mode
+            return newProjectWithActions()
+                .then(() => {
+                    driver.ide().exitReplayMode();
+
+                    // add a garbage action
+                    const badAction = {
+                        type: 'setField',
+                        args: ['item_123', 'catnip', 'dognip']
+                    };
+                    SnapUndo.record(badAction);
+
+                    // enter replay mode
+                    driver.ide().replayEvents();
+
+                    // record bugs
+                    driver.ide().submitBugReport =
+                        (desc, error) => reportedBugs.push([desc, error]);
+
+                    const replayer = driver.ide().replayControls;
+                    replayer.jumpToBeginning();
+                });
+        });
+
+        it('should notify user on error', function() {
+            return driver.expect(() => driver.dialog(), 'No dialog shown');
+        });
+
+        it('should report the error in bug report', function() {
+            return driver.expect(() => reportedBugs.length, 'No reported bugs');
         });
     });
 });

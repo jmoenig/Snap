@@ -531,7 +531,6 @@ ActionManager.prototype._rawApplyEvent = function(event) {
         this[method].apply(this, event.args);
     } catch (e) {
         this.completeAction(e);
-        throw e;
     }
 };
 

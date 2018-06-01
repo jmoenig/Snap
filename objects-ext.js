@@ -236,7 +236,7 @@ StageMorph.prototype.addMessageType = function (messageType) {
 ReplayControls.prototype._applyEvent = ReplayControls.prototype.applyEvent;
 ReplayControls.prototype.applyEvent = function(event, next) {
     if (event.type !== 'openProject') {
-        return ReplayControls.prototype._applyEvent.call(this, event, next);
+        return ReplayControls.prototype._applyEvent.apply(this, arguments);
     } else {
         return next();
     }
