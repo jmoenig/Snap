@@ -205,9 +205,14 @@ IDE_Morph.prototype.loadReplayFromXml = function (str) {
 };
 
 IDE_Morph.prototype.openReplayString = function (str) {
-    var replay = this.serializer.parse(str);
-    this.serializer.loadReplayHistory(replay);
+    var myself = this,
+        replay = this.serializer.parse(str);
 
-    this.replayEvents(JSON.parse(JSON.stringify(SnapUndo.allEvents)), false);
+    return SnapActions.openProject()
+        .then(function() {
+            myself.exitReplayMode();
+            myself.serializer.loadReplayHistory(replay);
+            myself.replayEvents(JSON.parse(JSON.stringify(SnapUndo.allEvents)), false);
+        });
 };
 
