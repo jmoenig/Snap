@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-May-24';
+modules.blocks = '2018-June-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1687,6 +1687,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     } else if (this instanceof MultiArgMorph
             || this instanceof ArgLabelMorph) {
         y = this.top();
+        if (this.slotSpec === '%cs' && this.inputs().length > 0) {
+            y -= this.rounding;
+        }
     }
     lines.forEach(function (line) {
         x = myself.left() + ico + myself.edge + myself.labelPadding;
@@ -1711,6 +1714,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
                 lineHeight = part.height();
             } else if (part instanceof MultiArgMorph &&
                     (part.slotSpec === '%cs')) {
+                if (myself.isPredicate) {
+                    x += myself.corner;
+                }
                 part.setPosition(new Point(x, y));
                 lineHeight = part.height();
             } else {
@@ -1799,7 +1805,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         var adjustMultiWidth = 0;
         if (part instanceof CSlotMorph || (part.slotSpec === '%cs')) {
             if (myself.isPredicate) {
-                part.setWidth(blockWidth - ico - myself.rounding * 2);
+                part.setWidth(
+                    blockWidth - ico - myself.rounding * 2 - myself.corner
+                );
             } else {
                 part.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;

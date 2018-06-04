@@ -4115,3 +4115,7 @@ in development:
 180524
 ------
 * Blocks: fixed rendering and layout of variadic C-shaped input slots
+
+180604
+------
+* Blocks: tweaked layout of variadic C-shaped input slots
