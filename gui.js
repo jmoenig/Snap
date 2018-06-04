@@ -6231,24 +6231,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 function (proj) { return proj.ispublished; }
             ]
         ],
-        function () { myself.ok(); },
-        function () {
-            var item = this,
-                menu = new MenuMorph(myself, 'Project Recovery');
-            menu.addItem(
-                'Previous save',
-                function () {
-                    // fetch project with delta -1 (previous save)
-                    myself.openCloudProject(myself.listField.selected, -1); }
-            );
-            menu.addItem(
-                'Last save before today',
-                function () {
-                    // fetch project with delta -2 (last save before today)
-                    myself.openCloudProject(myself.listField.selected, -2); }
-            );
-            return menu;
-        }
+        function () { myself.ok(); }
     );
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;

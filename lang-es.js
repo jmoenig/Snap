@@ -2404,6 +2404,12 @@ SnapTranslator.dict.es = {
         'Publicado.',
     'unpublished.':
         'No publicado',
+    'Recover':
+        'Recuperar',
+    'Today, ':
+        'Hoy, ',
+    'Yesterday, ':
+        'Ayer, ',
 
     // costume editor @todo (wasn't this superseed by paint editor?)
     'Costume Editor':
