@@ -4123,3 +4123,4 @@ in development:
 180605
 ------
 * VectorPaint: fixed rotation center editing for existing costumes
+* VectorPaint: fixed initial rendering, so costumes can be re-opened after saving

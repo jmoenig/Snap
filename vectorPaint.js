@@ -46,8 +46,10 @@
     Bernat Romagosa rewrote most of the code in 2017
 
     revision history
-    ----------------
-    2018, June 5 - fixed initial rotation center for an existing costume (Jens)
+    -----------------
+    2018, June 5
+        - fixed initial rotation center for an existing costume (Jens)
+        - fixed initial rendering, so costumes can be re-opened after saving
 */
 
 /*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
@@ -995,17 +997,19 @@ VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callbac
         isEmpty = isNil(shapes) || shapes.length === 0;
 
     VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback);
-
-    this.shapes = shapes.map(function (eachShape) { return eachShape.copy(); });
     this.ide = anIDE;
-
     this.paper.drawNew();
     this.paper.changed();
 
+    // make sure shapes are initialized and can be rendered
+    shapes.forEach(function (shape) {
+        shape.drawOn(myself.paper);
+    });
+    // copy the shapes for editing and re-render the copies
+    this.shapes = shapes.map(function (eachShape) { return eachShape.copy(); });
     this.shapes.forEach(function (shape) {
         shape.drawOn(myself.paper);
     });
-
     // init the rotation center, if any
     if (oldrc && !isEmpty) {
         this.paper.automaticCrosshairs = false;
