@@ -47,8 +47,8 @@
 
     revision history
     -----------------
-    2018, June 5
-        - fixed initial rotation center for an existing costume (Jens)
+    2018, June 5 (Jens):
+        - fixed initial rotation center for an existing costume
         - fixed initial rendering, so costumes can be re-opened after saving
 */
 
@@ -69,7 +69,6 @@ var VectorPolygon;
 var VectorSelection;
 var VectorPaintEditorMorph;
 var VectorPaintCanvasMorph;
-
 
 // VectorShape
 
@@ -177,8 +176,14 @@ VectorShape.prototype.constraintPoint = function (aPoint) {
     var newPoint = aPoint,
         delta = newPoint.subtract(this.origin),
         constraintPos = new Point(
-            Math.max(Math.abs(delta.x), Math.abs(delta.y)) * (delta.x / Math.abs(delta.x)),
-            Math.max(Math.abs(delta.x), Math.abs(delta.y)) * (delta.y / Math.abs(delta.y))
+            Math.max(
+                Math.abs(delta.x),
+                Math.abs(delta.y)) * (delta.x / Math.abs(delta.x)
+            ),
+            Math.max(
+                Math.abs(delta.x),
+                Math.abs(delta.y)) * (delta.y / Math.abs(delta.y)
+            )
         );
 
     newPoint = this.origin.add(constraintPos);
@@ -206,7 +211,9 @@ VectorShape.prototype.moveBy = function (delta) {
 
 VectorShape.prototype.resizeBy = function (delta, origin) {
     this.origin = this.origin.subtract(origin).multiplyBy(delta).add(origin);
-    this.destination = this.destination.subtract(origin).multiplyBy(delta).add(origin);
+    this.destination = this.destination.subtract(origin).multiplyBy(delta).add(
+        origin
+    );
 };
 
 // Generic drawOn method that stamps the shape SVG into its image canvas
@@ -232,7 +239,13 @@ VectorRectangle.prototype = new VectorShape();
 VectorRectangle.prototype.constructor = VectorRectangle;
 VectorRectangle.uber = VectorShape.prototype;
 
-function VectorRectangle (borderWidth, borderColor, fillColor, origin, destination) {
+function VectorRectangle (
+    borderWidth,
+    borderColor,
+    fillColor,
+    origin,
+    destination
+) {
     VectorRectangle.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(origin, destination);
 }
@@ -247,17 +260,17 @@ VectorRectangle.fromSVG = function (svg) {
 
     return new VectorRectangle(
             parseInt(attributes['stroke-width']), // borderWidth
-            attributes.stroke === 'none' ?
-                null :
+            attributes.stroke === 'none' ? null :
                 Color.fromString(attributes.stroke), // borderColor
-            attributes.fill === 'none' ?
-                null :
+            attributes.fill === 'none' ? null :
                 Color.fromString(attributes.fill), // fillColor
-            new Point(
-                parseInt(attributes.x), parseInt(attributes.y)), // origin
-            new Point(
+            new Point(  // origin
+                parseInt(attributes.x), parseInt(attributes.y)
+            ),
+            new Point( // destination
                 parseInt(attributes.x) + parseInt(attributes.width),
-                parseInt(attributes.y) + parseInt(attributes.height)) // destination
+                parseInt(attributes.y) + parseInt(attributes.height)
+            )
         );
 };
 
@@ -350,11 +363,11 @@ VectorLine.prototype.init = function(origin, destination) {
 VectorLine.fromSVG = function (svg) {
     var attributes = svg.attributes;
     return new VectorLine(
-            parseInt(attributes['stroke-width']), // borderWidth
-            Color.fromString(attributes.stroke), // borderColor
-            new Point(parseInt(attributes.x1), parseInt(attributes.y1)), // origin
-            new Point(parseInt(attributes.x2), parseInt(attributes.y2)) // destination
-        );
+        parseInt(attributes['stroke-width']), // borderWidth
+        Color.fromString(attributes.stroke), // borderColor
+        new Point(parseInt(attributes.x1), parseInt(attributes.y1)), // origin
+        new Point(parseInt(attributes.x2), parseInt(attributes.y2)) // dest.
+    );
 };
 
 VectorLine.prototype.copy = function () {
@@ -369,9 +382,11 @@ VectorLine.prototype.copy = function () {
 
 VectorLine.prototype.containsPoint = function (aPoint) {
     var lineLength = this.origin.distanceTo(this.destination),
-        distancesSum = aPoint.distanceTo(this.origin) + aPoint.distanceTo(this.destination);
+        distancesSum = aPoint.distanceTo(this.origin) +
+            aPoint.distanceTo(this.destination);
 
-    return Math.abs(lineLength - distancesSum) <= Math.sqrt(this.borderWidth / 2) / 2;
+    return Math.abs(lineLength - distancesSum) <=
+        Math.sqrt(this.borderWidth / 2) / 2;
 };
 
 VectorLine.prototype.constraintPoint = function (aPoint) {
@@ -432,14 +447,19 @@ VectorLine.prototype.drawOn = function (aCanvasMorph) {
     aCanvasMorph.redraw = true;
 };
 
-
 // VectorEllipse
 
 VectorEllipse.prototype = new VectorShape();
 VectorEllipse.prototype.constructor = VectorEllipse;
 VectorEllipse.uber = VectorShape.prototype;
 
-function VectorEllipse (borderWidth, borderColor, fillColor, origin, destination) {
+function VectorEllipse (
+    borderWidth,
+    borderColor,
+    fillColor,
+    origin,
+    destination)
+{
     VectorEllipse.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(origin, destination);
 }
@@ -453,17 +473,15 @@ VectorEllipse.fromSVG = function (svg) {
     var attributes = svg.attributes;
 
     return new VectorEllipse(
-            parseInt(attributes['stroke-width']), // borderWidth
-            attributes.stroke === 'none' ?
-                null :
-                Color.fromString(attributes.stroke), // borderColor
-            attributes.fill === 'none' ?
-                null :
-                Color.fromString(attributes.fill), // fillColor
-new Point(parseInt(attributes.cx), parseInt(attributes.cy)), // origin
-            new Point(
-                parseInt(attributes.cx) + parseInt(attributes.rx),
-                parseInt(attributes.cy) + parseInt(attributes.ry)) // destination
+        parseInt(attributes['stroke-width']), // borderWidth
+        attributes.stroke === 'none' ? null :
+            Color.fromString(attributes.stroke), // borderColor
+        attributes.fill === 'none' ? null :
+            Color.fromString(attributes.fill), // fillColor
+        new Point(parseInt(attributes.cx), parseInt(attributes.cy)), // origin
+        new Point(
+            parseInt(attributes.cx) + parseInt(attributes.rx),
+            parseInt(attributes.cy) + parseInt(attributes.ry)) // destination
         );
 };
 
@@ -489,7 +507,8 @@ VectorEllipse.prototype.vRadius = function () {
 VectorEllipse.prototype.toString = function () {
     return VectorEllipse.uber.toString.call(this) +
         ' center: ' + this.origin.toString() +
-        ' radii: ' + this.hRadius().toString() + ',' + this.vRadius().toString();
+        ' radii: ' + this.hRadius().toString() + ',' +
+        this.vRadius().toString();
 };
 
 VectorEllipse.prototype.bounds = function () {
@@ -505,8 +524,13 @@ VectorEllipse.prototype.bounds = function () {
 };
 
 VectorEllipse.prototype.containsPoint = function (aPoint) {
-    return (Math.pow(aPoint.x - this.origin.x, 2) / Math.pow(this.hRadius() + this.borderWidth / 2, 2) +
-            Math.pow(aPoint.y - this.origin.y, 2) / Math.pow(this.vRadius() + this.borderWidth / 2, 2)) < 1;
+    return (
+        Math.pow(aPoint.x - this.origin.x, 2) /
+            Math.pow(this.hRadius() + this.borderWidth / 2, 2)
+                +
+        Math.pow(aPoint.y - this.origin.y, 2) /
+            Math.pow(this.vRadius() + this.borderWidth / 2, 2)
+    ) < 1;
 };
 
 VectorEllipse.prototype.asSVG = function () {
@@ -523,11 +547,8 @@ VectorEllipse.prototype.drawOn = function (aCanvasMorph) {
         canvasPosition = aCanvasMorph.position();
 
     this.image = newCanvas(aCanvasMorph.extent());
-
     context = this.image.getContext('2d');
-
     context.beginPath();
-
     context.ellipse(
         this.origin.x - canvasPosition.x,
         this.origin.y - canvasPosition.y,
@@ -559,7 +580,14 @@ VectorPolygon.prototype = new VectorShape();
 VectorPolygon.prototype.constructor = VectorPolygon;
 VectorPolygon.uber = VectorShape.prototype;
 
-function VectorPolygon (borderWidth, borderColor, fillColor, points, isClosed, isFreeHand) {
+function VectorPolygon (
+    borderWidth,
+    borderColor,
+    fillColor,
+    points,
+    isClosed,
+    isFreeHand
+) {
     VectorPolygon.uber.init.call(this, borderWidth, borderColor, fillColor);
     this.init(points, isClosed, isFreeHand);
 }
@@ -574,26 +602,24 @@ VectorPolygon.prototype.init = function (points, isClosed, isFreeHand) {
 VectorPolygon.fromSVG = function (svg) {
     var attributes = svg.attributes,
         points = attributes.d.slice(1).split(/L */).map(
-                function (pointString) {
-                    var pointArray = pointString.split(' ');
-                    return new Point(
-                        parseInt(pointArray[0]),
-                        parseInt(pointArray[1]));
-                });
+            function (pointString) {
+                var pointArray = pointString.split(' ');
+                return new Point(
+                    parseInt(pointArray[0]),
+                    parseInt(pointArray[1]));
+            }
+        );
 
     return new VectorPolygon(
-            parseInt(attributes['stroke-width']), // borderWidth
-            attributes.stroke === 'none' ?
-                null :
-                Color.fromString(attributes.stroke), // borderColor
-            attributes.fill === 'none' ?
-                null :
-                Color.fromString(attributes.fill), // fillColor
-
-            points, // points
-            points[0].eq(points[points.length - 1]), // isClosed
-            false // isFreeHand, does only matter when drawing it
-        );
+        parseInt(attributes['stroke-width']), // borderWidth
+        attributes.stroke === 'none' ? null :
+            Color.fromString(attributes.stroke), // borderColor
+        attributes.fill === 'none' ? null :
+            Color.fromString(attributes.fill), // fillColor
+        points, // points
+        points[0].eq(points[points.length - 1]), // isClosed
+        false // isFreeHand, does only matter when drawing it
+    );
 };
 
 VectorPolygon.prototype.copy = function () {
@@ -647,10 +673,14 @@ VectorPolygon.prototype.containsPoint = function (aPoint) {
 
     if (this.isClosed) {
         for (i = 0, j = pointCount - 1; i < pointCount; i += 1) {
-            if ((this.points[i].y > aPoint.y) != (this.points[j].y > aPoint.y) &&
-                    aPoint.x <
-                        (this.points[j].x - this.points[i].x) * (aPoint.y - this.points[i].y) /
-                        (this.points[j].y - this.points[i].y) + this.points[i].x) {
+            if (
+                (this.points[i].y > aPoint.y) !==
+                    (this.points[j].y > aPoint.y) &&
+                aPoint.x <
+                    (this.points[j].x - this.points[i].x) *
+                        (aPoint.y - this.points[i].y) /
+                    (this.points[j].y - this.points[i].y) + this.points[i].x
+            ) {
                 inside = !inside;
             }
             j = i;
@@ -659,8 +689,9 @@ VectorPolygon.prototype.containsPoint = function (aPoint) {
     }
 
     function pointIsBetween (a, b) {
-        return Math.abs(a.distanceTo(b) - (aPoint.distanceTo(a) + aPoint.distanceTo(b))) <=
-            Math.sqrt(myself.borderWidth / 2) / 2;
+        return Math.abs(a.distanceTo(b) -
+            (aPoint.distanceTo(a) + aPoint.distanceTo(b))) <=
+                Math.sqrt(myself.borderWidth / 2) / 2;
     }
 
     return false;
@@ -671,17 +702,24 @@ VectorPolygon.prototype.update = function (newPoint, constrain) {
         this.points.push(newPoint);
     } else if (!this.isFreeHand) {
         if (constrain) {
-            // we reuse origin to store the previous point and perform the constraint
-            // calculations as if we were drawing a single line
+            // we reuse origin to store the previous point and perform the
+            // constraint calculations as if we were drawing a single line
             this.origin = this.points[this.points.length - 2];
-            newPoint = VectorLine.prototype.constraintPoint.call(this, newPoint);
+            newPoint = VectorLine.prototype.constraintPoint.call(
+                this,
+                newPoint
+            );
         }
         this.points[this.points.length - 1] = newPoint;
     }
 };
 
 VectorPolygon.prototype.setColor = function (color, isSecondary) {
-    VectorPolygon.uber.setColor.call(this, color, !this.isClosed || isSecondary);
+    VectorPolygon.uber.setColor.call(
+        this,
+        color,
+        !this.isClosed || isSecondary
+    );
 };
 
 VectorPolygon.prototype.moveBy = function (delta) {
@@ -984,7 +1022,9 @@ VectorPaintEditorMorph.prototype.buildScaleBox = function () {
         myself.scaleBox.add(
             myself.pushButton(
                 label,
-                function () { myself.changeSelectionLayer(label.toLowerCase()); }
+                function () {
+                    myself.changeSelectionLayer(label.toLowerCase());
+                }
             )
         );
     });
@@ -992,7 +1032,14 @@ VectorPaintEditorMorph.prototype.buildScaleBox = function () {
     this.scaleBox.fixLayout();
 };
 
-VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback, anIDE, shapes) {
+VectorPaintEditorMorph.prototype.openIn = function (
+    world,
+    oldim,
+    oldrc,
+    callback,
+    anIDE,
+    shapes
+) {
     var myself = this,
         isEmpty = isNil(shapes) || shapes.length === 0;
 
@@ -1006,14 +1053,18 @@ VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callbac
         shape.drawOn(myself.paper);
     });
     // copy the shapes for editing and re-render the copies
-    this.shapes = shapes.map(function (eachShape) { return eachShape.copy(); });
+    this.shapes = shapes.map(function (eachShape) {
+        return eachShape.copy();
+    });
     this.shapes.forEach(function (shape) {
         shape.drawOn(myself.paper);
     });
     // init the rotation center, if any
     if (oldrc && !isEmpty) {
         this.paper.automaticCrosshairs = false;
-        this.paper.rotationCenter = this.getBounds(this.shapes).origin.subtract(this.paper.bounds.origin).add(oldrc);
+        this.paper.rotationCenter = this.getBounds(this.shapes).origin.subtract(
+            this.paper.bounds.origin
+        ).add(oldrc);
     } else {
         this.paper.automaticCrosshairs = true;
     }
@@ -1162,8 +1213,7 @@ VectorPaintEditorMorph.prototype.buildToolbox = function () {
             selection:
                 'Selection tool',
             crosshairs:
-                "Set the rotation center",
-
+                'Set the rotation center',
             line:
                 'Line tool\n(shift: constrain to 45º)',
             closedBrush:
@@ -1293,7 +1343,9 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
     var myself = this,
         isSecondary = secondary || this.paper.isShiftPressed(),
         propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
-        ni = newCanvas(this.propertiesControls[propertyName + 'Viewer'].extent()),
+        ni = newCanvas(
+            this.propertiesControls[propertyName + 'Viewer'].extent()
+        ),
         ctx = ni.getContext('2d'),
         i, j;
 
@@ -1312,8 +1364,8 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
             for (j = 0; j < 15; j += 5) {
                 ctx.fillStyle =
                     ((j + i) / 5) % 2 === 0 ?
-                    'rgba(0, 0, 0, 0.2)' :
-                    'rgba(0, 0, 0, 0.5)';
+                        'rgba(0, 0, 0, 0.2)'
+                            :'rgba(0, 0, 0, 0.5)';
                 ctx.fillRect(i, j, 5, 5);
             }
         }
@@ -1389,9 +1441,14 @@ VectorPaintEditorMorph.prototype.dragSelection = function (pos) {
                 // constrain delta if shift is pressed
                 origin = this.originalSelection.origin;
                 ratio = Math.max(
-                    (pos.x - origin.x) / (this.originalSelection.destination.x - origin.x),
-                    (pos.y - origin.y) / (this.originalSelection.destination.y - origin.y));
-                pos = this.originalSelection.destination.subtract(origin).multiplyBy(ratio).add(origin);
+                    (pos.x - origin.x) /
+                        (this.originalSelection.destination.x - origin.x),
+                    (pos.y - origin.y) /
+                        (this.originalSelection.destination.y - origin.y)
+                );
+                pos = this.originalSelection.destination.subtract(
+                    origin
+                ).multiplyBy(ratio).add(origin);
             }
             // this.currentShape holds the selection shape
             delta = (pos.subtract(this.currentShape.origin)).divideBy(
@@ -1472,9 +1529,11 @@ VectorPaintEditorMorph.prototype.getSVG = function () {
 };
 
 VectorPaintEditorMorph.prototype.getBounds = function (shapeCollection) {
-    var shapeBounds = shapeCollection.map(function(each) { return each.bounds(); });
+    var shapeBounds = shapeCollection.map(function(each) {
+        return each.bounds();
+    });
 
-    if (shapeBounds.length === 0) { return null; }
+    if (shapeBounds.length === 0) {return null; }
 
     return shapeBounds.reduce(
         function(previous, current) {
@@ -1530,7 +1589,9 @@ VectorPaintEditorMorph.prototype.ok = function () {
 // Undo support
 
 VectorPaintEditorMorph.prototype.updateHistory = function () {
-    this.history.push(this.shapes.map(function (shape) { return shape.copy(); }));
+    this.history.push(this.shapes.map(function (shape) {
+        return shape.copy();
+    }));
 };
 
 VectorPaintEditorMorph.prototype.undo = function () {
@@ -1610,7 +1671,12 @@ VectorPaintCanvasMorph.prototype.clearCanvas = function () {
     editor.updateHistory();
     editor.shapes = [];
     editor.clearSelection();
-    this.mask.getContext('2d').clearRect(0, 0, this.bounds.width(), this.bounds.height());
+    this.mask.getContext('2d').clearRect(
+        0,
+        0,
+        this.bounds.width(),
+        this.bounds.height()
+    );
     this.redraw = true;
 };
 
@@ -1684,8 +1750,13 @@ VectorPaintCanvasMorph.prototype.mouseMove = function (pos) {
         if (editor.resizing || editor.moving) {
             editor.dragSelection(pos);
         } else if (selectionCorner) {
-            oppositeCorner = editor.currentShape.cornerOppositeTo(selectionCorner);
-            editor.currentShape = new VectorSelection(oppositeCorner, selectionCorner);
+            oppositeCorner = editor.currentShape.cornerOppositeTo(
+                selectionCorner
+            );
+            editor.currentShape = new VectorSelection(
+                oppositeCorner,
+                selectionCorner
+            );
             editor.currentShape.drawOn(this);
             editor.resizing = true;
             document.body.style.cursor = 'move';
@@ -1769,10 +1840,22 @@ VectorPaintCanvasMorph.prototype.mouseDoubleClick = function (pos) {
     }
 };
 
-VectorPaintCanvasMorph.prototype.beginShape = function (borderWidth, primaryColor, secondaryColor, pos) {
+VectorPaintCanvasMorph.prototype.beginShape = function (
+    borderWidth,
+    primaryColor,
+    secondaryColor,
+    pos
+) {
     switch (this.currentTool) {
         case 'brush':
-            this.beginPolygon(borderWidth, primaryColor, null, pos, false, true); // unclosed, freehanded
+            this.beginPolygon( // unclosed, freehanded
+                borderWidth,
+                primaryColor,
+                null,
+                pos,
+                false,
+                true
+            );
             break;
         case 'line':
             this.beginLine(borderWidth, primaryColor, pos);
@@ -1784,10 +1867,24 @@ VectorPaintCanvasMorph.prototype.beginShape = function (borderWidth, primaryColo
             this.beginEllipse(borderWidth, secondaryColor, primaryColor, pos);
             break;
         case 'polygon':
-            this.beginPolygon(borderWidth, secondaryColor, primaryColor, pos, true, false); // closed, point-based
+            this.beginPolygon( // closed, point-based
+                borderWidth,
+                secondaryColor,
+                primaryColor,
+                pos,
+                true,
+                false
+            );
             break;
         case 'closedBrush':
-            this.beginPolygon(borderWidth, secondaryColor, primaryColor, pos, true, true); // closed, freehanded
+            this.beginPolygon( // closed, freehanded
+                borderWidth,
+                secondaryColor,
+                primaryColor,
+                pos,
+                true,
+                true
+            );
             break;
         case 'selection':
             this.beginSelection(pos);
@@ -1796,24 +1893,69 @@ VectorPaintCanvasMorph.prototype.beginShape = function (borderWidth, primaryColo
     }
 };
 
-VectorPaintCanvasMorph.prototype.beginPolygon = function (borderWidth, borderColor, fillColor, origin, isClosed, isFreeHand) {
+VectorPaintCanvasMorph.prototype.beginPolygon = function (
+    borderWidth,
+    borderColor,
+    fillColor,
+    origin,
+    isClosed,
+    isFreeHand
+) {
     var editor = this.parentThatIsA(VectorPaintEditorMorph);
-    editor.currentShape = new VectorPolygon(borderWidth, borderColor, fillColor, [ origin ], isClosed, isFreeHand);
+    editor.currentShape = new VectorPolygon(
+        borderWidth,
+        borderColor,
+        fillColor,
+        [origin],
+        isClosed,
+        isFreeHand
+    );
 };
 
-VectorPaintCanvasMorph.prototype.beginLine = function (borderWidth, borderColor, origin) {
+VectorPaintCanvasMorph.prototype.beginLine = function (
+    borderWidth,
+    borderColor,
+    origin
+) {
     var editor = this.parentThatIsA(VectorPaintEditorMorph);
-    editor.currentShape = new VectorLine(borderWidth, borderColor, origin, origin);
+    editor.currentShape = new VectorLine(
+        borderWidth,
+        borderColor,
+        origin,
+        origin
+    );
 };
 
-VectorPaintCanvasMorph.prototype.beginRectangle = function (borderWidth, borderColor, fillColor, origin) {
+VectorPaintCanvasMorph.prototype.beginRectangle = function (
+    borderWidth,
+    borderColor,
+    fillColor,
+    origin
+) {
     var editor = this.parentThatIsA(VectorPaintEditorMorph);
-    editor.currentShape = new VectorRectangle(borderWidth, borderColor, fillColor, origin, origin);
+    editor.currentShape = new VectorRectangle(
+        borderWidth,
+        borderColor,
+        fillColor,
+        origin,
+        origin
+    );
 };
 
-VectorPaintCanvasMorph.prototype.beginEllipse = function (borderWidth, borderColor, fillColor, origin) {
+VectorPaintCanvasMorph.prototype.beginEllipse = function (
+    borderWidth,
+    borderColor,
+    fillColor,
+    origin
+) {
     var editor = this.parentThatIsA(VectorPaintEditorMorph);
-    editor.currentShape = new VectorEllipse(borderWidth, borderColor, fillColor, origin, origin);
+    editor.currentShape = new VectorEllipse(
+        borderWidth,
+        borderColor,
+        fillColor,
+        origin,
+        origin
+    );
 };
 
 VectorPaintCanvasMorph.prototype.beginSelection = function (origin) {
@@ -1823,7 +1965,8 @@ VectorPaintCanvasMorph.prototype.beginSelection = function (origin) {
 };
 
 VectorPaintCanvasMorph.prototype.selectInside = function (selectionShape) {
-    // I find and select all shapes contained inside the bounds of selectionShape
+    // I find and select all shapes contained inside
+    // the bounds of selectionShape
     var selectionBounds = selectionShape.bounds(),
         editor = this.parentThatIsA(VectorPaintEditorMorph);
 
@@ -1864,7 +2007,10 @@ VectorPaintCanvasMorph.prototype.selectAtPoint = function (position) {
     }
 
     if (bounds) {
-        editor.currentShape = new VectorSelection(bounds.topLeft(), bounds.bottomRight());
+        editor.currentShape = new VectorSelection(
+            bounds.topLeft(),
+            bounds.bottomRight()
+        );
         editor.currentShape.drawOn(this);
     } else {
         editor.clearSelection();
@@ -1876,10 +2022,13 @@ VectorPaintCanvasMorph.prototype.selectShapes = function (shapes) {
         bounds;
 
     if (shapes.length > 0) {
-       bounds = editor.getBounds(shapes);
-       editor.selection = shapes;
-       editor.currentShape = new VectorSelection(bounds.topLeft(), bounds.bottomRight());
-       editor.currentShape.drawOn(this);
+        bounds = editor.getBounds(shapes);
+        editor.selection = shapes;
+        editor.currentShape = new VectorSelection(
+            bounds.topLeft(),
+            bounds.bottomRight()
+        );
+        editor.currentShape.drawOn(this);
     }
 };
 
@@ -1930,7 +2079,11 @@ VectorPaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         shape = this.shapeAt(sourcepoint.add(this.position()));
 
     if (shape) {
-        shape.setColor(editor.shift ? this.settings.secondaryColor : this.settings.primaryColor, editor.shift);
+        shape.setColor(
+            editor.shift ?
+                this.settings.secondaryColor
+                    : this.settings.primaryColor, editor.shift
+        );
         shape.drawOn(this);
     }
 };
