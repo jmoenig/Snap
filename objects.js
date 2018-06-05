@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-May-02';
+modules.objects = '2018-June-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -8472,12 +8472,8 @@ SVG_Costume.prototype.edit = function (
     editor.oncancel = oncancel || nop;
     editor.openIn(
         aWorld,
-        isnew ?
-        newCanvas(StageMorph.prototype.dimensions) :
-        this.contents,
-        isnew ?
-        new Point(240, 180) :
-        myself.rotationCenter,
+        isnew ? newCanvas(StageMorph.prototype.dimensions) : this.contents,
+        isnew ? new Point(240, 180) : myself.rotationCenter,
         function (img, rc, shapes) {
             myself.contents = img;
             myself.rotationCenter = rc;

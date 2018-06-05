@@ -4119,3 +4119,7 @@ in development:
 180604
 ------
 * Blocks: tweaked layout of variadic C-shaped input slots
+
+180605
+------
+* VectorPaint: fixed rotation center editing for existing costumes

@@ -44,6 +44,10 @@
     -------
     Carles Paredes wrote the first working prototype in 2015
     Bernat Romagosa rewrote most of the code in 2017
+
+    revision history
+    ----------------
+    2018, June 5 - fixed initial rotation center for an existing costume (Jens)
 */
 
 /*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
@@ -51,7 +55,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.vectorPaint = '2018-March-19';
+modules.vectorPaint = '2018-June-05';
 
 // Declarations
 
@@ -987,11 +991,10 @@ VectorPaintEditorMorph.prototype.buildScaleBox = function () {
 };
 
 VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback, anIDE, shapes) {
-    var myself = this;
+    var myself = this,
+        isEmpty = isNil(shapes) || shapes.length === 0;
 
     VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback);
-
-    this.paper.automaticCrosshairs = isNil(shapes) || shapes.length === 0;
 
     this.shapes = shapes.map(function (eachShape) { return eachShape.copy(); });
     this.ide = anIDE;
@@ -1002,6 +1005,14 @@ VectorPaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callbac
     this.shapes.forEach(function (shape) {
         shape.drawOn(myself.paper);
     });
+
+    // init the rotation center, if any
+    if (oldrc && !isEmpty) {
+        this.paper.automaticCrosshairs = false;
+        this.paper.rotationCenter = this.getBounds(this.shapes).origin.subtract(this.paper.bounds.origin).add(oldrc);
+    } else {
+        this.paper.automaticCrosshairs = true;
+    }
 
     this.updateHistory();
 
