@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2018-March-19';
+modules.symbols = '2018-June-05';
 
 var SymbolMorph;
 
@@ -1590,18 +1590,20 @@ SymbolMorph.prototype.drawSymbolOctagonOutline = function (canvas, color) {
     // answer a canvas showing an octagon
     var ctx = canvas.getContext('2d'),
         side = canvas.width,
-        vert = (side - (side * 0.383)) / 2;
+        vert = (side - (side * 0.383)) / 2,
+        l = Math.max(side / 20, 0.5);
 
-    ctx.fillStyle = color.toString();
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
     ctx.beginPath();
-    ctx.moveTo(vert, 0);
-    ctx.lineTo(side - vert, 0);
-    ctx.lineTo(side, vert);
-    ctx.lineTo(side, side - vert);
-    ctx.lineTo(side - vert, side);
-    ctx.lineTo(vert, side);
-    ctx.lineTo(0, side - vert);
-    ctx.lineTo(0, vert);
+    ctx.moveTo(vert, l);
+    ctx.lineTo(side - vert, l);
+    ctx.lineTo(side - l, vert);
+    ctx.lineTo(side - l, side - vert);
+    ctx.lineTo(side - vert, side - l);
+    ctx.lineTo(vert, side - l);
+    ctx.lineTo(l, side - vert);
+    ctx.lineTo(l, vert);
     ctx.closePath();
     ctx.stroke();
 

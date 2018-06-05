@@ -4124,3 +4124,4 @@ in development:
 ------
 * VectorPaint: fixed rotation center editing for existing costumes
 * VectorPaint: fixed initial rendering, so costumes can be re-opened after saving
+* Symbols: fixed 'polygon' symbol rendering
