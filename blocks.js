@@ -857,7 +857,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         if ((spec.length > 6) && (spec.slice(0, 6) === '%mhint')) {
             var token = spec.slice(6);
-            part = new MultiHintArgMorph(token, null, 1);
+            part = new MultiHintArgMorph(token, null, 0); // third arg: min number of inputs
 
             part.isStatic = true;
             part.canBeEmpty = false;

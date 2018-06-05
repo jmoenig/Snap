@@ -108,6 +108,7 @@ MultiHintArgMorph.prototype.init = function(
         shadowOffset,
         isTransparent
     );
+    if (this.inputs().length === 0) this.addInput();
 };
 
 MultiHintArgMorph.prototype.addInput = function () {
