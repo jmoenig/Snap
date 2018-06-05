@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-May-03';
+modules.gui = '2018-June-05';
 
 // Declarations
 
