@@ -32,7 +32,7 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2018-March-14';
+modules.cloud = '2018-June-06';
 
 // Global stuff
 
@@ -410,7 +410,10 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
 
                 myself.request(
                     'POST',
-                    '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(ide.projectName),
+                    '/projects/' +
+                        encodeURIComponent(username) +
+                        '/' +
+                        encodeURIComponent(ide.projectName),
                     onSuccess,
                     onError,
                     'Project could not be saved',
@@ -498,7 +501,8 @@ Cloud.prototype.getProject = function (projectName, delta, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
         '/projects/%username/' +
-            encodeURIComponent(projectName) + (delta ? '?delta=' + delta : ''),
+            encodeURIComponent(projectName) +
+            (delta ? '?delta=' + delta : ''),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -514,7 +518,10 @@ Cloud.prototype.getPublicProject = function (
 ) {
     this.request(
         'GET',
-        '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName),
+        '/projects/' +
+            encodeURIComponent(username) +
+            '/' +
+            encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -530,7 +537,11 @@ Cloud.prototype.getProjectMetadata = function (
 ) {
     this.request(
         'GET',
-        '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName) + '/metadata',
+        '/projects/' +
+            encodeURIComponent(username) +
+            '/' +
+            encodeURIComponent(projectName) +
+            '/metadata',
         onSuccess,
         onError,
         'Could not fetch metadata for ' + projectName
@@ -561,8 +572,10 @@ Cloud.prototype.deleteProject = function (
 ) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
-        '/projects/' + (username ? encodeURIComponent(username) : '%username') +
-        '/' + encodeURIComponent(projectName),
+        '/projects/' +
+            (username ? encodeURIComponent(username) : '%username') +
+            '/' +
+            encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not delete project'
@@ -579,7 +592,8 @@ Cloud.prototype.shareProject = function (
         'POST',
         '/projects/' +
             (username ? encodeURIComponent(username) : '%username') +
-            '/' + encodeURIComponent(projectName) +
+            '/' +
+            encodeURIComponent(projectName) +
             '/metadata?ispublic=true',
         onSuccess,
         onError,
@@ -597,7 +611,8 @@ Cloud.prototype.unshareProject = function (
         'POST',
         '/projects/' +
             (username ? encodeURIComponent(username) : '%username') +
-            '/' + encodeURIComponent(projectName) +
+            '/' +
+            encodeURIComponent(projectName) +
             '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
@@ -615,7 +630,8 @@ Cloud.prototype.publishProject = function (
         'POST',
         '/projects/' +
             (username ? encodeURIComponent(username) : '%username') +
-            '/' + encodeURIComponent(projectName) +
+            '/' +
+            encodeURIComponent(projectName) +
             '/metadata?ispublished=true',
         onSuccess,
         onError,
@@ -633,7 +649,8 @@ Cloud.prototype.unpublishProject = function (
         'POST',
         '/projects/' +
             (username ? encodeURIComponent(username) : '%username') +
-            '/' + encodeURIComponent(projectName) +
+            '/' +
+            encodeURIComponent(projectName) +
             '/metadata?ispublished=false',
         onSuccess,
         onError,
@@ -649,8 +666,10 @@ Cloud.prototype.remixProject = function (
 ) {
     this.withCredentialsRequest(
         'POST',
-        '/projects/' + encodeURIComponent(username) +
-            '/' + encodeURIComponent(projectName) +
+        '/projects/' +
+            encodeURIComponent(username) +
+            '/' +
+            encodeURIComponent(projectName) +
             '/remix',
         onSuccess,
         onError,
@@ -666,7 +685,9 @@ Cloud.prototype.updateNotes = function (
 ) {
     this.withCredentialsRequest(
         'POST',
-        '/projects/%username/' + encodeURIComponent(projectName) + '/metadata',
+        '/projects/%username/' +
+            encodeURIComponent(projectName) +
+            '/metadata',
         onSuccess,
         onError,
         'Could not update project notes',

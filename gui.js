@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-June-05';
+modules.gui = '2018-June-06';
 
 // Declarations
 
@@ -6769,7 +6769,11 @@ function ProjectRecoveryDialogMorph(ide, project, browser) {
     this.init(ide, project, browser);
 }
 
-ProjectRecoveryDialogMorph.prototype.init = function (ide, projectName, browser) {
+ProjectRecoveryDialogMorph.prototype.init = function (
+    ide,
+    projectName,
+    browser
+) {
     // initialize inherited properties:
     ProjectRecoveryDialogMorph.uber.init.call(
         this,
@@ -6894,11 +6898,15 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
             yesterday.setDate(today.getDate() - 1);
             myself.versions = versions;
             myself.versions.forEach(function (version) {
-                var date = new Date(new Date().getTime() - version.lastupdated * 1000);
+                var date = new Date(
+                    new Date().getTime() - version.lastupdated * 1000
+                );
                 if (date.toDateString() === today.toDateString()) {
-                    version.lastupdated = localize('Today, ') + date.toLocaleTimeString();
+                    version.lastupdated = localize('Today, ') +
+                        date.toLocaleTimeString();
                 } else if (date.toDateString() === yesterday.toDateString()) {
-                    version.lastupdated = localize('Yesterday, ') + date.toLocaleTimeString();
+                    version.lastupdated = localize('Yesterday, ') +
+                        date.toLocaleTimeString();
                 } else {
                     version.lastupdated = date.toLocaleString();
                 }
@@ -6926,7 +6934,9 @@ ProjectRecoveryDialogMorph.prototype.cancel = function () {
     this.browser.listField.select(
         detect(
             this.browser.projectList,
-            function (item) { return item.projectname === myself.projectName }
+            function (item) {
+                return item.projectname === myself.projectName;
+            }
         )
     );
     ProjectRecoveryDialogMorph.uber.cancel.call(this);
@@ -6940,7 +6950,10 @@ ProjectRecoveryDialogMorph.prototype.recoverProject = function () {
             return version.lastupdated === lastupdated;
         });
 
-    this.browser.openCloudProject({ projectname: this.projectName }, version.delta);
+    this.browser.openCloudProject(
+        {projectname: this.projectName},
+        version.delta
+    );
     this.destroy();
 };
 

@@ -4130,3 +4130,4 @@ in development:
 ------
 * updated German translation, thanks, Jadga!
 * updated Portuguese translation, thanks, Manuel!
+* new Project Cloud Backups feature, thanks, Bernat!
