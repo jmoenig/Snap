@@ -1190,6 +1190,12 @@ SnapTranslator.dict.de = {
         'Teilen',
     'Updating\nproject list...':
         'Projektliste laden',
+    'Recover':
+        'Wiederherstellen',
+    'Today':
+        'Heute',
+    'Yesterday':
+        'Gestern',
 
     // costume editor
     'Costume Editor':
