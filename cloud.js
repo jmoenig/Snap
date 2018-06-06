@@ -494,10 +494,11 @@ Cloud.prototype.getThumbnail = function (
     );
 };
 
-Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
+Cloud.prototype.getProject = function (projectName, delta, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
-        '/projects/%username/' + encodeURIComponent(projectName),
+        '/projects/%username/' +
+            encodeURIComponent(projectName) + (delta ? '?delta=' + delta : ''),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -533,6 +534,22 @@ Cloud.prototype.getProjectMetadata = function (
         onSuccess,
         onError,
         'Could not fetch metadata for ' + projectName
+    );
+};
+
+Cloud.prototype.getProjectVersionMetadata = function (
+        projectName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'GET',
+        '/projects/%username/' +
+            encodeURIComponent(projectName) +
+            '/versions',
+        onSuccess,
+        onError,
+        'Could not fetch versions for project ' + projectName
     );
 };
 

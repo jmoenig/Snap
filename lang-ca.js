@@ -1074,6 +1074,12 @@ SnapTranslator.dict.ca = {
         'Segur que vols esborrar',
     'rename...':
         'canvia el nom...',
+    'Recover':
+        'Recupera',
+    'Today, ':
+        'Avui, ',
+    'Yesterday, ':
+        'Ahir, ',
 
     // costume editor
     'Costume Editor':
