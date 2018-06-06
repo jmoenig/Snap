@@ -1397,7 +1397,7 @@ Process.prototype.evaluateCustomBlock = function () {
 
             // if the parameter is an upvar,
             // create a reference to the variable it points to
-            if (declarations[context.inputs[i]][0] === '%upvar') {
+            if (declarations.get(context.inputs[i])[0] === '%upvar') {
                 this.context.outerContext.variables.vars[value] =
                     outer.variables.vars[context.inputs[i]];
             }

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-June-04';
+modules.blocks = '2018-June-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -659,7 +659,7 @@ SyntaxElementMorph.prototype.refactorVarInStack = function (
 
     if (this instanceof CustomCommandBlockMorph
             && this.definition.body
-            && isNil(this.definition.declarations[oldName])
+            && isNil(this.definition.declarations.get(oldName))
             && !contains(this.definition.variableNames, oldName)) {
         this.definition.body.expression.refactorVarInStack(oldName, newName);
     }
