@@ -181,11 +181,11 @@ SnapTranslator.dict.de = {
     'language_name':
         'Deutsch', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'Jens M\u00F6nig, Jadga H\u00fcgle', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2018-05-02', // this, too, will appear in the Translators tab
+        '2018-06-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
