@@ -66,6 +66,7 @@
                 SnapCloud.username = '{{= it.username }}';
                 SnapCloud.password = true;
             {{ } }}
+            SnapCloud.clientId = '{{= it.clientId }}';
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();

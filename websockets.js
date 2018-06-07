@@ -5,7 +5,7 @@
 
 var WebSocketManager = function (ide) {
     this.ide = ide;
-    this.uuid = null;
+    this.uuid = SnapCloud.clientId;
     this.websocket = null;
     this.messages = [];
     this.processes = [];  // Queued processes to start

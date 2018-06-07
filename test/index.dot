@@ -57,11 +57,13 @@
   <script src="./variables.spec.js"></script>
   <script src="./sprites.spec.js"></script>
   <script src="./xml.spec.js"></script>
+  <script src="./cloud.spec.js"></script>
   <script type="text/javascript">
     {{ if (it.username) { }}
         SnapCloud.username = '{{= it.username }}';
         SnapCloud.password = true;
     {{ } }}
+    SnapCloud.clientId = '{{= it.clientId }}';
       var world;
       var driver;
       window.onload = function () {

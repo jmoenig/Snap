@@ -18,7 +18,7 @@ NetCloud.prototype.login = function (
             __h: password,
             __u: username,
             remember: remember,
-            socketId: this.socketId()
+            socketId: SnapCloud.clientId
         }),
         myself = this;
     this.setRoute(username);
@@ -96,7 +96,7 @@ NetCloud.prototype.cloneRole = function(onSuccess, onFail, args) {
 
 NetCloud.prototype.moveToRole = function(onSuccess, onFail, args) {
     var myself = this;
-    args.push(this.socketId());
+    args.push(SnapCloud.clientId);
 
     this.reconnect(
         function () {
@@ -115,7 +115,7 @@ NetCloud.prototype.moveToRole = function(onSuccess, onFail, args) {
 
 NetCloud.prototype.invitationResponse = function (id, accepted, onSuccess, onFail) {
     var myself = this,
-        args = [id, accepted, this.socketId()];
+        args = [id, accepted, SnapCloud.clientId];
 
     this.reconnect(
         function () {
@@ -169,7 +169,7 @@ NetCloud.prototype.inviteToCollaborate = function () {
 
 NetCloud.prototype.evictCollaborator = function (id) {
     var myself = this,
-        args = [this.socketId(), id];
+        args = [SnapCloud.clientId, id];
 
     this.reconnect(
         function () {
@@ -186,7 +186,7 @@ NetCloud.prototype.evictCollaborator = function (id) {
 
 NetCloud.prototype.collabResponse = function (id, accepted, onSuccess, onFail) {
     var myself = this,
-        args = [id, accepted, this.socketId(), SnapActions.id];
+        args = [id, accepted, SnapCloud.clientId, SnapActions.id];
 
     this.reconnect(
         function () {
@@ -245,7 +245,7 @@ NetCloud.prototype.getCollaboratorList = function (callBack, errorCall) {
                     callBack.call(null, users, url);
                 },
                 errorCall,
-                [myself.socketId()]
+                [SnapCloud.clientId]
             );
         },
         errorCall
@@ -282,17 +282,6 @@ NetCloud.prototype.evictUser = function(onSuccess, onFail, args) {
         },
         onFail
     );
-};
-
-NetCloud.prototype.socketId = function () {
-    var ide;
-    ide = detect(
-        world.children,  // FIXME: Don't depend on the 'world' variable
-        function(child) {
-            return child instanceof IDE_Morph;
-        }
-    );
-    return ide.sockets.uuid;
 };
 
 // Override
@@ -416,7 +405,7 @@ NetCloud.prototype.logout = function (callBack, errorCall) {
         'logout',
         callBack,
         errorCall,
-        [this.socketId()]
+        [SnapCloud.clientId]
     );
     this.clear();
 };
@@ -509,7 +498,7 @@ NetCloud.prototype.hasConflictingStoredProject = function (callBack, errorCall) 
                 },
                 errorCall,
                 [
-                    myself.socketId()
+                    SnapCloud.clientId
                 ]
             );
         },
@@ -529,7 +518,7 @@ NetCloud.prototype.saveProjectCopy = function(callBack, errorCall) {
                 },
                 errorCall,
                 [
-                    myself.socketId()
+                    SnapCloud.clientId
                 ]
             );
         },

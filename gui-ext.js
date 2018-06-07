@@ -122,7 +122,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                     myself.ide.rawLoadCloudProject(response[0], proj.Public);
                 },
                 myself.ide.cloudError(),
-                [proj.Owner, proj.ProjectName, SnapCloud.socketId()]
+                [proj.Owner, proj.ProjectName, SnapCloud.clientId]
             );
         },
         myself.ide.cloudError()

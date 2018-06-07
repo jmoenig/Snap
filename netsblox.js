@@ -1375,7 +1375,7 @@ NetsBloxMorph.prototype.collabResponse = function (invite, response) {
                                     myself.rawLoadCloudProject(response[0]);
                                 },
                                 myself.cloudError(),
-                                [invite.roomName, invite.inviter, SnapCloud.socketId()]
+                                [invite.roomName, invite.inviter, SnapCloud.clientId]
                             );
                         },
                         myself.cloudError()
