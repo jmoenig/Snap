@@ -2973,7 +2973,7 @@ Process.prototype.createClone = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj;
 
-    if (!name) {return; }
+    if (!name || this.readyToTerminate) {return; }
     if (thisObj) {
         if (this.inputOption(name) === 'myself') {
             thisObj.createClone(!this.isFirstStep);

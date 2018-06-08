@@ -4136,3 +4136,4 @@ in development:
 180608
 ------
 * Blocks, Objects: new experimental "When I am stopped" event option
+* Threads: Prevent terminated threads from forking new ones and from cloning
