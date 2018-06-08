@@ -285,7 +285,7 @@ IDE_Morph.prototype.openIn = function (world) {
     if (localStorage) {
         usr = localStorage['-snap-user'];
         if (usr) {
-            usr = SnapCloud.parseResponse(usr)[0];
+            usr = SnapCloud.parseSnapResponse(usr)[0];
             if (usr) {
                 SnapCloud.username = usr.username || null;
                 SnapCloud.password = usr.password || null;

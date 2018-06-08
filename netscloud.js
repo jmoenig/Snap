@@ -372,9 +372,7 @@ NetCloud.prototype.callService = function (
                 if (serviceName === 'login') {
                     myself.api = myself.parseAPI(request.responseText);
                 }
-                responseList = myself.parseResponse(
-                    request.responseText
-                );
+                responseList = myself.parseResponse(request);
                 callBack.call(null, responseList, service.url);
             }
         };

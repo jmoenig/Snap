@@ -492,9 +492,7 @@ Cloud.prototype.callURL = function (url, callBack, errorCall) {
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    var responseList = myself.parseResponse(
-                        request.responseText
-                    );
+                    var responseList = myself.parseResponse(request);
                     callBack.call(null, responseList, url);
                 } else {
                     errorCall.call(
@@ -580,9 +578,7 @@ Cloud.prototype.callService = function (
                 if (serviceName === 'getRawProject') {
                     responseList = request.responseText;
                 } else {
-                    responseList = myself.parseResponse(
-                        request.responseText
-                    );
+                    responseList = myself.parseResponse(request);
                 }
                 callBack.call(null, responseList, service.url);
             }
@@ -622,7 +618,16 @@ Cloud.prototype.parseAPI = function (src) {
     return api;
 };
 
-Cloud.prototype.parseResponse = function (src) {
+Cloud.prototype.parseResponse = function (request) {
+    var src = request.responseText;
+    if (request.getResponseHeader('content-type').indexOf('application/json') > -1) {
+        return JSON.parse(src);
+    } else {
+        return this.parseSnapResponse(src);
+    }
+};
+
+Cloud.prototype.parseSnapResponse = function (src) {
     var ans = [],
         lines;
     if (!src) {return ans; }
