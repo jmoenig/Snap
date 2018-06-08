@@ -4132,3 +4132,7 @@ in development:
 * updated Portuguese translation, thanks, Manuel!
 * new Project Cloud Backups feature, thanks, Bernat!
 * BYOB, Blocks, Threads, Store: fixed support for numerical custom block input names
+
+180608
+------
+* Blocks, Objects: new experimental "When I am stopped" event option

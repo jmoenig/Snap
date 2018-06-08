@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-June-05';
+modules.objects = '2018-June-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -4855,7 +4855,7 @@ SpriteMorph.prototype.mouseScroll = function (y) {
     return this.receiveUserInteraction('scrolled-' + (y > 0 ? 'up' : 'down'));
 };
 
-SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
+SpriteMorph.prototype.receiveUserInteraction = function (interaction, now) {
     var stage = this.parentThatIsA(StageMorph),
         procs = [],
         myself = this,
@@ -4866,7 +4866,11 @@ SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
         procs.push(stage.threads.startProcess(
             block,
             myself,
-            stage.isThreadSafe
+            stage.isThreadSafe,
+            null, // export result
+            null, // callback
+            null, // is clicked
+            now // immediately
         ));
     });
     return procs;
@@ -6930,9 +6934,15 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 
 StageMorph.prototype.fireStopAllEvent = function () {
     var ide = this.parentThatIsA(IDE_Morph);
+
     this.threads.resumeAll(this.stage);
+
+    // experimental: run one step of a user-defined script
+    this.runStopScripts();
+
     this.keysPressed = {};
     this.threads.stopAll();
+
     this.stopAllActiveSounds();
     this.children.forEach(function (morph) {
         if (morph.stopTalking) {
@@ -6946,6 +6956,17 @@ StageMorph.prototype.fireStopAllEvent = function () {
             function () {ide.controlBar.pauseButton.refresh(); }
         ]);
     }
+};
+
+StageMorph.prototype.runStopScripts = function () {
+    // experimental: Allow each sprite to run one last step before termination
+    // usage example: Stop a robot or device associated with the sprite
+    this.receiveUserInteraction('stopped', true);
+    this.children.forEach(function (morph) {
+        if (morph instanceof SpriteMorph) {
+            morph.receiveUserInteraction('stopped', true);
+        }
+    });
 };
 
 StageMorph.prototype.removeAllClones = function () {

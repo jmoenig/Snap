@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-June-06';
+modules.blocks = '2018-June-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1009,7 +1009,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'mouse-entered' : ['mouse-entered'],
                     'mouse-departed' : ['mouse-departed'],
                     'scrolled-up' : ['scrolled-up'],
-                    'scrolled-down' : ['scrolled-down']
+                    'scrolled-down' : ['scrolled-down'],
+                    'stopped' : ['stopped'] // experimental
                 },
                 true // read-only
             );
@@ -4551,9 +4552,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
 CommandBlockMorph.prototype.isStop = function () {
     return ([
         'doStopThis',
-        'doStop',
-        'doStopBlock',
-        'doStopAll',
         'doForever',
         'doReport',
         'removeClone'

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2018-06-06', // this, too, will appear in the Translators tab
+        '2018-06-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -456,6 +456,8 @@ SnapTranslator.dict.de = {
     	'nach unten gescrollt',
     'scrolled-up':
         'nach oben gescrollt',
+    'stopped':
+        'gestoppt',
     'when %b':
         'Wenn %b',
     'when I receive %msgHat':
