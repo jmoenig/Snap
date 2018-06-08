@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-May-08';
+modules.threads = '2018-June-09';
 
 var ThreadManager;
 var Process;
@@ -1854,6 +1854,7 @@ Process.prototype.doStopAll = function () {
         if (stage) {
             stage.threads.resumeAll(stage);
             stage.keysPressed = {};
+            stage.runStopScripts();
             stage.threads.stopAll();
             stage.stopAllActiveSounds();
             stage.children.forEach(function (morph) {

@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-June-08';
+modules.objects = '2018-June-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -4855,7 +4855,11 @@ SpriteMorph.prototype.mouseScroll = function (y) {
     return this.receiveUserInteraction('scrolled-' + (y > 0 ? 'up' : 'down'));
 };
 
-SpriteMorph.prototype.receiveUserInteraction = function (interaction, now) {
+SpriteMorph.prototype.receiveUserInteraction = function (
+    interaction,
+    rightAway,
+    threadSafe
+) {
     var stage = this.parentThatIsA(StageMorph),
         procs = [],
         myself = this,
@@ -4866,11 +4870,11 @@ SpriteMorph.prototype.receiveUserInteraction = function (interaction, now) {
         procs.push(stage.threads.startProcess(
             block,
             myself,
-            stage.isThreadSafe,
+            threadSafe || stage.isThreadSafe,
             null, // export result
             null, // callback
             null, // is clicked
-            now // immediately
+            rightAway // immediately
         ));
     });
     return procs;
@@ -6961,10 +6965,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
 StageMorph.prototype.runStopScripts = function () {
     // experimental: Allow each sprite to run one last step before termination
     // usage example: Stop a robot or device associated with the sprite
-    this.receiveUserInteraction('stopped', true);
+    this.receiveUserInteraction('stopped', true, true);
     this.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph) {
-            morph.receiveUserInteraction('stopped', true);
+            morph.receiveUserInteraction('stopped', true, true);
         }
     });
 };

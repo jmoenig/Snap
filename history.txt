@@ -4137,3 +4137,7 @@ in development:
 ------
 * Blocks, Objects: new experimental "When I am stopped" event option
 * Threads: Prevent terminated threads from forking new ones and from cloning
+
+180609
+------
+* Objects, Threads: Also trigger "When I am stopped" when programmatically calling "stop all"
