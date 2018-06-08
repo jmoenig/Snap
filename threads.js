@@ -2324,6 +2324,9 @@ Process.prototype.doBroadcast = function (message) {
         myself = this,
         procs = [];
 
+    if (this.readyToTerminate) {
+        return [];
+    }
     if (message instanceof List && (message.length() === 2)) {
         thisObj = this.blockReceiver();
         msg = message.at(1);
