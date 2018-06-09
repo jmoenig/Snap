@@ -2506,6 +2506,24 @@ IDE_Morph.prototype.snapMenu = function () {
             );
         }
     );
+    menu.addItem(
+        'View source on GitHub',
+        function () {
+            window.open(
+                'https://github.com/jmoenig/Snap--Build-Your-Own-Blocks',
+                'SnapSourceViewGitHub'
+            );
+        }
+    );
+	menu.addItem(
+        'Download source and libraries from GitHub',
+        function () {
+            window.open(
+                'https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/archive/master.zip',
+                'SnapSourceGitHub'
+            );
+        }
+    );
     if (world.isDevMode) {
         menu.addLine();
         menu.addItem(
