@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-June-09';
+modules.objects = '2018-June-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1020,7 +1020,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportLetter: {
             type: 'reporter',
             category: 'operators',
-            spec: 'letter %n of %s',
+            spec: 'letter %idx of %s',
             defaults: [1, localize('world')]
         },
         reportStringSize: {

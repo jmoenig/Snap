@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-June-09';
+modules.threads = '2018-June-11';
 
 var ThreadManager;
 var Process;
@@ -2695,10 +2695,17 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
+    var i;
     if (string instanceof List) { // catch a common user error
         return '';
     }
-    var i = +(idx || 0),
+    if (this.inputOption(idx) === 'any') {
+        idx = this.reportRandom(1, string.length);
+    }
+    if (this.inputOption(idx) === 'last') {
+        idx = string.length;
+    }
+    i = +(idx || 0),
         str = isNil(string) ? '' : string.toString();
     return str[i - 1] || '';
 };
