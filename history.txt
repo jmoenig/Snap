@@ -4145,3 +4145,4 @@ in development:
 180611
 ------
 * Objects, Threads: fixed #2108 (added drop-down menu to "letter _ of _ ")
+* German translation update

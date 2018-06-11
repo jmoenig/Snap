@@ -623,8 +623,8 @@ SnapTranslator.dict.de = {
         'Hallo',
     'world':
         'Welt',
-    'letter %n of %s':
-        'Zeichen %n von %s',
+    'letter %idx of %s':
+        'Zeichen %idx von %s',
     'length of %s':
         'L\u00e4nge von %s',
     'unicode of %s':
