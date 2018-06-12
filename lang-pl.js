@@ -612,8 +612,8 @@ SnapTranslator.dict.pl = {
         'witaj',
     'world':
         'świecie',
-    'letter %n of %s':
-        'litera %n z %s',
+    'letter %idx of %s':
+        'litera %idx z %s',
     'length of %s':
         'd\u0142ugo\u015B\u0107 %s',
     'unicode of %s':

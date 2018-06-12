@@ -846,8 +846,8 @@ SnapTranslator.dict.zh_CN = {
         '你好',
     'world':
         '世界',
-    'letter %n of %s':
-        '第 %n 个字符在文字 %s 中',
+    'letter %idx of %s':
+        '第 %idx 个字符在文字 %s 中',
     'length of %s':
         '%s 的长度',
     'unicode of %s':

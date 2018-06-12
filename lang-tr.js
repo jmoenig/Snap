@@ -554,8 +554,8 @@ SnapTranslator.dict.tr = {
         'merhaba',
     'world':
         'dünya',
-    'letter %n of %s':
-        '%n in harfleri %s',
+    'letter %idx of %s':
+        '%idx in harfleri %s',
     'length of %s':
         '%s in uzunluğu',
     'unicode of %s':

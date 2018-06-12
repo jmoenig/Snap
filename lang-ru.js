@@ -589,8 +589,8 @@ SnapTranslator.dict.ru = {
         'Привет',
     'world':
         'мир',
-    'letter %n of %s':
-        '%n буква слова %s',
+    'letter %idx of %s':
+        '%idx буква слова %s',
     'length of %s':
         'длина %s',
     'unicode of %s':

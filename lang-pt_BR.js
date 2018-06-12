@@ -554,8 +554,8 @@ SnapTranslator.dict.pt_BR = {
         'Olá',
     'world':
         'mundo',
-    'letter %n of %s':
-        'o caractere %n de %s',
+    'letter %idx of %s':
+        'o caractere %idx de %s',
     'length of %s':
         'o comprimento de %s',
     'unicode of %s':
@@ -752,7 +752,7 @@ SnapTranslator.dict.pt_BR = {
     'check to prioritize\nscript execution':
         'Marque para priorizar\na execução de roteiros.',
     'uncheck to run scripts\nat normal speed':
-        'Desmarque para executar os roteiros\nna� velocidade normal.',
+        'Desmarque para executar os roteiros\nna velocidade normal.',
     'check to enable\nIDE animations':
         'Marque para ativar\nas animações da interface de usuário.',
     'Thread safe scripts':
@@ -935,7 +935,7 @@ SnapTranslator.dict.pt_BR = {
     'click or drag crosshairs to move the rotation center':
         'Clique ou arraste a mira para mudar o centro de rotação.',
 
-    // Anota��es de projeto
+    // Anotaes de projeto
     'Project Notes':
         'Notas do Projeto',
 
