@@ -614,8 +614,8 @@ SnapTranslator.dict.pt = {
         'Olá',
     'world':
         'mundo!',
-    'letter %n of %s':
-        'o caractere %n de %s',
+    'letter %idx of %s':
+        'o caractere %idx de %s',
     'length of %s':
         'o comprimento de %s',
     'unicode of %s':

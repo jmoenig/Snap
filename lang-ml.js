@@ -553,8 +553,8 @@ SnapTranslator.dict.ml = {
         'ഹലോ',
     'world':
         'ലോകം',
-    'letter %n of %s':
-        '%s ന്‍റെ %n മത്തെ അക്ഷരം',
+    'letter %idx of %s':
+        '%idx ന്‍റെ %n മത്തെ അക്ഷരം',
     'length of %s':
         '%s ന്‍റെ നീള',
     'unicode of %s':

@@ -535,8 +535,8 @@ SnapTranslator.dict.ja_HIRA = {
         'ハロー',
     'world':
         'ワールド',
-    'letter %n of %s':
-        '%n もじめのもじ %s',
+    'letter %idx of %s':
+        '%idx もじめのもじ %s',
     'length of %s':
         '%s のながさ',
     'unicode of %s':

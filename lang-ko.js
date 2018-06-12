@@ -580,8 +580,8 @@ SnapTranslator.dict.ko = {
         '안녕',
     'world':
         '세상',
-    'letter %n of %s':
-        '%n 번째 글자 ( %s 에 대한)',
+    'letter %idx of %s':
+        '%idx 번째 글자 ( %s 에 대한)',
     'length of %s':
         '%s 의 길이',
     'unicode of %s':

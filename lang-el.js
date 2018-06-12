@@ -543,8 +543,8 @@ SnapTranslator.dict.el = {
         'γεια',
     'world':
         'κόσμος',
-    'letter %n of %s':
-        'γράμμα %n του %s',
+    'letter %idx of %s':
+        'γράμμα %idx του %s',
     'length of %s':
         'μήκος του %s',
     'unicode of %s':

@@ -572,8 +572,8 @@ SnapTranslator.dict.fr = {
         'Bonjour',
     'world':
         'Monde',
-    'letter %n of %s':
-        'lettre %n de %s',
+    'letter %idx of %s':
+        'lettre %idx de %s',
     'length of %s':
         'longueur de %s',
     'unicode of %s':
