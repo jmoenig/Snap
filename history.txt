@@ -4146,3 +4146,8 @@ in development:
 ------
 * Objects, Threads: fixed #2108 (added drop-down menu to "letter _ of _ ")
 * German translation update
+
+180612
+------
+* Renamed vectorPaint.js to sketch.js
+* GUI: updated credits for Carles Paredes
