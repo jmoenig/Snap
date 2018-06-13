@@ -16,8 +16,12 @@ SnapDriver.prototype.palette = function() {
     return this.world().children[0].palette;
 };
 
+SnapDriver.prototype.dialogs = function() {
+    return this.world().children.slice(1);
+};
+
 SnapDriver.prototype.dialog = function() {
-    var dialogs = this.world().children.slice(1);
+    var dialogs = this.dialogs();
     var len = dialogs.length;
     return dialogs[len-1];
 };
@@ -31,8 +35,21 @@ SnapDriver.prototype.reset = function() {
     dialogs.forEach(dialog => dialog.destroy());
 
     this.ide().exitReplayMode();
-    return this.waitUntilReady()
-        .then(() => SnapActions.openProject());
+    return this.ide().newProject();
+};
+
+SnapDriver.prototype.setProjectName = function(name) {
+    // rename from the room tab
+    this.selectTab('room');
+    const room = this.ide().room;
+    this.click(room.roomName);
+
+    this.keys(name);
+    this.dialog().accept();
+    return this.expect(
+        () => this.ide().room.name === name,
+        `Project name did not update after setProjectName (${this.ide().room.name} vs ${name})`
+    );
 };
 
 SnapDriver.prototype.selectCategory = function(cat) {
@@ -183,11 +200,6 @@ SnapDriver.prototype.expect = function(fn, msg) {
         });
 };
 
-// Wait for the client to have a websocket id
-SnapDriver.prototype.waitUntilReady = function() {
-    return this.waitUntil(() => this.ide().sockets.uuid);
-};
-
 // netsblox additions
 SnapDriver.prototype.newRole = function(name) {
     this.selectTab('room');
@@ -212,6 +224,8 @@ SnapDriver.prototype.moveToRole = function(name) {
 
     // Click on "save"
     dialog = this.dialog();
-    const saveBtn = dialog.buttons.children.find(btn => btn.action === 'ok');
-    this.click(saveBtn);
+    if (dialog.buttons) {
+        const saveBtn = dialog.buttons.children.find(btn => btn.action === 'ok');
+        this.click(saveBtn);
+    }
 };

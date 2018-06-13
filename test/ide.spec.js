@@ -110,22 +110,18 @@ describe('ide', function() {
 
             // Change the language and create a sprite
             ide.setLanguage('en');
-            var validate = function() {
-                var spriteIds = ide.sprites.asArray().map(sprite => sprite.id);
-                try {
-                    expect(spriteIds.length).toBe(2);
-                    expect(spriteIds[0]).toNotBe(spriteIds[1]);
-                    done();
-                } catch (e) {
-                    ide.setLanguage('en');
-                    done(e);
-                }
-            };
-
             setTimeout(() => {
                 ide.addNewSprite()
                     .then(() => {
-                        validate();
+                        var spriteIds = ide.sprites.asArray().map(sprite => sprite.id);
+                        try {
+                            expect(spriteIds.length).toBe(2);
+                            expect(spriteIds[0]).toNotBe(spriteIds[1]);
+                            done();
+                        } catch (e) {
+                            ide.setLanguage('en');
+                            done(e);
+                        }
                     })
                     .catch(() => done('addNewSprite action caught!'));
             }, 150);

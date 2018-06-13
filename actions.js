@@ -334,6 +334,10 @@ ActionManager.prototype.isPreviousAction = function(action) {
     return action.id < (this.lastSeen + 1);
 };
 
+ActionManager.prototype.isAlwaysAllowed = function(action) {
+    return action.type === 'openProject';
+};
+
 ActionManager.prototype.joinSession = function(sessionId, error) {
     if (!SnapActions.id) {
         this.onconnect = this._joinSession.bind(this, sessionId, error);
@@ -417,7 +421,7 @@ ActionManager.prototype.submitIfAllowed = function(event) {
     var myself = this,
         ide = this.ide();
 
-    if (event.type === 'openProject') {
+    if (this.isAlwaysAllowed(event)) {
         return this.submitAction(event);
     } else if (ide.isReplayMode && !event.isReplay) {
         ide.promptExitReplay(function() {
@@ -452,7 +456,7 @@ ActionManager.prototype._isBatchEvent = function(msg) {
 };
 
 ActionManager.prototype.onReceiveAction = function(msg) {
-    if (this.isPreviousAction(msg)) return;
+    if (this.isPreviousAction(msg) && !this.isAlwaysAllowed(msg)) return;
     if (this.isUserAction(msg)) {
         if (!SnapUndo.contains(msg)) {
             SnapUndo.record(msg);
@@ -471,7 +475,7 @@ ActionManager.prototype.onReceiveAction = function(msg) {
         }
     }
 
-    if (this.isNextAction(msg) && !this.isApplyingAction) {
+    if ((this.isNextAction(msg) || this.isAlwaysAllowed(msg)) && !this.isApplyingAction) {
         this._applyEvent(msg);
     } else {
         this.addActionToQueue(msg);
@@ -536,7 +540,7 @@ ActionManager.prototype._rawApplyEvent = function(event) {
 
 ActionManager.prototype.submitAction = function(event) {
 
-    if (this.isLeader || !this.isCollaborating() || event.type === 'openProject') {
+    if (this.isLeader || !this.isCollaborating() || this.isAlwaysAllowed(event)) {
         this.acceptEvent(event);
     } else {
         this.send(event);
@@ -2642,7 +2646,7 @@ ActionManager.prototype.onOpenProject = function(str) {
         }
 
     } else {
-        this.ide().newProject();
+        this.ide().newRole();
     }
 
     // Load the owners

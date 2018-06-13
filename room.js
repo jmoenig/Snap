@@ -593,6 +593,7 @@ RoomMorph.prototype.moveToRole = function(dstId) {
 
     myself.ide.showMessage('moving to ' + dstId);
     SnapCloud.moveToRole(
+        dstId,
         function(args) {
             myself.ide.showMessage('moved to ' + dstId + '!');
             myself.ide.projectName = dstId;
@@ -618,8 +619,7 @@ RoomMorph.prototype.moveToRole = function(dstId) {
         },
         function (err, lbl) {
             myself.ide.cloudError().call(null, err, lbl);
-        },
-        [dstId, this.ownerId, this.name]
+        }
     );
 };
 
@@ -803,25 +803,22 @@ RoomMorph.prototype._invitationResponse = function (id, response, role) {
     SnapCloud.invitationResponse(
         id,
         response,
-        function (args) {
-            if (response) {
-                var proj = args[0];
-                // Load the project or make the project empty
-                if (proj) {
-                    myself.ide.source = 'cloud';
-                    myself.ide.droppedText(proj.SourceCode);
-                    if (proj.Public === 'true') {
-                        location.hash = '#present:Username=' +
-                            encodeURIComponent(SnapCloud.username) +
-                            '&ProjectName=' +
-                            encodeURIComponent(proj.ProjectName);
-                    }
-                } else {  // Empty the project
-                    myself.ide.newRole(role);
+        function (project) {
+            // Load the project or make the project empty
+            if (project) {
+                myself.ide.source = 'cloud';
+                myself.ide.droppedText(project.SourceCode);
+                if (project.Public === 'true') {
+                    location.hash = '#present:Username=' +
+                        encodeURIComponent(SnapCloud.username) +
+                        '&ProjectName=' +
+                        encodeURIComponent(project.ProjectName);
                 }
-                myself.ide.showMessage('you have joined the room!', 2);
-                myself.ide.silentSetProjectName(role);  // Set the role name FIXME
+            } else {  // Empty the project
+                myself.ide.newRole(role);
             }
+            myself.ide.showMessage('you have joined the room!', 2);
+            myself.ide.silentSetProjectName(role);  // Set the role name FIXME
             SnapCloud.disconnect();
         },
         function(err) {

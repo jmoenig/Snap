@@ -46,7 +46,6 @@
   <script type="text/javascript" src="/dist/app.min.js"></script>
   <script src="./snap-driver.js"></script>
   <script src="./replay.spec.js"></script>
-  <script src="./test-utils.js"></script>
   <script src="./room.spec.js"></script>
   <script src="./save.spec.js"></script>
   <script src="./messages.spec.js"></script>
@@ -57,6 +56,7 @@
   <script src="./variables.spec.js"></script>
   <script src="./sprites.spec.js"></script>
   <script src="./xml.spec.js"></script>
+  <script src="./url.spec.js"></script>
   <script src="./cloud.spec.js"></script>
   <script type="text/javascript">
     {{ if (it.username) { }}

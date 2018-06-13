@@ -1,4 +1,4 @@
-/*global driver*/
+/*global driver, expect, SnapCloud */
 describe('room', function() {
     this.timeout(10000);
     describe('new', function() {
@@ -7,31 +7,31 @@ describe('room', function() {
             return driver.reset()
                 .then(() => driver.addBlock('forward'))
                 .then(() => {
-                    driver.selectTab('Room');
-                    let btn = driver.ide().spriteEditor.addRoleBtn;
-
-                    // Click on the plus icon
-                    driver.click(btn);
-                    driver.keys(name);
-                    let dialog = driver.dialog();
-                    dialog.ok();
+                    driver.newRole(name);
 
                     // wait for it to show up
                     let room = driver.ide().room;
-                    return driver.waitUntil(() => room.getRole(name));
+                    return driver.expect(
+                        () => room.getRole(name),
+                        `new role (${name}) did not appear`
+                    );
                 });
         });
 
         describe('moveToRole', function() {
+            let projectId;
             before(function() {
+                projectId = SnapCloud.projectId;
                 driver.moveToRole(name);
             });
 
             it('should be able to move to new role', function() {
                 // wait for the project name to change
-                return driver.expect(() => {
-                    return driver.ide().projectName === name;
-                }, `could not move to ${name} role`);
+                return driver
+                    .expect(() => {
+                        return driver.ide().projectName === name;
+                    }, `could not move to ${name} role`)
+                    .then(() => expect(projectId).toBe(projectId));
             });
 
             it('should be an empty role', function() {
@@ -48,10 +48,11 @@ describe('room', function() {
         before(() => {
             return driver.reset()
                 .then(()=> {
-                    driver.selectTab('Room');
+                    driver.selectTab('room');
 
-                    const roleName = driver.ide().projectName;
-                    const role = driver.ide().room.getRole(roleName);
+                    const room = driver.ide().room;
+                    const roleName = room.getCurrentRoleName();
+                    const role = room.getRole(roleName);
 
                     // rename the role
                     driver.click(role.label);

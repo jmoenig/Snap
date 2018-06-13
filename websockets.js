@@ -257,15 +257,16 @@ WebSocketManager.prototype._connectWebSocket = function() {
         }
 
         self.lastSocketActivity = Date.now();
-        self.hasConnected = true;
         self.connected = true;
 
         if (self.uuid) {
             self.sendMessage({type: 'set-uuid', body: self.uuid});
-            self.onConnect();
+            self.onConnect(self.hasConnected);
         } else {
             self.sendMessage({type: 'request-uuid'});
         }
+
+        self.hasConnected = true;
     };
 
     // Set up message events
@@ -324,6 +325,7 @@ WebSocketManager.prototype.send = function(message) {
 };
 
 WebSocketManager.prototype.sendMessage = function(message) {
+    message.projectId = SnapCloud.projectId;
     message = this.serializeMessage(message);
     this.send(message);
 };
@@ -402,40 +404,44 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
 };
 
 WebSocketManager.prototype.onConnect = function() {
-    var myself = this,
-        afterConnect = function() {
-            myself.updateRoomInfo();
+    var myself = this;
+    return this.updateRoomInfo()
+        .then(function() {
             while (myself.messages.length) {
                 myself.websocket.send(myself.messages.shift());
             }
-        };
-
-    if (SnapCloud.username) {  // Reauthenticate if needed
-        SnapCloud.reconnect(afterConnect, afterConnect);
-    } else {
-        afterConnect();
-    }
-    this.inActionRequest = false;
+            myself.inActionRequest = false;
+        });
 };
 
-WebSocketManager.prototype.updateRoomInfo = function() {
+WebSocketManager.prototype.getClientState = function() {
     var owner = this.ide.room.ownerId,
-        roleId = this.ide.projectName,
+        roleName = this.ide.projectName || 'myRole',
         roomName = this.ide.room.name || '__new_project__',
-        msg = {
-            type: 'create-room',
+        state = {
             room: roomName,
-            role: roleId
+            role: roleName
         };
 
     if (owner) {
-        msg.type = 'join-room';
-        msg.owner = owner;
+        state.owner = owner;
         // Implicitly request actions
-        msg.actionId = SnapActions.lastSeen;
-        this.inActionRequest = true;
+        state.actionId = SnapActions.lastSeen;
     }
-    this.sendMessage(msg);
+
+    return state;
+};
+
+WebSocketManager.prototype.updateRoomInfo = function() {
+    var myself = this,
+        state = this.getClientState();
+
+    this.inActionRequest = true;
+    return SnapCloud.setClientState(state.room, state.role, state.owner, state.actionId)
+        .catch(function() {
+            myself.inActionRequest = false;
+            myself.ide.cloudError().apply(null, arguments);
+        });
 };
 
 /**
