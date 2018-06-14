@@ -24,4 +24,39 @@ describe('cloud', function() {
                 });
         });
     });
+
+    describe('isProjectActive', function () {
+        let clientId = SnapCloud.clientId;
+        before(() => driver.reset());
+        after(() => SnapCloud.clientId = clientId);
+
+        it('should return not active if I am only occupant', function(done) {
+            SnapCloud.isProjectActive(
+                SnapCloud.projectId,
+                isActive => {
+                    if (isActive) {
+                        done('Reported room as active');
+                    } else {
+                        done();
+                    }
+                },
+                done
+            );
+        });
+
+        it('should return active if there are other occupants', function(done) {
+            SnapCloud.clientId = '_someNewId';
+            SnapCloud.isProjectActive(
+                SnapCloud.projectId,
+                isActive => {
+                    if (isActive) {
+                        done();
+                    } else {
+                        done('Reported room as inactive');
+                    }
+                },
+                done
+            );
+        });
+    });
 });

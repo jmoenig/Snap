@@ -65,7 +65,7 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
                     myself.rawOpenCloudProject(project);
                 } else {
                     SnapCloud.isProjectActive(
-                        project.ProjectName,
+                        project.ID,
                         function(isActive) {
                             var choices,
                                 dialog;

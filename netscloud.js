@@ -123,7 +123,7 @@ NetCloud.prototype.invitationResponse = function (id, accepted, onSuccess, onFai
                 function(response) {
                     var project = response[0];
                     if (accepted) {
-                        myself.projectId = project.ProjectID;
+                        myself.setProjectID(project.ProjectID);
                     }
                     onSuccess(project);
                 },
@@ -299,7 +299,7 @@ NetCloud.prototype.saveProject = function (ide, callBack, errorCall, overwrite, 
             myself.callService(
                 'saveProject',
                 function (response, url) {
-                    myself.projectId = response.projectId;
+                    myself.setProjectID(response.projectId);
                     callBack.call(null, response, url);
                 },
                 errorCall,
@@ -468,7 +468,7 @@ NetCloud.prototype.signup = function (
     }
 };
 
-NetCloud.prototype.isProjectActive = function (name, callBack, errorCall) {
+NetCloud.prototype.isProjectActive = function (projectId, callBack, errorCall) {
     var myself = this;
 
     this.reconnect(
@@ -481,7 +481,10 @@ NetCloud.prototype.isProjectActive = function (name, callBack, errorCall) {
                     return callBack(isActive);
                 },
                 errorCall,
-                [name]
+                [
+                    myself.clientId,
+                    projectId
+                ]
             );
         },
         errorCall
@@ -518,7 +521,7 @@ NetCloud.prototype.saveProjectCopy = function(callBack, errorCall) {
             myself.callService(
                 'saveProjectCopy',
                 function (response, url) {
-                    myself.projectId = response[0].projectId;
+                    myself.setProjectID(response[0].projectId);
                     callBack.call(null, response, url);
                     myself.disconnect();
                 },
@@ -565,6 +568,10 @@ NetCloud.prototype.request = function (url, dict) {
     return promise;
 };
 
+NetCloud.prototype.setProjectID = function (id) {
+    this.projectId = id;
+};
+
 NetCloud.prototype.newProject = function (name) {
     var myself = this,
         data = {
@@ -575,13 +582,12 @@ NetCloud.prototype.newProject = function (name) {
     if (!this.newProjectRequest) {
         this.newProjectRequest = this.request('/api/newProject', data)
             .then(function(result) {
-                myself.projectId = result.projectId;
-                console.log('>>> newProject ', myself.projectId);
+                myself.setProjectID(result.projectId);
                 myself.newProjectRequest = null;
                 return result;
             })
             .catch(function(req) {
-                myself.projectId = myself.clientId + '-' + Date.now();
+                myself.setProjectID(myself.clientId + '-' + Date.now());
                 myself.newProjectRequest = null;
                 throw new Error(req.responseText);
             });
@@ -607,12 +613,12 @@ NetCloud.prototype.setClientState = function (room, role, owner, actionId) {
             return myself.request('/api/setClientState', data);
         })
         .then(function(result) {
-            console.log('>>> setClientState ', myself.projectId);
-            myself.projectId = result.projectId;
+            // Only change the project ID if no other moves/newProjects/etc have occurred
+            myself.setProjectID(result.projectId);
             return result;
         })
         .catch(function(req) {
-            myself.projectId = myself.clientId + '-' + Date.now();
+            myself.setProjectID(myself.clientId + '-' + Date.now());
             throw new Error(req.responseText);
         });
 };
@@ -646,11 +652,11 @@ NetCloud.prototype.importProject = function (name, role, roles) {
 
     return this.request('/api/importProject', data)
         .then(function(result) {
-            myself.projectId = result.projectId;
+            myself.setProjectID(result.projectId);
             return result;
         })
         .catch(function(req) {
-            myself.projectId = myself.clientId + '-' + Date.now();
+            myself.setProjectID(myself.clientId + '-' + Date.now());
             throw new Error(req.responseText);
         });
 };
