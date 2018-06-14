@@ -4152,3 +4152,7 @@ in development:
 * Renamed vectorPaint.js to sketch.js
 * GUI: updated credits for Carles Paredes
 * "Pixels" library: Enabled multiple references to the same pixel (variable)
+
+180614
+------
+* Threads: Prevent terminated threads from launching new ones
