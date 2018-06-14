@@ -617,6 +617,23 @@ NetCloud.prototype.setClientState = function (room, role, owner, actionId) {
         });
 };
 
+NetCloud.prototype.setProjectName = function(name) {
+    var myself = this,
+        newProjectRequest = this.newProjectRequest || Promise.resolve();
+
+    return newProjectRequest
+        .then(function() {
+            var data = {
+                projectId: myself.projectId,
+                name: name
+            };
+            return myself.request('/api/setProjectName', data);
+        })
+        .then(function(result) {
+            return result.name;
+        });
+};
+
 NetCloud.prototype.importProject = function (name, role, roles) {
     var myself = this,
         data = {

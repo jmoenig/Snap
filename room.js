@@ -120,18 +120,22 @@ RoomMorph.prototype.silentSetRoomName = function(name) {
     this.roomName.changed();
 
     this.ide.controlBar.updateLabel();
+    return name;
 };
 
 RoomMorph.prototype.setRoomName = function(name) {
-    var changed = this.name !== name;
+    var myself = this,
+        changed = this.name !== name;
 
     if (changed) {
-        this.ide.sockets.sendMessage({
-            type: 'rename-room',
-            name: name
-        });
+        return SnapCloud.setProjectName(name)
+            .then(function(name) {
+                return myself.silentSetRoomName(name);
+            })
+            .catch(this.ide.cloudError());
     }
 
+    return Promise.resolve(name);
 };
 
 RoomMorph.prototype.getDefaultRoles = function() {
@@ -499,11 +503,7 @@ RoomMorph.prototype.editRoomName = function () {
                 myself.world()
             );
         } else {
-            myself.ide.sockets.sendMessage({
-                type: 'rename-room',
-                name: name,
-                inPlace: true
-            });
+            myself.setRoomName(name);
         }
     }, null, 'editRoomName');
 };
