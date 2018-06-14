@@ -652,7 +652,10 @@ NetsBloxMorph.prototype.saveACopy = function () {
     }
 
     // Save the project!
-    SnapCloud.saveProjectCopy(function() {
+    SnapCloud.saveProjectCopy(function(result) {
+        if (result.name) {
+            myself.room.silentSetRoomName(result.name);
+        }
         myself.showMessage('Made your own copy and saved it to the cloud!', 2);
     }, this.cloudError());
 };
@@ -696,7 +699,10 @@ NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
             myself.showMessage('Saving ' + contentName + '\nto the cloud...');
             SnapCloud.saveProject(
                 myself,
-                function () {
+                function (result) {
+                    if (result.name) {
+                        myself.room.silentSetRoomName(result.name);
+                    }
                     if (overwrite) {
                         myself.showMessage('Saved ' + contentName + ' to cloud!', 2);
                     } else {

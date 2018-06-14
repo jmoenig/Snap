@@ -39,6 +39,14 @@ SnapDriver.prototype.reset = function() {
 };
 
 SnapDriver.prototype.setProjectName = function(name) {
+    this.setProjectNameNoConfirm(name);
+    return this.expect(
+        () => this.ide().room.name === name,
+        `Project name did not update after setProjectName (${this.ide().room.name} vs ${name})`
+    );
+};
+
+SnapDriver.prototype.setProjectNameNoConfirm = function(name) {
     // rename from the room tab
     this.selectTab('room');
     const room = this.ide().room;
@@ -46,10 +54,6 @@ SnapDriver.prototype.setProjectName = function(name) {
 
     this.keys(name);
     this.dialog().accept();
-    return this.expect(
-        () => this.ide().room.name === name,
-        `Project name did not update after setProjectName (${this.ide().room.name} vs ${name})`
-    );
 };
 
 SnapDriver.prototype.selectCategory = function(cat) {
@@ -228,4 +232,14 @@ SnapDriver.prototype.moveToRole = function(name) {
         const saveBtn = dialog.buttons.children.find(btn => btn.action === 'ok');
         this.click(saveBtn);
     }
+};
+
+SnapDriver.prototype.disconnect = function() {
+    this.ide().sockets.onClose = () => {};
+    this.ide().sockets.websocket.close();
+};
+
+SnapDriver.prototype.connect = function() {
+    delete this.ide().sockets.onClose;
+    this.ide().sockets.onClose();
 };
