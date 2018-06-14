@@ -4166,9 +4166,9 @@ v4.2 New Features:
 * vector paint editor, thanks, Carles Paredes and Bernat Romagosa!
 * "When I am stopped" event option, runs one atomic frame before terminating, use-case: stop robots when a user hits the stop button
 * experimental JIT compiler for atomic HOFs, used in new "Bigger Data" library
+* added options for sprite attributes to the SET block
 * added "name" selector to the "Pixels" library
 * added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
-
 
 Notable Changes:
 * hidden sprites can no longer be collision detected (but can test for other sprites)
@@ -4176,12 +4176,12 @@ Notable Changes:
 * new "center" option for location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
 * disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
 
-
 Notable Fixes:
 * rearranging and scrolling sound icons
 * rendering and layout of variadic C-shaped input slots
 * when collapsing ring-typed multi-arg slots only filled rings are preserved
 * support for numerical custom block input names
+* no more "leftover" clones when pressing the stop button or executing the STOP block 
 
 Translation Updates:
 * German
