@@ -1,7 +1,15 @@
-/* globals SpriteMorph, SnapActions, localize, Point */
 function SnapDriver(world) {
     this._world = world;
+    this._window = window;
 }
+
+SnapDriver.prototype.setWindow = function(window) {
+    this._window = window;
+};
+
+SnapDriver.prototype.globals = function() {
+    return this._window;
+};
 
 // Convenience Getters
 SnapDriver.prototype.world = function() {
@@ -65,6 +73,7 @@ SnapDriver.prototype.selectCategory = function(cat) {
 };
 
 SnapDriver.prototype.selectTab = function(cat) {
+    const localize = this.globals().localize;
     let tabs = this.ide().spriteBar.tabBar.children;
     let label = localize(cat.substring(0,1).toUpperCase() + cat.substring(1));
     let tab = tabs.find(tab => tab.labelString === label);
@@ -101,6 +110,9 @@ SnapDriver.prototype.keys = function(text) {
 
 // Add block by spec
 SnapDriver.prototype.addBlock = function(spec, position) {
+    const SpriteMorph = this.globals().SpriteMorph;
+    const Point = this.globals().Point;
+    const SnapActions = this.globals().SnapActions;
     var block = typeof spec === 'string' ?
         SpriteMorph.prototype.blockForSelector(spec, true) : spec;
     var sprite = this.ide().currentSprite;
@@ -113,6 +125,7 @@ SnapDriver.prototype.addBlock = function(spec, position) {
 
 // morphic interactions
 SnapDriver.prototype.click = function(morphOrPosition) {
+    const Point = this.globals().Point;
     let hand = this.world().hand;
     let position = morphOrPosition;
     let morphAtPointer = hand.morphAtPointer;

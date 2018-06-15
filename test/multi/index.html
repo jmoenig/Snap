@@ -1,0 +1,73 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>NetsBlox Client Tests</title>
+  <link href="/test/lib/mocha.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="/test/lib/material-icons.css" rel="stylesheet">
+</head>
+<body style="margin: 0;">
+  <iframe id="user1" style="width:50%;height:100%;"></iframe>
+  <iframe id="user2" style="position:absolute;right:0;width:50%;height:100%;"></iframe>
+  <!-- Add the testing things -->
+  <div id="tests-modal" class="modal">
+      <div class="model-content">
+          <div id="mocha"></div>
+      </div>
+  </div>
+  <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#tests-modal" style="position: absolute; bottom: 24px; right: 24px;"><i class="material-icons">check</i></a>
+
+  <script src="/test/lib/jquery-2.2.4.min.js"></script>
+  <script src="/test/lib/expect.min.js"></script>
+  <script src="/test/lib/mocha.js"></script>
+  <script src="../snap-driver.js"></script>
+  <script>mocha.setup('bdd')</script>
+
+  <script type="text/javascript" >
+      const frames = Array.prototype.slice.call(document.getElementsByTagName('iframe'));
+      var driver = {};
+      frames.forEach(frame => {
+        frame.setAttribute('src', window.origin);
+      });
+      window.onload = function() {
+          let loaded = 0;
+          frames.forEach(frame => {
+              const id = frame.getAttribute('id');
+              driver[id] = new SnapDriver(frame.contentWindow.world);
+              driver[id].setWindow(frame.contentWindow);
+
+              loaded++;
+              if (loaded === frames.length) {
+                  mocha.run();
+              }
+          });
+      };
+
+      /* Uncomment the following to add a console log at the start of each test
+        var oit = it;
+        it = function(desc, test) {
+            if (test.length) {
+                return oit.call(this, desc, function(done) {
+                    console.log('starting test:', desc);
+                    return test(done);
+                });
+            } else {
+                return oit.call(this, desc, function() {
+                    console.log('starting test:', desc);
+                    return test();
+                });
+            }
+        };
+      */
+  </script>
+  <script src="./basic.spec.js"></script>
+  <script src="/test/lib/materialize.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('.modal').modal();
+      $('.modal').modal('open');
+    });
+  </script>
+</body>
+</html>
