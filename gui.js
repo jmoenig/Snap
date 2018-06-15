@@ -5603,7 +5603,7 @@ IDE_Morph.prototype.setCloudURL = function () {
         SnapCloud.url,
         this.world(),
         null,
-        Cloud.prototype.knownDomains
+        Cloud.knownDomains
     );
 };
 
