@@ -41,16 +41,64 @@ var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
-function Cloud(url) {
-    this.init(url);
+function Cloud() {
+    this.init();
 }
 
-Cloud.prototype.init = function (url) {
-    this.url = url;
+Cloud.prototype.init = function () {
+    this.url = this.determineCloudDomain();
     this.username = null;
 };
 
-SnapCloud = new Cloud('https://cloud.snap.berkeley.edu');
+Cloud.prototype.knownDomains = {
+    'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
+    'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
+    'Snap!Cloud (staging)': 'https://snap-staging.cs10.org',
+    'localhost': 'http://localhost:8080',
+    'localhost (secure)': 'https://localhost:4431'
+};
+
+Cloud.prototype.defaultDomain = Cloud.prototype.knownDomains['Snap!Cloud'];
+
+Cloud.prototype.determineCloudDomain = function () {
+    // We dynamically determine the domain of the cloud server.
+    // Thise allows for easy mirrors and development servers.
+    // The domain is determined by:
+    // 1. <meta name='snap-cloud-domain' domain="X"> in snap.html.
+    // 2. The current page's domain
+    var currentDomain = window.location.host, // host includes the port.
+        metaTag = document.head.querySelector("[name='snap-cloud-domain']"),
+        cloudDomain = this.defaultDomain;
+
+    if (metaTag) { return metaTag.getAttribute('location'); }
+
+    Object.values(this.knownDomains).some(function (server) {
+        if (Cloud.isMatchingDomain(currentDomain, server)) {
+            cloudDomain = server;
+            return true;
+        }
+        return false;
+    });
+
+    return cloudDomain;
+}
+
+Cloud.isMatchingDomain = function (client, server) {
+    // A matching domain means that the client-server are not subject to
+    // 3rd party cookie restrictions.
+    // see https://tools.ietf.org/html/rfc6265#section-5.1.3
+    // This matches a domain at end of a subdomain URL.
+    var position = server.indexOf(client);
+    switch (position) {
+        case -1:
+            return false;
+        case 0:
+            return client === server;
+        default:
+            return /[\.\/]/.test(server[position - 1]) &&
+                server.length === position + client.length;
+    }
+}
 
 // Dictionary handling
 

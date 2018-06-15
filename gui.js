@@ -66,7 +66,7 @@ InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, ArgMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
+List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume,
 fontHeight, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
@@ -216,6 +216,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.applySavedSettings();
 
     // additional properties:
+    this.cloud = new Cloud();
     this.cloudMsg = null;
     this.source = 'local';
     this.serializer = new SnapSerializer();
@@ -272,11 +273,11 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this, urlLanguage = null;
 
-    SnapCloud.initSession(
+    this.cloud.initSession(
         function (username) {
             if (username) {
                 myself.source = 'cloud';
-                if (!SnapCloud.verified) {
+                if (!this.cloud.verified) {
                         new DialogBoxMorph().inform(
                             'Unverified account',
                             'Your account is still unverified.\n' +
@@ -301,7 +302,7 @@ IDE_Morph.prototype.openIn = function (world) {
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
-    SnapCloud.message = function (string) {
+    this.cloud.message = function (string) {
         var m = new MenuMorph(null, string),
             intervalHandle;
         m.popUpCenteredInWorld(world);
@@ -408,7 +409,7 @@ IDE_Morph.prototype.openIn = function (world) {
             } else {
                 this.rawOpenProjectString(getURL(hash));
             }
-            applyFlags(SnapCloud.parseDict(location.hash.substr(5)));
+            applyFlags(this.cloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -417,10 +418,10 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict = this.cloud.parseDict(location.hash.substr(9));
             dict.Username = dict.Username.toLowerCase();
 
-            SnapCloud.getPublicProject(
+            this.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -458,9 +459,9 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = SnapCloud.parseDict(location.hash.substr(7));
+            dict = this.cloud.parseDict(location.hash.substr(7));
 
-            SnapCloud.getPublicProject(
+            this.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -494,10 +495,10 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = SnapCloud.parseDict(location.hash.substr(4));
+            dict = this.cloud.parseDict(location.hash.substr(4));
             dict.Username = dict.Username.toLowerCase();
 
-            SnapCloud.getPublicProject(
+            this.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -2545,7 +2546,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addLine();
     }
-    if (!SnapCloud.username) {
+    if (!this.cloud.username) {
         menu.addItem(
             'Login...',
             'initializeCloud'
@@ -2564,7 +2565,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
     } else {
         menu.addItem(
-            localize('Logout') + ' ' + SnapCloud.username,
+            localize('Logout') + ' ' + this.cloud.username,
             'logout'
         );
         menu.addItem(
@@ -2625,7 +2626,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                         myself.showMessage(
                             'Fetching project\nfrom the cloud...'
                         );
-                        SnapCloud.getPublicProject(
+                        myself.cloud.getPublicProject(
                             prj,
                             usr.toLowerCase(),
                             function (projectData) {
@@ -3714,7 +3715,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () {
-    this.source = SnapCloud.username ? 'cloud' : 'local';
+    this.source = this.cloud.username ? 'cloud' : 'local';
     if (this.stage) {
         this.stage.destroy();
     }
@@ -4074,8 +4075,8 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     add(pname, 'h1');
 
     /*
-    if (SnapCloud.username) {
-        add(localize('by ') + SnapCloud.username);
+    if (this.cloud.username) {
+        add(localize('by ') + this.cloud.username);
     }
     */
     if (location.hash.indexOf('#present:') === 0) {
@@ -5200,7 +5201,7 @@ IDE_Morph.prototype.initializeCloud = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            SnapCloud.login(
+            myself.cloud.login(
                 user.username.toLowerCase(),
                 user.password,
                 user.choice,
@@ -5253,7 +5254,7 @@ IDE_Morph.prototype.createCloudAccount = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            SnapCloud.signup(
+            myself.cloud.signup(
                 user.username,
                 user.password,
                 user.passwordRepeat,
@@ -5291,7 +5292,7 @@ IDE_Morph.prototype.resetCloudPassword = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            SnapCloud.resetPassword(
+            myself.cloud.resetPassword(
                 user.username,
                 function (txt, title) {
                     new DialogBoxMorph().inform(
@@ -5328,7 +5329,7 @@ IDE_Morph.prototype.resendVerification = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            SnapCloud.resendVerification(
+            myself.cloud.resendVerification(
                 user.username,
                 function (txt, title) {
                     new DialogBoxMorph().inform(
@@ -5361,7 +5362,7 @@ IDE_Morph.prototype.changeCloudPassword = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            SnapCloud.changePassword(
+            myself.cloud.changePassword(
                 user.oldpassword,
                 user.password,
                 user.passwordRepeat,
@@ -5387,7 +5388,7 @@ IDE_Morph.prototype.changeCloudPassword = function () {
 
 IDE_Morph.prototype.logout = function () {
     var myself = this;
-    SnapCloud.logout(
+    this.cloud.logout(
         function () {
             myself.showMessage('disconnected.', 2);
         },
@@ -5402,7 +5403,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     if (name) {
         this.showMessage('Saving project\nto the cloud...');
         this.setProjectName(name);
-        SnapCloud.saveProject(
+        this.cloud.saveProject(
             this,
             function () {myself.showMessage('saved.', 2); },
             this.cloudError()
@@ -5593,22 +5594,18 @@ IDE_Morph.prototype.cloudIcon = function (height, color) {
 };
 
 IDE_Morph.prototype.setCloudURL = function () {
+    var myself = this;
     new DialogBoxMorph(
         null,
         function (url) {
-            SnapCloud.url = url;
+            myself.cloud.url = url;
         }
     ).withKey('cloudURL').prompt(
         'Cloud URL',
-        SnapCloud.url,
+        this.cloud.url,
         this.world(),
         null,
-        {
-            'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
-            'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
-            'localhost' : 'http://localhost:8080',
-            'localhost (secure)' : 'https://localhost:4431'
-        }
+        this.cloud.knownDomains
     );
 };
 
@@ -6070,7 +6067,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'cloud':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        SnapCloud.getProjectList(
+        this.cloud.getProjectList(
             function (response) {
                 // Don't show cloud projects if user has since switch panes.
                 if (myself.source === 'cloud') {
@@ -6259,7 +6256,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = '';
             myself.preview.drawNew();
             // we ask for the thumbnail when selecting a project
-            SnapCloud.getThumbnail(
+            myselfcloud.getThumbnail(
                 null, // username is implicit
                 item.projectname,
                 function (thumbnail) {
@@ -6365,7 +6362,7 @@ ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
     var myself = this;
-    SnapCloud.getProject(
+    this.cloud.getProject(
         proj.projectname,
         delta,
         function (clouddata) {
@@ -6378,7 +6375,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
 			location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
-                    encodeURIComponent(SnapCloud.username) +
+                    encodeURIComponent(myself.cloud.username) +
                     '&ProjectName=' +
                     encodeURIComponent(proj.projectname);
             }
@@ -6444,7 +6441,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
 ProjectDialogMorph.prototype.saveCloudProject = function () {
     var myself = this;
     this.ide.showMessage('Saving project\nto the cloud...');
-    SnapCloud.saveProject(
+    this.cloud.saveProject(
         this.ide,
         function () {
             myself.ide.source = 'cloud';
@@ -6470,7 +6467,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                 ) + '\n"' + proj.projectname + '"?',
                 'Delete Project',
                 function () {
-                    SnapCloud.deleteProject(
+                    myself.ide.cloud.deleteProject(
                         proj.projectname,
                         null, // username is implicit
                         function () {
@@ -6516,8 +6513,8 @@ ProjectDialogMorph.prototype.shareProject = function () {
             ) + '\n"' + proj.projectname + '"?',
             'Share Project',
             function () {
-                myself.ide.showMessage('sharing\nproject...');
-                SnapCloud.shareProject(
+                ide.showMessage('sharing\nproject...');
+                ide.cloud.shareProject(
                     proj.projectname,
                     null, // username is implicit
                     function () {
@@ -6537,7 +6534,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
 
                         // Set the Shared URL if the project is currently open
                         if (proj.projectname === ide.projectName) {
-                            var usr = SnapCloud.username,
+                            var usr = ide.cloud.username,
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
@@ -6565,8 +6562,8 @@ ProjectDialogMorph.prototype.unshareProject = function () {
             ) + '\n"' + proj.projectname + '"?',
             'Unshare Project',
             function () {
-                myself.ide.showMessage('unsharing\nproject...');
-                SnapCloud.unshareProject(
+                ide.showMessage('unsharing\nproject...');
+                ide.cloud.unshareProject(
                     proj.projectname,
                     null, // username is implicit
                     function () {
@@ -6608,8 +6605,8 @@ ProjectDialogMorph.prototype.publishProject = function () {
             ) + '\n"' + proj.projectname + '"?',
             'Publish Project',
             function () {
-                myself.ide.showMessage('publishing\nproject...');
-                SnapCloud.publishProject(
+                ide.showMessage('publishing\nproject...');
+                ide.cloud.publishProject(
                     proj.projectname,
                     null, // username is implicit
                     function () {
@@ -6627,7 +6624,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
 
                         // Set the Shared URL if the project is currently open
                         if (proj.projectname === ide.projectName) {
-                            var usr = SnapCloud.username,
+                            var usr = ide.cloud.username,
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
@@ -6655,7 +6652,7 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
             'Unpublish Project',
             function () {
                 myself.ide.showMessage('unpublishing\nproject...');
-                SnapCloud.unpublishProject(
+                myself.ide.cloud.unpublishProject(
                     proj.projectname,
                     null, // username is implicit
                     function () {
@@ -6897,7 +6894,7 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
         myself.preview.drawNew();
     };
 
-    SnapCloud.getProjectVersionMetadata(
+    this.ide.cloud.getProjectVersionMetadata(
         this.projectName,
         function (versions) {
             var today = new Date(),
