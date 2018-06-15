@@ -32,12 +32,11 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2018-June-06';
+modules.cloud = '2018-June-15';
 
 // Global stuff
 
 var Cloud;
-var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
@@ -81,7 +80,7 @@ Cloud.prototype.determineCloudDomain = function () {
     });
 
     return cloudDomain;
-}
+};
 
 Cloud.isMatchingDomain = function (client, server) {
     // A matching domain means that the client-server are not subject to
@@ -98,7 +97,7 @@ Cloud.isMatchingDomain = function (client, server) {
             return /[\.\/]/.test(server[position - 1]) &&
                 server.length === position + client.length;
     }
-}
+};
 
 // Dictionary handling
 
