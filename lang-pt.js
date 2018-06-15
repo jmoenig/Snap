@@ -445,6 +445,10 @@ SnapTranslator.dict.pt = {
         'entrar em ti',
     'mouse-departed':
         'sair de ti',
+    'scrolled-down':
+        'rolar para baixo',
+    'scrolled-up':
+        'rolar para cima',
     'when %b':
         'Quando %b',
     'when I receive %msgHat':
@@ -539,8 +543,10 @@ SnapTranslator.dict.pt = {
         'o botão do rato está pressionado',
     'key %key pressed?':
         'a tecla %key está a ser pressionada',
-    'distance to %dst':
-        'a distância até %dst',
+    '%rel to %dst':
+        '%rel até %dst',
+    'distance':
+        'a distância',
     'reset timer':
         'reinicia o cronómetro',
     'timer':
@@ -608,8 +614,8 @@ SnapTranslator.dict.pt = {
         'Olá',
     'world':
         'mundo!',
-    'letter %n of %s':
-        'o caractere %n de %s',
+    'letter %idx of %s':
+        'o caractere %idx de %s',
     'length of %s':
         'o comprimento de %s',
     'unicode of %s':
@@ -622,6 +628,8 @@ SnapTranslator.dict.pt = {
         '%s é idêntico a %s',
     'JavaScript function ( %mult%s ) { %code }':
         'função JavaScript ( %mult%s ) { %code }',
+    'compile %repRing':
+        'a compilação de %repRing',
 
     'type of %s':
         'o tipo de %s',
@@ -963,6 +971,8 @@ SnapTranslator.dict.pt = {
         'editar centro de rotação',
     'edit the costume\'s\nrotation center':
         'Drehpunkt des Kostüms\nanzeigen und verschieben',
+    'rotate':
+        'rodar',
     'detach from':
         'soltar de',
     'detach all parts':
@@ -1086,6 +1096,8 @@ SnapTranslator.dict.pt = {
         'Sem título',
     'Open Project':
         'Abrir Projecto',
+    'Open':
+        'Abrir',
     '(empty)':
         '(nada)',
     'Saved!':
@@ -1269,6 +1281,10 @@ SnapTranslator.dict.pt = {
         '0° (cima)',
     '(180) down':
         '180° (baixo)',
+    'random':
+        'um valor ao acaso',
+     'random position':
+        'um ponto ao acaso',
 
     // detecção de colisões
     'mouse-pointer':
@@ -1277,6 +1293,8 @@ SnapTranslator.dict.pt = {
         'a borda',
     'pen trails':
         'os traços da caneta',
+    'center':
+        'o centro',
 
     // trajes
     'Turtle':
@@ -1424,7 +1442,7 @@ SnapTranslator.dict.pt = {
     'e^':
         'a exponencial',
 
-    // Introdução pelos teclado de expressões booleanas
+    // Introdução pelo teclado de expressões booleanas
     'not':
         'é falso que',
 
@@ -1465,6 +1483,8 @@ SnapTranslator.dict.pt = {
         'um item ao acaso',
 
     // attributes
+    'my':
+        '',
     'neighbors':
         'os vizinhos',
     'self':
@@ -1504,13 +1524,15 @@ SnapTranslator.dict.pt = {
     'scripts':
         'os guiões',
 
-    // em falta no ficheiro lang-de.js
+    // herança
     'inherited':
         'herdado',
     'check to inherit\nfrom':
         'assinalar para\nherdar de',
     'uncheck to\ndisinherit':
         'desassinalar para\nnão herdar',
+
+    // em falta no ficheiro lang-de.js
     'log':
         'o logaritmo',
     'url %s':
@@ -1555,8 +1577,6 @@ SnapTranslator.dict.pt = {
         'procurar blocos…',
     'costume name':
         'o nome do traje',
-    'Open':
-        'Abrir',
     'Share':
         'Partilhar',
     'Snap!Cloud':

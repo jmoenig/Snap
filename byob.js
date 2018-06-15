@@ -95,7 +95,7 @@
 
 */
 
-/*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph,
+/*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map,
 StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2018-January-18';
+modules.byob = '2018-June-06';
 
 // Declarations
 
@@ -140,8 +140,9 @@ function CustomBlockDefinition(spec, receiver) {
     this.isGlobal = false;
     this.type = 'command';
     this.spec = spec || '';
-    // format: {'inputName' : [type, default, options, readonly]}
-    this.declarations = {};
+    this.declarations = new Map();
+        // key: inputName
+        // value: [type, default, options, isReadOnly]
     this.variableNames = [];
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
@@ -203,7 +204,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
     // assign slot declarations to prototype inputs
     block.parts().forEach(function (part) {
         if (part instanceof BlockInputFragmentMorph) {
-            slot = myself.declarations[part.fragment.labelString];
+            slot = myself.declarations.get(part.fragment.labelString);
             if (slot) {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
@@ -223,7 +224,13 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite, headerOnly) {
 
     delete c[XML_Serializer.prototype.idProperty];
     c.receiver = sprite; // only for (kludgy) serialization
-    c.declarations = copy(this.declarations); // might have to go deeper
+
+    // copy declarations
+    c.declarations = new Map();
+    for (var [key, val] of this.declarations) {
+        c.declarations.set(key, val);
+    }
+
     if (headerOnly) { // for serializing inherited method signatures
         c.body = null;
         return c;
@@ -276,15 +283,15 @@ CustomBlockDefinition.prototype.helpSpec = function () {
 };
 
 CustomBlockDefinition.prototype.typeOf = function (inputName) {
-    if (this.declarations[inputName]) {
-        return this.declarations[inputName][0];
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[0];
     }
     return '%s';
 };
 
 CustomBlockDefinition.prototype.defaultValueOf = function (inputName) {
-    if (this.declarations[inputName]) {
-        return this.declarations[inputName][1];
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[1];
     }
     return '';
 };
@@ -310,8 +317,9 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
-    if (this.declarations[inputName] && this.declarations[inputName][2]) {
-        return this.parseChoices(this.declarations[inputName][2]);
+    if (this.declarations.has(inputName) &&
+            this.declarations.get(inputName)[2]) {
+        return this.parseChoices(this.declarations.get(inputName)[2]);
     }
     return null;
 };
@@ -336,8 +344,8 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
 };
 
 CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
-    return this.declarations[inputName] &&
-        this.declarations[inputName][3] === true;
+    return this.declarations.has(inputName) &&
+        this.declarations.get(inputName)[3] === true;
 };
 
 CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
@@ -830,17 +838,22 @@ CustomCommandBlockMorph.prototype.blockSpecFromFragments = function () {
 };
 
 CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
-    // format for type declarations: {inputName : [type, default]}
-    var ans = {};
+    // returns a Map object for type declarations:
+    //     key: inputName
+    //     value: [type, default, options, isReadOnly]
+    var ans = new Map();
 
     this.parts().forEach(function (part) {
         if (part instanceof BlockInputFragmentMorph) {
-            ans[part.fragment.labelString] = [
-                part.fragment.type,
-                part.fragment.defaultValue,
-                part.fragment.options,
-                part.fragment.isReadOnly
-            ];
+            ans.set(
+                part.fragment.labelString,
+                [
+                    part.fragment.type,
+                    part.fragment.defaultValue,
+                    part.fragment.options,
+                    part.fragment.isReadOnly
+                ]
+            );
         }
     });
     return ans;

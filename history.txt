@@ -4038,3 +4038,151 @@ Translation Updates:
 180316
 ------
 * Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots
+
+180319
+------
+* Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
+* Objects: remove obsolete STOP primitive from the stage's palette
+
+=== v4.1.2.7 maintenance release ===
+
+in development:
+
+180319
+------
+* new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
+
+180320
+------
+* Threads: refactored experimental JS-compiler
+* Threads: enabled variables access for experimental JS-compiler
+
+180322
+------
+* Threads: extended implicit parameters handling for experimental JS-Compiler
+* Threads: new experimental atomic HOFs utilizing JIT compilation (MAP, KEEP, SORT)
+* new experimental "Big Data" library using JIT compiler
+
+180323
+------
+* Threads: new experimental atomic COMBINE utilizing JIT compiler
+* added atomic COMBINE to new experimental "Bigger Data" library
+* removed unused blocks from the audio comp library
+* added and removed atomic FOR EACH to new experimental "Bigger Data" library
+
+180412
+------
+* Threads: disable detecting collision with hidden sprites
+
+180413
+------
+* Objects: added implicit parameter count to experimental JIT compile reporter
+
+180416
+------
+* Blocks: only preserve filled rings when collapsing ring-typed multi-arg-slots
+* Blocks: minor tweaks
+
+180424
+------
+* added 'name' selector to pixel library
+
+180425
+------
+* GUI: fixed rearranging sound icons in the jukebox
+* GUI: fixed scrolling for the jukebox (updating the sounds list version)
+* GUI: only randomize position when shift-clicking on new turtle-sprite button
+
+180427
+------
+* GUI: when creating a new sprite only randomize color and direction when shift-clicking
+
+180502
+------
+* Blocks, Threads: added "center" to drop-down options of location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
+* updated German translation
+* disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
+* Blocks, Threads: added options for sprite attributes to the SET block
+
+180503
+------
+* GUI: (again) randomize pen color when creating a new sprite
+
+180508
+------
+* Threads: tweaked JS-Compiler to better handle process related ops
+
+180524
+------
+* Blocks: fixed rendering and layout of variadic C-shaped input slots
+
+180604
+------
+* Blocks: tweaked layout of variadic C-shaped input slots
+
+180605
+------
+* VectorPaint: fixed rotation center editing for existing costumes
+* VectorPaint: fixed initial rendering, so costumes can be re-opened after saving
+* Symbols: fixed 'polygon' symbol rendering
+
+180606
+------
+* updated German translation, thanks, Jadga!
+* updated Portuguese translation, thanks, Manuel!
+* new Project Cloud Backups feature, thanks, Bernat!
+* BYOB, Blocks, Threads, Store: fixed support for numerical custom block input names
+
+180608
+------
+* Blocks, Objects: new experimental "When I am stopped" event option
+* Threads: Prevent terminated threads from forking new ones and from cloning
+
+180609
+------
+* Objects, Threads: Also trigger "When I am stopped" when programmatically calling "stop all"
+
+180611
+------
+* Objects, Threads: fixed #2108 (added drop-down menu to "letter _ of _ ")
+* German translation update
+
+180612
+------
+* Renamed vectorPaint.js to sketch.js
+* GUI: updated credits for Carles Paredes
+* "Pixels" library: Enabled multiple references to the same pixel (variable)
+
+180614
+------
+* Threads: Prevent terminated threads from launching new ones
+* prepared v4.2 rc
+
+
+=== v4.2 major release (draft) ===
+
+v4.2 New Features:
+* "recover project" feature, (cloud backups), thanks, Bernat Romagosa!
+* vector paint editor, thanks, Carles Paredes and Bernat Romagosa!
+* "When I am stopped" event option, runs one atomic frame before terminating, use-case: stop robots when a user hits the stop button
+* experimental JIT compiler for atomic HOFs, used in new "Bigger Data" library
+* added options for sprite attributes to the SET block
+* added "name" selector to the "Pixels" library
+* added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
+
+Notable Changes:
+* hidden sprites can no longer be collision detected (but can test for other sprites)
+* new sprites created by pressing the arrow button no point in random directions (unless you hold down the shift-key)
+* new "center" option for location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
+* disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
+
+Notable Fixes:
+* rearranging and scrolling sound icons
+* rendering and layout of variadic C-shaped input slots
+* when collapsing ring-typed multi-arg slots only filled rings are preserved
+* support for numerical custom block input names
+* no more "leftover" clones when pressing the stop button or executing the STOP block 
+
+Translation Updates:
+* German
+* Portuguese

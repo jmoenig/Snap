@@ -565,8 +565,8 @@ SnapTranslator.dict.ar = {
         'مرحبا',
     'world':
         'ايها العالم',
-    'letter %n of %s':
-        '%n الحرف أوجد %s العبارة من',
+    'letter %idx of %s':
+        '%idx الحرف أوجد %s العبارة من',
     'length of %s':
         '%s أحرف عدد',
     'unicode of %s':

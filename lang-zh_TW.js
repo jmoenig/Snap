@@ -536,8 +536,8 @@ SnapTranslator.dict.zh_TW = {
         '歡迎',
     'world':
         '光臨',
-    'letter %n of %s':
-        '第 %n 位元在文字 %s 中',
+    'letter %idx of %s':
+        '第 %idx 位元在文字 %s 中',
     'length of %s':
         '%s 的長度',
     'unicode of %s':

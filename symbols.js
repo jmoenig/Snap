@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-26';
+modules.symbols = '2018-June-05';
 
 var SymbolMorph;
 
@@ -110,6 +110,7 @@ SymbolMorph.prototype.names = [
     'rectangleSolid',
     'circle',
     'circleSolid',
+    'ellipse',
     'line',
     'cross',
     'crosshairs',
@@ -131,6 +132,9 @@ SymbolMorph.prototype.names = [
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
+    'selection',
+    'polygon',
+    'closedBrush',
     'notes',
     'camera',
     'location',
@@ -270,6 +274,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolCircle(canvas, aColor);
     case 'circleSolid':
         return this.drawSymbolCircleSolid(canvas, aColor);
+    case 'ellipse':
+        return this.drawSymbolCircle(canvas, aColor);
     case 'line':
         return this.drawSymbolLine(canvas, aColor);
     case 'cross':
@@ -312,6 +318,12 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
     case 'magnifierOutline':
         return this.drawSymbolMagnifierOutline(canvas, aColor);
+    case 'selection':
+        return this.drawSymbolSelection(canvas, aColor);
+    case 'polygon':
+        return this.drawSymbolOctagonOutline(canvas, aColor);
+    case 'closedBrush':
+        return this.drawSymbolClosedBrushPath(canvas, aColor);
     case 'notes':
         return this.drawSymbolNotes(canvas, aColor);
     case 'camera':
@@ -1549,6 +1561,57 @@ SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
 
     return canvas;
 };
+
+
+SymbolMorph.prototype.drawSymbolSelection = function (canvas, color) {
+    // answer a canvas showing a filled arrow and a dashed rectangle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height;
+
+    ctx.save();
+    ctx.setLineDash([3]);
+    this.drawSymbolRectangle(canvas, color);
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = color.toString();
+    ctx.translate(0.7 * w, 0.4 * h);
+    ctx.scale(0.5, 0.5);
+    ctx.rotate(radians(135));
+    this.drawSymbolArrowDownOutline(canvas, color);
+    ctx.fill();
+    ctx.restore();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolOctagonOutline = function (canvas, color) {
+    // answer a canvas showing an octagon
+    var ctx = canvas.getContext('2d'),
+        side = canvas.width,
+        vert = (side - (side * 0.383)) / 2,
+        l = Math.max(side / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(vert, l);
+    ctx.lineTo(side - vert, l);
+    ctx.lineTo(side - l, vert);
+    ctx.lineTo(side - l, side - vert);
+    ctx.lineTo(side - vert, side - l);
+    ctx.lineTo(vert, side - l);
+    ctx.lineTo(l, side - vert);
+    ctx.lineTo(l, vert);
+    ctx.closePath();
+    ctx.stroke();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolClosedBrushPath =
+	SymbolMorph.prototype.drawSymbolCloudOutline;
 
 SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
     // answer a canvas showing two musical notes

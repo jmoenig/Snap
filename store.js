@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-March-05';
+modules.store = '2018-June-06';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -914,14 +914,17 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                     return;
                 }
                 i += 1;
-                definition.declarations[names[i]] = [
-                    child.attributes.type,
-                    contains(['%b', '%boolUE'], child.attributes.type) ?
-                        (child.contents ? child.contents === 'true' : null)
-                            : child.contents,
-                    options ? options.contents : undefined,
-                    child.attributes.readonly === 'true'
-                ];
+                definition.declarations.set(
+                    names[i],
+                    [
+                        child.attributes.type,
+                        contains(['%b', '%boolUE'], child.attributes.type) ?
+                            (child.contents ? child.contents === 'true' : null)
+                                : child.contents,
+                        options ? options.contents : undefined,
+                        child.attributes.readonly === 'true'
+                    ]
+                );
             });
         }
 
@@ -2010,15 +2013,16 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeHeader || '',
         this.codeMapping || '',
         this.translationsAsText(),
-        Object.keys(this.declarations).reduce(function (xml, decl) {
+        Array.from(this.declarations.keys()).reduce(function (xml, decl) {
+            // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
                     '<input type="@"$>$%</input>',
-                    myself.declarations[decl][0],
-                    myself.declarations[decl][3] ?
+                    myself.declarations.get(decl)[0],
+                    myself.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
-                    myself.declarations[decl][1],
-                    myself.declarations[decl][2] ?
-                            '<options>' + myself.declarations[decl][2] +
+                    myself.declarations.get(decl)[1],
+                    myself.declarations.get(decl)[2] ?
+                            '<options>' + myself.declarations.get(decl)[2] +
                                 '</options>'
                                 : ''
                 );

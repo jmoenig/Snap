@@ -562,8 +562,8 @@ SnapTranslator.dict.hu = {
         'szia',
     'world':
         'világ',
-    'letter %n of %s':
-        '%n karaktere ennek: %s',
+    'letter %idx of %s':
+        '%idx karaktere ennek: %s',
     'length of %s':
         '%s hossza',
     'unicode of %s':

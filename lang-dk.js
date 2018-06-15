@@ -547,8 +547,8 @@ SnapTranslator.dict.dk = {
         'hej',
     'world':
         'verden',
-    'letter %n of %s':
-        'bogstav %n af %s',
+    'letter %idx of %s':
+        'bogstav %idx af %s',
     'length of %s':
         'l\u00E6ngde af %s',
     'unicode of %s':

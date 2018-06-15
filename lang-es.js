@@ -923,8 +923,8 @@ SnapTranslator.dict.es = {
         'unir %words',
     'split %s by %delim':
         'separar %s por %delim',
-    'letter %n of %s':
-        'letra %n de %s',
+    'letter %idx of %s':
+        'letra %idx de %s',
     'length of %s':
         'longitud de %s',
     'unicode of %s':
@@ -2404,6 +2404,12 @@ SnapTranslator.dict.es = {
         'Publicado.',
     'unpublished.':
         'No publicado',
+    'Recover':
+        'Recuperar',
+    'Today, ':
+        'Hoy, ',
+    'Yesterday, ':
+        'Ayer, ',
 
     // costume editor @todo (wasn't this superseed by paint editor?)
     'Costume Editor':

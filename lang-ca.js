@@ -590,8 +590,8 @@ SnapTranslator.dict.ca = {
         'hola',
     'world':
         'món',
-    'letter %n of %s':
-        'lletra %n de %s',
+    'letter %idx of %s':
+        'lletra %idx de %s',
     'length of %s':
         'longitud de %s',
     'unicode of %s':
@@ -1074,6 +1074,12 @@ SnapTranslator.dict.ca = {
         'Segur que vols esborrar',
     'rename...':
         'canvia el nom...',
+    'Recover':
+        'Recupera',
+    'Today, ':
+        'Avui, ',
+    'Yesterday, ':
+        'Ahir, ',
 
     // costume editor
     'Costume Editor':

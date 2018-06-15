@@ -519,8 +519,8 @@ SnapTranslator.dict.bg = {
         'здравейте',
     'world':
         'хора',
-    'letter %n of %s':
-        'буква %n от %s',
+    'letter %idx of %s':
+        'буква %idx от %s',
     'length of %s':
         'дължина на %s',
     'unicode of %s':

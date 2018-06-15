@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2016 by Kartik Chandra
+    Copyright (C) 2018 by Kartik Chandra
 
     This file is part of Snap!.
 
@@ -67,17 +67,18 @@
     Apr 10 - getGlobalPixelColor adjustment for Chrome & retina (Jens)
     2018
     Jan 22 - floodfill alpha tweak (Bernat)
+    Mar 19 - vector paint editor (Bernat)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
 Color, SymbolMorph, newCanvas, Morph, TextMorph, Costume, SpriteMorph, nop,
 localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
 BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
-StageMorph, isNil*/
+StageMorph, isNil, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2018-January-22';
+modules.paint = '2018-March-19';
 
 // Declarations
 
@@ -219,7 +220,8 @@ PaintEditorMorph.prototype.buildToolbox = function () {
 };
 
 PaintEditorMorph.prototype.buildEdits = function () {
-    var paper = this.paper;
+    var myself = this,
+        paper = this.paper;
 
     this.edits.add(this.pushButton(
         "undo",
@@ -230,6 +232,25 @@ PaintEditorMorph.prototype.buildEdits = function () {
         "clear",
         function () {paper.clearCanvas(); }
     ));
+    this.edits.add(this.pushButton(
+        'Vector',
+        function () {
+            if (myself.paper.undoBuffer.length > 0) {
+                myself.ide.confirm(
+                    'This will erase your current drawing.\n' +
+                    'Are you sure you want to continue?',
+                    'Switch to vector editor?',
+                    function () {
+                        myself.switchToVector();
+                    },
+                    nop
+                );
+            } else {
+                myself.switchToVector();
+            }
+        }
+    ));
+
     this.edits.fixLayout();
 };
 
@@ -254,10 +275,17 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
     this.scaleBox.fixLayout();
 };
 
-PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
+PaintEditorMorph.prototype.openIn = function (
+	world,
+    oldim,
+    oldrc,
+    callback,
+    anIDE
+) {
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
     this.callback = callback || nop;
+    this.ide = anIDE;
 
     this.processKeyUp = function () {
         this.shift = false;
@@ -324,6 +352,20 @@ PaintEditorMorph.prototype.ok = function () {
 PaintEditorMorph.prototype.cancel = function () {
     if (this.oncancel) {this.oncancel(); }
     this.destroy();
+};
+
+PaintEditorMorph.prototype.switchToVector = function () {
+    var myself = this;
+    this.object = new SVG_Costume(new Image(), '', new Point(0,0));
+    this.object.edit(
+        this.world(),
+        this.ide,
+        true,
+        this.oncancel,
+        function() {
+            myself.ide.currentSprite.changed();
+        }
+    );
 };
 
 PaintEditorMorph.prototype.populatePropertiesMenu = function () {
@@ -611,7 +653,10 @@ PaintCanvasMorph.prototype.calculateCanvasCenter = function(canvas) {
         return null;
     }
     // Can't use canvasBounds.center(), it rounds down.
-    return new Point((canvasBounds.origin.x + canvasBounds.corner.x) / 2, (canvasBounds.origin.y + canvasBounds.corner.y) / 2);
+    return new Point(
+    	(canvasBounds.origin.x + canvasBounds.corner.x) / 2,
+        (canvasBounds.origin.y + canvasBounds.corner.y) / 2
+    );
 };
 
 // If we are in automaticCrosshairs mode, recalculate the rotationCenter.
@@ -947,7 +992,8 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         }
         break;
     case "crosshairs":
-        // Disable automatic crosshairs: user has now chosen where they should be.
+        // Disable automatic crosshairs:
+        // user has now chosen where they should be.
         this.automaticCrosshairs = false;
         this.rotationCenter = relpos.copy();
         this.drawcrosshair(mctx);

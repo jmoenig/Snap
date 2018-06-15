@@ -598,8 +598,8 @@ SnapTranslator.dict.it = {
         'ciao',
     'world':
         'mondo',
-    'letter %n of %s':
-        'lettera in posizione %n di %s',
+    'letter %idx of %s':
+        'lettera in posizione %idx di %s',
     'length of %s':
         'lunghezza di %s',
     'unicode of %s':

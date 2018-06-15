@@ -583,8 +583,8 @@ SnapTranslator.dict.si = {
         'Halo',
     'world':
         'Svet',
-    'letter %n of %s':
-        '\u010Drka %n od %s',
+    'letter %idx of %s':
+        '\u010Drka %idx od %s',
     'length of %s':
         'dol\u017Eina %s',
     'unicode of %s':
