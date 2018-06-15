@@ -29,7 +29,7 @@
 
     prerequisites:
     --------------
-    needs blocks.js, threads.js, objects.js and morphic.js
+    needs blocks.js, threads.js, objects.js, cloud.jus and morphic.js
 
 
     toc
@@ -58,7 +58,7 @@
 
 */
 
-/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color,
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
 ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-June-14';
+modules.gui = '2018-June-15';
 
 // Declarations
 
@@ -6256,7 +6256,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = '';
             myself.preview.drawNew();
             // we ask for the thumbnail when selecting a project
-            myselfcloud.getThumbnail(
+            myself.cloud.getThumbnail(
                 null, // username is implicit
                 item.projectname,
                 function (thumbnail) {
