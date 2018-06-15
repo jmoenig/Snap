@@ -37,16 +37,15 @@ modules.cloud = '2018-June-06';
 // Global stuff
 
 var Cloud;
-var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
-function Cloud() {
-    this.init();
+function Cloud(url) {
+    this.init(url);
 }
 
-Cloud.prototype.init = function () {
-    this.url = null;
+Cloud.prototype.init = function (url) {
+    this.url = url;
     this.username = null;
 };
 
@@ -99,8 +98,6 @@ Cloud.isMatchingDomain = function (client, server) {
                 server.length === position + client.length;
     }
 }
-
-SnapCloud = new Cloud();
 
 // Dictionary handling
 
