@@ -41,16 +41,16 @@ var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
-function Cloud(url) {
-    this.init(url);
+function Cloud() {
+    this.init();
 }
 
-Cloud.prototype.init = function (url) {
-    this.url = url;
+Cloud.prototype.init = function () {
+    this.url = this.determineCloudDomain();
     this.username = null;
 };
 
-Cloud.knownDomains = {
+Cloud.prototype.knownDomains = {
     'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
     'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
     'Snap!Cloud (staging)': 'https://snap-staging.cs10.org',
@@ -58,9 +58,9 @@ Cloud.knownDomains = {
     'localhost (secure)': 'https://localhost:4431'
 };
 
-Cloud.defaultDomain = Cloud.knownDomains['Snap!Cloud'];
+Cloud.prototype.defaultDomain = Cloud.prototype.knownDomains['Snap!Cloud'];
 
-Cloud.determineCloudDomain = function () {
+Cloud.prototype.determineCloudDomain = function () {
     // We dynamically determine the domain of the cloud server.
     // Thise allows for easy mirrors and development servers.
     // The domain is determined by:
@@ -68,11 +68,11 @@ Cloud.determineCloudDomain = function () {
     // 2. The current page's domain
     var currentDomain = window.location.host, // host includes the port.
         metaTag = document.head.querySelector("[name='snap-cloud-domain']"),
-        cloudDomain = Cloud.defaultDomain;
+        cloudDomain = this.defaultDomain;
 
     if (metaTag) { return metaTag.getAttribute('location'); }
 
-    Object.values(Cloud.knownDomains).some(function (server) {
+    Object.values(this.knownDomains).some(function (server) {
         if (Cloud.isMatchingDomain(currentDomain, server)) {
             cloudDomain = server;
             return true;
@@ -99,8 +99,6 @@ Cloud.isMatchingDomain = function (client, server) {
                 server.length === position + client.length;
     }
 }
-
-SnapCloud = new Cloud(Cloud.determineCloudDomain());
 
 // Dictionary handling
 
