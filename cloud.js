@@ -41,12 +41,12 @@ var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
-function Cloud(url) {
-    this.init(url);
+function Cloud() {
+    this.init();
 }
 
-Cloud.prototype.init = function (url) {
-    this.url = url;
+Cloud.prototype.init = function () {
+    this.url = null;
     this.username = null;
 };
 
@@ -66,12 +66,10 @@ Cloud.determineCloudDomain = function () {
     // 2. The current page's domain
     var defaultDomain = Cloud.knownDomains['Snap!Cloud'],
         currentDomain = window.location.host, // host includes the port.
-        metaTag = document.head.querySelector("name='snap-cloud-domain'"),
+        metaTag = document.head.querySelector("[name='snap-cloud-domain']"),
         cloudDomain;
 
-    if (metaTag.length > 0) {
-        return metaTag.location;
-    }
+    if (metaTag) { return metaTag.getAttribute('location'); }
 
     Object.values(this.knownDomains).some(function (server) {
         if (Cloud.isMatchingDomain(currentDomain, server)) {
@@ -102,7 +100,7 @@ Cloud.isMatchingDomain = function (client, server) {
     }
 }
 
-SnapCloud = new Cloud(Cloud.determineCloudDomain());
+SnapCloud = new Cloud();
 
 // Dictionary handling
 

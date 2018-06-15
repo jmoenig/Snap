@@ -24,6 +24,7 @@
 		<script type="text/javascript">
 			var world;
 			window.onload = function () {
+        SnapCloud.url = Cloud.determineCloudDomain();
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
 				new IDE_Morph().openIn(world);
