@@ -4158,6 +4158,10 @@ in development:
 * Threads: Prevent terminated threads from launching new ones
 * prepared v4.2 rc
 
+180615
+------
+* BYOB: fixed #2043 (regression)
+
 
 === v4.2 major release (draft) ===
 
@@ -4184,5 +4188,5 @@ Notable Fixes:
 * no more "leftover" clones when pressing the stop button or executing the STOP block 
 
 Translation Updates:
-* German
-* Portuguese
+* German, thanks, Jadga!
+* Portuguese, thanks, Manuel!

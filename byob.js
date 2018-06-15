@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2018-June-06';
+modules.byob = '2018-June-15';
 
 // Declarations
 
@@ -2201,11 +2201,13 @@ BlockEditorMorph.prototype.close = function () {
         block = detect(
             this.body.contents.allChildren(),
             function (morph) {
-                return morph.definition && !morph.definition.isGlobal;
+                return morph.isCustomBlock && !morph.isGlobal;
             }
         );
         if (block) {
-            block = block.definition.blockInstance();
+            block = block.scriptTarget()
+                .getMethod(block.semanticSpec)
+                .blockInstance();
             block.addShadow();
             new DialogBoxMorph().inform(
                 'Local Block(s) in Global Definition',
