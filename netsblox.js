@@ -137,6 +137,7 @@ NetsBloxMorph.prototype.newProject = function (projectName) {
         .then(function(info) {
             myself.silentSetProjectName(info.roleName);
             myself.createRoom();
+            myself.room.silentSetRoomName(info.name);
             myself.selectSprite(myself.stage.children[0]);
             if (!projectName) {
                 myself.updateUrlQueryString();
