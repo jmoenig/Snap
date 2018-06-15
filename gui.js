@@ -6165,7 +6165,11 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.body.add(this.listField);
     this.shareButton.hide();
     this.unshareButton.hide();
-    this.recoverButton.hide();
+
+    if (this.task === 'open') {
+        this.recoverButton.hide();
+    }
+
     /*
     this.publishButton.hide();
     this.unpublishButton.hide();
@@ -6300,7 +6304,9 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         myself.edit();
     };
     this.body.add(this.listField);
-    this.recoverButton.show();
+    if (this.task === 'open') {
+        this.recoverButton.show();
+    }
     this.shareButton.show();
     this.unshareButton.hide();
     this.deleteButton.show();
