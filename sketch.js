@@ -138,7 +138,7 @@ VectorShape.prototype.imageURL = function () {
 
     svg.children = [ this.asSVG() ];
 
-    return 'data:image/svg+xml, ' + svg;
+    return 'data:image/svg+xml;base64,' + svg;
 };
 
 VectorShape.prototype.copy = function (newShape) {
@@ -1525,7 +1525,7 @@ VectorPaintEditorMorph.prototype.getSVG = function () {
 
     svg.children = this.shapes.map(function (shape) { return shape.asSVG(); });
 
-    return svg;
+    return window.btoa(svg);
 };
 
 VectorPaintEditorMorph.prototype.getBounds = function (shapeCollection) {
@@ -1573,7 +1573,7 @@ VectorPaintEditorMorph.prototype.ok = function () {
 
     this.paper.updateAutomaticCenter();
 
-    img.src = 'data:image/svg+xml, ' + this.getSVG().toString();
+    img.src = 'data:image/svg+xml;base64,' + this.getSVG().toString();
 
     img.onload = function() {
         myself.callback(
