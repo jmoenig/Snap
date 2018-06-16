@@ -369,7 +369,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2017-11-15'
+        '2018-06-16'
 };
 
 SnapTranslator.dict.ca_VA = {

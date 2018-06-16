@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2017-11-15', // this, too, will appear in the Translators tab
+        '2018-06-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2244,5 +2244,51 @@ SnapTranslator.dict.ca = {
     'take a camera snapshot and\nimport it as a new sprite':
         'pren una imatge amb la càmera\ni importa-la com un nou vestit',
     'Import a new costume from your webcam':
-        'Importa un nou vestit amb la webcam'
+        'Importa un nou vestit amb la webcam',
+    'random':
+        'qualsevol',
+    'random position':
+        'qualsevol posició',
+    'center':
+        'centre',
+    '%rel to %dst':
+        '%rel a %dst',
+    'distance':
+        'distància',
+    'costume':
+        'vestit',
+    'sound':
+        'so',
+    'Record a new sound':
+        'Grava un so nou',
+    'Sound Recorder':
+        'Gravadora de So',
+    'recording':
+        'gravació',
+    'JIT compiler support':
+        'Suport a la compilació JIT',
+    'EXPERIMENTAL! uncheck to disable live\nsupport for compiling':
+        'EXPERIMENTAL! Desmarqueu per deshabilitar el\nsuport a la compilació dinàmica',
+    'EXPERIMENTAL! check to enable\nsupport for compiling':
+        'EXPERIMENTAL! Marqueu per habilitar\nel suport a la compilació',
+    'compile %repRing for %n args':
+        'compila %repRing per %n arguments',
+    'rotate':
+        'gira',
+    'stopped':
+        'pari',
+    'scrolled-up':
+        'faci scroll amunt',
+    'scrolled-down':
+        'faci scroll avall',
+    'Resend Verification Email...':
+        'Torna a enviar l\'email de verificació...',
+    'Resend verification email':
+        'Reenviament del mail',
+    'User name:':
+        'Nom d\'usuari:',
+    'Camera not supported':
+        'Webcam no disponible',
+	'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Comproveu que el navegador està actualitzat\ni la webcam ben configurada. \n\nAlguns navegadors també requereixen\nHTTPS per a utilitzar la càmera.\n\nPodeu provar canviant a l\'adreça el "http://"\nper "https://".'
 };
