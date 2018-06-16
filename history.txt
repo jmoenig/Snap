@@ -4190,3 +4190,4 @@ Notable Fixes:
 Translation Updates:
 * German, thanks, Jadga!
 * Portuguese, thanks, Manuel!
+* Catalan, thanks, Joan!
