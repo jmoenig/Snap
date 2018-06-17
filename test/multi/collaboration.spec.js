@@ -10,6 +10,7 @@ describe('collaboration', function() {
     });
 
     describe('same user', function() {
+        let blockId = null;
         before(function() {
             return driver.user2.openProject(projectName, false)
                 .then(() => driver.user2.waitForDialogBox())
@@ -17,26 +18,31 @@ describe('collaboration', function() {
                     const dialog = driver.user2.dialog();
                     const joinBtn = dialog.buttons.children[0];
                     driver.user2.click(joinBtn);
+                    return driver.user1.addBlock('show');
+                })
+                .then(block => {
+                    expect(block).toBeTruthy();
+                    blockId = block.id;
                 });
         });
 
         it('should add block across clients', function() {
-            let blockId = null;
-            // There is a warning that should be addressed during this test
-            // TODO
-            return driver.user1.addBlock('show')
-                .then(block => {
-                    expect(block).toBeTruthy();
-                    blockId = block.id;
-                    return driver.user2.expect(
-                        () => {
-                            const sprite = driver.user2.ide().currentSprite;
-                            const blocks = sprite.scripts.children;
-                            return blocks.map(block => block.id).includes(blockId);
-                        },
-                        `Block ${blockId} did not appear for user2`
-                    );
-                });
+            return driver.user2.expect(
+                () => {
+                    const sprite = driver.user2.ide().currentSprite;
+                    const blocks = sprite.scripts.children;
+                    return blocks.map(block => block.id).includes(blockId);
+                },
+                `Block ${blockId} did not appear for user2`
+            );
+        });
+
+        it('should use other clientId in last action', function() {
+            const clientId = driver.user1.globals().SnapCloud.clientId;
+            const clientId2 = driver.user2.globals().SnapCloud.clientId;
+            const action = driver.user2.globals().SnapUndo.allEvents.slice().pop();
+            expect(action.user).toNotBe(clientId2);
+            expect(action.user).toBe(clientId);
         });
     });
 

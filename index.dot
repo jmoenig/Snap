@@ -34,6 +34,9 @@
         <script type="text/javascript" src="xml.js"></script>
         <script type="text/javascript" src="store.js"></script>
         <script type="text/javascript" src="cloud.js"></script>
+        <script type="text/javascript">
+            SnapCloud.clientId = '{{= it.clientId }}';
+        </script>
         <script type="text/javascript" src="sha512.js"></script>
         <script type="text/javascript" src="actions.js"></script>
         <script type="text/javascript" src="undo.js"></script>
@@ -66,7 +69,6 @@
                 SnapCloud.username = '{{= it.username }}';
                 SnapCloud.password = true;
             {{ } }}
-            SnapCloud.clientId = '{{= it.clientId }}';
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();

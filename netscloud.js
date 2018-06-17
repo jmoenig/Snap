@@ -1,7 +1,8 @@
 /* global localize, SERVER_URL, nop, Cloud, SnapActions */
 NetCloud.prototype = new Cloud();
 
-function NetCloud(url) {
+function NetCloud(clientId, url) {
+    this.clientId = clientId;
     Cloud.call(this, url);
 }
 
@@ -672,4 +673,4 @@ NetCloud.prototype.importProject = function (name, role, roles) {
         });
 };
 
-var SnapCloud = new NetCloud(SERVER_URL + '/api/');
+var SnapCloud = new NetCloud(SnapCloud.clientId, SERVER_URL + '/api/');
