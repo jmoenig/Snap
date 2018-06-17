@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-June-15';
+modules.gui = '2018-June-17';
 
 // Declarations
 
@@ -277,7 +277,7 @@ IDE_Morph.prototype.openIn = function (world) {
         function (username) {
             if (username) {
                 myself.source = 'cloud';
-                if (!this.cloud.verified) {
+                if (!myself.cloud.verified) {
                         new DialogBoxMorph().inform(
                             'Unverified account',
                             'Your account is still unverified.\n' +
@@ -409,7 +409,7 @@ IDE_Morph.prototype.openIn = function (world) {
             } else {
                 this.rawOpenProjectString(getURL(hash));
             }
-            applyFlags(this.cloud.parseDict(location.hash.substr(5)));
+            applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -418,10 +418,10 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = this.cloud.parseDict(location.hash.substr(9));
+            dict = myself.cloud.parseDict(location.hash.substr(9));
             dict.Username = dict.Username.toLowerCase();
 
-            this.cloud.getPublicProject(
+            myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -459,9 +459,9 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = this.cloud.parseDict(location.hash.substr(7));
+            dict = myself.cloud.parseDict(location.hash.substr(7));
 
-            this.cloud.getPublicProject(
+            myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -495,10 +495,10 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.showMessage('Fetching project\nfrom the cloud...');
 
             // make sure to lowercase the username
-            dict = this.cloud.parseDict(location.hash.substr(4));
+            dict = myself.cloud.parseDict(location.hash.substr(4));
             dict.Username = dict.Username.toLowerCase();
 
-            this.cloud.getPublicProject(
+            myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
                 function (projectData) {
@@ -6067,7 +6067,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'cloud':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        this.cloud.getProjectList(
+        myself.ide.cloud.getProjectList(
             function (response) {
                 // Don't show cloud projects if user has since switch panes.
                 if (myself.source === 'cloud') {
@@ -6256,7 +6256,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = '';
             myself.preview.drawNew();
             // we ask for the thumbnail when selecting a project
-            myself.cloud.getThumbnail(
+            myself.ide.cloud.getThumbnail(
                 null, // username is implicit
                 item.projectname,
                 function (thumbnail) {
@@ -6362,7 +6362,7 @@ ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
     var myself = this;
-    this.cloud.getProject(
+    this.ide.cloud.getProject(
         proj.projectname,
         delta,
         function (clouddata) {
@@ -6375,7 +6375,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
 			location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
-                    encodeURIComponent(myself.cloud.username) +
+                    encodeURIComponent(myself.ide.cloud.username) +
                     '&ProjectName=' +
                     encodeURIComponent(proj.projectname);
             }
@@ -6441,7 +6441,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
 ProjectDialogMorph.prototype.saveCloudProject = function () {
     var myself = this;
     this.ide.showMessage('Saving project\nto the cloud...');
-    this.cloud.saveProject(
+    this.ide.cloud.saveProject(
         this.ide,
         function () {
             myself.ide.source = 'cloud';

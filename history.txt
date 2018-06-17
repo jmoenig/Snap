@@ -4162,6 +4162,10 @@ in development:
 ------
 * BYOB: fixed #2043 (regression)
 
+180617
+------
+* GUI: fixed cloud scope issues
+
 
 === v4.2 major release (draft) ===
 
@@ -4170,6 +4174,7 @@ v4.2 New Features:
 * vector paint editor, thanks, Carles Paredes and Bernat Romagosa!
 * "When I am stopped" event option, runs one atomic frame before terminating, use-case: stop robots when a user hits the stop button
 * experimental JIT compiler for atomic HOFs, used in new "Bigger Data" library
+* new library for programmatically creating variables, thanks, Brian Harvey!
 * added options for sprite attributes to the SET block
 * added "name" selector to the "Pixels" library
 * added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
