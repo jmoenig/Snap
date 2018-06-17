@@ -29,19 +29,33 @@
       frames.forEach(frame => {
         frame.setAttribute('src', window.origin);
       });
-      window.onload = function() {
+      function startTests() {
           let loaded = 0;
-          frames.forEach(frame => {
-              const id = frame.getAttribute('id');
-              driver[id] = new SnapDriver(frame.contentWindow.world);
-              driver[id].setWindow(frame.contentWindow);
+          return frames
+              .reduce((promise, frame) => {
+                  return promise.then(() => {
+                      const id = frame.getAttribute('id');
+                      driver[id] = new SnapDriver(frame.contentWindow.world);
+                      driver[id].setWindow(frame.contentWindow);
+                      return driver[id].login('test');
+                  });
+              }, Promise.resolve())
+              .then(() => mocha.run());
+      }
 
-              loaded++;
-              if (loaded === frames.length) {
-                  mocha.run();
-              }
-          });
-      };
+      function checkLoaded() {
+          const allLoaded = frames.reduce((isLoaded, frame) => {
+              const id = frame.getAttribute('id');
+              return isLoaded && !!frame.contentWindow.world;
+          }, true);
+
+          if (allLoaded) {
+              startTests();
+          } else {
+              setTimeout(checkLoaded, 10);
+          }
+      }
+      window.onload = checkLoaded;
 
       /* Uncomment the following to add a console log at the start of each test
         var oit = it;
@@ -61,6 +75,7 @@
       */
   </script>
   <script src="./basic.spec.js"></script>
+  <script src="./collaboration.spec.js"></script>
   <script src="/test/lib/materialize.min.js"></script>
 
   <script>

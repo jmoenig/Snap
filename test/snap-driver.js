@@ -247,6 +247,206 @@ SnapDriver.prototype.moveToRole = function(name) {
     }
 };
 
+SnapDriver.prototype.login = function(name, password='password') {
+    const btn = this.ide().controlBar.cloudButton;
+    this.click(btn);
+
+    const dropdown = this.dialog();
+    const logoutBtn = dropdown.children.find(item => item.action === 'logout');
+    const isLoggedIn = !!logoutBtn;
+    let prepare = Promise.resolve();
+
+    if (isLoggedIn) {
+        this.click(logoutBtn);
+        prepare = this.expect(
+            () => this.isShowingDialogTitle(title => title.includes('disconnected')),
+            `Did not see logout message`
+        );
+    }
+
+    return prepare
+        .then(() => {
+            this.click(btn);
+
+            // click the login button
+            const dropdown = this.dialog();
+            const loginBtn = dropdown.children.find(item => item.action === 'initializeCloud');
+            this.click(loginBtn);
+
+            // enter login credentials
+            console.log(`logging in as ${name}`);
+            this.keys(name);
+            this.keys('\t');
+            this.keys(password);
+            this.dialog().ok();
+            return this.expect(
+                () => this.isShowingDialogTitle(title => title.includes('connected')),
+                `Did not see connected message`
+            );
+        });
+};
+
+SnapDriver.prototype.inviteCollaborator = function(username) {
+    const controlBar = this.ide().controlBar;
+    this.click(controlBar.cloudButton);
+
+    const dropdown = this.dialog();
+    const collabs = dropdown.children.find(item => item.action === 'manageCollaborators');
+    this.click(collabs);
+
+    console.log('inviting', username);
+    return this
+        .expect(
+            () => this.dialog(),
+            `Collaborator dialog did not appear`
+        )
+        .then(() => {
+            const dialog = this.dialog();
+            console.log(dialog);
+            const otherUserItem = dialog.listField.elements
+                .find(element => element.username === username);
+
+            dialog.listField.select(otherUserItem);
+
+            // click the invite button
+            const inviteBtn = dialog.buttons.children.find((btn => btn.action === 'ok'));
+            this.click(inviteBtn);
+        });
+};
+
+SnapDriver.prototype.isShowingDialog = function(testFn) {
+    const dialogs = this.dialogs();
+    return dialogs.find(testFn);
+};
+
+SnapDriver.prototype.isShowingDialogTitle = function(testFn) {
+    return this.isShowingDialog(dialog => dialog.title && testFn(dialog.title));
+};
+
+SnapDriver.prototype.isShowingDialogKey = function(testFn) {
+    return this.isShowingDialog(dialog => dialog.key && testFn(dialog.key));
+};
+
+SnapDriver.prototype.isShowingSavedMsg = function() {
+    const menu = this.dialog();
+    const message = menu && menu.title && menu.title.toLowerCase();
+    if (message) {
+        return message.includes('saved') && message.includes('cloud');
+    }
+    return false;
+};
+
+SnapDriver.prototype.saveProjectAs = function(name, waitForSave=true) {
+    // save as
+    const controlBar = this.ide().controlBar;
+    this.click(controlBar.projectButton);
+
+    const menu = this.dialog();
+    const saveBtnIndex = menu.children
+        .findIndex(child => child.action === 'save');
+    const saveAsBtn = menu.children[saveBtnIndex+1];
+    this.click(saveAsBtn);
+
+    // Wait for the project list to be updated
+    return this.waitUntilProjectsLoaded()
+        .then(() => {
+            // Enter the new project name
+            this.keys(name);
+            const dialog = this.dialog();
+            const saveBtn = dialog.buttons.children[0];
+            this.click(saveBtn);
+            if (waitForSave) {
+                // TODO
+                return this.expect(
+                    () => this.isShowingSavedMsg(),
+                    `Did not see save message after "Save"`
+                );
+            }
+        });
+};
+
+SnapDriver.prototype.getProjectList = function(projectDialog) {
+    return projectDialog.listField.listContents.children
+        .map(item => item.labelString);
+};
+
+SnapDriver.prototype.waitForDialogBox = function() {
+    return this.expect(
+        () => {
+            const dialog = this.dialog();
+            return dialog && dialog instanceof this.globals().DialogBoxMorph;
+        },
+        'No dialog box appeared'
+    );
+};
+
+SnapDriver.prototype.waitUntilProjectsLoaded = function() {
+    const dialog = this.dialog();
+    if (dialog && dialog.source.includes('cloud')) {
+        return this.expect(
+            () => {
+                const isShowingUpdateMsg = this.dialogs().length === 2;
+                const projectDialog = this.dialogs()
+                    .find(d => d instanceof this.globals().ProjectDialogMorph);
+                const hasLoadedProjects = this.getProjectList(projectDialog)[0] !== '(empty)';
+                return isShowingUpdateMsg || hasLoadedProjects;
+            },
+            'Did not see "update project list" message'
+        )
+        .then(() => this.expect(
+                () => this.dialogs().length === 1,
+                '"update project list" message did not disappear'
+            )
+        );
+    } else {
+        return Promise.resolve();
+    }
+};
+
+SnapDriver.prototype.openProjectsBrowser = function() {
+    const controlBar = this.ide().controlBar;
+
+    this.click(controlBar.projectButton);
+    let menu = this.dialog();
+    const openBtn = menu.children.find(child => child.action === 'openProjectsBrowser');
+
+    this.click(openBtn);
+
+    // Open the saved project
+    return this.waitUntilProjectsLoaded()
+        .then(() => this.dialog());
+};
+
+SnapDriver.prototype.openProject = function(name, waitForComplete=true) {
+    // Open the project dialog
+    let projectDialog;
+    return this.openProjectsBrowser()
+        .then(dialog => {
+            projectDialog = dialog;
+            return this.expect(
+                () => this.getProjectList(projectDialog).includes(name),
+                `Could not find ${name} in project list`
+            );
+        })
+        .then(() => {
+            const projectList = projectDialog.listField.listContents.children;
+            const listItem = projectList.find(item => item.labelString === name);
+            this.click(listItem);
+            projectDialog.accept();
+
+            // Check for the if-else block
+            if (waitForComplete) {
+                return this.expect(
+                    () => {
+                        const blockCount = this.ide().currentSprite.scripts.children.length;
+                        return blockCount > 0;
+                    },
+                    `Did not see blocks after loading saved project`
+                );
+            }
+        });
+};
+
 SnapDriver.prototype.disconnect = function() {
     this.ide().sockets.onClose = () => {};
     this.ide().sockets.websocket.close();

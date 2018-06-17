@@ -158,7 +158,6 @@ NetCloud.prototype.inviteToCollaborate = function () {
     var myself = this,
         args = Array.prototype.slice.call(arguments);
 
-    args.push(SnapActions.sessionId);
     this.reconnect(
         function () {
             myself.callService(
@@ -169,6 +168,17 @@ NetCloud.prototype.inviteToCollaborate = function () {
             );
         },
         nop
+    );
+};
+
+NetCloud.prototype.joinActiveProject = function (id, callback, onError) {
+    this.callService(
+        'joinActiveProject',
+        function(response) {
+            callback(response[0]);
+        },
+        onError,
+        [id]
     );
 };
 
@@ -191,7 +201,7 @@ NetCloud.prototype.evictCollaborator = function (id) {
 
 NetCloud.prototype.collabResponse = function (id, accepted, onSuccess, onFail) {
     var myself = this,
-        args = [id, accepted, SnapCloud.clientId, SnapActions.id];
+        args = [id, accepted, SnapCloud.clientId];
 
     this.reconnect(
         function () {
