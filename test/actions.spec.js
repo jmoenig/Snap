@@ -1,12 +1,13 @@
 /* globals driver, expect */
 describe('actions', function() {
     let Point, SnapActions, SnapCloud;
-    var position = new Point(600, 600);
+    let position;
 
     before(() => {
         Point = driver.globals().Point;
         SnapCloud = driver.globals().SnapCloud;
         SnapActions = driver.globals().SnapActions;
+        position = new Point(600, 600);
     });
     beforeEach(() => driver.reset());
 

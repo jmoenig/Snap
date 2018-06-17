@@ -29,8 +29,12 @@ describe('cloud', function() {
     });
 
     describe('isProjectActive', function () {
-        let clientId = SnapCloud.clientId;
-        before(() => driver.reset());
+        let clientId;
+
+        before(() => {
+            clientId = SnapCloud.clientId;
+            return driver.reset();
+        });
         after(() => SnapCloud.clientId = clientId);
 
         it('should return not active if I am only occupant', function(done) {

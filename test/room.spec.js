@@ -24,6 +24,7 @@ describe('room', function() {
                 const SnapCloud = driver.globals().SnapCloud;
                 projectId = SnapCloud.projectId;
                 driver.moveToRole(name);
+                driver.dialogs().forEach(d => d.destroy());
             });
 
             it('should be able to move to new role', function() {
@@ -40,6 +41,31 @@ describe('room', function() {
                 return driver.expect(() => {
                     return !driver.ide().currentSprite.scripts.children.length;
                 }, `did not load empty role "${name}"`);
+            });
+
+            it('should be able to add block', function() {
+                const {SnapActions} = driver.globals();
+                return driver
+                    .expect(
+                        () => driver.ide().projectName === name,
+                        `did not open empty role "${name}"`
+                    )
+                    .then(() => driver.expect(
+                        () => SnapActions._attemptedLocalActions.length === 0,
+                        `Still has pending actions`
+                    ))
+                    .then(() => {
+                        driver.selectCategory('looks');
+                        driver.selectTab('scripts');
+                        let showBlock = driver.palette().contents.children
+                            .find(item => item.selector === 'show');
+
+                        let dropPosition = driver.ide().currentSprite.scripts.center();
+
+                        driver.dragAndDrop(showBlock, dropPosition);
+                        const action = SnapActions._attemptedLocalActions[0];
+                        return action.promise;
+                    });
             });
         });
     });

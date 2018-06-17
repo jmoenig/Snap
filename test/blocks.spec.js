@@ -2,14 +2,14 @@
 
 describe('blocks', function() {
     let Point, SnapActions, CustomBlockDefinition, CustomCommandBlockMorph;
+    let position;
     before(() => {
         Point = driver.globals().Point;
         CustomCommandBlockMorph = driver.globals().CustomCommandBlockMorph;
         CustomBlockDefinition = driver.globals().CustomBlockDefinition;
         SnapActions = driver.globals().SnapActions;
+        position = new Point(400, 400);
     });
-
-    var position = new Point(400, 400);
 
     beforeEach(function() {
         return driver.reset()
