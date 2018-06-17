@@ -1,5 +1,8 @@
-/*globals expect, SnapCloud, driver */
+/*globals expect, driver */
 describe('cloud', function() {
+    let SnapCloud;
+    before(() => SnapCloud = driver.globals().SnapCloud);
+
     it('should set clientId immediately', function() {
         expect(SnapCloud.clientId).toBeTruthy();
     });

@@ -1,8 +1,14 @@
-/*globals driver, expect, SERVER_URL, SERVER_ADDRESS, ensureFullUrl,
-  SnapUndo, SnapActions, SnapCloud, CustomBlockDefinition, CustomCommandBlockMorph */
+/*globals driver, expect, */
 describe('ide', function() {
+    let SnapCloud, SnapActions, SnapUndo;
+
     this.timeout(5000);
-    before(() => driver.reset());
+    before(() => {
+        SnapCloud = driver.globals().SnapCloud;
+        SnapActions = driver.globals().SnapActions;
+        SnapUndo = driver.globals().SnapUndo;
+        return driver.reset();
+    });
 
     describe('export', function() {
         it('should export locally if only one role', function(done) {
@@ -284,6 +290,13 @@ describe('ide', function() {
 
     describe('server connection', () => {
         const EXPECTED_SURL = window.location.origin;
+        let SERVER_URL, SERVER_ADDRESS, ensureFullUrl;
+        before(() => {
+            SERVER_URL = driver.globals().SERVER_URL;
+            SERVER_ADDRESS, ensureFullUrl = driver.globals().SERVER_ADDRESS;
+            ensureFullUrl = driver.globals().ensureFullUrl;
+        });
+
         beforeEach(() => driver.reset());
 
         describe('SERVER_URL', () => {
@@ -380,6 +393,7 @@ describe('ide', function() {
 
         it('should return a string starting with the custom block id', function(done) {
             // Create a custom block definition
+            const {CustomBlockDefinition, CustomCommandBlockMorph} = driver.globals();
             var sprite = driver.ide().currentSprite,
                 spec = 'sprite block %s',
                 definition = new CustomBlockDefinition(spec, sprite);

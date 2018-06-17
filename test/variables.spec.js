@@ -1,8 +1,9 @@
-/* globals driver, SnapActions, SnapUndo */
+/* globals driver, */
 describe('variables', function() {
     before(() => driver.reset());
 
     it('should be able to undo add global variable (after serializing)', function() {
+        const {SnapActions, SnapUndo} = driver.globals();
         return SnapActions.addVariable('testVar', true)
             .then(() => {
                 // Get the serialized event and try to apply it

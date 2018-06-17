@@ -1,8 +1,13 @@
-/* globals driver, SnapActions, Point, SnapUndo, expect, SnapCloud,
-   RingCommandSlotMorph */
+/* globals driver, expect */
 describe('actions', function() {
+    let Point, SnapActions, SnapCloud;
     var position = new Point(600, 600);
 
+    before(() => {
+        Point = driver.globals().Point;
+        SnapCloud = driver.globals().SnapCloud;
+        SnapActions = driver.globals().SnapActions;
+    });
     beforeEach(() => driver.reset());
 
     it('should have default color w/ setColorField', function() {
@@ -11,6 +16,7 @@ describe('actions', function() {
     });
 
     it('should not animate move block when not focused', function() {
+        const {SnapUndo} = driver.globals();
         // Create two blocks. Connect one to another then change to the stage and undo/redo
         let block1 = null;
         let id = null;
@@ -243,6 +249,7 @@ describe('actions', function() {
         });
 
         it('should include ringified statements', function(done) {
+            const {RingCommandSlotMorph} = driver.globals();
             // Create a call block and add the 'input list' option
             function setupListInputBlocks(callback) {
                 driver.addBlock('reifyScript').then(ring => {

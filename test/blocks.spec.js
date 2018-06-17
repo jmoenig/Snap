@@ -1,6 +1,14 @@
-/* globals SnapActions, expect, driver, Point, CustomBlockDefinition,
- CustomCommandBlockMorph, ScriptsMorph, SnapUndo */
+/* globals expect, driver */
+
 describe('blocks', function() {
+    let Point, SnapActions, CustomBlockDefinition, CustomCommandBlockMorph;
+    before(() => {
+        Point = driver.globals().Point;
+        CustomCommandBlockMorph = driver.globals().CustomCommandBlockMorph;
+        CustomBlockDefinition = driver.globals().CustomBlockDefinition;
+        SnapActions = driver.globals().SnapActions;
+    });
+
     var position = new Point(400, 400);
 
     beforeEach(function() {
@@ -37,6 +45,7 @@ describe('blocks', function() {
         });
 
         it('should be able to attach comment to prototype hat block', function() {
+            const {ScriptsMorph} = driver.globals();
             var sprite = driver.ide().currentSprite,
                 spec = 'sprite block %s',
                 definition = new CustomBlockDefinition(spec, sprite);
@@ -132,6 +141,7 @@ describe('blocks', function() {
                         .then(block => SnapActions.setField(block.inputs()[1], index));
                 }, Promise.resolve());
             const spriteScriptId = driver.ide().currentSprite.id + '/scripts';
+            const {SnapUndo} = driver.globals();
 
             return createBlocks
                 .then(() => {
@@ -173,7 +183,7 @@ describe('blocks', function() {
                         () => block.inputs().length >= 3,
                         `argument inputs not created!`
                     );
-                })
+                });
         });
     });
 });

@@ -2,12 +2,12 @@
 <head>
   <meta charset="utf-8">
   <title>NetsBlox Client Tests</title>
-  <link href="lib/mocha.min.css" rel="stylesheet" />
+  <link href="/test/lib/mocha.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-  <link href="lib/material-icons.css" rel="stylesheet">
+  <link href="/test/lib/material-icons.css" rel="stylesheet">
 </head>
 <body style="margin: 0;">
-  <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>
+  <iframe id="user1" style="width:100%;height:100%;"></iframe>
   <!-- Add the testing things -->
   <div id="tests-modal" class="modal">
       <div class="model-content">
@@ -16,15 +16,45 @@
   </div>
   <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#tests-modal" style="position: absolute; bottom: 24px; right: 24px;"><i class="material-icons">check</i></a>
 
-  <script src="lib/jquery-2.2.4.min.js"></script>
-  <script src="lib/expect.min.js"></script>
-  <script src="lib/mocha.js"></script>
+  <script src="/test/lib/jquery-2.2.4.min.js"></script>
+  <script src="/test/lib/expect.min.js"></script>
+  <script src="/test/lib/mocha.js"></script>
+  <script src="./snap-driver.js"></script>
   <script>mocha.setup('bdd')</script>
 
-  <!-- Set up NetsBlox -->
   <script type="text/javascript" >
-      var SERVER_URL = window.location.origin,
-          SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, '');
+      const frames = Array.prototype.slice.call(document.getElementsByTagName('iframe'));
+      var driver = null;
+      frames.forEach(frame => {
+        frame.setAttribute('src', window.origin);
+      });
+      function startTests() {
+          let loaded = 0;
+          return frames
+              .reduce((promise, frame) => {
+                  return promise.then(() => {
+                      const id = frame.getAttribute('id');
+                      driver = new SnapDriver(frame.contentWindow.world);
+                      driver.setWindow(frame.contentWindow);
+                      return driver.login('test');
+                  });
+              }, Promise.resolve())
+              .then(() => mocha.run());
+      }
+
+      function checkLoaded() {
+          const allLoaded = frames.reduce((isLoaded, frame) => {
+              const id = frame.getAttribute('id');
+              return isLoaded && !!frame.contentWindow.world;
+          }, true);
+
+          if (allLoaded) {
+              startTests();
+          } else {
+              setTimeout(checkLoaded, 10);
+          }
+      }
+      window.onload = checkLoaded;
 
       /* Uncomment the following to add a console log at the start of each test
         var oit = it;
@@ -43,8 +73,6 @@
         };
       */
   </script>
-  <script type="text/javascript" src="/dist/app.min.js"></script>
-  <script src="./snap-driver.js"></script>
   <script src="./replay.spec.js"></script>
   <script src="./room.spec.js"></script>
   <script src="./save.spec.js"></script>
@@ -58,31 +86,7 @@
   <script src="./xml.spec.js"></script>
   <script src="./url.spec.js"></script>
   <script src="./cloud.spec.js"></script>
-  <script type="text/javascript">
-    {{ if (it.username) { }}
-        SnapCloud.username = '{{= it.username }}';
-        SnapCloud.password = true;
-    {{ } }}
-    SnapCloud.clientId = '{{= it.clientId }}';
-      var world;
-      var driver;
-      window.onload = function () {
-          world = new WorldMorph(document.getElementById('world'));
-          world.worldCanvas.focus();
-          new NetsBloxMorph().openIn(world);
-          loop();
-
-          /* start the tests */
-          driver = new SnapDriver(world);
-          /* create test user if needed */
-          mocha.run();
-      };
-      function loop() {
-          requestAnimationFrame(loop);
-          world.doOneCycle();
-      }
-  </script>
-  <script src="lib/materialize.min.js"></script>
+  <script src="/test/lib/materialize.min.js"></script>
 
   <script>
     $(document).ready(function(){

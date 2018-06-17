@@ -1,5 +1,10 @@
-/*globals driver, expect, SnapCloud*/
+/*globals driver, expect */
 describe('save', function() {
+    let SnapCloud, ProjectDialogMorph;
+    before(() => {
+        SnapCloud = driver.globals().SnapCloud;
+        ProjectDialogMorph = driver.globals().ProjectDialogMorph;
+    });
     this.timeout(10000);
 
     [
@@ -122,12 +127,6 @@ describe('save', function() {
                         const name = `save-as-unsaved-${Date.now()}`;
                         const saveAs = `${name}-SAVE-AS`;
                         return driver.setProjectName(name)
-                            .catch(err => {
-                                console.log('could not set name to', name);
-                                console.log(SnapCloud.projectId);
-                                debugger;
-                                throw err;
-                            })
                             .then(() => driver.addBlock('forward'))
                             .then(() => saveProjectAs(saveAs))
                             .then(() => openProjectsBrowser())
@@ -267,11 +266,7 @@ describe('save', function() {
                     () => driver.dialogs().length === 1,
                     '"update project list" message did not disappear'
                 )
-            )
-            .catch(err => {
-                console.log(driver.dialog());
-                debugger;
-            });
+            );
         } else {
             return Promise.resolve();
         }

@@ -1,6 +1,7 @@
-/*global driver, SnapUndo*/
+/*global driver */
 describe('replay', function() {
     const newProjectWithActions = function() {
+        const SnapActions = driver.globals().SnapActions;
         return driver.reset()
             // Add a couple blocks, change the stage size, etc
             .then(() => driver.addBlock('forward'))
@@ -63,6 +64,7 @@ describe('replay', function() {
             // exit replay mode
             return newProjectWithActions()
                 .then(() => {
+                    const SnapUndo = driver.globals().SnapUndo;
                     driver.ide().exitReplayMode();
 
                     // add a garbage action

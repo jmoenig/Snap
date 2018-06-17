@@ -1,4 +1,4 @@
-/*global driver, expect, SnapCloud */
+/*global driver, expect */
 describe('room', function() {
     this.timeout(10000);
     describe('new', function() {
@@ -21,6 +21,7 @@ describe('room', function() {
         describe('moveToRole', function() {
             let projectId;
             before(function() {
+                const SnapCloud = driver.globals().SnapCloud;
                 projectId = SnapCloud.projectId;
                 driver.moveToRole(name);
             });

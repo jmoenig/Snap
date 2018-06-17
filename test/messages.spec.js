@@ -1,5 +1,11 @@
-/* globals expect, driver, SnapActions, MessageCreatorMorph, PushButtonMorph */
+/* globals expect, driver, */
 describe('messages', function() {
+    let SnapActions, MessageCreatorMorph, PushButtonMorph;
+    before(() => {
+        SnapActions = driver.globals().SnapActions;
+        MessageCreatorMorph = driver.globals().MessageCreatorMorph;
+        PushButtonMorph = driver.globals().PushButtonMorph;
+    });
 
     describe('message type', function() {
         beforeEach(function() {
