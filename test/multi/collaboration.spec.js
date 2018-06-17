@@ -66,6 +66,7 @@ describe('collaboration', function() {
         });
 
         it('should be able to open project as collaborator', function() {
+            let oldProjectId;
             return driver.user1.inviteCollaborator(user2)
                 .then(() => driver.user2.expect(
                     () => {
@@ -76,6 +77,7 @@ describe('collaboration', function() {
                     `Prospective collaborator never received invite`
                 ))
                 .then(() => {  // accept the invite and open the project
+                    oldProjectId = driver.user2.globals().SnapCloud.projectId;
                     const dialog = driver.user2.dialogs()
                         .find(dialog => dialog.key.includes('decideCollab'));
                     dialog.ok();
@@ -91,6 +93,12 @@ describe('collaboration', function() {
                         () => driver.user2.ide().room.name === projectName,
                         `Project did not change to ${projectName}`
                     );
+                })
+                .then(() => {
+                    let projectId = driver.user2.globals().SnapCloud.projectId;
+                    let sharedProjectId = driver.user1.globals().SnapCloud.projectId;
+                    expect(projectId).toBe(sharedProjectId);
+                    expect(projectId).toNotBe(oldProjectId);
                 });
         });
     });

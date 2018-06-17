@@ -173,10 +173,14 @@ NetCloud.prototype.inviteToCollaborate = function () {
 };
 
 NetCloud.prototype.joinActiveProject = function (id, callback, onError) {
+    var myself = this;
     this.callService(
         'joinActiveProject',
         function(response) {
-            callback(response[0]);
+            // Update the projectID
+            var projectInfo = response[0];
+            myself.setProjectID(projectInfo.ProjectID);
+            callback(projectInfo);
         },
         onError,
         [id]
