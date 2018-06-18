@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-June-14';
+modules.threads = '2018-June-18';
 
 var ThreadManager;
 var Process;
@@ -2706,8 +2706,8 @@ Process.prototype.reportLetter = function (idx, string) {
     if (this.inputOption(idx) === 'last') {
         idx = string.length;
     }
-    i = +(idx || 0),
-        str = isNil(string) ? '' : string.toString();
+    i = +(idx || 0);
+    str = isNil(string) ? '' : string.toString();
     return str[i - 1] || '';
 };
 
@@ -3774,7 +3774,7 @@ Process.prototype.unflash = function () {
     }
 };
 
-// Process: Compile simple, side-effect free Reporters to JS
+// Process: Compile (as of yet simple) block scripts to JS
 
 /*
 	with either only explicit formal parameters or a specified number of
@@ -3787,7 +3787,6 @@ Process.prototype.reportCompiled = function (context, implicitParamCount) {
  	// expected parameters, if any. This is only used to handle
   	// implicit (empty slot) parameters and can otherwise be
    	// ignored
-    this.assertType(context, ['reporter', 'predicate']);
     return new JSCompiler(this).compileFunction(context, implicitParamCount);
 };
 
@@ -3810,6 +3809,23 @@ Process.prototype.getVarNamed = function (name) {
             + name
             + localize('\'\ndoes not exist in this context')
     );
+};
+
+Process.prototype.setVarNamed = function (name, value) {
+    // private - special form for compiled expressions
+    // incomplete, currently only sets named vars
+    // DO NOT use except in compiled methods!
+    // first check script vars, then global ones
+    var frame = this.homeContext.variables.silentFind(name) ||
+            this.context.variables.silentFind(name);
+    if (isNil(frame)) {
+        throw new Error(
+            localize('a variable of name \'')
+                + name
+                + localize('\'\ndoes not exist in this context')
+        );
+    }
+    frame.vars[name].value = value;
 };
 
 // Process: Atomic HOFs using experimental JIT-compilation
@@ -4450,6 +4466,13 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     }
  
     // compile using gensyms
+
+    if (block instanceof CommandBlockMorph) {
+        return Function.apply(
+            null,
+            parms.concat([this.compileSequence(block)])
+        );
+    }
     return Function.apply(
         null,
         parms.concat(['return ' + this.compileExpression(block)])
@@ -4474,6 +4497,31 @@ JSCompiler.prototype.compileExpression = function (block) {
             'compiling does not yet support\n' +
             'custom blocks'
         );
+
+    // special command forms
+    case 'doSetVar': // redirect var to process
+        return 'arguments[arguments.length - 1].setVarNamed(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'doReport':
+        return 'return ' + this.compileInput(inputs[0]);
+    case 'doIf':
+        return 'if (' +
+            this.compileInput(inputs[0]) +
+            ') {\n' +
+            this.compileSequence(inputs[1].evaluate()) +
+            '}';
+    case 'doIfElse':
+        return 'if (' +
+            this.compileInput(inputs[0]) +
+            ') {\n' +
+            this.compileSequence(inputs[1].evaluate()) +
+            '} else {\n' +
+            this.compileSequence(inputs[2].evaluate()) +
+            '}';
+
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
@@ -4487,6 +4535,16 @@ JSCompiler.prototype.compileExpression = function (block) {
                 '.apply(arguments[arguments.length - 1], [' + args +'])';
         }
     }
+};
+
+JSCompiler.prototype.compileSequence = function (commandBlock) {
+    var body = '',
+        myself = this;
+    commandBlock.blockSequence().forEach(function (block) {
+        body += myself.compileExpression(block);
+        body += ';\n';
+    });
+    return body;
 };
 
 JSCompiler.prototype.compileInfix = function (operator, inputs) {
