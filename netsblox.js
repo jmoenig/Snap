@@ -859,7 +859,8 @@ NetsBloxMorph.prototype.initializeCloud = function () {
 };
 
 NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
-    var newRoom = project.RoomName,
+    var myself = this,
+        newRoom = project.RoomName,
         isNewRole = project.NewRole === 'true',
         roleName = project.ProjectName,
         projectId = project.ProjectID;  // src proj name
@@ -869,14 +870,14 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
     this.updateUrlQueryString(newRoom, isPublic === 'true');
     if (project.SourceCode) {
         return SnapActions.openProject(project.SourceCode)
-            .then(() => {
+            .then(function() {
                 SnapCloud.projectId = projectId;
-                this.room.silentSetRoomName(newRoom);
-                this.room.ownerId = project.Owner;
-                this.silentSetProjectName(roleName);
+                myself.room.silentSetRoomName(newRoom);
+                myself.room.ownerId = project.Owner;
+                myself.silentSetProjectName(roleName);
 
                 // Send the message to the server
-                this.sockets.updateRoomInfo();
+                myself.sockets.updateRoomInfo();
             });
     } else {  // initialize an empty code base
         this.newRole(roleName);

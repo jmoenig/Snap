@@ -617,7 +617,7 @@ NetCloud.prototype.setClientState = function (room, role, owner, actionId) {
         newProjectRequest = this.newProjectRequest || Promise.resolve();
 
     return newProjectRequest
-        .then(() => {
+        .then(function() {
             var data = {
                 clientId: myself.clientId,
                 projectId: myself.projectId,

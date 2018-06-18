@@ -483,7 +483,7 @@ ActionManager.prototype.onReceiveAction = function(msg) {
 };
 
 ActionManager.prototype.rejectPredecessorsInQueue = function(queue, event) {
-    var action = queue.find(action => action.equals(event));
+    var action = queue.find(function(action) { return action.equals(event)});
 
     // ensure that we found the given action
     if (action) {
