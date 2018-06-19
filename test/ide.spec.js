@@ -421,5 +421,26 @@ describe('ide', function() {
             });
         });
     });
+
+    describe('newProject', function() {
+        before(() => driver.reset().then(() => driver.addBlock('doIf')));
+        after(() => delete SnapCloud.request);
+
+        it('should be able to get new project on failed network request', function() {
+            const SnapCloud = driver.globals().SnapCloud;
+            SnapCloud.request = Promise.reject.bind(Promise, {responseText: 'Test error'});
+
+            driver.click(driver.ide().controlBar.projectButton);
+            const newBtn = driver.dialog().children
+                .find(item => item.action === 'createNewProject');
+
+            driver.click(newBtn);
+            driver.dialog().ok();  // (replace the current w/ new project)
+            return driver.expect(
+                () => !driver.ide().currentSprite.scripts.children.length,
+                `Did not replace scripts w/ new scripts`
+            );
+        });
+    });
 });
 

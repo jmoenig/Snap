@@ -132,17 +132,25 @@ NetsBloxMorph.prototype.settingsMenu = function () {
 
 NetsBloxMorph.prototype.newProject = function (projectName) {
     // Get new room name
-    var myself = this;
-    return SnapCloud.newProject(projectName)
-        .then(function(info) {
+    var myself = this,
+        callback = function(info) {
             myself.silentSetProjectName(info.roleName);
             myself.createRoom();
             myself.room.silentSetRoomName(info.name);
-            myself.selectSprite(myself.stage.children[0]);
             if (!projectName) {
                 myself.updateUrlQueryString();
             }
             return SnapActions.openProject();
+        };
+
+    return SnapCloud.newProject(projectName)
+        .then(callback)
+        .catch(function() {
+            var defaults = {
+                name: projectName || 'untitled',
+                roleName: 'myRole',
+            };
+            callback(defaults);
         });
 };
 
