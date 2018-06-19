@@ -420,13 +420,20 @@ NetCloud.prototype.reconnect = function (callback, errorCall) {
 NetCloud.prototype.disconnect = nop;
 
 NetCloud.prototype.logout = function (callBack, errorCall) {
-    this.callService(
-        'logout',
-        callBack,
-        errorCall,
-        [SnapCloud.clientId]
+    var myself = this;
+
+    this.reconnect(
+        function () {
+            myself.callService(
+                'logout',
+                callBack,
+                errorCall,
+                [myself.clientId]
+            );
+            myself.clear();
+        },
+        errorCall
     );
-    this.clear();
 };
 
 NetCloud.prototype.signup = function (
