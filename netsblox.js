@@ -544,19 +544,18 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
         roles = {},
         role;
 
-    // remove empty (malformed) roles
-    room.children = room.children.filter(function(role) {
-        return role.children.length;
-    });
-    if (!room.children[0]) {
-        this.showMessage('Malformed room - No roles found.');
+    if (room.children.length === 0) {
+        this.showMessage('Malformed project - No roles found.');
         return;
     }
 
     room.children.forEach(function(role) {
+        var srcCode = role.children[0] || '';
+        var media = role.children[1] || '';
+
         roles[role.attributes.name] = {
-            SourceCode: role.children[0].toString(),
-            Media: role.children[1].toString()
+            SourceCode: srcCode.toString(),
+            Media: media.toString()
         };
     });
     role = room.children[0].attributes.name;
