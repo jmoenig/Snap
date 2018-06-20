@@ -50,6 +50,8 @@
     2018, June 5 (Jens):
         - fixed initial rotation center for an existing costume
         - fixed initial rendering, so costumes can be re-opened after saving
+    2018, June 20 (Jens):
+        - select primary color with right-click (in addition to shift-click)
 */
 
 /*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
@@ -57,7 +59,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2018-June-05';
+modules.sketch = '2018-June-20';
 
 // Declarations
 
@@ -1274,6 +1276,16 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             myself.selectColor(color, isSecondary);
         }
     );
+
+    // allow right-click on the color picker to select the secondary color
+    pc.colorpicker.mouseDownRight = function (pos) {
+        if ((pos.subtract(this.position()).x > this.width() * 2 / 3) &&
+                (pos.subtract(this.position()).y > this.height() - 10)) {
+            this.action("transparent", true);
+        } else {
+            this.action(this.getPixelColor(pos), true);
+        }
+    };
 
     pc.colorpicker.action(new Color(0, 0, 0));
     pc.colorpicker.action('transparent', true); // secondary color

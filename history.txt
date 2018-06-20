@@ -4170,6 +4170,10 @@ in development:
 ------
 * Threads: added capability to JIT-compile command scripts to JS
 
+180620
+------
+* Sketch: enable right-click to select secondary color in vector paint editor
+
 
 === v4.2 major release (draft) ===
 
