@@ -4175,6 +4175,7 @@ in development:
 * Sketch: enable right-click to select secondary color in vector paint editor
 * GUI: allow only one instance of Camera and Sound Recorder to open
 * new "webcam snap" reporter in the "Pixels" library
+* new "record" reporter in the "Audio Comp" library
 
 
 === v4.2 major release (draft) ===
@@ -4187,6 +4188,7 @@ v4.2 New Features:
 * new library for programmatically creating variables, thanks, Brian Harvey!
 * added options for sprite attributes to the SET block
 * new "webcam snap" reporter in the "Pixels" library
+* new "record" reporter in the "Audio Comp" library
 * added "name" selector to the "Pixels" library
 * added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
 
