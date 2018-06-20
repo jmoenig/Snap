@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-June-17';
+modules.gui = '2018-June-20';
 
 // Declarations
 
@@ -2372,6 +2372,7 @@ IDE_Morph.prototype.recordNewSound = function () {
             }
         });
 
+    soundRecorder.key = 'microphone';
     soundRecorder.popUp(this.world());
 };
 
@@ -8472,6 +8473,7 @@ WardrobeMorph.prototype.newFromCam = function () {
             myself.updateList();
         });
 
+    camDialog.key = 'camera';
     camDialog.popUp(this.world());
 };
 
