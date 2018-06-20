@@ -684,4 +684,4 @@ NetCloud.prototype.importProject = function (name, role, roles) {
         });
 };
 
-var SnapCloud = new NetCloud(SnapCloud.clientId, SERVER_URL + '/api/');
+var SnapCloud = new NetCloud(CLIENT_ID, SERVER_URL + '/api/');

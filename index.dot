@@ -15,7 +15,8 @@
         {{ if (it.url) { }} <meta property="og:url" content="{{= encodeURI(it.url) }}"/> {{ } }}
         <script type="text/javascript">
             var SERVER_URL = "{{= it.baseUrl}}" || window.location.origin,
-                SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, '');
+                SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, ''),
+                CLIENT_ID = '{{= it.clientId }}';
         </script>
         {{ if (it.isDevMode) { }}
         <script type="text/javascript" src="polyfill.js"></script>
@@ -34,9 +35,6 @@
         <script type="text/javascript" src="xml.js"></script>
         <script type="text/javascript" src="store.js"></script>
         <script type="text/javascript" src="cloud.js"></script>
-        <script type="text/javascript">
-            SnapCloud.clientId = '{{= it.clientId }}';
-        </script>
         <script type="text/javascript" src="sha512.js"></script>
         <script type="text/javascript" src="actions.js"></script>
         <script type="text/javascript" src="undo.js"></script>
