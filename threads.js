@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-June-18';
+modules.threads = '2018-June-21';
 
 var ThreadManager;
 var Process;
@@ -205,7 +205,8 @@ ThreadManager.prototype.startProcess = function (
     exportResult, // bool
     callback,
     isClicked,
-    rightAway
+    rightAway,
+    atomic // special option used (only) for "onStop" scripts
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -221,6 +222,7 @@ ThreadManager.prototype.startProcess = function (
     newProc = new Process(top, receiver, callback, isClicked);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
+    newProc.isAtomic = atomic || false;
 
     // show a highlight around the running stack
     // if there are more than one active processes

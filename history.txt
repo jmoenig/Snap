@@ -4177,6 +4177,10 @@ in development:
 * new "webcam snap" reporter in the "Pixels" library
 * new "record" reporter in the "Audio Comp" library
 
+180621
+------
+* Threads, Objects: made "When I am stopped" scripts atomic, so you can use loops
+
 
 === v4.2 major release (draft) ===
 

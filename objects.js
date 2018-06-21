@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-June-11';
+modules.objects = '2018-June-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -4874,7 +4874,8 @@ SpriteMorph.prototype.receiveUserInteraction = function (
             null, // export result
             null, // callback
             null, // is clicked
-            rightAway // immediately
+            rightAway, // immediately
+            interaction === 'stopped' // atomic
         ));
     });
     return procs;
