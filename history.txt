@@ -4046,8 +4046,6 @@ Translation Updates:
 
 === v4.1.2.7 maintenance release ===
 
-in development:
-
 180319
 ------
 * new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
@@ -4182,7 +4180,7 @@ in development:
 * Threads, Objects: made "When I am stopped" scripts atomic, so you can use loops
 
 
-=== v4.2 major release (draft) ===
+=== v4.2 major release ===
 
 v4.2 New Features:
 * "recover project" feature, (cloud backups), thanks, Bernat Romagosa!
