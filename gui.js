@@ -3917,7 +3917,8 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
     var menu, str, dataPrefix;
 
     if (name) {
-        this.setProjectName(name);
+        var currentName = this.projectName;
+        this.silentSetProjectName(name);
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
         try {
             menu = this.showMessage('Exporting');
@@ -3933,6 +3934,7 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
                 throw err;
             }
         }
+        this.silentSetProjectName(currentName);
     }
 };
 

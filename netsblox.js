@@ -380,6 +380,30 @@ NetsBloxMorph.prototype.projectMenu = function () {
             'save "' + myself.projectName + '" as XML\nto your downloads folder',
             new Color(100, 0, 0)
         ]);
+        menu.items.splice(10, 0, [
+            localize('Export to Snap! project...'),
+            function () {
+                var isSavingHistory = SnapSerializer.prototype.isSavingHistory;
+                var name = myself.room.getRoleCount() === 1 ?
+                    myself.room.name : myself.projectName;
+
+                if (myself.room.getRoleCount() > 1) {
+                    myself.inform(
+                        'Multiple Roles Detected',
+                        'As a Snap! project is equivalent to a role in NetsBlox,\n' +
+                        'we can only export a single role to a Snap! project at\n' + 
+                        'a time.\n\nTo migrate the remaining roles, please export\n' + 
+                        'them all individually.',
+                        myself.world()
+                    );
+                }
+                SnapSerializer.prototype.isSavingHistory = false;
+                myself.exportRole(name, shiftClicked);
+                SnapSerializer.prototype.isSavingHistory = isSavingHistory;
+            },
+            'export "' + myself.projectName + '" as Snap!-compatible XML',
+            new Color(100, 0, 0)
+        ]);
     }
 
     if (this.stage.deletableMessageNames().length && !this.stage.globalBlocks.length) {
