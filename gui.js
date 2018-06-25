@@ -589,7 +589,7 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
                                 }
                             },
                             myself.cloudError(),
-                            [SnapCloud.username, dict.ProjectName, SnapCloud.socketId()]
+                            [SnapCloud.username, dict.ProjectName, SnapCloud.clientId]
                         );
                     },
                     myself.cloudError()

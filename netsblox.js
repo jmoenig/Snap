@@ -1297,8 +1297,7 @@ NetsBloxMorph.prototype.loadBugReport = function () {
 NetsBloxMorph.prototype.manageCollaborators = function () {
     var myself = this,
         ownerId = this.room.ownerId,
-        name = this.room.name,
-        socketId = this.sockets.uuid;
+        name = this.room.name;
 
     SnapCloud.getCollaboratorList(
         function(friends) {
@@ -1310,7 +1309,7 @@ NetsBloxMorph.prototype.manageCollaborators = function () {
                 function(user) {
                     if (user) {
                         SnapCloud.inviteToCollaborate(
-                            socketId,
+                            SnapCloud.clientId,
                             user.username,
                             ownerId,
                             name

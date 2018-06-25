@@ -759,11 +759,10 @@ RoomMorph.prototype._inviteGuestDialog = function (role, friends) {
 
 RoomMorph.prototype.inviteGuest = function (friend, role) {
     // Use inviteGuest service
-    var socketId = this.ide.sockets.uuid;
     if (friend === 'myself') {
         friend = SnapCloud.username;
     }
-    SnapCloud.inviteGuest(socketId, friend, this.ownerId, this.name, role);
+    SnapCloud.inviteGuest(SnapCloud.clientId, friend, this.ownerId, this.name, role);
 };
 
 RoomMorph.prototype.promptInvite = function (params) {  // id, room, roomName, role
