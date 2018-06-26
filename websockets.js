@@ -77,12 +77,7 @@ WebSocketManager.MessageHandlers = {
 
     // Update on the current roles at the given room
     'room-roles': function(msg) {
-        this.ide.room.update(
-            msg.owner,
-            msg.name,
-            msg.roles,
-            msg.collaborators
-        );
+        this.ide.room.onRoomStateUpdate(msg);
     },
 
     'close-invite': function(msg) {

@@ -34,6 +34,7 @@ function RoomMorph(ide) {
 RoomMorph.prototype.init = function(ide) {
     var myself = this;
     // Get the users at the room
+    this.version = -1;
     this.isReadOnly = false;
     this.ide = ide;
     this.displayedMsgMorphs = [];
@@ -244,6 +245,18 @@ RoomMorph.equalLists = function(first, second) {
     return true;
 };
 
+RoomMorph.prototype.onRoomStateUpdate = function(state) {
+    if (this.version < state.version) {
+        this.update(
+            state.owner,
+            state.name,
+            state.roles,
+            state.collaborators
+        );
+        this.version = state.version;
+    }
+};
+
 RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     var wasEditable = this.isEditable(),
         changed;
@@ -276,7 +289,6 @@ RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     this.ide.silentSetProjectName(this.getCurrentRoleName());
 
     if (changed) {
-        this.version = Date.now();
         this.drawNew();
         this.fixLayout();
         this.changed();
@@ -538,17 +550,15 @@ RoomMorph.prototype.createNewRole = function () {
 
     this.ide.prompt('New Role Name', function (roleName) {
         myself.validateRoleName(roleName, function() {
-            myself._createNewRole(roleName);
+            SnapCloud.addRole(
+                roleName,
+                function(state) {
+                    myself.onRoomStateUpdate(state);
+                },
+                myself.ide.cloudError()
+            );
         });
     }, null, 'createNewRole');
-};
-
-RoomMorph.prototype._createNewRole = function (name) {
-    // Create the new role
-    this.ide.sockets.sendMessage({
-        type: 'add-role',
-        name: name
-    });
 };
 
 RoomMorph.prototype.editRole = function(name) {
@@ -570,21 +580,11 @@ RoomMorph.prototype.editRole = function(name) {
     dialog.setCenter(world.center());
 };
 
-RoomMorph.prototype.editRoleName = function(role) {
+RoomMorph.prototype.editRoleName = function(roleId) {
     // Ask for a new role name
     var myself = this;
     this.ide.prompt('New Role Name', function (roleName) {
-        if (roleName !== myself.getCurrentRoleName()) {
-            myself.validateRoleName(roleName, function() {
-                if (role !== roleName){
-                    myself.ide.sockets.sendMessage({
-                        type: 'rename-role',
-                        role: role,
-                        name: roleName
-                    });
-                }
-            });
-        }
+        myself.setRoleName(roleId, roleName);
     }, null, 'editRoleName');
 };
 
@@ -627,7 +627,8 @@ RoomMorph.prototype.moveToRole = function(dstId) {
 RoomMorph.prototype.deleteRole = function(role) {
     var myself = this;
     SnapCloud.deleteRole(
-        function() {
+        function(state) {
+            myself.onRoomStateUpdate(state);
             myself.ide.showMessage('deleted ' + role + '!');
         },
         function (err, lbl) {
@@ -637,16 +638,16 @@ RoomMorph.prototype.deleteRole = function(role) {
     );
 };
 
-RoomMorph.prototype.createRoleClone = function(role) {
+RoomMorph.prototype.createRoleClone = function(roleName) {
     var myself = this;
+
     SnapCloud.cloneRole(
-        function() {
-            myself.ide.showMessage('created copy of ' + role);
+        roleName,
+        function(state) {
+            myself.onRoomStateUpdate(state);
+            myself.ide.showMessage('created copy of ' + roleName);
         },
-        function (err, lbl) {
-            myself.ide.cloudError().call(null, err, lbl);
-        },
-        [role, myself.ide.sockets.uuid]
+        myself.ide.cloudError()
     );
 };
 
@@ -654,22 +655,33 @@ RoomMorph.prototype.role = function() {
     return this.ide.projectName;
 };
 
-RoomMorph.prototype.setRoleName = function(role) {
-    var currentRole = this.getCurrentRoleName();
-    role = role || 'untitled';
-    if (role !== currentRole) {
-        this.ide.sockets.sendMessage({
-            type: 'rename-role',
-            role: currentRole,
-            name: role
-        });
+RoomMorph.prototype.setRoleName = function(roleId, name) {
+    var myself = this;
+
+    if (!name) return;
+
+    if (myself.getRoleNames().indexOf(name) !== -1) {
+        myself.ide.showMessage(localize('Role name already exists.'));
+        return;
     }
+
+    myself.validateRoleName(name, function() {
+        SnapCloud.renameRole(
+            roleId,
+            name,
+            function(state) {
+                myself.onRoomStateUpdate(state);
+            },
+            myself.ide.cloudError()
+        );
+    });
 };
 
 RoomMorph.prototype.evictUser = function (user, role) {
     var myself = this;
     SnapCloud.evictUser(
-        function() {
+        function(state) {
+            myself.onRoomStateUpdate(state);
             myself.ide.showMessage('evicted ' + user.username + '!');
         },
         function (err, lbl) {
@@ -1377,7 +1389,7 @@ RoleMorph.prototype.init = function(id, name, users) {
     this.label.mouseClickLeft = function() {
         var room = this.parentThatIsA(RoomMorph);
         if (room.isEditable()) {
-            room.editRoleName(this.text);
+            room.editRoleName(id);
         }
     };
 

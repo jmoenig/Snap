@@ -79,7 +79,39 @@ NetCloud.prototype.login = function (
     }
 };
 
-NetCloud.prototype.cloneRole = function(onSuccess, onFail, args) {
+NetCloud.prototype.addRole = function(name, onSuccess, onFail) {
+    var myself = this;
+
+    this.reconnect(
+        function () {
+            myself.callService(
+                'addRole',
+                onSuccess,
+                onFail,
+                [name, myself.clientId, myself.projectId]
+            );
+        },
+        onFail
+    );
+};
+
+NetCloud.prototype.renameRole = function(roleId, name, onSuccess, onFail) {
+    var myself = this;
+
+    this.reconnect(
+        function () {
+            myself.callService(
+                'renameRole',
+                onSuccess,
+                onFail,
+                [roleId, name, myself.clientId, myself.projectId]
+            );
+        },
+        onFail
+    );
+};
+
+NetCloud.prototype.cloneRole = function(roleName, onSuccess, onFail) {
     var myself = this;
 
     this.reconnect(
@@ -88,12 +120,10 @@ NetCloud.prototype.cloneRole = function(onSuccess, onFail, args) {
                 'cloneRole',
                 onSuccess,
                 onFail,
-                args
+                [roleName, myself.clientId]
             );
         },
-        function(err) {
-            myself.ide.showMessage(err, 2);
-        }
+        onFail
     );
 };
 
@@ -280,9 +310,7 @@ NetCloud.prototype.deleteRole = function(onSuccess, onFail, args) {
         function () {
             myself.callService(
                 'deleteRole',
-                function () {
-                    onSuccess.call(null);
-                },
+                onSuccess,
                 onFail,
                 args
             );
@@ -297,7 +325,7 @@ NetCloud.prototype.evictUser = function(onSuccess, onFail, args) {
         function () {
             myself.callService(
                 'evictUser',
-                onSuccess.bind(null),
+                onSuccess,
                 onFail,
                 args
             );
