@@ -293,7 +293,7 @@ describe('ide', function() {
         let SERVER_URL, SERVER_ADDRESS, ensureFullUrl;
         before(() => {
             SERVER_URL = driver.globals().SERVER_URL;
-            SERVER_ADDRESS, ensureFullUrl = driver.globals().SERVER_ADDRESS;
+            SERVER_ADDRESS = driver.globals().SERVER_ADDRESS;
             ensureFullUrl = driver.globals().ensureFullUrl;
         });
 

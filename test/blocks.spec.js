@@ -1,6 +1,8 @@
 /* globals expect, driver */
 
 describe('blocks', function() {
+    this.timeout(5000);
+
     let Point, SnapActions, CustomBlockDefinition, CustomCommandBlockMorph;
     let position;
     before(() => {
