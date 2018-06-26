@@ -16,12 +16,14 @@ NetCloud.prototype.login = function (
     // both callBack and errorCall are two-argument functions
     var request = new XMLHttpRequest(),
         usr = JSON.stringify({
+            projectId: this.projectId,
             __h: password,
             __u: username,
             remember: remember,
             socketId: SnapCloud.clientId
         }),
         myself = this;
+
     this.setRoute(username);
     try {
         request.open(
