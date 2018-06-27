@@ -721,8 +721,8 @@ SnapTranslator.dict.eu = {
         'kaixo',
     'world':
         'mundua',
-    'letter %n of %s':
-        '%n . letra hemendik %s',
+    'letter %idx of %s':
+        '%idx . letra hemendik %s',
     'length of %s':
         'honen luzera %s',
     'unicode of %s':
