@@ -8,7 +8,7 @@ var logger = {
 
 // If not the leader, send operations to the leader for approval
 function ActionManager() {
-    this.id = SnapCloud.clientId;
+    this.id = CLIENT_ID;
     this.rank = null;
     this.isLeader = false;
     this._pendingLocalActions = [];
