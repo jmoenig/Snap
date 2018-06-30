@@ -478,7 +478,7 @@ SnapTranslator.dict.fr = {
     'tell %spr to %cmdRing %inputs':
         'dis à %spr de %cmdRing %inputs',
     'ask %spr for %repRing %inputs':
-        'demande à %spr de %repRing %inputs',
+        'demande à %spr sa %repRing %inputs',
     'run %cmdRing w/continuation':
         'ex\u00E9cute %cmdRing avec continuation',
     'call %cmdRing w/continuation':
