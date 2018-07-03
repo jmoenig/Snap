@@ -4179,7 +4179,6 @@ Translation Updates:
 ------
 * Threads, Objects: made "When I am stopped" scripts atomic, so you can use loops
 
-
 === v4.2 major release ===
 
 v4.2 New Features:
@@ -4211,3 +4210,10 @@ Translation Updates:
 * German, thanks, Jadga!
 * Portuguese, thanks, Manuel!
 * Catalan, thanks, Joan!
+
+=== in development ===
+
+180703
+------
+* speed up HTTP based hardware APIs (by not waiting for the result if the URL reporter is used inside a REPORT block within a custom COMMAND block definition)
+

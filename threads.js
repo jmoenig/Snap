@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-June-21';
+modules.threads = '2018-July-03';
 
 var ThreadManager;
 var Process;
@@ -789,7 +789,7 @@ Process.prototype.doReport = function (block) {
     if (this.isClicked && (block.topBlock() === this.topBlock)) {
         this.isShowingResult = true;
     }
-    if (this.context.expression.partOfCustomCommand) {
+    if (block.partOfCustomCommand) {
         this.doStopCustomBlock();
         this.popContext();
     } else {
@@ -812,8 +812,9 @@ Process.prototype.doReport = function (block) {
     }
     // in any case evaluate (and ignore)
     // the input, because it could be
-    // and HTTP Request for a hardware extension
+    // an HTTP Request for a hardware extension
     this.pushContext(block.inputs()[0], outer);
+    this.context.isCustomCommand = block.partOfCustomCommand;
 };
 
 // Process: Non-Block evaluation
@@ -2301,6 +2302,11 @@ Process.prototype.reportURL = function (url) {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
         this.httpRequest.send(null);
+        if (this.context.isCustomCommand) {
+            // special case when ignoring the result, e.g. when
+            // communicating with a robot to control its motors
+            return null;
+        }
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
         this.httpRequest = null;
@@ -4004,6 +4010,7 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
     activeNote      audio oscillator for interpolated ops, don't persist
     activeSends		forked processes waiting to be completed
     isCustomBlock   marker for return ops
+    isCustomCommand marker for interpolated blocking reporters (reportURL)
     emptySlots      caches the number of empty slots for reification
     tag             string or number to optionally identify the Context,
                     as a "return" target (for the "stop block" primitive)
@@ -4034,6 +4041,7 @@ function Context(
     this.activeAudio = null;
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
+    this.isCustomCommand = null; // used for ignoring URL reporters' results
     this.emptySlots = 0; // used for block reification
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
