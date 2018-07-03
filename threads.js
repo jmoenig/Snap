@@ -2305,6 +2305,7 @@ Process.prototype.reportURL = function (url) {
         if (this.context.isCustomCommand) {
             // special case when ignoring the result, e.g. when
             // communicating with a robot to control its motors
+            this.httpRequest = null;
             return null;
         }
     } else if (this.httpRequest.readyState === 4) {
