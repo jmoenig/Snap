@@ -2301,6 +2301,7 @@ Process.prototype.reportURL = function (url) {
         }
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
+        this.httpRequest.setRequestHeader('Cache-Control', 'max-age=0');
         this.httpRequest.send(null);
         if (this.context.isCustomCommand) {
             // special case when ignoring the result, e.g. when
