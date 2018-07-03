@@ -1123,7 +1123,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doDeclareVariables: {
             type: 'command',
             category: 'other',
-            spec: 'script variables %scriptVars'
+            spec: '%vartype variables %scriptVars',
+	    defaults: ['script']
         },
 
         // inheritance - experimental
