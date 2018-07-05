@@ -4217,3 +4217,6 @@ Translation Updates:
 ------
 * speed up HTTP based hardware APIs (by not waiting for the result if the URL reporter is used inside a REPORT block within a custom COMMAND block definition)
 
+180705
+------
+* Threads: added JIT compiler support for "change variable" primitive

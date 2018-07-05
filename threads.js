@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-July-03';
+modules.threads = '2018-July-05';
 
 var ThreadManager;
 var Process;
@@ -3837,6 +3837,11 @@ Process.prototype.setVarNamed = function (name, value) {
     frame.vars[name].value = value;
 };
 
+Process.prototype.incrementVarNamed = function (name, delta) {
+    // private - special form for compiled expressions
+    this.setVarNamed(name, this.getVarNamed(name) + (+delta));
+};
+
 // Process: Atomic HOFs using experimental JIT-compilation
 
 Process.prototype.reportAtomicMap = function (reporter, list) {
@@ -4512,6 +4517,12 @@ JSCompiler.prototype.compileExpression = function (block) {
     // special command forms
     case 'doSetVar': // redirect var to process
         return 'arguments[arguments.length - 1].setVarNamed(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'doChangeVar': // redirect var to process
+        return 'arguments[arguments.length - 1].incrementVarNamed(' +
             this.compileInput(inputs[0]) +
             ',' +
             this.compileInput(inputs[1]) +
