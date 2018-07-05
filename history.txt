@@ -4220,3 +4220,4 @@ Translation Updates:
 180705
 ------
 * Threads: added JIT compiler support for "change variable" primitive
+* Threads: optimized RUN with reportURL (fire-and-forget)

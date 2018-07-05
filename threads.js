@@ -1105,6 +1105,7 @@ Process.prototype.evaluate = function (
         outer,
         context.receiver
     );
+    runnable.isCustomCommand = isCommand; // for short-circuiting HTTP requests
     this.context.parentContext = runnable;
 
     if (context.expression instanceof ReporterBlockMorph) {
