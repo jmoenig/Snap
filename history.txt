@@ -4221,3 +4221,7 @@ Translation Updates:
 ------
 * Threads: added JIT compiler support for "change variable" primitive
 * Threads: optimized RUN with reportURL (fire-and-forget)
+
+180706
+------
+* Objects: fixed #2142 - search and keyboard entry support for custom block translations
