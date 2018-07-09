@@ -1484,7 +1484,7 @@ SnapTranslator.dict.pt = {
 
     // attributes
     'my':
-        '',
+        'próprios',
     'neighbors':
         'os vizinhos',
     'self':

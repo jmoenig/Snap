@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2018-June-16';
+modules.locale = '2018-July-09';
 
 // Global stuff
 
@@ -579,4 +579,15 @@ SnapTranslator.dict.gl = {
         '',
     'last_changed':
         '2016-11-09'
+};
+
+SnapTranslator.dict.eu = {
+    'language_name':
+        'Euskara',
+    'language_translator':
+        'Asier Iturralde Sarasola',
+    'translator_e-mail':
+        'aiturralde@iametza.eus',
+    'last_changed':
+        '2018-06-26'
 };

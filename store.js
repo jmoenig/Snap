@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-June-06';
+modules.store = '2018-July-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 4.1, http://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 4.2, http://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
