@@ -1,6 +1,6 @@
 // labelPart() proxy
 SyntaxElementMorph.prototype.originalLabelPart = SyntaxElementMorph.prototype.labelPart;
-SyntaxElementMorph.prototype.labelPart = function(spec) {
+SyntaxElementMorph.prototype.labelPart = function (spec) {
     var part;
     switch (spec) {
         case '%drawStyle':

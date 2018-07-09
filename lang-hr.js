@@ -177,7 +177,7 @@ SnapTranslator.dict.hr = {
     ß      \u00df
 */
 
-    // translations meta information 4.0.2.IMA NOVA VERZIJA
+    // translations meta information 4.0.10.2
     'language_name':
         'Hrvatski', // the name as it should appear in the language menu
     'language_translator':
@@ -185,7 +185,7 @@ SnapTranslator.dict.hr = {
     'translator_e-mail':
         'zeljko.hrvoj@zg.t-com.hr', // optional
     'last_changed':
-        '2015-09-15', // this, too, will appear in the Translators tab
+        '2017-08-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -212,7 +212,7 @@ SnapTranslator.dict.hr = {
     'Variables':
         'Varijable',
     'Lists':
-        'Popisi',
+        'Liste',
     'Other':
         'Ostalo',
 
@@ -225,6 +225,8 @@ SnapTranslator.dict.hr = {
         'Skripte',
     'Costumes':
         'Kostimi',
+	'Backgrounds':
+        'Pozadine',
     'Sounds':
         'Zvukovi',
 
@@ -248,8 +250,8 @@ SnapTranslator.dict.hr = {
 
     // tab help
     'costumes tab help':
-        'Slike uvozi\u0161 povla\u010Denjem s jedne druge\n'
-            + 'web stranice ili ra\u010Dunala',
+        'Slike uvozi\u0161 povla\u010Denjem s druge\n'
+            + 'web stranice ili s ra\u010Dunala',
     'import a sound from your computer\nby dragging it into here':
         'Zvuk uvozi\u0161 tako, da ga povu\u010De\u0161 ovdje',
 
@@ -287,11 +289,11 @@ SnapTranslator.dict.hr = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Scena je izabrana, ali je\njo\u0161 bez blokova '
+        'Scena je izabrana: \n- bez blokova '
             + 'kretanja',
 
     'move %n steps':
-        'pomakni se %n koraka',
+        'pomak %n koraka',
     'turn %clockwise %n degrees':
         'okreni se %clockwise %n stupnjeva',
     'turn %counterclockwise %n degrees':
@@ -301,9 +303,9 @@ SnapTranslator.dict.hr = {
     'point towards %dst':
         'okreni se prema %dst',
     'go to x: %n y: %n':
-        'kreni prema x: %n y: %n',
+        'kreni na x: %n y: %n',
     'go to %dst':
-        'kreni prema %dst',
+        'kreni na %dst',
     'glide %n secs to x: %n y: %n':
         'kli\u017Ei %n s do x: %n y: %n',
     'change x by %n':
@@ -355,7 +357,7 @@ SnapTranslator.dict.hr = {
     'size':
         'veli\u010Dina',
     'show':
-        'pogledaj',
+        'poka\u017Ei',
     'hide':
         'sakrij',
     'go to front':
@@ -396,19 +398,19 @@ SnapTranslator.dict.hr = {
     'pen up':
         'olovku digni',
     'set pen color to %clr':
-        'postavi boju olovke na %clr',
+        'boja olovke %clr',
     'change pen color by %n':
         'promijeni boju olovke za %n',
     'set pen color to %n':
-        'postavi boju olovke na %n',
+        'boja olovke %n',
     'change pen shade by %n':
         'promijeni sjenu olovke za %n',
     'set pen shade to %n':
-        'postavi sjenu olovke na %n',
+        'sjena olovke %n',
     'change pen size by %n':
         'promijeni veli\u010Dinu olovke za %n',
     'set pen size to %n':
-        'postavi veli\u010Dinu olovke na %n',
+        'veli\u010Dina olovke %n',
     'stamp':
         'pe\u010Dat',
 
@@ -430,21 +432,21 @@ SnapTranslator.dict.hr = {
     'mouse-departed':
         'mi\u0161 napusti',
     'when I receive %msgHat':
-        'kad \u010Dujem %msgHat',
+        'kad spazim doga\u0111aj %msgHat',
     'broadcast %msg':
-        'razglasi %msg',
+        'objavljujem doga\u0111aj %msg',
     'broadcast %msg and wait':
-        'razglasi %msg i \u010Dekaj odg.',
+        'objavljujem doga\u0111aj %msg i \u010Dekam',
     'Message name':
-        'Ime poruke',
+        'Ime doga\u0111aja',
     'message':
-        'poruka',
+        'doga\u0111aj',
     'any message':
-        'bilo koja poruka',
+        'bilo koji doga\u0111aj',
     'wait %n secs':
-        '\u010Dekaj %n s',
+        '\u010Dekam %n s',
     'wait until %b':
-        '\u010Dekaj dok je %b',
+        '\u010Dekam dok ne bude %b',
     'forever %c':
         'zauvijek %c',
     'repeat %n %c':
@@ -456,7 +458,7 @@ SnapTranslator.dict.hr = {
     'if %b %c else %c':
         'ako %b %c ina\u010De %c',
     'report %s':
-        'izvje\u0161\u0107e %s',
+        'vrati vrijednost ili tvrdnju %s',
     'stop %stopChoices':
         'zaustavi %stopChoices',
     'all':
@@ -564,8 +566,8 @@ SnapTranslator.dict.hr = {
         'pozdrav',
     'world':
         'svijet',
-    'letter %n of %s':
-        'slovo %n od %s',
+    'letter %idx of %s':
+        'znak %idx od %s',
     'length of %s':
         'duljina od %s',
     'unicode of %s':
@@ -599,35 +601,35 @@ SnapTranslator.dict.hr = {
     'hide variable %var':
         'sakrij varijablu %var',
     'script variables %scriptVars':
-        'skriptne varijable %scriptVars',
+        'skriptna varijabla %scriptVars',
 
     // lists:
     'list %exp':
-        'popis %exp',
+        'lista %exp',
     '%s in front of %l':
         '%s ispred %l',
     'item %idx of %l':
-        'element %idx od %l',
+        'element %idx liste %l',
     'all but first of %l':
-        'svi osim prvog od %l',
+        'svi osim prvog iz liste %l',
     'length of %l':
-        'duljina od %l',
+        'duljina liste %l',
     '%l contains %s':
-        '%l sadr\u017Ei %s',
+        'lista %l sadr\u017Ei %s',
     'thing':
         'stvar',
     'add %s to %l':
-        'dodaj %s na %l',
+        'dodaj %s na listu %l',
     'delete %ida of %l':
-        'obri\u0161i %ida od %l',
+        'obri\u0161i %ida iz liste %l',
     'insert %s at %idx of %l':
-        'ubaci %s na mjesto %idx od %l',
+        'ubaci %s na %idx mjesto liste %l',
     'replace item %idx of %l with %s':
-        'zamijeni element %idx od %l sa %s',
+        'zamijeni %idx element liste %l sa %s',
 
     // other
     'Make a block':
-        'Napravi blok',
+        'Napravi novi blok',
 
     // menus
     // snap menu
@@ -680,7 +682,21 @@ SnapTranslator.dict.hr = {
         'Izvoz blokova',
     'show global custom block definitions as XML\nin a new browser window':
         'prikaz globalnih definicija korisni\u010Dkih blokova u XML obliku\nu novom prozoru preglednika',
-    'Import tools':
+    'Unused blocks...':
+        'Nekori\u0161teni blokovi',
+	'find unused global custom blocks\nand remove their definitions':
+        'Napravljeni blokovi - nekori\u0161teni',
+	'Remove unused blocks':
+        'Makni nekori\u0161tene blokove',
+	'there are currently no unused\nglobal custom blocks in this project':
+        'nema nekori\u0161tenih blokova\nu ovom projektu',
+    'unused block(s) removed':
+        'nekori\u0161tenih blokova izbrisano',
+	'Export summary...':
+        'Izvezi sa\u017Eetak...',
+    'open a new browser browser window\n with a summary of this project':
+        'otvara novi prozor preglednika\nsa sa\u017Eetkom projekta',
+	'Import tools':
         'Uvezi alate',
     'load the official library of\npowerful blocks':
         'u\u010Ditaj slu\u017Ebenu biblioteku\ns naprednim blokovima',
@@ -779,8 +795,16 @@ SnapTranslator.dict.hr = {
         'ozna\u010Di da se omogu\u0107i\u0161 IDE-\nanimacije',
     'Flat design':
         'Flat design',
+	'Nested auto-wrapping':
+        'Automatsko ugnje\u017E\u0111ivanje',
     'Keyboard Editing':
         'Ure\u0111ivanje tipkovnicom',
+	'Table support':
+        'Podr\u0161ka za tablice',
+	'Table lines':
+        'Linije tablica',
+	'Visible stepping':
+        'Prikazuj izvr\u0161avanje blokova',
     'Thread safe scripts':
         'Skripte - vi\u0161estrukost',
     'uncheck to allow\nscript reentrance':
@@ -810,7 +834,7 @@ SnapTranslator.dict.hr = {
     'Input Names:':
         'Imena parametara:',
     'input list:':
-        'popis parametara:',
+        'lista parametara:',
 
     // context menus:
     'help':
@@ -886,7 +910,7 @@ SnapTranslator.dict.hr = {
     'open a new window\nwith a picture of all scripts':
         'otvori novi prozor\nsa slikom svih skripti',
     'make a block...':
-        'napravi blok...',
+        'napravi novi blok...',
 
     // costumes
     'rename':
@@ -1001,15 +1025,15 @@ SnapTranslator.dict.hr = {
     'for all sprites':
         'za sve objekte',
     'for this sprite only':
-        'samo za taj objekt',
+        'samo za trenutni objekt',
 
     // block dialog
     'Change block':
         'Promijeni blok',
     'Command':
-        'Naredba',
+        'Potprogram',
     'Reporter':
-        'Vrijednost',
+        'Funkcija',
     'Predicate':
         'Tvrdnja',
 
@@ -1024,7 +1048,7 @@ SnapTranslator.dict.hr = {
         'Obri\u0161i korisni\u010Dki blok',
     'block deletion dialog text':
         'Da li da obri\u0161em taj blok\n' +
-            'sa svim primjerima?',
+            'sa svim potprogramima?',
 
     // input dialog
     'Create input name':
@@ -1034,7 +1058,7 @@ SnapTranslator.dict.hr = {
     'Edit label fragment':
         'Uredi oznaku',
     'Title text':
-        'Tekst naslova',
+        'Tekst u naslovu',
     'Input name':
         'Ime parametra',
     'Delete':
@@ -1046,7 +1070,7 @@ SnapTranslator.dict.hr = {
     'Text':
         'Tekst',
     'List':
-        'Popis',
+        'Lista',
     'Any type':
         'Bilo koji tip',
     'Boolean (T/F)':
@@ -1064,7 +1088,7 @@ SnapTranslator.dict.hr = {
     'Default Value:':
         'Default vrijednost:',
     'Multiple inputs (value is list of inputs)':
-        'Vi\u0161e parametara (vrijednost je popis parametara)',
+        'Vi\u0161e parametara (vrijednost je lista parametara)',
     'Upvar - make internal variable visible to caller':
         'Interna varijabla vidljiva pozivaocu',
 
@@ -1086,7 +1110,7 @@ SnapTranslator.dict.hr = {
     'current module versions:':
         'Verzije u\u010Ditanih modula:',
     'Contributors':
-        'Doprinosioci',
+        'Doprinijeli',
     'Translations':
         'Prijevodi',
 
@@ -1114,7 +1138,7 @@ SnapTranslator.dict.hr = {
 
     // coments
     'add comment here...':
-        'ovdje dodaj komentar...',
+        'ovdje napi\u0161i komentar...',
 
     // drow downs
     // directions
@@ -1267,7 +1291,7 @@ SnapTranslator.dict.hr = {
 
     // delimiters
     'letter':
-        'slovo',
+        'znak',
     'whitespace':
         'razmak',
     'line':
@@ -1285,11 +1309,11 @@ SnapTranslator.dict.hr = {
     'Boolean':
         'logi\u010Dki',
     'list':
-        'popis',
+        'lista',
     'command':
-        'naredba',
+        'potprogram',
     'reporter':
-        'vrijednost',
+        'funkcija',
     'predicate':
         'tvrdnja',
 
@@ -1297,5 +1321,307 @@ SnapTranslator.dict.hr = {
     'last':
         'zadnji',
     'any':
-        'bilo koji'
+        'bilo koji',
+    
+	//added manually
+	'grow':
+        've\u0107e',
+    'shrink':
+        'manje',
+    'flip ↔':
+        'izvrni ↔',
+    'flip ↕':
+        'izvrni ↕',
+    'Export all scripts as pic...':
+        'Izvezi sve skripte kao sliku...',
+    'show a picture of all scripts\nand block definitions':
+        'pokaž \u017Ei sliku svih skripti\ni definicija blokova',
+    'current %dates':
+        'trenutni %dates',
+    'year':
+        'godina',
+    'month':
+        'mjesec',
+    'date':
+        'dan',
+    'day of week':
+        'dan u tjednu',
+    'hour':
+        'sat',
+    'minute':
+        'minuta',
+    'second':
+        'sekunda',
+    'time in milliseconds':
+        'vrijeme u ms',
+    'find blocks...':
+        'na\u0111i blokove...',
+    'costume name':
+        'ime kostima',
+    'Open':
+        'Otvori',
+    'Share':
+        'Dijeli',
+    'Snap!Cloud':
+        'Snap!Cloud',
+    'Cloud':
+        'Oblak',
+    'could not connect to:':
+        'ne mo\u017Ee se spojiti na:',
+    'Service:':
+        'Servis:',
+    'login':
+        'prijava',
+    'ERROR: INVALID PASSWORD':
+        'Gre\u0161ka: neva\u017Ee\u0107a zaporka',
+    'Browser':
+        'Preglednik',
+    'Sign up':
+        'Registracija',
+    'Signup':
+        'Registracija',
+    'Sign in':
+        'Prijava',
+    'Logout':
+        'Odjava',
+    'Change Password...':
+        'Promjena zaporke…',
+    'Change Password':
+        'Promjena zaporke',
+    'Account created.':
+        'Ra\u010Dun je kreiran.',
+    'An e-mail with your password\nhas been sent to the address provided':
+        'E-mail sa zaporkom je\nposlan na upisanu adresu',
+    'now connected.':
+        'sad sam spojen.',
+    'disconnected.':
+        'odspojen.',
+    'Reset password':
+        'Obnova zaporke',
+    'Reset Password...':
+        'Obnova zaporke…',
+    'User name:':
+        'Korisni\u010Dko ime:',
+    'Password:':
+        'Zaporka:',
+    'Old password:':
+        'Stara zaporka:',
+    'New password:':
+        'Nova zaporka:',
+    'Repeat new password:':
+        'Ponovi novu zaporku:',
+    'Birth date:':
+        'Datum ro\u0111enja:',
+    'January':
+        'Sije\u010Danj',
+    'February':
+        'Velja\u010Da',
+    'March':
+        'O\u017Eujak',
+    'April':
+        'Travanj',
+    'May':
+        'Svibanj',
+    'June':
+        'Lipanj',
+    'July':
+        'Srpanj',
+    'August':
+        'Kolovoz',
+    'September':
+        'Rujan',
+    'October':
+        'Listopad',
+    'November':
+        'Studeni',
+    'December':
+        'Prosinac',
+    'year:':
+        'godina:',
+    ' or before':
+        ' ili prije',
+    'E-mail address:':
+        'E-mail adresa:',
+    'E-mail address of parent or guardian:':
+        'E-mail adresa roditelja ili staratelja:',
+    'Terms of Service...':
+        'Uvjeti kori\u0161tenja...',
+    'Privacy...':
+        'Privatnost...',
+    'I have read and agree\nto the Terms of Service':
+        'Pro\u010Ditao/la sam i sla\u017Eem se\ns uvjetima kori\u0161tenja',
+    'stay signed in on this computer\nuntil logging out':
+        'ostani prijavljen na\nra\u010Dunalu do odjave',
+    'please fill out\nthis field':
+        'molimo ispunite\novo polje',
+    'User name must be four\ncharacters or longer':
+        'Korisni\u010Dko ime mora\nimati vi\u0161e od 4 znaka',
+    'please provide a valid\nemail address':
+        'molimo upi\u0161ite\nva\u017Ee\u0107u e-mail adresu',
+    'password must be six\ncharacters or longer':
+        'zaporka mora imati\n6 znakova ili vi\u0161e',
+    'passwords do\nnot match':
+        'zaporke se\nne podudaraju',
+    'please agree to\nthe TOS':
+        'molimo prihvatite\nuvjete',
+    'Examples':
+        'Primjeri',
+    'You are not logged in':
+        'Niste prijavljeni',
+    'Updating\nproject list...':
+        'Osvje\u017Eavam\nlistu projekata...',
+    'Opening project...':
+        'Otvaram projekt...',
+    'Fetching project\nfrom the cloud...':
+        'Povla\u010Denje projekta\niz oblaka...',
+    'Saving project\nto the cloud...':
+        'Spremanje projekta\nu oblak...',
+    'Sprite Nesting':
+        'Ugnje\u017E\u0111ivanje objekata',
+    'uncheck to disable\nsprite composition':
+        'odznačite da onemogućite\nkombiniranje objekata',
+    'Codification support':
+        'Podr\u0161ka za kodiranje',
+    'check for block\nto text mapping features':
+        'označi za pretvaranje\nblokova u kod',
+    'saved.':
+        'spremljeno.',
+    'options...':
+        'opcije...',
+    'read-only':
+        'samo za \u010Ditanje',
+    'Input Slot Options':
+        'Opcije ulaznog utora',
+    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
+        'Upi\u0161ite jednu opciju po liniji.\nKoristite "=" kao key/value delimiter\nnpr: odgovor=42',
+    'paint a new sprite':
+        'nacrtaj novi objekt',
+    'Paint a new costume':
+        'nacrtaj novi kostim',
+    'add a new Turtle sprite':
+        'dodaj novi objekt',
+    'undo':
+        'poni\u0161ti',
+    'Brush size':
+        'Veli\u010Dina olovke',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Odr\u017Eati proporcije?\n(mo\u017Eete i dr\u017Eati shift)',
+    'Eraser tool':
+        'Brisalica\n(gumica)',
+    'Paintbrush tool\n(free draw)':
+        'Olovka\n(slobodno crtanje)',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Línije\n(shift: okomite/vodoravne)',
+    'Stroked Rectangle\n(shift: square)':
+        'Pravokutnik\n(shift: kvadrat)',
+    'Filled Rectangle\n(shift: square)':
+        'Ispunjeni pravokutnik\n(shift: kvadrat)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Elipsa\n(shift: krug)',
+    'Filled Ellipse\n(shift: circle)':
+        'Ispunjena elipsa\n(shift: krug)',
+    'Fill a region':
+        'Ispuna podru\u010Dja',
+    'Set the rotation center':
+        'Postavi centar rotacije',
+    'Pipette tool\n(pick a color anywhere)':
+        'Kapaljka\n(pokupit \u0107e uzorak boje)',
+    'Paint Editor':
+        'Ure\u0111iva\u010D slika',
+    'square':
+        'kvadrat',
+    'pointRight':
+        'pointRight',
+    'gears':
+        'gears',
+    'file':
+        'file',
+    'fullScreen':
+        'pun ekran',
+    'normalScreen':
+        'normal ekran',
+    'smallStage':
+        'mala scena',
+    'normalStage':
+        'normal scena',
+    'turtle':
+        'objekt',
+    'turtleOutline':
+        'obris objekta',
+    'pause':
+        'pauza',
+    'flag':
+        'zastava',
+    'octagon':
+        'oktogon',
+    'cloud':
+        'oblak',
+    'cloudOutline':
+        'obris oblaka',
+    'cloudGradient':
+        'gradijent oblaka',
+    'turnRight':
+        'okreni desno',
+    'turnLeft':
+        'okreni lijevo',
+    'storage':
+        'pohrana',
+    'poster':
+        'poster',
+    'flash':
+        'flash',
+    'brush':
+        'olovka',
+    'rectangle':
+        'pravokutnik',
+    'rectangleSolid':
+        'ispunjeni pravokutnik',
+    'circle':
+        'krug',
+    'circleSolid':
+        'ispunjeni krug',
+    'crosshairs':
+        'kri\u017Ei\u0107',
+    'paintbucket':
+        'kanta s bojom',
+    'eraser':
+        'brisalica\n(gumica)',
+    'pipette':
+        'kapaljka',
+    'speechBubble':
+        'balon\u010Di\u0107 teksta',
+    'speechBubbleOutline':
+        'obris balon\u010Di\u0107a teksta',
+    'arrowUp':
+        'strelica gore',
+    'arrowUpOutline':
+        'obris strelice gore',
+    'arrowLeft':
+        'strelica lijevo',
+    'arrowLeftOutline':
+        'obris strelice lijevo',
+    'arrowDown':
+        'strelica dolje',
+    'arrowDownOutline':
+        'obris strelice dolje',
+    'arrowRight':
+        'strelica desno',
+    'arrowRightOutline':
+        'obris strelice desno',
+    'robot':
+        'robot',
+    'turn pen trails into new costume...':
+        'pretvori trag olovke u novi kostim...',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'pretvori sve tragove olovke\ni \u017Eigove u novi kostim\nza trenutni objekt',
+    'pen':
+        'pero',
+    'tip':
+        'vrh',
+    'middle':
+        'sredina',
+    'last changed':
+        'zadnja promjena'
+
+
 };

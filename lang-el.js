@@ -185,7 +185,7 @@ SnapTranslator.dict.el = {
     'translator_e-mail':
         'ino.samaras@berkeley.edu', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2018-01-19', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -497,7 +497,7 @@ SnapTranslator.dict.el = {
     'key %key pressed?':
         'είναι το πλήκτρο %key πατημένο;',
     'distance to %dst':
-        'αποόσταση από %dst',
+        'απόσταση από %dst',
     'reset timer':
         'επανέφερε το χρονόμετρο',
     'timer':
@@ -543,8 +543,8 @@ SnapTranslator.dict.el = {
         'γεια',
     'world':
         'κόσμος',
-    'letter %n of %s':
-        'γράμμα %n του %s',
+    'letter %idx of %s':
+        'γράμμα %idx του %s',
     'length of %s':
         'μήκος του %s',
     'unicode of %s':
@@ -633,7 +633,7 @@ SnapTranslator.dict.el = {
     'New':
         'Νέο',
     'Open...':
-        'Άμοιγα...',
+        'Άνοιγμα...',
     'Save':
         'Αποθήκευση',
     'Save As...':

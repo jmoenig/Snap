@@ -175,11 +175,11 @@ SnapTranslator.dict.nl = {
     'language_name':
         'Nederlands', // the name as it should appear in the language menu
     'language_translator':
-        'Sjoerd Dirk Meijer, Frank Sierens', // your name for the Translators tab
+        'Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn', // your name for the Translators tab
     'translator_e-mail':
-        'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be', // optional
+        'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl', // optional
     'last_changed':
-        '2015-12-15', // this, too, will appear in the Translators tab
+        '2017-09-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -219,12 +219,14 @@ SnapTranslator.dict.nl = {
         'Scripts',
     'Costumes':
         'Uiterlijken',
+    'Backgrounds':
+        'Achtergronden',
     'Sounds':
         'Geluiden',
 
     // names:
     'Sprite':
-        'Sprite',
+        'Object',
     'Stage':
         'Speelveld',
 
@@ -238,7 +240,7 @@ SnapTranslator.dict.nl = {
 
     // new sprite button:
     'add a new sprite':
-        'een nieuwe sprite toevoegen',
+        'een nieuw object toevoegen',
 
     // tab help
     'costumes tab help':
@@ -280,7 +282,7 @@ SnapTranslator.dict.nl = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Toneel geselecteerd: geen standaardbeweging mogelijk',
+        'Speelveld geselecteerd: geen standaardbeweging mogelijk',
 
     'move %n steps':
         'neem %n stappen',
@@ -403,14 +405,28 @@ SnapTranslator.dict.nl = {
         'maak pengrootte %n',
     'stamp':
         'stempel',
+    'fill':
+        'vul',
 
     // control:
     'when %greenflag clicked':
         'wanneer %greenflag wordt aangeklikt',
     'when %keyHat key pressed':
         'wanneer %keyHat wordt ingedrukt',
-    'when I am clicked':
-        'wanneer er op mij wordt geklikt',
+    'when I am %interaction':
+        'wanneer ik %interaction word',
+    'clicked':
+        'aangeklikt',
+    'pressed':
+        'ingedrukt',
+    'dropped':
+        'losgelaten',
+    'mouse-entered':
+        'aangeraakt met de muis',
+    'mouse-departed':
+        'niet meer met de muis aangeraakt',
+    'when %b':
+        'wanneer %b',
     'when I receive %msgHat':
         'wanneer ik %msgHat ontvang',
     'broadcast %msg':
@@ -439,12 +455,20 @@ SnapTranslator.dict.nl = {
         'als %b %c anders %c',
     'report %s':
         'rapporteer %s',
-    'stop block':
-        'stop blok',
-    'stop script':
-        'stop script',
-    'stop all %stop':
-        'stop alle %stop',
+    'stop %stopChoices':
+        'stop %stopChoices',
+    'all':
+        'alles',
+    'this script':
+        'dit Script',
+    'this block':
+        'dit blok',
+    'stop %stopOthersChoices':
+        'stop %stopOthersChoices',
+    'all but this script':
+        'alle scripts behalve deze',
+    'other scripts in sprite':
+        'andere scripts van dit object',
     'pause all %pause':
         'pauzeer alles %pause',
     'run %cmdRing %inputs':
@@ -497,6 +521,8 @@ SnapTranslator.dict.nl = {
         'tijd',
     '%att of %spr':
         '%att van %spr',
+    'my %get':
+        'Eigenschap %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -532,12 +558,14 @@ SnapTranslator.dict.nl = {
         'onwaar',
     'join %words':
         'voeg %words samen',
+    'split %s by %delim':
+        'splits %s bij %delim',
     'hello':
         'hallo',
     'world':
         'wereld',
-    'letter %n of %s':
-        'letter %n van %s',
+    'letter %idx of %s':
+        'letter %idx van %s',
     'length of %s':
         'lengte van %s',
     'unicode of %s':
@@ -628,6 +656,10 @@ SnapTranslator.dict.nl = {
         'Openen...',
     'Save':
         'opslaan',
+    'Save to disk':
+        'Opslaan op schijf',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'Sla dit projekt op\nin de downloads folder\n(allen voor browsers die dit ondersteunen)',
     'Save As...':
         'Opslaan als...',
     'Import...':
@@ -644,6 +676,32 @@ SnapTranslator.dict.nl = {
         'Blokken exporteren...',
     'show global custom block definitions as XML\nin a new browser window':
         'toon globale aangepaste blokdefinities\nals XML in browser',
+    'Unused blocks...':
+          'Ongebruikte blokken...',
+    'find unused global custom blocks\nand remove their definitions':
+        'zoek ongebruikte globale aangepaste blokken\nen ruim ze op',
+    'Remove unused blocks':
+        'Ruim ongebruikte blokken op',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'er zijn nu geen ongebruikge globale\naangepaste blokkenin dit project',
+    'unused block(s) removed':
+        'ongebruikte blokken opgeruimd',
+    'Export summary...':
+        'Exporteer samenvatting...',
+    'open a new browser browser window\n with a summary of this project':
+        'open een nieuw browser scherm\nmet een samenvatting van dit project',
+    'Contents':
+        'inhoud',
+    'Kind of':
+        'Soort van',
+    'Part of':
+        'Een onderdeel van',
+    'Parts':
+        'Onderdelen',
+    'Blocks':
+        'Blokken',
+    'For all Sprites':
+        'Voor alle objecten',
     'Import tools':
         'Importeer tools',
     'load the official library of\npowerful blocks':
@@ -664,6 +722,16 @@ SnapTranslator.dict.nl = {
         'Taal...',
     'Zoom blocks...':
         'Blokken inzoomen...',
+    'Stage size...':
+        'Afmeting speelveld...',
+    'Stage size':
+        'Sspeelveld afmeting',
+    'Stage width':
+        'Speelveld breedte',
+    'Stage height':
+        'Speelveld hoogte',
+    'Default':
+        'Standaard',
     'Blurred shadows':
         'Onscherpe schaduwen',
     'uncheck to use solid drop\nshadows and highlights':
@@ -690,6 +758,12 @@ SnapTranslator.dict.nl = {
         'uitschakelen om lege functies\n anderen uit te sluiten',
     'Long form input dialog':
         'Lang formulier-invoerscherm',
+    'Plain prototype labels':
+        'Eenvoudige protoype-labels',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'uitvinken om altijd (+) symbolen\nte tonen in blok prototype labels',
+    'check to hide (+) symbols\nin block prototype labels':
+        'aanvinken om (+) symbolen in\nblock prototye labels te verbergen',
     'check to always show slot\ntypes in the input dialog':
         'aanvinken om data type in\ninvoerscherm te zien',
     'uncheck to use the input\ndialog in short form':
@@ -724,6 +798,18 @@ SnapTranslator.dict.nl = {
         'uitvinken voor scripuitvoering\nop normale snelheid',
     'check to enable\nIDE animations':
         'aanvinken om IDE-animaties\ntoe te laten',
+    'Flat design':
+        'Eenvoudige layout',
+    'Nested auto-wrapping':
+        'Automatisch omvatten',
+    'Keyboard Editing':
+        'Bewerken met toetsenbord',
+    'Table support':
+        'Gebruik tabellen',
+    'Table lines':
+        'Tabellen met lijntjes',
+    'Visible stepping':
+        'Stapsgewijs programma verloop',
     'Thread safe scripts':
         'Thread-veilige scripts',
     'uncheck to allow\nscript reentrance':
@@ -736,6 +822,14 @@ SnapTranslator.dict.nl = {
         'uitvinken voor hogere snelheid\nbij variabele framerates',
     'check for smooth, predictable\nanimations across computers':
         'aanvinken voor vloeiende,\nvoorspelbare animaties tussen computers',
+    'Flat line ends':
+        'Rechte lijn uiteinden',
+    'check for flat ends of lines':
+        'aanvinken voor rechte\nuiteinden van lijnen',
+    'uncheck for round ends of lines':
+        'uitvinken voor ronde\nuiteinden van lijnen',
+    'Inheritance support':
+        'Gebruik overerving',
 
     // inputs
     'with inputs':
@@ -778,6 +872,12 @@ SnapTranslator.dict.nl = {
         'omringen',
     'unringify':
         'niet omringen',
+    'transient':
+        'niet blijvend',
+    'uncheck to save contents\nin the project':
+        'uitvinken om de inhoud\nin het project op te slaan',
+    'check to prevent contents\nfrom being saved':
+        'aanvinken om te verhinderen dat\nde inhoud wordt opgeslagen',
 
     // custom blocks:
     'delete block definition...':
@@ -788,6 +888,8 @@ SnapTranslator.dict.nl = {
     // sprites:
     'edit':
         'bewerken',
+    'move':
+        'verplaatsen',
     'detach from':
         'losmaken van',
     'detach all parts':
@@ -814,6 +916,8 @@ SnapTranslator.dict.nl = {
         'ongedaan maken',
     'undo the last\nblock drop\nin this pane':
         'de laatste blokbeweging\nongedaan maken',
+    'redrop':
+        'opnieuw uitvoeren',
     'scripts pic...':
         'scripts-afbeelding...',
     'open a new window\nwith a picture of all scripts':
@@ -840,6 +944,18 @@ SnapTranslator.dict.nl = {
         'Speel',
     'rename sound':
         'geluid hernoemen',
+
+    // lists and tables
+    'list view...':
+        'lijstweergave...',
+    'table view...':
+        'tabelweergave...',
+    'open in dialog...':
+        'in nieuw venster openen...',
+    'reset columns':
+        'kolommen terugzetten',
+    'items':
+        'elementen',
 
     // dialogs
     // buttons
@@ -934,9 +1050,17 @@ SnapTranslator.dict.nl = {
 
     // variable dialog
     'for all sprites':
-        'voor alle sprite',
+        'voor alle objecten',
     'for this sprite only':
-        'alleen voor deze sprite',
+        'alleen voor dit object',
+
+    // variables refactoring
+    'rename only\nthis reporter':
+        'hernoem alleen\ndit blok',
+    'rename all...':
+        'hernoem alle...',
+    'rename all blocks that\naccess this variable':
+        'alle blokken hernoemen,\ndie naar deze variabele verwijzen',
 
     // block dialog
     'Change block':
@@ -1076,8 +1200,28 @@ SnapTranslator.dict.nl = {
         'Leeg',
 
     // graphical effects
+    'color':
+        'kleur',
+    'fisheye':
+        'vissenoog',
+    'whirl':
+        'draaikolk',
+    'pixelate':
+        'blokkig',
+    'mosaic':
+        'mosaiek',
+    'saturation':
+        'verzadiging',
+    'brightness':
+        'helderheid',
     'ghost':
-        'geest',
+        'spook',
+    'negative':
+        'negatief',
+    'comic':
+        'strepenpatroon',
+    'confetti':
+        'kleureffect',
 
     // keys
     'space':
@@ -1090,6 +1234,8 @@ SnapTranslator.dict.nl = {
         'pijltje naar rechts',
     'left arrow':
         'pijltje naar links',
+    'any key':
+        'willekeurige toets',
     'a':
         'a',
     'b':
@@ -1170,8 +1316,10 @@ SnapTranslator.dict.nl = {
     // math functions
     'abs':
         'abs',
+    'ceiling':
+        'afgerond omhoog',
     'floor':
-        'afgerond',
+        'afgerond omlaag',
     'sqrt':
         'wortel',
     'sin':
@@ -1191,6 +1339,18 @@ SnapTranslator.dict.nl = {
     'e^':
         'e^',
 
+    // delimiters
+    'letter':
+        'letter',
+    'whitespace':
+        'spatie',
+    'line':
+        'regel',
+    'tab':
+        'tab',
+    'cr':
+        'regelterugloop',
+
     // data types
     'number':
         'getal',
@@ -1206,11 +1366,46 @@ SnapTranslator.dict.nl = {
         'functie',
     'predicate':
         'predicaat',
+    'sprite':
+        'object',
 
     // list indices
     'last':
         'laatste',
     'any':
-        'willekeurig'
-};
+        'willekeurig',
 
+    // attributes
+    'neighbors':
+        'buren',
+    'self':
+        'zelf',
+    'other sprites':
+        'andere objecten',
+    'parts':
+        'onderdelen',
+    'anchor':
+        'ankerpunt',
+    'parent':
+        'ouder',
+    'children':
+        'kind',
+    'clones':
+        'kloon',
+    'other clones':
+        'andere klonen',
+    'dangling?':
+        'slingeren?',
+    'rotation x':
+        'draaipunt x',
+    'rotation y':
+        'draaipunt y',
+    'center x':
+        'middelpunt x',
+    'center y':
+        'middelpunt y',
+    'name':
+        'naam',
+    'stage':
+        'speelveld',
+};

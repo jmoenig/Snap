@@ -562,8 +562,8 @@ SnapTranslator.dict.ro = {
         'salut',
     'world':
         'lume',
-    'letter %n of %s':
-        'litera %n din %s',
+    'letter %idx of %s':
+        'litera %idx din %s',
     'length of %s':
         'lungimea lui %s',
     'unicode of %s':
