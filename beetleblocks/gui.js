@@ -77,7 +77,7 @@ IDE_Morph.prototype.createCategories = function () {
 };
 
 // Force flat design
-IDE_Morph.prototype.setDefaultDesign = IDE_Morph.prototype.setFlatDesign; 
+IDE_Morph.prototype.setDefaultDesign = IDE_Morph.prototype.setFlatDesign;
 
 IDE_Morph.prototype.originalInit = IDE_Morph.prototype.init;
 IDE_Morph.prototype.init = function (isAutoFill) {
@@ -141,7 +141,7 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     /*
     menu.addItem(
-            'Migrate from the old cloud', 
+            'Migrate from the old cloud',
             function () { window.open('/migration', true) },
             'Attempt to perform an automatic\nmigration of all your projects\nin the old cloud');
     */
@@ -294,7 +294,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 new Color(100, 0, 0)
                     );
     }
-    menu.popup(world, pos); 
+    menu.popup(world, pos);
 };
 
 IDE_Morph.prototype.saveProjectToDisk = function () {
@@ -738,7 +738,7 @@ IDE_Morph.prototype.downloadBinarySTL = function () {
     stlString = exporter.parse(scene);
     blob = new Blob([stlString], {type: 'text/plain;charset=utf-8'});
 
-    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.stl'); 
+    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.stl');
 };
 
 IDE_Morph.prototype.downloadSTL = function () {
@@ -750,7 +750,7 @@ IDE_Morph.prototype.downloadSTL = function () {
     scene.children = scene.children.filter(function (each) { return each.name != 'beetle' });
     stlString = exporter.parse(scene);
     blob = new Blob([stlString], {type: 'text/plain'});
-    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.stl'); 
+    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.stl');
 };
 
 
@@ -758,14 +758,14 @@ IDE_Morph.prototype.downloadSTL = function () {
 IDE_Morph.prototype.downloadOBJ = function () {
     var exporter = new THREE.OBJExporter(),
         scene = copy(this.stage.scene),
-        objString, 
+        objString,
         blob;
 
     scene.children = scene.children.filter(function (each) { return each.name != 'beetle' });
     objString = exporter.parse(scene);
     blob = new Blob([objString], {type: 'text/plain;charset=utf-8'});
 
-    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.obj'); 
+    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.obj');
 };
 
 // SVG export
@@ -775,7 +775,7 @@ IDE_Morph.prototype.downloadSVG = function () {
             function (element, index, ar){
                 if (element instanceof THREE.Line) {
                     lines.push(element);
-                } 
+                }
             }
             );
 
@@ -786,9 +786,9 @@ IDE_Morph.prototype.downloadSVG = function () {
 
     lines.forEach(function (line) {
 
-        var red = Math.round(line.material.color.r * 255); 
-        var green = Math.round(line.material.color.g * 255); 
-        var blue = Math.round(line.material.color.b * 255); 
+        var red = Math.round(line.material.color.r * 255);
+        var green = Math.round(line.material.color.g * 255);
+        var blue = Math.round(line.material.color.b * 255);
 
         if (line.type == 'polyline') {
 
@@ -885,7 +885,7 @@ IDE_Morph.prototype.downloadSVG = function () {
                 if (catmull[2].z < minZ) { minZ = catmull[2].z };
                 if (catmull[2].z > maxZ) { maxZ = catmull[2].z };
             });
- 
+
             svgStr += '"/>\n';
         }
     })
@@ -901,7 +901,7 @@ IDE_Morph.prototype.downloadSVG = function () {
     svgStr = svgHeader.concat(svgStr);
 
     blob = new Blob([svgStr], {type: 'text/plain;charset=utf-8'});
-    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.svg'); 
+    saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.svg');
 };
 
 
@@ -910,8 +910,8 @@ IDE_Morph.prototype.originalCreateControlBar = IDE_Morph.prototype.createControl
 IDE_Morph.prototype.createControlBar = function () {
     this.originalCreateControlBar();
     colors = [
-        this.controlBar.stageSizeButton.color, 
-        this.controlBar.stageSizeButton.labelShadowColor, 
+        this.controlBar.stageSizeButton.color,
+        this.controlBar.stageSizeButton.labelShadowColor,
         this.controlBar.stageSizeButton.pressColor
     ];
 
@@ -1012,9 +1012,9 @@ IDE_Morph.prototype.setStageExtent = function (ext) {
     var myself = this,
         world = this.world();
 
-    if (world) { 
+    if (world) {
         this.controlBar.stageSizeButton.refresh();
-    
+
         StageMorph.prototype.dimensions = ext;
         this.stage.setExtent(ext);
         this.fixLayout();
@@ -1218,7 +1218,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                             '&ProjectName=' +
                             encodeURIComponent(proj.ProjectName);
                         SnapCloud.postRequest(
-                                'project', 
+                                'project',
                                 {
                                     projectName: proj.ProjectName,
                                     username: SnapCloud.username,
@@ -1302,8 +1302,8 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createStage();
     this.createSpriteEditor();
     // It's easier to make a bogus spriteBar object than to remove all references to it
-    this.spriteBar = { 
-        tabBar: { 
+    this.spriteBar = {
+        tabBar: {
             tabTo: nop
         }
     };
@@ -1542,9 +1542,9 @@ IDE_Morph.prototype.createStatusDisplay = function () {
             function () {
                 stage.renderer.toggleParallelProjection();
             },
-            'Parallel projection',
+            '2D mode',
             function () {
-                return stage.renderer.isParallelProjection
+                return stage.renderer.is2DMode
             });
     toggleParallelProjectionButton.columns = 3;
     toggleParallelProjectionButton.newColumn = 2;
@@ -1610,7 +1610,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     elements.push(space);
 
     element = new StringMorph();
-    element.update = function () { this.text = 'x: ' + beetle.position.z.toFixed(2).toString().replace('.00','') }; 
+    element.update = function () { this.text = 'x: ' + beetle.position.z.toFixed(2).toString().replace('.00','') };
     element.newColumn = true;
     elements.push(element);
 
@@ -1619,7 +1619,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     space.columns = 9;
     space.newColumn = 3;
     elements.push(space);
- 
+
     elements.push('Rotation ');
 
     var space = new Morph();
@@ -1641,7 +1641,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     elements.push('Scale: ');
     element = new StringMorph();
     element.update = function () {
-        this.text = beetle.multiplierScale.toString() 
+        this.text = beetle.multiplierScale.toString()
             + ' (' + (beetle.multiplierScale * 100).toString() + '%)'
     }
     element.newLines = 1;
@@ -1654,7 +1654,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     elements.push(space);
 
     element = new StringMorph();
-    element.update = function () { this.text = 'y: ' + beetle.position.x.toFixed(2).toString().replace('.00','') }; 
+    element.update = function () { this.text = 'y: ' + beetle.position.x.toFixed(2).toString().replace('.00','') };
     element.newColumn = true;
     elements.push(element);
 
@@ -1676,7 +1676,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     elements.push(space);
 
     element = new StringMorph();
-    element.update = function () { this.text = 'z: ' + beetle.position.y.toFixed(2).toString().replace('.00','') }; 
+    element.update = function () { this.text = 'z: ' + beetle.position.y.toFixed(2).toString().replace('.00','') };
     element.newColumn = true;
     elements.push(element);
 
@@ -1692,12 +1692,12 @@ IDE_Morph.prototype.createStatusDisplay = function () {
     elements.push(element);
 
     elements.push('-');
-    
+
     elements.push('HSL: ');
     element = new StringMorph();
     element.update = function () {
-        this.text = beetle.color.state.h.toFixed(2).toString().replace('.00','') + ', ' 
-            + beetle.color.state.s.toFixed(2).toString().replace('.00','') + ', ' 
+        this.text = beetle.color.state.h.toFixed(2).toString().replace('.00','') + ', '
+            + beetle.color.state.s.toFixed(2).toString().replace('.00','') + ', '
             + beetle.color.state.l.toFixed(2).toString().replace('.00','') + ' '
     };
     elements.push(element);
@@ -1826,7 +1826,7 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
             myInnerSelf.reflectLanguage(lang, callback);
         };
         document.head.appendChild(translation);
-        translation.src = src; 
+        translation.src = src;
     });
 };
 
@@ -1877,7 +1877,7 @@ IDE_Morph.prototype.rawOpenScriptsString = function (str) {
     }
 
     scripts.add(script);
-    
+
     if (world.topMorphAt(dropPosition) !== scripts) {
         dropPosition = new Point(
             scripts.left() + scripts.cleanUpMargin,
@@ -1886,10 +1886,9 @@ IDE_Morph.prototype.rawOpenScriptsString = function (str) {
 
     script.setCenter(dropPosition);
     scripts.adjustBounds();
-    
+
     this.showMessage(
         'Imported Script.',
         2
     );
 };
-

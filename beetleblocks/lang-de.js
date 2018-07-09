@@ -69,8 +69,8 @@ tempDict = {
 		'Achsen',
 	'Wireframe':
 		'Drahtmodell',
-	'Parallel projection':
-		'parallele Projektion',
+	'2D mode':
+		'2D Modus',
 	'Grid':
 		'Gitter',
 	'Position: ':

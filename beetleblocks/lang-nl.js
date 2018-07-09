@@ -63,8 +63,8 @@ tempDict = {
 		'Assen',
 	'Wireframe':
 		'Wireframe',
-	'Parallel projection':
-		'Parallelle projectie',
+	'2D mode':
+		'2D modus',
 	'Grid':
 		'Raster',
 	'Position: ':
