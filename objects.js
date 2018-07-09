@@ -6395,8 +6395,6 @@ StageMorph.prototype.setScale = function (number) {
     this.scale = number;
     this.setExtent(this.dimensions.multiplyBy(number));
 
-    console.log('wat');
-
     // now move and resize all children - sprites, bubbles, watchers etc..
     this.children.forEach(function (morph) {
         relativePos = morph.position().subtract(pos);

@@ -1202,6 +1202,7 @@ StageMorph.prototype.initScene = function () {
 
         sprite.position['set' + axes[axis].realAxis].call(sprite.position, 4.3);
         sprite.scale.set(0.3, 0.3, 0.3);
+        sprite.name = axis;
 
         myself.scene.labels.push(sprite);
         myself.scene.add(sprite);
@@ -1256,7 +1257,9 @@ StageMorph.prototype.initRenderer = function () {
     };
 
     this.renderer.toggleParallelProjection = function () {
+        var label = myself.scene.labels.find( function (label) { return label.name === 'z'; });
         this.is2DMode = !this.is2DMode;
+        if (label) { label.visible = !this.is2DMode; }
         myself.initCamera();
     };
 };
