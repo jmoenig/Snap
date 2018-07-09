@@ -1229,16 +1229,20 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setTop(this.logo.bottom());
     }
 
-    // palette
-    this.palette.setLeft(this.logo.left());
-    this.palette.setTop(this.categories.bottom() + 1);
-    this.palette.setHeight(this.bottom() - this.palette.top());
+    if (!this.isAppMode) {
+        // palette
+        this.palette.setLeft(this.logo.left());
+        this.palette.setTop(this.categories.bottom() + 1);
+        this.palette.setHeight(this.bottom() - this.palette.top());
+    }
 
     if (situation !== 'refreshPalette') {
         // stage
         if (this.isAppMode) {
             this.stage.setCenter(this.center());
             this.stage.reRender();
+            this.controlBar.setTop(0);
+            this.controlBar.setRight(this.width() - padding);
         } else {
             this.stage.setTop(this.logo.bottom() + padding - 1); // We need to subtract 1 as now the border is white
             this.stage.setRight(this.right());
@@ -1700,6 +1704,7 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         myself = this,
+        ext = world.extent(),
         elements = [
             this.logo,
             this.controlBar.projectButton,
@@ -1717,15 +1722,11 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
     if (this.isAppMode) {
-        var ext = new Point(window.outerWidth, window.outerHeight);
-
         this.setExtent(ext);
         this.stage.renderer.setSize(ext.x, ext.y);
         this.stage.camera.aspect = ext.x / ext.y;
         this.stage.camera.updateProjectionMatrix();
         this.stage.setExtent(ext);
-        this.stage.setLeft(0);
-        this.stage.setTop(0);
 
         this.stage.add(this.controlBar);
         this.controlBar.alpha = 0;
@@ -1740,6 +1741,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             }
         });
 
+        this.fixLayout();
     } else {
         this.add(this.controlBar);
         this.controlBar.setColor(this.frameColor);
