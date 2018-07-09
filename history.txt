@@ -4225,3 +4225,12 @@ Translation Updates:
 180706
 ------
 * Objects: fixed #2142 - search and keyboard entry support for custom block translations
+
+180709
+------
+* Portuguese translation update, thanks, Manuel!
+* New Basque translation, thanks, Asier Iturralde Sarasola!
+* French translation update, thanks, Nathalie and Joan!
+* Spanish, Catalan and French translations of the tools library, thanks, Joan!
+* New JSON library, thanks, Bernat!
+* URL cache issue fix, thanks, Joan!
