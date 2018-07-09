@@ -580,3 +580,14 @@ SnapTranslator.dict.gl = {
     'last_changed':
         '2016-11-09'
 };
+
+SnapTranslator.dict.eu = {
+    'language_name':
+        'Euskara',
+    'language_translator':
+        'Asier Iturralde Sarasola',
+    'translator_e-mail':
+        'aiturralde@iametza.eus',
+    'last_changed':
+        '2018-06-26'
+};
