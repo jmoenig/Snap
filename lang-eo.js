@@ -75,7 +75,7 @@
 
         {
             'English string':
-        'English string'
+                'Translation string',
             'last key':
                 'last value'
         }
@@ -186,18 +186,16 @@ SnapTranslator.dict.eo = {
     'language_translator':
         'Sebastian CYPRYCH',
     'translator_e-mail':
-        'scy(ĉe)epf.pl',
+        'sebacyp(heliko)gmail(punkto)com',
     'last_changed':
-        '2012-11-11',
+        '2017-10-01',
 
     // GUI
     // control bar:
     'untitled':
         'sentitola',
-    'Untitled':
-        'sentitola',
     'development mode':
-        'programada reĝimo',
+        'programada re\u011dimo',
 
     // categories:
     'Motion':
@@ -229,7 +227,9 @@ SnapTranslator.dict.eo = {
     'Scripts':
         'Skriptoj',
     'Costumes':
-        'Kostumoj',
+        'Kost\u00fcme',
+    'Backgrounds':
+        'Fonoj',
     'Sounds':
         'Sonoj',
 
@@ -253,9 +253,9 @@ SnapTranslator.dict.eo = {
 
     // tab help
     'costumes tab help':
-        'trenu tien bildojn\nel aliaj retpaĝoj aŭ de via komputilo',
+        'trenu tien bildojn\nel aliaj retpa\u011doj a\u016d de via komputilo',
     'import a sound from your computer\nby dragging it into here':
-        'importu sonon de via komputilo\ntrenante ĝin ĉi tien',
+        'importu sonon de via komputilo\ntrenante \u011din \u0109i tien',
 
     // primitive blocks:
 
@@ -293,13 +293,13 @@ SnapTranslator.dict.eo = {
     'Stage selected:\nno motion primitives':
         'Scenejo elektita:\nneniuj movaj bazelementoj',
     'move %n steps':
-        'iri %n paŝojn',
+        'iri %n pa\u015dojn',
     'turn %clockwise %n degrees':
         'turni %n gradojn %clockwise',
     'turn %counterclockwise %n degrees':
         'turni %n gradojn %counterclockwise',
     'point in direction %dir':
-        'celi laŭ direkto %dir',
+        'celi la\u016d direkto %dir',
     'point towards %dst':
         'celi al %dst',
     'go to x: %n y: %n':
@@ -309,13 +309,13 @@ SnapTranslator.dict.eo = {
     'glide %n secs to x: %n y: %n':
         'gliti dum %n sek. al x: %n y: %n',
     'change x by %n':
-        'ŝanĝi x je %n',
+        '\u015dan\u011di x je %n',
     'set x to %n':
-        'ŝanĝi x al %n',
+        '\u015dan\u011di x al %n',
     'change y by %n':
-        'ŝanĝi y je %n',
+        '\u015dan\u011di y je %n',
     'set y to %n':
-        'ŝanĝi y al %n',
+        '\u015dan\u011di y al %n',
     'if on edge, bounce':
         'resalti de la rando',
     'x position':
@@ -327,7 +327,7 @@ SnapTranslator.dict.eo = {
 
     // looks:
     'switch to costume %cst':
-        'ŝanĝi al kostumo %cst',
+        '\u015dan\u011di al kostumo %cst',
     'next costume':
         'sekva kostumo',
     'costume #':
@@ -345,28 +345,28 @@ SnapTranslator.dict.eo = {
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        'ŝanĝi %eff efekton je %n',
+        '\u015dan\u011di %eff efekton je %n',
     'set %eff effect to %n':
-        'ŝanĝi efekton %eff al %n',
+        '\u015dan\u011di efekton %eff al %n',
     'clear graphic effects':
         'forigi grafikajn efektojn',
     'change size by %n':
-        'ŝanĝi grandecon je %n',
+        '\u015dan\u011di grandecon je %n',
     'set size to %n %':
-        'ŝanĝi grandecon al %n',
+        '\u015dan\u011di grandecon al %n',
     'size':
         'grandeco',
     'show':
         'montri',
     'hide':
-        'kaŝi',
+        'ka\u015di',
     'go to front':
-        'iri antaŭen',
+        'iri anta\u016den',
     'go back %n layers':
-        'iri %n tavolojn malantaŭen',
+        'iri %n tavolojn malanta\u016den',
 
     'development mode \ndebugging primitives:':
-        'programada reĝimo \nsencimigadaj bazelementoj:',
+        'programada re\u011dimo \nsencimigadaj bazelementoj:',
     'console log %mult%s':
         'konzola protokolo: %mult%oj',
     'alert %mult%s':
@@ -374,93 +374,139 @@ SnapTranslator.dict.eo = {
 
     // sound:
     'play sound %snd':
-        'aŭdigi sonon %snd',
+        'a\u016ddigi sonon %snd',
     'play sound %snd until done':
-        'aŭdigi sonon %snd ĝis finite',
+        'a\u016ddigi sonon %snd \u011dis finite',
     'stop all sounds':
-        'finigi ĉiujn sonojn',
+        'haltigi \u0109iujn sonojn',
+    'rest for %n beats':
+        'pa\u016dzi dum %n taktoj',
+    'play note %n for %n beats':
+        'a\u016ddigi noton %n dum %n taktoj',
+    'change tempo by %n':
+        '\u015dan\u011di rapidecon je %n',
+    'set tempo to %n bpm':
+        '\u015dan\u011di rapidecon al %n taktoj minute',
+    'tempo':
+        'tempo',
 
     // pen:
     'clear':
-        'forigi desegnaĵon',
+        'forigi desegna\u0135on',
     'pen down':
         'malsuprenigi skribilon',
     'pen up':
         'suprenigi skribilon',
     'set pen color to %clr':
-        'ŝanĝi skribilokoloron al %clr',
+        '\u015dan\u011di skribilokoloron al %clr',
     'change pen color by %n':
-        'ŝanĝi skribilokoloron je %n',
+        '\u015dan\u011di skribilokoloron je %n',
     'set pen color to %n':
-        'ŝanĝi skribilokoloron al %n',
+        '\u015dan\u011di skribilokoloron al %n',
     'change pen shade by %n':
-        'ŝanĝi kolorombron je %n',
+        '\u015dan\u011di kolorombron je %n',
     'set pen shade to %n':
-        'ŝanĝi kolorombron al %n',
+        '\u015dan\u011di kolorombron al %n',
     'change pen size by %n':
-        'ŝanĝi skribilodikecon je %n',
+        '\u015dan\u011di skribilodikecon je %n',
     'set pen size to %n':
-        'ŝanĝi skribilodikecon al %n',
+        '\u015dan\u011di skribilodikecon al %n',
     'stamp':
-        'stampi',
+        'stemple',
+    'fill':
+        'plenigi',
 
     // control:
     'when %greenflag clicked':
         'Kiam %greenflag estas alklakita',
     'when %keyHat key pressed':
-        'Kiam klavo %keyHat estas premita',
-    'when I am clicked':
-        'Kiam mi estas alklakita',
+        'se %keyHat klavo estas premita',
+    'when I am %interaction':
+        'Dum mi estas %interaction',
+    'clicked':
+        'alklakita',
+    'pressed':
+        'premita',
+    'dropped':
+        'demetita',
+    'mouse-entered':
+        'tu\u015data de musa montrilo',
+    'mouse-departed':
+        'lasita de musa montrilo',
+    'when %b':
+        'kiam %b',
     'when I receive %msgHat':
         'Kiam mi ricevas %msgHat',
     'broadcast %msg':
-        'elsendi %msg al ĉiuj',
+        'elsendi %msg al \u0109iuj',
     'broadcast %msg and wait':
-        'elsendi %msg al ĉiuj kaj atendi',
+        'elsendi %msg al \u0109iuj kaj atendi',
     'Message name':
-        'Mesaĝonomo',
+        'Mesa\u011donomo',
+    'message':
+        'mesa\u011do',
+    'any message':
+        'iu mesa\u011do',
     'wait %n secs':
         'atendi %n sek.',
     'wait until %b':
-        'atendi ĝis %b',
+        'atendi \u011dis %b',
     'forever %c':
         'ripeti eterne %c',
     'repeat %n %c':
         'ripeti %n -foje %c',
     'repeat until %b %c':
-        'ripeti ĝis %b %c',
+        'ripeti \u011dis %b %c',
     'if %b %c':
         'se %b %c',
     'if %b %c else %c':
         'se %b %c alie %c',
     'report %s':
         'raporti %s',
-    'stop block':
-        'halti blokon',
-    'stop script':
-        'halti skripton',
-    'stop all %stop':
-        'halti ĉiujn %stop',
+    'stop %stopChoices':
+        'halti %stopChoices',
+    'all':
+        '\u0109ion',
+    'this script':
+        'tiun \u0109i skripton',
+    'this block':
+        'tiun \u0109i blokon',
+    'stop %stopOthersChoices':
+        'halti %stopOthersChoices',
+    'all but this script':
+        '\u0109ion krom tiu \u0109i skripto',
+    'other scripts in sprite':
+        'aliajn skriptojn en tiu objekto',
+    'pause all %pause':
+        'pa\u016dzi \u0109iujn %pause',
     'run %cmdRing %inputs':
         'ruli %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        'lanĉi %cmdRing %inputs',
+        'lan\u0109i %cmdRing %inputs',
     'call %repRing %inputs':
         'voki %repRing %inputs',
     'run %cmdRing w/continuation':
-        'ruli %cmdRing %inputs kun daŭrigo',
+        'ruli %cmdRing %inputs kun da\u016drigo',
     'call %cmdRing w/continuation':
-        'voki %cmdRing %inputs kun daŭrigo',
+        'voki %cmdRing %inputs kun da\u016drigo',
     'warp %c':
         'nedisigeble %c',
+    'when I start as a clone':
+        'kiam mi estas klonita',
+    'create a clone of %cln':
+        'kloni %cln',
+    'myself':
+        'min',
+    'delete this clone':
+        'forigi tiun \u0109i klonon',
 
     // sensing:
     'touching %col ?':
-        'tuŝas %col ?',
+        'tu\u015das %col ?',
     'touching %clr ?':
-        'tuŝas %clr ?',
+        'tu\u015das %clr ?',
     'color %clr is touching %clr ?':
-        'koloro %clr tuŝas %clr ?',
+        'koloro %clr tu\u015das %clr ?',
     'ask %s and wait':
         'demandi %s kaj atendi',
     'what\'s your name?':
@@ -478,11 +524,19 @@ SnapTranslator.dict.eo = {
     'distance to %dst':
         'distanco de %dst',
     'reset timer':
-        'nuligi klikhorloĝon',
+        'nuligi klikhorlo\u011don',
     'timer':
-        'klikhorloĝo',
+        'klikhorlo\u011do',
+    '%att of %spr':
+        '%att de %spr',
+    'my %get':
+        'mia %get',
     'http:// %s':
         'http:// %s',
+    'turbo mode?':
+        'Rapida re\u011dimo?',
+    'set turbo mode to %b':
+        'apliki rapidan re\u011dimon al %b',
     'filtered for %clr':
         'filtrita por %clr',
     'stack size':
@@ -502,7 +556,7 @@ SnapTranslator.dict.eo = {
     '%b and %b':
         '%b kaj %b',
     '%b or %b':
-        '%b aŭ %b',
+        '%b a\u016d %b',
     'not %b':
         'ne %b',
     'true':
@@ -511,12 +565,14 @@ SnapTranslator.dict.eo = {
         'malvero',
     'join %words':
         'kunigi %words',
+    'split %s by %delim':
+        'dividi %s kun %delim',
     'hello':
         'saluton',
     'world':
         'mondo',
-    'letter %n of %s':
-        'litero %n el %s',
+    'letter %idx of %s':
+        'litero %idx el %s',
     'length of %s':
         'longeco de %s',
     'unicode of %s':
@@ -524,7 +580,9 @@ SnapTranslator.dict.eo = {
     'unicode %n as letter':
         'unikodo %n kiel litero',
     'is %s a %typ ?':
-        'ĉu %s estas %typ ?',
+        '\u0109u %s estas %typ ?',
+    'is %s identical to %s ?':
+        'estas %s identa kun %s ?',
     'type of %s':
         'tipo de %s',
 
@@ -533,16 +591,18 @@ SnapTranslator.dict.eo = {
         'Krei variablon',
     'Variable name':
         'Variablonomo',
+    'Script variable name':
+        'Variablonomo de skripto',
     'Delete a variable':
         'Forigi variablon',
     'set %var to %s':
-        'ŝanĝi %var al %s',
+        '\u015dan\u011di %var al %s',
     'change %var by %n':
-        'ŝanĝi %var je %n',
+        '\u015dan\u011di %var je %n',
     'show variable %var':
         'montri variablon %var',
     'hide variable %var':
-        'kaŝi variablon %var',
+        'ka\u015di variablon %var',
     'script variables %scriptVars':
         'variabloj de skripto %scriptVars',
 
@@ -550,11 +610,11 @@ SnapTranslator.dict.eo = {
     'list %exp':
         'listo %exp',
     '%s in front of %l':
-        '%s estas antaŭ %l',
+        '%s estas anta\u016d %l',
     'item %idx of %l':
         'elemento %idx el %l',
     'all but first of %l':
-        'ĉiuj krom la unua el %l',
+        '\u0109iuj krom la unua el %l',
     'length of %l':
         'longeco de %l',
     '%l contains %s':
@@ -568,7 +628,7 @@ SnapTranslator.dict.eo = {
     'insert %s at %idx of %l':
         'enigi %s je %idx en %l',
     'replace item %idx of %l with %s':
-        'astataŭi elementon %idx de %l per %s',
+        'astata\u016di elementon %idx de %l per %s',
 
     // other
     'Make a block':
@@ -578,18 +638,20 @@ SnapTranslator.dict.eo = {
     // snap menu
     'About...':
         'Pri...',
+    'Reference manual':
+        'Manlibro',
     'Snap! website':
-        'Snap! paĝaro',
+        'Snap! pa\u011daro',
     'Download source':
-        'Elŝuti fontokodon',
+        'El\u015duti fontokodon',
     'Switch back to user mode':
-        'Ŝanĝi reen al uzantoreĝimo',
+        '\u015can\u011di reen al uzantore\u011dimo',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'malŝalti deep-Morphic\nkuntekstajn menuojn\nkaj montri la afablajn',
+        'mal\u015dalti deep-Morphic\nkuntekstajn menuojn\nkaj montri la afablajn',
     'Switch to dev mode':
-        'Ŝanĝi al programada reĝimo',
+        '\u015can\u011di al programada re\u011dimo',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'ŝalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
+        '\u015dalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
 
     // project menu
     'Project notes...':
@@ -600,12 +662,17 @@ SnapTranslator.dict.eo = {
         'Malfermi...',
     'Save':
         'Konservi',
+    'Save to disk':
+        'Konservi al disko',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'konservi tiun \u0109i projekton\nen lokal el\u015dutan dosierujon\n'
+            + '(ne \u0109iuj foliumiloj tion apogas)',
     'Save As...':
         'Konservi kiel...',
     'Import...':
         'Importi...',
     'file menu import hint':
-        'elŝutu dosieron kun blokoj sonoj aŭ kostumoj',
+        'el\u015dutu dosieron kun blokoj sonoj a\u016d kostumoj',
     'Export project as plain text...':
         'Eksporti projekton en plata teksta formo...',
     'Export project...':
@@ -616,62 +683,160 @@ SnapTranslator.dict.eo = {
         'Eksporti blokojn...',
     'show global custom block definitions as XML\nin a new browser window':
         'prezenti mallokajn difinojn de propraj blokoj kiel XML\nen nova fenestro de retumilo',
-    'Delete Project':
-        'Forigi projekton',
-    'Are you sure you want to delete':
-        'Ĉu vi certas ke vi volas forigi',
+    'Unused blocks...':
+          'Neuzataj blokoj...',
+    'find unused global custom blocks\nand remove their definitions':
+        'trovi neuzatajn proprajn blokojn\nkaj forigi iliajn difinojn',
+    'Remove unused blocks':
+        'Forigi neuzatajn blokojn',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'aktuale estas neniu neuzata\nmalloka propra bloko en tiu \u0109i projekto',
+    'unused block(s) removed':
+        'neuzata(j) bloko(j) forigitaj',
+    'Export summary...':
+        'Eksportresumo',
+    'open a new browser browser window\n with a summary of this project':
+        'malfermi projektresumon\nen nova fenestro de foliumilo',
+    'Contents':
+        'Enhavo',
+    'Kind of':
+        'Speco de',
+    'Part of':
+        'Parto de',
+    'Parts':
+        'Partoj',
+    'Blocks':
+        'Blokoj',
+    'For all Sprites':
+        'Por \u0109iu objekto',
+    'Import tools':
+        'Importi ilaron',
+    'load the official library of\npowerful blocks':
+        'importi oficialan bibliotekon\nde potencaj blokoj',
+    'Libraries...':
+        'Bibliotekoj...',
+    'Import library':
+        'Importi bibliotekon',
+
+    // cloud menu
+    'Login...':
+        'Ensaluti...',
+    'Signup...':
+        'Krei konton...',
 
     // settings menu
     'Language...':
         'Lingvo...',
+    'Zoom blocks...':
+        'Zomi blokojn...',
+    'Stage size...':
+        'Grandeco de scenejo...',
+    'Stage size':
+        'Grandeco de scenejo',
+    'Stage width':
+        'Lar\u011deco de scenejo',
+    'Stage height':
+        'Alteco de scenejo',
+    'Default':
+        'Normala',
     'Blurred shadows':
         'Malklaraj ombroj',
     'uncheck to use solid drop\nshadows and highlights':
-        'malŝaltu por uzi klarajn\nombrojn kaj emfazojn',
+        'mal\u015daltu por uzi klarajn\nombrojn kaj emfazojn',
     'check to use blurred drop\nshadows and highlights':
-        'ŝaltu por uzi malklarajn\nombrojn kaj emfazojn',
+        '\u015daltu por uzi malklarajn\nombrojn kaj emfazojn',
     'Zebra coloring':
         'Zebra kolorigado',
     'check to enable alternating\ncolors for nested blocks':
-        'ŝaltu por ebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
+        '\u015daltu por ebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
     'uncheck to disable alternating\ncolors for nested block':
-        'malŝaltu por malebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
+        'mal\u015daltu por malebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
+    'Dynamic input labels':
+        'Dinamikaj enigoetikedoj',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        'mal\u015daltu por malebligi dinamikajn\nenigoetikedojn por enigo de variabloj',
+    'check to enable dynamic\nlabels for variadic inputs':
+        '\u015daltu por ebligi dinamikajn\nenigoetikedojn por enigo de variabloj',
     'Prefer empty slot drops':
-        'Preferas malplenajn malplenajn ingojn',
+        'Preferas malplenajn ingojn',
     'settings menu prefer empty slots hint':
-        'ŝaltu por malebligi demetatajn\nraportilojn forŝovi la aliajn',
+        'agorda menuo preferas indikojn \u0109e malpenaj ingoj',
     'uncheck to allow dropped\nreporters to kick out others':
-        'malŝaltu por ebligi demetatajn\nraportilojn forŝovi la aliajn',
+        'mal\u015daltu por ebligi demetatajn\nraportilojn for\u015dovi la aliajn',
     'Long form input dialog':
-        'Longa formo de eniga formularo',
+        'Eniga formularo en longa formo',
+    'Plain prototype labels':
+        'Krudaj prototipaj etikedoj',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'mal\u015daltu por \u0109iam montri (+) signon\nen etikedoj de prototipaj blokoj',
+    'check to hide (+) symbols\nin block prototype labels':
+        '\u015daltu por ka\u015di (+) signon\nen etikedoj de prototipaj blokoj',
     'check to always show slot\ntypes in the input dialog':
-        'ŝaltu por uzi la enigan\nformularon en longa formo',
+        '\u015daltu por \u0109iam montri specon\nde ingo en eniga formularo',
     'uncheck to use the input\ndialog in short form':
-        'malŝaltu por uzi la enigan\nformularon en mallonga formo',
+        'mal\u015daltu por uzi la enigan\nformularon en mallonga formo',
     'Virtual keyboard':
         'Virtuala klavaro',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'malŝaltu por malebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
+        'mal\u015daltu por malebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'ŝaltu por ebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
+        '\u015daltu por ebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
     'Input sliders':
-        'Enigaj ŝoviloj',
+        'Enigaj \u015doviloj',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'malŝaltu por malebligi\nenigajn ŝovilojn por\nenigaj kampoj',
+        'mal\u015daltu por malebligi\nenigajn \u015dovilojn por\nenigaj kampoj',
     'check to enable\ninput sliders for\nentry fields':
-        'ŝaltu por ebligi\nenigajn ŝovilojn por\nenigaj kampoj',
+        '\u015daltu por ebligi\nenigajn \u015dovilojn por\nenigaj kampoj',
     'Clicking sound':
         'Klakanta sono',
     'uncheck to turn\nblock clicking\nsound off':
-        'malŝaltu por malebligi\nklakantan sonon',
+        'mal\u015daltu por malebligi\nklakantan sonon',
     'check to turn\nblock clicking\nsound on':
-        'ŝaltu por ebligi\nklakantan sonon',
+        '\u015daltu por ebligi\nklakantan sonon',
+    'Animations':
+        'Animacioj',
+    'uncheck to disable\nIDE animations':
+        'mal\u015dalti por malebligi\nIDE-animaciojn',
+    'Turbo mode':
+        'Rapida re\u011dimo',
+    'check to prioritize\nscript execution':
+        '\u015dalti por asigni prioritaton\nde skriptoplenumado',
+    'uncheck to run scripts\nat normal speed':
+        'mal\u015dalti por plenumi skripton\nkun normala rapideco',
+    'check to enable\nIDE animations':
+        '\u015dalti por ebligi\nIDE-animaciojn',
+    'Flat design':
+        'Plata fasonado',
+    'Nested auto-wrapping':
+        'Ingita \u0109irka\u016dfulo',
+    'Keyboard Editing':
+        'Klavara redaktado',
+    'Table support':
+        'Subteno de tabeloj',
+    'Table lines':
+        'Linioj de tabelo',
+    'Visible stepping':
+        'Ponunupa\u015da plenumado',
     'Thread safe scripts':
         'Fadensekuraj skriptoj',
     'uncheck to allow\nscript reentrancy':
-        'malŝaltu por ebligi\nreeniron en fadenon',
+        'mal\u015daltu por ebligi\nreeniron en fadenon',
     'check to disallow\nscript reentrancy':
-        'ŝaltu por malebligi\nreeniron en fadenon',
+        '\u015daltu por malebligi\nreeniron en fadenon',
+    'Prefer smooth animations':
+        'Preferas glatajn animaciojn',
+    'uncheck for greater speed\nat variable frame rates':
+        'mal\u015daltu por pli granda rapideco\nkun varia bildorapido',
+    'check for smooth, predictable\nanimations across computers':
+        '\u015daltu por glataj, prognozeblaj\nanimacioj sur \u0109iuj komputiloj',
+    'Flat line ends':
+        'Malrondaj linifinoj',
+    'check for flat ends of lines':
+        '\u015daltu por malrondaj linifinoj',
+    'uncheck for round ends of lines':
+        'mal\u015daltu por rondaj linifinoj',
+    'Inheritance support':
+        'Subteno de heredado',
 
     // inputs
     'with inputs':
@@ -680,28 +845,46 @@ SnapTranslator.dict.eo = {
         'enigonomoj:',
     'Input Names:':
         'Enigonomoj:',
+    'input list:':
+        'enigolisto:',
 
     // context menus:
     'help':
         'helpo',
 
+    // palette:
+    'hide primitives':
+        'ka\u015di bazelementojn',
+    'show primitives':
+        'montri bazelementojn',
+
     // blocks:
     'help...':
-        'help...',
+        'helpo...',
+    'relabel...':
+        'Reetikedi...',
     'duplicate':
         'duobligi',
     'make a copy\nand pick it up':
-        'krei kopion\nkaj elekt ĝin',
+        'krei kopion\nkaj elekt \u011din',
+    'only duplicate this block':
+        'duobligi nur tiun \u0109i blokon',
     'delete':
         'forigi',
     'script pic...':
         'bildo de skripto...',
     'open a new window\nwith a picture of this script':
-        'malfermi novan fenestron\nkun bildo de ĉi tiu skripto',
+        'malfermi novan fenestron\nkun bildo de \u0109i tiu skripto',
     'ringify':
         'procedurigi',
     'unringify':
         'malprocedurigi',
+    'transient':
+        'travidebla',
+    'uncheck to save contents\nin the project':
+        'mal\u015daltu por konservi enhavon\nen la projekton',
+    'check to prevent contents\nfrom being saved':
+        '\u015daltu por malebligi konservon de la enhavo\nen al projekton',
 
     // custom blocks:
     'delete block definition...':
@@ -712,8 +895,22 @@ SnapTranslator.dict.eo = {
     // sprites:
     'edit':
         'redakti',
+    'move':
+        'movi',
+    'detach from':
+        'malligi de',
+    'detach all parts':
+        'malligi \u0109iujn partojn',
     'export...':
         'eksporti...',
+
+    // stage:
+    'show all':
+        'montri \u0109ion',
+    'pic...':
+        'bildo...',
+    'open a new window\nwith a picture of the stage':
+        'malfermi novan fenestron\nkun bildon de scenejo',
 
     // scripting area
     'clean up':
@@ -722,6 +919,16 @@ SnapTranslator.dict.eo = {
         'ordigi skriptojn\nvertikale',
     'add comment':
         'aldoni komenton',
+    'undrop':
+        'maldemeti',
+    'undo the last\nblock drop\nin this pane':
+        'malfari la alstan\ndemeton de bloko\nen tiu \u0109i panelo',
+    'redrop':
+        'redemeti',
+    'scripts pic...':
+        'bildo de skriptoj...',
+    'open a new window\nwith a picture of all scripts':
+        'malfermi novan fenestron\nkun bildo de \u0109iuj skriptoj',
     'make a block...':
         'krei blokon...',
 
@@ -735,13 +942,27 @@ SnapTranslator.dict.eo = {
 
     // sounds
     'Play sound':
-        'Aŭdigi sonon',
+        'A\u016ddigi sonon',
     'Stop sound':
         'Halti sonon',
     'Stop':
         'Haltigi',
     'Play':
-        'Aŭdigi',
+        'A\u016ddigi',
+    'rename sound':
+        'renomi sonon',
+
+    // lists and tables
+    'list view...':
+        'lista vidigo',
+    'table view...':
+        'tabela vidigo',
+    'open in dialog...':
+        'malfermi en formularo...',
+    'reset columns':
+        'nuligi kolumnojn',
+    'items':
+        'elementoj',
 
     // dialogs
     // buttons
@@ -762,11 +983,51 @@ SnapTranslator.dict.eo = {
     'Help':
         'Helpo',
 
+    // zoom blocks
+    'Zoom blocks':
+        'Zomi vlokojn',
+    'build':
+        'konstrui',
+    'your own':
+        'propraj',
+    'blocks':
+        'blokoj',
+    'normal (1x)':
+        'normala (1x)',
+    'demo (1.2x)':
+        'provo (1,2x)',
+    'presentation (1.4x)':
+        'prezentado (1,4x)',
+    'big (2x)':
+        'granda (2x)',
+    'huge (4x)':
+        'grandega (4x)',
+    'giant (8x)':
+        'giganta (8x)',
+    'monstrous (10x)':
+        'monstra (10x)',
+
+    // Project Manager
+    'Untitled':
+        'Sentitola',
+    'Open Project':
+        'Malfermi projekton',
+    '(empty)':
+        '(nenio)',
+    'Saved!':
+        'Konservita!',
+    'Delete Project':
+        'Forigi projekton',
+    'Are you sure you want to delete':
+        '\u0108u vi certe volas forigi?',
+    'rename...':
+        'alinomi...',
+
     // costume editor
     'Costume Editor':
         'Kostumoredaktilo',
     'click or drag crosshairs to move the rotation center':
-        'klaku aŭ trenu la krucon por movi la turnocentron',
+        'klaku a\u016d trenu la krucon por movi la turnocentron',
 
     // project notes
     'Project Notes':
@@ -776,41 +1037,42 @@ SnapTranslator.dict.eo = {
     'New Project':
         'Nova projekto',
     'Replace the current project with a new one?':
-        'Anstataŭi la aktualan projekton per la nova?',
-
-    // open project
-    'Open Project':
-        'Malfermi projekton',
-    '(empty)':
-        '(nenio)',
+        'Anstata\u016di la aktualan projekton per la nova?',
 
     // save project
     'Save Project As...':
         'Konservi projekton kiel...',
-    'Saved!':
-        'Konservita!',
 
     // export blocks
     'Export blocks':
         'Eksporti blokojn',
+    'Import blocks':
+        '',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'ĉi tiu projekto\nhavas ankoraŭ neniun\npropran blokon',
+        '\u0109i tiu projekto\nhavas ankora\u016d neniun\npropran blokon',
     'select':
         'elekti',
-    'all':
-        'ĉiujn',
     'none':
         'neniun',
 
     // variable dialog
     'for all sprites':
-        'por ĉiuj objektoj',
+        'por \u0109iuj objektoj',
     'for this sprite only':
-        'nur por ĉi tiu objekto',
+        'nur por \u0109i tiu objekto',
+
+    // variables refactoring
+    'rename only\nthis reporter':
+        '',
+    'rename all...':
+        '',
+    'rename all blocks that\naccess this variable':
+        '',
+
 
     // block dialog
     'Change block':
-        'Ŝanĝi blokon',
+        '\u015can\u011di blokon',
     'Command':
         'Komando',
     'Reporter':
@@ -828,13 +1090,15 @@ SnapTranslator.dict.eo = {
     'Delete Custom Block':
         'Forigi propran blokon',
     'block deletion dialog text':
-        'forigo de la bloko estas ne malfarebla, ĉu vi vere volas ĝin forigi?',
+        'forigo de la bloko estas ne malfarebla, \u0109u vi vere volas \u011din forigi?',
 
     // input dialog
     'Create input name':
         'Krei enigonomon',
     'Edit input name':
         'Redakti enigonomon',
+    'Edit label fragment':
+        '',
     'Title text':
         'Teksto de titolo',
     'Input name':
@@ -864,7 +1128,7 @@ SnapTranslator.dict.eo = {
     'Single input.':
         'Unuopa enigo.',
     'Default Value:':
-        'Defaŭlta valoro:',
+        'Defa\u016dlta valoro:',
     'Multiple inputs (value is list of inputs)':
         'Pluraj enigoj (valoro estas listo de enigoj)',
     'Upvar - make internal variable visible to caller':
@@ -896,17 +1160,19 @@ SnapTranslator.dict.eo = {
     'normal':
         'normala',
     'large':
-        'larĝe',
+        'lar\u011de',
     'slider':
-        'ŝovilo',
+        '\u015dovilo',
     'slider min...':
-        'ŝovilo min...',
+        '\u015dovilo min...',
     'slider max...':
-        'ŝovilo maks...',
+        '\u015dovilo maks...',
+    'import...':
+        'importi...',
     'Slider minimum value':
-        'Minimuma valoro de ŝovilo',
+        'Minimuma valoro de \u015dovilo',
     'Slider maximum value':
-        'Maksimuma valoro de ŝovilo',
+        'Maksimuma valoro de \u015dovilo',
 
     // list watchers
     'length: ':
@@ -914,7 +1180,7 @@ SnapTranslator.dict.eo = {
 
     // coments
     'add comment here...':
-        'aldonu komenton ĉi tie...',
+        'aldonu komenton \u0109i tie...',
 
     // drow downs
     // directions
@@ -938,10 +1204,32 @@ SnapTranslator.dict.eo = {
     // costumes
     'Turtle':
         'Testudo',
+    'Empty':
+        'Malplena',
 
     // graphical effects
+    'color':
+        'koloro',
+    'fisheye':
+        'fi\u015dokulo',
+    'whirl':
+        'kirlo',
+    'pixelate':
+        'bilderigi',
+    'mosaic':
+        'mozaiko',
+    'saturation':
+        'satureco',
+    'brightness':
+        'brileco',
     'ghost':
         'diafaneco',
+    'negative':
+        'negativo',
+    'comic':
+        'bildtrio',
+    'confetti':
+        'konfeto',
 
     // keys
     'space':
@@ -954,6 +1242,8 @@ SnapTranslator.dict.eo = {
         'sago dekstren',
     'left arrow':
         'sago maldekstren',
+    'any key':
+        'ajna klavo',
     'a':
         'a',
     'b':
@@ -999,7 +1289,7 @@ SnapTranslator.dict.eo = {
     'v':
         'v',
     'w':
-        'germana v',
+        'duobla v',
     'x':
         'ikso',
     'y':
@@ -1034,6 +1324,10 @@ SnapTranslator.dict.eo = {
     // math functions
     'abs':
         'abs',
+    'ceiling':
+        '',
+    'floor':
+        '',
     'sqrt':
         'radiko',
     'sin':
@@ -1053,6 +1347,18 @@ SnapTranslator.dict.eo = {
     'e^':
         'e^',
 
+    // delimiters
+    'letter':
+        'litero',
+    'whitespace':
+        'blankspaco',
+    'line':
+        'linio',
+    'tab':
+        'tabo',
+    'cr':
+        '\u0109aretreveno',
+
     // data types
     'number':
         'nombro',
@@ -1068,10 +1374,46 @@ SnapTranslator.dict.eo = {
         'raportilo',
     'predicate':
         'predikato',
+    'sprite':
+        'objekto',
 
     // list indices
     'last':
         'lasta',
     'any':
-        'iu'
+        'ajna',
+
+    // attributes
+    'neighbors':
+        'najbaroj',
+    'self':
+        'mem',
+    'other sprites':
+        'aliaj objektoj',
+    'parts':
+        'partoj',
+    'anchor':
+        'ankro',
+    'parent':
+        'parenco',
+    'children':
+        'idoj',
+    'clones':
+        'klonoj',
+    'other clones':
+        'aliaj klonoj',
+    'dangling?':
+        'misaj?',
+    'rotation x':
+        'rotacio x',
+    'rotation y':
+        'rotacio y',
+    'center x':
+        'centro x',
+    'center y':
+        'centro y',
+    'name':
+        'nomo',
+    'stage':
+        'scenejo'
 };

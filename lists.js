@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2017 by Jens Mönig and Brian Harvey
+    Copyright (C) 2018 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2017-January-31';
+modules.lists = '2018-March-08';
 
 var List;
 var ListWatcherMorph;
@@ -105,6 +105,7 @@ var ListWatcherMorph;
 // List instance creation:
 
 function List(array) {
+    this.type = null; // for UI lists, such as costumes, sounds, sprites
     this.contents = array || [];
     this.first = null;
     this.rest = null;
@@ -119,7 +120,7 @@ List.prototype.enableTables = false; // default, to not confuse NYC teachers
 // List printing
 
 List.prototype.toString = function () {
-    return 'a List [' + this.length + ' elements]';
+    return 'a List [' + this.length() + ' elements]';
 };
 
 // List updating:
@@ -312,68 +313,6 @@ List.prototype.version = function (startRow, rows) {
         v = Math.max(v, r.lastChanged ? r.lastChanged : 0);
     }
     return v;
-};
-
-// List object use (hierarchical dictionary)
-// *very* experimental and ineffective as hell
-// don't rely on any of this to stay around, -Jens
-
-function snapObject(parent) {
-    return new List([new List(['__proto__', parent])]);
-}
-
-List.prototype.setAttribute = function (key, value) {
-    var assoc = this.assoc(key);
-    if (assoc) {
-        assoc.put(value, 2);
-        this.changed();
-    } else {
-        this.add(new List([key, value]));
-    }
-};
-
-List.prototype.getAttribute = function (key) {
-    var assoc = this.assoc(key),
-        proto;
-    if (assoc) {
-        return assoc.at(2);
-    }
-    proto = this.getAttribute('__proto__');
-    if (proto) {
-        return proto.getAttribute(key);
-    }
-    throw new Error('unknown attribute: ' + key.toString());
-};
-
-List.prototype.removeAttribute = function (key) {
-    var i, assoc;
-    for (i = 1; i <= this.length(); i += 1) {
-        assoc = this.at(i);
-        if (snapEquals(assoc.at(1), key)) {
-            this.remove(i);
-            return;
-        }
-    }
-};
-
-List.prototype.attributes = function () {
-    var i, arr = [];
-    for (i = 1; i <= this.length(); i += 1) {
-        arr.push(this.at(i).at(1));
-    }
-    return new List(arr);
-};
-
-List.prototype.assoc = function (key) {
-    // private
-    var i, assoc;
-    for (i = 1; i <= this.length(); i += 1) {
-        assoc = this.at(i);
-        if (snapEquals(assoc.at(1), key)) {
-            return assoc;
-        }
-    }
-    return null;
 };
 
 // List conversion:

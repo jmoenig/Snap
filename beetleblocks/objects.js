@@ -378,6 +378,14 @@ SpriteMorph.prototype.initBlocks = function () {
     var myself = this;
     this.originalInitBlocks();
 
+    // Delete unused blocks, as they trigger errors on search and possibly in
+    // other situations
+    Object.keys(this.blocks).forEach(function (key) {
+        if (['motion', 'looks', 'sound', 'pen'].includes(myself.blocks[key].category)) {
+            delete(myself.blocks[key]);
+        }
+    });
+
     // control
 
     // Although this selector should naturally be "reset", I've kept "clear"
@@ -386,7 +394,7 @@ SpriteMorph.prototype.initBlocks = function () {
     {
         type: 'command',
         spec: 'reset',
-        category: 'control'
+        category: 'control',
     };
 
     // motion
@@ -1502,10 +1510,10 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
     }
 };
 
-StageMorph.prototype.originalSetScale = StageMorph.prototype.setScale;
+//StageMorph.prototype.originalSetScale = StageMorph.prototype.setScale;
 StageMorph.prototype.setScale = function (number) {
     this.scaleChanged = true;
-    this.originalSetScale(number);
+    //this.originalSetScale(number);
 };
 
 // Contextual menu

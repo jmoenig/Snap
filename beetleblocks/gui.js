@@ -109,11 +109,12 @@ IDE_Morph.prototype.projectMenu = function () {
         menu.addItem('My Profile', function () { window.open('/users/' + SnapCloud.username, true) });
         menu.addItem('My Projects', function () { window.open('/myprojects', true) });
     }
+    /*
     menu.addItem(
             'Migrate from the old cloud', 
             function () { window.open('/migration', true) },
             'Attempt to perform an automatic\nmigration of all your projects\nin the old cloud');
-
+    */
     menu.addLine();
     menu.addItem('Save                                       Ctrl+S', 'save');
     menu.addItem('Save As...', 'saveProjectsBrowser');
@@ -956,7 +957,7 @@ IDE_Morph.prototype.createControlBar = function () {
         this.stageSizeButton.setLeft(this.normalStageSizeButton.right() + 5);
         this.appModeButton.setLeft(this.stageSizeButton.right() + 5);
 
-        this.appModeButton.action = 'toggleFullscreen';
+        //this.appModeButton.action = 'toggleFullscreen';
 
         this.updateLabel();
     };
@@ -1236,14 +1237,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     if (situation !== 'refreshPalette') {
         // stage
         if (this.isAppMode) {
-            this.stage.setScale(Math.floor(Math.min(
-                            (this.width() - padding * 2) / this.stage.dimensions.x,
-                            (this.height() - this.controlBar.height() * 2 - padding * 2)
-                            / this.stage.dimensions.y
-                            ) * 10) / 10);
             this.stage.setCenter(this.center());
+            this.stage.reRender();
         } else {
-            this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(this.logo.bottom() + padding - 1); // We need to subtract 1 as now the border is white
             this.stage.setRight(this.right());
         }
@@ -1281,37 +1277,21 @@ IDE_Morph.prototype.buildPanes = function () {
 };
 
 // Scale buttons, embedded into the script editor
-/*
 IDE_Morph.prototype.originalCreateSpriteEditor = IDE_Morph.prototype.createSpriteEditor;
 IDE_Morph.prototype.createSpriteEditor = function () {
     this.originalCreateSpriteEditor();
 
     var plusButton = new PushButtonMorph(this, 'scaleBlocksUp', ' + '),
         equalButton = new PushButtonMorph(this, 'resetBlocksScale', ' = '),
-        minusButton = new PushButtonMorph(this, 'scaleBlocksDown', ' - ');
+        minusButton = new PushButtonMorph(this, 'scaleBlocksDown', ' - '),
+        toolBar = this.spriteEditor.toolBar;
 
-    this.spriteEditor.add(plusButton);
-    this.spriteEditor.add(equalButton);
-    this.spriteEditor.add(minusButton);
-
-    this.spriteEditor.fixLayout = function () {
-        var padding = 5;
-
-        minusButton.setLeft(this.left() + this.width() - minusButton.width() - padding);
-        minusButton.setTop(this.top() + padding);
-        equalButton.setLeft(minusButton.left() - equalButton.width() - padding);
-        equalButton.setTop(minusButton.top());
-        plusButton.setLeft(equalButton.left() - plusButton.width() - padding);
-        plusButton.setTop(minusButton.top());
-
-        minusButton.fixLayout();
-        equalButton.fixLayout();
-        plusButton.fixLayout();
-    }
-
-    this.spriteEditor.fixLayout();
+    toolBar.add(plusButton);
+    toolBar.add(equalButton);
+    toolBar.add(minusButton);
+    toolBar.setWidth(toolBar.width() + minusButton.width() + plusButton.width() + equalButton.width() + 15);
+    toolBar.setRight(this.spriteEditor.right() + 5);
 };
-*/
 
 IDE_Morph.prototype.scaleBlocksUp = function () {
     this.setBlocksScale(Math.min(SyntaxElementMorph.prototype.scale + 0.25, 12));
@@ -1717,9 +1697,7 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     this.currentSprite.scripts.fixMultiArgs();
 };
 
-IDE_Morph.prototype.toggleAppMode = nop;
-
-IDE_Morph.prototype.toggleFullscreen = function (appMode) {
+IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         myself = this,
         elements = [
@@ -1729,106 +1707,61 @@ IDE_Morph.prototype.toggleFullscreen = function (appMode) {
             this.controlBar.stageSizeButton,
             this.controlBar.normalStageSizeButton,
             this.controlBar.largeStageSizeButton,
+            this.controlBar.steppingButton,
             this.spriteEditor,
             this.palette,
             this.statusDisplay,
             this.categories ];
 
-    // The wonderful world of the web
-    document.removeEventListener('fullscreenchange', doToggleAppMode);
-    document.removeEventListener('mozfullscreenchange', doToggleAppMode);
-    document.removeEventListener('webkitfullscreenchange', doToggleAppMode);
-    document.removeEventListener('msfullscreenchange', doToggleAppMode);
-
-    document.addEventListener('fullscreenchange', doToggleAppMode, false);
-    document.addEventListener('mozfullscreenchange', doToggleAppMode, false);
-    document.addEventListener('webkitfullscreenchange', doToggleAppMode, false);
-    document.addEventListener('msfullscreenchange', doToggleAppMode, false);
-    
     Morph.prototype.trackChanges = false;
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
     if (this.isAppMode) {
-        var elem = world.worldCanvas;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        }
+        var ext = new Point(window.outerWidth, window.outerHeight);
+
+        this.setExtent(ext);
+        this.stage.renderer.setSize(ext.x, ext.y);
+        this.stage.camera.aspect = ext.x / ext.y;
+        this.stage.camera.updateProjectionMatrix();
+        this.stage.setExtent(ext);
+        this.stage.setLeft(0);
+        this.stage.setTop(0);
+
+        this.stage.add(this.controlBar);
+        this.controlBar.alpha = 0;
+
+        elements.forEach(function (e) {
+            e.hide();
+        });
+
+        world.children.forEach(function (morph) {
+            if (morph instanceof DialogBoxMorph) {
+                morph.hide();
+            }
+        });
+
     } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-    }
-
-    if (this.forceNoFullscreen) { doToggleAppMode() };
-
-    function doToggleAppMode() {
-        var isFullscreen = myself.forceNoFullscreen 
-            && (document.fullscreen 
-            || document.mozFullScreen 
-            || document.webkitIsFullScreen 
-            || document.msFullscreenElement);
-
-        if (isFullscreen || this.isAppMode) {
-            var ext = new Point(window.outerWidth, window.outerHeight);
-
-            myself.isAppMode = true;
-
-            myself.setExtent(ext);
-            myself.stage.renderer.setSize(ext.x, ext.y);
-            myself.stage.camera.aspect = ext.x / ext.y;
-            myself.stage.camera.updateProjectionMatrix();
-            myself.stage.setExtent(ext);
-            myself.stage.setLeft(0);
-            myself.stage.setTop(0);
-
-            myself.stage.add(myself.controlBar);
-            myself.controlBar.alpha = 0;
-
-            elements.forEach(function (e) {
-                e.hide();
-            });
-
-            world.children.forEach(function (morph) {
-                if (morph instanceof DialogBoxMorph) {
-                    morph.hide();
-                }
-            });
-
-        } else if (!isFullscreen || !this.isAppMode) {
-            myself.isAppMode = false;
-
-            myself.add(myself.controlBar);
-            myself.controlBar.setColor(myself.frameColor);
-            elements.forEach(function (e) {
-                e.show();
-            });
-            myself.setStageSize(1);
-            myself.stage.camera.aspect = 4/3;
-            myself.stage.camera.updateProjectionMatrix();
-            // show all hidden dialogs
-            world.children.forEach(function (morph) {
-                if (morph instanceof DialogBoxMorph) {
-                    morph.show();
-                }
-            });
-            // prevent scrollbars from showing when morph appears
-            world.allChildren().filter(function (c) {
-                return c instanceof ScrollFrameMorph;
-            }).forEach(function (s) {
-                s.adjustScrollBars();
-            });
-            myself.setExtent(world.extent());
-        }
+        this.add(this.controlBar);
+        this.controlBar.setColor(this.frameColor);
+        elements.forEach(function (e) {
+            e.show();
+        });
+        this.setStageSize(1);
+        this.stage.camera.aspect = 4/3;
+        this.stage.camera.updateProjectionMatrix();
+        // show all hidden dialogs
+        world.children.forEach(function (morph) {
+            if (morph instanceof DialogBoxMorph) {
+                morph.show();
+            }
+        });
+        // prevent scrollbars from showing when morph appears
+        world.allChildren().filter(function (c) {
+            return c instanceof ScrollFrameMorph;
+        }).forEach(function (s) {
+            s.adjustScrollBars();
+        });
+        this.setExtent(world.extent());
     }
 };
 

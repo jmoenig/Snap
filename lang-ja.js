@@ -535,8 +535,8 @@ SnapTranslator.dict.ja = {
         'ハロー',
     'world':
         'ワールド',
-    'letter %n of %s':
-        '%n 文字目の文字 %s',
+    'letter %idx of %s':
+        '%idx 文字目の文字 %s',
     'length of %s':
         '%s の長さ',
     'unicode of %s':
