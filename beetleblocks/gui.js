@@ -46,6 +46,36 @@ IDE_Morph.prototype.createStage = function () {
     this.setStageSize(1);
 };
 
+IDE_Morph.prototype.originalCreateCategories = IDE_Morph.prototype.createCategories;
+IDE_Morph.prototype.createCategories = function () {
+    var categories,
+        myself = this;
+
+    this.originalCreateCategories();
+
+    categories = this.categories;
+
+    function fixColor (button) {
+        categories.children.forEach(function (each) {
+            each.labelColor = new Color(70, 70, 70, 100);
+            each.label.drawNew();
+        });
+        button.labelColor = new Color(220, 220, 220, 100);
+        button.label.drawNew();
+    }
+
+    categories.children.forEach(function (button) {
+        button.originalAction = button.action;
+        button.action = function () {
+            button.originalAction();
+            fixColor(button);
+        };
+    });
+
+    fixColor(categories.children[0]);
+    categories.children[0].refresh();
+};
+
 // Force flat design
 IDE_Morph.prototype.setDefaultDesign = IDE_Morph.prototype.setFlatDesign; 
 
