@@ -4234,3 +4234,22 @@ Translation Updates:
 * Spanish, Catalan and French translations of the tools library, thanks, Joan!
 * New JSON library, thanks, Bernat!
 * URL cache issue fix, thanks, Joan!
+
+=== v4.2.1 minor release ===
+
+v4.2.1 New Features:
+* new libraries for parallelization and JSON support
+* new "loudness" reporter in audio comp library, thanks, Bernat!
+
+Notable Changes:
+* significant speed-up for HTTP based robot APIs such as the Hummingbird kit
+
+Notable Fixes:
+* "When I am stopped" hat block now also works for stacks of HTTP based robot commands
+* resolved name conflicts in pixels and audio comp libraries
+
+Translation Updates:
+* New Basque translation, thanks, Asier Iturralde Sarasola!
+* Portuguese, thanks, Manuel!
+* French, thanks, Nathalie and Joan!
+* Spanish, Catalan and French translations of the tools library, thanks, Nathalie and Joan!
