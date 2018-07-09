@@ -21,36 +21,36 @@ THREE.Object3D.prototype.add = function (object, negative, scene) {
     if (!negative) {
         this.originalAdd(object);
     } else {
-        
+
         object.geometry.computeBoundingBox();
         object.bsp = new ThreeBSP(object);
 
         var objectMin = new THREE.Vector3(
-                object.position.x + object.geometry.boundingBox.min.x, 
-                object.position.y + object.geometry.boundingBox.min.y, 
+                object.position.x + object.geometry.boundingBox.min.x,
+                object.position.y + object.geometry.boundingBox.min.y,
                 object.position.z + object.geometry.boundingBox.min.z
                 ),
             objectMax = new THREE.Vector3(
-                object.position.x + object.geometry.boundingBox.max.x, 
-                object.position.y + object.geometry.boundingBox.max.y, 
+                object.position.x + object.geometry.boundingBox.max.x,
+                object.position.y + object.geometry.boundingBox.max.y,
                 object.position.z + object.geometry.boundingBox.max.z
                 ),
-            objectBox = new THREE.Box3(objectMin, objectMax); 
+            objectBox = new THREE.Box3(objectMin, objectMax);
 
-        for (i = this.children.length - 1; i >= 0; i --) { 
+        for (i = this.children.length - 1; i >= 0; i --) {
 
             var victim = this.children[i];
 
             victim.geometry.computeBoundingBox();
 
             var victimMin = new THREE.Vector3(
-                    victim.position.x + victim.geometry.boundingBox.min.x, 
-                    victim.position.y + victim.geometry.boundingBox.min.y, 
+                    victim.position.x + victim.geometry.boundingBox.min.x,
+                    victim.position.y + victim.geometry.boundingBox.min.y,
                     victim.position.z + victim.geometry.boundingBox.min.z
                     ),
                 victimMax = new THREE.Vector3(
-                        victim.position.x + victim.geometry.boundingBox.max.x, 
-                        victim.position.y + victim.geometry.boundingBox.max.y, 
+                        victim.position.x + victim.geometry.boundingBox.max.x,
+                        victim.position.y + victim.geometry.boundingBox.max.y,
                         victim.position.z + victim.geometry.boundingBox.max.z
                         ),
                 victimBox = new THREE.Box3(victimMin, victimMax);
@@ -96,8 +96,8 @@ Cache.prototype.addMaterial = function (material) {
 
 Cache.prototype.findMaterial = function (color, opacity) {
     return detect(
-            this.materials, 
-            function (each) { 
+            this.materials,
+            function (each) {
                 return each.color.equals(color) && each.opacity === opacity;
             });
 };
@@ -109,17 +109,17 @@ Cache.prototype.addGeometry = function (type, geometry, params) {
 Cache.prototype.findGeometry = function (type, params) {
 
     var geometry = detect(
-            this.geometries[type], 
-            function (each) { 
-                return (each.params.length === params.length) 
+            this.geometries[type],
+            function (each) {
+                return (each.params.length === params.length)
                     && each.params.every(function (element, index) {
-                        return element === params[index]; 
+                        return element === params[index];
                     })
             });
 
-    if (geometry) { 
+    if (geometry) {
         return geometry.geometry;
-    } else { 
+    } else {
         return null;
     }
 };
@@ -144,8 +144,8 @@ SpriteMorph.prototype.initBeetle = function () {
     var loader = new THREE.OBJLoader();
     loader.load('beetleblocks/assets/meshes/beetle-color-standing.obj', function (object) {
             myself.beetle.standingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
                     child.material = material;
                 }
             });
@@ -154,8 +154,8 @@ SpriteMorph.prototype.initBeetle = function () {
 
     loader.load('beetleblocks/assets/meshes/beetle-color-flying.obj', function (object) {
             myself.beetle.flyingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
                     child.material = material;
                 }
             });
@@ -164,8 +164,8 @@ SpriteMorph.prototype.initBeetle = function () {
 
     loader.load('beetleblocks/assets/meshes/beetle-body-standing.obj', function (object) {
             myself.beetle.standingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
                     child.material = new THREE.MeshLambertMaterial({ color: 0x888888 })
                 }
             });
@@ -174,18 +174,18 @@ SpriteMorph.prototype.initBeetle = function () {
 
     loader.load('beetleblocks/assets/meshes/beetle-body-flying.obj', function (object) {
             myself.beetle.flyingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
-                    child.material = new THREE.MeshLambertMaterial({ color: 0x888888 }) 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = new THREE.MeshLambertMaterial({ color: 0x888888 })
                 }
             });
             object.rotation.set(Math.PI, 0, -Math.PI / 2);
     });
 
     loader.load('beetleblocks/assets/meshes/beetle-white.obj', function (object) {
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
-                    child.material = new THREE.MeshBasicMaterial({ color: 0xEEEEEE }) 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = new THREE.MeshBasicMaterial({ color: 0xEEEEEE })
                 }
             });
             object.rotation.set(Math.PI, 0, -Math.PI / 2);
@@ -195,9 +195,9 @@ SpriteMorph.prototype.initBeetle = function () {
 
     loader.load('beetleblocks/assets/meshes/beetle-black-standing.obj', function (object) {
             myself.beetle.standingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
-                    child.material = new THREE.MeshBasicMaterial({ color: 0x111111 }) 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = new THREE.MeshBasicMaterial({ color: 0x111111 })
                 }
             });
             object.rotation.set(Math.PI, 0, -Math.PI / 2);
@@ -205,9 +205,9 @@ SpriteMorph.prototype.initBeetle = function () {
 
     loader.load('beetleblocks/assets/meshes/beetle-black-flying.obj', function (object) {
             myself.beetle.flyingShape.add(object);
-            object.traverse(function (child) { 
-                if (child instanceof THREE.Mesh) { 
-                    child.material = new THREE.MeshBasicMaterial({ color: 0x111111 }) 
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = new THREE.MeshBasicMaterial({ color: 0x111111 })
                 }
             });
             object.rotation.set(Math.PI, 0, -Math.PI / 2);
@@ -230,7 +230,7 @@ SpriteMorph.prototype.initBeetle = function () {
         this.shape.add(this[name + 'Shape']);
     };
 
-    // To avoid precision loss, we keep state here and perform transformations on 
+    // To avoid precision loss, we keep state here and perform transformations on
     // the beetle's actual properties by using these values
     this.beetle.color.state = {
         h: 180,
@@ -254,7 +254,7 @@ SpriteMorph.prototype.initBeetle = function () {
         this.setHSL(hsl.h/360, hsl.s/100, hsl.l/100);
         myself.beetle.shape.material.color = this;
     };
-    
+
     this.beetle.posAndRotStack = [];
 
     this.beetle.multiplierScale = 1;
@@ -278,7 +278,7 @@ SpriteMorph.prototype.initBeetle = function () {
     this.beetle.negative = false;
 
     // reset
-    this.beetle.reset = function () {	
+    this.beetle.reset = function () {
         this.position.set(0, 0, 0);
         this.rotation.set(0, 0, 0);
         this.flying = false;
@@ -298,8 +298,8 @@ SpriteMorph.prototype.initBeetle = function () {
     this.beetle.makeMaterial = function () {
 
         var material = this.cache.findMaterial(this.color, this.shape.material.opacity);
-         
-        if (!material) { 
+
+        if (!material) {
 
             var stage = myself.parentThatIsA(StageMorph);
 
@@ -403,7 +403,7 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'command',
         spec: 'go home',
         category: 'motion'
-    };		
+    };
     this.blocks.move =
     {
         type: 'command',
@@ -434,7 +434,7 @@ SpriteMorph.prototype.initBlocks = function () {
     };
     this.blocks.changePositionBy =
     {
-        type: 'command', 
+        type: 'command',
         spec: 'change absolute %axes by %n',
         category: 'motion',
         defaults: ['x', 1]
@@ -442,7 +442,7 @@ SpriteMorph.prototype.initBlocks = function () {
     this.blocks.setRotationOnAxis =
     {
         type: 'command',
-        spec: 'set %axes rotation to %n',	
+        spec: 'set %axes rotation to %n',
         category: 'motion',
         defaults: ['z', 0]
     };
@@ -493,7 +493,7 @@ SpriteMorph.prototype.initBlocks = function () {
         category: 'motion',
         defaults: [0.5]
     };
-    this.blocks.reportScale = 
+    this.blocks.reportScale =
     {
         type: 'reporter',
         spec: 'scale',
@@ -520,7 +520,7 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'command',
         spec: 'sphere Dia. %n',
         category: 'shapes',
-        defaults: [0.5]		
+        defaults: [0.5]
     };
     this.blocks.tube =
     {
@@ -531,14 +531,14 @@ SpriteMorph.prototype.initBlocks = function () {
     };
     this.blocks.text =
     {
-        type: 'command', 
+        type: 'command',
         spec: 'text %s H: %n W: %n',
         category: 'shapes',
         defaults: [localize('hello'), 1, 0.5]
     };
     this.blocks.text2D =
     {
-        type: 'command', 
+        type: 'command',
         spec: '2D text %s size: %n',
         category: 'shapes',
         defaults: [localize('hello'), 2]
@@ -549,7 +549,7 @@ SpriteMorph.prototype.initBlocks = function () {
         spec: 'start drawing %drawStyle',
         category: 'shapes',
         defaults: ['lines']
-    };		 
+    };
     this.blocks.stopDrawing =
     {
         type: 'command',
@@ -588,20 +588,20 @@ SpriteMorph.prototype.initBlocks = function () {
     // color
     this.blocks.pickHue =
     {
-        type: 'command', 
-        spec: 'set hue to %huewheel',	
+        type: 'command',
+        spec: 'set hue to %huewheel',
         category: 'colors'
     };
     this.blocks.setHSLA =
     {
-        type: 'command', 
-        spec: 'set %hsla to %n',	
+        type: 'command',
+        spec: 'set %hsla to %n',
         category: 'colors',
         defaults: ['hue', 50]
     };
     this.blocks.changeHSLA =
     {
-        type: 'command', 
+        type: 'command',
         spec: 'change %hsla by %n',
         category: 'colors',
         defaults: ['hue', 10]
@@ -614,7 +614,7 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 
     // sensing
-    this.blocks.doAsk = 
+    this.blocks.doAsk =
     {
         type: 'command',
         spec: 'request user input %s',
@@ -1184,7 +1184,7 @@ StageMorph.prototype.initScene = function () {
 
     // Labels
     var loader = new THREE.TextureLoader(),
-        axes = { 
+        axes = {
             x: { realAxis: 'Z', color: 0xFF0000 },
             y: { realAxis: 'X', color: 0x00E11E },
             z: { realAxis: 'Y', color: 0x0000FF }
@@ -1192,7 +1192,7 @@ StageMorph.prototype.initScene = function () {
 
     Object.keys(axes).forEach(function (axis) {
         var map = loader.load(
-                'beetleblocks/assets/' + axis + '.png', 
+                'beetleblocks/assets/' + axis + '.png',
                 function () { if (myself.renderer) { myself.reRender(); }}),
             material = new THREE.SpriteMaterial( { map: map, color: axes[axis].color } ),
             sprite = new THREE.Sprite(material);
@@ -1230,7 +1230,7 @@ StageMorph.prototype.initRenderer = function () {
     this.renderer.changed = false;
     this.renderer.isWireframeMode = false;
     this.renderer.showingAxes = true;
-    this.renderer.isParallelProjection = false;
+    this.renderer.is2DMode = false;
 
     this.renderer.toggleWireframe = function () {
         var myInnerSelf = this;
@@ -1256,7 +1256,7 @@ StageMorph.prototype.initRenderer = function () {
     };
 
     this.renderer.toggleParallelProjection = function () {
-        this.isParallelProjection = !this.isParallelProjection;
+        this.is2DMode = !this.is2DMode;
         myself.initCamera();
     };
 };
@@ -1289,7 +1289,7 @@ StageMorph.prototype.initCamera = function () {
     var createCamera = function () {
         threeLayer = document.createElement('div');
 
-        if (myself.renderer.isParallelProjection) { 
+        if (myself.renderer.is2DMode) {
             var zoom = myself.camera ? myself.camera.zoomFactor : 82,
                 width = Math.max(myself.width(), 480),
                 height = Math.max(myself.height(), 360);
@@ -1299,7 +1299,7 @@ StageMorph.prototype.initCamera = function () {
                     width / zoom,
                     height / zoom,
                     height / - zoom,
-                    0.1, 
+                    0.1,
                     10000);
         } else {
             myself.camera = new THREE.PerspectiveCamera(60, 480/360);
@@ -1325,7 +1325,7 @@ StageMorph.prototype.initCamera = function () {
             this.right = width / zoom;
             this.top = height / zoom;
             this.bottom = height / - zoom;
-            this.updateProjectionMatrix();	
+            this.updateProjectionMatrix();
         };
 
         myself.camera.reset = function () {
@@ -1333,7 +1333,7 @@ StageMorph.prototype.initCamera = function () {
             myself.controls = new THREE.OrbitControls(this, threeLayer);
             myself.controls.addEventListener('change', function (event) { myself.render });
 
-            if (myself.renderer.isParallelProjection) {
+            if (myself.renderer.is2DMode) {
                 this.zoomFactor = 82;
                 this.applyZoom();
                 this.position.set(0,10,0);
@@ -1348,20 +1348,37 @@ StageMorph.prototype.initCamera = function () {
 
         myself.camera.fitScene = function () {
 
-            var boundingBox = new THREE.Box3().setFromObject(myself.myObjects),
-                boundingSphere = boundingBox.getBoundingSphere(),
-                center = boundingSphere.center,
-                distance = boundingSphere.radius;
+          this.reset();
 
-            this.reset();
+          var boundingBox = new THREE.Box3().setFromObject(myself.myObjects);
 
-            this.position.set(center.x, center.y, center.z);
-            this.translateZ(distance * 1.2);
+              if (!boundingBox.isEmpty()){
 
-            myself.controls.center.set(center.x, center.y, center.z);
-            myself.controls.dollyOut(1.2);
-            myself.controls.update();
-            myself.reRender();
+                var boundingSphere = boundingBox.getBoundingSphere(),
+                    center = boundingSphere.center,
+                    distance = boundingSphere.radius;
+
+
+                this.position.set(center.x, center.y, center.z);
+                this.translateZ(distance * 1.2);
+
+                myself.controls.center.set(center.x, center.y, center.z);
+
+                if (myself.renderer.is2DMode){
+                  var width = Math.max(myself.width(), 480),
+                      height = Math.max(myself.height(), 360);
+
+                  while (width / this.zoomFactor < distance ||
+                         height / this.zoomFactor < distance){
+                    this.zoomFactor /= 1.1;
+                  }
+                  this.applyZoom();
+                }
+
+                myself.controls.dollyOut(1.2);
+                myself.controls.update();
+                myself.reRender();
+             }
         };
     };
 
@@ -1389,7 +1406,7 @@ StageMorph.prototype.step = function () {
 StageMorph.prototype.referencePos = null;
 
 StageMorph.prototype.mouseScroll = function (y, x) {
-    if (this.renderer.isParallelProjection) {
+    if (this.renderer.is2DMode) {
         if (y > 0) {
             this.camera.zoomOut();
         } else if (y < 0) {
@@ -1418,7 +1435,7 @@ StageMorph.prototype.mouseMove = function (pos, button) {
 
     if (this.referencePos === null) { return };
 
-    var factor = this.renderer.isParallelProjection ? 65 / this.camera.zoomFactor : this.controls.object.position.length() / 10,
+    var factor = this.renderer.is2DMode ? 65 / this.camera.zoomFactor : this.controls.object.position.length() / 10,
         deltaX = (pos.x - this.referencePos.x),
         deltaY = (pos.y - this.referencePos.y);
 
@@ -1431,7 +1448,9 @@ StageMorph.prototype.mouseMove = function (pos, button) {
         var horzAngle = deltaX / (this.dimensions.x * this.scale) * 360;
         var vertAngle = deltaY / (this.dimensions.y * this.scale) * 360;
         this.controls.rotateLeft(radians(horzAngle));
+          if (!this.renderer.is2DMode){
         this.controls.rotateUp(radians(vertAngle));
+        }
     }
 
     this.controls.update();
@@ -1457,9 +1476,9 @@ StageMorph.prototype.clearPenTrails = nop;
 // StageMorph drawing
 StageMorph.prototype.originalDrawOn = StageMorph.prototype.drawOn;
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
-    // If the scale is lower than 1, we reuse the original method, 
+    // If the scale is lower than 1, we reuse the original method,
     // otherwise we need to modify the renderer dimensions
-    // we do not need to render the original canvas anymore because 
+    // we do not need to render the original canvas anymore because
     // we have removed sprites and backgrounds
 
     var rectangle, area, delta, src, context, w, h, sl, st;
@@ -1584,8 +1603,8 @@ SpriteMorph.prototype.findVariableWatcher = function (varName) {
         watcherInStage;
 
     watcherInStage = this.originalFindVariableWatcher(varName);
-    if (watcherInStage) { 
-        return watcherInStage 
+    if (watcherInStage) {
+        return watcherInStage
     };
 
     if (statusDisplay === null) {
