@@ -1183,12 +1183,12 @@ Process.prototype.fork = function (context, args) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     proc.instrument = this.instrument;
     proc.receiver = this.receiver;
-    proc.initializeFor(context, args, this.enableSingleStepping);
+    proc.initializeFor(context, args);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
 };
 
-Process.prototype.initializeFor = function (context, args, ignoreExit) {
+Process.prototype.initializeFor = function (context, args) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
         throw new Error(
@@ -1206,8 +1206,7 @@ Process.prototype.initializeFor = function (context, args, ignoreExit) {
             ),
         parms = args.asArray(),
         i,
-        value,
-        exit;
+        value;
 
     // remember the receiver
     this.context = context.receiver;
@@ -1256,20 +1255,6 @@ Process.prototype.initializeFor = function (context, args, ignoreExit) {
 
     if (runnable.expression instanceof CommandBlockMorph) {
         runnable.expression = runnable.expression.blockSequence();
-
-        // insert a tagged exit context
-        // which "report" can catch later
-        // needed for invoke() situations
-        if (!ignoreExit) { // when single stepping LAUNCH
-	        exit = new Context(
-    	        runnable.parentContext,
-        	    'expectReport',
-            	outer,
-            	outer.receiver
-        	);
-        	exit.tag = 'exit';
-        	runnable.parentContext = exit;
-    	}
     }
 
     this.homeContext = new Context(); // context.outerContext;

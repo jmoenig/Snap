@@ -4211,7 +4211,6 @@ Translation Updates:
 * Portuguese, thanks, Manuel!
 * Catalan, thanks, Joan!
 
-=== in development ===
 
 180703
 ------
@@ -4259,3 +4258,9 @@ Translation Updates:
 * Threads, GUI: reverted Cache-Control header for HTTP requests b/c of CORS issues
 
 === v4.2.1.1 maintenance release ===
+
+=== in development ===
+
+180710
+------
+* Threads, GUI: fixed #712 - false "reporter didn't report" error messages
