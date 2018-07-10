@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-July-09';
+modules.threads = '2018-July-10';
 
 var ThreadManager;
 var Process;
@@ -2302,7 +2302,9 @@ Process.prototype.reportURL = function (url) {
         }
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
-        this.httpRequest.setRequestHeader('Cache-Control', 'max-age=0');
+        // cache-control, commented out for now
+        // added for Snap4Arduino but has issues with local robot servers
+        // this.httpRequest.setRequestHeader('Cache-Control', 'max-age=0');
         this.httpRequest.send(null);
         if (this.context.isCustomCommand) {
             // special case when ignoring the result, e.g. when

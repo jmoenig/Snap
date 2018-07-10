@@ -4253,3 +4253,9 @@ Translation Updates:
 * Portuguese, thanks, Manuel!
 * French, thanks, Nathalie and Joan!
 * Spanish, Catalan and French translations of the tools library, thanks, Nathalie and Joan!
+
+180710
+------
+* Threads, GUI: reverted Cache-Control header for HTTP requests b/c of CORS issues
+
+=== v4.2.1.1 maintenance release ===
