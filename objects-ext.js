@@ -22,14 +22,16 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'reporter',
         category: 'network',
         spec: 'call %s with %s',
-        defaults: ['GoogleTrends']
+        defaults: ['GoogleTrends'],
+        deprecated: true  // deprecated blocks are not shown when searching for blocks
     };
 
     SpriteMorph.prototype.blocks.getJSFromRPCDropdown = {  // primitive JSON response
         type: 'reporter',
         category: 'network',
         spec: 'call %rpcNames / %rpcActions with %s',
-        defaults: ['GoogleTrends']
+        defaults: ['GoogleTrends'],
+        deprecated: true
     };
 
     SpriteMorph.prototype.blocks.getJSFromRPCStruct = {  // primitive JSON response
@@ -43,7 +45,8 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'reporter',
         category: 'network',
         spec: 'costume from %rpcNames / %rpcActions with %s',
-        defaults: ['GoogleTrends', '']
+        defaults: ['GoogleTrends', ''],
+        deprecated: true
     };
 
     SpriteMorph.prototype.blocks.reportRPCError = {
