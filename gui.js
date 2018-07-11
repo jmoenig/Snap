@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-July-10';
+modules.gui = '2018-July-11';
 
 // Declarations
 
@@ -361,6 +361,9 @@ IDE_Morph.prototype.openIn = function (world) {
         if (dict.noExitWarning) {
             window.onbeforeunload = nop;
         }
+        if (dict.lang) {
+            myself.setLanguage(dict.lang, null, true); // don't persist
+        }
     }
 
     // dynamic notifications from non-source text files
@@ -392,6 +395,13 @@ IDE_Morph.prototype.openIn = function (world) {
                 )) {
                 this.droppedText(hash);
             } else {
+                idx = hash.indexOf("&");
+                if (idx > 0) {
+                    dict = myself.cloud.parseDict(hash.substr(idx));
+                    dict.editMode = true;
+                    hash = hash.slice(0, idx);
+                    applyFlags(dict);
+                }
                 this.droppedText(getURL(hash));
             }
         } else if (location.hash.substr(0, 5) === '#run:') {
@@ -512,13 +522,12 @@ IDE_Morph.prototype.openIn = function (world) {
             );
         } else if (location.hash.substr(0, 6) === '#lang:') {
             urlLanguage = location.hash.substr(6);
-            this.setLanguage(urlLanguage);
+            this.setLanguage(urlLanguage, null, true); // don't persist
             this.loadNewProject = true;
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
     this.loadNewProject = false;
-
     }
 
     if (this.userLanguage) {
@@ -4956,7 +4965,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang, callback) {
+IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('lang-' + lang + '.js'),
         myself = this;
@@ -4965,18 +4974,18 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
         document.head.removeChild(translation);
     }
     if (lang === 'en') {
-        return this.reflectLanguage('en', callback);
+        return this.reflectLanguage('en', callback, noSave);
     }
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {
-        myself.reflectLanguage(lang, callback);
+        myself.reflectLanguage(lang, callback, noSave);
     };
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
@@ -5002,7 +5011,9 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     } else {
         this.openProjectString(projectData);
     }
-    this.saveSetting('language', lang);
+    if (!noSave) {
+        this.saveSetting('language', lang);
+    }
     if (callback) {callback.call(this); }
 };
 

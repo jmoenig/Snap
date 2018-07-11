@@ -4264,3 +4264,7 @@ Translation Updates:
 180710
 ------
 * Threads, GUI: fixed #712 - false "reporter didn't report" error messages
+
+180711
+------
+* GUI: added support for "&lang:nn" url parameter, made it non-permanent
