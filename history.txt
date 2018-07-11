@@ -4268,3 +4268,4 @@ Translation Updates:
 180711
 ------
 * GUI: added support for "&lang:nn" url parameter, made it non-permanent
+* Threads: fixed outer script variable scope for TELL/ASK and OF

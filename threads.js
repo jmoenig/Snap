@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-July-10';
+modules.threads = '2018-July-11';
 
 var ThreadManager;
 var Process;
@@ -3401,7 +3401,12 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.variables = copy(result.outerContext.variables);
         result.outerContext.receiver = otherObj;
-        result.outerContext.variables.parentFrame = otherObj.variables;
+        if (result.outerContext.variables.parentFrame) {
+            result.outerContext.variables.parentFrame.parentFrame =
+                otherObj.variables;
+        } else {
+            result.outerContext.variables.parentFrame = otherObj.variables;
+        }
     }
     return result;
 };
