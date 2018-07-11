@@ -4269,3 +4269,4 @@ Translation Updates:
 ------
 * GUI: added support for "&lang:nn" url parameter, made it non-permanent
 * Threads: fixed outer script variable scope for TELL/ASK and OF
+* Tools: fixed JOIN WORDS and LIST -> SENTENCE
