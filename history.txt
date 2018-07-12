@@ -4271,6 +4271,7 @@ Translation Updates:
 * Threads: fixed outer script variable scope for TELL/ASK and OF
 * Tools: fixed JOIN WORDS and LIST -> SENTENCE
 
-180711
+180712
 ------
 * Threads: tweaked outer script variable scope for TELL/ASK and OF
+* Blocks: fixed #2145 - newlines in block labels conflict with input declarations

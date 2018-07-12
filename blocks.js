@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-June-08';
+modules.blocks = '2018-July-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2312,7 +2312,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
         this.add(this.placeHolder());
     }
     this.parseSpec(spec).forEach(function (word) {
-        if (word[0] === '%') {
+        if (word[0] === '%' && (word !== '%br')) {
             inputIdx += 1;
         }
         part = myself.labelPart(word);
