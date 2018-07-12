@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-July-11';
+modules.gui = '2018-July-12';
 
 // Declarations
 
@@ -5905,9 +5905,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     if (notification) {
-        this.setExtent(new Point(455, 335).add(notification.extent()));
+        this.setExtent(new Point(555, 335).add(notification.extent()));
     } else {
-        this.setExtent(new Point(455, 335));
+        this.setExtent(new Point(555, 335));
     }
     this.fixLayout();
 
