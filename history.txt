@@ -4259,15 +4259,13 @@ Translation Updates:
 
 === v4.2.1.1 maintenance release ===
 
-=== in development ===
-
 180710
 ------
 * Threads, GUI: fixed #712 - false "reporter didn't report" error messages
 
 180711
 ------
-* GUI: added support for "&lang:nn" url parameter, made it non-permanent
+* GUI: added support for "&lang=nn" url parameter, made it non-permanent
 * Threads: fixed outer script variable scope for TELL/ASK and OF
 * Tools: fixed JOIN WORDS and LIST -> SENTENCE
 
@@ -4276,3 +4274,24 @@ Translation Updates:
 * Threads: tweaked outer script variable scope for TELL/ASK and OF
 * Blocks: fixed #2145 - newlines in block labels conflict with input declarations
 * GUI: increased project dialog width to accommodate translations for the "recover" button
+
+180713
+------
+* Blocks: enabled smart ternary Boolean slots by default
+
+=== v4.2.1.2 maintenance release ===
+
+New Feature:
+* new "&lang=nn" url parameter for specifying a session translation in a web-link
+
+Changed:
+* smart ternary Boolean slots - only 2 states except inside rings and in the palette
+* made project dialog wider to accommodate translations for the "recover" button
+
+Fixes:
+* corrected scope for outer script variables in inter-sprite messages (TELL, ASK, OF)
+* eliminated false "reporter didn't report" error messages
+
+
+=== in development ===
+

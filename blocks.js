@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-July-12';
+modules.blocks = '2018-July-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9419,7 +9419,7 @@ BooleanSlotMorph.uber = ArgMorph.prototype;
 
 // BooleanSlotMorph preferences settings
 
-BooleanSlotMorph.prototype.isTernary = true;
+BooleanSlotMorph.prototype.isTernary = false;
 
 // BooleanSlotMorph instance creation:
 
