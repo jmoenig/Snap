@@ -4293,5 +4293,12 @@ Fixes:
 * eliminated false "reporter didn't report" error messages
 
 
+180719
+------
+* Threads: fixed a regression conflict between "when I am stopped" and broadcasts
+
+=== v4.2.1.3 maintenance release ===
+
+
 === in development ===
 

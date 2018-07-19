@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-July-12';
+modules.threads = '2018-July-19';
 
 var ThreadManager;
 var Process;
@@ -217,6 +217,7 @@ ThreadManager.prototype.startProcess = function (
             return active;
         }
         active.stop();
+        active.canBroadcast = true; // broadcasts to fire despite reentrancy
         this.removeTerminatedProcesses();
     }
     newProc = new Process(top, receiver, callback, isClicked);
@@ -528,6 +529,7 @@ ThreadManager.prototype.toggleSingleStepping = function () {
                         invocations can catch them
     flashingContext     for single stepping
     isInterrupted       boolean, indicates intra-step flashing of blocks
+    canBroadcast        boolean, used to control reentrancy & "when stopped"
 */
 
 Process.prototype = {};
@@ -565,6 +567,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.procedureCount = 0;
     this.flashingContext = null; // experimental, for single-stepping
     this.isInterrupted = false; // experimental, for single-stepping
+    this.canBroadcast = true; // used to control "when I am stopped"
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -648,6 +651,7 @@ Process.prototype.stop = function () {
     if (this.context) {
         this.context.stopMusic();
     }
+    this.canBroadcast = false;
 };
 
 Process.prototype.pause = function () {
@@ -2324,7 +2328,7 @@ Process.prototype.doBroadcast = function (message) {
         myself = this,
         procs = [];
 
-    if (this.readyToTerminate) {
+    if (!this.canBroadcast) {
         return [];
     }
     if (message instanceof List && (message.length() === 2)) {
