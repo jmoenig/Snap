@@ -2003,7 +2003,8 @@ Process.prototype.doRepeat = function (counter, body) {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
+    // was '=== 0', which caused infinite loops on non-ints
+    if (counter < 1 || typeof counter === 'undefined') {
         return null;
     }
     this.popContext();
