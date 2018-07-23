@@ -18,7 +18,9 @@ jobs:
           on:
             repo: cycomachead/snap
             # repo: jmoenig/Snap--Build-Your-Own-Blocks
-            branch: /^[0-9]+\.[0-9]+/
+            branches:
+              only:
+                - /^[0-9]+\.[0-9]+/
             condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
         # deploy to the Snap!Cloud repo
         # - provider: script
