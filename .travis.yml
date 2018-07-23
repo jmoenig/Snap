@@ -16,7 +16,8 @@ jobs:
           repo: cs10/snap
           target-branch: master
           on:
-            repo: jmoenig/Snap--Build-Your-Own-Blocks
+            repo: cycomachead/snap
+            # repo: jmoenig/Snap--Build-Your-Own-Blocks
             condition: $TRAVIS_TAG =~ ^[0-9]+
         # deploy to the Snap!Cloud repo
         # - provider: script
