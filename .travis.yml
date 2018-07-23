@@ -18,7 +18,8 @@ jobs:
           on:
             repo: cycomachead/snap
             # repo: jmoenig/Snap--Build-Your-Own-Blocks
-            condition: $TRAVIS_TAG =~ ^[0-9]+
+            branch: /^[0-9]+\.[0-9]+/
+            condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
         # deploy to the Snap!Cloud repo
         # - provider: script
         #   script: bash scripts/deploy.sh staging
