@@ -1,5 +1,7 @@
-# Deploy Snap! when a release is created.
-
+# This uses travis-ci.org to automate releasing Snap!
+lang: node_js
+# We don't actually have tests to run...
+script: exit 0;
 # Creating a release creates a "branch".
 deploy:
   # This deploys to cs10.org/snap/
@@ -11,7 +13,7 @@ deploy:
     target-branch: master
     on:
       repo: jmoenig/Snap--Build-Your-Own-Blocks
-      condition: $TRAVIS_BRANCH =~ ^v[0-9]+
+      condition: $TRAVIS_TAG =~ ^v[0-9]+
   # deploy to the Snap!Cloud repo
   # - provider: script
   #   script: bash scripts/deploy.sh staging
@@ -23,3 +25,4 @@ deploy:
   #   script: bash scripts/deploy.sh staging
   #   on:
   #     branch: master
+  # deploy a release to berkeley...
