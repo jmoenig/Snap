@@ -578,13 +578,14 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
                         SnapCloud.callService(
                             'getProject',
                             function (response) {
-                                msg.destroy();
                                 var action = myself.rawLoadCloudProject(response[0]);
                                 if (action) {
                                     action.then(function() {
                                         applyFlags(dict);
+                                        msg.destroy();
                                     });
                                 } else {
+                                    msg.destroy();
                                     applyFlags(dict);
                                 }
                             },
@@ -2612,10 +2613,10 @@ IDE_Morph.prototype.cloudMenu = function () {
                                     },
                                     function () {nop(); }, // yield (Chrome)
                                     function () {
-                                        SnapActions.openProject(projectData);
-                                    },
-                                    function () {
-                                        msg.destroy();
+                                        SnapActions.openProject(projectData)
+                                            .then(function() {
+                                                msg.destroy();
+                                            });
                                     }
                                 ]);
                             },
@@ -4352,10 +4353,10 @@ IDE_Morph.prototype.openProjectString = function (str) {
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
-            SnapActions.openProject(str);
-        },
-        function () {
-            msg.destroy();
+            SnapActions.openProject(str)
+                .then(function() {
+                    msg.destroy();
+                });
         }
     ]);
 };
@@ -4403,10 +4404,9 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
-            SnapActions.openProject(str);
-        },
-        function () {
-            msg.destroy();
+            SnapActions.openProject(str).then(function() {
+                msg.destroy();
+            });
         }
     ]);
 };

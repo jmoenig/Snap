@@ -586,7 +586,7 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
     });
     role = room.children[0].attributes.name;
 
-    this.showMessage('Opening project...', 3);
+    var msg = this.showMessage('Opening project...');
     // Create a room with the new name
     this.newRole(role);
 
@@ -602,6 +602,9 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
                 '</snapdata>'
             ].join('');
             return SnapActions.openProject(projectXml);
+        })
+        .then(function() {
+            msg.destroy();
         });
 };
 
