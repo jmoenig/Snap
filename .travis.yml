@@ -12,15 +12,12 @@ jobs:
         - provider: pages
           skip-cleanup: true
           github-token: $GITHUB_TOKEN
-          keep-history: false
+          keep-history: true
           repo: cs10/snap
           target-branch: master
           on:
             repo: cycomachead/snap
             # repo: jmoenig/Snap--Build-Your-Own-Blocks
-            # branches:
-            #   only:
-            #     - /^[0-9]+\.[0-9]+/
             condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
             all_branches: true
         # deploy to the Snap!Cloud repo
@@ -31,7 +28,14 @@ jobs:
         #     condition: $TRAVIS_TAG =~ ^v[0-9]+
         # deploy master to snap.berkeley.edu/snapsource/development
         # - provider: script
-        #   script: bash scripts/deploy.sh staging
+        #   script: scp -r ./* michael@abbenay.cs.berkeley.edu:~/dev/
         #   on:
         #     branch: master
         # deploy a release to berkeley...
+        # - provider: script
+        #   script: scp -r ./* michael@abbenay.cs.berkeley.edu:~/dev/
+        #   on:
+        #     repo: cycomachead/snap
+        #     repo: jmoenig/Snap--Build-Your-Own-Blocks
+        #   condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
+        #   all_branches: true
