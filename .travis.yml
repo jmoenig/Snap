@@ -1,28 +1,32 @@
 # This uses travis-ci.org to automate releasing Snap!
-lang: node_js
+language: generic
 # We don't actually have tests to run...
 script: exit 0;
 # Creating a release creates a "branch".
-deploy:
-  # This deploys to cs10.org/snap/
-  - provider: pages
-    skip-cleanup: true
-    github-token: $GITHUB_TOKEN
-    keep-history: false
-    repo: cs10/snap
-    target-branch: master
-    on:
-      repo: jmoenig/Snap--Build-Your-Own-Blocks
-      condition: $TRAVIS_TAG =~ ^v[0-9]+
-  # deploy to the Snap!Cloud repo
-  # - provider: script
-  #   script: bash scripts/deploy.sh staging
-  #   on:
-  #     repo: jmoenig/Snap--Build-Your-Own-Blocks
-  #     condition: $TRAVIS_BRANCH =~ ^v[0-9]+
-  # deploy master to snap.berkeley.edu/snapsource/development
-  # - provider: script
-  #   script: bash scripts/deploy.sh staging
-  #   on:
-  #     branch: master
-  # deploy a release to berkeley...
+jobs:
+  include:
+    - stage: deploy
+      script: skip
+      deploy:
+        # This deploys to cs10.org/snap/
+        - provider: pages
+          skip-cleanup: true
+          github-token: $GITHUB_TOKEN
+          keep-history: false
+          repo: cs10/snap
+          target-branch: master
+          on:
+            repo: jmoenig/Snap--Build-Your-Own-Blocks
+            condition: $TRAVIS_TAG =~ ^[0-9]+
+        # deploy to the Snap!Cloud repo
+        # - provider: script
+        #   script: bash scripts/deploy.sh staging
+        #   on:
+        #     repo: jmoenig/Snap--Build-Your-Own-Blocks
+        #     condition: $TRAVIS_TAG =~ ^v[0-9]+
+        # deploy master to snap.berkeley.edu/snapsource/development
+        # - provider: script
+        #   script: bash scripts/deploy.sh staging
+        #   on:
+        #     branch: master
+        # deploy a release to berkeley...
