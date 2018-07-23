@@ -2201,11 +2201,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
 
     // language
-    if (language && language !== 'en') {
-        this.userLanguage = language;
-    } else {
-        this.userLanguage = null;
-    }
+    this.userLanguage = this.getBrowserLanguage();
 
     //  click
     if (click && !BlockMorph.prototype.snapSound) {
@@ -4946,6 +4942,17 @@ IDE_Morph.prototype.saveProjectsBrowser = function () {
 };
 
 // IDE_Morph localization
+
+IDE_Morph.prototype.getBrowserLanguage = function () {
+    var lang;
+    if (window.navigator.languages) {
+        lang = window.navigator.languages[0];
+    } else {
+        lang = (window.navigator.userLanguage || window.navigator.language);
+    }
+    lang = lang.substring(0, 2);
+    return lang;
+};
 
 IDE_Morph.prototype.languageMenu = function () {
     var menu = new MenuMorph(this),
