@@ -9180,7 +9180,7 @@ ReplayControls.prototype.getCaptionFor = function(action) {
 ReplayControls.prototype.play = function() {
     var myself = this;
 
-    if (this.actionIndex < this.actions.length-1) {
+    if (!this.isAtEnd()) {
         this.isPlaying = true;
         this.lastPlayUpdate = Date.now();
 
@@ -9192,6 +9192,10 @@ ReplayControls.prototype.play = function() {
         this.add(this.playButton);
         this.fixLayout();
     }
+};
+
+ReplayControls.prototype.isAtEnd = function() {
+    return this.actionIndex === this.actions.length-1;
 };
 
 ReplayControls.prototype.getSliderLeftFromValue = function(value) {
