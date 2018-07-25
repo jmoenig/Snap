@@ -9477,6 +9477,7 @@ ReplayControls.prototype.setActions = function(actions, atEnd) {
         this.actionIndex = this.actions.length - 1;
         this.actionTime = endTime;
     } else {
+        this.actionIndex = -1;
         this.slider.value = this.slider.start;
     }
     this.slider.setStop(endPosition);
