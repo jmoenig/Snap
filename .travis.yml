@@ -2,7 +2,10 @@
 language: generic
 # We don't actually have tests to run...
 script: exit 0;
-# Creating a release creates a "branch".
+# We need sshpass to sync to berkeley. (for now.)
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install sshpass
 jobs:
   include:
     - stage: deploy
@@ -22,20 +25,29 @@ jobs:
             all_branches: true
         # deploy to the Snap!Cloud repo
         # - provider: script
-        #   script: bash scripts/deploy.sh staging
+        #   script: |
+        #      git clone --depth=1 --recursive https://github.com/bromagosa/snapCloud
+        #      cd snapCloud/snap
+        #      git fetch origin --tags
+        #      release=$(git describe --tags `git rev-list --tags --max-count=1`)
+        #      git checkout $release
+        #      cd ..; git commit -m "[ci]: automatically checkout ${release}"
+        #      git push origin master
         #   on:
         #     repo: jmoenig/Snap--Build-Your-Own-Blocks
         #     condition: $TRAVIS_TAG =~ ^v[0-9]+
-        # deploy master to snap.berkeley.edu/snapsource/development
-        # - provider: script
-        #   script: scp -r ./* michael@abbenay.cs.berkeley.edu:~/dev/
-        #   on:
-        #     branch: master
-        # deploy a release to berkeley...
-        # - provider: script
-        #   script: scp -r ./* michael@abbenay.cs.berkeley.edu:~/dev/
-        #   on:
-        #     repo: cycomachead/snap
-        #     repo: jmoenig/Snap--Build-Your-Own-Blocks
-        #   condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
-        #   all_branches: true
+        #     all_branches: true
+        # deploy master to snap.berkeley.edu/snapsource/dev
+        - provider: script
+          script: sshpass -p "${REMOTE_PASSWORD}" rsync -avz cycomachead/snap/ ${ACCOUNT}:~/snapsource/
+          on:
+            repo: cycomachead/snap
+            # repo: jmoenig/Snap--Build-Your-Own-Blocks
+            branch: master
+        # deploy a release to main snap URL
+        - provider: script
+          script: sshpass -p "${REMOTE_PASSWORD}" rsync -avz cycomachead/snap/ ${ACCOUNT}:~/snapsource/
+          on:
+            repo: jmoenig/Snap--Build-Your-Own-Blocks
+          condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
+          all_branches: true
