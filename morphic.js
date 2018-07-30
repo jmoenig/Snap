@@ -8155,12 +8155,13 @@ MenuMorph.prototype.popup = function (world, pos) {
         world.activeMenu.destroy();
     }
     if (this.items.length < 1 && !this.title) { // don't show empty menus
-        return;
+        return false;
     }
     world.add(this);
     world.activeMenu = this;
     this.world = world; // optionally enable keyboard support
     this.fullChanged();
+	  return true;
 };
 
 MenuMorph.prototype.scroll = function () {
@@ -8180,7 +8181,8 @@ MenuMorph.prototype.scroll = function () {
 
 MenuMorph.prototype.popUpAtHand = function (world) {
     var wrrld = world || this.world;
-    this.popup(wrrld, wrrld.hand.position());
+    var menuOpened = this.popup(wrrld, wrrld.hand.position());
+	return menuOpened;
 };
 
 MenuMorph.prototype.popUpCenteredAtHand = function (world) {
@@ -11210,8 +11212,14 @@ HandMorph.prototype.processTouchStart = function (event) {
     if (event.touches.length === 1) {
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             function () {
+				// if the context menu is not opened after mouseRightClick, restore original mouse button
+				var currentMouseButton = myself.mouseButton;
                 myself.processMouseDown({button: 2});
-                myself.processMouseUp({button: 2});
+                var isContextMenuOpened = myself.processMouseUp({button: 2});
+				if (!isContextMenuOpened) {
+					myself.mouseButton = currentMouseButton;
+				}
+				
                 event.preventDefault();
                 clearInterval(myself.touchHoldTimeout);
             },
@@ -11244,6 +11252,7 @@ HandMorph.prototype.processMouseUp = function () {
         context,
         contextMenu,
         expectedClick;
+	  var	isContextMenuOpened = false;
 
     this.destroyTemporaries();
     if (this.children.length !== 0) {
@@ -11262,8 +11271,8 @@ HandMorph.prototype.processMouseUp = function () {
                     contextMenu = context.contextMenu();
                 }
                 if (contextMenu) {
-                    contextMenu.popUpAtHand(this.world);
-                }
+                    isContextMenuOpened = contextMenu.popUpAtHand(this.world);
+               }
             }
         }
         while (!morph[expectedClick]) {
@@ -11272,6 +11281,7 @@ HandMorph.prototype.processMouseUp = function () {
         morph[expectedClick](this.bounds.origin);
     }
     this.mouseButton = null;
+	  return isContextMenuOpened;
 };
 
 HandMorph.prototype.processDoubleClick = function () {
