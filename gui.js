@@ -1181,6 +1181,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
+    if (this.isAppMode) this.palette.hide();
     return this.palette;
 };
 
@@ -1189,6 +1190,7 @@ IDE_Morph.prototype.createPaletteHandle = function () {
     if (this.paletteHandle) {this.paletteHandle.destroy(); }
     this.paletteHandle = new PaletteHandleMorph(this.categories);
     this.add(this.paletteHandle);
+    if (this.isAppMode) this.paletteHandle.hide();
 };
 
 IDE_Morph.prototype.createStage = function () {
@@ -1439,6 +1441,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         this.tabBar.setLeft(this.left());
         this.tabBar.setBottom(this.bottom());
     };
+    if (this.isAppMode) this.spriteBar.hide();
 };
 
 IDE_Morph.prototype.createSpriteEditor = function () {
@@ -1721,6 +1724,7 @@ IDE_Morph.prototype.createCorral = function () {
         myself.createCorral();
         myself.fixLayout();
     };
+    if (this.isAppMode) this.corral.hide();
 };
 
 // IDE_Morph layout
