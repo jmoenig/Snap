@@ -1547,8 +1547,11 @@ SpriteMorph.prototype.appearIn = function (ide) {
 // SpriteMorph versioning
 
 SpriteMorph.prototype.setName = function (string) {
-    this.name = string || this.name;
-    this.version = Date.now();
+    if (string != 'mouse-pointer' && string != 'pen trails'
+            && string != 'edge') { // used by system
+        this.name = string || this.name;
+        this.version = Date.now();
+    }
 };
 
 // SpriteMorph rendering
