@@ -5624,7 +5624,7 @@ CursorMorph.prototype.undo = function () {
 };
 
 CursorMorph.prototype.insert = function (aChar, shiftKey) {
-    var text;
+    var text, start, end;
     if (aChar === '\u0009') {
         this.target.escalateEvent('reactToEdit', this.target);
         if (shiftKey) {
@@ -5632,22 +5632,41 @@ CursorMorph.prototype.insert = function (aChar, shiftKey) {
         }
         return this.target.tab(this.target);
     }
-    if (!this.target.isNumeric ||
-            !isNaN(parseFloat(aChar)) ||
-            contains(['-', '.'], aChar)) {
-        if (this.target.selection() !== '') {
-            this.gotoSlot(this.target.selectionStartSlot());
-            this.target.deleteSelection();
+    if (this.target.isNumeric) {
+        start = end = this.slot;
+        if (this.target.selection()) {
+            start = this.target.selectionStartSlot();
+            end = start + this.target.selection().length;
         }
-        text = this.target.text;
-        text = text.slice(0, this.slot) +
+        text = this.target.text.slice(0, start) +
             aChar +
-            text.slice(this.slot);
-        this.target.text = text;
-        this.target.drawNew();
-        this.target.changed();
-        this.goRight(false, aChar.length);
+            this.target.text.slice(end);
+        if (!contains(['-', '+', '.', '-.', '+.'], text)) {
+            if (text.length > 2 &&
+                    '-+'.indexOf(text[text.length - 1]) > -1 &&
+                    'eE'.indexOf(text[text.length - 2]) > -1) {
+                text = text.slice(0, -2);
+            } else if (text.length > 1 &&
+                    'eE'.indexOf(text[text.length - 1]) > -1) {
+                text = text.slice(0, -1);
+            }
+            if (isNaN(text)) {
+                return;
+            }
+        }
     }
+    if (this.target.selection() !== '') {
+        this.gotoSlot(this.target.selectionStartSlot());
+        this.target.deleteSelection();
+    }
+    text = this.target.text;
+    text = text.slice(0, this.slot) +
+        aChar +
+        text.slice(this.slot);
+    this.target.text = text;
+    this.target.drawNew();
+    this.target.changed();
+    this.goRight(false, aChar.length);
 };
 
 CursorMorph.prototype.ctrl = function (aChar, shiftKey) {
@@ -5727,6 +5746,20 @@ CursorMorph.prototype.deleteLeft = function () {
 // CursorMorph destroying:
 
 CursorMorph.prototype.destroy = function () {
+    var text = this.target.text;
+    if (this.target.isNumeric &&
+            text !== this.originalContents && isNaN(text)) {
+        if ('+-'.indexOf(text[text.length - 1]) > -1) {
+            text = text.slice(0, -1);
+        }
+        if ('eE'.indexOf(text[text.length - 1]) > -1) {
+            text = text.slice(0, -1);
+        }
+        this.target.text = '' + (+text || 0);
+        this.target.clearSelection();
+        this.target.drawNew();
+        this.target.changed();
+    }
     if (this.target.alignment !== this.originalAlignment) {
         this.target.alignment = this.originalAlignment;
         this.target.drawNew();
