@@ -144,18 +144,14 @@ List.prototype.cons = function (car, cdr) {
 
 List.prototype.cdr = function () {
     var result, i;
-    if (this.isLinked) {
-        return this.rest || new List();
-    }
-    if (this.contents.length < 2) {
-        return new List();
+    if (!this.isLinked) {
+        if (this.contents.length < 2) {
+            return new List();
+        }
+        this.becomeLinked();
     }
 
-    result = new List();
-    for (i = this.contents.length; i > 1; i -= 1) {
-        result = this.cons(this.at(i), result);
-    }
-    return result;
+    return this.rest || new List();
 };
 
 // List array setters:
@@ -383,17 +379,14 @@ List.prototype.becomeArray = function () {
 };
 
 List.prototype.becomeLinked = function () {
-    var i, stop, tail = this;
+    var i, rest;
     if (!this.isLinked) {
-        stop = this.length();
-        for (i = 0; i < stop; i += 1) {
-            tail.first = this.contents[i];
-            if (i < (stop - 1)) {
-                tail.rest = new List();
-                tail.isLinked = true;
-                tail = tail.rest;
-            }
+        rest = new List();
+        for (i = this.contents.length; i > 1; i -= 1) {
+            rest = this.cons(this.at(i), rest);
         }
+        this.first = this.at(1);
+        this.rest = rest;
         this.contents = [];
         this.isLinked = true;
     }
