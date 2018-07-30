@@ -6935,9 +6935,9 @@ SliderMorph.uber = CircleBoxMorph.prototype;
 
 function SliderMorph(start, stop, value, size, orientation, color) {
     this.init(
-        start || 1,
-        stop || 100,
-        value || 50,
+        typeof start === 'number' ? start : 1,
+        typeof stop === 'number' ? stop : 100,
+        typeof value === 'number' ? value : 50,
         size || 10,
         orientation || 'vertical',
         color
