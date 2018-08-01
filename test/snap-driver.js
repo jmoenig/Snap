@@ -161,8 +161,14 @@ SnapDriver.prototype.mouseUp = function(position) {
 };
 
 SnapDriver.prototype.dragAndDrop = function(srcMorph, position) {
-    this.mouseDown(srcMorph.center());
-    this.world().hand.grab(srcMorph);
+    const start = srcMorph.center();
+    const {MorphicPreferences} = this.globals();
+
+    this.mouseDown(start);
+    this.world().hand.processMouseMove({
+        pageY: start.y,
+        pageX: start.x + MorphicPreferences.grabThreshold+1
+    });
     this.mouseUp(position);
 };
 
