@@ -298,12 +298,7 @@ BeetleCloud.prototype.getProjectList = function (callBack, errorCall) {
             );
 };
 
-
-// Backwards compatibility with old cloud
-// To be removed when we finish moving to the new cloud
-BeetleCloud.prototype.parseResponse = function (usr) {
-    return [{ username: usr, password: 'nope' }];
-};
+Cloud = BeetleCloud;
 
 var SnapCloud = new BeetleCloud(
     '/api' // To be changed to HTTPS
