@@ -357,6 +357,7 @@ function listToArray(list) {
     return combinedArray;
 }
 
+NetsProcess.prototype.doRunRPC =
 NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
     var action = methodSignature[0],
         argNames = methodSignature[1],

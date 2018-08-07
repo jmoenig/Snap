@@ -34,10 +34,17 @@ SpriteMorph.prototype.initBlocks = function () {
         deprecated: true
     };
 
-    SpriteMorph.prototype.blocks.getJSFromRPCStruct = {  // primitive JSON response
+    SpriteMorph.prototype.blocks.getJSFromRPCStruct = {
         type: 'reporter',
         category: 'network',
         spec: 'call %rpcNames / %rpcMethod',
+        defaults: ['GoogleTrends']
+    };
+
+    SpriteMorph.prototype.blocks.doRunRPC = {
+        type: 'command',
+        category: 'network',
+        spec: 'run %rpcNames / %rpcMethod',
         defaults: ['GoogleTrends']
     };
 
