@@ -4358,7 +4358,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks.forEach(function (def) {
             def.receiver = myself.stage;
             myself.stage.globalBlocks.push(def);
-            myself.stage.replaceDoubleDefinitionsFor(def);
+            myself.stage.replaceDoubleDefinitionsFor(def, silently);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -7315,7 +7315,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         blocks.forEach(function (def) {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
+            ide.stage.replaceDoubleDefinitionsFor(def, true);
         });
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {

@@ -2378,7 +2378,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    
+
     palette.toolBar = new AlignmentMorph('column');
 
     searchButton = new PushButtonMorph(
@@ -5389,7 +5389,7 @@ SpriteMorph.prototype.doubleDefinitionsFor = function (definition) {
     });
 };
 
-SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
+SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition, silently) {
     var doubles = this.doubleDefinitionsFor(definition),
         myself = this,
         stage,
@@ -5410,6 +5410,7 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
             return !contains(doubles, def);
         });
     }
+    if (silently) {return; }
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.flushPaletteCache();
