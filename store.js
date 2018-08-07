@@ -400,6 +400,7 @@ SnapSerializer.prototype.thumbnailSize = new Point(640, 480);
 SnapSerializer.prototype.isSavingHistory = false;
 
 SnapSerializer.prototype.watcherLabels = {
+    reportRPCError: 'error',
     xPosition: 'x position',
     yPosition: 'y position',
     direction: 'direction',
