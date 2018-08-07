@@ -1,17 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript">
-    if (window.location) {
-      window.location = 'snap.html' + window.location.hash;
-    }
-    </script> 
-    <meta HTTP-EQUIV="REFRESH" content="0.1; url=snap.html">
-    <title>Redirecting to Snap!</title> 
-  </head>
-  <body>
-    <p>If you are not automatically redirected to Snap<i>!</i>,
-      <a href="snap.html">please click here.</a> </p> 
-  </body> 
-</html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Beetle Blocks editor</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
+        <script type="text/javascript" src="beetleblocks/three.js"></script>
+        <script type="text/javascript" src="beetleblocks/OrbitControls.js"></script>
+        <script type="text/javascript" src="beetleblocks/OBJLoader.js"></script>
+        <script type="text/javascript" src="beetleblocks/OBJExporter.js"></script>
+        <script type="text/javascript" src="beetleblocks/STLExporter.js"></script>
+        <script type="text/javascript" src="beetleblocks/STLBinaryExporter.js"></script>
+        <script type="text/javascript" src="beetleblocks/ThreeCSG.js"></script>
+        <script type="text/javascript" src="beetleblocks/TextGeometry.js"></script>
+
+        <script type="text/javascript" src="morphic.js"></script>
+        <script type="text/javascript" src="beetleblocks/morphic.js"></script>
+
+        <script type="text/javascript" src="widgets.js"></script>
+        <script type="text/javascript" src="beetleblocks/widgets.js"></script>
+
+        <script type="text/javascript" src="blocks.js"></script>
+
+        <script type="text/javascript" src="threads.js"></script>
+        <script type="text/javascript" src="beetleblocks/threads.js"></script>
+
+        <script type="text/javascript" src="objects.js"></script>
+        <script type="text/javascript" src="beetleblocks/objects.js"></script>
+
+        <script type="text/javascript" src="cloud.js"></script>
+        <script type="text/javascript" src="beetleblocks/beetlecloud.js"></script>
+
+        <script type="text/javascript" src="gui.js"></script>
+        <script type="text/javascript" src="beetleblocks/gui.js"></script>
+
+        <script type="text/javascript" src="beetleblocks/tutorial.js"></script>
+
+        <script type="text/javascript" src="lists.js"></script>
+
+        <script type="text/javascript" src="byob.js"></script>
+        <script type="text/javascript" src="beetleblocks/byob.js"></script>
+
+        <script type="text/javascript" src="tables.js"></script>
+        <script type="text/javascript" src="symbols.js?version=2018-06-21"></script>
+        <script type="text/javascript" src="xml.js"></script>
+
+        <script type="text/javascript" src="beetleblocks/blocks.js"></script>
+
+        <script type="text/javascript" src="store.js"></script>
+        <script type="text/javascript" src="beetleblocks/store.js"></script>
+
+        <script type="text/javascript" src="locale.js"></script>
+
+        <script type="text/javascript" src="sha512.js"></script>
+        <script type="text/javascript" src="FileSaver.min.js"></script>
+
+
+        <script type="text/javascript">
+            var world,
+                ide;
+
+            window.onload = function () {
+                disableRetinaSupport();
+                world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
+                ide = new IDE_Morph();
+                ide.openIn(world);
+                loop();
+            };
+
+            function loop() {
+                requestAnimationFrame(loop);
+                world.doOneCycle();
+            }
+        </script>
+    </head>
+    <body style="margin: 0;">
+        <canvas id="world" tabindex="1" style="position: absolute;" />
+    </body>
+</html>
