@@ -1,4 +1,3 @@
-/* globals world */
 /* eslint-disable no-console */
 
 /*
@@ -8,15 +7,19 @@
 class WSMonkey {
     constructor(aWorld) {
     // TODO total desired duration
-        this._world = aWorld || world;
         this._size = 200;
+        if (aWorld) this._setWorld(aWorld); // allow for early initialization
         this._connectedRatio = 0.7;
         this._durationRange = [200, 2000]; // ms
-        this._playOver = false;
+        this._playOver = true;
     }
 
     get ide() {
         return this._world.children[0];
+    }
+
+    _setWorld(aWorld) {
+        this._world = aWorld;
     }
 
     disconnect() {
@@ -112,7 +115,8 @@ class WSMonkey {
     }
 
     async startPlaying() {
-    // plan ahead
+        // plan ahead
+        this._playOver = false;
         while (!this._playOver) {
             let profile = this._genProfile();
             await this._play(profile);
@@ -121,6 +125,10 @@ class WSMonkey {
 
     async stopPlaying() {
         this._playOver = true;
+    }
+
+    get isPlaying() {
+        return !this._playOver;
     }
 
     // using Box-Muller transform to get a normal distribution

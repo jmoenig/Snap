@@ -572,18 +572,13 @@ ActionManager.prototype.newId = function() {
 };
 
 ActionManager.prototype.getId = function (block, index) {
-    var id = '',
-        isParentCodeElement;
-
+    var id = '';
     while (!block.id) {
-        isParentCodeElement = block.parent instanceof SyntaxElementMorph;
-        if (!isParentCodeElement) {
+        if (block.parent === null) {  // template block
             return null;
         }
-
         id = block.parent.inputs().indexOf(block) + '/' + id;
         block = block.parent;
-        
         if (!block) {
             throw Error('Cannot get id from element');
         }
