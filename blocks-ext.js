@@ -1,15 +1,13 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil,
-   ReporterSlotMorph, RingMorph, SyntaxElementMorph*/
+   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains*/
 // Extensions to the Snap blocks
 
 
 // support for help dialogbox on service blocks
 BlockMorph.prototype._showHelp = BlockMorph.prototype.showHelp;
 BlockMorph.prototype.showHelp = function() {
-    var isServiceBlock = this.selector === 'getJSFromRPCStruct';
-    if (!isServiceBlock) return this._showHelp();
-    // else we have a getJSFromRPCStruct block
+    if (!this.isServiceBlock()) return this._showHelp();
     var myself = this,
         help,
         block,
@@ -51,6 +49,11 @@ BlockMorph.prototype.showHelp = function() {
         myself.world(),
         block.fullImage()
     );
+};
+
+BlockMorph.prototype.isServiceBlock = function() {
+    var serviceSpecs = ['getJSFromRPCStruct', 'doRunRPC'];
+    return contains(serviceSpecs, this.selector);
 };
 
 MultiHintArgMorph.prototype = new MultiArgMorph();

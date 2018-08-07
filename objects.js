@@ -1900,6 +1900,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         blocks.push(block('getJSFromRPCStruct'));
+        blocks.push(block('doRunRPC'));
         blocks.push(watcherToggle('reportRPCError'));
         blocks.push(block('reportRPCError'));
         blocks.push('-');
@@ -6269,6 +6270,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         blocks.push(block('getJSFromRPCStruct'));
+        blocks.push(block('doRunRPC'));
         blocks.push(watcherToggle('reportRPCError'));
         blocks.push(block('reportRPCError'));
         blocks.push('-');
