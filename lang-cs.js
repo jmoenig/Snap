@@ -576,8 +576,8 @@ SnapTranslator.dict.cs = {
         'světe',
     'split %s by %delim':
         'rozděl %s podle %delim',
-    'letter %n of %s':
-        'písmeno %n z %s',
+    'letter %idx of %s':
+        'písmeno %idx z %s',
     'length of %s':
         'délka %s',
     'unicode of %s':

@@ -391,8 +391,8 @@ SnapTranslator.dict.fr = {
         'arr\u00EAter tous les sons',
     'rest for %n beats':
         'faire une pause pour %n temps',
-    'play note %n for %n beats':
-        'jouer la note %n pour %n temps',
+    'play note %note for %n beats':
+        'jouer la note %note pour %n temps',
     'change tempo by %n':
         'ajouter %n au tempo',
     'set tempo to %n bpm':
@@ -475,6 +475,10 @@ SnapTranslator.dict.fr = {
         'lance %cmdRing %inputs',
     'call %repRing %inputs':
         'appelle %repRing %inputs',
+    'tell %spr to %cmdRing %inputs':
+        'dis à %spr de %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'demande à %spr sa %repRing %inputs',
     'run %cmdRing w/continuation':
         'ex\u00E9cute %cmdRing avec continuation',
     'call %cmdRing w/continuation':
@@ -485,6 +489,8 @@ SnapTranslator.dict.fr = {
         'Quand je commence comme clone',
     'create a clone of %cln':
         'Clone %cln',
+    'a new clone of %cln':
+        'un nouveau clone de %cln',
     'myself':
         'moi-m\u00EAme',
     'delete this clone':
@@ -572,8 +578,8 @@ SnapTranslator.dict.fr = {
         'Bonjour',
     'world':
         'Monde',
-    'letter %n of %s':
-        'lettre %n de %s',
+    'letter %idx of %s':
+        'lettre %idx de %s',
     'length of %s':
         'longueur de %s',
     'unicode of %s':

@@ -179,13 +179,13 @@ SnapTranslator.dict.tr = {
 
     // translations meta information
     'language_name':
-        'Türkçe', // the name as it should appear in the language menu
+        'Türkçe', // the name as it should appear in the language menu (Dil menüsünde görünmesi gereken isim)
     'language_translator':
-        'Hakan Atas', // your name for the Translators tab
+        'Hakan Atas, www.3drobolab.com', // your name for the Translators tab (Çevirenlerin isimleri)
     'translator_e-mail':
-        'hakanatas@gmail.com', // optional
+        'hakanatas@gmail.com, mustafaipekbayrak@gmail.com', // optional (Mail adresleri)
     'last_changed':
-        '2015-7-26', // this, too, will appear in the Translators tab
+        '2018-01-22', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
 
     // GUI
     // control bar:
@@ -303,7 +303,7 @@ SnapTranslator.dict.tr = {
     'go to %dst':
         '%dst git',
     'glide %n secs to x: %n y: %n':
-        'x: %n y: %n noktasına %n saniyede süzül',
+        '%n saniyede x: %n y: %n noktasına git',
     'change x by %n':
         'x\'i %n değiştir',
     'set x to %n':
@@ -417,6 +417,8 @@ SnapTranslator.dict.tr = {
         '%keyHat tuşu basılınca',
     'when I am clicked':
         'bu kukla tıklanınca',
+   'when I am %interaction':
+    'kukla %interaction zaman',
     'when I receive %msgHat':
         '%msgHat haberi gelince',
     'broadcast %msg':
@@ -552,14 +554,14 @@ SnapTranslator.dict.tr = {
         'merhaba',
     'world':
         'dünya',
-    'letter %n of %s':
-        '%n in harfleri %s',
+    'letter %idx of %s':
+        '%idx in harfleri %s',
     'length of %s':
         '%s in uzunluğu',
     'unicode of %s':
         '%s in unicode hali',
     'unicode %n as letter':
-        'harf olarak %n in unicode hali',
+        'unicode %n in harf hali',
     'is %s a %typ ?':
         '%s bir %typ mi?',
     'is %s identical to %s ?':
@@ -1271,5 +1273,147 @@ SnapTranslator.dict.tr = {
     'last':
         'son',
     'any':
-        'herhangi'
+        'herhangi',
+
+    // miscellaneous
+    'find blocks...':
+        'blokları bul...',
+    'hide primitives':
+        'temelleri sakla',
+    'show primitives':
+        'temelleri göster',
+    'Login...':
+        'Bağlan...',
+    'Signup...':
+        'Giriş Yap...',
+    'Reset Password...':
+        'Şifre Değiştir...',
+    'show all':
+        'tümünü göster',
+    'pic...':
+        'görüntü...',
+    'open a new window\nwith a picture of the stage':
+        'yeni pencere aç\nyeni bölüm ile',
+    'scripts pic...':
+        'görüntü betikleri...',
+    'open a new window\nwith a picture of all scripts':
+        'yeni pencere aç\ntüm görüntü betikleri ile',
+    'Stage size...':
+        'Bölüm Boyutu...',
+    'Zoom blocks...':
+        'Blokları yakınlaştır...',
+
+    'Plain prototype labels':
+        'Düz prototip isimleri',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'daima göster (+) sembollerini kapat\nblok prototip isimleri içinde',
+    'check to hide (+) symbols\nin block prototype labels':
+        'gizle (+) sembollerini işaretle\nblok prototip isimleri içinde',
+
+    'check for flat ends of lines':
+        'çizgilerin düz sonları için işaretle',
+    'uncheck for round ends of lines':
+        'çizgilerin yuvarlatılmış sonları için işareti kaldır',
+    'Flat line ends':
+        'Fiz çizgi sonları',
+
+    'Codification support':
+        'Kodlaştırma desteği',
+    'uncheck to disable\nblock to text mapping features':
+        'etkisizleştirmeyi kaldır\nbloktan metine haritalandırma özellikleri',
+    'check for block\nto text mapping features':
+        'blok için kontrol et\nmetine dönüştürme özellikleri ',
+
+    'Inheritance support':
+        'Miras Desteği',
+
+    'current %dates':
+        'mevcut %dates',
+    'year':
+        'yıl',
+    'month':
+        'ay',
+    'date':
+        'tarih',
+    'hour':
+        'saat',
+    'minute':
+        'dakika',
+    'second':
+        'saniye',
+    'time in milliseconds':
+        'milisaniye zaman',
+    'day of week':
+        'haftanın günü',
+
+    'brightness':
+        'parlaklık',
+    'transparence':
+        'transparant',
+    'negative':
+        'negatif',
+    'comic':
+        'dergi',
+
+    'clicked':
+        'tıklandığı',
+    'pressed':
+        'basıldığı',
+    'dropped':
+        'hareket ettiği',
+    'mouse-entered':
+        'fare geldiği',
+    'mouse-departed':
+        'fare gittiği',
+    'when %b':
+        '%b olduğunda',
+
+    'JavaScript function ( %mult%s ) { %code }':
+        'fonction JavaScript ( %mult%s ) { %code }',
+
+
+    // Copy / Paste
+    'Press CTRL+C one more time to effectively copy to clipboard.':
+        'CTRL+C tuşuna bir kez daha basarak panoya kopyala',
+    'Press CTRL+V one more time to effectively paste from clipboard.':
+        'CTRL+V tuşuna bir kez daha basarak tabloya yapıştır',
+    'Press CTRL+X one more time to effectively cut to clipboard.':
+        'CTRL+X tuşuna bir kezdaha basarak panodan kes',
+
+    // Paint.js
+    'undo':
+        'geri',
+    'Paintbrush tool\n(free draw)':
+        'fırça\n(serbest çizim)',
+    'Stroked Rectangle\n(shift: square)':
+        'dikdörtgen\n(shift: kare)',
+    'Stroked Ellipse\n(shift: circle)':
+        'ekips\n(shift : cercle)',
+    'Eraser tool':
+        'silgi',
+    'Set the rotation center':
+        'döndürme merkezini ayarla',
+    'Line tool\n(shift: vertical/horizontal)':
+        'çizgi çizme\n(shift: yatay/dikey)',
+    'Filled Rectangle\n(shift: square)':
+        'içi dolu dikdörtgen\n(shift: kare)',
+    'Filled Ellipse\n(shift: circle)':
+        'içi dolu elips\n(shift: daire)',
+    'Fill a region':
+        'bölgenin içini doldur',
+    'Pipette tool\n(pick a color anywhere)':
+        'pipet\n(herhangibir yerden renk seç)',
+    'grow':
+        'büyüt',
+    'shrink':
+        'küçült',
+    'flip \u2194':
+        'ayna görüntüsü \u2194',
+    'flip \u2195':
+        'ayna görüntüsü \u2195',
+    'Brush size':
+        'fırça boyutu',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'şekil bölümleri içerir mi?\n(shift tuşuna basabilirsiniz)'
+
 };

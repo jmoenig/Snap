@@ -67,7 +67,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2015-June-25';
+modules.xml = '2017-November-15';
 
 // Declarations
 
@@ -238,7 +238,7 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
     for (key in this.attributes) {
         if (Object.prototype.hasOwnProperty.call(this.attributes, key)
                 && this.attributes[key]) {
-            result += ' ' + key + '="' + this.attributes[key] + '"';
+            result += ' ' + key + '="' + this.escape(this.attributes[key]) + '"';
         }
     }
 
@@ -247,7 +247,7 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
         result += '/>';
     } else {
         result += '>';
-        result += this.contents;
+        result += this.escape(this.contents);
         this.children.forEach(function (element) {
             if (isFormatted) {
                 result += '\n';

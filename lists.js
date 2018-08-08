@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2017 by Jens Mönig and Brian Harvey
+    Copyright (C) 2018 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2017-February-14';
+modules.lists = '2018-March-08';
 
 var List;
 var ListWatcherMorph;
@@ -105,6 +105,7 @@ var ListWatcherMorph;
 // List instance creation:
 
 function List(array) {
+    this.type = null; // for UI lists, such as costumes, sounds, sprites
     this.contents = array || [];
     this.first = null;
     this.rest = null;
@@ -119,7 +120,7 @@ List.prototype.enableTables = false; // default, to not confuse NYC teachers
 // List printing
 
 List.prototype.toString = function () {
-    return 'a List [' + this.length + ' elements]';
+    return 'a List [' + this.length() + ' elements]';
 };
 
 // List updating:

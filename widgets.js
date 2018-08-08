@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -30,6 +30,11 @@
     needs blocks.js and objects.js
 
 
+    credits
+    -------
+    Lucas Karahadian contributed a first prototype of the piano keyboard
+
+
     I. hierarchy
     -------------
     the following tree lists all constructors hierarchically,
@@ -41,11 +46,15 @@
         DialogBoxMorph
         InputFieldMorph
     TriggerMorph*
+        MenuItemMorph*
+            PianoKeyMorph
         PushButtonMorph
             ToggleButtonMorph
                 TabMorph
             ToggleMorph
         ToggleElementMorph
+    MenuMorph*
+        PianoMenuMorph
 
     * from Morphic.js
 
@@ -63,6 +72,8 @@
     DialogBoxMorph
     AlignmentMorph
     InputFieldMorph
+    PianoMenuMorph
+    PianoKeyMorph
 
 */
 
@@ -72,9 +83,9 @@
 newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph*/
+ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2017-January-03';
+modules.widgets = '2018-February-08';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -84,6 +95,8 @@ var ToggleElementMorph;
 var DialogBoxMorph;
 var AlignmentMorph;
 var InputFieldMorph;
+var PianoMenuMorph;
+var PianoKeyMorph;
 
 // PushButtonMorph /////////////////////////////////////////////////////
 
@@ -155,6 +168,7 @@ PushButtonMorph.prototype.init = function (
     this.hint = hint || null;
     this.template = template || null; // for pre-computed backbrounds
     // if a template is specified, its background images are used as cache
+    this.isDisabled = false;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -191,6 +205,7 @@ PushButtonMorph.prototype.mouseDownLeft = function () {
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
+    if (this.isDisabled) {return; }
     PushButtonMorph.uber.mouseClickLeft.call(this);
     if (this.label) {
         this.label.setCenter(this.center());
@@ -464,6 +479,24 @@ PushButtonMorph.prototype.createLabel = function () {
         );
     }
     this.add(this.label);
+};
+
+// PushButtonMorph states
+
+PushButtonMorph.prototype.disable = function () {
+    this.isDisabled = true;
+    this.forAllChildren(function (child) {
+        child.alpha = 0.3;
+    });
+    this.changed();
+};
+
+PushButtonMorph.prototype.enable = function () {
+    this.isDisabled = false;
+    this.forAllChildren(function (child) {
+        child.alpha = 1;
+    });
+    this.changed();
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////
@@ -2042,6 +2075,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
         emlLabel = labelText('foo');
         inp.add(emlLabel);
         inp.add(eml);
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
+        inp.add(labelText('Repeat Password:'));
+        inp.add(pw2);
     }
 
     if (purpose === 'login') {
@@ -2058,7 +2095,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(pw2);
     }
 
-    if (purpose === 'resetPassword') {
+    if (purpose === 'resetPassword' || purpose === 'resendVerification') {
         inp.add(labelText('User name:'));
         inp.add(usr);
     }
@@ -2149,10 +2186,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'login') {
             checklist = [usr, pw1];
         } else if (purpose === 'signup') {
-            checklist = [usr, bmn, byr, eml];
+            checklist = [usr, bmn, byr, eml, pw1, pw2];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
-        } else if (purpose === 'resetPassword') {
+        } else if (purpose === 'resetPassword' || purpose === 'resendVerification') {
             checklist = [usr];
         }
 
@@ -2172,12 +2209,12 @@ DialogBoxMorph.prototype.promptCredentials = function (
                 return false;
             }
             if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
-                    || em.indexOf('.') === -1) {
+                    || em.indexOf('.') === -1 || em.length < 5) {
                 indicate(eml, 'please provide a valid\nemail address');
                 return false;
             }
         }
-        if (purpose === 'changePassword') {
+        if (purpose === 'changePassword' || purpose === 'signup') {
             if (pw1.getValue().length < 6) {
                 indicate(pw1, 'password must be six\ncharacters or longer');
                 return false;
@@ -2205,7 +2242,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
-        } else { // 'signup', 'login', 'resetPassword'
+        } else { // 'signup', 'login', 'resetPassword', 'resendVerification'
             usr.edit();
         }
     };
@@ -2216,6 +2253,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             email: eml.getValue(),
             oldpassword: opw.getValue(),
             password: pw1.getValue(),
+            passwordRepeat: pw2.getValue(),
             choice: agree
         };
     };
@@ -3300,4 +3338,385 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
     context.moveTo(this.width() - shift, this.edge);
     context.lineTo(this.width() - shift, this.height() - this.edge);
     context.stroke();
+};
+
+// PianoMenuMorph //////////////////////////////////////////////////////
+/* 
+    I am a menu that looks like a piano keyboard.
+*/
+
+// PianoMenuMorph inherits from MenuMorph
+
+PianoMenuMorph.prototype = new MenuMorph();
+PianoMenuMorph.prototype.constructor = PianoMenuMorph;
+PianoMenuMorph.uber = MenuMorph.prototype;
+
+// PianoMenuMorph instance creation:
+
+function PianoMenuMorph(target, environment, fontSize, soundType) {
+    this.init(target, environment, fontSize, soundType);
+}
+
+PianoMenuMorph.prototype.init = function (
+    target,
+    environment,
+    fontSize,
+    soundType // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+) {
+    var choices, key;
+    this.soundType = soundType;
+    PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+    choices = {
+        'C (48)' : 48,
+        'D (50)' : 50,
+        'C# (49)' : 49,
+        'E (52)' : 52,
+        'Eb (51)' : 51,
+        'F (53)' : 53,
+        'G (55)' : 55,
+        'F# (54)' : 54,
+        'A (57)' : 57,
+        'G# (56)' : 56,
+        'B (59)' : 59,
+        'Bb (58)' : 58,
+        'C (60)' : 60,
+        'D (62)' : 62,
+        'C# (61)' : 61,
+        'E (64)' : 64,
+        'Eb (63)' : 63,
+        'F (65)' : 65,
+        'G (67)' : 67,
+        'F# (66)' : 66,
+        'A (69)' : 69,
+        'G# (68)' : 68,
+        'B (71)' : 71,
+        'Bb (70)' : 70,
+        'C (72)' : 72
+    };
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            this.addItem(key, choices[key]);
+        }
+    }
+    this.drawNew();
+};
+
+PianoMenuMorph.prototype.drawNew = function () {
+    var myself = this,
+        item,
+        fb,
+        x,
+        y,
+        label,
+        blackkey,
+        key,
+        keycolor,
+        keywidth,
+        keyheight,
+        keyposition;
+
+    this.children.forEach(function (m) {
+        m.destroy();
+    });
+    this.children = [];
+    if (!this.isListContents) {
+        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
+    }
+    this.color = new Color(255, 255, 255);
+    this.borderColor = new Color(60, 60, 60);
+    this.silentSetExtent(new Point(0, 0));
+
+    x = this.left() + 1;
+    y = this.top() + (this.fontSize * 1.5) + 2;
+    label = new StringMorph('', this.fontSize);
+    this.items.forEach(function (tuple) {
+        blackkey = tuple[0][1] !== " ";
+        key = new BoxMorph(1, 1);
+        if (blackkey) {
+            keycolor = new Color(0, 0, 0);
+            keywidth = myself.fontSize; // 9;
+            keyheight = myself.fontSize * 2.5;
+            keyposition = new Point(x + 2 - (myself.fontSize * 2), y);
+        } else {
+            keycolor = new Color(255, 255, 255);
+            keywidth = myself.fontSize * 1.5;
+            keyheight = myself.fontSize * 4;
+            keyposition = new Point(x + 1, y);
+            x += keywidth - 1;
+        }
+        key.setColor(keycolor);
+        key.setWidth(keywidth);
+        key.setHeight(keyheight);
+        item = new PianoKeyMorph(
+            myself.target,
+            tuple[1],
+            [key, tuple[0]],
+            myself.fontSize || MorphicPreferences.menuFontSize,
+            MorphicPreferences.menuFontName,
+            myself.environment,
+            tuple[2], // bubble help hint
+            tuple[3], // color
+            tuple[4], // bold
+            tuple[5], // italic
+            tuple[6], // doubleclick action
+            label     // String to change
+        );
+        item.setPosition(keyposition);
+        myself.add(item);
+    });
+    fb = this.fullBounds();
+    label.setPosition(new Point((fb.width() / 2) - this.fontSize, 2));
+    this.add(label);
+    fb = this.fullBounds();
+    this.silentSetExtent(fb.extent().add(2));
+    MenuMorph.uber.drawNew.call(this);
+};
+
+// PianoMenuMorph keyboard selecting a key:
+
+PianoMenuMorph.prototype.select = function(aPianoKeyItem) {
+    this.unselectAllItems();
+    aPianoKeyItem.mouseEnter();
+    this.selection = aPianoKeyItem;
+    this.world.keyboardReceiver = this;
+    this.hasFocus = true;
+};
+
+PianoMenuMorph.prototype.unselectAllItems = function () {
+    this.children.forEach(function (item) {
+        if (item instanceof MenuItemMorph) {
+            item.mouseLeave();
+        }
+    });
+    this.changed();
+};
+
+PianoMenuMorph.prototype.selectKey = function (midiNum) {
+    var key;
+    if (isNil(midiNum)) {
+        return;
+    }
+    key = detect(
+        this.children,
+        function (each) {
+            return each.action === midiNum;
+        }
+    );
+    if (key) {
+        this.select(key);
+    } else {
+        this.selectKey(48);
+    }
+};
+
+// PianoMenuMorph keyboard navigation & entry:
+
+PianoMenuMorph.prototype.processKeyDown = function (event) {
+    // console.log(event.keyCode);
+    switch (event.keyCode) {
+    case 13: // 'enter'
+    case 32: // 'space'
+        if (this.selection) {
+            this.selection.mouseClickLeft();
+        }
+        return;
+    case 27: // 'esc'
+        return this.destroy();
+    case 37: // 'left arrow'
+    case 40: // 'down arrow'
+    case 189: // -
+        return this.selectDown();
+    case 38: // 'up arrow'
+    case 39: // 'right arrow'
+    case 187: // +
+    case 220: // #
+        return this.selectUp();
+    default:
+        switch(event.key) {
+        case 'C':
+            return this.selectKey(48);
+        case 'c':
+            return this.selectKey(60);
+        case 'D':
+            return this.selectKey(50);
+        case 'd':
+            return this.selectKey(62);
+        case 'E':
+            return this.selectKey(52);
+        case 'e':
+            return this.selectKey(64);
+        case 'F':
+            return this.selectKey(53);
+        case 'f':
+            return this.selectKey(65);
+        case 'G':
+            return this.selectKey(55);
+        case 'g':
+            return this.selectKey(67);
+        case 'A':
+            return this.selectKey(57);
+        case 'a':
+            return this.selectKey(69);
+        case 'B':
+        case 'H':
+            return this.selectKey(59);
+        case 'b':
+        case 'h':
+            return this.selectKey(71);
+        default:
+            nop();
+        }
+    }
+};
+
+PianoMenuMorph.prototype.selectUp = function () {
+    var next = 48;
+    if (this.selection) {
+        next = this.selection.action + 1;
+        if (next > 72) {
+            next = 48;
+        }
+    }
+    this.selectKey(next);
+};
+
+PianoMenuMorph.prototype.selectDown = function () {
+    var next = 48;
+    if (this.selection) {
+        next = this.selection.action - 1;
+        if (next < 48) {
+            next = 72;
+        }
+    }
+    this.selectKey(next);
+};
+
+PianoMenuMorph.prototype.destroy = function () {
+    this.children.forEach(function (key) {
+        if (key.note) {
+            key.note.stop();
+        }
+    });
+    PianoMenuMorph.uber.destroy.call(this);
+};
+
+
+// PianoKeyMorph ///////////////////////////////////////////////////////
+
+PianoKeyMorph.prototype = new MenuItemMorph();
+PianoKeyMorph.prototype.constructor = PianoKeyMorph;
+PianoKeyMorph.uber = MenuItemMorph.prototype;
+
+function PianoKeyMorph(
+    target,
+    action,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction, // optional when used as list morph item
+    label
+) {
+    this.init(
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        label
+    );
+    this.feedback = label;
+}
+
+PianoKeyMorph.prototype.init = function (
+    target,
+    action,
+    labelString,
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction,
+    label
+) {
+    // additional "note" property for sound output:
+    this.note = new Note(action);
+    PianoKeyMorph.uber.init.call(
+        this,
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        label
+    );
+};
+
+PianoKeyMorph.prototype.createLabel = function () {
+    var icon;
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    // assume its pattern is: [icon, string]
+    this.label = new Morph();
+    icon = this.createIcon(this.labelString[0]);
+    this.label.add(icon);
+    this.label.drawNew();
+    this.silentSetExtent(icon.extent());
+    this.label.bounds = this.position().extent(this.label.extent());
+    this.label.silentSetExtent(new Point(0, 0));
+    this.add(this.label);
+};
+
+PianoKeyMorph.prototype.mouseEnter = function () {
+    var piano = this.parentThatIsA(PianoMenuMorph),
+        soundType = piano ? piano.soundType : 1,
+        myself = this;
+    if (piano) {
+        piano.unselectAllItems();
+        piano.selection = this;
+        piano.world.keyboardReceiver = piano;
+        piano.hasFocus = true;
+    }
+    this.label.children[0].hide();
+    this.image = this.highlightImage;
+    this.changed();
+    this.feedback.text = this.labelString[1];
+    this.feedback.changed();
+    this.feedback.drawNew();
+    this.feedback.changed();
+    this.note.play(soundType);
+    setTimeout(
+        function () {
+            myself.note.stop();
+        },
+        400
+    );
+};
+
+PianoKeyMorph.prototype.mouseLeave = function () {
+    this.note.stop();
+    this.label.children[0].show();
+    this.image = this.normalImage;
+    this.changed();
 };

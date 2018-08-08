@@ -170,11 +170,11 @@ SnapTranslator.dict.pl = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
-	Ą, ą	\u0104,	\u0105
+	Ą, ą	\u0104,	
 	Ć, ć	\u0106,	\u0107
 	Ę, ę	\u0118,	\u0119
 	Ł, ł	\u0141, \u0142
-	Ń, ń	\u0143, \u0144
+	Ń, ń	\u0143, \u0144\u0105
 	Ś, ś	\u015A, \u015B
 	Ó, ó	\u00D3, \u00F3
 	Ź, ź	\u0179,	\u017A
@@ -186,11 +186,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski', // the name as it should appear in the language menu
     'language_translator':
-        'Witek Kranas & deKrain', // your name for the Translators tab
+        'Witek Kranas & deKrain & AB', // your name for the Translators tab
     'translator_e-mail':
         'witek@oeiizk.waw.pl', // optional
     'last_changed':
-        '2016-11-14', // this, too, will appear in the Translators tab
+        '2017-11-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -230,7 +230,9 @@ SnapTranslator.dict.pl = {
         'Skrypty',
     'Costumes':
         'Kostiumy',
-    'Sounds':
+    'Backgrounds':
+        'T\u0142a',
+	'Sounds':
         'D\u017Awi\u0119ki',
 
     // names:
@@ -243,7 +245,7 @@ SnapTranslator.dict.pl = {
     'don\'t rotate':
         'nie obracaj',
     'can rotate':
-        'dowolny obrót',
+        'dowolny obr\u00F3t',
     'only face left/right':
         'tylko lewo/prawo',
 
@@ -383,16 +385,28 @@ SnapTranslator.dict.pl = {
         'zatrzymaj wszystkie d\u017Awi\u0119ki',
     'rest for %n beats':
         'pauzuj przez %n takt\u00F3w',
-    'play note %n for %n beats':
-        'zagraj nut\u0119 %n przez %n takt\u00F3w',
-    'change tempo by %n':
+    'play note %note for %n beats':
+        'zagraj nut\u0119 %note przez %n takt\u00F3w',
+    'set instrument to %inst':
+        'ustaw instrument (fal\u0119) na %inst',
+	'change tempo by %n':
         'zmie\u0144 tempo o %n',
     'set tempo to %n bpm':
         'ustaw tempo na %n takt\u00F3w na min.',
     'tempo':
         'tempo',
 
-    // pisak:
+    // "instrumenty", i.e. wave forms
+    '(1) sine':
+        '(1) sinusoidalna',
+    '(2) square':
+        '(2) prostok\u0105tna',
+    '(3) sawtooth':
+        '(3) pi\u0142okszta\u0142tna',
+    '(4) triangle':
+        '(4) tr\u00F3jk\u0105tna',
+	
+	// pisak:
     'clear':
         'wyczy\u015B\u0107',
     'pen down':
@@ -400,7 +414,7 @@ SnapTranslator.dict.pl = {
     'pen up':
         'podnie\u015B pisak',
     'set pen color to %clr':
-        'ustaw kolor piaka na %clr',
+        'ustaw kolor pisaka %clr',
     'change pen color by %n':
         'zmie\u0144 kolor pisaka o %n',
     'set pen color to %n':
@@ -444,7 +458,7 @@ SnapTranslator.dict.pl = {
     'broadcast %msg and wait':
         'nadaj %msg do wszystkich i czekaj',
     'Message name':
-        'nazwa wiadomo\u015Bci',
+        'Nazwa wiadomo\u015Bci',
     'message':
         'wiadomo\u015B\u0107',
     'any message':
@@ -466,7 +480,7 @@ SnapTranslator.dict.pl = {
     'if %b %c else %c':
         'je\u017Celi %b to %c w przeciwnym razie %c',
     'report %s':
-        'zwr\u00F3\u0107 %s',
+        'wynik %s',
     'stop %stopChoices':
         'zatrzymaj %stopChoices',
     'all':
@@ -497,10 +511,16 @@ SnapTranslator.dict.pl = {
         'kiedy zaczynam jako klon',
     'create a clone of %cln':
         'sklonuj %cln',
-    'myself':
+    'a new clone of %cln':
+        'nowy klon %cln',
+	'myself':
         'ja',
     'delete this clone':
         'usu\u0144 tego klona',
+	'tell %spr to %cmdRing %inputs':
+        'powiedz %spr do %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'zapytaj %spr o %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -532,13 +552,31 @@ SnapTranslator.dict.pl = {
     '%att of %spr':
         '%att z %spr',
     'my %get':
-        'atrybut %get',
+        'ja %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'tryb turbo?',
     'set turbo mode to %b':
         'ustaw tryb turbo na %b',
+	'current %dates':
+        'obecnie %dates',
+    'year':
+        'rok',
+    'month':
+        'miesi\u0105c',
+    'date':
+        'dzie\u0144',
+    'day of week':
+        'dzie\u0144 tygodnia',
+    'hour':
+        'godzina',
+    'minute':
+        'minuta',
+    'second':
+        'sekunda',
+    'time in milliseconds':
+        'czas w milisekundach',
 
     'filtered for %clr':
         'przefiltrowane dla %clr',
@@ -568,12 +606,14 @@ SnapTranslator.dict.pl = {
         'fa\u0142sz',
     'join %words':
         'po\u0142\u0105cz %words',
-    'hello':
+    'split %s by %delim':
+        'podziel %s na %delim',
+	'hello':
         'witaj',
     'world':
         'świecie',
-    'letter %n of %s':
-        'litera %n z %s',
+    'letter %idx of %s':
+        'litera %idx z %s',
     'length of %s':
         'd\u0142ugo\u015B\u0107 %s',
     'unicode of %s':
@@ -584,19 +624,23 @@ SnapTranslator.dict.pl = {
         'jest %s typu %typ ?',
     'is %s identical to %s ?':
         'jest %s identyczne z %s ?',
+	'JavaScript function ( %mult%s ) { %code }':
+        'funkcja JavaScript ( %mult%s ) { %code }',
 
     'type of %s':
         'typ %s',
 
     // variables:
     'Make a variable':
-        'Stw\u00F3rz zmienn\u0105',
+        'Utw\u00F3rz zmienn\u0105',
     'Variable name':
         'nazwa zmiennej',
     'Script variable name':
         'nazwa zmiennej skryptu',
-    'Delete a variable':
-        'usu\u0144 zmienn\u0105',
+    'inherit %shd':
+        'dziedzicz %shd',
+	'Delete a variable':
+        'Usu\u0144 zmienn\u0105',
 
     'set %var to %s':
         'ustaw %var na %s',
@@ -635,7 +679,7 @@ SnapTranslator.dict.pl = {
 
     // other
     'Make a block':
-        'nowy blok',
+        'Nowy blok',
 
     // menus
     // snap menu
@@ -650,11 +694,11 @@ SnapTranslator.dict.pl = {
     'Switch back to user mode':
         'Prze\u0142\u0105cz do trybu u\u017Cytkownika',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'disable Morphic',
+        'wy\u0142\u0105cz menu kontekstowe\ndeep-Morphic\ni poka\u017C przyjazne dla u\u017Cytkownika',
     'Switch to dev mode':
         'do trybu budowania',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'enable Morphic',
+        'w\u0142\u0105z Morphic\nmenu kontekstowe\ni inspectors,\nniezbyt przyjazne dla u\u017Cytkownika!',
 
     // project menu
     'Project notes...':
@@ -665,7 +709,12 @@ SnapTranslator.dict.pl = {
         'Otw\u00F3rz...',
     'Save':
         'Zapisz',
-    'Save As...':
+    'Save to disk':
+        'Zapisz na dysku',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'pobierz ten projekt\ni zapisz go lokalnie\n'
+            + '(nieobs\u0142ugiwane przez wszystkie przegl\u0105darki)',
+	'Save As...':
         'Zapisz jako...',
     'Import...':
         'Importuj...',
@@ -678,17 +727,45 @@ SnapTranslator.dict.pl = {
     'Export project...':
         'Eksportuj projekt...',
     'show project data as XML\nin a new browser window':
-        'poka\u017C projekt jako XML\nin w nowej karcie',
-    'Export blocks...':
+        'poka\u017C projekt jako XML\nw nowej karcie',
+    'save project data as XML\nto your downloads folder':
+        'zapisz dane projektu jako XML\nw folderze \u0142adowania',
+	'Export blocks...':
         'Eksportuj bloki...',
     'show global custom block definitions as XML\nin a new browser window':
-        'poka\u017C definicje blok\u00F3w jako XML/min w nowej karcie',
-    'Import tools':
+        'poka\u017C definicje blok\u00F3w jako XML/mw nowej karcie',
+    'Unused blocks...':
+          'Niewykorzystane bloki...',
+    'find unused global custom blocks\nand remove their definitions':
+        'znajdź i usuń\nniewykorzystane bloki',
+    'Remove unused blocks':
+        'Usu\u0144 niewykorzystane bloki',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'obecnie nie ma niewykorzystanych\nbloków w tym projekcie',
+    'unused block(s) removed':
+        'usunięto niewykorzystane bloki',
+    'Export summary...':
+        'Eksport podsumowania...',
+    'open a new browser browser window\n with a summary of this project':
+        'otwórz podsumowanie tego projektu\nw nowym oknie przeglądarki',
+    'Contents':
+        'Zawartość',
+    'Kind of':
+        'Rodzaj',
+    'Part of':
+        'Część',
+    'Parts':
+        'Części',
+    'Blocks':
+        'Bloki',
+    'For all Sprites':
+        'Dla wszystkich duszków',
+	'Import tools':
         'Importuj narz\u0119dzia',
     'load the official library of\npowerful blocks':
         'za\u0142aduj oficjaln\u0105 bibliotek\u0119 blok\u00F3w',
     'Libraries...':
-        'Biblioteka...',
+        'Biblioteki...',
     'Import library':
         'Importuj bibliotek\u0119',
 
@@ -705,7 +782,17 @@ SnapTranslator.dict.pl = {
         'J\u0119zyk...',
     'Zoom blocks...':
         'Powi\u0119ksz bloki...',
-    'Blurred shadows':
+    'Stage size...':
+        'Rozmiar sceny...',
+    'Stage size':
+        'Rozmiar sceny',
+    'Stage width':
+        'Szeroko\u015B\u0107 sceny',
+    'Stage height':
+        'Wysoko\u015B\u0107 sceny',
+    'Default':
+        'Domy\u015Blny',
+	'Blurred shadows':
         'Rozmyte cienie',
     'uncheck to use solid drop\nshadows and highlights':
         'Odznacz, aby uzyska\u0107\nmocne cienie i granice',
@@ -720,9 +807,9 @@ SnapTranslator.dict.pl = {
     'Dynamic input labels':
         'Dynamiczne opisy parametr\u00F3w',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'odznacz to disable dynamic\nlabels for variadic inputs',
+        'odznacz, aby wy\u0142\u0105czy\u0107 dynamiczne\nopisy dla wej\u015B\u0107 variadic',
     'check to enable dynamic\nlabels for variadic inputs':
-        'zaznacz to enable dynamic\nlabels for variadic inputs',
+        'zaznacz, aby w\u0142\u0105czy\u0107 dynamiczne\nopisy dla wej\u015B\u0107 variadic',
     'Prefer empty slot drops':
         'Preferuj empty slot drops',
     'settings menu prefer empty slots hint':
@@ -731,21 +818,47 @@ SnapTranslator.dict.pl = {
         'odznacz to allow dropped\nreporters to kick out others',
     'Long form input dialog':
         'D\u0142uga forma dialogu wej\u015Bcia',
-    'check to always show slot\ntypes in the input dialog':
-        'zaznacz to always show slot\ntypes in the input dialog',
+    'Plain prototype labels':
+        'Prosta etykieta prototypu',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'odznacz, aby pokazywać symbol (+)\nna etykietach prototypowych bloków',
+    'check to hide (+) symbols\nin block prototype labels':
+        'zaznacz, aby ukryć symbol (+)\nna etykietach prototypowych bloków',
+	'check to always show slot\ntypes in the input dialog':
+        'zaznacz, aby włączyć długą\nformę dialogu wejścia',
     'uncheck to use the input\ndialog in short form':
-        'odznacz to use the input\ndialog in short form',
+        'odznacz, aby używać dialogu\nwejścia w krótkiej formie',
     'Virtual keyboard':
         'Witualna klawiatura',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         'odznacz, aby nie u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'zaznacz, aby u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
-    'uncheck to disable\ninput sliders for\nentry fields':
+    'Input sliders':
+        'Suwaki wej\u015Bciowe',
+	'uncheck to disable\ninput sliders for\nentry fields':
         'odznacz, aby nie pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
     'check to enable\ninput sliders for\nentry fields':
         'zaznacz, aby pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
-    'Clicking sound':
+    'Retina display support':
+        'Wsparcie wy\u015Bwietlacza Retina',
+    'Codification support':
+        'Kodowanie bloków',
+	'uncheck to disable\nblock to text mapping features':
+        'odznacz, aby wyłączy\u0107\nfunkcje mapowania tekstu',
+    'check for block\nto text mapping features':
+        'zaznacz, aby włączy\u0107\nfunkcje mapowania tekstu',
+	'header mapping...':
+        'mapowanie nagłówka...',
+	'Header mapping':
+        'Mapowanie nagłówka',
+	'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
+        'Wprowadź kod odpowiadający definicji bloków. ' +
+            'Wybierz własne\nformalne nazwy parametrów (ignorując te, ' +
+            'które są wyświetlane).',
+	'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
+        'Wprowadź kod odpowiadający definicji bloków. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.',
+	'Clicking sound':
         'D\u017Awi\u0119k klikni\u0119cia',
 	'uncheck to turn\nblock clicking\nsound off':
 		'odznacz, aby wy\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
@@ -779,7 +892,9 @@ SnapTranslator.dict.pl = {
         'Edytowanie Klawiatur\u0105',
     'Table support':
         'Tablice 2D',
-    'Visible stepping':
+    'Table lines':
+        'Tabele z liniami',
+	'Visible stepping':
         'Debugowanie krokowe',
     'check to turn on\n visible stepping (slow)':
         'zaznacz, aby widzie\u0107 poszczeg\u00F3lne\nkroki skrypt\u00F3w (wolne)',
@@ -797,6 +912,20 @@ SnapTranslator.dict.pl = {
         'odznacz, aby pozwoli\u0107na\nwi\u0119ksz pr\u0119dko\u015B\u0107 ramek animacji',
     'check for smooth, predictable\nanimations across computers':
         'zaznacz, aby zapewni\u0107na\njednakowe, g\u0142adkie animacje',
+	'Flat line ends':
+        'P\u0142askie ko\u0144ce linii',
+    'check for flat ends of lines':
+        'zaznacz, aby końce linii\nbyły płaskie',
+    'uncheck for round ends of lines':
+        'odznacz, aby końce linii\nbyły zaokrąglone',
+    'Ternary Boolean slots':
+        'Ternäre Bool\'sche Inputs',
+    'Inheritance support':
+        'Podtrzymywanie dziedziczenia',
+	'check for sprite\ninheritance features':
+        'zaznacz, aby włączyć\nfunkcje dziedziczenia duszka',
+	'uncheck to disable\nsprite inheritance features':
+        'odznacz, aby wyłączyć\nfunkcje dziedziczenia duszka',
 
     // inputs
     'with inputs':
@@ -813,7 +942,9 @@ SnapTranslator.dict.pl = {
         'pomoc',
 
     // palette:
-    'hide primitives':
+    'find blocks':
+        'znajd\u017A bloki',
+	'hide primitives':
         'ukryj pierwotne',
     'show primitives':
         'poka\u017C pierwotne',
@@ -839,6 +970,14 @@ SnapTranslator.dict.pl = {
         'obwiednia',
     'unringify':
         'bez obwiedni',
+	'transient':
+        'chwilowo',
+    'uncheck to save contents\nin the project':
+        'odznacz, aby zapisać\nzawartość w projekcie',
+    'check to prevent contents\nfrom being saved':
+        'zaznacz, aby zapobiec\nzapisaniu zawartości',
+    'new line':
+        'nowa linia',
 
     // custom blocks:
     'delete block definition...':
@@ -849,8 +988,28 @@ SnapTranslator.dict.pl = {
     // sprites:
     'edit':
         'edytuj',
-    'export...':
+    'clone':
+        'klonuj',
+    'move':
+        'porusz',
+    'pivot':
+        'oś',
+    'edit the costume\'s\nrotation center':
+        'edytuj środek\nobrotu kostiumu',
+    'detach from':
+        'odłącz od',
+    'detach all parts':
+        'odłącz wszystkie części',
+	'export...':
         'eksportuj...',
+	'parent...':
+        'pierwowzór...',
+    'current parent':
+        'aktualny pierwowzór',
+    'release':
+        'wydanie',
+    'make temporary and\nhide in the sprite corral':
+        'zr\u00F3b tymczasowy\ni ukryj ikonę',
 
     // stage:
     'show all':
@@ -864,13 +1023,17 @@ SnapTranslator.dict.pl = {
     'clean up':
         'wyczy\u015B\u0107',
     'arrange scripts\nvertically':
-        'ustaw skrypty pionowo',
+        'ustaw skrypty w pionie',
     'add comment':
         'dodaj komentarz',
     'undrop':
         'odklej',
     'undo the last\nblock drop\nin this pane':
         'cofnij ostatnie upuszczenie\nbloku na tej planszy',
+	'redrop':
+        'ponownie upuść',
+	'use the keyboard\nto enter blocks':
+    	'użyj klawiatury,\naby wprowadzić bloki',
 	'scripts pic...':
         'obrazek skryptu...',
     'open a new window\nwith a picture of all scripts':
@@ -897,6 +1060,18 @@ SnapTranslator.dict.pl = {
         'Graj',
     'rename sound':
         'zmie\u0144 nazw\u0119 d\u017Cwi\u0119ku',
+
+    // lists and tables
+    'list view...':
+        'widok listy...',
+    'table view...':
+        'widok tabeli...',
+    'open in dialog...':
+        'otwórz w nowym oknie dialogowym',
+    'reset columns':
+        'zresetuj szerokość kolumn',
+    'items':
+        'pozycje',
 
     // dialogs
     // buttons
@@ -1003,7 +1178,7 @@ SnapTranslator.dict.pl = {
     'Costume Editor':
         'Edytor kostium\u00F3w',
     'click or drag crosshairs to move the rotation center':
-        'Kliknij lub przeci\u0105gnij krzy\u017Cyk, aby ustawi\u0107 centrum obrotu',
+        'Kliknij lub przeci\u0105gnij krzy\u017Cyk, aby ustawi\u0107 środek obrotu',
 
     // project notes
     'Project Notes':
@@ -1039,6 +1214,14 @@ SnapTranslator.dict.pl = {
     'for this sprite only':
         'tylko dla tego duszka',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'zmie\u0144 nazw\u0119\ntylko tej zmiennej',
+    'rename all...':
+        'zmie\u0144 nazwy wszystkich...',
+    'rename all blocks that\naccess this variable':
+        'zmie\u0144 nazwy wszystkich blok\u00F3w,z nazw\u0105 tej zmiennej',
+
     // block dialog
     'Change block':
         'Zmie\u0144 blok',
@@ -1052,7 +1235,9 @@ SnapTranslator.dict.pl = {
     // block editor
     'Block Editor':
         'Edytor blok\u00F3w',
-    'Apply':
+    'Method Editor':
+        'Methodeneditor',
+	'Apply':
         'Zastosuj',
 
     // block deletion dialog
@@ -1070,7 +1255,7 @@ SnapTranslator.dict.pl = {
     'Edit label fragment':
         'Edytuj opis parametru',
     'Title text':
-        'Tekst tutu\u0142owy',
+        'Tekst tytu\u0142owy',
     'Input name':
         'Nazwa',
     'Delete':
@@ -1146,7 +1331,7 @@ SnapTranslator.dict.pl = {
 
     // list watchers
     'length: ':
-        'du\u0142go\u015B\u0107: ',
+        'd\u0142ugo\u015B\u0107: ',
 
     // coments
     'add comment here...':
@@ -1178,21 +1363,95 @@ SnapTranslator.dict.pl = {
         'Pusty',
 
     // graphical effects
-    'ghost':
+    'color':
+        'kolor',
+    'fisheye':
+        'rybie oko',
+    'whirl':
+        'wir',
+    'pixelate':
+        'pikselizacja',
+    'mosaic':
+        'mozaika',
+    'saturation':
+        'nasycenie',
+    'brightness':
+        'jasność',
+	'ghost':
         'duch',
+	'negative':
+        'negatyw',
+    'comic':
+        'mora ',
+    'confetti':
+        'konfetti',
 
-    // keys
+	// paint editor
+	'paint a new sprite':
+        'namaluj nowego duszka',
+	'Paint Editor':
+        'Edytor obrazów',
+	'Paintbrush tool\n(free draw)':
+        'Narzędzie pędzel\n(swobodne malowanie)',
+	'Stroked Rectangle\n(shift: square)':
+        'Prostokąt\n(+shift: kwadrat)',
+	'Stroked Ellipse\n(shift: circle)':
+        'Elipsa\n(+shift: okrąg)',
+	'Eraser tool':
+        'Narzędzie gumka',
+	'Set the rotation center':
+        'Ustaw środek obrotu',
+	'Line tool\n(shift: vertical/horizontal)':
+        'Narzędzie linia\n(+shift: pionowa/pozioma)',
+	'Filled Rectangle\n(shift: square)':
+        'Wypełniony prostokąt\n(+shift: kwadrat)',
+	'Filled Ellipse\n(shift: circle)':
+        'Wypełniona elipsa\n(+shift: koło)',
+	'Fill a region':
+        'Wypełnij obszar',
+	'Pipette tool\n(pick a color anywhere)':
+        'Narzędzie pipeta\n(wybierz kolor z obrazu)',
+	'undo':
+        'cofnij',
+	'clear':
+        'wyczyść',
+	'grow':
+        'powiększ',
+	'shrink':
+        'zmniejsz',
+	'flip ↔':
+        'przerzuć ↔',
+	'flip ↕':
+        'przerzuć ↕',
+	'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Ograniczyć proporcje kształtów?\n(można również przytrzymać shift)',
+	'Brush size':
+        'Rozmiar pędzla',
+	'Paint a new costume':
+        'namaluj nowy kostium',
+
+	// camera
+	'take a camera snapshot and\nimport it as a new sprite':
+        'nowy duszek z kamery',
+	'Camera':
+        'Kamera',
+	'Import a new costume from your webcam':
+        'nowy kostium z kamery',
+
+	// keys
     'space':
         'spacja',
     'up arrow':
-        'strz\u0142aka w g\u00F3r\u0119',
+        'strza\u0142ka w g\u00F3r\u0119',
     'down arrow':
-        'strz\u0142aka w d\u00F3\u0142',
+        'strza\u0142ka w d\u00F3\u0142',
     'right arrow':
-        'strz\u0142aka w prawo',
+        'strza\u0142ka w prawo',
     'left arrow':
-        'strz\u0142aka w lewo',
-    'a':
+        'strza\u0142ka w lewo',
+    'any key':
+        'dowolny klawisz',
+	'a':
         'a',
     'b':
         'b',
@@ -1272,8 +1531,10 @@ SnapTranslator.dict.pl = {
     // math functions
     'abs':
         'modu\u0142',
-    'floor':
-        'pod\u0142oga',
+    'ceiling':
+        'zaokr\u0105glenie w g\u00F3r\u0119',
+	'floor':
+        'zaokr\u0105glenie w d\u00F3\u0142',
     'sqrt':
         'pierwiastek kwadratowy',
     'sin':
@@ -1293,6 +1554,22 @@ SnapTranslator.dict.pl = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'nie',
+
+    // delimiters
+    'letter':
+        'litera',
+    'whitespace':
+        'spacja',
+    'line':
+        'linia',
+    'tab':
+        'tabulator',
+    'cr':
+        'koniec linii',
+
     // data types
     'number':
         'liczba',
@@ -1308,12 +1585,66 @@ SnapTranslator.dict.pl = {
         'funkcja',
     'predicate':
         'predykat',
+	'sprite':
+        'duszek',
+	'costume':
+        'kostium',
+	'sound':
+        'dźwięk',
 
     // list indices
     'last':
         'ostatni',
     'any':
         'dowolny',
+
+    // attributes
+    'neighbors':
+        'sąsiedzi',
+    'self':
+        'sam',
+    'other sprites':
+        'inne duszki',
+    'parts':
+        'części',
+    'anchor':
+        'kotwica',
+    'parent':
+        'rodzic',
+    'children':
+        'potomstwo',
+    'clones':
+        'klony',
+    'other clones':
+        'inne klony',
+    'dangling?':
+        'wiszący?',
+    'rotation x':
+        'obrót x',
+    'rotation y':
+        'obrót y',
+    'center x':
+        'x środka',
+    'center y':
+        'y środka',
+    'name':
+        'nazwa',
+    'stage':
+        'scena',
+    'costumes':
+        'kostiumy',
+    'sounds':
+        'dźwięki',
+    'scripts':
+        'skrypty',
+
+    // inheritance
+    'inherited':
+        'odziedziczone',
+    'check to inherit\nfrom':
+        'zaznacz, żeby dziedziczyć\nod',
+    'uncheck to\ndisinherit':
+        'odznacz, żeby\nnie dziedziczyć',
 
     // Sign up dialog
     'Sign up':

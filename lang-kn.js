@@ -546,8 +546,8 @@ SnapTranslator.dict.kn = {
         '\u0CA8\u0CAE\u0CB8\u0CCD\u0C95\u0CBE\u0CB0',
     'world':
         '\u0CAA\u0CCD\u0CB0\u0CAA\u0C82\u0C9A',
-    'letter %n of %s':
-        '\u0C85\u0C95\u0CCD\u0CB7\u0CB0 %n \u0CB0\u0CB2\u0CCD\u0CB2\u0CBF %s',
+    'letter %idx of %s':
+        '\u0C85\u0C95\u0CCD\u0CB7\u0CB0 %idx \u0CB0\u0CB2\u0CCD\u0CB2\u0CBF %s',
     'length of %s':
         '\u0CA8\u0020\u0C89\u0CA6\u0CCD\u0CA6 %s',
     'unicode of %s':
