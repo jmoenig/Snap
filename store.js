@@ -2022,9 +2022,10 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                             ' readonly="true"' : '',
                     myself.declarations.get(decl)[1],
                     myself.declarations.get(decl)[2] ?
-                            '<options>' + myself.declarations.get(decl)[2] +
-                                '</options>'
-                                : ''
+                            serializer.format(
+                                '<options>@</options>',
+                                myself.declarations.get(decl)[2]
+                            ) : ''
                 );
             }, ''),
         this.body ? serializer.store(this.body.expression) : '',
