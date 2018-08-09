@@ -19,8 +19,7 @@ jobs:
           repo: cs10/snap
           target-branch: master
           on:
-            repo: cycomachead/snap
-            # repo: jmoenig/Snap--Build-Your-Own-Blocks
+            repo: jmoenig/Snap--Build-Your-Own-Blocks
             condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+
             all_branches: true
         # deploy to the Snap!Cloud repo
@@ -41,8 +40,7 @@ jobs:
         - provider: script
           script: sshpass -p "${REMOTE_PASSWORD}" rsync -avz cycomachead/snap/ ${ACCOUNT}:~/snapsource/
           on:
-            repo: cycomachead/snap
-            # repo: jmoenig/Snap--Build-Your-Own-Blocks
+            repo: jmoenig/Snap--Build-Your-Own-Blocks
             branch: master
         # deploy a release to main snap URL
         - provider: script
