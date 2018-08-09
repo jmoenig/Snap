@@ -8,7 +8,8 @@ var driver = null,
 setupVue();
 
 frames.forEach(frame => {
-    frame.setAttribute('src', window.origin);
+    const url = window.location.href.replace(window.location.pathname, '');
+    frame.setAttribute('src', url);
 });
 
 function startTests() {
@@ -18,7 +19,6 @@ function startTests() {
                 driver = new SnapDriver(frame.contentWindow.world);
                 driver.setWindow(frame.contentWindow);
                 monkey._world = frame.contentWindow.world; // update the world view for our monkey
-                return driver.login('test');
             });
         }, Promise.resolve())
         .then(() => {
