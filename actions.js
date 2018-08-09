@@ -572,9 +572,12 @@ ActionManager.prototype.newId = function() {
 };
 
 ActionManager.prototype.getId = function (block, index) {
-    var id = '';
+    var id = '',
+        isParentCodeElement;
+
     while (!block.id) {
-        if (block.parent === null) {  // template block
+        isParentCodeElement = block.parent instanceof SyntaxElementMorph;
+        if (!isParentCodeElement) {
             return null;
         }
         id = block.parent.inputs().indexOf(block) + '/' + id;
