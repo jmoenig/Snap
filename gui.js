@@ -3233,7 +3233,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Import tools',
         function () {
             myself.getURL(
-                myself.resourceURL('tools.xml'),
+                myself.resourceURL('libraries', 'tools.xml'),
                 function (txt) {
                     myself.droppedText(txt, 'tools');
                 }
