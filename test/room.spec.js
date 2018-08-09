@@ -3,10 +3,12 @@ describe('room', function() {
     this.timeout(10000);
     describe('new', function() {
         const name = 'newRoleName';
+        let initialRoleName = '';
         before(() => {
             return driver.reset()
                 .then(() => driver.addBlock('forward'))
                 .then(() => {
+                    initialRoleName = driver.ide().projectName;
                     driver.newRole(name);
 
                     // wait for it to show up
@@ -34,6 +36,25 @@ describe('room', function() {
                         return driver.ide().projectName === name;
                     }, `could not move to ${name} role`)
                     .then(() => expect(projectId).toBe(projectId));
+            });
+
+            it('should be able to move back and forth', async function() {
+                // wait for the project name to change
+                await driver.expect(() => {
+                    return driver.ide().projectName === name;
+                }, `could not move to ${name} role`);
+
+                driver.moveToRole(initialRoleName);
+                driver.dialogs().forEach(d => d.destroy());
+                await driver.expect(() => {
+                    return driver.ide().projectName === initialRoleName;
+                }, `could not move to ${initialRoleName} role`);
+
+                driver.moveToRole(name);
+                driver.dialogs().forEach(d => d.destroy());
+                await expect(() => {
+                    return driver.ide().projectName === name;
+                }, `could not move to ${name} role`);
             });
 
             it('should be an empty role', function() {
