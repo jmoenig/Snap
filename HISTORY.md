@@ -812,7 +812,7 @@ Fixes:
 * Store: fixed #1645
 
 ### 2017-01-27
-* Blocks, Objects, Threaes, Store: added support for codification of String, Number and Boolean value types
+* Blocks, Objects, Threads, Store: added support for codification of String, Number and Boolean value types
 
 ### 2017-01-24
 * BYOB: changed “new line” symbol to $nl
@@ -841,34 +841,29 @@ Fixes:
 ### 2017-01-13
 * GUI: added "savingPreferences" flag for bh's "Eisenbergification" library, sigh.
 
-== v4.0.10 ===
-
-Features:
-* auto-wrapping of C-slots
-* undo / redo for blocks, unlimited, but has some issues
-* search field for projects, thanks, Bernat!!
-* basic typography support for custom block labels, thanks, Bernat!!
-* treat JS-function reporters the same as variable getters wrt rings
-* new url switch #dl: for downloading raw shared projects
-* new url option switch: &noExitWarning
-* svg support for images from the web (svg files have been supported for a long time)
-* use media dialog for browsing and importing sounds
-* highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
-* hierarchical menus, also for custom blocks, thanks, Brian!
-* variable refactoring, thanks, Bernat!
-* “#run:” flags (same as “#present:”): ’editMode’, ‘noRun’, ‘hideControls’, thanks, Brian!
-* Libraries Browser, thanks, Michael!
-
-Fixes:
-* Music (play note) to work again in new and recent browser versions (Chrome 55)
-* IDE layout: fixed resizing issues when the window becomes too small
-* Keep left-over blocks from “relabel” around
-* Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
-* “go back _ layers” to work with out-of bounds numbers, thanks, Brian Broll!
-* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
-
-
-== v4.0.11 - in development - ===
+## v4.0.10
+* Features:
+    * auto-wrapping of C-slots
+    * undo / redo for blocks, unlimited, but has some issues
+    * search field for projects, thanks, Bernat!!
+    * basic typography support for custom block labels, thanks, Bernat!!
+    * treat JS-function reporters the same as variable getters wrt rings
+    * new url switch #dl: for downloading raw shared projects
+    * new url option switch: &noExitWarning
+    * svg support for images from the web (svg files have been supported for a long time)
+    * use media dialog for browsing and importing sounds
+    * highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
+    * hierarchical menus, also for custom blocks, thanks, Brian!
+    * variable refactoring, thanks, Bernat!
+    * “#run:” flags (same as “#present:”): ’editMode’, ‘noRun’, ‘hideControls’, thanks, Brian!
+    * Libraries Browser, thanks, Michael!
+* Fixes:
+    * Music (play note) to work again in new and recent browser versions (Chrome 55)
+    * IDE layout: fixed resizing issues when the window becomes too small
+    * Keep left-over blocks from “relabel” around
+    * Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
+    * “go back _ layers” to work with out-of bounds numbers, thanks, Brian Broll!
+    * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
 
 ### 2017-01-11
 * Error handling improvements for custom drop-down submenus and generic WHEN hats
@@ -1004,19 +999,15 @@ Fixes:
 ### 2016-11-07
 * New C-Slot auto-wrapping / snapping feature (similar to Scratch)
 
+# v4.0.9.2
 ### 2016-11-10
 * new Galician translation, yay!! Thanks, tecnoloxia.org!
 * Italian translation update
 * German translation update
 
-== v4.0.9.2 ====
-
-*** in development ***
-
+## v4.0.9.1
+## v4.0.9
 ### 2016-10-27
-== v4.0.9 ====
-
-== v4.0.9.1 ====
 
 ### 2016-10-24
 * Text Editing Tweaks, thanks, Bernat!!
@@ -1081,49 +1072,39 @@ Fixes:
 * slider for single-stepping speed
 * pausing now flashes the currently active blocks
 
+## v4.0.8.7
 ### 2016-08-12
 * Threads: for hidden sprites display ASK questions in the input box
 * Morphic: replace deprecated KeyboardEvent.keyIdentifier with .key
 
-== v4.0.8.7 ====
-
-*** in development ***
-
+## v4.0.8.6
 ### 2016-08-03
 * Store: restore implicit formal parameters for serialized lambdas
 
-== v4.0.8.6 ====
-
+## v4.0.8.5
 ### 2016-07-31
 * GUI: fixed #1348 - opening projects from url not working in non-English
 
-== v4.0.8.5 ====
-
+## v4.0.8.4
 ### 2016-07-20
 * GUI: fixed #1333 - paint a new costume not working in retina mode in FF and Edge
 
-== v4.0.8.4 ====
-
+## v4.0.8.3
 ### 2016-07-19
 * Morphic: avoid blitting artifacts for non-integer devicePixelRatios in Firefox
 * Widgets: fixed 3D corners for buttons in Firefox for Windows
 * Objects: fixed color collision detection for retina mode
 * Threads: enable broadcasts to be sent to specific sprites (experimental)
 
-== v4.0.8.3 ====
-
 ## v4.0.8.2
-
 ### 2016-07-17
 * Morphic: fixed collision detection for non-integer devicePixelRatios
 
 ## v4.0.8.1
-
 ### 2016-07-15
 * Blocks: activate generic hat blocks inserted via keyboard editing
 
 ## v4.0.8
-
 ### 2016-07-14
 * New Features
   - Retina Display Support, thanks, Bartosz Leper!!
@@ -1149,7 +1130,6 @@ Fixes:
   - German
 
 ## v4.0.7.2
-
 ### 2016-05-09
 * Threads: fixed #1212 - Null continuation doesn't escape from calling context.
 * Updated Simplified Chinese translation, thanks to @ubertao!
@@ -1164,7 +1144,6 @@ Fixes:
 
 
 ## v4.0.7
-
 ### 2016-05-02
 * first class sprites, new MY reporter block and extended functionality of TOUCHING
 * fixed switching from list watcher to table view inside sprite speech bubbles
@@ -1189,7 +1168,6 @@ Fixes:
 * minor bug fixes
 
 ## v4.0.6
-
 ### 2016-03-16
 * Store, Objects, GUI: fixed #99 (saving linked lists)
 * Objects: fixed #1163
@@ -1344,7 +1322,6 @@ Fixes:
 * Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph
 
 ## v4.0.3 (unreleased)
-
 ### 2015-11-16
 * Blocks, GUI: Slightly less transparency for dragged reporters and sprite icons
 * new Bulgarian and Romanian translations contributed!
@@ -1437,7 +1414,6 @@ Fixes:
 * Interlingua support, yay!! thanks, Ken Dickey!
 
 ## v4.0.2
-
 ### 2015-08-06
 * Polish & German translation updates
 
@@ -1469,7 +1445,6 @@ Fixes:
 * Morphic: Fix Inspector duplication, update documentation
 
 ## v4.0.1 (unreleased)
-
 ### 2015-06-25
 * Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
 * Objects: push maximum clone count up to 1000, tweak Note::play
@@ -1488,7 +1463,6 @@ Fixes:
 * Portuguese translation update, thanks, Manuel!!
 
 ## v4.0
-
 ### 2015-05-01
 * Morphic, Blocks: select all text when first clicking an input slot
 * BYOB: indicate numeric inputs in the block prototype with the # sign
