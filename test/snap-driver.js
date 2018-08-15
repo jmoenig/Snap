@@ -292,6 +292,25 @@ SnapDriver.prototype.login = function(name, password='password') {
         });
 };
 
+SnapDriver.prototype.logout = async function() {
+    const btn = this.ide().controlBar.cloudButton;
+    this.click(btn);
+
+    const dropdown = this.dialog();
+    const logoutBtn = dropdown.children.find(item => item.action === 'logout');
+    const isLoggedIn = !!logoutBtn;
+
+    if (isLoggedIn) {
+        this.click(logoutBtn);
+        await this.expect(
+            () => this.isShowingDialogTitle(title => title.includes('disconnected')),
+            `Did not see logout message`
+        );
+    } else {
+        throw new Error('no one is logged in');
+    }
+};
+
 SnapDriver.prototype.inviteCollaborator = function(username) {
     const controlBar = this.ide().controlBar;
     this.click(controlBar.cloudButton);
