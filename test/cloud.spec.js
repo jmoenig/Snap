@@ -1,5 +1,7 @@
 /*globals expect, driver */
 describe('cloud', function() {
+    this.timeout(5000);
+
     let SnapCloud;
     before(() => SnapCloud = driver.globals().SnapCloud);
 
@@ -23,6 +25,17 @@ describe('cloud', function() {
                 .catch(() => {
                     if (oldProjectId === SnapCloud.projectId) {
                         throw new Error('Did not update id');
+                    }
+                });
+        });
+
+        it('should set roleId on fail', function() {
+            const oldId = SnapCloud.roleId;
+            return SnapCloud.newProject('myRole')
+                .then(() => {throw new Error('request did not fail');})
+                .catch(() => {
+                    if (oldId === SnapCloud.roleId) {
+                        throw new Error(`Did not update id (${SnapCloud.roleId} vs ${oldId})`);
                     }
                 });
         });

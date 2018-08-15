@@ -573,25 +573,21 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
             },
             function () {nop(); }, // yield (bug in Chrome)
             function () {
-                SnapCloud.reconnect(
-                    function () {
-                        SnapCloud.callService(
-                            'getProject',
-                            function (response) {
-                                var action = myself.rawLoadCloudProject(response[0]);
-                                if (action) {
-                                    action.then(function() {
-                                        applyFlags(dict);
-                                        msg.destroy();
-                                    });
-                                } else {
-                                    msg.destroy();
-                                    applyFlags(dict);
-                                }
-                            },
-                            myself.cloudError(),
-                            [SnapCloud.username, dict.ProjectName, SnapCloud.clientId]
-                        );
+                // This needs to be able to open a project by name, too
+                // TODO: FIXME
+                SnapCloud.getProjectByName(
+                    SnapCloud.username,
+                    dict.ProjectName,
+                    function (xml) {
+                        msg.destroy();
+                        var action = myself.rawLoadCloudProject(xml);
+                        if (action) {
+                            action.then(function() {
+                                applyFlags(dict);
+                            });
+                        } else {
+                            applyFlags(dict);
+                        }
                     },
                     myself.cloudError()
                 );
@@ -4398,17 +4394,11 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         size = Math.round(str.length / 1024);
 
     this.exitReplayMode();
-    this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening project\n' + size + ' KB...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            SnapActions.openProject(str).then(function() {
-                msg.destroy();
-            });
-        }
-    ]);
+    msg = myself.showMessage('Opening project\n' + size + ' KB...');
+    return SnapActions.openProject(str)
+        .then(function() {
+            msg.destroy();
+        });
 };
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {

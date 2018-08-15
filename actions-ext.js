@@ -169,6 +169,7 @@ SnapActions.submitIfAllowed = function(event) {
             function () {
                 ide.sockets.sendMessage({
                     type: 'permission-elevation-request',
+                    projectId: SnapCloud.projectId,
                     guest: SnapCloud.username
                 });
             }

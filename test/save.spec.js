@@ -5,10 +5,10 @@ describe('save', function() {
         SnapCloud = driver.globals().SnapCloud;
         ProjectDialogMorph = driver.globals().ProjectDialogMorph;
     });
-    this.timeout(10000);
+    this.timeout(15000);
 
     [
-        ['w/o ws connection', () => driver.disconnect(), () => driver.connect()],
+        //['w/o ws connection', () => driver.disconnect(), () => driver.connect()],
         ['fully connected']
     ].forEach(tuple => {
         const [label, beforeFn, afterFn] = tuple;
@@ -78,7 +78,7 @@ describe('save', function() {
                             .then(() => openSavedProject(projectName))
                             .then(() => {
                                 saveAsName = `new${projectName}-saveAs`;
-                                return saveProjectAs(saveAsName);
+                                return driver.saveProjectAs(saveAsName);
                             });
                     });
 
@@ -115,7 +115,7 @@ describe('save', function() {
                     before(function() {
                         return driver.reset()
                             .then(() => driver.addBlock('doIf'))
-                            .then(() => saveProjectAs(existingName));
+                            .then(() => driver.saveProjectAs(existingName));
                     });
 
                     beforeEach(function() {
@@ -128,7 +128,7 @@ describe('save', function() {
                         const saveAs = `${name}-SAVE-AS`;
                         return driver.setProjectName(name)
                             .then(() => driver.addBlock('forward'))
-                            .then(() => saveProjectAs(saveAs))
+                            .then(() => driver.saveProjectAs(saveAs))
                             .then(() => openProjectsBrowser())
                             .then(dialog => {
                                 return driver.waitUntil(() => {
@@ -147,7 +147,7 @@ describe('save', function() {
                     });
 
                     it('should prompt for overwrite if conflicting exists', function() {
-                        return saveProjectAsNoConfirm(existingName)
+                        return driver.saveProjectAs(existingName, false)
                             .then(() => {
                                 const menu = driver.dialog();
                                 expect(menu.key.includes('decideReplace')).toBeTruthy();
@@ -157,7 +157,7 @@ describe('save', function() {
                     it('should save as given name on overwrite', function() {
                         const originalName = `original-name-${Date.now()}`;
                         return driver.setProjectName(originalName)
-                            .then(() => saveProjectAsNoConfirm(existingName))
+                            .then(() => driver.saveProjectAs(existingName, false))
                             .then(() => {
                                 const menu = driver.dialog();
                                 menu.ok();
@@ -177,7 +177,7 @@ describe('save', function() {
                     it('should not save if not overwriting', function() {
                         const originalName = `original-name-${Date.now()}`;
                         return driver.setProjectName(originalName)
-                            .then(() => saveProjectAsNoConfirm(existingName))
+                            .then(() => driver.saveProjectAs(existingName, false))
                             .then(() => {
                                 const menu = driver.dialog();
                                 menu.cancel();
@@ -228,7 +228,7 @@ describe('save', function() {
 
                 it('should not allow name collisions', function() {
                     const name = `collision-test-${Date.now()}`;
-                    return saveProjectAs(name)
+                    return driver.saveProjectAs(name)
                         .then(() => driver.reset())
                         .then(() => driver.setProjectNameNoConfirm(name))
                         .then(() => driver.expect(
@@ -257,7 +257,8 @@ describe('save', function() {
                     const isShowingUpdateMsg = driver.dialogs().length === 2;
                     const projectDialog = driver.dialogs()
                         .find(d => d instanceof ProjectDialogMorph);
-                    const hasLoadedProjects = getProjectList(projectDialog)[0] !== '(empty)';
+                    const hasLoadedProjects = projectDialog &&
+                            getProjectList(projectDialog)[0] !== '(empty)';
                     return isShowingUpdateMsg || hasLoadedProjects;
                 },
                 'Did not see "update project list" message'
@@ -270,38 +271,6 @@ describe('save', function() {
         } else {
             return Promise.resolve();
         }
-    }
-
-    function saveProjectAsNoConfirm(name) {  // don't wait for save confirmation
-        // save as
-        const controlBar = driver.ide().controlBar;
-        driver.click(controlBar.projectButton);
-
-        const menu = driver.dialog();
-        const saveBtnIndex = menu.children
-            .findIndex(child => child.action === 'save');
-        const saveAsBtn = menu.children[saveBtnIndex+1];
-        driver.click(saveAsBtn);
-
-        // Wait for the project list to be updated
-        return waitUntilProjectsLoaded()
-            .then(() => {
-                // Enter the new project name
-                driver.keys(name);
-                const dialog = driver.dialog();
-                const saveBtn = dialog.buttons.children[0];
-                driver.click(saveBtn);
-            });
-    }
-
-    function saveProjectAs(name) {
-        return saveProjectAsNoConfirm(name)
-            .then(() => {
-                return driver.expect(
-                    showingSaveMsg,
-                    `Did not see save message after "Save As"`
-                );
-            });
     }
 
     function saveProject() {

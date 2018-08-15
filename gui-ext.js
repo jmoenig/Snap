@@ -122,17 +122,11 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     var myself = this,
         msg = myself.ide.showMessage('Fetching project\nfrom the cloud...');
 
-    SnapCloud.reconnect(
-        function () {
-            SnapCloud.callService(
-                'getProject',
-                function (response) {
-                    msg.destroy();
-                    myself.ide.rawLoadCloudProject(response[0], proj.Public);
-                },
-                myself.ide.cloudError(),
-                [proj.Owner, proj.ProjectName, SnapCloud.clientId]
-            );
+    SnapCloud.getProject(
+        proj.ID,
+        function (xml) {
+            msg.destroy();
+            myself.ide.rawLoadCloudProject(xml, proj.Public);
         },
         myself.ide.cloudError()
     );

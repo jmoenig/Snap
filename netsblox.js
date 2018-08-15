@@ -45,6 +45,9 @@ NetsBloxMorph.prototype.openIn = function (world) {
         m.popUpCenteredInWorld(world);
 
         var startTime = Date.now();
+        // Currently, we wait until the ws connection is established before
+        // opening a project. After removing dependency on the ws connection,
+        // we should be able to remove this and open projects w/o any ws conn
         this.sockets.onConnect = function() {
             m.destroy();
             opened = true;
@@ -574,11 +577,12 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
         return;
     }
 
-    room.children.forEach(function(role) {
+    roles = room.children.map(function(role) {
         var srcCode = role.children[0] || '';
         var media = role.children[1] || '';
 
-        roles[role.attributes.name] = {
+        return {
+            ProjectName: role.attributes.name,
             SourceCode: srcCode.toString(),
             Media: media.toString()
         };
@@ -589,9 +593,12 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
     // Create a room with the new name
     this.newRole(role);
 
-    var name = room.attributes.name;
+    var myself = this,
+        name = room.attributes.name;
+
     return SnapCloud.importProject(name, role, roles)
-        .then(function() {
+        .then(function(state) {
+            myself.room.onRoomStateUpdate(state);
             // load the given project
             role = room.children[0];
             var projectXml = [
@@ -600,16 +607,22 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
                 role.childNamed('media').toString(),
                 '</snapdata>'
             ].join('');
-            return SnapActions.openProject(projectXml);
-        })
-        .then(function() {
-            msg.destroy();
+            return SnapActions.openProject(projectXml)
+                .then(function () {
+                    msg.destroy();
+                    myself.sockets.updateRoomInfo();
+                });
         });
 };
 
 NetsBloxMorph.prototype.openCloudDataString = function (model, parsed) {
-    var str = parsed ? model.toString() : model;
-    return IDE_Morph.prototype.openCloudDataString.call(this, str);
+    var myself = this,
+        str = parsed ? model.toString() : model;
+
+    return IDE_Morph.prototype.openCloudDataString.call(this, str)
+        .then(function() {
+            myself.sockets.updateRoomInfo();
+        });
 };
 
 // Serialize a project and save to the browser.
@@ -753,6 +766,8 @@ NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
     };
 
     // Check if it will overwrite the current one
+    // We can check this by just using the project IDs now...
+    // TODO
     SnapCloud.hasConflictingStoredProject(
         name,
         function(hasConflicting) {
@@ -802,6 +817,8 @@ NetsBloxMorph.prototype.droppedText = function (aString, name) {
                     myself.room.setRoomName(name);
                 }
                 msg.destroy();
+
+                myself.sockets.updateRoomInfo();
             });
     } else {
         return IDE_Morph.prototype.droppedText.call(this, aString, name);
@@ -1387,7 +1404,7 @@ NetsBloxMorph.prototype.collabResponse = function (invite, response) {
                     SnapCloud.reconnect(
                         function () {
                             SnapCloud.joinActiveProject(
-                                invite.ProjectID,
+                                invite.projectId,
                                 function (xml) {
                                     myself.rawLoadCloudProject(xml);
                                 },

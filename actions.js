@@ -2675,6 +2675,11 @@ ActionManager.prototype.onOpenProject = function(str) {
         if (project && project.collabStartIndex !== undefined) {
             this.lastSeen = project.collabStartIndex;
         }
+
+        var roomName = this.ide().room.name,
+            roleName = this.ide().projectName;
+
+        SnapCloud.setClientState(roomName, roleName, this.lastSeen);
     }
 };
 

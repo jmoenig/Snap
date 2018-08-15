@@ -3,13 +3,17 @@ describe('url anchors', function () {
     this.timeout(10000);
     // opening examples
     describe('examples', function() {
+        let oldRoleId = null;
         before(() => {
             const loc = {
                 href: location.origin + '?action=example&ProjectName=Dice&editMode=true',
                 hash: ''
             };
             return driver.reset()
-                .then(() => driver.ide().interpretUrlAnchors(loc));
+                .then(() => {
+                    oldRoleId = driver.globals().SnapCloud.roleId;
+                    return driver.ide().interpretUrlAnchors(loc);
+                });
         });
 
         it('should load example code', function () {
@@ -20,6 +24,11 @@ describe('url anchors', function () {
                 },
                 'No blocks showed up for example'
             );
+        });
+
+        it('should set role ID', function () {
+            const SnapCloud = driver.globals().SnapCloud;
+            return driver.expect(() => SnapCloud.roleId !== oldRoleId, `Role ID not updated`);
         });
 
         it('should load two roles (p1, p2)', function () {

@@ -21,10 +21,12 @@ describe('room', function() {
         });
 
         describe('moveToRole', function() {
-            let projectId;
+            let SnapCloud, projectId, oldRoleId;
             before(function() {
-                const SnapCloud = driver.globals().SnapCloud;
+                SnapCloud = driver.globals().SnapCloud;
                 projectId = SnapCloud.projectId;
+                oldRoleId = SnapCloud.projectId;
+
                 driver.moveToRole(name);
                 driver.dialogs().forEach(d => d.destroy());
             });
@@ -35,7 +37,15 @@ describe('room', function() {
                     .expect(() => {
                         return driver.ide().projectName === name;
                     }, `could not move to ${name} role`)
-                    .then(() => expect(projectId).toBe(projectId));
+                    .then(() => expect(projectId).toBe(SnapCloud.projectId));
+            });
+
+            it('should not update projectId', function() {
+                expect(projectId).toBe(SnapCloud.projectId);
+            });
+
+            it('should update roleId', function() {
+                expect(oldRoleId).toNotBe(SnapCloud.roleId);
             });
 
             it('should be able to move back and forth', async function() {

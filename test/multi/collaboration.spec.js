@@ -48,8 +48,35 @@ describe('collaboration', function() {
 
     describe('shared project', function() {
         const user2 = 'test2';
-        before(() => driver.user2.login(user2));
-        beforeEach(() => driver.user2.reset());
+        let oldProjectId;
+        let oldRoleId;
+        before(() => {
+            return driver.user2.login(user2)
+                .then(() => driver.user1.inviteCollaborator(user2))
+                .then(() => driver.user2.expect(
+                    () => {
+                        const dialog = driver.user2.dialog();
+                        const key = dialog && dialog.key;
+                        return key && key.includes('decideCollab');
+                    },
+                    `Prospective collaborator never received invite`
+                ))
+                .then(() => {  // accept the invite and open the project
+                    oldProjectId = driver.user2.globals().SnapCloud.projectId;
+                    oldRoleId = driver.user2.globals().SnapCloud.roleId;
+                    const dialog = driver.user2.dialogs()
+                        .find(dialog => dialog.key.includes('decideCollab'));
+                    dialog.ok();
+                    return driver.user2.expect(
+                        () => driver.user2.isShowingDialogKey(key => key.includes('decideOpen')),
+                        `Did not prompt user to open shared project`
+                    );
+                })
+                .then(() => {
+                    const openDialog = driver.user2.dialog();
+                    openDialog.ok();
+                });
+        });
 
         after(() => driver.user2.login('test'));
 
@@ -65,41 +92,55 @@ describe('collaboration', function() {
                 ));
         });
 
-        it('should be able to open project as collaborator', function() {
-            let oldProjectId;
-            return driver.user1.inviteCollaborator(user2)
-                .then(() => driver.user2.expect(
-                    () => {
-                        const dialog = driver.user2.dialog();
-                        const key = dialog && dialog.key;
-                        return key && key.includes('decideCollab');
-                    },
-                    `Prospective collaborator never received invite`
-                ))
-                .then(() => {  // accept the invite and open the project
-                    oldProjectId = driver.user2.globals().SnapCloud.projectId;
-                    const dialog = driver.user2.dialogs()
-                        .find(dialog => dialog.key.includes('decideCollab'));
-                    dialog.ok();
-                    return driver.user2.expect(
-                        () => driver.user2.isShowingDialogKey(key => key.includes('decideOpen')),
-                        `Did not prompt user to open shared project`
-                    );
-                })
-                .then(() => {
-                    const openDialog = driver.user2.dialog();
-                    openDialog.ok();
-                    return driver.user2.expect(
-                        () => driver.user2.ide().room.name === projectName,
-                        `Project did not change to ${projectName}`
-                    );
-                })
-                .then(() => {
-                    let projectId = driver.user2.globals().SnapCloud.projectId;
-                    let sharedProjectId = driver.user1.globals().SnapCloud.projectId;
-                    expect(projectId).toBe(sharedProjectId);
-                    expect(projectId).toNotBe(oldProjectId);
-                });
+        it('should open shared project', function() {
+            return driver.user2.expect(
+                () => driver.user2.ide().room.name === projectName,
+                `Project did not change to ${projectName}`
+            );
+        });
+
+        it('should change project ID', function() {
+            let projectId = null;
+            return driver.user2.expect(
+                () => {
+                    projectId = driver.user2.globals().SnapCloud.projectId;
+                    return projectId !== oldProjectId;
+                },
+                `Project ID not updated (${projectId} vs ${oldProjectId})`
+            );
+        });
+
+        it('should have matching project IDs', function() {
+            let projectId, sharedProjectId;
+            return driver.user2.expect(
+                () => {
+                    projectId = driver.user2.globals().SnapCloud.projectId;
+                    sharedProjectId = driver.user1.globals().SnapCloud.projectId;
+                    return projectId === sharedProjectId;
+                },
+                `Project IDs do not match (${projectId} vs ${sharedProjectId})`
+            );
+        });
+
+        it('should update role ID', function() {
+            return driver.user2.expect(
+                () => {
+                    let roleId = driver.user2.globals().SnapCloud.roleId;
+                    return roleId !== oldRoleId;
+                },
+                'Role ID not updated'
+            );
+        });
+
+        it('should have matching role IDs', function() {
+            return driver.user2.expect(
+                () => {
+                    let roleId = driver.user2.globals().SnapCloud.roleId;
+                    let sharedRoleId = driver.user1.globals().SnapCloud.roleId;
+                    return roleId === sharedRoleId;
+                },
+                'Role ID not updated'
+            );
         });
     });
 });
