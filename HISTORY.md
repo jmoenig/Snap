@@ -2,12 +2,11 @@
 
 ## Development Version
 
-## v4.2.1.3 - maintenance release
-
+## v4.2.1.3
 ### 2018-07-19
 * Threads: fixed a regression conflict between "when I am stopped" and broadcasts
 
-## v4.2.1.2 - maintenance release
+## v4.2.1.2
 * New Feature:
 	* new "&lang=nn" url parameter for specifying a session translation in a web-link
 * Changed:
@@ -33,12 +32,11 @@
 ### 2018-07-10
 * Threads, GUI: fixed #712 - false "reporter didn't report" error messages
 
-## v4.2.1.1 - maintenance release
-
+## v4.2.1.1
 ### 2018-07-10
 * Threads, GUI: reverted Cache-Control header for HTTP requests b/c of CORS issues
 
-## v4.2.1 - minor release
+## v4.2.1
 * New Features:
     * new libraries for parallelization and JSON support
     * new "loudness" reporter in audio comp library, thanks, Bernat!
@@ -71,41 +69,36 @@
 ### 2018-07-03
 * speed up HTTP based hardware APIs (by not waiting for the result if the URL reporter is used inside a REPORT block within a custom COMMAND block definition)
 
+## v4.2 "Solstice"
+* New Features:
+    * "recover project" feature, (cloud backups), thanks, Bernat Romagosa!
+    * vector paint editor, thanks, Carles Paredes and Bernat Romagosa!
+    * "When I am stopped" event option, runs one atomic frame before terminating, use-case: stop robots when a user hits the stop button
+    * experimental JIT compiler for atomic HOFs, used in new "Bigger Data" library
+    * new library for programmatically creating variables, thanks, Brian Harvey!
+    * added options for sprite attributes to the SET block
+    * new "webcam snap" reporter in the "Pixels" library
+    * new "record" reporter in the "Audio Comp" library
+    * added "name" selector to the "Pixels" library
+    * added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
+* Notable Changes:
+    * hidden sprites can no longer be collision detected (but can test for other sprites)
+    * new sprites created by pressing the arrow button no point in random directions (unless you hold down the shift-key)
+    * new "center" option for location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
+    * disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
+* Notable Fixes:
+    * rearranging and scrolling sound icons
+    * rendering and layout of variadic C-shaped input slots
+    * when collapsing ring-typed multi-arg slots only filled rings are preserved
+    * support for numerical custom block input names
+    * no more "leftover" clones when pressing the stop button or executing the STOP block
+* Translation Updates:
+    * German, thanks, Jadga!
+    * Portuguese, thanks, Manuel!
+    * Catalan, thanks, Joan!
+
 ### 2018-06-21
 * Threads, Objects: made "When I am stopped" scripts atomic, so you can use loops
-
-=== v4.2 major release ===
-
-v4.2 New Features:
-* "recover project" feature, (cloud backups), thanks, Bernat Romagosa!
-* vector paint editor, thanks, Carles Paredes and Bernat Romagosa!
-* "When I am stopped" event option, runs one atomic frame before terminating, use-case: stop robots when a user hits the stop button
-* experimental JIT compiler for atomic HOFs, used in new "Bigger Data" library
-* new library for programmatically creating variables, thanks, Brian Harvey!
-* added options for sprite attributes to the SET block
-* new "webcam snap" reporter in the "Pixels" library
-* new "record" reporter in the "Audio Comp" library
-* added "name" selector to the "Pixels" library
-* added drop-down menu to "letter _ of _ ", adjusted all translations (thanks, Joan!)
-
-Notable Changes:
-* hidden sprites can no longer be collision detected (but can test for other sprites)
-* new sprites created by pressing the arrow button no point in random directions (unless you hold down the shift-key)
-* new "center" option for location blocks (GO TO, POINT TOWARDS, DISTANCE TO and DIRECTION TO)
-* disabled keyboard shortcuts for green-flag (cmd-enter) and stop (esc) in presentation mode
-
-Notable Fixes:
-* rearranging and scrolling sound icons
-* rendering and layout of variadic C-shaped input slots
-* when collapsing ring-typed multi-arg slots only filled rings are preserved
-* support for numerical custom block input names
-* no more "leftover" clones when pressing the stop button or executing the STOP block
-
-Translation Updates:
-* German, thanks, Jadga!
-* Portuguese, thanks, Manuel!
-* Catalan, thanks, Joan!
-
 
 ### 2018-06-20
 * Sketch: enable right-click to select secondary color in vector paint editor
@@ -122,9 +115,9 @@ Translation Updates:
 ### 2018-06-15
 * BYOB: fixed #2043 (regression)
 
+## v4.2 Release Candidate
 ### 2018-06-14
 * Threads: Prevent terminated threads from launching new ones
-* prepared v4.2 rc
 
 ### 2018-06-12
 * Renamed vectorPaint.js to sketch.js
@@ -210,35 +203,32 @@ Translation Updates:
 ### 2018-03-19
 * new Vector Paint Editor, thanks, Carles Paredes and Bernat Romagosa!
 
+## v4.1.2.7
 ### 2018-03-19
 * Threads: initialize Process>>gensyms with null (because it's hardly ever needed)
 * Objects: remove obsolete STOP primitive from the stage's palette
 
-=== v4.1.2.7 maintenance release ===
-
 ### 2018-03-16
 * Threads: experimental JIT compiler support for multi-word formal parameters and a single implicit formal parameter mapped to all empty input slots
 
+## v4.1.2.6
 ### 2018-03-14
-* Threads: changed testing order for type inferral, speeds up list operations significantly
+* Threads: changed testing order for type inference, speeds up list operations significantly
 * Cloud: remix project method, thanks, Bernat!
 
-=== v4.1.2.6 maintenance release ===
-
+## v4.1.2.5
 ### 2018-03-13
 * Objects: draw a "dot" pentrail when moving zero steps while the pen is down
 
-=== v4.1.2.5 maintenance release ===
-
+## v4.1.2.4
 ### 2018-03-09
 * Blocks, Objects, Threads: added "random" option for "go to", "point towards" and "point in direction" primitives
-
-=== v4.1.2.4 maintenance release ===
 
 ### 2018-03-08
 * Objects: fixed #2053
 * GUI: fixed #2052
 
+## v4.1.2.3
 ### 2018-03-05
 * cloud tweaks, thanks, Bernat and Michael!
 * fixed "join words" in the tools, library, thanks, Brian, for reporting the bug!
@@ -247,49 +237,37 @@ Translation Updates:
 * added capability to compile input slot options to experimental JIT
 * Spanish and German translation updates
 
-=== v4.1.2.3 maintenance release ===
-
+## v4.1.2.2
 ### 2018-02-22
 * crayons library: fixed "nearest crayon to" reporter
-* release
 
-=== v4.1.2.2 maintenance release ===
+## v4.1.2.1
+* Notable Changes:
+    * account verification
+    * optimized "broadcast and wait" for atomic subroutines
+    * changed leap motion library to https
+* Translation Updates:
+    * Spanish
 
 ### 2018-02-20
 * Libraries: Changed LeapMotion library source to https
 * account verification
-* release
-
-=== v4.1.2.1 maintenance release ===
-
-v4.1.2.1 Notable Changes:
-* account verification
-* optimized "broadcast and wait" for atomic subroutines
-* changed leap motion library to https
-
-Translation Updates:
-* Spanish
 
 ### 2018-02-19
 * GUI, snap.html: started v4.1.2.1 development
 * Threads: optimized "broadcast and wait" for atomic subroutines
 * Spanish translation update
 
+## v4.1.2
 ### 2018-02-17
-release
-
-=== v4.1.2 minor release ===
-
-v4.1.2 Notable Changes:
-* new cloud backend
-
-New Features:
-* experimental JIT compiler (in progress)
-
-Translation Updates:
-* new Catalan-Valencia translation
-* Catalan
-* German
+* Notable Changes:
+    * new cloud backend
+* New Features:
+    * experimental JIT compiler (in progress)
+* Translation Updates:
+    * new Catalan-Valencia translation
+    * Catalan
+    * German
 
 ### 2018-02-15
 * Threads, Blocks, Objects: experimental JIT compiler
@@ -313,47 +291,42 @@ Translation Updates:
 * GUI: start developing v4.1.2
 * Morphic: roll back temporary rectangle filling workaround for a bug in Chrome v57
 
+## v4.1.1
+* New Features:
+    * translation support for custom blocks
+    * new "direction to..." primitive as variant of "distance to..." in "Sensing"
+    * included local methods in the OF-block's left drop-down menu
+    * added "width" and "height" selectors to Pixels library
+    * added scroll events, thanks, Bernat!
+    * new dial widget POINT IN DIRECTION's drop-down menu
+    * new "rotate" option for sprite context menu
+    * new sound recorder, thanks, Bernat!
+    * new "Crayons" library, thanks, Brian!
+* Notable Changes:
+    * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
+    * keyboard events are now always thread safe (the same as in Scratch nowadays)
+    * the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
+    * accidentally clicking on a custom block definition no longer fires up the Block Dialog
+* Notable Fixes:
+    * scroll menus if they are taller than the world
+    * enabled color picker for pen trails on stage
+    * track keyboard events after accepting ASK using the keyboard
+    * improved support for emojis, thanks, Michael!
+    * avoid occasional stuck text cursors, thanks, Bernat!
+    * paint editor flood fill alpha issue, thanks, Bernat!
+    * implicit parameter binding in visible stepping, thanks, Joan!
+    * when deleting a temporary clone, detach all its parts and delete the temporary ones
+    * new release protocol to avoid browser caching related version conflicts
+* Translation Updates:
+    * German
+    * Greek
+    * Turkish
+    * Chinese
+    * Spanish
+    * Russian
+
 ### 2018-02-05
 * Russian translation update, thanks, temap!
-* release
-
-=== v4.1.1 minor release ===
-
-v4.1.1 New Features:
-* translation support for custom blocks
-* new "direction to..." primitive as variant of "distance to..." in "Sensing"
-* included local methods in the OF-block's left drop-down menu
-* added "width" and "height" selectors to Pixels library
-* added scroll events, thanks, Bernat!
-* new dial widget POINT IN DIRECTION's drop-down menu
-* new "rotate" option for sprite context menu
-* new sound recorder, thanks, Bernat!
-* new "Crayons" library, thanks, Brian!
-
-Notable Changes:
-* global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
-* keyboard events are now always thread safe (the same as in Scratch nowadays)
-* the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
-* accidentally clicking on a custom block definition no longer fires up the Block Dialog
-
-Notable Fixes:
-* scroll menus if they are taller than the world
-* enabled color picker for pen trails on stage
-* track keyboard events after accepting ASK using the keyboard
-* improved support for emojis, thanks, Michael!
-* avoid occasional stuck text cursors, thanks, Bernat!
-* paint editor flood fill alpha issue, thanks, Bernat!
-* implicit parameter binding in visible stepping, thanks, Joan!
-* when deleting a temporary clone, detach all its parts and delete the temporary ones
-* new release protocol to avoid browser caching related version conflicts
-
-Translation Updates:
-* German
-* Greek
-* Turkish
-* Chinese
-* Spanish
-* Russian
 
 ### 2018-02-02
 * Libraries: Crayons library, thanks, Brian!
@@ -415,96 +388,89 @@ Translation Updates:
 * BYOB, Store, Threads: Localization support for custom blocks (experimental)
 * Tools: German translation of tools (experimental)
 
+## v4.1.0.5
 ### 2017-11-26
 * GUI: fixed #1933 - avoid creating "obsolete" blocks by not copying method blocks into sprites that don't understand them
 * Store: fixed #1937 - allow stage width to be a minimum of 240 pixels
 
-=== v4.1.0.5 maintenance release ===
-
+## v4.1.0.4
 ### 2017-11-16
 * Threads: suppress "exit" context when forking a process while single-stepping, this avoids a false "reporter didn't report" error message
 * Blocks: avoid coloring the block-highlight when re-coloring a syntax element, this prevents highlighted blocks inside LAUNCH statements to expand when repeatedly single-stepped.
 
-=== v4.1.0.4 maintenance release ===
-
+## v4.1.0.3
 ### 2017-11-15
 * Portuguese & Polish translation updates, thanks, Witek and Manuel!!
 * escape xml attribute contents, thanks, Brian Broll!
 * changed minimum stage width to 240
 * new Audio Comp library for Guzdial-style sound samples fun
 
-=== v4.1.0.3 maintenance release ===
-
+## v4.1.0.2
 ### 2017-10-28
 * Store: fixed a glitch that raised an error instead of creating an “obsolete” block
 
-=== v4.1.0.2 maintenance release ===
-
+## v4.1.0.1
 ### 2017-10-28
 * Store: fixed a glitch when loading method blocks stored in sprite-local vars
 * Objects: sped up "turbo" mode frame rate (slowing down "turbo" but making it more generally usable)
 * Chinese and Catalan translation updates
 
-=== v4.1.0.1 maintenance release ===
-
 ### 2017-10-20
 * fixed SVG encoding, thanks, Joan for the contribution!
 * German translation update
 
-=== v4.1 major release ===
-
-v4.1 Features:
-* polymorphic sprite-local custom blocks
-* inheritance of sprite-local custom blocks
-* inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
-* first-class costumes and sounds
-* visual indicator (map-pin icon) for sprite-local custom blocks (i.e. methods)
-* camera snapshots for costumes and new sprites
-* localization support when typing expressions
-* support for user-forced line-breaks in custom block labels
-* ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
-* support for default values in custom block Boolean slots
-* experimental: duplicate block definition (hidden in shift-click context menu)
-* support for codification of String, Number and Boolean value types
-* costume icons indicate svg costumes
-* sprites’s rotation centers can be adjusted onstage
-* clones share their original sprite’s scripts, not a shallow-copy of them
-* a highlight-colored balloon indicates the number of active processes per shared script
-* new musical “notes”, "location", "footprints", "cross" and "keyboard" symbols
-* new “visible stepping” toggle button in the control bar
-* new "keyboard entry" toggle button in the scripts tool bar
-* turn on the “Inheritance support” setting per default
-* Assert data types to list operations for more meaningful error messages
-* programmatically hide and show primitives in the palette
-* new "pen trails" reporter primitive and stage context menu entry
-* two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
-* Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
-* Basic “instruments” support: sine, square, sawtooth and triangle waves
-* Support https in “url” reporter
-* splitting csv-text
-* prevent context menu and dragging for stage watchers in presentation mode
-* "floating" search and make-a-block buttons in the blocks palette
-* "Make a block" button in every category
-* experimental "download script" feature
-* new "Animation" library
-* new "Pixels" library for MediaComp
-* double-clicking a corral sprite icon flashes the sprite onstage
-
-Fixes:
-* changed keyboard shortcut indicator for “find blocks” to “^”
-* prevent Snap from “hanging” when encountering certain errors in visible stepping
-* only mark implicit parameters if no formal ones exist
-* optimized thread-launch and script highlighting to a single frame instead of formerly two
-* changed direction attribute of sprites to automatically confine to 0-360 degrees
-* fixed rotation-bug when flipping costumes in "only turn left/right" mode"
-* fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
-* fixed “fill” block crash when applying the same color twice
-* fixed occasional empty drop-down menu items named “close”
-* fixed some typos
-* limited sprites' direction and coordinates to finite numbers
-* made block vars transient for block libraries
-* keep “undo” and “redo” buttons at the same location
-* fixed SVG encoding for exporting vector costumes
+## v4.1 "New York"
+* Features:
+    * polymorphic sprite-local custom blocks
+    * inheritance of sprite-local custom blocks
+    * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
+    * first-class costumes and sounds
+    * visual indicator (map-pin icon) for sprite-local custom blocks (i.e. methods)
+    * camera snapshots for costumes and new sprites
+    * localization support when typing expressions
+    * support for user-forced line-breaks in custom block labels
+    * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
+    * support for default values in custom block Boolean slots
+    * experimental: duplicate block definition (hidden in shift-click context menu)
+    * support for codification of String, Number and Boolean value types
+    * costume icons indicate svg costumes
+    * sprites’s rotation centers can be adjusted onstage
+    * clones share their original sprite’s scripts, not a shallow-copy of them
+    * a highlight-colored balloon indicates the number of active processes per shared script
+    * new musical “notes”, "location", "footprints", "cross" and "keyboard" symbols
+    * new “visible stepping” toggle button in the control bar
+    * new "keyboard entry" toggle button in the scripts tool bar
+    * turn on the “Inheritance support” setting per default
+    * Assert data types to list operations for more meaningful error messages
+    * programmatically hide and show primitives in the palette
+    * new "pen trails" reporter primitive and stage context menu entry
+    * two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
+    * Piano keyboard as drop-down menu for entering musical notes, Thanks, Lucas and Michael!
+    * Basic “instruments” support: sine, square, sawtooth and triangle waves
+    * Support https in “url” reporter
+    * splitting csv-text
+    * prevent context menu and dragging for stage watchers in presentation mode
+    * "floating" search and make-a-block buttons in the blocks palette
+    * "Make a block" button in every category
+    * experimental "download script" feature
+    * new "Animation" library
+    * new "Pixels" library for MediaComp
+    * double-clicking a corral sprite icon flashes the sprite onstage
+* Fixes:
+    * changed keyboard shortcut indicator for “find blocks” to “^”
+    * prevent Snap from “hanging” when encountering certain errors in visible stepping
+    * only mark implicit parameters if no formal ones exist
+    * optimized thread-launch and script highlighting to a single frame instead of formerly two
+    * changed direction attribute of sprites to automatically confine to 0-360 degrees
+    * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
+    * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
+    * fixed “fill” block crash when applying the same color twice
+    * fixed occasional empty drop-down menu items named “close”
+    * fixed some typos
+    * limited sprites' direction and coordinates to finite numbers
+    * made block vars transient for block libraries
+    * keep “undo” and “redo” buttons at the same location
+    * fixed SVG encoding for exporting vector costumes
 
 ### 2017-10-17
 * Blocks: keep “undo” and “redo” buttons at the same location
@@ -547,6 +513,7 @@ Fixes:
 * new "Animation" library
 * new "Pixels" library for MediaComp
 
+## v4.1 release candidate
 ### 2017-09-26
 * Symbols: added 'keyboard' and 'keyboardFilled' icons
 * GUI: fixed camera support for Safari, thanks, Bernat!
@@ -554,8 +521,6 @@ Fixes:
 * Blocks: added floating toggle for keyboard entry to scripts toolbar
 * GUI: make Snap! work in Safari 11 offline (file:// protocol) again, Sheesh
 * GUI, Blocks: Support "Keyboard Editing" setting in scripts toolbar
-
-=== v4.1 release candidate ===
 
 ### 2017-09-25
 * GUI, Symbols: added “visible stepping” toggle button to the control bar
@@ -636,7 +601,7 @@ Fixes:
 
 ### 2017-07-27
 * Objects: don't shadow costume # when editing a costume
-* Blocks, Objects: remodelled context menu for inheritance to use check-boxes
+* Blocks, Objects: remodeled context menu for inheritance to use check-boxes
 * Blocks, Objects, Threads: fold two "stop" commands into one
 * Objects: Allow two-item lists as arguments for "point towards" and "go to" primitives
 
@@ -755,13 +720,10 @@ Fixes:
 ### 2017-04-11
 * Objects: export text from variable watchers to new browser tab by default
 
+## v4.0.10.1
 ### 2017-04-10
 * Revert to 4.0.10 to prepare for newly surfaced bug in the Chrome browser
 * fixed #1707 (new Chrome blitting issue)
-
-== v4.0.10.1 - maintenance release - ===
-
-== v4.1 - development - ===
 
 ### 2017-03-22
 * sprite-local custom block inheritance, first pass, still under heavy development
