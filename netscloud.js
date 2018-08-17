@@ -744,4 +744,24 @@ NetCloud.prototype.importProject = function (name, role, roles) {
         });
 };
 
+NetCloud.prototype.getEntireProject = function(projectId, callback, errorCall) {
+    var myself = this;
+    this.reconnect(
+        function () {
+            myself.callService(
+                'getEntireProject',
+                function (response) {
+                    callback(response);
+                    myself.disconnect();
+                },
+                errorCall,
+                [
+                    projectId
+                ]
+            );
+        },
+        errorCall
+    );
+};
+
 var SnapCloud = new NetCloud(CLIENT_ID, SERVER_URL + '/api/');

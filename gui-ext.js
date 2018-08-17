@@ -91,8 +91,14 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
                                     myself.destroy();
                                 };
                                 choices['Create Copy'] = function() {
-                                    myself.rawOpenCloudProject(project);
                                     dialog.destroy();
+                                    return SnapCloud.getEntireProject(
+                                        project.ID,
+                                        function(xml) {
+                                            return myself.ide.droppedText(xml);
+                                        },
+                                        myself.ide.cloudError()
+                                    );
                                 };
                                 dialog.ask(
                                     localize('Join Existing Project'),

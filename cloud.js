@@ -622,6 +622,8 @@ Cloud.prototype.parseResponse = function (request) {
     var src = request.responseText;
     if (request.getResponseHeader('content-type').indexOf('application/json') > -1) {
         return JSON.parse(src);
+    } else if (request.getResponseHeader('content-type').indexOf('xml') > -1) {
+        return src;
     } else {
         return this.parseSnapResponse(src);
     }
