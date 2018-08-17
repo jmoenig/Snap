@@ -160,16 +160,30 @@ SnapDriver.prototype.mouseUp = function(position) {
     hand.processMouseUp();
 };
 
-SnapDriver.prototype.dragAndDrop = function(srcMorph, position) {
-    const start = srcMorph.center();
-    const {MorphicPreferences} = this.globals();
-
+/**
+ * Simulates mouse inputs to pick up a Morph and place it somewhere else.
+ * @param {Morph} srcMorph Morph to drag and drop
+ * @param {Point} position Position to drag center of srcMorph to 
+ * @param {Point=} start Position to initiate drag at, if not speficied middle of left side of srcMorph is used
+ */
+SnapDriver.prototype.dragAndDrop = function(srcMorph, position, start = null) {
+    const {MorphicPreferences, Point} = this.globals();
+    
+    // Drag from the upper left corner if not told otherwise
+    if(start == null)
+    {
+        start = srcMorph.topLeft().add(new Point(2, srcMorph.height() / 2));
+    }
+    
+    // If the Morph is not grabbed at center, final position will no longer be correct
+    let offset = start.subtract(srcMorph.center());
+    
     this.mouseDown(start);
     this.world().hand.processMouseMove({
         pageY: start.y,
-        pageX: start.x + MorphicPreferences.grabThreshold+1
+        pageX: start.x + MorphicPreferences.grabThreshold + 1
     });
-    this.mouseUp(position);
+    this.mouseUp(position.add(offset));
 };
 
 SnapDriver.prototype.sleep = function(duration) {
