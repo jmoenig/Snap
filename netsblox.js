@@ -936,6 +936,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
     project.Owner = project.Owner || SnapCloud.username;
     this.updateUrlQueryString(newRoom, isPublic === 'true');
     if (project.SourceCode) {
+        var msg = this.showMessage('Opening project...');
         return SnapActions.openProject(project.SourceCode)
             .then(function() {
                 SnapCloud.projectId = projectId;
@@ -945,6 +946,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
 
                 // Send the message to the server
                 myself.sockets.updateRoomInfo();
+                msg.destroy();
             });
     } else {  // initialize an empty code base
         this.newRole(roleName);
