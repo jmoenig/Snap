@@ -2059,8 +2059,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     // request to open pic in new window.
     ide.saveCanvasAs(
         pic,
-        ide.projectName || localize('Untitled') + ' ' + localize('script pic'),
-        true
+        ide.projectName || localize('Untitled') + ' ' + localize('script pic')
     );
 };
 
@@ -6173,8 +6172,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
         ide.saveCanvasAs(
             pic,
             ide.projectName || localize('Untitled') + ' ' +
-                localize('script pic'),
-            true // request new window
+                localize('script pic')
         );
     }
 };
@@ -12927,8 +12925,7 @@ CommentMorph.prototype.userMenu = function () {
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
                 ide.projectName || localize('Untitled') + ' ' +
-                    localize('comment pic'),
-                true // request new window
+                    localize('comment pic')
             );
         },
         'open a new window\nwith a picture of this comment'
