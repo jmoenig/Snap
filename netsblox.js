@@ -402,9 +402,24 @@ NetsBloxMorph.prototype.projectMenu = function () {
                         myself.world()
                     );
                 }
+
+                // remove the watcher for the RPC error...
+                var rpcErrWatcher = detect(
+                    myself.stage.children,
+                    function(child) {
+                        return child instanceof WatcherMorph &&
+                            child.getter === 'reportRPCError';
+                    }
+                );
+                var index = myself.stage.children.indexOf(rpcErrWatcher);
+                myself.stage.children.splice(index, 1);
+
                 SnapSerializer.prototype.isSavingHistory = false;
                 myself.exportRole(name, shiftClicked);
                 SnapSerializer.prototype.isSavingHistory = isSavingHistory;
+
+                // restore the RPC error watcher
+                myself.stage.children.splice(index, 0, rpcErrWatcher);
             },
             'export "' + myself.projectName + '" as Snap!-compatible XML',
             new Color(100, 0, 0)
