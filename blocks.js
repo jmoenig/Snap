@@ -2607,7 +2607,7 @@ BlockMorph.prototype.userMenu = function () {
                     localize('script pic')
             );
         },
-        'open a new window\nwith a picture of this script'
+        'download a picture of this script'
     );
     if (proc) {
         if (vNames.length) {
@@ -12928,7 +12928,7 @@ CommentMorph.prototype.userMenu = function () {
                     localize('comment pic')
             );
         },
-        'open a new window\nwith a picture of this comment'
+        'download a picture of this comment'
     );
     return menu;
 };

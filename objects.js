@@ -6667,7 +6667,7 @@ StageMorph.prototype.userMenu = function () {
                 myself.name
             );
         },
-        'open a new window\nwith a picture of the stage'
+        'download a picture of stage'
     );
     if (shiftClicked) {
         menu.addLine();

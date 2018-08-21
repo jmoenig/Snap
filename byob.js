@@ -872,7 +872,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         localize('script pic')
                 );
             },
-            'open a new window\nwith a picture of this script'
+            'download a picture of this script'
         );
         if (hat.inputs().length < 2) {
             menu.addItem(

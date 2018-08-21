@@ -7466,7 +7466,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                     this.object.name
                 );
             },
-            'open a new window\nwith a picture of the stage'
+            'download a picture of the stage'
         );
         return menu;
     }
