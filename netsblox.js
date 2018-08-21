@@ -935,29 +935,19 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
     this.source = 'cloud';
     project.Owner = project.Owner || SnapCloud.username;
     this.updateUrlQueryString(newRoom, isPublic === 'true');
-    if (project.SourceCode) {
-        var msg = this.showMessage('Opening project...');
-        return SnapActions.openProject(project.SourceCode)
-            .then(function() {
-                SnapCloud.projectId = projectId;
-                myself.room.silentSetRoomName(newRoom);
-                myself.room.ownerId = project.Owner;
-                myself.silentSetProjectName(roleName);
 
-                // Send the message to the server
-                myself.sockets.updateRoomInfo();
-                msg.destroy();
-            });
-    } else {  // initialize an empty code base
-        this.newRole(roleName);
-        this.room.name = newRoom;  // silent set name
-        // FIXME: this could cause problems later
-        this.room.ownerId = project.Owner;
-        this.sockets.updateRoomInfo();
-        if (isNewRole) {
-            this.showMessage(localize('A new role has been created for you at') + ' ' + newRoom);
-        }
-    }
+    var msg = this.showMessage('Opening project...');
+    return SnapActions.openProject(project.SourceCode)
+        .then(function() {
+            SnapCloud.projectId = projectId;
+            myself.room.silentSetRoomName(newRoom);
+            myself.room.ownerId = project.Owner;
+            myself.silentSetProjectName(roleName);
+
+            // Send the message to the server
+            myself.sockets.updateRoomInfo();
+            msg.destroy();
+        });
 };
 
 NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExample) {
