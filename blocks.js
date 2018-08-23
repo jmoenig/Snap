@@ -6429,21 +6429,16 @@ ScriptsMorph.prototype.addBlock = function (block) {
 
 ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
     var position = block.position(),
-        originPosition;
+        originPosition,
+        revertPosition;
+
+    originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
+    revertPosition = function() {
+        block.setPosition(originPosition);
+    };
 
     if (hand) {
-        if (hand.grabOrigin.origin === this) {  // on the same script
-            if (SnapActions.mightRejectActions()) {
-                originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-                block.setPosition(originPosition);
-            }
-        } else {  // move between scripts!
-
-            if (SnapActions.mightRejectActions()) {
-                // Revert the block back to the origin in case this fails
-                originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-                block.setPosition(originPosition);
-            }
+        if (hand.grabOrigin.origin !== this) {  // move between scripts morph
             hand.grabOrigin.origin.add(block);
 
             // copy the blocks and add them to the new editor
@@ -6458,7 +6453,8 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
         }
     }
 
-    SnapActions.setBlockPosition(block, position);
+    return SnapActions.setBlockPosition(block, position)
+        .catch(revertPosition);
 };
 
 // ScriptsMorph events
