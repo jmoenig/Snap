@@ -194,6 +194,9 @@ WebSocketManager.MessageHandlers = {
     },
     'user-action': function(msg) {
         SnapActions.onMessage(msg.action);
+    },
+    'action-rejected': function(msg) {
+        SnapActions.onActionReject(msg.action);
     }
 };
 

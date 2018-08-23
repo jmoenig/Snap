@@ -3076,6 +3076,17 @@ ActionManager.prototype.onMessage = function(msg) {
     }
 };
 
+ActionManager.prototype.onActionReject = function(action) {
+    var queue = this._attemptedLocalActions,
+        item = queue.find(function(item) { return item.equals(action)}),
+        index = queue.indexOf(item);
+
+    if (index > -1) {
+        queue.splice(index, 1);
+        item.reject();
+    }
+};
+
 /* * * * * * * * * * * * OwnerFor * * * * * * * * * * * */
 ActionManager.OwnerFor = function() {
     // default owner is the current sprite
