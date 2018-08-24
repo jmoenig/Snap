@@ -447,10 +447,8 @@ NetCloud.prototype.reconnect = function (callback, errorCall) {
         return;
     }
 
-    console.log('reconnecting...', myself.projectId);
     // need to set 'api' from setClientState
     return myself.setClientState()
-        .then(() => console.log('reconnected!', myself.projectId))
         .then(callback)
         .catch(errorCall);
 };
@@ -721,7 +719,7 @@ NetCloud.prototype.setProjectName = function(name) {
         .then(function(result) {
             return result;
         })
-        .catch(req => {
+        .catch(function(req) {
             var connError = 'Could not connect to ' + myself.url;
             throw new Error(req.responseText || connError);
         });
