@@ -432,10 +432,6 @@ ActionManager.prototype.submitIfAllowed = function(event) {
     }
 };
 
-ActionManager.prototype.mightRejectActions = function() {
-    return this.ide().isReplayMode || this.isCollaborating();
-};
-
 ActionManager.prototype._getMethodFor = function(action) {
     var method = 'on' + action.substring(0,1).toUpperCase() + action.substring(1);
 

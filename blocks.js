@@ -6450,6 +6450,8 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
                 .then(function() {
                     return SnapActions.removeBlock(block);
                 });
+        } else if (SnapActions.isReadOnly()) {
+            revertPosition();
         }
     }
 
