@@ -637,11 +637,11 @@ RoomMorph.prototype.deleteRole = function(role) {
     );
 };
 
-RoomMorph.prototype.createRoleClone = function(roleName) {
+RoomMorph.prototype.createRoleClone = function(roleId) {
     var myself = this;
 
     SnapCloud.cloneRole(
-        roleName,
+        roleId,
         function(state) {
             myself.onRoomStateUpdate(state);
             myself.ide.showMessage('created copy of ' + roleName);
@@ -1623,7 +1623,7 @@ EditRoleMorph.prototype.editRoleName = function() {
 };
 
 EditRoleMorph.prototype.createRoleClone = function() {
-    this.room.createRoleClone(this.role.name);
+    this.room.createRoleClone(this.role.id);
     this.destroy();
 };
 
