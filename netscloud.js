@@ -720,6 +720,10 @@ NetCloud.prototype.setProjectName = function(name) {
         })
         .then(function(result) {
             return result;
+        })
+        .catch(req => {
+            var connError = 'Could not connect to ' + myself.url;
+            throw new Error(req.responseText || connError);
         });
 };
 
