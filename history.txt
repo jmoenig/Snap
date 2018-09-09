@@ -4299,11 +4299,13 @@ Fixes:
 
 === v4.2.1.3 maintenance release ===
 
-
-=== in development ===
-
 180909
 ------
 * new dev version
 * Threads: fixed #2176 ('arguments' not found for calling empty multi-slots)
 * Blocks: enabled drop-down for "inherit" command for clone-initialization scripts
+
+=== v4.2.1.4 maintenance release ===
+
+
+=== in development ===
