@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-July-19';
+modules.threads = '2018-September-09';
 
 var ThreadManager;
 var Process;
@@ -1117,7 +1117,13 @@ Process.prototype.evaluate = function (
         this.readyToYield = (Date.now() - this.lastYield > this.timeout);
     }
 
-    // assign parameters if any were passed
+    // assign arguments to parameters
+
+    // assign the actual arguments list to the special
+    // parameter ID ['arguments'], to be used for variadic inputs
+    outer.variables.addVar(['arguments'], args);
+
+    // assign arguments that are actually passed
     if (parms.length > 0) {
 
         // assign formal parameters
@@ -1131,10 +1137,6 @@ Process.prototype.evaluate = function (
 
         // assign implicit parameters if there are no formal ones
         if (context.inputs.length === 0) {
-            // assign the actual arguments list to the special
-            // parameter ID ['arguments'], to be used for variadic inputs
-            outer.variables.addVar(['arguments'], args);
-
             // in case there is only one input
             // assign it to all empty slots
             if (parms.length === 1) {
@@ -1215,7 +1217,13 @@ Process.prototype.initializeFor = function (context, args) {
     // remember the receiver
     this.context = context.receiver;
 
-    // assign parameters if any were passed
+    // assign arguments to parameters
+
+    // assign the actual arguments list to the special
+    // parameter ID ['arguments'], to be used for variadic inputs
+    outer.variables.addVar(['arguments'], args);
+
+    // assign arguments that are actually passed
     if (parms.length > 0) {
 
         // assign formal parameters
@@ -1229,10 +1237,6 @@ Process.prototype.initializeFor = function (context, args) {
 
         // assign implicit parameters if there are no formal ones
         if (context.inputs.length === 0) {
-            // assign the actual arguments list to the special
-            // parameter ID ['arguments'], to be used for variadic inputs
-            outer.variables.addVar(['arguments'], args);
-
             // in case there is only one input
             // assign it to all empty slots
             if (parms.length === 1) {

@@ -4305,3 +4305,4 @@ Fixes:
 180909
 ------
 * new dev version
+* Threads: fixed #2176 ('arguments' not found for calling empty multi-slots)
