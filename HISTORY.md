@@ -2,6 +2,12 @@
 
 ## Development Version
 
+## v4.2.1.4
+### 2018-09-09
+* new dev version
+* Threads: fixed #2176 ('arguments' not found for calling empty multi-slots)
+* Blocks: enabled drop-down for "inherit" command for clone-initialization scripts
+
 ## v4.2.1.3
 ### 2018-07-19
 * Threads: fixed a regression conflict between "when I am stopped" and broadcasts
