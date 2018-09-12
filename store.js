@@ -208,8 +208,8 @@ XML_Serializer.prototype.getArgumentXML = function (tag, item) {
             }
         }).join('');
 
-    } else if (typeof item === 'string' && item[0] === '<') {
-        xml = '<![CDATA[' + item.replace(/]]>/g, '&ncdata;]>') + ']]>';
+    } else if (typeof item === 'string' && item.indexOf('<') > -1) {
+        xml = item.replace(/</g, '&lt;');
     }
 
     return [
