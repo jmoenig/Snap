@@ -225,3 +225,262 @@ IDE_Morph.prototype.openReplayString = function (str) {
         });
 };
 
+//// Mobile Mode ////
+
+IDE_Morph.prototype.isMobileDevice = function() {
+    var smallSideMax = 420,
+        bigSideMax = 800;
+    var hasSmallPortraitDims = screen.width <= smallSideMax && screen.height <= bigSideMax;
+    var hasSmallLandscapeDims = screen.width <= bigSideMax && screen.height <= smallSideMax;
+
+    return (hasSmallPortraitDims || hasSmallLandscapeDims) &&
+        (navigator.userAgent.toLowerCase().indexOf('mobile') !== -1) &&
+        (typeof window.orientation !== 'undefined');
+};
+
+IDE_Morph.prototype.mobileMode = {
+    // assuming top pos for horizontal alignment and right for vertical
+    _stackMode: '', // stack controls horizontally or vertically
+    buttons: [],
+    btnConfig: {
+        idealSize: 30, // symbol + padding(inner)
+        SBRatio: 0.5, // symbol to button(size) ratio
+        GBRatio: 0.3, // gap to button ratio
+        symbolSize: undefined,
+        padding: undefined,
+        size: undefined, // cur size
+        gap: undefined,
+    },
+    ideMorph: undefined, // TODO replace me
+};
+
+// activate mobilemode
+IDE_Morph.prototype.mobileMode.init = function() {
+    this.ideMorph = world.children[0];
+    this.hideExtra();
+    var screenPixelRatio = window.innerHeight / window.outerHeight;
+    this.btnConfig.idealSize = this.btnConfig.idealSize * screenPixelRatio;
+    this.setBtnSize(this.btnConfig.idealSize);
+    this.fixLayout();
+};
+
+IDE_Morph.prototype.mobileMode.updateBtnConfig = function() {
+    // compute btn sizes
+    this.btnConfig.gap = this.btnConfig.size * this.btnConfig.GBRatio;
+    this.btnConfig.symbolSize = this.btnConfig.size * this.btnConfig.SBRatio;
+    this.btnConfig.padding = this.btnConfig.size * (1 - this.btnConfig.SBRatio);
+};
+
+// permanently change the btn size or
+// temporarily set the btn size for current fixlayout
+IDE_Morph.prototype.mobileMode.setBtnSize = function(newSize, temp) {
+    if (temp === undefined) temp = true;
+    if (!temp) this.btnConfig.idealSize = newSize;
+    this.btnConfig.size = newSize;
+    this.updateBtnConfig();
+};
+
+// resets to the idealsize
+IDE_Morph.prototype.mobileMode.resetBtnSize = function() {
+    this.btnConfig.size = this.btnConfig.idealSize;
+    this.updateBtnConfig();
+};
+
+IDE_Morph.prototype.mobileMode.fixLayout = function() {
+    this.ideMorph.controlBar.setHeight(0);
+    var prevStackMode = this._stackMode;
+    var spaces = this.emptySpaces();
+    var optRect = this.optimalRectangle(spaces);
+    // keep the button sizes consistent in landscape and portrait mode
+    if (prevStackMode === 'h' && this._stackMode === 'v') {
+        var newSize = this.btnConfig.size * 0.6;
+        this.setBtnSize(newSize);
+    }
+    this.buttons = this.createButtons();
+    // compute wrapper box details for the buttons
+    var targetBox = this.computeControlPos(optRect);
+    this.positionButtons(this.buttons, targetBox);
+};
+
+IDE_Morph.prototype.mobileMode.hideExtra = function() {
+    this.ideMorph.controlBar.hide();
+};
+
+IDE_Morph.prototype.mobileMode.emptySpaces = function() {
+    var h = window.innerHeight,
+        w = window.innerWidth,
+        bounds = world.children[0].stage.bounds;
+    var spaces = {
+        top: bounds.origin.y,
+        left: bounds.origin.x,
+        right: w - bounds.corner.x,
+        bottom: h - bounds.corner.y
+    };
+    return spaces;
+};
+
+
+IDE_Morph.prototype.mobileMode.optimalRectangle = function(spaces) {
+    // assuming stage is centered
+    //  => just looking at top or right side of the stage
+    // WARN stage could fill up the whole window
+    var bestSide,
+        stage = world.children[0].stage;
+    var rect = {
+        topRight: {
+            x: window.innerWidth,
+            y: 0
+        },
+        bottomLeft: {}
+    };
+
+    bestSide = (spaces.top > spaces.right) ? 'top' : 'right';
+
+    var sizeToPixelRatio = 2; // symbol size to pixel raito
+    if (spaces[bestSide] < this.btnConfig.size * sizeToPixelRatio) {
+        var optimalSize = (spaces[bestSide] /sizeToPixelRatio) - 10;
+        if (optimalSize < 10) throw new Error('no space on the sides.');
+        this.setBtnSize(optimalSize);
+    } else {
+        this.resetBtnSize(); // set it back to ideal
+    }
+    switch(bestSide) {
+    case 'right':
+        rect.bottomLeft.x = stage.bounds.corner.x;
+        rect.bottomLeft.y = window.innerHeight;
+        break;
+    case 'top':
+        rect.bottomLeft.x = 0;
+        rect.bottomLeft.y = stage.bounds.origin.y;
+        break;
+    }
+
+    rect.height = Math.abs(rect.topRight.y - rect.bottomLeft.y);
+    rect.width = Math.abs(rect.topRight.x - rect.bottomLeft.x);
+
+    this._stackMode = (rect.height > rect.width) ? 'v' : 'h';
+    return rect;
+};
+
+IDE_Morph.prototype.mobileMode.computeControlPos = function(targetRect) {
+    var totalH = window.innerHeight,
+        totalW = window.innerWidth,
+        numButtons = this.buttons.length,
+        btnHeight = this.buttons[0].height(),
+        btnWidth = this.buttons[0].width(),
+        controls;
+
+    // stack button vertically or horizontally
+    if  (this._stackMode === 'v') {
+        // stack vertically
+        controls = {
+            origin: {},
+            height: numButtons * btnHeight + (numButtons-1) * this.btnConfig.gap,
+            width: btnWidth,
+        };
+        controls.origin.y = (totalH - controls.height) / 2;
+        controls.origin.x = targetRect.bottomLeft.x + (targetRect.width - controls.width) / 2;
+
+    } else if (this._stackMode === 'h') {
+        //stack vertically
+        controls = {
+            origin: {},
+            width: numButtons * btnWidth + (numButtons-1) * this.btnConfig.gap,
+            height: btnHeight,
+        };
+        controls.origin.x = (totalW - controls.width) / 2;
+        controls.origin.y = (targetRect.bottomLeft.y - controls.height)/2;
+    }
+    return controls;
+};
+
+IDE_Morph.prototype.mobileMode.createButtons = function() {
+    var myself = this;
+    var colors = [
+        new Color(50, 50, 50),
+        new Color(70, 70, 70),
+        new Color(90, 90, 90),
+    ];
+
+    if (this.buttons && this.buttons.length !== 0) {
+        this.buttons.forEach(function(btn) {
+            btn.destroy();
+        });
+    }
+
+    var buttons = [];
+
+    // stopButton
+    var stopButton = new ToggleButtonMorph(
+        null, // colors
+        this.ideMorph, // the IDE is the target
+        'stopAllScripts',
+        [
+            new SymbolMorph('octagon', myself.btnConfig.symbolSize),
+            new SymbolMorph('square', myself.btnConfig.symbolSize)
+        ],
+        function () {  // query
+            return myself.ideMorph.stage ?
+                myself.ideMorph.stage.enableCustomHatBlocks &&
+                myself.ideMorph.stage.threads.pauseCustomHatBlocks
+                : true;
+        }
+    );
+    stopButton.labelColor = new Color(200, 0, 0);
+
+    var startButton = new PushButtonMorph(
+        this.ideMorph,
+        'pressStart',
+        new SymbolMorph('flag', myself.btnConfig.symbolSize)
+    );
+    startButton.labelColor = new Color(0, 200, 0);
+
+    buttons.push(startButton);
+    buttons.push(stopButton);
+
+
+    buttons.forEach(function(btn){
+        btn.hide();
+        btn.fixLayout();
+        btn.drawNew();
+        myself.ideMorph.add(btn);
+        btn.corner = 12;
+        btn.color = colors[0];
+        btn.highlightColor = colors[1];
+        btn.pressColor = colors[2];
+        btn.labelMinExtent = new Point(36, 18);
+        btn.labelShadowOffset = new Point(-1, -1);
+        btn.labelShadowColor = colors[1];
+        btn.contrast = this.buttonContrast;
+        btn.padding = myself.btnConfig.padding;
+        // btn.setWidth(btnWidth);
+        // btn.setHeight(BUTTON_SIZE.height);
+        // fix layout will shrink width to paddings
+        btn.fixLayout();
+        if (btn.refresh) btn.refresh();
+    });
+
+    return buttons;
+};
+
+// position and show buttons
+IDE_Morph.prototype.mobileMode.positionButtons = function(buttons, controls) {
+    var btnHeight = buttons[0].height(),
+        myself = this,
+        btnWidth = buttons[0].width();
+
+    // position buttons
+    buttons.forEach( function(button, idx) {
+        var x,y;
+        if (myself._stackMode === 'v') {
+            x = controls.origin.x;
+            y = controls.origin.y + idx * btnHeight + idx * myself.btnConfig.gap;
+        } else if (myself._stackMode === 'h') {
+            y = controls.origin.y;
+            x = controls.origin.x + idx * btnWidth + idx * myself.btnConfig.gap;
+        }
+        button.setPosition(new Point(x, y));
+        button.show();
+    });
+
+};

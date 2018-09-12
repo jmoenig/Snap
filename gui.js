@@ -1820,11 +1820,19 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     if (situation !== 'refreshPalette') {
         // stage
         if (this.isAppMode) {
-            this.stage.setScale(Math.floor(Math.min(
-                (this.width() - padding * 2) / this.stage.dimensions.x,
-                (this.height() - this.controlBar.height() * 2 - padding * 2)
-                    / this.stage.dimensions.y
-            ) * 10) / 10);
+            var optimalScale;
+            if (this.isMobileDevice()) {
+                var widthScale = (this.width() - padding * 2) / this.stage.dimensions.x;
+                var heightScale = (this.height() - padding * 2) / this.stage.dimensions.y;
+                optimalScale = Math.floor(Math.min(widthScale, heightScale) * 1000) / 1000;
+            } else {
+                optimalScale = Math.floor(Math.min(
+                    (this.width() - padding * 2) / this.stage.dimensions.x,
+                    (this.height() - this.controlBar.height() * 2 - padding * 2)
+                        / this.stage.dimensions.y
+                ) * 10) / 10;
+            }
+            this.stage.setScale(optimalScale);
             this.stage.setCenter(this.center());
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
@@ -1891,6 +1899,12 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     Morph.prototype.trackChanges = true;
     this.changed();
+
+    // also re-arrange mobile mode
+    if (this.isAppMode && this.isMobileDevice()) {
+        // if mobilemode is fully initialized
+        if (this.mobileMode.buttons.length !== 0) this.mobileMode.fixLayout();
+    }
 };
 
 IDE_Morph.prototype.setProjectName = function (string) {
@@ -1913,9 +1927,13 @@ IDE_Morph.prototype.setExtent = function (point) {
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
-        minExt = StageMorph.prototype.dimensions.add(
-            this.controlBar.height() + 10
-        );
+        if (this.isMobileDevice()) {
+            minExt = {x: 10, y: 10}; // min dimensions
+        } else {
+            minExt = StageMorph.prototype.dimensions.add(
+                this.controlBar.height() + 10
+            );
+        }
     } else {
         if (this.stageRatio > 1) {
             minExt = padding.add(StageMorph.prototype.dimensions);
@@ -4952,6 +4970,11 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
     }
     this.setExtent(this.world().extent()); // resume trackChanges
+    // check for mobilemode
+    if (this.isMobileDevice() && this.isAppMode) {
+        this.mobileMode.init();
+    }
+
 };
 
 IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
@@ -8816,8 +8839,7 @@ PaletteHandleMorph.prototype.mouseEnter
 
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
-    
+
 PaletteHandleMorph.prototype.mouseDoubleClick = function () {
     this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
 };
-
