@@ -78,6 +78,7 @@
 				world.doOneCycle();
 			}
 		</script>
+    <script type="text/javascript" src="on-message.js"></script>
     </head>
     <body style="margin: 0;">
         <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>
