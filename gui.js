@@ -697,6 +697,13 @@ IDE_Morph.prototype.onUnsetActive = function () {
     }
 };
 
+IDE_Morph.prototype.getActiveScripts = function () {
+    if (this.activeEditor instanceof BlockEditorMorph) {
+        return this.activeEditor.body.contents;
+    }
+    return this.currentSprite.scripts;
+};
+
 IDE_Morph.prototype.getActiveEntity = function () {
     // Return the entity which is the subject of the focus. If a block editor
     // is open, return the definition which is being edited, else return the

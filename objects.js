@@ -6083,8 +6083,9 @@ StageMorph.prototype.editScripts = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         scripts,
         sorted;
+
     if (ide.isAppMode || !ScriptsMorph.prototype.enableKeyboard) {return; }
-    scripts = this.parentThatIsA(IDE_Morph).currentSprite.scripts;
+    scripts = ide.getActiveScripts();
     scripts.edit(scripts.position());
     sorted = scripts.focus.sortedScripts();
     if (sorted.length) {
