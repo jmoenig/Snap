@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Used to manually switch to dev mode on a production deployment -->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -50,6 +51,7 @@
                 world.worldCanvas.focus();
 				new NetsBloxMorph().openIn(world);
         loop();
+        window.dispatchEvent(new CustomEvent("ideLoaded"));
 			};
 			function loop() {
         requestAnimationFrame(loop);
