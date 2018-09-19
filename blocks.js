@@ -4884,7 +4884,7 @@ HatBlockMorph.prototype.updateReadout = function () {
     }
 
     // compute and set the bubble position
-    const padding = 5;
+    var padding = 5;
     var bubblePos = this.position() // hatblock pos
         .add(new Point(this.width(), 0)) // all the way to the right
         .add(new Point(padding, -2*padding)); // add a padding (same for x & y)
