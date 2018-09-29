@@ -764,7 +764,7 @@ Process.prototype.reportOr = function (block) {
         this.evaluateNextInput(block);
     } else {
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(!!inputs[1]);
         this.popContext();
     }
 };
@@ -782,7 +782,7 @@ Process.prototype.reportAnd = function (block) {
         this.evaluateNextInput(block);
     } else {
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(!!inputs[1]);
         this.popContext();
     }
 };
