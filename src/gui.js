@@ -2002,7 +2002,7 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
         ypr.id = 'ypr';
         ypr.onload = function () {loadYPR(anArrayBuffer, name); };
         document.head.appendChild(ypr);
-        ypr.src = 'ypr.js';
+        ypr.src = this.resourceURL('src', 'ypr.js');
     } else {
         loadYPR(anArrayBuffer, name);
     }

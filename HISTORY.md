@@ -8,6 +8,8 @@
 * Cloud: fixed cloud check, thanks, Michael!
 * deduped tools, thanks, Michael!
 * moved translations into subfolder "locale"
+* removed obsolete doc files
+* moved *.js files into subfolder "src" (and edited gui.js to deal with ypr.js)
 
 ## v4.2.1.4
 ### 2018-09-09
