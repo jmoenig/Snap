@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-July-09';
+modules.store = '2018-October-02';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -482,6 +482,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
                 sprite.setExemplar(exemplar);
             }
             sprite.inheritedAttributes = sprite.inheritanceInfo.delegated || [];
+            sprite.updatePropagationCache();
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
             anchor = myself.project.sprites[sprite.nestingInfo.anchor];

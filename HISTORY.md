@@ -3,6 +3,7 @@
 ## Development Version
 ### 2018-10-02
 * new dev version
+* Store: fixed #2219 - properly restore propagation of inherited attributes when loading
 
 ## v4.2.1.4
 ### 2018-09-09
