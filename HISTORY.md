@@ -1,6 +1,8 @@
 # Snap<em>!</em> (BYOB4) History
 
 ## Development Version
+### 2018-10-02
+* new dev version
 
 ## v4.2.1.4
 ### 2018-09-09
