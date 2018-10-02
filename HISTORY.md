@@ -10,6 +10,7 @@
 * moved translations into subfolder "locale"
 * removed obsolete doc files
 * moved *.js files into subfolder "src" (and edited gui.js to deal with ypr.js)
+* moved media files (icon, logo, click sound) into "src" subfolder
 
 ## v4.2.1.4
 ### 2018-09-09
