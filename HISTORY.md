@@ -7,6 +7,7 @@
 * Store: fixed #2219 - properly restore propagation of inherited attributes when loading
 * Cloud: fixed cloud check, thanks, Michael!
 * deduped tools, thanks, Michael!
+* moved translations into subfolder "locale"
 
 ## v4.2.1.4
 ### 2018-09-09

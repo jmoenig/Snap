@@ -4967,7 +4967,7 @@ IDE_Morph.prototype.languageMenu = function () {
 
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
-        src = this.resourceURL('lang-' + lang + '.js'),
+        src = this.resourceURL('locale', 'lang-' + lang + '.js'),
         myself = this;
     SnapTranslator.unload();
     if (translation) {
