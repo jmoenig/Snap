@@ -2706,14 +2706,14 @@ Process.prototype.reportLetter = function (idx, string) {
     if (string instanceof List) { // catch a common user error
         return '';
     }
+    str = isNil(string) ? '' : string.toString();
     if (this.inputOption(idx) === 'any') {
-        idx = this.reportRandom(1, string.length);
+        idx = this.reportRandom(1, str.length);
     }
     if (this.inputOption(idx) === 'last') {
-        idx = string.length;
+        idx = str.length;
     }
     i = +(idx || 0);
-    str = isNil(string) ? '' : string.toString();
     return str[i - 1] || '';
 };
 
@@ -4484,7 +4484,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         	parms = ['p0'];
         }
     }
- 
+
     // compile using gensyms
 
     if (block instanceof CommandBlockMorph) {
