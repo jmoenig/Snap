@@ -2,6 +2,9 @@
 
 ## Development Version
 
+### 2018-10-03
+* Threads: fixed "letter of" primitive for numeric input, thanks, Michael and Dan!
+
 ### 2018-10-02
 * new dev version
 * Store: fixed #2219 - properly restore propagation of inherited attributes when loading
