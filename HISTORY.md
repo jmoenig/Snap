@@ -6,6 +6,7 @@
 * GUI, Cloud: improved UX when running Snap! locally without a web server
 * pushed dev-version to v4.2.2
 * added OFFLINE.md
+* Objects: made SET PEN COLOR and SET PEN SHADE inputs wrap around
 
 ### 2018-10-03
 * Threads: fixed "letter of" primitive for numeric input, thanks, Michael and Dan!
