@@ -10,7 +10,7 @@ your computer, by following these
 ## Simple Steps:
 
 1. Download the latest Snap! Release from
-[https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/releases/latest](https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/releases/latest)"Snap! Source Code"), and unpack the contents of the archive to your local disk.
+[https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/releases/latest](https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/releases/latest "Snap! Source Code"), and unpack the contents of the archive to your local disk.
 2. Open the file `snap.html` in your browser.
 3. There is no step 3.
 
