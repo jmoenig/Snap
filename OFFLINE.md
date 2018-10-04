@@ -20,6 +20,14 @@ admin rights. You can also use a memory stick to distribute the directory with s
 among the participants of a workshop or the students of your class, even if some of them
 are using MacOS and others run MS Windows or Linux. 
 
+## Remember to Unpack
+
+Once you've downloaded the source code, please remember to actually unpack the archive
+to your computer. If you downloaded the zip file please actually unzip it, before you open
+`snap.html`. If you use a Mac simple double-clicking the zip file unpacks it. But if you're
+on Windows double clicking the zip fie will *not* unzip it but instead show you the contents of
+the archive.
+
 ## Which  Web Browser?
 
 It's best to open Snap! in Chrome or Firefox.
