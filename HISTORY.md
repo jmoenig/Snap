@@ -2,6 +2,9 @@
 
 ## Development Version
 
+### 2018-10-04
+* GUI, Cloud: improved UX when running Snap! locally without a web server
+
 ### 2018-10-03
 * Threads: fixed "letter of" primitive for numeric input, thanks, Michael and Dan!
 

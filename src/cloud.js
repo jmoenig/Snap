@@ -32,7 +32,7 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2018-October-02';
+modules.cloud = '2018-October-04';
 
 // Global stuff
 
@@ -241,6 +241,10 @@ Cloud.prototype.withCredentialsRequest = function (
 
 Cloud.prototype.initSession = function (onSuccess) {
     var myself = this;
+    if (location.protocol === 'file:') {
+        // disabled for now (jens)
+        return;
+    }
     this.request(
         'POST',
         '/init',
