@@ -3537,7 +3537,7 @@ SpriteMorph.prototype.setHue = function (num) {
         y = this.yPosition(),
         n = +num;
 
-    hsv[0] = (n < 0 ? 100 : 0) + n % 101 / 100;
+    hsv[0] = (n < 0 ? 100 : 0) + n % 100 / 100;
     // hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100; // old code
     hsv[1] = 1; // we gotta fix this at some time
     this.color.set_hsv.apply(this.color, hsv);
@@ -3564,7 +3564,7 @@ SpriteMorph.prototype.setBrightness = function (num) {
 
     hsv[1] = 1; // we gotta fix this at some time
     // hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100; // old code
-    hsv[2] = (n < 0 ? 100 : 0) + n % 101 / 100;
+    hsv[2] = (n < 0 ? 100 : 0) + n % 100 / 100;
     this.color.set_hsv.apply(this.color, hsv);
     if (!this.costume) {
         this.drawNew();
