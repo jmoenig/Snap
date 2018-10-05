@@ -2,6 +2,9 @@
 
 ## Development Version
 
+### 2018-10-05
+* Objects: Adjusted pen hue wrapping and took out pen shade wrapping
+
 ### 2018-10-04
 * GUI, Cloud: improved UX when running Snap! locally without a web server
 * pushed dev-version to v4.2.2
