@@ -22,13 +22,15 @@ are using MacOS and others run MS Windows or Linux.
 
 ## Remember to Unpack
 
+Windows users, this is for you.
+
 Once you've downloaded the source code, please remember to actually unpack the archive
 to your computer. If you downloaded the zip file please actually unzip it, before you open
 `snap.html`. If you use a Mac simple double-clicking the zip file unpacks it. But if you're
 on Windows double clicking the zip fie will *not* unzip it but instead show you the contents of
 the archive.
 
-## Which  Web Browser?
+## Which Web Browser?
 
 It's best to open Snap! in Chrome or Firefox.
 
@@ -45,6 +47,15 @@ Snap! sorta runs on tablets, but the UI isn't optimized for mobile use. Also, ma
 web browsers enforce some restrictions that are not web-standards compliant, e.g. they
 will not support the soft keyboard or intentionally slow down certain operations to discourage
 using web apps in favor of proprietary "native" apps.
+
+## Restrictions of the Offline Version
+
+You can't access the cloud, duh. Everything else just works.
+
+Aside from accessing the cloud using Snap! offline in the browser by opening the `snap.html`
+file locally there aren't any restrictions. You can use all the blocks, import pictures, sounds,
+libraries, take snapshots with the webcom, record sounds with the microphone, draw your
+own costumes etc.
 
 ## Saving and Loading
 
