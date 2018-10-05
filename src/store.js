@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-October-02';
+modules.store = '2018-October-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -2023,9 +2023,10 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                             ' readonly="true"' : '',
                     myself.declarations.get(decl)[1],
                     myself.declarations.get(decl)[2] ?
-                            '<options>' + myself.declarations.get(decl)[2] +
-                                '</options>'
-                                : ''
+                            serializer.format(
+                                '<options>@</options>',
+                                myself.declarations.get(decl)[2]
+                            ) : ''
                 );
             }, ''),
         this.body ? serializer.store(this.body.expression) : '',

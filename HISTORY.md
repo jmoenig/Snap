@@ -4,6 +4,7 @@
 
 ### 2018-10-05
 * Objects: Adjusted pen hue wrapping and took out pen shade wrapping
+* Store: Fixed #1918 - escape options in block drop downs #2174, thanks, Michael!
 
 ### 2018-10-04
 * GUI, Cloud: improved UX when running Snap! locally without a web server
