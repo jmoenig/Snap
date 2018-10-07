@@ -1,8 +1,7 @@
-# Snap<em>!</em> (BYOB4) History
+# Snap<em>!</em> (BYOB) History
 
-## v4.2.2 Development Version
-
-* New Features:
+## v4.2.2
+* New Feature:
     * support for stand-alone offline usage (open file snap.html in a web browser)
 * Notable Changes:
     * renamed github repo to "Snap"
