@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-October-04';
+modules.gui = '2018-October-07';
 
 // Declarations
 
@@ -2512,8 +2512,7 @@ IDE_Morph.prototype.snapMenu = function () {
         'Download source',
         function () {
             window.open(
-                'https://github.com/jmoenig/Snap--Build-Your-Own-Blocks' +
-                    '/releases/latest',
+                'https://github.com/jmoenig/Snap/releases/latest',
                 'SnapSource'
             );
         }

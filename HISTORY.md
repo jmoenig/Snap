@@ -2,6 +2,9 @@
 
 ## Development Version
 
+### 2018-10-07
+* renamed repo to "Snap"
+
 ### 2018-10-05
 * Objects: Adjusted pen hue wrapping and took out pen shade wrapping
 * Store: Fixed #1918 - escape options in block drop downs #2174, thanks, Michael!
