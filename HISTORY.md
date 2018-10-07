@@ -1,6 +1,17 @@
 # Snap<em>!</em> (BYOB4) History
 
-## Development Version
+## v4.2.2 Development Version
+
+* New Features:
+    * support for stand-alone offline usage (open file snap.html in a web browser)
+* Notable Changes:
+    * renamed github repo to "Snap"
+    * reorganized source code files and translations into a subfolder structure
+    * SET PEN COLOR TO (number) now wraps the hue around for numbers < 0 and > 100
+* Notable Fixes:
+    * restore propagation of inherited attributes when loading 
+    * support for older versions of Chrome, thanks, Michael! 
+    * fixed "letter of" primitive for numeric input, thanks, Michael and Dan!
 
 ### 2018-10-07
 * renamed repo to "Snap"
