@@ -1,9 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
-## Development version
+## v4.2.2.1
 
 ### 2018-10-16
 * New translation for Ukrainian, thanks, Serhiy Kryzhanovsky, for the contribution!
+* added timed FOR-loop to Animation library
 
 ## v4.2.2
 * New Feature:
