@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2018-July-09';
+modules.locale = '2018-October-16';
 
 // Global stuff
 
@@ -590,4 +590,15 @@ SnapTranslator.dict.eu = {
         'aiturralde@iametza.eus',
     'last_changed':
         '2018-06-26'
+};
+
+SnapTranslator.dict.ua = {
+    'language_name':
+        'Українська',
+    'language_translator':
+        'Serhiy Kryzhanovsky',
+    'translator_e-mail':
+        'kseryj@gmail.com',
+    'last_changed':
+        '2018-10-14'
 };

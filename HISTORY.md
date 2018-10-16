@@ -1,5 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
+## Development version
+
+### 2018-10-16
+* New translation for Ukrainian, thanks, Serhiy Kryzhanovsky, for the contribution!
+
 ## v4.2.2
 * New Feature:
     * support for stand-alone offline usage (open file snap.html in a web browser)
