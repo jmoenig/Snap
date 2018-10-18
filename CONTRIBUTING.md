@@ -154,7 +154,7 @@ Translating Snap! is easy:
 ### 1. Download
 
 Download the sources and extract them into a local folder on your
-computer: https://snap.berkeley.edu/snapsource/snap.zip.
+computer: https://github.com/jmoenig/Snap/releases/latest.
 
 Use the German translation file (named 'lang-de.js') as template for your
 own translations. Start with editing the original file, because that way
