@@ -344,6 +344,7 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         this.interpretUrlAnchors();
     }
+    window.dispatchEvent(new CustomEvent("ideLoaded"));
 };
 
 IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
