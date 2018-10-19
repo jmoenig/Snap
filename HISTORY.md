@@ -1,7 +1,11 @@
 # Snap<em>!</em> (BYOB) History
 
-## v4.2.2.1
+## Development Version
 
+### 2018-10-19
+* Threads: fixed #2227 - capture argument reporter's lexical environment in JIT-compiler
+
+## v4.2.2.1
 ### 2018-10-16
 * New translation for Ukrainian, thanks, Serhiy Kryzhanovsky, for the contribution!
 * added timed FOR-loop to Animation library

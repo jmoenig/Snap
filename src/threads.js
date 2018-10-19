@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-October-03';
+modules.threads = '2018-October-19';
 
 var ThreadManager;
 var Process;
@@ -3803,6 +3803,22 @@ Process.prototype.reportCompiled = function (context, implicitParamCount) {
     return new JSCompiler(this).compileFunction(context, implicitParamCount);
 };
 
+Process.prototype.capture = function (aContext) {
+    // private - answer a new process on a full copy of the given context
+    // while retaining the lexical variable scope
+    var proc = new Process(this.topBlock, this.receiver);
+    var clos = new Context(
+        aContext.parentContext,
+        aContext.expression,
+        aContext.outerContext,
+        aContext.receiver
+    );
+    clos.variables = aContext.variables.fullCopy();
+    clos.variables.root().parentFrame = proc.variables;
+    proc.context = clos;
+    return proc;
+};
+
 Process.prototype.getVarNamed = function (name) {
     // private - special form for compiled expressions
     // DO NOT use except in compiled methods!
@@ -3867,6 +3883,7 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
 
 	// iterate over the data in a single frame:
  	// to do: Insert some kind of user escape mechanism
+
 	for (i = 0; i < len; i += 1) {
   		result.push(
         	invoke(
@@ -3876,7 +3893,7 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
                 null,
                 null,
                 null,
-                this // process
+                this.capture(reporter) // process
             )
         );
 	}
@@ -3911,7 +3928,7 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
                 null,
                 null,
                 null,
-                this // process
+                this.capture(reporter) // process
             )
         ) {
      		result.push(src[i]);
@@ -3952,7 +3969,7 @@ Process.prototype.reportAtomicCombine = function (reporter, list) {
             null,
             null,
             null,
-            this // process
+            this.capture(reporter) // process
         );
     }
     return result;
@@ -3983,7 +4000,7 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
                     null,
                     null,
                     null,
-                    myself // process
+                    myself.capture(reporter) // process
                 ) ? -1 : 1;
             }
         )
@@ -4249,16 +4266,23 @@ VariableFrame.prototype.copy = function () {
     return frame;
 };
 
-VariableFrame.prototype.deepCopy = function () {
-    // currently unused
+VariableFrame.prototype.fullCopy = function () {
+    // experimental - for compiling to JS
     var frame;
     if (this.parentFrame) {
-        frame = new VariableFrame(this.parentFrame.deepCopy());
+        frame = new VariableFrame(this.parentFrame.fullCopy());
     } else {
-        frame = new VariableFrame(this.parentFrame);
+        frame = new VariableFrame();
     }
     frame.vars = copy(this.vars);
     return frame;
+};
+
+VariableFrame.prototype.root = function () {
+    if (this.parentFrame) {
+        return this.parentFrame.root();
+    }
+    return this;
 };
 
 VariableFrame.prototype.find = function (name) {
