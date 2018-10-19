@@ -1,7 +1,6 @@
 # Snap<em>!</em> (BYOB) History
 
-## Development Version
-
+## v4.2.2.2
 ### 2018-10-19
 * Threads: fixed #2227 - capture argument reporter's lexical environment in JIT-compiler
 
