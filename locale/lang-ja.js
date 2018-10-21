@@ -410,6 +410,8 @@ SnapTranslator.dict.ja = {
         'ペンの太さを %n にする',
     'stamp':
         'スタンプ',
+    'fill':
+        '塗りつぶす',
 
     // control:
     'when %greenflag clicked':
