@@ -5,6 +5,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>NetsBlox</title>
         <link rel="shortcut icon" href="favicon.ico">
+        <script type="text/javascript">
+            var REMOTE_SERVER_URL = undefined,
+                SERVER_URL = REMOTE_SERVER_URL || window.location.origin, // connect to the remote server or fall back to the local server
+                SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, ''),
+                CLIENT_ID = '_netsblox' + new Date().getTime(); // generate a client_id w/ low collision probability
+        </script>
         <script type="text/javascript" src="polyfill.js"></script>
         <script type="text/javascript" src="morphic.js"></script>
         <script type="text/javascript" src="locale.js"></script>
