@@ -1,5 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
+## Development
+
+### 2018-10-22
+* "Bigger Data" library: Added "analyze" function for fast frequency distributions
+
 ## v4.2.2.2
 ### 2018-10-19
 * Threads: fixed #2227 - capture argument reporter's lexical environment in JIT-compiler
