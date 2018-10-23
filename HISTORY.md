@@ -4,6 +4,7 @@
 ### 2018-10-23
 * Objects: Don't stamp if the canvas is too small (and would throw an error)
 * Threads: New "reportAtomicGroup" HOF primitive using the JIT compiler
+* "Bigger Data" library: Added "group" function for fast data drill-down analyses
 
 ### 2018-10-22
 * "Bigger Data" library: Added "analyze" function for fast frequency distributions
