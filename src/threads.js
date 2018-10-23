@@ -60,9 +60,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
-TableFrameMorph, ColorSlotMorph, isSnapObject*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2018-October-19';
+modules.threads = '2018-October-23';
 
 var ThreadManager;
 var Process;
@@ -4005,6 +4005,51 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
             }
         )
     );
+};
+
+Process.prototype.reportAtomicGroup = function (list, reporter) {
+    this.assertType(list, 'list');
+    var result = [],
+        dict = new Map(),
+        groupKey,
+        src = list.asArray(),
+        len = src.length,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+         func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+
+    for (i = 0; i < len; i += 1) {
+        groupKey = invoke(
+            func,
+            new List([src[i]]),
+            null,
+            null,
+            null,
+            null,
+            this.capture(reporter) // process
+        );
+        if (dict.has(groupKey)) {
+            dict.get(groupKey).push(src[i]);
+        } else {
+            dict.set(groupKey, [src[i]]);
+        }
+    }
+
+    dict.forEach(function (value, key) {
+        result.push(new List([key, value.length, new List(value)]));
+    });
+    return new List(result);
 };
 
 // Context /////////////////////////////////////////////////////////////
