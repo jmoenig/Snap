@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2018-October-16';
+modules.locale = '2018-October-23';
 
 // Global stuff
 
@@ -182,7 +182,7 @@ SnapTranslator.dict.ja = {
     'translator_e-mail':
         'abee@squeakland.jp',
     'last_changed':
-        '2012-04-02'
+        '2018-10-23'
 };
 
 SnapTranslator.dict.ja_HIRA = {
@@ -193,7 +193,7 @@ SnapTranslator.dict.ja_HIRA = {
     'translator_e-mail':
         'abee@squeakland.jp',
     'last_changed':
-        '2012-04-02'
+        '2018-10-23'
 };
 
 SnapTranslator.dict.ko = {
