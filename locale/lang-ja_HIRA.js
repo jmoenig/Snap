@@ -410,6 +410,8 @@ SnapTranslator.dict.ja_HIRA = {
         'ペンのふとさを %n にする',
     'stamp':
         'スタンプ',
+    'fill':
+        'ぬりつぶす',
 
     // control:
     'when %greenflag clicked':
