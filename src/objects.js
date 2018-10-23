@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-October-05';
+modules.objects = '2018-October-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -3633,6 +3633,10 @@ SpriteMorph.prototype.doStamp = function () {
         isWarped = this.isWarped,
         originalAlpha = context.globalAlpha;
 
+    if (this.image.width < 1 || (this.image.height < 1)) {
+        // too small to draw
+        return;
+    }
     if (isWarped) {
         this.endWarp();
     }
