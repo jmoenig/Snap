@@ -1,6 +1,9 @@
 # Snap<em>!</em> (BYOB) History
 
 ## Development
+### 2018-10-24
+* Blocks, Threads: added "csv records" to SPLIT options, renamed "csv" to "csv fields"
+
 ### 2018-10-23
 * Objects: Don't stamp if the canvas is too small (and would throw an error)
 * Threads: New "reportAtomicGroup" HOF primitive using the JIT compiler

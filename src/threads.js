@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2018-October-23';
+modules.threads = '2018-October-24';
 
 var ThreadManager;
 var Process;
@@ -2775,6 +2775,9 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'letter':
         del = '';
         break;
+    case 'csv records':
+        return this.parseCSVrecords(string);
+    case 'csv fields':
     case 'csv':
         return this.parseCSV(string);
     default:
@@ -2783,10 +2786,33 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     return new List(str.split(del));
 };
 
+Process.prototype.parseCSVrecords = function (string) {
+    // parse csv formatted text into a one-dimensional list of records
+    var lines = this.reportTextSplit(string, ['line']).asArray(),
+        len = lines.length,
+        i = 0,
+        cur,
+        records = [];
+    while (i < len) {
+        cur = lines[i];
+        while ((cur.split('"').length - 1) % 2 > 0) {
+            i += 1;
+            cur += '\n';
+            cur += lines[i];
+        }
+        records.push(cur);
+        i += 1;
+    }
+    if (records[records.length - 1].length < 1) {
+        records.pop();
+    }
+    return new List(records);
+};
+
 Process.prototype.parseCSV = function (string) {
     // parse a single row of CSV data into a one-dimensional list
     // this assumes that the whole csv data has already been split
-    // by lines.
+    // by records.
     // taken from:
     // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
 
