@@ -2796,7 +2796,7 @@ Process.prototype.parseCSV = function (text) {
     // list of fields instead (for backwards-compatibility)
     var prev = '',
         fields = [''],
-        result = [fields],
+        records = [fields],
         col = 0,
         r = 0,
         esc = true,
@@ -2821,8 +2821,8 @@ Process.prototype.parseCSV = function (text) {
             }
             char = '';
             r += 1;
-            result[r] = [char];
-            fields = result[r];
+            records[r] = [char];
+            fields = records[r];
             col = 0;
 
         } else {
@@ -2830,13 +2830,24 @@ Process.prototype.parseCSV = function (text) {
         }
         prev = char;
     }
-    result = new List(result.map(
+
+    // remove the last record, if it is empty
+    if (records[records.length - 1].length === 1 &&
+            records[records.length - 1][0] === '')
+    {
+        records.pop();
+    }
+
+    // convert arrays to Snap! Lists
+    records = new List(records.map(
         function (row) {return new List(row); })
     );
-    if (result.length() === 1) {
-        return result.at(1);
+
+    // for backwards compatibility return the first row if it is the only one
+    if (records.length() === 1) {
+        return records.at(1);
     }
-    return result;
+    return records;
 };
 
 /*
