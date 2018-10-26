@@ -3003,9 +3003,18 @@ BlockMorph.prototype.showHelp = function () {
         help,
         comment,
         block,
-        spec = this.isCustomBlock ?
-                this.definition.helpSpec() : this.selector,
+        spec,
         ctx;
+
+    if (this.isCustomBlock) {
+        if (this.isGlobal) {
+            spec = this.definition.helpSpec();
+        } else {
+            spec = this.scriptTarget().getMethod(this.blockSpec).helpSpec();
+        }
+    } else {
+        spec = this.selector;
+    }
 
     if (!ide) {
         blockEditor = this.parentThatIsA(BlockEditorMorph);
@@ -3026,24 +3035,29 @@ BlockMorph.prototype.showHelp = function () {
         );
     };
 
-    if (this.isCustomBlock && this.definition.comment) {
-        block = this.fullCopy();
-        block.addShadow();
-        comment = this.definition.comment.fullCopy();
-        comment.contents.parse();
-        help = '';
-        comment.contents.lines.forEach(function (line) {
-            help = help + '\n' + line;
-        });
-        new DialogBoxMorph().inform(
-            'Help',
-            help.substr(1),
-            myself.world(),
-            block.fullImage()
-        );
-    } else {
-        pic.src = ide.resourceURL('help', spec + '.png');
+    if (this.isCustomBlock) {
+        comment = this.isGlobal ?
+            this.definition.comment
+                : this.scriptTarget().getMethod(this.blockSpec).comment;
+        if (comment) {
+            block = this.fullCopy();
+            block.addShadow();
+            comment = comment.fullCopy();
+            comment.contents.parse();
+            help = '';
+            comment.contents.lines.forEach(function (line) {
+                help = help + '\n' + line;
+            });
+            new DialogBoxMorph().inform(
+                'Help',
+                help.substr(1),
+                myself.world(),
+                block.fullImage()
+            );
+            return;
+        }
     }
+    pic.src = ide.resourceURL('help', spec + '.png');
 };
 
 // BlockMorph code mapping
