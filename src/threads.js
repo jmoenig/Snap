@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2018-October-24';
+modules.threads = '2018-October-26';
 
 var ThreadManager;
 var Process;
@@ -2775,18 +2775,74 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'letter':
         del = '';
         break;
+    case 'csv':
+        return this.parseCSV(string);
+    /*
     case 'csv records':
         return this.parseCSVrecords(string);
     case 'csv fields':
-    case 'csv':
-        return this.parseCSV(string);
+        return this.parseCSVfields(string);
+    */
     default:
         del = isNil(delimiter) ? '' : delimiter.toString();
     }
     return new List(str.split(del));
 };
 
+Process.prototype.parseCSV = function (text) {
+    // RFC 4180
+    // parse a csv table into a two-dimensional list.
+    // if the table contains just a single row return it a one-dimensional
+    // list of fields instead (for backwards-compatibility)
+    var prev = '',
+        fields = [''],
+        result = [fields],
+        col = 0,
+        r = 0,
+        esc = true,
+        len = text.length,
+        idx,
+        char;
+    for (idx = 0; idx < len; idx += 1) {
+        char = text[idx];
+        if (char === '"') {
+            if (esc && char === prev) {
+                fields[col] += char;
+            }
+            esc = !esc;
+        } else if (char === ',' && esc) {
+            char = '';
+            col += 1;
+            fields[col] = char;
+
+        } else if (char === '\n' && esc) {
+            if (prev === '\r') {
+                fields[col] = fields[col].slice(0, -1);
+            }
+            char = '';
+            r += 1;
+            result[r] = [char];
+            fields = result[r];
+            col = 0;
+
+        } else {
+            fields[col] += char;
+        }
+        prev = char;
+    }
+    result = new List(result.map(
+        function (row) {return new List(row); })
+    );
+    if (result.length() === 1) {
+        return result.at(1);
+    }
+    return result;
+};
+
+/*
 Process.prototype.parseCSVrecords = function (string) {
+    // RFC 4180
+    // currently unused
     // parse csv formatted text into a one-dimensional list of records
     var lines = this.reportTextSplit(string, ['line']).asArray(),
         len = lines.length,
@@ -2809,41 +2865,36 @@ Process.prototype.parseCSVrecords = function (string) {
     return new List(records);
 };
 
-Process.prototype.parseCSV = function (string) {
-    // parse a single row of CSV data into a one-dimensional list
-    // this assumes that the whole csv data has already been split
-    // by records.
-    // taken from:
-    // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
-
-    var re_valid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/,
-        re_value = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g,
-        a = [];
-
-    if (!re_valid.test(string)) {
-        return new List();
-    }
-    string.replace(
-        re_value,
-        function(m0, m1, m2, m3) {
-            if (m1 !== undefined) {
-                // remove backslash from \' in single quoted values.
-                a.push(m1.replace(/\\'/g, "'"));
-            } else if (m2 !== undefined) {
-                // remove backslash from \" in double quoted values.
-                a.push(m2.replace(/\\"/g, '"'));
-            } else if (m3 !== undefined) {
-                a.push(m3);
+Process.prototype.parseCSVfields = function (text) {
+    // RFC 4180
+    // currently unused
+    // parse a single record of csv into a one-dimensional list of fields
+    var prev = '',
+        fields = [''],
+        col = 0,
+        esc = true,
+        len = text.length,
+        idx,
+        char;
+    for (idx = 0; idx < len; idx += 1) {
+        char = text[idx];
+        if (char === '"') {
+            if (esc && char === prev) {
+                fields[col] += char;
             }
-            return '';
+            esc = !esc;
+        } else if (char === ',' && esc) {
+            char = '';
+            col += 1;
+            fields[col] = char;
+        } else {
+            fields[col] += char;
         }
-    );
-    // special case: empty last value.
-    if (/,\s*$/.test(string)) {
-        a.push('');
+        prev = char;
     }
-    return new List(a);
+    return new List(fields);
 };
+*/
 
 // Process debugging
 

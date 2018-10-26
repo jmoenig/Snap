@@ -1,6 +1,9 @@
 # Snap<em>!</em> (BYOB) History
 
 ## Development
+### 2018-10-26
+* Blocks, Threads: changed SPLIT "csv" to comply with RFC 4180, took out others options
+
 ### 2018-10-24
 * Blocks, Threads: added "csv records" to SPLIT options, renamed "csv" to "csv fields"
 
