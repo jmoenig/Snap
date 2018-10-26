@@ -1,6 +1,16 @@
 # Snap<em>!</em> (BYOB) History
 
-## Development
+## v4.2.2.3
+* New Features:
+    * new fast atomic "analyze" and "group" reporters in the "Bigger Data" library
+* Notable Changes:
+    * don't stamp if the canvas is too small, avoid a JS error message
+    * changed "csv" option in SPLIT to comply with RFC 4180 and parse the whole table
+* Notable Fix:
+    * help for local custom blocks 
+* Translation Update:
+    * Japanese, thanks Yoshiteru Nakamura!
+
 ### 2018-10-26
 * Blocks, Threads: changed SPLIT "csv" to comply with RFC 4180, took out others options
 * fixed #2235 (help for local custom blocks)
