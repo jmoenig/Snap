@@ -4,6 +4,7 @@
 
 ###2018-10-29
 * Blocks: fixed #2234 (display all reachable local variables in drop-down menu)
+* new "does variable _ exist" predicate in var-library, thanks, Brian!
 
 ## v4.2.2.3
 * New Features:
