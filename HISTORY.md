@@ -1,7 +1,6 @@
 # Snap<em>!</em> (BYOB) History
 
-## Development version
-
+## v4.2.2.4
 ###2018-10-29
 * Blocks: fixed #2234 (display all reachable local variables in drop-down menu)
 * new "does variable _ exist" predicate in var-library, thanks, Brian!
