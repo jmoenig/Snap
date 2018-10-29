@@ -2,6 +2,9 @@
 
 ## Development version
 
+###2018-10-29
+* Blocks: fixed #2234 (display all reachable local variables in drop-down menu)
+
 ## v4.2.2.3
 * New Features:
     * new fast atomic "analyze" and "group" reporters in the "Bigger Data" library
