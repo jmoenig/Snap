@@ -2,6 +2,7 @@
 
 ###2018-11-02
 * new library: Frequency Distribution Analysis, separated from "Bigger Data"
+* Objects: avoid rendering graphic effects for null-extent canvasses
 
 ## v4.2.2.4
 ###2018-10-29
