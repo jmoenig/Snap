@@ -1,5 +1,8 @@
 # Snap<em>!</em> (BYOB) History
 
+###2018-11-02
+* new library: Frequency Distribution Analysis, separated from "Bigger Data"
+
 ## v4.2.2.4
 ###2018-10-29
 * Blocks: fixed #2234 (display all reachable local variables in drop-down menu)
