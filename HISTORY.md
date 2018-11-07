@@ -1,5 +1,11 @@
 # Snap<em>!</em> (BYOB) History
 
+## in development
+
+###2018-11-06
+* new dev version
+* Blocks: fixed a scope issue introduced in v4.2.2.4
+
 ## v4.2.2.5
 ###2018-11-02
 * new library: Frequency Distribution Analysis, separated from "Bigger Data"

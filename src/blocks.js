@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-October-29';
+modules.blocks = '2018-November-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -596,7 +596,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
             );
         } else if (morph instanceof BlockMorph) {
             morph.inputs().forEach(function (inp) {
-                inp.forAllChildren(function (child){
+                inp.allChildren().forEach(function (child){
                     if (child instanceof TemplateSlotMorph) {
                         tempVars.push(child.contents());
                     } else if (child instanceof MultiArgMorph) {
