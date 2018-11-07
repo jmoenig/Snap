@@ -5,6 +5,7 @@
 ###2018-11-06
 * new dev version
 * Blocks: fixed a scope issue introduced in v4.2.2.4
+* Blocks: enabled "duplicate block definition" in the palette
 
 ## v4.2.2.5
 ###2018-11-02

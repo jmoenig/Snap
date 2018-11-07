@@ -987,7 +987,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
         rcvr = this.scriptTarget(),
         myself = this,
-        shiftClicked = this.world().currentKey === 16,
+        // shiftClicked = this.world().currentKey === 16,
         menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
@@ -1084,16 +1084,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
+        /*
         if (shiftClicked) {
-            // menu.addItem("export definition...", 'exportBlockDefinition');
-            menu.addItem(
-                "duplicate block definition...",
-                'duplicateBlockDefinition',
-                null,
-                new Color(100, 0, 0)
-            );
+            menu.addItem("export definition...", 'exportBlockDefinition');
         }
-
+        */
         if (this.isTemplate) { // inside the palette
             if (this.isGlobal) {
                 menu.addItem(
@@ -1144,6 +1139,10 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     );
                 }
             }
+            menu.addItem(
+                "duplicate block definition...",
+                'duplicateBlockDefinition'
+            );
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal ||
