@@ -1,6 +1,9 @@
 # Snap<em>!</em> (BYOB) History
 
 ## in development
+###2018-11-13
+* Blocks: fixed #2261 (check for selectedBlock before declaring an InputSlotMorph to be "empty")
+
 ###2018-11-12
 * new dev version
 * BYOB: updated version date

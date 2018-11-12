@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-November-06';
+modules.blocks = '2018-November-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8997,7 +8997,7 @@ InputSlotMorph.prototype.evaluate = function () {
 };
 
 InputSlotMorph.prototype.isEmptySlot = function () {
-    return this.contents().text === '';
+    return this.contents().text === '' && !this.selectedBlock;
 };
 
 // InputSlotMorph single-stepping:
