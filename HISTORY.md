@@ -5,6 +5,7 @@
 * new dev version
 * BYOB: updated version date
 * Objects: fixed #2250
+* Frequency Distribution Analysis library: added "pipe" and "lower case" blocks
 
 ## v4.2.2.6
 ###2018-11-06
