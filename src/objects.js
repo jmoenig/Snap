@@ -5468,7 +5468,7 @@ SpriteMorph.prototype.setExemplar = function (another) {
     if (!this.isTemporary) {
         ide = this.parentThatIsA(IDE_Morph);
         if (ide) {
-            ide.flushBlocksCache('');
+            ide.flushBlocksCache();
             ide.refreshPalette();
         }
     }
