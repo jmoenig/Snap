@@ -3,6 +3,7 @@
 ## in development
 ###2018-11-12
 * new dev version
+* BYOB: updated version date
 
 ## v4.2.2.6
 ###2018-11-06
