@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2018-November-07';
+modules.byob = '2018-November-12';
 
 // Declarations
 
@@ -651,7 +651,6 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
     var i = 0,
         old,
         myself = this;
-
     if (this.isPrototype) {return; }
     this.cachedInputs = null;
     this.inputs().forEach(function (inp) {
@@ -661,6 +660,9 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
             myself.silentReplaceInput(inp, old.fullCopy());
         } else if (old instanceof InputSlotMorph
                 && inp instanceof InputSlotMorph) {
+            inp.setContents(old.evaluate());
+        } else if (old instanceof BooleanSlotMorph
+                && inp instanceof BooleanSlotMorph) {
             inp.setContents(old.evaluate());
         } else if (old instanceof TemplateSlotMorph
                 && inp instanceof TemplateSlotMorph) {
