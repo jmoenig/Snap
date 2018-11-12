@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -67,7 +67,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2017-November-15';
+modules.xml = '2018-November-12';
 
 // Declarations
 
@@ -178,11 +178,18 @@ XML_Element.prototype.init = function (tag, contents, parent) {
 
 // XML_Element DOM navigation: (aside from what's inherited from Node)
 
-XML_Element.prototype.require = function (tagName) {
-    // answer the first direct child with the specified tagName, or throw
-    // an error if it doesn't exist
+XML_Element.prototype.require = function (tagName, fallback) { // +++
+    // answer the first direct child with the specified tagName.
+    // if it doesn't exist execute the fallback function or return the
+    // fallback value, otherwise throw an error
     var child = this.childNamed(tagName);
     if (!child) {
+        if (fallback instanceof Function) {
+            return fallback();
+        }
+        if (!isNil(fallback)) {
+            return fallback;
+        }
         throw new Error('Missing required element <' + tagName + '>!');
     }
     return child;

@@ -6,6 +6,7 @@
 * BYOB: updated version date
 * Objects: fixed #2250
 * Frequency Distribution Analysis library: added "pipe" and "lower case" blocks
+* Store, XML: fixed #2251 (sorta, load project anyway even though costumes / sounds are missing)
 
 ## v4.2.2.6
 ###2018-11-06

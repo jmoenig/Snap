@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-October-05';
+modules.store = '2018-November-12';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -819,7 +819,14 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
     var costumes = model.childNamed('costumes'),
         costume;
     if (costumes) {
-        object.costumes = this.loadValue(costumes.require('list'));
+        object.costumes = this.loadValue(costumes.require(
+            'list',
+            function () {
+                console.log(object.name + ': missing required costumes list, ' +
+                    'improvising...');
+                return new XML_Element('list');
+            }
+        ));
         object.costumes.type = 'costume';
     }
     if (Object.prototype.hasOwnProperty.call(
@@ -844,7 +851,16 @@ SnapSerializer.prototype.loadSounds = function (object, model) {
     // private
     var sounds = model.childNamed('sounds');
     if (sounds) {
-        object.sounds = this.loadValue(sounds.require('list'));
+        // object.sounds = this.loadValue(sounds.require('list')); +++
+        object.sounds = this.loadValue(sounds.require(
+            'list',
+            function () {
+                console.log(object.name + ': missing required sounds list, ' +
+                    'improvising...');
+                return new XML_Element('list');
+            }
+        ));
+
         object.sounds.type = 'sound';
     }
 };
