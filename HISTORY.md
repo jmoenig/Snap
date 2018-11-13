@@ -1,10 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
-## in development
-###2018-11-13
+## v4.2.2.7
+### 2018-11-13
 * Blocks: fixed #2261 (check for selectedBlock before declaring an InputSlotMorph to be "empty")
 
-###2018-11-12
+### 2018-11-12
 * new dev version
 * BYOB: updated version date
 * Objects: fixed #2250
@@ -13,22 +13,22 @@
 * BYOB: fixed #2260
 
 ## v4.2.2.6
-###2018-11-06
+### 2018-11-06
 * prepared release
 
-###2018-11-06
+### 2018-11-06
 * new dev version
 * Blocks: fixed a scope issue introduced in v4.2.2.4
 * Blocks: enabled "duplicate block definition" in the palette
 * updated German translation
 
 ## v4.2.2.5
-###2018-11-02
+### 2018-11-02
 * new library: Frequency Distribution Analysis, separated from "Bigger Data"
 * Objects: avoid rendering graphic effects for null-extent canvasses
 
 ## v4.2.2.4
-###2018-10-29
+### 2018-10-29
 * Blocks: fixed #2234 (display all reachable local variables in drop-down menu)
 * new "does variable _ exist" predicate in var-library, thanks, Brian!
 
