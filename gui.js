@@ -265,6 +265,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
+    this.wasSingleStepping = false; // for toggling to and from app mode
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
 
@@ -728,6 +729,7 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton,
         stageSizeButton,
         appModeButton,
+        steppingButton,
         cloudButton,
         x,
         colors = [
@@ -812,6 +814,39 @@ IDE_Morph.prototype.createControlBar = function () {
     appModeButton = button;
     this.controlBar.add(appModeButton);
     this.controlBar.appModeButton = appModeButton; // for refreshing
+
+    //steppingButton
+    button = new ToggleButtonMorph(
+        null, //colors,
+        myself, // the IDE is the target
+        'toggleSingleStepping',
+        [
+            new SymbolMorph('footprints', 16),
+            new SymbolMorph('footprints', 16)
+        ],
+        function () {  // query
+            return Process.prototype.enableSingleStepping;
+        }
+    );
+
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = new Color(153, 255, 213);
+//    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.hint = 'Visible stepping';
+    button.fixLayout();
+    button.refresh();
+    steppingButton = button;
+    this.controlBar.add(steppingButton);
+    this.controlBar.steppingButton = steppingButton; // for refreshing
 
     // stopButton
     button = new ToggleButtonMorph(
@@ -915,7 +950,9 @@ IDE_Morph.prototype.createControlBar = function () {
         Process.prototype.flashTime = (num - 1) / 100;
         myself.controlBar.refreshResumeSymbol();
     };
-    slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
+    // slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
+    slider.color = new Color(153, 255, 213);
+    slider.alpha = 0.3;
     slider.setExtent(new Point(50, 14));
     this.controlBar.add(slider);
     this.controlBar.steppingSlider = slider;
@@ -1032,6 +1069,9 @@ IDE_Morph.prototype.createControlBar = function () {
 
         slider.setCenter(myself.controlBar.center());
         slider.setRight(stageSizeButton.left() - padding);
+
+        steppingButton.setCenter(myself.controlBar.center());
+        steppingButton.setRight(slider.left() - padding);
 
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
@@ -2136,6 +2176,7 @@ IDE_Morph.prototype.toggleCollaborativeEditing = function () {
 
 IDE_Morph.prototype.toggleSingleStepping = function () {
     this.stage.threads.toggleSingleStepping();
+    this.controlBar.steppingButton.refresh();
     this.controlBar.refreshSlider();
 };
 
@@ -4919,6 +4960,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.cloudButton,
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
+            this.controlBar.steppingButton,
             this.controlBar.stageSizeButton,
             this.paletteHandle,
             this.stageHandle,
@@ -4934,6 +4976,10 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
     Morph.prototype.trackChanges = false;
     if (this.isAppMode) {
+        this.wasSingleStepping = Process.prototype.enableSingleStepping;
+        if (this.wasSingleStepping) {
+        this.toggleSingleStepping();
+    }
         this.setColor(this.appModeColor);
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
@@ -4949,6 +4995,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             world.keyboardReceiver.stopEditing();
         }
     } else {
+        if (this.wasSingleStepping && !Process.prototype.enableSingleStepping) {
+             this.toggleSingleStepping();
+        }
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
         elements.forEach(function (e) {
