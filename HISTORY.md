@@ -1,6 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
-## v4.2.2.7
+## v4.2.2.8
+### 2018-11-21
+* Tools library: Fixed LABEL block to again allow printing both text and numbers
+* Frequency Distribution Analysis library: Added histogram and plot blocks
+
 ### 2018-11-13
 * Blocks: fixed #2261 (check for selectedBlock before declaring an InputSlotMorph to be "empty")
 
