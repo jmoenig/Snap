@@ -9635,10 +9635,10 @@ WatcherMorph.prototype.userMenu = function () {
                                 );
                             };
 
-                            if (aFile.type.indexOf("text") === 0) {
-                                frd.readAsText(aFile);
-                            } else {
+                            if (aFile.type.indexOf("text") === -1) {
                                 txtOnlyMsg(aFile.type);
+                            } else {
+                                frd.readAsText(aFile);
                             }
                         }
 
