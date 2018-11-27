@@ -1,5 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
+## in development
+### 2018-11-27
+* Objects: Cache stage>>penTrailsMorph to optimize collision detection
+* Objects: Fixed a collision detection errror when objects are sub-pixel sized
+
 ## v4.2.2.8
 ### 2018-11-21
 * Tools library: Fixed LABEL block to again allow printing both text and numbers

@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-November-12';
+modules.objects = '2018-November-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -3608,7 +3608,9 @@ SpriteMorph.prototype.overlappingImage = function (otherSprite) {
         oImg = newCanvas(oRect.extent(), true),
         ctx = oImg.getContext('2d');
 
-    if (oRect.width() < 1 || oRect.height() < 1) {
+    if (oRect.width() < 1 || oRect.height() < 1 ||
+            !this.image.width || !this.image.height
+            || !otherSprite.image.width || !otherSprite.image.height) {
         return newCanvas(new Point(1, 1), true);
     }
     ctx.drawImage(
@@ -3654,6 +3656,7 @@ SpriteMorph.prototype.doStamp = function () {
     if (isWarped) {
         this.startWarp();
     }
+    stage.cachedPenTrailsMorph = null;
 };
 
 SpriteMorph.prototype.clear = function () {
@@ -4272,6 +4275,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         if (this.isWarped === false) {
             this.world().broken.push(damaged);
         }
+        this.parent.cachedPenTrailsMorph = null;
     }
 };
 
@@ -4279,6 +4283,7 @@ SpriteMorph.prototype.floodFill = function () {
     if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
         return;
     }
+    this.parent.cachedPenTrailsMorph = null;
     if (this.color.a > 1) {
         // fix a legacy bug in Morphic color detection
         this.color.a = this.color.a / 255;
@@ -6386,6 +6391,8 @@ StageMorph.prototype.init = function (globals) {
         'brightness': 0
     };
 
+    this.cachedPenTrailsMorph = null; // optimization, do not persist
+
     StageMorph.uber.init.call(this);
 
     this.acceptsDrops = false;
@@ -6404,6 +6411,7 @@ StageMorph.prototype.setScale = function (number) {
         myself = this;
 
     if (delta === 1) {return; }
+    this.cachedPenTrailsMorph = null;
     Morph.prototype.trackChanges = false;
     this.scale = number;
     this.setExtent(this.dimensions.multiplyBy(number));
@@ -6526,6 +6534,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 };
 
 StageMorph.prototype.clearPenTrails = function () {
+    this.cachedPenTrailsMorph = null;
     this.trailsCanvas = newCanvas(this.dimensions);
     this.changed();
 };
@@ -6539,10 +6548,18 @@ StageMorph.prototype.penTrails = function () {
 
 StageMorph.prototype.penTrailsMorph = function () {
     // for collision detection purposes
-    var morph = new Morph(),
-        trails = this.penTrails(),
-        ctx;
+    var morph, trails, ctx;
+
+    if (this.cachedPenTrailsMorph) {
+        return this.cachedPenTrailsMorph;
+    }
+    morph = new Morph();
+    trails = this.penTrails();
     morph.bounds = this.bounds.copy();
+    if (this.image.width === trails.width) {
+        morph.image = trails;
+        return morph;
+    }
     morph.image = newCanvas(this.extent());
     ctx = morph.image.getContext('2d');
     ctx.drawImage(
@@ -6556,6 +6573,7 @@ StageMorph.prototype.penTrailsMorph = function () {
         this.image.width,
         this.image.height
     );
+    this.cachedPenTrailsMorph = morph;
     return morph;
 };
 
