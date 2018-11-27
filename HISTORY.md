@@ -5,6 +5,7 @@
 * Objects: Cache stage>>penTrailsMorph to optimize collision detection
 * Objects: Fixed a collision detection errror when objects are sub-pixel sized
 * Objects: made importing files into variable watchers more lenient wrt to file types
+* Objects: added "open anyway?" option to "unable to import" dialog for variables
 
 ## v4.2.2.8
 ### 2018-11-21

@@ -9616,13 +9616,16 @@ WatcherMorph.prototype.userMenu = function () {
                     function () {
                         var file;
 
-                        function txtOnlyMsg(ftype) {
-                            ide.inform(
+                        function txtOnlyMsg(ftype, anyway) {
+                            ide.confirm(
+                                localize(
+                                    'Snap! can only import "text" files.\n' +
+                                        'You selected a file of type "' +
+                                        ftype +
+                                        '".'
+                                ) + '\n\n' + localize('Open anyway?'),
                                 'Unable to import',
-                                'Snap! can only import "text" files.\n' +
-                                    'You selected a file of type "' +
-                                    ftype +
-                                    '".'
+                                anyway // callback
                             );
                         }
 
@@ -9636,7 +9639,10 @@ WatcherMorph.prototype.userMenu = function () {
                             };
 
                             if (aFile.type.indexOf("text") === -1) {
-                                txtOnlyMsg(aFile.type);
+                                txtOnlyMsg(
+                                    aFile.type,
+                                    function () {frd.readAsText(aFile); }
+                                );
                             } else {
                                 frd.readAsText(aFile);
                             }
