@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-November-27';
+modules.objects = '2018-November-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -9639,10 +9639,21 @@ WatcherMorph.prototype.userMenu = function () {
                             };
 
                             if (aFile.type.indexOf("text") === -1) {
-                                txtOnlyMsg(
-                                    aFile.type,
-                                    function () {frd.readAsText(aFile); }
-                                );
+                                // special cases for Windows
+                                // check the file extension for text-like-ness
+                                if (contains(
+                                    ['txt', 'csv', 'xml', 'json', 'tsv'],
+                                    aFile.name.split('.').pop().toLowerCase()
+                                )) {
+                                    frd.readAsText(aFile);
+                                } else {
+                                    // show a warning and an option
+                                    // letting the user load the file anyway
+                                    txtOnlyMsg(
+                                        aFile.type,
+                                        function () {frd.readAsText(aFile); }
+                                    );
+                                }
                             } else {
                                 frd.readAsText(aFile);
                             }

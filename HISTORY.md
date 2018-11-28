@@ -1,6 +1,9 @@
 # Snap<em>!</em> (BYOB) History
 
 ## in development
+### 2018-11-28
+* Objects: added special checks to make imporing text-based files into vars easier in Windows
+
 ### 2018-11-27
 * Objects: Cache stage>>penTrailsMorph to optimize collision detection
 * Objects: Fixed a collision detection errror when objects are sub-pixel sized
