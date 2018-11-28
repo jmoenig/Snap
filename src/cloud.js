@@ -61,9 +61,9 @@ Cloud.prototype.defaultDomain = Cloud.prototype.knownDomains['Snap!Cloud'];
 
 Cloud.prototype.determineCloudDomain = function () {
     // We dynamically determine the domain of the cloud server.
-    // Thise allows for easy mirrors and development servers.
+    // This allows for easy mirrors and development servers.
     // The domain is determined by:
-    // 1. <meta name='snap-cloud-domain' domain="X"> in snap.html.
+    // 1. <meta name='snap-cloud-domain' location="X"> in snap.html.
     // 2. The current page's domain
     var currentDomain = window.location.host, // host includes the port.
         metaTag = document.head.querySelector("[name='snap-cloud-domain']"),
