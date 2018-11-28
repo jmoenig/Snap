@@ -3,6 +3,7 @@
 ## in development
 ### 2018-11-28
 * Objects: added special checks to make imporing text-based files into vars easier in Windows
+* GUI: allow smaller stage extent in embed mode (for social website)
 
 ### 2018-11-27
 * Objects: Cache stage>>penTrailsMorph to optimize collision detection
