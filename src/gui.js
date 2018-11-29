@@ -273,29 +273,36 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this, urlLanguage = null;
 
-    this.cloud.initSession(
-        function (username) {
-            if (username) {
-                myself.source = 'cloud';
-                if (!myself.cloud.verified) {
-                        new DialogBoxMorph().inform(
-                            'Unverified account',
-                            'Your account is still unverified.\n' +
-                            'Please use the verification link that\n' +
-                            'was sent to your email address when you\n' +
-                            'signed up.\n\n' +
-                            'If you cannot find that email, please\n' +
-                            'check your spam folder. If you still\n' +
-                            'cannot find it, please use the "Resend\n' +
-                            'Verification Email..." option in the cloud\n' +
-                            'menu.',
-                            world,
-                            myself.cloudIcon(null, new Color(0, 180, 0))
-                        );
-                }
+    function initUser(username) {
+        sessionStorage.username = username;
+        if (username) {
+            myself.source = 'cloud';
+            if (!myself.cloud.verified) {
+                new DialogBoxMorph().inform(
+                    'Unverified account',
+                    'Your account is still unverified.\n' +
+                    'Please use the verification link that\n' +
+                    'was sent to your email address when you\n' +
+                    'signed up.\n\n' +
+                    'If you cannot find that email, please\n' +
+                    'check your spam folder. If you still\n' +
+                    'cannot find it, please use the "Resend\n' +
+                    'Verification Email..." option in the cloud\n' +
+                    'menu.',
+                    world,
+                    myself.cloudIcon(null, new Color(0, 180, 0))
+                );
             }
         }
-    );
+    }
+
+    if (!sessionStorage.username) {
+        // check whether login should persist across browser sessions
+        this.cloud.initSession(initUser);
+    } else {
+        // login only persistent during a single browser session
+        this.cloud.checkCredentials(initUser);
+    }
 
     this.buildPanes();
     world.add(this);
@@ -5283,6 +5290,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 user.password,
                 user.choice,
                 function (username, isadmin, response) {
+                    sessionStorage.username = username;
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
@@ -5467,9 +5475,11 @@ IDE_Morph.prototype.logout = function () {
     var myself = this;
     this.cloud.logout(
         function () {
+            delete(sessionStorage.username);
             myself.showMessage('disconnected.', 2);
         },
         function () {
+            delete(sessionStorage.username);
             myself.showMessage('disconnected.', 2);
         }
     );
