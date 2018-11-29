@@ -296,12 +296,14 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
-    if (!sessionStorage.username) {
-        // check whether login should persist across browser sessions
-        this.cloud.initSession(initUser);
-    } else {
-        // login only persistent during a single browser session
-        this.cloud.checkCredentials(initUser);
+    if (location.protocol !== 'file:') {
+        if (!sessionStorage.username) {
+            // check whether login should persist across browser sessions
+            this.cloud.initSession(initUser);
+        } else {
+            // login only persistent during a single browser session
+            this.cloud.checkCredentials(initUser);
+        }
     }
 
     this.buildPanes();

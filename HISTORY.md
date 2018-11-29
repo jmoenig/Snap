@@ -3,6 +3,7 @@
 ## v4.2.2.9
 ### 2018-11-29
 * GUI: prepared release
+* GUI: fixed offline version (avoid sessionStorage access)
 
 ### 2018-11-28
 * Objects: added special checks to make imporing text-based files into vars easier in Windows
