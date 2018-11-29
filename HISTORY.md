@@ -1,6 +1,9 @@
 # Snap<em>!</em> (BYOB) History
 
-## in development
+## v4.2.2.9
+### 2018-11-29
+* GUI: prepared release
+
 ### 2018-11-28
 * Objects: added special checks to make imporing text-based files into vars easier in Windows
 * GUI: allow smaller stage extent in embed mode (for social website)
