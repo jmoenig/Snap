@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-November-29';
+modules.gui = '2018-December-07';
 
 // Declarations
 
@@ -2027,6 +2027,10 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
     var oldTop = this.palette.contents.top();
 
     this.createPalette();
+    if (this.isAppMode) {
+        this.palette.hide();
+        return;
+    }
     this.fixLayout('refreshPalette');
     if (!shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
@@ -3552,7 +3556,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.2.2.9\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.2.2.10 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

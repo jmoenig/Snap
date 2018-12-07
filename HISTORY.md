@@ -1,5 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
+## in development
+
+### 2018-12-07
+* GUI: fixed #2284 (executing "inherit" should not un-hide palette in presentation mode)
+
 ## v4.2.2.9
 ### 2018-11-29
 * GUI: prepared release
