@@ -71,13 +71,30 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    ide.sockets.sendMessage({
-        type: 'message',
-        dstId: targetRole,
-        srcId: srcId,
-        msgType: name,
-        content: contents
-    });
+    var OUTPUT_RATE = 30; // per second (approx)
+    var delay = 1000 / OUTPUT_RATE;
+
+    var id = 'asyncFn-sendMsg';
+    if (!this[id]) {
+        this[id] = {};
+        this[id].endTime = new Date().getTime() + delay;
+        ide.sockets.sendMessage({
+            type: 'message',
+            dstId: targetRole,
+            srcId: srcId,
+            msgType: name,
+            content: contents
+        });
+        this[id].onerror = function(event) {
+            this[id].error = event;
+        };
+    } else if (new Date().getTime() > this[id].endTime) {
+        // delay is passed
+        this[id] = null;
+        return;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 //request block
