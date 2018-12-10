@@ -9863,6 +9863,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolRobot(canvas, aColor);
     case 'magnifiyingGlass':
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
+    case 'queue':
+        return this.drawSymbolQueue(canvas, aColor);
     case 'footprints':
         return this.drawSymbolFootprints(canvas, aColor);
     default:
@@ -11191,6 +11193,55 @@ SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
     ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
     ctx.closePath();
     ctx.stroke();
+
+    return canvas;
+};
+
+
+SymbolMorph.prototype.drawSymbolQueue = function (canvas, color) {
+
+    // draws a triangle given the tip position, dimenstions and direction
+    /* opts = {tipPos, dims, direction: pointing dir} */
+    var drawTriangle = function(ctx, color, opts) {
+        var tgHeight = opts.dims.h;
+        var tgWidth = opts.dims.w;
+        var direction = opts.direction === 'left' ? 1 : -1;
+        ctx.fillStyle = color.toString();
+        ctx.beginPath();
+        ctx.moveTo(opts.tipPos.x, opts.tipPos.y);
+        ctx.lineTo(opts.tipPos.x + (direction*tgWidth), opts.tipPos.y + tgHeight/2);
+        ctx.lineTo(opts.tipPos.x + (direction*tgWidth), opts.tipPos.y - tgHeight/2);
+        ctx.fill();
+    };
+
+    var ctx = canvas.getContext('2d');
+    var u = canvas.width/5;
+    var padding = u/2;
+    var rectW = u;
+    var rectH = 3*u;
+    var centerY = 1*padding + rectH/2;
+    var curX = padding;
+
+    ctx.fillStyle = color.toString();
+
+    var drawRightTri = function(startX) {
+        drawTriangle(ctx, color, {
+            tipPos: {x: startX + rectW, y: centerY},
+            dims: {h: rectH/2, w: rectW},
+            direction: 'right'
+        });
+    };
+
+    drawRightTri(curX);
+    curX += rectW+padding;
+
+    ctx.fillRect(curX, padding, rectW, rectH);
+    curX += rectW+padding;
+
+    ctx.fillRect(curX, padding, rectW, rectH);
+    curX += rectW+padding;
+
+    drawRightTri(curX);
 
     return canvas;
 };
