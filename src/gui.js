@@ -1768,24 +1768,21 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 this.width() / this.stage.dimensions.x,
                 this.height() / this.stage.dimensions.y
                 ) * 100) / 100);
-
             flag = this.embedPlayButton.flag;
             flag.size = Math.floor(Math.min(
                         this.width(), this.height())) / 5;
             flag.setWidth(flag.size);
             flag.setHeight(flag.size);
-            flag.setCenter(this.embedPlayButton.center());
-            flag.setLeft(flag.left() * 1.01); // account for slight asymmetry
             this.embedPlayButton.size = flag.size * 1.6;
             this.embedPlayButton.setWidth(this.embedPlayButton.size);
             this.embedPlayButton.setHeight(this.embedPlayButton.size);
-
             if (this.embedOverlay) {
                 this.embedOverlay.setExtent(this.extent());
             }
-
             this.stage.setCenter(this.center());
             this.embedPlayButton.setCenter(this.stage.center());
+            flag.setCenter(this.embedPlayButton.center());
+            flag.setLeft(flag.left() + flag.size * 0.1); // account for slight asymmetry
         } else if (this.isAppMode) {
             this.stage.setScale(Math.floor(Math.min(
                 (this.width() - padding * 2) / this.stage.dimensions.x,
