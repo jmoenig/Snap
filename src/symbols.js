@@ -87,6 +87,8 @@ SymbolMorph.prototype.names = [
     'stepForward',
     'gears',
     'file',
+    'mutedSounds',
+    'unmutedSounds',
     'fullScreen',
     'normalScreen',
     'smallStage',
@@ -228,6 +230,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolGears(canvas, aColor);
     case 'file':
         return this.drawSymbolFile(canvas, aColor);
+    case 'mutedSounds':
+        return this.drawSymbolMutedSounds(canvas, aColor);
+    case 'unmutedSounds':
+        return this.drawSymbolUnmutedSounds(canvas, aColor);
     case 'fullScreen':
         return this.drawSymbolFullScreen(canvas, aColor);
     case 'normalScreen':
@@ -484,6 +490,34 @@ SymbolMorph.prototype.drawSymbolFile = function (canvas, color) {
     ctx.lineTo(w, 0);
     ctx.closePath();
     ctx.fill();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolMutedSounds = function (canvas, color) {
+    // answer a canvas showing a muted sounds toggling symbol
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = w / 2,
+        h2 = h / 2;
+
+    ctx.fillStyle = color.darker(40).toString();
+    ctx.fillRect(0, 0, w, h);
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolUnmutedSounds = function (canvas, color) {
+    // answer a canvas showing a UNmuted sounds toggling symbol
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = w / 2,
+        h2 = h / 2;
+
+    ctx.fillStyle = color.darker(60).toString();
+    ctx.fillRect(0, 0, w, h);
 
     return canvas;
 };

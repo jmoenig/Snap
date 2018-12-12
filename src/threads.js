@@ -663,6 +663,9 @@ Process.prototype.pause = function () {
     if (this.context && this.context.startTime) {
         this.pauseOffset = Date.now() - this.context.startTime;
     }
+    if (this.context.activeNote) {
+        this.context.activeNote.stop();
+    }
 };
 
 Process.prototype.resume = function () {
@@ -671,6 +674,12 @@ Process.prototype.resume = function () {
     }
     this.isPaused = false;
     this.pauseOffset = null;
+    if (this.context.activeNote) {
+        if (this.context.activeNote.oscillator === null) {
+            // prevents Note from resuming twice
+            this.context.activeNote.play();
+        }
+    }
 };
 
 Process.prototype.pauseStep = function () {
@@ -1850,7 +1859,7 @@ Process.prototype.doStopAll = function () {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.resumeAll(stage);
+            //stage.threads.resumeAll(stage); // leads to a strange Note bug
             stage.keysPressed = {};
             stage.runStopScripts();
             stage.threads.stopAll();
@@ -3747,18 +3756,32 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
+    var receiver = this.homeContext.receiver;
+    var volume = receiver.volume;
+    var muted = receiver.parentThatIsA(StageMorph).muted;
+
+    if (muted === true) {
+        volume = 0;
+    }
+
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.context.activeNote = new Note(pitch);
+        this.context.activeNote = new Note(pitch, volume);
         this.context.activeNote.play(this.instrument);
     }
+
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
             this.context.activeNote.stop();
             this.context.activeNote = null;
         }
         return null;
+    } else if (this.context.activeNote) {
+        if (this.context.activeNote.volume !== volume) {
+            this.context.activeNote.setVolume(volume);
+        }
     }
+
     this.pushContext('doYield');
     this.pushContext();
 };
