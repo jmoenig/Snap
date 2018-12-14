@@ -71,13 +71,7 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var OUTPUT_RATE = 30; // per second (approx)
-    var delay = 1000 / OUTPUT_RATE;
-
-    var id = 'asyncFn-sendMsg';
-    if (!this[id]) {
-        this[id] = {};
-        this[id].endTime = new Date().getTime() + delay;
+    var sendMessage = function() {
         ide.sockets.sendMessage({
             type: 'message',
             dstId: targetRole,
@@ -85,6 +79,22 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
             msgType: name,
             content: contents
         });
+
+    };
+
+    var TURBO_OUTPUT_RATE = 50;
+    var NORMAL_OUTPUT_RATE = 30;
+    var NORMAL_OFFSET = 20; // approx normal mode's artificial delay offset
+
+    var outputRate = this.reportIsFastTracking() ? TURBO_OUTPUT_RATE : NORMAL_OUTPUT_RATE; // per second (approx)
+    var delay = 1000 / outputRate;
+    if (!this.reportIsFastTracking()) delay = Math.max(delay - NORMAL_OFFSET, 0);
+
+    var id = 'asyncFn-sendMsg';
+    if (!this[id]) {
+        this[id] = {};
+        this[id].endTime = new Date().getTime() + delay;
+        sendMessage();
         this[id].onerror = function(event) {
             this[id].error = event;
         };
@@ -95,6 +105,7 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
     }
     this.pushContext('doYield');
     this.pushContext();
+
 };
 
 //request block
