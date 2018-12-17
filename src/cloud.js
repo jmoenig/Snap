@@ -413,7 +413,8 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                     xml: xml,
                     media: ide.hasChangedMedia ?
                         ide.serializer.mediaXML(ide.projectName) : null,
-                    thumbnail: thumbnail
+                    thumbnail: thumbnail,
+                    remixID: ide.stage.remixID
                 };
                 ide.serializer.isCollectingMedia = false;
                 ide.serializer.flushMedia();
@@ -708,25 +709,6 @@ Cloud.prototype.unpublishProject = function (
         onSuccess,
         onError,
         'Could not unpublish project'
-    );
-};
-
-Cloud.prototype.remixProject = function (
-    projectName,
-    username,
-    onSuccess,
-    onError
-) {
-    this.withCredentialsRequest(
-        'POST',
-        '/projects/' +
-            encodeURIComponent(username) +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/remix',
-        onSuccess,
-        onError,
-        'Could not remix project'
     );
 };
 

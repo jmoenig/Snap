@@ -4361,7 +4361,8 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             this.serializer.openProject(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
-                    this
+                    this,
+                    model.attributes.remixID
                 ),
                 this
             );
@@ -4374,7 +4375,8 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         this.serializer.openProject(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
-                this
+                this,
+                model.attributes.remixID
             ),
             this
         );
