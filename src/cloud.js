@@ -618,6 +618,32 @@ Cloud.prototype.getProjectVersionMetadata = function (
     );
 };
 
+Cloud.prototype.getRemixes = function (
+	username,
+    page,
+    pageSize,
+    projectName,
+    onSuccess,
+    onError,
+    withThumbnail
+) {
+    var path = '/projects/' +
+                encodeURIComponent(username) + '/' +
+                encodeURIComponent(projectName) + '/remixes';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    this.request(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch remixes for project ' + projectName
+    );
+};
+
 Cloud.prototype.deleteProject = function (
 	projectName,
     username,
