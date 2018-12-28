@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2018-11-06', // this, too, will appear in the Translators tab
+        '2018-12-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -367,8 +367,12 @@ SnapTranslator.dict.de = {
         'anzeigen',
     'hide':
         'verstecken',
-    'go to front':
-        'komme nach vorn',
+    'go to %layer layer':
+        'gehe nach %layer',
+    'front':
+        'vorn',
+    'back':
+        'hinten',
     'go back %n layers':
         'gehe %n Ebenen zur\u00fcck',
 
