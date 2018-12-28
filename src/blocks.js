@@ -1276,6 +1276,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['sqrt']);
             break;
+        case '%layer':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    front : ['front'],
+                    back : ['back']
+                },
+                true
+            );
+            part.setContents(['front']);
+            break;
         case '%txtfun':
             part = new InputSlotMorph(
                 null,

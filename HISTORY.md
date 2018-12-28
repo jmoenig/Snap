@@ -4,6 +4,7 @@
 
 ###2018-12-28
 * Blocks, Threads: added 'neg' selector to monad operator dropdown
+* Blocks, Objects, Threads: added "front/back" options to "go to front" layer primitive
 
 ### 2018-12-07
 * GUI: fixed #2284 (executing "inherit" should not un-hide palette in presentation mode)

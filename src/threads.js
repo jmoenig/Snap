@@ -3073,6 +3073,20 @@ Process.prototype.doGotoObject = function (name) {
     }
 };
 
+// Process layering primitives
+
+Process.prototype.goToLayer = function (name) {
+    var option = this.inputOption(name),
+        thisObj = this.blockReceiver();
+    if (thisObj instanceof SpriteMorph) {
+        if (option === 'front') {
+            thisObj.comeToFront();
+        } else if (option === 'back') {
+            thisObj.goToBack();
+        }
+    }
+};
+
 // Process temporary cloning (Scratch-style)
 
 Process.prototype.createClone = function (name) {

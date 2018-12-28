@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-November-28';
+modules.objects = '2018-December-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -377,11 +377,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'hide'
         },
-        comeToFront: {
+        goToLayer: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'go to front'
+            spec: 'go to %layer layer',
+            defaults: ['front']
         },
         goBack: {
             only: SpriteMorph,
@@ -1299,6 +1300,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         	selector: 'reportRelationTo',
          	inputs: [['distance']],
             offset: 1
+        },
+        comeToFront: {
+            selector: 'goToLayer',
+            inputs: [['front']]
         }
     };
 };
@@ -1907,7 +1912,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('show'));
         blocks.push(block('hide'));
         blocks.push('-');
-        blocks.push(block('comeToFront'));
+        blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
 
     // for debugging: ///////////////
@@ -3583,6 +3588,13 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 SpriteMorph.prototype.comeToFront = function () {
     if (this.parent) {
         this.parent.add(this);
+        this.changed();
+    }
+};
+
+SpriteMorph.prototype.goToBack = function () {
+    if (this.parent) {
+        this.parent.addBack(this);
         this.changed();
     }
 };
