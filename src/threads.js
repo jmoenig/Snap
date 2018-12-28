@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2018-October-26';
+modules.threads = '2018-December-28';
 
 var ThreadManager;
 var Process;
@@ -2609,6 +2609,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
+    case 'neg':
+        result = n * -1;
+        break;
     case 'ceiling':
         result = Math.ceil(x);
         break;
@@ -3158,6 +3161,13 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
             }
             if (those.some(function (any) {
                     return any.isVisible && thisObj.isTouching(any);
+                    // check collision with any part, performance issue
+                    // commented out for now
+                /*
+                    return any.allParts().some(function (part) {
+                        return part.isVisible && thisObj.isTouching(part);
+                    })
+                */
                 })) {
                 return true;
             }
