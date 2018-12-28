@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-December-07';
+modules.gui = '2018-December-28';
 
 // Declarations
 
@@ -8152,7 +8152,7 @@ CostumeIconMorph.prototype.disinherit = function () {
         idx = this.parent.children.indexOf(this);
     if (wardrobe.sprite.inheritsAttribute('costumes')) {
         wardrobe.sprite.shadowAttribute('costumes');
-        this.object = wardrobe.sprite.costumes.at(idx - 2);
+        this.object = wardrobe.sprite.costumes.at(idx - 3);
     }
 };
 
@@ -8582,7 +8582,6 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
     var idx = 0,
         costume = icon.object,
         top = icon.top();
-
     icon.destroy();
     this.contents.children.forEach(function (item) {
         if (item instanceof CostumeIconMorph && item.top() < top - 4) {
@@ -8806,7 +8805,7 @@ SoundIconMorph.prototype.disinherit = function () {
         idx = this.parent.children.indexOf(this);
     if (jukebox.sprite.inheritsAttribute('sounds')) {
         jukebox.sprite.shadowAttribute('sounds');
-        this.object = jukebox.sprite.sounds.at(idx);
+        this.object = jukebox.sprite.sounds.at(idx - 1);
     }
 };
 
@@ -8959,13 +8958,13 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
 
     icon.destroy();
     this.contents.children.forEach(function (item) {
-        if (item.top() < top - 4) {
+        if (item instanceof SoundIconMorph && item.top() < top - 4) {
             idx += 1;
         }
     });
 
     this.sprite.shadowAttribute('sounds');
-    this.sprite.sounds.add(costume, idx);
+    this.sprite.sounds.add(costume, idx + 1);
     this.updateList();
 };
 

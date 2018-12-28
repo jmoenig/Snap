@@ -7,6 +7,7 @@
 * Blocks, Objects, Threads: added "front/back" options to "go to front" layer primitive
 * updated German translation
 * renamed help screen for layer primitive
+* fixed #2294
 
 ### 2018-12-07
 * GUI: fixed #2284 (executing "inherit" should not un-hide palette in presentation mode)
