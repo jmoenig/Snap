@@ -2,7 +2,11 @@
 
 ## in development
 
-###2018-12-28
+### 2019-01-01
+* Morphic: added HSL color conversion support
+* Morphic: fixed glitch in WorldMorph >> getGlobalPixelColor
+
+### 2018-12-28
 * Blocks, Threads: added 'neg' selector to monad operator dropdown
 * Blocks, Objects, Threads: added "front/back" options to "go to front" layer primitive
 * updated German translation

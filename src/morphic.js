@@ -11876,7 +11876,7 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
     return new Color(dta[0], dta[1], dta[2]);
 */
 
-    var clr = this.hand.morphAtPointer().getPixelColor(this.hand.position());
+    var clr = this.topMorphAt(point).getPixelColor(point);
     // IMPORTANT:
     // all callers of getGlobalPixelColor should make provisions for retina
     // display support, which gets null-pixels interlaced with non-null ones:
