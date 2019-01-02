@@ -507,14 +507,14 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen %hsla to %n',
+            spec: 'set pen %hsva to %n',
             defaults: [['color'], 50]
         },
         changePenHSVA: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'change pen %hsla by %n',
+            spec: 'change pen %hsva by %n',
             defaults: [['color'], 10]
         },
         changeSize: {

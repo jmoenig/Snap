@@ -1288,7 +1288,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['front']);
             break;
-        case '%hsla':
+        case '%hsva':
             part = new InputSlotMorph(
                 null,
                 false,
