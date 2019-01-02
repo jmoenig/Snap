@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2018-December-28';
+modules.objects = '2019-January-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -503,33 +503,19 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'set pen color to %clr'
         },
-        changeHue: {
+        setPenHSVA: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'change pen color by %n',
-            defaults: [10]
+            spec: 'set pen %hsla to %n',
+            defaults: [['color'], 50]
         },
-        setHue: {
+        changePenHSVA: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen color to %n',
-            defaults: [0]
-        },
-        changeBrightness: {
-            only: SpriteMorph,
-            type: 'command',
-            category: 'pen',
-            spec: 'change pen shade by %n',
-            defaults: [10]
-        },
-        setBrightness: {
-            only: SpriteMorph,
-            type: 'command',
-            category: 'pen',
-            spec: 'set pen shade to %n',
-            defaults: [100]
+            spec: 'change pen %hsla by %n',
+            defaults: [['color'], 10]
         },
         changeSize: {
             only: SpriteMorph,
@@ -642,36 +628,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'if %b %c else %c'
         },
-
-    /* migrated to a newer block version:
-
-        doStop: {
-            type: 'command',
-            category: 'control',
-            spec: 'stop script'
-        },
-        doStopAll: {
-            type: 'command',
-            category: 'control',
-            spec: 'stop all %stop'
-        },
-    */
-
         doStopThis: {
             type: 'command',
             category: 'control',
             spec: 'stop %stopChoices'
         },
-
-    /* migrated to doStopThis:
-
-        doStopOthers: {
-            type: 'command',
-            category: 'control',
-            spec: 'stop %stopOthersChoices'
-        },
-    */
-
         doRun: {
             type: 'command',
             category: 'control',
@@ -692,13 +653,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'report %s'
         },
-    /*
-        doStopBlock: { // migrated to a newer block version
-            type: 'command',
-            category: 'control',
-            spec: 'stop block'
-        },
-    */
         doCallCC: {
             type: 'command',
             category: 'control',
@@ -715,8 +669,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'warp %c'
         },
 
-        // Message passing - very experimental
-
+        // Message passing
         doTellTo: {
             type: 'command',
             category: 'control',
@@ -730,7 +683,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Cloning
-
         receiveOnClone: {
             type: 'hat',
             category: 'control',
@@ -754,7 +706,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Debugging - pausing
-
         doPauseAll: {
             type: 'command',
             category: 'control',
@@ -762,7 +713,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Sensing
-
         reportTouchingObject: {
             only: SpriteMorph,
             type: 'predicate',
@@ -842,13 +792,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'key %key pressed?'
         },
-    /*
-        reportDistanceTo: { // has been superseded by reportRelationTo
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'distance to %dst'
-        },
-    */
         reportRelationTo: {
             only: SpriteMorph,
             type: 'reporter',
@@ -1085,19 +1028,6 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [null, 0]
         },
 
-    /*
-        reportScript: {
-            type: 'reporter',
-            category: 'operators',
-            spec: 'the script %parms %c'
-        },
-        reify: {
-            type: 'reporter',
-            category: 'operators',
-            spec: 'the %f block %parms'
-        },
-    */
-
         // Variables
         doSetVar: {
             type: 'command',
@@ -1127,7 +1057,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'script variables %scriptVars'
         },
 
-        // inheritance - experimental
+        // inheritance
         doDeleteAttr: {
             type: 'command',
             category: 'variables',
@@ -1208,7 +1138,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Tables - experimental
-
         doShowTable: {
             dev: true,
             type: 'command',
@@ -1216,32 +1145,24 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'show table %l'
         },
 
-        // Code mapping - experimental
-        doMapCodeOrHeader: { // experimental
+        // Code mapping
+        doMapCodeOrHeader: {
             type: 'command',
             category: 'other',
             spec: 'map %cmdRing to %codeKind %code'
         },
-        doMapValueCode: { // experimental
+        doMapValueCode: {
             type: 'command',
             category: 'other',
             spec: 'map %mapValue to code %code',
             defaults: [['String'], '<#1>']
         },
-    /* obsolete - superseded by 'doMapValue'
-        doMapStringCode: { // experimental
-            type: 'command',
-            category: 'other',
-            spec: 'map String to code %code',
-            defaults: ['<#1>']
-        },
-    */
-        doMapListCode: { // experimental
+        doMapListCode: {
             type: 'command',
             category: 'other',
             spec: 'map %codeListPart of %codeListKind to code %code'
         },
-        reportMappedCode: { // experimental
+        reportMappedCode: {
             type: 'reporter',
             category: 'other',
             spec: 'code of %cmdRing'
@@ -1304,6 +1225,26 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         comeToFront: {
             selector: 'goToLayer',
             inputs: [['front']]
+        },
+        setHue: {
+            selector: 'setPenHSVA',
+            inputs: [['color']],
+            offset: 1
+        },
+        setBrightness: {
+            selector: 'setPenHSVA',
+            inputs: [['brightness']],
+            offset: 1
+        },
+        changeHue: {
+            selector: 'changePenHSVA',
+            inputs: [['color']],
+            offset: 1
+        },
+        changeBrightness: {
+            selector: 'changePenHSVA',
+            inputs: [['brightness']],
+            offset: 1
         }
     };
 };
@@ -1344,10 +1285,10 @@ SpriteMorph.prototype.blockAlternatives = {
     down: ['up', 'clear', 'doStamp'],
     up: ['down', 'clear', 'doStamp'],
     doStamp: ['clear', 'down', 'up'],
-    changeHue: ['setHue', 'changeBrightness', 'setBrightness'],
-    setHue: ['changeHue', 'changeBrightness', 'setBrightness'],
-    changeBrightness: ['setBrightness', 'setHue', 'changeHue'],
-    setBrightness: ['changeBrightness', 'setHue', 'changeHue'],
+
+    setPenHSVA: ['changePenHSVA'],
+    changePenHSVA: ['setPenHSVA'],
+
     changeSize: ['setSize'],
     setSize: ['changeSize'],
 
@@ -1409,6 +1350,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
 
+    // pen hsv color support
+    this.cachedHSV = [0, 0, 0]; // not serialized
+
     // only temporarily for serialization
     this.inheritedMethodsCache = [];
 
@@ -1447,6 +1391,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     SpriteMorph.uber.init.call(this);
 
+    this.cachedHSV = this.color.hsv();
     this.isDraggable = true;
     this.isDown = false;
     this.heading = 90;
@@ -1962,11 +1907,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('up'));
         blocks.push('-');
         blocks.push(block('setColor'));
-        blocks.push(block('changeHue'));
-        blocks.push(block('setHue'));
-        blocks.push('-');
-        blocks.push(block('changeBrightness'));
-        blocks.push(block('setBrightness'));
+        blocks.push(block('changePenHSVA'));
+        blocks.push(block('setPenHSVA'));
         blocks.push('-');
         blocks.push(block('changeSize'));
         blocks.push(block('setSize'));
@@ -2004,17 +1946,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
-    /*
-    // old STOP variants, migrated to a newer version, now redundant
-        blocks.push(block('doStopBlock'));
-        blocks.push(block('doStop'));
-        blocks.push(block('doStopAll'));
-    */
         blocks.push(block('doStopThis'));
-    /*
-        // migrated to doStopThis, now redundant
-        blocks.push(block('doStopOthers'));
-    */
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -3520,6 +3452,48 @@ SpriteMorph.prototype.show = function () {
 
 // SpriteMorph pen color
 
+SpriteMorph.prototype.setColorComponentHSVA = function (idx, num) {
+    var x = this.xPosition(),
+        y = this.yPosition(),
+        n = +num;
+
+    idx = +idx;
+    if (idx < 0 || idx > 3) {return; }
+    if (idx == 0) {
+        if (n < 0 || n > 100) { // wrap the hue
+            n = (n < 0 ? 100 : 0) + n % 100;
+        }
+    } else {
+        n = Math.min(100, Math.max(0, n));
+    }
+    if (idx === 3) {
+        this.color.a = 1 - n / 100;
+    } else {
+        this.cachedHSV[idx] = n / 100;
+        this.color.set_hsv.apply(this.color, this.cachedHSV);
+    }
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    this.gotoXY(x, y);
+};
+
+SpriteMorph.prototype.getColorComponentHSLA = function (idx) {
+    idx = +idx;
+    if (idx === 3) {
+        return (1 - this.color.a) * 100;
+    }
+    return this.cachedHSV[idx] * 100;
+};
+
+SpriteMorph.prototype.changeColorComponentHSVA = function (idx, delta) {
+    this.setColorComponentHSVA(
+        idx,
+        this.getColorComponentHSLA(idx) + (+delta || 0)
+    );
+};
+
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
@@ -3529,58 +3503,8 @@ SpriteMorph.prototype.setColor = function (aColor) {
             this.drawNew();
             this.silentGotoXY(x, y);
         }
+        this.cachedHSV = this.color.hsv();
     }
-};
-
-SpriteMorph.prototype.getHue = function () {
-    return this.color.hsv()[0] * 100;
-};
-
-SpriteMorph.prototype.setHue = function (num) {
-    var hsv = this.color.hsv(),
-        x = this.xPosition(),
-        y = this.yPosition(),
-        n = +num;
-
-    if (n < 0 || n > 100) { // wrap the hue
-        n = (n < 0 ? 100 : 0) + n % 100;
-    }
-    hsv[0] = n / 100;
-    // hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100; // old code
-    hsv[1] = 1; // we gotta fix this at some time
-    this.color.set_hsv.apply(this.color, hsv);
-    if (!this.costume) {
-        this.drawNew();
-        this.changed();
-    }
-    this.gotoXY(x, y);
-};
-
-SpriteMorph.prototype.changeHue = function (delta) {
-    this.setHue(this.getHue() + (+delta || 0));
-};
-
-SpriteMorph.prototype.getBrightness = function () {
-    return this.color.hsv()[2] * 100;
-};
-
-SpriteMorph.prototype.setBrightness = function (num) {
-    var hsv = this.color.hsv(),
-        x = this.xPosition(),
-        y = this.yPosition();
-
-    hsv[1] = 1; // we gotta fix this at some time
-    hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100; // shade doesn't wrap
-    this.color.set_hsv.apply(this.color, hsv);
-    if (!this.costume) {
-        this.drawNew();
-        this.changed();
-    }
-    this.gotoXY(x, y);
-};
-
-SpriteMorph.prototype.changeBrightness = function (delta) {
-    this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
 // SpriteMorph layers
@@ -7226,17 +7150,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
-    /*
-    // old STOP variants, migrated to a newer version, now redundant
-        blocks.push(block('doStopBlock'));
-        blocks.push(block('doStop'));
-        blocks.push(block('doStopAll'));
-    */
         blocks.push(block('doStopThis'));
-    /*
-        // migrated to doStopThis, now redundant
-        blocks.push(block('doStopOthers'));
-    */
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));

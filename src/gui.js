@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-December-28';
+modules.gui = '2019-January-02';
 
 // Declarations
 
@@ -2320,8 +2320,10 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.stage.add(sprite);
 
     // randomize sprite properties
-    sprite.setHue(rnd.call(this, 0, 100));
-    sprite.setBrightness(rnd.call(this, 50, 100));
+    sprite.setColorComponentHSVA(0, rnd.call(this, 0, 100));
+    sprite.setColorComponentHSVA(1, 100);
+    sprite.setColorComponentHSVA(2, rnd.call(this, 50, 100));
+
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
 

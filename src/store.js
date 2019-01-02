@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-November-12';
+modules.store = '2019-January-02';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -671,6 +671,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.color) {
             sprite.color = myself.loadColor(model.attributes.color);
+            sprite.cachedHSV = sprite.color.hsv();
         }
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
@@ -1364,6 +1365,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.color) {
             v.color = myself.loadColor(model.attributes.color);
+            v.cachedHSV = v.color.hsv();
         }
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2018-December-28';
+modules.threads = '2019-January-02';
 
 var ThreadManager;
 var Process;
@@ -3084,6 +3084,26 @@ Process.prototype.goToLayer = function (name) {
         } else if (option === 'back') {
             thisObj.goToBack();
         }
+    }
+};
+
+// Process pen primitives
+
+Process.prototype.setPenHSVA = function (name, num) {
+    var choice = this.inputOption(name),
+        options = ['color', 'saturation', 'brightness', 'transparency'],
+        thisObj = this.blockReceiver();
+    if (thisObj instanceof SpriteMorph) {
+        thisObj.setColorComponentHSVA(options.indexOf(choice), +num);
+    }
+};
+
+Process.prototype.changePenHSVA = function (name, num) {
+    var choice = this.inputOption(name),
+        options = ['color', 'saturation', 'brightness', 'transparency'],
+        thisObj = this.blockReceiver();
+    if (thisObj instanceof SpriteMorph) {
+        thisObj.changeColorComponentHSVA(options.indexOf(choice), +num);
     }
 };
 
