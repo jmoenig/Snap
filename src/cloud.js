@@ -762,7 +762,7 @@ Cloud.prototype.updateProjectName = function (
             '/metadata',
         onSuccess,
         onError,
-        'Could not update project notes',
+        'Could not update project name',
         false, // wants raw response
         JSON.stringify({ projectname: newName })
     );
