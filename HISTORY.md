@@ -4,6 +4,7 @@
 
 ### 2019-01-02
 * Objects, Blocks, Threads, GUI, Store: added third color dimension and transparency to pen
+* renamed help screens for "setHue" to "setPenHSVA" and "changeHue" to "changePenHSVA"
 
 ### 2019-01-01
 * Morphic: added HSL color conversion support
