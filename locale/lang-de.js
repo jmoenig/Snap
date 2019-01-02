@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2018-12-28', // this, too, will appear in the Translators tab
+        '2019-01-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -422,14 +422,10 @@ SnapTranslator.dict.de = {
         'Stift hoch',
     'set pen color to %clr':
         'setze Stiftfarbe auf %clr',
-    'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
-    'set pen color to %n':
-        'setze Stiftfarbe auf %n',
-    'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
-    'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+    'change pen %hsva by %n':
+        '\u00e4ndere Stift %hsva um %n',
+    'set pen %hsva to %n':
+        'setze Stift %hsva auf %n',
     'change pen size by %n':
         '\u00e4ndere Stiftdicke um %n',
     'set pen size to %n':
@@ -1483,7 +1479,7 @@ SnapTranslator.dict.de = {
         'neuen Klang aufnehmen',
     
 
-    // graphical effects
+    // graphical effects, pen color
     'color':
         'Farbe',
     'fisheye':
@@ -1498,6 +1494,8 @@ SnapTranslator.dict.de = {
         'Sättigung',
     'brightness':
         'Helligeit',
+    'transparency':
+        'Transparenz',
     'ghost':
         'Durchsichtigkeit',
     'negative':
