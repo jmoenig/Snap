@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-02';
+modules.blocks = '2019-January-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1091,6 +1091,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true // read-only
             );
             break;
+        case '%loc': // location
+            part = new InputSlotMorph(
+                null,
+                false,
+                'locationMenu',
+                true
+            );
+            break;
         case '%spr':
             part = new InputSlotMorph(
                 null,
@@ -1301,6 +1309,22 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['front']);
+            break;
+        case '%asp': // aspect
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    color : ['color'],
+                    saturation : ['saturation'],
+                    brightness : ['brightness'],
+                    transparency : ['transparency'],
+                    '~' : null,
+                    sprites : ['sprites'],
+                },
+                true
+            );
+            part.setContents(['color']);
             break;
         case '%txtfun':
             part = new InputSlotMorph(
@@ -8472,6 +8496,31 @@ InputSlotMorph.prototype.collidablesMenu = function () {
             'mouse-pointer' : ['mouse-pointer'],
             edge : ['edge'],
             'pen trails' : ['pen trails']
+        },
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allNames = [];
+
+    stage.children.forEach(function (morph) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+            if (morph.name !== rcvr.name) {
+                allNames = allNames.concat(morph.name);
+            }
+        }
+    });
+    if (allNames.length > 0) {
+        dict['~'] = null;
+        allNames.forEach(function (name) {
+            dict[name] = name;
+        });
+    }
+    return dict;
+};
+
+InputSlotMorph.prototype.locationMenu = function () {
+    var dict = {
+            'mouse-pointer' : ['mouse-pointer'],
+            'myself' : ['myself']
         },
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),

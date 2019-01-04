@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-02';
+modules.objects = '2019-January-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -736,6 +736,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'filtered for %clr'
+        },
+        reportAspect: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: '%asp at %loc',
+            defaults: [['color']]
         },
         reportStackSize: {
             dev: true,
@@ -1986,6 +1992,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportKeyPressed'));
         blocks.push('-');
         blocks.push(block('reportRelationTo'));
+        blocks.push(block('reportAspect'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
@@ -7182,6 +7189,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push('-');
+        blocks.push(block('reportAspect'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));

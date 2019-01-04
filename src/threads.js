@@ -59,10 +59,10 @@ MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
-isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
+isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-02';
+modules.threads = '2019-January-04';
 
 var ThreadManager;
 var Process;
@@ -3258,6 +3258,155 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
         }
     }
     return false;
+};
+
+Process.prototype.reportAspect = function (aspect, location) {
+    // sense colors and sprites anywhere,
+    // use sprites to read/write data encoded in colors.
+    //
+    // usage:
+    // ------
+    // left input selects color/saturation/brightness/transparency or "sprites".
+    // right input selects "mouse-pointer", "myself" or name of another sprite.
+    // you can also embed a a reporter with a reference to a sprite itself
+    // or a list of two items representing x- and y- coordinates.
+    //
+    // what you'll get:
+    // ----------------
+    // left input (aspect):
+    //
+    //      'color'         - hsv HUE on a scale of 0 - 100
+    //      'saturation'    - hsv SATURATION on a scale of 0 - 100
+    //      'brightness'    - hsv VALUE on a scale of 0 - 100
+    //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
+    //      'sprites'       - a list of sprites at the location, empty if none
+    //
+    // right input (location):
+    //
+    //      'mouse-pointer' - color/sprites at mouse-pointer anywhere in Snap
+    //      'myself'        - sprites at or color UNDERNEATH the rotation center
+    //      sprite-name     - sprites at or color UNDERNEATH sprites's rot-ctr.
+    //      two-item-list   - color/sprites at x-/y- coordinates on the Stage
+    //
+    // what does "underneath" mean?
+    // ----------------------------
+    // the not-fully-transparent color of the top-layered sprite at the given
+    // location excluding the receiver sprite's own layer and all layers above
+    // it gets reported.
+    //
+    // color-aspect "underneath" a sprite means that the sprite's layer is
+    // relevant for what gets reported. Sprites can only sense colors in layers
+    // below themselves, not their own color and not colors in sprites above
+    // their own layer.
+
+    var choice = this.inputOption(aspect),
+        target = this.inputOption(location),
+        options = ['color', 'saturation', 'brightness', 'transparency'],
+        idx = options.indexOf(choice),
+        thisObj = this.blockReceiver(),
+        thatObj,
+        stage = thisObj.parentThatIsA(StageMorph),
+        world = thisObj.world(),
+        point,
+        clr;
+
+    if (target === 'myself') {
+        if (choice === 'sprites') {
+            if (thisObj instanceof StageMorph) {
+                point = thisObj.center();
+            } else {
+                point = thisObj.rotationCenter();
+            }
+            return this.spritesAtPoint(point, stage);
+        } else {
+            clr = this.colorAtSprite(thisObj);
+        }
+    } else if (target === 'mouse-pointer') {
+        if (choice === 'sprites') {
+            return this.spritesAtPoint(world.hand.position(), stage);
+        } else {
+            clr = world.getGlobalPixelColor(world.hand.position());
+        }
+    } else if (target instanceof List) {
+        point = new Point(
+            target.at(1) * stage.scale + stage.center().x,
+            stage.center().y - (target.at(2) * stage.scale)
+        );
+        if (choice === 'sprites') {
+            return this.spritesAtPoint(point, stage);
+        } else {
+            clr = world.getGlobalPixelColor(point);
+        }
+    } else {
+        if (!target) {return; }
+        thatObj = this.getOtherObject(target, thisObj, stage);
+        if (thatObj) {
+            if (choice === 'sprites') {
+                point = thatObj instanceof SpriteMorph ?
+                    thatObj.rotationCenter() : thatObj.center();
+                return this.spritesAtPoint(point, stage);
+            } else {
+                clr = this.colorAtSprite(thatObj);
+            }
+        } else {
+            return;
+        }
+
+    }
+
+    if (idx < 0 || idx > 3) {
+        return;
+    }
+    if (idx === 3) {
+        return (1 - clr.a) * 100;
+    }
+    return clr.hsv()[idx] * 100;
+};
+
+Process.prototype.colorAtSprite = function (sprite) {
+    // private - helper function for aspect of location
+    // answer the color underneath the layer of the sprite's rotation center
+    var point = sprite instanceof SpriteMorph ? sprite.rotationCenter()
+            : sprite.center(),
+        stage = sprite.parentThatIsA(StageMorph),
+        below = stage,
+        found = false,
+        child,
+        i;
+
+    if (!stage) {return new Color(); }
+    for (i = 0; i < stage.children.length; i += 1) {
+        if (!found) {
+            child = stage.children[i];
+            if (child === sprite) {
+                found = true;
+            } else if (child.isVisible &&
+                child.bounds.containsPoint(point) &&
+                !child.isTransparentAt(point)
+            ) {
+                below = child;
+            }
+        }
+    }
+    if (below.bounds.containsPoint(point)) {
+        return below.getPixelColor(point);
+    }
+    return new Color();
+};
+
+Process.prototype.spritesAtPoint = function (point, stage) {
+    // private - helper function for aspect of location
+    // point argument is an absolute (Morphic) point
+    // answer a list of sprites, if any, at the given point
+    // ordered by their layer, i.e. top-layer is last in the list
+    return new List(
+        stage.children.filter(function (morph) {
+            return morph instanceof SpriteMorph &&
+                morph.isVisible &&
+                morph.bounds.containsPoint(point) &&
+                !morph.isTransparentAt(point);
+        })
+    );
 };
 
 Process.prototype.reportRelationTo = function (relation, name) {
