@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-01-02', // this, too, will appear in the Translators tab
+        '2019-01-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -556,6 +556,10 @@ SnapTranslator.dict.de = {
         '%rel zu %dst',
     'distance':
     	'Entfernung',
+    '%asp at %loc' :
+        '%asp bei %loc',
+    'sprites' :
+        'Objekte',
     'reset timer':
         'starte Stoppuhr neu',
     'timer':
