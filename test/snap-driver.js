@@ -125,6 +125,7 @@ SnapDriver.prototype.addBlock = function(spec, position) {
 
 // morphic interactions
 SnapDriver.prototype.click = function(morphOrPosition) {
+    if (!morphOrPosition) throw new Error('missing or invalid morph or position');
     const Point = this.globals().Point;
     let hand = this.world().hand;
     let position = morphOrPosition;
@@ -432,11 +433,11 @@ SnapDriver.prototype.waitUntilProjectsLoaded = function() {
             },
             'Did not see "update project list" message'
         )
-        .then(() => this.expect(
+            .then(() => this.expect(
                 () => this.dialogs().length === 1,
                 '"update project list" message did not disappear'
             )
-        );
+            );
     } else {
         return Promise.resolve();
     }
