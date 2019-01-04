@@ -5,6 +5,7 @@
 ### 2019-01-04
 * Objects, Blocks, Threads: new feature/block: sense colors and sprites anywhere
 * updated German translation 
+* Objects: fixed pixel color sensing for stage pen trails 
 
 ### 2019-01-02
 * Objects, Blocks, Threads, GUI, Store: added third color dimension and transparency to pen

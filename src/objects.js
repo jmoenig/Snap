@@ -6566,7 +6566,7 @@ StageMorph.prototype.getPixelColor = function (aPoint) {
     var point, context, data;
 	if (this.trailsCanvas) {
         point = aPoint.subtract(this.bounds.origin);
-        context = this.trailsCanvas.getContext('2d');
+        context = this.penTrailsMorph().image.getContext('2d');
         data = context.getImageData(point.x, point.y, 1, 1);
         if (data.data[3] === 0) {
         	return StageMorph.uber.getPixelColor.call(this, aPoint);
