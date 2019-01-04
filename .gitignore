@@ -2,3 +2,4 @@
 *.swp
 .tern-port
 dist/
+.server
