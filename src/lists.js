@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2018 by Jens Mönig and Brian Harvey
+    Copyright (C) 2019 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -58,11 +58,11 @@
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2018-March-08';
+modules.lists = '2019-January-07';
 
 var List;
 var ListWatcherMorph;
@@ -80,26 +80,28 @@ var ListWatcherMorph;
 
     setters (linked):
     -----------------
-    cons                - answer a new list with the given item in front
-    cdr                    - answer all but the first element
+    cons                    - answer a new list with the given item in front
+    cdr                     - answer all but the first element
 
     setters (arrayed):
     ------------------
-    add(element, index)    - insert the element before the given slot,
-    put(element, index)    - overwrite the element at the given slot
-    remove(index)        - remove the given slot, shortening the list
-    clear()                - remove all elements
+    add(element, index)     - insert the element before the given slot,
+    put(element, index)     - overwrite the element at the given slot
+    remove(index)           - remove the given slot, shortening the list
+    clear()                 - remove all elements
 
     getters (all hybrid):
     ---------------------
-    length()            - number of slots
-    at(index)            - element present in specified slot
-    contains(element)    - <bool>
+    length()                - number of slots
+    at(index)               - element present in specified slot
+    contains(element)       - <bool>
 
     conversion:
     -----------
-    asArray()            - answer me as JavaScript array
-    asText()            - answer my elements (recursively) concatenated
+    asArray()               - answer me as JavaScript array, convert to arrayed
+    itemsArray()            - answer a JavaScript array shallow copy of myself
+    asText()                - answer my elements (recursively) concatenated
+    asCSV()                 - answer a csv-formatted String of myself
 */
 
 // List instance creation:
@@ -399,6 +401,46 @@ List.prototype.becomeLinked = function () {
     }
 };
 
+List.prototype.asCSV = function () {
+    // RFC 4180
+    // Caution, no error catching!
+    // this method assumes that the list.canBeCSV()
+
+    var items = this.itemsArray(),
+        rows = [];
+    
+    function encodeCell(atomicValue) {
+        var string = atomicValue.toString(),
+            cell;
+        if (string.indexOf('\"') ===  -1 && (string.indexOf('\n') === -1)) {
+            return string;
+        }
+        cell = ['\"'];
+        string.split('').forEach(function (letter) {
+            cell.push(letter);
+            if (letter === '\"') {
+                cell.push(letter);
+            }
+        });
+        cell.push('\"');
+        return cell.join('');
+    }
+
+    if (items.some(function (any) {return any instanceof List; })) {
+        // 2-dimensional table
+        items.forEach(function (item) {
+            if (item instanceof List) {
+                rows.push(item.itemsArray().map(encodeCell).join(','));
+            } else {
+                rows.push(encodeCell(item));
+            }
+        });
+        return rows.join('\n');
+    }
+    // single row
+    return items.map(encodeCell).join(',');
+};
+
 // List testing
 
 List.prototype.equalTo = function (other) {
@@ -445,6 +487,25 @@ List.prototype.equalTo = function (other) {
         j += 1;
     }
     return true;
+};
+
+List.prototype.canBeCSV = function () {
+    return this.itemsArray().every(function (value) {
+        return !isNaN(+value) ||
+            isString(value) ||
+            value === true ||
+            value === false ||
+            (value instanceof List && value.hasOnlyAtomicData);
+    });
+};
+
+List.prototype.hasOnlyAtomicData = function () {
+    return this.itemsArray().every(function (value) {
+        return !isNaN(+value) ||
+            isString(value) ||
+            value === true ||
+            value === false;
+    });
 };
 
 // ListWatcherMorph ////////////////////////////////////////////////////

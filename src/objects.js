@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-04';
+modules.objects = '2019-January-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -9567,16 +9567,30 @@ WatcherMorph.prototype.userMenu = function () {
                         function readText(aFile) {
                             var frd = new FileReader();
                             frd.onloadend = function (e) {
-                                myself.target.setVar(
-                                    myself.getter,
-                                    e.target.result
-                                );
+                                // +++ needs to be refactored
+                                if (aFile.type.indexOf("csv") ||
+                                        aFile.name.split('.').pop()
+                                        .toLowerCase() === 'csv') {
+                                    // catch parsing errors
+                                    myself.target.setVar(
+                                        myself.getter,
+                                        Process.prototype.parseCSV(
+                                            e.target.result
+                                        )
+                                    );
+                                } else {
+                                    myself.target.setVar(
+                                        myself.getter,
+                                        e.target.result
+                                    );
+                                }
                             };
 
                             if (aFile.type.indexOf("text") === -1) {
                                 // special cases for Windows
                                 // check the file extension for text-like-ness
                                 if (contains(
+                                    // +++ avoid doubling
                                     ['txt', 'csv', 'xml', 'json', 'tsv'],
                                     aFile.name.split('.').pop().toLowerCase()
                                 )) {
@@ -9616,6 +9630,19 @@ WatcherMorph.prototype.userMenu = function () {
                     ide.saveFileAs(
                         myself.currentValue.toString(),
                         'text/plain;charset=utf-8',
+                        myself.getter // variable name
+                    );
+                }
+            );
+        } else if (this.currentValue instanceof List &&
+                this.currentValue.canBeCSV()) { // +++
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
                         myself.getter // variable name
                     );
                 }

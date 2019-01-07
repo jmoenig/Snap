@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-07
+* Lists, Objects: directly export and import lists as csv files, under construction
+
 ### 2019-01-04
 * Objects, Blocks, Threads: new feature/block: sense colors and sprites anywhere
 * updated German translation 
