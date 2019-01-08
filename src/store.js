@@ -2155,7 +2155,7 @@ List.prototype.toXML = function (serializer, mediaContext) {
         return serializer.format(
             '<list format="csv" ' +
                 (this.isLinked ? 'linked="linked" ' : '') +
-                '~>%</list>',
+                '~>@</list>',
             this.asCSV()
         );
     }
