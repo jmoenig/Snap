@@ -412,7 +412,9 @@ List.prototype.asCSV = function () {
     function encodeCell(atomicValue) {
         var string = atomicValue.toString(),
             cell;
-        if (string.indexOf('\"') ===  -1 && (string.indexOf('\n') === -1)) {
+        if (string.indexOf('\"') ===  -1 &&
+                (string.indexOf('\n') === -1) &&
+                (string.indexOf('\,') === -1)) {
             return string;
         }
         cell = ['\"'];
