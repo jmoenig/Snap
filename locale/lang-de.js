@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-01-04', // this, too, will appear in the Translators tab
+        '2019-01-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1486,6 +1486,8 @@ SnapTranslator.dict.de = {
     // graphical effects, pen color
     'color':
         'Farbe',
+    'hue':
+        'Farbton',
     'fisheye':
         'Fischauge',
     'whirl':

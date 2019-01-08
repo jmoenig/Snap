@@ -6,6 +6,7 @@
 * Lists: fixed an off-by-one error in becomeLinked()
 * Store: optimized serialization of lists with atomic data in project files
 * Blocks, Objects, Threads: renamed "color" to "hue" in pen-blocks and in location sensor
+* updated German translation
 
 ### 2019-01-07
 * Lists, Objects: directly export and import lists as csv files, under construction
