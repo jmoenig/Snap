@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-07';
+modules.objects = '2019-January-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -9457,6 +9457,7 @@ WatcherMorph.prototype.mouseClickLeft = function () {
 WatcherMorph.prototype.userMenu = function () {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
+        shiftClicked = (this.world().currentKey === 16),
         menu = new MenuMorph(this),
         on = '\u25CF',
         off = '\u25CB',
@@ -9528,101 +9529,25 @@ WatcherMorph.prototype.userMenu = function () {
         menu.addLine();
         menu.addItem(
             'import...',
-            function () {
-                var inp = document.createElement('input'),
-                    ide = myself.parentThatIsA(IDE_Morph);
-                if (ide.filePicker) {
-                    document.body.removeChild(ide.filePicker);
-                    ide.filePicker = null;
-                }
-                inp.type = 'file';
-                inp.style.color = "transparent";
-                inp.style.backgroundColor = "transparent";
-                inp.style.border = "none";
-                inp.style.outline = "none";
-                inp.style.position = "absolute";
-                inp.style.top = "0px";
-                inp.style.left = "0px";
-                inp.style.width = "0px";
-                inp.style.height = "0px";
-                inp.style.display = "none";
-                inp.addEventListener(
-                    "change",
-                    function () {
-                        var file;
-
-                        function txtOnlyMsg(ftype, anyway) {
-                            ide.confirm(
-                                localize(
-                                    'Snap! can only import "text" files.\n' +
-                                        'You selected a file of type "' +
-                                        ftype +
-                                        '".'
-                                ) + '\n\n' + localize('Open anyway?'),
-                                'Unable to import',
-                                anyway // callback
-                            );
-                        }
-
-                        function readText(aFile) {
-                            var frd = new FileReader();
-                            frd.onloadend = function (e) {
-                                // +++ needs to be refactored
-                                if (aFile.type.indexOf("csv") ||
-                                        aFile.name.split('.').pop()
-                                        .toLowerCase() === 'csv') {
-                                    // catch parsing errors
-                                    myself.target.setVar(
-                                        myself.getter,
-                                        Process.prototype.parseCSV(
-                                            e.target.result
-                                        )
-                                    );
-                                } else {
-                                    myself.target.setVar(
-                                        myself.getter,
-                                        e.target.result
-                                    );
-                                }
-                            };
-
-                            if (aFile.type.indexOf("text") === -1) {
-                                // special cases for Windows
-                                // check the file extension for text-like-ness
-                                if (contains(
-                                    // +++ avoid doubling
-                                    ['txt', 'csv', 'xml', 'json', 'tsv'],
-                                    aFile.name.split('.').pop().toLowerCase()
-                                )) {
-                                    frd.readAsText(aFile);
-                                } else {
-                                    // show a warning and an option
-                                    // letting the user load the file anyway
-                                    txtOnlyMsg(
-                                        aFile.type,
-                                        function () {frd.readAsText(aFile); }
-                                    );
-                                }
-                            } else {
-                                frd.readAsText(aFile);
-                            }
-                        }
-
-                        document.body.removeChild(inp);
-                        ide.filePicker = null;
-                        if (inp.files.length > 0) {
-                            file = inp.files[inp.files.length - 1];
-                            readText(file);
-                        }
-                    },
-                    false
-                );
-                document.body.appendChild(inp);
-                ide.filePicker = inp;
-                inp.click();
-            }
+            'importData'
         );
+        if (shiftClicked) {
+            menu.addItem(
+                'import raw data...',
+                function () {myself.importData(true); },
+                'do not attempt to\nparse or format data',
+                new Color(100, 0, 0)
+            );
+        }
         if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
+            if (shiftClicked) {
+                menu.addItem(
+                    'parse',
+                    'parseTxt',
+                    'try to convert\nraw data into a list',
+                    new Color(100, 0, 0)
+                );
+            }
             menu.addItem(
                 'export...',
                 function () {
@@ -9635,7 +9560,7 @@ WatcherMorph.prototype.userMenu = function () {
                 }
             );
         } else if (this.currentValue instanceof List &&
-                this.currentValue.canBeCSV()) { // +++
+                this.currentValue.canBeCSV()) {
             menu.addItem(
                 'export...',
                 function () {
@@ -9658,6 +9583,108 @@ WatcherMorph.prototype.userMenu = function () {
         }
     }
     return menu;
+};
+
+WatcherMorph.prototype.importData = function (raw) {
+    // raw is a Boolean flag selecting to keep the data unparsed
+    var inp = document.createElement('input'),
+        ide = this.parentThatIsA(IDE_Morph),
+        myself = this;
+
+    function userImport() {
+
+        function txtOnlyMsg(ftype, anyway) {
+            ide.confirm(
+                localize(
+                    'Snap! can only import "text" files.\n' +
+                        'You selected a file of type "' +
+                        ftype +
+                        '".'
+                ) + '\n\n' + localize('Open anyway?'),
+                'Unable to import',
+                anyway // callback
+            );
+        }
+
+        function readText(aFile) {
+            var frd = new FileReader(),
+                ext = aFile.name.split('.').pop().toLowerCase();
+
+            function isTextFile(aFile) {
+                // special cases for Windows
+                // check the file extension for text-like-ness
+                return aFile.type.indexOf("text") !== -1 ||
+                    contains(['txt', 'csv', 'xml', 'json', 'tsv'], ext);
+            }
+
+            function isCSVFile(aFile) {
+                return aFile.type.indexOf("csv") !== -1 || (ext === 'csv');
+            }
+
+            frd.onloadend = function (e) {
+                if (!raw && isCSVFile(aFile)) {
+                    myself.target.setVar(
+                        myself.getter,
+                        Process.prototype.parseCSV(e.target.result)
+                    );
+                } else {
+                    myself.target.setVar(
+                        myself.getter,
+                        e.target.result
+                    );
+                }
+            };
+
+            if (raw || isTextFile(aFile)) {
+                frd.readAsText(aFile);
+            } else {
+                // show a warning and an option
+                // letting the user load the file anyway
+                txtOnlyMsg(
+                    aFile.type,
+                    function () {frd.readAsText(aFile); }
+                );
+            }
+        }
+
+        document.body.removeChild(inp);
+        ide.filePicker = null;
+        if (inp.files.length > 0) {
+            readText(inp.files[inp.files.length - 1]);
+        }
+    }
+
+    if (ide.filePicker) {
+        document.body.removeChild(ide.filePicker);
+        ide.filePicker = null;
+    }
+    inp.type = 'file';
+    inp.style.color = "transparent";
+    inp.style.backgroundColor = "transparent";
+    inp.style.border = "none";
+    inp.style.outline = "none";
+    inp.style.position = "absolute";
+    inp.style.top = "0px";
+    inp.style.left = "0px";
+    inp.style.width = "0px";
+    inp.style.height = "0px";
+    inp.style.display = "none";
+    inp.addEventListener(
+        "change",
+        userImport,
+        false
+    );
+    document.body.appendChild(inp);
+    ide.filePicker = inp;
+    inp.click();
+};
+
+WatcherMorph.prototype.parseTxt = function () {
+    // experimental!
+    this.target.setVar(
+        this.getter,
+        Process.prototype.parseCSV(this.target.vars[this.getter].value)
+    );
 };
 
 WatcherMorph.prototype.setStyle = function (style) {

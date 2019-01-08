@@ -1,6 +1,8 @@
 # Snap<em>!</em> (BYOB) History
 
 ## in development
+### 2019-01-08
+* Objects: automatically parse csv files on import, experimental "raw data" and "parse" ops
 
 ### 2019-01-07
 * Lists, Objects: directly export and import lists as csv files, under construction
