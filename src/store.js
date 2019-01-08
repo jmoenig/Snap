@@ -55,13 +55,13 @@ CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
 Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
-localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
+localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences, Process,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
 normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-02';
+modules.store = '2019-January-08';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -852,7 +852,7 @@ SnapSerializer.prototype.loadSounds = function (object, model) {
     // private
     var sounds = model.childNamed('sounds');
     if (sounds) {
-        // object.sounds = this.loadValue(sounds.require('list')); +++
+        // object.sounds = this.loadValue(sounds.require('list'));
         object.sounds = this.loadValue(sounds.require(
             'list',
             function () {
@@ -1315,6 +1315,12 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         return model.contents === 'true';
     case 'list':
         if (model.attributes.hasOwnProperty('linked')) {
+            if (model.attributes.format === 'csv') {
+                v = Process.prototype.parseCSV(model.contents);
+                v.becomeLinked();
+                record();
+                return v;
+            }
             v = new List();
             v.isLinked = true;
             record();
@@ -1340,6 +1346,11 @@ SnapSerializer.prototype.loadValue = function (model, object) {
                 }
             });
             return lst;
+        }
+        if (model.attributes.format === 'csv') {
+            v = Process.prototype.parseCSV(model.contents);
+            record();
+            return v;
         }
         v = new List();
         record();
@@ -2137,6 +2148,18 @@ List.prototype.toXML = function (serializer, mediaContext) {
     // mediaContext is an optional name-stub
     // when collecting media into a separate module
     var xml, value, item;
+
+    if (this.hasOnlyAtomicData() &&
+            (!this.isLinked || !StageMorph.prototype.enableSublistIDs)) {
+        // special case for a less cluttered format
+        return serializer.format(
+            '<list format="csv" ' +
+                (this.isLinked ? 'linked="linked" ' : '') +
+                '~>%</list>',
+            this.asCSV()
+        );
+    }
+
     if (this.isLinked) {
         xml = '<list linked="linked" ~>';
         if (StageMorph.prototype.enableSublistIDs) {
