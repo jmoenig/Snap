@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-04';
+modules.threads = '2019-January-08';
 
 var ThreadManager;
 var Process;
@@ -3091,7 +3091,7 @@ Process.prototype.goToLayer = function (name) {
 
 Process.prototype.setPenHSVA = function (name, num) {
     var choice = this.inputOption(name),
-        options = ['color', 'saturation', 'brightness', 'transparency'],
+        options = ['hue', 'saturation', 'brightness', 'transparency'],
         thisObj = this.blockReceiver();
     if (thisObj instanceof SpriteMorph) {
         thisObj.setColorComponentHSVA(options.indexOf(choice), +num);
@@ -3100,7 +3100,7 @@ Process.prototype.setPenHSVA = function (name, num) {
 
 Process.prototype.changePenHSVA = function (name, num) {
     var choice = this.inputOption(name),
-        options = ['color', 'saturation', 'brightness', 'transparency'],
+        options = ['hue', 'saturation', 'brightness', 'transparency'],
         thisObj = this.blockReceiver();
     if (thisObj instanceof SpriteMorph) {
         thisObj.changeColorComponentHSVA(options.indexOf(choice), +num);
@@ -3275,7 +3275,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     // ----------------
     // left input (aspect):
     //
-    //      'color'         - hsv HUE on a scale of 0 - 100
+    //      'hue'           - hsv HUE on a scale of 0 - 100
     //      'saturation'    - hsv SATURATION on a scale of 0 - 100
     //      'brightness'    - hsv VALUE on a scale of 0 - 100
     //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
@@ -3301,7 +3301,7 @@ Process.prototype.reportAspect = function (aspect, location) {
 
     var choice = this.inputOption(aspect),
         target = this.inputOption(location),
-        options = ['color', 'saturation', 'brightness', 'transparency'],
+        options = ['hue', 'saturation', 'brightness', 'transparency'],
         idx = options.indexOf(choice),
         thisObj = this.blockReceiver(),
         thatObj,

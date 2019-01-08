@@ -508,14 +508,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set pen %hsva to %n',
-            defaults: [['color'], 50]
+            defaults: [['hue'], 50]
         },
         changePenHSVA: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'change pen %hsva by %n',
-            defaults: [['color'], 10]
+            defaults: [['hue'], 10]
         },
         changeSize: {
             only: SpriteMorph,
@@ -741,7 +741,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: '%asp at %loc',
-            defaults: [['color']]
+            defaults: [['hue']]
         },
         reportStackSize: {
             dev: true,
@@ -1234,7 +1234,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         setHue: {
             selector: 'setPenHSVA',
-            inputs: [['color']],
+            inputs: [['hue']],
             offset: 1
         },
         setBrightness: {
@@ -1244,7 +1244,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         changeHue: {
             selector: 'changePenHSVA',
-            inputs: [['color']],
+            inputs: [['hue']],
             offset: 1
         },
         changeBrightness: {

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-04';
+modules.blocks = '2019-January-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1301,21 +1301,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 {
-                    color : ['color'],
+                    hue : ['hue'],
                     saturation : ['saturation'],
                     brightness : ['brightness'],
                     transparency : ['transparency']
                 },
                 true
             );
-            part.setContents(['front']);
+            part.setContents(['hue']);
             break;
         case '%asp': // aspect
             part = new InputSlotMorph(
                 null,
                 false,
                 {
-                    color : ['color'],
+                    hue : ['hue'],
                     saturation : ['saturation'],
                     brightness : ['brightness'],
                     transparency : ['transparency'],
@@ -1324,7 +1324,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['color']);
+            part.setContents(['hue']);
             break;
         case '%txtfun':
             part = new InputSlotMorph(
