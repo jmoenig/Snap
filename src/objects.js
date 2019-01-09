@@ -9538,6 +9538,36 @@ WatcherMorph.prototype.userMenu = function () {
                 'do not attempt to\nparse or format data',
                 new Color(100, 0, 0)
             );
+            if (this.currentValue instanceof List &&
+                    this.currentValue.canBeCSV()) {
+                menu.addItem(
+                    'export as CSV...',
+                    function () {
+                        var ide = myself.parentThatIsA(IDE_Morph);
+                        ide.saveFileAs(
+                            myself.currentValue.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            myself.getter // variable name
+                        );
+                    }
+                );
+            }
+            if (this.currentValue instanceof List &&
+                    this.currentValue.canBeJSON()) {
+                menu.addItem(
+                    'export as JSON...',
+                    function () {
+                        var ide = myself.parentThatIsA(IDE_Morph);
+                        ide.saveFileAs(
+                            myself.currentValue.asJSON(true), // guess objects
+                            'text/json;charset=utf-8',
+                            myself.getter // variable name
+                        );
+                    },
+                    null,
+                    new Color(100, 0, 0)
+                );
+            }
         }
         if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
             if (shiftClicked) {

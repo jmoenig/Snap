@@ -443,6 +443,50 @@ List.prototype.asCSV = function () {
     return items.map(encodeCell).join(',');
 };
 
+List.prototype.asJSON = function (guessObjects) {
+    // Caution, no error catching!
+    // this method assumes that the list.canBeJSON()
+
+    function objectify(list, guessObjects) {
+        var items = list.itemsArray(),
+            obj = {};
+        if (canBeObject(items)) {
+            items.forEach(function (pair) {
+                var value = pair.length() === 2 ? pair.at(2) : undefined;
+                obj[pair.at(1)] = (value instanceof List ?
+                    objectify(value, guessObjects) : value);
+            });
+            return obj;
+        }
+        return items.map(function (element) {
+            return element instanceof List ?
+                objectify(element, guessObjects) : element;
+        });
+    }
+
+    function canBeObject(array) {
+        // try to determine whether the contents of a list
+        // might be better represented as dictionary/object
+        // than as array
+        var keys;
+        if (array.every(function (element) {
+            return element instanceof List && (element.length() < 3);
+        })) {
+            keys = array.map(function (each) {return each.at(1); });
+            return keys.every(function (each) {
+                return isString(each) &&
+                    isUniqueIn(each, keys);
+            });
+        }
+    }
+
+    function isUniqueIn(element, array) {
+        return array.indexOf(element) === array.lastIndexOf(element);
+    }
+
+    return JSON.stringify(objectify(this, guessObjects));
+};
+
 // List testing
 
 List.prototype.equalTo = function (other) {
@@ -498,6 +542,16 @@ List.prototype.canBeCSV = function () {
             value === true ||
             value === false ||
             (value instanceof List && value.hasOnlyAtomicData);
+    });
+};
+
+List.prototype.canBeJSON = function () {
+    return this.itemsArray().every(function (value) {
+        return !isNaN(+value) ||
+            isString(value) ||
+            value === true ||
+            value === false ||
+            (value instanceof List && value.canBeJSON);
     });
 };
 
