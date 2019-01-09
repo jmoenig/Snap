@@ -537,7 +537,7 @@ List.prototype.equalTo = function (other) {
 
 List.prototype.canBeCSV = function () {
     return this.itemsArray().every(function (value) {
-        return !isNaN(+value) ||
+        return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
             (value instanceof List && value.hasOnlyAtomicData());
     });
@@ -555,7 +555,7 @@ List.prototype.canBeJSON = function () {
 
 List.prototype.hasOnlyAtomicData = function () {
     return this.itemsArray().every(function (value) {
-        return !isNaN(+value) ||
+        return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value);
     });
 };
