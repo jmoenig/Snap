@@ -6,6 +6,7 @@
 * Store: tweaked format for serializing atomic data lists
 * Morphic: added option to include alpha in color comparison
 * Objects: fixed "set pen color (color picker)" to observe, i.e. overwrite transparency
+* Lists, Threads, Objects: added (Bernat's) JSON parser to SPLIT block 
 
 ### 2019-01-08
 * Objects: automatically parse csv files on import, experimental "raw data" and "parse" ops

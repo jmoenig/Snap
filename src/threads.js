@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-08';
+modules.threads = '2019-January-09';
 
 var ThreadManager;
 var Process;
@@ -2780,6 +2780,8 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         break;
     case 'csv':
         return this.parseCSV(string);
+    case 'json':
+        return this.parseJSON(string);
     /*
     case 'csv records':
         return this.parseCSVrecords(string);
@@ -2909,6 +2911,32 @@ Process.prototype.parseCSVfields = function (text) {
     return new List(fields);
 };
 */
+
+Process.prototype.parseJSON = function (string) {
+    // Bernat's original Snapi contribution
+    function listify(jsonObject) {
+        if (jsonObject instanceof Array) {
+            return new List(
+                jsonObject.map(function(eachElement) {
+                    return listify(eachElement);
+                })
+            );
+        } else if (jsonObject instanceof Object) {
+            return new List(
+                Object.keys(jsonObject).map(function(eachKey) {
+                    return new List([
+                        eachKey,
+                        listify(jsonObject[eachKey])
+                    ]);
+                })
+            );
+        } else {
+            return jsonObject;
+        }
+    }
+
+    return listify(JSON.parse(string));
+};
 
 // Process debugging
 
