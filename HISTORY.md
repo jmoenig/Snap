@@ -1,6 +1,10 @@
 # Snap<em>!</em> (BYOB) History
 
 ## in development
+
+### 2019-01-09
+* Store: tweaked format for serializing atomic data lists
+
 ### 2019-01-08
 * Objects: automatically parse csv files on import, experimental "raw data" and "parse" ops
 * Lists: fixed an off-by-one error in becomeLinked()

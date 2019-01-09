@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-08';
+modules.store = '2019-January-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1315,7 +1315,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         return model.contents === 'true';
     case 'list':
         if (model.attributes.hasOwnProperty('linked')) {
-            if (model.attributes.format === 'csv') {
+            if (model.attributes.struct === 'atomic') {
                 v = Process.prototype.parseCSV(model.contents);
                 v.becomeLinked();
                 record();
@@ -1347,7 +1347,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             });
             return lst;
         }
-        if (model.attributes.format === 'csv') {
+        if (model.attributes.struct === 'atomic') {
             v = Process.prototype.parseCSV(model.contents);
             record();
             return v;
@@ -2153,7 +2153,7 @@ List.prototype.toXML = function (serializer, mediaContext) {
             (!this.isLinked || !StageMorph.prototype.enableSublistIDs)) {
         // special case for a less cluttered format
         return serializer.format(
-            '<list format="csv" ' +
+            '<list struct="atomic" ' +
                 (this.isLinked ? 'linked="linked" ' : '') +
                 '~>@</list>',
             this.asCSV()
