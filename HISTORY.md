@@ -9,6 +9,7 @@
 * Lists, Threads, Objects: added (Bernat's) JSON parser to SPLIT block
 * Lists, Objects: added "export as JSON" capability
 * Lists, Objects: automatically parse json files on import 
+* Lists: prevent Booleans in CSVs
 
 ### 2019-01-08
 * Objects: automatically parse csv files on import, experimental "raw data" and "parse" ops

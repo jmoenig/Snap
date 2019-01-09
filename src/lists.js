@@ -539,8 +539,6 @@ List.prototype.canBeCSV = function () {
     return this.itemsArray().every(function (value) {
         return !isNaN(+value) ||
             isString(value) ||
-            value === true ||
-            value === false ||
             (value instanceof List && value.hasOnlyAtomicData());
     });
 };
@@ -558,9 +556,7 @@ List.prototype.canBeJSON = function () {
 List.prototype.hasOnlyAtomicData = function () {
     return this.itemsArray().every(function (value) {
         return !isNaN(+value) ||
-            isString(value) ||
-            value === true ||
-            value === false;
+            isString(value);
     });
 };
 
