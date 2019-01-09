@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-January-01';
+var morphicVersion = '2019-January-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1946,12 +1946,13 @@ Color.prototype.copy = function () {
 
 // Color comparison:
 
-Color.prototype.eq = function (aColor) {
+Color.prototype.eq = function (aColor, observeAlpha) {
     // ==
     return aColor &&
         this.r === aColor.r &&
         this.g === aColor.g &&
-        this.b === aColor.b;
+        this.b === aColor.b &&
+        (observeAlpha ? this.a === aColor.a : true);
 };
 
 // Color conversion (hsv):
