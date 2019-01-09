@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-08';
+modules.objects = '2019-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -3504,7 +3504,7 @@ SpriteMorph.prototype.changeColorComponentHSVA = function (idx, delta) {
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
-    if (!this.color.eq(aColor)) {
+    if (!this.color.eq(aColor, true)) { // observeAlpha
         this.color = aColor.copy();
         if (!this.costume) {
             this.drawNew();

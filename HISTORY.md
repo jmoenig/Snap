@@ -4,6 +4,8 @@
 
 ### 2019-01-09
 * Store: tweaked format for serializing atomic data lists
+* Morphic: added option to include alpha in color comparison
+* Objects: fixed "set pen color (color picker)" to observe, i.e. overwrite transparency
 
 ### 2019-01-08
 * Objects: automatically parse csv files on import, experimental "raw data" and "parse" ops
