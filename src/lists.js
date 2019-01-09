@@ -541,7 +541,7 @@ List.prototype.canBeCSV = function () {
             isString(value) ||
             value === true ||
             value === false ||
-            (value instanceof List && value.hasOnlyAtomicData);
+            (value instanceof List && value.hasOnlyAtomicData());
     });
 };
 
@@ -551,7 +551,7 @@ List.prototype.canBeJSON = function () {
             isString(value) ||
             value === true ||
             value === false ||
-            (value instanceof List && value.canBeJSON);
+            (value instanceof List && value.canBeJSON());
     });
 };
 

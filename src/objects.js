@@ -9549,7 +9549,9 @@ WatcherMorph.prototype.userMenu = function () {
                             'text/csv;charset=utf-8', // RFC 4180
                             myself.getter // variable name
                         );
-                    }
+                    },
+                    null,
+                    new Color(100, 0, 0)
                 );
             }
             if (this.currentValue instanceof List &&
@@ -9602,6 +9604,19 @@ WatcherMorph.prototype.userMenu = function () {
                     );
                 }
             );
+        } else if (this.currentValue instanceof List &&
+                this.currentValue.canBeJSON()) {
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.asJSON(true), // guessObjects
+                        'text/json;charset=utf-8',
+                        myself.getter // variable name
+                    );
+                }
+            );
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();
             if (vNames.length) {
@@ -9643,19 +9658,24 @@ WatcherMorph.prototype.importData = function (raw) {
             function isTextFile(aFile) {
                 // special cases for Windows
                 // check the file extension for text-like-ness
-                return aFile.type.indexOf("text") !== -1 ||
+                return aFile.type.indexOf('text') !== -1 ||
                     contains(['txt', 'csv', 'xml', 'json', 'tsv'], ext);
             }
 
-            function isCSVFile(aFile) {
-                return aFile.type.indexOf("csv") !== -1 || (ext === 'csv');
+            function isType(aFile, string) {
+                return aFile.type.indexOf(string) !== -1 || (ext === string);
             }
 
             frd.onloadend = function (e) {
-                if (!raw && isCSVFile(aFile)) {
+                if (!raw && isType(aFile, 'csv')) {
                     myself.target.setVar(
                         myself.getter,
                         Process.prototype.parseCSV(e.target.result)
+                    );
+                } else if (!raw && isType(aFile, 'json')) {
+                    myself.target.setVar(
+                        myself.getter,
+                        Process.prototype.parseJSON(e.target.result)
                     );
                 } else {
                     myself.target.setVar(
@@ -9711,9 +9731,12 @@ WatcherMorph.prototype.importData = function (raw) {
 
 WatcherMorph.prototype.parseTxt = function () {
     // experimental!
+    var src = this.target.vars[this.getter].value;
     this.target.setVar(
         this.getter,
-        Process.prototype.parseCSV(this.target.vars[this.getter].value)
+        src.indexOf('\[') === 0 ?
+            Process.prototype.parseJSON(src)
+                : Process.prototype.parseCSV(src)
     );
 };
 
