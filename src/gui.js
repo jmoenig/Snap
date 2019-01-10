@@ -66,7 +66,7 @@ InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume,
+List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph,
 fontHeight, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-January-02';
+modules.gui = '2019-January-10';
 
 // Declarations
 
@@ -1969,8 +1969,11 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     }
 };
 
-IDE_Morph.prototype.droppedText = function (aString, name) {
-    var lbl = name ? name.split('.')[0] : '';
+IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
+    var lbl = name ? name.split('.')[0] : '',
+        ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '';
+
+    // check for Snap specific files, projects, libraries, sprites, scripts
     if (aString.indexOf('<project') === 0) {
         location.hash = '';
         return this.openProjectString(aString);
@@ -1991,6 +1994,17 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
     if (aString.indexOf('<script') === 0) {
         return this.openScriptString(aString);
     }
+
+    // check for encoded data-sets, CSV, JSON
+    if (fileType.indexOf('csv') !== -1 || ext === 'csv') {
+        return this.openDataString(aString, lbl, 'csv');
+    }
+    if (fileType.indexOf('json') !== -1 || ext === 'json') {
+        return this.openDataString(aString, lbl, 'json');
+    }
+
+    // import as plain text data
+    this.openDataString(aString, lbl, 'text');
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
@@ -4520,6 +4534,68 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         'Imported Script.',
         2
     );
+};
+
+IDE_Morph.prototype.openDataString = function (str, name, type) {
+    var msg,
+        myself = this;
+    this.nextSteps([
+        function () {
+            msg = myself.showMessage('Opening data...');
+        },
+        function () {nop(); }, // yield (bug in Chrome)
+        function () {
+            myself.rawOpenDataString(str, name, type);
+        },
+        function () {
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
+    var data, vName, dlg,
+        globals = this.currentSprite.globalVariables();
+
+    function newVarName(name) {
+        var existing = globals.names(),
+            ix = name.indexOf('\('),
+            stem = (ix < 0) ? name : name.substring(0, ix),
+            count = 1,
+            newName = stem;
+        while (contains(existing, newName)) {
+            count += 1;
+            newName = stem + '(' + count + ')';
+        }
+        return newName;
+    }
+
+    switch (type) {
+        case 'csv':
+            data = Process.prototype.parseCSV(str);
+            break;
+        case 'json':
+            data = Process.prototype.parseJSON(str);
+            break;
+        default: // assume plain text
+            data = str;
+    }
+    vName = newVarName(name || 'data');
+    globals.addVar(vName);
+    globals.setVar(vName, data);
+    this.currentSprite.toggleVariableWatcher(vName, true); // global
+    this.flushBlocksCache('variables');
+    this.currentCategory = 'variables';
+    this.categories.children.forEach(function (each) {
+        each.refresh();
+    });
+    this.refreshPalette(true);
+    if (data instanceof List) {
+        dlg = new TableDialogMorph(data);
+        dlg.labelString = localize(dlg.labelString) + ': ' + vName;
+        dlg.createLabel();
+        dlg.popUp(this.world());
+    }
 };
 
 IDE_Morph.prototype.openProject = function (name) {

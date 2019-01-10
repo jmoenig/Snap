@@ -5,6 +5,7 @@
 ### 2019-01-09
 * Morphic: recognize data sets in dropped text files (csv, json)
 * Lists: updated list documentation, enabled table support by default
+* GUI: import & examine data sets and text files via drag'n'drop or "import" menu
 
 ### 2019-01-09
 * Store: tweaked format for serializing atomic data lists
