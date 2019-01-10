@@ -3,6 +3,9 @@
 ## in development
 
 ### 2019-01-09
+* Morphic: recognize data sets in dropped text files (csv, json)
+
+### 2019-01-09
 * Store: tweaked format for serializing atomic data lists
 * Morphic: added option to include alpha in color comparison
 * Objects: fixed "set pen color (color picker)" to observe, i.e. overwrite transparency

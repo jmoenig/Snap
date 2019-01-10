@@ -654,7 +654,7 @@
     Those are dispatched as
 
         droppedAudio(anAudio, name)
-        droppedText(aString, name)
+        droppedText(aString, name, type)
 
     events to interested Morphs at the mouse pointer.
 
@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-January-09';
+var morphicVersion = '2019-January-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -11496,6 +11496,7 @@ HandMorph.prototype.processDrop = function (event) {
         droppedImage(canvas, name)
         droppedSVG(image, name)
         droppedAudio(audio, name)
+        droppedText(text, name, type)
 
     events to interested Morphs at the mouse pointer
 */
@@ -11566,7 +11567,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         frd.onloadend = function (e) {
-            target.droppedText(e.target.result, aFile.name);
+            target.droppedText(e.target.result, aFile.name, aFile.type);
         };
         frd.readAsText(aFile);
     }
@@ -11617,6 +11618,9 @@ HandMorph.prototype.processDrop = function (event) {
     if (files.length > 0) {
         for (i = 0; i < files.length; i += 1) {
             file = files[i];
+            suffix = file.name.slice(
+                file.name.lastIndexOf('.') + 1
+            ).toLowerCase();
             if (file.type.indexOf("svg") !== -1
                     && !MorphicPreferences.rasterizeSVGs) {
                 readSVG(file);
@@ -11624,7 +11628,10 @@ HandMorph.prototype.processDrop = function (event) {
                 readImage(file);
             } else if (file.type.indexOf("audio") === 0) {
                 readAudio(file);
-            } else if (file.type.indexOf("text") === 0) {
+            } else if ((file.type.indexOf("text") === 0) ||
+                    contains(['txt', 'csv', 'json'], suffix)) {
+                    // check the file-extension because Windows
+                    // doesn't specify CSVs to be text/csv, sigh
                 readText(file);
             } else { // assume it's meant to be binary
                 readBinary(file);
