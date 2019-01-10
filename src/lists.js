@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2019-January-09';
+modules.lists = '2019-January-10';
 
 var List;
 var ListWatcherMorph;
@@ -102,6 +102,7 @@ var ListWatcherMorph;
     itemsArray()            - answer a JavaScript array shallow copy of myself
     asText()                - answer my elements (recursively) concatenated
     asCSV()                 - answer a csv-formatted String of myself
+    asJSON()                - answer a json-formatted String of myself
 */
 
 // List instance creation:
@@ -117,7 +118,7 @@ function List(array) {
 
 // List global preferences
 
-List.prototype.enableTables = false; // default, to not confuse NYC teachers
+List.prototype.enableTables = true;
 
 // List printing
 
