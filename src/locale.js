@@ -475,11 +475,11 @@ SnapTranslator.dict.tr = {
     'language_name':
         'Türkçe',
     'language_translator':
-        'Hakan Atas',
+        'Hakan Atas, www.3drobolab.com',
     'translator_e-mail':
-        'hakanatas@gmail.com',
+        'hakanatas@gmail.com, mustafaipekbayrak@gmail.com',
     'last_changed':
-        '2018-01-22'
+        '2019-01-11'
 };
 
 SnapTranslator.dict.hu = {

@@ -4,6 +4,7 @@
 
 ### 2019-01-11
 * Chinese translation update, thanks, Simon!
+* Turkish translation update, thanks, Turgut Guneysu!
 * new string library, thanks, Brian!
 * project renaming and remixing support, thanks, Bernat!
 * pushed dev version to 4.3
