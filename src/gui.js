@@ -1738,6 +1738,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = this.padding,
+        flag,
         maxPaletteWidth;
 
     Morph.prototype.trackChanges = false;
@@ -1766,19 +1767,22 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stage.setScale(Math.floor(Math.min(
                 this.width() / this.stage.dimensions.x,
                 this.height() / this.stage.dimensions.y
-                ) * 10) / 10);
-
-            this.embedPlayButton.size = Math.floor(Math.min(
-                        this.width(), this.height())) / 3;
+                ) * 100) / 100);
+            flag = this.embedPlayButton.flag;
+            flag.size = Math.floor(Math.min(
+                        this.width(), this.height())) / 5;
+            flag.setWidth(flag.size);
+            flag.setHeight(flag.size);
+            this.embedPlayButton.size = flag.size * 1.6;
             this.embedPlayButton.setWidth(this.embedPlayButton.size);
             this.embedPlayButton.setHeight(this.embedPlayButton.size);
-
             if (this.embedOverlay) {
                 this.embedOverlay.setExtent(this.extent());
             }
-
             this.stage.setCenter(this.center());
-            this.embedPlayButton.setCenter(this.center());
+            this.embedPlayButton.setCenter(this.stage.center());
+            flag.setCenter(this.embedPlayButton.center());
+            flag.setLeft(flag.left() + flag.size * 0.1); // account for slight asymmetry
         } else if (this.isAppMode) {
             this.stage.setScale(Math.floor(Math.min(
                 (this.width() - padding * 2) / this.stage.dimensions.x,
@@ -4891,23 +4895,31 @@ IDE_Morph.prototype.toggleSliderExecute = function () {
 
 IDE_Morph.prototype.setEmbedMode = function () {
     var myself = this;
+
+    this.isEmbedMode = true;
+    this.appModeColor = new Color(243,238,235);
     this.embedOverlay = new Morph();
     this.embedOverlay.color = new Color(128, 128, 128);
     this.embedOverlay.alpha = 0.5;
 
-    this.embedPlayButton = new SymbolMorph('pointRight');
-    this.embedPlayButton.color = new Color(128, 255, 128);
-
+    this.embedPlayButton = new SymbolMorph('circleSolid');
+    this.embedPlayButton.color = new Color(64, 128, 64);
+    this.embedPlayButton.alpha = 0.75;
+    this.embedPlayButton.flag = new SymbolMorph('flag');
+    this.embedPlayButton.flag.color = new Color(128, 255, 128);
+    this.embedPlayButton.flag.alpha = 0.75;
+    this.embedPlayButton.add(this.embedPlayButton.flag);
     this.embedPlayButton.mouseClickLeft = function () {
         myself.runScripts();
         myself.embedOverlay.destroy();
         this.destroy();
     };
 
-    this.isEmbedMode = true;
     this.controlBar.hide();
+
     this.add(this.embedOverlay);
     this.add(this.embedPlayButton);
+
     this.fixLayout();
 };
 
