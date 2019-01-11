@@ -749,3 +749,22 @@ Cloud.prototype.updateNotes = function (
     );
 };
 
+Cloud.prototype.updateProjectName = function (
+	projectName,
+    newName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' +
+            encodeURIComponent(projectName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not update project name',
+        false, // wants raw response
+        JSON.stringify({ projectname: newName })
+    );
+};
+
