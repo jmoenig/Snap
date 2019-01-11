@@ -509,7 +509,7 @@ ActionManager.prototype.addActionToQueue = function(msg) {
 };
 
 ActionManager.prototype._applyEvent = function(msg) {
-    logger.debug(`received "${msg.type}" event #${msg.id}:`, msg);
+    logger.debug('received "' + msg.type + '" event ' + msg.id + ':', msg);
     this.currentEvent = msg;
     this.isApplyingAction = true;
     this.lastSeen = this.currentEvent.id;

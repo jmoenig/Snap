@@ -26,9 +26,10 @@ NetsBloxMorph.prototype.init = function (isAutoFill) {
     NetsBloxMorph.uber.init.call(this, isAutoFill);
     this.serializer = new NetsBloxSerializer();
 
+    var myself = this;
     // attach the event listeners
-    window.addEventListener('ideLoaded', () => {
-        if (!(this.isSupportedBrowser())) this.showBrowserNotification();
+    window.addEventListener('ideLoaded', function() {
+        if (!(myself.isSupportedBrowser())) myself.showBrowserNotification();
     });
 };
 
@@ -401,8 +402,8 @@ NetsBloxMorph.prototype.projectMenu = function () {
                     myself.inform(
                         'Multiple Roles Detected',
                         'As a Snap! project is equivalent to a role in NetsBlox,\n' +
-                        'we can only export a single role to a Snap! project at\n' + 
-                        'a time.\n\nTo migrate the remaining roles, please export\n' + 
+                        'we can only export a single role to a Snap! project at\n' +
+                        'a time.\n\nTo migrate the remaining roles, please export\n' +
                         'them all individually.',
                         myself.world()
                     );
@@ -1509,7 +1510,7 @@ NetsBloxMorph.prototype.simpleNotification = function (msg, sticky) {
     notification.addShadow(new Point(2, 2), 80);
 
     world.add(notification);
-    notification.mouseClickLeft = sticky ? () => {} : notification.destroy;
+    notification.mouseClickLeft = sticky ? nop : notification.destroy;
     notification.drawNew();
 };
 
@@ -1518,5 +1519,5 @@ NetsBloxMorph.prototype.showUpdateNotification = function () {
 };
 
 NetsBloxMorph.prototype.showBrowserNotification = function () {
-    this.simpleNotification(`It seems you're using an unsupported browser. \n Use an up-to-date Chrome browser for the best experience.`);
+    this.simpleNotification('It seems you\'re using an unsupported browser. \n Use an up-to-date Chrome browser for the best experience.');
 };
