@@ -316,7 +316,7 @@ SnapSerializer.prototype.load = function (xmlString, ide) {
     return this.loadProjectModel(this.parse(xmlString), ide);
 };
 
-SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
+SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
     // public - answer a new Project represented by the given XML top node
     // show a warning if the origin apps differ
 
@@ -331,10 +331,10 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
                 '\n\nand may be incompatible or fail to load here.'
         );
     }
-    return this.rawLoadProjectModel(xmlNode);
+    return this.rawLoadProjectModel(xmlNode, remixID);
 };
 
-SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
+SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     // private
     var myself = this,
         project = {sprites: {}},
@@ -376,6 +376,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
     project.stage = new StageMorph(project.globalVariables);
+    project.stage.remixID = remixID;
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,
             'id'

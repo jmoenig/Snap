@@ -6336,6 +6336,8 @@ StageMorph.prototype.init = function (globals) {
 
     this.cachedPenTrailsMorph = null; // optimization, do not persist
 
+    this.remixID = null;
+
     StageMorph.uber.init.call(this);
 
     this.acceptsDrops = false;

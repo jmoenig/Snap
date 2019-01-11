@@ -413,7 +413,8 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                     xml: xml,
                     media: ide.hasChangedMedia ?
                         ide.serializer.mediaXML(ide.projectName) : null,
-                    thumbnail: thumbnail
+                    thumbnail: thumbnail,
+                    remixID: ide.stage.remixID
                 };
                 ide.serializer.isCollectingMedia = false;
                 ide.serializer.flushMedia();
@@ -617,6 +618,32 @@ Cloud.prototype.getProjectVersionMetadata = function (
     );
 };
 
+Cloud.prototype.getRemixes = function (
+	username,
+    page,
+    pageSize,
+    projectName,
+    onSuccess,
+    onError,
+    withThumbnail
+) {
+    var path = '/projects/' +
+                encodeURIComponent(username) + '/' +
+                encodeURIComponent(projectName) + '/remixes';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    this.request(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch remixes for project ' + projectName
+    );
+};
+
 Cloud.prototype.deleteProject = function (
 	projectName,
     username,
@@ -708,25 +735,6 @@ Cloud.prototype.unpublishProject = function (
         onSuccess,
         onError,
         'Could not unpublish project'
-    );
-};
-
-Cloud.prototype.remixProject = function (
-    projectName,
-    username,
-    onSuccess,
-    onError
-) {
-    this.withCredentialsRequest(
-        'POST',
-        '/projects/' +
-            encodeURIComponent(username) +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/remix',
-        onSuccess,
-        onError,
-        'Could not remix project'
     );
 };
 
