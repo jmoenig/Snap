@@ -1496,7 +1496,7 @@ NetsBloxMorph.prototype.createCloudAccount = function () {
     );
 };
 
-NetsBloxMorph.prototype.simpleNotification = function (msg, canClose) {
+NetsBloxMorph.prototype.simpleNotification = function (msg, sticky) {
     var msgText = localize(msg);
     var notification = new MenuMorph(null, msgText);
     var world = this.world();
@@ -1509,14 +1509,14 @@ NetsBloxMorph.prototype.simpleNotification = function (msg, canClose) {
     notification.addShadow(new Point(2, 2), 80);
 
     world.add(notification);
+    notification.mouseClickLeft = sticky ? () => {} : notification.destroy;
     notification.drawNew();
-    if (canClose) notification.mouseClickLeft = notification.destroy;
 };
 
 NetsBloxMorph.prototype.showUpdateNotification = function () {
-    this.simpleNotification('Newer Version of NetsBlox Available: Please Save and Refresh');
+    this.simpleNotification('Newer Version of NetsBlox Available: Please Save and Refresh', true);
 };
 
 NetsBloxMorph.prototype.showBrowserNotification = function () {
-    this.simpleNotification(`It seems you're using an unsupported browser. \n Use an up-to-date Chrome browser for the best experience.`, true);
+    this.simpleNotification(`It seems you're using an unsupported browser. \n Use an up-to-date Chrome browser for the best experience.`);
 };
