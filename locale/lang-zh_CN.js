@@ -624,8 +624,8 @@ SnapTranslator.dict.zh_CN = {
         '停止所有声音',
     'rest for %n beats':
         '停止 %n 拍',
-    'play note %n for %n beats':
-        '弹奏 %n %n 拍',
+    'play note %note for %n beats':
+        '弹奏音符 %note 拍长 %n',
     'set instrument to %inst':
         '将乐器设定为 %inst',
     'change tempo by %n':
@@ -739,9 +739,9 @@ SnapTranslator.dict.zh_CN = {
     'ask %spr for %repRing %inputs':
         '请求 %spr 返回 %repRing %inputs',
     'run %cmdRing w/continuation':
-        '持续运行 %cmdRing',
+        '带延续运行 %cmdRing',
     'call %cmdRing w/continuation':
-        '持续调用 %cmdRing',
+        '带延续调用 %cmdRing',
     'warp %c':
         '一步完成 %c',
     'when I start as a clone':
@@ -1812,6 +1812,10 @@ SnapTranslator.dict.zh_CN = {
         '上(0)',
     '(180) down':
         '下(180)',
+    'random':
+        '任意',
+    'random position':
+        '任意位置',
 
     // collision detection
     'mouse-pointer':
@@ -1820,6 +1824,8 @@ SnapTranslator.dict.zh_CN = {
         '边缘',
     'pen trails':
         '画笔轨迹',
+    'center':
+        '舞台中心',
 
     // costumes
     'Turtle':
@@ -1828,6 +1834,18 @@ SnapTranslator.dict.zh_CN = {
         '空白',
 
     // graphical effects
+    'color':
+        '色彩',
+    'fisheye':
+        '鱼眼',
+    'whirl':
+        '旋转',
+    'pixelate':
+        '像素化',
+    'mosaic':
+        '马赛克',
+    'saturation':
+        '饱和度',
     'brightness':
         '亮度',
     'ghost':
@@ -1986,6 +2004,10 @@ SnapTranslator.dict.zh_CN = {
         '判断',
     'sprite':
         '角色',
+    'costume':
+        '造型',
+    'sound':
+        '声音',     
 
     // list indices
     'last':
@@ -1994,6 +2016,8 @@ SnapTranslator.dict.zh_CN = {
         '任意',
 
     // attributes
+    'my':
+        '属性',
     'neighbors':
         '邻居',
     'self':
@@ -2026,6 +2050,12 @@ SnapTranslator.dict.zh_CN = {
         '名字',
     'stage':
         '舞台',
+    'distance':
+        '距离',
+    'costumes':
+        '造型',
+    'sounds':
+        '声音',   
 
     // Paint.js
     'Paint Editor':
