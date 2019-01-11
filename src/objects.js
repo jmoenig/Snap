@@ -3140,7 +3140,7 @@ SpriteMorph.prototype.playSound = function (name) {
     var stage = this.parentThatIsA(StageMorph),
         sound = name instanceof Sound ? name : detect(
             this.sounds.asArray(),
-            function (s) {return s.name === name; }
+            function (s) {return s.name === name.toString(); }
         ),
         active;
     if (sound) {
