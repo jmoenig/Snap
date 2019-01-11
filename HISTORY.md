@@ -2,7 +2,13 @@
 
 ## in development
 
-### 2019-01-09
+### 2019-01-11
+* Chinese translation update, thanks, Simon!
+* new string library, thanks, Brian!
+* project renaming and remixing support, thanks, Bernat!
+* pushed dev version to 4.3
+
+### 2019-01-10
 * Morphic: recognize data sets in dropped text files (csv, json)
 * Lists: updated list documentation, enabled table support by default
 * GUI: import & examine data sets and text files via drag'n'drop or "import" menu
