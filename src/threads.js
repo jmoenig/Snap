@@ -2820,7 +2820,7 @@ Process.prototype.parseCSV = function (text) {
             col += 1;
             fields[col] = char;
 
-        } else if (char === '\n' && esc) {
+        } else if ((char === '\n' || (prev === '\r')) && esc) {
             if (prev === '\r') {
                 fields[col] = fields[col].slice(0, -1);
             }
