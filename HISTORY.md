@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-12
+* Threads: try to identify Brian's problem with parsing a CSV
+
 ### 2019-01-11
 * Chinese translation update, thanks, Simon!
 * Turkish translation update, thanks, Turgut Guneysu!
