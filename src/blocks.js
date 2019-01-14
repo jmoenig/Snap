@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-09';
+modules.blocks = '2019-January-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -778,6 +778,8 @@ SyntaxElementMorph.prototype.setLabelColor = function (
                 || (morph instanceof InputSlotMorph
                     && morph.isReadOnly)) {
             morph.setLabelColor(textColor, shadowColor, shadowOffset);
+        } else if (morph.isLoop) { // C-shaped slot with loop arrow symbol
+            morph.loop().setLabelColor(textColor, shadowColor, shadowOffset);
         }
     });
 };
@@ -1467,6 +1469,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.isStatic = true; // rejects reporter drops
             part.isLambda = true; // auto-reifies nested script
             break;
+        case '%loop':
+            part = new CSlotMorph();
+            part.isStatic = true;
+            part.isLoop = true; // has a loop symbol
+            part.add(this.labelPart('%loopArrow'));
+            break;
+        case '%loopArrow':
+            part = new SymbolMorph('loop');
+            part.size = this.fontSize * 0.7;
+            part.color = new Color(255, 255, 255);
+            part.shadowColor = this.color.darker(this.labelContrast);
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
+            part.drawNew();
+            break;
         case '%clr':
             part = new ColorSlotMorph();
             part.isStatic = true;
@@ -1781,7 +1798,7 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
             } else {
                 part.setPosition(new Point(x, y));
                 if (!part.isBlockLabelBreak) {
-                    if (part.slotSpec === '%c') {
+                    if (part.slotSpec === '%c' || part.slotSpec === '%loop') {
                         x += part.width();
                     } else if (part.isVisible) {
                         x += part.fullBounds().width() + space;
@@ -7821,6 +7838,7 @@ CSlotMorph.prototype.init = function (silently) {
     CommandSlotMorph.uber.init.call(this, null, true); // silently
     this.isHole = true;
     this.isLambda = false; // see Process.prototype.evaluateInput
+    this.isLoop = false; // has a loop arrow symbol
     this.color = new Color(0, 17, 173);
     this.setExtent(
         new Point(230, this.corner * 4 + this.cSlotPadding),
@@ -7829,7 +7847,7 @@ CSlotMorph.prototype.init = function (silently) {
 };
 
 CSlotMorph.prototype.getSpec = function () {
-    return '%c';
+    return this.isLoop? '%loop' : '%c';
 };
 
 CSlotMorph.prototype.mappedCode = function (definitions) {
@@ -7856,7 +7874,6 @@ CSlotMorph.prototype.mappedCode = function (definitions) {
 
     return codeLines.join('\n');
 };
-
 
 // CSlotMorph layout:
 
@@ -7885,10 +7902,38 @@ CSlotMorph.prototype.fixLayout = function () {
     }
 };
 
+CSlotMorph.prototype.fixLoopLayout = function () {
+    var loop;
+    if (this.isLoop) {
+        loop = this.loop();
+        if (loop) {
+            loop.setRight(this.right() - this.corner);
+            loop.setBottom(this.bottom() + this.cSlotPadding + this.edge);
+        }
+    }
+};
+
+CSlotMorph.prototype.loop = function () {
+    if (this.isLoop) {
+        return detect(
+            this.children,
+            function (child) {
+                return child instanceof SymbolMorph;
+            }
+        );
+    }
+    return null;
+};
+
 // CSlotMorph drawing:
 
 CSlotMorph.prototype.drawNew = function () {
     var context;
+
+    // position loop symbol, if any
+    this.fixLoopLayout();
+
+    // init
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();

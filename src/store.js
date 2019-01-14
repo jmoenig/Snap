@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-11';
+modules.store = '2019-January-14';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -2104,7 +2104,7 @@ TemplateSlotMorph.prototype.toXML = function (serializer) {
 };
 
 CommandSlotMorph.prototype.toXML = function (serializer) {
-    var block = this.children[0];
+    var block = this.nestedBlock();
     if (block instanceof BlockMorph) {
         if (block instanceof ReporterBlockMorph) {
             return serializer.format(

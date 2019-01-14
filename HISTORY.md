@@ -4,6 +4,7 @@
 
 ### 2019-01-14
 * Symbols: added 'loop' arrow symbol
+* Blocks, Objects, Store: added 'loop' symbol to primitive loop blocks
 
 ### 2019-01-12
 * Threads: try to identify Brian's problem with parsing a CSV

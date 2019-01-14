@@ -1269,7 +1269,7 @@ SymbolMorph.prototype.drawSymbolLoop = function (canvas, aColor) {
         w2 = canvas.width / 2,
         w4 = w2 / 2,
         h2 = canvas.height / 2,
-        l = Math.max(h / 20, 0.5);
+        l = Math.max(h / 10, 0.5);
 
     ctx.lineWidth = l * 2;
     ctx.strokeStyle = aColor.toString();
