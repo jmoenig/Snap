@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2018-June-05';
+modules.symbols = '2019-January-14';
 
 var SymbolMorph;
 
@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'keyboardFilled',
+            'loop',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -119,6 +119,7 @@ SymbolMorph.prototype.names = [
     'pipette',
     'speechBubble',
     'speechBubbleOutline',
+    'loop',
     'turnBack',
     'turnForward',
     'arrowUp',
@@ -292,6 +293,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolSpeechBubble(canvas, aColor);
     case 'speechBubbleOutline':
         return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
+    case 'loop':
+        return this.drawSymbolLoop(canvas, aColor);
     case 'turnBack':
         return this.drawSymbolTurnBack(canvas, aColor);
     case 'turnForward':
@@ -374,6 +377,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'turnRight':
     case 'turnLeft':
         return size / 3 * 2;
+    case 'loop':
+        return size * 2;
     default:
         return size;
     }
@@ -1254,6 +1259,32 @@ SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
     ctx.lineTo(n / 2, h - l);
     ctx.closePath();
     ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolLoop = function (canvas, aColor) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = canvas.width / 2,
+        w4 = w2 / 2,
+        h2 = canvas.height / 2,
+        l = Math.max(h / 20, 0.5);
+
+    ctx.lineWidth = l * 2;
+    ctx.strokeStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, h - l);
+    ctx.lineTo(w2, h - l);
+    ctx.arc(w2, h2, h2 - l, radians(90), radians(0), true);
+    ctx.stroke();
+    ctx.fillStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.moveTo(w4 * 3 - l, 0);
+    ctx.lineTo(w2 - l, h2);
+    ctx.lineTo(w, h2);
+    ctx.closePath();
+    ctx.fill();
     return canvas;
 };
 

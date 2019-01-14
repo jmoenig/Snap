@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-14
+* Symbols: added 'loop' arrow symbol
+
 ### 2019-01-12
 * Threads: try to identify Brian's problem with parsing a CSV
 
