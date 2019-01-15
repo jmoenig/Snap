@@ -469,12 +469,12 @@ SnapTranslator.dict.pl = {
         'czekaj %n s',
     'wait until %b':
         'czekaj a\u017C %b',
-    'forever %c':
-        'zawsze %c',
-    'repeat %n %c':
-        'powt\u00F3rz %n razy %c',
-    'repeat until %b %c':
-        'powtarzaj a\u017C %b %c',
+    'forever %loop':
+        'zawsze %loop',
+    'repeat %n %loop':
+        'powt\u00F3rz %n razy %loop',
+    'repeat until %b %loop':
+        'powtarzaj a\u017C %b %loop',
     'if %b %c':
         'je\u017Celi %b to %c',
     'if %b %c else %c':

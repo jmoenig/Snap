@@ -443,12 +443,12 @@ SnapTranslator.dict.ko = {
         '%n 초 기다리기',
     'wait until %b':
         '%b 까지 기다리기',
-    'forever %c':
-        '무한 반복하기 %c',
-    'repeat %n %c':
-        '%n 번 반복하기 %c',
-    'repeat until %b %c':
-        '%b 까지 반복하기 %c',
+    'forever %loop':
+        '무한 반복하기 %loop',
+    'repeat %n %loop':
+        '%n 번 반복하기 %loop',
+    'repeat until %b %loop':
+        '%b 까지 반복하기 %loop',
     'if %b %c':
         '만약 %b 라면 %c',
     'if %b %c else %c':

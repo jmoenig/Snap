@@ -448,12 +448,12 @@ SnapTranslator.dict.si = {
         '\u010Dakaj %n sekund.',
     'wait until %b':
         '\u010Dakaj, dokler %b',
-    'forever %c':
-        'za vedno %c',
-    'repeat %n %c':
-        'ponovi %n krat %c',
-    'repeat until %b %c':
-        'ponavljaj, dokler %b %c',
+    'forever %loop':
+        'za vedno %loop',
+    'repeat %n %loop':
+        'ponovi %n krat %loop',
+    'repeat until %b %loop':
+        'ponavljaj, dokler %b %loop',
     'if %b %c':
         '\u010De %b %c',
     'if %b %c else %c':

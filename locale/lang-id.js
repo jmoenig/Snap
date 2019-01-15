@@ -449,12 +449,12 @@ SnapTranslator.dict.id = {
         'tungu %n dtk.',
     'wait until %b':
         'tunggu sampai %b',
-    'forever %c':
-        'selamanya lakukan: %c',
-    'repeat %n %c':
-        'ulangi %n kali %c',
-    'repeat until %b %c':
-        'ulangi sampai %b %c',
+    'forever %loop':
+        'selamanya lakukan: %loop',
+    'repeat %n %loop':
+        'ulangi %n kali %loop',
+    'repeat until %b %loop':
+        'ulangi sampai %b %loop',
     'if %b %c':
         'jika %b %c',
     'if %b %c else %c':

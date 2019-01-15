@@ -443,12 +443,12 @@ SnapTranslator.dict.nl = {
         'wacht %n sec.',
     'wait until %b':
         'wacht tot %b',
-    'forever %c':
-        'herhaal %c',
-    'repeat %n %c':
-        'herhaal %n keer %c',
-    'repeat until %b %c':
-        'herhaal tot %b %c',
+    'forever %loop':
+        'herhaal %loop',
+    'repeat %n %loop':
+        'herhaal %n keer %loop',
+    'repeat until %b %loop':
+        'herhaal tot %b %loop',
     'if %b %c':
         'als %b %c',
     'if %b %c else %c':

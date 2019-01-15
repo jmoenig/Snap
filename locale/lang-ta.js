@@ -435,12 +435,12 @@ SnapTranslator.dict.ta = {
         '%n விநாடிகள் காத்திருக்கவும்',
     'wait until %b':
         '%b வரை காத்திருக்கவும்',
-    'forever %c':
-        'எப்போதும் %c',
-    'repeat %n %c':
-        'திரும்பச்செய் %n %c',
-    'repeat until %b %c':
-        '%b %c வரை திரும்பச்செய்',
+    'forever %loop':
+        'எப்போதும் %loop',
+    'repeat %n %loop':
+        'திரும்பச்செய் %n %loop',
+    'repeat until %b %loop':
+        '%b %loop வரை திரும்பச்செய்',
     'if %b %c':
         '%b %c என்றால்',
     'if %b %c else %c':

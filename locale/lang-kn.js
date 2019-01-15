@@ -427,12 +427,12 @@ SnapTranslator.dict.kn = {
         '\u0CA8\u0CBF\u0CA7\u0CBE\u0CA8\u0CBF\u0CB8\u0CC1 %n \u0CB8\u0CC6\u0C95\u0CC6\u0C82\u0CA1\u0CBF\u0CA8\u0CB7\u0CCD\u0C9F\u0CC1',
     'wait until %b':
         '\u0CB5\u0CB0\u0C97\u0CC2\u0020\u0C95\u0CBE\u0CAF\u0CAC\u0CC7\u0C95\u0CC1 %b',
-    'forever %c':
-        '\u0CAF\u0CBE\u0CB5\u0CBE\u0C97\u0CB2\u0CC1 %c',
-    'repeat %n %c':
-        '\u0CAE\u0CB0\u0CC1\u0C95\u0CB3\u0CBF\u0CB8\u0CC1 %n mal %c',
-    'repeat until %b %c':
-        '\u0CB5\u0CB0\u0CC6\u0C97\u0CC2\u0020\u0CAE\u0CB0\u0CC1\u0C95\u0CB3\u0CBF\u0CB8\u0CC1 %b %c',
+    'forever %loop':
+        '\u0CAF\u0CBE\u0CB5\u0CBE\u0C97\u0CB2\u0CC1 %loop',
+    'repeat %n %loop':
+        '\u0CAE\u0CB0\u0CC1\u0C95\u0CB3\u0CBF\u0CB8\u0CC1 %n mal %loop',
+    'repeat until %b %loop':
+        '\u0CB5\u0CB0\u0CC6\u0C97\u0CC2\u0020\u0CAE\u0CB0\u0CC1\u0C95\u0CB3\u0CBF\u0CB8\u0CC1 %b %loop',
     'if %b %c':
         '\u0C92\u0C82\u0CA6\u0CC1\u0CB5\u0CC7\u0CB3\u0CC6 %b %c',
     'if %b %c else %c':

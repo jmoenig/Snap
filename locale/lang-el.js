@@ -434,12 +434,12 @@ SnapTranslator.dict.el = {
         'περίμενε %n δευτ.',
     'wait until %b':
         'περίμενε μέχρι %b',
-    'forever %c':
-        'για πάντα %c',
-    'repeat %n %c':
-        'επανέλαβε %n %c',
-    'repeat until %b %c':
-        'επανέλαβε μέχρι %b %c',
+    'forever %loop':
+        'για πάντα %loop',
+    'repeat %n %loop':
+        'επανέλαβε %n %loop',
+    'repeat until %b %loop':
+        'επανέλαβε μέχρι %b %loop',
     'if %b %c':
         'αν %b %c',
     'if %b %c else %c':

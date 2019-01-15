@@ -450,12 +450,12 @@ SnapTranslator.dict.gl = {
         'agardar %n s',
     'wait until %b':
         'agardar ata %b',
-    'forever %c':
-        'para sempre %c',
-    'repeat %n %c':
-        'repetir %n %c',
-    'repeat until %b %c':
-        'repetir ata %b %c',
+    'forever %loop':
+        'para sempre %loop',
+    'repeat %n %loop':
+        'repetir %n %loop',
+    'repeat until %b %loop':
+        'repetir ata %b %loop',
     'if %b %c':
         'se %b %c',
     'if %b %c else %c':

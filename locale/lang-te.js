@@ -435,12 +435,12 @@ SnapTranslator.dict.te = {
         '%n  సెకన్లు వేచియుండ',
     'wait until %b':
         '%b వరకూ వేచియుండ',
-    'forever %c':
-        'ఎప్పటికి %c',
-    'repeat %n %c':
-        '%n %c పునరావృత',
-    'repeat until %b %c':
-        '%b %c పునరావృతం అయ్యేంతవరక',
+    'forever %loop':
+        'ఎప్పటికి %loop',
+    'repeat %n %loop':
+        '%n %loop పునరావృత',
+    'repeat until %b %loop':
+        '%b %loop పునరావృతం అయ్యేంతవరక',
     'if %b %c':
         'ఒకవేళ %b %c',
     'if %b %c else %c':

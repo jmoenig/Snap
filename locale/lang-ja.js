@@ -432,12 +432,12 @@ SnapTranslator.dict.ja = {
         '%n 秒待つ',
     'wait until %b':
         '%b まで待つ',
-    'forever %c':
-        'ずっと %c',
-    'repeat %n %c':
-        '%n 回繰り返す %c',
-    'repeat until %b %c':
-        '%b まで繰り返す %c',
+    'forever %loop':
+        'ずっと %loop',
+    'repeat %n %loop':
+        '%n 回繰り返す %loop',
+    'repeat until %b %loop':
+        '%b まで繰り返す %loop',
     'if %b %c':
         'もし %b なら %c',
     'if %b %c else %c':

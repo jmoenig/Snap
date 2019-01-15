@@ -447,12 +447,12 @@ SnapTranslator.dict.hr = {
         '\u010Dekam %n s',
     'wait until %b':
         '\u010Dekam dok ne bude %b',
-    'forever %c':
-        'zauvijek %c',
-    'repeat %n %c':
-        'ponavljaj %n %c',
-    'repeat until %b %c':
-        'ponavljaj dok ne bude %b %c',
+    'forever %loop':
+        'zauvijek %loop',
+    'repeat %n %loop':
+        'ponavljaj %n %loop',
+    'repeat until %b %loop':
+        'ponavljaj dok ne bude %b %loop',
     'if %b %c':
         'ako %b %c',
     'if %b %c else %c':

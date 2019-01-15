@@ -431,12 +431,12 @@ SnapTranslator.dict.zh_TW = {
         '等待 %n 秒',
     'wait until %b':
         '直到 %b 前都等待闐',
-    'forever %c':
-        '重複執行 %c',
-    'repeat %n %c':
-        '重複執行 %n  %c',
-    'repeat until %b %c':
-        '重複執行直到 %b  %c',
+    'forever %loop':
+        '重複執行 %loop',
+    'repeat %n %loop':
+        '重複執行 %n  %loop',
+    'repeat until %b %loop':
+        '重複執行直到 %b  %loop',
     'if %b %c':
         '如果 %b  %c',
     'if %b %c else %c':

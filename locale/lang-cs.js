@@ -446,12 +446,12 @@ SnapTranslator.dict.cs = {
         'čekej %n sekund',
     'wait until %b':
         'čekej dokud nenastane %b',
-    'forever %c':
-        'stále opakuj %c',
-    'repeat %n %c':
-        'opakuj %n krát %c',
-    'repeat until %b %c':
-        'opakuj dokud nenastane %b %c',
+    'forever %loop':
+        'stále opakuj %loop',
+    'repeat %n %loop':
+        'opakuj %n krát %loop',
+    'repeat until %b %loop':
+        'opakuj dokud nenastane %b %loop',
     'if %b %c':
         'když %b %c',
     'if %b %c else %c':

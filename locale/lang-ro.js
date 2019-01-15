@@ -443,12 +443,12 @@ SnapTranslator.dict.ro = {
         'asteapta %n secunde',
     'wait until %b':
         'asteapta pana cand %b',
-    'forever %c':
-        'la infinit %c',
-    'repeat %n %c':
-        'repeta de %n ori %c',
-    'repeat until %b %c':
-        'repeta pana cand %b %c',
+    'forever %loop':
+        'la infinit %loop',
+    'repeat %n %loop':
+        'repeta de %n ori %loop',
+    'repeat until %b %loop':
+        'repeta pana cand %b %loop',
     'if %b %c':
         'daca %b fa %c',
     'if %b %c else %c':

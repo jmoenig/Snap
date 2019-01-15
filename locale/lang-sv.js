@@ -436,12 +436,12 @@ SnapTranslator.dict.sv = {
         'v\u00E4nta %n sek',
     'wait until %b':
         'v\u00E4nta tills %b',
-    'forever %c':
-        'f\u00F6r alltid %c',
-    'repeat %n %c':
-        'upprepa %n g\u00E5nger %c',
-    'repeat until %b %c':
-        'upprepa tills %b %c',
+    'forever %loop':
+        'f\u00F6r alltid %loop',
+    'repeat %n %loop':
+        'upprepa %n g\u00E5nger %loop',
+    'repeat until %b %loop':
+        'upprepa tills %b %loop',
     'if %b %c':
         'om %b %c',
     'if %b %c else %c':

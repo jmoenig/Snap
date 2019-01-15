@@ -271,12 +271,12 @@ SnapTranslator.dict.et = {
         'oota %n sekundit',
     'wait until %b':
         'oota kuni %b',
-    'forever %c':
-        'lõputult %c',
-    'repeat %n %c':
-        'korda %n korda %c',
-    'repeat until %b %c':
-        'korda kuni %b %c',
+    'forever %loop':
+        'lõputult %loop',
+    'repeat %n %loop':
+        'korda %n korda %loop',
+    'repeat until %b %loop':
+        'korda kuni %b %loop',
     'if %b %c':
         'kui %b %c',
     'if %b %c else %c':

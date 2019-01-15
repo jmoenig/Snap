@@ -432,12 +432,12 @@ SnapTranslator.dict.ja_HIRA = {
         '%n びょうまつ',
     'wait until %b':
         '%b までまつ',
-    'forever %c':
-        'ずっと %c',
-    'repeat %n %c':
-        '%n かいくりかえす %c',
-    'repeat until %b %c':
-        '%b までくりかえす %c',
+    'forever %loop':
+        'ずっと %loop',
+    'repeat %n %loop':
+        '%n かいくりかえす %loop',
+    'repeat until %b %loop':
+        '%b までくりかえす %loop',
     'if %b %c':
         'もし %b なら %c',
     'if %b %c else %c':

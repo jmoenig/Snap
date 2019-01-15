@@ -451,12 +451,12 @@ SnapTranslator.dict.eo = {
         'atendi %n sek.',
     'wait until %b':
         'atendi \u011dis %b',
-    'forever %c':
-        'ripeti eterne %c',
-    'repeat %n %c':
-        'ripeti %n -foje %c',
-    'repeat until %b %c':
-        'ripeti \u011dis %b %c',
+    'forever %loop':
+        'ripeti eterne %loop',
+    'repeat %n %loop':
+        'ripeti %n -foje %loop',
+    'repeat until %b %loop':
+        'ripeti \u011dis %b %loop',
     'if %b %c':
         'se %b %c',
     'if %b %c else %c':

@@ -464,12 +464,12 @@ SnapTranslator.dict.ru = {
         'ждать %n сек.',
     'wait until %b':
         'ждать до %b',
-    'forever %c':
-        'непрерывно %c',
-    'repeat %n %c':
-        'повторять %n %c',
-    'repeat until %b %c':
-        'повторять пока не %b %c',
+    'forever %loop':
+        'непрерывно %loop',
+    'repeat %n %loop':
+        'повторять %n %loop',
+    'repeat until %b %loop':
+        'повторять пока не %b %loop',
     'if %b %c':
         'если %b %c',
     'if %b %c else %c':

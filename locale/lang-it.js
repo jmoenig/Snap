@@ -450,12 +450,12 @@ SnapTranslator.dict.it = {
         'attendi %n secondi',
     'wait until %b':
         'attendi fino a quando %b',
-    'forever %c':
-        'per sempre %c',
-    'repeat %n %c':
-        'ripeti %n volte %c',
-    'repeat until %b %c':
-        'ripeti fino a quando %b %c',
+    'forever %loop':
+        'per sempre %loop',
+    'repeat %n %loop':
+        'ripeti %n volte %loop',
+    'repeat until %b %loop':
+        'ripeti fino a quando %b %loop',
     'if %b %c':
         'se %b %c',
     'if %b %c else %c':

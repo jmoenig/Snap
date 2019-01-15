@@ -426,12 +426,12 @@ SnapTranslator.dict.bg = {
         'изчакай %n сек',
     'wait until %b':
         'изчакай до %b',
-    'forever %c':
-        'завинаги %c',
-    'repeat %n %c':
-        'повтори %n %c',
-    'repeat until %b %c':
-        'повтори докато %b %c',
+    'forever %loop':
+        'завинаги %loop',
+    'repeat %n %loop':
+        'повтори %n %loop',
+    'repeat until %b %loop':
+        'повтори докато %b %loop',
     'if %b %c':
         'ако %b %c',
     'if %b %c else %c':

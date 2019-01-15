@@ -449,12 +449,12 @@ SnapTranslator.dict.ca_VA = {
         'espera %n segons',
     'wait until %b':
         'espera fins %b',
-    'forever %c':
-        'per sempre %c',
-    'repeat %n %c':
-        'repeteix %n vegades %c',
-    'repeat until %b %c':
-        'repeteix fins %b %c',
+    'forever %loop':
+        'per sempre %loop',
+    'repeat %n %loop':
+        'repeteix %n vegades %loop',
+    'repeat until %b %loop':
+        'repeteix fins %b %loop',
     'if %b %c':
         'si %b llavors %c',
     'if %b %c else %c':

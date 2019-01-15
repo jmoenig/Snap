@@ -435,12 +435,12 @@ SnapTranslator.dict.pt_BR = {
         'espere %n segundos',
     'wait until %b':
         'espere até que %b',
-    'forever %c':
-        'sempre %c',
-    'repeat %n %c':
-        'repita %n vezes %c',
-    'repeat until %b %c':
-        'repita até que %b %c',
+    'forever %loop':
+        'sempre %loop',
+    'repeat %n %loop':
+        'repita %n vezes %loop',
+    'repeat until %b %loop':
+        'repita até que %b %loop',
     'if %b %c':
         'se %b então %c',
     'if %b %c else %c':

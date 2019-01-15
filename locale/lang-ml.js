@@ -434,12 +434,12 @@ SnapTranslator.dict.ml = {
         '%n സെകന്റ് കാത്തിരിക്കുക',
     'wait until %b':
         '%b ആവുന്നത് വരെ കാത്തിരിക്കുക',
-    'forever %c':
-        'എല്ലായ്പ്പോഴു %c',
-    'repeat %n %c':
-        'തവണ ആവര്‍ത്തിക്കുക %n %c',
-    'repeat until %b %c':
-        '%b %c ആവുന്നത് വരെ ആവര്‍ത്തിക്കുക',
+    'forever %loop':
+        'എല്ലായ്പ്പോഴു %loop',
+    'repeat %n %loop':
+        'തവണ ആവര്‍ത്തിക്കുക %n %loop',
+    'repeat until %b %loop':
+        '%b %loop ആവുന്നത് വരെ ആവര്‍ത്തിക്കുക',
     'if %b %c':
         '%b %c ആണെങ്കില്‍',
     'if %b %c else %c':

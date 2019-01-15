@@ -447,12 +447,12 @@ SnapTranslator.dict.fr = {
         'attendre %n sec.',
     'wait until %b':
         'attendre jusqu\u0027\u00E0 %b',
-    'forever %c':
-        'r\u00E9p\u00E9ter ind\u00E9finiment %c',
-    'repeat %n %c':
-        'r\u00E9p\u00E9ter %n fois %c',
-    'repeat until %b %c':
-        'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %c',
+    'forever %loop':
+        'r\u00E9p\u00E9ter ind\u00E9finiment %loop',
+    'repeat %n %loop':
+        'r\u00E9p\u00E9ter %n fois %loop',
+    'repeat until %b %loop':
+        'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %loop',
     'if %b %c':
         'si %b %c',
     'if %b %c else %c':

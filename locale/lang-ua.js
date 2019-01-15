@@ -470,12 +470,12 @@ SnapTranslator.dict.ua = {
         'чекати %n сек.',
     'wait until %b':
         'чекати до %b',
-    'forever %c':
-        'завжди %c',
-    'repeat %n %c':
-        'повторити %n %c',
-    'repeat until %b %c':
-        'повторити поки не %b %c',
+    'forever %loop':
+        'завжди %loop',
+    'repeat %n %loop':
+        'повторити %n %loop',
+    'repeat until %b %loop':
+        'повторити поки не %b %loop',
     'if %b %c':
         'якщо %b %c',
     'if %b %c else %c':

@@ -436,11 +436,11 @@ SnapTranslator.dict.dk = {
         'vent i %n sekunder',
     'wait until %b':
         'Vent indtil %b',
-    'forever %c':
-        'for evigt %c',
-    'repeat %n %c':
-        'gentag %n gange %c',
-    'repeat until %b %c':
+    'forever %loop':
+        'for evigt %loop',
+    'repeat %n %loop':
+        'gentag %n gange %loop',
+    'repeat until %b %loop':
         'gentag indtil %b %c',
     'if %b %c':
         'hvis %b %c',

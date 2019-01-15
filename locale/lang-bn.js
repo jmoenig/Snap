@@ -443,12 +443,12 @@ SnapTranslator.dict.bn = {
         'অপেক্ষা কর   %n সেকেণড',
     'wait until %b':
         'অপেক্ষা কর  %b যতক্ষণ না',
-    'forever %c':
-        'অনন্তকাল কর %c',
-    'repeat %n %c':
-        'পুনরাবৃত্তি কর  %n বার  %c ',
-    'repeat until %b %c':
-        'পুনরায় কর যতক্ষণ না  %b %c',
+    'forever %loop':
+        'অনন্তকাল কর %loop',
+    'repeat %n %loop':
+        'পুনরাবৃত্তি কর  %n বার  %loop ',
+    'repeat until %b %loop':
+        'পুনরায় কর যতক্ষণ না  %b %loop',
     'if %b %c':
         'যদি হয়  %b %c',
     'if %b %c else %c':

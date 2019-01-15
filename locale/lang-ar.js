@@ -1,4 +1,4 @@
-﻿/*
+/*
 
     lang-ar.js
 
@@ -447,12 +447,12 @@ SnapTranslator.dict.ar = {
         ' %n لـ إنتظـر',
     'wait until %b':
         '%b الشرط يتحقق حتي إنتظر',
-    'forever %c':
-        'باستمرار كرر %c',
-    'repeat %n %c':
-        ' %n كرر %c',
-    'repeat until %b %c':
-        '%b حتي كرر %c',
+    'forever %loop':
+        'باستمرار كرر %loop',
+    'repeat %n %loop':
+        ' %n كرر %loop',
+    'repeat until %b %loop':
+        '%b حتي كرر %loop',
     'if %b %c':
         ' %b اذا %c',
     'if %b %c else %c':

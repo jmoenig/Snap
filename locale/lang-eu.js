@@ -574,12 +574,12 @@ SnapTranslator.dict.eu = {
         'itxaron %n segundo',
     'wait until %b':
         'itxaron %b arte',
-    'forever %c':
-        'beti %c',
-    'repeat %n %c':
-        'errepikatu %n aldiz %c',
-    'repeat until %b %c':
-        'errepikatu %b den arte %c',
+    'forever %loop':
+        'beti %loop',
+    'repeat %n %loop':
+        'errepikatu %n aldiz %loop',
+    'repeat until %b %loop':
+        'errepikatu %b den arte %loop',
     'if %b %c':
         'baldin %b %c',
     'if %b %c else %c':

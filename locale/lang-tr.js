@@ -440,12 +440,12 @@ SnapTranslator.dict.tr = {
         '%n sn bekle',
     'wait until %b':
         '%b olana kadar bekle',
-    'forever %c':
-        'sürekli %c',
-    'repeat %n %c':
-        '%n kere tekrarla %c',
-    'repeat until %b %c':
-        '%b olana kadar tekrarla %c',
+    'forever %loop':
+        'sürekli %loop',
+    'repeat %n %loop':
+        '%n kere tekrarla %loop',
+    'repeat until %b %loop':
+        '%b olana kadar tekrarla %loop',
     'if %b %c':
         'eğer %b %c',
     'if %b %c else %c':

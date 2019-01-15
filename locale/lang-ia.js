@@ -455,12 +455,12 @@ SnapTranslator.dict.ia = {
         'attende %n secundes',
     'wait until %b':
         'attende donec %b',
-    'forever %c':
-        'sin termino %c',
-    'repeat %n %c':
-        'itera %n %c',
-    'repeat until %b %c':
-        'itera donec %b %c',
+    'forever %loop':
+        'sin termino %loop',
+    'repeat %n %loop':
+        'itera %n %loop',
+    'repeat until %b %loop':
+        'itera donec %b %loop',
     'if %b %c':
         'si %b %c',
     'if %b %c else %c':

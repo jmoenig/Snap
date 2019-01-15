@@ -4,6 +4,7 @@
 
 ### 2019-01-15
 * updated German translation
+* updated all translations for the new %loop slot
 
 ### 2019-01-14
 * Symbols: added 'loop' arrow symbol

@@ -443,12 +443,12 @@ SnapTranslator.dict.hu = {
         'várj %n mp-et',
     'wait until %b':
         'várj amíg %b',
-    'forever %c':
-        'mindig %c',
-    'repeat %n %c':
-        'ismételd %n -szer %c',
-    'repeat until %b %c':
-        'ismételd amíg %b %c',
+    'forever %loop':
+        'mindig %loop',
+    'repeat %n %loop':
+        'ismételd %n -szer %loop',
+    'repeat until %b %loop':
+        'ismételd amíg %b %loop',
     'if %b %c':
         'ha %b %c',
     'if %b %c else %c':
