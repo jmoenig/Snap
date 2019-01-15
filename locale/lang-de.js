@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-01-10', // this, too, will appear in the Translators tab
+        '2019-01-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -476,12 +476,12 @@ SnapTranslator.dict.de = {
         'warte %n Sek.',
     'wait until %b':
         'warte bis %b',
-    'forever %c':
-        'fortlaufend %c',
-    'repeat %n %c':
-        'wiederhole %n mal %c',
-    'repeat until %b %c':
-        'wiederhole bis %b %c',
+    'forever %loop':
+        'fortlaufend %loop',
+    'repeat %n %loop':
+        'wiederhole %n mal %loop',
+    'repeat until %b %loop':
+        'wiederhole bis %b %loop',
     'if %b %c':
         'falls %b %c',
     'if %b %c else %c':

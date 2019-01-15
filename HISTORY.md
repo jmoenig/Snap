@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-15
+* updated German translation
+
 ### 2019-01-14
 * Symbols: added 'loop' arrow symbol
 * Blocks, Objects, Store: added 'loop' symbol to primitive loop blocks
