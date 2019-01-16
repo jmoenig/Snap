@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-16
+* suppress 'loop' arrow symbol where label text follow the C-slot in translations
+
 ### 2019-01-15
 * updated German translation
 * updated all translations for the new %loop slot

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-14';
+modules.blocks = '2019-January-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2218,6 +2218,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %bool   - chameleon colored hexagonal slot (for predicates), static
     %l      - list icon
     %c      - C-shaped command slot, special form for primitives
+    %loop   - C-shaped with loop arrow, special form for certain primitives
     %cs     - C-shaped, auto-reifying, accepts reporter drops
     %cl     - C-shaped, auto-reifying, rejects reporters
     %clr    - interactive color slot
@@ -2386,7 +2387,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
     if (this.isPrototype) {
         this.add(this.placeHolder());
     }
-    this.parseSpec(spec).forEach(function (word) {
+    this.parseSpec(spec).forEach(function (word, idx, arr) {
         if (word[0] === '%' && (word !== '%br')) {
             inputIdx += 1;
         }
@@ -2416,6 +2417,12 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
                 part,
                 (definition || myself.definition).inputOptionsOfIdx(inputIdx)
             );
+        }
+        if (part.isLoop && idx < arr.length - 1) {
+            // special case for primitive '%loop' slots:
+            // don't show the arrow if it is not the last symbol in the block
+            part.loop().destroy();
+            part.isLoop = false;
         }
     });
     this.blockSpec = spec;
