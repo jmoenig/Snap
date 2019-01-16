@@ -267,7 +267,7 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
             	onSuccess.call(
                     null,
                     user.username,
-                    user.isadmin,
+                    user.role,
                     response ? JSON.parse(response) : null
                 );
             }
