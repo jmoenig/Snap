@@ -32,7 +32,7 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2019-January-11';
+modules.cloud = '2019-January-17';
 
 // Global stuff
 

@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-January-15';
+modules.locale = '2019-January-17';
 
 // Global stuff
 
@@ -354,11 +354,11 @@ SnapTranslator.dict.el = {
     'language_name':
         'Ελληνικά',
     'language_translator':
-        'Ino Samaras',
+        'Ino Samaras , Alexandros Prekates',
     'translator_e-mail':
-        'ino.samaras@berkeley.edu',
+        'ino.samaras@berkeley.edu , aprekates@sch.gr',
     'last_changed':
-        '2018-01-19'
+        '2019-01-17'
 };
 
 SnapTranslator.dict.ca = {

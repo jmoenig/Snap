@@ -2,6 +2,10 @@
 
 ## in development
 
+### 2019-01-17
+* Greek translation update, thanks, Alexandros Prekates!
+* cloud: user role support, thanks, Bernat
+
 ### 2019-01-16
 * suppress 'loop' arrow symbol where label text follow the C-slot in translations
 
