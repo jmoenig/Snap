@@ -5387,7 +5387,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 user.username.toLowerCase(),
                 user.password,
                 user.choice,
-                function (username, isadmin, response) {
+                function (username, role, response) {
                     sessionStorage.username = username;
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
