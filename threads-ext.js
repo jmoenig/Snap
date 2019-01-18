@@ -82,14 +82,15 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
 
     };
 
-    var TURBO_OUTPUT_RATE = 50;
-    var NORMAL_OUTPUT_RATE = 30;
-    var NORMAL_OFFSET = 20; // approx normal mode's artificial delay offset
-
-    var outputRate = this.reportIsFastTracking() ? TURBO_OUTPUT_RATE : NORMAL_OUTPUT_RATE; // per second (approx)
+    var TURBO_OUTPUT_RATE = 90; // per sec
+    var outputRate = TURBO_OUTPUT_RATE;
     var delay = 1000 / outputRate;
-    if (!this.reportIsFastTracking()) delay = Math.max(delay - NORMAL_OFFSET, 0);
 
+    if (!this.reportIsFastTracking()) {
+        return sendMessage();
+    }
+
+    // else rate limit in turbo mode
     var id = 'asyncFn-sendMsg';
     if (!this[id]) {
         this[id] = {};
