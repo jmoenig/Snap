@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-16';
+modules.blocks = '2019-January-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3047,6 +3047,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
             // "fix" may be wrong b/c constants
             if (old.contents) {
                 inp.setContents(old.contents().text);
+                if (old.constant) {
+                    inp.constant = old.constant;
+                }
             }
         } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
             nb = old.nestedBlock();

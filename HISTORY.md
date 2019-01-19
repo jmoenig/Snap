@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-19
+* fixed "Staatsgalerie bug" - relabel did not restore drop-down choice when localized
+
 ### 2019-01-17
 * Greek translation update, thanks, Alexandros Prekates!
 * cloud: user role support, thanks, Bernat
