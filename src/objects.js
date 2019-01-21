@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-14';
+modules.objects = '2019-January-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1139,7 +1139,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'command',
             category: 'lists',
-            spec: 'for %upvar in %l %cl',
+            spec: 'for %upvar in %l %cla',
             defaults: [localize('each item')]
         },
 

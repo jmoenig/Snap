@@ -3,7 +3,8 @@
 ## in development
 
 ### 2019-01-21
-* let users make C-shape slots with loop arrow symbols. Sigh. 
+* let users make C-shape slots with loop arrow symbols. Sigh.
+* updated internal "for reach" primitive block with new arrow symbol. Sigh. 
 * updated Indonesian translation, thanks, Emmanuella Rumanti 
 
 ### 2019-01-19

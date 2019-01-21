@@ -1474,6 +1474,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.isStatic = true; // rejects reporter drops
             part.isLambda = true; // auto-reifies nested script
             break;
+        case '%cla':
+            part = new CSlotMorph();
+            part.isStatic = true; // rejects reporter drops
+            part.isLambda = true; // auto-reifies nested script
+            part.isLoop = true; // has a loop symbol
+            part.add(this.labelPart('%loopArrow'));
+            break;
         case '%loop':
             part = new CSlotMorph();
             part.isStatic = true;
@@ -2227,6 +2234,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %ca     - C-shaped with loop arrow, for custom blocks
     %cs     - C-shaped, auto-reifying, accepts reporter drops
     %cl     - C-shaped, auto-reifying, rejects reporters
+    %cla    - C-shaped with loop arrows, auto-reifying, rejects reporters
     %clr    - interactive color slot
     %t      - inline variable reporter template
     %anyUE  - white rectangular type-in slot, unevaluated if replaced
