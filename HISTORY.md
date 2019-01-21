@@ -32,6 +32,7 @@
 * let users make C-shape slots with loop arrow symbols. Sigh.
 * updated internal "for each" primitive block with new arrow symbol. Sigh. 
 * updated Indonesian translation, thanks, Emmanuella Rumanti 
+* updated FOR and FOREACH in tools library with new new loop-arrow symbols
 
 ### 2019-01-19
 * fixed "Staatsgalerie bug" - relabel did not restore drop-down choice when localized
