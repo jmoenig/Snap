@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2018-November-12';
+modules.byob = '2019-January-21';
 
 // Declarations
 
@@ -1452,7 +1452,7 @@ function JaggedBlockMorph(spec) {
 JaggedBlockMorph.prototype.init = function (spec) {
     JaggedBlockMorph.uber.init.call(this);
     if (spec) {this.setSpec(spec); }
-    if (spec === '%cs') {
+    if (spec === '%cs' || (spec === '%ca')) {
         this.minWidth = 25;
         this.fixLayout();
     }
@@ -2581,7 +2581,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \u2191';
     } else if (this.isMultipleInput()) {
         suff = '...';
-    } else if (this.type === '%cs') {
+    } else if (this.type === '%cs' || this.type === '%ca') {
         suff = ' \u03BB'; // ' [\u03BB'
     } else if (this.type === '%b') {
         suff = ' ?';
@@ -2655,6 +2655,8 @@ BlockLabelFragment.prototype.setToMultipleInput = function () {
     if (!this.type) {return null; } // not an input at all
     if (this.type === '%upvar') {
         this.type = '%s';
+    } else if (this.type === '%ca') {
+        this.type = '%cs';
     }
     this.type = '%mult'.concat(this.singleInputType());
 };
@@ -3282,7 +3284,7 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var myself = this, defLabel, defInput, defSwitch,
+    var myself = this, defLabel, defInput, defSwitch, loopArrow,
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
@@ -3297,7 +3299,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(inline)', '%cmdRing'); //'%cmd');
     this.addSlotTypeButton('Reporter', '%repRing'); //'%r');
     this.addSlotTypeButton('Predicate', '%predRing'); //'%p');
-    this.addSlotTypeButton('Command\n(C-shape)', '%cs');
+    this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
 
@@ -3374,6 +3376,43 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.slots.add(defSwitch);
     defSwitch.drawNew();
 
+    // loop arrow checkbox //
+    loopArrow = new ToggleMorph(
+            'checkbox',
+            this, // target
+            function () { // action
+                if (myself.fragment.type === '%ca') {
+                    myself.setType('%cs');
+                } else {
+                    myself.setType('%ca');
+                }
+            },
+            null, // label string
+            function () {return myself.fragment.type === '%ca'; },
+            null, // environment
+            null, // hint
+            null, // template
+            new SymbolMorph(
+                'loop',
+                this.fontSize * 0.7,
+                new Color(255, 255, 255)
+            ),
+            null // builder method that constructs the element morph
+        );
+    loopArrow.refresh = function () {
+        ToggleMorph.prototype.refresh.call(this);
+        if (myself.isExpanded && contains(
+                ['%cs', '%ca'],
+                myself.fragment.type
+            )) {
+            loopArrow.show();
+        } else {
+            loopArrow.hide();
+        }
+    };
+    this.slots.loopArrow = loopArrow;
+    this.slots.add(loopArrow);
+
     Morph.prototype.trackChanges = oldFlag;
 };
 
@@ -3402,7 +3441,7 @@ InputSlotDialogMorph.prototype.setSlotArity = function (arity) {
 
 InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     label,
-    spec
+    spec // slot spec or array of specs (I *hate* the arrow symbol, -Jens)
 ) {
 /*
     this method produces a radio button with a picture of the
@@ -3423,13 +3462,17 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     faster.
 */
     var myself = this,
-        action = function () {myself.setSlotType(spec); },
+        action = function () {
+            myself.setSlotType(spec instanceof Array ? spec[0] : spec);
+        },
         query,
-        element = new JaggedBlockMorph(spec),
+        element = new JaggedBlockMorph(spec instanceof Array ? spec[0] : spec),
         button;
 
     query = function () {
-        return myself.fragment.singleInputType() === spec;
+        return spec instanceof Array ?
+            contains(spec, myself.fragment.singleInputType())
+            : myself.fragment.singleInputType() === spec;
     };
     element.setCategory(this.category);
     element.rebuild();
@@ -3563,6 +3606,11 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
             0
         ))
     );
+
+    // loop arrow
+
+    this.slots.loopArrow.setPosition(this.slots.defaultInputLabel.position());
+
     Morph.prototype.trackChanges = oldFlag;
     this.slots.changed();
 };

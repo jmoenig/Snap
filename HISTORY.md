@@ -3,6 +3,7 @@
 ## in development
 
 ### 2019-01-21
+* let users make C-shape slots with loop arrow symbols. Sigh. 
 * updated Indonesian translation, thanks, Emmanuella Rumanti 
 
 ### 2019-01-19

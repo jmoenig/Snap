@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-19';
+modules.blocks = '2019-January-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1464,6 +1464,11 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%cs':
             part = new CSlotMorph(); // non-static
             break;
+        case '%ca':
+            part = new CSlotMorph(); // non-static
+            part.isLoop = true; // has a loop symbol
+            part.add(this.labelPart('%loopArrow'));
+            break;
         case '%cl':
             part = new CSlotMorph();
             part.isStatic = true; // rejects reporter drops
@@ -2219,6 +2224,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %l      - list icon
     %c      - C-shaped command slot, special form for primitives
     %loop   - C-shaped with loop arrow, special form for certain primitives
+    %ca     - C-shaped with loop arrow, for custom blocks
     %cs     - C-shaped, auto-reifying, accepts reporter drops
     %cl     - C-shaped, auto-reifying, rejects reporters
     %clr    - interactive color slot
