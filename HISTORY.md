@@ -2,9 +2,35 @@
 
 ## in development
 
+* New Features:
+    * export 1- /2- dimensional lists with atomic data as CSV
+    * export n-dimensional lists with atomic data as JSON
+    * import CSV, Text, or JSON via drag & drop
+    * parse JSON using the SPLIT reporter
+    * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
+    * new "string" library, thanks, Brian
+    * added "neg" selector to monadic function reporter in "Operators" category
+    * enhances support for embedding Snap in other website, thanks, Bernat!
+* Notable Changes:
+    * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
+    * added transparency (alpha) to pen colors
+    * new drop-down options for sprite-layer control ("GO TO front/back")
+    * "loop arrow" symbol for primitive loops, also available for custom blocks
+    * optimized in-project storage of atomic-data lists (more efficient, less space) 
+* Notable Fixes:
+    * "relabel" blocks with translated drop-down choices
+    * transforming arrayed to linked lists without loosing the last element
+    * using "inherit" no longer un-hides the palette in presentation mode
+* Translation Updates:
+    * Chinese, thanks, Simon!
+    * Turkish, thanks, Turgut!
+    * Indonesian, thanks, Emanuella!
+    * Greek, thanks, Alexandros!
+    * German
+
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
-* updated internal "for reach" primitive block with new arrow symbol. Sigh. 
+* updated internal "for each" primitive block with new arrow symbol. Sigh. 
 * updated Indonesian translation, thanks, Emmanuella Rumanti 
 
 ### 2019-01-19
