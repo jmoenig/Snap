@@ -181,11 +181,11 @@ SnapTranslator.dict.id = {
     'language_name':
         'Bahasa Indonesia', // the name as it should appear in the language menu
     'language_translator':
-        'Alexander Raphael Liu', // your name for the Translators tab
+        'Alexander Raphael Liu, Emmanuella Rumanti', // your name for the Translators tab
     'translator_e-mail':
         'raphaxander@gmail.com', // optional
     'last_changed':
-        '2016-5-2', // this, too, will appear in the Translators tab
+        '2019-01-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-January-17';
+modules.locale = '2019-January-21';
 
 // Global stuff
 
@@ -552,11 +552,11 @@ SnapTranslator.dict.id = {
     'language_name':
         'Bahasa Indonesia',
     'language_translator':
-        'Alexander Raphael Liu',
+        'Alexander Raphael Liu, Emmanuella Rumanti',
     'translator_e-mail':
         'raphaxander@gmail.com',
     'last_changed':
-        '2016-5-2'
+        '2019-01-21'
 };
 
 SnapTranslator.dict.et = {

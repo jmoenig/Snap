@@ -2,6 +2,9 @@
 
 ## in development
 
+### 2019-01-21
+* updated Indonesian translation, thanks, Emmanuella Rumanti 
+
 ### 2019-01-19
 * fixed "Staatsgalerie bug" - relabel did not restore drop-down choice when localized
 
