@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-12';
+modules.threads = '2019-January-22';
 
 var ThreadManager;
 var Process;
@@ -2819,8 +2819,7 @@ Process.prototype.parseCSV = function (text) {
             char = '';
             col += 1;
             fields[col] = char;
-
-        } else if ((char === '\n' || (prev === '\r')) && esc) {
+        } else if (char === '\n' && esc) {
             if (prev === '\r') {
                 fields[col] = fields[col].slice(0, -1);
             }

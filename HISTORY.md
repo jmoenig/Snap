@@ -34,7 +34,7 @@
 * Blocks: adjust label row below C-Slot to accomodate loop icon, if any
 * updated iteration-composition library blocks with new loop-arrow symbols
 * updated list-utilities library blocks with new loop-arrow symbols
-
+* Threads: cleaned up CSV parser
 
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
