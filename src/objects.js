@@ -1419,6 +1419,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.color = this.color.copy();
     c.blocksCache = {};
     c.paletteCache = {};
+    c.cachedHSV = c.color.hsv();
     arr = [];
     this.inheritedAttributes.forEach(function (att) {
         arr.push(att);

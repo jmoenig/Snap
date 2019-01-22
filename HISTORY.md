@@ -35,6 +35,7 @@
 * updated iteration-composition library blocks with new loop-arrow symbols
 * updated list-utilities library blocks with new loop-arrow symbols
 * Threads: cleaned up CSV parser
+* Objects: fixed pen hsv-cache invalidation for clones
 
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
