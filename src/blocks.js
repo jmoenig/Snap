@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-21';
+modules.blocks = '2019-January-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1710,6 +1710,8 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         ico = this instanceof BlockMorph && this.hasLocationPin() ?
         	this.methodIconExtent().x + space : 0,
         bottomCorrection,
+        hasLoopCSlot = false,
+        hasLoopArrow = false,
         initialExtent = this.extent();
 
     if ((this instanceof MultiArgMorph) && (this.slotSpec !== '%cs')) {
@@ -1780,6 +1782,10 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         }
     }
     lines.forEach(function (line) {
+        if (hasLoopCSlot) {
+            hasLoopArrow = true;
+            hasLoopCSlot = false;
+        }
         x = myself.left() + ico + myself.edge + myself.labelPadding;
         if (myself instanceof RingMorph) {
             x = myself.left() + space; //myself.labelPadding;
@@ -1792,6 +1798,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         y += lineHeight;
         lineHeight = 0;
         line.forEach(function (part) {
+            if (part.isLoop) {
+                hasLoopCSlot = true;
+            }
             if (part instanceof CSlotMorph) {
                 x -= myself.labelPadding;
                 if (myself.isPredicate) {
@@ -1824,6 +1833,13 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
                 );
             }
         });
+
+    // adjust label row below a loop-arrow C-slot to accomodate the loop icon
+    if (hasLoopArrow) {
+        x += myself.fontSize * 1.5;
+        maxX = Math.max(maxX, x);
+        hasLoopArrow = false;
+    }
 
     // center parts vertically on each line:
         line.forEach(function (part) {
@@ -2431,12 +2447,6 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
                 part,
                 (definition || myself.definition).inputOptionsOfIdx(inputIdx)
             );
-        }
-        if (part.isLoop && idx < arr.length - 1) {
-            // special case for primitive '%loop' slots:
-            // don't show the arrow if it is not the last symbol in the block
-            part.loop().destroy();
-            part.isLoop = false;
         }
     });
     this.blockSpec = spec;

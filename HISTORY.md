@@ -28,6 +28,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-01-22
+* Blocks: adjust label row below C-Slot to accomodate loop icon, if any
+
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
 * updated internal "for each" primitive block with new arrow symbol. Sigh. 
