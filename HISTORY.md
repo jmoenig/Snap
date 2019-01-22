@@ -17,6 +17,7 @@
     * new drop-down options for sprite-layer control ("GO TO front/back")
     * "loop arrow" symbol for primitive loops, also available for custom blocks
     * optimized in-project storage of atomic-data lists (more efficient, less space) 
+    * remove all clones when the Green Flag is clicked
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -29,6 +30,7 @@
     * German
 
 ### 2019-01-22
+* Objects: Remove all clones when the Green Flag is clicked
 * Blocks: adjust label row below C-Slot to accomodate loop icon, if any
 * updated iteration-composition library blocks with new loop-arrow symbols
 * updated list-utilities library blocks with new loop-arrow symbols
