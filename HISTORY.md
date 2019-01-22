@@ -30,6 +30,7 @@
 
 ### 2019-01-22
 * Blocks: adjust label row below C-Slot to accomodate loop icon, if any
+* updated iteration-composition library blocks with new loop-arrow symbols
 
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
