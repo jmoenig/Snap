@@ -40,7 +40,7 @@ BlockMorph.prototype.showHelp = function() {
         help = 'Get information from different providers, save information and more. \nTo get more help select one of the services:'
             + metadata.slice(0,3).join(', ') + ' ...';
     }
-    
+
     block = this.fullCopy();
     block.addShadow();
     new DialogBoxMorph().inform(
@@ -275,7 +275,12 @@ function RPCInputSlotMorph() {
         'methodSignature',
         function(rpcMethod) {
             if (!this.fieldsFor || !this.fieldsFor[rpcMethod]) {
-                this.methodSignature();
+                try {
+                    this.methodSignature();
+                } catch (e) { // let the projects load when the service is not supported
+                    console.error(e);
+                    this.fieldsFor = {};
+                }
             }
             if (this.fieldsFor[rpcMethod]) {
                 return this.fieldsFor[rpcMethod].args.map(function(arg) {
@@ -304,6 +309,7 @@ RPCInputSlotMorph.prototype.getRPCName = function () {
     return null;
 };
 
+// sets this.fieldsFor and returns the method signature dict
 RPCInputSlotMorph.prototype.methodSignature = function () {
     var actionNames,
         rpc,
