@@ -1,0 +1,21 @@
+language: node_js
+cache:
+  directories:
+    - node_modules
+env:
+  - MONGO_URI=mongodb://127.0.0.1:27017/netsblox-tests ENV=test PORT=8080
+addons:
+  apt:
+  sources:
+    - ubuntu-toolchain-r-test
+  packages:
+    - g++-4.8
+services:
+  - mongodb
+node_js:
+  - '8.11.2'
+install:
+before_script:
+script:
+  - bash bin/test.sh
+after_script:
