@@ -33,6 +33,7 @@
 ### 2019-01-23
 * Objects, Threads: new blocks for setting and changing the stage's background color
 * Store: save stage's background color in project
+* updated German translation
 * Blocks: Tweaked rendering of C-shaped slots in predicates 
 * updated cases library blocks with new loop-arrow symbols
 * updated animation library blocks with new loop-arrow symbols, tweaked FOR block

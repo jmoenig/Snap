@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-01-15', // this, too, will appear in the Translators tab
+        '2019-01-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -422,10 +422,16 @@ SnapTranslator.dict.de = {
         'Stift hoch',
     'set pen color to %clr':
         'setze Stiftfarbe auf %clr',
+    'set background color to %clr':
+        'setze Hintergrundfarbe auf %clr',
     'change pen %hsva by %n':
         '\u00e4ndere Stift %hsva um %n',
+    'change background %hsva by %n':
+        '\u00e4ndere Hintergrund %hsva um %n',
     'set pen %hsva to %n':
         'setze Stift %hsva auf %n',
+    'set background %hsva to %n':
+        'setze Hintergrund %hsva auf %n',
     'change pen size by %n':
         '\u00e4ndere Stiftdicke um %n',
     'set pen size to %n':
