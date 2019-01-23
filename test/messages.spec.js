@@ -7,6 +7,19 @@ describe('messages', function() {
         PushButtonMorph = driver.globals().PushButtonMorph;
     });
 
+    function sendMessage(opts={}) {
+        const ide = driver.ide();
+        const srcId = [ide.projectName, ide.room.name, ide.room.ownerId].join('@');
+        const msg = {
+            type: 'message',
+            dstId: opts.targetRole || 'everyone in room',
+            srcId: srcId,
+            msgType: opts.name || 'message',
+            content: opts.contents || {msg: 'blah'},
+        };
+        ide.sockets.sendMessage(msg);
+    }
+
     describe('message type', function() {
         beforeEach(function() {
             return driver.reset()
@@ -39,14 +52,20 @@ describe('messages', function() {
         });
 
         it('should show queue message count', async function() {
+            this.timeout(5000);
             const MIN_DELAY = 50;
+
             driver.selectTab('scripts');
             const hatBlock = await driver.addBlock('receiveSocketMessage');
-            const msgField = hatBlock.inputs()[0];
+
             // set the msg type to message
+            const msgField = hatBlock.inputs()[0];
             await SnapActions.setField(msgField, 'message');
+
+            // create and set the dowait block
             const doWait = await driver.addBlock('doWait');
-            await SnapActions.setField(doWait.inputs()[0], '0.5');
+            await SnapActions.setField(doWait.inputs()[0], '10');
+
             // attach doWait to hatblock
             let Point = driver.globals().Point;
             let dropPosition = hatBlock.bottomAttachPoint()
@@ -55,25 +74,20 @@ describe('messages', function() {
                 .subtract(new Point(0, 3));
             driver.dragAndDrop(doWait, dropPosition); // attach
             await driver.sleep(MIN_DELAY);
-            driver.dragAndDrop(hatBlock, dropPosition.add(new Point(200, 200))); // move away
-            await driver.sleep(MIN_DELAY);
-
-            // create the message sender
-            const doSocketBlock = await driver.addBlock('doSocketMessage');
-            // setup the fields
-            await SnapActions.setField(doSocketBlock.inputs()[0], 'message');
-            await SnapActions.setField(doSocketBlock.inputs()[1], 'some message');
-            await SnapActions.setField(doSocketBlock.inputs()[2], 'everyone in room');
 
             // send 10 messages
             for (let i=0; i<10; i++) {
-                driver.click(doSocketBlock);
-                await driver.sleep(MIN_DELAY);
+                sendMessage();
             }
 
+            await driver.expect(() => {
+                return hatBlock._msgQueue() !== undefined;
+            }, `message queue didn't show up`, {maxWait: 4000});
+
             hatBlock.updateReadout();
-            console.assert(hatBlock._msgQueue().length > 0);
-            console.assert(hatBlock.msgCount < 10);
+            expect(hatBlock._msgQueue().length).toBeLessThan(11);
+            expect(hatBlock.msgCount).toBeLessThan(11);
+            expect(hatBlock.msgCount).toBeMoreThan(8);
         });
     });
 });

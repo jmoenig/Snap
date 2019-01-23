@@ -1,5 +1,6 @@
 /*global driver */
 describe('replay', function() {
+    this.timeout(4000);
     const newProjectWithActions = function() {
         const SnapActions = driver.globals().SnapActions;
         return driver.reset()

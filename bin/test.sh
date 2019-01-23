@@ -11,6 +11,17 @@ function redirectClientCode()
   else
     echo WARN: is already symlinked.
   fi
+
+  # print out the head
+  cd src/browser
+  echo "#########"
+  echo client code pointing to:
+  git log -1
+  echo
+  echo with changes to:
+  git ls-files . -m
+  echo "#########"
+  cd ../../
 }
 
 if [ -d .server ]; then

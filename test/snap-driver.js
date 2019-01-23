@@ -164,21 +164,21 @@ SnapDriver.prototype.mouseUp = function(position) {
 /**
  * Simulates mouse inputs to pick up a Morph and place it somewhere else.
  * @param {Morph} srcMorph Morph to drag and drop
- * @param {Point} position Position to drag center of srcMorph to 
+ * @param {Point} position Position to drag center of srcMorph to
  * @param {Point=} start Position to initiate drag at, if not speficied middle of left side of srcMorph is used
  */
 SnapDriver.prototype.dragAndDrop = function(srcMorph, position, start = null) {
     const {MorphicPreferences, Point} = this.globals();
-    
+
     // Drag from the upper left corner if not told otherwise
     if(start == null)
     {
         start = srcMorph.topLeft().add(new Point(2, srcMorph.height() / 2));
     }
-    
+
     // If the Morph is not grabbed at center, final position will no longer be correct
     let offset = start.subtract(srcMorph.center());
-    
+
     this.mouseDown(start);
     this.world().hand.processMouseMove({
         pageY: start.y,
@@ -209,6 +209,7 @@ SnapDriver.prototype._defer = function() {
     };
 };
 
+// fn: synchronous function returning a boolean
 SnapDriver.prototype.waitUntil = function(fn, maxWait) {
     const deferred = this._defer();
 
@@ -219,7 +220,7 @@ SnapDriver.prototype.waitUntil = function(fn, maxWait) {
             if (result) {
                 deferred.resolve(result);
             } else {
-                deferred.reject(result);
+                deferred.reject(result || '');
             }
         } else {
             setTimeout(check, 25);
@@ -231,10 +232,10 @@ SnapDriver.prototype.waitUntil = function(fn, maxWait) {
     return deferred.promise;
 };
 
-SnapDriver.prototype.expect = function(fn, msg) {
-    return this.waitUntil(fn)
-        .catch(() => {
-            throw new Error(msg);
+SnapDriver.prototype.expect = function(fn, msg, opts={}) {
+    return this.waitUntil(fn, opts.maxWait)
+        .catch(e => {
+            throw new Error(msg, e);
         });
 };
 
@@ -248,6 +249,12 @@ SnapDriver.prototype.newRole = function(name) {
     this.keys(name);
     let dialog = this.dialog();
     dialog.ok();
+};
+
+// drives the UI to create a new role and waits for it to show up
+SnapDriver.prototype.newRoleNWait = async function(name) {
+    this.newRole(name);
+    await this.expect(() => this.ide().room.getRole(name), `new role didn't show up.`);
 };
 
 SnapDriver.prototype.moveToRole = function(name) {
