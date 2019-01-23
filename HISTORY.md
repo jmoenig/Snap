@@ -8,6 +8,7 @@
     * import CSV, Text, or JSON via drag & drop
     * parse JSON using the SPLIT reporter
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
+    * new blocks for setting and changing the stage's background color
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
@@ -30,6 +31,7 @@
     * German
 
 ### 2019-01-23
+* Objects, Threads: new blocks for setting and changing the stage's background color
 * Blocks: Tweaked rendering of C-shaped slots in predicates 
 * updated cases library blocks with new loop-arrow symbols
 * updated animation library blocks with new loop-arrow symbols, tweaked FOR block

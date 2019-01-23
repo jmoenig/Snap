@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-22';
+modules.threads = '2019-January-23';
 
 var ThreadManager;
 var Process;
@@ -3114,25 +3114,28 @@ Process.prototype.goToLayer = function (name) {
     }
 };
 
-// Process pen primitives
+// Process color primitives
 
-Process.prototype.setPenHSVA = function (name, num) {
-    var choice = this.inputOption(name),
-        options = ['hue', 'saturation', 'brightness', 'transparency'],
-        thisObj = this.blockReceiver();
-    if (thisObj instanceof SpriteMorph) {
-        thisObj.setColorComponentHSVA(options.indexOf(choice), +num);
-    }
+Process.prototype.setHSVA = function (name, num) {
+    var options = ['hue', 'saturation', 'brightness', 'transparency'];
+    this.blockReceiver().setColorComponentHSVA(
+        options.indexOf(this.inputOption(name)),
+        +num
+    );
 };
 
-Process.prototype.changePenHSVA = function (name, num) {
-    var choice = this.inputOption(name),
-        options = ['hue', 'saturation', 'brightness', 'transparency'],
-        thisObj = this.blockReceiver();
-    if (thisObj instanceof SpriteMorph) {
-        thisObj.changeColorComponentHSVA(options.indexOf(choice), +num);
-    }
+Process.prototype.changeHSVA = function (name, num) {
+    var options = ['hue', 'saturation', 'brightness', 'transparency'];
+    this.blockReceiver().changeColorComponentHSVA(
+        options.indexOf(this.inputOption(name)),
+        +num
+    );
 };
+
+Process.prototype.setPenHSVA = Process.prototype.setHSVA;
+Process.prototype.changePenHSVA = Process.prototype.changeHSVA;
+Process.prototype.setBackgroundHSVA = Process.prototype.setHSVA;
+Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
 
 // Process temporary cloning (Scratch-style)
 

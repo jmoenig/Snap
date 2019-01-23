@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-22';
+modules.objects = '2019-January-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -515,6 +515,26 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'change pen %hsva by %n',
+            defaults: [['hue'], 10]
+        },
+        setBackgroundColor: {
+            only: StageMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'set background color to %clr'
+        },
+        setBackgroundHSVA: {
+            only: StageMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'set background %hsva to %n',
+            defaults: [['hue'], 50]
+        },
+        changeBackgroundHSVA: {
+            only: StageMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'change background %hsva by %n',
             defaults: [['hue'], 10]
         },
         changeSize: {
@@ -1294,6 +1314,9 @@ SpriteMorph.prototype.blockAlternatives = {
 
     setPenHSVA: ['changePenHSVA'],
     changePenHSVA: ['setPenHSVA'],
+
+    setBackgroundHSVA: ['changeBackgroundHSVA'],
+    changeBackgroundHSVA: ['setBackgroundHSVA'],
 
     changeSize: ['setSize'],
     setSize: ['changeSize'],
@@ -3514,6 +3537,8 @@ SpriteMorph.prototype.setColor = function (aColor) {
         this.cachedHSV = this.color.hsv();
     }
 };
+
+SpriteMorph.prototype.setBackgroundColor = SpriteMorph.prototype.setColor;
 
 // SpriteMorph layers
 
@@ -6312,6 +6337,8 @@ StageMorph.prototype.init = function (globals) {
 
     this.scale = 1; // for display modes, do not persist
 
+    this.cachedHSV = [0, 0, 0]; // for background hsv support, not serialized
+
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
@@ -6341,6 +6368,7 @@ StageMorph.prototype.init = function (globals) {
 
     StageMorph.uber.init.call(this);
 
+    this.cachedHSV = this.color.hsv();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
@@ -7131,6 +7159,11 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push('-');
+        blocks.push(block('setBackgroundColor'));
+        blocks.push(block('changeBackgroundHSVA'));
+        blocks.push(block('setBackgroundHSVA'));
+        blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
@@ -7550,6 +7583,47 @@ StageMorph.prototype.show = function () {
 
 StageMorph.prototype.createClone = nop;
 StageMorph.prototype.newClone = nop;
+
+// StageMorph background color setting
+
+StageMorph.prototype.setColorComponentHSVA = function (idx, num) {
+    var n = +num;
+
+    idx = +idx;
+    if (idx < 0 || idx > 3) {return; }
+    if (idx == 0) {
+        if (n < 0 || n > 100) { // wrap the hue
+            n = (n < 0 ? 100 : 0) + n % 100;
+        }
+    } else {
+        n = Math.min(100, Math.max(0, n));
+    }
+    if (idx === 3) {
+        this.color.a = 1 - n / 100;
+    } else {
+        this.cachedHSV[idx] = n / 100;
+        this.color.set_hsv.apply(this.color, this.cachedHSV);
+    }
+    this.drawNew();
+    this.changed();
+};
+
+StageMorph.prototype.getColorComponentHSLA
+    = SpriteMorph.prototype.getColorComponentHSLA;
+
+StageMorph.prototype.changeColorComponentHSVA
+    = SpriteMorph.prototype.changeColorComponentHSVA;
+
+StageMorph.prototype.setColor = function (aColor) {
+    if (!this.color.eq(aColor, true)) { // observeAlpha
+        this.color = aColor.copy();
+        this.drawNew();
+        this.changed();
+        this.cachedHSV = this.color.hsv();
+    }
+};
+
+StageMorph.prototype.setBackgroundColor = StageMorph.prototype.setColor;
 
 // StageMorph pseudo-inherited behavior
 
