@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-14';
+modules.store = '2019-January-23';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -385,6 +385,10 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
+    }
+    if (model.stage.attributes.color) {
+        project.stage.color = this.loadColor(model.stage.attributes.color);
+        project.stage.cachedHSV = project.stage.color.hsv();
     }
     if (model.stage.attributes.scheduled === 'true') {
         project.stage.fps = 30;
@@ -1657,7 +1661,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
-            'costume="@" tempo="@" threadsafe="@" ' +
+            'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             '%' +
             'lines="@" ' +
             'ternary="@" ' +
@@ -1687,6 +1691,10 @@ StageMorph.prototype.toXML = function (serializer) {
         StageMorph.prototype.dimensions.x,
         StageMorph.prototype.dimensions.y,
         this.getCostumeIdx(),
+        this.color.r,
+        this.color.g,
+        this.color.b,
+        this.color.a,
         this.getTempo(),
         this.isThreadSafe,
         this.instrument ?
@@ -1732,7 +1740,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '%' +
             ' draggable="@"' +
             '%' +
-            ' costume="@" color="@,@,@" pen="@" ~>' +
+            ' costume="@" color="@,@,@,@" pen="@" ~>' +
             '%' + // inheritance info
             '%' + // nesting info
             (noCostumes ? '%' : '<costumes>%</costumes>') +
@@ -1757,6 +1765,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.color.r,
         this.color.g,
         this.color.b,
+        this.color.a,
         this.penPoint,
 
         // inheritance info
