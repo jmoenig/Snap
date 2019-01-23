@@ -29,6 +29,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-01-23
+* Blocks: Tweaked rendering of C-shaped slots in predicates 
+
 ### 2019-01-22
 * Objects: Remove all clones when the Green Flag is clicked
 * Blocks: adjust label row below C-Slot to accomodate loop icon, if any

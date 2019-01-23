@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-22';
+modules.blocks = '2019-January-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1910,8 +1910,13 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         if (part instanceof CSlotMorph || (part.slotSpec === '%cs')) {
             if (myself.isPredicate) {
                 part.setWidth(
-                    blockWidth - ico - myself.rounding * 2 - myself.corner
+                    blockWidth -
+                        ico -
+                        myself.rounding -
+                        myself.inset -
+                        myself.corner
                 );
+                adjustMultiWidth = myself.corner;
             } else {
                 part.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;
