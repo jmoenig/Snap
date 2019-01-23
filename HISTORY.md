@@ -31,6 +31,7 @@
 
 ### 2019-01-23
 * Blocks: Tweaked rendering of C-shaped slots in predicates 
+* updated cases library blocks with new loop-arrow symbols
 
 ### 2019-01-22
 * Objects: Remove all clones when the Green Flag is clicked
