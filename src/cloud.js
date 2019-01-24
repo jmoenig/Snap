@@ -29,9 +29,10 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
+/*global modules, SnapSerializer, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
+modules = modules || {};
 modules.cloud = '2019-January-17';
 
 // Global stuff
@@ -45,7 +46,8 @@ function Cloud() {
 }
 
 Cloud.prototype.init = function () {
-    this.url = this.determineCloudDomain();
+    this.urlBasePath = '/api/v1';
+    this.url = this.determineCloudDomain() + this.urlBasePath;
     this.username = null;
 };
 
@@ -249,7 +251,7 @@ Cloud.prototype.initSession = function (onSuccess) {
         'POST',
         '/init',
         function () { myself.checkCredentials(onSuccess); },
-        nop,
+        function () {},
         null,
         true
     );
