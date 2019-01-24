@@ -30,6 +30,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-01-24
+* Turkish translation update, thanks, Turgut!
+
 ### 2019-01-23
 * Objects, Threads: new blocks for setting and changing the stage's background color
 * Store: save stage's background color in project

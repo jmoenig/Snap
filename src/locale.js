@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-January-23';
+modules.locale = '2019-January-24';
 
 // Global stuff
 
@@ -475,11 +475,11 @@ SnapTranslator.dict.tr = {
     'language_name':
         'Türkçe',
     'language_translator':
-        'Hakan Atas, www.3drobolab.com',
+        'Hakan Atas - www.3drobolab.com, Turgut Güneysu',
     'translator_e-mail':
-        'hakanatas@gmail.com, mustafaipekbayrak@gmail.com',
+        'hakanatas@gmail.com, tguneysu@msn.com, mustafaipekbayrak@gmail.com',
     'last_changed':
-        '2019-01-11'
+        '2019-01-22'
 };
 
 SnapTranslator.dict.hu = {
