@@ -1,6 +1,6 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil,
-   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains*/
+   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world*/
 // Extensions to the Snap blocks
 
 
@@ -278,7 +278,10 @@ function RPCInputSlotMorph() {
                 try {
                     this.methodSignature();
                 } catch (e) { // let the projects load when the service is not supported
+                    /* eslint-disable no-console */
                     console.error(e);
+                    /* eslint-enable no-console */
+                    world.children[0].showMessage && world.children[0].showMessage(e.message);
                     this.fieldsFor = {};
                 }
             }
