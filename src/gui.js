@@ -5620,6 +5620,7 @@ IDE_Morph.prototype.verifyProject = function (body) {
         return false;
     }
 
+    console.log(encodedBody.length)
     // check if serialized data can be parsed back again
     try {
         this.serializer.parse(body.xml);

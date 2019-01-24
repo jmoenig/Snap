@@ -53,7 +53,7 @@ Cloud.prototype.init = function () {
 };
 
 // Projects larger than this are rejected.
-Cloud.MAX_FILE_SIZE = 10 * 2e20;
+Cloud.MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 Cloud.prototype.knownDomains = {
     'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
