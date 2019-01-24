@@ -5657,12 +5657,9 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 
     this.showMessage('Saving project\nto the cloud...');
-    console.log('name', name);
     projectBody = this.buildProjectRequest();
-    console.log(projectBody);
     projectSize = this.verifyProject(projectBody);
-    console.log(projectSize);
-    if (!projectSize) {return; }
+    if (!projectSize) {return; } // Invalid Projects don't return anything.
     this.showMessage(
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );

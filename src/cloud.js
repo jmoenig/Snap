@@ -28,9 +28,10 @@
 */
 
 // Global settings /////////////////////////////////////////////////////
+// cloud.js should be able to exist indepent of Snap!
+// (The module date is included for simplicity, but is not needed elsewhere.)
 
-/*global modules, SnapSerializer, hex_sha512, DialogBoxMorph, Color,
-normalizeCanvas*/
+/*global modules, hex_sha512*/
 
 modules = modules || {};
 modules.cloud = '2019-January-17';
