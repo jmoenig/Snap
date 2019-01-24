@@ -51,6 +51,9 @@ Cloud.prototype.init = function () {
     this.username = null;
 };
 
+// Projects larger than this are rejected.
+Cloud.MAX_FILE_SIZE = 10 * 2e20;
+
 Cloud.prototype.knownDomains = {
     'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
     'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
@@ -145,6 +148,8 @@ Cloud.genericErrorMessage =
 Cloud.prototype.genericError = function () {
     throw new Error(Cloud.genericErrorMessage);
 };
+
+
 
 // Low level functionality
 
@@ -397,79 +402,17 @@ Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
 
 // Projects
 
-Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
+Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
     var myself = this;
     this.checkCredentials(
         function (username) {
             if (username) {
-                var xml = ide.serializer.serialize(ide.stage),
-                    thumbnail = normalizeCanvas(
-                    	ide.stage.thumbnail(
-                        	SnapSerializer.prototype.thumbnailSize
-                    )).toDataURL(),
-                    body, mediaSize, size;
-
-                ide.serializer.isCollectingMedia = true;
-                body = {
-                    notes: ide.projectNotes,
-                    xml: xml,
-                    media: ide.hasChangedMedia ?
-                        ide.serializer.mediaXML(ide.projectName) : null,
-                    thumbnail: thumbnail,
-                    remixID: ide.stage.remixID
-                };
-                ide.serializer.isCollectingMedia = false;
-                ide.serializer.flushMedia();
-
-                mediaSize = body.media ? body.media.length : 0;
-                size = body.xml.length + mediaSize;
-                if (mediaSize > 10485760) {
-                    new DialogBoxMorph().inform(
-                        'Snap!Cloud - Cannot Save Project',
-                        'The media inside this project exceeds 10 MB.\n' +
-                            'Please reduce the size of costumes or sounds.\n',
-                        ide.world(),
-                        ide.cloudIcon(null, new Color(180, 0, 0))
-                    );
-                    throw new Error('Project media exceeds 10 MB size limit');
-                }
-
-                // check if serialized data can be parsed back again
-                try {
-                    ide.serializer.parse(body.xml);
-                } catch (err) {
-                    ide.showMessage(
-                    	'Serialization of program data failed:\n' + err
-                    );
-                    throw new Error(
-                    	'Serialization of program data failed:\n' + err
-                    );
-                }
-                if (body.media !== null) {
-                    try {
-                        ide.serializer.parse(body.media);
-                    } catch (err) {
-                        ide.showMessage(
-                        	'Serialization of media failed:\n' + err
-                        );
-                        throw new Error(
-                        	'Serialization of media failed:\n' + err
-                        );
-                    }
-                }
-                ide.serializer.isCollectingMedia = false;
-                ide.serializer.flushMedia();
-
-                ide.showMessage(
-                	'Uploading ' + Math.round(size / 1024) + ' KB...'
-                );
-
                 myself.request(
                     'POST',
                     '/projects/' +
                         encodeURIComponent(username) +
                         '/' +
-                        encodeURIComponent(ide.projectName),
+                        encodeURIComponent(projectName),
                     onSuccess,
                     onError,
                     'Project could not be saved',
