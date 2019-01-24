@@ -5606,9 +5606,10 @@ IDE_Morph.prototype.buildProjectRequest = function () {
     return body;
 }
 
-IDE_Morph.prototype.verifyProjectContents = function (body) {
+IDE_Morph.prototype.verifyProject = function (body) {
+    // Ensure the project is less than 10MB and serializes correctly.
     var encodedBody = JSON.stringify(body);
-    if (ecodedBody.length > Cloud.MAX_FILE_SIZE) {
+    if (encodedBody.length > Cloud.MAX_FILE_SIZE) {
         new DialogBoxMorph().inform(
             'Snap!Cloud - Cannot Save Project',
             'The media inside this project exceeds 10 MB.\n' +
@@ -5645,24 +5646,28 @@ IDE_Morph.prototype.verifyProjectContents = function (body) {
     this.serializer.isCollectingMedia = false;
     this.serializer.flushMedia();
 
-    return size;
+    return encodedBody.length;
 }
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var projectBody, projectSize;
+    var myself = this, projectBody, projectSize;
 
-    if (!name) {return; }
+    if (name) {
+        this.setProjectName(name);
+    }
 
     this.showMessage('Saving project\nto the cloud...');
-    this.setProjectName(name);
+    console.log('name', name);
     projectBody = this.buildProjectRequest();
-    projectSize = this.verifyProjectSize(projectBody);
+    console.log(projectBody);
+    projectSize = this.verifyProject(projectBody);
+    console.log(projectSize);
     if (!projectSize) {return; }
     this.showMessage(
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );
     this.cloud.saveProject(
-        name,
+        this.projectName,
         projectBody,
         function () {myself.showMessage('saved.', 2); },
         this.cloudError()
@@ -6700,16 +6705,8 @@ ProjectDialogMorph.prototype.saveProject = function () {
 };
 
 ProjectDialogMorph.prototype.saveCloudProject = function () {
-    var myself = this;
-    this.ide.showMessage('Saving project\nto the cloud...');
-    this.ide.cloud.saveProject(
-        this.ide,
-        function () {
-            myself.ide.source = 'cloud';
-            myself.ide.showMessage('saved.', 2);
-        },
-        this.ide.cloudError()
-    );
+    this.ide.source = 'cloud';
+    this.ide.saveProjectToCloud();
     this.destroy();
 };
 

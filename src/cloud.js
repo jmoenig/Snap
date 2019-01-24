@@ -376,7 +376,6 @@ Cloud.prototype.changePassword = function (
         onError,
         'Could not change password'
     );
-
 };
 
 Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
@@ -403,6 +402,8 @@ Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
 // Projects
 
 Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
+    // Expects a body object with the following paramters:
+    // xml, media, thumbnail, remixID (optional), notes (optional)
     var myself = this;
     this.checkCredentials(
         function (username) {
