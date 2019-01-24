@@ -5617,30 +5617,22 @@ IDE_Morph.prototype.verifyProject = function (body) {
             this.world(),
             this.cloudIcon(null, new Color(180, 0, 0))
         );
-        throw new Error('Project media exceeds 10 MB size limit');
+        return false;
     }
 
     // check if serialized data can be parsed back again
     try {
         this.serializer.parse(body.xml);
     } catch (err) {
-        this.showMessage(
-            'Serialization of program data failed:\n' + err
-        );
-        throw new Error(
-            'Serialization of program data failed:\n' + err
-        );
+        this.showMessage('Serialization of program data failed:\n' + err);
+        return false;
     }
     if (body.media !== null) {
         try {
             this.serializer.parse(body.media);
         } catch (err) {
-            this.showMessage(
-                'Serialization of media failed:\n' + err
-            );
-            throw new Error(
-                'Serialization of media failed:\n' + err
-            );
+            this.showMessage('Serialization of media failed:\n' + err);
+            return false;
         }
     }
     this.serializer.isCollectingMedia = false;
