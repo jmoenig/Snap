@@ -32,6 +32,7 @@
 
 ### 2019-01-24
 * Turkish translation update, thanks, Turgut!
+* updated audio-comp library blocks with new loop-arrow symbols
 
 ### 2019-01-23
 * Objects, Threads: new blocks for setting and changing the stage's background color
