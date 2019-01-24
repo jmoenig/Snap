@@ -477,3 +477,40 @@ NetsProcess.prototype.reportStageHeight = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     return stage.dimensions.y;
 };
+
+// helps executing async functions in custom js blocks
+// WARN it could be slower than non-promise based approach
+// when calling this function, return only if the return value is not undefined.
+NetsProcess.prototype.runAsyncFn = function (asyncFn, args) {
+    var id = '_async' + 'Func' + asyncFn.name; // make sure id doesn't collide with process methods
+    if (!id || !(asyncFn instanceof Function)) throw new Error('id or asyncFn input missing');
+    if (!this[id]) {
+        this[id] = {};
+        this[id].startTime = new Date().getTime();
+        var promise = asyncFn.apply(this, args)
+            .then(r => {
+                this[id].complete = true;
+                this[id].response = r;
+            })
+            .catch(e => {
+                this[id].error = true;
+                this[id].response = e;
+            });
+        this[id].onerror = function(event) {
+            this[id].error = event;
+        };
+        this[id].promise = promise;
+    } else if (this[id].complete) {
+        // Clear request
+        var tmp = this[id];
+        this[id] = null;
+        return tmp.response;
+    } else if (this[id].error) {
+        var tmp = this[id];
+        this[id] = null;
+        console.error(tmp.response);
+        throw new Error(tmp.response);
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
