@@ -30,6 +30,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-01-25
+* Threads: tweaked CSV-parser to handle \r-only record delimiters
+
 ### 2019-01-24
 * Turkish translation update, thanks, Turgut!
 * updated audio-comp library blocks with new loop-arrow symbols

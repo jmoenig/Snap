@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-23';
+modules.threads = '2019-January-25';
 
 var ThreadManager;
 var Process;
@@ -2819,16 +2819,18 @@ Process.prototype.parseCSV = function (text) {
             char = '';
             col += 1;
             fields[col] = char;
-        } else if (char === '\n' && esc) {
-            if (prev === '\r') {
-                fields[col] = fields[col].slice(0, -1);
-            }
-            char = '';
+        } else if (char === '\r' && esc) {
             r += 1;
-            records[r] = [char];
+            records[r] = [''];
             fields = records[r];
             col = 0;
-
+        } else if (char === '\n' && esc) {
+            if (prev !== '\r') {
+                r += 1;
+                records[r] = [''];
+                fields = records[r];
+                col = 0;
+            }
         } else {
             fields[col] += char;
         }
@@ -2853,63 +2855,6 @@ Process.prototype.parseCSV = function (text) {
     }
     return records;
 };
-
-/*
-Process.prototype.parseCSVrecords = function (string) {
-    // RFC 4180
-    // currently unused
-    // parse csv formatted text into a one-dimensional list of records
-    var lines = this.reportTextSplit(string, ['line']).asArray(),
-        len = lines.length,
-        i = 0,
-        cur,
-        records = [];
-    while (i < len) {
-        cur = lines[i];
-        while ((cur.split('"').length - 1) % 2 > 0) {
-            i += 1;
-            cur += '\n';
-            cur += lines[i];
-        }
-        records.push(cur);
-        i += 1;
-    }
-    if (records[records.length - 1].length < 1) {
-        records.pop();
-    }
-    return new List(records);
-};
-
-Process.prototype.parseCSVfields = function (text) {
-    // RFC 4180
-    // currently unused
-    // parse a single record of csv into a one-dimensional list of fields
-    var prev = '',
-        fields = [''],
-        col = 0,
-        esc = true,
-        len = text.length,
-        idx,
-        char;
-    for (idx = 0; idx < len; idx += 1) {
-        char = text[idx];
-        if (char === '"') {
-            if (esc && char === prev) {
-                fields[col] += char;
-            }
-            esc = !esc;
-        } else if (char === ',' && esc) {
-            char = '';
-            col += 1;
-            fields[col] = char;
-        } else {
-            fields[col] += char;
-        }
-        prev = char;
-    }
-    return new List(fields);
-};
-*/
 
 Process.prototype.parseJSON = function (string) {
     // Bernat's original Snapi contribution
