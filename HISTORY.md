@@ -12,6 +12,7 @@
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
+    * export sounds
 * Notable Changes:
     * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
     * added transparency (alpha) to pen colors
@@ -33,6 +34,7 @@
 ### 2019-01-25
 * Threads: tweaked CSV-parser to handle \r-only record delimiters
 * Cloud, GUI: Decouple cloud access from GUI, thanks, Michael and Bernat!
+* GUI: added ability to export sounds
 
 ### 2019-01-24
 * Turkish translation update, thanks, Turgut!

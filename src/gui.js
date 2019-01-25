@@ -4704,6 +4704,11 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName) {
     this.saveFileAs(canvas.toDataURL(), 'image/png', fileName);
 };
 
+IDE_Morph.prototype.saveAudioAs = function (audio, fileName) {
+    // Export a Sound object as a WAV file
+    this.saveFileAs(audio.src, 'audio/wav', fileName);
+};
+
 IDE_Morph.prototype.saveXMLAs = function(xml, fileName) {
     // wrapper to saving XML files with a proper type tag.
     this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName);
@@ -8911,6 +8916,8 @@ SoundIconMorph.prototype.userMenu = function () {
     if (!(this.object instanceof Sound)) { return null; }
     menu.addItem('rename', 'renameSound');
     menu.addItem('delete', 'removeSound');
+    menu.addLine();
+    menu.addItem('export', 'exportSound');
     return menu;
 };
 
@@ -8942,6 +8949,11 @@ SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
         idx = this.parent.children.indexOf(this) - 1;
     jukebox.removeSound(idx);
+};
+
+SoundIconMorph.prototype.exportSound = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.saveAudioAs(this.object.audio, this.object.name);
 };
 
 SoundIconMorph.prototype.createBackgrounds
