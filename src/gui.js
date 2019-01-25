@@ -60,7 +60,7 @@
 
 /*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
 ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
-StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,
+StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,normalizeCanvas,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-January-17';
+modules.gui = '2019-January-25';
 
 // Declarations
 
@@ -5604,7 +5604,7 @@ IDE_Morph.prototype.buildProjectRequest = function () {
     this.serializer.flushMedia();
 
     return body;
-}
+};
 
 IDE_Morph.prototype.verifyProject = function (body) {
     // Ensure the project is less than 10MB and serializes correctly.
@@ -5620,7 +5620,7 @@ IDE_Morph.prototype.verifyProject = function (body) {
         return false;
     }
 
-    console.log(encodedBody.length)
+    // console.log(encodedBody.length);
     // check if serialized data can be parsed back again
     try {
         this.serializer.parse(body.xml);
@@ -5640,7 +5640,7 @@ IDE_Morph.prototype.verifyProject = function (body) {
     this.serializer.flushMedia();
 
     return encodedBody.length;
-}
+};
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
     var myself = this, projectBody, projectSize;

@@ -32,6 +32,7 @@
 
 ### 2019-01-25
 * Threads: tweaked CSV-parser to handle \r-only record delimiters
+* Cloud, GUI: Decouple cloud access from GUI, thanks, Michael and Bernat!
 
 ### 2019-01-24
 * Turkish translation update, thanks, Turgut!
