@@ -5583,17 +5583,85 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
-IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var myself = this;
-    if (name) {
-        this.showMessage('Saving project\nto the cloud...');
-        this.setProjectName(name);
-        this.cloud.saveProject(
-            this,
-            function () {myself.showMessage('saved.', 2); },
-            this.cloudError()
+IDE_Morph.prototype.buildProjectRequest = function () {
+    var xml = this.serializer.serialize(this.stage),
+        thumbnail = normalizeCanvas(
+            this.stage.thumbnail(
+                SnapSerializer.prototype.thumbnailSize
+        )).toDataURL(),
+        body;
+
+    this.serializer.isCollectingMedia = true;
+    body = {
+        notes: this.projectNotes,
+        xml: xml,
+        media: this.hasChangedMedia ?
+            this.serializer.mediaXML(this.projectName) : null,
+        thumbnail: thumbnail,
+        remixID: this.stage.remixID
+    };
+    this.serializer.isCollectingMedia = false;
+    this.serializer.flushMedia();
+
+    return body;
+}
+
+IDE_Morph.prototype.verifyProject = function (body) {
+    // Ensure the project is less than 10MB and serializes correctly.
+    var encodedBody = JSON.stringify(body);
+    if (encodedBody.length > Cloud.MAX_FILE_SIZE) {
+        new DialogBoxMorph().inform(
+            'Snap!Cloud - Cannot Save Project',
+            'The media inside this project exceeds 10 MB.\n' +
+                'Please reduce the size of costumes or sounds.\n',
+            this.world(),
+            this.cloudIcon(null, new Color(180, 0, 0))
         );
+        return false;
     }
+
+    console.log(encodedBody.length)
+    // check if serialized data can be parsed back again
+    try {
+        this.serializer.parse(body.xml);
+    } catch (err) {
+        this.showMessage('Serialization of program data failed:\n' + err);
+        return false;
+    }
+    if (body.media !== null) {
+        try {
+            this.serializer.parse(body.media);
+        } catch (err) {
+            this.showMessage('Serialization of media failed:\n' + err);
+            return false;
+        }
+    }
+    this.serializer.isCollectingMedia = false;
+    this.serializer.flushMedia();
+
+    return encodedBody.length;
+}
+
+IDE_Morph.prototype.saveProjectToCloud = function (name) {
+    var myself = this, projectBody, projectSize;
+
+    if (name) {
+        this.setProjectName(name);
+    }
+
+    this.showMessage('Saving project\nto the cloud...');
+    projectBody = this.buildProjectRequest();
+    projectSize = this.verifyProject(projectBody);
+    if (!projectSize) {return; } // Invalid Projects don't return anything.
+    this.showMessage(
+        'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
+    );
+    this.cloud.saveProject(
+        this.projectName,
+        projectBody,
+        function () {myself.showMessage('saved.', 2); },
+        this.cloudError()
+    );
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
@@ -5804,11 +5872,11 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
         async = callback instanceof Function,
         myself = this,
         rsp;
-	if (async) {
-    	request.responseType = responseType || 'text';
+    if (async) {
+        request.responseType = responseType || 'text';
     }
     rsp = (!async || request.responseType === 'text') ? 'responseText'
-    	: 'response';
+        : 'response';
     try {
         request.open('GET', url, async);
         if (async) {
@@ -6627,16 +6695,8 @@ ProjectDialogMorph.prototype.saveProject = function () {
 };
 
 ProjectDialogMorph.prototype.saveCloudProject = function () {
-    var myself = this;
-    this.ide.showMessage('Saving project\nto the cloud...');
-    this.ide.cloud.saveProject(
-        this.ide,
-        function () {
-            myself.ide.source = 'cloud';
-            myself.ide.showMessage('saved.', 2);
-        },
-        this.ide.cloudError()
-    );
+    this.ide.source = 'cloud';
+    this.ide.saveProjectToCloud();
     this.destroy();
 };
 
