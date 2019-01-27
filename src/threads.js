@@ -4362,7 +4362,13 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     });
     return new List(result);
 };
-
+//LambdaMod wuz here
+//decodeBlocks();
+for (var i = 0; i < lm.blocks.length; i++) {
+  var blockName = lm.blocks[i].name;
+  var proto = localStorage.getItem("lambdaBlock-" + blockName + "-prototype");
+  eval("Process.prototype." + blockName + " = " + proto);
+}
 // Context /////////////////////////////////////////////////////////////
 
 /*
@@ -5035,5 +5041,3 @@ JSCompiler.prototype.compileInput = function (inp) {
         );
     }
 };
-
-

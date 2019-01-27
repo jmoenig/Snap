@@ -2,19 +2,32 @@
 <html>
   <head>
     <script type="text/javascript">
+    /*
     if (window.location) {
       window.location = 'snap.html' + window.location.hash;
     }
-    </script> 
-    <title>LambdaMod</title> 
+    */
+    </script>
+    <style>
+    img.loading {
+      vertical-align: middle;
+    }
+    </style>
+    <title>LambdaMod</title>
   </head>
   <body>
     <p>Welcome to LambdaMod!</p>
     <p>Please place your mod files in here:</p>
-    <input type="file" id="mods">
+    <input type="file" accept=".lmod" id="modLink">
+    <button id="addLink" onclick="addMod()">Add</button>
+    <img src="lambdaLoad.gif" height="16" width="16" class="loading" style="display: none" id="loading">
     <p>Mods you added will appear here:</p>
     <div id="listOfMods"></div>
-    <a href="snap.html">Run Snap!</a> 
-  </body> 
+    <button onclick="initializeMod()">Run Snap!</button>
+    <div id="log" style="font-family: monospace;">
+      <p style="font-family: serif;">Log</p>
+    </div>
+    <script src="launcher.js"></script>
+    <script src="modpackager.js"></script>
+  </body>
 </html>
-

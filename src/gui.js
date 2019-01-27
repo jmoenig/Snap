@@ -1377,7 +1377,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         myself.createSpriteEditor();
         myself.fixLayout('tabEditor');
     };
-
+//LambdaGoHere
     tab = new TabMorph(
         tabColors,
         null, // target
@@ -1501,6 +1501,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
+    //LambdaGoHere
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;

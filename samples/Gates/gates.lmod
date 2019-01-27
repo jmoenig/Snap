@@ -1,0 +1,67 @@
+//Logic Gates`Logic gates for Snap!`ChocolateCircus445
+var xor = new Block(
+  'xor',
+  'both',
+  'predicate',
+  'operators',
+  '%b xor %b',
+  'operators'
+);
+xor.func = function(a, b) {
+  if (a || b) {
+    if (a && b) {
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+var nand = new Block(
+  'nand',
+  'both',
+  'predicate',
+  'operators',
+  '%b nand %b',
+  'operators'
+)
+nand.func = function(a, b) {
+  if (!(a && b)) {
+    return true;
+  }
+  return false;
+}
+var nor = new Block(
+  'nor',
+  'both',
+  'predicate',
+  'operators',
+  '%b nor %b',
+  'operators'
+)
+nor.func = function(a, b) {
+  if (!(a || b)) {
+    return true;
+  }
+  return false;
+}
+var xnor = new Block(
+  'xnor',
+  'both',
+  'predicate',
+  'operators',
+  '%b xnor %b',
+  'operators'
+)
+xnor.func = function(a, b) {
+  if (a || b) {
+    if (a && b) {
+      return true;
+    }
+    return false;
+  }
+  return true;
+}
+thisMod.blocks.push(xor);
+thisMod.blocks.push(nand);
+thisMod.blocks.push(nor);
+thisMod.blocks.push(xnor);

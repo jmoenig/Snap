@@ -140,7 +140,27 @@ SpriteMorph.prototype.categories =
         'lists',
         'other'
     ];
-
+//LambdaMod wuz here
+for (var i = 0; i < lm.categories.length; i++) {
+  SpriteMorph.prototype.categories.push(lm.categories[i].name);
+}
+var rgbToColor = function(rgb) {
+  try {
+    /*
+    if ((rgb.charAt(0) != "r") || (rgb.charAt(0) != "g") || (rgb.charAt(0) != "b")) {
+      console.error("invalid color " + rgb);
+      return new Color(0, 0, 0);
+    }
+    */
+    var clr = rgb.split('(')[1];
+    clr = clr.split(')')[0];
+    clr = clr.split(',');
+    return new Color(clr[0], clr[1], clr[2]);
+  } catch (e){
+    console.error(e);
+    return new Color(0, 0, 0);
+  }
+}
 SpriteMorph.prototype.blockColor = {
     motion : new Color(74, 108, 212),
     looks : new Color(143, 86, 227),
@@ -153,7 +173,10 @@ SpriteMorph.prototype.blockColor = {
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
 };
-
+//LambdaMod wuz here
+for (i = 0; i < lm.categories.length; i++) {
+  eval("SpriteMorph.prototype.blockColor." + lm.categories[i].name + " = new Color(" + rgbToColor(lm.categories[i].color).r + "," + rgbToColor(lm.categories[i].color).g + "," + rgbToColor(lm.categories[i].color).b + ")");
+}
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
 SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
@@ -1194,6 +1217,26 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'code of %cmdRing'
         }
     };
+    //LambdaMod wuz here
+    for (var i = 0; i < lm.blocks.length; i++) {
+      var blobject = new Object();
+      var block = lm.blocks[i];
+      switch (block.only) {
+        case "sprite":
+        blobject.only = SpriteMorph;
+        break;
+        case "backdrop":
+        blobject.only = StageMorph;
+        break;
+      }
+      blobject.type = block.type;
+      blobject.category = block.category;
+      blobject.spec = block.spec;
+      if (block.defaults != null) {
+        blobject.defaults = block.defaults;
+      }
+      eval("SpriteMorph.prototype.blocks." + block.name + " = blobject");
+    };
 };
 
 SpriteMorph.prototype.initBlocks();
@@ -1833,7 +1876,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             }
         }
     }
-
+    //LambdaMod wuz here
+    var evaluateCatChoice = function(blocks, cat) {
+      for (var i = 0; i < lm.blocks.length; i++) {
+        var curBlock = lm.blocks[i];
+        if (curBlock.pcat == cat) {
+          blocks.push(block(curBlock.name));
+        }
+      }
+    };
     if (cat === 'motion') {
 
         blocks.push(block('forward'));
@@ -1860,8 +1911,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('yPosition', this.inheritsAttribute('y position')));
         blocks.push(watcherToggle('direction'));
         blocks.push(block('direction', this.inheritsAttribute('direction')));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
+
 
     } else if (cat === 'looks') {
 
@@ -1908,7 +1962,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -1926,6 +1981,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -1947,6 +2004,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('floodFill'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -1994,6 +2053,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -2056,7 +2117,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
 
 	/////////////////////////////////
-
+  blocks.push('-');
+  evaluateCatChoice(blocks, cat);
 		blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -2121,7 +2183,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -2247,12 +2310,18 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
+            blocks.push('-');
+            evaluateCatChoice(blocks, cat);
             blocks.push('=');
         }
 
         blocks.push(this.makeBlockButton());
 
- 	}
+ 	} else {
+    evaluateCatChoice(blocks, cat);
+    blocks.push('=');
+    blocks.push(this.makeBlockButton());
+  }
     return blocks;
 };
 
@@ -2346,7 +2415,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    
+
     palette.toolBar = new AlignmentMorph('column');
 
     searchButton = new PushButtonMorph(
@@ -7091,6 +7160,14 @@ StageMorph.prototype.blockTemplates = function (category) {
             }
         }
     }
+    var evaluateCatChoice = function(blocks, cat) {
+      for (var i = 0; i < lm.blocks.length; i++) {
+        var curBlock = lm.blocks[i];
+        if (curBlock.pcat == cat) {
+          blocks.push(block(curBlock.name));
+        }
+      }
+    };
 
     if (cat === 'motion') {
 
@@ -7099,7 +7176,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         ));
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
-        blocks.push(txt);
+        //blocks.push(txt);
+        //blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7135,7 +7214,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7153,6 +7233,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7165,6 +7247,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setBackgroundHSVA'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7210,6 +7294,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7267,7 +7353,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7332,7 +7419,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     //////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7432,7 +7520,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
+        blocks.push('-');
+        evaluateCatChoice(blocks, cat);
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
