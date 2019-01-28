@@ -33,6 +33,7 @@
 
 ### 2019-01-28
 * Greek translation update, thanks, Alexandros!
+* pushed version to "Beta"
 
 ### 2019-01-25
 * Threads: tweaked CSV-parser to handle \r-only record delimiters
