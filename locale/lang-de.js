@@ -578,10 +578,14 @@ SnapTranslator.dict.de = {
         'Objekt %spr',
     'http:// %s':
         'http:// %s',
-    'turbo mode?':
-        'Turbomodus?',
-    'set turbo mode to %b':
-        'setze Turbomodus auf %b',
+    'turbo mode':
+        'Turbomodus',
+    'flat line ends':
+        'flache Pinselstriche',
+    'is %setting on?':
+        'ist %setting an?',
+    'set %setting to %b':
+        'setze %setting auf %b',
     'current %dates':
         'Kalender %dates',
     'year':
@@ -1700,6 +1704,10 @@ SnapTranslator.dict.de = {
         'andere Klone',
     'dangling?':
         'Baumeln?',
+    'draggable?':
+        'greifbar?',
+    'rotation style':
+        'Drehtyp',
     'rotation x':
         'Drehpunkt x',
     'rotation y':
