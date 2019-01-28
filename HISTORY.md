@@ -11,6 +11,7 @@
     * new blocks for setting and changing the stage's background color
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
+    * selectors for changing and querying "draggable" and "rotation style" settings
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
@@ -36,6 +37,7 @@
 ### 2019-01-28
 * Threads, Objects: new "object" reporter in the Sensing category
 * Blocks, Objects, Threads: added "flat line ends" option to "turbo mode" accessor blocks
+* Blocks, Threads: added 'draggable' and 'rotation style' selectors to accessor blocks
 * Greek translation update, thanks, Alexandros!
 * German translation update
 * pushed version to "Beta"
