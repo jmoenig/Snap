@@ -31,6 +31,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-01-28
+* Greek translation update, thanks, Alexandros!
+
 ### 2019-01-25
 * Threads: tweaked CSV-parser to handle \r-only record delimiters
 * Cloud, GUI: Decouple cloud access from GUI, thanks, Michael and Bernat!
