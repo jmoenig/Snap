@@ -9,6 +9,7 @@
     * parse JSON using the SPLIT reporter
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
+    * new "object" reporter in the Sensing category for getting a sprite by its name
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
@@ -32,6 +33,7 @@
     * German
 
 ### 2019-01-28
+* Threads, Objects: new "object" reporter in the Sensing category
 * Greek translation update, thanks, Alexandros!
 * pushed version to "Beta"
 

@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-23';
+modules.objects = '2019-January-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -846,6 +846,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: '%att of %spr',
             defaults: [['costume #']]
+        },
+        reportObject: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'object %spr'
         },
         reportURL: {
             type: 'reporter',
@@ -2027,6 +2032,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         if (SpriteMorph.prototype.enableFirstClass) {
             blocks.push(block('reportGet'));
         }
+
+        blocks.push(block('reportObject'));
         blocks.push('-');
 
         blocks.push(block('reportURL'));
@@ -7238,6 +7245,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         if (SpriteMorph.prototype.enableFirstClass) {
             blocks.push(block('reportGet'));
         }
+
+        blocks.push(block('reportObject'));
         blocks.push('-');
 
         blocks.push(block('reportURL'));
