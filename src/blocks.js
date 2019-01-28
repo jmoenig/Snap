@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-January-23';
+modules.blocks = '2019-January-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1360,6 +1360,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['all']);
+            part.isStatic = true;
+            break;
+        case '%setting':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'turbo mode' : ['turbo mode'],
+                    'flat line ends' : ['flat line ends']
+                },
+                true
+            );
+            part.setContents(['turbo mode']);
             part.isStatic = true;
             break;
         case '%typ':

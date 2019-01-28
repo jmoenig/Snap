@@ -858,15 +858,17 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'url %s',
             defaults: ['snap.berkeley.edu']
         },
-        reportIsFastTracking: {
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'turbo mode?'
-        },
-        doSetFastTracking: {
+        doSetGlobalFlag: {
             type: 'command',
             category: 'sensing',
-            spec: 'set turbo mode to %b'
+            spec: 'set %setting to %b',
+            defaults: [['turbo mode']]
+        },
+        reportGlobalFlag: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'is %setting ?',
+            defaults: [['turbo mode']]
         },
         reportDate: {
             type: 'reporter',
@@ -1275,6 +1277,16 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         changeBrightness: {
             selector: 'changePenHSVA',
             inputs: [['brightness']],
+            offset: 1
+        },
+        reportIsFastTracking: {
+            selector: 'reportGlobalFlag',
+            inputs: [['turbo mode']],
+            offset: 1
+        },
+        doSetFastTracking: {
+            selector: 'doSetGlobalFlag',
+            inputs: [['turbo mode']],
             offset: 1
         }
     };
@@ -2038,8 +2050,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportURL'));
         blocks.push('-');
-        blocks.push(block('reportIsFastTracking'));
-        blocks.push(block('doSetFastTracking'));
+        blocks.push(block('reportGlobalFlag'));
+        blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
 
@@ -7251,8 +7263,8 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportURL'));
         blocks.push('-');
-        blocks.push(block('reportIsFastTracking'));
-        blocks.push(block('doSetFastTracking'));
+        blocks.push(block('reportGlobalFlag'));
+        blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
 

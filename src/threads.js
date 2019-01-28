@@ -1962,6 +1962,27 @@ Process.prototype.reportIsFastTracking = function () {
     return false;
 };
 
+Process.prototype.doSetGlobalFlag = function (name, bool) {
+    name = this.inputOption(name);
+    this.assertType(bool, 'Boolean');
+    if (name === 'turbo mode') {
+        this.doSetFastTracking(bool);
+    }
+    if (name === 'flat line ends') {
+        SpriteMorph.prototype.useFlatLineEnds = bool;
+    }
+};
+
+Process.prototype.reportGlobalFlag = function (name) {
+    name = this.inputOption(name);
+    if (name === 'turbo mode') {
+        return this.reportIsFastTracking();
+    }
+    if (name === 'flat line ends') {
+        return SpriteMorph.prototype.useFlatLineEnds;
+    }
+};
+
 Process.prototype.doSetFastTracking = function (bool) {
     var ide;
     if (!this.reportIsA(bool, 'Boolean')) {

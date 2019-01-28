@@ -10,6 +10,7 @@
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
     * new "object" reporter in the Sensing category for getting a sprite by its name
+    * blocks for changing and querying the "flat line ends" setting 
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
@@ -34,6 +35,7 @@
 
 ### 2019-01-28
 * Threads, Objects: new "object" reporter in the Sensing category
+* Blocks, Objects, Threads: added "flat line ends" option to "turbo mode" accessor blocks
 * Greek translation update, thanks, Alexandros!
 * German translation update
 * pushed version to "Beta"
