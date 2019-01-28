@@ -3584,6 +3584,8 @@ Process.prototype.reportGet = function (query) {
             );
         case 'dangling?':
             return !thisObj.rotatesWithAnchor;
+        case 'draggable?':
+            return thisObj.isDraggable; // +++
         case 'rotation x':
             return thisObj.xPosition();
         case 'rotation y':
@@ -3627,7 +3629,7 @@ Process.prototype.reportObject = function (name) {
 
 Process.prototype.doSet = function (attribute, value) {
     // experimental, manipulate sprites' attributes
-    var name, rcvr;
+    var name, rcvr, ide;
     rcvr = this.blockReceiver();
     this.assertAlive(rcvr);
     if (!(attribute instanceof Context || attribute instanceof Array) ||
@@ -3678,6 +3680,21 @@ Process.prototype.doSet = function (attribute, value) {
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
         rcvr.rotatesWithAnchor = !value;
+        rcvr.version = Date.now();
+        break;
+    case 'draggable?':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'Boolean');
+        rcvr.isDraggable = value;
+        // update padlock symbol in the IDE:
+        ide = rcvr.parentThatIsA(IDE_Morph);
+        if (ide) {
+            ide.spriteBar.children.forEach(function (each) {
+                if (each.refresh) {
+                    each.refresh();
+                }
+            });
+        }
         rcvr.version = Date.now();
         break;
     case 'rotation x':

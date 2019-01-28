@@ -623,6 +623,8 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'parent' : ['parent'],
                 // 'temporary?' : ['temporary?'],
                 'dangling?' : ['dangling?'],
+                'draggable?' : ['draggable?'], // +++
+                'rotation style' : ['rotation style'], // +++
                 'rotation x' : ['rotation x'],
                 'rotation y' : ['rotation y']
             };
@@ -8755,6 +8757,8 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
     dict['dangling?'] = ['dangling?'];
+    dict['draggable?'] = ['draggable?']; // +++
+    dict['rotation style'] = ['rotation style']; // +++
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];
     dict['center x'] = ['center x'];
