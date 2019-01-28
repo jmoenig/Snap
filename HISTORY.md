@@ -35,6 +35,7 @@
 ### 2019-01-28
 * Threads, Objects: new "object" reporter in the Sensing category
 * Greek translation update, thanks, Alexandros!
+* German translation update
 * pushed version to "Beta"
 
 ### 2019-01-25
