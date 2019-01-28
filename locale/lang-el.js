@@ -391,8 +391,10 @@ SnapTranslator.dict.el = {
         'σταμάτα όλους τους ήχους',
     'rest for %n beats':
         'κάνε παύση για %n ρυθμούς',
-    'play note %n for %n beats':
-        'παίξε την νότα %n για %n ρυθμούς',
+    'play note %note for %n beats':
+         'παίξε την νότα %note για %n ρυθμούς',
+    'set instrument to %inst':
+         'θέσε το όργανο σε %inst' ,
     'change tempo by %n':
         'άλλαξε την ταχύτητα του ρυθμού κατά %n',
     'set tempo to %n bpm':
@@ -409,10 +411,18 @@ SnapTranslator.dict.el = {
         'στυλό πάνω',
     'set pen color to %clr':
         'θέσε το χρώμα του στυλού να είναι %clr',
-    'change pen color by %n':
-        'άλλαξε το χρώμα του στυλού κατά %n',
-    'set pen color to %n':
-        'θέσε το χρώμα του στυλού να είναι %n',
+    'change pen %hsva by %n':
+         'άλλαξε %hsva του στυλού κατά %n',
+    'hue':
+        'απόχρωση',
+    'saturation':
+         'κορεσμός',
+    'brightness':
+         'φωτεινότητα' ,
+    'transparency':
+         'διαφάνεια',
+    'set pen %hsva to %n':
+        'θέσε %hsva του στυλού να είναι %n',
     'change pen shade by %n':
         'άλλαξε την σκιά του στυλού κατά %n',
     'set pen shade to %n':
@@ -423,6 +433,8 @@ SnapTranslator.dict.el = {
         'θέσε το μέγεθος του στυλού να είναι %n',
     'stamp':
         'σφραγίδα',
+    'fill':
+         'γέμισμα',
 
     // control:
     'when %greenflag clicked':
@@ -450,7 +462,7 @@ SnapTranslator.dict.el = {
     'when %b':
         'Όταν %b',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        'Όταν δεχτώ %msgHat',
     'broadcast %msg':
         'στείλε το %msg',
     'broadcast %msg and wait':
@@ -609,6 +621,8 @@ SnapTranslator.dict.el = {
         'λάθος',
     'join %words':
         'συνένωσε %words',
+    'split %s by %delim':
+        'χώρισε %s ως προς το %delim',
     'hello':
         'γεια',
     'world':
@@ -640,6 +654,8 @@ SnapTranslator.dict.el = {
         'Όνομα μεταβλητής',
     'Script variable name':
         'Όνομα μεταβλητής του σεναρίου',
+    'inherit %shd':
+        'Κληρονόμησε %shd',
     'Delete a variable':
         'Κάτάργηση μιας μεταβλητής',
 
@@ -1020,7 +1036,7 @@ SnapTranslator.dict.el = {
     'Brush size':
         'Μέγεθος πινέλου',
     'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Proportionen festlegen\n(auch über Shift-Taste)',
+        'Ενεργοποίηση περιορισμού σχημάτων\n(εναλλακτικά πατώντας shift)',
     'grow':
         'μεγάλωσε',
      'shrink':
