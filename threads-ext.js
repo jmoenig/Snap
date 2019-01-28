@@ -483,31 +483,33 @@ NetsProcess.prototype.reportStageHeight = function () {
 // when calling this function, return only if the return value is not undefined.
 NetsProcess.prototype.runAsyncFn = function (asyncFn, args) {
     var id = '_async' + 'Func' + asyncFn.name; // make sure id doesn't collide with process methods
+    var tmp;
+    var myself = this;
     if (!id || !(asyncFn instanceof Function)) throw new Error('id or asyncFn input missing');
     if (!this[id]) {
         this[id] = {};
         this[id].startTime = new Date().getTime();
-        var promise = asyncFn.apply(this, args)
-            .then(r => {
-                this[id].complete = true;
-                this[id].response = r;
+        var promise = asyncFn.apply(myself, args)
+            .then(function(r) {
+                myself[id].complete = true;
+                myself[id].response = r;
             })
-            .catch(e => {
-                this[id].error = true;
-                this[id].response = e;
+            .catch(function(e) {
+                myself[id].error = true;
+                myself[id].response = e;
             });
-        this[id].onerror = function(event) {
-            this[id].error = event;
+        myself[id].onerror = function(event) {
+            myself[id].error = event;
         };
-        this[id].promise = promise;
-    } else if (this[id].complete) {
+        myself[id].promise = promise;
+    } else if (myself[id].complete) {
         // Clear request
-        var tmp = this[id];
-        this[id] = null;
+        tmp = myself[id];
+        myself[id] = null;
         return tmp.response;
-    } else if (this[id].error) {
-        var tmp = this[id];
-        this[id] = null;
+    } else if (myself[id].error) {
+        tmp = myself[id];
+        myself[id] = null;
         console.error(tmp.response);
         throw new Error(tmp.response);
     }
