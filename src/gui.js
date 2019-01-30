@@ -273,8 +273,9 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this, urlLanguage = null;
 
-    function initUser(username) {
+    function initUser(username, userId) {
         sessionStorage.username = username;
+        sessionStorage.userId = userId;
         if (username) {
             myself.source = 'cloud';
             if (!myself.cloud.verified) {
@@ -293,6 +294,14 @@ IDE_Morph.prototype.openIn = function (world) {
                     myself.cloudIcon(null, new Color(0, 180, 0))
                 );
             }
+        }
+        // Assocate the user with any exceptions
+        if (Rollbar) {
+            Rollbar.configure({
+                payload: {
+                    person: { id: userId, username: username }
+                }
+            });
         }
     }
 
@@ -4745,7 +4754,8 @@ IDE_Morph.prototype.switchToUserMode = function () {
         }
     };
     this.showMessage('entering user mode', 1);
-
+    // Re-enable exception tracking
+    if (Rollbar) { Rollbar.configure({ enabled: true }); }
 };
 
 IDE_Morph.prototype.switchToDevMode = function () {
@@ -4769,6 +4779,8 @@ IDE_Morph.prototype.switchToDevMode = function () {
             + 'use the browser\'s web console\n'
             + 'to see error messages.'
     );
+    // disable exception tracking (to prevent noise)
+    if (Rollbar) { Rollbar.configure({ enabled: false }); }
 };
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
@@ -5392,8 +5404,9 @@ IDE_Morph.prototype.initializeCloud = function () {
                 user.username.toLowerCase(),
                 user.password,
                 user.choice,
-                function (username, role, response) {
+                function (username, userId, role, response) {
                     sessionStorage.username = username;
+                    sessionStorage.userId = userId;
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
@@ -5416,6 +5429,14 @@ IDE_Morph.prototype.initializeCloud = function () {
                         );
                     } else {
                         myself.showMessage(response.message, 2);
+                    }
+                    // Associate the user with any exceptions that occur.
+                    if (Rollbar) {
+                        Rollbar.configure({
+                            payload: {
+                                person: { id: userId, username: username }
+                            }
+                        });
                     }
                 },
                 myself.cloudError()
@@ -5575,17 +5596,19 @@ IDE_Morph.prototype.changeCloudPassword = function () {
 };
 
 IDE_Morph.prototype.logout = function () {
-    var myself = this;
-    this.cloud.logout(
-        function () {
-            delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
-        },
-        function () {
-            delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
+    function handleLogout() {
+        delete(sessionStorage.username);
+        delete(sessionStorage.userId);
+        myself.showMessage('disconnected.', 2);
+        // disassociate user with any future exceptions.
+        if (Rollbar) {
+            Rollbar.configure({ payload: { person: { id: 0 } } });
         }
-    );
+    }
+
+    var myself = this;
+    // log the user out on success or failure or request.
+    this.cloud.logout(handleLogout, handleLogout);
 };
 
 IDE_Morph.prototype.buildProjectRequest = function () {

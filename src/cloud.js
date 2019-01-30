@@ -272,9 +272,10 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
                 myself.verified = user.verified;
             }
             if (onSuccess) {
-            	onSuccess.call(
+                onSuccess.call(
                     null,
                     user.username,
+                    user.id,
                     user.role,
                     response ? JSON.parse(response) : null
                 );
@@ -286,7 +287,7 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
 
 Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
     this.request(
-    	'GET',
+        'GET',
         '/users/c',
         onSuccess,
         onError,
@@ -296,7 +297,7 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
 
 Cloud.prototype.getUser = function (username, onSuccess, onError) {
     this.request(
-    	'GET',
+        'GET',
         '/users/' + encodeURIComponent(username),
         onSuccess,
         onError,

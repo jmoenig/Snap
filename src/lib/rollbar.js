@@ -1,4 +1,6 @@
-// rollbar is an exception tracking platform.
+// Rollbar is an exception tracking platform.
+// Extenstion authors are free to ignore this as it will do nothing for you.
+// Or you can use to get a new Rollbar token and update the domain checking.
 
 (function() {
     // return production or staging, but make it easy to skip other servers.
@@ -8,19 +10,24 @@
             host.indexOf('cs10.org') > -1) {
             return host.indexOf('staging') == -1 ? 'production' : 'staging';
         }
-        return 'development'
         return false;
     }
 
     var _rollbarConfig = {
-        accessToken: "717176a49f184aaf88e311ff13174809",
+        accessToken: "c00a6f85db684a319c7e59895a1aa8f1",
         captureUncaught: true,
         captureUnhandledRejections: true,
         payload: {
-            environment: getEnvironment()
+            environment: getEnvironment(),
+            // identiy already logged in users.
+            person: {
+                id: sessionStorage.userId,
+                username: sessionStorage.username
+            }
         }
     };
 
+    // Skip Posting to Rollbar if not a Snap! domain.
     if (!getEnvironment()) { return; }
 
     // Rollbar Snippet
