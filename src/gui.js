@@ -296,7 +296,7 @@ IDE_Morph.prototype.openIn = function (world) {
             }
         }
         // Assocate the user with any exceptions
-        if (Rollbar) {
+        if (typeof Rollbar != 'undefined') {
             Rollbar.configure({
                 payload: {
                     person: { id: userId, username: username }
@@ -4755,7 +4755,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     };
     this.showMessage('entering user mode', 1);
     // Re-enable exception tracking
-    if (Rollbar) { Rollbar.configure({ enabled: true }); }
+    if (typeof Rollbar != 'undefined') { Rollbar.configure({ enabled: true }); }
 };
 
 IDE_Morph.prototype.switchToDevMode = function () {
@@ -4780,7 +4780,7 @@ IDE_Morph.prototype.switchToDevMode = function () {
             + 'to see error messages.'
     );
     // disable exception tracking (to prevent noise)
-    if (Rollbar) { Rollbar.configure({ enabled: false }); }
+    if (typeof Rollbar != 'undefined') { Rollbar.configure({ enabled: false }); }
 };
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
@@ -5431,7 +5431,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                         myself.showMessage(response.message, 2);
                     }
                     // Associate the user with any exceptions that occur.
-                    if (Rollbar) {
+                    if (typeof Rollbar != 'undefined') {
                         Rollbar.configure({
                             payload: {
                                 person: { id: userId, username: username }
@@ -5601,7 +5601,7 @@ IDE_Morph.prototype.logout = function () {
         delete(sessionStorage.userId);
         myself.showMessage('disconnected.', 2);
         // disassociate user with any future exceptions.
-        if (Rollbar) {
+        if (typeof Rollbar != 'undefined') {
             Rollbar.configure({ payload: { person: { id: 0 } } });
         }
     }
