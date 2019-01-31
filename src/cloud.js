@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-January-25';
+modules.cloud = '2019-January-31';
 
 // Global stuff
 
@@ -723,3 +723,79 @@ Cloud.prototype.updateProjectName = function (
     );
 };
 
+// Collections
+
+Cloud.prototype.newCollection = function (collectionName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/%username/collections/' + encodeURIComponent(collectionName),
+        onSuccess,
+        onError,
+        'Could not create collection'
+    );
+};
+
+Cloud.prototype.getCollectionProjects = function (collectionUsername, collectionName, page, pageSize, onSuccess, onError) {
+    var path = '/users/' + encodeURIComponent(collectionUsername) +
+                '/collections/' + encodeURIComponent(collectionName) +
+                '/projects/';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    this.withCredentialsRequest(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch projects'
+    );
+};
+
+Cloud.prototype.addProjectToCollection = function (collectionUsername, collectionName, projectUsername, projectName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/projects',
+        onSuccess,
+        onError,
+        false, // wants raw response
+        JSON.stringify({
+            projectUsername: projectUsername,
+            projectName: projectName
+        })
+    );
+};
+
+Cloud.prototype.getUserCollections = function (collectionUsername, page, pageSize, searchTerm, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'GET',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) + '?' +
+            this.encodeDict({
+                page: page,
+                pageSize: page ? pageSize | 16 : '',
+                matchtext: encodeURIComponent(searchTerm)
+            }),
+        onSuccess,
+        onError,
+        'Could not fetch collections'
+    );
+};
+
+Cloud.prototype.getCollections = function (page, pageSize, searchTerm, onSuccess, onError) {
+    this[this.username ? 'withCredentialsRequest' : 'request'](
+        'GET',
+        '/collections?' +
+            this.encodeDict({
+                page: page,
+                pageSize: page ? pageSize | 16 : '',
+                matchtext: encodeURIComponent(searchTerm)
+            }),
+        onSuccess,
+        onError,
+        'Could not fetch collections'
+    );
+};
