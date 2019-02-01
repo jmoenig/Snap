@@ -772,8 +772,11 @@ Cloud.prototype.addProjectToCollection = function (collectionUsername, collectio
 Cloud.prototype.getUserCollections = function (collectionUsername, page, pageSize, searchTerm, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
-        '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) + '?' +
+        '/users/' +
+            (collectionUsername ?
+                encodeURIComponent(collectionUsername) :
+                '%username') +
+            '/collections?' +
             this.encodeDict({
                 page: page,
                 pageSize: page ? pageSize | 16 : '',
