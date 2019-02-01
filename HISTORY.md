@@ -12,6 +12,7 @@
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
+    * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhances support for embedding Snap in other website, thanks, Bernat!
@@ -33,6 +34,9 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * German
+
+### 2019-02-01
+* BYOB: new experimental feature: special multi-line and monospaced input slot types
 
 ### 2019-01-28
 * Threads, Objects: new "object" reporter in the Sensing category
