@@ -3337,7 +3337,10 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defLabel.setColor(new Color(255, 255, 255));
     defLabel.refresh = function () {
         if (myself.isExpanded && contains(
-                ['%s', '%n', '%txt', '%anyUE', '%b', '%boolUE'],
+                [
+                    '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
+                    '%mlt', '%code'
+                ],
                 myself.fragment.type
             )) {
             defLabel.show();
@@ -3355,7 +3358,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = function () {
         if (myself.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE'],
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
             myself.fragment.type
         )) {
             defInput.show();
