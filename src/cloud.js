@@ -735,7 +735,7 @@ Cloud.prototype.newCollection = function (collectionName, onSuccess, onError) {
     );
 };
 
-Cloud.prototype.getCollectionProjects = function (collectionUsername, collectionName, page, pageSize, onSuccess, onError) {
+Cloud.prototype.getCollectionProjects = function (collectionUsername, page, pageSize, collectionName, onSuccess, onError) {
     var path = '/users/' + encodeURIComponent(collectionUsername) +
                 '/collections/' + encodeURIComponent(collectionName) +
                 '/projects/';
