@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-January-21';
+modules.byob = '2019-February-01';
 
 // Declarations
 
@@ -3619,7 +3619,10 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
     var myself = this;
 
     this.slots.userMenu = function () {
-        if (contains(['%s', '%n', '%txt', '%anyUE'], myself.fragment.type)) {
+        if (contains(
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
+            myself.fragment.type)
+        ) {
             var menu = new MenuMorph(myself),
                 on = '\u2611 ',
                 off = '\u2610 ';
@@ -3631,9 +3634,11 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                          !myself.fragment.isReadOnly;
                          }
             );
+            menu.addLine();
+            menu.addMenu('special', myself.specialSlotsMenu());
             return menu;
         }
-        return Morph.prototype.userMenu.call(myself);
+        return myself.specialSlotsMenu();
     };
 };
 
@@ -3655,6 +3660,24 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
             'and {} for submenus. ' +
             'e.g.\n   the answer=42')
     );
+};
+
+InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
+    var menu = new MenuMorph(this.setSlotType, null, this),
+        myself = this,
+        on = '\u2611 ',
+        off = '\u2610 ';
+
+    function addSpecialSlotType(label, spec) {
+        menu.addItem(
+            (myself.fragment.type === spec ? on : off) + localize(label),
+            spec
+        );
+    }
+
+    addSpecialSlotType('multi-line', '%mlt');
+    addSpecialSlotType('code', '%code');
+    return menu;
 };
 
 // InputSlotDialogMorph hiding and showing:
