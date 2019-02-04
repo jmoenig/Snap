@@ -763,8 +763,8 @@ Cloud.prototype.addProjectToCollection = function (collectionUsername, collectio
         onError,
         false, // wants raw response
         JSON.stringify({
-            projectUsername: projectUsername,
-            projectName: projectName
+            username: projectUsername,
+            projectname: projectName
         })
     );
 };
