@@ -38,6 +38,7 @@
 
 ### 2019-02-04
 * BYOB: new experimental feature: special context-aware drop-down menus for custom blocks
+* BYOB: identify multi-line input slots by the pilcrow symbol in the slot editor
 
 ### 2019-02-01
 * BYOB: new experimental feature: special multi-line and monospaced input slot types

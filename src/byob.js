@@ -2604,11 +2604,15 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     } else if (this.defaultValue) {
         if (this.type === '%n') {
             suff = ' # = ' + this.defaultValue.toString();
+        } else if (contains(['%mlt', '%code'], this.type)) {
+            suff = ' \u00B6 ' + this.defaultValue.toString(); // pilcrow
         } else { // 'any' or 'text'
             suff = ' = ' + this.defaultValue.toString();
         }
     } else if (this.type === '%n') {
         suff = ' #';
+    } else if (contains(['%mlt', '%code'], this.type)) {
+        suff = ' \u00B6'; // pilcrow
     }
     return this.labelString + suff;
 };
