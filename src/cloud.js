@@ -761,6 +761,7 @@ Cloud.prototype.addProjectToCollection = function (collectionUsername, collectio
             '/projects',
         onSuccess,
         onError,
+        'Could not add project to collection',
         false, // wants raw response
         JSON.stringify({
             username: projectUsername,
