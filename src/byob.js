@@ -2605,7 +2605,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         if (this.type === '%n') {
             suff = ' # = ' + this.defaultValue.toString();
         } else if (contains(['%mlt', '%code'], this.type)) {
-            suff = ' \u00B6 ' + this.defaultValue.toString(); // pilcrow
+            suff = ' \u00B6 = ' + this.defaultValue.toString(); // pilcrow
         } else { // 'any' or 'text'
             suff = ' = ' + this.defaultValue.toString();
         }
