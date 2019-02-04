@@ -778,9 +778,9 @@ Cloud.prototype.getUserCollections = function (collectionUsername, page, pageSiz
                 '%username') +
             '/collections?' +
             this.encodeDict({
-                page: page,
+                page: page || '',
                 pageSize: page ? pageSize | 16 : '',
-                matchtext: encodeURIComponent(searchTerm)
+                matchtext: searchTerm ? encodeURIComponent(searchTerm) : ''
             }),
         onSuccess,
         onError,
