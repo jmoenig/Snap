@@ -8511,7 +8511,7 @@ InputSlotMorph.prototype.menuFromDict = function (
        			dial.action = update;
        			dial.fillColor = this.parent.color;
           		dial.setRadius(this.fontSize * 3);
-				dial.setValue(this.evaluate(), false, true);
+				dial.setValue(+this.evaluate(), false, true);
        			menu.addLine();
 			    menu.items.push(dial);
             	menu.addLine();
