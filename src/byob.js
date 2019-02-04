@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-February-01';
+modules.byob = '2019-February-04';
 
 // Declarations
 
@@ -317,8 +317,15 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
+    var fname;
     if (this.declarations.has(inputName) &&
             this.declarations.get(inputName)[2]) {
+        if ( (this.declarations.get(inputName)[2].indexOf('§_') === 0)) {
+            fname = this.declarations.get(inputName)[2].slice(2);
+            if (fname !== 'dir') {
+                return fname;
+            }
+        }
         return this.parseChoices(this.declarations.get(inputName)[2]);
     }
     return null;
@@ -3439,6 +3446,10 @@ InputSlotDialogMorph.prototype.setSlotArity = function (arity) {
     this.edit();
 };
 
+InputSlotDialogMorph.prototype.setSlotOptions = function (text) {
+    this.fragment.options = text;
+};
+
 InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     label,
     spec // slot spec or array of specs (I *hate* the arrow symbol, -Jens)
@@ -3635,6 +3646,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                          }
             );
             menu.addLine();
+            menu.addMenu('menu', myself.specialOptionsMenu());
             menu.addMenu('special', myself.specialSlotsMenu());
             return menu;
         }
@@ -3677,6 +3689,31 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    return menu;
+};
+
+InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
+    var menu = new MenuMorph(this.setSlotOptions, null, this),
+        myself = this,
+        on = '\u2611 ',
+        off = '\u2610 ';
+
+    function addSpecialOptions(label, selector) {
+        menu.addItem(
+            (myself.fragment.options === selector ?
+                    on : off) + localize(label),
+            selector
+        );
+    }
+
+    addSpecialOptions('messages', '§_messagesReceivedMenu');
+    addSpecialOptions('objects', '§_objectsMenu');
+    // addSpecialOptions('data types', '§_typesMenu');
+    addSpecialOptions('costumes', '§_costumesMenu');
+    addSpecialOptions('sounds', '§_soundsMenu');
+    addSpecialOptions('variables', '§_getVarNamesDict');
+    addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
+    addSpecialOptions('360° dial', '§_dir');
     return menu;
 };
 
