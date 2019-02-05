@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-February-04';
+modules.byob = '2019-February-05';
 
 // Declarations
 
@@ -3684,8 +3684,8 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
 InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     var menu = new MenuMorph(this.setSlotType, null, this),
         myself = this,
-        on = '\u2611 ',
-        off = '\u2610 ';
+        on = '\u26AB ',
+        off = '\u26AA ';
 
     function addSpecialSlotType(label, spec) {
         menu.addItem(
@@ -3702,8 +3702,8 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     var menu = new MenuMorph(this.setSlotOptions, null, this),
         myself = this,
-        on = '\u2611 ',
-        off = '\u2610 ';
+        on = '\u26AB ',
+        off = '\u26AA ';
 
     function addSpecialOptions(label, selector) {
         menu.addItem(

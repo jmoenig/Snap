@@ -36,6 +36,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-05
+* BYOB: radio button symbols for special slot / drop-down menu options
+
 ### 2019-02-04
 * BYOB: new experimental feature: special context-aware drop-down menus for custom blocks
 * BYOB: identify multi-line input slots by the pilcrow symbol in the slot editor
