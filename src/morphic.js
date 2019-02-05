@@ -5710,6 +5710,14 @@ CursorMorph.prototype.gotoSlot = function (slot) {
     }
 };
 
+CursorMorph.prototype.setSelection = function (start, end) {
+    var direction = (start <= end) ? 'forward' : 'backward';
+    if (start < end) {
+        var tmp = start; start = end; end = tmp;
+    }
+    this.textarea.setSelectionRange(start, end, direction);
+}
+
 // CursorMorph.prototype.goLeft = function (shift, howMany) {
 //     this.updateSelection(shift);
 //     this.gotoSlot(this.slot - (howMany || 1));
@@ -5868,33 +5876,33 @@ CursorMorph.prototype.cmd = function (aChar, shiftKey) {
     }
 };
 
-CursorMorph.prototype.deleteRight = function () {
-    var text;
-    if (this.target.selection() !== '') {
-        this.gotoSlot(this.target.selectionStartSlot());
-        this.target.deleteSelection();
-    } else {
-        text = this.target.text;
-        this.target.changed();
-        text = text.slice(0, this.slot) + text.slice(this.slot + 1);
-        this.target.text = text;
-        this.target.drawNew();
-    }
-};
+// CursorMorph.prototype.deleteRight = function () {
+//     var text;
+//     if (this.target.selection() !== '') {
+//         this.gotoSlot(this.target.selectionStartSlot());
+//         this.target.deleteSelection();
+//     } else {
+//         text = this.target.text;
+//         this.target.changed();
+//         text = text.slice(0, this.slot) + text.slice(this.slot + 1);
+//         this.target.text = text;
+//         this.target.drawNew();
+//     }
+// };
 
-CursorMorph.prototype.deleteLeft = function () {
-    var text;
-    if (this.target.selection()) {
-        this.gotoSlot(this.target.selectionStartSlot());
-        return this.target.deleteSelection();
-    }
-    text = this.target.text;
-    this.target.changed();
-    this.target.text = text.substring(0, this.slot - 1) +
-        text.substr(this.slot);
-    this.target.drawNew();
-    this.goLeft();
-};
+// CursorMorph.prototype.deleteLeft = function () {
+//     var text;
+//     if (this.target.selection()) {
+//         this.gotoSlot(this.target.selectionStartSlot());
+//         return this.target.deleteSelection();
+//     }
+//     text = this.target.text;
+//     this.target.changed();
+//     this.target.text = text.substring(0, this.slot - 1) +
+//         text.substr(this.slot);
+//     this.target.drawNew();
+//     this.goLeft();
+// };
 
 // CursorMorph destroying:
 
@@ -5914,20 +5922,20 @@ CursorMorph.prototype.destroyTextarea = function () {
     this.textarea = null;
 }
 
-CursorMorph.prototype.destroyClipboardHandler = function () {
-    var nodes = document.body.children,
-        each,
-        i;
-    if (this.clipboardHandler) {
-        for (i = 0; i < nodes.length; i += 1) {
-            each = nodes[i];
-            if (each === this.clipboardHandler) {
-                document.body.removeChild(this.clipboardHandler);
-                this.clipboardHandler = null;
-            }
-        }
-    }
-};
+// CursorMorph.prototype.destroyClipboardHandler = function () {
+//     var nodes = document.body.children,
+//         each,
+//         i;
+//     if (this.clipboardHandler) {
+//         for (i = 0; i < nodes.length; i += 1) {
+//             each = nodes[i];
+//             if (each === this.clipboardHandler) {
+//                 document.body.removeChild(this.clipboardHandler);
+//                 this.clipboardHandler = null;
+//             }
+//         }
+//     }
+// };
 
 // CursorMorph utilities:
 
@@ -9093,6 +9101,8 @@ StringMorph.prototype.shiftClick = function (pos) {
         }
         cursor.gotoPos(pos);
         this.endMark = cursor.slot;
+        cursor.setSelection(this.startMark, this.endMark);
+        // cursor.textarea.focus();
         this.drawNew();
         this.changed();
     }
@@ -9109,6 +9119,8 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         cursor = this.root().cursor;
         if (cursor) {
             cursor.gotoPos(pos);
+            var p = cursor.slot;
+            cursor.setSelection(p, p)
         }
         this.currentlySelecting = true;
     } else {
