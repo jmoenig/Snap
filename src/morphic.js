@@ -5367,19 +5367,60 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+
     this.textarea = document.createElement('textarea');
     this.initializeTextarea();
     document.body.appendChild(this.textarea);
+    this.updateTextAreaPosition();
     this.textarea.focus();
+    console.log("focused on textarea");
 };
 
 CursorMorph.prototype.initializeTextarea = function () {
     var myself = this;
     this.textarea.style.zIndex = 1001;
     this.textarea.style.position = 'absolute';
+    this.textarea.wrap = "off";
+    this.textarea.style.overflow = "hidden";
+    this.textarea.autofocus = true;
     this.textarea.value = this.target.text;
     this.textarea.setSelectionRange(0, this.target.text.length);
-    this.textarea.addEventListener('keyup', function () {
+    /* The following keyboard events must be handlered before the textarea got them,
+    otherwise we will have no chance to get access to them:
+        - tab: default is to jump to next field, but we want to disable this behavior.
+        - enter / shift+enter: accept the editing
+        - esc: discard the editing
+    */
+    this.textarea.addEventListener('keydown', function (event) {
+        // Make sure tab prevents default
+        if (event.key === 'U+0009' ||
+                event.key === 'Tab') {
+            event.preventDefault();
+            myself.target.escalateEvent('reactToEdit', myself.target);
+            if (event.shiftKey) {
+                return myself.target.backTab(myself.target);
+            }
+            return myself.target.tab(myself.target);
+        }
+        switch (event.keyCode) {
+            case 13:
+                if ((myself.target instanceof StringMorph) || shift) {
+                    myself.accept();
+                    return false;
+                }
+                break;
+            case 27:
+                console.log("editing canceled.");
+                myself.cancel();
+                break;
+            default:
+                nop();
+        }
+        myself.target.escalateEvent('reactToKeystroke', event);
+    })
+    /* Other editing keyboard events should be handled by the textarea first, so we
+    can grab the effect of the editing after textarea handled the event. */
+    this.textarea.addEventListener('keyup', function (event) {
         var redrawTarget = false;
         var target = myself.target;
         var textarea = myself.textarea;
@@ -5408,74 +5449,84 @@ CursorMorph.prototype.initializeTextarea = function () {
         if (myself.slot !== textarea.selectionStart) {
             myself.gotoSlot(textarea.selectionStart);
         }
+        myself.updateTextAreaPosition();
+        target.escalateEvent('reactToKeystroke', event);
     })
 };
+function number2px (n) {
+    return Math.ceil(n) + "px";
+}
+CursorMorph.prototype.updateTextAreaPosition = function () {
+    var origin = this.target.bounds.origin;
+    this.textarea.style.top = number2px(origin.y+30)
+    this.textarea.style.left = number2px(origin.x);
+}
 
-CursorMorph.prototype.initializeClipboardHandler = function () {
-    // Add hidden text box for copying and pasting
-    var myself = this,
-        wrrld = this.target.world();
+// CursorMorph.prototype.initializeClipboardHandler = function () {
+//     // Add hidden text box for copying and pasting
+//     var myself = this,
+//         wrrld = this.target.world();
 
-    this.clipboardHandler = document.createElement('textarea');
-    this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.top = window.outerHeight;
-    this.clipboardHandler.style.right = '101%'; // placed just out of view
+//     this.clipboardHandler = document.createElement('textarea');
+//     this.clipboardHandler.style.position = 'absolute';
+//     this.clipboardHandler.style.top = window.outerHeight;
+//     this.clipboardHandler.style.right = '101%'; // placed just out of view
 
-    document.body.appendChild(this.clipboardHandler);
+//     document.body.appendChild(this.clipboardHandler);
 
-    this.clipboardHandler.value = this.target.selection();
-    this.clipboardHandler.focus();
-    this.clipboardHandler.select();
+//     this.clipboardHandler.value = this.target.selection();
+//     this.clipboardHandler.focus();
+//     this.clipboardHandler.select();
 
-    this.clipboardHandler.addEventListener(
-        'keypress',
-        function (event) {
-            myself.processKeyPress(event);
-            this.value = myself.target.selection();
-            this.select();
-        },
-        false
-    );
+//     this.clipboardHandler.addEventListener(
+//         'keypress',
+//         function (event) {
+//             myself.processKeyPress(event);
+//             this.value = myself.target.selection();
+//             this.select();
+//         },
+//         false
+//     );
 
-    this.clipboardHandler.addEventListener(
-        'keydown',
-        function (event) {
-            myself.processKeyDown(event);
-            if (event.shiftKey) {
-                wrrld.currentKey = 16;
-            }
-            this.value = myself.target.selection();
-            this.select();
+//     this.clipboardHandler.addEventListener(
+//         'keydown',
+//         function (event) {
+//             myself.processKeyDown(event);
+//             if (event.shiftKey) {
+//                 wrrld.currentKey = 16;
+//             }
+//             this.value = myself.target.selection();
+//             this.select();
 
-            // Make sure tab prevents default
-            if (event.key === 'U+0009' ||
-                    event.key === 'Tab') {
-                myself.processKeyPress(event);
-                event.preventDefault();
-            }
-        },
-        false
-    );
+//             // Make sure tab prevents default
+//             if (event.key === 'U+0009' ||
+//                     event.key === 'Tab') {
+//                 myself.processKeyPress(event);
+//                 event.preventDefault();
+//             }
+//         },
+//         false
+//     );
 
-    this.clipboardHandler.addEventListener(
-        'keyup',
-        function (event) {
-            wrrld.currentKey = null;
-        },
-        false
-    );
+//     this.clipboardHandler.addEventListener(
+//         'keyup',
+//         function (event) {
+//             wrrld.currentKey = null;
+//         },
+//         false
+//     );
 
-    this.clipboardHandler.addEventListener(
-        'input',
-        function (event) {
-            if (this.value === '') {
-                myself.gotoSlot(myself.target.selectionStartSlot());
-                myself.target.deleteSelection();
-            }
-        },
-        false
-    );
-};
+//     this.clipboardHandler.addEventListener(
+//         'input',
+//         function (event) {
+//             if (this.value === '') {
+//                 myself.gotoSlot(myself.target.selectionStartSlot());
+//                 myself.target.deleteSelection();
+//             }
+//         },
+//         false
+//     );
+// };
 
 // CursorMorph event processing:
 
@@ -5614,6 +5665,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
     this.target.escalateEvent('reactToKeystroke', event);
 };
 */
+
 // CursorMorph navigation:
 
 /*
@@ -5658,41 +5710,41 @@ CursorMorph.prototype.gotoSlot = function (slot) {
     }
 };
 
-CursorMorph.prototype.goLeft = function (shift, howMany) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.slot - (howMany || 1));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goLeft = function (shift, howMany) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.slot - (howMany || 1));
+//     this.updateSelection(shift);
+// };
 
-CursorMorph.prototype.goRight = function (shift, howMany) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.slot + (howMany || 1));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goRight = function (shift, howMany) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.slot + (howMany || 1));
+//     this.updateSelection(shift);
+// };
 
-CursorMorph.prototype.goUp = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.target.upFrom(this.slot));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goUp = function (shift) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.target.upFrom(this.slot));
+//     this.updateSelection(shift);
+// };
 
-CursorMorph.prototype.goDown = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.target.downFrom(this.slot));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goDown = function (shift) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.target.downFrom(this.slot));
+//     this.updateSelection(shift);
+// };
 
-CursorMorph.prototype.goHome = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.target.startOfLine(this.slot));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goHome = function (shift) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.target.startOfLine(this.slot));
+//     this.updateSelection(shift);
+// };
 
-CursorMorph.prototype.goEnd = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.target.endOfLine(this.slot));
-    this.updateSelection(shift);
-};
+// CursorMorph.prototype.goEnd = function (shift) {
+//     this.updateSelection(shift);
+//     this.gotoSlot(this.target.endOfLine(this.slot));
+//     this.updateSelection(shift);
+// };
 
 CursorMorph.prototype.gotoPos = function (aPoint) {
     this.gotoSlot(this.target.slotAt(aPoint));
@@ -5701,20 +5753,20 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 // CursorMorph selecting:
 
-CursorMorph.prototype.updateSelection = function (shift) {
-    if (shift) {
-        if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
-            this.target.startMark = this.slot;
-            this.target.endMark = this.slot;
-        } else if (this.target.endMark !== this.slot) {
-            this.target.endMark = this.slot;
-            this.target.drawNew();
-            this.target.changed();
-        }
-    } else {
-        this.target.clearSelection();
-    }
-};
+// CursorMorph.prototype.updateSelection = function (shift) {
+//     if (shift) {
+//         if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
+//             this.target.startMark = this.slot;
+//             this.target.endMark = this.slot;
+//         } else if (this.target.endMark !== this.slot) {
+//             this.target.endMark = this.slot;
+//             this.target.drawNew();
+//             this.target.changed();
+//         }
+//     } else {
+//         this.target.clearSelection();
+//     }
+// };
 
 // CursorMorph editing:
 
@@ -5859,6 +5911,7 @@ CursorMorph.prototype.destroy = function () {
 
 CursorMorph.prototype.destroyTextarea = function () {
     document.body.removeChild(this.textarea);
+    this.textarea = null;
 }
 
 CursorMorph.prototype.destroyClipboardHandler = function () {
