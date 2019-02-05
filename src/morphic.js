@@ -5368,31 +5368,47 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     }
     this.gotoSlot(this.slot);
     this.textarea = document.createElement('textarea');
-    this.textarea.style.zIndex = 1001;
-    this.textarea.style.position = 'absolute';
-    this.textarea.value = this.target.text;
-    this.textarea.select();
-    document.body.appendChild(this.textarea);
     this.initializeTextarea();
+    document.body.appendChild(this.textarea);
+    this.textarea.focus();
 };
 
 CursorMorph.prototype.initializeTextarea = function () {
     var myself = this;
+    this.textarea.style.zIndex = 1001;
+    this.textarea.style.position = 'absolute';
+    this.textarea.value = this.target.text;
+    this.textarea.setSelectionRange(0, this.target.text.length);
     this.textarea.addEventListener('keyup', function () {
-        myself.slot = myself.selectionStart;
-        myself.target.text = myself.textarea.value;
-        myself.target.changed();
-        myself.target.drawNew();
-        myself.target.changed();
-        if (myself.textarea.selectionDirection === 'forward') {
-            myself.target.startMark = myself.textarea.selectionStart;
-            myself.target.endMark = myself.textarea.selectionEnd;
-        } else if (myself.textarea.selectionDirection === 'backward') {
-            myself.target.startMark = myself.textarea.selectionEnd;
-            myself.target.endMark = myself.textarea.selectionStart;
+        var redrawTarget = false;
+        var target = myself.target;
+        var textarea = myself.textarea;
+        if (target.text !== textarea.value) {
+            target.text = textarea.value;
+            redrawTarget = true;
+        }
+        if (textarea.selectionDirection === 'backward') {
+            if (target.startMark !== textarea.selectionEnd|| target.endMark !== textarea.selectionStart) {
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
+                redrawTarget = true;
+            }
+        } else {
+            if (target.startMark !== textarea.selectionStart || target.endMark !== textarea.selectionEnd) {
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
+                redrawTarget = true;
+            }
+        }
+        if (redrawTarget) {
+            target.changed();
+            target.drawNew();
+            target.changed();
+        }
+        if (myself.slot !== textarea.selectionStart) {
+            myself.gotoSlot(textarea.selectionStart);
         }
     })
-    this.textarea.focus();
 };
 
 CursorMorph.prototype.initializeClipboardHandler = function () {
