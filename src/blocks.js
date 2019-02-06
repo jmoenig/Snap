@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-February-04';
+modules.blocks = '2019-February-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8915,6 +8915,10 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function () {
         this.bottom()
     ));
     menu.selectKey(+this.evaluate());
+};
+
+InputSlotMorph.prototype.directionDialMenu = function () {
+    return {'§_dir': null};
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {

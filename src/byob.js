@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-February-05';
+modules.byob = '2019-February-06';
 
 // Declarations
 
@@ -320,9 +320,20 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
     var fname;
     if (this.declarations.has(inputName) &&
             this.declarations.get(inputName)[2]) {
-        if ( (this.declarations.get(inputName)[2].indexOf('§_') === 0)) {
+        if ((this.declarations.get(inputName)[2].indexOf('§_') === 0)) {
             fname = this.declarations.get(inputName)[2].slice(2);
-            if (fname !== 'dir') {
+            if (contains(
+                [
+                    'messagesReceivedMenu',
+                    'objectsMenu',
+                    'costumesMenu',
+                    'soundsMenu',
+                    'getVarNamesDict',
+                    'pianoKeyboardMenu',
+                    'directionDialMenu'
+                ],
+                fname
+            )) {
                 return fname;
             }
         }
@@ -3713,6 +3724,8 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
         );
     }
 
+    // +++ add another radio button for "options"
+    addSpecialOptions('(none)', '');
     addSpecialOptions('messages', '§_messagesReceivedMenu');
     addSpecialOptions('objects', '§_objectsMenu');
     // addSpecialOptions('data types', '§_typesMenu');

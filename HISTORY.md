@@ -36,6 +36,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-06
+* Blocks, BYOB: refactored custom block input options and drop-down menus
+
 ### 2019-02-05
 * BYOB: radio button symbols for special slot / drop-down menu options
 
