@@ -1042,7 +1042,7 @@
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1083,12 +1083,12 @@
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1445,7 +1445,7 @@ function copy(target) {
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1479,7 +1479,7 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
-    
+
     [Jens]: like all other retina screen support implementations I've seen
     Bartosz's patch also does not address putImageData() compatibility when
     mixing retina-enabled and non-retina canvasses. If you need to manipulate
@@ -1617,7 +1617,7 @@ function enableRetinaSupport() {
     contextProto.drawImage = function(image) {
         var pixelRatio = getPixelRatio(image),
             sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -1809,12 +1809,12 @@ function normalizeCanvas(aCanvas, getCopy) {
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -6470,7 +6470,7 @@ DialMorph.prototype.drawNew = function () {
     );
     ctx.closePath();
     ctx.fill();
-    
+
     // fill value
     angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
     ctx.fillStyle = (this.fillColor || this.color.darker()).toString();
@@ -8739,7 +8739,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // answer the slot (index) slots indicating the position of the
     // previous word to the left of aSlot
     var index = aSlot - 1;
-    
+
     // while the current character is non-word one, we skip it, so that
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
@@ -8758,7 +8758,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
 
 StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
-    
+
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
         index += 1;
     }
