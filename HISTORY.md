@@ -26,6 +26,7 @@
     * optimized in-project storage of atomic-data lists (more efficient, less space) 
     * remove all clones when the Green Flag is clicked
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
+    * enable dropping commands into all rings, experimental, under construction
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -39,7 +40,8 @@
 
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
-* Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
+* Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch)
+* Blocks: enable dropping commands into all rings, under constructions 
 
 ### 2019-02-05
 * BYOB: radio button symbols for special slot / drop-down menu options

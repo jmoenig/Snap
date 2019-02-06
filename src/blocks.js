@@ -4692,6 +4692,18 @@ CommandBlockMorph.prototype.snap = function (hand) {
     }
 };
 
+CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
+    // +++
+    var oldPos = this.position();
+
+    nop(handMorph);
+    if (this.parent instanceof RingReporterSlotMorph) {
+        this.parent.revertToDefaultInput(this);
+        this.setPosition(oldPos);
+    }
+    CommandBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
+};
+
 CommandBlockMorph.prototype.isStop = function () {
     var choice;
     if (this.selector === 'doStopThis') { // this could be cached...
@@ -11594,6 +11606,8 @@ RingReporterSlotMorph.prototype.rfBorder
 RingReporterSlotMorph.prototype.edge
     = RingCommandSlotMorph.prototype.edge;
 
+RingReporterSlotMorph.prototype.enableCommandDrops = false; // +++ not finished
+
 // RingReporterSlotMorph instance creation:
 
 function RingReporterSlotMorph(isPredicate) {
@@ -11619,6 +11633,60 @@ RingReporterSlotMorph.prototype.replaceInput = function (source, target) {
         this.parent.vanishForSimilar();
     }
 };
+
+///* under construction +++
+// RingReporterSlotMorph attach targets for commands:
+
+RingReporterSlotMorph.prototype.slotAttachPoint =
+    CommandSlotMorph.prototype.slotAttachPoint;
+
+RingReporterSlotMorph.prototype.dentLeft =
+    CommandSlotMorph.prototype.dentLeft;
+
+RingReporterSlotMorph.prototype.dentCenter =
+    CommandSlotMorph.prototype.dentCenter;
+
+RingReporterSlotMorph.prototype.attachTargets = function () {
+    if (!RingReporterSlotMorph.prototype.enableCommandDrops ||
+        this.contents() instanceof ReporterBlockMorph
+    ) {
+        // don't let commands "kick out" embedded reporters
+        return [];
+    }
+    return CommandSlotMorph.prototype.attachTargets.call(this);
+};
+
+// RingReporterSlotMorph nesting for commands:
+
+RingReporterSlotMorph.prototype.nestedBlock = function (block) {
+    if (block) {
+        var nb = this.nestedBlock();
+        this.contents().destroy();
+        this.add(block);
+        if (nb) {
+            block.bottomBlock().nextBlock(nb);
+        }
+        this.fixLayout();
+    } else {
+        return detect(
+            this.children,
+            function (child) {
+                return child instanceof BlockMorph;
+            }
+        );
+    }
+};
+
+// RingReporterSlotMorph layout:
+
+RingReporterSlotMorph.prototype.fixLayout = function () {
+    if (this.contents() instanceof CommandBlockMorph) {
+        CommandSlotMorph.prototype.fixLayout.call(this);
+    } else {
+        RingReporterSlotMorph.uber.fixLayout.call(this);
+    }
+};
+//*/
 
 // RingReporterSlotMorph drawing:
 
