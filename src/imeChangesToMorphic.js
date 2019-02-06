@@ -59,14 +59,15 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.textarea = document.createElement('textarea');
     this.textarea.style.zIndex = -1;
     document.body.appendChild(this.textarea);
-    this.initializeTextarea();
+    this.initializeTextarea(this.target.fontSize);
 };
 
-CursorMorph.prototype.initializeTextarea = function () {
+CursorMorph.prototype.initializeTextarea = function (fontSize) {
     var myself = this;
     this.textarea.style.position = 'absolute';
     this.textarea.wrap = "off";
     this.textarea.style.overflow = "hidden";
+    this.textarea.style.fontSize = fontSize + 'px';
     this.textarea.autofocus = true;
     this.textarea.value = this.target.text;
     this.updateTextAreaPosition();
@@ -175,10 +176,10 @@ CursorMorph.prototype.initializeTextarea = function () {
 
 CursorMorph.prototype.updateTextAreaPosition = function () {
     function number2px (n) {
-        return Math.ceil(n) + "px";
+        return Math.ceil(n) + 'px';
     }
     var origin = this.target.bounds.origin;
-    this.textarea.style.top = number2px(origin.y + 10);
+    this.textarea.style.top = number2px(origin.y);
     this.textarea.style.left = number2px(origin.x);
 };
 
