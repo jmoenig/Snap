@@ -5367,174 +5367,79 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
-
-    this.textarea = document.createElement('textarea');
-    this.initializeTextarea();
-    document.body.appendChild(this.textarea);
-    this.updateTextAreaPosition();
-    this.textarea.focus();
-    console.log("focused on textarea");
+    this.initializeClipboardHandler();
 };
 
-CursorMorph.prototype.initializeTextarea = function () {
-    var myself = this;
-    this.textarea.style.zIndex = 1001;
-    this.textarea.style.position = 'absolute';
-    this.textarea.wrap = "off";
-    this.textarea.style.overflow = "hidden";
-    this.textarea.autofocus = true;
-    this.textarea.value = this.target.text;
-    this.textarea.setSelectionRange(0, this.target.text.length);
-    /* The following keyboard events must be handlered before the textarea got them,
-    otherwise we will have no chance to get access to them:
-        - tab: default is to jump to next field, but we want to disable this behavior.
-        - enter / shift+enter: accept the editing
-        - esc: discard the editing
-    */
-    this.textarea.addEventListener('keydown', function (event) {
-        // Make sure tab prevents default
-        if (event.key === 'U+0009' ||
-                event.key === 'Tab') {
-            event.preventDefault();
-            myself.target.escalateEvent('reactToEdit', myself.target);
+CursorMorph.prototype.initializeClipboardHandler = function () {
+    // Add hidden text box for copying and pasting
+    var myself = this,
+        wrrld = this.target.world();
+
+    this.clipboardHandler = document.createElement('textarea');
+    this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.top = window.outerHeight;
+    this.clipboardHandler.style.right = '101%'; // placed just out of view
+
+    document.body.appendChild(this.clipboardHandler);
+
+    this.clipboardHandler.value = this.target.selection();
+    this.clipboardHandler.focus();
+    this.clipboardHandler.select();
+
+    this.clipboardHandler.addEventListener(
+        'keypress',
+        function (event) {
+            myself.processKeyPress(event);
+            this.value = myself.target.selection();
+            this.select();
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keydown',
+        function (event) {
+            myself.processKeyDown(event);
             if (event.shiftKey) {
-                return myself.target.backTab(myself.target);
+                wrrld.currentKey = 16;
             }
-            return myself.target.tab(myself.target);
-        }
-        switch (event.keyCode) {
-            case 13:
-                if ((myself.target instanceof StringMorph) || shift) {
-                    myself.accept();
-                    return false;
-                }
-                break;
-            case 27:
-                console.log("editing canceled.");
-                myself.cancel();
-                break;
-            default:
-                nop();
-        }
-        myself.target.escalateEvent('reactToKeystroke', event);
-    })
-    /* Other editing keyboard events should be handled by the textarea first, so we
-    can grab the effect of the editing after textarea handled the event. */
-    this.textarea.addEventListener('keyup', function (event) {
-        var redrawTarget = false;
-        var target = myself.target;
-        var textarea = myself.textarea;
-        if (target.text !== textarea.value) {
-            target.text = textarea.value;
-            redrawTarget = true;
-        }
-        if (textarea.selectionDirection === 'backward') {
-            if (target.startMark !== textarea.selectionEnd|| target.endMark !== textarea.selectionStart) {
-                target.startMark = textarea.selectionEnd;
-                target.endMark = textarea.selectionStart;
-                redrawTarget = true;
+            this.value = myself.target.selection();
+            this.select();
+
+            // Make sure tab prevents default
+            if (event.key === 'U+0009' ||
+                    event.key === 'Tab') {
+                myself.processKeyPress(event);
+                event.preventDefault();
             }
-        } else {
-            if (target.startMark !== textarea.selectionStart || target.endMark !== textarea.selectionEnd) {
-                target.startMark = textarea.selectionStart;
-                target.endMark = textarea.selectionEnd;
-                redrawTarget = true;
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keyup',
+        function (event) {
+            wrrld.currentKey = null;
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'input',
+        function (event) {
+            if (this.value === '') {
+                myself.gotoSlot(myself.target.selectionStartSlot());
+                myself.target.deleteSelection();
             }
-        }
-        if (redrawTarget) {
-            target.changed();
-            target.drawNew();
-            target.changed();
-        }
-        if (myself.slot !== textarea.selectionStart) {
-            myself.gotoSlot(textarea.selectionStart);
-        }
-        myself.updateTextAreaPosition();
-        target.escalateEvent('reactToKeystroke', event);
-    })
+        },
+        false
+    );
 };
-function number2px (n) {
-    return Math.ceil(n) + "px";
-}
-CursorMorph.prototype.updateTextAreaPosition = function () {
-    var origin = this.target.bounds.origin;
-    this.textarea.style.top = number2px(origin.y+30)
-    this.textarea.style.left = number2px(origin.x);
-}
-
-// CursorMorph.prototype.initializeClipboardHandler = function () {
-//     // Add hidden text box for copying and pasting
-//     var myself = this,
-//         wrrld = this.target.world();
-
-//     this.clipboardHandler = document.createElement('textarea');
-//     this.clipboardHandler.style.position = 'absolute';
-//     this.clipboardHandler.style.top = window.outerHeight;
-//     this.clipboardHandler.style.right = '101%'; // placed just out of view
-
-//     document.body.appendChild(this.clipboardHandler);
-
-//     this.clipboardHandler.value = this.target.selection();
-//     this.clipboardHandler.focus();
-//     this.clipboardHandler.select();
-
-//     this.clipboardHandler.addEventListener(
-//         'keypress',
-//         function (event) {
-//             myself.processKeyPress(event);
-//             this.value = myself.target.selection();
-//             this.select();
-//         },
-//         false
-//     );
-
-//     this.clipboardHandler.addEventListener(
-//         'keydown',
-//         function (event) {
-//             myself.processKeyDown(event);
-//             if (event.shiftKey) {
-//                 wrrld.currentKey = 16;
-//             }
-//             this.value = myself.target.selection();
-//             this.select();
-
-//             // Make sure tab prevents default
-//             if (event.key === 'U+0009' ||
-//                     event.key === 'Tab') {
-//                 myself.processKeyPress(event);
-//                 event.preventDefault();
-//             }
-//         },
-//         false
-//     );
-
-//     this.clipboardHandler.addEventListener(
-//         'keyup',
-//         function (event) {
-//             wrrld.currentKey = null;
-//         },
-//         false
-//     );
-
-//     this.clipboardHandler.addEventListener(
-//         'input',
-//         function (event) {
-//             if (this.value === '') {
-//                 myself.gotoSlot(myself.target.selectionStartSlot());
-//                 myself.target.deleteSelection();
-//             }
-//         },
-//         false
-//     );
-// };
 
 // CursorMorph event processing:
 
 CursorMorph.prototype.processKeyPress = function (event) {
-}
-
-/*function (event) {
-    this.inspectKeyEvent(event);
+    // this.inspectKeyEvent(event);
     if (this.keyDownEventUsed) {
         this.keyDownEventUsed = false;
         return null;
@@ -5573,10 +5478,8 @@ CursorMorph.prototype.processKeyPress = function (event) {
     // notify target's parent of key event
     this.target.escalateEvent('reactToKeystroke', event);
 };
-*/
+
 CursorMorph.prototype.processKeyDown = function (event) {
-}
-/*
     // this.inspectKeyEvent(event);
     var shift = event.shiftKey,
         wordNavigation = event.ctrlKey || event.altKey,
@@ -5664,7 +5567,6 @@ CursorMorph.prototype.processKeyDown = function (event) {
     // notify target's parent of key event
     this.target.escalateEvent('reactToKeystroke', event);
 };
-*/
 
 // CursorMorph navigation:
 
@@ -5710,49 +5612,41 @@ CursorMorph.prototype.gotoSlot = function (slot) {
     }
 };
 
-CursorMorph.prototype.setSelection = function (start, end) {
-    var direction = (start <= end) ? 'forward' : 'backward';
-    if (start < end) {
-        var tmp = start; start = end; end = tmp;
-    }
-    this.textarea.setSelectionRange(start, end, direction);
-}
+CursorMorph.prototype.goLeft = function (shift, howMany) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.slot - (howMany || 1));
+    this.updateSelection(shift);
+};
 
-// CursorMorph.prototype.goLeft = function (shift, howMany) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.slot - (howMany || 1));
-//     this.updateSelection(shift);
-// };
+CursorMorph.prototype.goRight = function (shift, howMany) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.slot + (howMany || 1));
+    this.updateSelection(shift);
+};
 
-// CursorMorph.prototype.goRight = function (shift, howMany) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.slot + (howMany || 1));
-//     this.updateSelection(shift);
-// };
+CursorMorph.prototype.goUp = function (shift) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.target.upFrom(this.slot));
+    this.updateSelection(shift);
+};
 
-// CursorMorph.prototype.goUp = function (shift) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.target.upFrom(this.slot));
-//     this.updateSelection(shift);
-// };
+CursorMorph.prototype.goDown = function (shift) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.target.downFrom(this.slot));
+    this.updateSelection(shift);
+};
 
-// CursorMorph.prototype.goDown = function (shift) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.target.downFrom(this.slot));
-//     this.updateSelection(shift);
-// };
+CursorMorph.prototype.goHome = function (shift) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.target.startOfLine(this.slot));
+    this.updateSelection(shift);
+};
 
-// CursorMorph.prototype.goHome = function (shift) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.target.startOfLine(this.slot));
-//     this.updateSelection(shift);
-// };
-
-// CursorMorph.prototype.goEnd = function (shift) {
-//     this.updateSelection(shift);
-//     this.gotoSlot(this.target.endOfLine(this.slot));
-//     this.updateSelection(shift);
-// };
+CursorMorph.prototype.goEnd = function (shift) {
+    this.updateSelection(shift);
+    this.gotoSlot(this.target.endOfLine(this.slot));
+    this.updateSelection(shift);
+};
 
 CursorMorph.prototype.gotoPos = function (aPoint) {
     this.gotoSlot(this.target.slotAt(aPoint));
@@ -5761,20 +5655,20 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 // CursorMorph selecting:
 
-// CursorMorph.prototype.updateSelection = function (shift) {
-//     if (shift) {
-//         if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
-//             this.target.startMark = this.slot;
-//             this.target.endMark = this.slot;
-//         } else if (this.target.endMark !== this.slot) {
-//             this.target.endMark = this.slot;
-//             this.target.drawNew();
-//             this.target.changed();
-//         }
-//     } else {
-//         this.target.clearSelection();
-//     }
-// };
+CursorMorph.prototype.updateSelection = function (shift) {
+    if (shift) {
+        if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
+            this.target.startMark = this.slot;
+            this.target.endMark = this.slot;
+        } else if (this.target.endMark !== this.slot) {
+            this.target.endMark = this.slot;
+            this.target.drawNew();
+            this.target.changed();
+        }
+    } else {
+        this.target.clearSelection();
+    }
+};
 
 // CursorMorph editing:
 
@@ -5876,33 +5770,33 @@ CursorMorph.prototype.cmd = function (aChar, shiftKey) {
     }
 };
 
-// CursorMorph.prototype.deleteRight = function () {
-//     var text;
-//     if (this.target.selection() !== '') {
-//         this.gotoSlot(this.target.selectionStartSlot());
-//         this.target.deleteSelection();
-//     } else {
-//         text = this.target.text;
-//         this.target.changed();
-//         text = text.slice(0, this.slot) + text.slice(this.slot + 1);
-//         this.target.text = text;
-//         this.target.drawNew();
-//     }
-// };
+CursorMorph.prototype.deleteRight = function () {
+    var text;
+    if (this.target.selection() !== '') {
+        this.gotoSlot(this.target.selectionStartSlot());
+        this.target.deleteSelection();
+    } else {
+        text = this.target.text;
+        this.target.changed();
+        text = text.slice(0, this.slot) + text.slice(this.slot + 1);
+        this.target.text = text;
+        this.target.drawNew();
+    }
+};
 
-// CursorMorph.prototype.deleteLeft = function () {
-//     var text;
-//     if (this.target.selection()) {
-//         this.gotoSlot(this.target.selectionStartSlot());
-//         return this.target.deleteSelection();
-//     }
-//     text = this.target.text;
-//     this.target.changed();
-//     this.target.text = text.substring(0, this.slot - 1) +
-//         text.substr(this.slot);
-//     this.target.drawNew();
-//     this.goLeft();
-// };
+CursorMorph.prototype.deleteLeft = function () {
+    var text;
+    if (this.target.selection()) {
+        this.gotoSlot(this.target.selectionStartSlot());
+        return this.target.deleteSelection();
+    }
+    text = this.target.text;
+    this.target.changed();
+    this.target.text = text.substring(0, this.slot - 1) +
+        text.substr(this.slot);
+    this.target.drawNew();
+    this.goLeft();
+};
 
 // CursorMorph destroying:
 
@@ -5912,30 +5806,24 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    // this.destroyClipboardHandler();
-    this.destroyTextarea();
+    this.destroyClipboardHandler();
     CursorMorph.uber.destroy.call(this);
 };
 
-CursorMorph.prototype.destroyTextarea = function () {
-    document.body.removeChild(this.textarea);
-    this.textarea = null;
-}
-
-// CursorMorph.prototype.destroyClipboardHandler = function () {
-//     var nodes = document.body.children,
-//         each,
-//         i;
-//     if (this.clipboardHandler) {
-//         for (i = 0; i < nodes.length; i += 1) {
-//             each = nodes[i];
-//             if (each === this.clipboardHandler) {
-//                 document.body.removeChild(this.clipboardHandler);
-//                 this.clipboardHandler = null;
-//             }
-//         }
-//     }
-// };
+CursorMorph.prototype.destroyClipboardHandler = function () {
+    var nodes = document.body.children,
+        each,
+        i;
+    if (this.clipboardHandler) {
+        for (i = 0; i < nodes.length; i += 1) {
+            each = nodes[i];
+            if (each === this.clipboardHandler) {
+                document.body.removeChild(this.clipboardHandler);
+                this.clipboardHandler = null;
+            }
+        }
+    }
+};
 
 // CursorMorph utilities:
 
@@ -9101,8 +8989,6 @@ StringMorph.prototype.shiftClick = function (pos) {
         }
         cursor.gotoPos(pos);
         this.endMark = cursor.slot;
-        cursor.setSelection(this.startMark, this.endMark);
-        // cursor.textarea.focus();
         this.drawNew();
         this.changed();
     }
@@ -9119,8 +9005,6 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         cursor = this.root().cursor;
         if (cursor) {
             cursor.gotoPos(pos);
-            var p = cursor.slot;
-            cursor.setSelection(p, p)
         }
         this.currentlySelecting = true;
     } else {
@@ -12170,6 +12054,7 @@ WorldMorph.prototype.initEventListeners = function () {
         function (event) {
             // remember the keyCode in the world's currentKey property
             myself.currentKey = event.keyCode;
+            console.log(myself.currentKey);
             if (myself.keyboardReceiver) {
                 myself.keyboardReceiver.processKeyDown(event);
             }
