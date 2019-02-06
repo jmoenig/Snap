@@ -1,13 +1,14 @@
 /**
  * The changes in this file is to add a hidden textarea as the editing engine
- * for text editing, so that Snap can make use of the browser's support for IME.
+ * for text editing, so that Snap can make use of the browser's support for
+ * IME.
  *
  * The design is as follows:
- * - The textarea handles all keyboard events: nevagition, control and character
- *   insertion.
+ * - The textarea handles all keyboard events: nevagition, control and
+ *   character insertion.
  *
- * - After each keydown event, the content and selection status is copied to the
- *   target morph, and the caret position is copied to the cursor morph.
+ * - After each keydown event, the content and selection status is copied to
+ *   the target morph, and the caret position is copied to the cursor morph.
  *
  * - The target morph handles the mouse events
  *
@@ -23,17 +24,17 @@
  *     10, which is the returned value by parseFloat, I guess), "10.0.2"
  *
  * - Behavior change that might affect other part of system:
- *   * WorldMorph.edit: I added a guard at the start of the function, so that a
- *     new cursor morph is created only if the target morph is not the current
- *     editing morph. This is related to the above mentioned "shift-click" bug,
- *     which is caused by creating a new cursor morph for the current editing
- *     target.
+ *   * WorldMorph.edit: I added a guard at the start of the function, so that
+ *     a new cursor morph is created only if the target morph is not the
+ *     current editing morph. This is related to the above mentioned
+ *     "shift-click" bug, which is caused by creating a new cursor morph for
+ *     the current editing target.
  *
  * - Not ported features becuase I don't know the use cases
  *   * In the handling of ctrl(cmd)-keys, some special combinations are
- *     supported, for example ctrl + (keycode 123) will insert '{'. Is there any
- *     device that needs these combinations? If needed, I think they can be
- *     ported.
+ *     supported, for example ctrl + (keycode 123) will insert '{'. Is there
+ *     any device that needs these combinations? If needed, I think they can
+ *     be ported.
  */
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
     var ls;
@@ -81,9 +82,9 @@ CursorMorph.prototype.initializeTextarea = function () {
     */
     this.textarea.addEventListener('keydown', function (event) {
         // The following line is copied from the "keydown" event handler of
-        // canvas (world). There are other actions in that handler, but since we
-        // are in between of editing, we don't need to do the other actions. We
-        // need this one to allow shift+click works.
+        // canvas (world). There are other actions in that handler, but since
+        // we are in between of editing, we don't need to do the other
+        // actions. We need this one to allow shift+click works.
         myself.world().currentKey = event.keyCode;
 
         var keyName = event.key;
@@ -277,8 +278,8 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
         } else if (this.text[slot]) {
             this.selectBetweenWordsAt(slot);
         } else {
-            // special case for when we click right after the last slot in multi
-            // line TextMorphs
+            // special case for when we click right after the last slot in
+            // multi line TextMorphs
             this.selectAll();
         }
         this.root().cursor.syncTextareaSelectionWith(this);
