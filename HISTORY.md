@@ -25,6 +25,7 @@
     * "loop arrow" symbol for primitive loops, also available for custom blocks
     * optimized in-project storage of atomic-data lists (more efficient, less space) 
     * remove all clones when the Green Flag is clicked
+    * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element

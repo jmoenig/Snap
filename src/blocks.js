@@ -4693,8 +4693,12 @@ CommandBlockMorph.prototype.snap = function (hand) {
 };
 
 CommandBlockMorph.prototype.isStop = function () {
+    var choice;
+    if (this.selector === 'doStopThis') { // this could be cached...
+        choice = this.inputs()[0].evaluate();
+        return choice instanceof Array && choice[0].length < 12;
+    }
     return ([
-        'doStopThis',
         'doForever',
         'doReport',
         'removeClone'
@@ -8437,13 +8441,13 @@ InputSlotMorph.prototype.setContents = function (data) {
     }
     cnts.drawNew();
 
+    // remember the constant, if any
+    this.constant = isConstant ? data : null;
+
     // adjust to zebra coloring:
     if (this.isReadOnly && (this.parent instanceof BlockMorph)) {
         this.parent.fixLabelColor();
     }
-
-    // remember the constant, if any
-    this.constant = isConstant ? data : null;
 };
 
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
