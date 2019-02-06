@@ -39,6 +39,7 @@
 
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
+* Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
 
 ### 2019-02-05
 * BYOB: radio button symbols for special slot / drop-down menu options
