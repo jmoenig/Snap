@@ -3690,8 +3690,17 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                          }
             );
             menu.addLine();
-            menu.addMenu('menu', myself.specialOptionsMenu());
-            menu.addMenu('special', myself.specialSlotsMenu());
+            menu.addMenu(
+                (myself.fragment.hasSpecialMenu() ? on : off) +
+                    localize('menu'),
+                myself.specialOptionsMenu()
+            );
+            menu.addMenu(
+                (contains(['%mlt', '%code'], myself.fragment.type) ?
+                    on : off) +
+                'special',
+                 myself.specialSlotsMenu()
+            );
             return menu;
         }
         return myself.specialSlotsMenu();
