@@ -1,5 +1,5 @@
 /**
- * Changes made in this file related to a bug that "shift-click" does not
+ * Changes made in this file related to a bug that "shift+click" does not
  * select text as expected.
  *
  * This reason for the bug is that in the previous version of the following

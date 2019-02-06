@@ -4,7 +4,7 @@
  * IME.
  *
  * The design is as follows:
- * - The textarea handles all keyboard events: nevagition, control and
+ * - The textarea handles all keyboard events: navigation, control and
  *   character insertion.
  *
  * - After each keydown event, the content and selection status is copied to
@@ -15,26 +15,26 @@
  * - After each mouse events, the selection status, the position of cursor are
  *   copied to the textarea.
  *
- * Behavior differences caused by these changes:
+ * Improvements made by this change:
  * - The main goal:
  *   * Allow user to input texts in languages that needs an input method.
- * - Bugs fixed:
- *   * Shift-click does not select as expected
+ * - As side effects, two bugs are fixed:
+ *   * Shift+click does not select text as expected
  *   * Numeric input slots accept invalid inputs like "10-2" (but treat it as
  *     10, which is the returned value by parseFloat, I guess), "10.0.2"
  *
  * - Behavior change that might affect other part of system:
  *   * WorldMorph.edit: I added a guard at the start of the function, so that
- *     a new cursor morph is created only if the target morph is not the
- *     current editing morph. This is related to the above mentioned
- *     "shift-click" bug, which is caused by creating a new cursor morph for
- *     the current editing target.
+ *     a new cursor morph is created only if the target morph is different
+ *     from the one that is currently being edited. This is related to the
+ *     above mentioned "shift-click" bug, which is caused by creating a new
+ *     cursor morph for the current editing target.
  *
- * - Not ported features becuase I don't know the use cases
+ * - Not ported features
  *   * In the handling of ctrl(cmd)-keys, some special combinations are
- *     supported, for example ctrl + (keycode 123) will insert '{'. Is there
+ *     supported, for example ctrl + F12 (keycode 123) will insert '{'. Is there
  *     any device that needs these combinations? If needed, I think they can
- *     be ported.
+ *     be ported using synthetic events.
  */
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
     var ls;
