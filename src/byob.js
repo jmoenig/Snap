@@ -2642,6 +2642,27 @@ BlockLabelFragment.prototype.copy = function () {
     return ans;
 };
 
+// options and special drop-down menus
+
+BlockLabelFragment.prototype.hasOptions = function () {
+    return this.options !== '' && !this.hasSpecialMenu();
+};
+
+BlockLabelFragment.prototype.hasSpecialMenu = function () {
+    return contains(
+        [
+            '§_messagesReceivedMenu',
+            '§_objectsMenu',
+            '§_costumesMenu',
+            '§_soundsMenu',
+            '§_getVarNamesDict',
+            '§_pianoKeyboardMenu',
+            '§_directionDialMenu'
+        ],
+        this.options
+    );
+};
+
 // arity
 
 BlockLabelFragment.prototype.isSingleInput = function () {
@@ -3655,7 +3676,12 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             var menu = new MenuMorph(myself),
                 on = '\u2611 ',
                 off = '\u2610 ';
-            menu.addItem('options...', 'editSlotOptions');
+            menu.addItem(
+                (myself.fragment.hasOptions() ? on : off) +
+                    localize('options') +
+                    '...',
+                'editSlotOptions'
+            );
             menu.addItem(
                 (myself.fragment.isReadOnly ? on : off) +
                     localize('read-only'),
@@ -3733,7 +3759,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('sounds', '§_soundsMenu');
     addSpecialOptions('variables', '§_getVarNamesDict');
     addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
-    addSpecialOptions('360° dial', '§_dir');
+    addSpecialOptions('360° dial', '§_directionDialMenu');
     return menu;
 };
 
