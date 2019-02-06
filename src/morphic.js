@@ -12054,7 +12054,6 @@ WorldMorph.prototype.initEventListeners = function () {
         function (event) {
             // remember the keyCode in the world's currentKey property
             myself.currentKey = event.keyCode;
-            console.log(myself.currentKey);
             if (myself.keyboardReceiver) {
                 myself.keyboardReceiver.processKeyDown(event);
             }

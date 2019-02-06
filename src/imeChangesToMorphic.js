@@ -1,3 +1,40 @@
+/**
+ * The changes in this file is to add a hidden textarea as the editing engine
+ * for text editing, so that Snap can make use of the browser's support for IME.
+ *
+ * The design is as follows:
+ * - The textarea handles all keyboard events: nevagition, control and character
+ *   insertion.
+ *
+ * - After each keydown event, the content and selection status is copied to the
+ *   target morph, and the caret position is copied to the cursor morph.
+ *
+ * - The target morph handles the mouse events
+ *
+ * - After each mouse events, the selection status, the position of cursor are
+ *   copied to the textarea.
+ *
+ * Behavior differences caused by these changes:
+ * - The main goal:
+ *   * Allow user to input texts in languages that needs an input method.
+ * - Bugs fixed:
+ *   * Shift-click does not select as expected
+ *   * Numeric input slots accept invalid inputs like "10-2" (but treat it as
+ *     10, which is the returned value by parseFloat, I guess), "10.0.2"
+ *
+ * - Behavior change that might affect other part of system:
+ *   * WorldMorph.edit: I added a guard at the start of the function, so that a
+ *     new cursor morph is created only if the target morph is not the current
+ *     editing morph. This is related to the above mentioned "shift-click" bug,
+ *     which is caused by creating a new cursor morph for the current editing
+ *     target.
+ *
+ * - Not ported features becuase I don't know the use cases
+ *   * In the handling of ctrl(cmd)-keys, some special combinations are
+ *     supported, for example ctrl + (keycode 123) will insert '{'. Is there any
+ *     device that needs these combinations? If needed, I think they can be
+ *     ported.
+ */
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
     var ls;
 
@@ -19,147 +56,163 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.gotoSlot(this.slot);
 
     this.textarea = document.createElement('textarea');
-    this.initializeTextarea();
+    this.textarea.style.zIndex = -1;
     document.body.appendChild(this.textarea);
-    this.updateTextAreaPosition();
-    this.textarea.focus();
-    console.log("focused on textarea");
+    this.initializeTextarea();
 };
 
 CursorMorph.prototype.initializeTextarea = function () {
     var myself = this;
-    this.textarea.style.zIndex = 1001;
     this.textarea.style.position = 'absolute';
     this.textarea.wrap = "off";
     this.textarea.style.overflow = "hidden";
     this.textarea.autofocus = true;
     this.textarea.value = this.target.text;
-    this.textarea.setSelectionRange(0, this.target.text.length);
-    /* The following keyboard events must be handlered before the textarea got them,
-    otherwise we will have no chance to get access to them:
-        - tab: default is to jump to next field, but we want to disable this behavior.
-        - enter / shift+enter: accept the editing
-        - esc: discard the editing
+    this.updateTextAreaPosition();
+    /* The following keyboard events has special meaning in Snap, so we must
+    handler them before the textarea:
+
+    - tab: goto next text field
+    - enter / shift+enter: accept the editing
+    - esc: discard the editing
+    - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
+
+    We also take the chance to filter out invalid inputs for numeric fields.
     */
     this.textarea.addEventListener('keydown', function (event) {
-        // The following line is copied from the "keydown" event handler of canvas (world).
-        // There are other actions in that handler, but since we are in the process of editing,
-        // I think we don't need to do the other options. We need this one to allow shift+click
-        // works.
+        // The following line is copied from the "keydown" event handler of
+        // canvas (world). There are other actions in that handler, but since we
+        // are in between of editing, we don't need to do the other actions. We
+        // need this one to allow shift+click works.
         myself.world().currentKey = event.keyCode;
 
+        var keyName = event.key;
+        var isValidInput = (
+            // non-numeric morph can accept any input
+            !myself.target.isNumeric  ||
+            // control keys
+            keyName.length > 1      ||
+            // digits, is it safe to use '0' <= keyName <= '9'?
+            !Number.isNaN(parseFloat(keyName)) ||
+            // at most one '.'
+            (keyName === '.' && myself.textarea.value.indexOf('.')===-1) ||
+            // or '-' as first char
+            (keyName === '-' && myself.textarea.selectionStart === 0)
+        );
+
         // Make sure tab prevents default
-        if (event.key === 'U+0009' ||
-                event.key === 'Tab') {
+        if (keyName === 'U+0009' || keyName === 'Tab') {
             event.preventDefault();
             myself.target.escalateEvent('reactToEdit', myself.target);
             if (event.shiftKey) {
-                return myself.target.backTab(myself.target);
+                myself.target.backTab(myself.target);
             }
-            return myself.target.tab(myself.target);
-        } else {
+            myself.target.tab(myself.target);
+        } else if (!isNil(myself.target.receiver) &&
+                    (event.ctrlKey || event.metaKey)) {
+            if (keyName === 'd') {
+                myself.target.doIt();
+            } else if (keyName === 'i') {
+                myself.target.inspectIt();
+            } else if (keyName === 'p') {
+                myself.target.showIt();
+            }
+            event.preventDefault();
+        } else if (isValidInput) {
             switch (event.keyCode) {
                 case 13:
                     if ((myself.target instanceof StringMorph) || shift) {
                         myself.accept();
-                        return false;
                     }
                     break;
                 case 27:
-                    console.log("editing canceled.");
                     myself.cancel();
                     break;
                 default:
                     nop();
             }
             myself.target.escalateEvent('reactToKeystroke', event);
+        } else {
+            event.preventDefault();
         }
-    })
+    });
 
-    /* Other editing keyboard events should be handled by the textarea first, so we
-    can grab the effect of the editing after textarea handled the event. */
+    /* All other key events are handled by the textarea. Only after that, we
+       update the state of target morph and cursor morph.
+       - target morph: copy the content and selection status to the target.
+       - cursor morph: copy the caret position to cursor morph.
+     */
     this.textarea.addEventListener('keyup', function (event) {
         myself.world().currentKey = null;
 
-        var redrawTarget = false;
         var target = myself.target;
         var textarea = myself.textarea;
-        if (target.text !== textarea.value) {
-            target.text = textarea.value;
-            redrawTarget = true;
-        }
+
+        target.text = textarea.value;
         if (textarea.selectionStart === textarea.selectionEnd) {
             target.startMark = null;
             target.endMark = null;
-            redrawTarget = true;
         } else {
             if (textarea.selectionDirection === 'backward') {
-                if (target.startMark !== textarea.selectionEnd || target.endMark !== textarea.selectionStart) {
-                    target.startMark = textarea.selectionEnd;
-                    target.endMark = textarea.selectionStart;
-                    redrawTarget = true;
-                }
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
             } else {
-                if (target.startMark !== textarea.selectionStart || target.endMark !== textarea.selectionEnd) {
-                    target.startMark = textarea.selectionStart;
-                    target.endMark = textarea.selectionEnd;
-                    redrawTarget = true;
-                }
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
             }
         }
-        if (redrawTarget) {
-            target.changed();
-            target.drawNew();
-            target.changed();
-        }
-        if (myself.slot !== textarea.selectionStart) {
-            myself.gotoSlot(textarea.selectionStart);
-        }
+        target.changed();
+        target.drawNew();
+        target.changed();
+
+        myself.gotoSlot(textarea.selectionStart);
+
         myself.updateTextAreaPosition();
         target.escalateEvent('reactToKeystroke', event);
-    })
+    });
 };
-function number2px (n) {
-    return Math.ceil(n) + "px";
-}
+
 CursorMorph.prototype.updateTextAreaPosition = function () {
+    function number2px (n) {
+        return Math.ceil(n) + "px";
+    }
     var origin = this.target.bounds.origin;
-    this.textarea.style.top = number2px(origin.y+30)
+    this.textarea.style.top = number2px(origin.y + 10);
     this.textarea.style.left = number2px(origin.x);
-}
+};
 
 CursorMorph.prototype.processKeyPress = function (event) {
-}
+};
 
 CursorMorph.prototype.processKeyDown = function (event) {
-}
+};
 
-CursorMorph.prototype.setTextareaSelection = function (start, end) {
+CursorMorph.prototype.syncTextareaSelectionWith = function (targetMorph) {
+    var start = targetMorph.startMark;
+    var end = targetMorph.endMark;
+
     if (start <= end) {
-        console.log(start, end, 'forward');
         this.textarea.setSelectionRange(start, end, 'forward');
     } else {
-        console.log(end, start, 'backward');
         this.textarea.setSelectionRange(end, start, 'backward');
     }
     this.textarea.focus();
-}
+};
 
 CursorMorph.prototype.destroy = function () {
-  if (this.target.alignment !== this.originalAlignment) {
-      this.target.alignment = this.originalAlignment;
-      this.target.drawNew();
-      this.target.changed();
-  }
-  this.destroyTextarea();
-  CursorMorph.uber.destroy.call(this);
+    if (this.target.alignment !== this.originalAlignment) {
+        this.target.alignment = this.originalAlignment;
+        this.target.drawNew();
+        this.target.changed();
+    }
+    this.destroyTextarea();
+    CursorMorph.uber.destroy.call(this);
 };
 
 CursorMorph.prototype.destroyTextarea = function () {
-    console.log("destroying editor");
-  document.body.removeChild(this.textarea);
-  this.textarea = null;
-}
+    document.body.removeChild(this.textarea);
+    this.textarea = null;
+};
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
@@ -174,6 +227,22 @@ StringMorph.prototype.clearSelection = function () {
     this.changed();
 };
 
+StringMorph.prototype.selectAll = function () {
+    var cursor;
+    if (this.isEditable) {
+        this.startMark = 0;
+        this.endMark = this.text.length;
+        cursor = this.root().cursor;
+        if (cursor) {
+            cursor.gotoSlot(this.text.length);
+            cursor.syncTextareaSelectionWith(this);
+        }
+        this.drawNew();
+        this.changed();
+    }
+};
+
+
 StringMorph.prototype.shiftClick = function (pos) {
     var cursor = this.root().cursor;
 
@@ -183,36 +252,17 @@ StringMorph.prototype.shiftClick = function (pos) {
         }
         cursor.gotoPos(pos);
         this.endMark = cursor.slot;
-        cursor.setTextareaSelection(this.startMark, this.endMark);
+        cursor.syncTextareaSelectionWith(this);
         this.drawNew();
         this.changed();
-        cursor.textarea.focus();
     }
-    this.currentlySelecting = true;
+    this.currentlySelecting = false;
     this.escalateEvent('mouseDownLeft', pos);
 };
 
-StringMorph.prototype.mouseClickLeft = function (pos) {
-    var cursor;
-    if (this.isEditable) {
-        this.edit(); // creates a new cursor if not editing 'this'
-        cursor = this.root().cursor;
-        if (cursor) {
-            cursor.gotoPos(pos);
-            if (!this.startMark) {
-                this.startMark = cursor.slot;
-            }
-        }
-        this.currentlySelecting = true;
-    } else {
-        this.escalateEvent('mouseClickLeft', pos);
-    }
-};
-
 StringMorph.prototype.mouseDoubleClick = function (pos) {
-    // selects the word at pos
-    // if there is no word, we select whatever is between
-    // the previous and next words
+    // selects the word at pos if there is no word, we select whatever is
+    // between the previous and next words
     var slot = this.slotAt(pos);
 
     if (this.isEditable) {
@@ -227,11 +277,11 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
         } else if (this.text[slot]) {
             this.selectBetweenWordsAt(slot);
         } else {
-            // special case for when we click right after the
-            // last slot in multi line TextMorphs
+            // special case for when we click right after the last slot in multi
+            // line TextMorphs
             this.selectAll();
         }
-        this.root().cursor.setTextareaSelection(this.startMark, this.endMark);
+        this.root().cursor.syncTextareaSelectionWith(this);
     } else {
         this.escalateEvent('mouseDoubleClick', pos);
     }
@@ -239,8 +289,8 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
 
 StringMorph.prototype.enableSelecting = function () {
     this.mouseDownLeft = function (pos) {
-        var crs = this.root().cursor,
-            already = crs ? crs.target === this : false;
+        var crs = this.root().cursor;
+        var already = crs ? crs.target === this : false;
         if (this.world().currentKey === 16) {
             this.shiftClick(pos);
         } else {
@@ -251,6 +301,7 @@ StringMorph.prototype.enableSelecting = function () {
                 this.startMark = this.slotAt(pos);
                 this.endMark = this.startMark;
                 this.currentlySelecting = true;
+                this.root().cursor.syncTextareaSelectionWith(this);
                 if (!already) {this.escalateEvent('mouseDownLeft', pos); }
             }
         }
@@ -264,7 +315,7 @@ StringMorph.prototype.enableSelecting = function () {
                 this.endMark = newMark;
                 var cursor = this.root().cursor;
                 if (cursor) {
-                    cursor.setTextareaSelection(this.startMark, this.endMark);
+                    cursor.syncTextareaSelectionWith(this);
                 }
                 this.drawNew();
                 this.changed();
@@ -275,7 +326,7 @@ StringMorph.prototype.enableSelecting = function () {
 
 WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     if (this.cursor && this.cursor.target === aStringOrTextMorph) {
-        return
+        return;
     }
 
     var pos = getDocumentPositionOf(this.worldCanvas);
