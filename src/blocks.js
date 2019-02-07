@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-February-06';
+modules.blocks = '2019-February-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1966,8 +1966,10 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
             }
         }
         if (this.width() !== initialExtent.x) {
-            affected = this.parentThatIsAnyOf(
-                [ReporterBlockMorph, CommandSlotMorph, RingCommandSlotMorph]
+            affected = this.parentThatIsA(
+                ReporterBlockMorph,
+                CommandSlotMorph,
+                RingCommandSlotMorph
             );
             if (affected) {
                 affected.fixLayout();

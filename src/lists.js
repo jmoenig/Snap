@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2019-January-10';
+modules.lists = '2019-February-07';
 
 var List;
 var ListWatcherMorph;
@@ -924,11 +924,11 @@ ListWatcherMorph.prototype.userMenu = function () {
 };
 
 ListWatcherMorph.prototype.showTableView = function () {
-    var view = this.parentThatIsAnyOf([
+    var view = this.parentThatIsA(
         SpriteBubbleMorph,
         SpeechBubbleMorph,
         CellMorph
-    ]);
+    );
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
         view.changed();
