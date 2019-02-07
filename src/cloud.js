@@ -769,6 +769,24 @@ Cloud.prototype.getCollectionProjects = function (
     );
 };
 
+Cloud.prototype.setCollectionThumbnail = function (
+    collectionUsername,
+    collectionName,
+    thumbnailId,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/thumbnail?id=' + encodeURIComponent(thumbnailId),
+        onSuccess,
+        onError,
+        'Could not set project thumbnail'
+    );
+};
+
 Cloud.prototype.addProjectToCollection = function (
     collectionUsername,
     collectionName,
@@ -785,6 +803,30 @@ Cloud.prototype.addProjectToCollection = function (
         onSuccess,
         onError,
         'Could not add project to collection',
+        false, // wants raw response
+        JSON.stringify({
+            username: projectUsername,
+            projectname: projectName
+        })
+    );
+};
+
+Cloud.prototype.removeProjectFromCollection = function (
+    collectionUsername,
+    collectionName,
+    projectUsername,
+    projectName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/projects',
+        onSuccess,
+        onError,
+        'Could not remove project from collection',
         false, // wants raw response
         JSON.stringify({
             username: projectUsername,
