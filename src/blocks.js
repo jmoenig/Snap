@@ -718,7 +718,7 @@ SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
     var topBlock = this.topBlock(),
         affected;
     if (grabbedMorph instanceof CommandBlockMorph) {
-        affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph); // +++
+        affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
         if (affected) {
             this.startLayout();
             affected.fixLayout();
@@ -1960,7 +1960,7 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     // find out if one of my parents needs to be fixed
     if (this instanceof CommandBlockMorph) {
         if (this.height() !== initialExtent.y) {
-            affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph); // +++
+            affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
             if (affected) {
                 affected.fixLayout();
             }
@@ -3911,7 +3911,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
             } else if (this instanceof ReporterBlockMorph) {
                 nearest = this.parent.parentThatIsA(BlockMorph);
             } else { // command
-                cslot = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph); // +++
+                cslot = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
                 if (cslot) {
                     nearest = cslot.parentThatIsA(BlockMorph);
                 }
@@ -4410,7 +4410,7 @@ CommandBlockMorph.prototype.nextBlock = function (block) {
     // set / get the block attached to my bottom
     if (block) {
         var nb = this.nextBlock(),
-            affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph); // +++
+            affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
         this.add(block);
         // this.cachedNextBlock = block;
         if (nb) {
@@ -4504,7 +4504,7 @@ CommandBlockMorph.prototype.attachTargets = function () {
             });
         }
         if (ScriptsMorph.prototype.enableNestedAutoWrapping ||
-                !this.parentThatIsA(CommandSlotMorph)) { // +++ ??
+                !this.parentThatIsA(CommandSlotMorph)) {
             answer.push({
                 point: tp,
                 element: this,
@@ -4646,7 +4646,10 @@ CommandBlockMorph.prototype.snap = function (hand) {
             if (next) {
                 scripts.add(next);
                 next.moveBy(this.extent().floorDivideBy(2));
-                affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph); // +++
+                affected = this.parentThatIsA(
+                    CommandSlotMorph,
+                    ReporterSlotMorph
+                );
                 if (affected) {
                     affected.fixLayout();
                 }
@@ -4678,7 +4681,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
             before.nestedBlock(this);
         } else if (before instanceof RingReporterSlotMorph) {
             before.add(this);
-            before.fixLayout(); // +++
+            before.fixLayout();
         }
 
         // fix zebra coloring.
@@ -4699,7 +4702,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
 };
 
 CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
-    // +++
     var oldPos = this.position();
 
     nop(handMorph);
@@ -4748,7 +4750,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
         scripts.dropRecord.action = 'delete';
     }
 
-    this.prepareToBeGrabbed(); // fix outer ring reporter slot ++++
+    this.prepareToBeGrabbed(); // fix outer ring reporter slot
 
     if (ide) {
         // also stop all active processes hatted by this block
@@ -4768,12 +4770,12 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
     // delete just this one block, reattach next block to the previous one,
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide = this.parentThatIsA(IDE_Morph),
-        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph), // +++
+        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
         pb,
         nb = this.nextBlock(),
         above,
         parent = this.parentThatIsA(SyntaxElementMorph),
-        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph); // +++
+        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
 
     // for undrop / redrop
     if (scripts) {
@@ -4792,7 +4794,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         above = pb;
     } else if (cs && (cs.nestedBlock() === this)) {
         above = cs;
-        this.prepareToBeGrabbed(); // ++++
+        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
     }
     if (ide) {
         // also stop all active processes hatted by this block
@@ -4801,7 +4803,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         this.destroy(true); // just this block
     }
     if (nb) {
-        if (above instanceof CommandSlotMorph, RingReporterSlotMorph) { // ++++
+        if (above instanceof CommandSlotMorph, RingReporterSlotMorph) {
             above.nestedBlock(nb);
         } else if (above instanceof CommandBlockMorph) {
             above.nextBlock(nb);
@@ -6801,7 +6803,7 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                             rec.lastDropTarget.element
                         );
                     }
-                } else if (rec.lastWrapParent instanceof CommandSlotMorph) { // +++ ??
+                } else if (rec.lastWrapParent instanceof CommandSlotMorph) {
                     if (forRedrop) {
                         onBeforeDrop = function () {
                             cslot.nestedBlock(rec.lastDropTarget.element);
@@ -6861,7 +6863,7 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
         if (forRedrop && rec.lastNextBlock) {
             if (parent instanceof CommandBlockMorph) {
                 parent.nextBlock(rec.lastNextBlock);
-            } else if (parent instanceof CommandSlotMorph) { // +++ ??
+            } else if (parent instanceof CommandSlotMorph) {
                 parent.nestedBlock(rec.lastNextBlock);
             }
         }
@@ -11643,7 +11645,6 @@ RingReporterSlotMorph.prototype.replaceInput = function (source, target) {
     }
 };
 
-///* under construction +++
 // RingReporterSlotMorph attach targets for commands:
 
 RingReporterSlotMorph.prototype.slotAttachPoint =
@@ -11670,7 +11671,7 @@ RingReporterSlotMorph.prototype.attachTargets = function () {
 RingReporterSlotMorph.prototype.nestedBlock = function (block) {
     if (block) {
         var nb = this.nestedBlock();
-        this.silentReplaceInput(this.children[0], block); // ++++
+        this.silentReplaceInput(this.children[0], block);
         if (nb) {
             block.bottomBlock().nextBlock(nb);
         }
@@ -11694,7 +11695,6 @@ RingReporterSlotMorph.prototype.fixLayout = function () {
         RingReporterSlotMorph.uber.fixLayout.call(this);
     }
 };
-//*/
 
 // RingReporterSlotMorph drawing:
 
@@ -12503,7 +12503,7 @@ ScriptFocusMorph.prototype.getFocus = function (world) {
 ScriptFocusMorph.prototype.fixLayout = function () {
     this.changed();
     if (this.element instanceof CommandBlockMorph ||
-            this.element instanceof CommandSlotMorph || // +++ ??
+            this.element instanceof CommandSlotMorph ||
             this.element instanceof ScriptsMorph) {
         this.manifestStatement();
     } else {
@@ -12691,13 +12691,13 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
                 this.editor.add(block);
                 block.nextBlock(this.element);
                 this.fixLayout();
-            } else if (pb instanceof CommandSlotMorph) { // +++ ??
+            } else if (pb instanceof CommandSlotMorph) {
                 pb.nestedBlock(block);
             } else if (pb instanceof CommandBlockMorph) {
                 pb.nextBlock(block);
             }
         }
-    } else if (this.element instanceof CommandSlotMorph) { // +++ ??
+    } else if (this.element instanceof CommandSlotMorph) {
         // to be done: special case if block.isStop()
         this.element.nestedBlock(block);
         this.element = block;
