@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-February-01';
+modules.byob = '2019-February-06';
 
 // Declarations
 
@@ -317,8 +317,26 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
+    var fname;
     if (this.declarations.has(inputName) &&
             this.declarations.get(inputName)[2]) {
+        if ((this.declarations.get(inputName)[2].indexOf('§_') === 0)) {
+            fname = this.declarations.get(inputName)[2].slice(2);
+            if (contains(
+                [
+                    'messagesReceivedMenu',
+                    'objectsMenu',
+                    'costumesMenu',
+                    'soundsMenu',
+                    'getVarNamesDict',
+                    'pianoKeyboardMenu',
+                    'directionDialMenu'
+                ],
+                fname
+            )) {
+                return fname;
+            }
+        }
         return this.parseChoices(this.declarations.get(inputName)[2]);
     }
     return null;
@@ -2597,11 +2615,15 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     } else if (this.defaultValue) {
         if (this.type === '%n') {
             suff = ' # = ' + this.defaultValue.toString();
+        } else if (contains(['%mlt', '%code'], this.type)) {
+            suff = ' \u00B6 = ' + this.defaultValue.toString(); // pilcrow
         } else { // 'any' or 'text'
             suff = ' = ' + this.defaultValue.toString();
         }
     } else if (this.type === '%n') {
         suff = ' #';
+    } else if (contains(['%mlt', '%code'], this.type)) {
+        suff = ' \u00B6'; // pilcrow
     }
     return this.labelString + suff;
 };
@@ -2618,6 +2640,27 @@ BlockLabelFragment.prototype.copy = function () {
     ans.options = this.options;
     ans.isReadOnly = this.isReadOnly;
     return ans;
+};
+
+// options and special drop-down menus
+
+BlockLabelFragment.prototype.hasOptions = function () {
+    return this.options !== '' && !this.hasSpecialMenu();
+};
+
+BlockLabelFragment.prototype.hasSpecialMenu = function () {
+    return contains(
+        [
+            '§_messagesReceivedMenu',
+            '§_objectsMenu',
+            '§_costumesMenu',
+            '§_soundsMenu',
+            '§_getVarNamesDict',
+            '§_pianoKeyboardMenu',
+            '§_directionDialMenu'
+        ],
+        this.options
+    );
 };
 
 // arity
@@ -3326,7 +3369,10 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defLabel.setColor(new Color(255, 255, 255));
     defLabel.refresh = function () {
         if (myself.isExpanded && contains(
-                ['%s', '%n', '%txt', '%anyUE', '%b', '%boolUE'],
+                [
+                    '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
+                    '%mlt', '%code'
+                ],
                 myself.fragment.type
             )) {
             defLabel.show();
@@ -3344,7 +3390,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = function () {
         if (myself.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE'],
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
             myself.fragment.type
         )) {
             defInput.show();
@@ -3437,6 +3483,10 @@ InputSlotDialogMorph.prototype.setSlotArity = function (arity) {
         c.refresh();
     });
     this.edit();
+};
+
+InputSlotDialogMorph.prototype.setSlotOptions = function (text) {
+    this.fragment.options = text;
 };
 
 InputSlotDialogMorph.prototype.addSlotTypeButton = function (
@@ -3626,7 +3676,12 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             var menu = new MenuMorph(myself),
                 on = '\u2611 ',
                 off = '\u2610 ';
-            menu.addItem('options...', 'editSlotOptions');
+            menu.addItem(
+                (myself.fragment.hasOptions() ? on : off) +
+                    localize('options') +
+                    '...',
+                'editSlotOptions'
+            );
             menu.addItem(
                 (myself.fragment.isReadOnly ? on : off) +
                     localize('read-only'),
@@ -3635,7 +3690,17 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                          }
             );
             menu.addLine();
-            menu.addMenu('special', myself.specialSlotsMenu());
+            menu.addMenu(
+                (myself.fragment.hasSpecialMenu() ? on : off) +
+                    localize('menu'),
+                myself.specialOptionsMenu()
+            );
+            menu.addMenu(
+                (contains(['%mlt', '%code'], myself.fragment.type) ?
+                    on : off) +
+                'special',
+                 myself.specialSlotsMenu()
+            );
             return menu;
         }
         return myself.specialSlotsMenu();
@@ -3665,8 +3730,8 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
 InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     var menu = new MenuMorph(this.setSlotType, null, this),
         myself = this,
-        on = '\u2611 ',
-        off = '\u2610 ';
+        on = '\u26AB ',
+        off = '\u26AA ';
 
     function addSpecialSlotType(label, spec) {
         menu.addItem(
@@ -3677,6 +3742,33 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    return menu;
+};
+
+InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
+    var menu = new MenuMorph(this.setSlotOptions, null, this),
+        myself = this,
+        on = '\u26AB ',
+        off = '\u26AA ';
+
+    function addSpecialOptions(label, selector) {
+        menu.addItem(
+            (myself.fragment.options === selector ?
+                    on : off) + localize(label),
+            selector
+        );
+    }
+
+    // +++ add another radio button for "options"
+    addSpecialOptions('(none)', '');
+    addSpecialOptions('messages', '§_messagesReceivedMenu');
+    addSpecialOptions('objects', '§_objectsMenu');
+    // addSpecialOptions('data types', '§_typesMenu');
+    addSpecialOptions('costumes', '§_costumesMenu');
+    addSpecialOptions('sounds', '§_soundsMenu');
+    addSpecialOptions('variables', '§_getVarNamesDict');
+    addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
+    addSpecialOptions('360° dial', '§_directionDialMenu');
     return menu;
 };
 

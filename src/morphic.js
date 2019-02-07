@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-January-10';
+var morphicVersion = '2019-February-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2845,34 +2845,24 @@ Node.prototype.siblings = function () {
     });
 };
 
-Node.prototype.parentThatIsA = function (constructor) {
+Node.prototype.parentThatIsA = function () {
     // including myself
-    if (this instanceof constructor) {
-        return this;
+    // Note: you can pass in multiple constructors to test for
+    var i;
+    for (i = 0; i < arguments.length; i += 1) {
+        if (this instanceof arguments[i]) {
+            return this;
+        }
     }
     if (!this.parent) {
         return null;
     }
-    return this.parent.parentThatIsA(constructor);
+    return this.parentThatIsA.apply(this.parent, arguments);
 };
 
 Node.prototype.parentThatIsAnyOf = function (constructors) {
-    // including myself
-    var yup = false,
-        myself = this;
-    constructors.forEach(function (each) {
-        if (myself.constructor === each) {
-            yup = true;
-            return;
-        }
-    });
-    if (yup) {
-        return this;
-    }
-    if (!this.parent) {
-        return null;
-    }
-    return this.parent.parentThatIsAnyOf(constructors);
+    // deprecated, use parentThatIsA instead
+    return this.parentThatIsA.apply(this, constructors);
 };
 
 // Morphs //////////////////////////////////////////////////////////////

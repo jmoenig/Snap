@@ -12,10 +12,11 @@
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
+    * special context-aware drop-downs for custom blocks
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
-    * enhances support for embedding Snap in other website, thanks, Bernat!
+    * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
 * Notable Changes:
     * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
@@ -24,6 +25,8 @@
     * "loop arrow" symbol for primitive loops, also available for custom blocks
     * optimized in-project storage of atomic-data lists (more efficient, less space) 
     * remove all clones when the Green Flag is clicked
+    * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
+    * enable dropping commands into all rings, experimental, under construction
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -34,6 +37,28 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * German
+
+### 2019-02-07
+* Store: tweaked loading mechanism to enable command blocks inside reporter rings
+* Objects: tweaked spec for settings getter
+* Blocks: improved dropping command blocks into reporter rings
+* Morphic: simplified and optimized Node>>parentThatIsA / parentThatIsAnyOf
+* Blocks, Lists, Tables: refactored for optimized parent-by-type detection
+
+### 2019-02-06
+* Blocks, BYOB: refactored custom block input options and drop-down menus
+* Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch)
+* Blocks: enable dropping commands into all rings, under constructions 
+
+### 2019-02-05
+* BYOB: radio button symbols for special slot / drop-down menu options
+
+### 2019-02-04
+* BYOB: new experimental feature: special context-aware drop-down menus for custom blocks
+* BYOB: identify multi-line input slots by the pilcrow symbol in the slot editor
+* BYOB: support default values in multi-line input slots inside custom blocks
+* Blocks: enable piano keyboard menu to work with textual values representable as numbers
+* Blocks: enable dial menu to work with textual values representable as numbers
 
 ### 2019-02-01
 * BYOB: new experimental feature: special multi-line and monospaced input slot types

@@ -61,13 +61,13 @@
 /*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
 ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,normalizeCanvas,
-ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph,
+ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
-ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
+ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
 List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph,
-fontHeight, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
+CommentMorph, CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-January-28';
+modules.gui = '2019-February-06';
 
 // Declarations
 
@@ -3139,6 +3139,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.enableSublistIDs,
         'uncheck to disable\nsaving linked sublist identities',
         'check to enable\nsaving linked sublist identities',
+        true
+    );
+    addPreference(
+        'Enable command drops in all rings',
+        function () {
+            RingReporterSlotMorph.prototype.enableCommandDrops =
+                !RingReporterSlotMorph.prototype.enableCommandDrops;
+        },
+        RingReporterSlotMorph.prototype.enableCommandDrops,
+        'UNDER CONSTRUCTION!\nuncheck to disable\ndropping commands in ' +
+            'reporter rings',
+        'UNDER CONSTRUCTION!\ncheck to enable\ndropping commands in all rings',
         true
     );
     menu.popup(world, pos);

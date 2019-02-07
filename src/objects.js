@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-January-28';
+modules.objects = '2019-February-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -867,7 +867,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportGlobalFlag: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'is %setting ?',
+            spec: 'is %setting on?',
             defaults: [['turbo mode']]
         },
         reportDate: {
@@ -2971,7 +2971,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
-        } else { // diadic
+        } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
             inps = block.inputs();
         }
