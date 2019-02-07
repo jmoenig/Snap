@@ -11661,8 +11661,7 @@ RingReporterSlotMorph.prototype.attachTargets = function () {
 RingReporterSlotMorph.prototype.nestedBlock = function (block) {
     if (block) {
         var nb = this.nestedBlock();
-        this.contents().destroy();
-        this.add(block);
+        this.silentReplaceInput(this.children[0], block);
         if (nb) {
             block.bottomBlock().nextBlock(nb);
         }
