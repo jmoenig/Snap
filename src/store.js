@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-23';
+modules.store = '2019-February-07';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1143,7 +1143,9 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
         */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
-            migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+            migration = SpriteMorph.prototype.blockMigrations[
+                model.attributes.s
+            ];
             if (migration) {
                 migrationOffset = migration.offset;
             }
@@ -1231,8 +1233,13 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     if (model.tag === 'script') {
         inp = this.loadScript(model, object);
         if (inp) {
-            input.add(inp);
-            input.fixLayout();
+            if (block.selector === 'reifyReporter') {
+                input.silentReplaceInput(input.children[0], inp);
+                input.fixLayout();
+            } else {
+                input.add(inp);
+                input.fixLayout();
+            }
         }
     } else if (model.tag === 'autolambda' && model.children[0]) {
         inp = this.loadBlock(model.children[0], true, object);
