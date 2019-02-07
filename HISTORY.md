@@ -42,6 +42,7 @@
 * Store: tweaked loading mechanism to enable command blocks inside reporter rings
 * Objects: tweaked spec for settings getter
 * Blocks: improved dropping command blocks into reporter rings
+* Morphic: simplified and optimized Node>>parentThatIsA / parentThatIsAnyOf
 
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
