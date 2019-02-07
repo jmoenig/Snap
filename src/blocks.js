@@ -12693,6 +12693,10 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
                 this.fixLayout();
             } else if (pb instanceof CommandSlotMorph) {
                 pb.nestedBlock(block);
+            } else if (pb instanceof RingReporterSlotMorph) {
+                block.nextBlock(pb.nestedBlock());
+                pb.add(block);
+                pb.fixLayout();
             } else if (pb instanceof CommandBlockMorph) {
                 pb.nextBlock(block);
             }

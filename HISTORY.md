@@ -44,6 +44,7 @@
 * Blocks: improved dropping command blocks into reporter rings
 * Morphic: simplified and optimized Node>>parentThatIsA / parentThatIsAnyOf
 * Blocks, Lists, Tables: refactored for optimized parent-by-type detection
+* Blocks: adjusted keyboard typing for command blocks inside reporter rings
 
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
