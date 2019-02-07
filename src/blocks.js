@@ -9055,14 +9055,9 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
-    var world;
     if (this.isReadOnly || this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
-        world = this.world();
-        if (world) {
-            world.stopEditing();
-        }
         this.selectForEdit().contents().edit();
     }
 };
