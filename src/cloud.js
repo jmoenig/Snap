@@ -750,7 +750,7 @@ Cloud.prototype.getCollectionProjects = function (
 ) {
     var path = '/users/' + encodeURIComponent(collectionUsername) +
                 '/collections/' + encodeURIComponent(collectionName) +
-                '/projects/';
+                '/projects';
 
     if (page) {
         path += '?page=' + page + '&pagesize=' + (pageSize || 16);
