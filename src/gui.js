@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-06';
+modules.gui = '2019-February-07';
 
 // Declarations
 
@@ -3148,9 +3148,8 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !RingReporterSlotMorph.prototype.enableCommandDrops;
         },
         RingReporterSlotMorph.prototype.enableCommandDrops,
-        'UNDER CONSTRUCTION!\nuncheck to disable\ndropping commands in ' +
-            'reporter rings',
-        'UNDER CONSTRUCTION!\ncheck to enable\ndropping commands in all rings',
+        'uncheck to disable\ndropping commands in reporter rings',
+        'check to enable\ndropping commands in all rings',
         true
     );
     menu.popup(world, pos);

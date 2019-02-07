@@ -11617,7 +11617,7 @@ RingReporterSlotMorph.prototype.rfBorder
 RingReporterSlotMorph.prototype.edge
     = RingCommandSlotMorph.prototype.edge;
 
-RingReporterSlotMorph.prototype.enableCommandDrops = false; // +++ not finished
+RingReporterSlotMorph.prototype.enableCommandDrops = true;
 
 // RingReporterSlotMorph instance creation:
 
