@@ -26,7 +26,7 @@
     * optimized in-project storage of atomic-data lists (more efficient, less space) 
     * remove all clones when the Green Flag is clicked
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
-    * enable dropping commands into all rings, experimental, under construction
+    * enable dropping commands into all rings
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -44,6 +44,8 @@
 * Blocks: improved dropping command blocks into reporter rings
 * Morphic: simplified and optimized Node>>parentThatIsA / parentThatIsAnyOf
 * Blocks, Lists, Tables: refactored for optimized parent-by-type detection
+* Blocks: adjusted keyboard typing for command blocks inside reporter rings
+* GUI, Blocks: enable dropping command blocks into all rings by default. Yeah!
 
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
