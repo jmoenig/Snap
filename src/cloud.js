@@ -725,7 +725,11 @@ Cloud.prototype.updateProjectName = function (
 
 // Collections
 
-Cloud.prototype.newCollection = function (collectionName, onSuccess, onError) {
+Cloud.prototype.newCollection = function (
+        collectionName,
+    onSuccess,
+    onError
+) {
     this.withCredentialsRequest(
         'POST',
         '/users/%username/collections/' + encodeURIComponent(collectionName),
@@ -735,13 +739,25 @@ Cloud.prototype.newCollection = function (collectionName, onSuccess, onError) {
     );
 };
 
-Cloud.prototype.getCollectionProjects = function (collectionUsername, page, pageSize, collectionName, onSuccess, onError) {
+Cloud.prototype.getCollectionProjects = function (
+    collectionUsername,
+    page,
+    pageSize,
+    collectionName,
+    onSuccess,
+    onError,
+    withThumbnail
+) {
     var path = '/users/' + encodeURIComponent(collectionUsername) +
                 '/collections/' + encodeURIComponent(collectionName) +
                 '/projects/';
 
     if (page) {
         path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    if (withThumbnail) {
+        path += (page ? '&' : '?') + 'withthumbnail=true';
     }
 
     this.withCredentialsRequest(
@@ -753,7 +769,14 @@ Cloud.prototype.getCollectionProjects = function (collectionUsername, page, page
     );
 };
 
-Cloud.prototype.addProjectToCollection = function (collectionUsername, collectionName, projectUsername, projectName, onSuccess, onError) {
+Cloud.prototype.addProjectToCollection = function (
+    collectionUsername,
+    collectionName,
+    projectUsername,
+    projectName,
+    onSuccess,
+    onError
+) {
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
@@ -770,7 +793,14 @@ Cloud.prototype.addProjectToCollection = function (collectionUsername, collectio
     );
 };
 
-Cloud.prototype.getUserCollections = function (collectionUsername, page, pageSize, searchTerm, onSuccess, onError) {
+Cloud.prototype.getUserCollections = function (
+    collectionUsername,
+    page,
+    pageSize,
+    searchTerm,
+    onSuccess,
+    onError
+) {
     this.withCredentialsRequest(
         'GET',
         '/users/' +
@@ -789,7 +819,13 @@ Cloud.prototype.getUserCollections = function (collectionUsername, page, pageSiz
     );
 };
 
-Cloud.prototype.getCollections = function (page, pageSize, searchTerm, onSuccess, onError) {
+Cloud.prototype.getCollections = function (
+    page,
+    pageSize,
+    searchTerm,
+    onSuccess,
+    onError
+) {
     this[this.username ? 'withCredentialsRequest' : 'request'](
         'GET',
         '/collections?' +
