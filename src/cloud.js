@@ -814,8 +814,7 @@ Cloud.prototype.addProjectToCollection = function (
 Cloud.prototype.removeProjectFromCollection = function (
     collectionUsername,
     collectionName,
-    projectUsername,
-    projectName,
+    projectId,
     onSuccess,
     onError
 ) {
@@ -823,15 +822,10 @@ Cloud.prototype.removeProjectFromCollection = function (
         'DELETE',
         '/users/' + encodeURIComponent(collectionUsername) +
             '/collections/' + encodeURIComponent(collectionName) +
-            '/projects',
+            '/projects/' + encodeURIComponent(projectId),
         onSuccess,
         onError,
-        'Could not remove project from collection',
-        false, // wants raw response
-        JSON.stringify({
-            username: projectUsername,
-            projectname: projectName
-        })
+        'Could not remove project from collection'
     );
 };
 
