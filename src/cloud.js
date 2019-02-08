@@ -739,6 +739,23 @@ Cloud.prototype.newCollection = function (
     );
 };
 
+Cloud.prototype.getCollectionMetadata = function (
+        collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'GET',
+        '/users/' + encodeURIComponent(collectionUsername) +
+                '/collections/' + encodeURIComponent(collectionName) +
+                '/metadata',
+        onSuccess,
+        onError,
+        'Could not fetch metadata for ' + collectionName
+    );
+};
+
 Cloud.prototype.getCollectionProjects = function (
     collectionUsername,
     page,
