@@ -804,6 +804,46 @@ Cloud.prototype.setCollectionThumbnail = function (
     );
 };
 
+Cloud.prototype.updateCollectionDescription = function (
+	collectionUsername,
+    collectionName,
+    description,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not update collection description',
+        false, // wants raw response
+        JSON.stringify({ description: description })
+    );
+};
+
+Cloud.prototype.updateCollectionName = function (
+	collectionUsername,
+    collectionName,
+    newName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not update collection name',
+        false, // wants raw response
+        JSON.stringify({ name: newName })
+    );
+};
+
 Cloud.prototype.addProjectToCollection = function (
     collectionUsername,
     collectionName,
