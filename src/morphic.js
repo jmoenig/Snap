@@ -5418,7 +5418,7 @@ CursorMorph.prototype.initializeTextarea = function () {
         }
     });
 
-    // For other keyboard events, let the textarea element handle other key 
+    // For other keyboard events, first let the textarea element handle the
     // events, then we take its state and update the target morph and cursor
     // morph accordingly.
     this.textarea.addEventListener('keyup', function (event) {
@@ -5498,7 +5498,9 @@ CursorMorph.prototype.syncTextareaSelectionWith = function (targetMorph) {
     var start = targetMorph.startMark;
     var end = targetMorph.endMark;
 
-    if (start <= end) {
+    if (start === end) {
+        this.textarea.setSelectionRange(this.slot, this.slot, 'none');
+    } else if (start < end) {
         this.textarea.setSelectionRange(start, end, 'forward');
     } else {
         this.textarea.setSelectionRange(end, start, 'backward');
