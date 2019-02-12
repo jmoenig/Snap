@@ -5481,7 +5481,6 @@ CursorMorph.prototype.initializeTextarea = function () {
         myself.gotoSlot(textarea.selectionStart);
 
         myself.updateTextAreaPosition();
-        target.escalateEvent('reactToKeystroke', event);
     });
 };
 
