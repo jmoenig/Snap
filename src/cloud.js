@@ -1001,7 +1001,7 @@ Cloud.prototype.getCollections = function (
     );
 };
 
-Cloud.prototype.removeCollection = function (
+Cloud.prototype.deleteCollection = function (
     collectionUsername,
     collectionName,
     onSuccess,
