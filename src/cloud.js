@@ -745,11 +745,14 @@ Cloud.prototype.getCollectionMetadata = function (
     onSuccess,
     onError
 ) {
-    this.withCredentialsRequest(
+    this.request(
         'GET',
-        '/users/' + encodeURIComponent(collectionUsername) +
-                '/collections/' + encodeURIComponent(collectionName) +
-                '/metadata',
+        '/users/' +
+            (collectionUsername ?
+                encodeURIComponent(collectionUsername) :
+                '%username') +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
         onSuccess,
         onError,
         'Could not fetch metadata for ' + collectionName
@@ -765,7 +768,10 @@ Cloud.prototype.getCollectionProjects = function (
     onError,
     withThumbnail
 ) {
-    var path = '/users/' + encodeURIComponent(collectionUsername) +
+    var path = '/users/' +
+                (collectionUsername ?
+                    encodeURIComponent(collectionUsername) :
+                    '%username') +
                 '/collections/' + encodeURIComponent(collectionName) +
                 '/projects';
 
@@ -777,7 +783,7 @@ Cloud.prototype.getCollectionProjects = function (
         path += (page ? '&' : '?') + 'withthumbnail=true';
     }
 
-    this.withCredentialsRequest(
+    this.request(
         'GET',
         path,
         onSuccess,
@@ -913,7 +919,7 @@ Cloud.prototype.unpublishCollection = function (
 };
 
 Cloud.prototype.addProjectToCollection = function (
-    collectionUsername,
+        collectionUsername,
     collectionName,
     projectUsername,
     projectName,
@@ -937,7 +943,7 @@ Cloud.prototype.addProjectToCollection = function (
 };
 
 Cloud.prototype.removeProjectFromCollection = function (
-    collectionUsername,
+        collectionUsername,
     collectionName,
     projectId,
     onSuccess,
@@ -955,14 +961,14 @@ Cloud.prototype.removeProjectFromCollection = function (
 };
 
 Cloud.prototype.getUserCollections = function (
-    collectionUsername,
+        collectionUsername,
     page,
     pageSize,
     searchTerm,
     onSuccess,
     onError
 ) {
-    this.withCredentialsRequest(
+    this[this.username ? 'request' : 'withCredentialsRequest'](
         'GET',
         '/users/' +
             (collectionUsername ?
@@ -981,13 +987,13 @@ Cloud.prototype.getUserCollections = function (
 };
 
 Cloud.prototype.getCollections = function (
-    page,
+        page,
     pageSize,
     searchTerm,
     onSuccess,
     onError
 ) {
-    this[this.username ? 'withCredentialsRequest' : 'request'](
+    this.request(
         'GET',
         '/collections?' +
             this.encodeDict({
@@ -1002,7 +1008,7 @@ Cloud.prototype.getCollections = function (
 };
 
 Cloud.prototype.deleteCollection = function (
-    collectionUsername,
+        collectionUsername,
     collectionName,
     onSuccess,
     onError
