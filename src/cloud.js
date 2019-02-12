@@ -844,6 +844,74 @@ Cloud.prototype.updateCollectionName = function (
     );
 };
 
+Cloud.prototype.shareCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?shared=true',
+        onSuccess,
+        onError,
+        'Could not share collection'
+    );
+};
+
+Cloud.prototype.unshareCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?shared=false&published=false',
+        onSuccess,
+        onError,
+        'Could not unshare collection'
+    );
+};
+
+Cloud.prototype.publishCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?published=true',
+        onSuccess,
+        onError,
+        'Could not publish collection'
+    );
+};
+
+Cloud.prototype.unpublishCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?published=false',
+        onSuccess,
+        onError,
+        'Could not unpublish collection'
+    );
+};
+
 Cloud.prototype.addProjectToCollection = function (
     collectionUsername,
     collectionName,
