@@ -932,3 +932,19 @@ Cloud.prototype.getCollections = function (
         'Could not fetch collections'
     );
 };
+
+Cloud.prototype.removeCollection = function (
+    collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName),
+        onSuccess,
+        onError,
+        'Could not remove collection'
+    );
+};
