@@ -1044,3 +1044,21 @@ Cloud.prototype.addEditorToCollection = function (
         })
     );
 };
+
+Cloud.prototype.removeEditorFromCollection = function (
+        collectionUsername,
+    collectionName,
+    editorUsername,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/editors/' + encodeURIComponent(editorUsername),
+        onSuccess,
+        onError,
+        'Could not remove editor from collection'
+    );
+};
