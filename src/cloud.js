@@ -1022,3 +1022,25 @@ Cloud.prototype.deleteCollection = function (
         'Could not remove collection'
     );
 };
+
+Cloud.prototype.addEditorToCollection = function (
+        collectionUsername,
+    collectionName,
+    editorUsername,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/editors',
+        onSuccess,
+        onError,
+        'Could not add editor to collection',
+        false, // wants raw response
+        JSON.stringify({
+            editor_username: editorUsername,
+        })
+    );
+};
