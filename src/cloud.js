@@ -571,8 +571,7 @@ Cloud.prototype.getRemixes = function (
     pageSize,
     projectName,
     onSuccess,
-    onError,
-    withThumbnail
+    onError
 ) {
     var path = '/projects/' +
                 encodeURIComponent(username) + '/' +
@@ -983,6 +982,31 @@ Cloud.prototype.getUserCollections = function (
         onSuccess,
         onError,
         'Could not fetch collections'
+    );
+};
+
+Cloud.prototype.getCollectionsContainingProject = function (
+        username,
+    page,
+    pageSize,
+    projectName,
+    onSuccess,
+    onError
+) {
+    var path = '/projects/' +
+                encodeURIComponent(username) + '/' +
+                encodeURIComponent(projectName) + '/collections';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    this.request(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch collections for project ' + projectName
     );
 };
 
