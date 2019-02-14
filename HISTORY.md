@@ -31,12 +31,16 @@
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
     * using "inherit" no longer un-hides the palette in presentation mode
+    * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
 * Translation Updates:
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * German
+
+### 2019-02-07
+* BYOB: keep empty numerical input slots in custom blocks empty when relabelling
 
 ### 2019-02-07
 * Store: tweaked loading mechanism to enable command blocks inside reporter rings
