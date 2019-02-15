@@ -41,6 +41,7 @@
 
 ### 2019-02-15
 * BYOB: tweaked yesterday's fix...
+* Blocks: fixed a glitch in the custom block help mechanism (show only the prototype)
 
 ### 2019-02-14
 * BYOB: keep empty numerical input slots in custom blocks empty when relabelling
