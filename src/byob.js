@@ -3763,7 +3763,6 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
         );
     }
 
-    // +++ add another radio button for "options"
     addSpecialOptions('(none)', '');
     addSpecialOptions('messages', '§_messagesReceivedMenu');
     addSpecialOptions('objects', '§_objectsMenu');
