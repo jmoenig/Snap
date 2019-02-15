@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-February-14';
+modules.byob = '2019-February-15';
 
 // Declarations
 
@@ -678,7 +678,9 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
             myself.silentReplaceInput(inp, old.fullCopy());
         } else if (old instanceof InputSlotMorph
                 && inp instanceof InputSlotMorph) {
-            if (!old.isEmptySlot()) {
+            if (old.isEmptySlot()) {
+                inp.setContents('');
+            } else {
                 inp.setContents(old.evaluate());
             }
         } else if (old instanceof BooleanSlotMorph

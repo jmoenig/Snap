@@ -39,7 +39,10 @@
     * Greek, thanks, Alexandros!
     * German
 
-### 2019-02-07
+### 2019-02-15
+* BYOB: tweaked yesterday's fix...
+
+### 2019-02-14
 * BYOB: keep empty numerical input slots in custom blocks empty when relabelling
 
 ### 2019-02-07
