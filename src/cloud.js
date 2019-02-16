@@ -567,9 +567,9 @@ Cloud.prototype.getProjectVersionMetadata = function (
 
 Cloud.prototype.getRemixes = function (
 	username,
+    projectName,
     page,
     pageSize,
-    projectName,
     onSuccess,
     onError
 ) {
@@ -987,9 +987,9 @@ Cloud.prototype.getUserCollections = function (
 
 Cloud.prototype.getCollectionsContainingProject = function (
         username,
+    projectName,
     page,
     pageSize,
-    projectName,
     onSuccess,
     onError
 ) {
