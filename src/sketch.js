@@ -1020,7 +1020,7 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
 
 VectorPaintEditorMorph.prototype.buildScaleBox = function () {
     var myself = this;
-    ['Top', 'Bottom', 'Up', 'Down'].forEach(function (label) {
+    ['Frontmost', 'Backmost', 'Front', 'Back'].forEach(function (label) {
         myself.scaleBox.add(
             myself.pushButton(
                 label,
@@ -1109,20 +1109,20 @@ VectorPaintEditorMorph.prototype.openIn = function (
             break;
             /* Page Up key */
             case 33:
-                this.changeSelectionLayer('up');
+                this.changeSelectionLayer('front');
             break;
             /* Page Down key */
             case 34:
-                this.changeSelectionLayer('down');
+                this.changeSelectionLayer('back');
             break;
             /* End key */
             case 35:
-                this.changeSelectionLayer('bottom');
+                this.changeSelectionLayer('backmost');
             break;
 
             /* Home key */
             case 36:
-                this.changeSelectionLayer('top');
+                this.changeSelectionLayer('frontmost');
             break;
             case 90:
             /* Ctrl + Z */
@@ -1262,6 +1262,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
         alignColor = new AlignmentMorph("row", this.padding);
+        alignNames = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
     pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
@@ -1343,9 +1344,19 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     alignColor.add(pc.primaryColorViewer);
     alignColor.fixLayout();
 
+    alignNames.add(new TextMorph(localize('Edge color'), 
+				 null, null, null, null,
+				 'center', 85));
+    alignNames.add(new TextMorph(localize('Fill color'), 
+				 null, null, null, null,
+				 'center', 85));
+    alignNames.fixLayout();
     c.add(pc.colorpicker);
-    c.add(new TextMorph(localize('    Edge color             Fill color')));
+	c.add(alignNames);
+//    c.add(new TextMorph(localize('    Edge color             Fill color')));
     c.add(alignColor);
+    c.add(new TextMorph(localize('Right-click/Control-click to set Fill')));
+
     c.add(new TextMorph(localize('Brush size')));
     c.add(alpen);
     c.add(pc.constrain);
@@ -1405,26 +1416,26 @@ VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
     this.sortSelection();
 
     switch (destination) {
-        case 'top':
+        case 'frontmost':
             this.selection.forEach(function (shape) {
                 myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 myself.shapes.push(shape);
             });
         break;
-        case 'bottom':
+        case 'backmost':
             this.selection.slice().reverse().forEach(function (shape) {
                 myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 myself.shapes.splice(0, 0, shape);
             });
         break;
-        case 'up':
+        case 'front':
             this.selection.forEach(function (shape) {
                 var index = myself.shapes.indexOf(shape);
                 myself.shapes.splice(index, 1);
                 myself.shapes.splice(index + myself.selection.length, 0, shape);
             });
         break;
-        case 'down':
+        case 'back':
             if (this.shapes[0] !== this.selection[0]) {
                 this.selection.forEach(function (shape) {
                     var index = myself.shapes.indexOf(shape);
