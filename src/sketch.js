@@ -1261,7 +1261,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         myself = this,
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
-        alignColor = new AlignmentMorph("row", this.padding);
+        alignColor = new AlignmentMorph("row", this.padding),
         alignNames = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
