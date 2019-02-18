@@ -13,6 +13,7 @@
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * special context-aware drop-downs for custom blocks
+    * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
@@ -38,6 +39,9 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * German
+
+### 2019-02-18
+* Objects: enable sprite nesting via the context menu
 
 ### 2019-02-15
 * BYOB: tweaked yesterday's fix...
