@@ -40,6 +40,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-19
+* Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.
+
 ### 2019-02-18
 * Objects: enable sprite nesting via the context menu
 
