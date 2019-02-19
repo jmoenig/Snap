@@ -2464,7 +2464,7 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing instanceof List) {
         return 'list';
     }
-    if (parseFloat(thing) === +thing && !isNaN(+thing)) { // I hate this! -Jens
+    if (parseFloat(thing) === +thing) { // I hate this! -Jens
         return 'number';
     }
     if (isString(thing)) {
