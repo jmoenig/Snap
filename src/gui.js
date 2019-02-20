@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-07';
+modules.gui = '2019-February-20';
 
 // Declarations
 
@@ -3749,7 +3749,6 @@ IDE_Morph.prototype.editProjectNotes = function () {
     var dialog = new DialogBoxMorph().withKey('projectNotes'),
         frame = new ScrollFrameMorph(),
         text = new TextMorph(this.projectNotes || ''),
-        ok = dialog.ok,
         myself = this,
         size = 250,
         world = this.world();
@@ -3776,9 +3775,14 @@ IDE_Morph.prototype.editProjectNotes = function () {
     frame.addContents(text);
     text.drawNew();
 
-    dialog.ok = function () {
-        myself.projectNotes = text.text;
-        ok.call(this);
+    dialog.getInput = function () {
+        return text.text;
+    };
+
+    dialog.target = myself;
+
+    dialog.action = function (note) {
+        myself.projectNotes = note;
     };
 
     dialog.justDropped = function () {

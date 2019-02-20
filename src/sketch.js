@@ -59,7 +59,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2018-June-20';
+modules.sketch = '2019-February-20';
 
 // Declarations
 
@@ -1261,7 +1261,8 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         myself = this,
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
-        alignColor = new AlignmentMorph("row", this.padding);
+        alignColor = new AlignmentMorph("row", this.padding),
+        alignNames = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
     pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
@@ -1273,11 +1274,11 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     pc.colorpicker = new PaintColorPickerMorph(
         new Point(180, 100),
         function (color, isSecondary) {
-            myself.selectColor(color, isSecondary);
+            myself.selectColor(color, !isSecondary);
         }
     );
 
-    // allow right-click on the color picker to select the secondary color
+    // allow right-click on the color picker to select the fill color
     pc.colorpicker.mouseDownRight = function (pos) {
         if ((pos.subtract(this.position()).x > this.width() * 2 / 3) &&
                 (pos.subtract(this.position()).y > this.height() - 10)) {
@@ -1287,8 +1288,8 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         }
     };
 
-    pc.colorpicker.action(new Color(0, 0, 0));
-    pc.colorpicker.action('transparent', true); // secondary color
+    pc.colorpicker.action(new Color(0, 0, 0)); // secondary color
+    pc.colorpicker.action('transparent', true);
 
     pc.penSizeSlider = new SliderMorph(0, 20, 5, 5);
     pc.penSizeSlider.orientation = "horizontal";
@@ -1339,12 +1340,19 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             function () { return myself.shift; }
             );
 
-    alignColor.add(pc.primaryColorViewer);
     alignColor.add(pc.secondaryColorViewer);
+    alignColor.add(pc.primaryColorViewer);
     alignColor.fixLayout();
 
+    alignNames.add(new TextMorph(localize('Edge color\n(left click)'),
+				 null, null, null, null,
+				 'center', 85));
+    alignNames.add(new TextMorph(localize('Fill color\n(rigth click)'),
+				 null, null, null, null,
+				 'center', 85));
+    alignNames.fixLayout();
     c.add(pc.colorpicker);
-    c.add(new TextMorph(localize('Primary color      Secondary color')));
+	c.add(alignNames);
     c.add(alignColor);
     c.add(new TextMorph(localize('Brush size')));
     c.add(alpen);
@@ -1647,8 +1655,8 @@ VectorPaintCanvasMorph.prototype.init = function (shift) {
     this.pointBuffer = [];
     this.currentTool = 'brush';
     this.settings = {
-        primaryColor: new Color(0, 0, 0, 255),
-        secondaryColor: new Color(0, 0, 0, 0),
+        primaryColor: new Color(0, 0, 0, 0),
+        secondaryColor: new Color(0, 0, 0, 255),
         lineWidth: 3
     };
 };
@@ -1862,7 +1870,7 @@ VectorPaintCanvasMorph.prototype.beginShape = function (
         case 'brush':
             this.beginPolygon( // unclosed, freehanded
                 borderWidth,
-                primaryColor,
+                secondaryColor,
                 null,
                 pos,
                 false,
@@ -1870,7 +1878,7 @@ VectorPaintCanvasMorph.prototype.beginShape = function (
             );
             break;
         case 'line':
-            this.beginLine(borderWidth, primaryColor, pos);
+            this.beginLine(borderWidth, secondaryColor, pos);
             break;
         case 'rectangle':
             this.beginRectangle(borderWidth, secondaryColor, primaryColor, pos);

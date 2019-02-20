@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-February-07';
+modules.objects = '2019-February-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -3206,7 +3206,9 @@ SpriteMorph.prototype.reportSounds = function () {
 
 SpriteMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
-        menu = new MenuMorph(this);
+        menu = new MenuMorph(this),
+        allParts,
+        anchors;
 
     if (ide && ide.isAppMode) {
         // menu.addItem('help', 'nop');
@@ -3246,11 +3248,34 @@ SpriteMorph.prototype.userMenu = function () {
             localize('detach from') + ' ' + this.anchor.name,
             'detachFromAnchor'
         );
+    } else {
+        allParts = this.allParts();
+        anchors = this.parent.children.filter(function (morph) {
+            return morph instanceof SpriteMorph &&
+                !contains(allParts, morph);
+        });
+        if (anchors.length) {
+            menu.addMenu('stick to', this.anchorsMenu(anchors));
+        }
     }
     if (this.parts.length) {
         menu.addItem('detach all parts', 'detachAllParts');
     }
     menu.addItem("export...", 'exportSprite');
+    return menu;
+};
+
+SpriteMorph.prototype.anchorsMenu = function (targets) {
+    var menu = new MenuMorph(this.attachTo, null, this);
+    targets.forEach(function (sprite) {
+        menu.addItem(
+            [
+                sprite.thumbnail(new Point(24, 24)),
+                sprite.name,
+            ],
+            sprite
+        );
+    });
     return menu;
 };
 
@@ -5986,6 +6011,10 @@ SpriteMorph.prototype.booleanMorph = function (bool) {
 /*
     simulate Morphic trees
 */
+
+SpriteMorph.prototype.attachTo = function (aSprite) {
+    aSprite.attachPart(this);
+};
 
 SpriteMorph.prototype.attachPart = function (aSprite) {
     var v = Date.now();

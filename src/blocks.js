@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-February-07';
+modules.blocks = '2019-February-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3129,6 +3129,7 @@ BlockMorph.prototype.showHelp = function () {
         blockEditor,
         pic = new Image(),
         help,
+        def,
         comment,
         block,
         spec,
@@ -3164,11 +3165,12 @@ BlockMorph.prototype.showHelp = function () {
     };
 
     if (this.isCustomBlock) {
-        comment = this.isGlobal ?
-            this.definition.comment
-                : this.scriptTarget().getMethod(this.blockSpec).comment;
+        def = this.isGlobal ? this.definition
+                : this.scriptTarget().getMethod(this.blockSpec);
+        comment = def.comment;
         if (comment) {
-            block = this.fullCopy();
+            block = def.blockInstance();
+            block.refreshDefaults(def);
             block.addShadow();
             comment = comment.fullCopy();
             comment.contents.parse();
