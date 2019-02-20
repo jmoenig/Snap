@@ -59,7 +59,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2018-June-20';
+modules.sketch = '2019-February-20';
 
 // Declarations
 
@@ -1020,7 +1020,7 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
 
 VectorPaintEditorMorph.prototype.buildScaleBox = function () {
     var myself = this;
-    ['Frontmost', 'Backmost', 'Front', 'Back'].forEach(function (label) {
+    ['Top', 'Bottom', 'Up', 'Down'].forEach(function (label) {
         myself.scaleBox.add(
             myself.pushButton(
                 label,
@@ -1109,20 +1109,20 @@ VectorPaintEditorMorph.prototype.openIn = function (
             break;
             /* Page Up key */
             case 33:
-                this.changeSelectionLayer('front');
+                this.changeSelectionLayer('up');
             break;
             /* Page Down key */
             case 34:
-                this.changeSelectionLayer('back');
+                this.changeSelectionLayer('down');
             break;
             /* End key */
             case 35:
-                this.changeSelectionLayer('backmost');
+                this.changeSelectionLayer('bottom');
             break;
 
             /* Home key */
             case 36:
-                this.changeSelectionLayer('frontmost');
+                this.changeSelectionLayer('top');
             break;
             case 90:
             /* Ctrl + Z */
@@ -1416,26 +1416,26 @@ VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
     this.sortSelection();
 
     switch (destination) {
-        case 'frontmost':
+        case 'top':
             this.selection.forEach(function (shape) {
                 myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 myself.shapes.push(shape);
             });
         break;
-        case 'backmost':
+        case 'bottom':
             this.selection.slice().reverse().forEach(function (shape) {
                 myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 myself.shapes.splice(0, 0, shape);
             });
         break;
-        case 'front':
+        case 'up':
             this.selection.forEach(function (shape) {
                 var index = myself.shapes.indexOf(shape);
                 myself.shapes.splice(index, 1);
                 myself.shapes.splice(index + myself.selection.length, 0, shape);
             });
         break;
-        case 'back':
+        case 'down':
             if (this.shapes[0] !== this.selection[0]) {
                 this.selection.forEach(function (shape) {
                     var index = myself.shapes.indexOf(shape);
