@@ -1281,10 +1281,10 @@ SnapTranslator.dict.de = {
         'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
     'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
         'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
-    'Edge color':
-        'Randfarbe',
-    'Fill color':
-        'Füllfarbe',
+    'Edge color\n(left click)':
+        'Randfarbe\n(Linksklick)',
+    'Fill color\n(rigth click)':
+        'Füllfarbe\n(Rechtsklick)',
    // 'Top':
    //     'oben',
    // 'Bottom':
