@@ -1344,19 +1344,16 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     alignColor.add(pc.primaryColorViewer);
     alignColor.fixLayout();
 
-    alignNames.add(new TextMorph(localize('Edge color'), 
+    alignNames.add(new TextMorph(localize('Edge color\n(left click)'),
 				 null, null, null, null,
 				 'center', 85));
-    alignNames.add(new TextMorph(localize('Fill color'), 
+    alignNames.add(new TextMorph(localize('Fill color\n(rigth click)'),
 				 null, null, null, null,
 				 'center', 85));
     alignNames.fixLayout();
     c.add(pc.colorpicker);
 	c.add(alignNames);
-//    c.add(new TextMorph(localize('    Edge color             Fill color')));
     c.add(alignColor);
-    c.add(new TextMorph(localize('Right-click/Control-click to set Fill')));
-
     c.add(new TextMorph(localize('Brush size')));
     c.add(alpen);
     c.add(pc.constrain);
