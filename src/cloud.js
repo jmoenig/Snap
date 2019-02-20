@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-January-31';
+modules.cloud = '2019-February-20';
 
 // Global stuff
 
