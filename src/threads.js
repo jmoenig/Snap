@@ -2226,7 +2226,7 @@ Process.prototype.doPlaySoundUntilDone = function (name) {
     if (this.context.activeAudio === null) {
         this.context.activeAudio = sprite.playSound(name);
     }
-    if (this.context.activeAudio.ended
+    if (name === null || this.context.activeAudio.ended
             || this.context.activeAudio.terminated) {
         return null;
     }
