@@ -1066,7 +1066,7 @@ SnapTranslator.dict.de = {
     'rotate':
     	'Drehen',
     'stick to':
-        'Anheften',
+        'Befestigen an',
     'detach from':
         'Abtrennen von',
     'detach all parts':

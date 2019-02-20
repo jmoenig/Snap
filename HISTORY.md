@@ -40,6 +40,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-20
+* Tweaked German translation
+
 ### 2019-02-19
 * Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.
 * Udated German translation
