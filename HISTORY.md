@@ -28,6 +28,7 @@
     * remove all clones when the Green Flag is clicked
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
     * enable dropping commands into all rings
+    * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -42,6 +43,7 @@
 
 ### 2019-02-20
 * Tweaked German translation
+* Vector editor color name changes, thanks, Brian!
 
 ### 2019-02-19
 * Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.

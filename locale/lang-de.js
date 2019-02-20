@@ -1281,8 +1281,10 @@ SnapTranslator.dict.de = {
         'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
     'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
         'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
-    'Primary color      Secondary color':
-        'Primärfarbe          Sekundärfarbe',
+    'Edge color':
+        'Randfarbe',
+    'Fill color':
+        'Füllfarbe',
    // 'Top':
    //     'oben',
    // 'Bottom':
