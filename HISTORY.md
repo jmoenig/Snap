@@ -41,6 +41,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-21
+* Blocks: fixed deleting a single command inside a stack
+
 ### 2019-02-20
 * Tweaked German translation
 * Vector editor color name changes, thanks, Brian!

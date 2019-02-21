@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-February-15';
+modules.blocks = '2019-February-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4805,7 +4805,9 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         this.destroy(true); // just this block
     }
     if (nb) {
-        if (above instanceof CommandSlotMorph, RingReporterSlotMorph) {
+        if (above instanceof CommandSlotMorph ||
+            above instanceof RingReporterSlotMorph
+        ) {
             above.nestedBlock(nb);
         } else if (above instanceof CommandBlockMorph) {
             above.nextBlock(nb);
