@@ -495,7 +495,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
     var myself = this,
         world = this.world(),
         hand = world.hand,
-		shifted = this.paper.isShiftPressed();
+        shifted = this.paper.isShiftPressed();
         posInDocument = getDocumentPositionOf(world.worldCanvas),
         mouseMoveBak = hand.processMouseMove,
         mouseDownBak = hand.processMouseDown,
@@ -514,7 +514,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
             return;
         }
         color.a = 255;
-        myself.propertiesControls.colorpicker.action(color,shifted);
+        myself.propertiesControls.colorpicker.action(color, shifted);
     };
 
     hand.processMouseDown = nop;
