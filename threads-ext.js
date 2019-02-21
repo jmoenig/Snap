@@ -481,7 +481,12 @@ NetsProcess.prototype.reportStageHeight = function () {
 // helps executing async functions in custom js blocks
 // WARN it could be slower than non-promise based approach
 // when calling this function, return only if the return value is not undefined.
-NetsProcess.prototype.runAsyncFn = function (asyncFn, args) {
+NetsProcess.prototype.runAsyncFn = function (asyncFn, opts) {
+    opts = opts || {};
+    opts = {
+        timeout: opts.timeout || 2000,
+        args: opts.args || [],
+    };
     var id = '_async' + 'Func' + asyncFn.name; // make sure id doesn't collide with process methods
     var tmp;
     var myself = this;
@@ -489,7 +494,11 @@ NetsProcess.prototype.runAsyncFn = function (asyncFn, args) {
     if (!this[id]) {
         this[id] = {};
         this[id].startTime = new Date().getTime();
-        var promise = asyncFn.apply(myself, args)
+        var timeoutPromise = new Promise(function(_, reject) {
+            setTimeout(reject, opts.timeout, 'timeout');
+        });
+        var requestedPromise = asyncFn.apply(this, opts.args);
+        var promise = Promise.race([requestedPromise, timeoutPromise])
             .then(function(r) {
                 myself[id].complete = true;
                 myself[id].response = r;
