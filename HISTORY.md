@@ -13,6 +13,7 @@
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * special context-aware drop-downs for custom blocks
+    * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
@@ -27,6 +28,7 @@
     * remove all clones when the Green Flag is clicked
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
     * enable dropping commands into all rings
+    * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -38,6 +40,20 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * German
+
+### 2019-02-21
+* Blocks: fixed deleting a single command inside a stack
+
+### 2019-02-20
+* Tweaked German translation
+* Vector editor color name changes, thanks, Brian!
+
+### 2019-02-19
+* Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.
+* Udated German translation
+
+### 2019-02-18
+* Objects: enable sprite nesting via the context menu
 
 ### 2019-02-15
 * BYOB: tweaked yesterday's fix...

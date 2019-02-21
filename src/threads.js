@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-January-28';
+modules.threads = '2019-February-19';
 
 var ThreadManager;
 var Process;
@@ -2464,7 +2464,7 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing instanceof List) {
         return 'list';
     }
-    if (!isNaN(+thing)) {
+    if (parseFloat(thing) === +thing) { // I hate this! -Jens
         return 'number';
     }
     if (isString(thing)) {

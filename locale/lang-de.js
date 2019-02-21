@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-01-28', // this, too, will appear in the Translators tab
+        '2019-02-19', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1065,6 +1065,8 @@ SnapTranslator.dict.de = {
         'Drehpunkt des Kostüms\nanzeigen und verschieben',
     'rotate':
     	'Drehen',
+    'stick to':
+        'Befestigen an',
     'detach from':
         'Abtrennen von',
     'detach all parts':
@@ -1279,8 +1281,10 @@ SnapTranslator.dict.de = {
         'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
     'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
         'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
-    'Primary color      Secondary color':
-        'Primärfarbe          Sekundärfarbe',
+    'Edge color\n(left click)':
+        'Randfarbe\n(Linksklick)',
+    'Fill color\n(rigth click)':
+        'Füllfarbe\n(Rechtsklick)',
    // 'Top':
    //     'oben',
    // 'Bottom':
