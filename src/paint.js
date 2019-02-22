@@ -78,7 +78,7 @@ StageMorph, isNil, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2018-March-19';
+modules.paint = '2019-February-22';
 
 // Declarations
 
@@ -495,7 +495,6 @@ PaintEditorMorph.prototype.getUserColor = function () {
     var myself = this,
         world = this.world(),
         hand = world.hand,
-        shifted = this.paper.isShiftPressed();
         posInDocument = getDocumentPositionOf(world.worldCanvas),
         mouseMoveBak = hand.processMouseMove,
         mouseDownBak = hand.processMouseDown,
@@ -514,7 +513,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
             return;
         }
         color.a = 255;
-        myself.propertiesControls.colorpicker.action(color, shifted);
+        myself.propertiesControls.colorpicker.action(color);
     };
 
     hand.processMouseDown = nop;
