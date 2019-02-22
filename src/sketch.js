@@ -59,7 +59,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2019-February-20';
+modules.sketch = '2019-February-22';
 
 // Declarations
 
@@ -1361,7 +1361,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
 
 VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
     var myself = this,
-        isSecondary = secondary || this.paper.isShiftPressed(),
+        isSecondary = this.paper.isShiftPressed() ? false : secondary,
         propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
         ni = newCanvas(
             this.propertiesControls[propertyName + 'Viewer'].extent()
