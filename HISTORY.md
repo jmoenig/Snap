@@ -43,6 +43,7 @@
 
 ### 2019-02-22
 * Paint, Sketch: fixed pipette bug for fill color introduced 
+* Tweaked German translation
 
 ### 2019-02-21
 * Blocks: fixed deleting a single command inside a stack

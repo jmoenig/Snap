@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-02-19', // this, too, will appear in the Translators tab
+        '2019-02-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1283,7 +1283,7 @@ SnapTranslator.dict.de = {
         'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
     'Edge color\n(left click)':
         'Randfarbe\n(Linksklick)',
-    'Fill color\n(rigth click)':
+    'Fill color\n(right click)':
         'Füllfarbe\n(Rechtsklick)',
    // 'Top':
    //     'oben',
