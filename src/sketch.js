@@ -1223,9 +1223,9 @@ VectorPaintEditorMorph.prototype.buildToolbox = function () {
             polygon:
                 'Polygon',
             paintbucket:
-                'Paint a shape\n(shift: secondary color)',
+                'Paint a shape\n(shift: edge color)',
             pipette:
-                'Pipette tool\n(pick a color from anywhere\nshift: secondary color)'
+                'Pipette tool\n(pick a color from anywhere\nshift: fill color)'
         },
         myself = this,
         left = this.toolbox.left(),
@@ -1347,7 +1347,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     alignNames.add(new TextMorph(localize('Edge color\n(left click)'),
 				 null, null, null, null,
 				 'center', 85));
-    alignNames.add(new TextMorph(localize('Fill color\n(rigth click)'),
+    alignNames.add(new TextMorph(localize('Fill color\n(right click)'),
 				 null, null, null, null,
 				 'center', 85));
     alignNames.fixLayout();
