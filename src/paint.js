@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2018 by Kartik Chandra
+    Copyright (C) 2019 by Kartik Chandra
 
     This file is part of Snap!.
 
