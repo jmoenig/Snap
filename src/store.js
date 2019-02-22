@@ -1085,6 +1085,14 @@ SnapSerializer.prototype.loadScript = function (model, object) {
     // private
     var topBlock, block, nextBlock,
         myself = this;
+
+    // Check whether we're importing a single script, not a script as part of a
+    // whole project
+    if (!this.project.stage) {
+        this.project.stage = object.parentThatIsA(StageMorph);
+        this.project.targetStage = this.project.stage;
+    }
+
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
         if (!nextBlock) {
@@ -1122,6 +1130,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     // private
     var block, info, inputs, isGlobal, receiver, migration,
         migrationOffset = 0;
+
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
