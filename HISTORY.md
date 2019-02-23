@@ -41,6 +41,9 @@
     * Greek, thanks, Alexandros!
     * German
 
+### 2019-02-23
+* new help screens for some blocks, thanks, Brian!
+
 ### 2019-02-22
 * Paint, Sketch: fixed pipette bug for fill color introduced 
 * Tweaked German translation
