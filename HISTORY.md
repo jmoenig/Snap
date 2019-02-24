@@ -39,7 +39,11 @@
     * Turkish, thanks, Turgut!
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
+    * Catalan, thanks, Joan!
     * German
+
+### 2019-02-23
+* Catalan translation update, thanks, Joan!
 
 ### 2019-02-23
 * new help screens for some blocks, thanks, Brian!
