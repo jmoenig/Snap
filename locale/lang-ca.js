@@ -360,8 +360,8 @@ SnapTranslator.dict.ca = {
         'mostra',
     'hide':
         'amaga',
-    'go to front':
-        'vés al front',
+    'go to %layer layer':
+        'vés a la cap del %layer',
     'go back %n layers':
         'vés %n capes darrera',
 
@@ -415,6 +415,10 @@ SnapTranslator.dict.ca = {
         'augmenta en %n el color del llapis',
     'set pen color to %n':
         'fixa el color del llapis a %n',
+    'change pen %hsva by %n':
+        'augmenta %hsva del llapis en %n',
+    'set pen %hsva to %n':
+        'fixa %hsva del llapis a %n',
     'change pen shade by %n':
         'augmenta en %n la intensitat del llapis',
     'set pen shade to %n':
@@ -423,6 +427,12 @@ SnapTranslator.dict.ca = {
         'augmenta en %n la mida del llapis',
     'set pen size to %n':
         'fixa la mida del llapis en %n',
+    'set background color to %clr':
+        'fixa el color del fons a %clr',
+    'change background %hsva by %n':
+        'augmenta %hsva del fons en %n',
+    'set background %hsva to %n':
+        'fixa %hsva del fons a %n',
     'stamp':
         'estampa',
     'fill':
@@ -555,14 +565,22 @@ SnapTranslator.dict.ca = {
         'mode turbo?',
     'set turbo mode to %b':
         'posa el mode turbo a %b',
-
+    'is %setting on?':
+        'paràmetre %setting actiu?',
+    'set %setting to %b':
+        'fixa el paràmetre %setting a %b',
+    'turbo mode':
+        'mode turbo',
+    'flat line ends':
+        'finals de línia plans',
     'filtered for %clr':
         'filtrat per a %clr',
     'stack size':
         'mida de la pila',
     'frames':
         'frames',
-
+    'object %spr':
+        'objecte %spr',
     // operators:
     '%n mod %n':
         'residu de dividir %n entre %n',
@@ -860,9 +878,9 @@ SnapTranslator.dict.ca = {
     'check for smooth, predictable\nanimations across computers':
         'marqueu per aconseguir unes animacions\nmés suaus i a velocitat previsible en màquines diferents',
     'Flat line ends':
-        'Línies del llapis rectes',
+        'Finals de línia plans',
     'check for flat ends of lines':
-        'marqueu per fer que els\nextrems de les línies del\nllapis siguin rectes',
+        'marqueu per fer que els\nextrems de les línies del\nllapis siguin planes',
     'uncheck for round ends of lines':
         'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
     'Ternary Boolean slots':
@@ -929,6 +947,20 @@ SnapTranslator.dict.ca = {
         'esborra la definició d\'aquest bloc',
     'edit...':
         'edita...',
+    'duplicate block definition...':
+        'duplica la definició d\'aquest bloc',
+    'Same Named Blocks':
+        'Blocs amb el mateix nom',
+    'Another custom block with this name exists.\n':
+        'Ja existeix un altre block personalitzat amb el mateix nom.\n',
+    'Would you like to replace it?':
+        'Esteu segur que voleu reemplaçar-lo?',
+    'Local Block(s) in Global Definition':
+        'Blocs locals en una definició global',
+    'This global block definition contains one or more\n':
+        'Aquest bloc global té un o més\n',
+    'local custom blocks which must be removed first.':
+        'blocs locals. No poden estar dins la definició del bloc global.',
 
     // sprites:
     'edit':
@@ -1071,7 +1103,7 @@ SnapTranslator.dict.ca = {
     'Delete Project':
         'Esborra un projecte',
     'Are you sure you want to delete':
-        'Segur que vols esborrar',
+        'Esteu segur que voleu esborrar',
     'rename...':
         'canvia el nom...',
     'Recover':
@@ -1150,7 +1182,7 @@ SnapTranslator.dict.ca = {
     'Delete Custom Block':
         'Esborra el bloc personalitzat',
     'block deletion dialog text':
-        'Segur que vols esborrar la definició\nd\'aquest bloc?',
+        'Esteu segur que voleu esborrar la definició\nd\'aquest bloc?',
 
 
     // input dialog
@@ -1268,6 +1300,16 @@ SnapTranslator.dict.ca = {
     'Empty':
         'Buit',
 
+    'front':
+        'davant',
+    'back':
+        'darrere',
+
+    // pen
+    'hue':
+        'tonalitat',
+    'transparency':
+        'transparència',
     // graphical effects
     'color':
         'color',
@@ -1469,6 +1511,10 @@ SnapTranslator.dict.ca = {
         'altres clons',
     'dangling?':
         'penjat?',
+    'draggable':
+        'arrossegable?',
+    'rotation style':
+        'estil de rotació',
     'rotation x':
         'rotació x',
     'rotation y':
@@ -1594,7 +1640,7 @@ SnapTranslator.dict.ca = {
     'now connected.':
         'heu entrat.',
     'disconnected.':
-        'desconnectats.',
+        'desconnectat.',
     'Reset password':
         'Recupera la contrasenya',
     'Reset Password...':
@@ -1711,6 +1757,9 @@ SnapTranslator.dict.ca = {
         'obre una finestra\namb una imatge del comentari',
     'undo':
         'desfés',
+//Paint editors
+    'Vector Paint Editor':
+        'Editor vectorial d\'imatges',
     'Brush size':
         'Gruix del pinzell',
     'Constrain proportions of shapes?\n(you can also hold shift)':
@@ -1721,20 +1770,34 @@ SnapTranslator.dict.ca = {
         'Pinzell\n(dibuix lliure)',
     'Line tool\n(shift: vertical/horizontal)':
         'Línies\n(majúscula: vertical/horitzontal)',
+    'Line tool\n(shift: constrain to 45º)':
+        'Línies\n(majúscula: només angles de 45º)',
     'Stroked Rectangle\n(shift: square)':
         'Rectangle traçat\n(majúscula: quadrat)',
     'Filled Rectangle\n(shift: square)':
         'Rectangle ple\n(majúscula: quadrat)',
+    'Rectangle\n(shift: square)':
+        'Rectangle\n(majúscula: quadrat)',
     'Stroked Ellipse\n(shift: circle)':
         'El·lipse traçada\n(majúscula: circumferència)',
     'Filled Ellipse\n(shift: circle)':
         'El·lipse plena\n(majúscula: cercle)',
+    'Ellipse\n(shift: circle)':
+        'El·lipse\n(majúscula: cercle)',
+    'Selection tool':
+        'Eina de selecció',
+    'Closed brush\n(free draw)':
+        'Dibuix tancat\n(pinzell lliure)',
+    'Paint a shape\n(shift: edge color)':
+        'Coloreja la forma\n(majúscula: el traçat)',
     'Fill a region':
         'Ompla l\'àrea',
     'Set the rotation center':
         'Estableix el centre de rotació',
     'Pipette tool\n(pick a color anywhere)':
         'Capturador de color\n(captura el color de qualsevol lloc)',
+    'Polygon':
+        'Polígon',
     'Paint Editor':
         'Editor d\'imatges',
     'square':
@@ -1797,6 +1860,37 @@ SnapTranslator.dict.ca = {
         'goma d\'esborrar',
     'pipette':
         'pipeta',
+    'Pipette tool\n(pick a color from anywhere\nshift: fill color)':
+        'Capturador de color\n(captura un color de qualsevol lloc\nMajúscules: pel color d\'emplenament)',
+    'Edge color\n(left click)':
+        'Color del Traç\n(botó esquerre)',
+    'Fill color\n(right click)':
+        'Color d\'Emplenament\n(botó dret)',
+    'Bitmap':
+        'Mapa de bits',
+    'Top':
+        'A dalt',
+    'Bottom':
+        'A baix',
+    'Up':
+        'Amunt',
+    'Down':
+        'Avall',
+    'This will erase your current drawing.\n':
+        'El canvi d\'editor esborrarà el dibuix actual.\n',
+    'Are you sure you want to continue?':
+        'Esteu segur que voleu continuar?',
+    'Switch to vector editor?':
+        'Voleu canviar a l\'editor vectorial?',
+    'This will convert your vector objects into\n':
+        'El canvi convertirà els objectes vectorials en\n',
+    'bitmaps, and you will not be able to convert\n':
+        'un mapa de bits, i no es podrà tornar enrere\n',
+    'them back into vector drawings.\n':
+        'ni recuperar els objectes vectorials.\n',
+    'Convert to bitmap?':
+        'Voleu canviar a mapa de bits?',
+//
     'speechBubble':
         'bafarada',
     'speechBubbleOutline':
@@ -1831,10 +1925,6 @@ SnapTranslator.dict.ca = {
         'mig',
     'last changed':
         'el darrer modificat',
-    'Are you sure you want to publish':
-        'Segur que vols compartir-ho?',
-    'Are you sure you want to unpublish':
-        'Segur que vols deixar-ho de compartir?',
     'Share Project':
         'Comparteix el Projecte',
     'Unshare Project':
@@ -1849,6 +1939,32 @@ SnapTranslator.dict.ca = {
         'no compartit.',
     'Unshare':
         'Deixa de compartir',
+    'Are you sure you want to unshare':
+        'Esteu segur que voleu deixar de compartir',
+    'Are you sure you want to share':
+        'Esteu segur que voleu compartir',
+    'Publish Project':
+        'Publica el Projecte',
+    'publishing\nproject...':
+        'publicant\nel projecte...',
+    'published.':
+        'publicat.',
+    'Are you sure you want to publish':
+        'Esteu segur que voleu publicar',
+    'Unpublish Project':
+        'Deixar de publicar el Projecte',
+    'unpublishing\nproject...':
+        'deixant de publicar\nel projecte...',
+    'unpublished.':
+        'no publicat',
+    'Are you sure you want to unpublish':
+        'Esteu segur que voleu deixar de publicar',
+    'Replace Project':
+        'Substitueix el Projecte',
+    'Are you sure you want to replace':
+        'Esteu segur que voleu substituir el projecte original',
+    'Open Project':
+        'Obre el Projecte',
     'password has been changed.':
         's\'ha canviat la contrasenya.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
@@ -1926,7 +2042,7 @@ SnapTranslator.dict.ca = {
     'experimental -\nunder construction':
         'Experimental -\nen construcció',
     'Table view':
-        'Vista de tabla',
+        'Vista de taula',
     'open in another dialog...':
         'obriu en un altre formulari…',
     'check for multi-column\nlist view support':
@@ -2009,7 +2125,8 @@ SnapTranslator.dict.ca = {
 		'mostra la taula %l',
 	'%txtfun of %s':
 		'%txtfun de %s',
-
+    'stick to':
+        'ancora a',
 //IDE Messages
 	'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
 		'entrant en mode desenvolupador.\n\ndeshabilitada la captura d\'errades,\nutilitzeu la consola del navegador\nper veure els errors.',
@@ -2019,6 +2136,8 @@ SnapTranslator.dict.ca = {
 		'llindar per l\'arrossegament',
 	'redo the last undone block drop in this pane':
 		'refés l\'últim moviment\nde blocs desfet',
+    'cloud unavailable without a web server.':
+        'el núvol no està disponible sense un servidor web.',
 
 //costumes and backgrounds
 	'rename background':
@@ -2060,7 +2179,12 @@ SnapTranslator.dict.ca = {
 		'desmarqueu per no llançar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
 	'check to run\nthe edited script\nwhen moving the slider':
 		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
-
+    'Enable command drops in all rings':
+        'Permet arrossegar les comandes dins tots els encapsulaments',
+    'uncheck to disable\ndropping commands in reporter rings':
+        'desmarqueu per deshabilitar\nl\'arrossegament de comandes en\nencapçulaments reportadors',
+    'check to enable\ndropping commands in all rings':
+        'marqueu per habilitar\nl\'arrossegament de comandes en\ntots els encapçulaments',
 //Developer mode menus
 	'user features...':
 		'opcions d\'usuari...',
@@ -2290,5 +2414,43 @@ SnapTranslator.dict.ca = {
     'Camera not supported':
         'Webcam no disponible',
 	'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Comproveu que el navegador està actualitzat\ni la webcam ben configurada. \n\nAlguns navegadors també requereixen\nHTTPS per a utilitzar la càmera.\n\nPodeu provar canviant a l\'adreça el "http://"\nper "https://".'
+        'Comproveu que el navegador està actualitzat\ni la webcam ben configurada. \n\nAlguns navegadors també requereixen\nHTTPS per a utilitzar la càmera.\n\nPodeu provar canviant a l\'adreça el "http://"\nper "https://".',
+    'Uploading ':
+        'Pujant ',
+    'Repeat Password:':
+        'Repeteix la contrasenya:',
+    '%asp at %loc' :
+        '%asp en %loc' ,
+    'sprites':
+        'objectes',
+//Cloud messages
+    'Unverified account: ':
+        'Compte no verificat: ',
+    ' days left':
+        ' dies de termini',
+    'You are now logged in, and your account\n':
+        'Ara esteu validats, però el vostre compte\n',
+    'is enabled for three days.\n':
+        'és només vàlid per 3 dies.\n',
+    'Please use the verification link that\n':
+        'Cal usar l\'enllaç de verificació que\n',
+    'was sent to your email address when you\n':
+        's\'ha enviat al vostre correu quan\n',
+    'signed up.\n\n':
+        'vau registrar l\'usuari',
+    'If you cannot find that email, please\n':
+        'Si no l\'heu rebut,\n',
+    'check your spam folder. If you still\n':
+        'comproveu primer el correu brossa. I si no\n',
+    'cannot find it, please use the "Resend\n':
+        'podeu trobar-ho, utilitzeu l\'opció de "Torna a enviar\n',
+    'Verification Email..." option in the cloud\n':
+        'l\'email de verificació" a les opcions del Núvol\n',
+    'menu.\n\n':
+        'del menú d\'Snap!\n\n',
+    'You have ':
+        'Teniu ',
+    ' days left.':
+        ' dies de termini.'
+    
 };
