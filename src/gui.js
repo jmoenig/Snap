@@ -5412,20 +5412,20 @@ IDE_Morph.prototype.initializeCloud = function () {
                     myself.source = 'cloud';
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
-                            'Unverified account: ' +
+                            localize('Unverified account: ') +
                             response.days_left +
-                            ' days left',
-                            'You are now logged in, and your account\n' +
-                            'is enabled for three days.\n' +
-                            'Please use the verification link that\n' +
-                            'was sent to your email address when you\n' +
-                            'signed up.\n\n' +
-                            'If you cannot find that email, please\n' +
-                            'check your spam folder. If you still\n' +
-                            'cannot find it, please use the "Resend\n' +
-                            'Verification Email..." option in the cloud\n' +
-                            'menu.\n\n' +
-                            'You have ' + response.days_left + ' days left.',
+                            localize(' days left'),
+                            localize('You are now logged in, and your account\n') +
+                            localize('is enabled for three days.\n') +
+                            localize('Please use the verification link that\n') +
+                            localize('was sent to your email address when you\n') +
+                            localize('signed up.\n\n') +
+                            localize('If you cannot find that email, please\n') +
+                            localize('check your spam folder. If you still\n') +
+                            localize('cannot find it, please use the "Resend\n') +
+                            localize('Verification Email..." option in the cloud\n') +
+                            localize('menu.\n\n') +
+                            localize('You have ') + response.days_left + localize(' days left.'),
                             world,
                             myself.cloudIcon(null, new Color(0, 180, 0))
                         );

@@ -2234,8 +2234,8 @@ BlockEditorMorph.prototype.close = function () {
             block.addShadow();
             new DialogBoxMorph().inform(
                 'Local Block(s) in Global Definition',
-                'This global block definition contains one or more\n'
-                    + 'local custom blocks which must be removed first.',
+                localize('This global block definition contains one or more\n')
+                    + localize('local custom blocks which must be removed first.'),
                 myself.world(),
                 block.fullImage()
             );
@@ -2251,8 +2251,8 @@ BlockEditorMorph.prototype.close = function () {
         block.addShadow();
         new DialogBoxMorph(this, 'consolidateDoubles', this).askYesNo(
             'Same Named Blocks',
-            'Another custom block with this name exists.\n'
-                + 'Would you like to replace it?',
+            localize('Another custom block with this name exists.\n')
+                + localize('Would you like to replace it?'),
             myself.world(),
             block.fullImage()
         );
