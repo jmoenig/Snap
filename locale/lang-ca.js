@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2018-06-16', // this, too, will appear in the Translators tab
+        '2019-02-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
