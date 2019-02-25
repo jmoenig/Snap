@@ -42,7 +42,10 @@
     * Catalan, thanks, Joan!
     * German
 
-### 2019-02-23
+### 2019-02-26
+* German translation for animation library
+
+### 2019-02-24
 * Catalan translation update, thanks, Joan!
 
 ### 2019-02-23
