@@ -44,6 +44,7 @@
 
 ### 2019-02-26
 * German translation for animation library
+* GUI, snap.html: don't focus embedded worlds
 
 ### 2019-02-24
 * Catalan translation update, thanks, Joan!

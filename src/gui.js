@@ -545,6 +545,10 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         interpretUrlAnchors.call(this);
     }
+
+    if (!this.isEmbedMode) {
+        world.worldCanvas.focus();
+    }
 };
 
 // IDE_Morph construction
