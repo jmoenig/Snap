@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-20';
+modules.gui = '2019-February-25';
 
 // Declarations
 
@@ -3588,7 +3588,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 5 - Beta -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2019 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
