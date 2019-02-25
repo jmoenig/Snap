@@ -1514,6 +1514,103 @@ NetsBloxMorph.prototype.simpleNotification = function (msg, sticky) {
     notification.drawNew();
 };
 
+// searches the existing sprites and custom blocks for the desired block.
+// can search by block spec or selector
+NetsBloxMorph.prototype.findBlocks = function(query) {
+    query = query || {};
+    var ide = this;
+    var allSprites = ide.stage.children
+        .filter(function(m) {
+            return m instanceof SpriteMorph;
+        });
+    allSprites.push(ide.stage); // also look into stage scripts
+
+    // mark it on the blocks
+    var trackPath = function(b, upperLevel) {
+        b.upperLevel = upperLevel;
+        return b;
+    };
+
+    var allTopBlocks = allSprites
+        .map(function(sp) {
+            return sp.scripts;
+        })
+        .map(function(script, idx) {
+            return script.children.map(function(b) {
+                return trackPath(b, allSprites[idx]);
+            });
+        })
+        .reduce(function(a, b) {
+            return a.concat(b);
+        });
+
+    // find interesting blocks
+    var impBlocks = [];
+    while (allTopBlocks.length !== 0) {
+        var topBlock = allTopBlocks.shift();
+        SnapActions.traverse(topBlock, function(block) {
+            if (block.definition) { // if custom block
+                if (block !== topBlock) trackPath(block, topBlock);
+                var blk = block.definition.scriptsModel();
+                blk = blk.children[0];
+                if (blk.children.length > 1) { // has contents
+                    var topChild = blk.children[1];
+                    trackPath(topChild, block);
+                    allTopBlocks.push(topChild); // add the top child // OPT only once per custom block
+                }
+            }
+            var include = false;
+            if (query.selectors && query.selectors.includes(block.selector)) {
+                include = true;
+            } else if (query.specs) {
+                // OPT break early
+                query.specs.forEach(function(spec) {
+                    try {
+                        if (block.blockSpec && block.blockSpec.toLowerCase().indexOf(spec) !== -1) {
+                            include = true;
+                        }
+                    } catch (e) {
+                        console.error('error when searching for blocks', e);
+                    }
+                });
+            }
+            if (include) {
+                if (block !== topBlock) trackPath(block, topBlock);
+                impBlocks.push(block);
+            }
+        });
+    }
+
+    return impBlocks;
+};
+
+// give a block found by the findBlocks fn returns a user friendly list of parents
+NetsBloxMorph.prototype.blockAddress = function(b) {
+    var location = [];
+    var getCleanBlockSpec = function(morph) {
+        return '[' + morph.blockSpec.replace(/%/g,'') + ']';
+    };
+
+    var getStepName = function(morph) {
+        if (morph.name && morph instanceof SpriteMorph) return 'S: ' + morph.name;
+        if (morph.name) return morph.name; // cover stage
+
+        // custom blocks
+        if (morph.selector === 'evaluateCustomBlock') return 'CB: ' + getCleanBlockSpec(morph);
+
+        // other blocks
+        return getCleanBlockSpec(morph);
+    };
+
+    while (b.upperLevel) {
+        var upperLevel = b.upperLevel;
+        location.unshift(getStepName(upperLevel));
+        b = upperLevel;
+    }
+    return location;
+};
+
+
 NetsBloxMorph.prototype.showUpdateNotification = function () {
     this.simpleNotification('Newer Version of NetsBlox Available: Please Save and Refresh', true);
 };
