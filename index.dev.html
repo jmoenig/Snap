@@ -50,20 +50,8 @@
         <script type="text/javascript" src="store-ext.js"></script>
         <script type="text/javascript" src="actions-ext.js"></script>
 
-        <script type="text/javascript">
-            var world;
-            window.onload = function () {
-                world = new WorldMorph(document.getElementById('world'));
-                world.worldCanvas.focus();
-                new NetsBloxMorph().openIn(world);
-                loop();
-            };
-            function loop() {
-                requestAnimationFrame(loop);
-                world.doOneCycle();
-            }
-        </script>
         <script type="text/javascript" src="on-message.js"></script>
+        <script type="text/javascript" src="main.js"></script>
     </head>
     <body style="margin: 0;">
         <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>

@@ -8,7 +8,7 @@
         <meta property="og:site_name" content="{{= it.title }}"/>
 {{ if (it.description) { }} <meta property="og:description" content="{{= it.description }}"/> {{ } }}
 {{ if (it.title) { }} <meta property="og:title" content="{{= it.title }}"/> {{ } }}
-{{ if (it.image) { }} 
+{{ if (it.image) { }}
         <meta property="og:image" content="{{= it.image.url }}"/>
         <meta property="og:image:width" content="{{= it.image.width }}"/>
         <meta property="og:image:height" content="{{= it.image.height }}"/>
@@ -62,29 +62,19 @@
         <script type="text/javascript" src="dist/app.min.js"></script>
         {{ } }}
 
-		<script type="text/javascript">
-			var world;
-            {{ if (it.username) { }}
-                SnapCloud.username = '{{= it.username }}';
-                SnapCloud.password = true;
-            {{ } }}
-			window.onload = function () {
-				world = new WorldMorph(document.getElementById('world'));
-                world.worldCanvas.focus();
-				new NetsBloxMorph().openIn(world);
-                loop();
-			};
-			function loop() {
-                requestAnimationFrame(loop);
-				world.doOneCycle();
-			}
-		</script>
+        <script type="text/javascript">
+        {{ if (it.username) { }}
+        SnapCloud.username = '{{= it.username }}';
+        SnapCloud.password = true;
+        {{ } }}
+        </script>
     <script type="text/javascript" src="on-message.js"></script>
+    <script type="text/javascript" src="main.js"></script>
     </head>
     <body style="margin: 0;">
         <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>
     </body>
-{{ if (it.googleAnalyticsKey) { }} 
+{{ if (it.googleAnalyticsKey) { }}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
