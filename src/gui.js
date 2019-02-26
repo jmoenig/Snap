@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-25';
+modules.gui = '2019-February-26';
 
 // Declarations
 
@@ -3132,7 +3132,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.enableInheritance,
         'uncheck to disable\nsprite inheritance features',
         'check for sprite\ninheritance features',
-        false
+        true
     );
     addPreference(
         'Persist linked sublist IDs',
