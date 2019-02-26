@@ -44,6 +44,7 @@
 
 ### 2019-02-26
 * GUI: made "inheritance support" setting hidden
+* Objects: disabled calls to world.worldCanvas.focus()
 
 ### 2019-02-25
 * German translation for animation library
