@@ -306,13 +306,6 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
-    // find out whether I'm in embed mode and remember that
-    // so I don't get focus, because then the iFrame
-    // involunatarily scrolls into view
-    if (location.hash.substr(0, 6) === 'embed?') {
-        this.isEmbedMode = true;
-    }
-
     this.buildPanes();
     world.add(this);
     world.userMenu = this.userMenu;
@@ -379,6 +372,12 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.lang) {
             myself.setLanguage(dict.lang, null, true); // don't persist
+        }
+
+        // only force my world to get focus if I'm not in embed mode
+        // to prevent the iFrame from involuntarily scrolling into view
+        if (!myself.isEmbedMode) {
+            world.worldCanvas.focus();
         }
     }
 
@@ -551,10 +550,6 @@ IDE_Morph.prototype.openIn = function (world) {
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
         interpretUrlAnchors.call(this);
-    }
-
-    if (!this.isEmbedMode) {
-        world.worldCanvas.focus();
     }
 };
 
