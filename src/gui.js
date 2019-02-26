@@ -306,6 +306,13 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+    // find out whether I'm in embed mode and remember that
+    // so I don't get focus, because then the iFrame
+    // involunatarily scrolls into view
+    if (location.hash.substr(0, 6) === 'embed?') {
+        this.isEmbedMode = true;
+    }
+
     this.buildPanes();
     world.add(this);
     world.userMenu = this.userMenu;
