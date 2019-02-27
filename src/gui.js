@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-26';
+modules.gui = '2019-February-27';
 
 // Declarations
 
@@ -6063,7 +6063,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
-    this.addSourceButton('local', localize('Browser'), 'storage');
+    this.addSourceButton('local', localize('Browser'), 'globe');
     if (this.task === 'open') {
         this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');

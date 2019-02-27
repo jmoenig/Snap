@@ -44,6 +44,7 @@
 
 ### 2019-02-26
 * Symbols: new "globe" symbol
+* GUI: replaced "storage" icon in project dialog with "globe" symbol
 
 ### 2019-02-26
 * GUI: made "inheritance support" setting hidden
