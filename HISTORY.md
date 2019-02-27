@@ -43,6 +43,9 @@
     * German
 
 ### 2019-02-26
+* Symbols: new "globe" symbol
+
+### 2019-02-26
 * GUI: made "inheritance support" setting hidden
 * Objects: disabled calls to world.worldCanvas.focus()
 
