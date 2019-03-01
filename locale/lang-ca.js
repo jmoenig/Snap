@@ -361,7 +361,7 @@ SnapTranslator.dict.ca = {
     'hide':
         'amaga',
     'go to %layer layer':
-        'vés a la cap del %layer',
+        'vés a la capa del %layer',
     'go back %n layers':
         'vés %n capes darrera',
 
@@ -572,7 +572,7 @@ SnapTranslator.dict.ca = {
     'turbo mode':
         'mode turbo',
     'flat line ends':
-        'finals de línia plans',
+        'puntes de llapis planes',
     'filtered for %clr':
         'filtrat per a %clr',
     'stack size':
@@ -878,11 +878,11 @@ SnapTranslator.dict.ca = {
     'check for smooth, predictable\nanimations across computers':
         'marqueu per aconseguir unes animacions\nmés suaus i a velocitat previsible en màquines diferents',
     'Flat line ends':
-        'Finals de línia plans',
+        'Puntes de llapis planes',
     'check for flat ends of lines':
-        'marqueu per fer que els\nextrems de les línies del\nllapis siguin planes',
+        'marqueu per fer que\nles puntes dels llapis\nsiguin planes',
     'uncheck for round ends of lines':
-        'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
+        'desmarqueu per fer que\nles puntes dels llapis\nsiguin arrodonides',
     'Ternary Boolean slots':
         'Tres opcions per a les ranures booleanes',
     'Camera support':
@@ -2182,9 +2182,9 @@ SnapTranslator.dict.ca = {
     'Enable command drops in all rings':
         'Permet arrossegar les comandes dins tots els encapsulaments',
     'uncheck to disable\ndropping commands in reporter rings':
-        'desmarqueu per deshabilitar\nl\'arrossegament de comandes en\nencapçulaments reportadors',
+        'desmarqueu per deshabilitar\nl\'arrossegament de comandes en\nencapsulaments reportadors',
     'check to enable\ndropping commands in all rings':
-        'marqueu per habilitar\nl\'arrossegament de comandes en\ntots els encapçulaments',
+        'marqueu per habilitar\nl\'arrossegament de comandes en\ntots els encapsulaments',
 //Developer mode menus
 	'user features...':
 		'opcions d\'usuari...',
