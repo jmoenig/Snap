@@ -6148,9 +6148,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     if (notification) {
-        this.setExtent(new Point(555, 335).add(notification.extent()));
+        this.setExtent(new Point(555, 360).add(notification.extent()));
     } else {
-        this.setExtent(new Point(555, 335));
+        this.setExtent(new Point(555, 360));
     }
     this.fixLayout();
 
@@ -6163,7 +6163,7 @@ ProjectDialogMorph.prototype.popUp = function (wrrld) {
         this.handle = new HandleMorph(
             this,
             350,
-            300,
+            330,
             this.corner,
             this.corner
         );
