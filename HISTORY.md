@@ -45,6 +45,7 @@
 
 ### 2019-03-04
 * GUI: deprecated storing projects in localStorage
+* GUI: reenabled publish / unpublish buttons in the project dialog
 
 ### 2019-02-26
 * Symbols: new "globe" symbol
