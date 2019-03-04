@@ -48,6 +48,7 @@
 * GUI: reenabled publish / unpublish buttons in the project dialog
 * GUI: spread project dialog action buttons over 2 rows
 * GUI: changed project dialog's initial & miminum extent
+* Updated German translation
 
 ### 2019-02-26
 * Symbols: new "globe" symbol
