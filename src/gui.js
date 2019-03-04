@@ -6148,9 +6148,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     if (notification) {
-        this.setExtent(new Point(555, 360).add(notification.extent()));
+        this.setExtent(new Point(500, 360).add(notification.extent()));
     } else {
-        this.setExtent(new Point(555, 360));
+        this.setExtent(new Point(500, 360));
     }
     this.fixLayout();
 
