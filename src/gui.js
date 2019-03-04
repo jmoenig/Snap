@@ -6126,18 +6126,22 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
-        this.recoverButton = this.addButton('recoveryDialog', 'Recover');
+        this.recoverButton = this.addButton('recoveryDialog', 'Recover', true);
         this.recoverButton.hide();
     } else { // 'save'
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
     }
-    this.shareButton = this.addButton('shareProject', 'Share');
-    this.unshareButton = this.addButton('unshareProject', 'Unshare');
+    this.shareButton = this.addButton('shareProject', 'Share', true);
+    this.unshareButton = this.addButton('unshareProject', 'Unshare', true);
     this.shareButton.hide();
     this.unshareButton.hide();
-    this.publishButton = this.addButton('publishProject', 'Publish');
-    this.unpublishButton = this.addButton('unpublishProject', 'Unpublish');
+    this.publishButton = this.addButton('publishProject', 'Publish', true);
+    this.unpublishButton = this.addButton(
+        'unpublishProject',
+        'Unpublish',
+        true
+    );
     this.publishButton.hide();
     this.unpublishButton.hide();
     this.deleteButton = this.addButton('deleteProject', 'Delete');
@@ -6164,6 +6168,67 @@ ProjectDialogMorph.prototype.popUp = function (wrrld) {
             this.corner
         );
     }
+};
+
+// ProjectDialogMorph action buttons
+
+ProjectDialogMorph.prototype.createButtons = function () {
+    if (this.buttons) {
+        this.buttons.destroy();
+    }
+    this.buttons = new AlignmentMorph('column', this.padding / 3);
+    this.buttons.bottomRow = new AlignmentMorph('row', this.padding);
+    this.buttons.topRow = new AlignmentMorph('row', this.padding);
+    this.buttons.add(this.buttons.topRow);
+    this.buttons.add(this.buttons.bottomRow);
+    this.add(this.buttons);
+
+    this.buttons.topRow.hide = function () {
+        this.isVisible = false;
+        this.changed();
+    };
+
+    this.buttons.topRow.show = function () {
+        this.isVisible = true;
+        this.changed();
+    };
+
+    this.buttons.fixLayout = function () {
+        if (this.topRow.children.some(function (any) {
+            return any.isVisible;
+        })) {
+            this.topRow.show();
+            this.topRow.fixLayout();
+        } else {
+            this.topRow.hide();
+        }
+        this.bottomRow.fixLayout();
+        AlignmentMorph.prototype.fixLayout.call(this);
+    };
+};
+
+ProjectDialogMorph.prototype.addButton = function (action, label, topRow) {
+    var button = new PushButtonMorph(
+        this,
+        action || 'ok',
+        '  ' + localize((label || 'OK')) + '  '
+    );
+    button.fontSize = this.buttonFontSize;
+    button.corner = this.buttonCorner;
+    button.edge = this.buttonEdge;
+    button.outline = this.buttonOutline;
+    button.outlineColor = this.buttonOutlineColor;
+    button.outlineGradient = this.buttonOutlineGradient;
+    button.padding = this.buttonPadding;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    if (topRow) {
+        this.buttons.topRow.add(button);
+    } else {
+        this.buttons.bottomRow.add(button);
+    }
+    return button;
 };
 
 // ProjectDialogMorph source buttons
@@ -7090,7 +7155,7 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
 
     this.body.add(this.notesField);
 
-    this.addButton('recoverProject', 'Recover');
+    this.addButton('recoverProject', 'Recover', true);
     this.addButton('cancel', 'Cancel');
 
     this.setExtent(new Point(360, 300));
