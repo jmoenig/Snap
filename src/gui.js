@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-February-27';
+modules.gui = '2019-March-04';
 
 // Declarations
 
@@ -218,7 +218,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // additional properties:
     this.cloud = new Cloud();
     this.cloudMsg = null;
-    this.source = 'local';
+    this.source = null;
     this.serializer = new SnapSerializer();
 
     this.globalVariables = new VariableFrame();
@@ -3809,7 +3809,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () {
-    this.source = this.cloud.username ? 'cloud' : 'local';
+    this.source = this.cloud.username ? 'cloud' : null;
     if (this.stage) {
         this.stage.destroy();
     }
@@ -3853,55 +3853,22 @@ IDE_Morph.prototype.save = function () {
         return;
     }
 
-    if (this.source === 'examples') {
-        this.source = 'local'; // cannot save to examples
+    if (this.source === 'examples' || this.source === 'local') {
+        // cannot save to examples, deprecated localStorage
+        this.source = null;
     }
     if (this.projectName) {
-        if (this.source === 'local') { // as well as 'examples'
-            this.saveProject(this.projectName);
-        } else { // 'cloud'
+        if (this.source === 'disk') {
+            this.exportProject(this.projectName);
+        } else if (this.source === 'cloud') {
             this.saveProjectToCloud(this.projectName);
+        } else {
+            this.saveProjectsBrowser();
         }
     } else {
         this.saveProjectsBrowser();
     }
 };
-
-IDE_Morph.prototype.saveProject = function (name) {
-    var myself = this;
-    this.nextSteps([
-        function () {
-            myself.showMessage('Saving...');
-        },
-        function () {
-            myself.rawSaveProject(name);
-        }
-    ]);
-};
-
-// Serialize a project and save to the browser.
-IDE_Morph.prototype.rawSaveProject = function (name) {
-    var str;
-    if (name) {
-        this.setProjectName(name);
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                localStorage['-snap-project-' + name]
-                    = str = this.serializer.serialize(this.stage);
-                this.setURL('#open:' + str);
-                this.showMessage('Saved!', 1);
-            } catch (err) {
-                this.showMessage('Save failed: ' + err);
-            }
-        } else {
-            localStorage['-snap-project-' + name]
-                = str = this.serializer.serialize(this.stage);
-            this.setURL('#open:' + str);
-            this.showMessage('Saved!', 1);
-        }
-    }
-};
-
 
 IDE_Morph.prototype.exportProject = function (name, plain) {
     // Export project XML, saving a file to disk
@@ -5136,7 +5103,7 @@ IDE_Morph.prototype.saveProjectsBrowser = function () {
     }
 
     if (this.source === 'examples') {
-        this.source = 'local'; // cannot save to examples
+        this.source = null; // cannot save to examples
     }
     new ProjectDialogMorph(this, 'save').popUp();
 };
@@ -6000,7 +5967,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     // additional properties:
     this.ide = ide;
     this.task = task || 'open'; // String describing what do do (open, save)
-    this.source = ide.source || 'local'; // or 'cloud' or 'examples'
+    this.source = ide.source;
     this.projectList = []; // [{name: , thumb: , notes:}]
 
     this.handle = null;
@@ -6063,11 +6030,16 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
-    this.addSourceButton('local', localize('Browser'), 'globe');
+
     if (this.task === 'open') {
         this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
+        if (this.ide.world().currentKey === 16) { // shiftClicked
+            this.addSourceButton('local', localize('Browser'), 'globe');
+        }
     }
+    this.addSourceButton('disk', localize('Computer'), 'storage');
+
     this.srcBar.fixLayout();
     this.body.add(this.srcBar);
 
@@ -6341,17 +6313,18 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     var myself = this,
         msg;
 
-    this.source = source; //this.task === 'save' ? 'local' : source;
+    this.source = source;
     this.srcBar.children.forEach(function (button) {
         button.refresh();
     });
+
     switch (this.source) {
     case 'cloud':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
         myself.ide.cloud.getProjectList(
             function (response) {
-                // Don't show cloud projects if user has since switch panes.
+                // Don't show cloud projects if user has since switched panes.
                 if (myself.source === 'cloud') {
                     myself.installCloudProjectList(response.projects);
                 }
@@ -6367,7 +6340,17 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList = this.getExamplesProjectList();
         break;
     case 'local':
+        // deprecated, only for reading
         this.projectList = this.getLocalProjectList();
+        break;
+    case 'disk':
+        if (this.task === 'save') {
+            this.projectList = [];
+        } else {
+            this.destroy();
+            this.ide.importLocalFile();
+            return;
+        }
         break;
     }
 
@@ -6381,6 +6364,9 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         null,
         function () {myself.ok(); }
     );
+    if (this.source === 'disk') {
+        this.listField.hide();
+    }
 
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -6625,6 +6611,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
+        this.ide.source = null;
         this.ide.openProject(proj.name);
         this.destroy();
     }
@@ -6693,29 +6680,10 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 this.ide.setProjectName(name);
                 myself.saveCloudProject();
             }
-        } else { // 'local'
-            if (detect(
-                    this.projectList,
-                    function (item) {return item.name === name; }
-                )) {
-                this.ide.confirm(
-                    localize(
-                        'Are you sure you want to replace'
-                    ) + '\n"' + name + '"?',
-                    'Replace Project',
-                    function () {
-                        myself.ide.setProjectName(name);
-                        myself.ide.source = 'local';
-                        myself.ide.saveProject(name);
-                        myself.destroy();
-                    }
-                );
-            } else {
-                this.ide.setProjectName(name);
-                myself.ide.source = 'local';
-                this.ide.saveProject(name);
-                this.destroy();
-            }
+        } else if (this.source === 'disk') {
+            this.ide.exportProject(name, false);
+            this.ide.source = 'disk';
+            this.destroy();
         }
     }
 };

@@ -29,6 +29,7 @@
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
+    * deprecated storing projects in the browser's localStorage
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -41,6 +42,9 @@
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
     * German
+
+### 2019-03-04
+* GUI: deprecated storing projects in localStorage
 
 ### 2019-02-26
 * Symbols: new "globe" symbol
