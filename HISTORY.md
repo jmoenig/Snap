@@ -30,6 +30,8 @@
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * deprecated storing projects in the browser's localStorage
+    * additional "publish / unpublish" buttons in the project dialog
+    * buttons for saving & loading projects to disk in the project dialog
 * Notable Fixes:
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
