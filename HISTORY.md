@@ -35,6 +35,7 @@
     * transforming arrayed to linked lists without loosing the last element
     * using "inherit" no longer un-hides the palette in presentation mode
     * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
+    * the language menu now has a "globe" icon (so it can be found in any language)
 * Translation Updates:
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
@@ -42,6 +43,9 @@
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
     * German
+
+### 2019-03-05
+* GUI: added "globe" icon to language menu item
 
 ### 2019-03-04
 * GUI: deprecated storing projects in localStorage

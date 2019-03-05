@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-March-04';
+modules.gui = '2019-March-05';
 
 // Declarations
 
@@ -2746,7 +2746,16 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
 
     menu = new MenuMorph(this);
-    menu.addItem('Language...', 'languageMenu');
+    menu.addPair(
+        [
+            new SymbolMorph(
+                'globe',
+                MorphicPreferences.menuFontSize
+            ),
+            localize('Language...')
+        ],
+        'languageMenu'
+    );
     menu.addItem(
         'Zoom blocks...',
         'userSetBlocksScale'
