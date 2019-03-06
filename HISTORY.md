@@ -19,7 +19,6 @@
     * added "neg" selector to monadic function reporter in "Operators" category
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
-    * new "microphone" sensor block in audioComp lib with live volume / signals / frequencies 
 * Notable Changes:
     * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
     * added transparency (alpha) to pen colors
@@ -50,6 +49,7 @@
 ### 2019-03-06
 * AudioComp lib: turn off mic after 5 secs of idling
 * AudioComp lib: support Safari
+* removed "loudness / microphone" block from AudioComp lib (turned into primitive)
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item
