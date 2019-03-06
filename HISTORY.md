@@ -47,6 +47,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-06
+* AudioComp lib: turn off mic after 5 secs of idling
+
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item
 * AudioComp lib: added @mjguzdial style live signal and fft support
