@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-March-05';
+modules.gui = '2019-March-06';
 
 // Declarations
 
@@ -2771,6 +2771,12 @@ IDE_Morph.prototype.settingsMenu = function () {
             'specify the distance the hand has to move\n' +
                 'before it picks up an object',
             new Color(100, 0, 0)
+        );
+    }
+    if (stage.microphone.isReady) {
+        menu.addItem(
+            '\u2611 ' + localize('Microphone'),
+            function () {stage.microphone.stop(); }
         );
     }
     menu.addLine();

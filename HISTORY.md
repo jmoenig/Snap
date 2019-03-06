@@ -53,6 +53,7 @@
 * removed "loudness / microphone" block from AudioComp lib (turned into primitive)
 * new "microphone" reporter in Sensing for getting volume, signals and frequencies
 * Objects: keep microphone always on when running Snap! locally
+* GUI: let users turn off microphone manually in the settings menu (in the offline version) 
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item
