@@ -49,6 +49,7 @@
 
 ### 2019-03-06
 * AudioComp lib: turn off mic after 5 secs of idling
+* AudioComp lib: support Safari
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item
