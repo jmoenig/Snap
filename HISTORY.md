@@ -52,6 +52,7 @@
 * AudioComp lib: support Safari
 * removed "loudness / microphone" block from AudioComp lib (turned into primitive)
 * new "microphone" reporter in Sensing for getting volume, signals and frequencies
+* Objects: keep microphone always on when running Snap! locally
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item

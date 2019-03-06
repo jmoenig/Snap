@@ -8885,6 +8885,7 @@ function Microphone() {
     this.isReady = false;
 
     // idling control:
+    this.isAutoStop = (location.protocol !== 'file:');
     this.lastTime = Date.now();
 }
 
@@ -8971,7 +8972,7 @@ Microphone.prototype.stepAudio = function (event) {
         freqBufLength = this.analyser.frequencyBinCount,
         dataArray = new Uint8Array(freqBufLength);
 
-    if ((Date.now() - this.lastTime) > 5000) {
+    if (this.isAutoStop && ((Date.now() - this.lastTime) > 5000)) {
         this.stop();
         return;
     }
