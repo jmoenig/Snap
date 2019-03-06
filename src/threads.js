@@ -4363,6 +4363,10 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     return new List(result);
 };
 //LambdaMod wuz here
+//this.mySprite();
+Process.prototype.mySprite = function() {
+  return this.blockReceiver();
+}
 //decodeBlocks();
 for (var i = 0; i < lm.blocks.length; i++) {
   var blockName = lm.blocks[i].name;

@@ -2,10 +2,12 @@
 //The above comment was the information that LambdaMod will use.
 //It goes like this: NameOfMod`Description`Creator
 var testCat = new Category('test', 'rgb(0,74,30)');
+var testTab = new Tab('testtab', 'Test Tab');
 var testBlock = new Block('testBlock', 'both', 'command', 'test',
 'This block is a test', 'test', 1);
 testBlock.func = function() {
   console.log("Hooray!");
 }
+thisMod.tabs.push(testTab);
 thisMod.categories.push(testCat); //You must do this for every category...
 thisMod.blocks.push(testBlock); //...and every block.

@@ -4,10 +4,12 @@ coat = function(string) {
 }
 var thisMod = {
   blocks: [],
-  categories: []
+  categories: [],
+  tabs: [],
+  prototypes: []
 }
-Block = function(name, only, type, category, spec, pcat, position = 0,
-defaults = null) {
+
+Block = function(name, only, type, category, spec, pcat, defaults = null) {
   this.name = name;
   this.only = only;
   this.type = type;
@@ -15,12 +17,16 @@ defaults = null) {
   this.spec = spec;
   this.func = new Function();
   this.pcat = pcat;
-  this.position = position;
   this.defaults = defaults;
 }
 Category = function(name, color) {
   this.name = name;
   this.color = color;
+}
+Tab = function(name, label) {
+  this.name = name;
+  this.label = label;
+  this.content = new Function();
 }
 Block.prototype.pack = function() {
   var blockSuitcase = localStorage.getItem("blocks");
@@ -31,7 +37,7 @@ Block.prototype.pack = function() {
   blockSuitcase.push(this.name);
   blockSuitcase.join(sec);
   localStorage.setItem("blocks", blockSuitcase);
-  localStorage.setItem("lambdaBlock-" + this.name, [coat(this.only), coat(this.type), coat(this.category), coat(this.spec), coat(this.pcat), this.position, this.defaults].join(sec));
+  localStorage.setItem("lambdaBlock-" + this.name, [coat(this.only), coat(this.type), coat(this.category), coat(this.spec), coat(this.pcat), this.defaults].join(sec));
   localStorage.setItem("lambdaBlock-" + this.name + "-prototype", this.func.toString());
 
 }
@@ -45,6 +51,19 @@ Category.prototype.pack = function() {
   categorySuitcase.join(sec);
   localStorage.setItem("categories", categorySuitcase);
   localStorage.setItem("lambdaCategory-" + this.name, coat(this.color));
+}
+Tab.prototype.pack = function() {
+  var tabSuitcase = localStorage.getItem("tabs");
+  tabSuitcase = tabSuitcase.split(sec);
+  if (tabSuitcase[tabSuitcase.length - 1] == "") {
+    tabSuitcase.pop();
+  }
+  tabSuitcase.push(this.name);
+  tabSuitcase.join(sec);
+  localStorage.setItem("tabs", tabSuitcase);
+  localStorage.setItem("lambdaTab-" + this.name, coat(this.label));
+  localStorage.setItem("lambdaTab-" + this.name + "-content", this.content.toString());
+
 }
 initializeMod = function() {
   var loadImg = document.getElementById("loading");
@@ -78,6 +97,11 @@ initializeMod = function() {
     thisMod.categories[i].pack();
   }
   divLog("Done packing categories");
+  for (i = 0; i < thisMod.tabs.length; i++) {
+    divLog("Packing tab " + thisMod.tabs[i].name);
+    thisMod.tabs[i].pack();
+  }
+  divLog("Done packing tabs");
   divLog("Done packing mod, now redirecting to snap.html");
   window.location = "snap.html";
 }

@@ -30,20 +30,24 @@ Array.prototype.shove = function(thing, index) {
   newa = newa.concat(og);
   return newa;
 }
-LambdaModBlock = function(name, only, type, category, spec, pcat, position, defaults) {
+LambdaModBlock = function(name, only, type, category, spec, pcat, defaults) {
   this.name = name;
   this.only = only;
   this.type = type;
   this.category = category;
   this.spec = spec;
   this.pcat = pcat;
-  this.position = position;
   this.defaults = defaults;
   this.func = new Function(); //Had to put something here
 }
 LambdaModCategory = function(name, color) {
   this.name = name;
   this.color = color;
+}
+LambdaModTab = function(name, label) {
+  this.name = name;
+  this.content = new Function();
+  this.label = label;
 }
 decodeBlocks = function() {
   try {
@@ -55,7 +59,7 @@ decodeBlocks = function() {
       j = localStorage.getItem("lambdaBlock-" + blockLocations[i]).split(sec);
     }
 
-    var block = new LambdaModBlock(blockLocations[i], eval(j[0]), eval(j[1]), eval(j[2]), eval(j[3]), eval(j[4]), eval(j[5]), eval(j[6]));
+    var block = new LambdaModBlock(blockLocations[i], eval(j[0]), eval(j[1]), eval(j[2]), eval(j[3]), eval(j[4]), eval(j[5]));
     eval("block.func = " + localStorage.getItem("lambdaBlock-" + blockLocations[i] + "-prototype"));
     lm.blocks.push(block);
   }
@@ -84,5 +88,26 @@ decodeCategories = function() {
   return;
 }
 }
+decodeTabs = function() {
+  try {
+  var tabLocations = lambda.tabs.split(',');
+  for (var i = 0; i < tabLocations.length; i++) {
+    divLog("Unpacking tab " + tabLocations[i]);
+    var j;
+    if (localStorage.getItem("lambdaTab-" + tabLocations[i]) != null) {
+      j = localStorage.getItem("lambdaTab-" + tabLocations[i]).split(sec);
+    }
+
+    var tab = new LambdaModTab(tabLocations[i], eval(j[0]));
+    eval("tab.content = " + localStorage.getItem("lambdaTab-" + tabLocations[i] + "-content"));
+    lm.tabs.push(tab);
+  }
+  divLog("Done unpacking tabs");
+} catch(e) {
+  console.error(e);
+  return;
+}
+}
 decodeBlocks();
 decodeCategories();
+decodeTabs();

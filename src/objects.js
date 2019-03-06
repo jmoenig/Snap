@@ -2313,15 +2313,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             evaluateCatChoice(blocks, cat);
             blocks.push('=');
+            blocks.push(this.makeBlockButton());
+        } else {
+          evaluateCatChoice(blocks, cat);
+          blocks.push('=');
+          blocks.push(this.makeBlockButton());
         }
 
-        blocks.push(this.makeBlockButton());
-
- 	} else {
-    evaluateCatChoice(blocks, cat);
-    blocks.push('=');
-    blocks.push(this.makeBlockButton());
-  }
     return blocks;
 };
 

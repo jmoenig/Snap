@@ -1437,6 +1437,31 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.fixLayout();
     tabBar.add(tab);
 
+    //LambdaMod wuz here
+    for (i = 0; i < lm.tabs.length; i++) {
+    var thisTab = lm.tabs[i];
+    eval(`
+      tab = new TabMorph(
+          tabColors,
+          null, // target
+          function () {tabBar.tabTo('${thisTab.name}'); },
+          localize('${thisTab.label}'), // label
+          function () {  // query
+              return myself.currentTab === '${thisTab.name}';
+          }
+      );
+      tab.padding = 3;
+      tab.corner = tabCorner;
+      tab.edge = 1;
+      tab.labelShadowOffset = new Point(-1, -1);
+      tab.labelShadowColor = tabColors[1];
+      tab.labelColor = this.buttonLabelColor;
+      tab.drawNew();
+      tab.fixLayout();
+      tabBar.add(tab);
+      `);
+    }
+
     tabBar.fixLayout();
     tabBar.children.forEach(function (each) {
         each.refresh();
@@ -1503,6 +1528,16 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.contents.acceptsDrops = false;
     //LambdaGoHere
     } else {
+      for (i = 0; i < lm.tabs.length; i++) {
+        if (this.currentTab === lm.tabs[i].name) {
+          var tabContent = this.spriteEditor;
+          lm.tabs[i].content();
+          this.add(this.spriteEditor);
+          this.spriteEditor.updateSelection();
+          this.spriteEditor.acceptDrops = false;
+          this.spriteEditor.contents.acceptsDrops = false;
+        }
+      }
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
         this.spriteEditor.acceptsDrops = true;
