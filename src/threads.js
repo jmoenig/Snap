@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-February-19';
+modules.threads = '2019-March-06';
 
 var ThreadManager;
 var Process;
@@ -2247,6 +2247,26 @@ Process.prototype.doStopAllSounds = function () {
         });
         stage.stopAllActiveSounds();
     }
+};
+
+// Process audio input (interpolated)
+
+Process.prototype.reportAudio = function (choice) { // +++
+    var stage = this.blockReceiver().parentThatIsA(StageMorph);
+    if (stage.microphone.isOn()) {
+        switch (this.inputOption(choice)) {
+        case 'volume':
+            return stage.microphone.volume;
+        case 'signals':
+            return new List(stage.microphone.signals);
+        case 'frequencies':
+            return new List(stage.microphone.frequencies);
+        default:
+            return null;
+        }
+    }
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 // Process user prompting primitives (interpolated)

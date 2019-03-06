@@ -9,6 +9,7 @@
     * parse JSON using the SPLIT reporter
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
+    * new "microphone" reporter in Sensing for getting volume, signals and frequencies
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
@@ -50,6 +51,7 @@
 * AudioComp lib: turn off mic after 5 secs of idling
 * AudioComp lib: support Safari
 * removed "loudness / microphone" block from AudioComp lib (turned into primitive)
+* new "microphone" reporter in Sensing for getting volume, signals and frequencies
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item

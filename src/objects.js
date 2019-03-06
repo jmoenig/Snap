@@ -45,6 +45,7 @@
         CostumeEditorMorph
         Sound
         Note
+        Microphone
         CellMorph
         WatcherMorph
         StagePrompterMorph
@@ -83,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-February-26';
+modules.objects = '2019-March-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -93,6 +94,7 @@ var SVG_Costume;
 var CostumeEditorMorph;
 var Sound;
 var Note;
+var Microphone;
 var CellMorph;
 var WatcherMorph;
 var StagePrompterMorph;
@@ -880,6 +882,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'my %get',
             defaults: [['neighbors']]
+        },
+        reportAudio: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'microphone %audio',
+            defaults: [['volume']]
         },
 
         // Operators
@@ -2047,7 +2055,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportObject'));
         blocks.push('-');
-
+        blocks.push(block('reportAudio'));
         blocks.push(block('reportURL'));
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
@@ -6396,6 +6404,8 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
+    this.microphone = new Microphone(); // audio input, do not persist
+
     this.graphicsValues = {
         'color': 0,
         'fisheye': 0,
@@ -7288,7 +7298,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportObject'));
         blocks.push('-');
-
+        blocks.push(block('reportAudio'));
         blocks.push(block('reportURL'));
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
@@ -8843,6 +8853,157 @@ Note.prototype.stop = function () {
         this.oscillator.stop(0);
         this.oscillator = null;
     }
+};
+
+// Microphone /////////////////////////////////////////////////////////
+
+// I am a microphone and know about volume, signals and frequencies
+// mostly meant to be a singleton of the stage
+// I stop when I'm not queried something for 5 seconds
+// to free up system resources
+
+// Microphone instance creation
+
+function Microphone() {
+    // web audio components:
+    this.audioContext = null;
+    this.sourceStream = null;
+    this.processor = null;
+    this.analyser = null;
+
+    // parameters:
+    this.signalBufferSize = 512; // should be automatic, I guess
+    this.fftSize = 1024;
+
+    // metered values:
+    this.volume = 0;
+    this.signals = [];
+    this.frequencies = [];
+
+    // asynch control:
+    this.isStarted = false;
+    this.isReady = false;
+
+    // idling control:
+    this.lastTime = Date.now();
+}
+
+Microphone.prototype.isOn = function () {
+    if (this.isReady) {
+        this.lastTime = Date.now();
+        return true;
+    }
+    this.start();
+    return false;
+};
+
+Microphone.prototype.start = function () {
+    var AudioContext = window.AudioContext || window.webkitAudioContext,
+        myself = this;
+
+    if (this.isStarted) {
+        return;
+    }
+    this.isStarted = true;
+
+    this.isReady = false;
+    if (this.audioContext) {
+        this.audioContext.close();
+    }
+    this.audioContext =  new AudioContext();
+
+    navigator.mediaDevices.getUserMedia(
+        {
+            "audio": {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+            "optional": []
+            },
+        }
+    ).then(function (stream) {
+        myself.setupNodes(stream);
+        myself.isReady = true;
+        myself.isStarted = false;
+    }).catch(nop);
+};
+
+Microphone.prototype.setupNodes = function (stream) {
+    this.sourceStream = stream;
+    this.createProcessor();
+    this.createAnalyser();
+    this.analyser.connect(this.processor);
+    this.processor.connect(this.audioContext.destination);
+    this.audioContext.createMediaStreamSource(stream).connect(this.analyser);
+    this.lastTime = Date.now();
+};
+
+Microphone.prototype.createAnalyser = function () {
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.fftSize = this.fftSize;
+};
+
+Microphone.prototype.createProcessor = function () {
+    var myself = this;
+    this.processor = this.audioContext.createScriptProcessor(
+        this.signalBufferSize
+    );
+
+    this.processor.onaudioprocess = function (event) {
+        myself.stepAudio(event);
+    };
+
+    this.processor.clipping = false;
+    this.processor.lastClip = 0;
+    this.processor.clipLevel = 0.98;
+    this.processor.averaging = 0.95;
+    this.processor.clipLag = 750;
+};
+
+Microphone.prototype.stepAudio = function (event) {
+    var buf = event.inputBuffer.getChannelData(0),
+        bufLength = buf.length,
+        sum = 0,
+        x, i, rms,
+        freqBufLength = this.analyser.frequencyBinCount,
+        dataArray = new Uint8Array(freqBufLength);
+
+    if ((Date.now() - this.lastTime) > 5000) {
+        this.stop();
+        return;
+    }
+
+    this.signals = buf;
+    this.analyser.getByteFrequencyData(dataArray);
+    this.frequencies = dataArray;
+    for (i = 0; i < bufLength; i += 1) {
+        x = buf[i];
+        if (Math.abs(x) >= this.processor.clipLevel) {
+            this.processor.clipping = true;
+            this.processor.lastClip = window.performance.now();
+        }
+        sum += x * x;
+    }
+    rms =  Math.sqrt(sum / bufLength);
+    this.volume = Math.max(rms, this.volume * this.processor.averaging);
+};
+
+Microphone.prototype.stop = function () {
+    this.processor.onaudioprocess = null;
+    this.sourceStream.getTracks().forEach(function (track) {
+        track.stop();}
+    );
+    this.processor.disconnect();
+    this.analyser.disconnect();
+    this.audioContext.close();
+    this.processor = null;
+    this.analyser = null;
+    this.audioContext = null;
+    this.isReady = false;
+    this.isStarted = false;
 };
 
 // CellMorph //////////////////////////////////////////////////////////
