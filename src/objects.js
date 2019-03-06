@@ -8927,8 +8927,6 @@ Microphone.prototype.start = function () {
         }
     ).then(function (stream) {
         myself.setupNodes(stream);
-        myself.isReady = true;
-        myself.isStarted = false;
     }).catch(nop);
 };
 
@@ -8990,6 +8988,9 @@ Microphone.prototype.stepAudio = function (event) {
     }
     rms =  Math.sqrt(sum / bufLength);
     this.volume = Math.max(rms, this.volume * this.processor.averaging);
+
+    this.isReady = true;
+    this.isStarted = false;
 };
 
 Microphone.prototype.stop = function () {
