@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-06';
+modules.objects = '2019-March-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -8872,7 +8872,7 @@ function Microphone() {
     this.analyser = null;
 
     // parameters:
-    this.signalBufferSize = 512; // should be automatic, I guess
+    this.signalBufferSize = 512;
     this.fftSize = 1024;
 
     // metered values:

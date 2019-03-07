@@ -47,6 +47,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-07
+* AudioComp lib: added block to set the microphone's buffer and fft sizes
+
 ### 2019-03-06
 * AudioComp lib: turn off mic after 5 secs of idling
 * AudioComp lib: support Safari
