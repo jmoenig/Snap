@@ -2603,8 +2603,6 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
-
-
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
         myself = this,
@@ -2659,6 +2657,28 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addItem('Save As...', 'saveProjectsBrowser');
 
+    // Button to save project as STL for 3D printing
+    menu.addItem('Export as STL',
+        function (){
+            console.log("Exporting project as STL for 3D printing");
+            // Below we call our costume function and pass in the name of the project
+            console.log("my project name is " + myself.projectName);
+            try {
+                this.exportProjectAsSTL();
+            } catch (e) {
+                console.log("Error trying to export file was " + e);
+            }
+    });
+
+    //
+
+    // Button to start and end collaboration using togetherjs
+    menu.addItem('Collaboration',
+        function () {
+            console.log("Starting collaboration");
+            TogetherJS(this); return false;
+        });
+    //
     menu.addLine();
 
     menu.addItem(
@@ -2780,25 +2800,24 @@ IDE_Morph.prototype.projectMenu = function () {
             '2D ' + localize(graphicsName) + '...',
             function () {
 
-                console.log("asset_path " + config.asset_path);
-                console.log("graphics name " + graphicsName);
-
                 let directory = config.asset_path + graphicsName,
-                names = myself.getCostumesList(directory+'/Costumes.html'),   // Passing in a url to getCostumesList returns
-                    // an array, whatever url you pass into here, this method will make a get request
+
+                names = myself.getCostumesList(directory+'/costumes.html'), // Passing in a url or in this
+                    // a path to the getCostumesList function returns
+                    // an array of images gathered from a html page using a regular expression to filter out the name from
+                    // from the <a href attribute>
+                    // i.e alonzo etc, whatever url you pass into here, this method will make a get request
+
+
                 libMenu = new MenuMorph(
                     myself,
                     localize('Import') + ' ' + '2D ' + localize(graphicsName)
                 );
 
-                console.log("directory is " + directory);
-                console.log("names " + names);
 
                 function loadCostume(name) {
                     var url = directory + '/' + name,
                     img = new Image();
-
-                    console.log("url " + url);
 
                     img.onload = function () {
                         var canvas = newCanvas(new Point(img.width, img.height));
@@ -2960,7 +2979,6 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
 
     dir = this.getURL(dirname);
 
-    console.log("dir " + dir);
 
     dir.split('\n').forEach(
         function (line) {
@@ -2980,11 +2998,6 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
         return x < y ? -1 : 1;
     });
 
-    console.log(costumes.length);
-    console.log(costumes.forEach(function (value) {
-        console.log("value " + value);
-    }));
-    console.log('config ap after request ' + config.asset_path);
     return costumes;
 };
 
@@ -4183,6 +4196,36 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
     }
 };
 
+
+/**
+ * Testing out STL exportation
+ *
+ */
+IDE_Morph.prototype.exportProjectAsSTL = function () {
+    let menu;
+    // Testing to see what world is
+    console.log(world);
+    try {
+                menu = this.showMessage('Exporting as STL');
+                let scene = copy(this.stage.scene);
+                // console.log("Scene is: " + scene);
+
+                let exporter = new THREE.STLExporter();
+                // console.log("Exporter: " + exporter);
+
+                let exportedScene = exporter.parse(scene);
+                let blob = new Blob( [exportedScene], { type: 'text/plain'});
+                saveAs(blob, (this.projectName ? this.projectName : '3DCSDT') + '.stl');
+
+                menu.destroy();
+                this.showMessage('Exported!', 1);
+    } catch (err) {
+                this.showMessage('Export failed: ' + err);
+                console.log(err)
+    }
+};
+
+
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     fileType,
@@ -4190,7 +4233,7 @@ IDE_Morph.prototype.saveFileAs = function (
     newWindow // (optional) defaults to false.
 ) {
     /** Allow for downloading a file to a disk or open in a new tab.
-        This relies the FileSaver.js library which exports saveAs()
+        This relies on the FileSaver.js library which exports saveAs()
         Two utility methods saveImageAs and saveXMLAs should be used first.
         1. Opening a new window uses standard URI encoding.
         2. downloading a file uses Blobs.
@@ -4480,8 +4523,6 @@ IDE_Morph.prototype.setCloudURL = function () {
 // IDE_Morph synchronous Http data fetching
 
 IDE_Morph.prototype.getURL = function (url) {
-
-    console.log("url is " + url);
 
     var request = new XMLHttpRequest(),
         myself = this;
