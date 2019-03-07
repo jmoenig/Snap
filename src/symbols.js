@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2019-February-27';
+modules.symbols = '2019-February-07';
 
 var SymbolMorph;
 
@@ -1841,12 +1841,21 @@ SymbolMorph.prototype.drawSymbolGlobe = function (canvas, color) {
     ctx.lineWidth = l * 2;
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
+
+/* // more detailed version, commmented out
     ctx.moveTo(l, w / 3);
     ctx.lineTo(w - l, w / 3);
     ctx.stroke();
     ctx.moveTo(l, 2 * w / 3);
     ctx.lineTo(w - l, 2 * w / 3);
     ctx.stroke();
+*/
+
+    // single line version, looks better when small:
+    ctx.moveTo(l, w / 2);
+    ctx.lineTo(w - l, w / 2);
+    ctx.stroke();
+
     ctx.moveTo(w / 2, 0);
     ctx.arcTo(0, w / 2, w / 2, w, w * 0.75);
     ctx.stroke();
