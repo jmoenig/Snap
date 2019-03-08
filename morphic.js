@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -3113,21 +3113,21 @@ Morph.prototype.setFullCenter = function (aPoint) {
 Morph.prototype.keepWithin = function (aMorph) {
     // make sure I am completely within another Morph's bounds
     var leftOff, rightOff, topOff, bottomOff;
-    leftOff = this.fullBounds().left() - aMorph.left();
-    if (leftOff < 0) {
-        this.moveBy(new Point(-leftOff, 0));
-    }
     rightOff = this.fullBounds().right() - aMorph.right();
     if (rightOff > 0) {
         this.moveBy(new Point(-rightOff, 0));
     }
-    topOff = this.fullBounds().top() - aMorph.top();
-    if (topOff < 0) {
-        this.moveBy(new Point(0, -topOff));
+    leftOff = this.fullBounds().left() - aMorph.left();
+    if (leftOff < 0) {
+        this.moveBy(new Point(-leftOff, 0));
     }
     bottomOff = this.fullBounds().bottom() - aMorph.bottom();
     if (bottomOff > 0) {
         this.moveBy(new Point(0, -bottomOff));
+    }
+    topOff = this.fullBounds().top() - aMorph.top();
+    if (topOff < 0) {
+        this.moveBy(new Point(0, -topOff));
     }
 };
 
@@ -7773,16 +7773,38 @@ MenuMorph.prototype.unselectAllItems = function () {
     this.children.forEach(function (item) {
         if (item instanceof MenuItemMorph) {
             item.image = item.normalImage;
+        } else if (item instanceof ScrollFrameMorph) {
+        	item.contents.children.forEach(function (morph) {
+         		if (morph instanceof MenuItemMorph) {
+           			morph.image = morph.normalImage;
+              	}
+         	});
         }
     });
     this.changed();
 };
 
+// MenuMorph popping up
+
 MenuMorph.prototype.popup = function (world, pos) {
+	var scroller;
+
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
     this.keepWithin(world);
+
+    if (this.bottom() > world.bottom()) {
+    	// scroll menu items if the menu is taller than the world
+    	this.removeShadow();
+        scroller = this.scroll();
+        this.bounds.corner.y = world.bottom() - 2;
+        MenuMorph.uber.drawNew.call(this);
+        this.addShadow(new Point(2, 2), 80);
+        scroller.setHeight(world.bottom() - scroller.top() - 6);
+        scroller.adjustScrollBars(); // ?
+     }
+
     if (world.activeMenu) {
         world.activeMenu.destroy();
     }
@@ -7793,6 +7815,21 @@ MenuMorph.prototype.popup = function (world, pos) {
     world.activeMenu = this;
     this.world = world; // optionally enable keyboard support
     this.fullChanged();
+};
+
+MenuMorph.prototype.scroll = function () {
+    // private - move all items into a scroll frame
+     var scroller = new ScrollFrameMorph(),
+          start = this.label ? 1 : 0,
+        first = this.children[start];
+
+    scroller.setPosition(first.position());
+      this.children.slice(start).forEach(function (morph) {
+        scroller.addContents(morph);
+    });
+    this.add(scroller);
+    scroller.setWidth(first.width());
+    return scroller;
 };
 
 MenuMorph.prototype.popUpAtHand = function (world) {
@@ -9621,7 +9658,7 @@ MenuItemMorph.prototype.mouseLeave = function () {
 
 MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
-        this.parent.unselectAllItems();
+        this.parentThatIsA(MenuMorph).unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
     }
     this.image = this.pressImage;
@@ -9639,7 +9676,7 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
         this.popUpSubmenu();
     } else {
         if (!this.isListItem()) {
-            this.parent.closeRootMenu();
+            this.parentThatIsA(MenuMorph).closeRootMenu();
             this.world().activeMenu = null;
         }
         this.trigger();
@@ -9647,8 +9684,9 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
 };
 
 MenuItemMorph.prototype.isListItem = function () {
-    if (this.parent) {
-        return this.parent.isListContents;
+	var menu = this.parentThatIsA(MenuMorph);
+    if (menu) {
+        return menu.isListContents;
     }
     return false;
 };
