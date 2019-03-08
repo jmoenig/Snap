@@ -2234,8 +2234,7 @@ BlockEditorMorph.prototype.close = function () {
             block.addShadow();
             new DialogBoxMorph().inform(
                 'Local Block(s) in Global Definition',
-                localize('This global block definition contains one or more\n')
-                    + localize('local custom blocks which must be removed first.'),
+                localize('This global block definition contains one or more\nlocal custom blocks which must be removed first.'),
                 myself.world(),
                 block.fullImage()
             );
