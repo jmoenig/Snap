@@ -2672,7 +2672,7 @@ SpriteMorph.prototype.searchBlocks = function (
     searchPane.mouseClickLeft = function() {
         if (world.currentKey !== 16) return; // shift key required.
         ide.prompt('Search for used blocks', function (input) {
-            if (!input) return;
+            if (!input || input.length < 3) return; // min 3 chars
             input = input.toLowerCase();
             console.log('searching with query:', input);
             var blocks = ide.findBlocks({specs: [input]});
@@ -2682,7 +2682,20 @@ SpriteMorph.prototype.searchBlocks = function (
                 var addresses = blocks.map(function(b) {
                     return ide.blockAddress(b).join(' => ');
                 })
-                msg = addresses.join('\n');
+
+                /* count and remove duplicates */
+                var stats = {};
+                addresses.forEach(function(addr) {
+                    stats[addr] = stats[addr] === undefined ? 1 : stats[addr] + 1;
+                });
+
+                msg = '';
+                for (var addr in stats) {
+                    if (stats[addr] > 1)
+                        msg += '[' + stats[addr] + 'x] ';
+                    msg += addr + '\n';
+                }
+
             } else {
                 msg = 'No blocks found';
             }
