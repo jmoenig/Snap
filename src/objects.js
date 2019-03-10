@@ -9029,8 +9029,10 @@ Microphone.prototype.stepAudio = function (event) {
         this.note = Math.round(
             12 * (Math.log(this.pitch / 440) / Math.log(2))
         ) + 69;
+    /*
     } else {
         this.note = -1;
+    */
     }
 
     this.isReady = true;
