@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-03-07', // this, too, will appear in the Translators tab
+        '2019-03-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -608,6 +608,10 @@ SnapTranslator.dict.de = {
         'Mikrofon %audio',
     'volume':
         'Lautstärke',
+    'note':
+        'Note',
+    'pitch':
+        'Tonhöhe',
     'signals':
         'Signale',
     'frequencies':
