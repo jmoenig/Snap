@@ -9065,7 +9065,7 @@ Microphone.prototype.detectPitch = function (buf, sampleRate) {
     }
     rms = Math.sqrt(rms/SIZE);
     if (rms < 0.01)
-        return -1;
+        return this.pitch; // -1;
 
     lastCorrelation = 1;
     for (offset = this.MIN_SAMPLES; offset < MAX_SAMPLES; offset += 1) {
@@ -9095,7 +9095,7 @@ Microphone.prototype.detectPitch = function (buf, sampleRate) {
     if (best_correlation > 0.01) {
         return sampleRate / best_offset;
     }
-    return -1;
+    return this.pitch; // -1;
 };
 
 // CellMorph //////////////////////////////////////////////////////////

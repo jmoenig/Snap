@@ -51,6 +51,7 @@
 * Objects, Blocks, Threads: added microphone note and pitch detection
 * Tweaked note detection to only change when the audio signal is strong enough
 * updated German translation for pitch-detection
+* tweaked pitch detection to smoothen low audio signals
 
 ### 2019-03-07
 * AudioComp lib: added block to set the microphone's buffer and fft sizes
