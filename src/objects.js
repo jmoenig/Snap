@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-07';
+modules.objects = '2019-March-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -8857,12 +8857,11 @@ Note.prototype.stop = function () {
 
 // Microphone /////////////////////////////////////////////////////////
 
-// I am a microphone and know about volume, signals and frequencies
+// I am a microphone and know about volume, note, pitch, as well as
+// signals and frequencies.
 // mostly meant to be a singleton of the stage
 // I stop when I'm not queried something for 5 seconds
 // to free up system resources
-
-// Microphone instance creation
 
 function Microphone() {
     // web audio components:
@@ -8872,13 +8871,20 @@ function Microphone() {
     this.analyser = null;
 
     // parameters:
-    this.signalBufferSize = 512;
-    this.fftSize = 1024;
+    this.signalBufferSize = 512; // should probably be 1024 by default
+    this.fftSize = 1024; // should probably be 2048 by default
+    this.MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
+    this.GOOD_ENOUGH_CORRELATION = 0.9;
+
+    // buffers:
+    this.freqBuffer = null; // will be initialized to Uint8Array
+    this.pitchBuffer = null; // will be initialized to Float32Array
 
     // metered values:
     this.volume = 0;
     this.signals = [];
     this.frequencies = [];
+    this.pitch = -1;
 
     // asynch control:
     this.isStarted = false;
@@ -8930,6 +8936,21 @@ Microphone.prototype.start = function () {
     }).catch(nop);
 };
 
+Microphone.prototype.stop = function () {
+    this.processor.onaudioprocess = null;
+    this.sourceStream.getTracks().forEach(function (track) {
+        track.stop();}
+    );
+    this.processor.disconnect();
+    this.analyser.disconnect();
+    this.audioContext.close();
+    this.processor = null;
+    this.analyser = null;
+    this.audioContext = null;
+    this.isReady = false;
+    this.isStarted = false;
+};
+
 Microphone.prototype.setupNodes = function (stream) {
     this.sourceStream = stream;
     this.createProcessor();
@@ -8941,8 +8962,12 @@ Microphone.prototype.setupNodes = function (stream) {
 };
 
 Microphone.prototype.createAnalyser = function () {
+    var freqBufLength;
     this.analyser = this.audioContext.createAnalyser();
     this.analyser.fftSize = this.fftSize;
+    freqBufLength = this.analyser.frequencyBinCount;
+    this.freqBuffer = new Uint8Array(freqBufLength);
+    this.pitchBuffer = new Float32Array(freqBufLength);
 };
 
 Microphone.prototype.createProcessor = function () {
@@ -8966,18 +8991,21 @@ Microphone.prototype.stepAudio = function (event) {
     var buf = event.inputBuffer.getChannelData(0),
         bufLength = buf.length,
         sum = 0,
-        x, i, rms,
-        freqBufLength = this.analyser.frequencyBinCount,
-        dataArray = new Uint8Array(freqBufLength);
+        x, i, rms;
 
     if (this.isAutoStop && ((Date.now() - this.lastTime) > 5000)) {
         this.stop();
         return;
     }
 
+    // signals:
     this.signals = buf;
-    this.analyser.getByteFrequencyData(dataArray);
-    this.frequencies = dataArray;
+
+    // frequency bins:
+    this.analyser.getByteFrequencyData(this.freqBuffer);
+    this.frequencies = this.freqBuffer;
+
+    // volume:
     for (i = 0; i < bufLength; i += 1) {
         x = buf[i];
         if (Math.abs(x) >= this.processor.clipLevel) {
@@ -8989,23 +9017,83 @@ Microphone.prototype.stepAudio = function (event) {
     rms =  Math.sqrt(sum / bufLength);
     this.volume = Math.max(rms, this.volume * this.processor.averaging);
 
+    // pitch:
+    this.analyser.getFloatTimeDomainData(this.pitchBuffer);
+    this.pitch = this.detectPitch(
+        this.pitchBuffer,
+        this.audioContext.sampleRate
+    );
+
+    // note:
+    if (this.pitch > 0) {
+        this.note = Math.round(
+            12 * (Math.log(this.pitch / 440) / Math.log(2))
+        ) + 69;
+    } else {
+        this.note = -1;
+    }
+
     this.isReady = true;
     this.isStarted = false;
 };
 
-Microphone.prototype.stop = function () {
-    this.processor.onaudioprocess = null;
-    this.sourceStream.getTracks().forEach(function (track) {
-        track.stop();}
-    );
-    this.processor.disconnect();
-    this.analyser.disconnect();
-    this.audioContext.close();
-    this.processor = null;
-    this.analyser = null;
-    this.audioContext = null;
-    this.isReady = false;
-    this.isStarted = false;
+Microphone.prototype.detectPitch = function (buf, sampleRate) {
+    // https://en.wikipedia.org/wiki/Autocorrelation
+    // thanks to Chris Wilson:
+    // https://plus.google.com/+ChrisWilson/posts/9zHsF9PCDAL
+    // https://github.com/cwilso/PitchDetect/
+
+    var SIZE = buf.length,
+        MAX_SAMPLES = Math.floor(SIZE/2),
+        best_offset = -1,
+        best_correlation = 0,
+        rms = 0,
+        foundGoodCorrelation = false,
+        correlations = new Array(MAX_SAMPLES),
+        correlation,
+        lastCorrelation,
+        offset,
+        shift,
+        i,
+        val;
+
+    for (i = 0; i < SIZE; i += 1) {
+        val = buf[i];
+        rms += val * val;
+    }
+    rms = Math.sqrt(rms/SIZE);
+    if (rms < 0.01)
+        return -1;
+
+    lastCorrelation = 1;
+    for (offset = this.MIN_SAMPLES; offset < MAX_SAMPLES; offset += 1) {
+        correlation = 0;
+
+        for (i = 0; i < MAX_SAMPLES; i += 1) {
+            correlation += Math.abs((buf[i]) - (buf[i + offset]));
+        }
+        correlation = 1 - (correlation/MAX_SAMPLES);
+        correlations[offset] = correlation;
+        if ((correlation > this.GOOD_ENOUGH_CORRELATION)
+            && (correlation > lastCorrelation)
+        ) {
+            foundGoodCorrelation = true;
+            if (correlation > best_correlation) {
+                best_correlation = correlation;
+                best_offset = offset;
+            }
+        } else if (foundGoodCorrelation) {
+            shift = (correlations[best_offset + 1] -
+                correlations[best_offset - 1]) /
+                    correlations[best_offset];
+            return sampleRate / (best_offset + (8 * shift));
+        }
+        lastCorrelation = correlation;
+    }
+    if (best_correlation > 0.01) {
+        return sampleRate / best_offset;
+    }
+    return -1;
 };
 
 // CellMorph //////////////////////////////////////////////////////////

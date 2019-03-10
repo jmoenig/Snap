@@ -9,7 +9,7 @@
     * parse JSON using the SPLIT reporter
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
-    * new "microphone" reporter in Sensing for getting volume, signals and frequencies
+    * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
@@ -46,6 +46,9 @@
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
     * German
+
+### 2019-03-10
+* Objects, Blocks, Threads: added microphone note and pitch detection
 
 ### 2019-03-07
 * AudioComp lib: added block to set the microphone's buffer and fft sizes
