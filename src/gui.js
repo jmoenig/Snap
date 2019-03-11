@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-March-06';
+modules.gui = '2019-March-11';
 
 // Declarations
 
@@ -2773,12 +2773,10 @@ IDE_Morph.prototype.settingsMenu = function () {
             new Color(100, 0, 0)
         );
     }
-    if (stage.microphone.isReady) {
-        menu.addItem(
-            '\u2611 ' + localize('Microphone'),
-            function () {stage.microphone.stop(); }
-        );
-    }
+    menu.addItem(
+        'Microphone resolution...',
+        'microphoneMenu'
+    );
     menu.addLine();
     /*
     addPreference(
@@ -5121,6 +5119,34 @@ IDE_Morph.prototype.saveProjectsBrowser = function () {
         this.source = null; // cannot save to examples
     }
     new ProjectDialogMorph(this, 'save').popUp();
+};
+
+// IDE_Morph microphone settings
+
+IDE_Morph.prototype.microphoneMenu = function () {
+    var menu = new MenuMorph(this),
+        world = this.world(),
+        pos = this.controlBar.settingsButton.bottomLeft(),
+        resolutions = ['low', 'normal', 'high', 'max'],
+        microphone = this.stage.microphone;
+
+    if (microphone.isReady) {
+        menu.addItem(
+            '\u2611 ' + localize('Microphone on'),
+            function () {microphone.stop(); }
+        );
+        menu.addLine();
+    }
+    resolutions.forEach(function (res, i) {
+        menu.addItem(
+            (microphone.resolution === i + 1 ? '\u2713 ' : '    ') +
+                res,
+            function () {
+                microphone.setResolution(i + 1);
+            }
+        );
+    });
+    menu.popup(world, pos);
 };
 
 // IDE_Morph localization
