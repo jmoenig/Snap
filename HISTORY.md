@@ -52,6 +52,7 @@
 * added note / hz conversion blocks to audioComp library
 * ported multiline library to new (custom input slot) format
 * new "text costumes" library for generating costumes from letters or words of text
+* took out "b block" costume from catalog
 
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
