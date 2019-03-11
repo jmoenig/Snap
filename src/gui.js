@@ -5132,7 +5132,7 @@ IDE_Morph.prototype.microphoneMenu = function () {
 
     if (microphone.isReady) {
         menu.addItem(
-            '\u2611 ' + localize('Microphone on'),
+            '\u2611 ' + localize('Microphone'),
             function () {microphone.stop(); }
         );
         menu.addLine();
