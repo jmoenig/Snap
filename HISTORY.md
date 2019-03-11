@@ -47,6 +47,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-11
+* added note / hz conversion blocks to audioComp library
+
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
 * Tweaked note detection to only change when the audio signal is strong enough
