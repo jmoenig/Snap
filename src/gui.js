@@ -5140,7 +5140,7 @@ IDE_Morph.prototype.microphoneMenu = function () {
     resolutions.forEach(function (res, i) {
         menu.addItem(
             (microphone.resolution === i + 1 ? '\u2713 ' : '    ') +
-                res,
+                localize(res),
             function () {
                 microphone.setResolution(i + 1);
             }
