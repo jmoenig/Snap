@@ -55,6 +55,7 @@
 * took out "b block" costume from catalog
 * added microphone "resolution" concept governing "bins" (buffer / bin sizes)
 * added microphone "resolution" settings to GUI
+* updated German translation for microphone settings
 
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
