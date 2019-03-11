@@ -8917,8 +8917,8 @@ Microphone.prototype.setResolution = function (num) {
     if (contains([1, 2, 3, 4], num)) {
         if (this.isReady) {
             this.stop();
-            this.resolution = num;
         }
+        this.resolution = num;
     }
 };
 
