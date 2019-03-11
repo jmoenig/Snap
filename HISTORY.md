@@ -49,6 +49,7 @@
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
+* ported multiline library to new (custom input slot) format
 
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
