@@ -56,6 +56,7 @@
 * added microphone "resolution" concept governing "bins" (buffer / bin sizes)
 * added microphone "resolution" settings to GUI
 * updated German translation for microphone settings
+* removed microphone resolution setters from audioComp library
 
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
