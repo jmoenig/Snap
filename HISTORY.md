@@ -18,6 +18,7 @@
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * added "neg" selector to monadic function reporter in "Operators" category
+    * new "text costumes" library for generating costumes from letters or words of text
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
 * Notable Changes:
@@ -50,6 +51,7 @@
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
 * ported multiline library to new (custom input slot) format
+* new "text costumes" library for generating costumes from letters or words of text
 
 ### 2019-03-10
 * Objects, Blocks, Threads: added microphone note and pitch detection
