@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-10';
+modules.objects = '2019-March-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -8871,8 +8871,7 @@ function Microphone() {
     this.analyser = null;
 
     // parameters:
-    this.signalBufferSize = 512; // should probably be 1024 by default
-    this.fftSize = 1024; // should probably be 2048 by default
+    this.resolution = 2;
     this.MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
     this.GOOD_ENOUGH_CORRELATION = 0.9;
 
@@ -8903,6 +8902,27 @@ Microphone.prototype.isOn = function () {
     this.start();
     return false;
 };
+
+// Microphone shared properties
+
+Microphone.prototype.binSizes = [256, 512, 1024, 2048, 4096];
+
+// Microphone resolution
+
+Microphone.prototype.binSize = function () {
+    return this.binSizes[this.resolution - 1];
+};
+
+Microphone.prototype.setResolution = function (num) {
+    if (contains([1, 2, 3, 4], num)) {
+        if (this.isReady) {
+            this.stop();
+            this.resolution = num;
+        }
+    }
+};
+
+// Microphone ops
 
 Microphone.prototype.start = function () {
     var AudioContext = window.AudioContext || window.webkitAudioContext,
@@ -8964,7 +8984,7 @@ Microphone.prototype.setupNodes = function (stream) {
 Microphone.prototype.createAnalyser = function () {
     var freqBufLength;
     this.analyser = this.audioContext.createAnalyser();
-    this.analyser.fftSize = this.fftSize;
+    this.analyser.fftSize = this.binSizes[this.resolution];
     freqBufLength = this.analyser.frequencyBinCount;
     this.freqBuffer = new Uint8Array(freqBufLength);
     this.pitchBuffer = new Float32Array(freqBufLength);
@@ -8973,7 +8993,7 @@ Microphone.prototype.createAnalyser = function () {
 Microphone.prototype.createProcessor = function () {
     var myself = this;
     this.processor = this.audioContext.createScriptProcessor(
-        this.signalBufferSize
+        this.binSizes[this.resolution - 1]
     );
 
     this.processor.onaudioprocess = function (event) {

@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-10';
+modules.threads = '2019-March-11';
 
 var ThreadManager;
 var Process;
@@ -2252,9 +2252,13 @@ Process.prototype.doStopAllSounds = function () {
 // Process audio input (interpolated)
 
 Process.prototype.reportAudio = function (choice) {
-    var stage = this.blockReceiver().parentThatIsA(StageMorph);
+    var stage = this.blockReceiver().parentThatIsA(StageMorph),
+        selection = this.inputOption(choice);
+    if (selection === 'bins') {
+        return stage.microphone.binSize();
+    }
     if (stage.microphone.isOn()) {
-        switch (this.inputOption(choice)) {
+        switch (selection) {
         case 'volume':
             return stage.microphone.volume;
         case 'pitch':
