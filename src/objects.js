@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-11';
+modules.objects = '2019-March-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -448,6 +448,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'play note %note for %n beats',
             defaults: [60, 0.5]
+        },
+        doPlayFrequency: {
+            type: 'command',
+            category: 'sound',
+            spec: 'play %n hz for %n secs',
+            defaults: [440, 2]
         },
         doSetInstrument: {
             type: 'command',
@@ -1951,6 +1957,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        blocks.push(block('doPlayFrequency'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7210,6 +7218,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        blocks.push(block('doPlayFrequency'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -8786,12 +8796,14 @@ Sound.prototype.toDataURL = function () {
 
 // Note /////////////////////////////////////////////////////////
 
-// I am a single musical note
+// I am a single musical note.
+// alternatively I can be used to play a frequency in hz
 
 // Note instance creation
 
 function Note(pitch) {
     this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.frequency = null; // alternative for playing a non-note frequency
     this.setupContext();
     this.oscillator = null;
 }
@@ -8841,8 +8853,8 @@ Note.prototype.play = function (type) {
         'sawtooth',
         'triangle'
     ][(type || 1) - 1];
-    this.oscillator.frequency.value =
-        Math.pow(2, (this.pitch - 69) / 12) * 440;
+    this.oscillator.frequency.value = isNil(this.frequency) ?
+        Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
     this.oscillator.start(0);

@@ -11,6 +11,7 @@
     * new blocks for setting and changing the stage's background color
     * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
     * new "object" reporter in the Sensing category for getting a sprite by its name
+    * new "play frequency" command in the Sound category
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * special context-aware drop-downs for custom blocks
@@ -50,6 +51,7 @@
 
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
+* Threads, Objects: added "play frequency" primitive to "Sound" category
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library

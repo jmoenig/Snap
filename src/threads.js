@@ -4041,6 +4041,32 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     this.pushContext();
 };
 
+Process.prototype.doPlayFrequency = function (hz, secs) {
+    this.doPlayFrequencyForSecs(
+        parseFloat(hz || '0'),
+        parseFloat(secs || '0')
+    );
+};
+
+Process.prototype.doPlayFrequencyForSecs = function (hz, secs) {
+    // interpolated
+    if (!this.context.startTime) {
+        this.context.startTime = Date.now();
+        this.context.activeNote = new Note();
+        this.context.activeNote.frequency = hz;
+        this.context.activeNote.play(this.instrument);
+    }
+    if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
+        if (this.context.activeNote) {
+            this.context.activeNote.stop();
+            this.context.activeNote = null;
+        }
+        return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
 Process.prototype.doSetInstrument = function (num) {
     this.instrument = +num;
     this.receiver.instrument = +num;
