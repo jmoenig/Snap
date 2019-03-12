@@ -48,6 +48,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-12
+* Threads: changed microphone volume (back) to a scale of 0-100
+
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
 * ported multiline library to new (custom input slot) format

@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-11';
+modules.threads = '2019-March-12';
 
 var ThreadManager;
 var Process;
@@ -2260,7 +2260,7 @@ Process.prototype.reportAudio = function (choice) {
     if (stage.microphone.isOn()) {
         switch (selection) {
         case 'volume':
-            return stage.microphone.volume;
+            return stage.microphone.volume * 100;
         case 'pitch':
             return stage.microphone.pitch;
         case 'note':
