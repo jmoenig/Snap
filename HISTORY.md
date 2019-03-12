@@ -52,6 +52,7 @@
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
 * Threads, Objects: added "play frequency" primitive to "Sound" category
+* updated German translation for "play frequency" primitive
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
