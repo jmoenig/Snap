@@ -8920,6 +8920,9 @@ function Microphone() {
     // idling control:
     this.isAutoStop = (location.protocol !== 'file:');
     this.lastTime = Date.now();
+
+    // pitch detection capability - Safari bug
+    this.canDetectPitch = false;
 }
 
 Microphone.prototype.isOn = function () {
@@ -9016,6 +9019,10 @@ Microphone.prototype.createAnalyser = function () {
     freqBufLength = this.analyser.frequencyBinCount;
     this.freqBuffer = new Uint8Array(freqBufLength);
     this.pitchBuffer = new Float32Array(freqBufLength);
+    if (this.analyser.getFloatTimeDomainData instanceof Function) {
+        // Safari flunks this, sigh
+        this.canDetectPitch = true;
+    }
 };
 
 Microphone.prototype.createProcessor = function () {
@@ -9066,21 +9073,19 @@ Microphone.prototype.stepAudio = function (event) {
     this.volume = Math.max(rms, this.volume * this.processor.averaging);
 
     // pitch:
-    this.analyser.getFloatTimeDomainData(this.pitchBuffer);
-    this.pitch = this.detectPitch(
-        this.pitchBuffer,
-        this.audioContext.sampleRate
-    );
+    if (this.canDetectPitch) {
+        this.analyser.getFloatTimeDomainData(this.pitchBuffer);
+        this.pitch = this.detectPitch(
+            this.pitchBuffer,
+            this.audioContext.sampleRate
+        );
 
     // note:
-    if (this.pitch > 0) {
-        this.note = Math.round(
-            12 * (Math.log(this.pitch / 440) / Math.log(2))
-        ) + 69;
-    /*
-    } else {
-        this.note = -1;
-    */
+        if (this.pitch > 0) {
+            this.note = Math.round(
+                12 * (Math.log(this.pitch / 440) / Math.log(2))
+            ) + 69;
+        }
     }
 
     this.isReady = true;

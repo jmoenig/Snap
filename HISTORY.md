@@ -57,6 +57,7 @@
 * Objects, Threads: added "^" reporter (power of) in the Operators category
 * Objects: updated relabel-dictionary
 * updated Animation und AudioComp libraries with new powerOf primitive
+* disabled pitch detection for Safari, so at least the other microphone features work
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
