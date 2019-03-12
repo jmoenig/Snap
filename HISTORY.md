@@ -56,6 +56,7 @@
 * updated German translation for "play frequency" primitive
 * Objects, Threads: added "^" reporter (power of) in the Operators category
 * Objects: updated relabel-dictionary
+* updated Animation und AudioComp libraries with new powerOf primitive
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
