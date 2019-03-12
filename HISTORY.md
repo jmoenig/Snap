@@ -54,6 +54,8 @@
 * Threads: changed microphone volume (back) to a scale of 0-100
 * Threads, Objects: added "play frequency" primitive to "Sound" category
 * updated German translation for "play frequency" primitive
+* Objects, Threads: added "^" reporter (power of) in the Operators category
+* Objects: updated relabel-dictionary
 
 ### 2019-03-11
 * added note / hz conversion blocks to audioComp library
