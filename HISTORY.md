@@ -14,11 +14,12 @@
     * new "play frequency" command in the Sound category
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
+    * added "neg" selector to monadic function reporter in "Operators" category
+    * added "^" reporter (power of) in the Operators category
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
-    * added "neg" selector to monadic function reporter in "Operators" category
     * new "text costumes" library for generating costumes from letters or words of text
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
