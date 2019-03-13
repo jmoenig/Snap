@@ -11,7 +11,6 @@
     * new blocks for setting and changing the stage's background color
     * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
     * new "object" reporter in the Sensing category for getting a sprite by its name
-    * new "play frequency" command in the Sound category
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * added "neg" selector to monadic function reporter in "Operators" category
@@ -19,6 +18,7 @@
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
+    * new "play frequency" commands in the AudioComp libary's Sound category
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
     * enhanced support for embedding Snap in other website, thanks, Bernat!
@@ -53,6 +53,7 @@
 ### 2019-03-13
 * Objects: Simplified and optimized pitch detection, made it work on Safari
 * Objects: made "play frequency" command experimental / only revealed in dev
+* added "play hz" and "stop hz" blocks to AudioComp libary
 
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
