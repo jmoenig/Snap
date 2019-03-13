@@ -449,7 +449,8 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'play note %note for %n beats',
             defaults: [60, 0.5]
         },
-        doPlayFrequency: {
+        doPlayFrequency: { // only in dev mode - experimental
+            dev: true,
             type: 'command',
             category: 'sound',
             spec: 'play %n hz for %n secs',
@@ -1970,8 +1971,23 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('doPlayFrequency'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doPlayFrequency'));
+        }
+
+    /////////////////////////////////
+
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7233,8 +7249,23 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('doPlayFrequency'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doPlayFrequency'));
+        }
+
+    /////////////////////////////////
+
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 

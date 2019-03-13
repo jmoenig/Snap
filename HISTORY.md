@@ -52,6 +52,7 @@
 
 ### 2019-03-13
 * Objects: Simplified and optimized pitch detection, made it work on Safari
+* Objects: made "play frequency" command experimental / only revealed in dev
 
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
