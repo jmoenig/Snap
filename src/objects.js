@@ -8934,8 +8934,8 @@ function Microphone() {
     this.MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
     this.GOOD_ENOUGH_CORRELATION = 0.9;
 
-    // buffer:
-    this.freqBuffer = null; // will be initialized to Uint8Array
+    // memory alloc
+    this.correlations = []; //new Array(MAX_SAMPLES), // +++
 
     // metered values:
     this.volume = 0;
@@ -9040,11 +9040,14 @@ Microphone.prototype.setupNodes = function (stream) {
 };
 
 Microphone.prototype.createAnalyser = function () {
-    var freqBufLength;
+    var bufLength;
     this.analyser = this.audioContext.createAnalyser();
     this.analyser.fftSize = this.binSizes[this.resolution];
-    freqBufLength = this.analyser.frequencyBinCount;
-    this.freqBuffer = new Uint8Array(freqBufLength);
+    bufLength = this.analyser.frequencyBinCount;
+    this.frequencies = new Uint8Array(bufLength);
+
+    // setup pitch detection correlations:
+    this.correlations = new Array(Math.floor(bufLength/2));
 };
 
 Microphone.prototype.createProcessor = function () {
@@ -9065,38 +9068,20 @@ Microphone.prototype.createProcessor = function () {
 };
 
 Microphone.prototype.stepAudio = function (event) {
-    var buf = event.inputBuffer.getChannelData(0),
-        bufLength = buf.length,
-        sum = 0,
-        x, i, rms;
-
     if (this.isAutoStop && ((Date.now() - this.lastTime) > 5000)) {
         this.stop();
         return;
     }
 
     // signals:
-    this.signals = buf;
+    this.signals = event.inputBuffer.getChannelData(0);
 
     // frequency bins:
-    this.analyser.getByteFrequencyData(this.freqBuffer);
-    this.frequencies = this.freqBuffer;
+    this.analyser.getByteFrequencyData(this.frequencies);
 
-    // volume:
-    for (i = 0; i < bufLength; i += 1) {
-        x = buf[i];
-        if (Math.abs(x) >= this.processor.clipLevel) {
-            this.processor.clipping = true;
-            this.processor.lastClip = window.performance.now();
-        }
-        sum += x * x;
-    }
-    rms =  Math.sqrt(sum / bufLength);
-    this.volume = Math.max(rms, this.volume * this.processor.averaging);
-
-    // pitch:
-    this.pitch = this.detectPitch(
-        buf,
+    // pitch & volume:
+    this.pitch = this.detectPitchAndVolume(
+        this.signals,
         this.audioContext.sampleRate
     );
 
@@ -9111,7 +9096,7 @@ Microphone.prototype.stepAudio = function (event) {
     this.isStarted = false;
 };
 
-Microphone.prototype.detectPitch = function (buf, sampleRate) {
+Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
     // https://en.wikipedia.org/wiki/Autocorrelation
     // thanks to Chris Wilson:
     // https://plus.google.com/+ChrisWilson/posts/9zHsF9PCDAL
@@ -9123,7 +9108,7 @@ Microphone.prototype.detectPitch = function (buf, sampleRate) {
         best_correlation = 0,
         rms = 0,
         foundGoodCorrelation = false,
-        correlations = new Array(MAX_SAMPLES),
+        correlations = this.correlations,
         correlation,
         lastCorrelation,
         offset,
@@ -9133,11 +9118,16 @@ Microphone.prototype.detectPitch = function (buf, sampleRate) {
 
     for (i = 0; i < SIZE; i += 1) {
         val = buf[i];
+        if (Math.abs(val) >= this.processor.clipLevel) {
+            this.processor.clipping = true;
+            this.processor.lastClip = window.performance.now();
+        }
         rms += val * val;
     }
     rms = Math.sqrt(rms/SIZE);
+    this.volume = Math.max(rms, this.volume * this.processor.averaging);
     if (rms < 0.01)
-        return this.pitch; // -1;
+        return this.pitch;
 
     lastCorrelation = 1;
     for (offset = this.MIN_SAMPLES; offset < MAX_SAMPLES; offset += 1) {
@@ -9167,7 +9157,7 @@ Microphone.prototype.detectPitch = function (buf, sampleRate) {
     if (best_correlation > 0.01) {
         return sampleRate / best_offset;
     }
-    return this.pitch; // -1;
+    return this.pitch;
 };
 
 // CellMorph //////////////////////////////////////////////////////////

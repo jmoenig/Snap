@@ -54,6 +54,7 @@
 * Objects: Simplified and optimized pitch detection, made it work on Safari
 * Objects: made "play frequency" command experimental / only revealed in dev
 * added "play hz" and "stop hz" blocks to AudioComp libary
+* Objects: Optimized microphone volume detection
 
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
