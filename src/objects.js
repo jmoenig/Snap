@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-12';
+modules.objects = '2019-March-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -8903,9 +8903,8 @@ function Microphone() {
     this.MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
     this.GOOD_ENOUGH_CORRELATION = 0.9;
 
-    // buffers:
+    // buffer:
     this.freqBuffer = null; // will be initialized to Uint8Array
-    this.pitchBuffer = null; // will be initialized to Float32Array
 
     // metered values:
     this.volume = 0;
@@ -8920,9 +8919,6 @@ function Microphone() {
     // idling control:
     this.isAutoStop = (location.protocol !== 'file:');
     this.lastTime = Date.now();
-
-    // pitch detection capability - Safari bug
-    this.canDetectPitch = false;
 }
 
 Microphone.prototype.isOn = function () {
@@ -9018,11 +9014,6 @@ Microphone.prototype.createAnalyser = function () {
     this.analyser.fftSize = this.binSizes[this.resolution];
     freqBufLength = this.analyser.frequencyBinCount;
     this.freqBuffer = new Uint8Array(freqBufLength);
-    this.pitchBuffer = new Float32Array(freqBufLength);
-    if (this.analyser.getFloatTimeDomainData instanceof Function) {
-        // Safari flunks this, sigh
-        this.canDetectPitch = true;
-    }
 };
 
 Microphone.prototype.createProcessor = function () {
@@ -9073,19 +9064,16 @@ Microphone.prototype.stepAudio = function (event) {
     this.volume = Math.max(rms, this.volume * this.processor.averaging);
 
     // pitch:
-    if (this.canDetectPitch) {
-        this.analyser.getFloatTimeDomainData(this.pitchBuffer);
-        this.pitch = this.detectPitch(
-            this.pitchBuffer,
-            this.audioContext.sampleRate
-        );
+    this.pitch = this.detectPitch(
+        buf,
+        this.audioContext.sampleRate
+    );
 
     // note:
-        if (this.pitch > 0) {
-            this.note = Math.round(
-                12 * (Math.log(this.pitch / 440) / Math.log(2))
-            ) + 69;
-        }
+    if (this.pitch > 0) {
+        this.note = Math.round(
+            12 * (Math.log(this.pitch / 440) / Math.log(2))
+        ) + 69;
     }
 
     this.isReady = true;

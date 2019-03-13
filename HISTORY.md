@@ -50,6 +50,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-13
+* Objects: Simplified and optimized pitch detection, made it work on Safari
+
 ### 2019-03-12
 * Threads: changed microphone volume (back) to a scale of 0-100
 * Threads, Objects: added "play frequency" primitive to "Sound" category
