@@ -50,6 +50,10 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-14
+* atomic HOFs lib: consolidate names with tools lib, thanks, Brian
+* atomic HOFs lib: added translations from tools lib
+
 ### 2019-03-13
 * Objects: Simplified and optimized pitch detection, made it work on Safari
 * Objects: made "play frequency" command experimental / only revealed in dev
