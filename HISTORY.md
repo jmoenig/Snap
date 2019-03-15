@@ -50,6 +50,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-15
+* Objects: improved microphone pitch detection
+
 ### 2019-03-14
 * atomic HOFs lib: consolidate names with tools lib, thanks, Brian
 * atomic HOFs lib: added translations from tools lib

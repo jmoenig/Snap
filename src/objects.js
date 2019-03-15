@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-13';
+modules.objects = '2019-March-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -8931,8 +8931,7 @@ function Microphone() {
 
     // parameters:
     this.resolution = 2;
-    this.MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
-    this.GOOD_ENOUGH_CORRELATION = 0.9;
+    this.GOOD_ENOUGH_CORRELATION = 0.96;
 
     // memory alloc
     this.correlations = []; //new Array(MAX_SAMPLES), // +++
@@ -9130,7 +9129,7 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
         return this.pitch;
 
     lastCorrelation = 1;
-    for (offset = this.MIN_SAMPLES; offset < MAX_SAMPLES; offset += 1) {
+    for (offset = 1; offset < MAX_SAMPLES; offset += 1) {
         correlation = 0;
 
         for (i = 0; i < MAX_SAMPLES; i += 1) {
