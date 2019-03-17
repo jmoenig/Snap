@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-02-24', // this, too, will appear in the Translators tab
+        '2019-03-17', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -957,10 +957,8 @@ SnapTranslator.dict.ca = {
         'Esteu segur que voleu reemplaçar-lo?',
     'Local Block(s) in Global Definition':
         'Blocs locals en una definició global',
-    'This global block definition contains one or more\n':
-        'Aquest bloc global té un o més\n',
-    'local custom blocks which must be removed first.':
-        'blocs locals. No poden estar dins la definició del bloc global.',
+    'This global block definition contains one or more\nlocal custom blocks which must be removed first.':
+        'Aquest bloc global té un o més\nblocs locals. No poden estar dins la definició del bloc global.',
 
     // sprites:
     'edit':
@@ -1882,15 +1880,13 @@ SnapTranslator.dict.ca = {
         'Esteu segur que voleu continuar?',
     'Switch to vector editor?':
         'Voleu canviar a l\'editor vectorial?',
-    'This will convert your vector objects into\n':
-        'El canvi convertirà els objectes vectorials en\n',
-    'bitmaps, and you will not be able to convert\n':
-        'un mapa de bits, i no es podrà tornar enrere\n',
-    'them back into vector drawings.\n':
-        'ni recuperar els objectes vectorials.\n',
+    'This will convert your vector objects into\nbitmaps,':
+        'El canvi convertirà els objectes vectorials en\nun mapa de bits,',
+    ' and you will not be able to convert\nthem back into vector drawings.\n':
+        ' i no es podrà tornar enrere\nni recuperar els objectes vectorials.\n',
     'Convert to bitmap?':
         'Voleu canviar a mapa de bits?',
-//
+// més símbols
     'speechBubble':
         'bafarada',
     'speechBubbleOutline':
@@ -1913,6 +1909,39 @@ SnapTranslator.dict.ca = {
         'contorn de fletxa a la dreta',
     'robot':
         'robot',
+    'globe':
+        'món',
+    'stepForward':
+        'pas endavant',
+    'cross':
+        'creu',
+    'loop':
+        'bucle',
+    'turnBack':
+        'torna enrere',
+    'turnForward':
+        'torna endavant',
+    'magnifyingGlass':
+        'lupa',
+    'magnifierOutline':
+        'contorn de lupa',
+    'selection':
+        'selecció',
+    'polygon':
+        'polígon',
+    'closedBrush':
+        'pinzell tancat',
+    'camera':
+        'càmera',
+    'location':
+        'localització',
+    'footprints':
+        'petjades',
+    'keyboard':
+        'teclat',
+    'keyboardFilled':
+        'plantilla de teclat',
+//
     'turn pen trails into new costume...':
         'crea un nou vestit amb la imatge dibuixada…',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
@@ -1957,6 +1986,10 @@ SnapTranslator.dict.ca = {
         'deixant de publicar\nel projecte...',
     'unpublished.':
         'no publicat',
+    'Publish':
+        'Publica',
+    'Unpublish':
+        'Despublica',
     'Are you sure you want to unpublish':
         'Esteu segur que voleu deixar de publicar',
     'Replace Project':
@@ -2428,29 +2461,131 @@ SnapTranslator.dict.ca = {
         'Compte no verificat: ',
     ' days left':
         ' dies de termini',
-    'You are now logged in, and your account\n':
-        'Ara esteu validats, però el vostre compte\n',
-    'is enabled for three days.\n':
-        'és només vàlid per 3 dies.\n',
-    'Please use the verification link that\n':
-        'Cal usar l\'enllaç de verificació que\n',
-    'was sent to your email address when you\n':
-        's\'ha enviat al vostre correu quan\n',
-    'signed up.\n\n':
-        'vau registrar l\'usuari',
-    'If you cannot find that email, please\n':
-        'Si no l\'heu rebut,\n',
-    'check your spam folder. If you still\n':
-        'comproveu primer el correu brossa. I si no\n',
-    'cannot find it, please use the "Resend\n':
-        'podeu trobar-ho, utilitzeu l\'opció de "Torna a enviar\n',
-    'Verification Email..." option in the cloud\n':
-        'l\'email de verificació" a les opcions del Núvol\n',
-    'menu.\n\n':
-        'del menú d\'Snap!\n\n',
+    'You are now logged in, and your account\nis enabled for three days.\n':
+        'Ara esteu validats, però el vostre compte\nés només vàlid per 3 dies.\n',
+    'Please use the verification link that\nwas sent to your email address when you\nsigned up.\n\n':
+        'Cal usar l\'enllaç de verificació que\ns\'ha enviat al vostre correu quan\nvau registrar l\'usuari',
+    'If you cannot find that email, please\ncheck your spam folder.':
+        'Si no l\'heu rebut,\ncomproveu primer el correu brossa.',
+    'If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.\n\n':
+        'I si no\npodeu trobar-ho, utilitzeu l\'opció de "Torna a enviar\nl\'email de verificació" a les opcions del Núvol\ndel menú d\'Snap!\n\n',
     'You have ':
         'Teniu ',
     ' days left.':
-        ' dies de termini.'
+        ' dies de termini.',
+//micròfon
+    'microphone %audio':
+        '%audio del micròfon',
+    'volume':
+        'volum',
+    'note':
+        'nota',
+    'pitch':
+        'to',
+    'signals':
+        'senyals',
+    'frequencies':
+        'freqüències',
+    'bins':
+        'resolució',
+    'Microphone resolution...':
+        'Resolució del micròfon...',
+    'low':
+        'baixa',
+    'normal':
+        'normal',
+    'high':
+        'alta',
+    'max':
+        'màxima',
+//
+    'play %n hz for %n secs':
+        'toca %n Hz durant %n segons',
+//libreries
+    'Tools':
+        'Eines',
+    'Text Costumes':
+        'Text als vestits',
+    'Provide getters and setters for all GUI-controlled global settings':
+        'Getters i Setters pel paràmetres de configuració de la interfície',
+    'Infinite precision integers, exact rationals, complex':
+        'Números sencers de precisió infinita, racionals exactes i complexos',
+    'Provide 100 selected colors':
+        'Paleta de 100 colors',
+    'Text to speech':
+        'Lector de text',
+    'Animation':
+        'Animacions',
+    'Pixels':
+        'Píxels',
+    'Audio Comp':
+        'Composició d\'audio',
+    '"Bigger" Data':
+        'Treballant amb "Big Data"',
+    'Frequency Distribution Analysis':
+        'Analisi de la disbribució de freqüències',
+    'create variables in program':
+        'Creant variables des del programa',
+    'Deal with JSON data':
+        'Tractament de dades JSON',
+    'Parallelization':
+        'Processos en paral·lel',
+    'String processing':
+        'Processant text',
+    'Standard library of powerful blocks (for, map, etc.)':
+        'Llibreria estàndard amb eines generals (for, map, etc.)',
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
+        'Construcció de bucles estàndard (while, until, etc.), construccions "named let" pròpies de Lisp (una generalització dels bucles "for"), iteració funcional (repeticions de crides a una funció) i composició de funcions.',
+    'Some standard functions on lists (append, reverse, etc.)':
+        'Funcions estàndard per a llistes (append, reverse, etc.)',
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
+        'Variació del tipus de dades "llistes" on els elements de la llista no són avaluats fins que s\'utilitzen. D\'aquesta manera es poden construir llistes amb milions d\'elements sense un gran consum de memòria i fins i tot construir llistes de mida infinita. (S\'inclou un bloc d\'exemple que reporta tots els números primers.)',
+    'Versions of +, x, AND, and OR that take more than two inputs.':
+        'Versions dels blocs +, x, AND i OR que tenen més de dues ranures',
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
+        'Una versió ampliada del bloc "URL" que permet treballar amb  crides "POST", "PUT", "DELETE" i "GET" i també triar el protocol "HTTP-HTTPS" i controlar les capçaleres',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.':
+        'Una de les idees importants en Logo i que va continuar Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria (juntament amb el bloc "JOIN WORDS" de la llibreria d\'Eines) torna a desenvolupar aquesta idea.',
+    'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
+        'La mateixa idea que la comanda "switch" en llenguatges tipus C o "cond" en Lisp. Gràcies a Nathan Dinsmore per inventar la idea de tenir un bloc separat per a cada branca!',
+    'Report hand positions from LEAP Motion controller (leapmotion.com).':
+        'Reporta la posició de les mans des de un controlador de moviment LEAP (leapmotion.com).',
+    'Generate costumes from letters or words of text.':
+        'Genera vestits utilitzant lletres, paraules... o qualevol text.',
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
+        'Blocs per establir o reportar el color del llapis en RGB (vermell, verd i blau) o en HSV (tonalitat, saturació i valor).',
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
+        'Executa un programa i, si troba alguna errada, no atura el programa reportant una avís vermell sobre el bloc, sinó que permet definir un altre programa que pugui evitar aquesta errada. També inclou un bloc per enviar missatges d\'errades i també un altra per crear variables de programa i assignar el seu valor.',
+    'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
+        'De forma normal, les ranures només permeten escriure una línia de text. Aquesta llibreria ofereix un sol bloc "Multiline" que accepta múltiples línies de text. Aquest bloc es pot fer servir en altres entrades de text dels blocs per poder adquirir aquest caràcter multilínia',
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
+        'La llei de Eisenberg diu: Des de la programació s\'hauria de poder fer tot allò que es faci des de l\'entorn i les seves funcionalitats i configuració. I viceversa!',
+    'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
+        'Ens ofereix la implementació numèrica de Scheme. Cal habilitar els "Big Nums" (amb el bloc "USE BIGNUMS" a cert) per utilitzar-ho',
+    'to use instead of hue for better selection':
+        'Per poder tenir eines de selecció més ràpides i fàcils',
+    'output text using speech synthesis.':
+        'Gràcies a la síntesi de veu per l\'ordinador podem obtenir audio automàticament llegint un text',
+    'glide, grow and rotate using easing functions.':
+        'Fés llicar, crèixer i girar els objectes utilitzan diferents formes i filtres a les animacions',
+    'manipulate costumes pixel-wise.':
+        'Manipulem els píxels dels vestits',
+    'analyze, manipulate and generate sound samples.':
+        'Analitza, manipula i genera mostres de so',
+    '[EXPERIMENTAL] crunch large lists very fast':
+        '[EXPERIMENTAL] Juga mol ràpid amb llistes llargues',
+    '[EXPERIMENTAL] analyze data for frequency distribution':
+        '[EXPERIMENTAL] Analitza dades i disbribucions de les freqüències',
+    'declare global or sprite-local variables in a script':
+        'Declara i assigna variables (locals o globals) dins els programes',
+    'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
+        'Converteix les cadenes JSON en llistes utilitzant el bloc "listify". Utilitza els blocs de valors i claus per gestionar aquest tipus de llistes',
+    'Run several scripts in parallel and wait until all are done.':
+        'Executa diversos scripts en paral·lel i espereu que hagin acabat els processos abans d\'aturar-se',
+    'Extract substrings of a string in various ways':
+        'Extreu sub-cadenes de texts de diverses formes',
+//
+    'translations...':
+         'traduccions...'
     
 };
