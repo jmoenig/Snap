@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-12';
+modules.threads = '2019-March-17';
 
 var ThreadManager;
 var Process;
@@ -3347,7 +3347,7 @@ Process.prototype.reportAspect = function (aspect, location) {
             }
             return this.spritesAtPoint(point, stage);
         } else {
-            clr = this.colorAtSprite(thisObj);
+            clr = this.colorBelowSprite(thisObj);
         }
     } else if (target === 'mouse-pointer') {
         if (choice === 'sprites') {
@@ -3374,7 +3374,7 @@ Process.prototype.reportAspect = function (aspect, location) {
                     thatObj.rotationCenter() : thatObj.center();
                 return this.spritesAtPoint(point, stage);
             } else {
-                clr = this.colorAtSprite(thatObj);
+                clr = this.colorBelowSprite(thatObj);
             }
         } else {
             return;
@@ -3391,7 +3391,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     return clr.hsv()[idx] * 100;
 };
 
-Process.prototype.colorAtSprite = function (sprite) {
+Process.prototype.colorBelowSprite = function (sprite) {
     // private - helper function for aspect of location
     // answer the color underneath the layer of the sprite's rotation center
     var point = sprite instanceof SpriteMorph ? sprite.rotationCenter()
