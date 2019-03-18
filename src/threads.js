@@ -2254,20 +2254,20 @@ Process.prototype.doStopAllSounds = function () {
 Process.prototype.reportAudio = function (choice) {
     var stage = this.blockReceiver().parentThatIsA(StageMorph),
         selection = this.inputOption(choice);
-    if (selection === 'bins') {
+    if (selection === 'resolution') {
         return stage.microphone.binSize();
     }
     if (stage.microphone.isOn()) {
         switch (selection) {
         case 'volume':
             return stage.microphone.volume * 100;
-        case 'pitch':
+        case 'frequency':
             return stage.microphone.pitch;
         case 'note':
             return stage.microphone.note;
-        case 'signals':
+        case 'samples':
             return new List(stage.microphone.signals);
-        case 'frequencies':
+        case 'spectrum':
             return new List(stage.microphone.frequencies);
         default:
             return null;
