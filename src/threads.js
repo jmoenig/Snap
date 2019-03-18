@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-17';
+modules.threads = '2019-March-18';
 
 var ThreadManager;
 var Process;
@@ -3347,7 +3347,7 @@ Process.prototype.reportAspect = function (aspect, location) {
             }
             return this.spritesAtPoint(point, stage);
         } else {
-            clr = this.colorBelowSprite(thisObj);
+            clr = this.colorAtSprite(thisObj);
         }
     } else if (target === 'mouse-pointer') {
         if (choice === 'sprites') {
@@ -3374,7 +3374,7 @@ Process.prototype.reportAspect = function (aspect, location) {
                     thatObj.rotationCenter() : thatObj.center();
                 return this.spritesAtPoint(point, stage);
             } else {
-                clr = this.colorBelowSprite(thatObj);
+                clr = this.colorAtSprite(thatObj);
             }
         } else {
             return;
@@ -3391,9 +3391,38 @@ Process.prototype.reportAspect = function (aspect, location) {
     return clr.hsv()[idx] * 100;
 };
 
+Process.prototype.colorAtSprite = function (sprite) {
+    // private - helper function for aspect of location
+    // answer the top-most color at the sprite's rotation center
+    // excluding the sprite itself
+    var point = sprite instanceof SpriteMorph ? sprite.rotationCenter()
+            : sprite.center(),
+        stage = sprite.parentThatIsA(StageMorph),
+        child,
+        i;
+
+    if (!stage) {return new Color(); }
+    for (i = stage.children.length; i > 0; i -= 1) {
+        child = stage.children[i - 1];
+        if ((child !== sprite) &&
+            child.isVisible &&
+            child.bounds.containsPoint(point) &&
+            !child.isTransparentAt(point)
+        ) {
+            return child.getPixelColor(point);
+        }
+    }
+    if (stage.bounds.containsPoint(point)) {
+        return stage.getPixelColor(point);
+    }
+    return new Color();
+};
+
 Process.prototype.colorBelowSprite = function (sprite) {
     // private - helper function for aspect of location
     // answer the color underneath the layer of the sprite's rotation center
+    // NOTE: layer-aware color sensing is currently unused
+    // in favor of top-layer detection because of user-observations
     var point = sprite instanceof SpriteMorph ? sprite.rotationCenter()
             : sprite.center(),
         stage = sprite.parentThatIsA(StageMorph),

@@ -50,6 +50,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-18
+* Threads: replaced 'colorBehindSprite' with 'colorAtSprite'
+
 ### 2019-03-17
 * Threads: renamed 'colorAtSprite' to 'colorBelowSprite' (first step to refactoring it altogether)
 
