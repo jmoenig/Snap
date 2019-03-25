@@ -1017,14 +1017,16 @@ Cloud.prototype.getCollections = function (
     onSuccess,
     onError
 ) {
+    var dict = {
+        page: page,
+        pageSize: page ? pageSize | 16 : '',
+    };
+
+    if (searchTerm) { dict.matchtext = encodeURIComponent(searchTerm); }
+
     this.request(
         'GET',
-        '/collections?' +
-            this.encodeDict({
-                page: page,
-                pageSize: page ? pageSize | 16 : '',
-                matchtext: encodeURIComponent(searchTerm)
-            }),
+        '/collections?' + this.encodeDict(dict),
         onSuccess,
         onError,
         'Could not fetch collections'
