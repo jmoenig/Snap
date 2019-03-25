@@ -50,6 +50,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2019-03-25
+* GUI: fixed unintentional pen trails when manually cloning or duplicating a sprite whose pen is down
+
 ### 2019-03-18
 * Threads: replaced 'colorBehindSprite' with 'colorAtSprite'
 * Blocks: renamed some items of the microphone dropdown
