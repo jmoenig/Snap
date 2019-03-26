@@ -49,6 +49,10 @@
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
     * German
+    * French
+
+### 2019-03-26
+* updated French translation
 
 ### 2019-03-25
 * GUI: fixed unintentional pen trails when manually cloning or duplicating a sprite whose pen is down

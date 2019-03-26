@@ -197,7 +197,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2016-10-27', // this, too, will appear in the Translators tab
+        '2019-03-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -370,8 +370,12 @@ SnapTranslator.dict.fr = {
         'montrer',
     'hide':
         'cacher',
-    'go to front':
-        'envoyer au premier plan',
+    'go to %layer layer':
+        'envoyer au %layer plan',
+    'front':
+        'premier',
+    'back':
+        'dernier',
     'go back %n layers':
         'd\u00E9placer de %n plan arri\u00E8re',
 
@@ -399,7 +403,9 @@ SnapTranslator.dict.fr = {
         'choisir le tempo \u00E0 %n bpm',
     'tempo':
         'tempo',
-
+    'set instrument to %inst':
+        'mettre l\u0027instrument à %inst',
+    
     // pen:
     'clear':
         'effacer tout',
@@ -411,8 +417,15 @@ SnapTranslator.dict.fr = {
         'mettre la couleur %clr pour le stylo',
     'change pen color by %n':
         'ajouter %n \u00E0 la couleur du stylo',
-    'set pen color to %n':
-        'choisir la couleur %n pour le stylo',
+    'set pen %hsva to %n':
+        'mettre la %hsva du stylo à %n',
+    'hue':
+        'teinte',
+    'transparency':
+        'transparence',
+    'change pen %hsva by %n':
+        'ajouter à la %hsva du stylo %n',
+
     'change pen shade by %n':
         'ajouter %n \u00E0 l\u0027intensit\u00E9 du stylo ',
     'set pen shade to %n':
@@ -420,7 +433,7 @@ SnapTranslator.dict.fr = {
     'change pen size by %n':
         'ajouter %n \u00E0 la taille du stylo ',
     'set pen size to %n':
-        'choisir la taille %n pour le stylo',
+        'mettre la taille du stylo à %n',
     'stamp':
         'estampiller',
     'fill':
@@ -463,10 +476,10 @@ SnapTranslator.dict.fr = {
         'arr\u00EAter le bloc',
     'stop script':
         'arr\u00EAter le script',
-  'stop %stopOthersChoices':
-    'arr\u00EAter %stopOthersChoices',
-  'stop %stopChoices':
-    'arr\u00EAter %stopChoices',
+    'stop %stopOthersChoices':
+        'arr\u00EAter %stopOthersChoices',
+    'stop %stopChoices':
+        'arr\u00EAter %stopChoices',
     'stop all %stop':
         'arr\u00EAter tout %stop',
     'run %cmdRing %inputs':
@@ -488,7 +501,7 @@ SnapTranslator.dict.fr = {
     'when I start as a clone':
         'Quand je commence comme clone',
     'create a clone of %cln':
-        'Clone %cln',
+        'créer un clone de %cln',
     'a new clone of %cln':
         'un nouveau clone de %cln',
     'myself':
@@ -497,14 +510,16 @@ SnapTranslator.dict.fr = {
         'supprime ce clone',
     'pause all %pause':
         'mettre en pause %pause',
-  'all but this script':
-    'tout sauf ce script',
-  'other scripts in sprite':
-    'les autres scripts de ce lutin',
-  'this script':
-    'ce script',
-  'this block':
-    'ce bloc',
+    'all but this script':
+        'tout sauf ce script',
+    'other scripts in sprite':
+        'les autres scripts de ce lutin',
+    'this script':
+        'ce script',
+    'this block':
+        'ce bloc',
+    'any message':
+        'message quelconque',
 
      // sensing:
     'touching %col ?':
@@ -543,13 +558,64 @@ SnapTranslator.dict.fr = {
         'turbo mode activ\u00E9 ?',
     'set turbo mode to %b':
         'turbo mode prend la valeur %b',
-
     'filtered for %clr':
         'filtr\u00E9 pour %clr',
     'stack size':
         'taille de la pile',
     'frames':
         'cadres',
+    '%rel to %dst':
+        '%rel à %dst',
+    'distance':
+        'distance',
+    '%asp at %loc' :
+        '%asp sous %loc',
+    'sprites' :
+        'lutins',
+
+    // attributes
+    'neighbors':
+        'voisins',
+    'self':
+        'moi-m\u00EAme',
+    'other sprites':
+        'autres lutins',
+    'parts':
+        'parts',
+    'anchor':
+        'ancre',
+    'parent':
+        'parent',
+    'children':
+        'enfants',
+    'clones':
+        'clones',
+    'other clones':
+        'autres clones',
+    'dangling?':
+        'pendiller?',
+    'draggable?':
+        'd\u00E9pla\u00E7able avec la souris?',
+    'rotation style':
+        'sens de rotation',
+    'rotation x':
+        'rotation x',
+    'rotation y':
+        'rotation y',
+    'center x':
+        'centre x',
+    'center y':
+        'centre y',
+    'name':
+        'nom',
+    'stage':
+        'scène',
+    'costumes':
+        'costumes',
+    'sounds':
+        'sons',
+    'scripts':
+        'scripts',
 
     // operators:
     '%n mod %n':
@@ -603,7 +669,7 @@ SnapTranslator.dict.fr = {
         'Supprimer une variable',
 
     'set %var to %s':
-        '%var prend la valeur %s',
+        'mettre %var à %s',
     'change %var by %n':
         'ajouter \u00E0 %var %n',
     'show variable %var':
@@ -1105,6 +1171,10 @@ SnapTranslator.dict.fr = {
         'bord',
     'pen trails':
         'traces de stylo',
+    'random position':
+        'position aléatoire',
+    'center':
+        'centre',
 
     // costumes
     'Turtle':
@@ -1137,6 +1207,8 @@ SnapTranslator.dict.fr = {
         'confetti',
 
     // keys
+    'any key':
+        'touche quelconque',
     'space':
         'espace',
     'up arrow':
