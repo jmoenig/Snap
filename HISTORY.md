@@ -53,6 +53,7 @@
 
 ### 2019-03-26
 * updated French translation
+* updated animation library with partial French translation
 
 ### 2019-03-25
 * GUI: fixed unintentional pen trails when manually cloning or duplicating a sprite whose pen is down
