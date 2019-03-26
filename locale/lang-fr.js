@@ -371,11 +371,11 @@ SnapTranslator.dict.fr = {
     'hide':
         'cacher',
     'go to %layer layer':
-        'envoyer au %layer plan',
+        'aller à l\u0027 %layer plan',
     'front':
-        'premier',
+        'avant',
     'back':
-        'dernier',
+        'arrière',
     'go back %n layers':
         'd\u00E9placer de %n plan arri\u00E8re',
 
