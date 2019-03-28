@@ -146,7 +146,7 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph*/
+CustomCommandBlockMorph, utils*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -7960,21 +7960,14 @@ InputSlotMorph.prototype.roleNames = function () {
 // InputSlotMorph
 InputSlotMorph.prototype.getURL = function (url) {
     try {
-        url = ensureFullUrl(url);
-        var request = new XMLHttpRequest();
-        request.open('GET', url, false);
-        request.send();
-        if (request.status === 200) {
-            return request.responseText;
-        }
-        throw new Error('unable to retrieve ' + url);
+        return utils.getUrlSync(url);
     } catch (err) {
         return '';
     }
 };
 
 InputSlotMorph.prototype.rpcNames = function () {
-    var rpcs = JSON.parse(this.getURL('/rpc')),
+    var rpcs = JSON.parse(utils.getUrlSyncCached('/rpc')),
         dict = {};
 
     for (var i = 0; i < rpcs.length; i++) {

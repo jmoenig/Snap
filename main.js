@@ -1,31 +1,6 @@
-/* globals SnapCloud, SERVER_URL, NetsBloxMorph, WorldMorph*/
+/* globals SnapCloud, SERVER_URL, NetsBloxMorph, WorldMorph, utils */
 
 var world;
-
-function requestPromise(request, data) {
-    // takes an xhr request
-    return new Promise((resolve, reject) => {
-        // stringifying undefined => undefined
-        if (data) {
-            request.setRequestHeader(
-                'Content-Type',
-                'application/json; charset=utf-8'
-            );
-        }
-        request.send(JSON.stringify(data));
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                if (request.status >= 200 && request.status < 300) {
-                    resolve(request);
-                } else {
-                    let err = new Error(request.statusText || 'Unsuccessful Xhr response');
-                    err.request = request;
-                    reject(err);
-                }
-            }
-        };
-    });
-}
 
 
 window.onload = function () {
@@ -46,7 +21,7 @@ window.onload = function () {
                 return_user: true,
                 silent: true
             };
-            return requestPromise(request, data)
+            return utils.requestPromise(request, data)
                 .then(function(res) {
                     if (!res.responseText) throw new Error('Access denied. You are not logged in.');
                     let user = JSON.parse(res.responseText);

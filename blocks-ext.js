@@ -1,6 +1,6 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil,
-   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world*/
+   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world, utils*/
 // Extensions to the Snap blocks
 
 
@@ -322,7 +322,7 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
     if (rpc) {
         // stores information on a specific service's rpcs
         try {
-            this.fieldsFor = JSON.parse(this.getURL('/rpc/' + rpc)).rpcs;
+            this.fieldsFor = JSON.parse(utils.getUrlSyncCached('/rpc/' + rpc)).rpcs;
         } catch (e) {
             throw new Error('Service "' + rpc + '" is not available');
         }
