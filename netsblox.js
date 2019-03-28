@@ -255,6 +255,9 @@ NetsBloxMorph.prototype.createControlBar = function () {
             return;
         }
 
+        // update the document title
+        document.title = headerName + suffix + ' - ' + myself.serializer.appName;
+
         this.label = new StringMorph(
             headerName + suffix,
             14,
