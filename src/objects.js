@@ -9072,7 +9072,10 @@ Microphone.prototype.createProcessor = function () {
 };
 
 Microphone.prototype.stepAudio = function (event) {
-    if (this.isAutoStop && ((Date.now() - this.lastTime) > 5000)) {
+    if (this.isAutoStop &&
+            ((Date.now() - this.lastTime) > 5000) &&
+            !this.modifier
+    ) {
         this.stop();
         return;
     }
