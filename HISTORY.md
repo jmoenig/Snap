@@ -10,6 +10,7 @@
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
     * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
+    * new experimental live audio-scripting support
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
@@ -50,6 +51,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-03-28
+* Blocks, Threaeds, Objects: new experimental live audio scripting support
 
 ### 2019-03-26
 * updated French translation

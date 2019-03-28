@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-March-18';
+modules.blocks = '2019-March-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -628,6 +628,10 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'rotation x' : ['rotation x'],
                 'rotation y' : ['rotation y']
             };
+            if (this.world().currentKey === 16) { // shift
+                dict.my['~'] = null;
+                dict.my['microphone modifier'] = ['microphone modifier'];
+            }
         }
         return dict;
     }
@@ -987,14 +991,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null, // text
                 false, // numeric?
-                {
-                    'volume' : ['volume'],
-                    'note' : ['note'],
-                    'frequency' : ['frequency'],
-                    'samples' : ['samples'],
-                    'spectrum' : ['spectrum'],
-                    'resolution' : ['resolution']
-                },
+                'audioMenu',
                 true // read-only
             );
             break;
@@ -8965,6 +8962,23 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function () {
 
 InputSlotMorph.prototype.directionDialMenu = function () {
     return {'§_dir': null};
+};
+
+InputSlotMorph.prototype.audioMenu = function () {
+    var dict = {
+        'volume' : ['volume'],
+        'note' : ['note'],
+        'frequency' : ['frequency'],
+        'samples' : ['samples'],
+        'spectrum' : ['spectrum'],
+        'resolution' : ['resolution']
+    };
+    if (this.world().currentKey === 16) { // shift
+        dict['~'] = null;
+        dict.modifier = ['modifier'];
+        dict.output = ['output'];
+    }
+    return dict;
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {

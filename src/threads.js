@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-18';
+modules.threads = '2019-March-28';
 
 var ThreadManager;
 var Process;
@@ -2257,6 +2257,9 @@ Process.prototype.reportAudio = function (choice) {
     if (selection === 'resolution') {
         return stage.microphone.binSize();
     }
+    if (selection === 'modifier') {
+        return stage.microphone.modifier;
+    }
     if (stage.microphone.isOn()) {
         switch (selection) {
         case 'volume':
@@ -2267,6 +2270,8 @@ Process.prototype.reportAudio = function (choice) {
             return stage.microphone.note;
         case 'samples':
             return new List(stage.microphone.signals);
+        case 'output':
+            return new List(stage.microphone.output);
         case 'spectrum':
             return new List(stage.microphone.frequencies);
         default:
@@ -2275,6 +2280,26 @@ Process.prototype.reportAudio = function (choice) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.setMicrophoneModifier = function (modifier) {
+    var stage = this.blockReceiver().parentThatIsA(StageMorph),
+        invalid = [
+            'sprite',
+            'stage',
+            'list',
+            'costume',
+            'sound',
+            'number',
+            'text',
+            'Boolean'
+        ];
+    if (!modifier || contains(invalid, this.reportTypeOf(modifier))) {
+        stage.microphone.modifier = null;
+        stage.microphone.stop();
+        return;
+    }
+    stage.microphone.modifier = modifier;
 };
 
 // Process user prompting primitives (interpolated)
@@ -3791,6 +3816,9 @@ Process.prototype.doSet = function (attribute, value) {
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'number');
         rcvr.setRotationY(value);
+        break;
+    case 'microphone modifier':
+        this.setMicrophoneModifier(value);
         break;
     default:
         throw new Error(

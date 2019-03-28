@@ -74,7 +74,7 @@ ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,
 TextMorph, contains, degrees, detect, newCanvas, nop, radians, Array,
-CursorMorph, Date, FrameMorph, HandMorph, Math, MenuMorph, Morph,
+CursorMorph, Date, FrameMorph, HandMorph, Math, MenuMorph, Morph, invoke,
 MorphicPreferences, Object, PenMorph, Point, Rectangle, ScrollFrameMorph,
 SliderMorph, String, StringMorph, TextMorph, contains, copy, degrees, detect,
 document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-15';
+modules.objects = '2019-March-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -8933,8 +8933,13 @@ function Microphone() {
     this.resolution = 2;
     this.GOOD_ENOUGH_CORRELATION = 0.96;
 
+    // modifier
+    this.modifier = null;
+    this.output = [];
+
     // memory alloc
-    this.correlations = []; //new Array(MAX_SAMPLES), // +++
+    this.correlations = [];
+    this.wrapper = new List([0]);
 
     // metered values:
     this.volume = 0;
@@ -9074,6 +9079,7 @@ Microphone.prototype.stepAudio = function (event) {
 
     // signals:
     this.signals = event.inputBuffer.getChannelData(0);
+    this.output = event.outputBuffer.getChannelData(0);
 
     // frequency bins:
     this.analyser.getByteFrequencyData(this.frequencies);
@@ -9122,6 +9128,12 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
             this.processor.lastClip = window.performance.now();
         }
         rms += val * val;
+
+        // apply modifier, if any
+        if (this.modifier) {
+            this.wrapper.contents[0] = val;
+            this.output[i] = invoke(this.modifier, this.wrapper);
+        }
     }
     rms = Math.sqrt(rms/SIZE);
     this.volume = Math.max(rms, this.volume * this.processor.averaging);
