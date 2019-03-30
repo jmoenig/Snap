@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-28';
+modules.objects = '2019-March-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -8935,15 +8935,16 @@ function Microphone() {
 
     // modifier
     this.modifier = null;
-    this.output = [];
 
     // memory alloc
     this.correlations = [];
     this.wrapper = new List([0]);
+    this.outChannels = [];
 
     // metered values:
     this.volume = 0;
     this.signals = [];
+    this.output = [];
     this.frequencies = [];
     this.pitch = -1;
 
@@ -9072,6 +9073,7 @@ Microphone.prototype.createProcessor = function () {
 };
 
 Microphone.prototype.stepAudio = function (event) {
+    var channels, i;
     if (this.isAutoStop &&
             ((Date.now() - this.lastTime) > 5000) &&
             !this.modifier
@@ -9082,7 +9084,20 @@ Microphone.prototype.stepAudio = function (event) {
 
     // signals:
     this.signals = event.inputBuffer.getChannelData(0);
-    this.output = event.outputBuffer.getChannelData(0);
+
+    // output:
+    if (this.modifier) {
+        channels = event.outputBuffer.numberOfChannels;
+        if (this.outChannels.length !== channels) {
+            this.outChannels = new Array(channels);
+        }
+        for (i = 0; i < channels; i += 1) {
+            this.outChannels[i] = event.outputBuffer.getChannelData(i);
+        }
+        this.output = this.outChannels[0];
+    } else {
+        this.output = event.outputBuffer.getChannelData(0);
+    }
 
     // frequency bins:
     this.analyser.getByteFrequencyData(this.frequencies);
@@ -9117,12 +9132,15 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
         rms = 0,
         foundGoodCorrelation = false,
         correlations = this.correlations,
+        channels = this.outChannels.length,
         correlation,
         lastCorrelation,
         offset,
         shift,
         i,
-        val;
+        k,
+        val,
+        modified;
 
     for (i = 0; i < SIZE; i += 1) {
         val = buf[i];
@@ -9135,7 +9153,10 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
         // apply modifier, if any
         if (this.modifier) {
             this.wrapper.contents[0] = val;
-            this.output[i] = invoke(this.modifier, this.wrapper);
+            modified = invoke(this.modifier, this.wrapper);
+            for (k = 0; k < channels; k += 1) {
+                this.outChannels[k][i] = modified;
+            }
         }
     }
     rms = Math.sqrt(rms/SIZE);

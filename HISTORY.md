@@ -52,6 +52,9 @@
     * German
     * French
 
+### 2019-03-30
+* Objects: support multi-channel live-audio scripting
+
 ### 2019-03-28
 * Blocks, Threaeds, Objects: new experimental live audio scripting support
 
