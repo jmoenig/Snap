@@ -67,40 +67,40 @@ the following tree lists all constructors hierarchically,
 indentation indicating inheritance. Refer to this list to get a
 contextual overview:
 
-    Animation
-    Color
-    Node
-        Morph
-            BlinkerMorph
-                CursorMorph
-            BouncerMorph*
-            BoxMorph
-                InspectorMorph
-                MenuMorph
-                MouseSensorMorph*
-                SpeechBubbleMorph
-            CircleBoxMorph
-                SliderButtonMorph
-                SliderMorph
-            ColorPaletteMorph
-                GrayPaletteMorph
-            ColorPickerMorph
-            DialMorph
-            FrameMorph
-                ScrollFrameMorph
-                    ListMorph
-                StringFieldMorph
-                WorldMorph
-            HandleMorph
-            HandMorph
-            PenMorph
-            ShadowMorph
-            StringMorph
-            TextMorph
-            TriggerMorph
-                MenuItemMorph
-    Point
-    Rectangle
+ - Animation
+ - Color
+ - Node
+   - Morph
+     - BlinkerMorph
+       - CursorMorph
+     - BouncerMorph*
+     - BoxMorph
+       - InspectorMorph
+       - MenuMorph
+       - MouseSensorMorph*
+       - SpeechBubbleMorph
+     - CircleBoxMorph
+       - SliderButtonMorph
+       - SliderMorph
+     - ColorPaletteMorph
+       - GrayPaletteMorph
+     - ColorPickerMorph
+     - DialMorph
+     - FrameMorph
+       - ScrollFrameMorph
+         - ListMorph
+       - StringFieldMorph
+       - WorldMorph
+     - HandleMorph
+     - HandMorph
+     - PenMorph
+     - ShadowMorph
+     - StringMorph
+     - TextMorph
+     - TriggerMorph
+       - MenuItemMorph
+ - Point
+ - Rectangle
 
 
 object definition to
@@ -748,11 +748,11 @@ original one received by the World.
 Once the user has completed the edit, the following events are
 dispatched:
 
-    accept() - <enter> was pressed on a single line of text
-    cancel() - <esc> was pressed on any text element
+ - accept() - \<enter> was pressed on a single line of text
+ - cancel() - \<esc> was pressed on any text element
 
 Note that "accept" only gets triggered by single-line texte elements,
-as the <enter> key is used to insert line breaks in multi-line
+as the \<enter> key is used to insert line breaks in multi-line
 elements. Therefore, whenever a text edit is terminated by the user
 (accepted, cancelled or otherwise),
 
@@ -831,14 +831,14 @@ the morph's
 property.
 
 Use the following template for a start:
-
-    MyMorph.prototype.drawNew = function() {
-        var context;
-        this.image = newCanvas(this.extent());
-        context = this.image.getContext('2d');
-        // use context to paint stuff here
-    };
-
+```js
+MyMorph.prototype.drawNew = function() {
+    var context;
+    this.image = newCanvas(this.extent());
+    context = this.image.getContext('2d');
+    // use context to paint stuff here
+};
+```
 If your new morph stores or references to other morphs outside of
 the submorph tree in other properties, be sure to also override the
 default
@@ -911,18 +911,18 @@ trails (and doesn't loose these on redraw).
 the following properties of PenMorph are relevant for turtle
 graphics:
 
-    color        - a Color
-    size        - line width of pen trails
-    heading        - degrees
-    isDown        - drawing state
+ - color        - a Color
+ - size        - line width of pen trails
+ - heading        - degrees
+ - isDown        - drawing state
 
 the following commands can be used to actually draw something:
 
-    up()        - lift the pen up, further movements leave no trails
-    down()        - set down, further movements leave trails
-    clear()        - remove all trails from the current parent
-    forward(n)    - move n steps in the current direction (heading)
-    turn(n)        - turn right n degrees
+ - up()        - lift the pen up, further movements leave no trails
+ - down()        - set down, further movements leave trails
+ - clear()        - remove all trails from the current parent
+ - forward(n)    - move n steps in the current direction (heading)
+ - turn(n)        - turn right n degrees
 
 Turtle graphics can best be explored interactively by creating a
 new PenMorph object and by manipulating it with the inspector
@@ -938,11 +938,11 @@ of recursion that's displayable by wrapping WARP around your
 recursive function call:
 
 example:
-
-    myPen.warp(function () {
-        myPen.tree(12, 120, 20);
-    })
-
+```js
+myPen.warp(function () {
+    myPen.tree(12, 120, 20);
+})
+```
 will be much faster than just invoking the tree function, because it
 prevents the parent's parent from keeping track of every single line
 segment and instead redraws the outcome in a single pass.
@@ -989,8 +989,8 @@ methods of SyntaxElementMorph in the Snap application.
 By default retina support gets installed when Morphic.js loads. There
 are two global functions that let you test for retina availability:
 
-    isRetinaSupported() - Bool, answers if retina support is available
-    isRetinaEnabled()   - Bool, answers if currently in retina mode
+ - isRetinaSupported() - Bool, answers if retina support is available
+ - isRetinaEnabled()   - Bool, answers if currently in retina mode
 
 and two more functions that let you control retina support if it is
 available:
@@ -1114,4 +1114,4 @@ Jason N (@cyderize) contributed native copy & paste for text editing.
 Bartosz Leper contributed retina display support.
 Brian Harvey contributed to the design and implementation of submenus.
 
-- Jens Mönig
+Jens Mönig
