@@ -8921,6 +8921,11 @@ Note.prototype.stop = function () {
 // mostly meant to be a singleton of the stage
 // I stop when I'm not queried something for 5 seconds
 // to free up system resources
+//
+// modifying and metering output is currently experimental
+// and only fully works in Chrome. Modifiers work in Firefox, but only with
+// a significant lag, metering output is currently not supported by Firefox.
+// Safari... well, let's not talk about Safari :-)
 
 function Microphone() {
     // web audio components:
@@ -8935,6 +8940,8 @@ function Microphone() {
 
     // modifier
     this.modifier = null;
+    this.compiledModifier = null;
+    this.compilerProcess = null;
 
     // memory alloc
     this.correlations = [];
@@ -9034,6 +9041,8 @@ Microphone.prototype.stop = function () {
     this.isStarted = false;
 };
 
+// Microphone initialization
+
 Microphone.prototype.setupNodes = function (stream) {
     this.sourceStream = stream;
     this.createProcessor();
@@ -9071,6 +9080,8 @@ Microphone.prototype.createProcessor = function () {
     this.processor.averaging = 0.95;
     this.processor.clipLag = 750;
 };
+
+// Microphone stepping
 
 Microphone.prototype.stepAudio = function (event) {
     var channels, i;
@@ -9153,7 +9164,15 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
         // apply modifier, if any
         if (this.modifier) {
             this.wrapper.contents[0] = val;
-            modified = invoke(this.modifier, this.wrapper);
+            modified = invoke(
+                this.compiledModifier,
+                this.wrapper,
+                null,
+                null,
+                null,
+                null,
+                this.compilerProcess
+            );
             for (k = 0; k < channels; k += 1) {
                 this.outChannels[k][i] = modified;
             }

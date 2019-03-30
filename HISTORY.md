@@ -54,6 +54,7 @@
 
 ### 2019-03-30
 * Objects: support multi-channel live-audio scripting
+* Threads, Objects: added JIT-compilation to live-audio scripting
 
 ### 2019-03-28
 * Blocks, Threaeds, Objects: new experimental live audio scripting support

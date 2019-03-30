@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-28';
+modules.threads = '2019-March-30';
 
 var ThreadManager;
 var Process;
@@ -2300,6 +2300,8 @@ Process.prototype.setMicrophoneModifier = function (modifier) {
         return;
     }
     stage.microphone.modifier = modifier;
+    stage.microphone.compiledModifier = this.reportCompiled(modifier, 1);
+    stage.microphone.compilerProcess = this;
 };
 
 // Process user prompting primitives (interpolated)
