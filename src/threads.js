@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-March-30';
+modules.threads = '2019-March-31';
 
 var ThreadManager;
 var Process;
@@ -3615,7 +3615,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
 };
 
 Process.prototype.reportGet = function (query) {
-    // experimental, answer a reference to a first-class member
+    // answer a reference to a first-class member
     // or a list of first-class members
     var thisObj = this.blockReceiver(),
         neighborhood,
@@ -3688,6 +3688,10 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
+        case 'stage width':
+            return StageMorph.prototype.dimensions.x;
+        case 'stage height':
+            return StageMorph.prototype.dimensions.y;
         case 'costumes':
             return thisObj.reportCostumes();
         case 'sounds':

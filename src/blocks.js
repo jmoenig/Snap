@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-March-28';
+modules.blocks = '2019-March-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8789,6 +8789,8 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         dict.anchor = ['anchor'];
     }
     dict.stage = ['stage'];
+    dict['stage width'] = ['stage width'];
+    dict['stage height'] = ['stage height'];
     if (StageMorph.prototype.enableInheritance) {
         dict.children = ['children'];
         dict.parent = ['parent'];

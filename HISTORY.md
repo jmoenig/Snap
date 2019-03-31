@@ -16,6 +16,7 @@
     * selectors for changing and querying "draggable" and "rotation style" settings
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
+    * added "stage width" and "stage height" as gettable selectors of the MY primitive
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
@@ -51,6 +52,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-03-31
+* Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
 
 ### 2019-03-30
 * Objects: support multi-channel live-audio scripting
