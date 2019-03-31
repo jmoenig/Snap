@@ -55,6 +55,7 @@
 
 ### 2019-03-31
 * Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
+* updated German translation
 
 ### 2019-03-30
 * Objects: support multi-channel live-audio scripting
