@@ -1407,7 +1407,6 @@ function SpriteMorph(globals) {
 
 SpriteMorph.prototype.init = function (globals) {
     this.name = localize('Sprite');
-    this.instrument = null;
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph();
     this.customBlocks = [];
@@ -1419,6 +1418,13 @@ SpriteMorph.prototype.init = function (globals) {
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
+    this.instrument = null;
+
+    // volume support, experimental: // +++
+    // tweak for fullcopy and clone
+    this.volume = 100;
+    this.gainNode = null; // must be lazily initialized in Chrome, sigh...
+
     this.version = Date.now(); // for observer optimization
     this.isTemporary = false; // indicate a temporary Scratch-style clone
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
@@ -1485,6 +1491,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.instances = [];
     c.stopTalking();
     c.color = this.color.copy();
+    c.gainNode = null; // +++
     c.blocksCache = {};
     c.paletteCache = {};
     c.cachedHSV = c.color.hsv();
@@ -3247,6 +3254,27 @@ SpriteMorph.prototype.playSound = function (name) {
 
 SpriteMorph.prototype.reportSounds = function () {
     return this.sounds;
+};
+
+// experimental volume ops: +++
+
+SpriteMorph.prototype.setVolume = function (num) {
+    this.volume = Math.max(Math.min(+num, 100), 0);
+    this.getGainNode().gain.setValueAtTime(
+        this.volume / 100,
+        this.audioContext().currentTime
+    );
+};
+
+SpriteMorph.prototype.getGainNode = function () {
+    if (!this.gainNode) {
+        this.gainNode = this.audioContext().createGain();
+    }
+    return this.gainNode;
+};
+
+SpriteMorph.prototype.audioContext = function () {
+    return Note.prototype.getAudioContext();
 };
 
 // SpriteMorph user menu
@@ -8898,7 +8926,7 @@ Note.prototype.getAudioContext = function () {
 
 // Note playing
 
-Note.prototype.play = function (type) {
+Note.prototype.play = function (type, gainNode) {
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -8914,11 +8942,12 @@ Note.prototype.play = function (type) {
     ][(type || 1) - 1];
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
-    this.oscillator.connect(this.audioContext.destination);
-/*
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.audioContext.destination);
-*/
+
+// +++    this.oscillator.connect(this.audioContext.destination);
+///*
+    this.oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+//*/
     this.oscillator.start(0);
 };
 

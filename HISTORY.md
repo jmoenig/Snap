@@ -57,6 +57,7 @@
 * Objects: let the Microphone share the Note prototype's AudioContext
 * Objects: took out gain node from Note oscillator (will be used for "volume" setting)
 * Objects: refactored audio context sharing and lazy initialization
+* Objects, Threads: added volume support for notes (under construction)
 
 ### 2019-03-31
 * Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
