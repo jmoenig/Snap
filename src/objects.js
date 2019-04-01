@@ -8886,6 +8886,16 @@ Note.prototype.setupContext = function () {
     */
 };
 
+Note.prototype.getAudioContext = function () {
+    // lazily initializes and shares the Note prototype's audio context
+    // to be used by all other Snap! objects requiring audio,
+    // e.g. the microphone, the sprites, etc.
+    if (!this.audioContext) {
+        this.setupContext();
+    }
+    return this.audioContext;
+};
+
 // Note playing
 
 Note.prototype.play = function (type) {
@@ -9002,17 +9012,10 @@ Microphone.prototype.setResolution = function (num) {
 Microphone.prototype.start = function () {
     var myself = this;
 
-    if (this.isStarted) {
-        return;
-    }
+    if (this.isStarted) {return; }
     this.isStarted = true;
-
     this.isReady = false;
-    // share Note's audioContext:
-    if (!Note.prototype.audioContext) {
-        Note.prototype.setupContext();
-    }
-    this.audioContext = Note.prototype.audioContext;
+    this.audioContext = Note.prototype.getAudioContext();
 
     navigator.mediaDevices.getUserMedia(
         {
