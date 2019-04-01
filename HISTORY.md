@@ -53,6 +53,9 @@
     * German
     * French
 
+### 2019-04-01
+* Objects: let the Microphone share the Note prototype's AudioContext
+
 ### 2019-03-31
 * Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
 * updated German translation

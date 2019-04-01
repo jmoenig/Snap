@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-March-30';
+modules.objects = '2019-April-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -8929,7 +8929,7 @@ Note.prototype.stop = function () {
 
 function Microphone() {
     // web audio components:
-    this.audioContext = null;
+    this.audioContext = null; // shared with Note.prototype.audioContext
     this.sourceStream = null;
     this.processor = null;
     this.analyser = null;
@@ -8995,8 +8995,7 @@ Microphone.prototype.setResolution = function (num) {
 // Microphone ops
 
 Microphone.prototype.start = function () {
-    var AudioContext = window.AudioContext || window.webkitAudioContext,
-        myself = this;
+    var myself = this;
 
     if (this.isStarted) {
         return;
@@ -9004,10 +9003,11 @@ Microphone.prototype.start = function () {
     this.isStarted = true;
 
     this.isReady = false;
-    if (this.audioContext) {
-        this.audioContext.close();
+    // share Note's audioContext:
+    if (!Note.prototype.audioContext) {
+        Note.prototype.setupContext();
     }
-    this.audioContext =  new AudioContext();
+    this.audioContext = Note.prototype.audioContext;
 
     navigator.mediaDevices.getUserMedia(
         {
@@ -9033,7 +9033,6 @@ Microphone.prototype.stop = function () {
     );
     this.processor.disconnect();
     this.analyser.disconnect();
-    this.audioContext.close();
     this.processor = null;
     this.analyser = null;
     this.audioContext = null;
