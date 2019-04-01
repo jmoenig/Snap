@@ -8858,7 +8858,7 @@ function Note(pitch) {
 // Note shared properties
 
 Note.prototype.audioContext = null;
-Note.prototype.gainNode = null;
+// Note.prototype.gainNode = null;
 
 // Note audio context
 
@@ -8880,8 +8880,10 @@ Note.prototype.setupContext = function () {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
+    /*
     Note.prototype.gainNode = Note.prototype.audioContext.createGain();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
+    */
 };
 
 // Note playing
@@ -8902,8 +8904,11 @@ Note.prototype.play = function (type) {
     ][(type || 1) - 1];
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
+    this.oscillator.connect(this.audioContext.destination);
+/*
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
+*/
     this.oscillator.start(0);
 };
 
