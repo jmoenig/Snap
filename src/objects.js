@@ -6462,6 +6462,10 @@ StageMorph.prototype.init = function (globals) {
     this.tempo = 60; // bpm
     this.lastMessage = '';
 
+    // volume support, experimental:
+    this.volume = 100;
+    this.gainNode = null; // must be lazily initialized in Chrome, sigh...
+
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
 
@@ -7890,6 +7894,17 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
 
 StageMorph.prototype.reportSounds
     = SpriteMorph.prototype.reportSounds;
+
+// StageMorph volume
+
+StageMorph.prototype.setVolume
+    = SpriteMorph.prototype.setVolume;
+
+StageMorph.prototype.getGainNode
+    = SpriteMorph.prototype.getGainNode;
+
+StageMorph.prototype.audioContext
+    = SpriteMorph.prototype.audioContext;
 
 // StageMorph non-variable watchers
 

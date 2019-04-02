@@ -56,6 +56,7 @@
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property
 * Objects: use AudioContext to play recorded sounds
+* Objects: new audio scheme support for the stage
 
 ### 2019-04-01
 * Objects: let the Microphone share the Note prototype's AudioContext
