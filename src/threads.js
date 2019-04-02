@@ -4094,12 +4094,13 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
     var rcvr = this.blockReceiver();
     if (!this.context.startTime) {
-        rcvr.setVolume(rvr.volume); // b/c Chrome needs lazy initialization
+        rcvr.setVolume(rcvr.volume); // b/c Chrome needs lazy initialization
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
         this.context.activeNote.play(
             this.instrument,
-            rcvr.getGainNode()
+            rcvr.getGainNode(),
+            rcvr.getPanNode()
         );
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {

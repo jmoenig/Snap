@@ -1492,6 +1492,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.stopTalking();
     c.color = this.color.copy();
     c.gainNode = null;
+    c.panNode = null;
     c.blocksCache = {};
     c.paletteCache = {};
     c.cachedHSV = c.color.hsv();
@@ -8977,7 +8978,7 @@ Note.prototype.getAudioContext = function () {
 
 // Note playing
 
-Note.prototype.play = function (type, gainNode) {
+Note.prototype.play = function (type, gainNode, panNode) {
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -8994,7 +8995,8 @@ Note.prototype.play = function (type, gainNode) {
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
     this.oscillator.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
+    gainNode.connect(panNode);
+    panNode.connect(this.audioContext.destination);
     this.oscillator.start(0);
 };
 

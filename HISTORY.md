@@ -58,6 +58,7 @@
 * Objects: use AudioContext to play recorded sounds
 * Objects: new audio scheme support for the stage
 * Objects: added basic stereo-panning support for sounds (under construction)
+* Objects, Threads: added basic stereo-panning support for notes
 
 ### 2019-04-01
 * Objects: let the Microphone share the Note prototype's AudioContext
