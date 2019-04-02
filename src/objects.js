@@ -3237,16 +3237,25 @@ SpriteMorph.prototype.playSound = function (name) {
             this.sounds.asArray(),
             function (s) {return s.name === name.toString(); }
         ),
-        active;
+        ctx = this.audioContext(),
+        gain =  this.getGainNode(),
+        aud,
+        source;
     if (sound) {
-        active = sound.play();
+        aud = document.createElement('audio');
+        aud.src = sound.audio.src;
+        source = ctx.createMediaElementSource(aud);
+        source.connect(gain);
+        gain.connect(ctx.destination); // perhaps redundant
+        this.setVolume(this.volume); // probably redundant as well
+        aud.play();
         if (stage) {
-            stage.activeSounds.push(active);
-            stage.activeSounds = stage.activeSounds.filter(function (aud) {
-                return !aud.ended && !aud.terminated;
+            stage.activeSounds.push(aud);
+            stage.activeSounds = stage.activeSounds.filter(function (snd) {
+                return !snd.ended && !snd.terminated;
             });
         }
-        return active;
+        return aud;
     }
 };
 
@@ -8848,6 +8857,8 @@ function Sound(audio, name) {
 Sound.prototype.play = function () {
     // return an instance of an audio element which can be terminated
     // externally (i.e. by the stage)
+    // Note: only to be used by the GUI, not by scripts,
+    // because no effects like volume or panning are applied
     var aud = document.createElement('audio');
     aud.src = this.audio.src;
     aud.play();
