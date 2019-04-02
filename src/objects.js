@@ -3274,7 +3274,7 @@ SpriteMorph.prototype.reportSounds = function () {
 SpriteMorph.prototype.setVolume = function (num) {
     this.volume = Math.max(Math.min(+num, 100), 0);
     this.getGainNode().gain.setValueAtTime(
-        this.volume / 100,
+        1 / Math.pow(10, Math.log2(100 / this.volume)),
         this.audioContext().currentTime
     );
 };
