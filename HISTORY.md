@@ -53,6 +53,9 @@
     * German
     * French
 
+### 2019-04-02
+* Objects, Threads: lazily initialize volume property
+
 ### 2019-04-01
 * Objects: let the Microphone share the Note prototype's AudioContext
 * Objects: took out gain node from Note oscillator (will be used for "volume" setting)

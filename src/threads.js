@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-April-01';
+modules.threads = '2019-April-02';
 
 var ThreadManager;
 var Process;
@@ -4092,12 +4092,14 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
+    var rcvr = this.blockReceiver();
     if (!this.context.startTime) {
+        rcvr.setVolume(rvr.volume); // b/c Chrome needs lazy initialization
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
         this.context.activeNote.play(
             this.instrument,
-            this.blockReceiver().getGainNode()  // +++
+            rcvr.getGainNode()
         );
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {

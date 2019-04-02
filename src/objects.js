@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-01';
+modules.objects = '2019-April-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1419,16 +1419,14 @@ SpriteMorph.prototype.init = function (globals) {
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
     this.instrument = null;
-
-    // volume support, experimental: // +++
-    // tweak for fullcopy and clone
-    this.volume = 100;
-    this.gainNode = null; // must be lazily initialized in Chrome, sigh...
-
     this.version = Date.now(); // for observer optimization
     this.isTemporary = false; // indicate a temporary Scratch-style clone
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
+
+    // volume support, experimental:
+    this.volume = 100;
+    this.gainNode = null; // must be lazily initialized in Chrome, sigh...
 
     // pen hsv color support
     this.cachedHSV = [0, 0, 0]; // not serialized
@@ -1491,7 +1489,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.instances = [];
     c.stopTalking();
     c.color = this.color.copy();
-    c.gainNode = null; // +++
+    c.gainNode = null;
     c.blocksCache = {};
     c.paletteCache = {};
     c.cachedHSV = c.color.hsv();
@@ -3256,7 +3254,7 @@ SpriteMorph.prototype.reportSounds = function () {
     return this.sounds;
 };
 
-// experimental volume ops: +++
+// SpriteMorph volume
 
 SpriteMorph.prototype.setVolume = function (num) {
     this.volume = Math.max(Math.min(+num, 100), 0);
@@ -8942,12 +8940,8 @@ Note.prototype.play = function (type, gainNode) {
     ][(type || 1) - 1];
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
-
-// +++    this.oscillator.connect(this.audioContext.destination);
-///*
     this.oscillator.connect(gainNode);
     gainNode.connect(this.audioContext.destination);
-//*/
     this.oscillator.start(0);
 };
 
