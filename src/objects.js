@@ -1424,9 +1424,11 @@ SpriteMorph.prototype.init = function (globals) {
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
 
-    // volume support, experimental:
+    // volume and stereo-pan support, experimental:
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
+    this.pan = 0;
+    this.panNode = null; // must be lazily initialized in Chrome, sigh...
 
     // pen hsv color support
     this.cachedHSV = [0, 0, 0]; // not serialized
@@ -3239,6 +3241,7 @@ SpriteMorph.prototype.playSound = function (name) {
         ),
         ctx = this.audioContext(),
         gain =  this.getGainNode(),
+        pan = this.getPanNode(),
         aud,
         source;
     if (sound) {
@@ -3246,8 +3249,10 @@ SpriteMorph.prototype.playSound = function (name) {
         aud.src = sound.audio.src;
         source = ctx.createMediaElementSource(aud);
         source.connect(gain);
-        gain.connect(ctx.destination); // perhaps redundant
+        gain.connect(pan);
+        pan.connect(ctx.destination); // perhaps redundant
         this.setVolume(this.volume); // probably redundant as well
+        this.setPan(this.pan); // yep, should be redundant, but still...
         aud.play();
         if (stage) {
             stage.activeSounds.push(aud);
@@ -3282,6 +3287,23 @@ SpriteMorph.prototype.getGainNode = function () {
 
 SpriteMorph.prototype.audioContext = function () {
     return Note.prototype.getAudioContext();
+};
+
+// SpriteMorph stero panning
+
+SpriteMorph.prototype.setPan = function (num) {
+    this.pan = Math.max(Math.min(+num, 100), -100);
+    this.getPanNode().pan.setValueAtTime(
+        this.pan / 100,
+        this.audioContext().currentTime
+    );
+};
+
+SpriteMorph.prototype.getPanNode = function () {
+    if (!this.panNode) {
+        this.panNode = this.audioContext().createStereoPanner();
+    }
+    return this.panNode;
 };
 
 // SpriteMorph user menu
@@ -6462,9 +6484,11 @@ StageMorph.prototype.init = function (globals) {
     this.tempo = 60; // bpm
     this.lastMessage = '';
 
-    // volume support, experimental:
+    // volume and stereo-pan support, experimental:
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
+    this.pan = 0;
+    this.panNode = null; // must be lazily initialized in Chrome, sigh...
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -7906,6 +7930,14 @@ StageMorph.prototype.getGainNode
 StageMorph.prototype.audioContext
     = SpriteMorph.prototype.audioContext;
 
+// StageMorph stereo panning
+
+StageMorph.prototype.setPan
+    = SpriteMorph.prototype.setPan;
+
+StageMorph.prototype.getPanNode
+    = SpriteMorph.prototype.getPanNode;
+
 // StageMorph non-variable watchers
 
 StageMorph.prototype.toggleWatcher
@@ -8910,7 +8942,6 @@ function Note(pitch) {
 // Note shared properties
 
 Note.prototype.audioContext = null;
-// Note.prototype.gainNode = null;
 
 // Note audio context
 
@@ -8932,10 +8963,6 @@ Note.prototype.setupContext = function () {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    /*
-    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
-    */
 };
 
 Note.prototype.getAudioContext = function () {
