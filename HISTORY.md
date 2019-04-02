@@ -15,6 +15,7 @@
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * added "neg" selector to monadic function reporter in "Operators" category
+    * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
     * added "stage width" and "stage height" as gettable selectors of the MY primitive
     * special context-aware drop-downs for custom blocks
@@ -59,6 +60,8 @@
 * Objects: new audio scheme support for the stage
 * Objects: added basic stereo-panning support for sounds (under construction)
 * Objects, Threads: added basic stereo-panning support for notes
+* Objects: map volume to a logarithmic gain scale
+* Blocks, Threads: added "log2" function selector to monadic reporter, tweaked "log"
 
 ### 2019-04-01
 * Objects: let the Microphone share the Note prototype's AudioContext
