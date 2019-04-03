@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-03-31', // this, too, will appear in the Translators tab
+        '2019-04-03', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -402,6 +402,16 @@ SnapTranslator.dict.de = {
         'setze Tempo auf %n Schl\u00e4ge/Min.',
     'tempo':
         'Tempo',
+    'change volume by %n':
+        'ändere Lautstärke um %n',
+    'set volume to %n %':
+        'setze Lautstärke auf %n %',
+    'change pan left/right by %n':
+        'ändere Balance um %n',
+    'set pan left/right to %n':
+        'setze Balance auf %n',
+    'pan left/right':
+        'Balance',
     'play %n hz for %n secs':
         'spiele %n hz f\u00fcr %n Sek.',
 
