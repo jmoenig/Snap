@@ -15,6 +15,7 @@
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
     * new sound + music "volume" feature + blocks
+    * new sound + music stereo "panning" feature + blocks
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -59,6 +60,7 @@
 * Objects: Threads: Safari compatibility tweaks (only use StereoPanner if available)
 * Objects. Store: new feature: volume blocks
 * Objects: added relabelling information for the new volume blocks
+* Objects, Store: new feature: audio stereo-panning blocks
 
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property

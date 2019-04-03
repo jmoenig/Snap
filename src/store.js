@@ -266,6 +266,7 @@ SnapSerializer.prototype.watcherLabels = {
     getScale: 'size',
     getTempo: 'tempo',
     getVolume: 'volume',
+    getPan: 'pan left/right',
     getLastAnswer: 'answer',
     getLastMessage: 'message',
     getTimer: 'timer',
@@ -397,6 +398,9 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.volume) {
         project.stage.volume = +model.stage.attributes.volume;
+    }
+    if (model.stage.attributes.pan) {
+        project.stage.pan = +model.stage.attributes.pan;
     }
 
     model.pentrails = model.stage.childNamed('pentrails');
@@ -688,6 +692,9 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.volume) {
             sprite.volume = +model.attributes.volume;
+        }
+        if (model.attributes.pan) {
+            sprite.pan = +model.attributes.pan;
         }
         project.stage.add(sprite);
         ide.sprites.add(sprite);
@@ -1413,6 +1420,9 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         if (model.attributes.volume) {
             v.volume = +model.attributes.volume;
         }
+        if (model.attributes.pan) {
+            v.pan = +model.attributes.pan;
+        }
         myself.project.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
@@ -1691,6 +1701,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             '%' +
             'volume="@" ' +
+            'pan="@" ' +
             'lines="@" ' +
             'ternary="@" ' +
             'codify="@" ' +
@@ -1728,6 +1739,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.volume,
+        this.pan,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
@@ -1766,6 +1778,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' heading="@"' +
             ' scale="@"' +
             ' volume="@"' +
+            ' pan="@"' +
             ' rotation="@"' +
             '%' +
             ' draggable="@"' +
@@ -1787,6 +1800,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.heading,
         this.scale,
         this.volume,
+        this.pan,
         this.rotationStyle,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',

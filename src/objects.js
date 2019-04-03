@@ -496,6 +496,23 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'volume'
         },
+        changePan: {
+            type: 'command',
+            category: 'sound',
+            spec: 'change pan left/right by %n',
+            defaults: [10]
+        },
+        setPan: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set pan left/right to %n',
+            defaults: [0]
+        },
+        getPan: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'pan left/right'
+        },
 
         // Sound - Debugging primitives for development mode
         reportSounds: {
@@ -2005,6 +2022,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setVolume'));
         blocks.push(watcherToggle('getVolume'));
         blocks.push(block('getVolume'));
+        blocks.push('-');
+        blocks.push(block('changePan'));
+        blocks.push(block('setPan'));
+        blocks.push(watcherToggle('getPan'));
+        blocks.push(block('getPan'));
 
     // for debugging: ///////////////
 
@@ -3333,11 +3355,19 @@ SpriteMorph.prototype.audioContext = function () {
 SpriteMorph.prototype.setPan = function (num) {
     var panner = this.getPannerNode();
     if (!panner) {return; }
-    this.pan = Math.max(Math.min(+num, 100), -100);
+    this.pan = Math.max(Math.min((+num || 0), 100), -100);
     panner.pan.setValueAtTime(
         this.pan / 100,
         this.audioContext().currentTime
     );
+};
+
+SpriteMorph.prototype.changePan = function (delta) {
+    this.setPan(this.pan + (+delta || 0));
+};
+
+SpriteMorph.prototype.getPan = function () {
+    return this.pan;
 };
 
 SpriteMorph.prototype.getPannerNode = function () {
@@ -7362,6 +7392,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setVolume'));
         blocks.push(watcherToggle('getVolume'));
         blocks.push(block('getVolume'));
+        blocks.push('-');
+        blocks.push(block('changePan'));
+        blocks.push(block('setPan'));
+        blocks.push(watcherToggle('getPan'));
+        blocks.push(block('getPan'));
 
     // for debugging: ///////////////
 
@@ -7990,6 +8025,12 @@ StageMorph.prototype.audioContext
 
 StageMorph.prototype.setPan
     = SpriteMorph.prototype.setPan;
+
+StageMorph.prototype.changePan
+    = SpriteMorph.prototype.changePan;
+
+StageMorph.prototype.getPan
+    = SpriteMorph.prototype.getPan;
 
 StageMorph.prototype.getPannerNode
     = SpriteMorph.prototype.getPannerNode;
