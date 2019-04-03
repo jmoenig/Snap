@@ -63,6 +63,7 @@
 * Objects, Store: new feature: audio stereo-panning blocks
 * Objects: added relabelling information for the new stereo-panning blocks
 * German translation update for volume and panning blocks
+* updated AudioComp library for the new volume and stereo-panning features
 
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property
