@@ -1359,6 +1359,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doPlaySoundUntilDone: ['playSound'],
     doChangeTempo: ['doSetTempo'],
     doSetTempo: ['doChangeTempo'],
+    setVolume: ['changeVolume'],
+    changeVolume: ['setVolume'],
+    getVolume: ['getTempo'],
+    getTempo: ['getVolume'],
 
     // pen:
     clear: ['down', 'up', 'doStamp'],

@@ -58,6 +58,7 @@
 ### 2019-04-03
 * Objects: Threads: Safari compatibility tweaks (only use StereoPanner if available)
 * Objects. Store: new feature: volume blocks
+* Objects: added relabelling information for the new volume blocks
 
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property
