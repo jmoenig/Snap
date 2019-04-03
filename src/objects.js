@@ -479,6 +479,23 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'tempo'
         },
+        changeVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'change volume by %n',
+            defaults: [10]
+        },
+        setVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set volume to %n %',
+            defaults: [100]
+        },
+        getVolume: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'volume'
+        },
 
         // Sound - Debugging primitives for development mode
         reportSounds: {
@@ -1979,6 +1996,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        blocks.push(block('changeVolume'));
+        blocks.push(block('setVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
 
     // for debugging: ///////////////
 
@@ -3276,11 +3298,19 @@ SpriteMorph.prototype.reportSounds = function () {
 // SpriteMorph volume
 
 SpriteMorph.prototype.setVolume = function (num) {
-    this.volume = Math.max(Math.min(+num, 100), 0);
+    this.volume = Math.max(Math.min(+num || 0, 100), 0);
     this.getGainNode().gain.setValueAtTime(
         1 / Math.pow(10, Math.log2(100 / this.volume)),
         this.audioContext().currentTime
     );
+};
+
+SpriteMorph.prototype.changeVolume = function (delta) {
+    this.setVolume(this.volume + (+delta || 0));
+};
+
+SpriteMorph.prototype.getVolume = function () {
+    return this.volume;
 };
 
 SpriteMorph.prototype.getGainNode = function () {
@@ -7323,6 +7353,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+        blocks.push('-');
+        blocks.push(block('changeVolume'));
+        blocks.push(block('setVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
 
     // for debugging: ///////////////
 
@@ -7934,6 +7969,12 @@ StageMorph.prototype.reportSounds
 
 StageMorph.prototype.setVolume
     = SpriteMorph.prototype.setVolume;
+
+StageMorph.prototype.changeVolume
+    = SpriteMorph.prototype.changeVolume;
+
+StageMorph.prototype.getVolume
+    = SpriteMorph.prototype.getVolume;
 
 StageMorph.prototype.getGainNode
     = SpriteMorph.prototype.getGainNode;

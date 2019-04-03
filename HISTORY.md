@@ -14,6 +14,7 @@
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
+    * new sound + music "volume" feature + blocks
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -56,6 +57,7 @@
 
 ### 2019-04-03
 * Objects: Threads: Safari compatibility tweaks (only use StereoPanner if available)
+* Objects. Store: new feature: volume blocks
 
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property
