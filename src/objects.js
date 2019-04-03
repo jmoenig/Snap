@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-02';
+modules.objects = '2019-April-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -1428,7 +1428,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
     this.pan = 0;
-    this.panNode = null; // must be lazily initialized in Chrome, sigh...
+    this.pannerNode = null; // must be lazily initialized in Chrome, sigh...
 
     // pen hsv color support
     this.cachedHSV = [0, 0, 0]; // not serialized
@@ -1492,7 +1492,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.stopTalking();
     c.color = this.color.copy();
     c.gainNode = null;
-    c.panNode = null;
+    c.pannerNode = null;
     c.blocksCache = {};
     c.paletteCache = {};
     c.cachedHSV = c.color.hsv();
@@ -3242,7 +3242,7 @@ SpriteMorph.prototype.playSound = function (name) {
         ),
         ctx = this.audioContext(),
         gain =  this.getGainNode(),
-        pan = this.getPanNode(),
+        pan = this.getPannerNode(),
         aud,
         source;
     if (sound) {
@@ -3250,10 +3250,14 @@ SpriteMorph.prototype.playSound = function (name) {
         aud.src = sound.audio.src;
         source = ctx.createMediaElementSource(aud);
         source.connect(gain);
-        gain.connect(pan);
-        pan.connect(ctx.destination); // perhaps redundant
+        if (pan) {
+            gain.connect(pan);
+            pan.connect(ctx.destination); // perhaps redundant
+            this.setPan(this.pan); // yep, should be redundant, but still...
+        } else {
+            gain.connect(ctx.destination);
+        }
         this.setVolume(this.volume); // probably redundant as well
-        this.setPan(this.pan); // yep, should be redundant, but still...
         aud.play();
         if (stage) {
             stage.activeSounds.push(aud);
@@ -3293,18 +3297,24 @@ SpriteMorph.prototype.audioContext = function () {
 // SpriteMorph stero panning
 
 SpriteMorph.prototype.setPan = function (num) {
+    var panner = this.getPannerNode();
+    if (!panner) {return; }
     this.pan = Math.max(Math.min(+num, 100), -100);
-    this.getPanNode().pan.setValueAtTime(
+    panner.pan.setValueAtTime(
         this.pan / 100,
         this.audioContext().currentTime
     );
 };
 
-SpriteMorph.prototype.getPanNode = function () {
-    if (!this.panNode) {
-        this.panNode = this.audioContext().createStereoPanner();
+SpriteMorph.prototype.getPannerNode = function () {
+    var ctx;
+    if (!this.pannerNode) {
+        ctx = this.audioContext();
+        if (ctx.createStereoPanner) {
+            this.pannerNode = this.audioContext().createStereoPanner();
+        }
     }
-    return this.panNode;
+    return this.pannerNode;
 };
 
 // SpriteMorph user menu
@@ -6489,7 +6499,7 @@ StageMorph.prototype.init = function (globals) {
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
     this.pan = 0;
-    this.panNode = null; // must be lazily initialized in Chrome, sigh...
+    this.pannerNode = null; // must be lazily initialized in Chrome, sigh...
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -7936,8 +7946,8 @@ StageMorph.prototype.audioContext
 StageMorph.prototype.setPan
     = SpriteMorph.prototype.setPan;
 
-StageMorph.prototype.getPanNode
-    = SpriteMorph.prototype.getPanNode;
+StageMorph.prototype.getPannerNode
+    = SpriteMorph.prototype.getPannerNode;
 
 // StageMorph non-variable watchers
 
@@ -8978,7 +8988,7 @@ Note.prototype.getAudioContext = function () {
 
 // Note playing
 
-Note.prototype.play = function (type, gainNode, panNode) {
+Note.prototype.play = function (type, gainNode, pannerNode) {
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -8995,8 +9005,12 @@ Note.prototype.play = function (type, gainNode, panNode) {
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
     this.oscillator.connect(gainNode);
-    gainNode.connect(panNode);
-    panNode.connect(this.audioContext.destination);
+    if (pannerNode) {
+        gainNode.connect(pannerNode);
+        pannerNode.connect(this.audioContext.destination);
+    } else {
+        gainNode.connect(this.audioContext.destination);
+    }
     this.oscillator.start(0);
 };
 

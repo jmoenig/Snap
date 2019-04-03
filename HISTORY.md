@@ -54,6 +54,9 @@
     * German
     * French
 
+### 2019-04-03
+* Objects: Threads: Safari compatibility tweaks (only use StereoPanner if available)
+
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property
 * Objects: use AudioContext to play recorded sounds
