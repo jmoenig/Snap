@@ -61,6 +61,7 @@
 * Objects. Store: new feature: volume blocks
 * Objects: added relabelling information for the new volume blocks
 * Objects, Store: new feature: audio stereo-panning blocks
+* Objects: added relabelling information for the new stereo-panning blocks
 
 ### 2019-04-02
 * Objects, Threads: lazily initialize volume property

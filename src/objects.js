@@ -1378,8 +1378,11 @@ SpriteMorph.prototype.blockAlternatives = {
     doSetTempo: ['doChangeTempo'],
     setVolume: ['changeVolume'],
     changeVolume: ['setVolume'],
-    getVolume: ['getTempo'],
-    getTempo: ['getVolume'],
+    setPan: ['changePan'],
+    changePan: ['setPan'],
+    getVolume: ['getTempo', 'getPan'],
+    getTempo: ['getVolume', 'getPan'],
+    getPan: ['getVolume', 'getTempo'],
 
     // pen:
     clear: ['down', 'up', 'doStamp'],
