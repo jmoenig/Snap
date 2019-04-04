@@ -4103,8 +4103,8 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
     var rcvr = this.blockReceiver();
     if (!this.context.startTime) {
-        rcvr.setVolume(rcvr.getVolume()); // b/c Chrome needs lazy initialization
-        rcvr.setPan(rcvr.pan); // b/c Chrome needs lazy initialization
+        rcvr.setVolume(rcvr.getVolume()); // b/c Chrome needs lazy init
+        rcvr.setPan(rcvr.getPan()); // b/c Chrome needs lazy initialization
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
         this.context.activeNote.play(

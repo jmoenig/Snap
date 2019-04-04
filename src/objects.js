@@ -126,6 +126,7 @@ SpriteMorph.prototype.attributes =
         'costumes',
         'costume #',
         'volume',
+        'balance',
         'sounds',
         'scripts'
     ];
@@ -2045,7 +2046,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changePan'));
         blocks.push(block('setPan'));
         blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan'));
+        blocks.push(block('getPan', this.inheritsAttribute('balance')));
         blocks.push('-');
         blocks.push(block('playFreq'));
         blocks.push(block('stopFreq'));
@@ -3323,7 +3324,7 @@ SpriteMorph.prototype.playSound = function (name) {
         if (pan) {
             gain.connect(pan);
             pan.connect(ctx.destination); // perhaps redundant
-            this.setPan(this.pan); // yep, should be redundant, but still...
+            this.setPan(this.getPan()); // yep, should be redundant
         } else {
             gain.connect(ctx.destination);
         }
@@ -3388,7 +3389,7 @@ SpriteMorph.prototype.audioContext = function () {
 
 // SpriteMorph stero panning
 
-SpriteMorph.prototype.setPan = function (num) {
+SpriteMorph.prototype.setPan = function (num, noShadow) {
     var panner = this.getPannerNode();
     if (!panner) {return; }
     this.pan = Math.max(Math.min((+num || 0), 100), -100);
@@ -3396,13 +3397,27 @@ SpriteMorph.prototype.setPan = function (num) {
         this.pan / 100,
         this.audioContext().currentTime
     );
+    // propagate to children that inherit my balance
+    if (!noShadow) {
+        this.shadowAttribute('balance');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('balance')) {
+                instance.setPan(num, true);
+            }
+        }
+    });
 };
 
 SpriteMorph.prototype.changePan = function (delta) {
-    this.setPan(this.pan + (+delta || 0));
+    this.setPan(this.getPan() + (+delta || 0));
 };
 
 SpriteMorph.prototype.getPan = function () {
+    if (this.inheritsAttribute('balance')) {
+        return this.exemplar.getPan();
+    }
     return this.pan;
 };
 
@@ -5839,7 +5854,8 @@ SpriteMorph.prototype.updatePropagationCache = function () {
             'direction',
             'size',
             'costume #',
-            'volume'
+            'volume',
+            'balance'
         ],
         function (att) {
             return contains(myself.inheritedAttributes, att);
@@ -5962,6 +5978,10 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'volume':
         this.cachedPropagation = true;
         this.setVolume(this.getVolume(), true);
+        break;
+    case 'balance':
+        this.cachedPropagation = true;
+        this.setPan(this.getPan(), true);
         break;
     case 'costumes':
         idx = this.getCostumeIdx();
@@ -10055,7 +10075,8 @@ WatcherMorph.prototype.update = function () {
                 direction: 'direction',
                 getCostumeIdx: 'costume #',
                 getScale: 'size',
-                getVolume: 'volume'
+                getVolume: 'volume',
+                getPan: 'balance'
             } [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }

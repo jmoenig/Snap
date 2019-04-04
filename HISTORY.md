@@ -63,6 +63,7 @@
 * moved "stage width" and "stage height" into attribute menu of the OF block for the stage
 * added 'volume' and 'balance' selectors to the OF block
 * Objects, Threads, Blocks: added inheritance support for "volume"
+* Objects, Threads, Blocks: added inheritance support for "balance"
 
 ### 2019-04-03
 * Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
