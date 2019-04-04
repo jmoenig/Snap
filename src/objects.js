@@ -499,19 +499,19 @@ SpriteMorph.prototype.initBlocks = function () {
         changePan: {
             type: 'command',
             category: 'sound',
-            spec: 'change pan left/right by %n',
+            spec: 'change balance by %n',
             defaults: [10]
         },
         setPan: {
             type: 'command',
             category: 'sound',
-            spec: 'set pan left/right to %n',
+            spec: 'set balance to %n',
             defaults: [0]
         },
         getPan: {
             type: 'reporter',
             category: 'sound',
-            spec: 'pan left/right'
+            spec: 'balance'
         },
         playFreq: {
             type: 'command',

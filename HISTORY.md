@@ -58,6 +58,7 @@
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category
+* Objects, Store: renamed "pan left/right" to "balance"
 
 ### 2019-04-03
 * Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
