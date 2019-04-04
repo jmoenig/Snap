@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-April-03';
+modules.threads = '2019-April-04';
 
 var ThreadManager;
 var Process;
@@ -4147,6 +4147,9 @@ Process.prototype.doPlayFrequencyForSecs = function (hz, secs) {
 Process.prototype.doSetInstrument = function (num) {
     this.instrument = +num;
     this.receiver.instrument = +num;
+    if (this.receiver.freqPlayer) {
+        this.receiver.freqPlayer.setInstrument(+num);
+    }
 };
 
 // Process constant input options

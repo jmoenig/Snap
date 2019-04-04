@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-03';
+modules.objects = '2019-April-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -512,6 +512,17 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sound',
             spec: 'pan left/right'
+        },
+        playFreq: {
+            type: 'command',
+            category: 'sound',
+            spec: 'play frequency %n hz',
+            defaults: [440]
+        },
+        stopFreq: {
+            type: 'command',
+            category: 'sound',
+            spec: 'stop frequency'
         },
 
         // Sound - Debugging primitives for development mode
@@ -1471,6 +1482,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.pan = 0;
     this.pannerNode = null; // must be lazily initialized in Chrome, sigh...
 
+    // frequency player, experimental
+    this.freqPlayer = null; // Note, to be lazily initialized
+
     // pen hsv color support
     this.cachedHSV = [0, 0, 0]; // not serialized
 
@@ -1534,6 +1548,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.color = this.color.copy();
     c.gainNode = null;
     c.pannerNode = null;
+    c.freqPlayer = null;
     c.blocksCache = {};
     c.paletteCache = {};
     c.cachedHSV = c.color.hsv();
@@ -2030,6 +2045,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setPan'));
         blocks.push(watcherToggle('getPan'));
         blocks.push(block('getPan'));
+        blocks.push('-');
+        blocks.push(block('playFreq'));
+        blocks.push(block('stopFreq'));
 
     // for debugging: ///////////////
 
@@ -3382,6 +3400,57 @@ SpriteMorph.prototype.getPannerNode = function () {
         }
     }
     return this.pannerNode;
+};
+
+// SpriteMorph frequency player
+
+SpriteMorph.prototype.playFreq = function (hz) {
+    // start playing the given frequency until stopped
+    var note,
+        ctx = this.audioContext(),
+        gain = this.getGainNode(),
+        pan = this.getPannerNode(),
+        stage = this.parentThatIsA(StageMorph);
+    if (!this.freqPlayer) {
+        this.freqPlayer = new Note();
+    }
+    note = this.freqPlayer;
+    if (note.oscillator) {
+        note.oscillator.frequency.value = hz;
+    } else {
+        note.oscillator = ctx.createOscillator();
+        if (!note.oscillator.start) {
+            note.oscillator.start = note.oscillator.noteOn;
+        }
+        if (!note.oscillator.stop) {
+            note.oscillator.stop = note.oscillator.noteOff;
+        }
+        note.setInstrument(this.instrument);
+        note.oscillator.frequency.value = hz;
+        this.setVolume(this.volume);
+        note.oscillator.connect(gain);
+        if (pan) {
+            gain.connect(pan);
+            pan.connect(ctx.destination);
+            this.setPan(this.pan);
+        } else {
+            gain.connect(ctx.destination);
+        }
+        note.ended = false;
+        if (stage) {
+            stage.activeSounds.push(note);
+            stage.activeSounds = stage.activeSounds.filter(function (snd) {
+                return !snd.ended && !snd.terminated;
+            });
+        }
+        note.oscillator.start(0);
+    }
+};
+
+SpriteMorph.prototype.stopFreq = function () {
+    if (this.freqPlayer) {
+        this.freqPlayer.stop();
+    }
 };
 
 // SpriteMorph user menu
@@ -6568,6 +6637,9 @@ StageMorph.prototype.init = function (globals) {
     this.pan = 0;
     this.pannerNode = null; // must be lazily initialized in Chrome, sigh...
 
+    // frequency player, experimental
+    this.freqPlayer = null; // Note, to be lazily initialized
+
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
 
@@ -7400,6 +7472,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setPan'));
         blocks.push(watcherToggle('getPan'));
         blocks.push(block('getPan'));
+        blocks.push('-');
+        blocks.push(block('playFreq'));
+        blocks.push(block('stopFreq'));
 
     // for debugging: ///////////////
 
@@ -8037,6 +8112,14 @@ StageMorph.prototype.getPan
 
 StageMorph.prototype.getPannerNode
     = SpriteMorph.prototype.getPannerNode;
+
+// StageMorph frequency player
+
+StageMorph.prototype.playFreq
+    = SpriteMorph.prototype.playFreq;
+
+StageMorph.prototype.stopFreq
+    = SpriteMorph.prototype.stopFreq;
 
 // StageMorph non-variable watchers
 
@@ -9037,6 +9120,7 @@ function Note(pitch) {
     this.frequency = null; // alternative for playing a non-note frequency
     this.setupContext();
     this.oscillator = null;
+    this.ended = false; // for active sounds management
 }
 
 // Note shared properties
@@ -9085,12 +9169,7 @@ Note.prototype.play = function (type, gainNode, pannerNode) {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = [
-        'sine',
-        'square',
-        'sawtooth',
-        'triangle'
-    ][(type || 1) - 1];
+    this.setInstrument(type);
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
     this.oscillator.connect(gainNode);
@@ -9100,7 +9179,18 @@ Note.prototype.play = function (type, gainNode, pannerNode) {
     } else {
         gainNode.connect(this.audioContext.destination);
     }
+    this.ended = false;
     this.oscillator.start(0);
+};
+
+Note.prototype.setInstrument = function (type) {
+    // private - make sure the oscillator node has been initialized before
+    this.oscillator.type = [
+        'sine',
+        'square',
+        'sawtooth',
+        'triangle'
+    ][(type || 1) - 1];
 };
 
 Note.prototype.stop = function () {
@@ -9108,6 +9198,12 @@ Note.prototype.stop = function () {
         this.oscillator.stop(0);
         this.oscillator = null;
     }
+    this.ended = true;
+};
+
+Note.prototype.pause = function () {
+    // emulate a sound for active sounds mngmt
+    this.stop();
 };
 
 // Microphone /////////////////////////////////////////////////////////

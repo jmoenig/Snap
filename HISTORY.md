@@ -16,6 +16,7 @@
     * selectors for changing and querying "draggable" and "rotation style" settings
     * new sound + music "volume" feature + blocks
     * new sound + music stereo "panning" feature + blocks
+    * new "play frequency" commands in the Sounds category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -23,7 +24,6 @@
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
-    * new "play frequency" commands in the AudioComp libary's Sound category
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
     * enhanced support for embedding Snap in other website, thanks, Bernat!
@@ -56,9 +56,12 @@
     * German
     * French
 
+### 2019-04-04
+* Objects, Threads: new "play frequency" commands in the Sounds category
+
 ### 2019-04-03
-* Objects: Threads: Safari compatibility tweaks (only use StereoPanner if available)
-* Objects. Store: new feature: volume blocks
+* Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
+* Objects, Store: new feature: volume blocks
 * Objects: added relabelling information for the new volume blocks
 * Objects, Store: new feature: audio stereo-panning blocks
 * Objects: added relabelling information for the new stereo-panning blocks
