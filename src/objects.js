@@ -7253,7 +7253,8 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 };
 
 StageMorph.prototype.fireStopAllEvent = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide = this.parentThatIsA(IDE_Morph),
+        myself = this;
 
     this.threads.resumeAll(this.stage);
 
@@ -7273,6 +7274,7 @@ StageMorph.prototype.fireStopAllEvent = function () {
     if (ide) {
         ide.nextSteps([
             nop,
+            function () {myself.stopAllActiveSounds(); }, // catch forever loops
             function () {ide.controlBar.pauseButton.refresh(); }
         ]);
     }
