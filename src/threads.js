@@ -3611,6 +3611,10 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                                 : localize('Empty');
             case 'size':
                 return thatObj.getScale ? thatObj.getScale() : '';
+            case 'volume':
+                return thatObj.getVolume();
+            case 'balance':
+                return thatObj.getPan();
             case 'width':
                 this.assertType(thatObj, 'stage');
                 return thatObj.dimensions.x;

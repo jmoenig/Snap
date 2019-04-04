@@ -8839,12 +8839,16 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'direction' : ['direction'],
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
-            'size' : ['size']
+            'size' : ['size'],
+            'volume' : ['volume'],
+            'balance' : ['balance']
         };
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
+            'volume' : ['volume'],
+            'balance' : ['balance'],
             'width': ['width'],
             'height': ['height']
         };

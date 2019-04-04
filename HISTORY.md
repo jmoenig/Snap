@@ -61,6 +61,7 @@
 * Objects, Store: renamed "pan left/right" to "balance"
 * updated German translation
 * moved "stage width" and "stage height" into attribute menu of the OF block for the stage
+* added 'volume' and 'balance' selectors to the OF block
 
 ### 2019-04-03
 * Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
