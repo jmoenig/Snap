@@ -893,7 +893,6 @@ SnapTranslator.dict.de = {
         'Passwort zurücksetzen...',
     'Resend Verification Email...':
         'Bestätigungsmail nochmal senden...',
-    
 
     // settings menu
     'Language...':
@@ -1743,10 +1742,6 @@ SnapTranslator.dict.de = {
         'Teile',
     'anchor':
         'Verankerung',
-    'stage width':
-        'Bühnenbreite',
-    'stage height':
-        'Bühnenhöhe',
     'parent':
         'Vorfahr',
     'children':
@@ -1779,6 +1774,10 @@ SnapTranslator.dict.de = {
         'Klänge',
     'scripts':
         'Skripte',
+    'width':
+        'Breite',
+    'height':
+        'Höhe',
 
     // inheritance
     'inherited':
