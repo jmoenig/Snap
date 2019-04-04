@@ -2667,7 +2667,8 @@ BlockMorph.prototype.userMenu = function () {
                     yPosition: 'y position',
                     direction: 'direction',
                     getScale: 'size',
-                    getCostumeIdx: 'costume #'
+                    getCostumeIdx: 'costume #',
+                    getVolume: 'volume'
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
                     menu.addLine();

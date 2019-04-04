@@ -125,6 +125,7 @@ SpriteMorph.prototype.attributes =
         'size',
         'costumes',
         'costume #',
+        'volume',
         'sounds',
         'scripts'
     ];
@@ -2039,7 +2040,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeVolume'));
         blocks.push(block('setVolume'));
         blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume'));
+        blocks.push(block('getVolume', this.inheritsAttribute('volume')));
         blocks.push('-');
         blocks.push(block('changePan'));
         blocks.push(block('setPan'));
@@ -3326,7 +3327,7 @@ SpriteMorph.prototype.playSound = function (name) {
         } else {
             gain.connect(ctx.destination);
         }
-        this.setVolume(this.volume); // probably redundant as well
+        this.setVolume(this.getVolume()); // probably redundant as well
         aud.play();
         if (stage) {
             stage.activeSounds.push(aud);
@@ -3344,19 +3345,33 @@ SpriteMorph.prototype.reportSounds = function () {
 
 // SpriteMorph volume
 
-SpriteMorph.prototype.setVolume = function (num) {
+SpriteMorph.prototype.setVolume = function (num, noShadow) {
     this.volume = Math.max(Math.min(+num || 0, 100), 0);
     this.getGainNode().gain.setValueAtTime(
         1 / Math.pow(10, Math.log2(100 / this.volume)),
         this.audioContext().currentTime
     );
+    // propagate to children that inherit my volume
+    if (!noShadow) {
+        this.shadowAttribute('volume');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('volume')) {
+                instance.setVolume(num, true);
+            }
+        }
+    });
 };
 
 SpriteMorph.prototype.changeVolume = function (delta) {
-    this.setVolume(this.volume + (+delta || 0));
+    this.setVolume(this.getVolume() + (+delta || 0));
 };
 
 SpriteMorph.prototype.getVolume = function () {
+    if (this.inheritsAttribute('volume')) {
+        return this.exemplar.getVolume();
+    }
     return this.volume;
 };
 
@@ -3427,7 +3442,7 @@ SpriteMorph.prototype.playFreq = function (hz) {
         }
         note.setInstrument(this.instrument);
         note.oscillator.frequency.value = hz;
-        this.setVolume(this.volume);
+        this.setVolume(this.getVolume());
         note.oscillator.connect(gain);
         if (pan) {
             gain.connect(pan);
@@ -5818,7 +5833,14 @@ SpriteMorph.prototype.updatePropagationCache = function () {
     // (only) needed for internal optimization caching
     var myself = this;
     this.cachedPropagation = !isNil(this.exemplar) && detect(
-        ['x position', 'y position', 'direction', 'size', 'costume #'],
+        [
+            'x position',
+            'y position',
+            'direction',
+            'size',
+            'costume #',
+            'volume'
+        ],
         function (att) {
             return contains(myself.inheritedAttributes, att);
         }
@@ -5936,6 +5958,10 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'costume #':
         this.cachedPropagation = true;
         this.doSwitchToCostume(this.getCostumeIdx(), true);
+        break;
+    case 'volume':
+        this.cachedPropagation = true;
+        this.setVolume(this.getVolume(), true);
         break;
     case 'costumes':
         idx = this.getCostumeIdx();
@@ -10028,7 +10054,9 @@ WatcherMorph.prototype.update = function () {
                 yPosition: 'y position',
                 direction: 'direction',
                 getCostumeIdx: 'costume #',
-                getScale: 'size'} [this.getter];
+                getScale: 'size',
+                getVolume: 'volume'
+            } [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }
         if (newValue !== '' && !isNil(newValue)) {
