@@ -3611,6 +3611,12 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                                 : localize('Empty');
             case 'size':
                 return thatObj.getScale ? thatObj.getScale() : '';
+            case 'width':
+                this.assertType(thatObj, 'stage');
+                return thatObj.dimensions.x;
+            case 'height':
+                this.assertType(thatObj, 'stage');
+                return thatObj.dimensions.y;
             }
         }
     }
@@ -3691,10 +3697,6 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
-        case 'stage width':
-            return StageMorph.prototype.dimensions.x;
-        case 'stage height':
-            return StageMorph.prototype.dimensions.y;
         case 'costumes':
             return thisObj.reportCostumes();
         case 'sounds':

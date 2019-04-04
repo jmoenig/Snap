@@ -20,7 +20,7 @@
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
-    * added "stage width" and "stage height" as gettable selectors of the MY primitive
+    * added "width" and "height" as attribute selectors of the OF primitive for the stage
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
@@ -60,6 +60,7 @@
 * Objects, Threads: new "play frequency" commands in the Sounds category
 * Objects, Store: renamed "pan left/right" to "balance"
 * updated German translation
+* moved "stage width" and "stage height" into attribute menu of the OF block for the stage
 
 ### 2019-04-03
 * Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
