@@ -9185,12 +9185,14 @@ Note.prototype.play = function (type, gainNode, pannerNode) {
 
 Note.prototype.setInstrument = function (type) {
     // private - make sure the oscillator node has been initialized before
-    this.oscillator.type = [
-        'sine',
-        'square',
-        'sawtooth',
-        'triangle'
-    ][(type || 1) - 1];
+    if (this.oscillator) {
+        this.oscillator.type = [
+            'sine',
+            'square',
+            'sawtooth',
+            'triangle'
+        ][(type || 1) - 1];
+    }
 };
 
 Note.prototype.stop = function () {
