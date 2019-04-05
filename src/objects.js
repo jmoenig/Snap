@@ -9168,12 +9168,39 @@ function Note(pitch) {
     this.frequency = null; // alternative for playing a non-note frequency
     this.setupContext();
     this.oscillator = null;
+    this.fader = null; // gain node for suppressing clicks
     this.ended = false; // for active sounds management
 }
 
 // Note shared properties
 
 Note.prototype.audioContext = null;
+
+Note.prototype.fadeIn = new Float32Array(10);
+Note.prototype.fadeIn[0] = [0.1];
+Note.prototype.fadeIn[1] = [0.2];
+Note.prototype.fadeIn[2] = [0.3];
+Note.prototype.fadeIn[3] = [0.4];
+Note.prototype.fadeIn[4] = [0.5];
+Note.prototype.fadeIn[5] = [0.6];
+Note.prototype.fadeIn[6] = [0.7];
+Note.prototype.fadeIn[7] = [0.8];
+Note.prototype.fadeIn[8] = [0.9];
+Note.prototype.fadeIn[9] = [1.0];
+
+Note.prototype.fadeOut = new Float32Array(10);
+Note.prototype.fadeOut[0] = [0.9];
+Note.prototype.fadeOut[1] = [0.8];
+Note.prototype.fadeOut[2] = [0.7];
+Note.prototype.fadeOut[3] = [0.6];
+Note.prototype.fadeOut[4] = [0.5];
+Note.prototype.fadeOut[5] = [0.4];
+Note.prototype.fadeOut[6] = [0.3];
+Note.prototype.fadeOut[7] = [0.2];
+Note.prototype.fadeOut[8] = [0.1];
+Note.prototype.fadeOut[9] = [0.0];
+
+Note.prototype.fadeTime = 0.005;
 
 // Note audio context
 
@@ -9210,6 +9237,7 @@ Note.prototype.getAudioContext = function () {
 // Note playing
 
 Note.prototype.play = function (type, gainNode, pannerNode) {
+    this.fader = this.audioContext.createGain();
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -9220,7 +9248,8 @@ Note.prototype.play = function (type, gainNode, pannerNode) {
     this.setInstrument(type);
     this.oscillator.frequency.value = isNil(this.frequency) ?
         Math.pow(2, (this.pitch - 69) / 12) * 440 : this.frequency;
-    this.oscillator.connect(gainNode);
+    this.oscillator.connect(this.fader);
+    this.fader.connect(gainNode);
     if (pannerNode) {
         gainNode.connect(pannerNode);
         pannerNode.connect(this.audioContext.destination);
@@ -9228,6 +9257,11 @@ Note.prototype.play = function (type, gainNode, pannerNode) {
         gainNode.connect(this.audioContext.destination);
     }
     this.ended = false;
+    this.fader.gain.setValueCurveAtTime(
+        this.fadeIn,
+        this.audioContext.currentTime,
+        this.fadeTime
+    );
     this.oscillator.start(0);
 };
 
@@ -9244,8 +9278,13 @@ Note.prototype.setInstrument = function (type) {
 };
 
 Note.prototype.stop = function () {
+    this.fader.gain.setValueCurveAtTime(
+        this.fadeOut,
+        this.audioContext.currentTime,
+        this.fadeTime
+    );
     if (this.oscillator) {
-        this.oscillator.stop(0);
+        this.oscillator.stop(this.audioContext.currentTime + this.fadeTime);
         this.oscillator = null;
     }
     this.ended = true;

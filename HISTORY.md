@@ -42,6 +42,7 @@
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
 * Notable Fixes:
+    * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
     * using "inherit" no longer un-hides the palette in presentation mode
@@ -55,6 +56,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-04-05
+* Objects: eliminated "clicks" when playing music notes
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category
