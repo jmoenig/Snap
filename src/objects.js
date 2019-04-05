@@ -8120,6 +8120,9 @@ StageMorph.prototype.stopAllActiveSounds = function () {
         audio.pause();
     });
     this.activeSounds = [];
+    if (this.microphone.modifier && this.microphone.isReady) {
+        this.microphone.stop();
+    }
 };
 
 StageMorph.prototype.pauseAllActiveSounds = function () {

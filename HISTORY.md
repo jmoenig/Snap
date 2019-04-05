@@ -64,6 +64,7 @@
 * Objects: tweaked oscillator fade-out
 * Blocks, Threads: added "sample rate" selector to microphone drow-down
 * updated German translation for "sample rate"
+* Objects: stop microphone output when the user presses the stop button
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category
