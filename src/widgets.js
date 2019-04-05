@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2018-February-08';
+modules.widgets = '2019-April-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3708,14 +3708,14 @@ PianoKeyMorph.prototype.mouseEnter = function () {
     this.note.play(soundType);
     setTimeout(
         function () {
-            myself.note.stop();
+            myself.note.stop(true);
         },
         400
     );
 };
 
 PianoKeyMorph.prototype.mouseLeave = function () {
-    this.note.stop();
+    this.note.stop(true);
     this.label.children[0].show();
     this.image = this.normalImage;
     this.changed();

@@ -9244,6 +9244,9 @@ Note.prototype.getAudioContext = function () {
 // Note playing
 
 Note.prototype.play = function (type, gainNode, pannerNode) {
+    if (!gainNode) {
+        gainNode = this.audioContext.createGain();
+    }
     this.fader = this.audioContext.createGain();
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
@@ -9284,12 +9287,20 @@ Note.prototype.setInstrument = function (type) {
     }
 };
 
-Note.prototype.stop = function () {
-    this.fader.gain.setValueCurveAtTime(
-        this.fadeOut,
-        this.audioContext.currentTime,
-        this.fadeTime
-    );
+Note.prototype.stop = function (immediately) {
+    // set "immediately" to true to terminate instantly
+    // needed for widgets like the PianoKeyboard
+    if (immediately && this.oscillator) {
+        this.oscillator.stop(0);
+        return;
+    }
+    if (this.fader) {
+        this.fader.gain.setValueCurveAtTime(
+            this.fadeOut,
+            this.audioContext.currentTime,
+            this.fadeTime
+        );
+    }
     if (this.oscillator) {
         this.oscillator.stop(this.audioContext.currentTime + this.fadeTime);
         this.oscillator = null;
