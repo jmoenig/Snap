@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-04';
+modules.objects = '2019-April-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3445,6 +3445,7 @@ SpriteMorph.prototype.playFreq = function (hz) {
         this.freqPlayer = new Note();
     }
     note = this.freqPlayer;
+    note.fader = ctx.createGain();
     if (note.oscillator) {
         note.oscillator.frequency.value = hz;
     } else {
@@ -3458,7 +3459,8 @@ SpriteMorph.prototype.playFreq = function (hz) {
         note.setInstrument(this.instrument);
         note.oscillator.frequency.value = hz;
         this.setVolume(this.getVolume());
-        note.oscillator.connect(gain);
+        note.oscillator.connect(note.fader);
+        note.fader.connect(gain);
         if (pan) {
             gain.connect(pan);
             pan.connect(ctx.destination);
@@ -3473,6 +3475,11 @@ SpriteMorph.prototype.playFreq = function (hz) {
                 return !snd.ended && !snd.terminated;
             });
         }
+        note.fader.gain.setValueCurveAtTime(
+            note.fadeIn,
+            ctx.currentTime,
+            note.fadeTime
+        );
         note.oscillator.start(0);
     }
 };

@@ -59,6 +59,7 @@
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes
+* Objects: eliminated "clicks" when playing a frequency
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category
