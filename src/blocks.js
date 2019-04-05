@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-April-04';
+modules.blocks = '2019-April-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8979,6 +8979,7 @@ InputSlotMorph.prototype.audioMenu = function () {
         'note' : ['note'],
         'frequency' : ['frequency'],
         'samples' : ['samples'],
+        'sample rate' : ['sample rate'],
         'spectrum' : ['spectrum'],
         'resolution' : ['resolution']
     };
