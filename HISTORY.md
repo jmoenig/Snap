@@ -61,6 +61,7 @@
 * Objects: eliminated "clicks" when playing music notes
 * Objects: eliminated "clicks" when playing a frequency
 * Widgets, Objects: Adjusted PianoKeyboard for the new audio engine
+* Objects: tweaked oscillator fade-out
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category

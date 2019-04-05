@@ -9290,19 +9290,28 @@ Note.prototype.setInstrument = function (type) {
 Note.prototype.stop = function (immediately) {
     // set "immediately" to true to terminate instantly
     // needed for widgets like the PianoKeyboard
+    var fade = !immediately;
     if (immediately && this.oscillator) {
         this.oscillator.stop(0);
         return;
     }
     if (this.fader) {
-        this.fader.gain.setValueCurveAtTime(
-            this.fadeOut,
-            this.audioContext.currentTime,
-            this.fadeTime
-        );
+        try {
+            this.fader.gain.setValueCurveAtTime(
+                this.fadeOut,
+                this.audioContext.currentTime,
+                this.fadeTime
+            );
+        } catch (err) {
+            fade = false;
+        }
     }
     if (this.oscillator) {
-        this.oscillator.stop(this.audioContext.currentTime + this.fadeTime);
+        this.oscillator.stop(
+            fade ?
+                this.audioContext.currentTime + this.fadeTime
+                : 0
+        );
         this.oscillator = null;
     }
     this.ended = true;
