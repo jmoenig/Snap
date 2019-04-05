@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-04-04', // this, too, will appear in the Translators tab
+        '2019-04-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -630,6 +630,8 @@ SnapTranslator.dict.de = {
         'Frequenz',
     'samples':
         'Signale',
+    'sample rate':
+        'Abtastrate',
     'spectrum':
         'Frequenzspektrum',
     'resolution':

@@ -63,6 +63,7 @@
 * Widgets, Objects: Adjusted PianoKeyboard for the new audio engine
 * Objects: tweaked oscillator fade-out
 * Blocks, Threads: added "sample rate" selector to microphone drow-down
+* updated German translation for "sample rate"
 
 ### 2019-04-04
 * Objects, Threads: new "play frequency" commands in the Sounds category

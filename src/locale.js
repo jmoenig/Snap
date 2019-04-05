@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2019-04-04'
+        '2019-04-05'
 };
 
 SnapTranslator.dict.it = {
