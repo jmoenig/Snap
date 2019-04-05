@@ -9186,29 +9186,13 @@ function Note(pitch) {
 
 Note.prototype.audioContext = null;
 
-Note.prototype.fadeIn = new Float32Array(10);
-Note.prototype.fadeIn[0] = [0.1];
-Note.prototype.fadeIn[1] = [0.2];
-Note.prototype.fadeIn[2] = [0.3];
-Note.prototype.fadeIn[3] = [0.4];
-Note.prototype.fadeIn[4] = [0.5];
-Note.prototype.fadeIn[5] = [0.6];
-Note.prototype.fadeIn[6] = [0.7];
-Note.prototype.fadeIn[7] = [0.8];
-Note.prototype.fadeIn[8] = [0.9];
-Note.prototype.fadeIn[9] = [1.0];
+Note.prototype.fadeIn = new Float32Array(2);
+Note.prototype.fadeIn[0] = [0.0];
+Note.prototype.fadeIn[1] = [1.0];
 
-Note.prototype.fadeOut = new Float32Array(10);
-Note.prototype.fadeOut[0] = [0.9];
-Note.prototype.fadeOut[1] = [0.8];
-Note.prototype.fadeOut[2] = [0.7];
-Note.prototype.fadeOut[3] = [0.6];
-Note.prototype.fadeOut[4] = [0.5];
-Note.prototype.fadeOut[5] = [0.4];
-Note.prototype.fadeOut[6] = [0.3];
-Note.prototype.fadeOut[7] = [0.2];
-Note.prototype.fadeOut[8] = [0.1];
-Note.prototype.fadeOut[9] = [0.0];
+Note.prototype.fadeOut = new Float32Array(2);
+Note.prototype.fadeOut[0] = [1.0];
+Note.prototype.fadeOut[1] = [0.0];
 
 Note.prototype.fadeTime = 0.005;
 
