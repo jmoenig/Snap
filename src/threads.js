@@ -2817,9 +2817,9 @@ Process.prototype.reportUnicode = function (string) {
     var str = isNil(string) ? '\u0000' : string.toString();
 
     if (str.codePointAt) { // support for Unicode in newer browsers.
-        return str.codePointAt(0);
+        return str.codePointAt(0) || 0;
     }
-    return str.charCodeAt(0);
+    return str.charCodeAt(0) || 0;
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
