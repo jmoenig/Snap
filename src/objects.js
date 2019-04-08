@@ -1397,8 +1397,9 @@ SpriteMorph.prototype.blockAlternatives = {
     setScale: ['changeScale'],
 
     // sound:
-    playSound: ['doPlaySoundUntilDone'],
-    doPlaySoundUntilDone: ['playSound'],
+    playSound: ['doPlaySoundUntilDone', 'doPlaySoundAtRate'],
+    doPlaySoundUntilDone: ['playSound', 'doPlaySoundAtRate'],
+    doPlaySoundAtRate: ['playSound', 'doPlaySoundUntilDone'],
     doChangeTempo: ['doSetTempo'],
     doSetTempo: ['doChangeTempo'],
     setVolume: ['changeVolume'],

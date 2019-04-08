@@ -62,6 +62,7 @@
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
 * Blocks, Objects, Threads: new "play sound at sample rate" command primitive
+* Objects: added relabelling information for the new "play sound at sample rate" block
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes
