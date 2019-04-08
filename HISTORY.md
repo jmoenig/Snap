@@ -16,6 +16,7 @@
     * selectors for changing and querying "draggable" and "rotation style" settings
     * new sound + music "volume" feature + blocks
     * new sound + music stereo "panning" feature + blocks
+    * new sound attribute getter reporter
     * new "play frequency" commands in the Sounds category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
@@ -56,6 +57,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-04-08
+* Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes

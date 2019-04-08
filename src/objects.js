@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-05';
+modules.objects = '2019-April-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -438,6 +438,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'stop all sounds'
+        },
+        reportGetSoundAttribute: {
+            type: 'reporter',
+            category: 'sound',
+            spec: '%aa of sound %snd',
+            defaults: [['duration']]
         },
         doRest: {
             type: 'command',
@@ -2028,6 +2034,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
+        blocks.push('-');
+        blocks.push(block('reportGetSoundAttribute'));
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));
@@ -7509,6 +7517,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
+        blocks.push(block('reportGetSoundAttribute'));
+        blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));
         blocks.push(block('doSetInstrument'));
@@ -9140,6 +9150,13 @@ CostumeEditorMorph.prototype.mouseMove
 function Sound(audio, name) {
     this.audio = audio; // mandatory
     this.name = name || "Sound";
+
+    // cached samples, don't persist
+    this.cachedSamples = null;
+
+    // internal for decoding, don't persist
+    this.audioBuffer = null; // for decoding ops
+    this.isDecoding = false;
 }
 
 Sound.prototype.play = function () {

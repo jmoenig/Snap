@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-April-05';
+modules.blocks = '2019-April-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -992,6 +992,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null, // text
                 false, // numeric?
                 'audioMenu',
+                true // read-only
+            );
+            break;
+        case '%aa': // audio attributes
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'name' : ['name'],
+                    'duration' : ['duration'],
+                    'length' : ['length'],
+                    'number of channels' : ['number of channels'],
+                    'sample rate' : ['sample rate'],
+                    'samples' : ['samples']
+                },
                 true // read-only
             );
             break;

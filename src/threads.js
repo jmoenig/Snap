@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-April-07';
+modules.threads = '2019-April-08';
 
 var ThreadManager;
 var Process;
@@ -2247,6 +2247,86 @@ Process.prototype.doStopAllSounds = function () {
         });
         stage.stopAllActiveSounds();
     }
+};
+
+Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
+    var sound = soundName instanceof Sound ? soundName : detect(
+            this.blockReceiver().sounds.asArray(),
+            function (s) {return s.name === soundName.toString(); }
+        ),
+        option = this.inputOption(choice);
+
+    if (option === 'name') {
+        return sound.name;
+    }
+
+    if (!sound.audioBuffer) {
+        this.decodeSound(sound);
+        return;
+    }
+
+    switch (option) {
+    case 'samples':
+        if (!sound.cachedSamples) {
+            sound.cachedSamples = function (sound) {
+                var buf = sound.audioBuffer,
+                    result, i;
+                if (buf.numberOfChannels > 1) {
+                    result = new List();
+                    for (i = 0; i < buf.numberOfChannels; i += 1) {
+                        result.add(new List(buf.getChannelData(i)));
+                    }
+                    return result;
+                }
+                return new List(buf.getChannelData(0));
+            } (sound);
+        }
+        return sound.cachedSamples;
+    case 'sample rate':
+        return sound.audioBuffer.sampleRate;
+    case 'duration':
+        return sound.audioBuffer.duration;
+    case 'length':
+        return sound.audioBuffer.length;
+    case 'number of channels':
+        return sound.audioBuffer.numberOfChannels;
+    default:
+        return 0;
+    }
+};
+
+Process.prototype.decodeSound = function (sound, callback) {
+    // private - callback is optional and invoked with sound as argument
+    var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx,
+        myself = this;
+    if (sound.audioBuffer) {
+        return (callback || nop)(sound);
+    }
+    if (!sound.isDecoding) {
+        base64 = sound.audio.src.split(',')[1];
+        binaryString = window.atob(base64);
+        len = binaryString.length;
+        bytes = new Uint8Array(len);
+        for (i = 0; i < len; i += 1)        {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        arrayBuffer = bytes.buffer;
+        audioCtx = Note.prototype.getAudioContext();
+        sound.isDecoding = true;
+        audioCtx.decodeAudioData(
+            arrayBuffer,
+            function(buffer) {
+                sound.audioBuffer = buffer;
+                sound.isDecoding = false;
+            },
+            function (err) {
+                sound.isDecoding = false;
+                myself.handleError(err);
+            }
+        );
+    }
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 // Process audio input (interpolated)
