@@ -18,7 +18,7 @@
     * new sound + music stereo "panning" feature + blocks
     * new sound attribute getter reporter
     * new "play sound at sample rate" command
-    * accept lists and lists of lists as inputs to all sound playing primitives
+    * accept lists and lists of lists as inputs to all sound primitives
     * new "play frequency" commands in the Sounds category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
@@ -67,6 +67,7 @@
 * Objects: added relabelling information for the new "play sound at sample rate" block
 * Objects, Threads: accept a number as input for a sound - interpret as index
 * Objects, Threads: accept lists and lists of lists as inputs to all sound playing primitives
+* Threads: accept lists and lists of lists as inputs to the "get sound attribute" primitive
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes

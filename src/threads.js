@@ -2229,7 +2229,6 @@ Process.prototype.playSound = function (name) {
 };
 
 Process.prototype.doPlaySoundUntilDone = function (name) {
-    var sprite = this.blockReceiver();
     if (this.context.activeAudio === null) {
         this.context.activeAudio = this.playSound(name);
     }
@@ -2257,8 +2256,7 @@ Process.prototype.doStopAllSounds = function () {
 };
 
 Process.prototype.doPlaySoundAtRate = function (name, rate) {
-    var sound, samples, ctx, gain, pan, channels, frameCount, arrayBuffer,
-        i, source, rcvr;
+    var sound, samples, ctx, gain, pan, source, rcvr;
 
     if (!(name instanceof List)) {
         sound = name instanceof Sound ? name
@@ -2281,35 +2279,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
     ctx = rcvr.audioContext();
     gain = rcvr.getGainNode();
     pan = rcvr.getPannerNode();
-    channels = (samples.at(1) instanceof List) ? samples.length() : 1;
-    frameCount = (channels === 1) ? samples.length() : samples.at(1).length();
-    arrayBuffer = ctx.createBuffer(channels, frameCount, +rate || 44100);
-
-    if (!arrayBuffer.copyToChannel) {
-        arrayBuffer.copyToChannel = function (src, channel) {
-            var buffer = this.getChannelData(channel);
-            for (i = 0; i < src.length; i += 1) {
-                buffer[i] = src[i];
-            }
-        };
-    }
-    if (channels === 1) {
-        arrayBuffer.copyToChannel(
-            Float32Array.from(samples.asArray()),
-            0,
-            0
-        );
-    } else {
-        for (i = 0; i < channels; i += 1) {
-            arrayBuffer.copyToChannel(
-                Float32Array.from(samples.at(i + 1).asArray()),
-                i,
-                0
-            );
-        }
-    }
-    source = ctx.createBufferSource();
-    source.buffer = arrayBuffer;
+    source = this.encodeSound(samples, rate);
     rcvr.setVolume(rcvr.volume);
     source.connect(gain);
     if (pan) {
@@ -2330,12 +2300,14 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
 Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
     var sound = soundName instanceof Sound ? soundName
             : (typeof soundName === 'number' ?
-                this.blockReceiver().sounds.at(soundName)
-                : detect(
-                    this.blockReceiver().sounds.asArray(),
-                    function (s) {return s.name === soundName.toString(); }
-            )
-        ),
+                    this.blockReceiver().sounds.at(soundName)
+                : (soundName instanceof List ? this.encodeSound(soundName)
+                    : detect(
+                        this.blockReceiver().sounds.asArray(),
+                        function (s) {return s.name === soundName.toString(); }
+                    )
+                )
+            ),
         option = this.inputOption(choice);
 
     if (option === 'name') {
@@ -2409,6 +2381,47 @@ Process.prototype.decodeSound = function (sound, callback) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.encodeSound = function (samples, rate) {
+    // private
+    var rcvr = this.blockReceiver(),
+        ctx = rcvr.audioContext(),
+        channels = (samples.at(1) instanceof List) ? samples.length() : 1,
+        frameCount = (channels === 1) ?
+            samples.length()
+            : samples.at(1).length(),
+        arrayBuffer = ctx.createBuffer(channels, frameCount, +rate || 44100),
+        i,
+        source;
+
+    if (!arrayBuffer.copyToChannel) {
+        arrayBuffer.copyToChannel = function (src, channel) {
+            var buffer = this.getChannelData(channel);
+            for (i = 0; i < src.length; i += 1) {
+                buffer[i] = src[i];
+            }
+        };
+    }
+    if (channels === 1) {
+        arrayBuffer.copyToChannel(
+            Float32Array.from(samples.asArray()),
+            0,
+            0
+        );
+    } else {
+        for (i = 0; i < channels; i += 1) {
+            arrayBuffer.copyToChannel(
+                Float32Array.from(samples.at(i + 1).asArray()),
+                i,
+                0
+            );
+        }
+    }
+    source = ctx.createBufferSource();
+    source.buffer = arrayBuffer;
+    source.audioBuffer = source.buffer; // +++
+    return source;
 };
 
 // Process audio input (interpolated)
@@ -5366,5 +5379,3 @@ JSCompiler.prototype.compileInput = function (inp) {
         );
     }
 };
-
-
