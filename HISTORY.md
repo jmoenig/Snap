@@ -17,6 +17,7 @@
     * new sound + music "volume" feature + blocks
     * new sound + music stereo "panning" feature + blocks
     * new sound attribute getter reporter
+    * new "play sound at sample rate" command
     * new "play frequency" commands in the Sounds category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
@@ -60,6 +61,7 @@
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
+* Blocks, Objects, Threads: new "play sound at sample rate" command primitive
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes

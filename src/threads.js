@@ -2249,6 +2249,71 @@ Process.prototype.doStopAllSounds = function () {
     }
 };
 
+Process.prototype.doPlaySoundAtRate = function (name, rate) {
+    var sound, samples, ctx, gain, pan, channels, frameCount, arrayBuffer,
+        i, source, rcvr;
+
+    if (!(name instanceof List)) {
+        sound = name instanceof Sound ? name : detect(
+            this.blockReceiver().sounds.asArray(),
+            function (s) {return s.name === name.toString(); }
+        );
+        if (!sound.audioBuffer) {
+            this.decodeSound(sound);
+            return;
+        }
+        samples = this.reportGetSoundAttribute('samples', sound);
+    } else {
+        samples = name;
+    }
+
+    rcvr = this.blockReceiver();
+    ctx = rcvr.audioContext();
+    gain = rcvr.getGainNode();
+    pan = rcvr.getPannerNode();
+    channels = (samples.at(1) instanceof List) ? samples.length() : 1;
+    frameCount = (channels === 1) ? samples.length() : samples.at(1).length();
+    arrayBuffer = ctx.createBuffer(channels, frameCount, +rate || 44100);
+
+    if (!arrayBuffer.copyToChannel) {
+        arrayBuffer.copyToChannel = function (src, channel) {
+            var buffer = this.getChannelData(channel);
+            for (i = 0; i < src.length; i += 1) {
+                buffer[i] = src[i];
+            }
+        };
+    }
+    if (channels === 1) {
+        arrayBuffer.copyToChannel(
+            Float32Array.from(samples.asArray()),
+            0,
+            0
+        );
+    } else {
+        for (i = 0; i < channels; i += 1) {
+            arrayBuffer.copyToChannel(
+                Float32Array.from(samples.at(i + 1).asArray()),
+                i,
+                0
+            );
+        }
+    }
+    source = ctx.createBufferSource();
+    source.buffer = arrayBuffer;
+    rcvr.setVolume(rcvr.volume);
+    source.connect(gain);
+    if (pan) {
+        gain.connect(pan);
+        pan.connect(ctx.destination);
+        rcvr.setPan(rcvr.pan);
+    } else {
+        gain.connect(ctx.destination);
+    }
+    source.start();
+    source.pause = source.stop;
+    rcvr.parentThatIsA(StageMorph).activeSounds.push(source);
+};
+
 Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
     var sound = soundName instanceof Sound ? soundName : detect(
             this.blockReceiver().sounds.asArray(),
