@@ -2221,10 +2221,17 @@ Process.prototype.blockReceiver = function () {
 
 // Process sound primitives (interpolated)
 
+Process.prototype.playSound = function (name) {
+    if (name instanceof List) {
+        return this.doPlaySoundAtRate(name, 44100);
+    }
+    return this.blockReceiver().doPlaySound(name);
+};
+
 Process.prototype.doPlaySoundUntilDone = function (name) {
     var sprite = this.blockReceiver();
     if (this.context.activeAudio === null) {
-        this.context.activeAudio = sprite.playSound(name);
+        this.context.activeAudio = this.playSound(name);
     }
     if (name === null || this.context.activeAudio.ended
             || this.context.activeAudio.terminated) {
@@ -2312,9 +2319,12 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
     } else {
         gain.connect(ctx.destination);
     }
-    source.start();
     source.pause = source.stop;
+    source.ended = false;
+    source.onended = function () {this.ended = true; }
+    source.start();
     rcvr.parentThatIsA(StageMorph).activeSounds.push(source);
+    return source;
 };
 
 Process.prototype.reportGetSoundAttribute = function (choice, soundName) {

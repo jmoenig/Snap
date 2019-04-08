@@ -3321,7 +3321,7 @@ SpriteMorph.prototype.addSound = function (audio, name) {
     this.sounds.add(new Sound(audio, name));
 };
 
-SpriteMorph.prototype.playSound = function (name) {
+SpriteMorph.prototype.doPlaySound = function (name) {
     var stage = this.parentThatIsA(StageMorph),
         sound = name instanceof Sound ? name
             : (typeof name === 'number' ? this.sounds.at(name)
