@@ -50,6 +50,7 @@
     * using "inherit" no longer un-hides the palette in presentation mode
     * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
     * the language menu now has a "globe" icon (so it can be found in any language)
+    * accept a number as input for a sound - interpret as index
 * Translation Updates:
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
@@ -63,6 +64,7 @@
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
 * Blocks, Objects, Threads: new "play sound at sample rate" command primitive
 * Objects: added relabelling information for the new "play sound at sample rate" block
+* Objects, Threads: accept a number as input for a sound - interpret as index
 
 ### 2019-04-05
 * Objects: eliminated "clicks" when playing music notes

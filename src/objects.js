@@ -3323,10 +3323,12 @@ SpriteMorph.prototype.addSound = function (audio, name) {
 
 SpriteMorph.prototype.playSound = function (name) {
     var stage = this.parentThatIsA(StageMorph),
-        sound = name instanceof Sound ? name : detect(
-            this.sounds.asArray(),
-            function (s) {return s.name === name.toString(); }
-        ),
+        sound = name instanceof Sound ? name
+            : (typeof name === 'number' ? this.sounds.at(name)
+                : detect(
+                    this.sounds.asArray(),
+                    function (s) {return s.name === name.toString(); }
+            )),
         ctx = this.audioContext(),
         gain =  this.getGainNode(),
         pan = this.getPannerNode(),

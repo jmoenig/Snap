@@ -2254,9 +2254,12 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
         i, source, rcvr;
 
     if (!(name instanceof List)) {
-        sound = name instanceof Sound ? name : detect(
-            this.blockReceiver().sounds.asArray(),
-            function (s) {return s.name === name.toString(); }
+        sound = name instanceof Sound ? name
+            : (typeof name === 'number' ? this.blockReceiver().sounds.at(name)
+                : detect(
+                    this.blockReceiver().sounds.asArray(),
+                    function (s) {return s.name === name.toString(); }
+            )
         );
         if (!sound.audioBuffer) {
             this.decodeSound(sound);
@@ -2315,9 +2318,13 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
 };
 
 Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
-    var sound = soundName instanceof Sound ? soundName : detect(
-            this.blockReceiver().sounds.asArray(),
-            function (s) {return s.name === soundName.toString(); }
+    var sound = soundName instanceof Sound ? soundName
+            : (typeof soundName === 'number' ?
+                this.blockReceiver().sounds.at(soundName)
+                : detect(
+                    this.blockReceiver().sounds.asArray(),
+                    function (s) {return s.name === soundName.toString(); }
+            )
         ),
         option = this.inputOption(choice);
 
