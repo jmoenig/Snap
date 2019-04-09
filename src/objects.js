@@ -3294,6 +3294,9 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         this.wearCostume(id, noShadow);
         return;
     }
+    if (id instanceof Array && (id[0] === 'current')) {
+        return;
+    }
 
     var num,
         arr = this.costumes.asArray(),

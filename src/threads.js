@@ -4338,14 +4338,7 @@ Process.prototype.doSetInstrument = function (num) {
 // Process image processing primitives
 
 Process.prototype.reportGetImageAttribute = function (choice, name) {
-    var cst = name instanceof Costume ? name
-            : (typeof name === 'number' ?
-                    this.blockReceiver().costumes.at(name)
-                : detect(
-                    this.blockReceiver().costumes.asArray(),
-                    function (c) {return c.name === name.toString(); }
-                )
-            ) || new Costume(),
+    var cst = this.costumeNamed(name) || new Costume(),
         option = this.inputOption(choice);
 
     switch (option) {
@@ -4363,24 +4356,34 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
 };
 
 Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
+    var cst;
     if (name instanceof List) {
         return this.reportNewCostume(name, xP, yP);
     }
-
-    var cst = name instanceof Costume ? name
-            : (typeof name === 'number' ?
-                    this.blockReceiver().costumes.at(name)
-                : detect(
-                    this.blockReceiver().costumes.asArray(),
-                    function (c) {return c.name === name.toString(); }
-                )
-            );
+    cst = this.costumeNamed(name);
     if (!cst) {
         return new Costume();
     }
     return cst.stretched(
         Math.round(cst.width() * +xP / 100),
         Math.round(cst.height() * +yP / 100)
+    );
+};
+
+Process.prototype.costumeNamed = function (name) {
+    // private
+    if (name instanceof Costume) {
+        return name;
+    }
+    if (typeof name === 'number') {
+        return this.blockReceiver().costumes.at(name);
+    }
+    if (this.inputOption(name) === 'current') {
+        return this.blockReceiver().costume;
+    }
+    return detect(
+        this.blockReceiver().costumes.asArray(),
+        function (c) {return c.name === name.toString(); }
     );
 };
 

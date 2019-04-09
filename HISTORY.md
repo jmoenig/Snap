@@ -67,7 +67,8 @@
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
 * Objects, Threads: let "getImageAttribute" deal with null costumes
 * Objects, Threads: new "stretch" primitive for costumes, also for flipping
-* Threas: new feature: new costume from list of pixels
+* Threads: new feature: new costume from list of pixels
+* Objects, Threads: added "current" to costume input slot dropdown
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
