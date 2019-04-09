@@ -1264,7 +1264,7 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, null, localize('thing')]
         },
 
-        // MAP - experimental
+        // HOFs - experimental
         reportMap: {
             dev: true,
             type: 'reporter',
@@ -1275,8 +1275,8 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'command',
             category: 'lists',
-            spec: 'for %upvar in %l %cla',
-            defaults: [localize('each item')]
+            spec: 'for each %upvar in %l %cla',
+            defaults: [localize('item')]
         },
 
         // Tables - experimental
@@ -2411,6 +2411,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
+        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -2427,9 +2430,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportMap'));
-            blocks.push('-');
-            blocks.push(block('doForEach'));
             blocks.push(block('doShowTable'));
         }
 
@@ -7930,6 +7930,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
+        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -7946,9 +7949,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportMap'));
-            blocks.push('-');
-            blocks.push(block('doForEach'));
             blocks.push(block('doShowTable'));
         }
 

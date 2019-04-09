@@ -25,6 +25,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
+    * new "map" and "for each" primitives in list category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -77,6 +78,7 @@
 * Objects: added reporter for graphic effects
 * Objects, Blocks: added pen attribute reporter
 * Objects: added "write" command to Pen category (same as "label" from tools
+* Objects: added "map" and "for each" primitives to List category
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
