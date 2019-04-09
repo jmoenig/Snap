@@ -403,7 +403,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'go to %layer layer',
-            defaults: ['front']
+            defaults: [['front']]
         },
         goBack: {
             only: SpriteMorph,
@@ -653,6 +653,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'fill'
+        },
+        write: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'write %s size %n',
+            defaults: [localize('Hello!'), 12]
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
@@ -2130,6 +2137,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
         blocks.push(block('floodFill'));
+        blocks.push(block('write'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('=');
@@ -4020,6 +4028,49 @@ SpriteMorph.prototype.doStamp = function () {
 
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
+};
+
+// SpeiteMorph writing (printing)
+
+SpriteMorph.prototype.write = function (text, size) {
+    // thanks to Michael Ball for contributing this code!
+    if (typeof text !== 'string' && typeof text !== 'number') {
+        throw new Error(
+            'LABEL can only draw text or numbers, not a ' +
+            typeof text
+        );
+    }
+
+    var stage = this.parentThatIsA(StageMorph),
+        context = stage.penTrails().getContext('2d'),
+        rotation = radians(this.direction() - 90),
+        trans = new Point(
+            this.center().x - stage.left(),
+            this.center().y - stage.top()
+        ),
+        len,
+        pos;
+
+    context.save();
+    context.font = size + 'px monospace';
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
+    context.fillStyle = this.color.toString();
+    len = context.measureText(text).width;
+    trans = trans.multiplyBy(1 / stage.scale);
+    context.translate(trans.x, trans.y);
+    context.rotate(rotation);
+    context.fillText(text, 0, 0);
+    context.translate(-trans.x, -trans.y);
+    context.restore();
+    pos = new Point(
+        len * Math.sin(radians(this.direction())),
+        len * Math.cos(radians(this.direction()))
+    );
+    pos = pos.add(new Point(this.xPosition(), this.yPosition()));
+    this.gotoXY(pos.x, pos.y, false);
+    this.changed();
+    stage.changed();
 };
 
 // SpriteMorph pen size

@@ -24,6 +24,7 @@
     * new "stretch" primitive for costumes, also for flipping
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
+    * new "write" command in pen category (used to be "label" in tools)
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -75,6 +76,7 @@
 * Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
 * Objects: added reporter for graphic effects
 * Objects, Blocks: added pen attribute reporter
+* Objects: added "write" command to Pen category (same as "label" from tools
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
