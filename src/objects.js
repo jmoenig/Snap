@@ -602,6 +602,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'change pen %hsva by %n',
             defaults: [['hue'], 10]
         },
+        getPenAttribute: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen %pen',
+            defaults: [['hue']]
+        },
         setBackgroundColor: {
             only: StageMorph,
             type: 'command',
@@ -2117,6 +2123,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setColor'));
         blocks.push(block('changePenHSVA'));
         blocks.push(block('setPenHSVA'));
+        blocks.push(block('getPenAttribute'));
         blocks.push('-');
         blocks.push(block('changeSize'));
         blocks.push(block('setSize'));
@@ -3913,6 +3920,15 @@ SpriteMorph.prototype.setColor = function (aColor) {
 };
 
 SpriteMorph.prototype.setBackgroundColor = SpriteMorph.prototype.setColor;
+
+SpriteMorph.prototype.getPenAttribute = function (attrib) {
+    var name = attrib instanceof Array ? attrib[0] : null,
+        options = ['hue', 'saturation', 'brightness', 'transparency'];
+    if (name === 'size') {
+        return this.size || 0;
+    }
+    return this.getColorComponentHSLA(options.indexOf(name));
+};
 
 // SpriteMorph layers
 
@@ -8078,6 +8094,9 @@ StageMorph.prototype.setColor = function (aColor) {
 };
 
 StageMorph.prototype.setBackgroundColor = StageMorph.prototype.setColor;
+
+StageMorph.prototype.getPenAttribute
+    = SpriteMorph.prototype.getPenAttribute;
 
 // StageMorph pseudo-inherited behavior
 

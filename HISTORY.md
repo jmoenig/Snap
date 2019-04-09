@@ -23,6 +23,7 @@
     * pixel access primitives for bitmap and vector (!) graphics
     * new "stretch" primitive for costumes, also for flipping
     * new "get graphic effect" reporter
+    * new "get pen attribute" reporter
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -73,6 +74,7 @@
 * Objects, Threads: added "current" to costume input slot dropdown
 * Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
 * Objects: added reporter for graphic effects
+* Objects, Blocks: added pen attribute reporter
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive

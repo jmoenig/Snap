@@ -1369,6 +1369,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['hue']);
             break;
+        case '%pen':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    size : ['size'],
+                    hue : ['hue'],
+                    saturation : ['saturation'],
+                    brightness : ['brightness'],
+                    transparency : ['transparency']
+                },
+                true
+            );
+            part.setContents(['hue']);
+            break;
         case '%asp': // aspect
             part = new InputSlotMorph(
                 null,
