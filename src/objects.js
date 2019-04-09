@@ -356,6 +356,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set %eff effect to %n',
             defaults: [null, 0]
         },
+        getEffect: {
+            type: 'reporter',
+            category: 'looks',
+            spec: '%eff effect'
+        },
         clearEffects: {
             type: 'command',
             category: 'looks',
@@ -2017,6 +2022,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
+        blocks.push(block('getEffect'));
         blocks.push('-');
         blocks.push(block('changeScale'));
         blocks.push(block('setScale'));
@@ -4455,6 +4461,14 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     }
     this.drawNew();
     this.changed();
+};
+
+SpriteMorph.prototype.getEffect = function (effect) {
+    var eff = effect instanceof Array ? effect[0] : null;
+    if (eff === 'ghost') {
+        return this.getGhostEffect();
+    }
+    return this.graphicsValues[eff];
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
@@ -7516,6 +7530,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
+        blocks.push(block('getEffect'));
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
@@ -8139,6 +8154,9 @@ StageMorph.prototype.applyGraphicsEffects
 
 StageMorph.prototype.setEffect
     = SpriteMorph.prototype.setEffect;
+
+StageMorph.prototype.getEffect
+    = SpriteMorph.prototype.getEffect;
 
 StageMorph.prototype.getGhostEffect
     = SpriteMorph.prototype.getGhostEffect;
