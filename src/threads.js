@@ -60,7 +60,7 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
-TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas*/
 
 modules.threads = '2019-April-09';
 
@@ -4363,6 +4363,10 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
 };
 
 Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
+    if (name instanceof List) {
+        return this.reportNewCostume(name, xP, yP);
+    }
+
     var cst = name instanceof Costume ? name
             : (typeof name === 'number' ?
                     this.blockReceiver().costumes.at(name)
@@ -4378,6 +4382,27 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
         Math.round(cst.width() * +xP / 100),
         Math.round(cst.height() * +yP / 100)
     );
+};
+
+Process.prototype.reportNewCostume = function (pixels, width, height) {
+    // private
+    width = Math.abs(Math.floor(+width));
+    height = Math.abs(Math.floor(+height));
+
+    var canvas = newCanvas(new Point(width, height), true),
+        ctx = canvas.getContext('2d'),
+        src = pixels.asArray(),
+        dta = ctx.createImageData(width, height),
+        i, k, px;
+
+    for (i = 0; i < src.length; i += 1) {
+        px = src[i].asArray();
+        for (k = 0; k < 4; k += 1) {
+            dta.data[(i * 4) + k] = px[k];
+        }
+    }
+    ctx.putImageData(dta, 0, 0);
+    return new Costume(canvas);
 };
 
 // Process constant input options
