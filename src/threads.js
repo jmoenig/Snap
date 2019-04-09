@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map*/
 
-modules.threads = '2019-April-08';
+modules.threads = '2019-April-09';
 
 var ThreadManager;
 var Process;
@@ -2291,7 +2291,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
     }
     source.pause = source.stop;
     source.ended = false;
-    source.onended = function () {this.ended = true; }
+    source.onended = function () {this.ended = true; };
     source.start();
     rcvr.parentThatIsA(StageMorph).activeSounds.push(source);
     return source;
@@ -2420,7 +2420,7 @@ Process.prototype.encodeSound = function (samples, rate) {
     }
     source = ctx.createBufferSource();
     source.buffer = arrayBuffer;
-    source.audioBuffer = source.buffer; // +++
+    source.audioBuffer = source.buffer;
     return source;
 };
 
@@ -4332,6 +4332,33 @@ Process.prototype.doSetInstrument = function (num) {
     this.receiver.instrument = +num;
     if (this.receiver.freqPlayer) {
         this.receiver.freqPlayer.setInstrument(+num);
+    }
+};
+
+// Process image processing primitives
+
+Process.prototype.reportGetImageAttribute = function (choice, name) {
+    var cst = name instanceof Costume ? name
+            : (typeof name === 'number' ?
+                    this.blockReceiver().costumes.at(name)
+                : detect(
+                    this.blockReceiver().costumes.asArray(),
+                    function (c) {return c.name === name.toString(); }
+                )
+            ),
+        option = this.inputOption(choice);
+
+    switch (option) {
+    case 'name':
+        return cst.name;
+    case 'width':
+        return cst.width();
+    case 'height':
+        return cst.height();
+    case 'pixels':
+        return cst.rasterized().pixels();
+    default:
+        return 0;
     }
 };
 

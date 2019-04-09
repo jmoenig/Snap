@@ -20,6 +20,7 @@
     * new "play sound at sample rate" command
     * accept lists and lists of lists as inputs to all sound primitives
     * new "play frequency" commands in the Sounds category
+    * pixel access primitives for bitmap and vector (!) graphics
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -60,6 +61,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-04-09
+* Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive

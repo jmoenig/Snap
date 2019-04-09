@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-08';
+modules.objects = '2019-April-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -303,6 +303,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: 'costume #'
+        },
+        reportGetImageAttribute: {
+            type: 'reporter',
+            category: 'looks',
+            spec: '%img of costume %cst',
+            defaults: [['width']]
         },
         doSayFor: {
             only: SpriteMorph,
@@ -1993,6 +1999,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doWearNextCostume'));
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
+        blocks.push('-');
+        blocks.push(block('reportGetImageAttribute'));
         blocks.push('-');
         blocks.push(block('doSayFor'));
         blocks.push(block('bubble'));
@@ -7492,6 +7500,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
+        blocks.push(block('reportGetImageAttribute'));
+        blocks.push('-');
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
@@ -8893,6 +8903,32 @@ Costume.prototype.thumbnail = function (extentPoint) {
     return trg;
 };
 
+// Costume pixel access
+
+Costume.prototype.rasterized = function () {
+    return this;
+};
+
+Costume.prototype.pixels = function () {
+    var i,
+        pixels = [],
+        src = this.contents.getContext('2d').getImageData(
+            0,
+            0,
+            this.contents.width,
+            this.contents.height
+        );
+    for (i = 0; i < src.data.length; i += 4) {
+        pixels.push(new List([
+            src.data[i],
+            src.data[i + 1],
+            src.data[i + 2],
+            src.data[i + 3]
+        ]));
+    }
+    return new List(pixels);
+};
+
 // Costume catching "tainted" canvases
 
 Costume.prototype.isTainted = function () {
@@ -9020,6 +9056,22 @@ SVG_Costume.prototype.edit = function (
         anIDE,
         this.shapes || []
     );
+};
+
+// SVG_Costume pixel access
+
+SVG_Costume.prototype.rasterized = function () {
+    var canvas = newCanvas(this.extent(), true),
+        ctx = canvas.getContext('2d'),
+        rasterized;
+
+    ctx.drawImage(this.contents, 0, 0);
+    rasterized = new Costume(
+        canvas,
+        this.name,
+        this.rotationCenter.copy()
+    );
+    return rasterized;
 };
 
 // CostumeEditorMorph ////////////////////////////////////////////////////////
