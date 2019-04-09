@@ -1264,15 +1264,13 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, null, localize('thing')]
         },
 
-        // HOFs - experimental
+        // HOFs
         reportMap: {
-            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'map %repRing over %l'
         },
         doForEach: {
-            dev: true,
             type: 'command',
             category: 'lists',
             spec: 'for each %upvar in %l %cla',
@@ -2592,6 +2590,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListLength',
                         'reportListContainsItem',
+                        'doForEach',
+                        'reportMap',
                         'doAddToList',
                         'doDeleteFromList',
                         'doInsertInList',

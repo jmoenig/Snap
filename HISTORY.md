@@ -79,6 +79,7 @@
 * Objects, Blocks: added pen attribute reporter
 * Objects: added "write" command to Pen category (same as "label" from tools
 * Objects: added "map" and "for each" primitives to List category
+* Objects: made HOF primitives hidable
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
