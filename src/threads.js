@@ -4345,7 +4345,7 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
                     this.blockReceiver().costumes.asArray(),
                     function (c) {return c.name === name.toString(); }
                 )
-            ),
+            ) || new Costume(),
         option = this.inputOption(choice);
 
     switch (option) {

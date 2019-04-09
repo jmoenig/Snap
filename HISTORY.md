@@ -64,6 +64,7 @@
 
 ### 2019-04-09
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
+* Objects, Threads: let "getImageAttribute" deal with null costumes 
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive

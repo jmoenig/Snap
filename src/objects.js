@@ -8910,14 +8910,19 @@ Costume.prototype.rasterized = function () {
 };
 
 Costume.prototype.pixels = function () {
-    var i,
-        pixels = [],
-        src = this.contents.getContext('2d').getImageData(
-            0,
-            0,
-            this.contents.width,
-            this.contents.height
-        );
+    var pixels = [],
+        src,
+        i;
+
+    if (!this.contents.width || !this.contents.height) {
+        return pixels;
+    }
+    src = this.contents.getContext('2d').getImageData(
+        0,
+        0,
+        this.contents.width,
+        this.contents.height
+    );
     for (i = 0; i < src.data.length; i += 4) {
         pixels.push(new List([
             src.data[i],
