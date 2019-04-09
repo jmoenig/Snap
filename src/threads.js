@@ -4362,6 +4362,24 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
     }
 };
 
+Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
+    var cst = name instanceof Costume ? name
+            : (typeof name === 'number' ?
+                    this.blockReceiver().costumes.at(name)
+                : detect(
+                    this.blockReceiver().costumes.asArray(),
+                    function (c) {return c.name === name.toString(); }
+                )
+            );
+    if (!cst) {
+        return new Costume();
+    }
+    return cst.stretched(
+        Math.round(cst.width() * +xP / 100),
+        Math.round(cst.height() * +yP / 100)
+    );
+};
+
 // Process constant input options
 
 Process.prototype.inputOption = function (dta) {

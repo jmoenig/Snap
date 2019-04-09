@@ -21,6 +21,7 @@
     * accept lists and lists of lists as inputs to all sound primitives
     * new "play frequency" commands in the Sounds category
     * pixel access primitives for bitmap and vector (!) graphics
+    * new "stretch" primitive for costumes, also for flipping
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -64,7 +65,8 @@
 
 ### 2019-04-09
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
-* Objects, Threads: let "getImageAttribute" deal with null costumes 
+* Objects, Threads: let "getImageAttribute" deal with null costumes
+* Objects, Threads: new "stretch" primitive for costumes, also for flipping
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
