@@ -44,6 +44,7 @@
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * deprecated storing projects in the browser's localStorage
+    * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
 * Notable Fixes:
@@ -69,6 +70,7 @@
 * Objects, Threads: new "stretch" primitive for costumes, also for flipping
 * Threads: new feature: new costume from list of pixels
 * Objects, Threads: added "current" to costume input slot dropdown
+* Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
 
 ### 2019-04-08
 * Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive

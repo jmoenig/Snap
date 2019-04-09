@@ -1212,17 +1212,17 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     color: ['color'],
+                    saturation: ['saturation'],
+                    brightness : ['brightness'],
+                    ghost: ['ghost'],
                     fisheye: ['fisheye'],
                     whirl: ['whirl'],
                     pixelate: ['pixelate'],
                     mosaic: ['mosaic'],
-                    duplicate: ['duplicate'],
-                    negative : ['negative'],
-                    comic: ['comic'],
-                    confetti: ['confetti'],
-                    saturation: ['saturation'],
-                    brightness : ['brightness'],
-                    ghost: ['ghost']
+                    negative : ['negative']
+                    // duplicate: ['duplicate'],
+                    // comic: ['comic'],
+                    // confetti: ['confetti']
                 },
                 true
             );
