@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-March-25';
+modules.gui = '2019-April-10';
 
 // Declarations
 
@@ -6045,10 +6045,19 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.key = 'project' + task;
 
     // build contents
-    this.buildContents();
-    this.onNextStep = function () { // yield to show "updating" message
-        myself.setSource(myself.source);
-    };
+    if (task === 'open' && this.source === 'disk') {
+        // give the user a chance to switch to another source
+        this.source = null;
+        this.buildContents();
+        this.projectList = [];
+        this.listField.hide();
+        this.source = 'disk';
+    } else {
+        this.buildContents();
+        this.onNextStep = function () { // yield to show "updating" message
+            myself.setSource(myself.source);
+        };
+    }
 };
 
 ProjectDialogMorph.prototype.buildContents = function () {

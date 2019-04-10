@@ -70,6 +70,7 @@
 ### 2019-04-10
 * Objects: took out MAP and FOREACH primitives (available in dev mode)
 * Objects: fixed #2371 (playing sounds in the stage)
+* GUI: fixed #2367 (changing project source after exporting to disk)
 
 ### 2019-04-09
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
