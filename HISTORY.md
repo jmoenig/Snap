@@ -68,7 +68,8 @@
     * French
 
 ### 2019-04-10
-* took out MAP and FOREACH primitives (available in dev mode)
+* Objects: took out MAP and FOREACH primitives (available in dev mode)
+* Objects: fixed #2371 (playing sounds in the stage)
 
 ### 2019-04-09
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive

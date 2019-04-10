@@ -3409,6 +3409,9 @@ SpriteMorph.prototype.setVolume = function (num, noShadow) {
         1 / Math.pow(10, Math.log2(100 / this.volume)),
         this.audioContext().currentTime
     );
+    if (this instanceof StageMorph) {
+        return;
+    }
     // propagate to children that inherit my volume
     if (!noShadow) {
         this.shadowAttribute('volume');
@@ -3454,6 +3457,9 @@ SpriteMorph.prototype.setPan = function (num, noShadow) {
         this.pan / 100,
         this.audioContext().currentTime
     );
+    if (this instanceof StageMorph) {
+        return;
+    }
     // propagate to children that inherit my balance
     if (!noShadow) {
         this.shadowAttribute('balance');
@@ -8242,8 +8248,8 @@ StageMorph.prototype.clearEffects
 StageMorph.prototype.addSound
     = SpriteMorph.prototype.addSound;
 
-StageMorph.prototype.playSound
-    = SpriteMorph.prototype.playSound;
+StageMorph.prototype.doPlaySound
+    = SpriteMorph.prototype.doPlaySound;
 
 StageMorph.prototype.stopAllActiveSounds = function () {
     this.activeSounds.forEach(function (audio) {
