@@ -25,7 +25,6 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
-    * new "map" and "for each" primitives in list category
     * added "neg" selector to monadic function reporter in "Operators" category
     * added "log2" selector to monadic function reporter in "Operators" category
     * added "^" reporter (power of) in the Operators category
@@ -67,6 +66,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-04-10
+* took out MAP and FOREACH primitives (available in dev mode)
 
 ### 2019-04-09
 * Blocks, Objects, Threads: new "getImageAttribute" reporter primitive

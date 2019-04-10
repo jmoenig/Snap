@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-09';
+modules.objects = '2019-April-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -2409,9 +2409,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push(block('reportMap'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -2427,6 +2424,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doForEach'));
+            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
@@ -2590,8 +2590,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListLength',
                         'reportListContainsItem',
-                        'doForEach',
-                        'reportMap',
+                        // 'doForEach',
+                        // 'reportMap',
                         'doAddToList',
                         'doDeleteFromList',
                         'doInsertInList',
@@ -7930,9 +7930,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push(block('reportMap'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -7948,6 +7945,9 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doForEach'));
+            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
