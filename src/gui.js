@@ -5305,7 +5305,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         false, // read only?
         true, // numeric
         1, // slider min
-        12, // slider max
+        5, // slider max
         action // slider action
     );
 };
