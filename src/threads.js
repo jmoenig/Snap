@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas*/
 
-modules.threads = '2019-April-09';
+modules.threads = '2019-April-11';
 
 var ThreadManager;
 var Process;
@@ -2866,7 +2866,7 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
-    case 'neg':
+    case '\u2212': // minus-sign
         result = n * -1;
         break;
     case 'ceiling':
@@ -2902,7 +2902,7 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'log': // base 10
         result =  Math.log10(x);
         break;
-    case 'log2': // base 2
+    case 'lg': // base 2
         result =  Math.log2(x);
         break;
     case 'e^':
@@ -2910,6 +2910,9 @@ Process.prototype.reportMonadic = function (fname, n) {
         break;
     case '10^':
         result = Math.pow(10, x);
+        break;
+    case '2^':
+        result = Math.pow(2, x);
         break;
     default:
         nop();
