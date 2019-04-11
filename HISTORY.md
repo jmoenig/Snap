@@ -67,7 +67,8 @@
     * French
 
 ### 2019-04-11
-* Blocks, Threads: Renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
+* Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
+* Objects: moved costume-pixels primitives down in the palette towards the graphic effects
 
 ### 2019-04-10
 * Objects: took out MAP and FOREACH primitives (available in dev mode)
