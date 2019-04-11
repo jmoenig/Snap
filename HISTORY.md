@@ -25,7 +25,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
-    * added "-" (minus), "lg" (log2) and "2^" selectors to monadic function reporter in Operators
+    * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" as attribute selectors of the OF primitive for the stage
     * special context-aware drop-downs for custom blocks
@@ -70,6 +70,7 @@
 * Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
 * Objects: moved costume-pixels primitives down in the palette towards the graphic effects
 * German translation update
+* re- renamed minus selector back to "neg"
 
 ### 2019-04-10
 * Objects: took out MAP and FOREACH primitives (available in dev mode)

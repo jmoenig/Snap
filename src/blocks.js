@@ -1323,7 +1323,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     abs : ['abs'],
-                    '\u2212' : ['\u2212'], // minus-sign
+                    // '\u2212' : ['\u2212'], // minus-sign
+                    neg : ['neg'],
                     ceiling : ['ceiling'],
                     floor : ['floor'],
                     sqrt : ['sqrt'],

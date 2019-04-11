@@ -2866,7 +2866,8 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
-    case '\u2212': // minus-sign
+    // case '\u2212': // minus-sign
+    case 'neg':
         result = n * -1;
         break;
     case 'ceiling':
