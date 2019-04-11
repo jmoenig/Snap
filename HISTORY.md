@@ -71,6 +71,7 @@
 * Objects: moved costume-pixels primitives down in the palette towards the graphic effects
 * German translation update
 * re- renamed minus selector back to "neg"
+* updated tools library (removed "label", because it's now a primitive)
 
 ### 2019-04-10
 * Objects: took out MAP and FOREACH primitives (available in dev mode)
