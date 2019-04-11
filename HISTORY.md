@@ -74,6 +74,7 @@
 * updated tools library (removed "label", because it's now a primitive)
 * updated text-costumes library (removed "label", because it's now a primitive)
 * updated pixels-library (removed blocks that are now primitives)
+* updated audio-comp library (removed blocks that are now primitives)
 
 ### 2019-04-10
 * Objects: took out MAP and FOREACH primitives (available in dev mode)
