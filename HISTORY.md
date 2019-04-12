@@ -33,6 +33,7 @@
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
+    * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
 * Notable Changes:
@@ -68,6 +69,7 @@
 
 ### 2019-04-12
 * Objects: enabled text-variables as inputs for graphic effects / pen attributes
+* updated amination library with graphic effects and audio attributes
 
 ### 2019-04-11
 * Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
