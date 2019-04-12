@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-11';
+modules.objects = '2019-April-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -3910,7 +3910,7 @@ SpriteMorph.prototype.getColorComponentHSLA = function (idx) {
     if (idx === 3) {
         return (1 - this.color.a) * 100;
     }
-    return this.cachedHSV[idx] * 100;
+    return (this.cachedHSV[idx] || 0) * 100;
 };
 
 SpriteMorph.prototype.changeColorComponentHSVA = function (idx, delta) {
@@ -3936,7 +3936,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
 SpriteMorph.prototype.setBackgroundColor = SpriteMorph.prototype.setColor;
 
 SpriteMorph.prototype.getPenAttribute = function (attrib) {
-    var name = attrib instanceof Array ? attrib[0] : null,
+    var name = attrib instanceof Array ? attrib[0] : attrib.toString(),
         options = ['hue', 'saturation', 'brightness', 'transparency'];
     if (name === 'size') {
         return this.size || 0;
@@ -4526,7 +4526,27 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 };
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
-    var eff = effect instanceof Array ? effect[0] : null;
+    var eff = effect instanceof Array ? effect[0] : effect.toString();
+    if (!contains(
+            [
+                'color',
+                'saturation',
+                'brightness',
+                'ghost',
+                'fisheye',
+                'whirl',
+                'pixelate',
+                'mosaic',
+                'negative',
+                // depracated, but still supported in legacy projects:
+                'duplicate',
+                'comic',
+                'confetti'
+            ],
+            eff
+    )) {
+        throw new Error(localize('unsupported graphic effect') + ':\n' + eff);
+    }
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
@@ -4537,11 +4557,11 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
 };
 
 SpriteMorph.prototype.getEffect = function (effect) {
-    var eff = effect instanceof Array ? effect[0] : null;
+    var eff = effect instanceof Array ? effect[0] : effect.toString();
     if (eff === 'ghost') {
         return this.getGhostEffect();
     }
-    return this.graphicsValues[eff];
+    return this.graphicsValues[eff] || 0;
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
@@ -4549,7 +4569,7 @@ SpriteMorph.prototype.getGhostEffect = function () {
 };
 
 SpriteMorph.prototype.changeEffect = function (effect, value) {
-    var eff = effect instanceof Array ? effect[0] : null;
+    var eff = effect instanceof Array ? effect[0] : effect.toString();
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
     } else {

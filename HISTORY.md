@@ -66,6 +66,9 @@
     * German
     * French
 
+### 2019-04-12
+* Objects: enabled text-variables as inputs for graphic effects / pen attributes
+
 ### 2019-04-11
 * Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
 * Objects: moved costume-pixels primitives down in the palette towards the graphic effects
