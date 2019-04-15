@@ -67,6 +67,8 @@
     * German
     * French
 
+### 2019-04-15
+* Catalan translation update
 ### 2019-04-12
 * Objects: enabled text-variables as inputs for graphic effects / pen attributes
 * updated amination library with graphic effects and audio attributes

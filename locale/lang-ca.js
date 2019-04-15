@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-03-17', // this, too, will appear in the Translators tab
+        '2019-04-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2523,7 +2523,7 @@ SnapTranslator.dict.ca = {
     '"Bigger" Data':
         'Treballant amb "Big Data"',
     'Frequency Distribution Analysis':
-        'Analisi de la disbribució de freqüències',
+        'Anàlisi de la disbribució de freqüències',
     'create variables in program':
         'Creant variables des del programa',
     'Deal with JSON data':
@@ -2586,6 +2586,62 @@ SnapTranslator.dict.ca = {
         'Extreu sub-cadenes de texts de diverses formes',
 //
     'translations...':
-         'traduccions...'
-    
+         'traduccions...',
+    'width':
+        'amplada',
+    'height':
+        'alçada',
+    'pixel':
+        'píxels',
+    '%img of costume %cst':
+        '%img del vestit %cst',
+    'stretch %cst x: %n y: %n %':
+        'estira %cst a x: %n y: %n %',
+    '%eff effect':
+        'efecte %eff',
+    'current':
+        'actual',
+    'play sound %snd at %rate hz':
+        'toca el so %snd a %rate hz',
+    '%aa of sound %snd':
+        '%aa del so %snd',
+    'duration':
+        'durada',
+    'length':
+        'longitud',
+    'number of channels':
+        'número de canals',
+    'sample rate':
+        'freqüència de mostreig',
+    'samples':
+        'mostres',
+    'change volume by %n':
+        'augmenta el volum en %n',
+    'set volume to %n %':
+        'fixa el volum a %n %',
+    'change balance by %n':
+        'augmenta el balanç en %n',
+    'set balance to %n':
+        'fixa el balanç a %n',
+    'balance':
+        'balanç',
+    'play frequency %n hz':
+        'toca la freqüència %n hz',
+    'stop frequency':
+        'atura la freqüència',
+    'pen %pen':
+        '%pen del llapis',
+    'write %s size %n':
+        'escriu %s de mida %n',
+    'draggable?':
+        'arrossegable?',
+    'frequency':
+        'freqüència',
+    'spectrum':
+        'espectre',
+    'resolution':
+        'resolució',
+    'neg':
+        'oposat'
+
 };
