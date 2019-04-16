@@ -967,7 +967,9 @@ Cloud.prototype.getUserCollections = function (
     onSuccess,
     onError
 ) {
-    this.withCredentialsRequest(
+    this[(collectionUsername !== this.username) ?
+            'request' :
+            'withCredentialsRequest'](
         'GET',
         '/users/' +
             (collectionUsername ?
