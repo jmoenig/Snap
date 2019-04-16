@@ -10,17 +10,30 @@
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
     * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
+    * new experimental live audio-scripting support
     * new "object" reporter in the Sensing category for getting a sprite by its name
     * blocks for changing and querying the "flat line ends" setting 
     * selectors for changing and querying "draggable" and "rotation style" settings
-    * added "neg" selector to monadic function reporter in "Operators" category
+    * new sound + music "volume" feature + blocks
+    * new sound + music stereo "panning" feature + blocks
+    * new sound attribute getter reporter
+    * new "play sound at sample rate" command
+    * accept lists and lists of lists as inputs to all sound primitives
+    * new "play frequency" commands in the Sounds category
+    * pixel access primitives for bitmap and vector (!) graphics
+    * new "stretch" primitive for costumes, also for flipping
+    * new "get graphic effect" reporter
+    * new "get pen attribute" reporter
+    * new "write" command in pen category (used to be "label" in tools)
+    * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
+    * added "width" and "height" as attribute selectors of the OF primitive for the stage
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
-    * new "play frequency" commands in the AudioComp libary's Sound category
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
+    * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
 * Notable Changes:
@@ -34,14 +47,17 @@
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * deprecated storing projects in the browser's localStorage
+    * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
 * Notable Fixes:
+    * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
     * using "inherit" no longer un-hides the palette in presentation mode
     * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
     * the language menu now has a "globe" icon (so it can be found in any language)
+    * accept a number as input for a sound - interpret as index
 * Translation Updates:
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
@@ -49,6 +65,109 @@
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
     * German
+    * French
+
+### 2019-04-12
+* Objects: enabled text-variables as inputs for graphic effects / pen attributes
+* updated amination library with graphic effects and audio attributes
+
+### 2019-04-11
+* Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
+* Objects: moved costume-pixels primitives down in the palette towards the graphic effects
+* German translation update
+* re- renamed minus selector back to "neg"
+* updated tools library (removed "label", because it's now a primitive)
+* updated text-costumes library (removed "label", because it's now a primitive)
+* updated pixels-library (removed blocks that are now primitives)
+* updated audio-comp library (removed blocks that are now primitives)
+
+### 2019-04-10
+* Objects: took out MAP and FOREACH primitives (available in dev mode)
+* Objects: fixed #2371 (playing sounds in the stage)
+* GUI: fixed #2367 (changing project source after exporting to disk)
+* GUI: fixed #2373 (limit zoom blocks slider to 5x)
+
+### 2019-04-09
+* Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
+* Objects, Threads: let "getImageAttribute" deal with null costumes
+* Objects, Threads: new "stretch" primitive for costumes, also for flipping
+* Threads: new feature: new costume from list of pixels
+* Objects, Threads: added "current" to costume input slot dropdown
+* Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
+* Objects: added reporter for graphic effects
+* Objects, Blocks: added pen attribute reporter
+* Objects: added "write" command to Pen category (same as "label" from tools
+* Objects: added "map" and "for each" primitives to List category
+* Objects: made HOF primitives hidable
+
+### 2019-04-08
+* Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
+* Blocks, Objects, Threads: new "play sound at sample rate" command primitive
+* Objects: added relabelling information for the new "play sound at sample rate" block
+* Objects, Threads: accept a number as input for a sound - interpret as index
+* Objects, Threads: accept lists and lists of lists as inputs to all sound playing primitives
+* Threads: accept lists and lists of lists as inputs to the "get sound attribute" primitive
+
+### 2019-04-05
+* Objects: eliminated "clicks" when playing music notes
+* Objects: eliminated "clicks" when playing a frequency
+* Widgets, Objects: Adjusted PianoKeyboard for the new audio engine
+* Objects: tweaked oscillator fade-out
+* Blocks, Threads: added "sample rate" selector to microphone drow-down
+* updated German translation for "sample rate"
+* Objects: stop microphone output when the user presses the stop button
+
+### 2019-04-04
+* Objects, Threads: new "play frequency" commands in the Sounds category
+* Objects, Store: renamed "pan left/right" to "balance"
+* updated German translation
+* moved "stage width" and "stage height" into attribute menu of the OF block for the stage
+* added 'volume' and 'balance' selectors to the OF block
+* Objects, Threads, Blocks: added inheritance support for "volume"
+* Objects, Threads, Blocks: added inheritance support for "balance"
+
+### 2019-04-03
+* Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
+* Objects, Store: new feature: volume blocks
+* Objects: added relabelling information for the new volume blocks
+* Objects, Store: new feature: audio stereo-panning blocks
+* Objects: added relabelling information for the new stereo-panning blocks
+* German translation update for volume and panning blocks
+* updated AudioComp library for the new volume and stereo-panning features
+
+### 2019-04-02
+* Objects, Threads: lazily initialize volume property
+* Objects: use AudioContext to play recorded sounds
+* Objects: new audio scheme support for the stage
+* Objects: added basic stereo-panning support for sounds (under construction)
+* Objects, Threads: added basic stereo-panning support for notes
+* Objects: map volume to a logarithmic gain scale
+* Blocks, Threads: added "log2" function selector to monadic reporter, tweaked "log"
+
+### 2019-04-01
+* Objects: let the Microphone share the Note prototype's AudioContext
+* Objects: took out gain node from Note oscillator (will be used for "volume" setting)
+* Objects: refactored audio context sharing and lazy initialization
+* Objects, Threads: added volume support for notes (under construction)
+
+### 2019-03-31
+* Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
+* updated German translation
+* updated AudioComp library (removed stage width/height blocks, added translation)
+
+### 2019-03-30
+* Objects: support multi-channel live-audio scripting
+* Threads, Objects: added JIT-compilation to live-audio scripting
+
+### 2019-03-28
+* Blocks, Threaeds, Objects: new experimental live audio scripting support
+
+### 2019-03-26
+* updated French translation
+* updated animation library with partial French translation
+
+### 2019-03-25
+* GUI: fixed unintentional pen trails when manually cloning or duplicating a sprite whose pen is down
 
 ### 2019-03-18
 * Threads: replaced 'colorBehindSprite' with 'colorAtSprite'

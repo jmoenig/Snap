@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-March-18';
+modules.locale = '2019-April-11';
 
 // Global stuff
 
@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2019-03-18'
+        '2019-04-11'
 };
 
 SnapTranslator.dict.it = {
@@ -259,7 +259,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2016-10-27'
+        '2019-03-26'
 };
 
 SnapTranslator.dict.si = {

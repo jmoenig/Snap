@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-February-22';
+modules.store = '2019-April-04';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -265,6 +265,8 @@ SnapSerializer.prototype.watcherLabels = {
     direction: 'direction',
     getScale: 'size',
     getTempo: 'tempo',
+    getVolume: 'volume',
+    getPan: 'balance',
     getLastAnswer: 'answer',
     getLastMessage: 'message',
     getTimer: 'timer',
@@ -394,6 +396,13 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         project.stage.fps = 30;
         StageMorph.prototype.frameRate = 30;
     }
+    if (model.stage.attributes.volume) {
+        project.stage.volume = +model.stage.attributes.volume;
+    }
+    if (model.stage.attributes.pan) {
+        project.stage.pan = +model.stage.attributes.pan;
+    }
+
     model.pentrails = model.stage.childNamed('pentrails');
     if (model.pentrails) {
         project.pentrails = new Image();
@@ -680,6 +689,12 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
+        }
+        if (model.attributes.volume) {
+            sprite.volume = +model.attributes.volume;
+        }
+        if (model.attributes.pan) {
+            sprite.pan = +model.attributes.pan;
         }
         project.stage.add(sprite);
         ide.sprites.add(sprite);
@@ -1402,6 +1417,12 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;
         }
+        if (model.attributes.volume) {
+            v.volume = +model.attributes.volume;
+        }
+        if (model.attributes.pan) {
+            v.pan = +model.attributes.pan;
+        }
         myself.project.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
@@ -1679,6 +1700,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<stage name="@" width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             '%' +
+            'volume="@" ' +
+            'pan="@" ' +
             'lines="@" ' +
             'ternary="@" ' +
             'codify="@" ' +
@@ -1715,6 +1738,8 @@ StageMorph.prototype.toXML = function (serializer) {
         this.isThreadSafe,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        this.volume,
+        this.pan,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
@@ -1752,6 +1777,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         '<sprite name="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
             ' scale="@"' +
+            ' volume="@"' +
+            ' pan="@"' +
             ' rotation="@"' +
             '%' +
             ' draggable="@"' +
@@ -1772,6 +1799,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.yPosition(),
         this.heading,
         this.scale,
+        this.volume,
+        this.pan,
         this.rotationStyle,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',

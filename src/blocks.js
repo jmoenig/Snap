@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-March-18';
+modules.blocks = '2019-April-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -628,6 +628,10 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'rotation x' : ['rotation x'],
                 'rotation y' : ['rotation y']
             };
+            if (this.world().currentKey === 16) { // shift
+                dict.my['~'] = null;
+                dict.my['microphone modifier'] = ['microphone modifier'];
+            }
         }
         return dict;
     }
@@ -987,16 +991,50 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null, // text
                 false, // numeric?
+                'audioMenu',
+                true // read-only
+            );
+            break;
+        case '%aa': // audio attributes
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
                 {
-                    'volume' : ['volume'],
-                    'note' : ['note'],
-                    'frequency' : ['frequency'],
-                    'samples' : ['samples'],
-                    'spectrum' : ['spectrum'],
-                    'resolution' : ['resolution']
+                    'name' : ['name'],
+                    'duration' : ['duration'],
+                    'length' : ['length'],
+                    'number of channels' : ['number of channels'],
+                    'sample rate' : ['sample rate'],
+                    'samples' : ['samples']
                 },
                 true // read-only
             );
+            break;
+        case '%img': // image attributes
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'name' : ['name'],
+                    'width' : ['width'],
+                    'height' : ['height'],
+                    'pixels' : ['pixels']
+                },
+                true // read-only
+            );
+            break;
+        case '%rate':
+            part = new InputSlotMorph(
+                null,
+                true,
+                {
+                    '22.05 kHz' : 22050,
+                    '44.1 kHz' : 44100,
+                    '88.2 kHz' : 88200,
+                    '96 kHz' : 96000
+                }
+            );
+            part.setContents(1);
             break;
         case '%month':
             part = new InputSlotMorph(
@@ -1174,17 +1212,17 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     color: ['color'],
+                    saturation: ['saturation'],
+                    brightness : ['brightness'],
+                    ghost: ['ghost'],
                     fisheye: ['fisheye'],
                     whirl: ['whirl'],
                     pixelate: ['pixelate'],
                     mosaic: ['mosaic'],
-                    duplicate: ['duplicate'],
-                    negative : ['negative'],
-                    comic: ['comic'],
-                    confetti: ['confetti'],
-                    saturation: ['saturation'],
-                    brightness : ['brightness'],
-                    ghost: ['ghost']
+                    negative : ['negative']
+                    // duplicate: ['duplicate'],
+                    // comic: ['comic'],
+                    // confetti: ['confetti']
                 },
                 true
             );
@@ -1285,6 +1323,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     abs : ['abs'],
+                    // '\u2212' : ['\u2212'], // minus-sign
                     neg : ['neg'],
                     ceiling : ['ceiling'],
                     floor : ['floor'],
@@ -1297,8 +1336,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     atan : ['atan'],
                     ln : ['ln'],
                     log : ['log'],
+                    lg : ['lg'],
                     'e^' : ['e^'],
-                    '10^' : ['10^']
+                    '10^' : ['10^'],
+                    '2^' : ['2^'],
                 },
                 true
             );
@@ -1321,6 +1362,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 {
+                    hue : ['hue'],
+                    saturation : ['saturation'],
+                    brightness : ['brightness'],
+                    transparency : ['transparency']
+                },
+                true
+            );
+            part.setContents(['hue']);
+            break;
+        case '%pen':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    size : ['size'],
                     hue : ['hue'],
                     saturation : ['saturation'],
                     brightness : ['brightness'],
@@ -2669,7 +2725,9 @@ BlockMorph.prototype.userMenu = function () {
                     yPosition: 'y position',
                     direction: 'direction',
                     getScale: 'size',
-                    getCostumeIdx: 'costume #'
+                    getCostumeIdx: 'costume #',
+                    getVolume: 'volume',
+                    getPan: 'balance'
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
                     menu.addLine();
@@ -8841,12 +8899,18 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'direction' : ['direction'],
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
-            'size' : ['size']
+            'size' : ['size'],
+            'volume' : ['volume'],
+            'balance' : ['balance']
         };
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
-            'costume name' : ['costume name']
+            'costume name' : ['costume name'],
+            'volume' : ['volume'],
+            'balance' : ['balance'],
+            'width': ['width'],
+            'height': ['height']
         };
     }
     varNames = obj.variables.names();
@@ -8871,6 +8935,7 @@ InputSlotMorph.prototype.costumesMenu = function () {
     } else { // stage
         dict = {Empty : ['Empty']};
     }
+    dict.current = ['current'];
     rcvr.costumes.asArray().forEach(function (costume) {
         allNames = allNames.concat(costume.name);
     });
@@ -8965,6 +9030,24 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function () {
 
 InputSlotMorph.prototype.directionDialMenu = function () {
     return {'§_dir': null};
+};
+
+InputSlotMorph.prototype.audioMenu = function () {
+    var dict = {
+        'volume' : ['volume'],
+        'note' : ['note'],
+        'frequency' : ['frequency'],
+        'samples' : ['samples'],
+        'sample rate' : ['sample rate'],
+        'spectrum' : ['spectrum'],
+        'resolution' : ['resolution']
+    };
+    if (this.world().currentKey === 16) { // shift
+        dict['~'] = null;
+        dict.modifier = ['modifier'];
+        dict.output = ['output'];
+    }
+    return dict;
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {

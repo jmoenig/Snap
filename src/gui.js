@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-March-11';
+modules.gui = '2019-April-10';
 
 // Declarations
 
@@ -2430,15 +2430,18 @@ IDE_Morph.prototype.recordNewSound = function () {
 
 IDE_Morph.prototype.duplicateSprite = function (sprite) {
     var duplicate = sprite.fullCopy();
+    duplicate.isDown = false;
     duplicate.setPosition(this.world().hand.position());
     duplicate.appearIn(this);
     duplicate.keepWithin(this.stage);
+    duplicate.isDown = sprite.isDown;
     this.selectSprite(duplicate);
 };
 
 IDE_Morph.prototype.instantiateSprite = function (sprite) {
     var instance = sprite.fullCopy(true),
         hats = instance.allHatBlocksFor('__clone__init__');
+    instance.isDown = false;
     instance.appearIn(this);
     if (hats.length) {
         instance.initClone(hats);
@@ -2446,6 +2449,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
         instance.setPosition(this.world().hand.position());
         instance.keepWithin(this.stage);
     }
+    instance.isDown = sprite.isDown;
     this.selectSprite(instance);
 };
 
@@ -5301,7 +5305,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         false, // read only?
         true, // numeric
         1, // slider min
-        12, // slider max
+        5, // slider max
         action // slider action
     );
 };
@@ -6041,10 +6045,19 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.key = 'project' + task;
 
     // build contents
-    this.buildContents();
-    this.onNextStep = function () { // yield to show "updating" message
-        myself.setSource(myself.source);
-    };
+    if (task === 'open' && this.source === 'disk') {
+        // give the user a chance to switch to another source
+        this.source = null;
+        this.buildContents();
+        this.projectList = [];
+        this.listField.hide();
+        this.source = 'disk';
+    } else {
+        this.buildContents();
+        this.onNextStep = function () { // yield to show "updating" message
+            myself.setSource(myself.source);
+        };
+    }
 };
 
 ProjectDialogMorph.prototype.buildContents = function () {
