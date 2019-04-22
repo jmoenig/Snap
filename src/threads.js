@@ -60,9 +60,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
-TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-11';
+modules.threads = '2019-April-22';
 
 var ThreadManager;
 var Process;
@@ -1018,7 +1018,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
             context.expression.allEmptySlots().forEach(function (slot) {
                 i += 1;
                 if (slot instanceof MultiArgMorph) {
-                    slot.bindingID = ['arguments'];
+                    slot.bindingID = Symbol.for('arguments');
                 } else {
                     slot.bindingID = i;
                 }
@@ -1120,8 +1120,8 @@ Process.prototype.evaluate = function (
     // assign arguments to parameters
 
     // assign the actual arguments list to the special
-    // parameter ID ['arguments'], to be used for variadic inputs
-    outer.variables.addVar(['arguments'], args);
+    // parameter ID Symbol.for('arguments'), to be used for variadic inputs
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1220,8 +1220,8 @@ Process.prototype.initializeFor = function (context, args) {
     // assign arguments to parameters
 
     // assign the actual arguments list to the special
-    // parameter ID ['arguments'], to be used for variadic inputs
-    outer.variables.addVar(['arguments'], args);
+    // parameter ID Symbol.for('arguments'), to be used for variadic inputs
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {

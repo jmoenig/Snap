@@ -67,6 +67,9 @@
     * German
     * French
 
+### 2019-04-22
+* Threads: fixed variable binding for "arguments", turned dictionary key into a Symbol
+
 ### 2019-04-12
 * Objects: enabled text-variables as inputs for graphic effects / pen attributes
 * updated amination library with graphic effects and audio attributes
