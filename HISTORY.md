@@ -25,6 +25,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
+    * new "map" and "for each" primitives in list category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" as attribute selectors of the OF primitive for the stage

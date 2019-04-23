@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-12';
+modules.objects = '2019-April-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -2401,13 +2401,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         blocks.push(block('reportNewList'));
-        blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
+        blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -2424,9 +2426,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doForEach'));
-            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
@@ -2590,8 +2589,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListLength',
                         'reportListContainsItem',
-                        // 'doForEach',
-                        // 'reportMap',
+                        'doForEach',
+                        'reportMap',
                         'doAddToList',
                         'doDeleteFromList',
                         'doInsertInList',
@@ -7948,13 +7947,15 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeclareVariables'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
-        blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
+        blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -7971,9 +7972,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doForEach'));
-            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
