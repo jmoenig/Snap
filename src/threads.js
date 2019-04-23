@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-22';
+modules.threads = '2019-April-23';
 
 var ThreadManager;
 var Process;
@@ -1075,11 +1075,9 @@ Process.prototype.evaluate = function (
 ) {
     if (!context) {return null; }
     if (context instanceof Function) {
-        /*
-        if (!this.enableJS) {
-            throw new Error('JavaScript is not enabled');
-        }
-        */
+        // if (!this.enableJS) {
+        //     throw new Error('JavaScript is not enabled');
+        // }
         return context.apply(
             this.blockReceiver(),
             args.asArray().concat([this])
@@ -2071,58 +2069,59 @@ Process.prototype.reportMap = function (reporter, list) {
     // answer a new list containing the results of the reporter applied
     // to each value of the given list. Distinguish between linked and
     // arrayed lists.
-    // Note: This method utilizes the current context's inputs array to
-    // manage temporary variables, whose allocation to which slot are
-    // documented in each of the variants' code (linked or arrayed) below
+
+    // this.context.inputs:
+    // [0] - reporter
+    // [1] - list (original source)
+    // -----------------------------
+    // [2] - last reporter evaluation result
 
     var next;
     if (list.isLinked) {
-        // this.context.inputs:
-        // [0] - reporter
-        // [1] - list (original source)
-        // -----------------------------
-        // [2] - result list (target)
-        // [3] - currently last element of result list
-        // [4] - current source list (what's left to map)
-        // [5] - current value of last function call
-
-        if (this.context.inputs.length < 3) {
-            this.context.addInput(new List());
-            this.context.inputs[2].isLinked = true;
-            this.context.addInput(this.context.inputs[2]);
-            this.context.addInput(list);
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list,
+                target : new List(),
+                end : null,
+                remaining : list.length()
+            };
+            this.context.aggregation.target.isLinked = true;
+            this.context.aggregation.end = this.context.aggregation.target;
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.end.rest = list.cons(
+                this.context.inputs.pop()
+            );
+            this.context.aggregation.end = this.context.aggregation.end.rest;
+            this.context.aggregation.remaining -= 1;
         }
-        if (this.context.inputs[4].length() === 0) {
-            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
-            this.returnValueToParentContext(this.context.inputs[2].cdr());
-            return;
-        }
-        if (this.context.inputs.length > 5) {
-            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
-            this.context.inputs[3] = this.context.inputs[3].rest;
-            this.context.inputs.splice(5);
-        }
-        next = this.context.inputs[4].at(1);
-        this.context.inputs[4] = this.context.inputs[4].cdr();
-        this.pushContext();
-        this.evaluate(reporter, new List([next]));
-    } else { // arrayed
-        // this.context.inputs:
-        // [0] - reporter
-        // [1] - list (original source)
-        // -----------------------------
-        // [2..n] - result values (target)
-
-        if (this.context.inputs.length - 2 === list.length()) {
+        if (this.context.aggregation.remaining === 0) {
+            this.context.aggregation.end.rest = list.cons(
+                this.context.inputs[2]
+            ).cdr();
             this.returnValueToParentContext(
-                new List(this.context.inputs.slice(2))
+                this.context.aggregation.target.cdr()
             );
             return;
         }
-        next = list.at(this.context.inputs.length - 1);
-        this.pushContext();
-        this.evaluate(reporter, new List([next]));
+
+        next = this.context.aggregation.source.at(1);
+        this.context.aggregation.source = this.context.aggregation.source.cdr();
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = [];
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.push(this.context.inputs.pop());
+        }
+        if (this.context.aggregation.length === list.length()) {
+            this.returnValueToParentContext(
+                new List(this.context.aggregation)
+            );
+            return;
+        }
+        next = list.at(this.context.aggregation.length + 1);
     }
+    this.pushContext();
+    this.evaluate(reporter, new List([next]));
 };
 
 Process.prototype.doForEach = function (upvar, list, script) {
@@ -4819,6 +4818,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     tag             string or number to optionally identify the Context,
                     as a "return" target (for the "stop block" primitive)
     isFlashing      flag for single-stepping
+    aggregation     slot for collecting data from reentrant visits
 */
 
 function Context(
@@ -4849,6 +4849,7 @@ function Context(
     this.emptySlots = 0; // used for block reification
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
+    this.aggregation = null;
 }
 
 Context.prototype.toString = function () {

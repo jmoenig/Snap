@@ -67,6 +67,9 @@
     * German
     * French
 
+### 2019-04-23
+* Threads: fixed JS stack overflow issue for MAP primitive
+
 ### 2019-04-22
 * Threads: fixed variable binding for "arguments", turned dictionary key into a Symbol
 
