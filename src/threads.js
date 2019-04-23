@@ -2065,6 +2065,8 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext();
 };
 
+// Process interpolated HOF primitives
+
 Process.prototype.reportMap = function (reporter, list) {
     // answer a new list containing the results of the reporter applied
     // to each value of the given list. Distinguish between linked and
@@ -2103,7 +2105,6 @@ Process.prototype.reportMap = function (reporter, list) {
             );
             return;
         }
-
         next = this.context.aggregation.source.at(1);
         this.context.aggregation.source = this.context.aggregation.source.cdr();
     } else { // arrayed
@@ -2122,6 +2123,73 @@ Process.prototype.reportMap = function (reporter, list) {
     }
     this.pushContext();
     this.evaluate(reporter, new List([next]));
+};
+
+Process.prototype.reportKeep = function (predicate, list) {
+    // Filter - answer a new list containing the items of the list for which
+    // the predicate evaluates TRUE.
+    // Distinguish between linked and arrayed lists.
+
+    // this.context.inputs:
+    // [0] - predicate
+    // [1] - list (original source)
+    // -----------------------------
+    // [2] - last predicate evaluation result
+
+    var next;
+    if (list.isLinked) {
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list,
+                target : new List(),
+                end : null,
+                remaining : list.length()
+            };
+            this.context.aggregation.target.isLinked = true;
+            this.context.aggregation.end = this.context.aggregation.target;
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.context.aggregation.end.rest = list.cons(
+                    this.context.aggregation.source.at(1)
+                );
+                this.context.aggregation.end =
+                    this.context.aggregation.end.rest;
+            }
+            this.context.aggregation.remaining -= 1;
+            this.context.aggregation.source =
+                this.context.aggregation.source.cdr();
+        }
+        if (this.context.aggregation.remaining === 0) {
+            this.returnValueToParentContext(
+                this.context.aggregation.target.cdr()
+            );
+            return;
+        }
+        next = this.context.aggregation.source.at(1);
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                idx : 0,
+                target : []
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.context.aggregation.target.push(
+                    list.at(this.context.aggregation.idx)
+                );
+            }
+        }
+        if (this.context.aggregation.idx === list.length()) {
+            this.returnValueToParentContext(
+                new List(this.context.aggregation.target)
+            );
+            return;
+        }
+        this.context.aggregation.idx += 1;
+        next = list.at(this.context.aggregation.idx);
+    }
+    this.pushContext();
+    this.evaluate(predicate, new List([next]));
 };
 
 Process.prototype.doForEach = function (upvar, list, script) {
