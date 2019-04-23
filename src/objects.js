@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-23';
+modules.objects = '2019-April-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1270,6 +1270,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'map %repRing over %l'
         },
+        reportKeep: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'keep items such that %predRing from %l'
+        },
+        reportCombine: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combine with %repRing items of %l'
+        },
         doForEach: {
             type: 'command',
             category: 'lists',
@@ -2401,6 +2411,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         blocks.push(block('reportNewList'));
+        blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
@@ -2410,6 +2421,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push(block('reportMap'));
+        blocks.push(block('reportKeep'));
+        blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -2591,6 +2604,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListContainsItem',
                         'doForEach',
                         'reportMap',
+                        'reportKeep',
+                        'reportCombine',
                         'doAddToList',
                         'doDeleteFromList',
                         'doInsertInList',
@@ -7947,6 +7962,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeclareVariables'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
+        blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
@@ -7956,6 +7972,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push(block('reportMap'));
+        blocks.push(block('reportKeep'));
+        blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));

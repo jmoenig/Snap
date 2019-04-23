@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-23';
+modules.threads = '2019-April-24';
 
 var ThreadManager;
 var Process;
@@ -2190,6 +2190,60 @@ Process.prototype.reportKeep = function (predicate, list) {
     }
     this.pushContext();
     this.evaluate(predicate, new List([next]));
+};
+
+Process.prototype.reportCombine = function (reporter, list) {
+    // Fold - answer an aggregation of all list items from "left to right"
+    // Distinguish between linked and arrayed lists.
+
+    // this.context.inputs:
+    // [0] - predicate
+    // [1] - list (original source)
+    // -----------------------------
+    // [2] - last predicate evaluation result
+
+    var next, current;
+    if (list.length() < 2) {
+        this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+        return;
+    }
+    if (list.isLinked) {
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list.cdr(),
+                target : list.at(1),
+                remaining : list.length() - 1
+            };
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.target = this.context.inputs.pop();
+            this.context.aggregation.remaining -= 1;
+            this.context.aggregation.source =
+                this.context.aggregation.source.cdr();
+        }
+        if (this.context.aggregation.remaining === 0) {
+            this.returnValueToParentContext(this.context.aggregation.target);
+            return;
+        }
+        next = this.context.aggregation.source.at(1);
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                idx : 1,
+                target : list.at(1)
+            };
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.target = this.context.inputs.pop();
+        }
+        if (this.context.aggregation.idx === list.length()) {
+            this.returnValueToParentContext(this.context.aggregation.target);
+            return;
+        }
+        this.context.aggregation.idx += 1;
+        next = list.at(this.context.aggregation.idx);
+    }
+    current = this.context.aggregation.target;
+    this.pushContext();
+    this.evaluate(reporter, new List([current, next]));
 };
 
 Process.prototype.doForEach = function (upvar, list, script) {

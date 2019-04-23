@@ -25,7 +25,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
-    * new "map","keep" and "for each" primitives in list category
+    * new "map","keep", "combine" and "for each" primitives in list category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" as attribute selectors of the OF primitive for the stage
@@ -67,6 +67,9 @@
     * Catalan, thanks, Joan!
     * German
     * French
+
+### 2019-04-24
+* Threads: new "combine" primitive in list category
 
 ### 2019-04-23
 * Threads: fixed JS stack overflow issue for MAP primitive
