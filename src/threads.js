@@ -2087,10 +2087,7 @@ Process.prototype.doForEach = function (upvar, list, script) {
     if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
     var index = this.context.inputs[3];
     this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(
-        upvar,
-        list.at(index)
-    );
+    this.context.outerContext.variables.setVar(upvar, list.at(index));
     if (index > list.length()) {return; }
     this.context.inputs[3] += 1;
     this.pushContext('doYield');
@@ -2115,13 +2112,9 @@ Process.prototype.doFor = function (upvar, start, end, script) {
             parms : new List() // empty parameters, reusable to avoid GC
         };
     }
-
     dta = this.context.aggregation;
     this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(
-        upvar,
-        dta.idx
-    );
+    this.context.outerContext.variables.setVar(upvar, dta.idx);
     if (dta.test()) {return; }
     dta.idx += dta.step;
     this.pushContext('doYield');
