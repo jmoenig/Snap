@@ -2065,20 +2065,63 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext();
 };
 
+// Process interpolated iteration primitives
+
+/*
+    these primitives can be - for the most part easily - written as
+    custom blocks by users themselves. They are, or used to be, in
+    libraries that could be loaded additionally. Making them available
+    as primitives has the benefit of getting novices acquainted to
+    using HOFs plus some performance advantages, however at the cost
+    of losing the ability to inspect how they're written.
+*/
+
+Process.prototype.doForEach = function (upvar, list, script) {
+    // perform a script for each element of a list, assigning the
+    // current iteration's element to a variable with the name
+    // specified in the "upvar" parameter, so it can be referenced
+    // within the script. Uses the context's - unused - fourth
+    // element as temporary storage for the current list index
+
+    this.assertType(list, 'list');
+    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
+    var index = this.context.inputs[3];
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(
+        upvar,
+        list.at(index)
+    );
+    if (index > list.length()) {return; }
+    this.context.inputs[3] += 1;
+    this.pushContext('doYield');
+    this.pushContext();
+    this.evaluate(script, new List(), true);
+};
+
 // Process interpolated HOF primitives
+
+/*
+    this.context.inputs:
+    [0] - reporter
+    [1] - list (original source)
+    -----------------------------
+    [2] - last reporter evaluation result
+
+    these primitives used to store the aggregated data in the unused parts
+    of the context's input-array. For reasons obscure to me this led to
+    JS stack overflows when used on large lists (> 150 k items). As a remedy
+    aggregations are now accumulated in the "aggregation" property slot
+    of Context. Why this speeds up execution by orders of magnitude while
+    "fixing" the stack-overflow issue eludes me. -Jens
+*/
 
 Process.prototype.reportMap = function (reporter, list) {
     // answer a new list containing the results of the reporter applied
     // to each value of the given list. Distinguish between linked and
     // arrayed lists.
 
-    // this.context.inputs:
-    // [0] - reporter
-    // [1] - list (original source)
-    // -----------------------------
-    // [2] - last reporter evaluation result
-
     var next;
+    this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.aggregation === null) {
             this.context.aggregation = {
@@ -2130,13 +2173,8 @@ Process.prototype.reportKeep = function (predicate, list) {
     // the predicate evaluates TRUE.
     // Distinguish between linked and arrayed lists.
 
-    // this.context.inputs:
-    // [0] - predicate
-    // [1] - list (original source)
-    // -----------------------------
-    // [2] - last predicate evaluation result
-
     var next;
+    this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.aggregation === null) {
             this.context.aggregation = {
@@ -2196,13 +2234,8 @@ Process.prototype.reportCombine = function (reporter, list) {
     // Fold - answer an aggregation of all list items from "left to right"
     // Distinguish between linked and arrayed lists.
 
-    // this.context.inputs:
-    // [0] - predicate
-    // [1] - list (original source)
-    // -----------------------------
-    // [2] - last predicate evaluation result
-
     var next, current;
+    this.assertType(list, 'list');
     if (list.length() < 2) {
         this.returnValueToParentContext(list.length() ? list.at(1) : 0);
         return;
@@ -2244,27 +2277,6 @@ Process.prototype.reportCombine = function (reporter, list) {
     current = this.context.aggregation.target;
     this.pushContext();
     this.evaluate(reporter, new List([current, next]));
-};
-
-Process.prototype.doForEach = function (upvar, list, script) {
-    // perform a script for each element of a list, assigning the
-    // current iteration's element to a variable with the name
-    // specified in the "upvar" parameter, so it can be referenced
-    // within the script. Uses the context's - unused - fourth
-    // element as temporary storage for the current list index
-
-    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
-    var index = this.context.inputs[3];
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(
-        upvar,
-        list.at(index)
-    );
-    if (index > list.length()) {return; }
-    this.context.inputs[3] += 1;
-    this.pushContext('doYield');
-    this.pushContext();
-    this.evaluate(script, new List(), true);
 };
 
 // Process interpolated primitives

@@ -70,6 +70,7 @@
 
 ### 2019-04-24
 * Threads: new "combine" primitive in list category
+* Threads: added type-assertions for the new HOF prims
 
 ### 2019-04-23
 * Threads: fixed JS stack overflow issue for MAP primitive
