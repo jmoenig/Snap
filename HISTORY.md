@@ -26,7 +26,7 @@
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
     * new "map","keep", "combine" and "for each" primitives in list category
-    * new "for" loop primitive in the Control category
+    * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" as attribute selectors of the OF primitive for the stage
@@ -73,6 +73,7 @@
 * Threads, Objects: new "combine" primitive in list category
 * Threads: added type-assertions for the new HOF prims
 * Threads, Objects: new "for" loop primitive in Control category
+* Threads, Objects: new "if then else" reporter primitive in Control category
 
 ### 2019-04-23
 * Threads: fixed JS stack overflow issue for MAP primitive

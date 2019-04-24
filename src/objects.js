@@ -752,6 +752,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'if %b %c else %c'
         },
+        reportIfElse: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'if %b then %s else %s'
+        },
         doStopThis: {
             type: 'command',
             category: 'control',
@@ -2182,6 +2187,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
+        blocks.push(block('reportIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));
@@ -7758,6 +7764,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
+        blocks.push(block('reportIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));

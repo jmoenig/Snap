@@ -716,6 +716,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     // check for special forms
     if (selector === 'reportOr' ||
             selector ===  'reportAnd' ||
+            selector === 'reportIfElse' ||
             selector === 'doReport') {
         return this[selector](block);
     }
@@ -1835,6 +1836,23 @@ Process.prototype.doIfElse = function () {
     }
 
     this.pushContext();
+};
+
+Process.prototype.reportIfElse = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 1) {
+        this.evaluateNextInput(block);
+    } else if (inputs.length > 1) {
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs.pop());
+        this.popContext();
+    } else if (inputs[0]) {
+        this.evaluateNextInput(block);
+    } else {
+        inputs.push(null);
+        this.evaluateNextInput(block);
+    }
 };
 
 // Process process related primitives
