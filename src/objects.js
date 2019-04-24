@@ -736,6 +736,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'repeat until %b %loop'
         },
+        doFor: {
+            type: 'command',
+            category: 'control',
+            spec: 'for %upvar = %n to %n %cla',
+            defaults: ['i', 1, 10]
+        },
         doIf: {
             type: 'command',
             category: 'control',
@@ -2172,6 +2178,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doUntil'));
+        blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
@@ -7747,6 +7754,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doUntil'));
+        blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));

@@ -2098,6 +2098,37 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.evaluate(script, new List(), true);
 };
 
+Process.prototype.doFor = function (upvar, start, end, script) {
+    // perform a script for every integer step between start and stop,
+    // assigning the current iteration index to a variable with the
+    // name specified in the "upvar" parameter, so it can be referenced
+    // within the script.
+
+    var dta;
+    if (this.context.aggregation === null) {
+        this.context.aggregation = {
+            idx : Math.floor(start),
+            test : start < end ?
+                function () {return this.idx > end; }
+                    : function () {return this.idx < end; },
+            step : start < end ? 1 : -1,
+            parms : new List() // empty parameters, reusable to avoid GC
+        };
+    }
+
+    dta = this.context.aggregation;
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(
+        upvar,
+        dta.idx
+    );
+    if (dta.test()) {return; }
+    dta.idx += dta.step;
+    this.pushContext('doYield');
+    this.pushContext();
+    this.evaluate(script, dta.parms, true);
+};
+
 // Process interpolated HOF primitives
 
 /*
