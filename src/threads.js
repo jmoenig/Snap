@@ -60,9 +60,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
-TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-11';
+modules.threads = '2019-April-24';
 
 var ThreadManager;
 var Process;
@@ -716,6 +716,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     // check for special forms
     if (selector === 'reportOr' ||
             selector ===  'reportAnd' ||
+            selector === 'reportIfElse' ||
             selector === 'doReport') {
         return this[selector](block);
     }
@@ -1018,7 +1019,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
             context.expression.allEmptySlots().forEach(function (slot) {
                 i += 1;
                 if (slot instanceof MultiArgMorph) {
-                    slot.bindingID = ['arguments'];
+                    slot.bindingID = Symbol.for('arguments');
                 } else {
                     slot.bindingID = i;
                 }
@@ -1075,11 +1076,9 @@ Process.prototype.evaluate = function (
 ) {
     if (!context) {return null; }
     if (context instanceof Function) {
-        /*
-        if (!this.enableJS) {
-            throw new Error('JavaScript is not enabled');
-        }
-        */
+        // if (!this.enableJS) {
+        //     throw new Error('JavaScript is not enabled');
+        // }
         return context.apply(
             this.blockReceiver(),
             args.asArray().concat([this])
@@ -1120,8 +1119,8 @@ Process.prototype.evaluate = function (
     // assign arguments to parameters
 
     // assign the actual arguments list to the special
-    // parameter ID ['arguments'], to be used for variadic inputs
-    outer.variables.addVar(['arguments'], args);
+    // parameter ID Symbol.for('arguments'), to be used for variadic inputs
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1220,8 +1219,8 @@ Process.prototype.initializeFor = function (context, args) {
     // assign arguments to parameters
 
     // assign the actual arguments list to the special
-    // parameter ID ['arguments'], to be used for variadic inputs
-    outer.variables.addVar(['arguments'], args);
+    // parameter ID Symbol.for('arguments'), to be used for variadic inputs
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1839,6 +1838,23 @@ Process.prototype.doIfElse = function () {
     this.pushContext();
 };
 
+Process.prototype.reportIfElse = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 1) {
+        this.evaluateNextInput(block);
+    } else if (inputs.length > 1) {
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs.pop());
+        this.popContext();
+    } else if (inputs[0]) {
+        this.evaluateNextInput(block);
+    } else {
+        inputs.push(null);
+        this.evaluateNextInput(block);
+    }
+};
+
 // Process process related primitives
 
 Process.prototype.doStop = function () {
@@ -2067,63 +2083,16 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext();
 };
 
-Process.prototype.reportMap = function (reporter, list) {
-    // answer a new list containing the results of the reporter applied
-    // to each value of the given list. Distinguish between linked and
-    // arrayed lists.
-    // Note: This method utilizes the current context's inputs array to
-    // manage temporary variables, whose allocation to which slot are
-    // documented in each of the variants' code (linked or arrayed) below
+// Process interpolated iteration primitives
 
-    var next;
-    if (list.isLinked) {
-        // this.context.inputs:
-        // [0] - reporter
-        // [1] - list (original source)
-        // -----------------------------
-        // [2] - result list (target)
-        // [3] - currently last element of result list
-        // [4] - current source list (what's left to map)
-        // [5] - current value of last function call
-
-        if (this.context.inputs.length < 3) {
-            this.context.addInput(new List());
-            this.context.inputs[2].isLinked = true;
-            this.context.addInput(this.context.inputs[2]);
-            this.context.addInput(list);
-        }
-        if (this.context.inputs[4].length() === 0) {
-            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
-            this.returnValueToParentContext(this.context.inputs[2].cdr());
-            return;
-        }
-        if (this.context.inputs.length > 5) {
-            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
-            this.context.inputs[3] = this.context.inputs[3].rest;
-            this.context.inputs.splice(5);
-        }
-        next = this.context.inputs[4].at(1);
-        this.context.inputs[4] = this.context.inputs[4].cdr();
-        this.pushContext();
-        this.evaluate(reporter, new List([next]));
-    } else { // arrayed
-        // this.context.inputs:
-        // [0] - reporter
-        // [1] - list (original source)
-        // -----------------------------
-        // [2..n] - result values (target)
-
-        if (this.context.inputs.length - 2 === list.length()) {
-            this.returnValueToParentContext(
-                new List(this.context.inputs.slice(2))
-            );
-            return;
-        }
-        next = list.at(this.context.inputs.length - 1);
-        this.pushContext();
-        this.evaluate(reporter, new List([next]));
-    }
-};
+/*
+    these primitives can be - for the most part easily - written as
+    custom blocks by users themselves. They are, or used to be, in
+    libraries that could be loaded additionally. Making them available
+    as primitives has the benefit of getting novices acquainted to
+    using HOFs plus some performance advantages, however at the cost
+    of losing the ability to inspect how they're written.
+*/
 
 Process.prototype.doForEach = function (upvar, list, script) {
     // perform a script for each element of a list, assigning the
@@ -2132,18 +2101,224 @@ Process.prototype.doForEach = function (upvar, list, script) {
     // within the script. Uses the context's - unused - fourth
     // element as temporary storage for the current list index
 
+    this.assertType(list, 'list');
     if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
     var index = this.context.inputs[3];
     this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(
-        upvar,
-        list.at(index)
-    );
+    this.context.outerContext.variables.setVar(upvar, list.at(index));
     if (index > list.length()) {return; }
     this.context.inputs[3] += 1;
     this.pushContext('doYield');
     this.pushContext();
     this.evaluate(script, new List(), true);
+};
+
+Process.prototype.doFor = function (upvar, start, end, script) {
+    // perform a script for every integer step between start and stop,
+    // assigning the current iteration index to a variable with the
+    // name specified in the "upvar" parameter, so it can be referenced
+    // within the script.
+
+    var dta;
+    if (this.context.aggregation === null) {
+        this.context.aggregation = {
+            idx : Math.floor(start),
+            test : start < end ?
+                function () {return this.idx > end; }
+                    : function () {return this.idx < end; },
+            step : start < end ? 1 : -1,
+            parms : new List() // empty parameters, reusable to avoid GC
+        };
+    }
+    dta = this.context.aggregation;
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(upvar, dta.idx);
+    if (dta.test()) {return; }
+    dta.idx += dta.step;
+    this.pushContext('doYield');
+    this.pushContext();
+    this.evaluate(script, dta.parms, true);
+};
+
+// Process interpolated HOF primitives
+
+/*
+    this.context.inputs:
+    [0] - reporter
+    [1] - list (original source)
+    -----------------------------
+    [2] - last reporter evaluation result
+
+    these primitives used to store the aggregated data in the unused parts
+    of the context's input-array. For reasons obscure to me this led to
+    JS stack overflows when used on large lists (> 150 k items). As a remedy
+    aggregations are now accumulated in the "aggregation" property slot
+    of Context. Why this speeds up execution by orders of magnitude while
+    "fixing" the stack-overflow issue eludes me. -Jens
+*/
+
+Process.prototype.reportMap = function (reporter, list) {
+    // answer a new list containing the results of the reporter applied
+    // to each value of the given list. Distinguish between linked and
+    // arrayed lists.
+
+    var next;
+    this.assertType(list, 'list');
+    if (list.isLinked) {
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list,
+                target : new List(),
+                end : null,
+                remaining : list.length()
+            };
+            this.context.aggregation.target.isLinked = true;
+            this.context.aggregation.end = this.context.aggregation.target;
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.end.rest = list.cons(
+                this.context.inputs.pop()
+            );
+            this.context.aggregation.end = this.context.aggregation.end.rest;
+            this.context.aggregation.remaining -= 1;
+        }
+        if (this.context.aggregation.remaining === 0) {
+            this.context.aggregation.end.rest = list.cons(
+                this.context.inputs[2]
+            ).cdr();
+            this.returnValueToParentContext(
+                this.context.aggregation.target.cdr()
+            );
+            return;
+        }
+        next = this.context.aggregation.source.at(1);
+        this.context.aggregation.source = this.context.aggregation.source.cdr();
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = [];
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.push(this.context.inputs.pop());
+        }
+        if (this.context.aggregation.length === list.length()) {
+            this.returnValueToParentContext(
+                new List(this.context.aggregation)
+            );
+            return;
+        }
+        next = list.at(this.context.aggregation.length + 1);
+    }
+    this.pushContext();
+    this.evaluate(reporter, new List([next]));
+};
+
+Process.prototype.reportKeep = function (predicate, list) {
+    // Filter - answer a new list containing the items of the list for which
+    // the predicate evaluates TRUE.
+    // Distinguish between linked and arrayed lists.
+
+    var next;
+    this.assertType(list, 'list');
+    if (list.isLinked) {
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list,
+                target : new List(),
+                end : null,
+                remaining : list.length()
+            };
+            this.context.aggregation.target.isLinked = true;
+            this.context.aggregation.end = this.context.aggregation.target;
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.context.aggregation.end.rest = list.cons(
+                    this.context.aggregation.source.at(1)
+                );
+                this.context.aggregation.end =
+                    this.context.aggregation.end.rest;
+            }
+            this.context.aggregation.remaining -= 1;
+            this.context.aggregation.source =
+                this.context.aggregation.source.cdr();
+        }
+        if (this.context.aggregation.remaining === 0) {
+            this.returnValueToParentContext(
+                this.context.aggregation.target.cdr()
+            );
+            return;
+        }
+        next = this.context.aggregation.source.at(1);
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                idx : 0,
+                target : []
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.context.aggregation.target.push(
+                    list.at(this.context.aggregation.idx)
+                );
+            }
+        }
+        if (this.context.aggregation.idx === list.length()) {
+            this.returnValueToParentContext(
+                new List(this.context.aggregation.target)
+            );
+            return;
+        }
+        this.context.aggregation.idx += 1;
+        next = list.at(this.context.aggregation.idx);
+    }
+    this.pushContext();
+    this.evaluate(predicate, new List([next]));
+};
+
+Process.prototype.reportCombine = function (reporter, list) {
+    // Fold - answer an aggregation of all list items from "left to right"
+    // Distinguish between linked and arrayed lists.
+
+    var next, current;
+    this.assertType(list, 'list');
+    if (list.length() < 2) {
+        this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+        return;
+    }
+    if (list.isLinked) {
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                source : list.cdr(),
+                target : list.at(1),
+                remaining : list.length() - 1
+            };
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.target = this.context.inputs.pop();
+            this.context.aggregation.remaining -= 1;
+            this.context.aggregation.source =
+                this.context.aggregation.source.cdr();
+        }
+        if (this.context.aggregation.remaining === 0) {
+            this.returnValueToParentContext(this.context.aggregation.target);
+            return;
+        }
+        next = this.context.aggregation.source.at(1);
+    } else { // arrayed
+        if (this.context.aggregation === null) {
+            this.context.aggregation = {
+                idx : 1,
+                target : list.at(1)
+            };
+        } else if (this.context.inputs.length > 2) {
+            this.context.aggregation.target = this.context.inputs.pop();
+        }
+        if (this.context.aggregation.idx === list.length()) {
+            this.returnValueToParentContext(this.context.aggregation.target);
+            return;
+        }
+        this.context.aggregation.idx += 1;
+        next = list.at(this.context.aggregation.idx);
+    }
+    current = this.context.aggregation.target;
+    this.pushContext();
+    this.evaluate(reporter, new List([current, next]));
 };
 
 // Process interpolated primitives
@@ -4819,6 +4994,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     tag             string or number to optionally identify the Context,
                     as a "return" target (for the "stop block" primitive)
     isFlashing      flag for single-stepping
+    aggregation     slot for collecting data from reentrant visits
 */
 
 function Context(
@@ -4849,6 +5025,7 @@ function Context(
     this.emptySlots = 0; // used for block reification
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
+    this.aggregation = null;
 }
 
 Context.prototype.toString = function () {

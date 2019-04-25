@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-12';
+modules.objects = '2019-April-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -736,6 +736,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'repeat until %b %loop'
         },
+        doFor: {
+            type: 'command',
+            category: 'control',
+            spec: 'for %upvar = %n to %n %cla',
+            defaults: ['i', 1, 10]
+        },
         doIf: {
             type: 'command',
             category: 'control',
@@ -745,6 +751,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'if %b %c else %c'
+        },
+        reportIfElse: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'if %b then %s else %s'
         },
         doStopThis: {
             type: 'command',
@@ -1269,6 +1280,16 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'map %repRing over %l'
+        },
+        reportKeep: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'keep items such that %predRing from %l'
+        },
+        reportCombine: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combine with %repRing items of %l'
         },
         doForEach: {
             type: 'command',
@@ -2162,9 +2183,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doUntil'));
+        blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
+        blocks.push(block('reportIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));
@@ -2409,6 +2432,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
+        blocks.push(block('reportKeep'));
+        blocks.push(block('reportCombine'));
+        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -2424,9 +2452,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doForEach'));
-            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
@@ -2590,8 +2615,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListLength',
                         'reportListContainsItem',
-                        // 'doForEach',
-                        // 'reportMap',
+                        'doForEach',
+                        'reportMap',
+                        'reportKeep',
+                        'reportCombine',
                         'doAddToList',
                         'doDeleteFromList',
                         'doInsertInList',
@@ -7733,9 +7760,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doUntil'));
+        blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
+        blocks.push(block('reportIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));
@@ -7956,6 +7985,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
+        blocks.push(block('doForEach'));
+        blocks.push(block('reportMap'));
+        blocks.push(block('reportKeep'));
+        blocks.push(block('reportCombine'));
+        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
@@ -7971,9 +8005,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doForEach'));
-            blocks.push(block('reportMap'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
