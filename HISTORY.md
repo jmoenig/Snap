@@ -70,7 +70,10 @@
     * German
     * French
 
-### 2019-04-24
+### 2019-04-26
+* updated Catalan translation (for new HOF prims)
+
+### 2019-04-25
 * updated German translation (for new HOF prims)
 * Costume size fixes, yay! Thank you, Brian!!
 

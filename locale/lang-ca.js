@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-04-15', // this, too, will appear in the Translators tab
+        '2019-04-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -479,10 +479,14 @@ SnapTranslator.dict.ca = {
         'repeteix %n vegades %loop',
     'repeat until %b %loop':
         'repeteix fins %b %loop',
+    'for %upvar = %n to %n %cla':
+        'per %upvar = %n fins %n %cla',
     'if %b %c':
         'si %b llavors %c',
     'if %b %c else %c':
         'si %b llavors %c si no %c',
+    'if %b then %s else %s':
+        'si %b llavors %s si no %s',
     'report %s':
         'retorna %s',
     'stop %stopChoices':
@@ -662,6 +666,16 @@ SnapTranslator.dict.ca = {
         '%l conté %s',
     'thing':
         'cosa',
+    'for each %upvar in %l %cla':
+        'per cada %upvar de %l %cla',
+    'item':
+        'element',
+    'map %repRing over %l':
+        'mapeja %repRing sobre %l',
+    'keep items such that %predRing from %l':
+        'manté els elements on %predRing de %l',
+    'combine with %repRing items of %l':
+        'combina amb %repRing els elements de %l',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
@@ -2150,10 +2164,6 @@ SnapTranslator.dict.ca = {
 		'imatge de l\'escenari',
 	'processes':
 		'processos',
-	'map %repRing over %l':
-		'mapeja %repRing sobre %l',
-	'for %upvar in %l %cl':
-		'per cada %upvar dins %l %cl',
 	'show table %l':
 		'mostra la taula %l',
 	'%txtfun of %s':
