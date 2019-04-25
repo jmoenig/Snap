@@ -164,12 +164,16 @@ Cloud.prototype.request = function (
     body) {
 
     var request = new XMLHttpRequest(),
-        myself = this;
+        myself = this,
+        fullPath = this.url +
+            (path.indexOf('%username') > -1 ?
+                path.replace('%username', encodeURIComponent(this.username)) :
+                path);
 
     try {
         request.open(
             method,
-            this.url + path,
+            fullPath,
             true
         );
         request.setRequestHeader(
@@ -232,7 +236,7 @@ Cloud.prototype.withCredentialsRequest = function (
                 myself.request(
                     method,
                     // %username is replaced by the actual username
-                    path.replace('%username', encodeURIComponent(username)),
+                    path,
                     onSuccess,
                     onError,
                     errorMsg,
@@ -967,7 +971,9 @@ Cloud.prototype.getUserCollections = function (
     onSuccess,
     onError
 ) {
-    this.withCredentialsRequest(
+    this[(collectionUsername !== this.username) ?
+            'request' :
+            'withCredentialsRequest'](
         'GET',
         '/users/' +
             (collectionUsername ?
