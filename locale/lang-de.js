@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-04-11', // this, too, will appear in the Translators tab
+        '2019-04-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -529,10 +529,14 @@ SnapTranslator.dict.de = {
         'wiederhole %n mal %loop',
     'repeat until %b %loop':
         'wiederhole bis %b %loop',
+    'for %upvar = %n to %n %cla':
+        'für %upvar = %n bis %n %cla',
     'if %b %c':
         'falls %b %c',
     'if %b %c else %c':
         'falls %b %c sonst %c',
+    'if %b then %s else %s':
+        'falls %b dann %s sonst %s',
     'report %s':
         'berichte %s',
     'stop %stopChoices':
@@ -763,6 +767,16 @@ SnapTranslator.dict.de = {
         '%l enth\u00e4lt %s',
     'thing':
         'etwas',
+    'for each %upvar in %l %cla':
+        'für jedes %upvar von %l %cla',
+    'item':
+        'Element',
+    'map %repRing over %l':
+        'wende %repRing an auf %l',
+    'keep items such that %predRing from %l':
+        'behalte Elemente, die %predRing aus %l',
+    'combine with %repRing items of %l':
+        'kombiniere mit %repRing die Elemente von %l',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':

@@ -70,6 +70,9 @@
     * French
 
 ### 2019-04-24
+* updated German translation (for new HOF prims)
+
+### 2019-04-24
 * Threads, Objects: new "combine" primitive in list category
 * Threads: added type-assertions for the new HOF prims
 * Threads, Objects: new "for" loop primitive in Control category
