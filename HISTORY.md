@@ -60,6 +60,7 @@
     * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
     * the language menu now has a "globe" icon (so it can be found in any language)
     * accept a number as input for a sound - interpret as index
+    * fixed many costume sizes, thanks, Brian!
 * Translation Updates:
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
@@ -71,6 +72,7 @@
 
 ### 2019-04-24
 * updated German translation (for new HOF prims)
+* Costume size fixes, yay! Thank you, Brian!!
 
 ### 2019-04-24
 * Threads, Objects: new "combine" primitive in list category
