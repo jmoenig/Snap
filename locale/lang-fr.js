@@ -197,7 +197,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2019-03-26', // this, too, will appear in the Translators tab
+        '2019-04-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -466,10 +466,14 @@ SnapTranslator.dict.fr = {
         'r\u00E9p\u00E9ter %n fois %loop',
     'repeat until %b %loop':
         'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %loop',
+    'for %upvar = %n to %n %cla':
+        'pour %upvar allant de %n à %n %cla',
     'if %b %c':
         'si %b %c',
     'if %b %c else %c':
         'si %b %c sinon %c',
+    'if %b then %s else %s':
+        'si %b alors %s sinon %s',
     'report %s':
         'rapporte %s',
     'stop block':
@@ -694,6 +698,16 @@ SnapTranslator.dict.fr = {
         '%l contient %s',
     'thing':
         'qqchose',
+    'for each %upvar in %l %cla':
+        'pour chaque %upvar de %l %cla',
+    'item':
+        'item',
+    'map %repRing over %l':
+        'appliquer %repRing à %l',
+    'keep items such that %predRing from %l':
+        'garder les items tels que %predRing de %l',
+    'combine with %repRing items of %l':
+        'combine avec %repRing les items de %l',
     'add %s to %l':
         'ajouter %s \u00E0 %l',
     'delete %ida of %l':
