@@ -84,6 +84,7 @@
 * updated "crayons" library (for new HOF prims)
 * updated "animation" library (for new HOF prims)
 * updated "audio comp" library (for new HOF prims)
+* updated "parallelism" library (for new HOF prims)
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)
