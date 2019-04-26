@@ -501,7 +501,7 @@ SnapTranslator.dict.fr = {
     'call %cmdRing w/continuation':
         'appelle %cmdRing avec continuation',
     'warp %c':
-        'Englobe %c',
+        'warp %c',
     'when I start as a clone':
         'Quand je commence comme clone',
     'create a clone of %cln':
