@@ -78,6 +78,7 @@
 * corrected French translation for "warp" to be "warp" instead of "englobe"
 * moved "for each" down in the lists pallette towards the imperative blocks
 * updated "tools" library (for new HOF prims)
+* removed "catch" etc. from "tools" library (has been moved to "iteration" lib)
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)
