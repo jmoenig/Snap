@@ -76,6 +76,7 @@
 * updated Spanish translation (for new HOF prims)
 * updated French translation (for new HOF prims)
 * corrected French translation for "warp" to be "warp" instead of "englobe"
+* moved "for each" down in the lists pallette towards the imperative blocks
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)

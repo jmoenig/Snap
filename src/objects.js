@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-24';
+modules.objects = '2019-April-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -2432,10 +2432,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
-        blocks.push(block('doForEach'));
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
         blocks.push(block('reportCombine'));
+        blocks.push('-');
+        blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -7985,10 +7986,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
         blocks.push('-');
-        blocks.push(block('doForEach'));
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
         blocks.push(block('reportCombine'));
+        blocks.push('-');
+        blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
