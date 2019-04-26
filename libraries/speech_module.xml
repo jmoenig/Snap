@@ -1,6 +1,7 @@
 <blocks app="Snap! 4.1, http://snap.berkeley.edu" version="1"><block-definition s="speak %&apos;text&apos; with %&apos;lang&apos; accent $nl and pitch %&apos;pitch&apos; rate %&apos;rate&apos;" type="command" category="sound"><header></header><code></code><translations>de:sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _&#xD;</translations><inputs><input type="%s">Hello, World!</input><input type="%txt">en-US<options>American=en-US
 Arabic=ar
 British=en-GB
+Catalan=ca-ES
 Chinese=zh
 Czech=cs
 Dutch=nl
@@ -22,6 +23,7 @@ Swedish=sv
 Turkish=tr</options></input><input type="%n">1</input><input type="%n">1</input></inputs><script><block s="doRun"><block s="reportJSFunction"><list><l>msg</l><l>accent</l><l>pitch</l><l>rate</l></list><l>var utter = new SpeechSynthesisUtterance(msg);&#xD;utter.lang = accent;&#xD;utter.pitch = pitch;&#xD;utter.rate = rate;&#xD;window.speechSynthesis.speak(utter);</l></block><list><block var="text"/><block var="lang"/><block var="pitch"/><block var="rate"/></list></block></script></block-definition><block-definition s="speak %&apos;text&apos; with %&apos;lang&apos; accent $nl and pitch %&apos;pitch&apos; rate %&apos;rate&apos; and wait" type="command" category="sound"><header></header><code></code><translations>de:sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _ und warte&#xD;</translations><inputs><input type="%s">Hello, World!</input><input type="%txt">en-US<options>American=en-US
 Arabic=ar
 British=en-GB
+Catalan=ca-ES
 Chinese=zh
 Czech=cs
 Dutch=nl
