@@ -81,6 +81,7 @@
 * removed "catch" etc. from "tools" library (has been moved to "iteration" lib)
 * updated "cases" library (for new HOF prims)
 * updated "bignums" library (for new HOF prims)
+* updated "crayons" library (for new HOF prims)
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)
