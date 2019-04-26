@@ -86,6 +86,7 @@
 * updated "audio comp" library (for new HOF prims)
 * updated "parallelism" library (for new HOF prims)
 * renamed help screens for the new HOF prims
+* Theads: added support for single implicit parameter to FOR EACH prim
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)

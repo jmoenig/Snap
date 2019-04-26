@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-24';
+modules.threads = '2019-April-26';
 
 var ThreadManager;
 var Process;
@@ -2103,14 +2103,15 @@ Process.prototype.doForEach = function (upvar, list, script) {
 
     this.assertType(list, 'list');
     if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
-    var index = this.context.inputs[3];
+    var index = this.context.inputs[3],
+        item = list.at(index);
     this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, list.at(index));
+    this.context.outerContext.variables.setVar(upvar, item);
     if (index > list.length()) {return; }
     this.context.inputs[3] += 1;
     this.pushContext('doYield');
     this.pushContext();
-    this.evaluate(script, new List(), true);
+    this.evaluate(script, new List([item]), true);
 };
 
 Process.prototype.doFor = function (upvar, start, end, script) {
