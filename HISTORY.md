@@ -67,11 +67,13 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
+    * Spanish
     * German
     * French
 
 ### 2019-04-26
 * updated Catalan translation (for new HOF prims)
+* updated Spanish translation (for new HOF prims)
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)

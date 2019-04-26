@@ -185,7 +185,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
-        '2018-02-19', // this, too, will appear in the Translators tab
+        '2019-04-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -600,10 +600,14 @@ SnapTranslator.dict.es = {
         'repetir %n %loop',
     'repeat until %b %loop':
         'repetir hasta que %b %loop',
+    'for %upvar = %n to %n %cla':
+        'para %upvar = %n hasta %n %cla',
     'if %b %c':
         'si %b %c',
     'if %b %c else %c':
         'si %b %c sino %c',
+    'if %b then %s else %s':
+        'si %b entonces %s sino %s',
     'report %s':
         'reportar %s',
     'stop %stopChoices':
@@ -1074,6 +1078,16 @@ SnapTranslator.dict.es = {
         'longitud de %l',
     '%l contains %s':
         '\u00BF %l contiene %s ?',
+    'for each %upvar in %l %cla':
+        'para cada %upvar de %l %cla',
+    'item':
+        'elemento',
+    'map %repRing over %l':
+        'mapear %repRing sobre %l',
+    'keep items such that %predRing from %l':
+        'mantener los elementos donde %predRing de %l',
+    'combine with %repRing items of %l':
+        'combinar con %repRing los elementos de %l',
     'add %s to %l':
         'a\u00F1adir %s a %l',
     'delete %ida of %l':
@@ -1084,10 +1098,6 @@ SnapTranslator.dict.es = {
         'reemplazar elemento %idx de %l con %s',
 
     // lists' development mode blocks:
-    'map %repRing over %l':
-        'mapear %repRing sobre %l',
-    'for %upvar in %l %cl':
-        'para %upvar en %l %cl',
     'show table %l':
         'mostrar tabla %l',
 
@@ -1164,8 +1174,6 @@ SnapTranslator.dict.es = {
     // already defined
     // 'list':
     //    'lista',
-    'item':
-        'elemento',
     'delimiter':
         'delimitador',
 
