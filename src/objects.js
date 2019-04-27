@@ -1280,6 +1280,14 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, null, localize('thing')]
         },
 
+        // numbers - linked
+        reportNumbers: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'numbers from %n to %n',
+            defaults: [1, 10]
+        },
+
         // HOFs
         reportMap: {
             type: 'reporter',
@@ -2429,6 +2437,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         blocks.push(block('reportNewList'));
+        blocks.push(block('reportNumbers'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
@@ -2617,6 +2626,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     [
                         'doDeclareVariables',
                         'reportNewList',
+                        'reportNumbers',
                         'reportCONS',
                         'reportListItem',
                         'reportCDR',
@@ -7985,6 +7995,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeclareVariables'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
+        blocks.push(block('reportNumbers'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));

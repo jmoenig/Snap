@@ -1802,6 +1802,37 @@ Process.prototype.doShowTable = function (list) {
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
+// Process interpolated non-HOF list primitives
+
+Process.prototype.reportNumbers = function (start, end) {
+    // answer a new linked list containing an linearly ascending progression
+    // of integers beginning at start to end.
+    // this is interpolated so it can handle big ranges of numbers
+    // without blocking the UI
+
+    var dta;
+    this.assertType(start, 'number');
+    this.assertType(end, 'number');
+    if (this.context.aggregation === null) {
+        this.context.aggregation = {
+            target : new List(),
+            end : null,
+            idx : start
+        };
+        this.context.aggregation.target.isLinked = true;
+        this.context.aggregation.end = this.context.aggregation.target;
+    }
+    dta = this.context.aggregation;
+    if (dta.idx > end) {
+        this.returnValueToParentContext(dta.target.cdr());
+        return;
+    }
+    dta.end.rest = dta.target.cons(dta.idx);
+    dta.end = dta.end.rest;
+    dta.idx += 1;
+    this.pushContext();
+};
+
 // Process conditionals primitives
 
 Process.prototype.doIf = function () {
