@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-26';
+modules.objects = '2019-April-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -1249,6 +1249,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%l contains %s',
             defaults: [null, localize('thing')]
+        },
+        reportListIsEmpty: {
+            type: 'predicate',
+            category: 'lists',
+            spec: 'is %l empty?'
         },
         doAddToList: {
             type: 'command',
@@ -2431,6 +2436,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
+        blocks.push(block('reportListIsEmpty'));
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
@@ -2616,6 +2622,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListLength',
                         'reportListContainsItem',
+                        'reportListIsEmpty',
                         'doForEach',
                         'reportMap',
                         'reportKeep',
@@ -7985,6 +7992,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
+        blocks.push(block('reportListIsEmpty'));
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));

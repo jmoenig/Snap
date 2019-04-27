@@ -25,7 +25,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
-    * new "map","keep", "combine" and "for each" primitives in list category
+    * new "is empty", "map","keep", "combine" and "for each" primitives in list category
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
@@ -70,6 +70,9 @@
     * Spanish
     * German
     * French
+
+### 2019-04-26
+* Lists, Threads, Objects: new "is empty" predicate primitive in List category
 
 ### 2019-04-26
 * updated Catalan translation (for new HOF prims)

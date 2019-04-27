@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-26';
+modules.threads = '2019-April-27';
 
 var ThreadManager;
 var Process;
@@ -1789,6 +1789,11 @@ Process.prototype.reportListLength = function (list) {
 Process.prototype.reportListContainsItem = function (list, element) {
     this.assertType(list, 'list');
     return list.contains(element);
+};
+
+Process.prototype.reportListIsEmpty = function (list) {
+    this.assertType(list, 'list');
+    return list.isEmpty();
 };
 
 Process.prototype.doShowTable = function (list) {
