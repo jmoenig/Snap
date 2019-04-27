@@ -78,6 +78,7 @@
 * Threads: renamed "aggregation" property to "accumulator"
 * GUI: removed "tools" library, yay!
 * updated German, Catalan, Spanish and French translations for former tools
+* renamed help screen for "is _ empty?"
 
 ### 2019-04-26
 * updated Catalan translation (for new HOF prims)
