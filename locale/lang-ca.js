@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-04-26', // this, too, will appear in the Translators tab
+        '2019-04-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -654,6 +654,8 @@ SnapTranslator.dict.ca = {
     // lists:
     'list %exp':
         'llista %exp',
+    'numbers from %n to %n':
+        'nombres des de %n a %n',
     '%s in front of %l':
         'afegeix %s davant de %l',
     'item %idx of %l':
@@ -666,16 +668,18 @@ SnapTranslator.dict.ca = {
         '%l conté %s',
     'thing':
         'cosa',
-    'for each %upvar in %l %cla':
-        'per cada %upvar de %l %cla',
-    'item':
-        'element',
+    'is %l empty?':
+        '%l buida?',
     'map %repRing over %l':
         'mapeja %repRing sobre %l',
     'keep items such that %predRing from %l':
         'manté els elements on %predRing de %l',
     'combine with %repRing items of %l':
         'combina amb %repRing els elements de %l',
+    'for each %upvar in %l %cla':
+        'per cada %upvar de %l %cla',
+    'item':
+        'element',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
@@ -767,10 +771,6 @@ SnapTranslator.dict.ca = {
         'Blocs',
     'For all Sprites':
         'Per a tots els objectes', 
-    'Import tools':
-        'Importa eines',
-    'load the official library of\npowerful blocks':
-        'Carrega la llibreria\noficial de blocs avançats',
     'Libraries...':
         'Llibreries...',
     'Import library':
@@ -2512,8 +2512,6 @@ SnapTranslator.dict.ca = {
     'play %n hz for %n secs':
         'toca %n Hz durant %n segons',
 //libreries
-    'Tools':
-        'Eines',
     'Text Costumes':
         'Text als vestits',
     'Provide getters and setters for all GUI-controlled global settings':
@@ -2554,8 +2552,8 @@ SnapTranslator.dict.ca = {
         'Versions dels blocs +, x, AND i OR que tenen més de dues ranures',
     'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
         'Una versió ampliada del bloc "URL" que permet treballar amb  crides "POST", "PUT", "DELETE" i "GET" i també triar el protocol "HTTP-HTTPS" i controlar les capçaleres',
-    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.':
-        'Una de les idees importants en Logo i que va continuar Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria (juntament amb el bloc "JOIN WORDS" de la llibreria d\'Eines) torna a desenvolupar aquesta idea.',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
+        'Una de les idees importants en Logo i que va continuar Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.',
     'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
         'La mateixa idea que la comanda "switch" en llenguatges tipus C o "cond" en Lisp. Gràcies a Nathan Dinsmore per inventar la idea de tenir un bloc separat per a cada branca!',
     'Report hand positions from LEAP Motion controller (leapmotion.com).':

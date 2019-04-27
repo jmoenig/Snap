@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-04-25', // this, too, will appear in the Translators tab
+        '2019-04-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -755,6 +755,8 @@ SnapTranslator.dict.de = {
     // lists:
     'list %exp':
         'Liste %exp',
+    'numbers from %n to %n':
+        'Zahlen von %n bis %n',
     '%s in front of %l':
         '%s am Anfang von %l',
     'item %idx of %l':
@@ -767,16 +769,18 @@ SnapTranslator.dict.de = {
         '%l enth\u00e4lt %s',
     'thing':
         'etwas',
-    'for each %upvar in %l %cla':
-        'für jedes %upvar von %l %cla',
-    'item':
-        'Element',
+    'is %l empty?':
+        'ist %l leer?',
     'map %repRing over %l':
         'wende %repRing an auf %l',
     'keep items such that %predRing from %l':
         'behalte Elemente, die %predRing aus %l',
     'combine with %repRing items of %l':
         'kombiniere mit %repRing die Elemente von %l',
+    'for each %upvar in %l %cla':
+        'für jedes %upvar von %l %cla',
+    'item':
+        'Element',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
@@ -870,10 +874,6 @@ SnapTranslator.dict.de = {
         'Bausteine',
     'For all Sprites':
         'Allen gemeinsam',
-    'Import tools':
-        'Tools laden',
-    'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
     'Libraries...':
         'Module...',
     'Select categories of additional blocks to add to this project.':

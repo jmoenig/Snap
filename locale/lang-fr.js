@@ -197,7 +197,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2019-04-26', // this, too, will appear in the Translators tab
+        '2019-04-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -686,6 +686,8 @@ SnapTranslator.dict.fr = {
     // lists:
     'list %exp':
         'liste %exp',
+    'numbers from %n to %n':
+        'nombres de %n à %n',
     '%s in front of %l':
         '%s au d\u00E9but de %l',
     'item %idx of %l':
@@ -698,16 +700,18 @@ SnapTranslator.dict.fr = {
         '%l contient %s',
     'thing':
         'qqchose',
-    'for each %upvar in %l %cla':
-        'pour chaque %upvar de %l %cla',
-    'item':
-        'item',
+    'is %l empty?':
+        '%l vide?',
     'map %repRing over %l':
         'appliquer %repRing à %l',
     'keep items such that %predRing from %l':
         'garder les items tels que %predRing de %l',
     'combine with %repRing items of %l':
         'combine avec %repRing les items de %l',
+    'for each %upvar in %l %cla':
+        'pour chaque %upvar de %l %cla',
+    'item':
+        'item',
     'add %s to %l':
         'ajouter %s \u00E0 %l',
     'delete %ida of %l':
@@ -783,8 +787,6 @@ SnapTranslator.dict.fr = {
         'Exporter un r\u00E9sum\u00E9...',
     'open a new browser browser window\n with a summary of this project':
         'voir un résumé de ce projet dans\nune nouvelle fenêtre du navigateur',
-    'Import tools':
-        'Importer les outils',
     'load the official library of\npowerful blocks':
         'Importer la biblioth\u00E8que officielle\nd\'outils avanc\u00E9s',
     'Libraries...':

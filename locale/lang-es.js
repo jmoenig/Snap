@@ -185,7 +185,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
-        '2019-04-26', // this, too, will appear in the Translators tab
+        '2019-04-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1068,6 +1068,8 @@ SnapTranslator.dict.es = {
     // lists:
     'list %exp':
         'lista %exp',
+    'números de %n a %n':
+        'Zahlen von %n bis %n',
     '%s in front of %l':
         '%s delante de %l',
     'item %idx of %l':
@@ -1078,16 +1080,18 @@ SnapTranslator.dict.es = {
         'longitud de %l',
     '%l contains %s':
         '\u00BF %l contiene %s ?',
-    'for each %upvar in %l %cla':
-        'para cada %upvar de %l %cla',
-    'item':
-        'elemento',
+    'is %l empty?':
+        '%l vacía?',
     'map %repRing over %l':
         'mapear %repRing sobre %l',
     'keep items such that %predRing from %l':
         'mantener los elementos donde %predRing de %l',
     'combine with %repRing items of %l':
         'combinar con %repRing los elementos de %l',
+    'for each %upvar in %l %cla':
+        'para cada %upvar de %l %cla',
+    'item':
+        'elemento',
     'add %s to %l':
         'a\u00F1adir %s a %l',
     'delete %ida of %l':
@@ -1262,10 +1266,6 @@ SnapTranslator.dict.es = {
     'show a picture of all scripts\nand block definitions':
         'muestra una imagen con todos\nlos programas y definiciones de bloques',
 
-    'Import tools':
-        'Importar utilidades',
-    'load the official library of\npowerful blocks':
-        'carga la biblioteca oficial de\nbloques avanzados',
     'Opening blocks...':
         'Abriendo bloques...',
 
@@ -2595,11 +2595,6 @@ SnapTranslator.dict.es = {
         'No se ha podido exportar el texto',
 
     //libraries
-    'Tools':
-        'Utilidades',
-    'Standard library of powerful blocks (for, map, etc.)':
-        'Biblioteca est\u00E1ndar de bloques avanzados (for, map, etc...)',
-
     'Iteration, composition':
         'Iteraci\u00F3n, composici\u00F3n',
     'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
@@ -2627,8 +2622,8 @@ SnapTranslator.dict.es = {
 
     'Words, sentences':
         'Palabras, frases',
-    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.':
-        'Una de las mejores ideas de Logo no inclu\u00EDda en Scratch es la de considerar un texto como una secuencia de palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca (junto al bloque UNIR de la biblioteca Utilidades) recupera esa idea.',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
+        'Una de las mejores ideas de Logo no inclu\u00EDda en Scratch es la de considerar un texto como una secuencia de palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca recupera esa idea.',
 
     'Multi-branched conditional (switch)':
         'Condicionales multirama (switch)',
