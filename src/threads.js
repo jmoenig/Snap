@@ -1811,19 +1811,19 @@ Process.prototype.reportNumbers = function (start, end) {
     // without blocking the UI
 
     var dta;
-    this.assertType(start, 'number');
-    this.assertType(end, 'number');
+    this.assertType(+start, 'number');
+    this.assertType(+end, 'number');
     if (this.context.accumulator === null) {
         this.context.accumulator = {
             target : new List(),
             end : null,
-            idx : start
+            idx : +start
         };
         this.context.accumulator.target.isLinked = true;
         this.context.accumulator.end = this.context.accumulator.target;
     }
     dta = this.context.accumulator;
-    if (dta.idx > end) {
+    if (dta.idx > +end) {
         dta.end.rest = new List();
         this.returnValueToParentContext(dta.target.cdr());
         return;
