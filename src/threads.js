@@ -1824,6 +1824,7 @@ Process.prototype.reportNumbers = function (start, end) {
     }
     dta = this.context.aggregation;
     if (dta.idx > end) {
+        dta.end.rest = new List();
         this.returnValueToParentContext(dta.target.cdr());
         return;
     }
