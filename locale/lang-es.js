@@ -1068,8 +1068,8 @@ SnapTranslator.dict.es = {
     // lists:
     'list %exp':
         'lista %exp',
-    'números de %n a %n':
-        'Zahlen von %n bis %n',
+    'numbers from %n to %n':
+        'números de %n a %n',
     '%s in front of %l':
         '%s delante de %l',
     'item %idx of %l':
