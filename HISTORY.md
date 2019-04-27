@@ -3,6 +3,7 @@
 ## in development
 
 * New Features:
+    * the "tools" library has been integrated as primitives 
     * export 1- /2- dimensional lists with atomic data as CSV
     * export n-dimensional lists with atomic data as JSON
     * import CSV, Text, or JSON via drag & drop
@@ -75,6 +76,7 @@
 * Lists, Threads, Objects: new "is empty" predicate primitive in List category
 * Threads, Objects: new "numbers" constructor primitive in List category
 * Threads: renamed "aggregation" property to "accumulator"
+* GUI: removed "tools" library, yay!
 
 ### 2019-04-26
 * updated Catalan translation (for new HOF prims)
