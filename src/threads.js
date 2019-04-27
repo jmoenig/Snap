@@ -2278,6 +2278,7 @@ Process.prototype.reportKeep = function (predicate, list) {
                 this.context.accumulator.source.cdr();
         }
         if (this.context.accumulator.remaining === 0) {
+            this.context.accumulator.end.rest = new List();
             this.returnValueToParentContext(
                 this.context.accumulator.target.cdr()
             );
