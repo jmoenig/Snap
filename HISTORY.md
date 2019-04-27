@@ -74,6 +74,7 @@
 ### 2019-04-26
 * Lists, Threads, Objects: new "is empty" predicate primitive in List category
 * Threads, Objects: new "numbers" constructor primitive in List category
+* Threads: renamed "aggregation" property to "accumulator"
 
 ### 2019-04-26
 * updated Catalan translation (for new HOF prims)

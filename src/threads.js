@@ -1813,16 +1813,16 @@ Process.prototype.reportNumbers = function (start, end) {
     var dta;
     this.assertType(start, 'number');
     this.assertType(end, 'number');
-    if (this.context.aggregation === null) {
-        this.context.aggregation = {
+    if (this.context.accumulator === null) {
+        this.context.accumulator = {
             target : new List(),
             end : null,
             idx : start
         };
-        this.context.aggregation.target.isLinked = true;
-        this.context.aggregation.end = this.context.aggregation.target;
+        this.context.accumulator.target.isLinked = true;
+        this.context.accumulator.end = this.context.accumulator.target;
     }
-    dta = this.context.aggregation;
+    dta = this.context.accumulator;
     if (dta.idx > end) {
         dta.end.rest = new List();
         this.returnValueToParentContext(dta.target.cdr());
@@ -2158,8 +2158,8 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     // within the script.
 
     var dta;
-    if (this.context.aggregation === null) {
-        this.context.aggregation = {
+    if (this.context.accumulator === null) {
+        this.context.accumulator = {
             idx : Math.floor(start),
             test : start < end ?
                 function () {return this.idx > end; }
@@ -2168,7 +2168,7 @@ Process.prototype.doFor = function (upvar, start, end, script) {
             parms : new List() // empty parameters, reusable to avoid GC
         };
     }
-    dta = this.context.aggregation;
+    dta = this.context.accumulator;
     this.context.outerContext.variables.addVar(upvar);
     this.context.outerContext.variables.setVar(upvar, dta.idx);
     if (dta.test()) {return; }
@@ -2187,10 +2187,10 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     -----------------------------
     [2] - last reporter evaluation result
 
-    these primitives used to store the aggregated data in the unused parts
+    these primitives used to store the accumulated data in the unused parts
     of the context's input-array. For reasons obscure to me this led to
     JS stack overflows when used on large lists (> 150 k items). As a remedy
-    aggregations are now accumulated in the "aggregation" property slot
+    aggregations are now accumulated in the "accumulator" property slot
     of Context. Why this speeds up execution by orders of magnitude while
     "fixing" the stack-overflow issue eludes me. -Jens
 */
@@ -2203,46 +2203,46 @@ Process.prototype.reportMap = function (reporter, list) {
     var next;
     this.assertType(list, 'list');
     if (list.isLinked) {
-        if (this.context.aggregation === null) {
-            this.context.aggregation = {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
                 source : list,
                 target : new List(),
                 end : null,
                 remaining : list.length()
             };
-            this.context.aggregation.target.isLinked = true;
-            this.context.aggregation.end = this.context.aggregation.target;
+            this.context.accumulator.target.isLinked = true;
+            this.context.accumulator.end = this.context.accumulator.target;
         } else if (this.context.inputs.length > 2) {
-            this.context.aggregation.end.rest = list.cons(
+            this.context.accumulator.end.rest = list.cons(
                 this.context.inputs.pop()
             );
-            this.context.aggregation.end = this.context.aggregation.end.rest;
-            this.context.aggregation.remaining -= 1;
+            this.context.accumulator.end = this.context.accumulator.end.rest;
+            this.context.accumulator.remaining -= 1;
         }
-        if (this.context.aggregation.remaining === 0) {
-            this.context.aggregation.end.rest = list.cons(
+        if (this.context.accumulator.remaining === 0) {
+            this.context.accumulator.end.rest = list.cons(
                 this.context.inputs[2]
             ).cdr();
             this.returnValueToParentContext(
-                this.context.aggregation.target.cdr()
+                this.context.accumulator.target.cdr()
             );
             return;
         }
-        next = this.context.aggregation.source.at(1);
-        this.context.aggregation.source = this.context.aggregation.source.cdr();
+        next = this.context.accumulator.source.at(1);
+        this.context.accumulator.source = this.context.accumulator.source.cdr();
     } else { // arrayed
-        if (this.context.aggregation === null) {
-            this.context.aggregation = [];
+        if (this.context.accumulator === null) {
+            this.context.accumulator = [];
         } else if (this.context.inputs.length > 2) {
-            this.context.aggregation.push(this.context.inputs.pop());
+            this.context.accumulator.push(this.context.inputs.pop());
         }
-        if (this.context.aggregation.length === list.length()) {
+        if (this.context.accumulator.length === list.length()) {
             this.returnValueToParentContext(
-                new List(this.context.aggregation)
+                new List(this.context.accumulator)
             );
             return;
         }
-        next = list.at(this.context.aggregation.length + 1);
+        next = list.at(this.context.accumulator.length + 1);
     }
     this.pushContext();
     this.evaluate(reporter, new List([next]));
@@ -2256,55 +2256,55 @@ Process.prototype.reportKeep = function (predicate, list) {
     var next;
     this.assertType(list, 'list');
     if (list.isLinked) {
-        if (this.context.aggregation === null) {
-            this.context.aggregation = {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
                 source : list,
                 target : new List(),
                 end : null,
                 remaining : list.length()
             };
-            this.context.aggregation.target.isLinked = true;
-            this.context.aggregation.end = this.context.aggregation.target;
+            this.context.accumulator.target.isLinked = true;
+            this.context.accumulator.end = this.context.accumulator.target;
         } else if (this.context.inputs.length > 2) {
             if (this.context.inputs.pop() === true) {
-                this.context.aggregation.end.rest = list.cons(
-                    this.context.aggregation.source.at(1)
+                this.context.accumulator.end.rest = list.cons(
+                    this.context.accumulator.source.at(1)
                 );
-                this.context.aggregation.end =
-                    this.context.aggregation.end.rest;
+                this.context.accumulator.end =
+                    this.context.accumulator.end.rest;
             }
-            this.context.aggregation.remaining -= 1;
-            this.context.aggregation.source =
-                this.context.aggregation.source.cdr();
+            this.context.accumulator.remaining -= 1;
+            this.context.accumulator.source =
+                this.context.accumulator.source.cdr();
         }
-        if (this.context.aggregation.remaining === 0) {
+        if (this.context.accumulator.remaining === 0) {
             this.returnValueToParentContext(
-                this.context.aggregation.target.cdr()
+                this.context.accumulator.target.cdr()
             );
             return;
         }
-        next = this.context.aggregation.source.at(1);
+        next = this.context.accumulator.source.at(1);
     } else { // arrayed
-        if (this.context.aggregation === null) {
-            this.context.aggregation = {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
                 idx : 0,
                 target : []
             };
         } else if (this.context.inputs.length > 2) {
             if (this.context.inputs.pop() === true) {
-                this.context.aggregation.target.push(
-                    list.at(this.context.aggregation.idx)
+                this.context.accumulator.target.push(
+                    list.at(this.context.accumulator.idx)
                 );
             }
         }
-        if (this.context.aggregation.idx === list.length()) {
+        if (this.context.accumulator.idx === list.length()) {
             this.returnValueToParentContext(
-                new List(this.context.aggregation.target)
+                new List(this.context.accumulator.target)
             );
             return;
         }
-        this.context.aggregation.idx += 1;
-        next = list.at(this.context.aggregation.idx);
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
     }
     this.pushContext();
     this.evaluate(predicate, new List([next]));
@@ -2321,40 +2321,40 @@ Process.prototype.reportCombine = function (reporter, list) {
         return;
     }
     if (list.isLinked) {
-        if (this.context.aggregation === null) {
-            this.context.aggregation = {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
                 source : list.cdr(),
                 target : list.at(1),
                 remaining : list.length() - 1
             };
         } else if (this.context.inputs.length > 2) {
-            this.context.aggregation.target = this.context.inputs.pop();
-            this.context.aggregation.remaining -= 1;
-            this.context.aggregation.source =
-                this.context.aggregation.source.cdr();
+            this.context.accumulator.target = this.context.inputs.pop();
+            this.context.accumulator.remaining -= 1;
+            this.context.accumulator.source =
+                this.context.accumulator.source.cdr();
         }
-        if (this.context.aggregation.remaining === 0) {
-            this.returnValueToParentContext(this.context.aggregation.target);
+        if (this.context.accumulator.remaining === 0) {
+            this.returnValueToParentContext(this.context.accumulator.target);
             return;
         }
-        next = this.context.aggregation.source.at(1);
+        next = this.context.accumulator.source.at(1);
     } else { // arrayed
-        if (this.context.aggregation === null) {
-            this.context.aggregation = {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
                 idx : 1,
                 target : list.at(1)
             };
         } else if (this.context.inputs.length > 2) {
-            this.context.aggregation.target = this.context.inputs.pop();
+            this.context.accumulator.target = this.context.inputs.pop();
         }
-        if (this.context.aggregation.idx === list.length()) {
-            this.returnValueToParentContext(this.context.aggregation.target);
+        if (this.context.accumulator.idx === list.length()) {
+            this.returnValueToParentContext(this.context.accumulator.target);
             return;
         }
-        this.context.aggregation.idx += 1;
-        next = list.at(this.context.aggregation.idx);
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
     }
-    current = this.context.aggregation.target;
+    current = this.context.accumulator.target;
     this.pushContext();
     this.evaluate(reporter, new List([current, next]));
 };
@@ -5032,7 +5032,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     tag             string or number to optionally identify the Context,
                     as a "return" target (for the "stop block" primitive)
     isFlashing      flag for single-stepping
-    aggregation     slot for collecting data from reentrant visits
+    accumulator     slot for collecting data from reentrant visits
 */
 
 function Context(
@@ -5063,7 +5063,7 @@ function Context(
     this.emptySlots = 0; // used for block reification
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
-    this.aggregation = null;
+    this.accumulator = null;
 }
 
 Context.prototype.toString = function () {
