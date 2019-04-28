@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-04-27', // this, too, will appear in the Translators tab
+        '2019-04-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2609,8 +2609,8 @@ SnapTranslator.dict.ca = {
         'efecte %eff',
     'current':
         'actual',
-    'play sound %snd at %rate hz':
-        'toca el so %snd a %rate hz',
+    'play sound %snd at %rate Hz':
+        'toca el so %snd a %rate Hz',
     '%aa of sound %snd':
         '%aa del so %snd',
     'duration':

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-04-27', // this, too, will appear in the Translators tab
+        '2019-04-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -403,8 +403,8 @@ SnapTranslator.dict.de = {
         'stoppe alle Kl\u00e4nge',
     'rest for %n beats':
         'spiele Pause f\u00fcr %n Schl\u00e4ge',
-    'play sound %snd at %rate hz':
-        'spiele Klang %snd mit %rate hz',
+    'play sound %snd at %rate Hz':
+        'spiele Klang %snd mit %rate Hz',
     '%aa of sound %snd':
         '%aa von Klang %snd',
     'duration':

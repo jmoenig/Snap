@@ -53,6 +53,7 @@
     * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
+    * more language options for the Text2Speech library, thanks Joan!
 * Notable Fixes:
     * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
@@ -72,7 +73,12 @@
     * German
     * French
 
-### 2019-04-26
+### 2019-04-28
+* more helpscreens and bignum library update, thanks, Brian!
+* more language options for the Text2Speech library, thanks, Joan!
+* Objects, translations: changed "hz" typo to "Hz", thanks, Brian, for catching this!
+
+### 2019-04-27
 * Lists, Threads, Objects: new "is empty" predicate primitive in List category
 * Threads, Objects: new "numbers" constructor primitive in List category
 * Threads: renamed "aggregation" property to "accumulator"

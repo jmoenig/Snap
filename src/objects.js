@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-27';
+modules.objects = '2019-April-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -454,7 +454,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doPlaySoundAtRate: {
             type: 'command',
             category: 'sound',
-            spec: 'play sound %snd at %rate hz',
+            spec: 'play sound %snd at %rate Hz',
             defaults: ['', 44100]
         },
         doStopAllSounds: {
