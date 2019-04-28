@@ -484,7 +484,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'command',
             category: 'sound',
-            spec: 'play %n hz for %n secs',
+            spec: 'play %n Hz for %n secs',
             defaults: [440, 2]
         },
         doSetInstrument: {
@@ -547,7 +547,7 @@ SpriteMorph.prototype.initBlocks = function () {
         playFreq: {
             type: 'command',
             category: 'sound',
-            spec: 'play frequency %n hz',
+            spec: 'play frequency %n Hz',
             defaults: [440]
         },
         stopFreq: {

@@ -433,12 +433,12 @@ SnapTranslator.dict.de = {
         'setze Balance auf %n',
     'balance':
         'Balance',
-    'play frequency %n hz':
-        'spiele Frequenz %n hz',
+    'play frequency %n Hz':
+        'spiele Frequenz %n Hz',
     'stop frequency':
         'stoppe Frequenz',
-    'play %n hz for %n secs':
-        'spiele %n hz f\u00fcr %n Sek.',
+    'play %n Hz for %n secs':
+        'spiele %n Hz f\u00fcr %n Sek.',
 
     // "instruments", i.e. wave forms
     '(1) sine':

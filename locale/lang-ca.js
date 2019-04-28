@@ -2509,7 +2509,7 @@ SnapTranslator.dict.ca = {
     'max':
         'màxima',
 //
-    'play %n hz for %n secs':
+    'play %n Hz for %n secs':
         'toca %n Hz durant %n segons',
 //libreries
     'Text Costumes':
@@ -2633,8 +2633,8 @@ SnapTranslator.dict.ca = {
         'fixa el balanç a %n',
     'balance':
         'balanç',
-    'play frequency %n hz':
-        'toca la freqüència %n hz',
+    'play frequency %n Hz':
+        'toca la freqüència %n Hz',
     'stop frequency':
         'atura la freqüència',
     'pen %pen':
