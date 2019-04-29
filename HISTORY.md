@@ -75,6 +75,7 @@
 
 ### 2019-04-29
 * optimized animation library
+* Threads: stop audio frequency instances when "stop all" is executed
 
 ### 2019-04-28
 * more helpscreens and bignum library update, thanks, Brian!

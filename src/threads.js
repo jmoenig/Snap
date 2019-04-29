@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-27';
+modules.threads = '2019-April-29';
 
 var ThreadManager;
 var Process;
@@ -1903,11 +1903,11 @@ Process.prototype.doStopAll = function () {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
+            stage.stopAllActiveSounds();
             stage.threads.resumeAll(stage);
             stage.keysPressed = {};
             stage.runStopScripts();
             stage.threads.stopAll();
-            stage.stopAllActiveSounds();
             stage.children.forEach(function (morph) {
                 if (morph.stopTalking) {
                     morph.stopTalking();
@@ -1916,7 +1916,13 @@ Process.prototype.doStopAll = function () {
             stage.removeAllClones();
         }
         ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {ide.controlBar.pauseButton.refresh(); }
+        if (ide) {
+            ide.controlBar.pauseButton.refresh();
+            ide.nextSteps([ // catch forever loops
+                nop,
+                function () {stage.stopAllActiveSounds(); }
+            ]);
+        }
     }
 };
 
