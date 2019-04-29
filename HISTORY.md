@@ -73,6 +73,9 @@
     * German
     * French
 
+### 2019-04-29
+* optimized animation library
+
 ### 2019-04-28
 * more helpscreens and bignum library update, thanks, Brian!
 * more language options for the Text2Speech library, thanks, Joan!
