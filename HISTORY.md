@@ -73,6 +73,9 @@
     * German
     * French
 
+### 2019-04-30
+* Blocks, Threads: added "id" to image attributes dropdown
+
 ### 2019-04-29
 * optimized animation library
 * Threads: stop audio frequency instances when "stop all" is executed

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-April-11';
+modules.blocks = '2019-April-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1015,6 +1015,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null, // text
                 false, // numeric?
                 {
+                    'id' : ['id'],
                     'name' : ['name'],
                     'width' : ['width'],
                     'height' : ['height'],

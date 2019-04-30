@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-April-29';
+modules.threads = '2019-April-30';
 
 var ThreadManager;
 var Process;
@@ -4574,8 +4574,9 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
         return cst.height();
     case 'pixels':
         return cst.rasterized().pixels();
+    case 'id':
     default:
-        return 0;
+        return cst;
     }
 };
 
