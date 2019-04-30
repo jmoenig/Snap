@@ -79,6 +79,7 @@
 * Blocks, Threads: removed "id" from image attributes
 * Blocks, Threads: added "costume" selector to MY dropdown
 * German translation update
+* Objects: adjusted costume stretch minimum to 1 pixel
 
 ### 2019-04-29
 * optimized animation library

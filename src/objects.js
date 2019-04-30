@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-28';
+modules.objects = '2019-April-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -8982,8 +8982,8 @@ Costume.prototype.flipped = function () {
 };
 
 Costume.prototype.stretched = function (w, h) {
-    w = (Math.sign(w) || 1) * Math.max(10, Math.abs(w));
-    h = (Math.sign(h) || 1) * Math.max(10, Math.abs(h));
+    w = (Math.sign(w) || 1) * Math.max(1, Math.abs(w));
+    h = (Math.sign(h) || 1) * Math.max(1, Math.abs(h));
 
     var canvas = newCanvas(new Point(Math.abs(w), Math.abs(h)), true),
         ctx = canvas.getContext('2d'),
