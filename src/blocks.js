@@ -1015,7 +1015,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null, // text
                 false, // numeric?
                 {
-                    'id' : ['id'],
                     'name' : ['name'],
                     'width' : ['width'],
                     'height' : ['height'],
@@ -8859,6 +8858,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         }
     }
     dict.name = ['name'];
+    dict.costume = ['costume'];
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
     dict['dangling?'] = ['dangling?'];

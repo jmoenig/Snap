@@ -4102,6 +4102,8 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
+        case 'costume':
+            return thisObj.costume;
         case 'costumes':
             return thisObj.reportCostumes();
         case 'sounds':
@@ -4574,7 +4576,6 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
         return cst.height();
     case 'pixels':
         return cst.rasterized().pixels();
-    case 'id':
     default:
         return cst;
     }

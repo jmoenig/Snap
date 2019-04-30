@@ -31,6 +31,7 @@
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" as attribute selectors of the OF primitive for the stage
+    * added "costume" selector to the MY attributes dropdown
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
@@ -75,6 +76,8 @@
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
+* Blocks, Threads: removed "id" from image attributes
+* Blocks, Threads: added "costume" selector to MY dropdown
 
 ### 2019-04-29
 * optimized animation library
