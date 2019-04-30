@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-04-28', // this, too, will appear in the Translators tab
+        '2019-04-30', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1807,6 +1807,8 @@ SnapTranslator.dict.de = {
         'Mittelpunkt y',
     'name':
         'Name',
+    'costume':
+        'Kostüm',
     'stage':
         'B\u00fchne',
     'costumes':

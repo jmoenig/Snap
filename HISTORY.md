@@ -78,6 +78,7 @@
 * Blocks, Threads: added "id" to image attributes dropdown
 * Blocks, Threads: removed "id" from image attributes
 * Blocks, Threads: added "costume" selector to MY dropdown
+* German translation update
 
 ### 2019-04-29
 * optimized animation library
