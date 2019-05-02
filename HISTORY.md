@@ -27,6 +27,7 @@
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
     * new "numbers", "is empty", "map","keep", "combine" and "for each" primitives in list category
+    * new JIT-compiler "blitz-HOF" primitives for "map", "keep" & "combine" via "relabel"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
@@ -79,6 +80,7 @@
 * Blocks: reordered MY block dropdown by data type
 * Blocks, Threads: added "width" and "height" to the MY block's dropdown
 * Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
+* Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown

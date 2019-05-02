@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-April-30';
+modules.objects = '2019-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1294,15 +1294,33 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'map %repRing over %l'
         },
+        reportAtomicMap: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz map %repRing over %l'
+        },
         reportKeep: {
             type: 'reporter',
             category: 'lists',
             spec: 'keep items such that %predRing from %l'
         },
+        reportAtomicKeep: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz keep items such that %predRing from %l'
+        },
         reportCombine: {
             type: 'reporter',
             category: 'lists',
             spec: 'combine with %repRing items of %l'
+        },
+        reportAtomicCombine: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz combine with %repRing items of %l'
         },
         doForEach: {
             type: 'command',
@@ -1525,7 +1543,15 @@ SpriteMorph.prototype.blockAlternatives = {
     doSetVar: ['doChangeVar'],
     doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
-    doHideVar: ['doShowVar']
+    doHideVar: ['doShowVar'],
+
+    // lists - blitz primitives
+    reportMap: ['reportAtomicMap'],
+    reportAtomicMap: ['reportMap'],
+    reportKeep: ['reportAtomicKeep'],
+    reportAtomicKeep: ['reportKeep'],
+    reportCombine: ['reportAtomicCombine'],
+    reportAtomicCombine: ['reportCombine']
 };
 
 // SpriteMorph instance creation
