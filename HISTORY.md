@@ -31,7 +31,7 @@
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
     * added "width" and "height" to the MY blocks dropdown
-    * added "width" and "height" as attribute selectors of the OF primitive for the stage
+    * added "width" and "height" as attribute selectors of the OF primitive
     * added "costume" selector to the MY attributes dropdown
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
@@ -77,7 +77,8 @@
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
-* Blocks, Threads: added "width" and "height" to the MY blocks dropdown
+* Blocks, Threads: added "width" and "height" to the MY block's dropdown
+* Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown

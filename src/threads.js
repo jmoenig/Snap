@@ -4017,11 +4017,17 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             case 'balance':
                 return thatObj.getPan();
             case 'width':
-                this.assertType(thatObj, 'stage');
-                return thatObj.dimensions.x;
+                if (thatObj instanceof StageMorph) {
+                    return thatObj.dimensions.x;
+                }
+                this.assertType(thatObj, 'sprite');
+                return thatObj.width() / stage.scale;
             case 'height':
-                this.assertType(thatObj, 'stage');
-                return thatObj.dimensions.y;
+                if (thatObj instanceof StageMorph) {
+                    return thatObj.dimensions.y;
+                }
+                this.assertType(thatObj, 'sprite');
+                return thatObj.height() / stage.scale;
             }
         }
     }

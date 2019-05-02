@@ -8918,6 +8918,8 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
             'size' : ['size'],
+            'width': ['width'],
+            'height': ['height'],
             'volume' : ['volume'],
             'balance' : ['balance']
         };
