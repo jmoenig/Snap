@@ -7251,6 +7251,7 @@ StageMorph.prototype.startVideo = function(isFlipped) {
         dialog.drawNew();
         if (myself.videoElement) {
             myself.videoElement.remove();
+            myself.videoElement = null;
         }
     }
 
