@@ -74,6 +74,9 @@
     * German
     * French
 
+### 2019-05-02
+* Blocks: reordered MY block dropdown by data type
+
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
 * Blocks, Threads: removed "id" from image attributes

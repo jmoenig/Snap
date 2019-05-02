@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-April-30';
+modules.blocks = '2019-May-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8838,31 +8838,46 @@ InputSlotMorph.prototype.typesMenu = function () {
 };
 
 InputSlotMorph.prototype.gettablesMenu = function () {
-    var dict = {
-        neighbors : ['neighbors'],
-        self : ['self'],
-        'other sprites' : ['other sprites'],
-        clones : ['clones'],
-        'other clones' : ['other clones']
-    };
-    if (SpriteMorph.prototype.enableNesting) {
-        dict.parts = ['parts'];
+    var dict = {},
+        nest = SpriteMorph.prototype.enableNesting,
+        oop = StageMorph.prototype.enableInheritance;
+
+    // (single) objects
+    dict.self = ['self'];
+    if (nest) {
         dict.anchor = ['anchor'];
     }
-    dict.stage = ['stage'];
-    if (StageMorph.prototype.enableInheritance) {
-        dict.children = ['children'];
+    if (oop) {
         dict.parent = ['parent'];
-        if (this.world().isDevMode) {
-            dict['temporary?'] = ['temporary?'];
-        }
     }
-    dict.name = ['name'];
+    dict.stage = ['stage'];
     dict.costume = ['costume'];
+
+    // strings
+    dict.name = ['name'];
+
+    // lists
+    if (nest) {
+        dict.parts = ['parts'];
+    }
+    if (oop) {
+        dict.children = ['children'];
+    }
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
+    dict.neighbors = ['neighbors'];
+    dict['other sprites'] = ['other sprites'];
+    dict.clones = ['clones'];
+    dict['other clones'] = ['other clones'];
+
+    // Booleans
     dict['dangling?'] = ['dangling?'];
     dict['draggable?'] = ['draggable?'];
+    if (oop && this.world().isDevMode) {
+        dict['temporary?'] = ['temporary?'];
+    }
+
+    // numbers
     dict['rotation style'] = ['rotation style'];
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];
