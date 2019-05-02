@@ -1531,6 +1531,10 @@ SnapTranslator.dict.de = {
         'Maximalwert...',
     'import...':
         'Importieren...',
+    'raw data...':
+        'Rohdaten...',
+    'import without attempting to\nparse or format data':
+        'Daten unformatiert\nimportieren',
     'Slider minimum value':
         'Minimalwert des Reglers',
     'Slider maximum value':

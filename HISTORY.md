@@ -85,6 +85,7 @@
 * updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
 * duplicated help-screens for "map" & friends for their atomic "blitz" variants
 * Objects: expose "import raw data" option in variable watcher context menu
+* German translation update for "raw data" importing feature
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
