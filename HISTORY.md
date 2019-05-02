@@ -7,6 +7,7 @@
     * export 1- /2- dimensional lists with atomic data as CSV
     * export n-dimensional lists with atomic data as JSON
     * import CSV, Text, or JSON via drag & drop
+    * option to import CSV etc. as "raw data", i.e. unparsed
     * parse JSON using the SPLIT reporter
     * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
     * new blocks for setting and changing the stage's background color
@@ -83,7 +84,7 @@
 * Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
 * updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
 * duplicated help-screens for "map" & friends for their atomic "blitz" variants
-
+* Objects: expose "import raw data" option in variable watcher context menu
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
