@@ -10737,13 +10737,12 @@ WatcherMorph.prototype.userMenu = function () {
             'import...',
             'importData'
         );
+        menu.addItem(
+            'raw data...',
+            function () {myself.importData(true); },
+            'import without attempting to\nparse or format data'//,
+        );
         if (shiftClicked) {
-            menu.addItem(
-                'import raw data...',
-                function () {myself.importData(true); },
-                'do not attempt to\nparse or format data',
-                new Color(100, 0, 0)
-            );
             if (this.currentValue instanceof List &&
                     this.currentValue.canBeCSV()) {
                 menu.addItem(
