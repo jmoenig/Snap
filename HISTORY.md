@@ -82,6 +82,7 @@
 * Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
 * Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
 * updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
+* duplicated help-screens for "map" & friends for their atomic "blitz" variants
 
 
 ### 2019-04-30
