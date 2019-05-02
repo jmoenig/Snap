@@ -4119,13 +4119,13 @@ Process.prototype.reportGet = function (query) {
                 return thisObj.dimensions.x;
             }
             stage = thisObj.parentThatIsA(StageMorph);
-            return thisObj.width() / stage.scale;
+            return stage ? thisObj.width() / stage.scale : 0;
         case 'height':
             if (thisObj instanceof StageMorph) {
                 return thisObj.dimensions.y;
             }
             stage = thisObj.parentThatIsA(StageMorph);
-            return thisObj.height() / stage.scale;
+            return stage ? thisObj.height() / stage.scale : 0;
         }
     }
     return '';
