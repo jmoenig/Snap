@@ -81,6 +81,8 @@
 * Blocks, Threads: added "width" and "height" to the MY block's dropdown
 * Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
 * Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
+* updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
+
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
