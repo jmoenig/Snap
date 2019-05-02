@@ -5555,6 +5555,14 @@ JSCompiler.prototype.compileExpression = function (block) {
         return this.compileInfix('||', inputs);
     case 'reportAnd':
         return this.compileInfix('&&', inputs);
+    case 'reportIfElse':
+        return '(' +
+            this.compileInput(inputs[0]) +
+            ' ? ' +
+            this.compileInput(inputs[1]) +
+            ' : ' +
+            this.compileInput(inputs[2]) +
+            ')';
     case 'evaluateCustomBlock':
         throw new Error(
             'compiling does not yet support\n' +
