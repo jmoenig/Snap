@@ -8878,6 +8878,8 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     }
 
     // numbers
+    dict.width = ['width'];
+    dict.height = ['height'];
     dict['rotation style'] = ['rotation style'];
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];

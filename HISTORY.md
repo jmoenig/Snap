@@ -30,6 +30,7 @@
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
+    * added "width" and "height" to the MY blocks dropdown
     * added "width" and "height" as attribute selectors of the OF primitive for the stage
     * added "costume" selector to the MY attributes dropdown
     * special context-aware drop-downs for custom blocks
@@ -76,6 +77,7 @@
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
+* Blocks, Threads: added "width" and "height" to the MY blocks dropdown
 
 ### 2019-04-30
 * Blocks, Threads: added "id" to image attributes dropdown
