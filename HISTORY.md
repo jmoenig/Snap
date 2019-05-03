@@ -82,6 +82,7 @@
 * Blocks: added "compile / un-compile" options to HOF-prims
 * Objects: added relabelling options for HOF-prims
 * German translation update
+* removed new HOF prims from the "atomic  HOFs" library (aka "Bigger Data")
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
