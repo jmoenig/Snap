@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-02';
+modules.objects = '2019-May-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -1546,12 +1546,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doHideVar: ['doShowVar'],
 
     // lists - blitz primitives
-    reportMap: ['reportAtomicMap'],
-    reportAtomicMap: ['reportMap'],
-    reportKeep: ['reportAtomicKeep'],
-    reportAtomicKeep: ['reportKeep'],
-    reportCombine: ['reportAtomicCombine'],
-    reportAtomicCombine: ['reportCombine']
+    reportMap: ['reportKeep', 'reportCombine'],
+    reportKeep: ['reportMap', 'reportCombine'],
+    reportCombine: ['reportMap', 'reportKeep']
 };
 
 // SpriteMorph instance creation

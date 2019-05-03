@@ -80,6 +80,7 @@
 ### 2019-05-02
 * Blocks: reverted reordering MY block dropdown by data type - back to similarities
 * Blocks: added "compile / un-compile" options to HOF-prims
+* Objects: added relabelling options for HOF-prims
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
