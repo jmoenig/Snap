@@ -83,6 +83,7 @@
 * Objects: added relabelling options for HOF-prims
 * German translation update
 * removed new HOF prims from the "atomic  HOFs" library (aka "Bigger Data")
+* edited "parallelization" library to use the new "is (list) empty" primitive
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
