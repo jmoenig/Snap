@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-02';
+modules.blocks = '2019-May-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8852,42 +8852,29 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         nest = SpriteMorph.prototype.enableNesting,
         oop = StageMorph.prototype.enableInheritance;
 
-    // (single) objects
-    dict.self = ['self'];
-    if (nest) {
-        dict.anchor = ['anchor'];
-    }
-    if (oop) {
-        dict.parent = ['parent'];
-    }
-    dict.stage = ['stage'];
-    dict.costume = ['costume'];
-
-    // strings
-    dict.name = ['name'];
-
-    // lists
-    if (nest) {
-        dict.parts = ['parts'];
-    }
-    if (oop) {
-        dict.children = ['children'];
-    }
-    dict.costumes = ['costumes'];
-    dict.sounds = ['sounds'];
     dict.neighbors = ['neighbors'];
+    dict.self = ['self'];
     dict['other sprites'] = ['other sprites'];
     dict.clones = ['clones'];
     dict['other clones'] = ['other clones'];
-
-    // Booleans
-    dict['dangling?'] = ['dangling?'];
-    dict['draggable?'] = ['draggable?'];
+    if (nest) {
+        dict.parts = ['parts'];
+        dict.anchor = ['anchor'];
+    }
+    dict.stage = ['stage'];
+    if (oop) {
+        dict.children = ['children'];
+        dict.parent = ['parent'];
+    }
     if (oop && this.world().isDevMode) {
         dict['temporary?'] = ['temporary?'];
     }
-
-    // numbers
+    dict.name = ['name'];
+    dict.costume = ['costume'];
+    dict.costumes = ['costumes'];
+    dict.sounds = ['sounds'];
+    dict['dangling?'] = ['dangling?'];
+    dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
     dict.height = ['height'];
     dict['rotation style'] = ['rotation style'];

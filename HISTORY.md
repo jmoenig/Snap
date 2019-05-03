@@ -78,6 +78,9 @@
     * French
 
 ### 2019-05-02
+* Blocks: reverted reordering MY block dropdown by data type - back to similarities
+
+### 2019-05-02
 * Blocks: reordered MY block dropdown by data type
 * Blocks, Threads: added "width" and "height" to the MY block's dropdown
 * Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
