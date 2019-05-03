@@ -28,7 +28,7 @@
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
     * new "numbers", "is empty", "map","keep", "combine" and "for each" primitives in list category
-    * new JIT-compiler "blitz-HOF" primitives for "map", "keep" & "combine" via "relabel"
+    * new JIT-compiler "blitz-HOF" primitives for "map", "keep" & "combine" via "compile"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
@@ -79,6 +79,7 @@
 
 ### 2019-05-02
 * Blocks: reverted reordering MY block dropdown by data type - back to similarities
+* Blocks: added "compile / un-compile" options to HOF-prims
 
 ### 2019-05-02
 * Blocks: reordered MY block dropdown by data type

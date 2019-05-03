@@ -2794,6 +2794,47 @@ BlockMorph.prototype.userMenu = function () {
         }
     }
 
+    // JIT-compile HOFs - experimental
+    if (
+        contains(
+            ['reportMap', 'reportKeep', 'reportCombine'],
+            this.selector
+        )
+    ) {
+        alternatives = {
+            reportMap : 'reportAtomicMap',
+            reportKeep : 'reportAtomicKeep',
+            reportCombine : 'reportAtomicCombine'
+        };
+        menu.addItem(
+            'compile',
+            function () {
+                myself.setSelector(alternatives[myself.selector]);
+                myself.changed();
+            },
+            'experimental!\nmake this reporter fast and uninterruptable\n' +
+                'CAUTION: Errors in the ring\ncan break your Snap! session!'
+        );
+    } else if (
+        contains(
+            ['reportAtomicMap', 'reportAtomicKeep', 'reportAtomicCombine'],
+            this.selector
+        )
+    ) {
+        alternatives = {
+            reportAtomicMap : 'reportMap',
+            reportAtomicKeep : 'reportKeep',
+            reportAtomicCombine : 'reportCombine'
+        };
+        menu.addItem(
+            'un-compile',
+            function () {
+                myself.setSelector(alternatives[myself.selector]);
+                myself.changed();
+            }
+        );
+    }
+
     menu.addItem(
         "duplicate",
         function () {
