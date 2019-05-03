@@ -2827,7 +2827,7 @@ BlockMorph.prototype.userMenu = function () {
             reportAtomicCombine : 'reportCombine'
         };
         menu.addItem(
-            'un-compile',
+            'uncompile',
             function () {
                 myself.setSelector(alternatives[myself.selector]);
                 myself.changed();
