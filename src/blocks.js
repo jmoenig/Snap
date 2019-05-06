@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-06';
+modules.blocks = '2019-May-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
