@@ -1358,6 +1358,30 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'other',
             spec: 'code of %cmdRing'
+        },
+        // Video motion
+        doSetVideo: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'turn video %vid',
+            defaults: ['on']
+        },
+        doSetVideoTransparency: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'set video transparency to %n',
+            defaults: [50]
+        },
+        reportMotionOn: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'video %motype on %on',
+            defaults: ['motion', 'this sprite']
+        },
+        reportMotionOnStage: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'video %motype on stage'
         }
     };
 };
@@ -1623,6 +1647,10 @@ SpriteMorph.prototype.init = function (globals) {
     this.instances = [];
     this.cachedPropagation = false; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
+
+    this.motionAmount = 0;
+    this.motionDirection = 0;
+    this.frameNumber = 0;
 
     SpriteMorph.uber.init.call(this);
 
@@ -2271,6 +2299,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
+        blocks.push('-');
+        blocks.push(block('doSetVideo'));
+        blocks.push(block('doSetVideoTransparency'));
+        blocks.push(block('reportMotionOn'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
 
@@ -6940,6 +6972,10 @@ StageMorph.prototype.init = function (globals) {
 
     this.remixID = null;
 
+    this.videoElement = null;
+    this.videoTransparency = 50;
+    this.videoMotion = null;
+
     StageMorph.uber.init.call(this);
 
     this.cachedHSV = this.color.hsv();
@@ -7044,7 +7080,10 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
             w,
             h
         );
-
+        // webcam
+        if (this.videoElement) {
+            this.drawVideo(context);
+        }
         // pen trails
         ws = w / this.scale;
         hs = h / this.scale;
@@ -7163,6 +7202,86 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     }
     ctx.putImageData(dta, 0, 0);
     return morph;
+};
+
+// Video
+StageMorph.prototype.drawVideo = function(context) {
+    var w = this.dimensions.x * this.scale,
+        h = this.dimensions.y * this.scale;
+    context.save();
+    context.globalAlpha = 1 - (this.videoTransparency / 100);
+    if (!this.videoElement.isFlipped) {
+        context.translate(w, 0);
+        context.scale(-1, 1);
+    }
+    if (this.videoElement.width != this.dimensions.x || this.videoElement.height != this.dimensions.y) {
+        this.videoElement.width = this.dimensions.x;
+        this.videoElement.height = this.dimensions.y;
+        this.videoMotion.reset(this.dimensions.x, this.dimensions.y);
+    }
+    context.drawImage(
+        this.videoElement,
+        this.left() * (this.videoElement.isFlipped ? 1 : -1),
+        this.top(),
+        w,
+        h
+    );
+    context.restore();
+};
+
+StageMorph.prototype.startVideo = function(isFlipped) {
+    var myself = this;
+
+    function noCameraSupport() {
+        var dialog = new DialogBoxMorph();
+        dialog.inform(
+            localize('Camera not supported'),
+            localize('Please make sure your web browser is up to date\n' +
+                'and your camera is properly configured. \n\n' +
+                'Some browsers also require you to access Snap!\n' +
+                'through HTTPS to use the camera.\n\n' +
+                'Please replace the "http://" part of the address\n' +
+                'in your browser by "https://" and try again.'),
+            this.world
+        );
+        dialog.fixLayout();
+        dialog.drawNew();
+        if (myself.videoElement) {
+            myself.videoElement.remove();
+            myself.videoElement = null;
+        }
+    }
+
+    if (!this.videoElement) {
+        this.videoElement = document.createElement('video');
+        this.videoElement.width = this.dimensions.x;
+        this.videoElement.height = this.dimensions.y;
+        this.videoElement.hidden = true;
+        document.body.appendChild(this.videoElement);
+    }
+    this.videoElement.isFlipped = isFlipped;
+    if (!this.videoMotion) {
+        this.videoMotion = new VideoMotion(this.dimensions.x, this.dimensions.y);
+    }
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                myself.videoElement.srcObject = stream;
+                myself.videoElement.play().catch(noCameraSupport);
+                myself.videoElement.stream = stream;
+            })
+            .catch(noCameraSupport);
+    }
+};
+
+StageMorph.prototype.stopVideo = function() {
+    if (this.videoElement) {
+        this.videoElement.remove();
+        this.videoElement = null;
+        this.videoMotion = null;
+    }
+    this.changed();
+    this.drawNew();
 };
 
 // StageMorph pixel access:
@@ -7331,6 +7450,20 @@ StageMorph.prototype.step = function () {
             w.update();
         });
         this.lastWatcherUpdate = Date.now();
+    }
+
+    // video frame capture
+    if (this.videoElement) {
+        var context = newCanvas(this.dimensions, true).getContext('2d');
+        context.save();
+        if (!this.videoElement.isFlipped) {
+            context.translate(this.dimensions.x, 0);
+            context.scale(-1, 1);
+        }
+        context.drawImage(this.videoElement, 0, 0, this.videoElement.width, this.videoElement.height);
+        this.videoMotion.addFrame(context.getImageData(0, 0, this.videoElement.width, this.videoElement.height).data);
+        context.restore();
+        this.changed();
     }
 };
 
@@ -7846,6 +7979,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
+        blocks.push('-');
+        blocks.push(block('doSetVideo'));
+        blocks.push(block('doSetVideoTransparency'));
+        blocks.push(block('reportMotionOnStage'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
 

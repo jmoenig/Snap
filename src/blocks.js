@@ -1710,6 +1710,38 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     new Point() : this.embossing;
             part.drawNew();
             break;
+        // Video motion
+        case '%vid': // video modes
+            part = new InputSlotMorph(
+                null,
+                false, {
+                    on: ['on'],
+                    off: ['off'],
+                    'on-flipped': ['on-flipped']
+                },
+                true
+            );
+            break;
+        case '%motype':
+            part = new InputSlotMorph(
+                null,
+                false, {
+                    'motion': ['motion'],
+                    'direction': ['direction']
+                },
+                true // read-only
+            );
+            part.setContents(['motion']);
+            break;
+        case '%on':
+            part = new InputSlotMorph(
+                null,
+                false, {
+                    'this sprite': ['this sprite'],
+                    'stage': ['stage']
+                },
+                true // read-only
+            );
         default:
             nop();
         }
@@ -2362,6 +2394,9 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %f      - round function slot, unevaluated if replaced,
     %r      - round reporter slot
     %p      - hexagonal predicate slot
+    %vid    - chameleon colored rectangular drop-down for video modes
+    %motype - chameleon colored rectangular drop-down for motion type
+    %on     - chameleon colored rectangular drop-down for motion detection scope
 
     rings:
 
