@@ -166,6 +166,7 @@ SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
+SpriteMorph.prototype.enableVideo = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
@@ -2300,10 +2301,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
         blocks.push('-');
-        blocks.push(block('doSetVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push(block('reportMotionOn'));
-        blocks.push('-');
+
+        if (SpriteMorph.prototype.enableVideo) {
+            blocks.push(block('doSetVideo'));
+            blocks.push(block('doSetVideoTransparency'));
+            blocks.push(block('reportMotionOn'));
+            blocks.push('-');
+        }
+
         blocks.push(block('reportAttributeOf'));
 
         if (SpriteMorph.prototype.enableFirstClass) {
@@ -7998,10 +8003,14 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
         blocks.push('-');
-        blocks.push(block('doSetVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push(block('reportMotionOnStage'));
-        blocks.push('-');
+
+        if (SpriteMorph.prototype.enableVideo) {
+            blocks.push(block('doSetVideo'));
+            blocks.push(block('doSetVideoTransparency'));
+            blocks.push(block('reportMotionOnStage'));
+            blocks.push('-');
+        }
+
         blocks.push(block('reportAttributeOf'));
 
         if (SpriteMorph.prototype.enableFirstClass) {

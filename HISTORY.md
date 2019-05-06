@@ -77,7 +77,10 @@
     * German
     * French
 
-### 2019-05-02
+### 2019-05-06
+* Blocks, Objects, Threads, Video: New video motion detection feature by Josep Ferràndiz i Farré, under construction
+
+### 2019-05-03
 * Blocks: reverted reordering MY block dropdown by data type - back to similarities
 * Blocks: added "compile / un-compile" options to HOF-prims
 * Objects: added relabelling options for HOF-prims
