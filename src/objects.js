@@ -79,12 +79,12 @@ MorphicPreferences, Object, PenMorph, Point, Rectangle, ScrollFrameMorph,
 SliderMorph, String, StringMorph, TextMorph, contains, copy, degrees, detect,
 document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
-SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
+SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph, VideoMotion,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-03';
+modules.objects = '2019-May-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -7214,7 +7214,9 @@ StageMorph.prototype.drawVideo = function(context) {
         context.translate(w, 0);
         context.scale(-1, 1);
     }
-    if (this.videoElement.width != this.dimensions.x || this.videoElement.height != this.dimensions.y) {
+    if (this.videoElement.width != this.dimensions.x ||
+        this.videoElement.height != this.dimensions.y
+    ) {
         this.videoElement.width = this.dimensions.x;
         this.videoElement.height = this.dimensions.y;
         this.videoMotion.reset(this.dimensions.x, this.dimensions.y);
@@ -7261,7 +7263,10 @@ StageMorph.prototype.startVideo = function(isFlipped) {
     }
     this.videoElement.isFlipped = isFlipped;
     if (!this.videoMotion) {
-        this.videoMotion = new VideoMotion(this.dimensions.x, this.dimensions.y);
+        this.videoMotion = new VideoMotion(
+            this.dimensions.x,
+            this.dimensions.y
+        );
     }
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -7460,8 +7465,21 @@ StageMorph.prototype.step = function () {
             context.translate(this.dimensions.x, 0);
             context.scale(-1, 1);
         }
-        context.drawImage(this.videoElement, 0, 0, this.videoElement.width, this.videoElement.height);
-        this.videoMotion.addFrame(context.getImageData(0, 0, this.videoElement.width, this.videoElement.height).data);
+        context.drawImage(
+            this.videoElement,
+            0,
+            0,
+            this.videoElement.width,
+            this.videoElement.height
+        );
+        this.videoMotion.addFrame(
+            context.getImageData(
+                0,
+                0,
+                this.videoElement.width,
+                this.videoElement.height
+            ).data
+        );
         context.restore();
         this.changed();
     }

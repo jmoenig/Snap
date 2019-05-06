@@ -62,7 +62,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-02';
+modules.threads = '2019-May-06';
 
 var ThreadManager;
 var Process;
@@ -5800,7 +5800,7 @@ function VideoMotion(width, height) {
     this.threshold = 30;
     this.amountScale = 100;
     this.toDegree = 180 / Math.PI;
-};
+}
 
 /*
  * Reset videoElement and videoMotion dimensions.
@@ -5844,7 +5844,7 @@ VideoMotion.prototype.getStageMotion = function() {
             u: 0,
             v: 0
         },
-        i, j, k, l, address, nextAddress, maxAddress,
+        i, j, address, nextAddress, maxAddress,
         winStep = this.winSize * 2 + 1,
         wmax = this.width - this.winSize - 1,
         hmax = this.height - this.winSize - 1,
@@ -5975,7 +5975,7 @@ VideoMotion.prototype.getMotionVector = function(A2, A1B2, B1, C2, C1) {
 VideoMotion.prototype.getLocalMotion = function(aSprite) {
     var stage = aSprite.parentThatIsA(StageMorph),
         activePixelNum = 0,
-        i, j,
+        i, j, xmin, xmax, ymin, ymax, gradT, gradX, gradY,
         spriteWidth = Math.floor(aSprite.width() / stage.scale),
         winSize = this.winSize,
         vector = {

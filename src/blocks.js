@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-03';
+modules.blocks = '2019-May-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1710,7 +1710,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     new Point() : this.embossing;
             part.drawNew();
             break;
+
         // Video motion
+
         case '%vid': // video modes
             part = new InputSlotMorph(
                 null,
@@ -1742,6 +1744,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true // read-only
             );
+            break;
         default:
             nop();
         }
