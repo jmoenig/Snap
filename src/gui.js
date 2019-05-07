@@ -5379,6 +5379,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.stageRatio = 1;
     this.isSmallStage = false;
     this.controlBar.stageSizeButton.refresh();
+    this.stage.stopVideo();
     this.setExtent(world.extent());
     if (this.isAnimating) {
         zoom();

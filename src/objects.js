@@ -1649,6 +1649,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.cachedPropagation = false; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
+    this.imageData = {}; // version: date, pixels: Uint32Array
     this.motionAmount = 0;
     this.motionDirection = 0;
     this.frameNumber = 0;
@@ -1680,6 +1681,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.freqPlayer = null;
     c.blocksCache = {};
     c.paletteCache = {};
+    c.imageData = {};
     c.cachedHSV = c.color.hsv();
     arr = [];
     this.inheritedAttributes.forEach(function (att) {
@@ -1935,6 +1937,38 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
     }
     ctx.putImageData(dta, 0, 0);
     return morph;
+};
+
+SpriteMorph.prototype.getImageData = function () {
+    // used for video motion detection.
+    // Get sprite image data scaled to 1 an converted to ABGR array,
+    // cache to reduce GC load
+    if (this.version !== this.imageData.version) {
+        var stage = this.parentThatIsA(StageMorph),
+            ext = this.extent(),
+            newExtent = {
+                x: Math.floor(ext.x / stage.scale),
+                y: Math.floor(ext.y / stage.scale)
+            },
+            canvas = newCanvas(newExtent, true),
+            canvasContext,
+            imageData;
+        canvasContext = canvas.getContext("2d");
+        canvasContext.drawImage(
+            this.image,
+            0, 0, Math.floor(ext.x),
+            Math.floor(ext.y),
+            0, 0, newExtent.x, newExtent.y
+        );
+        imageData = canvas.getContext("2d")
+            .getImageData(0, 0, newExtent.x, newExtent.y).data;
+        this.imageData = {
+            version : this.version,
+            pixels : new Uint32Array(imageData.buffer.slice(0))
+        };
+
+    }
+    return this.imageData.pixels;
 };
 
 // SpriteMorph block instantiation
@@ -6977,6 +7011,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.remixID = null;
 
+    this.cameraCanvas = null;
     this.videoElement = null;
     this.videoTransparency = 50;
     this.videoMotion = null;
@@ -7087,8 +7122,26 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         );
         // webcam
         if (this.videoElement) {
-            this.drawVideo(context);
+            ws = w / this.scale;
+            hs = h / this.scale;
+            context.save();
+            context.scale(this.scale, this.scale);
+            context.globalAlpha = 1 - (this.videoTransparency / 100);
+            context.drawImage(
+                this.videoLayer(),
+                sl / this.scale,
+                st / this.scale,
+                ws,
+                hs,
+                area.left() / this.scale,
+                area.top() / this.scale,
+                ws,
+                hs
+            );
+            context.restore();
+            this.version = Date.now(); // update watcher icons
         }
+
         // pen trails
         ws = w / this.scale;
         hs = h / this.scale;
@@ -7169,6 +7222,18 @@ StageMorph.prototype.penTrailsMorph = function () {
     return morph;
 };
 
+StageMorph.prototype.videoLayer = function () {
+    if (!this.cameraCanvas) {
+        this.cameraCanvas = newCanvas(this.dimensions, true);
+    }
+    return this.cameraCanvas;
+};
+
+StageMorph.prototype.clearVideoLayer = function () {
+    this.cameraCanvas = null;
+    this.changed();
+};
+
 StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     // answer a new Morph containing my image filtered by aColor
     // ignore the excludedSprite, because its collision is checked
@@ -7207,33 +7272,6 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     }
     ctx.putImageData(dta, 0, 0);
     return morph;
-};
-
-// Video
-StageMorph.prototype.drawVideo = function(context) {
-    var w = this.dimensions.x * this.scale,
-        h = this.dimensions.y * this.scale;
-    context.save();
-    context.globalAlpha = 1 - (this.videoTransparency / 100);
-    if (!this.videoElement.isFlipped) {
-        context.translate(w, 0);
-        context.scale(-1, 1);
-    }
-    if (this.videoElement.width != this.dimensions.x ||
-        this.videoElement.height != this.dimensions.y
-    ) {
-        this.videoElement.width = this.dimensions.x;
-        this.videoElement.height = this.dimensions.y;
-        this.videoMotion.reset(this.dimensions.x, this.dimensions.y);
-    }
-    context.drawImage(
-        this.videoElement,
-        this.left() * (this.videoElement.isFlipped ? 1 : -1),
-        this.top(),
-        w,
-        h
-    );
-    context.restore();
 };
 
 StageMorph.prototype.startVideo = function(isFlipped) {
@@ -7290,8 +7328,7 @@ StageMorph.prototype.stopVideo = function() {
         this.videoElement = null;
         this.videoMotion = null;
     }
-    this.changed();
-    this.drawNew();
+    this.clearVideoLayer();
 };
 
 // StageMorph pixel access:
@@ -7303,6 +7340,17 @@ StageMorph.prototype.getPixelColor = function (aPoint) {
         context = this.penTrailsMorph().image.getContext('2d');
         data = context.getImageData(point.x, point.y, 1, 1);
         if (data.data[3] === 0) {
+            if (this.cameraCanvas) {
+                point = point.divideBy(this.scale);
+                context = this.cameraCanvas.getContext('2d');
+                data = context.getImageData(point.x, point.y, 1, 1);
+                return new Color(
+                    data.data[0],
+                    data.data[1],
+                    data.data[2],
+                    data.data[3] / 255
+                );
+            }
         	return StageMorph.uber.getPixelColor.call(this, aPoint);
         }
         return new Color(
@@ -7464,7 +7512,7 @@ StageMorph.prototype.step = function () {
 
     // video frame capture
     if (this.videoElement) {
-        var context = newCanvas(this.dimensions, true).getContext('2d');
+        var context = this.videoLayer().getContext('2d');
         context.save();
         if (!this.videoElement.isFlipped) {
             context.translate(this.dimensions.x, 0);
@@ -8332,6 +8380,18 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         this.dimensions.x * this.scale,
         this.dimensions.y * this.scale
     );
+    if (this.videoElement) {
+        ctx.save();
+        ctx.globalAlpha = 1 - (this.videoTransparency / 100);
+        ctx.drawImage(
+            this.videoLayer(),
+            0,
+            0,
+            this.dimensions.x * this.scale,
+            this.dimensions.y * this.scale
+        );
+        ctx.restore();
+    }
     this.children.forEach(function (morph) {
         if (morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();

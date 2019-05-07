@@ -30,14 +30,13 @@
     needs morphic.js
 
 
-    prerequisites:
+    edit history:
     --------------
-    additional symbols have been contributed by members of the Snap!
-    open-source community, especially by Bernat Romagosa
+    2019-05-07 - optimized imageData caching (jens)
 
 */
 
-/*global modules, StageMorph, newCanvas*/
+/*global modules, StageMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -278,7 +277,7 @@ VideoMotion.prototype.getLocalMotion = function(aSprite) {
     // Skip if the current frame has already been considered
     // for this state.
     if (aSprite.frameNumber !== this.frameNumber) {
-        spriteImage = getSpriteImgageData(aSprite);
+        spriteImage = aSprite.getImageData();
         // Consider only the area of the current frame overlapped
         // with the given sprite.
         cb = getClippedBounds(aSprite);
@@ -348,30 +347,6 @@ VideoMotion.prototype.getLocalMotion = function(aSprite) {
         }
         // Skip future calls on this state until a new frame is added.
         aSprite.frameNumber = this.frameNumber;
-    }
-
-    /*
-     * Get sprite image data scaled to 1 an converted to ABGR array
-     */
-    function getSpriteImgageData(sprite) {
-        var stage = sprite.parentThatIsA(StageMorph),
-            newExtent = {
-                x: Math.floor(sprite.extent().x / stage.scale),
-                y: Math.floor(sprite.extent().y / stage.scale)
-            },
-            canvas = newCanvas(newExtent, true),
-            canvasContext,
-            imageData;
-        canvasContext = canvas.getContext("2d");
-        canvasContext.drawImage(
-            sprite.image,
-            0, 0, Math.floor(sprite.extent().x),
-            Math.floor(sprite.extent().y),
-            0, 0, newExtent.x, newExtent.y
-        );
-        imageData = canvas.getContext("2d")
-            .getImageData(0, 0, newExtent.x, newExtent.y).data;
-        return new Uint32Array(imageData.buffer.slice(0));
     }
 
     /*

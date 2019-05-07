@@ -77,6 +77,9 @@
     * German
     * French
 
+### 2019-05-07
+* Blocks, Objects, Threads, Video: optimized video motion detection
+
 ### 2019-05-06
 * Blocks, Objects, Threads, Video: New video motion detection feature by Josep Ferràndiz i Farré, under construction
 
