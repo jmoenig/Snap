@@ -77,6 +77,9 @@
     * German
     * French
 
+### 2019-05-08
+* Blocks, Objects, Threads: integrated video capture control into global settings prims in Sensing
+
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection
 * Objects: actually stop the webcam, i.e. all tracks of the media stream when stopping video

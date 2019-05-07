@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-07';
+modules.threads = '2019-May-08';
 
 var ThreadManager;
 var Process;
@@ -2021,23 +2021,46 @@ Process.prototype.reportIsFastTracking = function () {
 };
 
 Process.prototype.doSetGlobalFlag = function (name, bool) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);
     this.assertType(bool, 'Boolean');
-    if (name === 'turbo mode') {
+    switch (name) {
+    case 'turbo mode':
         this.doSetFastTracking(bool);
-    }
-    if (name === 'flat line ends') {
+        break;
+    case 'flat line ends':
         SpriteMorph.prototype.useFlatLineEnds = bool;
+        break;
+    case 'video capture':
+        if (bool) {
+            stage.startVideo();
+        } else {
+            stage.stopVideo();
+        }
+        break;
+    case 'mirror video':
+        stage.mirrorVideo = bool;
+        if (stage.videoElement) {
+            stage.videoElement.isFlipped = !bool;
+        }
+        break;
     }
 };
 
 Process.prototype.reportGlobalFlag = function (name) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);
-    if (name === 'turbo mode') {
+    switch (name) {
+    case 'turbo mode':
         return this.reportIsFastTracking();
-    }
-    if (name === 'flat line ends') {
+    case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
+    case 'video capture':
+        return !isNil(stage.videoElement);
+    case 'mirror video':
+        return stage.mirrorVideo;
+    default:
+        return '';
     }
 };
 

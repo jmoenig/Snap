@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-07';
+modules.objects = '2019-May-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -1360,13 +1360,8 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'code of %cmdRing'
         },
+
         // Video motion
-        doSetVideo: {
-            type: 'command',
-            category: 'sensing',
-            spec: 'turn video %vid',
-            defaults: ['on']
-        },
         doSetVideoTransparency: {
             type: 'command',
             category: 'sensing',
@@ -2337,7 +2332,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         if (SpriteMorph.prototype.enableVideo) {
-            blocks.push(block('doSetVideo'));
             blocks.push(block('doSetVideoTransparency'));
             blocks.push(block('reportMotionOn'));
             blocks.push('-');
@@ -7011,7 +7005,9 @@ StageMorph.prototype.init = function (globals) {
 
     this.remixID = null;
 
+    // video motion detection, do not persist
     this.cameraCanvas = null;
+    this.mirrorVideo = true;
     this.videoElement = null;
     this.videoTransparency = 50;
     this.videoMotion = null;
@@ -7274,7 +7270,7 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     return morph;
 };
 
-StageMorph.prototype.startVideo = function(isFlipped) {
+StageMorph.prototype.startVideo = function() {
     var myself = this;
 
     function noCameraSupport() {
@@ -7304,7 +7300,7 @@ StageMorph.prototype.startVideo = function(isFlipped) {
         this.videoElement.hidden = true;
         document.body.appendChild(this.videoElement);
     }
-    this.videoElement.isFlipped = isFlipped;
+    this.videoElement.isFlipped = !this.mirrorVideo;
     if (!this.videoMotion) {
         this.videoMotion = new VideoMotion(
             this.dimensions.x,
@@ -8056,7 +8052,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         if (SpriteMorph.prototype.enableVideo) {
-            blocks.push(block('doSetVideo'));
             blocks.push(block('doSetVideoTransparency'));
             blocks.push(block('reportMotionOnStage'));
             blocks.push('-');
