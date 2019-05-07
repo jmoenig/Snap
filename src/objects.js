@@ -7324,6 +7324,9 @@ StageMorph.prototype.startVideo = function(isFlipped) {
 
 StageMorph.prototype.stopVideo = function() {
     if (this.videoElement) {
+        this.videoElement.stream.getTracks().forEach(
+            function (track) {track.stop(); }
+        );
         this.videoElement.remove();
         this.videoElement = null;
         this.videoMotion = null;

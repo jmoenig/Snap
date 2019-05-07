@@ -79,6 +79,7 @@
 
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection
+* Objects: actually stop the webcam, i.e. all tracks of the media stream when stopping video
 
 ### 2019-05-06
 * Blocks, Objects, Threads, Video: New video motion detection feature by Josep Ferràndiz i Farré, under construction
