@@ -1907,6 +1907,9 @@ Process.prototype.doStopAll = function () {
             stage.keysPressed = {};
             stage.runStopScripts();
             stage.threads.stopAll();
+            if (stage.videoElement) {
+                stage.stopVideo();
+            }
             stage.children.forEach(function (morph) {
                 if (morph.stopTalking) {
                     morph.stopTalking();
@@ -4447,8 +4450,15 @@ Process.prototype.reportVideo = function(attribute, name) {
         stage = thisObj.parentThatIsA(StageMorph),
         thatObj = this.getOtherObject(name, thisObj, stage);
 
-    if (!stage || !stage.videoElement) {
-        return null;
+    if (!stage.videoElement || !stage.videoElement.stream) {
+        // wait until video is turned on
+        if (!this.context.accumulator) {
+            this.context.accumulator = true; // started video
+            stage.startVideo();
+        }
+        this.pushContext('doYield');
+        this.pushContext();
+        return;
     }
 
     switch (this.inputOption(attribute)) {

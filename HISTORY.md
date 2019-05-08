@@ -81,6 +81,7 @@
 * Blocks, Objects, Threads: integrated video capture control into global settings prims in Sensing
 * Blocks, Threads: added a %self menu
 * Blocks, Threads, Objects: Finalized Video ops
+* Objects, Threads, GUI: auto-start video capture when querying, stop video on stop-all
 
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection

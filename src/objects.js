@@ -7726,8 +7726,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
 
     this.keysPressed = {};
     this.threads.stopAll();
-
     this.stopAllActiveSounds();
+    if (this.videoElement) {
+        this.stopVideo();
+    }
     this.children.forEach(function (morph) {
         if (morph.stopTalking) {
             morph.stopTalking();
