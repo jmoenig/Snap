@@ -7282,14 +7282,15 @@ StageMorph.prototype.startVideo = function() {
             myself.videoElement = null;
         }
     }
-
-    if (!this.videoElement) {
-        this.videoElement = document.createElement('video');
-        this.videoElement.width = this.dimensions.x;
-        this.videoElement.height = this.dimensions.y;
-        this.videoElement.hidden = true;
-        document.body.appendChild(this.videoElement);
+    if (this.videoElement) { // video capture has already been started
+        return;
     }
+
+    this.videoElement = document.createElement('video');
+    this.videoElement.width = this.dimensions.x;
+    this.videoElement.height = this.dimensions.y;
+    this.videoElement.hidden = true;
+    document.body.appendChild(this.videoElement);
     this.videoElement.isFlipped = !this.mirrorVideo;
     if (!this.videoMotion) {
         this.videoMotion = new VideoMotion(
