@@ -166,7 +166,6 @@ SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
-SpriteMorph.prototype.enableVideo = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
@@ -973,7 +972,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set %setting to %b',
-            defaults: [['turbo mode']]
+            defaults: [['video capture']]
         },
         reportGlobalFlag: {
             type: 'predicate',
@@ -2326,13 +2325,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
         blocks.push('-');
-
-        if (SpriteMorph.prototype.enableVideo) {
-            blocks.push(block('doSetVideoTransparency'));
-            blocks.push(block('reportVideo'));
-            blocks.push('-');
-        }
-
         blocks.push(block('reportAttributeOf'));
 
         if (SpriteMorph.prototype.enableFirstClass) {
@@ -2341,8 +2333,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportObject'));
         blocks.push('-');
-        blocks.push(block('reportAudio'));
         blocks.push(block('reportURL'));
+        blocks.push(block('reportAudio'));
+        blocks.push(block('reportVideo'));
+        blocks.push(block('doSetVideoTransparency'));
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
@@ -8048,13 +8042,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
         blocks.push('-');
-
-        if (SpriteMorph.prototype.enableVideo) {
-            blocks.push(block('doSetVideoTransparency'));
-            blocks.push(block('reportVideo'));
-            blocks.push('-');
-        }
-
         blocks.push(block('reportAttributeOf'));
 
         if (SpriteMorph.prototype.enableFirstClass) {
@@ -8063,8 +8050,10 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('reportObject'));
         blocks.push('-');
-        blocks.push(block('reportAudio'));
         blocks.push(block('reportURL'));
+        blocks.push(block('reportAudio'));
+        blocks.push(block('reportVideo'));
+        blocks.push(block('doSetVideoTransparency'));
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));

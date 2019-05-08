@@ -82,6 +82,7 @@
 * Blocks, Threads: added a %self menu
 * Blocks, Threads, Objects: Finalized Video ops
 * Objects, Threads, GUI: auto-start video capture when querying, stop video on stop-all
+* GUI, Objects: arranged video blocks in palette 
 
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection

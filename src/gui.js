@@ -2855,20 +2855,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\ncamera support',
         true
     );
-    addPreference(
-        'Video support',
-        function () {
-            SpriteMorph.prototype.enableVideo =
-                !SpriteMorph.prototype.enableVideo;
-            myself.currentSprite.blocksCache.sensing = null;
-            myself.currentSprite.paletteCache.sensing = null;
-            myself.refreshPalette();
-        },
-        SpriteMorph.prototype.enableVideo,
-        'uncheck to disable\nvideo motion detection features',
-        'check for video motion\ndetection features',
-        true
-    );
     menu.addLine(); // everything visible below is persistent
     addPreference(
         'Blurred shadows',
@@ -3842,7 +3828,6 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
-    SpriteMorph.prototype.enableVideo = false;
     Process.prototype.enableLiveCoding = false;
     this.setProjectName('');
     this.projectNotes = '';
@@ -4333,7 +4318,6 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     Process.prototype.enableLiveCoding = false;
-    SpriteMorph.prototype.enableVideo = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(
@@ -4379,7 +4363,6 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     Process.prototype.enableLiveCoding = false;
-    SpriteMorph.prototype.enableVideo = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
