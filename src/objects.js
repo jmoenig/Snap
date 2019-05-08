@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-08';
+modules.objects = '2019-May-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1639,7 +1639,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.cachedPropagation = false; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
-    this.imageData = {}; // version: date, pixels: Uint32Array, canvas: Canvas
+    this.imageData = {}; // version: date, pixels: Uint32Array
     this.motionAmount = 0;
     this.motionDirection = 0;
     this.frameNumber = 0;
@@ -1929,7 +1929,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
     return morph;
 };
 
-SpriteMorph.prototype.getImageData = function (asCanvas) {
+SpriteMorph.prototype.getImageData = function () {
     // used for video motion detection.
     // Get sprite image data scaled to 1 an converted to ABGR array,
     // cache to reduce GC load
@@ -1954,24 +1954,33 @@ SpriteMorph.prototype.getImageData = function (asCanvas) {
             .getImageData(0, 0, newExtent.x, newExtent.y).data;
         this.imageData = {
             version : this.version,
-            pixels : new Uint32Array(imageData.buffer.slice(0)),
-            canvas : canvas
+            pixels : new Uint32Array(imageData.buffer.slice(0))
         };
     }
-    return asCanvas ? this.imageData.canvas : this.imageData.pixels;
+    return this.imageData.pixels;
 };
 
 SpriteMorph.prototype.videoSnap = function() {
     var stage = this.parentThatIsA(StageMorph),
-        img = this.getImageData(true),
-        offset = this.position().subtract(stage.position())
+        center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
-        snap = newCanvas(new Point(img.width, img.height), true),
-        ctx = snap.getContext('2d');
+        cst = this.costume || this.image,
+        offset,
+        snap,
+        ctx;
 
+    if (cst instanceof Costume) {
+        cst = cst.contents;
+    }
+    offset = new Point(
+        Math.floor(center.x - (cst.width / 2)),
+        Math.floor(center.y - (cst.height / 2))
+    );
+    snap = newCanvas(new Point(cst.width, cst.height), true);
+    ctx = snap.getContext('2d');
     ctx.drawImage(stage.videoLayer(), -offset.x, -offset.y);
     ctx.globalCompositeOperation = 'destination-atop';
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(cst, 0, 0);
     return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
