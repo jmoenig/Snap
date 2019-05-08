@@ -4476,6 +4476,11 @@ Process.prototype.reportVideo = function(attribute, name) {
         }
         stage.videoMotion.getStageMotion();
         return stage.videoMotion.motionDirection;
+    case 'snap':
+        if (thatObj instanceof SpriteMorph) {
+            return thatObj.videoSnap();
+        }
+        return stage.videoSnap();
     }
     return -1;
 };

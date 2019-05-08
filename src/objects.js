@@ -1639,7 +1639,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.cachedPropagation = false; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
-    this.imageData = {}; // version: date, pixels: Uint32Array
+    this.imageData = {}; // version: date, pixels: Uint32Array, canvas: Canvas
     this.motionAmount = 0;
     this.motionDirection = 0;
     this.frameNumber = 0;
@@ -1929,7 +1929,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
     return morph;
 };
 
-SpriteMorph.prototype.getImageData = function () {
+SpriteMorph.prototype.getImageData = function (asCanvas) {
     // used for video motion detection.
     // Get sprite image data scaled to 1 an converted to ABGR array,
     // cache to reduce GC load
@@ -1954,11 +1954,25 @@ SpriteMorph.prototype.getImageData = function () {
             .getImageData(0, 0, newExtent.x, newExtent.y).data;
         this.imageData = {
             version : this.version,
-            pixels : new Uint32Array(imageData.buffer.slice(0))
+            pixels : new Uint32Array(imageData.buffer.slice(0)),
+            canvas : canvas
         };
-
     }
-    return this.imageData.pixels;
+    return asCanvas ? this.imageData.canvas : this.imageData.pixels;
+};
+
+SpriteMorph.prototype.videoSnap = function() {
+    var stage = this.parentThatIsA(StageMorph),
+        img = this.getImageData(true),
+        offset = this.position().subtract(stage.position())
+            .divideBy(stage.scale),
+        snap = newCanvas(new Point(img.width, img.height), true),
+        ctx = snap.getContext('2d');
+
+    ctx.drawImage(stage.videoLayer(), -offset.x, -offset.y);
+    ctx.globalCompositeOperation = 'destination-atop';
+    ctx.drawImage(img, 0, 0);
+    return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
 // SpriteMorph block instantiation
@@ -7260,6 +7274,8 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     return morph;
 };
 
+// StageMorph video capture
+
 StageMorph.prototype.startVideo = function() {
     var myself = this;
 
@@ -7319,6 +7335,13 @@ StageMorph.prototype.stopVideo = function() {
         this.videoMotion = null;
     }
     this.clearVideoLayer();
+};
+
+StageMorph.prototype.videoSnap = function() {
+    var snap = newCanvas(this.dimensions, true),
+        ctx = snap.getContext('2d');
+    ctx.drawImage(this.videoLayer(), 0, 0);
+    return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
 // StageMorph pixel access:
@@ -7722,9 +7745,6 @@ StageMorph.prototype.fireStopAllEvent = function () {
     this.keysPressed = {};
     this.threads.stopAll();
     this.stopAllActiveSounds();
-    if (this.videoElement) {
-        this.stopVideo();
-    }
     this.children.forEach(function (morph) {
         if (morph.stopTalking) {
             morph.stopTalking();
@@ -7735,6 +7755,7 @@ StageMorph.prototype.fireStopAllEvent = function () {
         ide.nextSteps([
             nop,
             function () {myself.stopAllActiveSounds(); }, // catch forever loops
+            function () {myself.stopVideo(); },
             function () {ide.controlBar.pauseButton.refresh(); }
         ]);
     }

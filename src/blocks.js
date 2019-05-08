@@ -1727,6 +1727,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false, {
+                    'snap': ['snap'],
                     'motion': ['motion'],
                     'direction': ['direction']
                 },
