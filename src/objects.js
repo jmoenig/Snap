@@ -960,7 +960,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportObject: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'object %spr'
+            spec: 'object %self',
+            defaults: [['myself']]
         },
         reportURL: {
             type: 'reporter',

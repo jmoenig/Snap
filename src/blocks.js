@@ -1165,6 +1165,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
+        case '%self':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'objectsMenuWithSelf',
+                true
+            );
+            break;
         case '%col': // collision detection
             part = new InputSlotMorph(
                 null,
@@ -8889,12 +8897,19 @@ InputSlotMorph.prototype.clonablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.objectsMenu = function () {
+InputSlotMorph.prototype.objectsMenuWithSelf = function () {
+    return this.objectsMenu(true);
+};
+
+InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
     var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         dict = {},
         allNames = [];
 
+    if (includeMyself) {
+        dict.myself = ['myself'];
+    }
     dict[stage.name] = stage.name;
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {

@@ -3418,15 +3418,17 @@ Process.prototype.getOtherObject = function (name, thisObj, stageObj) {
     // private, find the sprite indicated by the given name
     // either onstage or in the World's hand
 
-    // experimental: deal with first-class sprites
+    // deal with first-class sprites
     if (isSnapObject(name)) {
         return name;
     }
 
+    if (this.inputOption(name) === 'myself') {
+        return thisObj;
+    }
     var stage = isNil(stageObj) ?
                 thisObj.parentThatIsA(StageMorph) : stageObj,
         thatObj = null;
-
     if (stage) {
         // find the corresponding sprite on the stage
         thatObj = detect(

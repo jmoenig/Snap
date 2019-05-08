@@ -79,6 +79,7 @@
 
 ### 2019-05-08
 * Blocks, Objects, Threads: integrated video capture control into global settings prims in Sensing
+* Blocks, Threads: added a %self menu
 
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection
