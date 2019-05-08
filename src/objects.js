@@ -1375,13 +1375,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']]
         },
-    /* // +++ to be removed
-        reportMotionOnStage: {
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'video %motype on stage'
-        }
-    */
     };
 };
 

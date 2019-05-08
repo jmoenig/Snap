@@ -1723,19 +1723,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // Video motion
 
-/* // +++ to be removed
-        case '%vid': // video modes
-            part = new InputSlotMorph(
-                null,
-                false, {
-                    on: ['on'],
-                    off: ['off'],
-                    'on-flipped': ['on-flipped']
-                },
-                true
-            );
-            break;
-*/
         case '%vid':
             part = new InputSlotMorph(
                 null,
@@ -2409,9 +2396,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %f      - round function slot, unevaluated if replaced,
     %r      - round reporter slot
     %p      - hexagonal predicate slot
-    %vid    - chameleon colored rectangular drop-down for video modes // +++ check these
-    %motype - chameleon colored rectangular drop-down for motion type
-    %on     - chameleon colored rectangular drop-down for motion detection scope
+    %vid    - chameleon colored rectangular drop-down for video modes
 
     rings:
 
