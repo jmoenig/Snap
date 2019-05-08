@@ -1369,17 +1369,19 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set video transparency to %n',
             defaults: [50]
         },
-        reportMotionOn: {
+        reportVideo: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'video %motype on %on',
-            defaults: ['motion', 'this sprite']
+            spec: 'video %vid on %self',
+            defaults: [['motion'], ['myself']]
         },
+    /* // +++ to be removed
         reportMotionOnStage: {
             type: 'reporter',
             category: 'sensing',
             spec: 'video %motype on stage'
         }
+    */
     };
 };
 
@@ -2334,7 +2336,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (SpriteMorph.prototype.enableVideo) {
             blocks.push(block('doSetVideoTransparency'));
-            blocks.push(block('reportMotionOn'));
+            blocks.push(block('reportVideo'));
             blocks.push('-');
         }
 
@@ -8054,7 +8056,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (SpriteMorph.prototype.enableVideo) {
             blocks.push(block('doSetVideoTransparency'));
-            blocks.push(block('reportMotionOnStage'));
+            blocks.push(block('reportVideo'));
             blocks.push('-');
         }
 

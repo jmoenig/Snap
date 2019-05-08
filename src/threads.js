@@ -4442,17 +4442,41 @@ Process.prototype.doSetVideoTransparency = function(factor) {
     }
 };
 
+/* // +++ to be removed
 Process.prototype.reportMotionOnStage = function(motionType) {
     return this.reportMotionOn(motionType, 'stage');
 };
+*/
 
-Process.prototype.reportMotionOn = function(motionType, on) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        sprite = this.blockReceiver(),
-        result;
-    if (stage === null || !stage.videoElement) {
+Process.prototype.reportVideo = function(attribute, name) { // +++
+    var thisObj = this.blockReceiver(),
+        stage = thisObj.parentThatIsA(StageMorph),
+        thatObj = this.getOtherObject(name, thisObj, stage);
+
+    if (!stage || !stage.videoElement) {
         return null;
     }
+
+
+    switch (this.inputOption(attribute)) {
+    case 'motion':
+        if (thatObj instanceof SpriteMorph) {
+            stage.videoMotion.getLocalMotion(thatObj);
+            return thatObj.motionAmount;
+        }
+        stage.videoMotion.getStageMotion();
+        return stage.videoMotion.motionAmount;
+    case 'direction':
+        if (thatObj instanceof SpriteMorph) {
+            stage.videoMotion.getLocalMotion(thatObj);
+            return thatObj.motionDirection;
+        }
+        stage.videoMotion.getStageMotion();
+        return stage.videoMotion.motionDirection;
+    }
+    return -1;
+
+/* // +++ remove
     switch (this.inputOption(on)) {
         case 'stage':
             stage.videoMotion.getStageMotion();
@@ -4474,6 +4498,7 @@ Process.prototype.reportMotionOn = function(motionType, on) {
             break;
     }
     return result;
+*/
 };
 
 // Process code mapping
