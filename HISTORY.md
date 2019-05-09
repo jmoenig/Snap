@@ -82,6 +82,7 @@
 * Blocks, Objects, Threads: tweaked new video-snap (still capture) feature 
 * Objects: fixed video still "snap on sprite" for Firefox
 * GUI: added credits in the "about" dialog for @jferran6 and @jguille2
+* German and Catalan translation updates
 
 ### 2019-05-08
 * Blocks, Objects, Threads: integrated video capture control into global settings prims in Sensing

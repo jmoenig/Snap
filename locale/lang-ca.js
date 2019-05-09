@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-05-02', // this, too, will appear in the Translators tab
+        '2019-05-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -583,8 +583,8 @@ SnapTranslator.dict.ca = {
         'mida de la pila',
     'frames':
         'frames',
-    'object %spr':
-        'objecte %spr',
+    'object %self':
+        'objecte %self',
     // operators:
     '%n mod %n':
         'residu de dividir %n entre %n',

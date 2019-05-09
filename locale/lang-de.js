@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-05-03', // this, too, will appear in the Translators tab
+        '2019-05-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -619,8 +619,8 @@ SnapTranslator.dict.de = {
         '%att von %spr',
     'my %get':
         'Attribut %get',
-    'object %spr':
-        'Objekt %spr',
+    'object %self':
+        'Objekt %self',
     'http:// %s':
         'http:// %s',
     'turbo mode':
@@ -675,6 +675,18 @@ SnapTranslator.dict.de = {
         'hoch',
     'max':
         'max',
+    'video %vid on %self':
+        'Video %vid auf %self',
+    'motion':
+        'Bewegung',
+    'snap':
+        'Snap',
+    'set video transparency to %n':
+        'setze Videotransparenz auf %n',
+    'video capture':
+        'Videoaufnahme',
+    'mirror video':
+        'Video gespiegelt',
     'filtered for %clr':
         'nach %clr gefiltert',
     'stack size':
