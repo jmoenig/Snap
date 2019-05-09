@@ -1978,9 +1978,9 @@ SpriteMorph.prototype.videoSnap = function() {
     );
     snap = newCanvas(new Point(cst.width, cst.height), true);
     ctx = snap.getContext('2d');
-    ctx.drawImage(stage.videoLayer(), -offset.x, -offset.y);
-    ctx.globalCompositeOperation = 'destination-atop';
     ctx.drawImage(cst, 0, 0);
+    ctx.globalCompositeOperation = 'source-in';
+    ctx.drawImage(stage.videoLayer(), -offset.x, -offset.y);
     return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
