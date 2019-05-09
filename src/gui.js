@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-May-08';
+modules.gui = '2019-May-09';
 
 // Declarations
 
@@ -3638,6 +3638,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nBartosz Leper: Retina Display Support'
         + '\nBernat Romagosa: Countless contributions'
+        + '\nJosep Ferràndiz: Video Motion Detection'
+        + '\nJoan Guillén: Countless contributions'
         + '\nCarles Paredes: Initial Vector Paint Editor'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
