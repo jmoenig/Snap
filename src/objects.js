@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-09';
+modules.objects = '2019-May-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -6060,7 +6060,9 @@ SpriteMorph.prototype.setExemplar = function (another) {
     } else {
         this.variables.parentFrame = this.globalVariables();
     }
-    if (!this.isTemporary) {
+    if (this.isTemporary) {
+        this.cloneOriginName = another.cloneOriginName || another.name;
+    } else {
         ide = this.parentThatIsA(IDE_Morph);
         if (ide) {
             ide.flushBlocksCache();

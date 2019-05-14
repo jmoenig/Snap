@@ -78,7 +78,10 @@
     * German
     * French
 
-### 2019-05-09
+### 2019-05-14
+* Objects: fixed originalCloneName reference when setting a new parent
+
+### 2019-05-12
 * Threads: fixed costume names and thumbnails for computed costumes
 
 ### 2019-05-09
