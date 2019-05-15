@@ -1960,7 +1960,7 @@ SpriteMorph.prototype.getImageData = function () {
     return this.imageData.pixels;
 };
 
-SpriteMorph.prototype.videoSnap = function() {
+SpriteMorph.prototype.projectionSnap = function() {
     var stage = this.parentThatIsA(StageMorph),
         center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
@@ -7352,7 +7352,7 @@ StageMorph.prototype.stopVideo = function() {
     this.clearProjectionLayer();
 };
 
-StageMorph.prototype.videoSnap = function() {
+StageMorph.prototype.projectionSnap = function() {
     var snap = newCanvas(this.dimensions, true),
         ctx = snap.getContext('2d');
     ctx.drawImage(this.projectionLayer(), 0, 0);
