@@ -7022,6 +7022,7 @@ StageMorph.prototype.init = function (globals) {
 
     // projection layer - for video, maps, 3D extensions etc., transient
     this.projectionSource = null; // offscreen DOM element for video, maps, 3D
+    this.stopProjectionSource = null; // function to turn off video stream etc.
     this.continuousProjection = false; // turn ON for video
     this.projectionCanvas = null;
     this.projectionTransparency = 50;
@@ -7330,6 +7331,7 @@ StageMorph.prototype.startVideo = function() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
+                myself.stopProjectionSource = myself.stopVideo;
                 myself.continuousProjection = true;
                 myself.projectionSource.srcObject = stream;
                 myself.projectionSource.play().catch(noCameraSupport);
@@ -7340,14 +7342,18 @@ StageMorph.prototype.startVideo = function() {
 };
 
 StageMorph.prototype.stopVideo = function() {
+    this.projectionSource.stream.getTracks().forEach(
+        function (track) {track.stop(); }
+    );
+    this.videoMotion = null;
+};
+
+StageMorph.prototype.stopProjection = function() {
     if (this.projectionSource) {
-        this.projectionSource.stream.getTracks().forEach(
-            function (track) {track.stop(); }
-        );
+        this.stopProjectionSource();
         this.projectionSource.remove();
         this.projectionSource = null;
         this.continuousProjection = false;
-        this.videoMotion = null;
     }
     this.clearProjectionLayer();
 };
@@ -7774,7 +7780,7 @@ StageMorph.prototype.fireStopAllEvent = function () {
         ide.nextSteps([
             nop,
             function () {myself.stopAllActiveSounds(); }, // catch forever loops
-            function () {myself.stopVideo(); },
+            function () {myself.stopProjection(); },
             function () {ide.controlBar.pauseButton.refresh(); }
         ]);
     }

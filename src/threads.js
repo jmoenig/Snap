@@ -1908,7 +1908,7 @@ Process.prototype.doStopAll = function () {
             stage.runStopScripts();
             stage.threads.stopAll();
             if (stage.projectionSource) {
-                stage.stopVideo();
+                stage.stopProjection();
             }
             stage.children.forEach(function (morph) {
                 if (morph.stopTalking) {
@@ -2038,7 +2038,7 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
         if (bool) {
             stage.startVideo();
         } else {
-            stage.stopVideo();
+            stage.stopProjection();
         }
         break;
     case 'mirror video':
@@ -4413,24 +4413,6 @@ Process.prototype.reportDate = function (datefn) {
 };
 
 // Process video motion detection primitives
-
-Process.prototype.doSetVideo = function(state) {
-    var stage,
-        inputState = this.inputOption(state);
-
-    if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            if (inputState === 'on') {
-                stage.startVideo();
-            } else if (inputState === 'off') {
-                stage.stopVideo();
-            } else if (inputState === 'on-flipped') {
-                stage.startVideo(true); // flipped
-            }
-        }
-    }
-};
 
 Process.prototype.doSetVideoTransparency = function(factor) {
     var stage;
