@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-14';
+modules.objects = '2019-May-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1980,7 +1980,7 @@ SpriteMorph.prototype.videoSnap = function() {
     ctx = snap.getContext('2d');
     ctx.drawImage(cst, 0, 0);
     ctx.globalCompositeOperation = 'source-in';
-    ctx.drawImage(stage.videoLayer(), -offset.x, -offset.y);
+    ctx.drawImage(stage.projectionLayer(), -offset.x, -offset.y);
     return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
@@ -7020,11 +7020,13 @@ StageMorph.prototype.init = function (globals) {
 
     this.remixID = null;
 
-    // video motion detection, do not persist
-    this.cameraCanvas = null;
+    // projection layer - for video, maps, 3D extensions etc., transient
+    this.projectionCanvas = null;
+    this.projectionTransparency = 50;
+
+    // video motion detection, transient
     this.mirrorVideo = true;
     this.videoElement = null;
-    this.videoTransparency = 50;
     this.videoMotion = null;
 
     StageMorph.uber.init.call(this);
@@ -7131,15 +7133,15 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
             w,
             h
         );
-        // webcam
+        // projection layer (webcam, maps, etc.)
         if (this.videoElement) {
             ws = w / this.scale;
             hs = h / this.scale;
             context.save();
             context.scale(this.scale, this.scale);
-            context.globalAlpha = 1 - (this.videoTransparency / 100);
+            context.globalAlpha = 1 - (this.projectionTransparency / 100);
             context.drawImage(
-                this.videoLayer(),
+                this.projectionLayer(),
                 sl / this.scale,
                 st / this.scale,
                 ws,
@@ -7233,15 +7235,15 @@ StageMorph.prototype.penTrailsMorph = function () {
     return morph;
 };
 
-StageMorph.prototype.videoLayer = function () {
-    if (!this.cameraCanvas) {
-        this.cameraCanvas = newCanvas(this.dimensions, true);
+StageMorph.prototype.projectionLayer = function () {
+    if (!this.projectionCanvas) {
+        this.projectionCanvas = newCanvas(this.dimensions, true);
     }
-    return this.cameraCanvas;
+    return this.projectionCanvas;
 };
 
-StageMorph.prototype.clearVideoLayer = function () {
-    this.cameraCanvas = null;
+StageMorph.prototype.clearProjectionLayer = function () {
+    this.projectionCanvas = null;
     this.changed();
 };
 
@@ -7318,7 +7320,6 @@ StageMorph.prototype.startVideo = function() {
     this.videoElement.height = this.dimensions.y;
     this.videoElement.hidden = true;
     document.body.appendChild(this.videoElement);
-    this.videoElement.isFlipped = !this.mirrorVideo;
     if (!this.videoMotion) {
         this.videoMotion = new VideoMotion(
             this.dimensions.x,
@@ -7345,13 +7346,13 @@ StageMorph.prototype.stopVideo = function() {
         this.videoElement = null;
         this.videoMotion = null;
     }
-    this.clearVideoLayer();
+    this.clearProjectionLayer();
 };
 
 StageMorph.prototype.videoSnap = function() {
     var snap = newCanvas(this.dimensions, true),
         ctx = snap.getContext('2d');
-    ctx.drawImage(this.videoLayer(), 0, 0);
+    ctx.drawImage(this.projectionLayer(), 0, 0);
     return new Costume(snap, this.newCostumeName(localize('snap')));
 };
 
@@ -7364,9 +7365,9 @@ StageMorph.prototype.getPixelColor = function (aPoint) {
         context = this.penTrailsMorph().image.getContext('2d');
         data = context.getImageData(point.x, point.y, 1, 1);
         if (data.data[3] === 0) {
-            if (this.cameraCanvas) {
+            if (this.projectionCanvas) {
                 point = point.divideBy(this.scale);
-                context = this.cameraCanvas.getContext('2d');
+                context = this.projectionCanvas.getContext('2d');
                 data = context.getImageData(point.x, point.y, 1, 1);
                 return new Color(
                     data.data[0],
@@ -7536,9 +7537,9 @@ StageMorph.prototype.step = function () {
 
     // video frame capture
     if (this.videoElement) {
-        var context = this.videoLayer().getContext('2d');
+        var context = this.projectionLayer().getContext('2d');
         context.save();
-        if (!this.videoElement.isFlipped) {
+        if (this.mirrorVideo) {
             context.translate(this.dimensions.x, 0);
             context.scale(-1, 1);
         }
@@ -8402,7 +8403,7 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         ctx.save();
         ctx.globalAlpha = 1 - (this.videoTransparency / 100);
         ctx.drawImage(
-            this.videoLayer(),
+            this.projectionLayer(),
             0,
             0,
             this.dimensions.x * this.scale,

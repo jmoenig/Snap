@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-13';
+modules.threads = '2019-May-15';
 
 var ThreadManager;
 var Process;
@@ -2043,9 +2043,6 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
         break;
     case 'mirror video':
         stage.mirrorVideo = bool;
-        if (stage.videoElement) {
-            stage.videoElement.isFlipped = !bool;
-        }
         break;
     }
 };
@@ -4440,7 +4437,7 @@ Process.prototype.doSetVideoTransparency = function(factor) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.videoTransparency = Math.max(0, Math.min(100, factor));
+            stage.projectionTransparency = Math.max(0, Math.min(100, factor));
         }
     }
 };
