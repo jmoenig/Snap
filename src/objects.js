@@ -7536,8 +7536,13 @@ StageMorph.prototype.step = function () {
     }
 
     // video frame capture
+    this.stepVideo();
+};
+
+StageMorph.prototype.stepVideo = function () {
+    var context;
     if (this.videoElement) {
-        var context = this.projectionLayer().getContext('2d');
+        context = this.projectionLayer().getContext('2d');
         context.save();
         if (this.mirrorVideo) {
             context.translate(this.dimensions.x, 0);

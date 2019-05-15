@@ -80,6 +80,7 @@
 
 ### 2019-05-15
 * Objects, Treads: refactored videoLayer so it can also be used for other extensions (maps, 3d)
+* Objects: refactored video frame capture
 
 ### 2019-05-14
 * Objects: fixed originalCloneName reference when setting a new parent
