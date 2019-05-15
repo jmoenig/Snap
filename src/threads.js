@@ -1907,7 +1907,7 @@ Process.prototype.doStopAll = function () {
             stage.keysPressed = {};
             stage.runStopScripts();
             stage.threads.stopAll();
-            if (stage.videoElement) {
+            if (stage.projectionSource) {
                 stage.stopVideo();
             }
             stage.children.forEach(function (morph) {
@@ -2056,7 +2056,7 @@ Process.prototype.reportGlobalFlag = function (name) {
     case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
     case 'video capture':
-        return !isNil(stage.videoElement);
+        return !isNil(stage.projectionSource);
     case 'mirror video':
         return stage.mirrorVideo;
     default:
@@ -4447,7 +4447,7 @@ Process.prototype.reportVideo = function(attribute, name) {
         stage = thisObj.parentThatIsA(StageMorph),
         thatObj = this.getOtherObject(name, thisObj, stage);
 
-    if (!stage.videoElement || !stage.videoElement.stream) {
+    if (!stage.projectionSource || !stage.projectionSource.stream) {
         // wait until video is turned on
         if (!this.context.accumulator) {
             this.context.accumulator = true; // started video

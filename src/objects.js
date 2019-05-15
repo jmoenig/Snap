@@ -7021,12 +7021,13 @@ StageMorph.prototype.init = function (globals) {
     this.remixID = null;
 
     // projection layer - for video, maps, 3D extensions etc., transient
+    this.projectionSource = null; // offscreen DOM element for video, maps, 3D
+    this.continuousProjection = false; // turn ON for video
     this.projectionCanvas = null;
     this.projectionTransparency = 50;
 
     // video motion detection, transient
     this.mirrorVideo = true;
-    this.videoElement = null;
     this.videoMotion = null;
 
     StageMorph.uber.init.call(this);
@@ -7134,7 +7135,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
             h
         );
         // projection layer (webcam, maps, etc.)
-        if (this.videoElement) {
+        if (this.projectionSource) {
             ws = w / this.scale;
             hs = h / this.scale;
             context.save();
@@ -7306,20 +7307,20 @@ StageMorph.prototype.startVideo = function() {
         );
         dialog.fixLayout();
         dialog.drawNew();
-        if (myself.videoElement) {
-            myself.videoElement.remove();
-            myself.videoElement = null;
+        if (myself.projectionSource) {
+            myself.projectionSource.remove();
+            myself.projectionSource = null;
         }
     }
-    if (this.videoElement) { // video capture has already been started
+    if (this.projectionSource) { // video capture has already been started
         return;
     }
 
-    this.videoElement = document.createElement('video');
-    this.videoElement.width = this.dimensions.x;
-    this.videoElement.height = this.dimensions.y;
-    this.videoElement.hidden = true;
-    document.body.appendChild(this.videoElement);
+    this.projectionSource = document.createElement('video');
+    this.projectionSource.width = this.dimensions.x;
+    this.projectionSource.height = this.dimensions.y;
+    this.projectionSource.hidden = true;
+    document.body.appendChild(this.projectionSource);
     if (!this.videoMotion) {
         this.videoMotion = new VideoMotion(
             this.dimensions.x,
@@ -7329,21 +7330,23 @@ StageMorph.prototype.startVideo = function() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
-                myself.videoElement.srcObject = stream;
-                myself.videoElement.play().catch(noCameraSupport);
-                myself.videoElement.stream = stream;
+                myself.continuousProjection = true;
+                myself.projectionSource.srcObject = stream;
+                myself.projectionSource.play().catch(noCameraSupport);
+                myself.projectionSource.stream = stream;
             })
             .catch(noCameraSupport);
     }
 };
 
 StageMorph.prototype.stopVideo = function() {
-    if (this.videoElement) {
-        this.videoElement.stream.getTracks().forEach(
+    if (this.projectionSource) {
+        this.projectionSource.stream.getTracks().forEach(
             function (track) {track.stop(); }
         );
-        this.videoElement.remove();
-        this.videoElement = null;
+        this.projectionSource.remove();
+        this.projectionSource = null;
+        this.continuousProjection = false;
         this.videoMotion = null;
     }
     this.clearProjectionLayer();
@@ -7535,37 +7538,36 @@ StageMorph.prototype.step = function () {
         this.lastWatcherUpdate = Date.now();
     }
 
-    // video frame capture
-    this.stepVideo();
+    // projection layer update (e.g. video frame capture)
+    if (this.continuousProjection && this.projectionSource) {
+        this.stepProjection();
+    }
 };
 
-StageMorph.prototype.stepVideo = function () {
-    var context;
-    if (this.videoElement) {
-        context = this.projectionLayer().getContext('2d');
-        context.save();
-        if (this.mirrorVideo) {
-            context.translate(this.dimensions.x, 0);
-            context.scale(-1, 1);
-        }
-        context.drawImage(
-            this.videoElement,
-            0,
-            0,
-            this.videoElement.width,
-            this.videoElement.height
-        );
-        this.videoMotion.addFrame(
-            context.getImageData(
-                0,
-                0,
-                this.videoElement.width,
-                this.videoElement.height
-            ).data
-        );
-        context.restore();
-        this.changed();
+StageMorph.prototype.stepProjection = function () {
+    var context = this.projectionLayer().getContext('2d');
+    context.save();
+    if (this.mirrorVideo) {
+        context.translate(this.dimensions.x, 0);
+        context.scale(-1, 1);
     }
+    context.drawImage(
+        this.projectionSource,
+        0,
+        0,
+        this.projectionSource.width,
+        this.projectionSource.height
+    );
+    this.videoMotion.addFrame(
+        context.getImageData(
+            0,
+            0,
+            this.projectionSource.width,
+            this.projectionSource.height
+        ).data
+    );
+    context.restore();
+    this.changed();
 };
 
 StageMorph.prototype.stepGenericConditions = function (stopAll) {
@@ -8404,9 +8406,9 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         this.dimensions.x * this.scale,
         this.dimensions.y * this.scale
     );
-    if (this.videoElement) {
+    if (this.projectionSource) {
         ctx.save();
-        ctx.globalAlpha = 1 - (this.videoTransparency / 100);
+        ctx.globalAlpha = 1 - (this.projectionTransparency / 100);
         ctx.drawImage(
             this.projectionLayer(),
             0,
