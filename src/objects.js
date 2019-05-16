@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-15';
+modules.objects = '2019-May-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -7022,6 +7022,7 @@ StageMorph.prototype.init = function (globals) {
 
     // projection layer - for video, maps, 3D extensions etc., transient
     this.projectionSource = null; // offscreen DOM element for video, maps, 3D
+    this.getProjectionImage = null; // function to return a blittable image
     this.stopProjectionSource = null; // function to turn off video stream etc.
     this.continuousProjection = false; // turn ON for video
     this.projectionCanvas = null;
@@ -7331,6 +7332,7 @@ StageMorph.prototype.startVideo = function() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
+                myself.getProjectionImage = myself.getVideoImage;
                 myself.stopProjectionSource = myself.stopVideo;
                 myself.continuousProjection = true;
                 myself.projectionSource.srcObject = stream;
@@ -7339,6 +7341,10 @@ StageMorph.prototype.startVideo = function() {
             })
             .catch(noCameraSupport);
     }
+};
+
+StageMorph.prototype.getVideoImage = function () {
+    return this.projectionSource;
 };
 
 StageMorph.prototype.stopVideo = function() {
@@ -7558,20 +7564,22 @@ StageMorph.prototype.stepProjection = function () {
         context.scale(-1, 1);
     }
     context.drawImage(
-        this.projectionSource,
+        this.getProjectionImage(),
         0,
         0,
         this.projectionSource.width,
         this.projectionSource.height
     );
-    this.videoMotion.addFrame(
-        context.getImageData(
-            0,
-            0,
-            this.projectionSource.width,
-            this.projectionSource.height
-        ).data
-    );
+    if (this.videoMotion) {
+        this.videoMotion.addFrame(
+            context.getImageData(
+                0,
+                0,
+                this.projectionSource.width,
+                this.projectionSource.height
+            ).data
+        );
+    }
     context.restore();
     this.changed();
 };
