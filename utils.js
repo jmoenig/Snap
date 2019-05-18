@@ -6,7 +6,7 @@ var utils = {};
 
 utils.requestPromise = function(request, data) {
     // takes an xhr request
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
         // stringifying undefined => undefined
         if (data) {
             request.setRequestHeader(
@@ -20,7 +20,7 @@ utils.requestPromise = function(request, data) {
                 if (request.status >= 200 && request.status < 300) {
                     resolve(request);
                 } else {
-                    let err = new Error(request.statusText || 'Unsuccessful Xhr response');
+                    var err = new Error(request.statusText || 'Unsuccessful Xhr response');
                     err.request = request;
                     reject(err);
                 }

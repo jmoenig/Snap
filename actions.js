@@ -3216,4 +3216,4 @@ ActionManager.OwnerFor.deleteCustomBlock = function() {
     return 'palette';
 };
 
-SnapActions = new ActionManager();
+var SnapActions = new ActionManager();
