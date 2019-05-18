@@ -577,6 +577,18 @@ SnapTranslator.dict.ca = {
         'mode turbo',
     'flat line ends':
         'puntes de llapis planes',
+    'video %vid on %self':
+        '%vid del vídeo en %self',
+    'motion':
+        'moviment',
+    'snap':
+        'instantània',
+    'set video transparency to %n':
+        'fixa la transparència del vídeo a %n',
+    'video capture':
+        'captura de vídeo',
+    'mirror video':
+        'mirall sobre el vídeo',
     'filtered for %clr':
         'filtrat per a %clr',
     'stack size':
@@ -937,7 +949,13 @@ SnapTranslator.dict.ca = {
         'ajuda...',
     'relabel...':
         'blocs similars...',
-    'duplicate':
+    'compile':
+        'compila',
+    'experimental!\nmake this reporter fast and uninterruptable\nCAUTION: Errors in the ring\ncan break your Snap! session!':
+    'és experimental!\naccelera aquest reportador executant-lo ininterrompudament\nCOMPTE: Errades en les condicions d\'entrada\npodrien penjar la sessió d\'Snap!',
+    'uncompile':
+        'descompila',
+     'duplicate':
         'duplica\'m',
     'make a copy\nand pick it up':
         'crea una còpia\ni fes-la servir',
@@ -1284,6 +1302,10 @@ SnapTranslator.dict.ca = {
         'Valor mínim del lliscador...',
     'Slider maximum value':
         'Valor màxim del lliscador...',
+    'raw data...':
+        'importa sense processar...',
+    'import without attempting to\nparse or format data':
+        'importa contingut sense tractar-lo ni donar-li format',
 
     // list watchers
     'length: ':
@@ -2606,6 +2628,8 @@ SnapTranslator.dict.ca = {
     'height':
         'alçada',
     'pixel':
+        'píxel',
+    'pixels':
         'píxels',
     '%img of costume %cst':
         '%img del vestit %cst',
