@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-16';
+modules.objects = '2019-May-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -7664,6 +7664,12 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
         break;
     case 40:
         keyName = 'down arrow';
+        break;
+    case 187:
+        keyName = '+';
+        break;
+    case 189:
+        keyName = '-';
         break;
     default:
         keyName = String.fromCharCode(event.keyCode || event.charCode);
