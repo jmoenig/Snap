@@ -7552,11 +7552,11 @@ StageMorph.prototype.step = function () {
 
     // projection layer update (e.g. video frame capture)
     if (this.continuousProjection && this.projectionSource) {
-        this.stepProjection();
+        this.updateProjection();
     }
 };
 
-StageMorph.prototype.stepProjection = function () {
+StageMorph.prototype.updateProjection = function () {
     var context = this.projectionLayer().getContext('2d');
     context.save();
     if (this.mirrorVideo) {

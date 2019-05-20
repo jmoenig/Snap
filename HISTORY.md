@@ -80,6 +80,7 @@
 
 ### 2019-05-20
 * Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
+* Objects: refactored projection layer update
 
 ### 2019-05-16
 * Objects: more refactoring to generalize projection extensions
