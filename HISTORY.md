@@ -36,6 +36,7 @@
     * added "width" and "height" to the MY blocks dropdown
     * added "width" and "height" as attribute selectors of the OF primitive
     * added "costume" selector to the MY attributes dropdown
+    * added plus (+) and minus (-) keys to sensing and key hat 
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
