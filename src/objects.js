@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-20';
+modules.objects = '2019-May-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -7348,9 +7348,11 @@ StageMorph.prototype.getVideoImage = function () {
 };
 
 StageMorph.prototype.stopVideo = function() {
-    this.projectionSource.stream.getTracks().forEach(
-        function (track) {track.stop(); }
-    );
+    if (this.projectionSource && this.projectionSource.stream) {
+        this.projectionSource.stream.getTracks().forEach(
+            function (track) {track.stop(); }
+        );
+    }
     this.videoMotion = null;
 };
 

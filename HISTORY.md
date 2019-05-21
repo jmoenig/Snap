@@ -79,6 +79,9 @@
     * German
     * French
 
+### 2019-05-21
+* Objects: fixed stage-size settings bug
+
 ### 2019-05-20
 * Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
 * Objects: refactored projection layer update
