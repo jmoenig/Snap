@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-February-07';
+var morphicVersion = '2019-May-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5827,6 +5827,8 @@ CursorMorph.prototype.inspectKeyEvent = function (event) {
             event.charCode.toString() +
             '\nkeyCode: ' +
             event.keyCode.toString() +
+            '\nkey: ' +
+            event.key.toString() +
             '\nshiftKey: ' +
             event.shiftKey.toString() +
             '\naltKey: ' +

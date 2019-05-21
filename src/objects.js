@@ -7667,16 +7667,10 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
     case 40:
         keyName = 'down arrow';
         break;
-    case 171: // Firefox
-    case 187: // Chrome, Safari
-        keyName = '+';
-        break;
-    case 173: // Firefox
-    case 189: // Chrome, Safari
-        keyName = '-';
-        break;
     default:
-        keyName = String.fromCharCode(event.keyCode || event.charCode);
+        keyName = event.key || String.fromCharCode(
+            event.keyCode || event.charCode
+        );
         if (event.ctrlKey || event.metaKey) {
             keyName = 'ctrl ' + (event.shiftKey ? 'shift ' : '') + keyName;
         }
