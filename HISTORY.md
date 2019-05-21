@@ -42,6 +42,7 @@
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
+    * new "World Map" library for interactive maps
     * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
@@ -81,6 +82,7 @@
 
 ### 2019-05-21
 * Objects: fixed stage-size settings bug
+* new "World Map" library
 
 ### 2019-05-20
 * Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
