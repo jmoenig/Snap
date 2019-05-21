@@ -83,6 +83,7 @@
 ### 2019-05-21
 * Objects: fixed stage-size settings bug
 * new "World Map" library
+* enhanced detecting '+' and '-' keys for Firefox
 
 ### 2019-05-20
 * Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
