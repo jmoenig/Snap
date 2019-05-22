@@ -2,7 +2,7 @@
 
     video.js
 
-    video motion detection for marphic.js and Snap!
+    video motion detection for morphic.js and Snap!
 
     written by Josep Ferràndiz i Farré
     https://github.com/jferran6
@@ -40,7 +40,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.video = '2019-May-07';
+modules.video = '2019-May-22';
 
 var VideoMotion;
 
