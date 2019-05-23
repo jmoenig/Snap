@@ -80,6 +80,9 @@
     * German
     * French
 
+### 2019-05-23
+* Objects: changed WRITE block to print at the rotation center instead of the geometric one
+
 ### 2019-05-21
 * Objects: fixed stage-size settings bug
 * new "World Map" library

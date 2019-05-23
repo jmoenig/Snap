@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
 
-modules.objects = '2019-May-21';
+modules.objects = '2019-May-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -4197,8 +4197,8 @@ SpriteMorph.prototype.write = function (text, size) {
         context = stage.penTrails().getContext('2d'),
         rotation = radians(this.direction() - 90),
         trans = new Point(
-            this.center().x - stage.left(),
-            this.center().y - stage.top()
+            this.rotationCenter().x - stage.left(),
+            this.rotationCenter().y - stage.top()
         ),
         len,
         pos;
