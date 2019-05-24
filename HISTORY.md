@@ -82,6 +82,7 @@
 
 ### 2019-05-24
 * new experimental Maps module, our own thin slippy maps client for Snap!
+* adjusted "World Map" library to the new client
 
 ### 2019-05-23
 * Objects: changed WRITE block to print at the rotation center instead of the geometric one
