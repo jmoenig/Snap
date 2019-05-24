@@ -191,16 +191,11 @@ WorldMap.prototype.render = function () {
                 img.onerror = err;
                 myself.loading += 1;
                 img.src = 'https://' +
-                    // this.subdomains[sub] +
-                    // '.' +
-                    this.url +
-                    '/' +
-                    this.zoom +
-                    '/' +
-                    (originTile.x + x) +
-                    '/' +
-                    (originTile.y + y) +
-                    '.png' +
+                    // this.subdomains[sub] + '.' +
+                    this.url + '/' +
+                    this.zoom + '/' +
+                    (originTile.x + x) + '/' +
+                    (originTile.y + y) + '.png' +
                     this.apiSuffix;
                 /*
                 sub += 1;

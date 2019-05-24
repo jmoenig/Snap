@@ -82,9 +82,9 @@ modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph, VideoMotion,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
-AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph*/
+AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-May-23';
+modules.objects = '2019-May-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -7031,6 +7031,9 @@ StageMorph.prototype.init = function (globals) {
     // video motion detection, transient
     this.mirrorVideo = true;
     this.videoMotion = null;
+
+    // world map client - experimental, transient
+    this.worldMap = new WorldMap();
 
     StageMorph.uber.init.call(this);
 
