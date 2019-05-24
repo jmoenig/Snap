@@ -42,7 +42,7 @@
     * multi-line and monospaced "code" input slots for custom blocks
     * new "string" library, thanks, Brian
     * new "text costumes" library for generating costumes from letters or words of text
-    * new "World Map" library for interactive maps
+    * new "World Map" extension and library for interactive maps
     * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
@@ -79,6 +79,9 @@
     * Spanish
     * German
     * French
+
+### 2019-05-24
+* new experimental Maps module, our own thin slippy maps client for Snap!
 
 ### 2019-05-23
 * Objects: changed WRITE block to print at the rotation center instead of the geometric one
