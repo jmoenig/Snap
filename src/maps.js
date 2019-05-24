@@ -194,8 +194,8 @@ WorldMap.prototype.render = function () {
                     // this.subdomains[sub] + '.' +
                     this.url + '/' +
                     this.zoom + '/' +
-                    (originTile.x + x) + '/' +
-                    (originTile.y + y) + '.png' +
+                    tileX + '/' +
+                    tileY + '.png' +
                     this.apiSuffix;
                 /*
                 sub += 1;
