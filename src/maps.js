@@ -85,15 +85,14 @@ WorldMap.prototype.panBy = function (x, y) {
 
 WorldMap.prototype.refresh = function () {
     this.position = new Point(
-        this.tileXfromLon(this.lon),
+        this.wrapTile(this.tileXfromLon(this.lon)),
         this.tileYfromLat(this.lat)
     );
 };
 
 WorldMap.prototype.wrapTile = function (n) {
-    // currently unused
     var max = Math.pow(2, this.zoom);
-    return n < 0 ? max - n : n % max;
+    return n < 0 ? max + n : n % max;
 };
 
 WorldMap.prototype.tileXfromLon = function (lon) {
@@ -180,7 +179,7 @@ WorldMap.prototype.render = function () {
     ctx = this.canvas.getContext('2d');
     for (x = 0; x < tileGrid.x; x += 1) {
         for (y = 0; y < tileGrid.y; y += 1) {
-            tileX = originTile.x + x;
+            tileX = this.wrapTile(originTile.x + x);
             tileY = originTile.y + y;
             if ((tileX >= 0 && tileX < max) && (tileY >= 0 && tileY < max)) {
                 img = new Image();
