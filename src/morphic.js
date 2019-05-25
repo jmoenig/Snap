@@ -189,7 +189,7 @@
     bare essentials:
 
         * a stepping mechanism (a time-sharing multiplexer for lively
-          user interaction ontop of a single OS/browser thread)
+          user interaction on top of a single OS/browser thread)
         * progressive display updates (only dirty rectangles are
           redrawn in each display cycle)
         * a tree structure
@@ -208,7 +208,7 @@
     Therefore these additions ("sprites" etc.) are likely to be part of
     other libraries ("microworld.js") in separate files.
 
-    the purpose of morphic.js is to provide a malleable framework that
+    The purpose of morphic.js is to provide a malleable framework that
     will let me experiment with lively GUIs for my hobby horse, which
     is drag-and-drop, blocks based programming languages. Those things
     (BYOB4 - http://byob.berkeley.edu) will be written using morphic.js
@@ -235,8 +235,8 @@
     and may also have a keyboardReceiver to handle key events.
 
     The basic idea of Morphic is to continuously run display cycles and
-    to incrementally update the screen by only redrawing those  World
-    regions    which have been "dirtied" since the last redraw. Before
+    to incrementally update the screen by only redrawing those World
+    regions which have been "dirtied" since the last redraw. Before
     each shape is processed for redisplay it gets the chance to perform
     a "step" procedure, thus allowing for an illusion of concurrency.
 
@@ -280,11 +280,11 @@
         </head>
         <body style="margin: 0;">
             <canvas id="world" tabindex="1" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
-    if you use ScrollFrames or otherwise plan to support mouse wheel
+    If you use ScrollFrames or otherwise plan to support mouse wheel
     scrolling events, make sure to add the following inline-CSS
     attribute to the Canvas element:
 
@@ -298,7 +298,7 @@
     -------------------
     If you wish to create a web page with more than one world, make
     sure to prevent each world from auto-filling the whole page and
-    include    it in the main loop. It's also a good idea to give each
+    include it in the main loop. It's also a good idea to give each
     world its own tabindex:
 
     example html file:
@@ -330,9 +330,9 @@
         </head>
         <body>
             <p>first world:</p>
-            <canvas id="world1" tabindex="1" width="600" height="400" />
+            <canvas id="world1" tabindex="1" width="600" height="400"></canvas>
             <p>second world:</p>
-            <canvas id="world2" tabindex="2" width="400" height="600" />
+            <canvas id="world2" tabindex="2" width="400" height="600"></canvas>
         </body>
     </html>
 
@@ -344,7 +344,7 @@
     application (something like Scratch!) in it. For such an
     application you'll create your own morph prototypes, perhaps
     assemble your own "window frame" and bring it all to life in a
-    customized World state. the following example creates a simple
+    customized World state. The following example creates a simple
     snake-like mouse drawing game.
 
     example html file:
@@ -396,14 +396,14 @@
         </head>
         <body bgcolor='black' style="margin: 0;">
             <canvas id="world" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
     To get an idea how you can craft your own custom morph prototypes
     I've included two examples which should give you an idea how to add
     properties, override inherited methods and use the stepping
-    mechanism for "livelyness":
+    mechanism for "liveliness":
 
         BouncerMorph
         MouseSensorMorph
@@ -426,7 +426,7 @@
     * setExtent(aPoint)
     * setColor(aColor)
 
-    * add(submorph)            - attaches submorph ontop
+    * add(submorph)            - attaches submorph on top
     * addBack(submorph)        - attaches submorph underneath
 
     * fullCopy()               - duplication
@@ -476,7 +476,7 @@
 
         MyMorph.prototype.mouseMove = function(pos) {};
 
-    All of these methods have as optional parameter a Point object
+    All of these methods have as an optional parameter a Point object
     indicating the current position of the Hand inside the World's
     coordinate system. The
 
@@ -526,7 +526,7 @@
     create draggable composite morphs like Windows, DialogBoxes,
     Sliders etc.
 
-    Sometimes it is desireable to make "template" shapes which cannot be
+    Sometimes it is desirable to make "template" shapes which cannot be
     moved themselves, but from which instead duplicates can be peeled
     off. This is especially useful for building blocks in construction
     kits, e.g. the MIT-Scratch palette. Morphic.js lets you control this
@@ -559,7 +559,7 @@
 
         prepareToBeGrabbed(handMorph)
 
-    methods are invoked, each if it is present. the optional
+    methods are invoked, each if it is present. The optional
 
         selectForEdit
 
@@ -602,9 +602,9 @@
 
         selectForEdit
 
-    method is invoked if it is present. Again, if implemented this method
+    method is invoked if it is present. Again, if implemented, this method
     must return the new parent for the morph that is about to be dropped.
-    Again, in addition to just returning the designeted drop-target
+    Again, in addition to just returning the designated drop-target
     your method can also modify its environment and instead return
     a copy of the new parent if, for example, you would like to implement
     a copy-on-write mechanism such as in Snap.
@@ -631,7 +631,7 @@
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want you Morph
-    to e.g. import outside images you can add the droppedImage() and / or the
+    to e.g. import outside images you can add the droppedImage() and/or the
     droppedSVG() methods to it. The parameter passed to the event handles is
     a new offscreen canvas element representing a copy of the original image
     element which can be directly used, e.g. by assigning it to another
@@ -654,12 +654,12 @@
     Those are dispatched as
 
         droppedAudio(anAudio, name)
-        droppedText(aString, name, type)
+        droppedText(aString, name)
 
     events to interested Morphs at the mouse pointer.
 
-    if none of the above content types can be determined, the file contents
-    is dispatched as an ArrayBuffer to interested Morphs:
+    If none of the above content types can be determined, the file contents
+    are dispatched as an ArrayBuffer to interested Morphs:
 
         droppedBinary(anArrayBuffer, name)
 
@@ -705,20 +705,20 @@
 
     Alternatively you can also initialize the World with the
     useFillPage switch turned off from the beginning by passing the
-    false value as second parameter to the World's constructor:
+    false value as a second parameter to the World's constructor:
 
         world = new World(aCanvas, false);
 
     Use this when creating a web page with multiple Worlds.
 
-    if "useFillPage" is turned on the World dispatches an
+    If "useFillPage" is turned on the World dispatches a
 
         reactToWorldResize(newBounds)
 
-    events to all of its children (toplevel only), allowing each to
+    event to all of its children (top-level only), allowing each to
     adjust to the new World bounds by implementing a corresponding
     method, the passed argument being the World's new dimensions after
-    completing the resize. By default, the "reactToWorldResize" Method
+    completing the resize. By default, the "reactToWorldResize" method
     does not exist.
 
     Example:
@@ -773,7 +773,7 @@
         accept() - <enter> was pressed on a single line of text
         cancel() - <esc> was pressed on any text element
 
-    Note that "accept" only gets triggered by single-line texte elements,
+    Note that "accept" only gets triggered by single-line text elements,
     as the <enter> key is used to insert line breaks in multi-line
     elements. Therefore, whenever a text edit is terminated by the user
     (accepted, cancelled or otherwise),
@@ -805,8 +805,8 @@
         layoutChanged() - sent from instances of TextMorph
         fixLayout() - sent from instances of StringMorph
 
-    they are different so that Morphs which contain both multi-line and
-    single-line text elements can hold them apart.
+    They are different so that Morphs which contain both multi-line and
+    single-line text elements can tell them apart.
 
 
     (4) stepping
@@ -829,7 +829,7 @@
     your CPU, and also result in your application behaving differently
     on slower computers than on fast ones.
 
-    setting
+    Setting
 
         myMorph.fps
 
@@ -864,7 +864,7 @@
             // use context to paint stuff here
         };
 
-    If your new morph stores or references to other morphs outside of
+    If your new morph stores or references other morphs outside of
     the submorph tree in other properties, be sure to also override the
     default
 
@@ -890,7 +890,7 @@
 
     method is called and the resulting menu invoked. The developers'
     menu features Gui-Builder-wise functionality to directly inspect,
-    take apart, reassamble and otherwise manipulate morphs and their
+    take apart, reassemble, or otherwise manipulate morphs and their
     contents.
 
     Instead of using the "customContextMenu" property you can also
@@ -908,7 +908,7 @@
     When in development mode you can inspect every Morph's properties
     with the inspector, including all of its methods. The inspector
     also lets you add, remove and rename properties, and even edit
-    their values at runtime. Like in a Smalltalk environment the inspect
+    their values at runtime. Like in a Smalltalk environment the inspector
     features an evaluation pane into which you can type in arbitrary
     JavaScript code and evaluate it in the context of the inspectee.
 
@@ -927,7 +927,7 @@
         PenMorph
 
     which you can use to draw onto its parent Morph. By default every
-    Morph in the system (including the World) is able to act as turtle
+    Morph in the system (including the World) is able to act as a turtle
     canvas and can display pen trails. Pen trails will be lost whenever
     the trails morph (the pen's parent) performs a "drawNew()"
     operation. If you want to create your own pen trails canvas, you
@@ -938,21 +938,21 @@
     property, so that it keeps a separate offscreen canvas for pen
     trails (and doesn't loose these on redraw).
 
-    the following properties of PenMorph are relevant for turtle
+    The following properties of PenMorph are relevant for turtle
     graphics:
 
         color        - a Color
-        size        - line width of pen trails
-        heading        - degrees
-        isDown        - drawing state
+        size         - line width of pen trails
+        heading      - degrees
+        isDown       - drawing state
 
-    the following commands can be used to actually draw something:
+    The following commands can be used to actually draw something:
 
-        up()        - lift the pen up, further movements leave no trails
-        down()        - set down, further movements leave trails
-        clear()        - remove all trails from the current parent
-        forward(n)    - move n steps in the current direction (heading)
-        turn(n)        - turn right n degrees
+        up()         - lift the pen up, further movements leave no trails
+        down()       - set down, further movements leave trails
+        clear()      - remove all trails from the current parent
+        forward(n)   - move n steps in the current direction (heading)
+        turn(n)      - turn right n degrees
 
     Turtle graphics can best be explored interactively by creating a
     new PenMorph object and by manipulating it with the inspector
@@ -1033,20 +1033,20 @@
         disableRetinaSupport()
 
     Both of these internally test whether retina is available, so they are
-    safe to call directly. For an example how to make retina support
+    safe to call directly. For an example of how to make retina support
     user-specifiable refer to
 
         Snap! >> guis.js >> toggleRetina()
 
     Even when in retina mode it often makes sense to use normal-resolution
-    canvasses for simple shapes in order to save system resources and
+    canvases for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
-    If retina support is enabled such new canvasses will automatically be
-    high-resolution canvasses, unless the newCanvas() function is given an
+    If retina support is enabled such new canvases will automatically be
+    high-resolution canvases, unless the newCanvas() function is given an
     otherwise optional second Boolean <true> argument that explicitly makes
     it a non-retina canvas.
 
@@ -1069,26 +1069,26 @@
     Animations handle gradual transitions between one state and another over a
     period of time. Transition effects can be specified using easing functions.
     An easing function maps a fraction of the transition time to a fraction of
-    the state delta. This way accelerating / decelerating and bouncing sliding
+    the state delta. This way accelerating/decelerating and bouncing sliding
     effects can be accomplished.
 
     Animations are generic and not limited to motion, i.e. they can also handle
     other transitions such as color changes, transparency fadings, growing,
     shrinking, turning etc.
 
-    Animations need to be stepped by a scheduler, e. g. an interval function.
+    Animations need to be stepped by a scheduler, e.g. an interval function.
     In Morphic the preferred way to run an animation is to register it with
     the World by adding it to the World's animation queue. The World steps each
     registered animation once per display cycle independently of the Morphic
     stepping mechanism.
 
-    For an example how to use animations look at how the Morph's methods
-    
+    For an example of how to use animations look at how the Morph's methods
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1102,7 +1102,7 @@
     you need to get going is this very file.
 
     Nowadays with live streaming HD video even on mobile phones 250 KB
-    shouldn't be a big strain on bandwith, still minifying and even
+    shouldn't be a big strain on bandwidth; still minifying and even
     compressing morphic.js down do about 100 KB may sometimes improve
     performance in production use.
 
@@ -1230,7 +1230,7 @@ var MorphicPreferences = standardSettings;
     support also will simply do nothing if retina support is not possible
     or already disabled, so it's equally safe to call.
 
-    For an example how to make retina support user-specifiable refer to
+    For an example of how to make retina support user-specifiable refer to
     Snap! >> guis.js >> toggleRetina()
 */
 
@@ -1445,7 +1445,7 @@ function copy(target) {
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1479,7 +1479,7 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
-    
+
     [Jens]: like all other retina screen support implementations I've seen
     Bartosz's patch also does not address putImageData() compatibility when
     mixing retina-enabled and non-retina canvasses. If you need to manipulate
@@ -1617,7 +1617,7 @@ function enableRetinaSupport() {
     contextProto.drawImage = function(image) {
         var pixelRatio = getPixelRatio(image),
             sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -1809,12 +1809,12 @@ function normalizeCanvas(aCanvas, getCopy) {
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -2931,6 +2931,7 @@ Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
     this.image = null;
+    // bounds are absolute (not relative to parent)
     this.bounds = new Rectangle(0, 0, 50, 40);
     this.cachedFullImage = null;
     this.cachedFullBounds = null;
@@ -6462,7 +6463,7 @@ DialMorph.prototype.drawNew = function () {
     );
     ctx.closePath();
     ctx.fill();
-    
+
     // fill value
     angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
     ctx.fillStyle = (this.fillColor || this.color.darker()).toString();
@@ -7375,14 +7376,19 @@ MouseSensorMorph.prototype.touch = function () {
 
         this.step = function () {
             if (myself.isTouched) {
-                if (myself.alpha < 1) {
+                if (myself.alpha < 1 - myself.upStep) {
                     myself.alpha = myself.alpha + myself.upStep;
                 }
-            } else if (myself.alpha > (myself.downStep)) {
-                myself.alpha = myself.alpha - myself.downStep;
+                else {
+                    myself.alpha = 1;
+                }
             } else {
-                myself.alpha = 0;
-                myself.step = null;
+                if (myself.alpha > myself.downStep) {
+                    myself.alpha = myself.alpha - myself.downStep;
+                } else {
+                    myself.alpha = 0;
+                    myself.step = null;
+                }
             }
             myself.changed();
         };
@@ -8731,7 +8737,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // answer the slot (index) slots indicating the position of the
     // previous word to the left of aSlot
     var index = aSlot - 1;
-    
+
     // while the current character is non-word one, we skip it, so that
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
@@ -8750,7 +8756,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
 
 StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
-    
+
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
         index += 1;
     }
@@ -10182,6 +10188,7 @@ function FrameMorph(aScrollFrame) {
 }
 
 FrameMorph.prototype.init = function (aScrollFrame) {
+    // the scroll frame that this is the "contents" of, if it is
     this.scrollFrame = aScrollFrame || null;
 
     FrameMorph.uber.init.call(this);
