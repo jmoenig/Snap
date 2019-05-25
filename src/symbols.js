@@ -75,9 +75,9 @@ WorldMorph.prototype.customMorphs = function () {
 
 // SymbolMorph inherits from Morph:
 
-SymbolMorph.prototype = new Morph();
+SymbolMorph.prototype = new OldMorph();
 SymbolMorph.prototype.constructor = SymbolMorph;
-SymbolMorph.uber = Morph.prototype;
+SymbolMorph.uber = OldMorph.prototype;
 
 // SymbolMorph available symbols:
 

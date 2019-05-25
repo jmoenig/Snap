@@ -2865,6 +2865,103 @@ Node.prototype.parentThatIsAnyOf = function (constructors) {
     return this.parentThatIsA.apply(this, constructors);
 };
 
+// LazyImageContainer //////////////////////////////////////////////////
+
+// I manage lazily drawing an image.
+
+// LazyImageContainer instance creation:
+
+function LazyImageContainer(extent, delegate) {
+    this.init(extent, delegate);
+}
+
+LazyImageContainer.prototype.init = function (extent, delegate) {
+    this._extent = extent || new Point(0, 0);   // target dimensions for image
+    // Delegate the redrawing work to this object.
+    // See the image() method to see when it is used.
+    this.delegate = delegate || null;
+    this._image = null; // cached image
+    this._isDirty = true;   // dirty flag
+};
+
+// LazyImageContainer string representation:
+// e.g. 'a LazyImageContainer [ | 400@300] dirty=true'
+
+LazyImageContainer.prototype.toString = function () {
+    return 'a LazyImageContainer [ | ' + this.extent().toString() +
+        '] dirty=' + this.isDirty();
+};
+
+// LazyImageContainer methods:
+
+LazyImageContainer.prototype.extent = function () {
+    return this._extent;
+};
+
+LazyImageContainer.prototype.setExtent = function (extent) {
+    var ext = extent || new Point(0, 0);
+    if (!this._extent.eq(ext)) {
+        this._extent = ext;
+        this.setIsDirty();
+    }
+};
+
+LazyImageContainer.prototype.isDirty = function () {
+    return this._isDirty;
+};
+
+LazyImageContainer.prototype.setIsDirty = function () {
+    this._isDirty = true;
+};
+
+LazyImageContainer.prototype.imageCanvas = function () {
+    // Returns the raw "canvas" for the image at the proper size
+    // without doing any drawing.
+    if (!this._image ||
+        this._image.width !== this.extent().x ||
+        this._image.height !== this.extent().y)
+    {
+        // initialize my surface property
+        this._image = newCanvas(this.extent());
+        this.setIsDirty();
+    }
+    return this._image;
+};
+
+LazyImageContainer.prototype.image = function () {
+    // Lazily returns the image.
+    // After this, the image is at the proper size and is no longer dirty.
+
+    // Force "_image" to be the right size.
+    var canvas = this.imageCanvas();
+
+    if (this._isDirty) {
+        if (this.delegate && 'forLazyImageContainerDoDraw' in this.delegate) {
+            // Delegate drawing functionality to the delegate.
+            // The delegate draws on the provided canvas,
+            // which may have garbage data.
+            this.delegate.forLazyImageContainerDoDraw(this, canvas);
+        }
+        this._isDirty = false;
+    }
+    return this._image;
+};
+
+LazyImageContainer.prototype.setImage = function (image) {
+    // Takes on the provided image as the new image,
+    // so this is no longer dirty.
+
+    if (image) {
+        this._extent = new Point(image.width, image.height);
+        this._image = image;
+        this._isDirty = false;
+    } else {
+        this._extent = new Point(0, 0);
+        this._image = newCanvas(this.extent());
+        this._isDirty = false;
+    }
+};
+
 // Morphs //////////////////////////////////////////////////////////////
 
 // Morph: referenced constructors
@@ -2930,7 +3027,13 @@ function Morph() {
 Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
-    this.image = null;
+    this.image = null;  // Deprecated: Use getImage() instead
+    // For what the deprecated "image" property was used for.
+    // Don't have to use this,
+    // but the default behavior is to populate this when first used
+    // in the default implementation of the lazy image drawing methods
+    // (i.e., setIsDirty(), getImageCanvas(), getImage(), and setImage()).
+    this.lazyImageContainer = null;
     // bounds are absolute (not relative to parent)
     this.bounds = new Rectangle(0, 0, 50, 40);
     this.cachedFullImage = null;
@@ -3271,7 +3374,7 @@ Morph.prototype.setExtent = function (aPoint, silently) {
         this.changed();
         this.silentSetExtent(aPoint);
         this.changed();
-        this.drawNew();
+        this.setIsDirty();
     }
 };
 
@@ -3317,24 +3420,81 @@ Morph.prototype.setColor = function (aColor) {
         if (!this.color.eq(aColor)) {
             this.color = aColor;
             this.changed();
-            this.drawNew();
+            this.setIsDirty();
         }
     }
 };
 
 // Morph displaying:
 
-Morph.prototype.drawNew = function () {
-    // initialize my surface property
-    this.image = newCanvas(this.extent());
-    var context = this.image.getContext('2d');
-    context.fillStyle = this.color.toString();
-    context.fillRect(0, 0, this.width(), this.height());
-    if (this.cachedTexture) {
-        this.drawCachedTexture();
-    } else if (this.texture) {
-        this.drawTexture(this.texture);
+Morph.prototype.setIsDirty = function () {
+    // Get notified that you have to redraw (or resize) this morph's image.
+    // Override if you don't want the following default behavior.
+    if (!this.lazyImageContainer) {
+        this.lazyImageContainer = new LazyImageContainer(this.extent(), this);
     }
+    this.lazyImageContainer.setExtent(this.extent());
+    this.lazyImageContainer.setIsDirty();
+};
+
+Morph.prototype.getImageCanvas = function () {
+    // Get the image (canvas) without doing any redraws.
+    // This should lazily resize the canvas that represents the image.
+    // Override if you don't want the following default behavior.
+    if (!this.lazyImageContainer) {
+        this.lazyImageContainer = new LazyImageContainer(this.extent(), this);
+    }
+    return this.lazyImageContainer.imageCanvas();
+};
+
+Morph.prototype.getImage = function () {
+    // Get the image.
+    // This should (1) lazily resize the canvas that represents the image,
+    // (2) lazily redraw the image, and (3) make this no longer dirty.
+    // Override if you don't want the following default behavior.
+    if (!this.lazyImageContainer) {
+        this.lazyImageContainer = new LazyImageContainer(this.extent(), this);
+    }
+    return this.lazyImageContainer.image();
+};
+
+Morph.prototype.setImage = function (image) {
+    // Set the image.
+    // This should do the housekeeping analogous to that done by getImage()
+    // except the difference is that we are using the provided image
+    // instead of drawing it ourselves.
+    // (We are also using the provided image as the new canvas.)
+    // This method may not make sense for certain subclasses of Morph,
+    // so use this as appropriate.
+    // Override if you don't want the following default behavior.
+    if (!this.lazyImageContainer) {
+        this.lazyImageContainer = new LazyImageContainer(this.extent(), this);
+    }
+    return this.lazyImageContainer.setImage(image);
+};
+
+// Delegate protocol for LazyImageContainer:
+Morph.prototype.forLazyImageContainerDoDraw = function (
+    lazyImageContainer, canvas)
+{
+    // Do the drawing for the LazyImageContainer.
+    if (lazyImageContainer === this.lazyImageContainer) {
+        var context = canvas.getContext('2d');
+        context.fillStyle = this.color.toString();
+        context.fillRect(0, 0, this.width(), this.height());
+        if (this.cachedTexture) {
+            this.drawCachedTexture();
+        } else if (this.texture) {
+            this.drawTexture(this.texture);
+        }
+    }
+};
+
+// Deprecated: Instead, use setIsDirty(), getImageCanvas(), and getImage()
+// to draw lazily. (You may also use setImage().)
+Morph.prototype.drawNew = function () {
+    this.setIsDirty();
+    this.image = this.getImage();
 };
 
 Morph.prototype.drawTexture = function (url) {
@@ -3348,11 +3508,11 @@ Morph.prototype.drawTexture = function (url) {
 
 Morph.prototype.drawCachedTexture = function () {
     var bg = this.cachedTexture,
-        cols = Math.floor(this.image.width / bg.width),
-        lines = Math.floor(this.image.height / bg.height),
+        cols = Math.floor(this.getImageCanvas().width / bg.width),
+        lines = Math.floor(this.getImageCanvas().height / bg.height),
         x,
         y,
-        context = this.image.getContext('2d');
+        context = this.getImageCanvas().getContext('2d');
 
     for (y = 0; y <= lines; y += 1) {
         for (x = 0; x <= cols; x += 1) {
@@ -3374,7 +3534,7 @@ Morph.prototype.drawCachedTexture = function () {
 
 Morph.prototype.drawOn = function (aCanvas, aRect) {
     var rectangle, area, delta, src, context, w, h, sl, st,
-        pic = this.cachedFullImage || this.image,
+        pic = this.cachedFullImage || this.getImage(),
         bounds = this.cachedFullBounds || this.bounds;
     if (!this.isVisible) {
         return null;
@@ -3468,9 +3628,9 @@ Morph.prototype.fullImage = function () {
     this.allChildren().forEach(function (morph) {
         if (morph.isVisible) {
             ctx.globalAlpha = morph.alpha;
-            if (morph.image.width && morph.image.height) {
+            if (morph.getImage().width && morph.getImage().height) {
                 ctx.drawImage(
-                    morph.image,
+                    morph.getImage(),
                     morph.bounds.origin.x - fb.origin.x,
                     morph.bounds.origin.y - fb.origin.y
                 );
@@ -3544,11 +3704,11 @@ Morph.prototype.shadow = function (off, a, color) {
         fb = this.fullBounds();
     shadow.setExtent(fb.extent().add(this.shadowBlur * 2));
     if (useBlurredShadows && !MorphicPreferences.isFlat) {
-        shadow.image = this.shadowImageBlurred(offset, color);
+        shadow.setImage(this.shadowImageBlurred(offset, color));
         shadow.alpha = alpha;
         shadow.setPosition(fb.origin.add(offset).subtract(this.shadowBlur));
     } else {
-        shadow.image = this.shadowImage(offset, color);
+        shadow.setImage(this.shadowImage(offset, color));
         shadow.alpha = alpha;
         shadow.setPosition(fb.origin.add(offset));
     }
@@ -3590,7 +3750,7 @@ Morph.prototype.removeShadow = function () {
 
 Morph.prototype.penTrails = function () {
     // answer my pen trails canvas. default is to answer my image
-    return this.image;
+    return this.getImage(); // TODO: Should be "this.getImageCanvas()"?
 };
 
 // Morph updating:
@@ -3708,7 +3868,7 @@ Morph.prototype.overlappedMorphs = function () {
 Morph.prototype.getPixelColor = function (aPoint) {
     var point, context, data;
     point = aPoint.subtract(this.bounds.origin);
-    context = this.image.getContext('2d');
+    context = this.getImage().getContext('2d');
     data = context.getImageData(point.x, point.y, 1, 1);
     return new Color(
         data.data[0],
@@ -3725,7 +3885,7 @@ Morph.prototype.isTransparentAt = function (aPoint) {
             return false;
         }
         point = aPoint.subtract(this.bounds.origin);
-        context = this.image.getContext('2d');
+        context = this.getImage().getContext('2d');
         data = context.getImageData(
             Math.floor(point.x),
             Math.floor(point.y),
@@ -4487,13 +4647,68 @@ Morph.prototype.overlappingImage = function (otherMorph) {
     return oImg;
 };
 
+// OldMorph /////////////////////////////////////////////////////////
+
+// I am a temporary Morph class for Morph subclasses to inherit from
+// so that they do not break while we transition to the new Morph class
+// that uses lazy image redrawing. (The old way of redrawing
+// is immediately do it with drawNew() whenever a property is changed.)
+
+// OldMorph inherits from Morph:
+
+OldMorph.prototype = new Morph();
+OldMorph.prototype.constructor = OldMorph;
+OldMorph.uber = Morph.prototype;
+
+// OldMorph instance creation:
+
+function OldMorph() {
+    this.init();
+}
+
+OldMorph.prototype.init = function () {
+    OldMorph.uber.init.call(this);
+};
+
+// OldMorph displaying:
+
+OldMorph.prototype.setIsDirty = function () {
+    this.drawNew();
+};
+
+OldMorph.prototype.getImageCanvas = function () {
+    return this.image;
+};
+
+OldMorph.prototype.getImage = function () {
+    return this.image;
+};
+
+Morph.prototype.setImage = function (image) {
+    this.image = image;
+};
+
+// Deprecated: Instead, use setIsDirty(), getImageCanvas(), and getImage()
+// to draw lazily. (You may also use setImage().)
+OldMorph.prototype.drawNew = function () {
+    this.image = newCanvas(this.extent());
+    var context = this.image.getContext('2d');
+    context.fillStyle = this.color.toString();
+    context.fillRect(0, 0, this.width(), this.height());
+    if (this.cachedTexture) {
+        this.drawCachedTexture();
+    } else if (this.texture) {
+        this.drawTexture(this.texture);
+    }
+};
+
 // ShadowMorph /////////////////////////////////////////////////////////
 
 // ShadowMorph inherits from Morph:
 
-ShadowMorph.prototype = new Morph();
+ShadowMorph.prototype = new OldMorph();
 ShadowMorph.prototype.constructor = ShadowMorph;
-ShadowMorph.uber = Morph.prototype;
+ShadowMorph.uber = OldMorph.prototype;
 
 // ShadowMorph instance creation:
 
@@ -4511,9 +4726,9 @@ ShadowMorph.prototype.topMorphAt = function () {
 
 // HandleMorph inherits from Morph:
 
-HandleMorph.prototype = new Morph();
+HandleMorph.prototype = new OldMorph();
 HandleMorph.prototype.constructor = HandleMorph;
-HandleMorph.uber = Morph.prototype;
+HandleMorph.uber = OldMorph.prototype;
 
 // HandleMorph instance creation:
 
@@ -4796,9 +5011,9 @@ var PenMorph;
 
 // PenMorph inherits from Morph:
 
-PenMorph.prototype = new Morph();
+PenMorph.prototype = new OldMorph();
 PenMorph.prototype.constructor = PenMorph;
-PenMorph.uber = Morph.prototype;
+PenMorph.uber = OldMorph.prototype;
 
 // PenMorph instance creation:
 
@@ -5074,9 +5289,9 @@ var ColorPaletteMorph;
 
 // ColorPaletteMorph inherits from Morph:
 
-ColorPaletteMorph.prototype = new Morph();
+ColorPaletteMorph.prototype = new OldMorph();
 ColorPaletteMorph.prototype.constructor = ColorPaletteMorph;
-ColorPaletteMorph.uber = Morph.prototype;
+ColorPaletteMorph.uber = OldMorph.prototype;
 
 // ColorPaletteMorph instance creation:
 
@@ -5223,9 +5438,9 @@ GrayPaletteMorph.prototype.drawNew = function () {
 
 // ColorPickerMorph inherits from Morph:
 
-ColorPickerMorph.prototype = new Morph();
+ColorPickerMorph.prototype = new OldMorph();
 ColorPickerMorph.prototype.constructor = ColorPickerMorph;
-ColorPickerMorph.uber = Morph.prototype;
+ColorPickerMorph.uber = OldMorph.prototype;
 
 // ColorPickerMorph instance creation:
 
@@ -5253,7 +5468,7 @@ ColorPickerMorph.prototype.buildSubmorphs = function () {
         child.destroy();
     });
     this.children = [];
-    this.feedback = new Morph();
+    this.feedback = new OldMorph();
     this.feedback.color = this.choice;
     this.feedback.setExtent(new Point(20, 20));
     cpal = new ColorPaletteMorph(
@@ -5292,9 +5507,9 @@ var BlinkerMorph;
 
 // BlinkerMorph inherits from Morph:
 
-BlinkerMorph.prototype = new Morph();
+BlinkerMorph.prototype = new OldMorph();
 BlinkerMorph.prototype.constructor = BlinkerMorph;
-BlinkerMorph.uber = Morph.prototype;
+BlinkerMorph.uber = OldMorph.prototype;
 
 // BlinkerMorph instance creation:
 
@@ -5849,9 +6064,9 @@ var BoxMorph;
 
 // BoxMorph inherits from Morph:
 
-BoxMorph.prototype = new Morph();
+BoxMorph.prototype = new OldMorph();
 BoxMorph.prototype.constructor = BoxMorph;
-BoxMorph.uber = Morph.prototype;
+BoxMorph.uber = OldMorph.prototype;
 
 // BoxMorph instance creation:
 
@@ -6139,7 +6354,7 @@ SpeechBubbleMorph.prototype.drawNew = function () {
             'center'
         );
     } else if (this.contents instanceof HTMLCanvasElement) {
-        this.contentsMorph = new Morph();
+        this.contentsMorph = new OldMorph();
         this.contentsMorph.silentSetWidth(this.contents.width);
         this.contentsMorph.silentSetHeight(this.contents.height);
         this.contentsMorph.image = this.contents;
@@ -6357,9 +6572,9 @@ var DialMorph;
 
 // DialMorph inherits from Morph:
 
-DialMorph.prototype = new Morph();
+DialMorph.prototype = new OldMorph();
 DialMorph.prototype.constructor = DialMorph;
-DialMorph.uber = Morph.prototype;
+DialMorph.uber = OldMorph.prototype;
 
 function DialMorph(min, max, value, tick, radius) {
     this.init(min, max, value, tick, radius);
@@ -6666,9 +6881,9 @@ var CircleBoxMorph;
 
 // CircleBoxMorph inherits from Morph:
 
-CircleBoxMorph.prototype = new Morph();
+CircleBoxMorph.prototype = new OldMorph();
 CircleBoxMorph.prototype.constructor = CircleBoxMorph;
-CircleBoxMorph.uber = Morph.prototype;
+CircleBoxMorph.uber = OldMorph.prototype;
 
 function CircleBoxMorph(orientation) {
     this.init(orientation || 'vertical');
@@ -8095,7 +8310,7 @@ MenuMorph.prototype.drawNew = function () {
             item = tuple;
         } else if (tuple[0] === 0) {
             isLine = true;
-            item = new Morph();
+            item = new OldMorph();
             item.color = myself.borderColor;
             item.setHeight(tuple[1]);
         } else {
@@ -8442,9 +8657,9 @@ MenuMorph.prototype.destroy = function () {
 
 // StringMorph inherits from Morph:
 
-StringMorph.prototype = new Morph();
+StringMorph.prototype = new OldMorph();
 StringMorph.prototype.constructor = StringMorph;
-StringMorph.uber = Morph.prototype;
+StringMorph.uber = OldMorph.prototype;
 
 // StringMorph instance creation:
 
@@ -9113,9 +9328,9 @@ StringMorph.prototype.disableSelecting = function () {
 
 // TextMorph inherits from Morph:
 
-TextMorph.prototype = new Morph();
+TextMorph.prototype = new OldMorph();
 TextMorph.prototype.constructor = TextMorph;
-TextMorph.uber = Morph.prototype;
+TextMorph.uber = OldMorph.prototype;
 
 // TextMorph instance creation:
 
@@ -9661,9 +9876,9 @@ TextMorph.prototype.inspectIt = function () {
 
 // TriggerMorph inherits from Morph:
 
-TriggerMorph.prototype = new Morph();
+TriggerMorph.prototype = new OldMorph();
 TriggerMorph.prototype.constructor = TriggerMorph;
-TriggerMorph.uber = Morph.prototype;
+TriggerMorph.uber = OldMorph.prototype;
 
 // TriggerMorph instance creation:
 
@@ -10007,7 +10222,7 @@ MenuItemMorph.prototype.createLabelPart = function (source) {
     }
     if (source instanceof Array) {
         // assume its pattern is: [icon, string]
-        part = new Morph();
+        part = new OldMorph();
         part.alpha = 0; // transparent
         icon = this.createIcon(source[0]);
         part.add(icon);
@@ -10025,7 +10240,7 @@ MenuItemMorph.prototype.createLabelPart = function (source) {
 
 MenuItemMorph.prototype.createIcon = function (source) {
     // source can be either a Morph or an HTMLCanvasElement
-    var icon = new Morph(),
+    var icon = new OldMorph(),
         src;
     icon.image = source instanceof Morph ? source.fullImage() : source;
     // adjust shadow dimensions
@@ -10179,9 +10394,9 @@ MenuItemMorph.prototype.popUpSubmenu = function () {
 
 // Frames inherit from Morph:
 
-FrameMorph.prototype = new Morph();
+FrameMorph.prototype = new OldMorph();
 FrameMorph.prototype.constructor = FrameMorph;
-FrameMorph.uber = Morph.prototype;
+FrameMorph.uber = OldMorph.prototype;
 
 function FrameMorph(aScrollFrame) {
     this.init(aScrollFrame);
@@ -10999,9 +11214,9 @@ var BouncerMorph;
 
 // Bouncers inherit from Morph:
 
-BouncerMorph.prototype = new Morph();
+BouncerMorph.prototype = new OldMorph();
 BouncerMorph.prototype.constructor = BouncerMorph;
-BouncerMorph.uber = Morph.prototype;
+BouncerMorph.uber = OldMorph.prototype;
 
 // BouncerMorph instance creation:
 
@@ -11086,9 +11301,9 @@ BouncerMorph.prototype.step = function () {
 
 // HandMorph inherits from Morph:
 
-HandMorph.prototype = new Morph();
+HandMorph.prototype = new OldMorph();
 HandMorph.prototype.constructor = HandMorph;
-HandMorph.uber = Morph.prototype;
+HandMorph.uber = OldMorph.prototype;
 
 // HandMorph instance creation:
 
@@ -12317,7 +12532,7 @@ WorldMorph.prototype.userCreateMorph = function () {
 
     menu = new MenuMorph(this, 'make a morph');
     menu.addItem('rectangle', function () {
-        create(new Morph());
+        create(new OldMorph());
     });
     menu.addItem('box', function () {
         create(new BoxMorph());

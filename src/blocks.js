@@ -182,9 +182,9 @@ var ScriptFocusMorph;
 
 // SyntaxElementMorph inherits from Morph:
 
-SyntaxElementMorph.prototype = new Morph();
+SyntaxElementMorph.prototype = new OldMorph();
 SyntaxElementMorph.prototype.constructor = SyntaxElementMorph;
-SyntaxElementMorph.uber = Morph.prototype;
+SyntaxElementMorph.uber = OldMorph.prototype;
 
 // SyntaxElementMorph preferences settings:
 
@@ -909,7 +909,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.canBeEmpty = false;
             break;
         case '%br':
-            part = new Morph();
+            part = new OldMorph();
             part.setExtent(new Point(0, 0));
             part.isBlockLabelBreak = true;
             part.getSpec = function () {
@@ -2166,7 +2166,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     } else if (value instanceof Morph) {
         if (isSnapObject(value)) {
             img = value.thumbnail(new Point(40, 40));
-            morphToShow = new Morph();
+            morphToShow = new OldMorph();
             morphToShow.silentSetWidth(img.width);
             morphToShow.silentSetHeight(img.height);
             morphToShow.image = img;
@@ -2181,14 +2181,14 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             };
         } else {
             img = value.fullImage();
-            morphToShow = new Morph();
+            morphToShow = new OldMorph();
             morphToShow.silentSetWidth(img.width);
             morphToShow.silentSetHeight(img.height);
             morphToShow.image = img;
         }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
-        morphToShow = new Morph();
+        morphToShow = new OldMorph();
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
@@ -2196,7 +2196,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow = new SymbolMorph('notes', 30);
     } else if (value instanceof Context) {
         img = value.image();
-        morphToShow = new Morph();
+        morphToShow = new OldMorph();
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
@@ -3863,7 +3863,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
         gradient,
         rightX,
         holes = [];
-    
+
     this.parts().forEach(function (part) {
         if (part.isHole) {
             holes.push(part);
@@ -7403,7 +7403,7 @@ ArgMorph.prototype.drawNew = function () {
 };
 
 ArgMorph.prototype.listIcon = function () {
-    var frame = new Morph(),
+    var frame = new OldMorph(),
         first = new CellMorph(),
         second = new CellMorph(),
         source,
@@ -10437,9 +10437,9 @@ BooleanSlotMorph.prototype.textLabel = function () {
 
 // ArrowMorph inherits from Morph:
 
-ArrowMorph.prototype = new Morph();
+ArrowMorph.prototype = new OldMorph();
 ArrowMorph.prototype.constructor = ArrowMorph;
-ArrowMorph.uber = Morph.prototype;
+ArrowMorph.uber = OldMorph.prototype;
 
 // ArrowMorph instance creation:
 
@@ -10713,9 +10713,9 @@ ColorSlotMorph.prototype.drawRectBorder =
 
 // BlockHighlightMorph inherits from Morph:
 
-BlockHighlightMorph.prototype = new Morph();
+BlockHighlightMorph.prototype = new OldMorph();
 BlockHighlightMorph.prototype.constructor = BlockHighlightMorph;
-BlockHighlightMorph.uber = Morph.prototype;
+BlockHighlightMorph.uber = OldMorph.prototype;
 
 // BlockHighlightMorph instance creation:
 
@@ -12553,7 +12553,7 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
         }
 
         if (!this.anchor) {
-            this.anchor = new Morph();
+            this.anchor = new OldMorph();
             this.anchor.color = this.titleBar.color;
         }
         this.anchor.silentSetPosition(new Point(

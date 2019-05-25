@@ -98,9 +98,9 @@ var CamSnapshotDialogMorph;
 
 // IDE_Morph inherits from Morph:
 
-IDE_Morph.prototype = new Morph();
+IDE_Morph.prototype = new OldMorph();
 IDE_Morph.prototype.constructor = IDE_Morph;
-IDE_Morph.uber = Morph.prototype;
+IDE_Morph.uber = OldMorph.prototype;
 
 // IDE_Morph preferences settings and skins
 
@@ -436,7 +436,7 @@ IDE_Morph.prototype.openIn = function (world) {
             }
             applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
-            this.shield = new Morph();
+            this.shield = new OldMorph();
             this.shield.color = this.color;
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
@@ -477,7 +477,7 @@ IDE_Morph.prototype.openIn = function (world) {
                 this.cloudError()
             );
         } else if (location.hash.substr(0, 7) === '#cloud:') {
-            this.shield = new Morph();
+            this.shield = new OldMorph();
             this.shield.alpha = 0;
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
@@ -574,7 +574,7 @@ IDE_Morph.prototype.createLogo = function () {
         this.logo.destroy();
     }
 
-    this.logo = new Morph();
+    this.logo = new OldMorph();
     this.logo.texture = this.logoURL;
     this.logo.drawNew = function () {
         this.image = newCanvas(this.extent());
@@ -640,7 +640,7 @@ IDE_Morph.prototype.createControlBar = function () {
         this.controlBar.destroy();
     }
 
-    this.controlBar = new Morph();
+    this.controlBar = new OldMorph();
     this.controlBar.color = this.frameColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
     this.controlBar.mouseClickLeft = function () {
@@ -1035,7 +1035,7 @@ IDE_Morph.prototype.createCategories = function () {
     if (this.categories) {
         this.categories.destroy();
     }
-    this.categories = new Morph();
+    this.categories = new OldMorph();
     this.categories.color = this.groupColor;
     this.categories.silentSetWidth(this.paletteWidth);
 
@@ -1249,7 +1249,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         this.spriteBar.destroy();
     }
 
-    this.spriteBar = new Morph();
+    this.spriteBar = new OldMorph();
     this.spriteBar.color = this.frameColor;
     this.add(this.spriteBar);
 
@@ -1305,7 +1305,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     addRotationStyleButton(0);
     this.rotationStyleButtons = rotationStyleButtons;
 
-    thumbnail = new Morph();
+    thumbnail = new OldMorph();
     thumbnail.setExtent(thumbSize);
     thumbnail.image = this.currentSprite.thumbnail(thumbSize);
     thumbnail.setPosition(
@@ -1508,7 +1508,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
     } else {
-        this.spriteEditor = new Morph();
+        this.spriteEditor = new OldMorph();
         this.spriteEditor.color = this.groupColor;
         this.spriteEditor.acceptsDrops = true;
         this.spriteEditor.reactToDropOf = function (droppedMorph) {
@@ -1540,7 +1540,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.destroy();
     }
 
-    this.corralBar = new Morph();
+    this.corralBar = new OldMorph();
     this.corralBar.color = this.frameColor;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
     this.add(this.corralBar);
@@ -1644,7 +1644,7 @@ IDE_Morph.prototype.createCorral = function () {
         this.corral.destroy();
     }
 
-    this.corral = new Morph();
+    this.corral = new OldMorph();
     this.corral.color = this.groupColor;
     this.add(this.corral);
 
@@ -4896,7 +4896,7 @@ IDE_Morph.prototype.setEmbedMode = function () {
 
     this.isEmbedMode = true;
     this.appModeColor = new Color(243,238,235);
-    this.embedOverlay = new Morph();
+    this.embedOverlay = new OldMorph();
     this.embedOverlay.color = new Color(128, 128, 128);
     this.embedOverlay.alpha = 0.5;
 
@@ -5245,7 +5245,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     scrpt.setPosition(sample.position().add(10));
     sample.add(scrpt);
 
-    shield = new Morph();
+    shield = new OldMorph();
     shield.alpha = 0;
     shield.setExtent(sample.extent());
     shield.setPosition(sample.position());
@@ -6050,7 +6050,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 ProjectDialogMorph.prototype.buildContents = function () {
     var thumbnail, notification;
 
-    this.addBody(new Morph());
+    this.addBody(new OldMorph());
     this.body.color = this.color;
 
     this.srcBar = new AlignmentMorph('column', this.padding / 2);
@@ -6103,7 +6103,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     this.body.add(this.listField);
 
-    this.preview = new Morph();
+    this.preview = new OldMorph();
     this.preview.fixLayout = nop;
     this.preview.edge = InputFieldMorph.prototype.edge;
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
@@ -6301,8 +6301,8 @@ ProjectDialogMorph.prototype.addSourceButton = function (
             this.titleBarColor.darker(50),
             new Color(255, 255, 255)
         ),
-        l1 = new Morph(),
-        l2 = new Morph(),
+        l1 = new OldMorph(),
+        l2 = new OldMorph(),
         button;
 
     lbl1.add(new SymbolMorph(
@@ -7144,12 +7144,12 @@ ProjectRecoveryDialogMorph.prototype.init = function (
 };
 
 ProjectRecoveryDialogMorph.prototype.buildContents = function () {
-    this.addBody(new Morph());
+    this.addBody(new OldMorph());
     this.body.color = this.color;
 
     this.buildListField();
 
-    this.preview = new Morph();
+    this.preview = new OldMorph();
     this.preview.fixLayout = nop;
     this.preview.edge = InputFieldMorph.prototype.edge;
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
@@ -7422,7 +7422,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
 };
 
 LibraryImportDialogMorph.prototype.buildContents = function () {
-    this.addBody(new Morph());
+    this.addBody(new OldMorph());
     this.body.color = this.color;
 
     this.initializePalette();
@@ -7675,7 +7675,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             previousCategory = category;
 
             blockImage = definition.templateInstance().fullImage();
-            blockContainer = new Morph();
+            blockContainer = new OldMorph();
             blockContainer.setExtent(
                 new Point(blockImage.width, blockImage.height)
             );
@@ -7796,7 +7796,7 @@ SpriteIconMorph.prototype.createThumbnail = function () {
         this.thumbnail.destroy();
     }
 
-    this.thumbnail = new Morph();
+    this.thumbnail = new OldMorph();
     this.thumbnail.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
         this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
@@ -8915,7 +8915,7 @@ SoundIconMorph.prototype.createThumbnail = function () {
     if (this.thumbnail) {
         this.thumbnail.destroy();
     }
-    this.thumbnail = new Morph();
+    this.thumbnail = new OldMorph();
     this.thumbnail.setExtent(this.thumbSize);
     this.add(this.thumbnail);
     label = new StringMorph(
@@ -9223,9 +9223,9 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
 
 // StageHandleMorph inherits from Morph:
 
-StageHandleMorph.prototype = new Morph();
+StageHandleMorph.prototype = new OldMorph();
 StageHandleMorph.prototype.constructor = StageHandleMorph;
-StageHandleMorph.uber = Morph.prototype;
+StageHandleMorph.uber = OldMorph.prototype;
 
 // StageHandleMorph instance creation:
 
@@ -9372,9 +9372,9 @@ StageHandleMorph.prototype.mouseDoubleClick = function () {
 
 // PaletteHandleMorph inherits from Morph:
 
-PaletteHandleMorph.prototype = new Morph();
+PaletteHandleMorph.prototype = new OldMorph();
 PaletteHandleMorph.prototype.constructor = PaletteHandleMorph;
-PaletteHandleMorph.uber = Morph.prototype;
+PaletteHandleMorph.uber = OldMorph.prototype;
 
 // PaletteHandleMorph instance creation:
 
@@ -9497,7 +9497,7 @@ CamSnapshotDialogMorph.prototype.init = function (
     this.oncancel = onCancel;
     this.accept = onAccept;
     this.videoElement = null; // an HTML5 video element
-    this.videoView = new Morph(); // a morph where we'll copy the video contents
+    this.videoView = new OldMorph(); // a morph where we'll copy the video contents
 
     CamSnapshotDialogMorph.uber.init.call(this);
     this.labelString = 'Camera';
@@ -9736,7 +9736,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
 };
 
 SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
-    var line = new Morph(),
+    var line = new OldMorph(),
         myself = this;
 
     this.progressBar.setExtent(new Point(150, 20));
@@ -9749,7 +9749,7 @@ SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
     line.setCenter(this.progressBar.center());
     this.progressBar.add(line);
 
-    this.progressBar.indicator = new Morph();
+    this.progressBar.indicator = new OldMorph();
     this.progressBar.indicator.setExtent(new Point(5, 15));
     this.progressBar.indicator.setColor(new Color(50, 200, 50));
     this.progressBar.indicator.setCenter(line.leftCenter());

@@ -1264,10 +1264,10 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         alignColor = new AlignmentMorph("row", this.padding),
         alignNames = new AlignmentMorph("row", this.padding);
 
-    pc.primaryColorViewer = new Morph();
+    pc.primaryColorViewer = new OldMorph();
     pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
     pc.primaryColorViewer.color = new Color(0, 0, 0);
-    pc.secondaryColorViewer = new Morph();
+    pc.secondaryColorViewer = new OldMorph();
     pc.secondaryColorViewer.setExtent(new Point(85, 15)); // 20 = height secondaryColor box
     pc.secondaryColorViewer.color = new Color(0, 0, 0);
 
@@ -2107,4 +2107,3 @@ VectorPaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         shape.drawOn(this);
     }
 };
-

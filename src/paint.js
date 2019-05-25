@@ -374,7 +374,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding);
 
-    pc.primaryColorViewer = new Morph();
+    pc.primaryColorViewer = new OldMorph();
     pc.primaryColorViewer.setExtent(new Point(180, 50));
     pc.primaryColorViewer.color = new Color(0, 0, 0);
     pc.colorpicker = new PaintColorPickerMorph(
@@ -532,9 +532,9 @@ PaintEditorMorph.prototype.getUserColor = function () {
 
 // A large hsl color picker
 
-PaintColorPickerMorph.prototype = new Morph();
+PaintColorPickerMorph.prototype = new OldMorph();
 PaintColorPickerMorph.prototype.constructor = PaintColorPickerMorph;
-PaintColorPickerMorph.uber = Morph.prototype;
+PaintColorPickerMorph.uber = OldMorph.prototype;
 
 function PaintColorPickerMorph(extent, action) {
     this.init(extent, action);
@@ -608,9 +608,9 @@ PaintColorPickerMorph.prototype.mouseMove =
     modify its image, based on a 'tool' property.
 */
 
-PaintCanvasMorph.prototype = new Morph();
+PaintCanvasMorph.prototype = new OldMorph();
 PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
-PaintCanvasMorph.uber = Morph.prototype;
+PaintCanvasMorph.uber = OldMorph.prototype;
 
 function PaintCanvasMorph(shift) {
     this.init(shift);

@@ -1218,7 +1218,7 @@ ToggleMorph.prototype.createLabel = function () {
                     this.builder
                 );
             } else if (this.element instanceof HTMLCanvasElement) {
-                this.toggleElement = new Morph();
+                this.toggleElement = new OldMorph();
                 this.toggleElement.silentSetExtent(new Point(
                     this.element.width,
                     this.element.height
@@ -1477,9 +1477,9 @@ ToggleElementMorph.prototype.mouseClickLeft
 
 // DialogBoxMorph inherits from Morph:
 
-DialogBoxMorph.prototype = new Morph();
+DialogBoxMorph.prototype = new OldMorph();
 DialogBoxMorph.prototype.constructor = DialogBoxMorph;
-DialogBoxMorph.uber = Morph.prototype;
+DialogBoxMorph.uber = OldMorph.prototype;
 
 // DialogBoxMorph preferences settings:
 
@@ -2459,7 +2459,7 @@ DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas) {
     if (aMorphOrCanvas instanceof Morph) {
         morph = aMorphOrCanvas;
     } else {
-        morph = new Morph();
+        morph = new OldMorph();
         morph.image = aMorphOrCanvas;
         morph.silentSetWidth(aMorphOrCanvas.width);
         morph.silentSetHeight(aMorphOrCanvas.height);
@@ -2914,9 +2914,9 @@ DialogBoxMorph.prototype.outlinePathBody = function (context, radius) {
 
 // AlignmentMorph inherits from Morph:
 
-AlignmentMorph.prototype = new Morph();
+AlignmentMorph.prototype = new OldMorph();
 AlignmentMorph.prototype.constructor = AlignmentMorph;
-AlignmentMorph.uber = Morph.prototype;
+AlignmentMorph.uber = OldMorph.prototype;
 
 // AlignmentMorph instance creation:
 
@@ -2989,9 +2989,9 @@ AlignmentMorph.prototype.fixLayout = function () {
 
 // InputFieldMorph inherits from Morph:
 
-InputFieldMorph.prototype = new Morph();
+InputFieldMorph.prototype = new OldMorph();
 InputFieldMorph.prototype.constructor = InputFieldMorph;
-InputFieldMorph.uber = Morph.prototype;
+InputFieldMorph.uber = OldMorph.prototype;
 
 // InputFieldMorph settings
 
@@ -3341,7 +3341,7 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
-/* 
+/*
     I am a menu that looks like a piano keyboard.
 */
 
@@ -3678,7 +3678,7 @@ PianoKeyMorph.prototype.createLabel = function () {
         this.label.destroy();
     }
     // assume its pattern is: [icon, string]
-    this.label = new Morph();
+    this.label = new OldMorph();
     icon = this.createIcon(this.labelString[0]);
     this.label.add(icon);
     this.label.drawNew();

@@ -1894,7 +1894,7 @@ SpriteMorph.prototype.rotationCenter = function () {
 SpriteMorph.prototype.colorFiltered = function (aColor) {
     // answer a new Morph containing my image filtered by aColor
     // ignore transparency (alpha)
-    var morph = new Morph(),
+    var morph = new OldMorph(),
         ext = this.extent(),
         ctx,
         src,
@@ -2682,7 +2682,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    
+
     palette.toolBar = new AlignmentMorph('column');
 
     searchButton = new PushButtonMorph(
@@ -6906,9 +6906,9 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
 
 // SpriteHighlightMorph inherits from Morph:
 
-SpriteHighlightMorph.prototype = new Morph();
+SpriteHighlightMorph.prototype = new OldMorph();
 SpriteHighlightMorph.prototype.constructor = SpriteHighlightMorph;
-SpriteHighlightMorph.uber = Morph.prototype;
+SpriteHighlightMorph.uber = OldMorph.prototype;
 
 // SpriteHighlightMorph instance creation:
 
@@ -7214,7 +7214,7 @@ StageMorph.prototype.penTrailsMorph = function () {
     if (this.cachedPenTrailsMorph) {
         return this.cachedPenTrailsMorph;
     }
-    morph = new Morph();
+    morph = new OldMorph();
     trails = this.penTrails();
     morph.bounds = this.bounds.copy();
     if (this.image.width === trails.width) {
@@ -7254,7 +7254,7 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     // answer a new Morph containing my image filtered by aColor
     // ignore the excludedSprite, because its collision is checked
     // ignore transparency (alpha)
-    var morph = new Morph(),
+    var morph = new OldMorph(),
         ext = this.extent(),
         img = this.thumbnail(ext, excludedSprite),
         ctx,
@@ -8900,7 +8900,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
     if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
-            contents = new Morph();
+            contents = new OldMorph();
             contents.silentSetWidth(img.width);
             contents.silentSetHeight(img.height);
             contents.image = img;
@@ -8928,20 +8928,20 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         );
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
-        contents = new Morph();
+        contents = new OldMorph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
         contents.image = img;
     } else if (data instanceof Costume) {
         img = data.thumbnail(new Point(40, 40));
-        contents = new Morph();
+        contents = new OldMorph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
         contents.image = img;
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
     } else if (data instanceof HTMLCanvasElement) {
-        contents = new Morph();
+        contents = new OldMorph();
         contents.silentSetWidth(data.width);
         contents.silentSetHeight(data.height);
         contents.image = data;
@@ -8972,7 +8972,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         contents.isDraggable = false;
     } else if (data instanceof Context) {
         img = data.image();
-        contents = new Morph();
+        contents = new OldMorph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
         contents.image = img;
@@ -9583,9 +9583,9 @@ SVG_Costume.prototype.rasterized = function () {
 
 // CostumeEditorMorph inherits from Morph:
 
-CostumeEditorMorph.prototype = new Morph();
+CostumeEditorMorph.prototype = new OldMorph();
 CostumeEditorMorph.prototype.constructor = CostumeEditorMorph;
-CostumeEditorMorph.uber = Morph.prototype;
+CostumeEditorMorph.uber = OldMorph.prototype;
 
 // CostumeEditorMorph preferences settings:
 CostumeEditorMorph.prototype.size = Costume.prototype.maxExtent();
@@ -10305,7 +10305,7 @@ CellMorph.prototype.drawNew = function (toggle, type) {
         if (this.contents instanceof Morph) {
             if (isSnapObject(this.contents)) {
                 img = this.contents.thumbnail(new Point(40, 40));
-                this.contentsMorph = new Morph();
+                this.contentsMorph = new OldMorph();
                 this.contentsMorph.silentSetWidth(img.width);
                 this.contentsMorph.silentSetHeight(img.height);
                 this.contentsMorph.image = img;
@@ -10334,24 +10334,24 @@ CellMorph.prototype.drawNew = function (toggle, type) {
                 null,
                 this.contents
             ).fullImage();
-            this.contentsMorph = new Morph();
+            this.contentsMorph = new OldMorph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
         } else if (this.contents instanceof HTMLCanvasElement) {
-            this.contentsMorph = new Morph();
+            this.contentsMorph = new OldMorph();
             this.contentsMorph.silentSetWidth(this.contents.width);
             this.contentsMorph.silentSetHeight(this.contents.height);
             this.contentsMorph.image = this.contents;
         } else if (this.contents instanceof Context) {
             img = this.contents.image();
-            this.contentsMorph = new Morph();
+            this.contentsMorph = new OldMorph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
         } else if (this.contents instanceof Costume) {
             img = this.contents.thumbnail(new Point(40, 40));
-            this.contentsMorph = new Morph();
+            this.contentsMorph = new OldMorph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;

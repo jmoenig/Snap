@@ -268,9 +268,9 @@ Table.prototype.fillWithTestData = function () {
 
 // TableCellMorph inherits from Morph:
 
-TableCellMorph.prototype = new Morph();
+TableCellMorph.prototype = new OldMorph();
 TableCellMorph.prototype.constructor = TableCellMorph;
-TableCellMorph.uber = Morph.prototype;
+TableCellMorph.uber = OldMorph.prototype;
 
 // TableCellMorph global setting:
 
@@ -1093,9 +1093,9 @@ TableMorph.prototype.show = function () {
 
 // TableFrameMorph inherits from Morph:
 
-TableFrameMorph.prototype = new Morph();
+TableFrameMorph.prototype = new OldMorph();
 TableFrameMorph.prototype.constructor = TableFrameMorph;
-TableFrameMorph.uber = Morph.prototype;
+TableFrameMorph.uber = OldMorph.prototype;
 
 // TableFrameMorph instance creation:
 
