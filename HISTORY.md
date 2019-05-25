@@ -80,6 +80,9 @@
     * German
     * French
 
+### 2019-05-25
+* added credits and license information to map costumes
+
 ### 2019-05-24
 * new experimental Maps module, our own thin slippy maps client for Snap!
 * adjusted "World Map" library to the new client

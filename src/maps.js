@@ -34,11 +34,11 @@
     https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 */
 
-/*global modules, Point, newCanvas, radians*/
+/*global modules, Point, newCanvas, radians, StringMorph, normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-May-24';
+modules.maps = '2019-May-25';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -62,6 +62,9 @@ function WorldMap() {
     this.extent = new Point(480, 360);
     this.tileSize = 256;
     this.canvas = null;
+    this.creditsTxt = null;
+    this.creditsBG = null;
+    this.initializeCredits();
     this.loading = 0;
 }
 
@@ -169,10 +172,18 @@ WorldMap.prototype.render = function () {
             mapOrigin.x + (this.cx * size),
             mapOrigin.y + (this.cy * size)
         );
+        crd();
     }
     
     function err() {
         myself.loading -= 1;
+        crd();
+    }
+
+    function crd() {
+        if (!myself.loading) {
+            myself.addCredits();
+        }
     }
 
     this.canvas = newCanvas(this.extent, true);
@@ -205,4 +216,35 @@ WorldMap.prototype.render = function () {
             }
         }
     }
+};
+
+WorldMap.prototype.initializeCredits = function () {
+    var ctx;
+    this.creditsTxt = new StringMorph(
+        ' Map data \u00A9 OpenStreetMap contributors, ' +
+            'CC-BY-SA, Imagery \u00A9 Mapbox ',
+        8
+    );
+    normalizeCanvas(this.creditsTxt.image);
+    this.creditsBG = newCanvas(this.creditsTxt.extent(), true);
+    ctx = this.creditsBG.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, this.creditsBG.width, this.creditsBG.height);
+};
+
+WorldMap.prototype.addCredits = function () {
+    var ctx = this.canvas.getContext('2d'),
+        crd = this.creditsTxt.image;
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(
+        this.creditsBG,
+        this.canvas.width - crd.width,
+        this.canvas.height - crd.height
+    );
+    ctx.globalAlpha = 1;
+    ctx.drawImage(
+        crd,
+        this.canvas.width - crd.width,
+        this.canvas.height - crd.height
+    );
 };
