@@ -655,7 +655,7 @@
     Those are dispatched as
 
         droppedAudio(anAudio, name)
-        droppedText(text, name, type)
+        droppedText(aString, name, type)
 
     events to interested Morphs at the mouse pointer.
 
