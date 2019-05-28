@@ -1660,7 +1660,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         throw 'Module uses newer version of Serializer';
     }
     model.children.forEach(function (child) {
-        var morph = myself.loadHelpScreenElement(child, screen, target);
+        var morph = myself.loadHelpScreenElement(child, screen, screen, target);
         if (morph) {
             screen.add(morph);
         }
@@ -1669,8 +1669,9 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     return screen;
 };
 
-SnapSerializer.prototype.loadHelpScreenElement = function (element, screen, target) {
-    var myself = this, morph;
+SnapSerializer.prototype.loadHelpScreenElement = function (element, parent, screen, target) {
+    var myself = this, padding = HelpScreenMorph.prototype.padding,
+        morph, x, y;
 
     switch (element.tag) {
     case 'box':
@@ -1691,16 +1692,22 @@ SnapSerializer.prototype.loadHelpScreenElement = function (element, screen, targ
     }
     if (morph) {
         element.children.forEach(function (child) {
-            var childMorph = myself.loadHelpScreenElement(child, screen, target);
+            var childMorph = myself.loadHelpScreenElement(child, morph, screen, target);
             if (childMorph) {
                 morph.add(childMorph);
             }
         });
-        if (element.tag === 'column' || element.tag === 'row') {
-            morph.setPosition(new Point(
-                HelpScreenMorph.prototype.padding,
-                HelpScreenMorph.prototype.padding
-            ));
+        if (parent instanceof BoxMorph) {
+            // Allow an element in a box to be placed anywhere.
+            // If no position is specified, place it in the top-left corner
+            // with padding.
+            if (element.attributes.x != null || element.attributes.y != null) {
+                x = +element.attributes.x || 0;
+                y = +element.attributes.y || 0;
+                morph.setPosition(new Point(x, y));
+            } else {
+                morph.setPosition(new Point(padding, padding));
+            }
         }
         if (typeof morph.fixLayout === 'function') {
             morph.fixLayout();
