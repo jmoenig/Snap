@@ -76,6 +76,10 @@ HelpScreenMorph.prototype = new FrameMorph();
 HelpScreenMorph.prototype.constructor = HelpScreenMorph;
 HelpScreenMorph.uber = FrameMorph.prototype;
 
+// HelpScreenMorph layout settings:
+
+HelpScreenMorph.prototype.padding = 5;
+
 // HelpScreenMorph instance creation:
 
 function HelpScreenMorph() {
@@ -101,6 +105,16 @@ HelpScreenMorph.prototype.createBox = function () {
     box.color = new Color(133, 138, 140);
     box.borderColor = new Color(183, 186, 188);
     return box;
+};
+
+HelpScreenMorph.prototype.createColumn = function () {
+    var col = new AlignmentMorph('column', this.padding);
+    col.alignment = 'left';
+    return col;
+};
+
+HelpScreenMorph.prototype.createRow = function () {
+    return new AlignmentMorph('row', this.padding);
 };
 
 HelpScreenMorph.prototype.createParagraph = function (text) {

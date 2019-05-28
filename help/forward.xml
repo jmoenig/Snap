@@ -1,5 +1,8 @@
 <help-screen version="1">
     <box>
-        <p>Test</p>
+        <column>
+            <p>MOVE 10 STEPS</p>
+            <p>Test</p>
+        </column>
     </box>
 </help-screen>

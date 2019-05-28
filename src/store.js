@@ -1670,21 +1670,40 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString) {
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (element, screen) {
-    var myself = this, box;
+    var myself = this, morph;
 
     switch (element.tag) {
     case 'box':
-        box = screen.createBox();
+        morph = screen.createBox();
+        break;
+    case 'column':
+        morph = screen.createColumn();
+        break;
+    case 'row':
+        morph = screen.createRow();
+        break;
+    case 'p':
+        morph = screen.createParagraph(element.contents);
+        break;
+    }
+    if (morph) {
         element.children.forEach(function (child) {
-            var morph = myself.loadHelpScreenElement(child, screen);
-            if (morph) {
-                box.add(morph);
+            var childMorph = myself.loadHelpScreenElement(child, screen);
+            if (childMorph) {
+                morph.add(childMorph);
             }
         });
-        return box;
-    case 'p':
-        return p = screen.createParagraph(element.contents);
+        if (element.tag !== 'box') {
+            morph.setPosition(new Point(
+                HelpScreenMorph.prototype.padding,
+                HelpScreenMorph.prototype.padding
+            ));
+        }
+        if (typeof morph.fixLayout === 'function') {
+            morph.fixLayout();
+        }
     }
+    return morph;
 };
 
 // SnapSerializer XML-representation of objects:
