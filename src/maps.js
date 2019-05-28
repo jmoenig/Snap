@@ -38,23 +38,82 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-May-25';
+modules.maps = '2019-May-28';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
-function WorldMap() {
-    this.url = 'api.tiles.mapbox.com/v4/mapbox.streets';
-    // this.url = 'tile.openstreetmap.org';
-    // this.url = 'maps.wikimedia.org/osm-intl';
-    // this.subdomains = ['a', 'b', 'c'];
-    this.apiSuffix = '?access_token=' +
-        'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.' +
-        'rJcFIG214AriISLbB6B5aw';
+function WorldMap(host) {
+    this.tileServers = {
+        OpenStreetMap: {
+            url: 'tile.openstreetmap.org',
+            subdomains: ['a', 'b', 'c'],
+            key: null,
+            min: 0,
+            max: 19,
+            credits: 'Map data \u00A9 OpenStreetMap contributors' +
+                'CC-BY-SA, Imagery \u00A9 Mapnik'
+        },
+        Wikimedia: {
+            url: 'maps.wikimedia.org/osm-intl',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 19,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Wikimedia'
+        },
+        Watercolor: {
+            url: 'stamen-tiles.a.ssl.fastly.net/watercolor',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 20,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Stamen, CC-BY-3.0.'
+        },
+        'Toner': {
+            url: 'stamen-tiles.a.ssl.fastly.net/toner',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 20,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Stamen, CC-BY-3.0.'
+        },
+        'Terrain': {
+            url: 'stamen-tiles.a.ssl.fastly.net/terrain',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 16,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Stamen, CC-BY-3.0.'
+        },
+        Topographic: {
+            url: 'tile.opentopomap.org',
+            subdomains: null, //['a', 'b', 'c'],
+            key: null,
+            min: 0,
+            max: 20,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Opentopomaps'
+        },
+        'Mapbox (experimental)': {
+            url: 'api.tiles.mapbox.com/v4/mapbox.streets',
+            subdomains: null,
+            key: '?access_token=' +
+                'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycX' +
+                'BndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+            min: 0,
+            max: 20,
+            credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
+                'CC-BY-SA, Imagery \u00A9 Mapbox'
+        }
+    };
+    this.api = this.tileServers[host || 'Wikimedia'];
     this.lon = -122.257852;
     this.lat = 37.872099;
     this.zoom = 13;
-    this.minZoom = 0;
-    this.maxZoom = 20;
     this.position = new Point(
         this.tileXfromLon(this.lon),
         this.tileYfromLat(this.lat)
@@ -68,6 +127,12 @@ function WorldMap() {
     this.loading = 0;
 }
 
+WorldMap.prototype.setHost = function (host) {
+    this.api = this.tileServers[host || 'Wikimedia'];
+    this.initializeCredits();
+    this.setZoom(this.zoom);
+};
+
 WorldMap.prototype.setView = function (lon, lat) {
     this.lat = lat;
     this.lon = lon;
@@ -75,9 +140,8 @@ WorldMap.prototype.setView = function (lon, lat) {
 };
 
 WorldMap.prototype.setZoom = function (num) {
-    this.zoom = Math.max(Math.min(this.maxZoom, Math.floor(num)), 0);
+    this.zoom = Math.max(Math.min(this.api.max, Math.floor(num)), this.api.min);
     this.refresh();
-
 };
 
 WorldMap.prototype.panBy = function (x, y) {
@@ -160,7 +224,7 @@ WorldMap.prototype.render = function () {
         mapOrigin = tileOrigin.subtract(
             tileDistance.multiplyBy(size)
         ),
-        // sub = 0,
+        sub = 0,
         myself = this,
         max = Math.pow(2, this.zoom),
         x, y, img, ctx, tileX, tileY;
@@ -201,18 +265,20 @@ WorldMap.prototype.render = function () {
                 img.onerror = err;
                 myself.loading += 1;
                 img.src = 'https://' +
-                    // this.subdomains[sub] + '.' +
-                    this.url + '/' +
+                    (this.api.subdomains ?
+                        this.api.subdomains[sub] + '.'
+                            : '') +
+                    this.api.url + '/' +
                     this.zoom + '/' +
                     tileX + '/' +
                     tileY + '.png' +
-                    this.apiSuffix;
-                /*
-                sub += 1;
-                if (sub === this.subdomains.length) {
-                    sub = 0;
+                    (this.api.key || '');
+                if (this.api.subdomains) {
+                    sub += 1;
+                    if  (sub === this.api.subdomains.length) {
+                        sub = 0;
+                    }
                 }
-                */
             }
         }
     }
@@ -221,8 +287,7 @@ WorldMap.prototype.render = function () {
 WorldMap.prototype.initializeCredits = function () {
     var ctx;
     this.creditsTxt = new StringMorph(
-        ' Map data \u00A9 OpenStreetMap contributors, ' +
-            'CC-BY-SA, Imagery \u00A9 Mapbox ',
+        ' ' + this.api.credits + ' ',
         8
     );
     normalizeCanvas(this.creditsTxt.image);

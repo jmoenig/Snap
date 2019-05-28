@@ -80,6 +80,9 @@
     * German
     * French
 
+### 2019-05-28
+* Maps: added various different tile hosts
+
 ### 2019-05-25
 * added credits and license information to map costumes
 
