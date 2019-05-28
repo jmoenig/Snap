@@ -82,6 +82,7 @@
 
 ### 2019-05-28
 * Maps: added various different tile hosts
+* added "set map style" command to maps library
 
 ### 2019-05-25
 * added credits and license information to map costumes
