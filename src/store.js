@@ -1670,7 +1670,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString) {
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (element, screen) {
-    var box;
+    var myself = this, box;
 
     switch (element.tag) {
     case 'box':
@@ -1682,6 +1682,8 @@ SnapSerializer.prototype.loadHelpScreenElement = function (element, screen) {
             }
         });
         return box;
+    case 'p':
+        return p = screen.createParagraph(element.contents);
     }
 };
 

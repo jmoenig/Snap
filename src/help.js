@@ -32,7 +32,7 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.createLabel();
 
     screen = new SnapSerializer()
-        .loadHelpScreen('<help-screen version="1"><box /></help-screen>');
+        .loadHelpScreen('<help-screen version="1"><box><p>Test</p></box></help-screen>');
     screen.color = DialogBoxMorph.prototype.color;
     scrollFrame = new ScrollFrameMorph(screen);
     scrollFrame.color = DialogBoxMorph.prototype.color;
@@ -102,8 +102,12 @@ HelpScreenMorph.prototype.adjustBounds = function () {
 };
 
 HelpScreenMorph.prototype.createBox = function () {
-    box = new BoxMorph();
+    var box = new BoxMorph();
     box.color = new Color(133, 138, 140);
     box.borderColor = new Color(183, 186, 188);
     return box;
+};
+
+HelpScreenMorph.prototype.createParagraph = function (text) {
+    return new TextMorph(text, 18, 'serif', false, false, null, null, 'Baskerville');
 };
