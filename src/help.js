@@ -31,7 +31,8 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.labelString = 'Help';
     this.createLabel();
 
-    screen = new HelpScreenMorph();
+    screen = new SnapSerializer()
+        .loadHelpScreen('<help-screen version="1"><box /></help-screen>');
     screen.color = DialogBoxMorph.prototype.color;
     scrollFrame = new ScrollFrameMorph(screen);
     scrollFrame.color = DialogBoxMorph.prototype.color;
@@ -82,18 +83,27 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 
 // HelpScreenMorph instance creation:
 
-function HelpScreenMorph(block, target) {
-    this.init(block, target);
+function HelpScreenMorph() {
+    this.init();
 }
 
-HelpScreenMorph.prototype.init = function (block, target) {
-    this.mainBox = new BoxMorph();
-    this.mainBox.color = new Color(133, 138, 140);
-    this.mainBox.borderColor = new Color(183, 186, 188);
-    this.add(this.mainBox);
+HelpScreenMorph.prototype.init = function () {
+    HelpScreenMorph.uber.init.call(this);
 };
 
 HelpScreenMorph.prototype.adjustBounds = function () {
+    var myself = this;
+
     HelpScreenMorph.uber.adjustBounds.call(this);
-    this.mainBox.setExtent(this.extent());
-}
+    this.children.forEach(function (child)  {
+        // temporary
+        child.setExtent(myself.extent());
+    });
+};
+
+HelpScreenMorph.prototype.createBox = function () {
+    box = new BoxMorph();
+    box.color = new Color(133, 138, 140);
+    box.borderColor = new Color(183, 186, 188);
+    return box;
+};

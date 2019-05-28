@@ -1649,6 +1649,42 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.world().keyboardReceiver = project.stage;
 };
 
+SnapSerializer.prototype.loadHelpScreen = function (xmlString) {
+    // public - answer the HelpScreenMorph represented by xmlString
+    var myself = this, box,
+        model = this.parse(xmlString),
+        screen = new HelpScreenMorph();
+
+    console.log(model);
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    model.children.forEach(function (child) {
+        var morph = myself.loadHelpScreenElement(child, screen);
+        if (morph) {
+            screen.add(morph);
+        }
+    });
+    console.log(screen);
+    return screen;
+};
+
+SnapSerializer.prototype.loadHelpScreenElement = function (element, screen) {
+    var box;
+
+    switch (element.tag) {
+    case 'box':
+        box = screen.createBox();
+        element.children.forEach(function (child) {
+            var morph = myself.loadHelpScreenElement(child, screen);
+            if (morph) {
+                box.add(morph);
+            }
+        });
+        return box;
+    }
+};
+
 // SnapSerializer XML-representation of objects:
 
 // Generics
