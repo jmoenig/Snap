@@ -1,7 +1,11 @@
 <help-screen version="1">
     <box>
         <column>
-            <p>MOVE 10 STEPS</p>
+            <script>
+                <block s="forward">
+                    <l>10</l>
+                </block>
+            </script>
             <p>Test</p>
         </column>
     </box>

@@ -44,7 +44,7 @@ HelpDialogMorph.prototype.popUp = function () {
         if (this.block.isGlobal) {
             spec = this.block.definition.helpSpec();
         } else {
-            spec = this.block.scriptTarget().getMethod(this.blockSpec).helpSpec();
+            spec = this.target.getMethod(this.blockSpec).helpSpec();
         }
     } else {
         spec = this.block.selector;
@@ -54,7 +54,7 @@ HelpDialogMorph.prototype.popUp = function () {
         ide.resourceURL('help', spec + '.xml'),
         function (xmlString) {
             var screen, scrollFrame;
-            screen = new SnapSerializer().loadHelpScreen(xmlString);
+            screen = new SnapSerializer().loadHelpScreen(xmlString, myself.target);
             screen.color = DialogBoxMorph.prototype.color;
             scrollFrame = new ScrollFrameMorph(screen);
             scrollFrame.color = DialogBoxMorph.prototype.color;
@@ -78,7 +78,7 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 
 // HelpScreenMorph layout settings:
 
-HelpScreenMorph.prototype.padding = 5;
+HelpScreenMorph.prototype.padding = 10;
 
 // HelpScreenMorph instance creation:
 
