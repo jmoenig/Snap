@@ -44,34 +44,7 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.fixLayout();
 };
 
-HelpDialogMorph.prototype.fixLayout = function () {
-    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2;
-
-    if (this.buttons && (this.buttons.children.length > 0)) {
-        this.buttons.fixLayout();
-    }
-
-    if (this.body) {
-        this.body.setPosition(this.position().add(new Point(
-            this.padding,
-            th + this.padding
-        )));
-        this.body.setExtent(new Point(
-            this.width() - this.padding * 2,
-            this.height() - this.padding * 3 - th - this.buttons.height()
-        ));
-    }
-
-    if (this.label) {
-        this.label.setCenter(this.center());
-        this.label.setTop(this.top() + (th - this.label.height()) / 2);
-    }
-
-    if (this.buttons && (this.buttons.children.length > 0)) {
-        this.buttons.setCenter(this.center());
-        this.buttons.setBottom(this.bottom() - this.padding);
-    }
-};
+HelpDialogMorph.prototype.fixLayout = BlockEditorMorph.prototype.fixLayout;
 
 // HelpScreenMorph //////////////////////////////////////////////////////
 
