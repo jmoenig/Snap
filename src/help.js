@@ -13,10 +13,9 @@ function HelpDialogMorph(block, target) {
 }
 
 HelpDialogMorph.prototype.init = function (block, target) {
-    var screen, scrollFrame;
-
     // additional properties:
-    this.mainBox = null;
+    this.block = block;
+    this.target = target;
 
     // initialize inherited properties:
     HelpDialogMorph.uber.init.call(
@@ -31,17 +30,40 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.labelString = 'Help';
     this.createLabel();
 
-    screen = new SnapSerializer()
-        .loadHelpScreen('<help-screen version="1"><box><p>Test</p></box></help-screen>');
-    screen.color = DialogBoxMorph.prototype.color;
-    scrollFrame = new ScrollFrameMorph(screen);
-    scrollFrame.color = DialogBoxMorph.prototype.color;
-    screen.scrollFrame = scrollFrame;
-    this.addBody(scrollFrame)
-    this.addButton('ok', 'OK');
-
     this.setExtent(new Point(600, 400));
-    this.fixLayout();
+    this.addButton('ok', 'OK');
+};
+
+HelpDialogMorph.prototype.popUp = function () {
+    var myself = this,
+        world = this.target.parentThatIsA(WorldMorph),
+        ide = this.target.parentThatIsA(IDE_Morph),
+        spec;
+    
+    if (this.block.isCustomBlock) {
+        if (this.block.isGlobal) {
+            spec = this.block.definition.helpSpec();
+        } else {
+            spec = this.block.scriptTarget().getMethod(this.blockSpec).helpSpec();
+        }
+    } else {
+        spec = this.block.selector;
+    }
+
+    ide.getURL( // TODO: error handling
+        ide.resourceURL('help', spec + '.xml'),
+        function (xmlString) {
+            var screen, scrollFrame;
+            screen = new SnapSerializer().loadHelpScreen(xmlString);
+            screen.color = DialogBoxMorph.prototype.color;
+            scrollFrame = new ScrollFrameMorph(screen);
+            scrollFrame.color = DialogBoxMorph.prototype.color;
+            screen.scrollFrame = scrollFrame;
+            myself.addBody(scrollFrame);
+            myself.fixLayout();
+            HelpDialogMorph.uber.popUp.call(myself, world);
+        }
+    );
 };
 
 HelpDialogMorph.prototype.fixLayout = BlockEditorMorph.prototype.fixLayout;
