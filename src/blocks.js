@@ -3314,17 +3314,17 @@ BlockMorph.prototype.showHelp = function () {
         }
     }
 
-    pic.onload = function () {
-        help = newCanvas(new Point(pic.width, pic.height), true); // nonRetina
-        ctx = help.getContext('2d');
-        ctx.drawImage(pic, 0, 0);
-        new DialogBoxMorph().inform(
-            'Help',
-            null,
-            myself.world(),
-            help
-        );
-    };
+    // pic.onload = function () {
+    //     help = newCanvas(new Point(pic.width, pic.height), true); // nonRetina
+    //     ctx = help.getContext('2d');
+    //     ctx.drawImage(pic, 0, 0);
+    //     new DialogBoxMorph().inform(
+    //         'Help',
+    //         null,
+    //         myself.world(),
+    //         help
+    //     );
+    // };
 
     if (this.isCustomBlock) {
         def = this.isGlobal ? this.definition
@@ -3349,7 +3349,9 @@ BlockMorph.prototype.showHelp = function () {
             return;
         }
     }
-    pic.src = ide.resourceURL('help', spec + '.png');
+    // pic.src = ide.resourceURL('help', spec + '.png');
+
+    new HelpDialogMorph(this, this.scriptTarget()).popUp(this.world());
 };
 
 // BlockMorph code mapping
