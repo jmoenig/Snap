@@ -1680,17 +1680,29 @@ SnapSerializer.prototype.loadHelpScreenElement = function (element, parent, scre
     case 'column':
         morph = screen.createColumn();
         break;
+    case 'p':
+        if (element.children.length === 0) {
+            morph = screen.createParagraph(element.contents);
+        } else {
+            morph = screen.createRichParagraph(null);
+            morph.maxWidth = 300; // temporary
+            morph.text = element.children.map(function (child) {
+                return myself.loadHelpScreenElement(child, morph, screen, target);
+            });
+            morph.drawNew();
+            console.log(morph);
+        }
+        break;
     case 'row':
         morph = screen.createRow();
-        break;
-    case 'p':
-        morph = screen.createParagraph(element.contents);
         break;
     case 'script':
         morph = this.loadScript(element, target);
         break;
+    case 'text':
+        return element.contents;
     }
-    if (morph) {
+    if (morph && !(morph instanceof RichTextMorph)) {
         element.children.forEach(function (child) {
             var childMorph = myself.loadHelpScreenElement(child, morph, screen, target);
             if (childMorph) {
