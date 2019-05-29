@@ -4280,6 +4280,17 @@ Process.prototype.doSet = function (attribute, value) {
             }
         }
         break;
+    case 'name':
+        this.assertType(rcvr, ['sprite', 'stage']);
+        this.assertType(value, 'text');
+        ide = rcvr.parentThatIsA(IDE_Morph);
+        if (ide) {
+            rcvr.setName(
+                ide.newSpriteName(value, rcvr)
+            );
+            ide.spriteBar.nameField.setContents(ide.currentSprite.name);
+        }
+        break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');

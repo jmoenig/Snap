@@ -621,6 +621,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
             dict.my = {
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
+                'name' : ['name'],
                 // 'temporary?' : ['temporary?'],
                 'dangling?' : ['dangling?'],
                 'draggable?' : ['draggable?'],

@@ -57,6 +57,7 @@
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * renamed "whitespace" option in SPLIT to "word"
+    * made the "name" attribute programmatically settable
     * deprecated storing projects in the browser's localStorage
     * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
@@ -85,6 +86,7 @@
 * Threads, Objects: added "Find First" primitive to lists category
 * Blocks, Threads, Objects: added "blitz" version of FIND
 * Blocks, Threads, Objects:  renamed "whitespace" option in SPLIT to "word"
+* GUI, Threads: made "name" attribut programmatically settable, (I hate my life!)
 
 ### 2019-05-28
 * Maps: added various different tile hosts
