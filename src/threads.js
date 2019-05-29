@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-15';
+modules.threads = '2019-May-29';
 
 var ThreadManager;
 var Process;
@@ -2334,6 +2334,61 @@ Process.prototype.reportKeep = function (predicate, list) {
         }
         this.context.accumulator.idx += 1;
         next = list.at(this.context.accumulator.idx);
+    }
+    this.pushContext();
+    this.evaluate(predicate, new List([next]));
+};
+
+Process.prototype.reportFindFirst = function (predicate, list) {
+    // Find - answer the first item of the list for which
+    // the predicate evaluates TRUE.
+    // Distinguish between linked and arrayed lists.
+
+    var next;
+    this.assertType(list, 'list');
+    if (list.isLinked) {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                source : list,
+                remaining : list.length()
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.returnValueToParentContext(
+                    this.context.accumulator.source.at(1)
+                );
+                return;
+            }
+            this.context.accumulator.remaining -= 1;
+            this.context.accumulator.source =
+                this.context.accumulator.source.cdr();
+        }
+        if (this.context.accumulator.remaining === 0) {
+            this.returnValueToParentContext(false);
+            return;
+        }
+        next = this.context.accumulator.source.at(1);
+    } else { // arrayed
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                idx : 0,
+                current : null
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.returnValueToParentContext(
+                    this.context.accumulator.current
+                );
+                return;
+            }
+        }
+        if (this.context.accumulator.idx === list.length()) {
+            this.returnValueToParentContext(false);
+            return;
+        }
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
+        this.context.accumulator.current = next;
     }
     this.pushContext();
     this.evaluate(predicate, new List([next]));

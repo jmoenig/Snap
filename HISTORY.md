@@ -28,7 +28,7 @@
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
     * new "write" command in pen category (used to be "label" in tools)
-    * new "numbers", "is empty", "map","keep", "combine" and "for each" primitives in list category
+    * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
     * new JIT-compiler "blitz-HOF" primitives for "map", "keep" & "combine" via "compile"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
@@ -79,6 +79,9 @@
     * Spanish
     * German
     * French
+
+### 2019-05-29
+* Threads, Objects: added "Find First" primitive to lists category
 
 ### 2019-05-28
 * Maps: added various different tile hosts

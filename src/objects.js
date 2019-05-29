@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-May-24';
+modules.objects = '2019-May-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -1312,6 +1312,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%blitz keep items such that %predRing from %l'
         },
+        reportFindFirst: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'find first item such that %predRing in %l'
+        },
         reportCombine: {
             type: 'reporter',
             category: 'lists',
@@ -1560,10 +1565,11 @@ SpriteMorph.prototype.blockAlternatives = {
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
 
-    // lists - blitz primitives
-    reportMap: ['reportKeep', 'reportCombine'],
-    reportKeep: ['reportMap', 'reportCombine'],
-    reportCombine: ['reportMap', 'reportKeep']
+    // lists - HOFs
+    reportMap: ['reportKeep', 'reportFindFirst', 'reportCombine'],
+    reportKeep: ['reportFindFirst', 'reportMap', 'reportCombine'],
+    reportCombine: ['reportMap', 'reportKeep', 'reportFindFirst'],
+    reportFindFirst: ['reportKeep', 'reportMap', 'reportCombine']
 };
 
 // SpriteMorph instance creation
@@ -2550,6 +2556,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
+        blocks.push(block('reportFindFirst'));
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
@@ -2737,6 +2744,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'doForEach',
                         'reportMap',
                         'reportKeep',
+                        'reportFindFirst',
                         'reportCombine',
                         'doAddToList',
                         'doDeleteFromList',
@@ -8289,6 +8297,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
+        blocks.push(block('reportFindFirst'));
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
