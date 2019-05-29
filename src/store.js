@@ -1669,9 +1669,11 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     return screen;
 };
 
-SnapSerializer.prototype.loadHelpScreenElement = function (element, parent, screen, target) {
+SnapSerializer.prototype.loadHelpScreenElement = function (
+    element, parent, screen, target
+) {
     var myself = this, padding = HelpScreenMorph.prototype.padding,
-        morph, x, y;
+        morph, x, y, usedWidth, relWidthDenominator;
 
     switch (element.tag) {
     case 'box':
@@ -1682,12 +1684,15 @@ SnapSerializer.prototype.loadHelpScreenElement = function (element, parent, scre
         break;
     case 'p':
         if (element.children.length === 0) {
-            morph = screen.createParagraph(element.contents);
+            morph = screen.createParagraph(
+                element.contents.trim().split(/\s/).join(' ')
+            );
         } else {
             morph = screen.createRichParagraph(null);
-            morph.maxWidth = 300; // temporary
             morph.text = element.children.map(function (child) {
-                return myself.loadHelpScreenElement(child, morph, screen, target);
+                return myself.loadHelpScreenElement(
+                    child, morph, screen, target
+                );
             });
             morph.drawNew();
             console.log(morph);
@@ -1700,20 +1705,75 @@ SnapSerializer.prototype.loadHelpScreenElement = function (element, parent, scre
         morph = this.loadScript(element, target);
         break;
     case 'text':
-        return element.contents;
+        return element.contents.trim().split(/\s/).join(' ');
+    }
+    if (morph instanceof BoxMorph) {
+        morph.setWidth(parent.width());
+    } else if (
+        morph instanceof AlignmentMorph || morph instanceof TextMorph
+    ) {
+        if (+element.attributes['rel-width']) {
+            // width will be adjusted later
+            morph.relativeWidth = +element.attributes['rel-width'];
+        } else {
+            morph.setWidth(parent.width() - 2 * padding);
+        }
     }
     if (morph && !(morph instanceof RichTextMorph)) {
+        // add children
         element.children.forEach(function (child) {
-            var childMorph = myself.loadHelpScreenElement(child, morph, screen, target);
+            var childMorph = myself.loadHelpScreenElement(
+                child, morph, screen, target
+            );
             if (childMorph) {
                 morph.add(childMorph);
             }
         });
+        if (element.tag === 'row') {
+            // adjust child widths for rows
+            usedWidth = padding * (morph.children.length - 1);
+            morph.children.forEach(function (child) {
+                if (
+                    !(child instanceof AlignmentMorph
+                    || child instanceof TextMorph)
+                ) {
+                    if (child instanceof BlockMorph) {
+                        usedWidth += child.stackFullBounds().width();
+                    } else {
+                        usedWidth += child.width();
+                    }
+                }
+            });
+            relWidthDenominator = morph.children.reduce(
+                function (width, child) {
+                    return width + (child.relativeWidth || 0)
+                }, 0
+            );
+            console.log(usedWidth, relWidthDenominator);
+            morph.children.forEach(function (child) {
+                if (
+                    child instanceof AlignmentMorph
+                    || child instanceof TextMorph
+                ) {
+                    if (child.relativeWidth) {
+                        child.setWidth(
+                            child.relativeWidth
+                                / relWidthDenominator
+                                * (parent.width() - usedWidth)
+                        );
+                    } else {
+                        morph.setWidth(parent.width() - 2 * padding);
+                    }
+                }
+            });
+        }
         if (parent instanceof BoxMorph) {
             // Allow an element in a box to be placed anywhere.
             // If no position is specified, place it in the top-left corner
             // with padding.
-            if (element.attributes.x != null || element.attributes.y != null) {
+            if (
+                element.attributes.x != null || element.attributes.y != null
+            ) {
                 x = +element.attributes.x || 0;
                 y = +element.attributes.y || 0;
                 morph.setPosition(new Point(x, y));

@@ -16,6 +16,7 @@ HelpDialogMorph.prototype.init = function (block, target) {
     // additional properties:
     this.block = block;
     this.target = target;
+    this.screen = null;
 
     // initialize inherited properties:
     HelpDialogMorph.uber.init.call(
@@ -53,12 +54,12 @@ HelpDialogMorph.prototype.popUp = function () {
     ide.getURL( // TODO: error handling
         ide.resourceURL('help', spec + '.xml'),
         function (xmlString) {
-            var screen, scrollFrame;
-            screen = new SnapSerializer().loadHelpScreen(xmlString, myself.target);
-            screen.color = DialogBoxMorph.prototype.color;
-            scrollFrame = new ScrollFrameMorph(screen);
+            var scrollFrame;
+            myself.screen = new SnapSerializer().loadHelpScreen(xmlString, myself.target);
+            myself.screen.color = DialogBoxMorph.prototype.color;
+            scrollFrame = new ScrollFrameMorph(myself.screen);
             scrollFrame.color = DialogBoxMorph.prototype.color;
-            screen.scrollFrame = scrollFrame;
+            myself.screen.scrollFrame = scrollFrame;
             myself.addBody(scrollFrame);
             myself.fixLayout();
             HelpDialogMorph.uber.popUp.call(myself, world);
@@ -66,7 +67,12 @@ HelpDialogMorph.prototype.popUp = function () {
     );
 };
 
-HelpDialogMorph.prototype.fixLayout = BlockEditorMorph.prototype.fixLayout;
+HelpDialogMorph.prototype.fixLayout = function () {
+    BlockEditorMorph.prototype.fixLayout.call(this);
+    if (this.screen && typeof this.screen.fixLayout === 'function') {
+        this.screen.fixLayout();
+    }
+};
 
 // HelpScreenMorph //////////////////////////////////////////////////////
 
@@ -88,15 +94,18 @@ function HelpScreenMorph() {
 
 HelpScreenMorph.prototype.init = function () {
     HelpScreenMorph.uber.init.call(this);
+    this.setWidth(572);
 };
 
-HelpScreenMorph.prototype.adjustBounds = function () {
+HelpScreenMorph.prototype.fixLayout = function () {
+    console.log('test');
     var myself = this;
-
-    HelpScreenMorph.uber.adjustBounds.call(this);
-    this.children.forEach(function (child)  {
-        // temporary
-        child.setExtent(myself.extent());
+    this.children.forEach(function (child) {
+        var startY = child.top(), height = 0;
+        child.children.forEach(function (child) {
+            height = Math.max(height, child.bottom() - startY);
+        });
+        child.setHeight(height + myself.padding);
     });
 };
 
@@ -114,7 +123,9 @@ HelpScreenMorph.prototype.createColumn = function () {
 };
 
 HelpScreenMorph.prototype.createRow = function () {
-    return new AlignmentMorph('row', this.padding);
+    var row = new AlignmentMorph('row', this.padding);
+    row.alignment = 'top';
+    return row;
 };
 
 HelpScreenMorph.prototype.createParagraph = function (text) {
@@ -252,7 +263,6 @@ RichTextMorph.prototype.parse = function () {
 };
 
 RichTextMorph.prototype.drawNew = function () {
-    console.log(this.maxLineWidth);
     var myself = this, context, height, width, i, j, line, lineHeight, word,
         shadowHeight, shadowWidth, offx, offy, x, y;
 
