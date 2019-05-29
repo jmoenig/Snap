@@ -8959,8 +8959,6 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     if (oop) {
         dict.children = ['children'];
         dict.parent = ['parent'];
-    }
-    if (oop && this.world().isDevMode) {
         dict['temporary?'] = ['temporary?'];
     }
     dict.name = ['name'];
