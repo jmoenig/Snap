@@ -1099,7 +1099,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false, // numeric?
                 {
                     'letter' : ['letter'],
-                    'whitespace' : ['whitespace'],
+                    'word' : ['word'],
                     'line' : ['line'],
                     'tab' : ['tab'],
                     'cr' : ['cr'],

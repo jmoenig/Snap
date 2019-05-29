@@ -3332,6 +3332,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'cr':
         del = '\r';
         break;
+    case 'word':
     case 'whitespace':
         str = str.trim();
         del = /\s+/;
