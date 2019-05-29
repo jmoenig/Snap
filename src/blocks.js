@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-20';
+modules.blocks = '2019-May-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2835,13 +2835,14 @@ BlockMorph.prototype.userMenu = function () {
     // JIT-compile HOFs - experimental
     if (
         contains(
-            ['reportMap', 'reportKeep', 'reportCombine'],
+            ['reportMap', 'reportKeep', 'reportFindFirst', 'reportCombine'],
             this.selector
         )
     ) {
         alternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
+            reportFindFirst: 'reportAtomicFindFirst',
             reportCombine : 'reportAtomicCombine'
         };
         menu.addItem(
@@ -2855,13 +2856,19 @@ BlockMorph.prototype.userMenu = function () {
         );
     } else if (
         contains(
-            ['reportAtomicMap', 'reportAtomicKeep', 'reportAtomicCombine'],
+            [
+                'reportAtomicMap',
+                'reportAtomicKeep',
+                'reportAtomicFindFirst',
+                'reportAtomicCombine'
+            ],
             this.selector
         )
     ) {
         alternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
+            reportAtomicFindFirst: 'reportFindFirst',
             reportAtomicCombine : 'reportCombine'
         };
         menu.addItem(

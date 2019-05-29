@@ -5043,6 +5043,42 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
     return new List(result);
 };
 
+Process.prototype.reportAtomicFindFirst = function (reporter, list) {
+    this.assertType(list, 'list');
+    var src = list.asArray(),
+        len = src.length,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+        func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+    for (i = 0; i < len; i += 1) {
+        if (
+            invoke(
+                func,
+                new List([src[i]]),
+                null,
+                null,
+                null,
+                null,
+                this.capture(reporter) // process
+            )
+        ) {
+            return src[i];
+         }
+    }
+    return false;
+};
+
 Process.prototype.reportAtomicCombine = function (reporter, list) {
     this.assertType(list, 'list');
     var result = '',

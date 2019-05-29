@@ -1317,6 +1317,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'find first item such that %predRing in %l'
         },
+        reportAtomicFindFirst: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz find first item such that %predRing in %l'
+        },
         reportCombine: {
             type: 'reporter',
             category: 'lists',
