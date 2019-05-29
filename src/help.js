@@ -98,11 +98,13 @@ HelpScreenMorph.prototype.init = function () {
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
-    console.log('test');
     var myself = this;
     this.children.forEach(function (child) {
         var startY = child.top(), height = 0;
         child.children.forEach(function (child) {
+            child.setPosition(
+                child.position().add(new Point(myself.padding, myself.padding))
+            );
             height = Math.max(height, child.bottom() - startY);
         });
         child.setHeight(height + myself.padding);
@@ -220,7 +222,9 @@ RichTextMorph.prototype.parse = function () {
         var paragraphs, i, p;
         if (word instanceof Morph) {
             myself.words.push(word);
-            myself.add(word);
+            if (word.parent !== this) {
+                myself.add(word);
+            }
         } else {
             paragraphs = word.split('\n');
             for (i = 0; i < paragraphs.length; i = i + 1) {
@@ -355,6 +359,7 @@ RichTextMorph.prototype.drawNew = function () {
         for (j = 0; j < line.length; j = j + 1) {
             word = line[j];
             if (word instanceof Morph) {
+                console.log(word);
                 word.setPosition(new Point(
                     x + offx, 
                     y - (this.calculateWordHeight(word) / 2) + offy

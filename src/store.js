@@ -1651,9 +1651,10 @@ SnapSerializer.prototype.openProject = function (project, ide) {
 
 SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     // public - answer the HelpScreenMorph represented by xmlString
-    var myself = this, box,
+    var myself = this,
         model = this.parse(xmlString),
-        screen = new HelpScreenMorph();
+        screen = new HelpScreenMorph(),
+        padding = HelpScreenMorph.prototype.padding;
 
     console.log(model);
     if (+model.attributes.version > this.version) {
@@ -1665,7 +1666,58 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
             screen.add(morph);
         }
     });
-    console.log(screen);
+
+    function fixWidths (morph) {
+        var parent = morph.parent;
+        if (morph instanceof BoxMorph) {
+            morph.setWidth(parent.width());
+        } else if (morph instanceof AlignmentMorph || morph instanceof TextMorph) {
+            if (morph.relativeWidth) {
+                morph.silentSetWidth(morph.relativeWidth
+                    / parent.relWidthDenominator
+                    * (parent.width() - parent.usedWidth));
+            } else if (parent instanceof BoxMorph) {
+                morph.silentSetWidth(parent.width());
+            } else {
+                morph.silentSetWidth(parent.width() - 2 * padding);
+            }
+        }
+        if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
+            if (
+                morph instanceof AlignmentMorph
+                && morph.orientation === 'row'
+            ) {
+                // calculate the total known used width of row items
+                morph.usedWidth = padding * (morph.children.length - 1);
+                morph.relWidthDenominator = morph.children.reduce(
+                    function (width, child) {
+                        return width + (child.relativeWidth || 0)
+                    }, 0
+                );
+                console.log(morph.usedWidth, morph.relWidthDenominator);
+            }
+            morph.children.forEach(function (child) {
+                fixWidths(child);
+            });
+        }
+    }
+    screen.children.forEach(function (child) {
+        fixWidths(child);
+    });
+    screen.forAllChildren(function (child) {
+        // Reflow text
+        if (child instanceof TextMorph) {
+            child.setExtent(child.extent());
+        }
+    });
+    screen.children.forEach(function (child) {
+        screen.forAllChildren(function (child) {
+            if (child instanceof AlignmentMorph) {
+                child.fixLayout();
+            }
+        });
+    });
+
     return screen;
 };
 
@@ -1673,7 +1725,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
     element, parent, screen, target
 ) {
     var myself = this, padding = HelpScreenMorph.prototype.padding,
-        morph, x, y, usedWidth, relWidthDenominator;
+        morph, x, y;
 
     switch (element.tag) {
     case 'box':
@@ -1707,17 +1759,9 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
     case 'text':
         return element.contents.trim().split(/\s/).join(' ');
     }
-    if (morph instanceof BoxMorph) {
-        morph.setWidth(parent.width());
-    } else if (
-        morph instanceof AlignmentMorph || morph instanceof TextMorph
-    ) {
-        if (+element.attributes['rel-width']) {
-            // width will be adjusted later
-            morph.relativeWidth = +element.attributes['rel-width'];
-        } else {
-            morph.setWidth(parent.width() - 2 * padding);
-        }
+    if (+element.attributes['rel-width']) {
+        // width will be adjusted later
+        morph.relativeWidth = +element.attributes['rel-width'];
     }
     if (morph && !(morph instanceof RichTextMorph)) {
         // add children
@@ -1729,61 +1773,6 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                 morph.add(childMorph);
             }
         });
-        if (element.tag === 'row') {
-            // adjust child widths for rows
-            usedWidth = padding * (morph.children.length - 1);
-            morph.children.forEach(function (child) {
-                if (
-                    !(child instanceof AlignmentMorph
-                    || child instanceof TextMorph)
-                ) {
-                    if (child instanceof BlockMorph) {
-                        usedWidth += child.stackFullBounds().width();
-                    } else {
-                        usedWidth += child.width();
-                    }
-                }
-            });
-            relWidthDenominator = morph.children.reduce(
-                function (width, child) {
-                    return width + (child.relativeWidth || 0)
-                }, 0
-            );
-            console.log(usedWidth, relWidthDenominator);
-            morph.children.forEach(function (child) {
-                if (
-                    child instanceof AlignmentMorph
-                    || child instanceof TextMorph
-                ) {
-                    if (child.relativeWidth) {
-                        child.setWidth(
-                            child.relativeWidth
-                                / relWidthDenominator
-                                * (parent.width() - usedWidth)
-                        );
-                    } else {
-                        morph.setWidth(parent.width() - 2 * padding);
-                    }
-                }
-            });
-        }
-        if (parent instanceof BoxMorph) {
-            // Allow an element in a box to be placed anywhere.
-            // If no position is specified, place it in the top-left corner
-            // with padding.
-            if (
-                element.attributes.x != null || element.attributes.y != null
-            ) {
-                x = +element.attributes.x || 0;
-                y = +element.attributes.y || 0;
-                morph.setPosition(new Point(x, y));
-            } else {
-                morph.setPosition(new Point(padding, padding));
-            }
-        }
-        if (typeof morph.fixLayout === 'function') {
-            morph.fixLayout();
-        }
     }
     return morph;
 };
