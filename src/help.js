@@ -494,7 +494,8 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 annotation.center().y
             );
             if (i === 1) {
-                endPoint = annotated.rightCenter();
+                endPoint = annotated.rightCenter()
+                    .add(new Point(this.padding, 0));
                 if (Math.abs(annotation.center().y  - endPoint.y) <= 5) {
                     endPoint.y = annotation.center().y;
                 }
