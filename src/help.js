@@ -103,7 +103,7 @@ HelpScreenMorph.prototype.fixLayout = function () {
         var startY = child.top(), height = 0;
         child.children.forEach(function (child) {
             child.setPosition(
-                child.position().add(new Point(myself.padding, myself.padding))
+                child.position().add(myself.padding)
             );
             height = Math.max(height, child.bottom() - startY);
         });
@@ -231,7 +231,7 @@ RichTextMorph.prototype.parse = function () {
             }
         } else {
             paragraphs = word.split('\n');
-            for (i = 0; i < paragraphs.length; i = i + 1) {
+            for (i = 0; i < paragraphs.length; i++) {
                 p = paragraphs[i];
                 myself.words = myself.words.concat(p.split(' '));
                 if (i < paragraphs.length - 1) {
@@ -317,7 +317,7 @@ RichTextMorph.prototype.drawNew = function () {
         context.fillStyle = this.shadowColor.toString();
 
         y = 0;
-        for (i = 0; i < this.lines.length; i = i + 1) {
+        for (i = 0; i < this.lines.length; i++) {
             line = this.lines[i];
             width = this.calculateLineWidth(line) + shadowWidth;
             if (this.alignment === 'right') {
@@ -348,7 +348,7 @@ RichTextMorph.prototype.drawNew = function () {
     context.fillStyle = this.color.toString();
 
     y = 0;
-    for (i = 0; i < this.lines.length; i = i + 1) {
+    for (i = 0; i < this.lines.length; i++) {
         line = this.lines[i];
         width = this.calculateLineWidth(line) + shadowWidth;
         if (this.alignment === 'right') {
