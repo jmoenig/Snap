@@ -421,7 +421,7 @@ RichTextMorph.prototype.calculateLineHeight = function (line) {
     return height;
 };
 
-// ScriptDiagramMorph ///////////////////////////////////////////////////////
+// ScriptDiagramMorph ///////////////////////////////////////////////////
 
 // ScriptDiagramMorph inherits from FrameMorph:
 
@@ -535,7 +535,7 @@ ScriptDiagramMorph.prototype.getAnnotatedMorph = function (id) {
     return check(this.script);
 };
 
-// DiagramArrowMorph ////////////////////////////////////////////////////////
+// DiagramArrowMorph ////////////////////////////////////////////////////
 
 // DiagramArrowMorph inherits from FrameMorph:
 
