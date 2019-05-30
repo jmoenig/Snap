@@ -138,6 +138,10 @@ HelpScreenMorph.prototype.createRichParagraph = function (text) {
     return new RichTextMorph(text, 18, 'serif', false, false, null, null, 'Baskerville');
 };
 
+HelpScreenMorph.prototype.createScriptDiagram = function (script, annotations) {
+    return new ScriptDiagramMorph(script, annotations);
+};
+
 // RichTextMorph ////////////////////////////////////////////////////////////
 
 // I am a multi-line, word-wrapping String that can have other morphs inlined
@@ -416,4 +420,188 @@ RichTextMorph.prototype.calculateLineHeight = function (line) {
         height = Math.max(height, myself.calculateWordHeight(word));
     });
     return height;
+};
+
+// ScriptDiagramMorph ///////////////////////////////////////////////////////
+
+// ScriptDiagramMorph inherits from FrameMorph:
+
+ScriptDiagramMorph.prototype = new FrameMorph();
+ScriptDiagramMorph.prototype.constructor = ScriptDiagramMorph;
+ScriptDiagramMorph.uber = FrameMorph.prototype;
+
+// ScriptDiagramMorph layout settings:
+
+ScriptDiagramMorph.prototype.margin = 50;
+ScriptDiagramMorph.prototype.padding = 5;
+
+// ScriptDiagramMorph instance creation:
+
+function ScriptDiagramMorph(script, annotation) {
+    this.init(script, annotation);
+}
+
+ScriptDiagramMorph.prototype.init = function (script, annotations) {
+    var myself = this;
+
+    // additional properties:
+    this.script = script;
+    console.log(this.script);
+
+    annotations = annotations || [];
+    this.annotations = new AlignmentMorph('column', this.padding);
+    this.annotations.alignment = 'left';
+    annotations.forEach(function (annotation) {
+        myself.annotations.add(annotation);
+    });
+
+    this.arrows = [];
+
+    // initialize inherited properties:
+    ScriptDiagramMorph.uber.init.call(this);
+
+    this.add(this.script);
+    this.add(this.annotations);
+};
+
+ScriptDiagramMorph.prototype.drawNew = function () {
+    this.image = newCanvas(new Point(1, 1));
+};
+
+ScriptDiagramMorph.prototype.fixLayout = function () {
+    var myself = this,
+        i, startPoint, endPoint, annotation, annotated, arrow;
+
+    this.arrows.forEach(function (arrow) {
+        myself.remove(arrow);
+    });
+    this.arrows = [];
+
+    this.annotations.setLeft(
+        this.script.stackFullBounds().right() + this.margin
+    );
+    var annotationsWidth = this.right() - this.annotations.left();
+    this.annotations.setWidth(annotationsWidth);
+    this.annotations.children.forEach(function (annotation) {
+        annotation.setWidth(annotationsWidth);
+    });
+    for (i = 1; i <= this.annotations.children.length; i = i + 1) {
+        annotation = this.annotations.children[i - 1];
+        annotated = this.getAnnotatedMorph(i);
+        console.log(i, annotated);
+        if (annotated) {
+            startPoint = new Point(
+                annotation.left() - this.padding,
+                annotation.center().y
+            );
+            if (i === 1) {
+                endPoint = annotated.rightCenter();
+                if (Math.abs(annotation.center().y  - endPoint.y) <= 5) {
+                    endPoint.y = annotation.center().y;
+                }
+            } else {
+                endPoint = annotated.bottomCenter();
+            }
+            arrow = new DiagramArrowMorph(startPoint, endPoint);
+            console.log(arrow);
+            // TODO: implement arrows other than bottom-right to top-left
+            arrow.setPosition(
+                endPoint.subtract(DiagramArrowMorph.prototype.padding)
+            );
+            this.arrows.push(arrow);
+            this.add(arrow);
+        }
+    }
+    this.setHeight(Math.max(
+        this.script.stackFullBounds().height(),
+        this.annotations.height()
+    ));
+};
+
+ScriptDiagramMorph.prototype.getAnnotatedMorph = function (id) {
+    function check (morph) {
+        var i, result;
+        if (morph.annotation === id) {
+            return morph;
+        }
+        for (i = 0; i < morph.children.length; i++) {
+            result = check(morph.children[i]);
+            if (result) {
+                return result;
+            }
+        }
+        return null;
+    }
+    return check(this.script);
+};
+
+// DiagramArrowMorph ////////////////////////////////////////////////////////
+
+// DiagramArrowMorph inherits from FrameMorph:
+
+DiagramArrowMorph.prototype = new Morph();
+DiagramArrowMorph.prototype.constructor = DiagramArrowMorph;
+DiagramArrowMorph.uber = Morph.prototype;
+
+DiagramArrowMorph.prototype.padding = 5;
+
+function DiagramArrowMorph(start, end) {
+    this.init(start, end);
+}
+
+DiagramArrowMorph.prototype.init = function (start, end) {
+    // additional properties:
+    this.start = start;
+    this.end = end;
+
+    // initialize inherited properties:
+    DiagramArrowMorph.uber.init.call(this);
+};
+
+DiagramArrowMorph.prototype.drawNew = function () {
+    var start, end, ctx, theta, r;
+
+    this.silentSetExtent(
+        this.end.subtract(this.start).abs().add(this.padding * 2)
+    );
+
+    // TODO: implement arrows other than bottom-right to top-left
+    start = new Point(
+        this.width() - this.padding,
+        this.height() - this.padding
+    );
+    end = new Point(this.padding, this.padding);
+    r = 5; // arrow head size
+    theta = end.subtract(start).theta();
+    end = end.subtract(new Point (
+        r * Math.cos(theta), r * Math.sin(theta)
+    ));
+
+    this.image = newCanvas(this.extent());
+    ctx = this.image.getContext('2d');
+    ctx.strokeStyle = ctx.fillStyle = '#bb0000';
+
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(end.x, end.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(
+        end.x + r * Math.cos(theta),
+        end.y + r * Math.sin(theta),
+    );
+    theta += 2/3 * Math.PI;
+    ctx.lineTo(
+        end.x + r * Math.cos(theta),
+        end.y + r * Math.sin(theta),
+    );
+    theta += 2/3 * Math.PI;
+    ctx.lineTo(
+        end.x + r * Math.cos(theta),
+        end.y + r * Math.sin(theta),
+    );
+    ctx.closePath();
+    ctx.fill();
 };

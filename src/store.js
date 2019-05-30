@@ -1110,6 +1110,9 @@ SnapSerializer.prototype.loadScript = function (model, object) {
 
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
+        if (+child.attributes['annotation']) {
+            nextBlock.annotation = +child.attributes['annotation'];
+        }
         if (!nextBlock) {
             return;
         }
@@ -1297,6 +1300,9 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             // was added.
             input.setContents(this.loadValue(model));
         }
+    }
+    if (+model.attributes['annotation']) {
+        input.annotation = +model.attributes['annotation'];
     }
 };
 
@@ -1661,7 +1667,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         throw 'Module uses newer version of Serializer';
     }
     model.children.forEach(function (child) {
-        var morph = myself.loadHelpScreenElement(child, screen, screen, target);
+        var morph = myself.loadHelpScreenElement(child, screen, target);
         if (morph) {
             screen.add(morph);
         }
@@ -1671,15 +1677,19 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         var parent = morph.parent;
         if (morph instanceof BoxMorph) {
             morph.setWidth(parent.width());
-        } else if (morph instanceof AlignmentMorph || morph instanceof TextMorph) {
+        } else if (
+            morph instanceof AlignmentMorph
+            || morph instanceof TextMorph
+            || morph instanceof ScriptDiagramMorph
+        ) {
             if (morph.relativeWidth) {
                 morph.silentSetWidth(morph.relativeWidth
                     / parent.relWidthDenominator
                     * (parent.width() - parent.usedWidth));
             } else if (parent instanceof BoxMorph) {
-                morph.silentSetWidth(parent.width());
-            } else {
                 morph.silentSetWidth(parent.width() - 2 * padding);
+            } else {
+                morph.silentSetWidth(parent.width());
             }
         }
         if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
@@ -1694,38 +1704,34 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
                         return width + (child.relativeWidth || 0)
                     }, 0
                 );
-                console.log(morph.usedWidth, morph.relWidthDenominator);
             }
-            morph.children.forEach(function (child) {
-                fixWidths(child);
-            });
+            morph.children.forEach(fixWidths);
         }
     }
-    screen.children.forEach(function (child) {
-        fixWidths(child);
-    });
+
+    screen.children.forEach(fixWidths);
     screen.forAllChildren(function (child) {
         // Reflow text
         if (child instanceof TextMorph) {
             child.setExtent(child.extent());
         }
     });
-    screen.children.forEach(function (child) {
-        screen.forAllChildren(function (child) {
-            if (child instanceof AlignmentMorph) {
-                child.fixLayout();
-            }
-        });
+    screen.forAllChildren(function (child) {
+        if (
+            child instanceof AlignmentMorph
+            || child instanceof ScriptDiagramMorph
+        ) {
+            child.fixLayout();
+        }
     });
 
     return screen;
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (
-    element, parent, screen, target
+    element, screen, target
 ) {
-    var myself = this, padding = HelpScreenMorph.prototype.padding,
-        morph, x, y;
+    var myself = this, morph;
 
     switch (element.tag) {
     case 'box':
@@ -1733,6 +1739,14 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         break;
     case 'column':
         morph = screen.createColumn();
+        break;
+    case 'diagram':
+        morph = screen.createScriptDiagram(
+            this.loadScript(element.require('script'), target),
+            element.require('annotations').children.map(function (child) {
+                return myself.loadHelpScreenElement(child, screen, target);
+            })
+        );
         break;
     case 'p':
         if (element.children.length === 0) {
@@ -1743,11 +1757,10 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             morph = screen.createRichParagraph(null);
             morph.text = element.children.map(function (child) {
                 return myself.loadHelpScreenElement(
-                    child, morph, screen, target
+                    child, screen, target
                 );
             });
             morph.drawNew();
-            console.log(morph);
         }
         break;
     case 'row':
@@ -1759,20 +1772,25 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
     case 'text':
         return element.contents.trim().split(/\s/).join(' ');
     }
-    if (+element.attributes['rel-width']) {
-        // width will be adjusted later
-        morph.relativeWidth = +element.attributes['rel-width'];
-    }
-    if (morph && !(morph instanceof RichTextMorph)) {
-        // add children
-        element.children.forEach(function (child) {
-            var childMorph = myself.loadHelpScreenElement(
-                child, morph, screen, target
-            );
-            if (childMorph) {
-                morph.add(childMorph);
-            }
-        });
+    if (morph) {
+        if (+element.attributes['rel-width']) {
+            // width will be adjusted later
+            morph.relativeWidth = +element.attributes['rel-width'];
+        }
+        if (
+            !(morph instanceof RichTextMorph
+            || morph instanceof ScriptDiagramMorph)
+        ) {
+            // add children
+            element.children.forEach(function (child) {
+                var childMorph = myself.loadHelpScreenElement(
+                    child, screen, target
+                );
+                if (childMorph) {
+                    morph.add(childMorph);
+                }
+            });
+        }
     }
     return morph;
 };
