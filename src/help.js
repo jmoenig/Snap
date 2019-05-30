@@ -363,7 +363,6 @@ RichTextMorph.prototype.drawNew = function () {
         for (j = 0; j < line.length; j = j + 1) {
             word = line[j];
             if (word instanceof Morph) {
-                console.log(word);
                 word.setPosition(new Point(
                     x + offx, 
                     y - (this.calculateWordHeight(word) / 2) + offy
