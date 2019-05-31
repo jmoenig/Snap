@@ -83,6 +83,9 @@
     * German
     * French
 
+### 2019-05-31
+* Threads: optimized FOREACH performance for large linked lists
+
 ### 2019-05-29
 * Threads, Objects: added "Find First" primitive to lists category
 * Blocks, Threads, Objects: added "blitz" version of FIND

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-29';
+modules.threads = '2019-May-31';
 
 var ThreadManager;
 var Process;
@@ -2150,33 +2150,48 @@ Process.prototype.doWaitUntil = function (goalCondition) {
 
 // Process interpolated iteration primitives
 
-/*
-    these primitives can be - for the most part easily - written as
-    custom blocks by users themselves. They are, or used to be, in
-    libraries that could be loaded additionally. Making them available
-    as primitives has the benefit of getting novices acquainted to
-    using HOFs plus some performance advantages, however at the cost
-    of losing the ability to inspect how they're written.
-*/
-
 Process.prototype.doForEach = function (upvar, list, script) {
+
+//Process.prototype.reportFindFirst = function (predicate, list) {
     // perform a script for each element of a list, assigning the
     // current iteration's element to a variable with the name
     // specified in the "upvar" parameter, so it can be referenced
-    // within the script. Uses the context's - unused - fourth
-    // element as temporary storage for the current list index
+    // within the script.
+    // Distinguish between linked and arrayed lists.
 
+    var next;
     this.assertType(list, 'list');
-    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
-    var index = this.context.inputs[3],
-        item = list.at(index);
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, item);
-    if (index > list.length()) {return; }
-    this.context.inputs[3] += 1;
+    if (list.isLinked) {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                source : list,
+                remaining : list.length()
+            };
+        }
+        if (this.context.accumulator.remaining === 0) {
+            return;
+        }
+        next = this.context.accumulator.source.at(1);
+        this.context.accumulator.remaining -= 1;
+        this.context.accumulator.source =
+            this.context.accumulator.source.cdr();
+    } else { // arrayed
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                idx : 0
+            };
+        }
+        if (this.context.accumulator.idx === list.length()) {
+            return;
+        }
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
+    }
     this.pushContext('doYield');
     this.pushContext();
-    this.evaluate(script, new List([item]), true);
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(upvar, next);
+    this.evaluate(script, new List([next]), true);
 };
 
 Process.prototype.doFor = function (upvar, start, end, script) {
