@@ -46,6 +46,7 @@ function WorldMap(host) {
     this.tileServers = {
         OpenStreetMap: {
             url: 'tile.openstreetmap.org',
+            type: 'zxy',
             subdomains: ['a', 'b', 'c'],
             key: null,
             min: 0,
@@ -55,6 +56,7 @@ function WorldMap(host) {
         },
         Wikimedia: {
             url: 'maps.wikimedia.org/osm-intl',
+            type: 'zxy',
             subdomains: null,
             key: null,
             min: 0,
@@ -64,6 +66,7 @@ function WorldMap(host) {
         },
         Watercolor: {
             url: 'stamen-tiles.a.ssl.fastly.net/watercolor',
+            type: 'zxy',
             subdomains: null,
             key: null,
             min: 0,
@@ -73,6 +76,7 @@ function WorldMap(host) {
         },
         'Toner': {
             url: 'stamen-tiles.a.ssl.fastly.net/toner',
+            type: 'zxy',
             subdomains: null,
             key: null,
             min: 0,
@@ -82,6 +86,7 @@ function WorldMap(host) {
         },
         'Terrain': {
             url: 'stamen-tiles.a.ssl.fastly.net/terrain',
+            type: 'zxy',
             subdomains: null,
             key: null,
             min: 0,
@@ -91,15 +96,47 @@ function WorldMap(host) {
         },
         Topographic: {
             url: 'tile.opentopomap.org',
-            subdomains: null, //['a', 'b', 'c'],
+            type: 'zxy',
+            subdomains: null,
             key: null,
             min: 0,
-            max: 20,
+            max: 17,
             credits: 'Map data \u00A9 OpenStreetMap contributors, ' +
                 'CC-BY-SA, Imagery \u00A9 Opentopomaps'
         },
+        Satellite: {
+            url: 'services.arcgisonline.com/ArcGIS/rest/services/' +
+                'World_Imagery/MapServer/tile',
+            type: 'zyx',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 19,
+            credits: 'Imagery \u00A9 ArcGIS'
+        },
+        Streets: {
+            url: 'services.arcgisonline.com/ArcGIS/rest/services/' +
+                'World_Street_Map/MapServer/tile',
+            type: 'zyx',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 19,
+            credits: 'Imagery \u00A9 ArcGIS'
+        },
+        Shading: {
+            url: 'services.arcgisonline.com/ArcGIS/rest/services/' +
+                'World_Topo_Map/MapServer/tile',
+            type: 'zyx',
+            subdomains: null,
+            key: null,
+            min: 0,
+            max: 19,
+            credits: 'Imagery \u00A9 ArcGIS'
+        },
         'Mapbox (experimental)': {
             url: 'api.tiles.mapbox.com/v4/mapbox.streets',
+            type: 'zxy',
             subdomains: null,
             key: '?access_token=' +
                 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycX' +
@@ -227,7 +264,7 @@ WorldMap.prototype.render = function () {
         sub = 0,
         myself = this,
         max = Math.pow(2, this.zoom),
-        x, y, img, ctx, tileX, tileY;
+        x, y, img, ctx, tileX, tileY, coords;
 
     function ok() {
         myself.loading -= 1;
@@ -264,15 +301,22 @@ WorldMap.prototype.render = function () {
                 img.onload = ok;
                 img.onerror = err;
                 myself.loading += 1;
+                switch (this.api.type) {
+                    case 'zxy':
+                        coords = '' + this.zoom + '/' + tileX + '/' + tileY;
+                        break;
+                    case 'zyx':
+                        coords = '' + this.zoom + '/' + tileY + '/' + tileX;
+                        break;
+                    case 'xyz':
+                        coords = '' + tileX + '/' + tileY + '/' + this.zoom ;
+                        break;
+                }
                 img.src = 'https://' +
                     (this.api.subdomains ?
                         this.api.subdomains[sub] + '.'
                             : '') +
-                    this.api.url + '/' +
-                    this.zoom + '/' +
-                    tileX + '/' +
-                    tileY + '.png' +
-                    (this.api.key || '');
+                    this.api.url + '/' + coords + '.png' + (this.api.key || '');
                 if (this.api.subdomains) {
                     sub += 1;
                     if  (sub === this.api.subdomains.length) {
