@@ -91,6 +91,7 @@
 * updated "audioComp" library (purged unused blocks)
 * updated "frequency distribution" library (changed PIPE to use EMPTY prim)
 * Maps: added support for zxy, zyx and xyz style maps and satellite imagery
+* updated "World Map" library with options for Satellite, Streets and Shading
 
 ### 2019-05-29
 * Threads, Objects: added "Find First" primitive to lists category
