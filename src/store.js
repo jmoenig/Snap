@@ -1748,6 +1748,13 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             })
         );
         break;
+    case 'img':
+        morph = screen.createImage(
+            element.attributes.src,
+            +element.attributes.width,
+            +element.attributes.height
+        );
+        break;
     case 'p':
         if (element.children.length === 0) {
             morph = screen.createParagraph(

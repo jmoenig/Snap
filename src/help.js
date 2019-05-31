@@ -142,6 +142,24 @@ HelpScreenMorph.prototype.createScriptDiagram = function (script, annotations) {
     return new ScriptDiagramMorph(script, annotations);
 };
 
+HelpScreenMorph.prototype.createImage = function (src, width, height) {
+    var morph = new Morph();
+    morph.setExtent(new Point(width, height));
+    morph.pic = new Image();
+    morph.pic.onload = function () {
+        console.log('aaa');
+        morph.drawNew = function () {
+            var ctx;
+            this.image = newCanvas(this.extent());
+            ctx = this.image.getContext('2d');
+            ctx.drawImage(this.pic, 0, 0, this.width(), this.height());
+        };
+        morph.drawNew();
+    };
+    morph.pic.src = 'help/' + src;
+    return morph;
+};
+
 // RichTextMorph ////////////////////////////////////////////////////////////
 
 // I am a multi-line, word-wrapping String that can have other morphs inlined
