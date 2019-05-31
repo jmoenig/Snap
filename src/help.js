@@ -88,7 +88,7 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 
 // HelpScreenMorph layout settings:
 
-HelpScreenMorph.prototype.padding = 10;
+HelpScreenMorph.prototype.padding = 15;
 
 // HelpScreenMorph instance creation:
 
@@ -97,22 +97,54 @@ function HelpScreenMorph() {
 }
 
 HelpScreenMorph.prototype.init = function () {
+    // additional properties:
+    this.thumbnail = null;
+
+    // initialize inherited properties:
     HelpScreenMorph.uber.init.call(this);
     this.setWidth(572);
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
-    var myself = this;
-    this.children.forEach(function (child) {
-        var startY = child.top(), height = 0;
-        child.children.forEach(function (child) {
-            child.setPosition(
-                child.position().add(myself.padding)
-            );
+    var padding = this.padding, nextY = padding,
+        thumbnail = this.thumbnail;
+    function resizeBox (box) {
+        var startX, startY, width = 0, height = 0;
+        if (box !== thumbnail) {
+            box.moveBy(new Point(padding, nextY));
+        }
+        startX = box.left();
+        startY = box.top();
+        box.children.forEach(function (child) {
+            child.moveBy(padding);
+            if (box !== thumbnail) {
+                if (child.top() < thumbnail.bottom() + padding) {
+                    child.setTop(thumbnail.bottom() + padding);
+                }
+            }
+            width = Math.max(width, child.right() - startX);
             height = Math.max(height, child.bottom() - startY);
         });
-        child.setHeight(height + myself.padding);
+        box.setHeight(height + padding);
+        if (box === thumbnail) {
+            box.setWidth(width + padding);
+        } else {
+            nextY += box.height() + padding;
+        }
+    }
+    resizeBox(thumbnail);
+    this.children.forEach(function (box) {
+        if (box !== thumbnail) {
+            resizeBox(box);
+        }
     });
+};
+
+HelpScreenMorph.prototype.createThumbnail = function () {
+    var box = new BoxMorph();
+    box.color = new Color(214, 225, 235);
+    box.borderColor = new Color(153, 156, 158);
+    return box;
 };
 
 HelpScreenMorph.prototype.createBox = function () {
@@ -151,7 +183,6 @@ HelpScreenMorph.prototype.createImage = function (src, width, height) {
     morph.setExtent(new Point(width, height));
     morph.pic = new Image();
     morph.pic.onload = function () {
-        console.log('aaa');
         morph.drawNew = function () {
             var ctx;
             this.image = newCanvas(this.extent());
@@ -467,7 +498,6 @@ ScriptDiagramMorph.prototype.init = function (script, annotations) {
 
     // additional properties:
     this.script = script;
-    console.log(this.script);
 
     annotations = annotations || [];
     this.annotations = new AlignmentMorph('column', this.padding);
@@ -509,7 +539,6 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     for (i = 1; i <= this.annotations.children.length; i = i + 1) {
         annotation = this.annotations.children[i - 1];
         annotated = this.getAnnotatedMorph(i);
-        console.log(i, annotated);
         if (annotated) {
             startPoint = new Point(
                 annotation.left() - this.padding,
@@ -525,7 +554,6 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 endPoint = annotated.bottomCenter();
             }
             arrow = new DiagramArrowMorph(startPoint, endPoint);
-            console.log(arrow);
             // TODO: implement arrows other than bottom-right to top-left
             arrow.setPosition(
                 endPoint.subtract(DiagramArrowMorph.prototype.padding)

@@ -1667,29 +1667,28 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         throw 'Module uses newer version of Serializer';
     }
     model.children.forEach(function (child) {
-        var morph = myself.loadHelpScreenElement(child, screen, target);
-        if (morph) {
-            screen.add(morph);
+        if (child.tag !== 'thumbnail') {
+            var morph = myself.loadHelpScreenElement(child, screen, target);
+            if (morph) {
+                screen.add(morph);
+            }
         }
     });
 
     function fixWidths (morph) {
         var parent = morph.parent;
-        if (morph instanceof BoxMorph) {
-            morph.setWidth(parent.width());
-        } else if (
+        if (
             morph instanceof AlignmentMorph
-            || morph instanceof TextMorph
+            || morph instanceof BoxMorph
             || morph instanceof ScriptDiagramMorph
+            || morph instanceof TextMorph
         ) {
             if (morph.relativeWidth) {
                 morph.silentSetWidth(morph.relativeWidth
                     / parent.relWidthDenominator
                     * (parent.width() - parent.usedWidth));
-            } else if (parent instanceof BoxMorph) {
-                morph.silentSetWidth(parent.width() - 2 * padding);
             } else {
-                morph.silentSetWidth(parent.width());
+                morph.silentSetWidth(parent.width() - 2 * padding);
             }
         }
         if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
@@ -1724,6 +1723,11 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
             child.fixLayout();
         }
     });
+
+    screen.thumbnail = this.loadHelpScreenElement(
+        model.require('thumbnail'), screen, target
+    );
+    screen.add(screen.thumbnail);
 
     return screen;
 };
@@ -1778,6 +1782,9 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         break;
     case 'text':
         return element.contents.trim().split(/\s/).join(' ');
+    case 'thumbnail':
+        morph = screen.createThumbnail();
+        break;
     }
     if (morph) {
         if (+element.attributes['rel-width']) {
