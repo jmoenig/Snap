@@ -1668,7 +1668,10 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     }
     model.children.forEach(function (child) {
         if (child.tag !== 'thumbnail') {
-            var morph = myself.loadHelpScreenElement(child, screen, target);
+            var morph = myself.loadHelpScreenElement(
+                child, screen, target,
+                child.attributes.color === 'blue' ? 'black' : 'white'
+            );
             if (morph) {
                 screen.add(morph);
             }
@@ -1726,7 +1729,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     });
 
     screen.thumbnail = this.loadHelpScreenElement(
-        model.require('thumbnail'), screen, target
+        model.require('thumbnail'), screen, target, 'black'
     );
     screen.add(screen.thumbnail);
 
@@ -1734,13 +1737,13 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (
-    element, screen, target
+    element, screen, target, textColor
 ) {
-    var myself = this, morph;
+    var myself = this, morph, textSize;
 
     switch (element.tag) {
     case 'box':
-        morph = screen.createBox();
+        morph = screen.createBox(element.attributes.color);
         break;
     case 'column':
         morph = screen.createColumn();
@@ -1749,7 +1752,9 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph = screen.createScriptDiagram(
             this.loadScript(element.require('script'), target),
             element.require('annotations').children.map(function (child) {
-                return myself.loadHelpScreenElement(child, screen, target);
+                return myself.loadHelpScreenElement(
+                    child, screen, target, textColor
+                );
             })
         );
         break;
@@ -1761,17 +1766,21 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         );
         break;
     case 'p':
+    case 'small-p':
+        textSize = element.tag === 'small-p' ? 14 : 18;
         if (element.children.length === 0) {
             morph = screen.createParagraph(
-                element.contents.trim().split(/\s/).join(' ')
+                element.contents.trim().split(/\s+/).join(' '),
+                textSize, textColor
             );
         } else {
-            morph = screen.createRichParagraph(null);
+            morph = screen.createRichParagraph(null, textSize, textColor);
             morph.text = element.children.map(function (child) {
                 return myself.loadHelpScreenElement(
-                    child, screen, target
+                    child, screen, target, textColor
                 );
             });
+            console.log(morph);
             morph.drawNew();
         }
         break;
@@ -1782,7 +1791,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph = this.loadScript(element, target);
         break;
     case 'text':
-        return element.contents.trim().split(/\s/).join(' ');
+        return element.contents.trim().split(/\s+/).join(' ');
     case 'thumbnail':
         morph = screen.createThumbnail();
         break;
@@ -1799,7 +1808,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             // add children
             element.children.forEach(function (child) {
                 var childMorph = myself.loadHelpScreenElement(
-                    child, screen, target
+                    child, screen, target, textColor
                 );
                 if (childMorph) {
                     morph.add(childMorph);

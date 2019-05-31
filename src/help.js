@@ -31,7 +31,7 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.labelString = 'Help';
     this.createLabel();
 
-    this.setExtent(new Point(600, 400));
+    this.setExtent(new Point(600, 500));
     this.addButton('ok', 'OK');
 };
 
@@ -89,6 +89,7 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 // HelpScreenMorph layout settings:
 
 HelpScreenMorph.prototype.padding = 15;
+HelpScreenMorph.prototype.verticalPadding = 5;
 
 // HelpScreenMorph instance creation:
 
@@ -106,8 +107,8 @@ HelpScreenMorph.prototype.init = function () {
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
-    var padding = this.padding, nextY = padding / 3,
-        thumbnail = this.thumbnail;
+    var padding = this.padding, verticalPadding = this.verticalPadding,
+        nextY = verticalPadding, thumbnail = this.thumbnail;
     function resizeBox (box) {
         var startX, startY, width = 0, height = 0;
         if (box !== thumbnail) {
@@ -129,7 +130,7 @@ HelpScreenMorph.prototype.fixLayout = function () {
         if (box === thumbnail) {
             box.setWidth(width + padding);
         } else {
-            nextY += box.height() + padding;
+            nextY += box.height() + verticalPadding;
         }
     }
     resizeBox(thumbnail);
@@ -147,10 +148,15 @@ HelpScreenMorph.prototype.createThumbnail = function () {
     return box;
 };
 
-HelpScreenMorph.prototype.createBox = function () {
+HelpScreenMorph.prototype.createBox = function (color) {
     var box = new BoxMorph();
-    box.color = new Color(133, 138, 140);
-    box.borderColor = new Color(183, 186, 188);
+    if (color === 'blue') {
+        box.color = new Color(214, 225, 235);
+        box.borderColor = new Color(153, 156, 158);
+    } else { // gray is default
+        box.color = new Color(133, 138, 140);
+        box.borderColor = new Color(183, 186, 188);
+    }
     return box;
 };
 
@@ -166,19 +172,19 @@ HelpScreenMorph.prototype.createRow = function () {
     return row;
 };
 
-HelpScreenMorph.prototype.createParagraph = function (text) {
+HelpScreenMorph.prototype.createParagraph = function (text, size, color) {
     var text = new TextMorph(
-        text, 18, 'serif', false, false, null, null, 'Baskerville'
+        text, size, 'serif', false, false, null, null, 'Baskerville'
     );
-    text.color = 'white';
+    text.color = color;
     return text;
 };
 
-HelpScreenMorph.prototype.createRichParagraph = function (text) {
-    var text = new TextMorph(
-        text, 18, 'serif', false, false, null, null, 'Baskerville'
+HelpScreenMorph.prototype.createRichParagraph = function (text, size, color) {
+    var text = new RichTextMorph(
+        text, size, 'serif', false, false, null, null, 'Baskerville'
     );
-    text.color = 'white';
+    text.color = color;
     return text;
 };
 
@@ -553,9 +559,11 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 annotation.left() - this.padding,
                 annotation.center().y
             );
-            if (i === 1) {
-                endPoint = annotated.rightCenter()
-                    .add(new Point(this.padding, 0));
+            if (annotated instanceof CommandBlockMorph || i === 1) {
+                endPoint = new Point(
+                    annotated.right() + this.padding,
+                    annotated.parts()[0].center().y // use y of center of label
+                );
                 if (Math.abs(annotation.center().y  - endPoint.y) <= 5) {
                     endPoint.y = annotation.center().y;
                 }
