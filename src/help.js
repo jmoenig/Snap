@@ -190,6 +190,7 @@ HelpScreenMorph.prototype.createImage = function (src, width, height) {
             ctx.drawImage(this.pic, 0, 0, this.width(), this.height());
         };
         morph.drawNew();
+        morph.changed();
     };
     morph.pic.src = 'help/' + src;
     return morph;
