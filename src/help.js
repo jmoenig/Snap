@@ -106,12 +106,12 @@ HelpScreenMorph.prototype.init = function () {
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
-    var padding = this.padding, nextY = padding,
+    var padding = this.padding, nextY = padding / 3,
         thumbnail = this.thumbnail;
     function resizeBox (box) {
         var startX, startY, width = 0, height = 0;
         if (box !== thumbnail) {
-            box.moveBy(new Point(padding, nextY));
+            box.moveBy(new Point(0, nextY));
         }
         startX = box.left();
         startY = box.top();
@@ -167,11 +167,19 @@ HelpScreenMorph.prototype.createRow = function () {
 };
 
 HelpScreenMorph.prototype.createParagraph = function (text) {
-    return new TextMorph(text, 18, 'serif', false, false, null, null, 'Baskerville');
+    var text = new TextMorph(
+        text, 18, 'serif', false, false, null, null, 'Baskerville'
+    );
+    text.color = 'white';
+    return text;
 };
 
 HelpScreenMorph.prototype.createRichParagraph = function (text) {
-    return new RichTextMorph(text, 18, 'serif', false, false, null, null, 'Baskerville');
+    var text = new TextMorph(
+        text, 18, 'serif', false, false, null, null, 'Baskerville'
+    );
+    text.color = 'white';
+    return text;
 };
 
 HelpScreenMorph.prototype.createScriptDiagram = function (script, annotations) {

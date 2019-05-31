@@ -1677,9 +1677,10 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
 
     function fixWidths (morph) {
         var parent = morph.parent;
-        if (
+        if (morph instanceof BoxMorph) {
+            morph.setWidth(parent.width() - padding);
+        } else if (
             morph instanceof AlignmentMorph
-            || morph instanceof BoxMorph
             || morph instanceof ScriptDiagramMorph
             || morph instanceof TextMorph
         ) {
