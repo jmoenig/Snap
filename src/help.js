@@ -69,8 +69,12 @@ HelpDialogMorph.prototype.popUp = function () {
 
 HelpDialogMorph.prototype.fixLayout = function () {
     BlockEditorMorph.prototype.fixLayout.call(this);
-    if (this.screen && typeof this.screen.fixLayout === 'function') {
+    if (this.screen) {
         this.screen.fixLayout();
+    }
+    if (this.body) {
+        // hack - scroll bars don't properly update without this
+        this.body.setExtent(this.body.extent());
     }
 };
 
