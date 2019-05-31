@@ -87,8 +87,9 @@
 * Threads: optimized FOREACH performance for large linked lists
 * German translation update (FINDFIRST, WORD, TEMPORARY?)
 * Threads: also allow numbers as sprite names in SET
-* updated "animation library" (purged unused blocks)
-* updated "audioComp library" (purged unused blocks)
+* updated "animation" library (purged unused blocks)
+* updated "audioComp" library (purged unused blocks)
+* updated "frequency distribution" library (changed PIPE to use EMPTY prim)
 
 ### 2019-05-29
 * Threads, Objects: added "Find First" primitive to lists category
