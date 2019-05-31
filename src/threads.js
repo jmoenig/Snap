@@ -4297,13 +4297,15 @@ Process.prototype.doSet = function (attribute, value) {
         break;
     case 'name':
         this.assertType(rcvr, ['sprite', 'stage']);
-        this.assertType(value, 'text');
+        this.assertType(value, ['text', 'number']);
         ide = rcvr.parentThatIsA(IDE_Morph);
         if (ide) {
             rcvr.setName(
-                ide.newSpriteName(value, rcvr)
+                ide.newSpriteName(value.toString(), rcvr)
             );
-            ide.spriteBar.nameField.setContents(ide.currentSprite.name);
+            ide.spriteBar.nameField.setContents(
+                ide.currentSprite.name.toString()
+            );
         }
         break;
     case 'dangling?':
