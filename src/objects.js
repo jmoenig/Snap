@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-May-29';
+modules.objects = '2019-June-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -581,6 +581,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'pen up'
+        },
+        getPenDown: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'pen',
+            spec: 'pen down?'
         },
         setColor: {
             only: SpriteMorph,
@@ -2269,6 +2275,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('down'));
         blocks.push(block('up'));
+        blocks.push(block('getPenDown'));
         blocks.push('-');
         blocks.push(block('setColor'));
         blocks.push(block('changePenHSVA'));
@@ -4160,7 +4167,7 @@ SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     return oImg;
 };
 
-// SpriteMorph stamping
+// SpriteMorph pen ops
 
 SpriteMorph.prototype.doStamp = function () {
     var stage = this.parent,
@@ -4195,8 +4202,6 @@ SpriteMorph.prototype.doStamp = function () {
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
-
-// SpeiteMorph writing (printing)
 
 SpriteMorph.prototype.write = function (text, size) {
     // thanks to Michael Ball for contributing this code!
@@ -4239,8 +4244,6 @@ SpriteMorph.prototype.write = function (text, size) {
     stage.changed();
 };
 
-// SpriteMorph pen size
-
 SpriteMorph.prototype.setSize = function (size) {
     // pen size
     if (!isNaN(size)) {
@@ -4250,6 +4253,10 @@ SpriteMorph.prototype.setSize = function (size) {
 
 SpriteMorph.prototype.changeSize = function (delta) {
     this.setSize(this.size + (+delta || 0));
+};
+
+SpriteMorph.prototype.getPenDown = function () {
+    return this.isDown;
 };
 
 // SpriteMorph scale

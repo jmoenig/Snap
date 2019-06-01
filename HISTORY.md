@@ -27,6 +27,7 @@
     * new "stretch" primitive for costumes, also for flipping
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
+    * new "pen down?" predicate
     * new "write" command in pen category (used to be "label" in tools)
     * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
     * new JIT-compiler "blitz-HOF" primitives for "map", "keep", "find" & "combine" via "compile"
@@ -82,6 +83,9 @@
     * Spanish
     * German
     * French
+
+### 2019-06-01
+* Objects: new "pen down?" predicate
 
 ### 2019-05-31
 * Threads: optimized FOREACH performance for large linked lists
