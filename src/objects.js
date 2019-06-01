@@ -398,6 +398,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'hide'
         },
+        reportShown: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'looks',
+            spec: 'shown?'
+        },
         goToLayer: {
             only: SpriteMorph,
             type: 'command',
@@ -2193,6 +2199,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(block('reportShown'));
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
@@ -4041,6 +4048,10 @@ SpriteMorph.prototype.hide = function () {
 SpriteMorph.prototype.show = function () {
     SpriteMorph.uber.show.call(this);
     this.parts.forEach(function (part) {part.show(); });
+};
+
+SpriteMorph.prototype.reportShown = function () {
+    return this.isVisible;
 };
 
 // SpriteMorph pen color
