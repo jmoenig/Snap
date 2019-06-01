@@ -387,19 +387,16 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'size'
         },
         show: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'show'
         },
         hide: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'hide'
         },
         reportShown: {
-            only: SpriteMorph,
             type: 'predicate',
             category: 'looks',
             spec: 'shown?'
@@ -7984,6 +7981,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(block('reportShown'));
 
     // for debugging: ///////////////
 
@@ -8504,6 +8502,8 @@ StageMorph.prototype.show = function () {
     this.isVisible = true;
     this.changed();
 };
+
+StageMorph.prototype.reportShown = SpriteMorph.prototype.reportShown;
 
 // StageMorph cloning override
 
