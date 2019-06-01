@@ -88,6 +88,7 @@
 ### 2019-06-01
 * Objects: new "pen down?" predicate
 * Objects: new "shown?" predicate
+* updated German translation for "shown?" and "pen down?"
 
 ### 2019-05-31
 * Threads: optimized FOREACH performance for large linked lists
