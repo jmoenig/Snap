@@ -129,6 +129,7 @@ SpriteMorph.prototype.attributes =
         'balance',
         'sounds',
         'shown?',
+        'pen down?',
         'scripts'
     ];
 
@@ -2282,7 +2283,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('down'));
         blocks.push(block('up'));
         blocks.push(watcherToggle('getPenDown'));
-        blocks.push(block('getPenDown'));
+        blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
         blocks.push('-');
         blocks.push(block('setColor'));
         blocks.push(block('changePenHSVA'));
@@ -4290,7 +4291,40 @@ SpriteMorph.prototype.changeSize = function (delta) {
     this.setSize(this.size + (+delta || 0));
 };
 
+// SpriteMorph pen up and down:
+
+SpriteMorph.prototype.down = function () {
+    this.setPenDown(true);
+}
+
+SpriteMorph.prototype.up = function () {
+    this.setPenDown(false);
+}
+
+SpriteMorph.prototype.setPenDown = function (bool, noShadow) {
+    if (bool) {
+        SpriteMorph.uber.down.call(this);
+    } else {
+        SpriteMorph.uber.up.call(this);
+    }
+
+    // propagate to children that inherit my visibility
+    if (!noShadow) {
+        this.shadowAttribute('pen down?');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('pen down?')) {
+                instance.setPenDown(bool, true);
+            }
+        }
+    });
+};
+
 SpriteMorph.prototype.getPenDown = function () {
+    if (this.inheritsAttribute('pen down?')) {
+        return this.exemplar.getPenDown();
+    }
     return this.isDown;
 };
 
@@ -6210,7 +6244,8 @@ SpriteMorph.prototype.updatePropagationCache = function () {
             'costume #',
             'volume',
             'balance',
-            'shown?'
+            'shown?',
+            'pen down?'
         ],
         function (att) {
             return contains(myself.inheritedAttributes, att);
@@ -6337,6 +6372,10 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'shown?':
         this.cachedPropagation = true;
         this.setVisibility(this.reportShown(), true);
+        break;
+    case 'pen down?':
+        this.cachedPropagation = true;
+        this.setPenDown(this.getPenDown(), true);
         break;
     case 'balance':
         this.cachedPropagation = true;
@@ -10784,7 +10823,8 @@ WatcherMorph.prototype.update = function () {
                 getScale: 'size',
                 getVolume: 'volume',
                 getPan: 'balance',
-                reportShown: 'shown?'
+                reportShown: 'shown?',
+                getPenDown: 'pen down?'
             } [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }

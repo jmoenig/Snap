@@ -88,6 +88,7 @@
 ### 2019-06-02
 * Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
 * Objects, Blocks: made "shown?" attribute inheritable 
+* Objects, Blocks: made "pen down?" attribute inheritable 
 
 ### 2019-06-01
 * Objects: new "pen down?" predicate
