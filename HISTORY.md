@@ -86,7 +86,8 @@
     * French
 
 ### 2019-06-02
-* Objects, store: made "pen down?" and "shown?" attributes watchable onstage
+* Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
+* Objects, Blocks: made "shown?" attribute inheritable 
 
 ### 2019-06-01
 * Objects: new "pen down?" predicate

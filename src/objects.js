@@ -128,6 +128,7 @@ SpriteMorph.prototype.attributes =
         'volume',
         'balance',
         'sounds',
+        'shown?',
         'scripts'
     ];
 
@@ -2197,7 +2198,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('show'));
         blocks.push(block('hide'));
         blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown'));
+        blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
@@ -4039,17 +4040,41 @@ SpriteMorph.prototype.corpsify = function () {
     nested parts.
 */
 
-SpriteMorph.prototype.hide = function () {
-    SpriteMorph.uber.hide.call(this);
-    this.parts.forEach(function (part) {part.hide(); });
+SpriteMorph.prototype.show = function () {
+    this.setVisibility(true);
 };
 
-SpriteMorph.prototype.show = function () {
-    SpriteMorph.uber.show.call(this);
-    this.parts.forEach(function (part) {part.show(); });
+SpriteMorph.prototype.hide = function () {
+    this.setVisibility(false);
+};
+
+SpriteMorph.prototype.setVisibility = function (bool, noShadow) {
+    if (bool) {
+        SpriteMorph.uber.show.call(this);
+    } else {
+        SpriteMorph.uber.hide.call(this);
+    }
+
+    // progagate to parts
+    this.parts.forEach(function (part) {part.setVisibility(bool); });
+
+    // propagate to children that inherit my visibility
+    if (!noShadow) {
+        this.shadowAttribute('shown?');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('shown?')) {
+                instance.setVisibility(bool, true);
+            }
+        }
+    });
 };
 
 SpriteMorph.prototype.reportShown = function () {
+    if (this.inheritsAttribute('shown?')) {
+        return this.exemplar.reportShown();
+    }
     return this.isVisible;
 };
 
@@ -6184,7 +6209,8 @@ SpriteMorph.prototype.updatePropagationCache = function () {
             'size',
             'costume #',
             'volume',
-            'balance'
+            'balance',
+            'shown?'
         ],
         function (att) {
             return contains(myself.inheritedAttributes, att);
@@ -6307,6 +6333,10 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'volume':
         this.cachedPropagation = true;
         this.setVolume(this.getVolume(), true);
+        break;
+    case 'shown?':
+        this.cachedPropagation = true;
+        this.setVisibility(this.reportShown(), true);
         break;
     case 'balance':
         this.cachedPropagation = true;
@@ -10753,7 +10783,8 @@ WatcherMorph.prototype.update = function () {
                 getCostumeIdx: 'costume #',
                 getScale: 'size',
                 getVolume: 'volume',
-                getPan: 'balance'
+                getPan: 'balance',
+                reportShown: 'shown?'
             } [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }

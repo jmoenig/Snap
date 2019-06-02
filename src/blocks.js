@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-29';
+modules.blocks = '2019-June-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2776,7 +2776,8 @@ BlockMorph.prototype.userMenu = function () {
                     getScale: 'size',
                     getCostumeIdx: 'costume #',
                     getVolume: 'volume',
-                    getPan: 'balance'
+                    getPan: 'balance',
+                    reportShown: 'shown?'
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
                     menu.addLine();
