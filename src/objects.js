@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-June-01';
+modules.objects = '2019-June-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -2196,6 +2196,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(watcherToggle('reportShown'));
         blocks.push(block('reportShown'));
         blocks.push('-');
         blocks.push(block('goToLayer'));
@@ -2279,6 +2280,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('down'));
         blocks.push(block('up'));
+        blocks.push(watcherToggle('getPenDown'));
         blocks.push(block('getPenDown'));
         blocks.push('-');
         blocks.push(block('setColor'));
@@ -7981,6 +7983,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(watcherToggle('reportShown'));
         blocks.push(block('reportShown'));
 
     // for debugging: ///////////////

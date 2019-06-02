@@ -85,6 +85,9 @@
     * German
     * French
 
+### 2019-06-02
+* Objects, store: made "pen down?" and "shown?" attributes watchable onstage
+
 ### 2019-06-01
 * Objects: new "pen down?" predicate
 * Objects: new "shown?" predicate
