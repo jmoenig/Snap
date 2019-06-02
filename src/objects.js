@@ -4295,11 +4295,11 @@ SpriteMorph.prototype.changeSize = function (delta) {
 
 SpriteMorph.prototype.down = function () {
     this.setPenDown(true);
-}
+};
 
 SpriteMorph.prototype.up = function () {
     this.setPenDown(false);
-}
+};
 
 SpriteMorph.prototype.setPenDown = function (bool, noShadow) {
     if (bool) {
@@ -10707,6 +10707,7 @@ WatcherMorph.prototype.init = function (
     this.labelText = label || '';
     this.version = null;
     this.objName = '';
+    this.isGhosted = false; // transient, don't persist
 
     // initialize inherited properties
     WatcherMorph.uber.init.call(
@@ -10785,7 +10786,7 @@ WatcherMorph.prototype.setSliderMax = function (num, noUpdate) {
 
 WatcherMorph.prototype.update = function () {
     var newValue, sprite, num, att,
-        isGhosted = false;
+        isInherited = false;
 
     if (this.target && this.getter) {
         this.updateLabel();
@@ -10826,7 +10827,7 @@ WatcherMorph.prototype.update = function () {
                 reportShown: 'shown?',
                 getPenDown: 'pen down?'
             } [this.getter];
-            isGhosted = att ? this.target.inheritsAttribute(att) : false;
+            isInherited = att ? this.target.inheritsAttribute(att) : false;
         }
         if (newValue !== '' && !isNil(newValue)) {
             num = +newValue;
@@ -10834,11 +10835,13 @@ WatcherMorph.prototype.update = function () {
                 newValue = Math.round(newValue * 1000000000) / 1000000000;
             }
         }
-        if (newValue !== this.currentValue) {
+        if (newValue !== this.currentValue ||
+                isInherited !== this.isGhosted) {
             this.changed();
             this.cellMorph.contents = newValue;
+            this.isGhosted = isInherited;
             if (isSnapObject(this.target)) {
-                if (isGhosted) {
+                if (isInherited) {
                     this.cellMorph.setColor(this.readoutColor.lighter(35));
                 } else {
                     this.cellMorph.setColor(this.readoutColor);
