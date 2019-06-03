@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-June-02';
+modules.blocks = '2019-June-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2269,7 +2269,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
+                IDE_Morph
+            ),
         scr = this.fullImage(),
         bub = aBubble.fullImageClassic(),
         taller = Math.max(0, bub.height - scr.height),
