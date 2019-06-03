@@ -60,9 +60,9 @@
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable, isSnapObject*/
+TableFrameMorph, TableMorph, Variable, isSnapObject, Costume*/
 
-modules.lists = '2019-April-27';
+modules.lists = '2019-June-04';
 
 var List;
 var ListWatcherMorph;
@@ -677,12 +677,12 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
 ListWatcherMorph.prototype.update = function (anyway) {
     var i, idx, ceil, morphs, cell, cnts, label, button, max,
         starttime, maxtime = 1000;
-
     this.frame.contents.children.forEach(function (m) {
         if (m instanceof CellMorph) {
             if (m.contentsMorph instanceof ListWatcherMorph) {
                 m.contentsMorph.update();
-            } else if (isSnapObject(m.contents)) {
+            } else if (isSnapObject(m.contents) ||
+                    (m.contents instanceof Costume)) {
                 m.update();
             }
         }

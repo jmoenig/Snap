@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-June-02';
+modules.objects = '2019-June-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -10381,11 +10381,12 @@ CellMorph.prototype.fixLayout = function () {
 
 CellMorph.prototype.update = function () {
     // special case for observing sprites
-    if (!isSnapObject(this.contents)) {
+    if (!isSnapObject(this.contents) && !(this.contents instanceof Costume)) {
         return;
     }
     if (this.version !== this.contents.version) {
         this.drawNew();
+        this.version = this.contents.version;
     }
 };
 
@@ -10836,7 +10837,8 @@ WatcherMorph.prototype.update = function () {
             }
         }
         if (newValue !== this.currentValue ||
-                isInherited !== this.isGhosted) {
+                isInherited !== this.isGhosted ||
+                (newValue.version && (newValue.version !== this.version))) {
             this.changed();
             this.cellMorph.contents = newValue;
             this.isGhosted = isInherited;
@@ -10853,6 +10855,11 @@ WatcherMorph.prototype.update = function () {
                 this.sliderMorph.drawNew();
             }
             this.fixLayout();
+            if (this.currentValue && this.currentValue.version) {
+                this.version = this.currentValue.version;
+            } else {
+                this.version = Date.now();
+            }
             this.currentValue = newValue;
         }
     }

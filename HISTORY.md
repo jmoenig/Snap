@@ -86,6 +86,9 @@
     * German
     * French
 
+### 2019-06-04
+* Objects, Lists: fixed #682
+
 ### 2019-06-03
 * Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
 * Blocks: fixed #1740
