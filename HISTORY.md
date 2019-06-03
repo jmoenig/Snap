@@ -67,6 +67,7 @@
     * buttons for saving & loading projects to disk in the project dialog
     * more language options for the Text2Speech library, thanks Joan!
 * Notable Fixes:
+    * predicates inside generic WHEN hat blocks can now pass upvars
     * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -84,6 +85,9 @@
     * Spanish
     * German
     * French
+
+### 2019-06-03
+* Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
 
 ### 2019-06-02
 * Objects, Store: made "pen down?" and "shown?" attributes watchable onstage

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-31';
+modules.threads = '2019-June-03';
 
 var ThreadManager;
 var Process;
@@ -115,7 +115,8 @@ function invoke(
     timeout, // msecs
     timeoutErrorMsg, // string
     suppressErrors, // bool
-    callerProcess // optional for JS-functions
+    callerProcess, // optional for JS-functions
+    returnContext // bool
 ) {
     // execute the given block or context synchronously without yielding.
     // Apply context (not a block) to a list of optional arguments.
@@ -176,7 +177,7 @@ function invoke(
         }
         proc.runStep(deadline);
     }
-    return proc.homeContext.inputs[0];
+    return returnContext ? proc.homeContext : proc.homeContext.inputs[0];
 }
 
 // ThreadManager ///////////////////////////////////////////////////////
@@ -205,7 +206,8 @@ ThreadManager.prototype.startProcess = function (
     callback,
     isClicked,
     rightAway,
-    atomic // special option used (only) for "onStop" scripts
+    atomic, // special option used (only) for "onStop" scripts
+    variables // optional variable frame, used for WHEN hats
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -223,6 +225,18 @@ ThreadManager.prototype.startProcess = function (
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     newProc.isAtomic = atomic || false;
+
+    // in case an optional variable frame has been passed,
+    // copy it into the new outer context.
+    // Relevance: When a predicate inside a generic WHEN hat block
+    // publishes an upvar, this code makes the upvar accessible
+    // to the script attached to the WHEN hat
+    if (variables instanceof VariableFrame) {
+        Object.keys(variables.vars).forEach(function (vName) {
+            newProc.context.outerContext.variables.vars[vName] =
+                variables.vars[vName];
+        });
+    }
 
     // show a highlight around the running stack
     // if there are more than one active processes
@@ -416,7 +430,7 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     if ((!block) || this.findProcess(block, receiver)) {
         return;
     }
-    var pred = block.inputs()[0], world;
+    var pred = block.inputs()[0], world, test;
     if (block.removeHighlight()) {
         world = block.world();
         if (world) {
@@ -425,30 +439,38 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     }
     if (stopIt) {return; }
     try {
-        if (invoke(
+        test = invoke(
             pred,
             null,
             receiver,
-            50,
+            50, // timeout in msecs
             'the predicate takes\ntoo long for a\ncustom hat block',
-            true // suppress errors => handle them right here instead
-        ) === true) {
-            this.startProcess(
-                block,
-                receiver,
-                null,
-                null,
-                null,
-                null,
-                true // atomic
-            );
-        }
+            true, // suppress errors => handle them right here instead
+            null, // caller process for JS-functions
+            true // return the whole home context instead of just he result
+        );
     } catch (error) {
         block.addErrorHighlight();
         block.showBubble(
             error.name
             + '\n'
             + error.message
+        );
+    }
+    // since we're asking for the whole context instead of just the result
+    // of the computation, we need to look at the result-context's first
+    // input to find out whether the condition is met
+    if (test && test.inputs[0] === true) {
+        this.startProcess(
+            block,
+            receiver,
+            null, // isThreadSafe
+            null, // exportResult
+            null, // callback
+            null, // isClicked
+            true,  // rightAway
+            null, // atomic
+            test.variables // make the test-context's variables available
         );
     }
 };
@@ -4811,7 +4833,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        this.blockReceiver().newCostumeName(localize('snap')) // +++
+        this.blockReceiver().newCostumeName(localize('snap'))
     );
 };
 
