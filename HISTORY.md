@@ -89,6 +89,7 @@
 ### 2019-06-03
 * Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
 * Blocks: fixed #1740
+* Blocks: fixed #670 and #1804
 
 ### 2019-06-02
 * Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
