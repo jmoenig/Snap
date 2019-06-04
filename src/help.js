@@ -378,37 +378,7 @@ RichTextMorph.prototype.drawNew = function () {
         context.fillRect(0, 0, this.width(), this.height());
     }
 
-    // draw the shadow, if any
-    if (this.shadowColor) {
-        offx = Math.max(this.shadowOffset.x, 0);
-        offy = Math.max(this.shadowOffset.y, 0);
-        context.fillStyle = this.shadowColor.toString();
-
-        y = 0;
-        for (i = 0; i < this.lines.length; i++) {
-            line = this.lines[i];
-            width = this.calculateLineWidth(line) + shadowWidth;
-            if (this.alignment === 'right') {
-                x = this.width() - width;
-            } else if (this.alignment === 'center') {
-                x = (this.width() - width) / 2;
-            } else { // 'left'
-                x = 0;
-            }
-            y += calculateLineHeight(line) / 2
-            for (j = 0; j < line.length; j = j + 1) {
-                word = line[j];
-                if (!(word instanceof Morph)) {
-                    context.fillText(
-                        word, x + offx,
-                        y + (this.calculateWordHeight(word) / 2) + offy
-                    );
-                }
-                x += this.calculateWordWidth(word);
-            }
-            y += (calculateLineHeight(line) / 2) + shadowHeight;
-        }
-    }
+    // don't bother with drawing shadow
 
     // now draw the actual text
     offx = Math.abs(Math.min(this.shadowOffset.x, 0));
@@ -532,7 +502,7 @@ ScriptDiagramMorph.prototype.drawNew = function () {
 ScriptDiagramMorph.prototype.fixLayout = function () {
     var myself = this,
         i, annotationWidth, annotationX, annotationMinY, arrowStart,
-        arrowEnd, annotation, annotated, arrow;
+        arrowEnd, annotation, annotated, lineHeight, arrow;
 
     this.arrows.forEach(function (arrow) {
         myself.remove(arrow);
@@ -565,9 +535,12 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             ));
             annotationMinY = annotation.bottom() + this.padding;
 
+            lineHeight = annotation instanceof RichTextMorph
+                ? annotation.calculateLineHeight(annotation.lines[0])
+                : fontHeight(annotation.fontSize);
             arrowStart = new Point(
                 annotation.left() - this.padding,
-                annotation.center().y
+                annotation.top() + lineHeight / 2
             );
             if (Math.abs(arrowStart.y  - arrowEnd.y) <= 5) {
                 arrowEnd.y = arrowStart.y;
