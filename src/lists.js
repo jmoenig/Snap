@@ -314,7 +314,7 @@ List.prototype.columnNames = function () {
     return [];
 };
 
-List.prototype.version = function (startRow, rows) {
+List.prototype.version = function (startRow, rows, startCol, cols) {
     var l = Math.min(startRow + rows, this.length()),
         v = this.lastChanged,
         r,
@@ -324,7 +324,7 @@ List.prototype.version = function (startRow, rows) {
         if (r instanceof Costume) {
             v = Math.max(v, r.version);
         } else if (r instanceof List) {
-            v = Math.max(v, r.version(1, r.length()));
+            v = Math.max(v, r.version(startCol, cols));
         } else {
             v = Math.max(v, r.lastChanged ? r.lastChanged : 0);
         }

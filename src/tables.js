@@ -794,8 +794,12 @@ TableMorph.prototype.step = function () {
 TableMorph.prototype.update = function () {
     var oldCols, oldRows,
         version = this.table instanceof List ?
-            this.table.version(this.startRow, this.rows)
-                    : this.table.lastChanged;
+            this.table.version(
+                this.startRow,
+                this.rows,
+                this.startCol,
+                this.columns.length
+            ) : this.table.lastChanged;
     if (this.tableVersion === version && !this.wantsUpdate) {
         return;
     }
