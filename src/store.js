@@ -1767,9 +1767,11 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph = screen.createScriptDiagram(
             this.loadScript(element.require('script'), target),
             element.require('annotations').children.map(function (child) {
-                return myself.loadHelpScreenElement(
+                var morph = myself.loadHelpScreenElement(
                     child, screen, target, textColor
                 );
+                morph.arrowReverse = !!child.attributes['arrow-reverse'];
+                return morph;
             })
         );
         break;

@@ -1,0 +1,41 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="clearEffects"></block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="setEffect">
+                        <l><option>color</option></l>
+                        <l>150</l>
+                    </block>
+                    <block s="setEffect" annotation="1">
+                        <l><option>fisheye</option></l>
+                        <l>100</l>
+                    </block>
+                    <block s="doWait">
+                        <l>1</l>
+                    </block>
+                    <block s="clearEffects" annotation="2"></block>
+                </script>
+                <annotations>
+                    <img src="clearEffects_dog1.png" width="79" height="94" arrow-reverse="true" />
+                    <img src="clearEffects_dog2.png" width="79" height="94" arrow-reverse="true" />
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="clearEffects"></block>
+                </script>
+                <text>clears all the graphic effects for this sprite.</text>
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,43 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="changeYPosition">
+                <l></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <diagram>
+                    <script>
+                        <block s="changeYPosition" annotation="1">
+                            <l>10</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            Change y by a positive number moves the sprite up
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <img src="changeYPosition_cat_up.png" width="42" height="38" />
+            </row>
+            <row>
+                <diagram>
+                    <script>
+                        <block s="changeYPosition" annotation="1">
+                            <l>-10</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            Change y by a negative number moves the sprite down
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <img src="changeYPosition_cat_down.png" width="42" height="38" />
+            </row>
+        </column>
+    </box>
+</help-screen>

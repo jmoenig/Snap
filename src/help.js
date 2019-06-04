@@ -525,7 +525,9 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 arrowEnd = annotated.bottomCenter();
             }
 
-            annotation.setWidth(annotationWidth);
+            if (annotation instanceof TextMorph) {
+                annotation.setWidth(annotationWidth);
+            }
             annotation.setPosition(new Point(
                 annotationX,
                 Math.max(
@@ -535,9 +537,13 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             ));
             annotationMinY = annotation.bottom() + this.padding;
 
-            lineHeight = annotation instanceof RichTextMorph
-                ? annotation.calculateLineHeight(annotation.lines[0])
-                : fontHeight(annotation.fontSize);
+            if (annotation instanceof RichTextMorph) {
+                lineHeight = annotation.calculateLineHeight(annotation.lines[0]);
+            } else if (annotation instanceof TextMorph) {
+                lineHeight = fontHeight(annotation.fontSize);
+            } else {
+                lineHeight = annotation.height();
+            }
             arrowStart = new Point(
                 annotation.left() - this.padding,
                 annotation.top() + lineHeight / 2
@@ -546,7 +552,9 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 arrowEnd.y = arrowStart.y;
             }
 
-            arrow = new DiagramArrowMorph(arrowStart, arrowEnd);
+            arrow = new DiagramArrowMorph(
+                arrowStart, arrowEnd, annotation.arrowReverse
+            );
             // TODO: implement arrows other than bottom-right to top-left
             arrow.setPosition(
                 arrowEnd.subtract(DiagramArrowMorph.prototype.padding)
@@ -587,21 +595,22 @@ DiagramArrowMorph.uber = Morph.prototype;
 
 DiagramArrowMorph.prototype.padding = 5;
 
-function DiagramArrowMorph(start, end) {
-    this.init(start, end);
+function DiagramArrowMorph(start, end, reverse) {
+    this.init(start, end, reverse);
 }
 
-DiagramArrowMorph.prototype.init = function (start, end) {
+DiagramArrowMorph.prototype.init = function (start, end, reverse) {
     // additional properties:
     this.start = start;
     this.end = end;
+    this.reverse = reverse;
 
     // initialize inherited properties:
     DiagramArrowMorph.uber.init.call(this);
 };
 
 DiagramArrowMorph.prototype.drawNew = function () {
-    var start, end, ctx, theta, r;
+    var start, end, oldStart, ctx, theta, r;
 
     this.silentSetExtent(
         this.end.subtract(this.start).abs().add(this.padding * 2)
@@ -613,6 +622,12 @@ DiagramArrowMorph.prototype.drawNew = function () {
         this.height() - this.padding
     );
     end = new Point(this.padding, this.padding);
+    if (this.reverse) {
+        oldStart = start;
+        start = end;
+        end = oldStart;
+    }
+
     r = 5; // arrow head size
     theta = end.subtract(start).theta();
     end = end.subtract(new Point (
