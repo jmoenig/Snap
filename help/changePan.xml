@@ -1,0 +1,22 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="changePan">
+                <l></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Change balance for sounds.</p>
+            <p>
+                0 is normal. -100 is left channel only; 100 is right channel
+                only.
+            </p>
+            <p>
+                Each sprite has its own balance, which can be inherited by
+                clones.
+            </p>
+        </column>
+    </box>
+</help-screen>

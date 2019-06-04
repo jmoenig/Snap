@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="forward">
+            <block s="changeScale">
                 <l></l>
             </block>
         </script>
@@ -10,22 +10,22 @@
         <column>
             <diagram>
                 <script>
-                    <block s="forward" annotation="1">
+                    <block s="changeScale" annotation="1">
                         <l>10</l>
                     </block>
                 </script>
                 <annotations>
-                    <small-p>Move 10 steps</small-p>
+                    <small-p>Grows the sprite by 10</small-p>
                 </annotations>
             </diagram>
             <diagram>
                 <script>
-                    <block s="forward" annotation="1">
+                    <block s="changeScale" annotation="1">
                         <l>-10</l>
                     </block>
                 </script>
                 <annotations>
-                    <small-p>Move 10 steps in the opposite direction</small-p>
+                    <small-p>Shrinks the sprite by 10</small-p>
                 </annotations>
             </diagram>
         </column>

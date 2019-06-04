@@ -33,7 +33,7 @@
                     <block s="bounceOffEdge"></block>
                 </script>
                 <text>
-                    checks to see if this sprite has reached the edge—and
+                    checks to see if this sprite has reached the edge – and
                     if it has, it turns away from the edge. (And then is
                     ready for the next move.)
                 </text>

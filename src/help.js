@@ -646,7 +646,7 @@ DiagramArrowMorph.prototype.drawNew = function () {
 
     this.image = newCanvas(this.extent());
     ctx = this.image.getContext('2d');
-    ctx.strokeStyle = ctx.fillStyle = '#bb0000';
+    ctx.strokeStyle = ctx.fillStyle = 'white';
 
     ctx.beginPath();
     ctx.lineWidth = 3;
