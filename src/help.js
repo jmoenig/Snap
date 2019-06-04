@@ -513,21 +513,16 @@ ScriptDiagramMorph.prototype.init = function (script, annotations) {
 
     // additional properties:
     this.script = script;
-
-    annotations = annotations || [];
-    this.annotations = new AlignmentMorph('column', this.padding);
-    this.annotations.alignment = 'left';
-    annotations.forEach(function (annotation) {
-        myself.annotations.add(annotation);
-    });
-
+    this.annotations = annotations || [];
     this.arrows = [];
 
     // initialize inherited properties:
     ScriptDiagramMorph.uber.init.call(this);
 
     this.add(this.script);
-    this.add(this.annotations);
+    this.annotations.forEach(function (annotation) {
+        myself.add(annotation);
+    });
 };
 
 ScriptDiagramMorph.prototype.drawNew = function () {
@@ -536,52 +531,59 @@ ScriptDiagramMorph.prototype.drawNew = function () {
 
 ScriptDiagramMorph.prototype.fixLayout = function () {
     var myself = this,
-        i, startPoint, endPoint, annotation, annotated, arrow;
+        i, annotationWidth, annotationX, annotationMinY, arrowStart,
+        arrowEnd, annotation, annotated, arrow;
 
     this.arrows.forEach(function (arrow) {
         myself.remove(arrow);
     });
     this.arrows = [];
 
-    this.annotations.setLeft(
-        this.script.stackFullBounds().right() + this.margin
-    );
-    var annotationsWidth = this.right() - this.annotations.left();
-    this.annotations.setWidth(annotationsWidth);
-    this.annotations.children.forEach(function (annotation) {
-        annotation.setWidth(annotationsWidth);
-    });
-    for (i = 1; i <= this.annotations.children.length; i = i + 1) {
-        annotation = this.annotations.children[i - 1];
+    annotationX = this.script.stackFullBounds().right() + this.margin;
+    annotationMinY = this.top();
+    annotationWidth = this.right() - annotationX;
+    for (i = 1; i <= this.annotations.length; i++) {
+        annotation = this.annotations[i - 1];
         annotated = this.getAnnotatedMorph(i);
         if (annotated) {
-            startPoint = new Point(
-                annotation.left() - this.padding,
-                annotation.center().y
-            );
             if (annotated instanceof CommandBlockMorph || i === 1) {
-                endPoint = new Point(
+                arrowEnd = new Point(
                     annotated.right() + this.padding,
                     annotated.parts()[0].center().y // use y of center of label
                 );
-                if (Math.abs(annotation.center().y  - endPoint.y) <= 5) {
-                    endPoint.y = annotation.center().y;
-                }
             } else {
-                endPoint = annotated.bottomCenter();
+                arrowEnd = annotated.bottomCenter();
             }
-            arrow = new DiagramArrowMorph(startPoint, endPoint);
+
+            annotation.setWidth(annotationWidth);
+            annotation.setPosition(new Point(
+                annotationX,
+                Math.max(
+                    annotationMinY,
+                    arrowEnd.y - annotation.height() / 2
+                )
+            ));
+            annotationMinY = annotation.bottom() + this.padding;
+
+            arrowStart = new Point(
+                annotation.left() - this.padding,
+                annotation.center().y
+            );
+            if (Math.abs(arrowStart.y  - arrowEnd.y) <= 5) {
+                arrowEnd.y = arrowStart.y;
+            }
+
+            arrow = new DiagramArrowMorph(arrowStart, arrowEnd);
             // TODO: implement arrows other than bottom-right to top-left
             arrow.setPosition(
-                endPoint.subtract(DiagramArrowMorph.prototype.padding)
+                arrowEnd.subtract(DiagramArrowMorph.prototype.padding)
             );
             this.arrows.push(arrow);
             this.add(arrow);
         }
     }
     this.setHeight(Math.max(
-        this.script.stackFullBounds().height(),
-        this.annotations.height()
+        this.script.stackFullBounds().height(), annotationMinY
     ));
 };
 

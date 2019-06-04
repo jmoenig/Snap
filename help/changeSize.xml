@@ -1,0 +1,43 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="changeSize">
+                <l></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="changeSize" annotation="1">
+                        <l></l>
+                    </block>
+                    <block s="down"></block>
+                    <block s="doRepeat" annotation="2">
+                        <l>100</l>
+                        <script>
+                            <block s="forward" annotation="3">
+                                <l>5</l>
+                            </block>
+                            <block s="turn" annotation="4">
+                                <l>3</l>
+                            </block>
+                            <block s="changeSize" annotation="5">
+                                <l>1</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Start with pen size 1</small-p>
+                    <small-p>Repeat 100 times:</small-p>
+                    <small-p>Move a little</small-p>
+                    <small-p>Turn a little</small-p>
+                    <small-p>Increase the pen size by 1</small-p>
+                </annotations>
+            </diagram>
+            <img src="changeSize_cat.png" width="140" height="159" />
+        </row>
+    </box>
+</help-screen>
