@@ -88,6 +88,7 @@
 
 ### 2019-06-04
 * Objects, Lists: fixed #682
+* Lists, Tables: fixed table watcher cell updates for costumes (save / load) 
 
 ### 2019-06-03
 * Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars

@@ -321,7 +321,13 @@ List.prototype.version = function (startRow, rows) {
         i;
     for (i = startRow; i <= l; i += 1) {
         r = this.at(i);
-        v = Math.max(v, r.lastChanged ? r.lastChanged : 0);
+        if (r instanceof Costume) {
+            v = Math.max(v, r.version);
+        } else if (r instanceof List) {
+            v = Math.max(v, r.version(1, r.length()));
+        } else {
+            v = Math.max(v, r.lastChanged ? r.lastChanged : 0);
+        }
     }
     return v;
 };
