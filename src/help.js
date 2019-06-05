@@ -531,14 +531,6 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             if (annotation instanceof TextMorph) {
                 annotation.setWidth(annotationWidth);
             }
-            annotation.setPosition(new Point(
-                annotationX,
-                Math.max(
-                    annotationMinY,
-                    arrowEnd.y - annotation.height() / 2
-                )
-            ));
-            annotationMinY = annotation.bottom() + this.padding;
 
             if (annotation instanceof RichTextMorph) {
                 lineHeight = annotation.calculateLineHeight(annotation.lines[0]);
@@ -547,6 +539,16 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             } else {
                 lineHeight = annotation.height();
             }
+
+            annotation.setPosition(new Point(
+                annotationX,
+                Math.max(
+                    annotationMinY,
+                    arrowEnd.y - lineHeight / 2
+                )
+            ));
+            annotationMinY = annotation.bottom() + this.padding;
+
             arrowStart = new Point(
                 annotation.left() - this.padding,
                 annotation.top() + lineHeight / 2
