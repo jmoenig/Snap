@@ -31,7 +31,7 @@ HelpDialogMorph.prototype.init = function (block, target) {
     this.labelString = 'Help';
     this.createLabel();
 
-    this.setExtent(new Point(600, 500));
+    this.setExtent(new Point(600, 550));
     this.addButton('ok', 'OK');
 };
 
@@ -55,7 +55,9 @@ HelpDialogMorph.prototype.popUp = function () {
         ide.resourceURL('help', spec + '.xml'),
         function (xmlString) {
             var scrollFrame;
-            myself.screen = new SnapSerializer().loadHelpScreen(xmlString, myself.target);
+            myself.screen = new SnapSerializer().loadHelpScreen(
+                xmlString, new SpriteMorph()
+            );
             myself.screen.color = DialogBoxMorph.prototype.color;
             scrollFrame = new ScrollFrameMorph(myself.screen);
             scrollFrame.color = DialogBoxMorph.prototype.color;
@@ -188,8 +190,8 @@ HelpScreenMorph.prototype.createRichParagraph = function (text, size, color) {
     return text;
 };
 
-HelpScreenMorph.prototype.createScriptDiagram = function (script, annotations) {
-    return new ScriptDiagramMorph(script, annotations);
+HelpScreenMorph.prototype.createScriptDiagram = function (script, annotations, defaultArrowColor) {
+    return new ScriptDiagramMorph(script, annotations, defaultArrowColor);
 };
 
 HelpScreenMorph.prototype.createImage = function (src, width, height) {
@@ -469,21 +471,22 @@ ScriptDiagramMorph.uber = FrameMorph.prototype;
 
 // ScriptDiagramMorph layout settings:
 
-ScriptDiagramMorph.prototype.margin = 50;
+ScriptDiagramMorph.prototype.margin = 30;
 ScriptDiagramMorph.prototype.padding = 5;
 
 // ScriptDiagramMorph instance creation:
 
-function ScriptDiagramMorph(script, annotation) {
-    this.init(script, annotation);
+function ScriptDiagramMorph(script, annotation, defaultArrowColor) {
+    this.init(script, annotation, defaultArrowColor);
 }
 
-ScriptDiagramMorph.prototype.init = function (script, annotations) {
+ScriptDiagramMorph.prototype.init = function (script, annotations, defaultArrowColor) {
     var myself = this;
 
     // additional properties:
     this.script = script;
     this.annotations = annotations || [];
+    this.defaultArrowColor = defaultArrowColor;
     this.arrows = [];
 
     // initialize inherited properties:
@@ -555,6 +558,8 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             arrow = new DiagramArrowMorph(
                 arrowStart, arrowEnd, annotation.arrowReverse
             );
+            arrow.color = this.defaultArrowColor;
+            arrow.drawNew();
             // TODO: implement arrows other than bottom-right to top-left
             arrow.setPosition(
                 arrowEnd.subtract(DiagramArrowMorph.prototype.padding)
@@ -636,7 +641,7 @@ DiagramArrowMorph.prototype.drawNew = function () {
 
     this.image = newCanvas(this.extent());
     ctx = this.image.getContext('2d');
-    ctx.strokeStyle = ctx.fillStyle = 'white';
+    ctx.strokeStyle = ctx.fillStyle = this.color.toString();
 
     ctx.beginPath();
     ctx.lineWidth = 3;
