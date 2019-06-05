@@ -1110,8 +1110,11 @@ SnapSerializer.prototype.loadScript = function (model, object) {
 
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
-        if (+child.attributes['annotation']) {
+        if (child.attributes['annotation']) {
             nextBlock.annotation = +child.attributes['annotation'];
+        }
+        if (child.attributes['menu']) {
+            nextBlock.menuAnnotation = +child.attributes['menu'];
         }
         if (!nextBlock) {
             return;
@@ -1301,8 +1304,11 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             input.setContents(this.loadValue(model));
         }
     }
-    if (+model.attributes['annotation']) {
+    if (model.attributes['annotation']) {
         input.annotation = +model.attributes['annotation'];
+    }
+    if (model.attributes['menu']) {
+        nextBlock.menuAnnotation = +child.attributes['menu'];
     }
 };
 
@@ -1784,14 +1790,12 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph = screen.createColumn();
         break;
     case 'diagram':
-        if (element.childNamed('block-definition')) {
-            script = myself.loadHelpScreenElement(
-                element.childNamed('block-definition'),
-                screen, target, textColor
-            );
-        } else {
-            script = this.loadScript(element.require('script'), target);
-        }
+        script = myself.loadHelpScreenElement(
+            element.childNamed('block-definition')
+            || element.childNamed('menu')
+            || element.require('script'),
+            screen, target, textColor
+        );
         morph = screen.createScriptDiagram(
             script,
             element.require('annotations').children.map(function (child) {
@@ -1801,6 +1805,13 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                 morph.arrowReverse = !!child.attributes['arrow-reverse'];
                 return morph;
             }),
+            element.childNamed('menus')
+                ? element.childNamed('menus').children.map(function (child) {
+                    return myself.loadHelpScreenElement(
+                        child, screen, target, textColor
+                    );
+                })
+                : [],
             textColor
         );
         break;
@@ -1810,6 +1821,9 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             +element.attributes.width,
             +element.attributes.height
         );
+        break;
+    case 'menu':
+        morph = screen.createMenu(element.children);
         break;
     case 'p':
     case 'small-p':
