@@ -1,0 +1,50 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doBroadcast">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doBroadcast" annotation="1">
+                        <l>jump</l>
+                    </block>
+                </script>
+                <annotations>
+                    <p>Sends the message "jump" to all sprites</p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="doBroadcast">
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    sends a mesages to all the sprites (and the stage). This
+                    is useful if you want to tell other sprites when to do
+                    something.
+                </text>
+            </p>
+            <p>
+                <text>
+                    What do you want them to do when they receive the
+                    message? See
+                </text>
+                <script>
+                    <block s="receiveMessage">
+                        <l/>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

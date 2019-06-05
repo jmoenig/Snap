@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="changeXPosition">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>
@@ -22,7 +22,7 @@
                         </small-p>
                     </annotations>
                 </diagram>
-                <img src="changeXPosition_cat_right.png" width="40" height="32" />
+                <img src="changeXPosition_cat_right.png" width="40" height="32"/>
             </row>
             <row>
                 <diagram>
@@ -38,7 +38,7 @@
                         </small-p>
                     </annotations>
                 </diagram>
-                <img src="changeXPosition_cat_left.png" width="39" height="32" />
+                <img src="changeXPosition_cat_left.png" width="39" height="32"/>
             </row>
         </column>
     </box>

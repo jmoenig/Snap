@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="changePan">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>

@@ -1,14 +1,14 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="clear"></block>
+            <block s="clear"/>
         </script>
     </thumbnail>
     <box color="gray">
         <column>
             <diagram>
                 <script>
-                    <block s="clear" annotation="1"></block>
+                    <block s="clear" annotation="1"/>
                 </script>
                 <annotations>
                     <p>Clears all pen marks and stamps from the stage</p>

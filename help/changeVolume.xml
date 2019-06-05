@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="changeVolume">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>

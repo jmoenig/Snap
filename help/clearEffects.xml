@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="clearEffects"></block>
+            <block s="clearEffects"/>
         </script>
     </thumbnail>
     <box color="gray">
@@ -19,11 +19,11 @@
                     <block s="doWait">
                         <l>1</l>
                     </block>
-                    <block s="clearEffects" annotation="2"></block>
+                    <block s="clearEffects" annotation="2"/>
                 </script>
                 <annotations>
-                    <img src="clearEffects_dog1.png" width="79" height="94" arrow-reverse="true" />
-                    <img src="clearEffects_dog2.png" width="79" height="94" arrow-reverse="true" />
+                    <img src="clearEffects_dog1.png" width="79" height="94" arrow-reverse="true"/>
+                    <img src="clearEffects_dog2.png" width="79" height="94" arrow-reverse="true"/>
                 </annotations>
             </diagram>
         </column>
@@ -32,7 +32,7 @@
         <column>
             <p>
                 <script>
-                    <block s="clearEffects"></block>
+                    <block s="clearEffects"/>
                 </script>
                 <text>clears all the graphic effects for this sprite.</text>
             </p>

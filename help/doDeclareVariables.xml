@@ -1,0 +1,142 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="swap items %&apos;index1&apos; and %&apos;index2&apos; in %&apos;list&apos;" type="command" category="lists">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+                <input type="%n"></input>
+                <input type="%l"></input>
+            </inputs>
+            <script>
+                <block s="doDeclareVariables" annotation="1">
+                    <list annotation="2">
+                        <l>temp</l>
+                    </list>
+                </block>
+                <block s="doSetVar">
+                    <l>temp</l>
+                    <block s="reportListItem">
+                        <block var="index1"/>
+                        <block var="list"/>
+                    </block>
+                </block>
+                <block s="doReplaceInList">
+                    <block var="index1"/>
+                    <block var="list"/>
+                    <block s="reportListItem">
+                        <block var="index2"/>
+                        <block var="list"/>
+                    </block>
+                </block>
+                <block s="doReplaceInList">
+                    <block var="index2"/>
+                    <block var="list"/>
+                    <block var="temp"/>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="new counter" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doDeclareVariables">
+                    <list><l>count</l></list>
+                </block>
+                <block s="doSetVar">
+                    <l>count</l>
+                    <l>0</l>
+                </block>
+                <block s="doReport">
+                    <block s="reifyScript">
+                        <script>
+                            <block s="doChangeVar">
+                                <l>count</l>
+                                <l>1</l>
+                            </block>
+                            <block s="doReport">
+                                <block var="count"/>
+                            </block>
+                        </script>
+                        <list/>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <block s="doDeclareVariables">
+                <list><l>a</l></list>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <block-definition s="swap items %n and %n in %l"/>
+                <annotations>
+                    <small-p>
+                        <text>
+                            Every time this block is called, it makes a new
+                            temporary variable
+                        </text>
+                        <script>
+                            <block var="temp"/>
+                        </script>
+                        <text>
+                            . Variables like this don't clutter up your
+                            palette, and you can be sure no other block
+                            changes its value. This works for scripting
+                            area scripts, too, not just custom blocks.
+                        </text>
+                    </small-p>
+                    <small-p>Click (don't drag) to change name.</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <block-definition s="new counter"/>
+            <column rel-width="1">
+                <p>Object Oriented Programming:</p>
+                <p>
+                    If a reporter reports a script, and that script uses a
+                    script variable created outside the reported script (such
+                    as the use of count in the script that new counter
+                    reports) then the script variable isn't temporary!
+                </p>
+                <diagram>
+                    <script>
+                        <block s="doSetVar">
+                            <l>my counter</l>
+                            <custom-block s="new counter" scope="local"/>
+                        </block>
+                        <block s="doSayFor" annotation="1">
+                            <block s="evaluate">
+                                <block var="my counter"/>
+                                <list/>
+                            </block>
+                            <l>2</l>
+                        </block>
+                        <block s="doSayFor" annotation="2">
+                            <block s="evaluate">
+                                <block var="my counter"/>
+                                <list/>
+                            </block>
+                            <l>2</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p arrow-reverse="true">1</small-p>
+                        <small-p arrow-reverse="true">2</small-p>
+                    </annotations>
+                </diagram>
+            </column>
+        </row>
+    </box>
+</help-screen>

@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="forward">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>

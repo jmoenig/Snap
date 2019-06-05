@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="changeSize">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>
@@ -11,7 +11,7 @@
             <diagram rel-width="1">
                 <script>
                     <block s="changeSize" annotation="1">
-                        <l></l>
+                        <l/>
                     </block>
                     <block s="down"></block>
                     <block s="doRepeat" annotation="2">
@@ -37,7 +37,7 @@
                     <small-p>Increase the pen size by 1</small-p>
                 </annotations>
             </diagram>
-            <img src="changeSize_cat.png" width="140" height="159" />
+            <img src="changeSize_cat.png" width="140" height="159"/>
         </row>
     </box>
 </help-screen>

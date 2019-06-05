@@ -2,7 +2,7 @@
     <thumbnail>
         <script>
             <block s="changeYPosition">
-                <l></l>
+                <l/>
             </block>
         </script>
     </thumbnail>
@@ -21,7 +21,7 @@
                         </small-p>
                     </annotations>
                 </diagram>
-                <img src="changeYPosition_cat_up.png" width="42" height="38" />
+                <img src="changeYPosition_cat_up.png" width="42" height="38"/>
             </row>
             <row>
                 <diagram>
@@ -36,7 +36,7 @@
                         </small-p>
                     </annotations>
                 </diagram>
-                <img src="changeYPosition_cat_down.png" width="42" height="38" />
+                <img src="changeYPosition_cat_down.png" width="42" height="38"/>
             </row>
         </column>
     </box>

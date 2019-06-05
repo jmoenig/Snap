@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="bounceOffEdge"></block>
+            <block s="bounceOffEdge"/>
         </script>
     </thumbnail>
     <box color="gray">
@@ -13,7 +13,7 @@
                             <block s="forward" annotation="2">
                                 <l>10</l>
                             </block>
-                            <block s="bounceOffEdge" annotation="3"></block>
+                            <block s="bounceOffEdge" annotation="3"/>
                         </script>
                     </block>
                 </script>
@@ -23,14 +23,14 @@
                     <small-p>If at the edge of the stage, then turn around</small-p>
                 </annotations>
             </diagram>
-            <img src="bounceOffEdge_cats.png" width="446" height="77" />
+            <img src="bounceOffEdge_cats.png" width="446" height="77"/>
         </column>
     </box>
     <box color="blue">
         <column>
             <p>
                 <script>
-                    <block s="bounceOffEdge"></block>
+                    <block s="bounceOffEdge"/>
                 </script>
                 <text>
                     checks to see if this sprite has reached the edge – and
