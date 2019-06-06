@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-May-28';
+modules.maps = '2019-June-06';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -237,10 +237,10 @@ WorldMap.prototype.snapYfromLat = function (lat) {
 WorldMap.prototype.distanceInKm = function(lat1, lon1, lat2, lon2) {
     // haversine formula:
     var R = 6371, // radius of the earth in km
-        dLat = radians(lat2 - lat1),
-        dLon = radians(lon2 - lon1),
+        dLat = radians(+lat2 - lat1),
+        dLon = radians(+lon2 - lon1),
         a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(radians(lat1)) * Math.cos(radians(lat2)) *
+            Math.cos(radians(+lat1)) * Math.cos(radians(+lat2)) *
             Math.sin(dLon/2) * Math.sin(dLon/2),
         c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;

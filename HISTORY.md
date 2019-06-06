@@ -86,6 +86,9 @@
     * German
     * French
 
+### 2019-06-06
+* Maps: fixed a typecasting issue, thanks, Bernat!
+
 ### 2019-06-04
 * Objects, Lists: fixed #682
 * Lists, Tables: fixed table watcher cell updates for costumes (save / load) 
