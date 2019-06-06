@@ -91,7 +91,7 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 // HelpScreenMorph layout settings:
 
 HelpScreenMorph.prototype.padding = 15;
-HelpScreenMorph.prototype.verticalPadding = 5;
+HelpScreenMorph.prototype.verticalPadding = 10;
 
 // HelpScreenMorph instance creation:
 
@@ -165,26 +165,28 @@ HelpScreenMorph.prototype.createBox = function (color) {
 HelpScreenMorph.prototype.createColumn = function () {
     var col = new AlignmentMorph('column', this.padding);
     col.alignment = 'left';
+    col.padding = this.verticalPadding;
     return col;
 };
 
 HelpScreenMorph.prototype.createRow = function () {
     var row = new AlignmentMorph('row', this.padding);
     row.alignment = 'top';
+    row.padding = this.padding;
     return row;
 };
 
-HelpScreenMorph.prototype.createParagraph = function (text, size, color) {
+HelpScreenMorph.prototype.createParagraph = function (text, size, color, italic) {
     var text = new TextMorph(
-        text, size, 'serif', false, false, null, null, 'Baskerville'
+        text, size, 'serif', false, italic, null, null, 'Baskerville'
     );
     text.color = color;
     return text;
 };
 
-HelpScreenMorph.prototype.createRichParagraph = function (text, size, color) {
+HelpScreenMorph.prototype.createRichParagraph = function (text, size, color, italic) {
     var text = new RichTextMorph(
-        text, size, 'serif', false, false, null, null, 'Baskerville'
+        text, size, 'serif', false, italic, null, null, 'Baskerville'
     );
     text.color = color;
     return text;
@@ -569,7 +571,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         console.log(menu, annotated);
         if (annotated) {
             menu.setPosition(
-                annotated.rightCenter().subtract(new Point(5, 0))
+                annotated.rightCenter().add(new Point(-10, 5))
             );
             scriptWidth = Math.max(
                 scriptWidth,
@@ -577,7 +579,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             );
             diagramHeight = Math.max(
                 diagramHeight,
-                menu.bottom() - this.top() + this.padding
+                menu.bottom() - this.top()
             )
         }
     }
@@ -624,7 +626,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                     arrowEnd.y - lineHeight / 2
                 )
             ));
-            annotationMinY = annotation.bottom() + this.padding;
+            annotationMinY = annotation.bottom();
 
             arrowStart = new Point(
                 annotation.left() - this.padding,
@@ -637,7 +639,8 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             arrow = new DiagramArrowMorph(
                 arrowStart, arrowEnd, annotation.arrowReverse
             );
-            arrow.color = this.defaultArrowColor;
+            arrow.color = annotation.arrowColor || this.defaultArrowColor;
+            console.log(arrow.color);
             arrow.drawNew();
             // TODO: implement arrows other than bottom-right to top-left
             arrow.setPosition(

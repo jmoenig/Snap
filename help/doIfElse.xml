@@ -1,0 +1,44 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doIfElse">
+                <l/>
+                <script/>
+                <script/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="doIfElse" annotation="2">
+                                <block s="reportTouchingColor">
+                                    <color>121,169,214,1</color>
+                                </block>
+                                <script>
+                                    <block s="bubble" annotation="3">
+                                        <l>We found water!</l>
+                                    </block>
+                                </script>
+                                <script>
+                                    <block s="bubble" annotation="4">
+                                        <l/>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep checking:</small-p>
+                    <small-p>If this is true</small-p>
+                    <small-p>Then do this</small-p>
+                    <small-p>Otherwise do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

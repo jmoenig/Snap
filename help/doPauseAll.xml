@@ -1,0 +1,44 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doPauseAll"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Pause all running scripts.</p>
+            <p>
+                <text>
+                    Running this block is like pushing the pause button
+                </text>
+                <img src="doPauseAll_pause.png" width="33" height="20"/>
+                <text>
+                    in the top right corner of the screen. It pauses all
+                    running scripts until you push the pause button (which
+                    will have urned into a play button
+                </text>
+                <img src="doPauseAll_play.png" width="33" height="20"/>
+                <text>).</text>
+            </p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                The main purpose of this block is for use in debugging, as a
+                way to set a breakpoint in a script.
+            </p>
+            <script>
+                <block s="doIf">
+                    <block s="reportLessThan">
+                        <block s="xPosition"/>
+                        <l>0</l>
+                    </block>
+                    <script>
+                        <block s="doPauseAll"/>
+                    </script>
+                </block>
+            </script>
+        </column>
+    </box>
+</help-screen>

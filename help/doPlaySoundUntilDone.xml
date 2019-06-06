@@ -1,0 +1,61 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doPlaySoundUntilDone">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveKey" annotation="1">
+                        <l><option>space</option></l>
+                    </block>
+                    <block s="doPlaySoundUntilDone" annotation="2">
+                        <l>Mystery Song</l>
+                    </block>
+                    <block s="bubble" annotation="3">
+                        <l>Do you know the title of this song?</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Whenever space key is pressed</small-p>
+                    <small-p>Play the entire sound</small-p>
+                    <small-p>And then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="playSound" annotation="1">
+                        <l/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Starts playing a sound and continues to the next
+                        block immediately
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doPlaySoundUntilDone" annotation="1">
+                        <l/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Waits until the sound is finished playing before
+                        continuing to the next block
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

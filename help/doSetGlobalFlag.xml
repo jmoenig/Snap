@@ -1,0 +1,47 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSetGlobalFlag">
+                <l><option>turbo mode</option></l>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="doSetGlobalFlag">
+                            <l menu="1"><option>turbo mode</option></l>
+                            <l/>
+                        </block>
+                    </script>
+                    <menus>
+                        <menu>
+                            <item> </item>
+                            <item>turbo mode</item>
+                            <item>flat line ends</item>
+                            <item>video capture</item>
+                            <item>mirror video</item>
+                        </menu>
+                    </menus>
+                </diagram>
+                <column rel-width="1">
+                    <script>
+                        <block s="doSetGlobalFlag">
+                            <l><option>turbo mode</option></l>
+                            <l><bool>true</bool></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="doSetGlobalFlag">
+                            <l><option>flat line ends</option></l>
+                            <l><bool>false</bool></l>
+                        </block>
+                    </script>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

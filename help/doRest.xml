@@ -1,0 +1,37 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doRest">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doPlayNote" annotation="1">
+                        <l>60</l>
+                        <l>0.2</l>
+                    </block>
+                    <block s="doPlayNote">
+                        <l>64</l>
+                        <l>0.2</l>
+                    </block>
+                    <block s="doRest" annotation="2">
+                        <l>0.2</l>
+                    </block>
+                    <block s="doPlayNote" annotation="3">
+                        <l>67</l>
+                        <l>0.2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Play two notes</small-p>
+                    <small-p>Rest (play nothing)</small-p>
+                    <small-p>Play another note</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>
