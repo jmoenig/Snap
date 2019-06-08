@@ -19,6 +19,7 @@ pixel_module.xml	Pixels	manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
 atomic_HOFs_module.xml	"Bigger" Data	[EXPERIMENTAL] crunch large lists very fast
 frequency_distribution_module.xml	Frequency Distribution Analysis	[EXPERIMENTAL] analyze data for frequency distribution
+maps_module.xml	World Map	[EXPERIMENTAL] add interactive maps to projects
 make-variables.xml	create variables in program	declare global or sprite-local variables in a script
 json.xml	Deal with JSON data	Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.
 parallel_module.xml	Parallelization	Run several scripts in parallel and wait until all are done.
