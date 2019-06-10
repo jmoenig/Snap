@@ -1,0 +1,53 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSetVar">
+                <l>variable</l>
+                <l>0</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveGo" annotation="1"/>
+                    <block s="doSetVar" annotation="2">
+                        <l>score</l>
+                        <l>0</l>
+                    </block>
+                    <block s="doForever" annotation="3">
+                        <script>
+                            <block s="doFaceTowards" annotation="4">
+                                <l><option>mouse-pointer</option></l>
+                            </block>
+                            <block s="forward" annotation="5">
+                                <l>10</l>
+                            </block>
+                            <block s="doIf" annotation="6">
+                                <block s="reportTouchingObject">
+                                    <l>Sprite(2)</l>
+                                </block>
+                                <script>
+                                    <block s="doChangeVar" annotation="7">
+                                        <l>score</l>
+                                        <l>1</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>When the green flag button is clicked</small-p>
+                    <small-p>Set score to 0 (reset the score)</small-p>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>Point toward the mouse-pointer</small-p>
+                    <small-p>Move</small-p>
+                    <small-p>If you catch Sprite(2)</small-p>
+                    <small-p>Increase your score</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

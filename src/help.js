@@ -548,9 +548,9 @@ ScriptDiagramMorph.prototype.drawNew = function () {
 
 ScriptDiagramMorph.prototype.fixLayout = function () {
     var myself = this,
-        i, scriptWidth, diagramHeight, menu,
-        annotationWidth, annotationX, annotationMinY, arrowStart,
-        arrowEnd, annotation, annotated, lineHeight, arrow;
+        i, scriptWidth, diagramHeight, menu, annotationWidth, annotationX,
+        annotationMinY, annotation, annotated, lineHeight, arrow, arrowStart,
+        arrowEnd, arrowStartMorph, arrowEndMorph;
 
     if (this.script instanceof BlockMorph) {
         scriptWidth = this.script.stackFullBounds().width();
@@ -567,7 +567,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
 
     for (i = 1; i <= this.menus.length; i++) {
         menu = this.menus[i - 1];
-        annotated = this.getAnnotatedMorph('menuAnnotation', i);
+        annotated = this.getAnnotatedMorph('annotationMenu', i);
         console.log(menu, annotated);
         if (annotated) {
             menu.setPosition(
@@ -589,7 +589,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     annotationWidth = this.right() - annotationX;
     for (i = 1; i <= this.annotations.length; i++) {
         annotation = this.annotations[i - 1];
-        annotated = this.getAnnotatedMorph('annotation', i);
+        annotated = this.getAnnotatedMorph('annotationID', i);
         if (annotated) {
             if (
                 annotated instanceof CommandBlockMorph
@@ -640,16 +640,34 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 arrowStart, arrowEnd, annotation.arrowReverse
             );
             arrow.color = annotation.arrowColor || this.defaultArrowColor;
-            console.log(arrow.color);
             arrow.drawNew();
-            // TODO: implement arrows other than bottom-right to top-left
-            arrow.setPosition(
-                arrowEnd.subtract(DiagramArrowMorph.prototype.padding)
-            );
             this.arrows.push(arrow);
             this.add(arrow);
         }
     }
+
+    i = 1;
+    while (true) {
+        arrowStartMorph = this.getAnnotatedMorph('annotationArrowStart', i);
+        if (!arrowStartMorph) {
+            break;
+        }
+        arrowStart = arrowStartMorph.center();
+        arrowEndMorph = this.getAnnotatedMorph('annotationArrowEnd', i);
+        arrowEnd = arrowEndMorph.center();
+        arrow = new DiagramArrowMorph(arrowStart, arrowEnd, false);
+        arrow.color = arrowStartMorph.annotationArrowColor || this.defaultArrowColor;
+        arrow.drawNew();
+        this.arrows.push(arrow);
+        this.add(arrow);
+        i += 1;
+    }
+
+    this.script.forAllChildren(function (child) {
+        if (child.annotationHighlight) {
+            child.addHighlight();
+        }
+    });
 
     diagramHeight = Math.max(diagramHeight, annotationMinY);
     this.setHeight(diagramHeight);
@@ -702,13 +720,27 @@ DiagramArrowMorph.prototype.drawNew = function () {
     this.silentSetExtent(
         this.end.subtract(this.start).abs().add(this.padding * 2)
     );
-
-    // TODO: implement arrows other than bottom-right to top-left
-    start = new Point(
-        this.width() - this.padding,
-        this.height() - this.padding
+    this.setPosition(
+        this.start.min(this.end)
+            .subtract(DiagramArrowMorph.prototype.padding)
     );
-    end = new Point(this.padding, this.padding);
+
+    start = new Point(
+        this.start.x < this.end.x
+            ? this.padding
+            : this.width() - this.padding,
+        this.start.y < this.end.y
+            ? this.padding
+            : this.height() - this.padding
+    );
+    end = new Point(
+        this.start.x < this.end.x
+            ? this.width() - this.padding
+            : this.padding,
+        this.start.y < this.end.y
+            ? this.height() - this.padding
+            : this.padding
+    );
     if (this.reverse) {
         oldStart = start;
         start = end;
@@ -749,3 +781,31 @@ DiagramArrowMorph.prototype.drawNew = function () {
     ctx.closePath();
     ctx.fill();
 };
+
+// ArgMorph /////////////////////////////////////////////////////////////
+
+ArgMorph.prototype.addHighlight = function (oldHighlight) {
+    var isHidden = !this.isVisible,
+        oldUseBlurredShadows = useBlurredShadows,
+        highlight;
+
+    if (isHidden) {this.show(); }
+    useBlurredShadows = false;
+    highlight = this.highlight(
+        oldHighlight ? oldHighlight.color : new Color(0, 255, 0),
+        10,
+        2
+    );
+    useBlurredShadows = oldUseBlurredShadows;
+    this.addBack(highlight);
+    this.fullChanged();
+    if (isHidden) {this.hide(); }
+    return highlight;
+};
+ArgMorph.prototype.removeHighlight = BlockMorph.prototype.removeHighlight;
+ArgMorph.prototype.toggleHighlight = ArgMorph.prototype.toggleHighlight;
+ArgMorph.prototype.highlight = BlockMorph.prototype.highlight;
+ArgMorph.prototype.highlightImage = BlockMorph.prototype.highlightImage;
+ArgMorph.prototype.highlightImageBlurred =
+    BlockMorph.prototype.highlightImageBlurred;
+ArgMorph.prototype.getHighlight = BlockMorph.prototype.getHighlight;

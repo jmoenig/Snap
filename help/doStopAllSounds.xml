@@ -1,0 +1,27 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doStopAllSounds"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveMessage" annotation="1">
+                        <l>new song</l>
+                    </block>
+                    <block s="doStopAllSounds" annotation="2"/>
+                    <block s="playSound" annotation="3">
+                        <l>my favorite song</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>When I receive this message</small-p>
+                    <small-p>Stop playing all sounds</small-p>
+                    <small-p>And start playing this sond</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

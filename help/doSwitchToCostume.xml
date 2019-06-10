@@ -1,0 +1,60 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSwitchToCostume">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="doSwitchToCostume" annotation="2">
+                                <l>Bird1</l>
+                            </block>
+                            <block s="doWait" annotation="3">
+                                <l>0.5</l>
+                            </block>
+                            <block s="doSwitchToCostume" annotation="4">
+                                <l>Bird2</l>
+                            </block>
+                            <block s="doWait" annotation="5">
+                                <l>0.5</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>Switch costume to Bird1</small-p>
+                    <small-p>Wait 0.5 secs</small-p>
+                    <small-p>Switch costume to Bird2</small-p>
+                    <small-p>Wait 0.5 secs</small-p>
+                </annotations>
+            </diagram>
+            <img src="doSwitchToCostume_birds.png" width="86" height="109"/>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                You can refer to a costume by name or by number. For example:
+            </p>
+            <row>
+                <script>
+                    <block s="doSwitchToCostume">
+                        <l>happy face</l>
+                    </block>
+                </script>
+                <script>
+                    <block s="doSwitchToCostume">
+                        <block var="which one"/>
+                    </block>
+                </script>
+            </row>
+        </column>
+    </box>
+</help-screen>
