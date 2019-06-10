@@ -1125,6 +1125,9 @@ SnapSerializer.prototype.loadScript = function (model, object) {
         if (child.attributes['arrow-color']) {
             nextBlock.annotationArrowColor = child.attributes['arrow-color'];
         }
+        if (child.attributes['bubble']) {
+            nextBlock.annotationBubble = +child.attributes['bubble'];
+        }
         if (child.attributes['highlight']) {
             nextBlock.annotationHighlight = true;
         }
@@ -1841,6 +1844,13 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                 ) : [],
             element.childNamed('menus')
                 ? element.childNamed('menus').children.map(function (child) {
+                    return myself.loadHelpScreenElement(
+                        child, screen, target, textColor
+                    );
+                })
+                : [],
+            element.childNamed('bubbles')
+                ? element.childNamed('bubbles').children.map(function (child) {
                     return myself.loadHelpScreenElement(
                         child, screen, target, textColor
                     );

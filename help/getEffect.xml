@@ -1,0 +1,38 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getEffect">
+                <l><option>ghost</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report the value of a costume effect.</p>
+            <diagram>
+                <script>
+                    <block s="setEffect" annotation="1">
+                        <l><option>fisheye</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Most effects have useful values between -100 and
+                        100, but not all. Experiment.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="getEffect" bubble="1">
+                        <l><option>fisheye</option></l>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>50</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>
