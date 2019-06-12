@@ -2017,88 +2017,6 @@ SnapTranslator.dict.pt = {
         'Transformar SVG em mapas de bits',
     'check to rasterize\nSVGs on import':
         'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
-    'square':
-        'quadrado',
-    'pointRight':
-        'triângulo para a direita',
-    'gears':
-        'roda dentada',
-    'file':
-        'arquivo',
-    'fullScreen':
-        'ecrã inteiro',
-    'normalScreen':
-        'ecrã normal',
-    'smallStage':
-        'palco pequeno',
-    'normalStage':
-        'palco normal',
-    'turtle':
-        'tartaruga',
-    'turtleOutline':
-        'contorno de tartaruga',
-    'pause':
-        'pausa',
-    'flag':
-        'bandeira',
-    'octagon':
-        'octógono',
-    'cloud':
-        'nuvem',
-    'cloudOutline':
-        'contorno de nuvem',
-    'cloudGradient':
-        'nuvem com gradiente',
-    'turnRight':
-        'girar à direita',
-    'turnLeft':
-        'girar à esquerda',
-    'storage':
-        'armazenagem',
-    'poster':
-        'póster',
-    'flash':
-        'relâmpago',
-    'brush':
-        'pincel',
-    'rectangle':
-        'rectângulo',
-    'rectangleSolid':
-        'rectângulo preenchido',
-    'circle':
-        'circunferência',
-    'circleSolid':
-        'círculo',
-    'crosshairs':
-        'mira',
-    'paintbucket':
-        'balde de tinta',
-    'eraser':
-        'borracha',
-    'pipette':
-        'pipeta',
-    'speechBubble':
-        'balão de fala',
-    'speechBubbleOutline':
-        'contorno de balão de fala',
-    'arrowUp':
-        'seta para cima',
-    'arrowUpOutline':
-        'contorno de seta para cima',
-    'arrowLeft':
-        'seta para a esquerda',
-    'arrowLeftOutline':
-        'contorno de seta para a esquerda',
-    'arrowDown':
-        'seta para baixo',
-    'arrowDownOutline':
-        'contorno de seta para baixo',
-    'arrowRight':
-        'seta para a direita',
-    'arrowRightOutline':
-        'contorno de seta para a direita',
-    'robot':
-        'robot',
     'turn pen trails into new costume...':
         'transformar traços da caneta em novo traje…',
     'pen':
@@ -2204,6 +2122,126 @@ SnapTranslator.dict.pt = {
         '(numa nova janela)',
     'save project data as XML\nto your downloads folder':
         'Guardar dados do projecto como XML\nna sua pasta de descarregamentos.',
+
+    // Símbolos em blocos personalizados:
+    'square':
+        'quadrado',
+    'pointRight':
+        'triângulo para a direita',
+    'stepForward':
+        'avançar um passo',
+    'gears':
+        'roda dentada',
+    'file':
+        'arquivo',
+    'fullScreen':
+        'ecrã inteiro',
+    'normalScreen':
+        'ecrã normal',
+    'smallStage':
+        'palco pequeno',
+    'normalStage':
+        'palco normal',
+    'turtle':
+        'tartaruga',
+    'turtleOutline':
+        'contorno de tartaruga',
+    'pause':
+        'pausa',
+    'flag':
+        'bandeira',
+    'octagon':
+        'octógono',
+    'cloud':
+        'nuvem',
+    'cloudOutline':
+        'contorno de nuvem',
+    'cloudGradient':
+        'nuvem com gradiente',
+    'turnRight':
+        'girar à direita',
+    'turnLeft':
+        'girar à esquerda',
+    'storage':
+        'armazenagem',
+    'poster':
+        'póster',
+    'flash':
+        'relâmpago',
+    'brush':
+        'pincel',
+    'rectangle':
+        'rectângulo',
+    'rectangleSolid':
+        'rectângulo preenchido',
+    'circle':
+        'circunferência',
+    'circleSolid':
+        'círculo',
+    'ellipse':
+        'elipse',
+    'cross':
+        'cruz',
+    'crosshairs':
+        'mira',
+    'paintbucket':
+        'balde de tinta',
+    'eraser':
+        'borracha',
+    'pipette':
+        'pipeta',
+    'speechBubble':
+        'balão de fala',
+    'speechBubbleOutline':
+        'contorno de balão de fala',
+    'loop':
+        'ciclo',
+    'turnBack':
+        'voltar para trás',
+    'turnForward':
+        'voltar para a frente',
+    'arrowUp':
+        'seta para cima',
+    'arrowUpOutline':
+        'contorno de seta para cima',
+    'arrowLeft':
+        'seta para a esquerda',
+    'arrowLeftOutline':
+        'contorno de seta para a esquerda',
+    'arrowDown':
+        'seta para baixo',
+    'arrowDownOutline':
+        'contorno de seta para baixo',
+    'arrowRight':
+        'seta para a direita',
+    'arrowRightOutline':
+        'contorno de seta para a direita',
+    'robot':
+        'robô',
+    'magnifyingGlass':
+        'lupa',
+    'magnifierOutline':
+        'contorno de lupa',
+    'selection':
+        'selecção',
+    'polygon':
+        'polígono',
+    'closedBrush':
+        'pincelada fechada',
+    'notes':
+        'nota',
+    'camera':
+        'câmara',
+    'location':
+        'localização',
+    'footprints':
+        'pegadas',
+    'keyboard':
+        'teclas',
+    'keyboardFilled':
+        'teclado',
+    'globe':
+        'globo',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
