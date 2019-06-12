@@ -2276,7 +2276,15 @@ SnapTranslator.dict.pt = {
     'cloud unavailable without a web server.':
         'Nuvem indisponível sem um servidor web.',
 
-    // custom block input options:
+    // Traduções de blocos personalizados:
+    'translations...':
+        'traduções…',
+    'Custom Block Translations':
+        'Traduções do Bloco Personalizado',
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs':
+        'Introduza uma tradução por linha.\nUtilize (:) para separar a língua da especificação traduzida do bloco\ne sublinhado (_) nos locais dos parâmetros, por exemplo:\n\n  pt:diz _ durante _ s',
+
+    // Opções de entradas de blocos personalizados:
     'options':
         'opções',
     'Input Slot Options':
