@@ -2477,4 +2477,24 @@ SnapTranslator.dict.pt = {
         'sinusoidal à entrada e à saída',
     'elastic':
         'elástica',
+
+    // Biblioteca Eisenberg:
+    'Project notes':
+        'Notas do projecto',
+    'Project name':
+        'Nome do projecto',
+    'User':
+        'Utilizador',
+    'Presentation mode':
+        'Modo de apresentação',
+    'Language':
+        'Língua',
+    'Stage scale':
+        'Escala do palco',
+    'Execute on slider change':
+        'Executar quando o potenciometro varia',
+    'Keyboard edition':
+        'Edição com o teclado',
+    'Visible palette':
+        'Palete visível',
 };
