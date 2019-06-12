@@ -2013,14 +2013,6 @@ SnapTranslator.dict.pt = {
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
     'saved.':
         'guardado.',
-    'options...':
-        'opções…',
-    'read-only':
-        'apenas leitura',
-    'Input Slot Options':
-        'Opções de Ranhura de Entrada',
-    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
-        'Introduza uma opção por linha. Opcionalmente, use "=" como separador\nentre chave e valor, e.g.\n   a resposta=42',
     'Rasterize SVGs':
         'Transformar SVG em mapas de bits',
     'check to rasterize\nSVGs on import':
@@ -2228,8 +2220,8 @@ SnapTranslator.dict.pt = {
         'delimitador',
     'collection':
         'colecção',
-    'variables':
-        'variáveis',
+//    'variables':
+//        'variáveis',
     'parameters':
         'parâmetros',
     'code':
@@ -2282,5 +2274,161 @@ SnapTranslator.dict.pt = {
     'Polygon':
         'Polígono',
     'cloud unavailable without a web server.':
-        'Nuvem indisponível sem um servidor web.'
+        'Nuvem indisponível sem um servidor web.',
+
+    // custom block input options:
+    'options':
+        'opções',
+    'Input Slot Options':
+        'Opções de Ranhura de Entrada',
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42':
+        'Introduza uma opção por linha.\nOpcionalmente, use "=" como separador entre chave e valor e {} para submenus. E.g.\n   a resposta=42',
+    'read-only':
+        'apenas leitura',
+    '(none)':
+        '(nenhum)',
+    'messages':
+        'as mensagens',
+    'objects':
+        'os objectos',
+    'variables':
+        'as variáveis',
+    'piano keyboard':
+        'um teclado de piano',
+    '360° dial':
+        'um mostrador de 360°',
+    'special':
+        'especial',
+    'multi-line':
+        'multilinha',
+
+    // Libraries:
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
+        'Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.',
+    'Some standard functions on lists (append, reverse, etc.)':        
+        'Algumas funções padrão sobre listas (acrescentar, inverter, etc.)',
+    'Streams (lazy lists)':
+        'Canais (listas preguiçosas)',
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
+        'Uma variação do tipo de dados lista para o qual cada item da lista não é calculado senão quando é necessário, pelo que pode criar listas com milhões de itens sem que isso demore demasiado tempo ou ocupe demasiada memória, ou mesmo listas de comprimento infinito.  (É incluído como exemplo um bloco que reporta todos os números primos.)', 
+    'Versions of +, x, AND, and OR that take more than two inputs.':
+        'Versões de +, x, E, e OU que aceitam mais do que duas entradas.',
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
+        'Uma versão estendida do bloco HTTP:// que permite realizar pedidos POST, PUT e DELETE, bem como GET, permite utilizar o protocolo seguro HTTPS e dá controlo sobre os cabeçalhos, etc.',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
+        'Um das grandes ideias do Logo que ficou de fora no Scratch é pensar no texto como estruturado em palavras e frases, em vez de só como uma cadeia de caracteres. Esta biblioteca reintroduz esta ideia.',
+    'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
+        'Tal como o «switch» em linguagens como o C ou o «cond» no Lisp.  Obrigado ao Nathan Dinsmore por inventar a ideia de ter um bloco separado para cada ramo!',
+    'Report hand positions from LEAP Motion controller (leapmotion.com).':
+        'Reportar posições das mãos dadas pelo controlador LEAP Motion (leapmotion.com).',
+    'Text Costumes':
+        'Trajes de texto',
+    'Generate costumes from letters or words of text.':
+        'Gerar trajes a partir de letras ou palavras de texto.',
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
+        'Alterar ou reportar a cor da caneta nos formatos RGB (vermelho/«red», verde/«green», azul/«blue») ou HSV (matiz/«hue«, saturação/«saturation», brilho/«value»).',
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
+        'Execute um guião; se ocorrer um erro, em vez de parar o guião com um halo vermelho, execute outro guião para lidar com o erro. Inclui também um bloco que causa um erro com uma mensagem dada como entrada. Inclui ainda um bloco para criar uma variável de guião inicializando-a imediatamente.',
+    'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
+        'Em geral as entradas de texto permitem apenas uma única linha.  O bloco MULTILINHA aceita texto multilinha na sua entrada e pode ser usado em ranhuras de entradas de texto de outros blocos.',
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
+        'Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.',
+    'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
+        'A torre numérica do Scheme completa. Usar «usa números grandes <verdadeiro>" para activar.',
+    'to use instead of hue for better selection':
+        'Para usar em vez da matiz de modo a permitir uma melhor selecção.',
+    'output text using speech synthesis.':
+        'Falar texto usando síntese de voz.',
+    'glide, grow and rotate using easing functions.':
+        'Deslizar, aumentar e rodar usando funções de forma (de «easing»).',
+    'Pixels':
+        'Píxeis',
+    'manipulate costumes pixel-wise.':
+        'Manipular trajes píxel a píxel.',
+    'Audio Comp':
+        'Computação áudio',
+    'analyze, manipulate and generate sound samples.':
+        'Analisar, manipular e gerar amostras de som.',
+    '"Bigger" Data':
+        'Dados «maiores»',
+    '[EXPERIMENTAL] crunch large lists very fast':
+        '[EXPERIMENTAL] Processar listas grandes de forma muito rápida.',
+    'Frequency Distribution Analysis':
+        'Análise da distribuição de frequências',
+    '[EXPERIMENTAL] analyze data for frequency distribution':
+        '[EXPERIMENTAL] Analisar dados para obter a sua distribuição de frequências.',
+    'World Map':
+        'Mapa do mundo',
+    '[EXPERIMENTAL] add interactive maps to projects':
+        '[EXPERIMENTAL] Adicionar mapas interactivos a projectos.',
+    'declare global or sprite-local variables in a script':
+        'Criar variáveis globais ou de objecto a partir de um guião.',
+    'Deal with JSON data':
+        'Lidar com dados JSON',
+    'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
+        'Converter em listas texto com formato JSON usando o bloco «a lista em» e obter dados dessas listas usando o bloco «o valor com chave em».',
+    'Parallelization':
+        'Paralelização',
+    'Run several scripts in parallel and wait until all are done.':
+        'Executar vários guiões em paralelo e esperar que todos eles terminem.',
+    'String processing':
+        'Processamento de cadeias de caracteres',
+    'Extract substrings of a string in various ways':
+        'Extrair partes de cadeias de caracteres de formas variadas',
+
+    // Biblioteca Animações:
+    'ghost effect':
+        'o efeito fantasma',
+    'color effect':
+        'o efeito cor',
+    'saturation effect':
+        'o efeito saturação',
+    'brightness effect':
+        'o efeito brilho',
+    'fisheye effect':
+        'o efeito olho-de-peixe',
+    'whirl effect':
+        'o efeito remoinho',
+    'pixelate effect':
+        'o efeito pixelização',
+    'mosaic effect':
+        'o efeito mosaico',
+    'negative effect':
+        'o efeito negativo',
+    'linear':
+        'linear',
+    'quadratic':
+        'quadrática',
+    'quadratic-in':
+        'quadrática à entrada',
+    'quadratic-out':
+        'quadrática à saída',
+    'quadratic-in-out':
+        'quadrática à entrada e à saída',
+    'cubic':
+        'cúbica',
+    'cubic-in':
+        'cúbica à entrada',
+    'cubic-out':
+        'cúbica à saída',
+    'cubic-in-out':
+        'cúbica à entrada e à saída',
+    'quart':
+        'quártica',
+    'quart-in':
+        'quártica à entrada',
+    'quart-out':
+        'quártica à saída',
+    'quart-in-out':
+        'quártica à entrada e à saída',
+    'sinusoidal':
+        'sinusoidal',
+    'sine-in':
+        'sinusoidal à entrada',
+    'sine-out':
+        'sinusoidal à saída',
+    'sine-in-out':
+        'sinusoidal à entrada e à saída',
+    'elastic':
+        'elástica',
 };
