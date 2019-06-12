@@ -2849,7 +2849,7 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
         );
     SymbolMorph.prototype.names.forEach(function (name) {
         menu.addItem(
-            [new SymbolMorph(name, menu.fontSize, symbolColor), name],
+            [new SymbolMorph(name, menu.fontSize, symbolColor), localize(name)],
             name
         );
     });
