@@ -2313,7 +2313,7 @@ SnapTranslator.dict.pt = {
         'Polígono',
     'cloud unavailable without a web server.':
         'Nuvem indisponível sem um servidor web.',
-    'sound',
+    'sound':
         'som',
 
     // Traduções de blocos personalizados:
