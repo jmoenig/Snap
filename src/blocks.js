@@ -3357,7 +3357,12 @@ BlockMorph.prototype.showHelp = function () {
     }
     // pic.src = ide.resourceURL('help', spec + '.png');
 
-    new HelpDialogMorph(this, this.scriptTarget()).popUp();
+    new HelpDialogMorph(
+        this,
+        this.scriptTarget
+            ? this.scriptTarget()
+            : this.parentThatIsA(IDE_Morph).currentSprite
+    ).popUp();
 };
 
 // BlockMorph code mapping

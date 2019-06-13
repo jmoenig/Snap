@@ -124,6 +124,9 @@ HelpScreenMorph.prototype.fixLayout = function () {
                 (child.shiftDown || 0) + padding
             ));
             if (box !== thumbnail) {
+                if (child.right() > box.right()) {
+                    child.setWidth(box.right() - padding - child.left());
+                }
                 if (child.top() < thumbnail.bottom() + padding) {
                     child.setTop(thumbnail.bottom() + padding);
                 }
@@ -219,8 +222,8 @@ HelpScreenMorph.prototype.createMenu = function (items) {
     morph.drawNew();
     for (i = 0; i < items.length; i++) {
         if (items[i].attributes.annotation) {
-            morph.children[i].annotation =
-                +items[i].attributes.annotation;
+            morph.children[i].annotationID =
+                items[i].attributes.annotation;
         }
     }
     return morph;
@@ -643,7 +646,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             if (
                 annotated instanceof CommandBlockMorph
                 || annotated instanceof MenuItemMorph
-                || i === 1
+                || annotated === annotated.topBlock()
             ) {
                 arrowEnd = new Point(
                     annotated.right() + this.padding,
@@ -651,6 +654,11 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                         // use y of center of label
                         ? annotated.parts()[0].center().y
                         : annotated.center().y
+                );
+            } else if (i === 1) {
+                arrowEnd = new Point(
+                    annotated.right(),
+                    annotated.center().y
                 );
             } else {
                 arrowEnd = annotated.bottomCenter();
@@ -724,9 +732,14 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
 
 ScriptDiagramMorph.prototype.getAnnotatedMorph = function (attribute, id) {
     function check (morph) {
-        var i, result;
-        if (morph[attribute] === id) {
-            return morph;
+        var i, result, ids, attrValue = morph[attribute];
+        if (attrValue) {
+            ids = attrValue.split(',').map(function (n) {
+                return +n;
+            });
+            if (contains(ids, id)) {
+                return morph;
+            }
         }
         for (i = 0; i < morph.children.length; i++) {
             result = check(morph.children[i]);
@@ -831,9 +844,9 @@ DiagramArrowMorph.prototype.drawNew = function () {
     ctx.fill();
 };
 
-// ArgMorph /////////////////////////////////////////////////////////////
+// BlockMorph ///////////////////////////////////////////////////////////
 
-ArgMorph.prototype.addHighlight = function (oldHighlight) {
+BlockMorph.prototype.addHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,
         oldUseBlurredShadows = useBlurredShadows,
         highlight;
@@ -851,6 +864,10 @@ ArgMorph.prototype.addHighlight = function (oldHighlight) {
     if (isHidden) {this.hide(); }
     return highlight;
 };
+
+// ArgMorph /////////////////////////////////////////////////////////////
+
+ArgMorph.prototype.addHighlight = BlockMorph.prototype.addHighlight;
 ArgMorph.prototype.removeHighlight = BlockMorph.prototype.removeHighlight;
 ArgMorph.prototype.toggleHighlight = ArgMorph.prototype.toggleHighlight;
 ArgMorph.prototype.highlight = BlockMorph.prototype.highlight;

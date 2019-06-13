@@ -1111,22 +1111,22 @@ SnapSerializer.prototype.loadScript = function (model, object) {
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
         if (child.attributes['annotation']) {
-            nextBlock.annotationID = +child.attributes['annotation'];
+            nextBlock.annotationID = child.attributes['annotation'];
         }
         if (child.attributes['menu']) {
-            nextBlock.annotationMenu = +child.attributes['menu'];
+            nextBlock.annotationMenu = child.attributes['menu'];
         }
         if (child.attributes['arrow-start']) {
-            nextBlock.annotationArrowStart = +child.attributes['arrow-start'];
+            nextBlock.annotationArrowStart = child.attributes['arrow-start'];
         }
         if (child.attributes['arrow-end']) {
-            nextBlock.annotationArrowEnd = +child.attributes['arrow-end'];
+            nextBlock.annotationArrowEnd = child.attributes['arrow-end'];
         }
         if (child.attributes['arrow-color']) {
             nextBlock.annotationArrowColor = child.attributes['arrow-color'];
         }
         if (child.attributes['bubble']) {
-            nextBlock.annotationBubble = +child.attributes['bubble'];
+            nextBlock.annotationBubble = child.attributes['bubble'];
         }
         if (child.attributes['highlight']) {
             nextBlock.annotationHighlight = true;
@@ -1322,16 +1322,16 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         }
     }
     if (model.attributes['annotation']) {
-        input.annotationID = +model.attributes['annotation'];
+        input.annotationID = model.attributes['annotation'];
     }
     if (model.attributes['menu']) {
-        input.annotationMenu = +model.attributes['menu'];
+        input.annotationMenu = model.attributes['menu'];
     }
     if (model.attributes['arrow-start']) {
-        input.annotationArrowStart = +model.attributes['arrow-start'];
+        input.annotationArrowStart = model.attributes['arrow-start'];
     }
     if (model.attributes['arrow-end']) {
-        input.annotationArrowEnd = +model.attributes['arrow-end'];
+        input.annotationArrowEnd = model.attributes['arrow-end'];
     }
     if (model.attributes['arrow-color']) {
         input.annotationArrowColor = model.attributes['arrow-color'];
@@ -1725,26 +1725,19 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         if (morph instanceof BoxMorph) {
             morph.setWidth(parent.width() - padding);
         } else if (
-            morph instanceof AlignmentMorph &&
-            parent instanceof BoxMorph
-        ) {
-            morph.silentSetWidth(parent.width() - 2 * padding);
-        } else if (
             morph instanceof AlignmentMorph
             || morph instanceof ScriptDiagramMorph
             || morph instanceof TextMorph
         ) {
-            if (morph.relativeWidth) {
+            if (parent instanceof BoxMorph) {
+                morph.silentSetWidth(parent.width() - 2 * padding);
+            } else if (morph.relativeWidth) {
                 morph.silentSetWidth(
                     morph.relativeWidth / parent.relWidthDenominator
                     * (parent.width() - parent.usedWidth)
                 );
             } else {
-                if (parent.alignment === 'row') {
-                    morph.silentSetWidth(parent.width() - padding);
-                } else {
-                    morph.silentSetWidth(parent.width());
-                }
+                morph.silentSetWidth(parent.width());
             }
         }
         if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
@@ -1753,7 +1746,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
                 && morph.orientation === 'row'
             ) {
                 // calculate the total known used width of row items
-                morph.usedWidth = padding * morph.children.length
+                morph.usedWidth = padding * (morph.children.length - 1)
                     + morph.children.reduce(
                         function (width, child) {
                             if (
@@ -1763,7 +1756,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
                             ) {
                                 return width;
                             } else if (child instanceof BlockMorph) {
-                                return width + child.stackFullBounds().width();
+                                return width
+                                    + child.stackFullBounds().width();
                             } else {
                                 return width + child.width();
                             }
@@ -1783,9 +1777,15 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
     screen.forAllChildren(function (child) {
         // Reflow text
         if (child instanceof TextMorph) {
+            child.children.forEach(function (child) {
+                if (typeof child.fixLayout === 'function') {
+                    child.fixLayout();
+                }
+            });
             child.setExtent(child.extent());
         }
     });
+    screen.add(screen.thumbnail);
     screen.forAllChildren(function (child) {
         if (
             child instanceof AlignmentMorph
@@ -1794,7 +1794,6 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
             child.fixLayout();
         }
     });
-    screen.add(screen.thumbnail);
 
     return screen;
 };
