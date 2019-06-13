@@ -216,7 +216,12 @@ HelpScreenMorph.prototype.createMenu = function (items) {
         if (item.tag === 'line') {
             morph.addLine();
         } else if (item.tag === 'item') {
-            morph.addItem(item.contents);
+            morph.addItem(
+                item.contents,
+                null,
+                null,
+                item.attributes.color
+            );
         }
     });
     morph.drawNew();

@@ -1878,13 +1878,14 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         if (element.children.length === 0) {
             morph = screen.createParagraph(
                 element.contents.trim().split(/\s+/).join(' '),
-                textSize, textColor, italic
+                textSize, element.attributes.color || textColor, italic
             );
         } else {
             morph = screen.createRichParagraph(null, textSize, textColor);
             morph.text = element.children.map(function (child) {
                 return myself.loadHelpScreenElement(
-                    child, screen, target, textColor, italic
+                    child, screen, target,
+                    element.attributes.color || textColor, italic
                 );
             });
             morph.drawNew();
