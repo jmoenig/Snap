@@ -2499,4 +2499,26 @@ SnapTranslator.dict.pt = {
         'Edição com o teclado',
     'Visible palette':
         'Palete visível',
+
+    // Biblioteca Mapa do mundo:
+    'OpenStreetMap':
+        'OpenStreetMap',
+    'Wikimedia':
+        'Wikimedia',
+    'Watercolor':
+        'Aguarela',
+    'Toner':
+        'Tons',
+    'Terrain':
+        'Terreno',
+    'Topographic':
+        'Topográfico',
+    'Satellite':
+        'Satélite',
+    'Streets':
+        'Estradas',
+    'Shading':
+        'Sombreamento',
+    'Mapbox (experimental)':
+        'Mapbox (experimental)',
 };
