@@ -201,21 +201,7 @@ HelpScreenMorph.prototype.createScriptDiagram = function (
 };
 
 HelpScreenMorph.prototype.createImage = function (src, width, height) {
-    var morph = new Morph();
-    morph.setExtent(new Point(width, height));
-    morph.pic = new Image();
-    morph.pic.onload = function () {
-        morph.drawNew = function () {
-            var ctx;
-            this.image = newCanvas(this.extent());
-            ctx = this.image.getContext('2d');
-            ctx.drawImage(this.pic, 0, 0, this.width(), this.height());
-        };
-        morph.drawNew();
-        morph.changed();
-    };
-    morph.pic.src = 'help/' + src;
-    return morph;
+    return new ImageMorph(src, width, height);
 };
 
 HelpScreenMorph.prototype.createMenu = function (items) {
@@ -235,6 +221,41 @@ HelpScreenMorph.prototype.createMenu = function (items) {
         }
     }
     return morph;
+};
+
+// ImageMorph ///////////////////////////////////////////////////////////////
+
+ImageMorph.prototype = new Morph();
+ImageMorph.prototype.constructor = ImageMorph;
+ImageMorph.uber = Morph.prototype;
+
+function ImageMorph(src, width, height) {
+    this.init(src, width, height);
+}
+
+ImageMorph.prototype.init = function (src, width, height) {
+    var myself = this;
+
+    // initialize inherited properties:
+    HelpScreenMorph.uber.init.call(this);
+
+    this.src = src;
+    this.setExtent(new Point(width, height));
+    this.pic = new Image();
+    this.pic.onload = function () {
+        myself.drawNew();
+        myself.changed();
+    };
+    this.pic.src = 'help/' + src;
+};
+
+ImageMorph.prototype.drawNew = function () {
+    var ctx;
+    this.image = newCanvas(this.extent());
+    ctx = this.image.getContext('2d');
+    if (this.pic) {
+        ctx.drawImage(this.pic, 0, 0, this.width(), this.height());
+    }
 };
 
 // RichTextMorph ////////////////////////////////////////////////////////////
