@@ -119,7 +119,10 @@ HelpScreenMorph.prototype.fixLayout = function () {
         startX = box.left();
         startY = box.top();
         box.children.forEach(function (child) {
-            child.moveBy(padding);
+            child.moveBy(new Point (
+                (child.shiftRight || 0) + padding,
+                (child.shiftDown || 0) + padding
+            ));
             if (box !== thumbnail) {
                 if (child.top() < thumbnail.bottom() + padding) {
                     child.setTop(thumbnail.bottom() + padding);
