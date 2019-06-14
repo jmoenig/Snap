@@ -2521,4 +2521,42 @@ SnapTranslator.dict.pt = {
         'Sombreamento',
     'Mapbox (experimental)':
         'Mapbox (experimental)',
+
+    // Biblioteca aritmética do Scheme:
+    'number?':
+        'é número, o valor',
+    'complex?':
+        'é complexo, o valor',
+    'real?':
+        'é real, o valor',
+    'rational?':
+        'é racional, o valor',
+    'integer?':
+        'é inteiro, o valor',
+    'exact?':
+        'é exacto, o valor',
+    'inexact?':
+        'é inexacto, o valor',
+    'exact':
+        'a versão exacta',
+    'inexact':
+        'a versão inexacta',
+    'finite?':
+        'é finito, o valor',
+    'infinite?':
+        'é infinito, o valor',
+    'nan?':
+        'é NaN, o valor',
+    'numerator':
+        'o numerador',
+    'denominator':
+        'o denominador',
+    'real-part':
+        'a parte real',
+    'imag-part':
+        'a parte imaginária',
+    'magnitude':
+        'o módulo',
+    'angle':
+        'o argumento',
 };
