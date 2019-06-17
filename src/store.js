@@ -1110,27 +1110,6 @@ SnapSerializer.prototype.loadScript = function (model, object) {
 
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
-        if (child.attributes['annotation']) {
-            nextBlock.annotationID = child.attributes['annotation'];
-        }
-        if (child.attributes['menu']) {
-            nextBlock.annotationMenu = child.attributes['menu'];
-        }
-        if (child.attributes['arrow-start']) {
-            nextBlock.annotationArrowStart = child.attributes['arrow-start'];
-        }
-        if (child.attributes['arrow-end']) {
-            nextBlock.annotationArrowEnd = child.attributes['arrow-end'];
-        }
-        if (child.attributes['arrow-color']) {
-            nextBlock.annotationArrowColor = child.attributes['arrow-color'];
-        }
-        if (child.attributes['bubble']) {
-            nextBlock.annotationBubble = child.attributes['bubble'];
-        }
-        if (child.attributes['highlight']) {
-            nextBlock.annotationHighlight = true;
-        }
         if (!nextBlock) {
             return;
         }
@@ -1271,7 +1250,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
 
 SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     // private
-    var inp, val, myself = this, newInput;
+    var inp, val, myself = this;
     if (isNil(input)) {
         return;
     }
@@ -1307,9 +1286,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         });
         input.fixLayout();
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
-        newInput = this.loadBlock(model, true, object);
-        block.silentReplaceInput(input, newInput);
-        input = newInput;
+        block.silentReplaceInput(input, this.loadBlock(model, true, object));
     } else if (model.tag === 'color') {
         input.setColor(this.loadColor(model.contents));
     } else {
@@ -1320,24 +1297,6 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             // was added.
             input.setContents(this.loadValue(model));
         }
-    }
-    if (model.attributes['annotation']) {
-        input.annotationID = model.attributes['annotation'];
-    }
-    if (model.attributes['menu']) {
-        input.annotationMenu = model.attributes['menu'];
-    }
-    if (model.attributes['arrow-start']) {
-        input.annotationArrowStart = model.attributes['arrow-start'];
-    }
-    if (model.attributes['arrow-end']) {
-        input.annotationArrowEnd = model.attributes['arrow-end'];
-    }
-    if (model.attributes['arrow-color']) {
-        input.annotationArrowColor = model.attributes['arrow-color'];
-    }
-    if (model.attributes['highlight']) {
-        input.annotationHighlight = true;
     }
 };
 
@@ -1688,257 +1647,6 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //})
 
     ide.world().keyboardReceiver = project.stage;
-};
-
-SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
-    // public - answer the HelpScreenMorph represented by xmlString
-    var myself = this,
-        model = this.parse(xmlString),
-        screen = new HelpScreenMorph(),
-        padding = HelpScreenMorph.prototype.padding;
-
-    console.log(model);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
-    model.children.forEach(function (child) {
-        if (child.tag === 'thumbnail') {
-            screen.thumbnail = myself.loadHelpScreenElement(
-                model.require('thumbnail'), screen, target, 'black'
-            );
-        } else if (child.tag === 'blocks') {
-            myself.loadCustomBlocks(target, child);
-            myself.populateCustomBlocks(target, child);
-        } else {
-            var morph = myself.loadHelpScreenElement(
-                child, screen, target,
-                child.attributes.color === 'blue' ? 'black' : 'white'
-            );
-            if (morph) {
-                screen.add(morph);
-            }
-        }
-    });
-
-    function fixWidths (morph) {
-        var parent = morph.parent;
-        if (morph instanceof BoxMorph) {
-            morph.setWidth(parent.width() - padding);
-        } else if (
-            morph instanceof AlignmentMorph
-            || morph instanceof ScriptDiagramMorph
-            || morph instanceof TextMorph
-        ) {
-            if (parent instanceof BoxMorph) {
-                morph.silentSetWidth(parent.width() - 2 * padding);
-            } else if (morph.relativeWidth) {
-                morph.silentSetWidth(
-                    morph.relativeWidth / parent.relWidthDenominator
-                    * (parent.width() - parent.usedWidth)
-                );
-            } else {
-                morph.silentSetWidth(parent.width());
-            }
-        }
-        if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
-            if (
-                morph instanceof AlignmentMorph
-                && morph.orientation === 'row'
-            ) {
-                // calculate the total known used width of row items
-                morph.usedWidth = padding * (morph.children.length - 1)
-                    + morph.children.reduce(
-                        function (width, child) {
-                            if (
-                                child instanceof AlignmentMorph
-                                || child instanceof ScriptDiagramMorph
-                                || child instanceof TextMorph
-                            ) {
-                                return width;
-                            } else if (child instanceof BlockMorph) {
-                                return width
-                                    + child.stackFullBounds().width();
-                            } else {
-                                return width + child.width();
-                            }
-                        }, 0
-                    );
-                morph.relWidthDenominator = morph.children.reduce(
-                    function (width, child) {
-                        return width + (child.relativeWidth || 0)
-                    }, 0
-                );
-            }
-            morph.children.forEach(fixWidths);
-        }
-    }
-
-    screen.children.forEach(fixWidths);
-    screen.forAllChildren(function (child) {
-        // Reflow text
-        if (child instanceof TextMorph) {
-            child.children.forEach(function (child) {
-                if (typeof child.fixLayout === 'function') {
-                    child.fixLayout();
-                }
-            });
-            child.setExtent(child.extent());
-        }
-    });
-    screen.add(screen.thumbnail);
-    screen.forAllChildren(function (child) {
-        if (
-            child instanceof AlignmentMorph
-            || child instanceof ScriptDiagramMorph
-        ) {
-            child.fixLayout();
-        }
-    });
-
-    return screen;
-};
-
-SnapSerializer.prototype.loadHelpScreenElement = function (
-    element, screen, target, textColor
-) {
-    var myself = this, morph, customBlock, script, textSize, italic;
-
-    switch (element.tag) {
-    case 'block-definition':
-        customBlock = detect(target.customBlocks, function (block) {
-            return block.blockSpec() === element.attributes.s;
-        });
-        morph = new PrototypeHatBlockMorph(customBlock);
-        morph.nextBlock(customBlock.body.expression);
-        break;
-    case 'bool':
-        return element.contents === 'true';
-    case 'box':
-        morph = screen.createBox(element.attributes.color);
-        break;
-    case 'column':
-        morph = screen.createColumn();
-        break;
-    case 'diagram':
-        script = myself.loadHelpScreenElement(
-            element.childNamed('block-definition')
-            || element.childNamed('menu')
-            || element.require('script'),
-            screen, target, textColor
-        );
-        morph = screen.createScriptDiagram(
-            script,
-            element.childNamed('annotations')
-                ? element.require('annotations').children.map(
-                    function (child) {
-                        var morph = myself.loadHelpScreenElement(
-                            child, screen, target, textColor
-                        );
-                        morph.arrowReverse =
-                            !!child.attributes['arrow-reverse'];
-                        if (child.attributes['arrow-color']) {
-                            morph.arrowColor =
-                                child.attributes['arrow-color'];
-                        }
-                        return morph;
-                    }
-                ) : [],
-            element.childNamed('menus')
-                ? element.childNamed('menus').children.map(function (child) {
-                    return myself.loadHelpScreenElement(
-                        child, screen, target, textColor
-                    );
-                })
-                : [],
-            element.childNamed('bubbles')
-                ? element.childNamed('bubbles').children.map(function (child) {
-                    return myself.loadHelpScreenElement(
-                        child, screen, target, textColor
-                    );
-                })
-                : [],
-            textColor
-        );
-        break;
-    case 'img':
-        morph = screen.createImage(
-            element.attributes.src,
-            +element.attributes.width,
-            +element.attributes.height
-        );
-        break;
-    case 'menu':
-        morph = screen.createMenu(element.children);
-        break;
-    case 'p':
-    case 'small-p':
-    case 'i':
-    case 'small-i':
-        textSize = element.tag === 'small-p' || element.tag === 'small-i'
-                        ? 14 : 18;
-        italic = element.tag === 'i' || element.tag === 'small-i';
-        if (element.children.length === 0) {
-            morph = screen.createParagraph(
-                element.contents.trim().split(/\s+/).join(' '),
-                textSize, element.attributes.color || textColor, italic
-            );
-        } else {
-            morph = screen.createRichParagraph(null, textSize, textColor);
-            morph.text = element.children.map(function (child) {
-                return myself.loadHelpScreenElement(
-                    child, screen, target,
-                    element.attributes.color || textColor, italic
-                );
-            });
-            morph.drawNew();
-        }
-        break;
-    case 'row':
-        morph = screen.createRow();
-        break;
-    case 'script':
-        morph = this.loadScript(element, target);
-        break;
-    case 'text':
-        return element.contents.trim().split(/\s+/).join(' ');
-    case 'thumbnail':
-        morph = screen.createThumbnail();
-        break;
-    }
-    if (morph) {
-        if (element.attributes['rel-width']) {
-            // width will be adjusted later
-            morph.relativeWidth = +element.attributes['rel-width'];
-        }
-        if (
-            morph instanceof AlignmentMorph
-            && element.attributes.padding
-        ) {
-            morph.padding = +element.attributes.padding;
-        }
-        if (element.attributes.x) {
-            morph.shiftRight = +element.attributes.x;
-        }
-        if (element.attributes.y) {
-            morph.shiftDown = +element.attributes.y;
-        }
-        if (
-            !(morph instanceof RichTextMorph
-            || morph instanceof ScriptDiagramMorph
-            || morph instanceof BlockMorph)
-        ) {
-            // add children
-            element.children.forEach(function (child) {
-                var childMorph = myself.loadHelpScreenElement(
-                    child, screen, target, textColor
-                );
-                if (childMorph) {
-                    morph.add(childMorph);
-                }
-            });
-        }
-    }
-    return morph;
 };
 
 // SnapSerializer XML-representation of objects:

@@ -234,6 +234,305 @@ HelpScreenMorph.prototype.createMenu = function (items) {
     return morph;
 };
 
+// SnapSerializer ///////////////////////////////////////////////////////////
+
+SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
+    // public - answer the HelpScreenMorph represented by xmlString
+    var myself = this,
+        model = this.parse(xmlString),
+        screen = new HelpScreenMorph(),
+        padding = HelpScreenMorph.prototype.padding;
+
+    console.log(model);
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    model.children.forEach(function (child) {
+        if (child.tag === 'thumbnail') {
+            screen.thumbnail = myself.loadHelpScreenElement(
+                model.require('thumbnail'), screen, target, 'black'
+            );
+        } else if (child.tag === 'blocks') {
+            myself.loadCustomBlocks(target, child);
+            myself.populateCustomBlocks(target, child);
+        } else {
+            var morph = myself.loadHelpScreenElement(
+                child, screen, target,
+                child.attributes.color === 'blue' ? 'black' : 'white'
+            );
+            if (morph) {
+                screen.add(morph);
+            }
+        }
+    });
+
+    function fixWidths (morph) {
+        var parent = morph.parent;
+        if (morph instanceof BoxMorph) {
+            morph.setWidth(parent.width() - padding);
+        } else if (
+            morph instanceof AlignmentMorph
+            || morph instanceof ScriptDiagramMorph
+            || morph instanceof TextMorph
+        ) {
+            if (parent instanceof BoxMorph) {
+                morph.silentSetWidth(parent.width() - 2 * padding);
+            } else if (morph.relativeWidth) {
+                morph.silentSetWidth(
+                    morph.relativeWidth / parent.relWidthDenominator
+                    * (parent.width() - parent.usedWidth)
+                );
+            } else {
+                morph.silentSetWidth(parent.width());
+            }
+        }
+        if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
+            if (
+                morph instanceof AlignmentMorph
+                && morph.orientation === 'row'
+            ) {
+                // calculate the total known used width of row items
+                morph.usedWidth = morph.padding * (morph.children.length - 1)
+                    + morph.children.reduce(
+                        function (width, child) {
+                            if (
+                                child instanceof AlignmentMorph
+                                || child instanceof ScriptDiagramMorph
+                                || child instanceof TextMorph
+                            ) {
+                                return width;
+                            } else if (child instanceof BlockMorph) {
+                                return width
+                                    + child.stackFullBounds().width();
+                            } else {
+                                return width + child.width();
+                            }
+                        }, 0
+                    );
+                morph.relWidthDenominator = morph.children.reduce(
+                    function (width, child) {
+                        return width + (child.relativeWidth || 0)
+                    }, 0
+                );
+            }
+            morph.children.forEach(fixWidths);
+        }
+    }
+
+    screen.children.forEach(fixWidths);
+    screen.forAllChildren(function (child) {
+        // Reflow text
+        if (child instanceof TextMorph) {
+            child.children.forEach(function (child) {
+                if (typeof child.fixLayout === 'function') {
+                    child.fixLayout();
+                }
+            });
+            child.setExtent(child.extent());
+        }
+    });
+    screen.add(screen.thumbnail);
+    screen.forAllChildren(function (child) {
+        if (
+            child instanceof AlignmentMorph
+            || child instanceof ScriptDiagramMorph
+        ) {
+            child.fixLayout();
+        }
+    });
+
+    return screen;
+};
+
+SnapSerializer.prototype.loadHelpScreenElement = function (
+    element, screen, target, textColor
+) {
+    var myself = this, morph, customBlock, script, textSize, italic;
+
+    switch (element.tag) {
+    case 'block-definition':
+        customBlock = detect(target.customBlocks, function (block) {
+            return block.blockSpec() === element.attributes.s;
+        });
+        morph = new PrototypeHatBlockMorph(customBlock);
+        morph.nextBlock(customBlock.body.expression);
+        break;
+    case 'bool':
+        return element.contents === 'true';
+    case 'box':
+        morph = screen.createBox(element.attributes.color);
+        break;
+    case 'column':
+        morph = screen.createColumn();
+        break;
+    case 'diagram':
+        script = myself.loadHelpScreenElement(
+            element.childNamed('block-definition')
+            || element.childNamed('menu')
+            || element.require('script'),
+            screen, target, textColor
+        );
+        morph = screen.createScriptDiagram(
+            script,
+            element.childNamed('annotations')
+                ? element.require('annotations').children.map(
+                    function (child) {
+                        var morph = myself.loadHelpScreenElement(
+                            child, screen, target, textColor
+                        );
+                        morph.arrowReverse =
+                            !!child.attributes['arrow-reverse'];
+                        if (child.attributes['arrow-color']) {
+                            morph.arrowColor =
+                                child.attributes['arrow-color'];
+                        }
+                        return morph;
+                    }
+                ) : [],
+            element.childNamed('menus')
+                ? element.childNamed('menus').children.map(function (child) {
+                    return myself.loadHelpScreenElement(
+                        child, screen, target, textColor
+                    );
+                })
+                : [],
+            element.childNamed('bubbles')
+                ? element.childNamed('bubbles').children.map(function (child) {
+                    return myself.loadHelpScreenElement(
+                        child, screen, target, textColor
+                    );
+                })
+                : [],
+            textColor
+        );
+        break;
+    case 'img':
+        morph = screen.createImage(
+            element.attributes.src,
+            +element.attributes.width,
+            +element.attributes.height
+        );
+        break;
+    case 'menu':
+        morph = screen.createMenu(element.children);
+        break;
+    case 'p':
+    case 'small-p':
+    case 'i':
+    case 'small-i':
+        textSize = element.tag === 'small-p' || element.tag === 'small-i'
+                        ? 14 : 18;
+        italic = element.tag === 'i' || element.tag === 'small-i';
+        if (element.children.length === 0) {
+            morph = screen.createParagraph(
+                element.contents.trim().split(/\s+/).join(' '),
+                textSize, element.attributes.color || textColor, italic
+            );
+        } else {
+            morph = screen.createRichParagraph(null, textSize, textColor);
+            morph.text = element.children.map(function (child) {
+                return myself.loadHelpScreenElement(
+                    child, screen, target,
+                    element.attributes.color || textColor, italic
+                );
+            });
+            morph.drawNew();
+        }
+        break;
+    case 'row':
+        morph = screen.createRow();
+        break;
+    case 'script':
+        morph = this.loadScript(element, target);
+        break;
+    case 'text':
+        return element.contents.trim().split(/\s+/).join(' ');
+    case 'thumbnail':
+        morph = screen.createThumbnail();
+        break;
+    }
+    if (morph) {
+        if (element.attributes['rel-width']) {
+            // width will be adjusted later
+            morph.relativeWidth = +element.attributes['rel-width'];
+        }
+        if (
+            morph instanceof AlignmentMorph
+            && element.attributes.padding
+        ) {
+            morph.padding = +element.attributes.padding;
+        }
+        if (element.attributes.x) {
+            morph.shiftRight = +element.attributes.x;
+        }
+        if (element.attributes.y) {
+            morph.shiftDown = +element.attributes.y;
+        }
+        if (
+            !(morph instanceof RichTextMorph
+            || morph instanceof ScriptDiagramMorph
+            || morph instanceof BlockMorph)
+        ) {
+            // add children
+            element.children.forEach(function (child) {
+                var childMorph = myself.loadHelpScreenElement(
+                    child, screen, target, textColor
+                );
+                if (childMorph) {
+                    morph.add(childMorph);
+                }
+            });
+        }
+    }
+    return morph;
+};
+
+SnapSerializer.prototype.handleAnnotations = function (model, morph) {
+    if (model.attributes['annotation']) {
+        morph.annotationID = model.attributes['annotation'];
+    }
+    if (model.attributes['menu']) {
+        morph.annotationMenu = model.attributes['menu'];
+    }
+    if (model.attributes['arrow-start']) {
+        morph.annotationArrowStart = model.attributes['arrow-start'];
+    }
+    if (model.attributes['arrow-end']) {
+        morph.annotationArrowEnd = model.attributes['arrow-end'];
+    }
+    if (model.attributes['arrow-color']) {
+        morph.annotationArrowColor = model.attributes['arrow-color'];
+    }
+    if (model.attributes['bubble']) {
+        morph.annotationBubble = model.attributes['bubble'];
+    }
+    if (model.attributes['highlight']) {
+        morph.annotationHighlight = true;
+    }
+};
+
+SnapSerializer.prototype.loadBlockOld = SnapSerializer.prototype.loadBlock;
+SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
+    var block = this.loadBlockOld(model, isReporter, object),
+        migration, migrationOffset = 0, inputs;
+    this.handleAnnotations(model, block);
+    if (model.tag === 'block' && model.attributes.s) {
+        migration = SpriteMorph.prototype.blockMigrations[
+            model.attributes.s
+        ];
+        if (migration) {
+            migrationOffset = migration.offset;
+        }
+    }
+    inputs = block.inputs();
+    model.children.forEach(function (child, i) {
+        if (!contains(['variables', 'comment', 'receiver'], child.tag)) {
+            this.handleAnnotations(child, inputs[i + migrationOffset]);
+        }
+    }, this);
+    return block;
+};
+
 // ImageMorph ///////////////////////////////////////////////////////////////
 
 ImageMorph.prototype = new Morph();
