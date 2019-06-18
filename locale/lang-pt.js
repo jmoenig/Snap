@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2019-06-12',
+        '2019-06-18',
 
     // GUI
     // control bar:
@@ -1871,6 +1871,8 @@ SnapTranslator.dict.pt = {
     // em falta no ficheiro lang-de.js
     'log':
         'o logaritmo',
+    'neg':
+        'o simétrico',
     'url %s':
         'o recurso http:// %s',
     'delete %shd':
