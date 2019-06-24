@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2019-06-18',
+        '2019-06-24',
 
     // GUI
     // control bar:
@@ -789,17 +789,17 @@ SnapTranslator.dict.pt = {
         '%l está vazia',
     'map %repRing over %l':
         'a aplicação de %repRing aos itens de %l',
-    'keep items such that %predRing from %l':
+    'keep items %predRing from %l':
         'os itens tais que %predRing de %l',
-    'find first item such that %predRing in %l':
+    'find first item %predRing in %l':
         'o primeiro item tal que %predRing de %l',
     'combine with %repRing items of %l':
         'a combinação com %repRing dos itens de %l',
     '%blitz map %repRing over %l':
         '%blitz a aplicação de %repRing aos itens de %l',
-    '%blitz keep items such that %predRing from %l':
+    '%blitz keep items %predRing from %l':
         '%blitz os itens tais que %predRing de %l',
-    '%blitz find first item such that %predRing in %l':
+    '%blitz find first item %predRing in %l':
         '%blitz o primeiro item tal que %predRing de %l',
     '%blitz combine with %repRing items of %l':
         '%blitz a combinação com %repRing dos itens de %l',
