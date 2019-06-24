@@ -92,6 +92,8 @@
 * adjusted German, French, Portuguese, Spanish, Catalan translations
 * updated Catalan translation, thanks, Joan!
 * updated Portuguese translation, thanks, Manuel!
+* fixed #2417
+* fixed #2416
 
 ### 2019-06-06
 * Maps: fixed a typecasting issue, thanks, Bernat!
