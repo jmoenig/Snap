@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-06-09', // this, too, will appear in the Translators tab
+        '2019-06-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -688,17 +688,17 @@ SnapTranslator.dict.ca = {
         '%l buida?',
     'map %repRing over %l':
         'mapeja %repRing sobre %l',
-    'keep items such that %predRing from %l':
+    'keep items %predRing from %l':
         'manté els elements on %predRing de %l',
-    'find first item such that %predRing in %l':
+    'find first item %predRing in %l':
         'primer element on %predRing de %l',
     'combine with %repRing items of %l':
         'combina amb %repRing els elements de %l',
     '%blitz map %repRing over %l':
         '%blitz mapeja %repRing sobre %l',
-    '%blitz keep items such that %predRing from %l':
+    '%blitz keep items %predRing from %l':
         '%blitz manté els elements on %predRing de %l',
-    '%blitz find first item such that %predRing in %l':
+    '%blitz find first item %predRing in %l':
         '%blitz primer element on %predRing de %l',
     '%blitz combine with %repRing items of %l':
         '%blitz combina amb %repRing els elements de %l',
