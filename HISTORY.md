@@ -88,6 +88,7 @@
     * French
 
 ### 2019-06-24
+* removed "such that" from KEEP and FIND block labels
 * updated Catalan translation, thanks, Joan!
 * updated Portuguese translation, thanks, Manuel!
 

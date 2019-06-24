@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-June-04';
+modules.objects = '2019-June-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1315,24 +1315,24 @@ SpriteMorph.prototype.initBlocks = function () {
         reportKeep: {
             type: 'reporter',
             category: 'lists',
-            spec: 'keep items such that %predRing from %l'
+            spec: 'keep items %predRing from %l'
         },
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz keep items such that %predRing from %l'
+            spec: '%blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
             category: 'lists',
-            spec: 'find first item such that %predRing in %l'
+            spec: 'find first item %predRing in %l'
         },
         reportAtomicFindFirst: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz find first item such that %predRing in %l'
+            spec: '%blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
