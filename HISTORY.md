@@ -82,9 +82,14 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
+    * Portuguese, thanks, Manuel!
     * Spanish
     * German
     * French
+
+### 2019-06-24
+* updated Catalan translation, thanks, Joan!
+* updated Portuguese translation, thanks, Manuel!
 
 ### 2019-06-06
 * Maps: fixed a typecasting issue, thanks, Bernat!
