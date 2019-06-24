@@ -2849,7 +2849,7 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
         );
     SymbolMorph.prototype.names.forEach(function (name) {
         menu.addItem(
-            [new SymbolMorph(name, menu.fontSize, symbolColor), name],
+            [new SymbolMorph(name, menu.fontSize, symbolColor), localize(name)],
             name
         );
     });
@@ -3702,7 +3702,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             menu.addMenu(
                 (contains(['%mlt', '%code'], myself.fragment.type) ?
                     on : off) +
-                'special',
+                localize('special'),
                  myself.specialSlotsMenu()
             );
             return menu;
