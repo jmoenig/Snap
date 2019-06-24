@@ -1,85 +1,3 @@
-// HelpDialogMorph //////////////////////////////////////////////////////
-
-// HelpDialogMorph inherits from DialogBoxMorph:
-
-HelpDialogMorph.prototype = new DialogBoxMorph();
-HelpDialogMorph.prototype.constructor = HelpDialogMorph;
-HelpDialogMorph.uber = DialogBoxMorph.prototype;
-
-// HelpDialogMorph instance creation:
-
-function HelpDialogMorph(block, target) {
-    this.init(block, target);
-}
-
-HelpDialogMorph.prototype.init = function (block, target) {
-    // additional properties:
-    this.block = block;
-    this.target = target;
-    this.screen = null;
-
-    // initialize inherited properties:
-    HelpDialogMorph.uber.init.call(
-        this,
-        target,
-        nop,
-        target
-    );
-
-    // override inherited properites:
-    this.key = 'help';
-    this.labelString = 'Help';
-    this.createLabel();
-
-    this.setExtent(new Point(600, 550));
-    this.addButton('ok', 'OK');
-};
-
-HelpDialogMorph.prototype.popUp = function () {
-    var myself = this,
-        world = this.target.parentThatIsA(WorldMorph),
-        ide = this.target.parentThatIsA(IDE_Morph),
-        spec;
-    
-    if (this.block.isCustomBlock) {
-        if (this.block.isGlobal) {
-            spec = this.block.definition.helpSpec();
-        } else {
-            spec = this.target.getMethod(this.blockSpec).helpSpec();
-        }
-    } else {
-        spec = this.block.selector;
-    }
-
-    ide.getURL( // TODO: error handling
-        ide.resourceURL('help', spec + '.xml'),
-        function (xmlString) {
-            var scrollFrame;
-            myself.screen = new SnapSerializer().loadHelpScreen(
-                xmlString, new SpriteMorph()
-            );
-            myself.screen.color = DialogBoxMorph.prototype.color;
-            scrollFrame = new ScrollFrameMorph(myself.screen);
-            scrollFrame.color = DialogBoxMorph.prototype.color;
-            myself.screen.scrollFrame = scrollFrame;
-            myself.addBody(scrollFrame);
-            myself.fixLayout();
-            HelpDialogMorph.uber.popUp.call(myself, world);
-        }
-    );
-};
-
-HelpDialogMorph.prototype.fixLayout = function () {
-    BlockEditorMorph.prototype.fixLayout.call(this);
-    if (this.screen) {
-        this.screen.fixLayout();
-    }
-    if (this.body) {
-        // hack - scroll bars don't properly update without this
-        this.body.setExtent(this.body.extent());
-    }
-};
-
 // HelpScreenMorph //////////////////////////////////////////////////////
 
 // HelpScreenMorph inherits from FrameMorph:
@@ -95,17 +13,20 @@ HelpScreenMorph.prototype.verticalPadding = 10;
 
 // HelpScreenMorph instance creation:
 
-function HelpScreenMorph() {
-    this.init();
+function HelpScreenMorph(loadCallback) {
+    this.init(loadCallback);
 }
 
-HelpScreenMorph.prototype.init = function () {
+HelpScreenMorph.prototype.init = function (loadCallback) {
     // additional properties:
     this.thumbnail = null;
+    this.imagesLoading = 0;
+    this.loadCallback = loadCallback;
 
     // initialize inherited properties:
     HelpScreenMorph.uber.init.call(this);
     this.setWidth(572);
+    this.color = DialogBoxMorph.prototype.color;
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
@@ -147,6 +68,7 @@ HelpScreenMorph.prototype.fixLayout = function () {
             resizeBox(box);
         }
     });
+    this.setHeight(nextY - verticalPadding);
 };
 
 HelpScreenMorph.prototype.createThumbnail = function () {
@@ -207,28 +129,39 @@ HelpScreenMorph.prototype.createScriptDiagram = function (
 };
 
 HelpScreenMorph.prototype.createImage = function (src, width, height) {
-    return new ImageMorph(src, width, height);
+    var myself = this;
+    this.imagesLoading += 1;
+    return new ImageMorph(src, width, height, function () {
+        myself.imageLoaded();
+    });
 };
 
-HelpScreenMorph.prototype.createMenu = function (items) {
-    var morph = new MenuMorph(), i;
+HelpScreenMorph.prototype.imageLoaded = function () {
+    this.imagesLoading -= 1;
+    if (this.imagesLoading === 0) {
+        this.loadCallback(this);
+    }
+}
+
+HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
+    var dict = {}, morph, i, item, itemMorph;
     items.forEach(function (item) {
         if (item.tag === 'line') {
-            morph.addLine();
+            dict['~'] = null;
         } else if (item.tag === 'item') {
-            morph.addItem(
-                item.contents,
-                null,
-                null,
-                item.attributes.color
-            );
+            dict[item.contents] = null;
         }
     });
+    morph = new InputSlotMorph().menuFromDict(dict, noEmptyOption);
     morph.drawNew();
     for (i = 0; i < items.length; i++) {
-        if (items[i].attributes.annotation) {
-            morph.children[i].annotationID =
-                items[i].attributes.annotation;
+        item = items[i];
+        itemMorph = morph.children[noEmptyOption ? i : i + 1];
+        if (item.attributes.color) {
+            itemMorph.setColor(item.attributes.color);
+        }
+        if (item.attributes.annotation) {
+            itemMorph.annotationID = item.attributes.annotation;
         }
     }
     return morph;
@@ -236,11 +169,11 @@ HelpScreenMorph.prototype.createMenu = function (items) {
 
 // SnapSerializer ///////////////////////////////////////////////////////////
 
-SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
+SnapSerializer.prototype.loadHelpScreen = function (xmlString, target, callback) {
     // public - answer the HelpScreenMorph represented by xmlString
     var myself = this,
         model = this.parse(xmlString),
-        screen = new HelpScreenMorph(),
+        screen = new HelpScreenMorph(callback),
         padding = HelpScreenMorph.prototype.padding;
 
     console.log(model);
@@ -341,13 +274,22 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target) {
         }
     });
 
-    return screen;
+    screen.fixLayout();
+
+    if (screen.imagesLoading === 0) {
+        callback(screen);
+    }
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (
     element, screen, target, textColor
 ) {
     var myself = this, morph, customBlock, script, textSize, italic;
+
+    function processText(text) {
+        return text.trim().split(/\s+/).join(' ') // collapse whitespace
+                    .replace(/\s*\\n\s*/g, '\n'); // replace $br with \n
+    }
 
     switch (element.tag) {
     case 'block-definition':
@@ -414,7 +356,10 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         );
         break;
     case 'menu':
-        morph = screen.createMenu(element.children);
+        morph = screen.createMenu(
+            element.children,
+            element.attributes['no-empty-option']
+        );
         break;
     case 'p':
     case 'small-p':
@@ -425,7 +370,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         italic = element.tag === 'i' || element.tag === 'small-i';
         if (element.children.length === 0) {
             morph = screen.createParagraph(
-                element.contents.trim().split(/\s+/).join(' '),
+                processText(element.contents),
                 textSize, element.attributes.color || textColor, italic
             );
         } else {
@@ -446,7 +391,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph = this.loadScript(element, target);
         break;
     case 'text':
-        return element.contents.trim().split(/\s+/).join(' ');
+        return processText(element.contents);
     case 'thumbnail':
         morph = screen.createThumbnail();
         break;
@@ -539,22 +484,24 @@ ImageMorph.prototype = new Morph();
 ImageMorph.prototype.constructor = ImageMorph;
 ImageMorph.uber = Morph.prototype;
 
-function ImageMorph(src, width, height) {
-    this.init(src, width, height);
+function ImageMorph(src, width, height, onload) {
+    this.init(src, width, height, onload);
 }
 
-ImageMorph.prototype.init = function (src, width, height) {
+ImageMorph.prototype.init = function (src, width, height, onload) {
     var myself = this;
 
     // initialize inherited properties:
     HelpScreenMorph.uber.init.call(this);
 
-    this.src = src;
     this.setExtent(new Point(width, height));
     this.pic = new Image();
     this.pic.onload = function () {
         myself.drawNew();
         myself.changed();
+        if (typeof onload === 'function') {
+            onload();
+        }
     };
     this.pic.src = 'help/' + src;
 };
@@ -900,6 +847,24 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     });
     this.arrows = [];
 
+    for (i = 1; i <= this.bubbles.length; i++) {
+        bubbleValue = this.bubbles[i - 1];
+        annotated = this.getAnnotatedMorph('annotationBubble', i);
+        if (annotated) {
+            bubble = annotated.showBubble(
+                bubbleValue, false, new SpriteMorph(), true
+            );
+            this.add(bubble);
+            bubble.setTop(this.top());
+            bubble.setLeft(this.script.right() + 2);
+            this.script.setTop(bubble.bottom());
+            diagramHeight = Math.max(
+                diagramHeight,
+                this.script.bottom() - this.top()
+            );
+        }
+    }
+
     for (i = 1; i <= this.menus.length; i++) {
         menu = this.menus[i - 1];
         annotated = this.getAnnotatedMorph('annotationMenu', i);
@@ -914,28 +879,6 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             diagramHeight = Math.max(
                 diagramHeight,
                 menu.bottom() - this.top()
-            );
-        }
-    }
-
-    for (i = 1; i <= this.bubbles.length; i++) {
-        bubbleValue = this.bubbles[i - 1];
-        annotated = this.getAnnotatedMorph('annotationBubble', i);
-        if (annotated) {
-            bubble = annotated.showBubble(
-                bubbleValue, false, new SpriteMorph(), true
-            );
-            this.add(bubble);
-            bubble.setTop(this.top());
-            bubble.setLeft(this.script.right() + 2);
-            this.script.setTop(bubble.bottom());
-            scriptWidth = Math.max(
-                scriptWidth,
-                bubble.right() - this.left()
-            );
-            diagramHeight = Math.max(
-                diagramHeight,
-                this.script.bottom() - this.top()
             );
         }
     }
@@ -1017,7 +960,8 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         arrowEndMorph = this.getAnnotatedMorph('annotationArrowEnd', i);
         arrowEnd = arrowEndMorph.center();
         arrow = new DiagramArrowMorph(arrowStart, arrowEnd, false);
-        arrow.color = arrowStartMorph.annotationArrowColor || this.defaultArrowColor;
+        arrow.color = arrowStartMorph.annotationArrowColor
+                        || this.defaultArrowColor;
         arrow.drawNew();
         this.arrows.push(arrow);
         this.add(arrow);
