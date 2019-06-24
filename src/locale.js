@@ -292,7 +292,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2019-05-02'
+        '2019-06-24'
 };
 
 SnapTranslator.dict.nl = {
