@@ -3404,12 +3404,6 @@ BlockMorph.prototype.showHelp = function (lang) {
             return;
         }
     }
-    if (lang === 'old') { // temporary until screens are moved
-        pic.src = ide.resourceURL(
-            'help', spec + '.png'
-        );
-        return;
-    }
     pic.src = ide.resourceURL(
         'help', lang, spec + '.png'
     );
