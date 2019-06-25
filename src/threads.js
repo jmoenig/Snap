@@ -2479,7 +2479,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
     this.evaluate(predicate, new List(parms));
 };
 
-Process.prototype.reportCombine = function (reporter, list) {
+Process.prototype.reportCombine = function (list, reporter) {
     // Fold - answer an aggregation of all list items from "left to right"
     // Distinguish between linked and arrayed lists.
     // if the reporter uses formal parameters instead of implicit empty slots
@@ -5239,7 +5239,7 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     return false;
 };
 
-Process.prototype.reportAtomicCombine = function (reporter, list) {
+Process.prototype.reportAtomicCombine = function (list, reporter) {
     // if the reporter uses formal parameters instead of implicit empty slots
     // there are two additional optional parameters:
     // #1 - accumulator

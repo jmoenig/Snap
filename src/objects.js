@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-June-24';
+modules.objects = '2019-June-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -1337,13 +1337,13 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCombine: {
             type: 'reporter',
             category: 'lists',
-            spec: 'combine with %repRing items of %l'
+            spec: 'combine %l using %repRing'
         },
         reportAtomicCombine: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz combine with %repRing items of %l'
+            spec: '%blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
