@@ -1583,10 +1583,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doHideVar: ['doShowVar'],
 
     // lists - HOFs
-    reportMap: ['reportKeep', 'reportFindFirst', 'reportCombine'],
-    reportKeep: ['reportFindFirst', 'reportMap', 'reportCombine'],
-    reportCombine: ['reportMap', 'reportKeep', 'reportFindFirst'],
-    reportFindFirst: ['reportKeep', 'reportMap', 'reportCombine']
+    reportMap: ['reportKeep', 'reportFindFirst'],
+    reportKeep: ['reportFindFirst', 'reportMap'],
+    reportFindFirst: ['reportKeep', 'reportMap']
 };
 
 // SpriteMorph instance creation
