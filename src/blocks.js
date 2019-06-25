@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-May-20';
+modules.blocks = '2019-June-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -621,6 +621,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
             dict.my = {
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
+                'name' : ['name'],
                 // 'temporary?' : ['temporary?'],
                 'dangling?' : ['dangling?'],
                 'draggable?' : ['draggable?'],
@@ -1099,7 +1100,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false, // numeric?
                 {
                     'letter' : ['letter'],
-                    'whitespace' : ['whitespace'],
+                    'word' : ['word'],
                     'line' : ['line'],
                     'tab' : ['tab'],
                     'cr' : ['cr'],
@@ -2276,7 +2277,10 @@ SyntaxElementMorph.prototype.showBubble = function (
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
+                IDE_Morph
+            ),
         scr = this.fullImage(),
         bub = aBubble.fullImageClassic(),
         taller = Math.max(0, bub.height - scr.height),
@@ -2783,7 +2787,9 @@ BlockMorph.prototype.userMenu = function () {
                     getScale: 'size',
                     getCostumeIdx: 'costume #',
                     getVolume: 'volume',
-                    getPan: 'balance'
+                    getPan: 'balance',
+                    reportShown: 'shown?',
+                    getPenDown: 'pen down?'
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
                     menu.addLine();
@@ -2843,13 +2849,14 @@ BlockMorph.prototype.userMenu = function () {
     // JIT-compile HOFs - experimental
     if (
         contains(
-            ['reportMap', 'reportKeep', 'reportCombine'],
+            ['reportMap', 'reportKeep', 'reportFindFirst', 'reportCombine'],
             this.selector
         )
     ) {
         alternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
+            reportFindFirst: 'reportAtomicFindFirst',
             reportCombine : 'reportAtomicCombine'
         };
         menu.addItem(
@@ -2863,13 +2870,19 @@ BlockMorph.prototype.userMenu = function () {
         );
     } else if (
         contains(
-            ['reportAtomicMap', 'reportAtomicKeep', 'reportAtomicCombine'],
+            [
+                'reportAtomicMap',
+                'reportAtomicKeep',
+                'reportAtomicFindFirst',
+                'reportAtomicCombine'
+            ],
             this.selector
         )
     ) {
         alternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
+            reportAtomicFindFirst: 'reportFindFirst',
             reportAtomicCombine : 'reportCombine'
         };
         menu.addItem(
@@ -9001,8 +9014,6 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     if (oop) {
         dict.children = ['children'];
         dict.parent = ['parent'];
-    }
-    if (oop && this.world().isDevMode) {
         dict['temporary?'] = ['temporary?'];
     }
     dict.name = ['name'];
@@ -12486,7 +12497,23 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "duplicate",
         function () {
-            myself.fullCopy().pickUp(myself.world());
+            var dup = myself.fullCopy(),
+                ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph),
+                world = myself.world();
+            dup.pickUp(world);
+            // register the drop-origin, so the comment can
+            // slide back to its former situation if dropped
+            // somewhere where it gets rejected
+            if (!ide && blockEditor) {
+                ide = blockEditor.target.parentThatIsA(IDE_Morph);
+            }
+            if (ide) {
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
         },
         'make a copy\nand pick it up'
     );

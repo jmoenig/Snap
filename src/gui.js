@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-May-09';
+modules.gui = '2019-May-29';
 
 // Declarations
 
@@ -1328,6 +1328,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     nameField.contrast = 90;
     nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
     this.spriteBar.add(nameField);
+    this.spriteBar.nameField = nameField;
     nameField.drawNew();
     nameField.accept = function () {
         var newName = nameField.getValue();

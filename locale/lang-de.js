@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-05-09', // this, too, will appear in the Translators tab
+        '2019-06-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -373,6 +373,8 @@ SnapTranslator.dict.de = {
         'anzeigen',
     'hide':
         'verstecken',
+    'shown?':
+        'angezeigt?',
     'go to %layer layer':
         'gehe nach %layer',
     'front':
@@ -457,6 +459,8 @@ SnapTranslator.dict.de = {
         'Stift runter',
     'pen up':
         'Stift hoch',
+    'pen down?':
+        'Stift unten?',
     'set pen color to %clr':
         'setze Stiftfarbe auf %clr',
     'set background color to %clr':
@@ -785,14 +789,18 @@ SnapTranslator.dict.de = {
         'ist %l leer?',
     'map %repRing over %l':
         'wende %repRing an auf %l',
-    'keep items such that %predRing from %l':
+    'keep items %predRing from %l':
         'behalte Elemente, die %predRing aus %l',
+    'find first item %predRing in %l':
+        'finde das erste Element, das %predRing in %l',
     'combine with %repRing items of %l':
         'kombiniere mit %repRing die Elemente von %l',
     '%blitz map %repRing over %l':
         '%blitz wende %repRing an auf %l',
-    '%blitz keep items such that %predRing from %l':
+    '%blitz keep items %predRing from %l':
         '%blitz behalte Elemente, die %predRing aus %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz finde das erste Element, das %predRing in %l',
     '%blitz combine with %repRing items of %l':
         '%blitz kombiniere mit %repRing die Elemente von %l',
     'for each %upvar in %l %cla':
@@ -1763,6 +1771,8 @@ SnapTranslator.dict.de = {
     // delimiters
     'letter':
         'Buchstabe',
+    'word':
+        'Wort',
     'whitespace':
         'Leerraum',
     'line':
@@ -1811,6 +1821,8 @@ SnapTranslator.dict.de = {
         'Verankerung',
     'parent':
         'Vorfahr',
+    'temporary?':
+        'temporär?',
     'children':
         'Abkömmlinge',
     'clones':

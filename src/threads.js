@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-May-15';
+modules.threads = '2019-June-03';
 
 var ThreadManager;
 var Process;
@@ -115,7 +115,8 @@ function invoke(
     timeout, // msecs
     timeoutErrorMsg, // string
     suppressErrors, // bool
-    callerProcess // optional for JS-functions
+    callerProcess, // optional for JS-functions
+    returnContext // bool
 ) {
     // execute the given block or context synchronously without yielding.
     // Apply context (not a block) to a list of optional arguments.
@@ -176,7 +177,7 @@ function invoke(
         }
         proc.runStep(deadline);
     }
-    return proc.homeContext.inputs[0];
+    return returnContext ? proc.homeContext : proc.homeContext.inputs[0];
 }
 
 // ThreadManager ///////////////////////////////////////////////////////
@@ -205,7 +206,8 @@ ThreadManager.prototype.startProcess = function (
     callback,
     isClicked,
     rightAway,
-    atomic // special option used (only) for "onStop" scripts
+    atomic, // special option used (only) for "onStop" scripts
+    variables // optional variable frame, used for WHEN hats
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -223,6 +225,18 @@ ThreadManager.prototype.startProcess = function (
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     newProc.isAtomic = atomic || false;
+
+    // in case an optional variable frame has been passed,
+    // copy it into the new outer context.
+    // Relevance: When a predicate inside a generic WHEN hat block
+    // publishes an upvar, this code makes the upvar accessible
+    // to the script attached to the WHEN hat
+    if (variables instanceof VariableFrame) {
+        Object.keys(variables.vars).forEach(function (vName) {
+            newProc.context.outerContext.variables.vars[vName] =
+                variables.vars[vName];
+        });
+    }
 
     // show a highlight around the running stack
     // if there are more than one active processes
@@ -416,7 +430,7 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     if ((!block) || this.findProcess(block, receiver)) {
         return;
     }
-    var pred = block.inputs()[0], world;
+    var pred = block.inputs()[0], world, test;
     if (block.removeHighlight()) {
         world = block.world();
         if (world) {
@@ -425,30 +439,38 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     }
     if (stopIt) {return; }
     try {
-        if (invoke(
+        test = invoke(
             pred,
             null,
             receiver,
-            50,
+            50, // timeout in msecs
             'the predicate takes\ntoo long for a\ncustom hat block',
-            true // suppress errors => handle them right here instead
-        ) === true) {
-            this.startProcess(
-                block,
-                receiver,
-                null,
-                null,
-                null,
-                null,
-                true // atomic
-            );
-        }
+            true, // suppress errors => handle them right here instead
+            null, // caller process for JS-functions
+            true // return the whole home context instead of just he result
+        );
     } catch (error) {
         block.addErrorHighlight();
         block.showBubble(
             error.name
             + '\n'
             + error.message
+        );
+    }
+    // since we're asking for the whole context instead of just the result
+    // of the computation, we need to look at the result-context's first
+    // input to find out whether the condition is met
+    if (test && test.inputs[0] === true) {
+        this.startProcess(
+            block,
+            receiver,
+            null, // isThreadSafe
+            null, // exportResult
+            null, // callback
+            null, // isClicked
+            true,  // rightAway
+            null, // atomic
+            test.variables // make the test-context's variables available
         );
     }
 };
@@ -2150,33 +2172,48 @@ Process.prototype.doWaitUntil = function (goalCondition) {
 
 // Process interpolated iteration primitives
 
-/*
-    these primitives can be - for the most part easily - written as
-    custom blocks by users themselves. They are, or used to be, in
-    libraries that could be loaded additionally. Making them available
-    as primitives has the benefit of getting novices acquainted to
-    using HOFs plus some performance advantages, however at the cost
-    of losing the ability to inspect how they're written.
-*/
-
 Process.prototype.doForEach = function (upvar, list, script) {
+
+//Process.prototype.reportFindFirst = function (predicate, list) {
     // perform a script for each element of a list, assigning the
     // current iteration's element to a variable with the name
     // specified in the "upvar" parameter, so it can be referenced
-    // within the script. Uses the context's - unused - fourth
-    // element as temporary storage for the current list index
+    // within the script.
+    // Distinguish between linked and arrayed lists.
 
+    var next;
     this.assertType(list, 'list');
-    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
-    var index = this.context.inputs[3],
-        item = list.at(index);
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, item);
-    if (index > list.length()) {return; }
-    this.context.inputs[3] += 1;
+    if (list.isLinked) {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                source : list,
+                remaining : list.length()
+            };
+        }
+        if (this.context.accumulator.remaining === 0) {
+            return;
+        }
+        next = this.context.accumulator.source.at(1);
+        this.context.accumulator.remaining -= 1;
+        this.context.accumulator.source =
+            this.context.accumulator.source.cdr();
+    } else { // arrayed
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                idx : 0
+            };
+        }
+        if (this.context.accumulator.idx === list.length()) {
+            return;
+        }
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
+    }
     this.pushContext('doYield');
     this.pushContext();
-    this.evaluate(script, new List([item]), true);
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(upvar, next);
+    this.evaluate(script, new List([next]), true);
 };
 
 Process.prototype.doFor = function (upvar, start, end, script) {
@@ -2334,6 +2371,61 @@ Process.prototype.reportKeep = function (predicate, list) {
         }
         this.context.accumulator.idx += 1;
         next = list.at(this.context.accumulator.idx);
+    }
+    this.pushContext();
+    this.evaluate(predicate, new List([next]));
+};
+
+Process.prototype.reportFindFirst = function (predicate, list) {
+    // Find - answer the first item of the list for which
+    // the predicate evaluates TRUE.
+    // Distinguish between linked and arrayed lists.
+
+    var next;
+    this.assertType(list, 'list');
+    if (list.isLinked) {
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                source : list,
+                remaining : list.length()
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.returnValueToParentContext(
+                    this.context.accumulator.source.at(1)
+                );
+                return;
+            }
+            this.context.accumulator.remaining -= 1;
+            this.context.accumulator.source =
+                this.context.accumulator.source.cdr();
+        }
+        if (this.context.accumulator.remaining === 0) {
+            this.returnValueToParentContext(false);
+            return;
+        }
+        next = this.context.accumulator.source.at(1);
+    } else { // arrayed
+        if (this.context.accumulator === null) {
+            this.context.accumulator = {
+                idx : 0,
+                current : null
+            };
+        } else if (this.context.inputs.length > 2) {
+            if (this.context.inputs.pop() === true) {
+                this.returnValueToParentContext(
+                    this.context.accumulator.current
+                );
+                return;
+            }
+        }
+        if (this.context.accumulator.idx === list.length()) {
+            this.returnValueToParentContext(false);
+            return;
+        }
+        this.context.accumulator.idx += 1;
+        next = list.at(this.context.accumulator.idx);
+        this.context.accumulator.current = next;
     }
     this.pushContext();
     this.evaluate(predicate, new List([next]));
@@ -3277,6 +3369,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'cr':
         del = '\r';
         break;
+    case 'word':
     case 'whitespace':
         str = str.trim();
         del = /\s+/;
@@ -4224,6 +4317,19 @@ Process.prototype.doSet = function (attribute, value) {
             }
         }
         break;
+    case 'name':
+        this.assertType(rcvr, ['sprite', 'stage']);
+        this.assertType(value, ['text', 'number']);
+        ide = rcvr.parentThatIsA(IDE_Morph);
+        if (ide) {
+            rcvr.setName(
+                ide.newSpriteName(value.toString(), rcvr)
+            );
+            ide.spriteBar.nameField.setContents(
+                ide.currentSprite.name.toString()
+            );
+        }
+        break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
@@ -4727,7 +4833,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        this.blockReceiver().newCostumeName(localize('snap')) // +++
+        this.blockReceiver().newCostumeName(localize('snap'))
     );
 };
 
@@ -4986,6 +5092,42 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
      	}
     }
     return new List(result);
+};
+
+Process.prototype.reportAtomicFindFirst = function (reporter, list) {
+    this.assertType(list, 'list');
+    var src = list.asArray(),
+        len = src.length,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    // fall back to the morphic reporter if unsuccessful
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.log(err.message);
+        func = reporter;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+    for (i = 0; i < len; i += 1) {
+        if (
+            invoke(
+                func,
+                new List([src[i]]),
+                null,
+                null,
+                null,
+                null,
+                this.capture(reporter) // process
+            )
+        ) {
+            return src[i];
+         }
+    }
+    return false;
 };
 
 Process.prototype.reportAtomicCombine = function (reporter, list) {

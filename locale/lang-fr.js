@@ -197,7 +197,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2019-05-02', // this, too, will appear in the Translators tab
+        '2019-06-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -704,13 +704,13 @@ SnapTranslator.dict.fr = {
         '%l vide?',
     'map %repRing over %l':
         'appliquer %repRing à %l',
-    'keep items such that %predRing from %l':
+    'keep items %predRing from %l':
         'garder les items tels que %predRing de %l',
     'combine with %repRing items of %l':
         'combine avec %repRing les items de %l',
     '%blitz map %repRing over %l':
         '%blitz appliquer %repRing à %l',
-    '%blitz keep items such that %predRing from %l':
+    '%blitz keep items %predRing from %l':
         '%blitz garder les items tels que %predRing de %l',
     '%blitz combine with %repRing items of %l':
         '%blitz combine avec %repRing les items de %l',

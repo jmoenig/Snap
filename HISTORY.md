@@ -27,9 +27,11 @@
     * new "stretch" primitive for costumes, also for flipping
     * new "get graphic effect" reporter
     * new "get pen attribute" reporter
+    * new "pen down?" predicate
+    * new "shown?" predicate
     * new "write" command in pen category (used to be "label" in tools)
-    * new "numbers", "is empty", "map","keep", "combine" and "for each" primitives in list category
-    * new JIT-compiler "blitz-HOF" primitives for "map", "keep" & "combine" via "compile"
+    * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
+    * new JIT-compiler "blitz-HOF" primitives for "map", "keep", "find" & "combine" via "compile"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
     * added "^" reporter (power of) in the Operators category
@@ -56,12 +58,16 @@
     * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
+    * renamed "whitespace" option in SPLIT to "word"
+    * made the "name" attribute programmatically settable
+    * made the "temporary?" attibute readyble
     * deprecated storing projects in the browser's localStorage
     * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
     * more language options for the Text2Speech library, thanks Joan!
 * Notable Fixes:
+    * predicates inside generic WHEN hat blocks can now pass upvars
     * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
     * transforming arrayed to linked lists without loosing the last element
@@ -76,9 +82,62 @@
     * Indonesian, thanks, Emanuella!
     * Greek, thanks, Alexandros!
     * Catalan, thanks, Joan!
+    * Portuguese, thanks, Manuel!
     * Spanish
     * German
     * French
+
+### 2019-06-24
+* removed "such that" from KEEP and FIND block labels
+* adjusted German, French, Portuguese, Spanish, Catalan translations
+* updated Catalan translation, thanks, Joan!
+* updated Portuguese translation, thanks, Manuel!
+* fixed #2417
+* fixed #2416
+
+### 2019-06-06
+* Maps: fixed a typecasting issue, thanks, Bernat!
+
+### 2019-06-04
+* Objects, Lists: fixed #682
+* Lists, Tables: fixed table watcher cell updates for costumes (save / load) 
+
+### 2019-06-03
+* Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
+* Blocks: fixed #1740
+* Blocks: fixed #670 and #1804
+
+### 2019-06-02
+* Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
+* Objects, Blocks: made "shown?" attribute inheritable 
+* Objects, Blocks: made "pen down?" attribute inheritable
+* Objects: made watchers immediately react to inheritance changes
+
+### 2019-06-01
+* Objects: new "pen down?" predicate
+* Objects: new "shown?" predicate
+* updated German translation for "shown?" and "pen down?"
+
+### 2019-05-31
+* Threads: optimized FOREACH performance for large linked lists
+* German translation update (FINDFIRST, WORD, TEMPORARY?)
+* Threads: also allow numbers as sprite names in SET
+* updated "animation" library (purged unused blocks)
+* updated "audioComp" library (purged unused blocks)
+* updated "frequency distribution" library (changed PIPE to use EMPTY prim)
+* Maps: added support for zxy, zyx and xyz style maps and satellite imagery
+* updated "World Map" library with options for Satellite, Streets and Shading
+
+### 2019-05-29
+* Threads, Objects: added "Find First" primitive to lists category
+* Blocks, Threads, Objects: added "blitz" version of FIND
+* Blocks, Threads, Objects:  renamed "whitespace" option in SPLIT to "word"
+* GUI, Threads: made "name" attribut programmatically settable, (I hate my life!)
+* Blocks: made the "temporary?" attibute readable (I hate my life even more!)
+
+### 2019-05-28
+* Maps: added various different tile hosts
+* added "set map style" command to maps library
 
 ### 2019-05-25
 * added credits and license information to map costumes

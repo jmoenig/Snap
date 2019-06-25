@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-April-04';
+modules.store = '2019-June-02';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -264,9 +264,11 @@ SnapSerializer.prototype.watcherLabels = {
     yPosition: 'y position',
     direction: 'direction',
     getScale: 'size',
+    reportShown: 'shown?',
     getTempo: 'tempo',
     getVolume: 'volume',
     getPan: 'balance',
+    getPenDown: 'pen down?',
     getLastAnswer: 'answer',
     getLastMessage: 'message',
     getTimer: 'timer',

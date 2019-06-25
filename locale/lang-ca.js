@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-05-19', // this, too, will appear in the Translators tab
+        '2019-06-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -360,6 +360,8 @@ SnapTranslator.dict.ca = {
         'mostra',
     'hide':
         'amaga',
+    'shown?':
+        'visible?',
     'go to %layer layer':
         'vés a la capa del %layer',
     'go back %n layers':
@@ -409,6 +411,8 @@ SnapTranslator.dict.ca = {
         'baixa el llapis',
     'pen up':
         'puja el llapis',
+    'pen down?':
+        'llapis abaixat?',
     'set pen color to %clr':
         'fixa el color del llapis a %clr',
     'change pen color by %n':
@@ -617,7 +621,7 @@ SnapTranslator.dict.ca = {
     'false':
         'fals',
     'join %words':
-        'unir %words',
+        'uneix %words',
     'split %s by %delim':
         'divideix %s per %delim',
     'hello':
@@ -684,14 +688,18 @@ SnapTranslator.dict.ca = {
         '%l buida?',
     'map %repRing over %l':
         'mapeja %repRing sobre %l',
-    'keep items such that %predRing from %l':
+    'keep items %predRing from %l':
         'manté els elements on %predRing de %l',
+    'find first item %predRing in %l':
+        'primer element on %predRing de %l',
     'combine with %repRing items of %l':
         'combina amb %repRing els elements de %l',
     '%blitz map %repRing over %l':
         '%blitz mapeja %repRing sobre %l',
-    '%blitz keep items such that %predRing from %l':
+    '%blitz keep items %predRing from %l':
         '%blitz manté els elements on %predRing de %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz primer element on %predRing de %l',
     '%blitz combine with %repRing items of %l':
         '%blitz combina amb %repRing els elements de %l',
     'for each %upvar in %l %cla':
@@ -1497,6 +1505,8 @@ SnapTranslator.dict.ca = {
     // delimiters
     'letter':
         'lletra',
+    'word':
+        'paraula',
     'whitespace':
         'espai en blanc',
     'line':
@@ -1543,6 +1553,8 @@ SnapTranslator.dict.ca = {
         'àncora',
     'parent':
         'pare',
+    'temporary?':
+        'temporal?',
     'children':
         'fill',
     'clones':
@@ -2559,7 +2571,9 @@ SnapTranslator.dict.ca = {
     '"Bigger" Data':
         'Treballant amb "Big Data"',
     'Frequency Distribution Analysis':
-        'Anàlisi de la disbribució de freqüències',
+        'Anàlisi de la distribució de freqüències',
+    'World Map':
+        'Mapa del món',
     'create variables in program':
         'Creant variables des del programa',
     'Deal with JSON data':

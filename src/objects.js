@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-May-24';
+modules.objects = '2019-June-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -128,6 +128,8 @@ SpriteMorph.prototype.attributes =
         'volume',
         'balance',
         'sounds',
+        'shown?',
+        'pen down?',
         'scripts'
     ];
 
@@ -387,16 +389,19 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'size'
         },
         show: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'show'
         },
         hide: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'hide'
+        },
+        reportShown: {
+            type: 'predicate',
+            category: 'looks',
+            spec: 'shown?'
         },
         goToLayer: {
             only: SpriteMorph,
@@ -581,6 +586,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'pen up'
+        },
+        getPenDown: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'pen',
+            spec: 'pen down?'
         },
         setColor: {
             only: SpriteMorph,
@@ -1304,13 +1315,24 @@ SpriteMorph.prototype.initBlocks = function () {
         reportKeep: {
             type: 'reporter',
             category: 'lists',
-            spec: 'keep items such that %predRing from %l'
+            spec: 'keep items %predRing from %l'
         },
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz keep items such that %predRing from %l'
+            spec: '%blitz keep items %predRing from %l'
+        },
+        reportFindFirst: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'find first item %predRing in %l'
+        },
+        reportAtomicFindFirst: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
@@ -1560,10 +1582,11 @@ SpriteMorph.prototype.blockAlternatives = {
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
 
-    // lists - blitz primitives
-    reportMap: ['reportKeep', 'reportCombine'],
-    reportKeep: ['reportMap', 'reportCombine'],
-    reportCombine: ['reportMap', 'reportKeep']
+    // lists - HOFs
+    reportMap: ['reportKeep', 'reportFindFirst', 'reportCombine'],
+    reportKeep: ['reportFindFirst', 'reportMap', 'reportCombine'],
+    reportCombine: ['reportMap', 'reportKeep', 'reportFindFirst'],
+    reportFindFirst: ['reportKeep', 'reportMap', 'reportCombine']
 };
 
 // SpriteMorph instance creation
@@ -2175,6 +2198,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(watcherToggle('reportShown'));
+        blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
@@ -2257,6 +2282,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('down'));
         blocks.push(block('up'));
+        blocks.push(watcherToggle('getPenDown'));
+        blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
         blocks.push('-');
         blocks.push(block('setColor'));
         blocks.push(block('changePenHSVA'));
@@ -2550,6 +2577,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
+        blocks.push(block('reportFindFirst'));
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
@@ -2737,6 +2765,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'doForEach',
                         'reportMap',
                         'reportKeep',
+                        'reportFindFirst',
                         'reportCombine',
                         'doAddToList',
                         'doDeleteFromList',
@@ -4012,14 +4041,42 @@ SpriteMorph.prototype.corpsify = function () {
     nested parts.
 */
 
-SpriteMorph.prototype.hide = function () {
-    SpriteMorph.uber.hide.call(this);
-    this.parts.forEach(function (part) {part.hide(); });
+SpriteMorph.prototype.show = function () {
+    this.setVisibility(true);
 };
 
-SpriteMorph.prototype.show = function () {
-    SpriteMorph.uber.show.call(this);
-    this.parts.forEach(function (part) {part.show(); });
+SpriteMorph.prototype.hide = function () {
+    this.setVisibility(false);
+};
+
+SpriteMorph.prototype.setVisibility = function (bool, noShadow) {
+    if (bool) {
+        SpriteMorph.uber.show.call(this);
+    } else {
+        SpriteMorph.uber.hide.call(this);
+    }
+
+    // progagate to parts
+    this.parts.forEach(function (part) {part.setVisibility(bool); });
+
+    // propagate to children that inherit my visibility
+    if (!noShadow) {
+        this.shadowAttribute('shown?');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('shown?')) {
+                instance.setVisibility(bool, true);
+            }
+        }
+    });
+};
+
+SpriteMorph.prototype.reportShown = function () {
+    if (this.inheritsAttribute('shown?')) {
+        return this.exemplar.reportShown();
+    }
+    return this.isVisible;
 };
 
 // SpriteMorph pen color
@@ -4146,7 +4203,7 @@ SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     return oImg;
 };
 
-// SpriteMorph stamping
+// SpriteMorph pen ops
 
 SpriteMorph.prototype.doStamp = function () {
     var stage = this.parent,
@@ -4181,8 +4238,6 @@ SpriteMorph.prototype.doStamp = function () {
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
-
-// SpeiteMorph writing (printing)
 
 SpriteMorph.prototype.write = function (text, size) {
     // thanks to Michael Ball for contributing this code!
@@ -4225,8 +4280,6 @@ SpriteMorph.prototype.write = function (text, size) {
     stage.changed();
 };
 
-// SpriteMorph pen size
-
 SpriteMorph.prototype.setSize = function (size) {
     // pen size
     if (!isNaN(size)) {
@@ -4236,6 +4289,43 @@ SpriteMorph.prototype.setSize = function (size) {
 
 SpriteMorph.prototype.changeSize = function (delta) {
     this.setSize(this.size + (+delta || 0));
+};
+
+// SpriteMorph pen up and down:
+
+SpriteMorph.prototype.down = function () {
+    this.setPenDown(true);
+};
+
+SpriteMorph.prototype.up = function () {
+    this.setPenDown(false);
+};
+
+SpriteMorph.prototype.setPenDown = function (bool, noShadow) {
+    if (bool) {
+        SpriteMorph.uber.down.call(this);
+    } else {
+        SpriteMorph.uber.up.call(this);
+    }
+
+    // propagate to children that inherit my visibility
+    if (!noShadow) {
+        this.shadowAttribute('pen down?');
+    }
+    this.instances.forEach(function (instance) {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('pen down?')) {
+                instance.setPenDown(bool, true);
+            }
+        }
+    });
+};
+
+SpriteMorph.prototype.getPenDown = function () {
+    if (this.inheritsAttribute('pen down?')) {
+        return this.exemplar.getPenDown();
+    }
+    return this.isDown;
 };
 
 // SpriteMorph scale
@@ -6153,7 +6243,9 @@ SpriteMorph.prototype.updatePropagationCache = function () {
             'size',
             'costume #',
             'volume',
-            'balance'
+            'balance',
+            'shown?',
+            'pen down?'
         ],
         function (att) {
             return contains(myself.inheritedAttributes, att);
@@ -6276,6 +6368,14 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'volume':
         this.cachedPropagation = true;
         this.setVolume(this.getVolume(), true);
+        break;
+    case 'shown?':
+        this.cachedPropagation = true;
+        this.setVisibility(this.reportShown(), true);
+        break;
+    case 'pen down?':
+        this.cachedPropagation = true;
+        this.setPenDown(this.getPenDown(), true);
         break;
     case 'balance':
         this.cachedPropagation = true;
@@ -7952,6 +8052,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push(watcherToggle('reportShown'));
+        blocks.push(block('reportShown'));
 
     // for debugging: ///////////////
 
@@ -8289,6 +8391,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
+        blocks.push(block('reportFindFirst'));
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
@@ -8471,6 +8574,8 @@ StageMorph.prototype.show = function () {
     this.isVisible = true;
     this.changed();
 };
+
+StageMorph.prototype.reportShown = SpriteMorph.prototype.reportShown;
 
 // StageMorph cloning override
 
@@ -10276,11 +10381,12 @@ CellMorph.prototype.fixLayout = function () {
 
 CellMorph.prototype.update = function () {
     // special case for observing sprites
-    if (!isSnapObject(this.contents)) {
+    if (!isSnapObject(this.contents) && !(this.contents instanceof Costume)) {
         return;
     }
     if (this.version !== this.contents.version) {
         this.drawNew();
+        this.version = this.contents.version;
     }
 };
 
@@ -10602,6 +10708,7 @@ WatcherMorph.prototype.init = function (
     this.labelText = label || '';
     this.version = null;
     this.objName = '';
+    this.isGhosted = false; // transient, don't persist
 
     // initialize inherited properties
     WatcherMorph.uber.init.call(
@@ -10680,7 +10787,7 @@ WatcherMorph.prototype.setSliderMax = function (num, noUpdate) {
 
 WatcherMorph.prototype.update = function () {
     var newValue, sprite, num, att,
-        isGhosted = false;
+        isInherited = false;
 
     if (this.target && this.getter) {
         this.updateLabel();
@@ -10717,9 +10824,11 @@ WatcherMorph.prototype.update = function () {
                 getCostumeIdx: 'costume #',
                 getScale: 'size',
                 getVolume: 'volume',
-                getPan: 'balance'
+                getPan: 'balance',
+                reportShown: 'shown?',
+                getPenDown: 'pen down?'
             } [this.getter];
-            isGhosted = att ? this.target.inheritsAttribute(att) : false;
+            isInherited = att ? this.target.inheritsAttribute(att) : false;
         }
         if (newValue !== '' && !isNil(newValue)) {
             num = +newValue;
@@ -10727,11 +10836,14 @@ WatcherMorph.prototype.update = function () {
                 newValue = Math.round(newValue * 1000000000) / 1000000000;
             }
         }
-        if (newValue !== this.currentValue) {
+        if (newValue !== this.currentValue ||
+                isInherited !== this.isGhosted ||
+                (newValue.version && (newValue.version !== this.version))) {
             this.changed();
             this.cellMorph.contents = newValue;
+            this.isGhosted = isInherited;
             if (isSnapObject(this.target)) {
-                if (isGhosted) {
+                if (isInherited) {
                     this.cellMorph.setColor(this.readoutColor.lighter(35));
                 } else {
                     this.cellMorph.setColor(this.readoutColor);
@@ -10743,6 +10855,11 @@ WatcherMorph.prototype.update = function () {
                 this.sliderMorph.drawNew();
             }
             this.fixLayout();
+            if (this.currentValue && this.currentValue.version) {
+                this.version = this.currentValue.version;
+            } else {
+                this.version = Date.now();
+            }
             this.currentValue = newValue;
         }
     }
