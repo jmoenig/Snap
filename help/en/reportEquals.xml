@@ -1,0 +1,37 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportEquals">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportEquals">
+                                    <block s="direction"/>
+                                    <l>0</l>
+                                </block>
+                                <script>
+                                    <block s="doSwitchToCostume" annotation="2">
+                                        <l>look up</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If direction equals 0 (poiinting up)</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

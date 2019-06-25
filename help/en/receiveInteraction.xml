@@ -1,0 +1,48 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveInteraction">
+                <l><option>clicked</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Start script when sprite is...</p>
+            <diagram>
+                <menu>
+                    <item annotation="1">clicked</item>
+                    <item annotation="2">pressed</item>
+                    <item annotation="3">dropped</item>
+                    <item annotation="4">mouse-entered</item>
+                    <item annotation="5">mouse-departed</item>
+                    <item annotation="6">scrolled-up</item>
+                    <item>scrolled-down</item>
+                    <item annotation="7">stopped</item>
+                </menu>
+                <annotations>
+                    <small-p>Clicked and then released</small-p>
+                    <small-p>
+                        Clicked, even before mouse button is released
+                    </small-p>
+                    <small-p>
+                        Clicked, dragged (moved), and then released
+                    </small-p>
+                    <small-p>Entered by mouse, without clicking</small-p>
+                    <small-p>
+                        Entered and then left by mouse, without clicking
+                    </small-p>
+                    <small-p>
+                        When mouse wheel is scrolled up or down while
+                        hovering over this sprite
+                    </small-p>
+                    <small-p>
+                        <text>When scripts are stopped (</text>
+                        <img src="receiveInteraction_stop.png" width="14" height="14"/>
+                        <text>)</text>
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

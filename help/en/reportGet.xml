@@ -1,0 +1,153 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportGet">
+                <l><option>neighbors</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports properties of this sprite and its family.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportGet" menu="1">
+                            <l><option>neighbors</option></l>
+                        </block>
+                    </script>
+                    <menus>
+                        <menu>
+                            <item color="orange">neighbors</item>
+                            <item color="lime">self</item>
+                            <item color="orange">other sprites</item>
+                            <item color="orange">clones</item>
+                            <item color="orange">other clones</item>
+                            <item color="orange">parts</item>
+                            <item color="lime">anchor</item>
+                            <item color="lime">stage</item>
+                            <item color="orange">children</item>
+                            <item color="lime">parent</item>
+                            <item color="cyan">temporary?</item>
+                            <item>name</item>
+                            <item color="lime">costume</item>
+                            <item color="orange">costumes</item>
+                            <item color="orange">sounds</item>
+                            <item color="cyan">dangling?</item>
+                            <item color="cyan">draggable?</item>
+                            <item color="fuchsia">width</item>
+                            <item color="fuchsia">height</item>
+                            <item color="fuchsia">rotation style</item>
+                            <item color="fuchsia">rotation x</item>
+                            <item color="fuchsia">rotation y</item>
+                            <item color="fuchsia">center x</item>
+                            <item color="fuchsia">center y</item>
+                        </menu>
+                    </menus>
+                </diagram>
+                <column rel-width="2">
+                    <row>
+                        <p color="lime" rel-width="1">● Reports an object</p>
+                        <diagram rel-width="1">
+                            <script>
+                                <block s="reportGet" bubble="1">
+                                    <l><option>self</option></l>
+                                </block>
+                            </script>
+                            <bubbles>
+                                <img src="reportGet_alonzo.png" width="49" height="61"/>
+                            </bubbles>
+                        </diagram>
+                    </row>
+                    <row>
+                        <p color="fuchsia" rel-width="1">● Reports a number</p>
+                        <diagram rel-width="1">
+                            <script>
+                                <block s="reportGet" bubble="1">
+                                    <l><option>rotation x</option></l>
+                                </block>
+                            </script>
+                            <bubbles>
+                                <text>-115</text>
+                            </bubbles>
+                        </diagram>
+                    </row>
+                    <row>
+                        <p color="cyan" rel-width="1">● Reports a Boolean</p>
+                        <diagram rel-width="1">
+                            <script>
+                                <block s="reportGet" bubble="1">
+                                    <l><option>dangling?</option></l>
+                                </block>
+                            </script>
+                            <bubbles>
+                                <bool>false</bool>
+                            </bubbles>
+                        </diagram>
+                    </row>
+                    <row>
+                        <p color="orange" rel-width="3">● Reports a list</p>
+                        <diagram rel-width="5">
+                            <script>
+                                <block s="reportGet" bubble="1">
+                                    <l><option>dangling?</option></l>
+                                </block>
+                            </script>
+                            <bubbles>
+                                <img src="reportGet_list.png" width="91" height="90"/>
+                            </bubbles>
+                        </diagram>
+                    </row>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportAskFor">
+                        <l>Sprite(3)</l>
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportGet">
+                                    <l><option>self</option></l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <list/>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportGet_cake.png" width="72" height="58"/>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportAskFor">
+                        <block s="reportGet">
+                            <l><option>parent</option></l>
+                        </block>
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportGet">
+                                    <l><option>name</option></l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <list/>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>soccerball</text>
+                </bubbles>
+            </diagram>
+            <p>
+                For more details on what each option means, read the
+                Reference Manual, Chapter VII.
+            </p>
+        </column>
+    </box>
+</help-screen>

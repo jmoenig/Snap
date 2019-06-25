@@ -1,0 +1,130 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="prime? %&apos;value&apos;" type="predicate" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportListIsEmpty">
+                        <block s="reportKeep">
+                            <block s="reifyPredicate">
+                                <autolambda>
+                                    <block s="reportEquals">
+                                        <block s="reportModulus">
+                                            <block var="value"/>
+                                            <l/>
+                                        </block>
+                                        <l>0</l>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <block s="reportNumbers">
+                                <l>2</l>
+                                <block s="reportDifference">
+                                    <block var="value"/>
+                                    <l>1</l>
+                                </block>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <block s="reportNumbers">
+                <l>1</l>
+                <l>10</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report a list of consecutive numbers.</p>
+            <row padding="0">
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportNumbers" bubble="1">
+                            <l>3</l>
+                            <l>6</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportNumbers_list1.png" width="80" height="87"/>
+                    </bubbles>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportNumbers" bubble="1">
+                            <l>-2</l>
+                            <l>1</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportNumbers_list1.png" width="80" height="87"/>
+                    </bubbles>
+                </diagram>
+            </row>
+            <diagram>
+                <script>
+                    <block s="reportNumbers" bubble="1">
+                        <l>5</l>
+                        <l>1</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportNumbers_list3.png" width="80" height="69"/>
+                </bubbles>
+            </diagram>
+            <p>(Range must be ascending.)</p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <block-definition s="prime? %n"/>
+            <p>
+                A number n is prime if the lsit of its factors in the range
+                [2,n-1] is empty.
+            </p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <custom-block s="prime? %n" bubble="1">
+                            <l>7</l>
+                        </custom-block>
+                    </script>
+                    <bubbles>
+                        <bool>true</bool>
+                    </bubbles>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <custom-block s="prime? %n" bubble="1">
+                            <l>7</l>
+                        </custom-block>
+                    </script>
+                    <bubbles>
+                        <bool>false</bool>
+                    </bubbles>
+                </diagram>
+            </row>
+            <diagram>
+                <script>
+                    <block s="reportNumbers" bubble="1">
+                        <l>1.3</l>
+                        <l>5</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportNumbers_list1.png" width="80" height="87"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,80 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportColorIsTouchingColor">
+                <color>145,26,68,1</color>
+                <color>145,26,68,1</color>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="doIf" annotation="2">
+                                <block s="reportColorIsTouchingColor">
+                                    <color>103,65,38,1</color>
+                                    <color>155,102,1,1</color>
+                                </block>
+                                <script>
+                                    <block s="doPlayNote" annotation="3">
+                                        <l>60</l>
+                                        <l>0.5</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>
+                        If the nose of the bee (color brown) touches the
+                        center of the flower (color orange)
+                    </small-p>
+                    <small-p>Play a sound to show that it landed</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <img src="reportColorIsTouchingColor_not_touching.png" width="165" height="78"/>
+                <img src="reportColorIsTouchingColor_touching.png" width="165" height="78"/>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportColorIsTouchingColor">
+                        <color>145,26,68,1</color>
+                        <color annotation="1">145,26,68,1</color>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Get the eye dropper by clicking in the square.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <img src="reportColorIsTouchingColor_dropper.png" width="32" height="30"/>
+                <small-p>
+                    Use the eye dropper to click on the color you want.
+                </small-p>
+            </row>
+            <diagram>
+                <script>
+                    <block s="reportColorIsTouchingColor">
+                        <color>145,26,68,1</color>
+                        <color annotation="1">255,0,0,1</color>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Color appears in square</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,51 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="turnLeft">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="turn" annotation="1">
+                        <l>30</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Rotate this much</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="turnLeft" annotation="1">
+                        <l>30</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Rotate the other way</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doRepeat" annotation="1">
+                        <l>12</l>
+                        <script>
+                            <block s="forward">
+                                <l>50</l>
+                            </block>
+                            <block s="turn">
+                                <l>30</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Go in a circle</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

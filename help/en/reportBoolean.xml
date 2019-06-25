@@ -1,0 +1,123 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="square %&apos;size&apos; %&apos;pendown&apos;" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+                <input type="%b"></input>
+            </inputs>
+            <script>
+                <block s="doIf">
+                    <block var="pendown"/>
+                    <script>
+                        <block s="down"/>
+                    </script>
+                </block>
+                <block s="doRepeat">
+                    <l>4</l>
+                    <script>
+                        <block s="forward">
+                            <block var="size"/>
+                        </block>
+                        <block s="turn">
+                            <l>90</l>
+                        </block>
+                    </script>
+                </block>
+            </script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <row>
+            <script>
+                <block s="reportBoolean">
+                    <l><bool>true</bool></l>
+                </block>
+            </script>
+            <script>
+                <block s="reportBoolean">
+                    <l><bool>false</bool></l>
+                </block>
+            </script>
+        </row>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports “true” or “false.”</p>
+            <diagram>
+                <script>
+                    <block s="reportBoolean" annotation="1">
+                        <l><bool>true</bool></l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Click me!</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <p>
+                        This says, “draw a square with side 200 steps, after
+                        putting the pend down first.”
+                    </p>
+                    <script>
+                        <custom-block s="square %n %b">
+                            <l>100</l>
+                            <l><bool>true</bool></l>
+                        </custom-block>
+                    </script>
+                    <p>
+                        This says, “draw a square with side 100 steps, and don't
+                        put the pen down first.”
+                    </p>
+                    <script>
+                        <custom-block s="square %n %b">
+                            <l>100</l>
+                            <l><bool>false</bool></l>
+                        </custom-block>
+                    </script>
+                </column>
+                <block-definition s="square %n %b"/>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>Programming style tip:</p>
+            <diagram>
+                <script>
+                    <block s="doIfElse" annotation="1">
+                        <block s="reportEquals">
+                            <block var="foo"/>
+                            <l>0</l>
+                        </block>
+                        <script>
+                            <block s="doReport">
+                                <block s="reportBoolean">
+                                    <l><bool>true</bool></l>
+                                </block>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Instead of this</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doReport" annotation="1">
+                        <block s="reportBoolean">
+                            <l><bool>false</bool></l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>you can just say this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

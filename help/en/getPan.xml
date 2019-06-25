@@ -1,0 +1,20 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getPan"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report stereo balance for sounds.</p>
+            <p>
+                0 is normal. -100 is left channel only; 100 is right channel
+                is right channel only.
+            </p>
+            <p color="lime">
+                Each sprite has its own balance, which can be inherited by
+                clones.
+            </p>
+        </column>
+    </box>
+</help-screen>

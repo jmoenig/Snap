@@ -1,0 +1,26 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportStringSize">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportStringSize">
+                            <l>elephant</l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Says the number of letters in the word</small-p>
+                </annotations>
+            </diagram>
+            <img src="reportStringSize_elephant.png" width="124" height="102"/>
+        </column>
+    </box>
+</help-screen>

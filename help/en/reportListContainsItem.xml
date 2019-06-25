@@ -1,0 +1,55 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportListContainsItem">
+                <l>list</l>
+                <l>thing</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doIfElse" annotation="1">
+                        <block s="reportListContainsItem">
+                            <l>my list</l>
+                            <l>banana</l>
+                        </block>
+                        <script>
+                            <block s="bubble" annotation="2">
+                                <l>You have a banana.</l>
+                            </block>
+                        </script>
+                        <script>
+                            <block s="bubble" annotation="3">
+                                <l>You do not have a banana.</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If list contains this item</small-p>
+                    <small-p>Says this</small-p>
+                    <small-p>If not, says this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="reportListContainsItem">
+                        <l>list</l>
+                        <l>thing</l>
+                    </block>
+                </script>
+                <text>
+                    reports whether an item is in a list. If the item matches
+                    exactly, then it reports true. If not, it reports false.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,87 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportPenTrailsAsCostume"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report lines drawn on stage as a costume.</p>
+            <row>
+                <img src="reportPenTrailsAsCostume_stage.png" width="148" height="112"/>
+                <column rel-width="1">
+                    <diagram>
+                        <script>
+                            <block s="reportPenTrailsAsCostume" bubble="1"/>
+                        </script>
+                        <bubbles>
+                            <img src="reportPenTrailsAsCostume_pentrails.png" width="38" height="31"/>
+                        </bubbles>
+                    </diagram>
+                    <p>
+                        The reported value does not include the stage
+                        background or the sprite itself, just the lines drawn
+                        with the pen.
+                    </p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>What can you do with the reported costume?</p>
+            <i>Add it to your costumes.</i>
+            <script>
+                <block s="doAddToList">
+                    <block s="reportPenTrailsAsCostume"/>
+                    <block s="reportGet">
+                        <l><option>costumes</option></l>
+                    </block>
+                </block>
+            </script>
+            <i>Modify it.</i>
+            <script>
+                <block s="doSwitchToCostume">
+                    <block s="reportNewCostumeStretched">
+                        <block s="reportMap">
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportIfElse">
+                                        <block s="reportGreaterThan">
+                                            <block s="reportListItem">
+                                                <l>4</l>
+                                                <l/>
+                                            </block>
+                                            <l>0</l>
+                                        </block>
+                                        <block s="reportCONS">
+                                            <l>255</l>
+                                            <block s="reportCDR">
+                                                <l/>
+                                            </block>
+                                        </block>
+                                        <l/>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <block s="reportGetImageAttribute">
+                                <l><option>pixels</option></l>
+                                <block s="reportPenTrailsAsCostume"/>
+                            </block>
+                        </block>
+                        <block s="reportGetImageAttribute">
+                            <l><option>width</option></l>
+                            <block s="reportPenTrailsAsCostume"/>
+                        </block>
+                        <block s="reportGetImageAttribute">
+                            <l><option>height</option></l>
+                            <block s="reportPenTrailsAsCostume"/>
+                        </block>
+                    </block>
+                </block>
+            </script>
+            <img src="reportPenTrailsAsCostume_transform_pentrails.png" width="90" height="29"/>
+        </column>
+    </box>
+</help-screen>

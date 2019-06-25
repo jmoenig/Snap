@@ -1,0 +1,119 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportKeep">
+                <block s="reifyPredicate">
+                    <script/>
+                    <list/>
+                </block>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportKeep" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportIsA">
+                                    <l/>
+                                    <l><option>number</option></l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>4</l>
+                                <l>calling</l>
+                                <l>birds</l>
+                                <l>3</l>
+                                <l>french</l>
+                                <l>hens</l>
+                                <l>2</l>
+                                <l>turtle</l>
+                                <l>doves</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportKeep_list1.png" width="108" height="94"/>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportKeep" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportGreaterThan">
+                                    <block s="reportStringSize">
+                                        <l/>
+                                    </block>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>the</l>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                                <l>at</l>
+                                <l>Berkeley</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportKeep_list2.png" width="107" height="93"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>
+                    Each list item is put into the empty input slot of the
+                    predicate block. If the predicate reports
+                </text>
+                <script>
+                    <block s="reportBoolean">
+                        <l><bool>true</bool></l>
+                    </block>
+                </script>
+                <text>
+                    then that item is included in the result list. Note that if
+                    the predicate has a default input value, you have to clear
+                    the slot to use it with KEEP, e.g., this won't work:
+                </text>
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportKeep">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportIsA">
+                                    <l highlight="true">5</l>
+                                    <l><option>number</option></l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>...</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+            </diagram>
+            <p>KEEP makes a new list; the original list is not modified.</p>
+        </column>
+    </box>
+</help-screen>

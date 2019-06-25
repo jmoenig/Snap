@@ -1,0 +1,58 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="playSound">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveKey" annotation="1">
+                        <l><option>space</option></l>
+                    </block>
+                    <block s="playSound" annotation="2">
+                        <l>laugh</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Whenever space key is pressed</small-p>
+                    <small-p>Play this sound</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                If your computer has a microphone, you can record your own
+                sounds.
+            </p>
+            <row>
+                <column rel-width="1">
+                    <img src="playSound_sounds_tab.png" width="140" height="70"/>
+                    <p>Go to Sounds and click Record.</p>
+                </column>
+                <column rel-width="1">
+                    <img src="playSound_record.png" width="142" height="63"/>
+                    <p>
+                        <text>Use this to record. Then click</text>
+                        <img src="playSound_save_button.png" width="33" height="17"/>
+                    </p>
+                </column>
+                <column rel-width="1">
+                    <diagram>
+                        <script>
+                            <block s="playSound">
+                                <l highlight="true">pop</l>
+                            </block>
+                        </script>
+                    </diagram>
+                    <p>Choose your sound from the menu.</p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

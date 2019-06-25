@@ -1,0 +1,57 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportMouseX"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="setEffect" annotation="2">
+                                <l><option>ghost</option></l>
+                                <block s="reportMouseX"/>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>
+                        Set the sprite's transparency to the mouse's x
+                        position
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <img src="reportMouseY_cat1.png" width="129" height="90"/>
+                    <p>Mouse y = -50</p>
+                </column>
+                <column rel-width="1">
+                    <img src="reportMouseY_cat2.png" width="129" height="90"/>
+                    <p>Mouse y = 0</p>
+                </column>
+                <column rel-width="1">
+                    <img src="reportMouseY_cat3.png" width="129" height="90"/>
+                    <p>Mouse y = 80</p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="reportMouseY" annotation="1"/>
+                </script>
+                <annotations>
+                    <small-p>Reports the y position of the mouse pointer</small-p>
+                </annotations>
+            </diagram>
+            <img src="reportMouseY_range.png" width="74" height="84"/>
+        </row>
+    </box>
+</help-screen>

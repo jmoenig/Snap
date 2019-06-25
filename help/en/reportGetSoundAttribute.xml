@@ -1,0 +1,44 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportGetSoundAttribute">
+                <l><option>duration</option></l>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report sound properties.</p>
+            <diagram>
+                <script>
+                    <block s="reportGetSoundAttribute">
+                        <l menu="1"><option>duration</option></l>
+                        <l/>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item annotation="1">name</item>
+                        <item annotation="2">duration</item>
+                        <item>length</item>
+                        <item>number of channels</item>
+                        <item>sample rate</item>
+                        <item annotation="3">samples</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>“Number of channels” is 2 for stereo.</small-p>
+                    <small-p>
+                        “Duration” is in seconds; “length” is in the number
+                        of samples. Duration = Length / Sample rate.
+                    </small-p>
+                    <small-p>
+                        “Samples” is a list containing the actual numeric
+                        samples (volume at each instant).
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

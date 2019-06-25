@@ -1,0 +1,86 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportCDR">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report all but first list item.</p>
+            <diagram>
+                <script>
+                    <block s="reportCDR" bubble="1">
+                        <block s="reportNewList">
+                            <list>
+                                <l>7</l>
+                                <l>8</l>
+                                <l>1</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportCDR_list.png" width="109" height="94"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>
+                    The new list shares structure with the old one; it's not
+                    a copy. If the input list was made with the list reporter
+                    blocks
+                </text>
+                <script>
+                    <block s="reportCONS">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <script>
+                    <block s="reportListItem">
+                        <l>1</l>
+                        <l/>
+                    </block>
+                </script>
+                <script>
+                    <block s="reportCDR">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <text>then</text>
+                <script>
+                    <block s="reportCDR">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    is very fast; it doesn't have to copy the items or the
+                    list structure. If you use list commands such as
+                </text>
+                <script>
+                    <block s="doInsertInList">
+                        <l>thing</l>
+                        <l>1</l>
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    on a list; then it will be a a dynamic array rather than
+                    a linked list, so this block has to convert to linked
+                    form.
+                </text>
+            </p>
+            <p>
+                The list reporters are good for writing recursive list
+                reporters that build up a result list item by item.
+            </p>
+        </column>
+    </box>
+</help-screen>

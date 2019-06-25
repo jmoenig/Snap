@@ -1,0 +1,61 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveCondition">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Start script when any test is true.</p>
+            <row>
+                <column rel-width="1">
+                    <script>
+                        <block s="receiveCondition">
+                            <block s="reportEquals">
+                                <block s="getLastAnswer"/>
+                                <l>parrot</l>
+                            </block>
+                        </block>
+                        <block s="doSayFor">
+                            <l>You won 50!!</l>
+                            <l>2</l>
+                        </block>
+                    </script>
+                </column>
+                <column rel-width="1">
+                    <script>
+                        <block s="receiveCondition">
+                            <block s="reportMouseDown"/>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="receiveCondition">
+                            <block s="reportLessThan">
+                                <block s="yPosition"/>
+                                <l>0</l>
+                            </block>
+                        </block>
+                    </script>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: This generic hat block slows down Snap! more than the
+                specific hat blocks, because your script is always running, in
+                the equivalent of a FOREVER [IF...] loop. Therefore, to prevent
+                an inescapable slowdown, clicking the Stop button disables the
+                generic hat block tests until some other script is running.
+            </p>
+            <p>
+                When a test is True, the script under the hat block is guaranteed
+                to start (but not necessarily to finish) before any other script
+                runs.
+            </p>
+        </column>
+    </box>
+</help-screen>

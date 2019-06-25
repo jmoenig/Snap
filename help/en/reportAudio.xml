@@ -1,0 +1,74 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportAudio">
+                <l><option>volume</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report data form microphone.</p>
+            <p>
+                This block collects and analyzes a short (0.01 to 0.1 second)
+                burst of sound.
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportAudio">
+                        <l menu="1"><option>volume</option></l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item color="orange" annotation="1">volume</item>
+                        <item color="orange">note</item>
+                        <item color="orange">frequency</item>
+                        <item color="green" annotation="2">samples</item>
+                        <item color="green">sample rate</item>
+                        <item color="blue" annotation="3">spectrum</item>
+                        <item color="blue">resolution</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p arrow-color="orange">
+                        The first three options report a single number
+                        characterizing the sound as a whole average volume,
+                        dominant note number, and frequency.
+                    </small-p>
+                    <small-p arrow-color="green">
+                        The next two options are time domain information:
+                        a list of instantaneous volumes and a number
+                        representing the number of samples per second
+                        (sampling rate).
+                    </small-p>
+                    <small-p arrow-color="blue">
+                        The last two options are frequency domain
+                        information: a histogram of frequencies and the
+                        number of buckets in the histogram.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                “Time domain” means that the list items are the instantaneous
+                volume at each moment, measured thosuands of times per seocnd.
+                “Frequency domain” means that the list items are the volume
+                over the entire burst of sound at each note frequency.
+            </p>
+            <row>
+                <column rel-width="1">
+                    <img src="reportAudio_tuning_fork.png" width="207" height="72"/>
+                    <p>Tuning fork (pure sine wave)</p>
+                </column>
+                <column rel-width="1">
+                    <img src="reportAudio_instrument.png" width="203" height="72"/>
+                    <p>Simple musical instrument with harmonies</p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

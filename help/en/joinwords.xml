@@ -1,0 +1,98 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="join words %&apos;words&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:füge Wörter zusammen _&#xD;ca:uneix les paraules _&#xD;es:unir las palabras _&#xD;fr:fusionne les mots _&#xD;</translations>
+            <inputs>
+                <input type="%mult%txt"></input>
+            </inputs>
+            <script>
+            </script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <custom-block s="join words %mult%txt">
+                <list><l/></list>
+            </custom-block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Combine words into a sentence.</p>
+            <diagram>
+                <script>
+                    <custom-block s="join words %mult%txt" bubble="1">
+                        <list>
+                            <l>The</l>
+                            <l>Night</l>
+                            <l>Before</l>
+                        </list>
+                    </custom-block>
+                </script>
+                <bubbles>
+                    <text>The Night Before</text>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportCombine" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <custom-block s="join words %mult%txt">
+                                    <list>
+                                        <l/>
+                                        <l/>
+                                    </list>
+                                </custom-block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>University of California</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>This block is just like</text>
+                <script>
+                    <block s="reportJoinWords">
+                        <list>
+                            <l/>
+                            <l/>
+                        </list>
+                    </block>
+                </script>
+                <text>except that it puts spaces between inputs.</text>
+            </p>
+            <diagram>
+                <script>
+                    <custom-block s="join words %mult%txt">
+                        <list annotation="1">
+                            <l/>
+                            <l/>
+                        </list>
+                    </custom-block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Use the arrows to make more or fewer input slots.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

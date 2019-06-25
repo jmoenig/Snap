@@ -1,0 +1,53 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportGlobalFlag">
+                <l><option>turbo mode</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report global flag.</p>
+            <diagram>
+                <script>
+                    <block s="reportGlobalFlag">
+                        <l menu="1"><option>turbo mode</option></l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>turbo mode</item>
+                        <item>flat line ends</item>
+                        <item>video capture</item>
+                        <item>mirror video</item>
+                    </menu>
+                </menus>
+            </diagram>
+            <p>
+                <text>
+                    Reports true or false based on the value of the chosen
+                    setting from the settings menu (
+                </text>
+                <img src="doSetGlobalFlag_settings.png" width="42" height="24"/>
+                <text>).</text>
+            </p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                (Note: The particular settings available in the menu of this
+                block are just the ones Jens has needed for some project of
+                his. If you'd like to be able to read and set all the
+                settings in your project, load the “Provide getts and setters
+                for all GUI controls” library.)
+            </p>
+            <i>
+                “Anything you can do from the GUI, you should be able to do
+                from the programming language, and vice versa.”
+                — Mike Eisenberg, d. 3/12/2019 RIP
+            </i>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,67 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportRandom">
+                <l>1</l>
+                <l>10</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="forward" annotation="1">
+                        <block s="reportRandom">
+                            <l>-240</l>
+                            <l>240</l>
+                        </block>
+                    </block>
+                    <block s="forward" annotation="1">
+                        <block s="reportRandom">
+                            <l>-180</l>
+                            <l>180</l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Set sprite's position to a random point anywhere on
+                        the stage
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportRandom" annotation="1">
+                        <l>1</l>
+                        <l>10</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Picks a random number from 1 and 10.</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportRandom">
+                            <l>1</l>
+                            <l>10</l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Click to have a sprite say a random number. Click
+                        again to get another random number.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,69 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="floodFill"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Change the color of a solid-color area.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="setColor">
+                            <color>145,26,68,1</color>
+                        </block>
+                        <block s="setSize" annotation="1">
+                            <l>3</l>
+                        </block>
+                        <block s="down"/>
+                        <block s="doRepeat">
+                            <l>4</l>
+                            <script>
+                                <block s="forward">
+                                    <l>100</l>
+                                </block>
+                                <block s="turn">
+                                    <l>90</l>
+                                </block>
+                            </script>
+                        </block>
+                    </script>
+                    <annotations>
+                        <img src="floodFill_stage1.png" width="78" height="65" arrow-reverse="true"/>
+                    </annotations>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="up"/>
+                        <block s="turn" annotation="1">
+                            <l>45</l>
+                        </block>
+                        <block s="forward">
+                            <l>30</l>
+                        </block>
+                        <block s="setColor">
+                            <color>230,153,0,1</color>
+                        </block>
+                        <block s="floodFill"/>
+                    </script>
+                    <annotations>
+                        <img src="floodFill_stage2.png" width="78" height="65" arrow-reverse="true"/>
+                    </annotations>
+                </diagram>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Fill first determines the color of the stage pixel under the
+                sprite. Then it changes every adjacent pixel with that color
+                to be the current pen color. So it's important to pick the
+                pen up before moving to the inside of the region to be
+                colored. If the color under the sprite is the border color,
+                just the border will be filled.
+            </p>
+        </column>
+    </box>
+</help-screen>

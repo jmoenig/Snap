@@ -1,0 +1,100 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportTouchingObject">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportTouchingObject">
+                                    <l>dog</l>
+                                </block>
+                                <script>
+                                    <block s="turn" annotation="2">
+                                        <l>180</l>
+                                    </block>
+                                    <block s="forward">
+                                        <l>10</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If touching the “dog” sprite</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <img src="reportTouchingObject_not_touching.png" width="152" height="107"/>
+                    <p>Not touching...</p>
+                </column>
+                <column rel-width="1">
+                    <img src="reportTouchingObject_not_touching.png" width="152" height="107"/>
+                    <p>Touching...</p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>You can use the</text>
+                <script>
+                    <block s="reportTouchingObject">
+                        <l>dog</l>
+                    </block>
+                </script>
+                <text>
+                    block in three different ways. Select from the dropdown
+                    menu to choose. You can check if the sprite is:
+                </text>
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportTouchingObject" annotation="1">
+                        <l><option>mouse-pointer</option></l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        <text>Touching the mouse-pointer (</text>
+                        <img src="pointer.png" width="8" height="13"/>
+                        <text>)?</text>
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportTouchingObject" annotation="1">
+                        <l><option>edge</option></l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Touching the edge of the screen?
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportTouchingObject" annotation="1">
+                        <l>Sprite(2)</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Touching another sprite?</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

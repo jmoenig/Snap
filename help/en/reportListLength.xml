@@ -1,0 +1,63 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportListLength">
+                <l>list</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doSetVar" annotation="1">
+                        <l>counter</l>
+                        <l>1</l>
+                    </block>
+                    <block s="doRepeat" annotation="2">
+                        <block s="reportListLength">
+                            <block var="my list"/>
+                        </block>
+                        <script>
+                            <block s="doSayFor" annotation="3">
+                                <block s="reportListItem">
+                                    <block var="counter"/>
+                                    <block var="my list"/>
+                                </block>
+                                <l>2</l>
+                            </block>
+                            <block s="doChangeVar" annotation="4">
+                                <l>counter</l>
+                                <l>1</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Set the counter value to 1</small-p>
+                    <small-p>Repeat for the number of items in the list</small-p>
+                    <small-p>Say the item at that place in the list</small-p>
+                    <small-p>Increase the counter 1</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                This block report reports how many items are currently in a
+                list.
+            </p>
+            <script>
+                <block s="reportListLength">
+                    <block var="my list"/>
+                </block>
+            </script>
+            <p>
+                The number is the same as the length shown at the bottom of
+                the list monitor.
+            </p>
+            <img src="reportListLength_watcher.png" width="80" height="17"/>
+        </column>
+    </box>
+</help-screen>

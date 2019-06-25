@@ -1,0 +1,48 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doThink">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="4">
+                <script>
+                    <block s="doThink" annotation="1">
+                        <l>I wonder...</l>
+                    </block>
+                    <block s="doThink" annotation="2">
+                        <l>1</l>
+                    </block>
+                    <block s="doThink" annotation="3">
+                        <l/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Show "I wonder..." in a think bubble</small-p>
+                    <small-p>Wait a second</small-p>
+                    <small-p>Remove think bubble</small-p>
+                </annotations>
+            </diagram>
+            <column rel-width="1">
+                <img src="doThink_cat1.png" width="104" height="103"/>
+                <img src="doThink_cat2.png" width="66" height="72"/>
+            </column>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>You can type any phrase into</text>
+                <script>
+                    <block s="doThink">
+                        <l/>
+                    </block>
+                </script>
+            </p>
+            <p>The words will appear above the sprite, in a think bubble.</p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,59 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="removeClone"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <column rel-width="1">
+                    <script>
+                        <block s="receiveGo"/>
+                        <block s="createClone">
+                            <l><option>myself</option></l>
+                        </block>
+                        <block s="doBroadcast">
+                            <l>go</l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="receiveMessage">
+                            <l>go</l>
+                        </block>
+                        <block s="down"/>
+                        <block s="doFaceTowards">
+                            <l><option>random position</option></l>
+                        </block>
+                        <block s="forward">
+                            <l>100</l>
+                        </block>
+                        <block s="removeClone"/>
+                    </script>
+                </column>
+                <img src="removeClone_stage.png" width="122" height="90"/>
+            </row>
+            <p>
+                <text>
+                    Both the original sprite and the clone run the GO
+                    script. The original moves down to the left; the
+                    clone moves down to the right. Both sprites run
+                </text>
+                <script>
+                    <block s="removeClone"/>
+                </script>
+                <text>but onlt the clone is actually deleted.</text>
+            </p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: Snap! clones are not copies of the sprite; they
+                actually share information, so a change in the original may
+                be seen in the clones. See the “Object Oriented Porgramming
+                with Sprites” chapter in the Snap! Reference Manual.
+            </p>
+        </column>
+    </box>
+</help-screen>

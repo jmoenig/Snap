@@ -1,0 +1,43 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportLessThan">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportLessThan">
+                                    <block s="reportRelationTo">
+                                        <l><option>distance</option></l>
+                                        <l>mouse-pointer</l>
+                                    </block>
+                                    <l>10</l>
+                                </block>
+                                <script>
+                                    <block s="forward" annotation="2">
+                                        <l>5</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        If the distance to mouse-pointer is less than 10
+                        (mouse-pointer is close)
+                    </small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

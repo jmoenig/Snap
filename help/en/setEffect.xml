@@ -1,0 +1,105 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="setEffect">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row padding="5">
+            <column rel-width="1">
+                <img src="setEffect_dog1.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>color</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <img src="setEffect_dog4.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>pixelate</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+            </column>
+            <column rel-width="1">
+                <img src="setEffect_dog2.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>fisheye</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <img src="setEffect_dog5.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>mosaic</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+            </column>
+            <column rel-width="1">
+                <img src="setEffect_dog3.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>whirl</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <img src="setEffect_dog6.png" width="79" height="91"/>
+                <script>
+                    <block s="setEffect">
+                        <l><option>brightness</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+            </column>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="setEffect">
+                        <l menu="1" annotation="1"><option>color</option></l>
+                        <l>0</l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>color</item>
+                        <item>saturation</item>
+                        <item>brightness</item>
+                        <item>ghost</item>
+                        <item>fisheye</item>
+                        <item>whirl</item>
+                        <item>pixelate</item>
+                        <item>mosaic</item>
+                        <item>negative</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        Click to choose an effect from the menu
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="setEffect" annotation="1">
+                        <l><option>color</option></l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Type in a number between -100 and 100
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

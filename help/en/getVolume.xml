@@ -1,0 +1,20 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getVolume"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Change volume for sounds.</p>
+            <p>
+                100% is the maximum sound possible.
+                50% is already quite soft!
+            </p>
+            <p color="lime">
+                Each sprite has its own volume, which can be inherited by
+                clones.
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,139 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportIsA">
+                <l>5</l>
+                <l><option>number</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>
+                <text>Reports</text>
+                <script>
+                    <block s="reportBoolean">
+                        <l><bool>true</bool></l>
+                    </block>
+                </script>
+                <text>if input is a given type.</text>
+            </p>
+            <p>All of these are true:</p>
+            <row>
+                <column rel-width="1">
+                    <script>
+                        <block s="reportIsA">
+                            <l>-5.37</l>
+                            <l><option>number</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <block s="reportSum">
+                                <l>3</l>
+                                <l>4</l>
+                            </block>
+                            <l><option>number</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportSum">
+                                        <l>3</l>
+                                        <l>4</l>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <l><option>reporter</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <block s="reifyScript">
+                                <script>
+                                    <block s="up"/>
+                                </script>
+                                <list/>
+                            </block>
+                            <l><option>command</option></l>
+                        </block>
+                    </script>
+                </column>
+                <column rel-width="1">
+                    <script>
+                        <block s="reportIsA">
+                            <l/>
+                            <l><option>text</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <l>true</l>
+                            <l><option>text</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <block s="reportBoolean">
+                                <l><bool>true</bool></l>
+                            </block>
+                            <l><option>Boolean</option></l>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="reportIsA">
+                            <block s="reifyPredicate">
+                                <autolambda>
+                                    <block s="reportBoolean">
+                                        <l><bool>true</bool></l>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <l><option>predicate</option></l>
+                        </block>
+                    </script>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <column rel-width="2">
+                <p>
+                    The possible types are number, text, Boolean (true or
+                    false), list, command (a script or jigsaw-shaped command
+                    block), sprite, costume, sound (object-oriented types),
+                    reporter (an oval block that reports a value), and
+                    predicate (a hexagonal block that reports true or false).
+                </p>
+                <p>Every value has exactly one of these types.</p>
+            </column>
+            <diagram rel-width="1">
+                <script>
+                    <block s="reportIsA">
+                        <l/>
+                        <l menu="1"><option>number</option></l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>number</item>
+                        <item>text</item>
+                        <item>Boolean</item>
+                        <item>list</item>
+                        <item>sprite</item>
+                        <item>costume</item>
+                        <item>sound</item>
+                        <item>command</item>
+                        <item>reporter</item>
+                        <item>predicate</item>
+                    </menu>
+                </menus>
+            </diagram>
+        </row>
+    </box>
+</help-screen>
