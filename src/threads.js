@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-June-03';
+modules.threads = '2019-June-25';
 
 var ThreadManager;
 var Process;
@@ -2264,13 +2264,19 @@ Process.prototype.reportMap = function (reporter, list) {
     // answer a new list containing the results of the reporter applied
     // to each value of the given list. Distinguish between linked and
     // arrayed lists.
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
 
-    var next;
+    var next, index, parms;
     this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             this.context.accumulator = {
                 source : list,
+                idx : 1,
                 target : new List(),
                 end : null,
                 remaining : list.length()
@@ -2282,6 +2288,7 @@ Process.prototype.reportMap = function (reporter, list) {
                 this.context.inputs.pop()
             );
             this.context.accumulator.end = this.context.accumulator.end.rest;
+            this.context.accumulator.idx += 1;
             this.context.accumulator.remaining -= 1;
         }
         if (this.context.accumulator.remaining === 0) {
@@ -2293,6 +2300,7 @@ Process.prototype.reportMap = function (reporter, list) {
             );
             return;
         }
+        index = this.context.accumulator.idx;
         next = this.context.accumulator.source.at(1);
         this.context.accumulator.source = this.context.accumulator.source.cdr();
     } else { // arrayed
@@ -2307,23 +2315,37 @@ Process.prototype.reportMap = function (reporter, list) {
             );
             return;
         }
-        next = list.at(this.context.accumulator.length + 1);
+        index = this.context.accumulator.length + 1;
+        next = list.at(index);
     }
     this.pushContext();
-    this.evaluate(reporter, new List([next]));
+    parms = [next];
+    if (reporter.inputs.length > 1) {
+        parms.push(index);
+    }
+    if (reporter.inputs.length > 2) {
+        parms.push(list);
+    }
+    this.evaluate(reporter, new List(parms));
 };
 
 Process.prototype.reportKeep = function (predicate, list) {
     // Filter - answer a new list containing the items of the list for which
     // the predicate evaluates TRUE.
     // Distinguish between linked and arrayed lists.
+    // if the predicate uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
 
-    var next;
+    var next, index, parms;
     this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             this.context.accumulator = {
                 source : list,
+                idx: 1,
                 target : new List(),
                 end : null,
                 remaining : list.length()
@@ -2339,6 +2361,7 @@ Process.prototype.reportKeep = function (predicate, list) {
                     this.context.accumulator.end.rest;
             }
             this.context.accumulator.remaining -= 1;
+            this.context.accumulator.idx += 1;
             this.context.accumulator.source =
                 this.context.accumulator.source.cdr();
         }
@@ -2349,6 +2372,7 @@ Process.prototype.reportKeep = function (predicate, list) {
             );
             return;
         }
+        index = this.context.accumulator.idx;
         next = this.context.accumulator.source.at(1);
     } else { // arrayed
         if (this.context.accumulator === null) {
@@ -2370,23 +2394,37 @@ Process.prototype.reportKeep = function (predicate, list) {
             return;
         }
         this.context.accumulator.idx += 1;
-        next = list.at(this.context.accumulator.idx);
+        index = this.context.accumulator.idx;
+        next = list.at(index);
     }
     this.pushContext();
-    this.evaluate(predicate, new List([next]));
+    parms = [next];
+    if (predicate.inputs.length > 1) {
+        parms.push(index);
+    }
+    if (predicate.inputs.length > 2) {
+        parms.push(list);
+    }
+    this.evaluate(predicate, new List(parms));
 };
 
 Process.prototype.reportFindFirst = function (predicate, list) {
     // Find - answer the first item of the list for which
     // the predicate evaluates TRUE.
     // Distinguish between linked and arrayed lists.
+    // if the predicate uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
 
-    var next;
+    var next, index, parms;
     this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             this.context.accumulator = {
                 source : list,
+                idx : 1,
                 remaining : list.length()
             };
         } else if (this.context.inputs.length > 2) {
@@ -2397,6 +2435,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
                 return;
             }
             this.context.accumulator.remaining -= 1;
+            this.context.accumulator.idx += 1;
             this.context.accumulator.source =
                 this.context.accumulator.source.cdr();
         }
@@ -2404,6 +2443,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
             this.returnValueToParentContext(false);
             return;
         }
+        index = this.context.accumulator.idx;
         next = this.context.accumulator.source.at(1);
     } else { // arrayed
         if (this.context.accumulator === null) {
@@ -2424,18 +2464,32 @@ Process.prototype.reportFindFirst = function (predicate, list) {
             return;
         }
         this.context.accumulator.idx += 1;
-        next = list.at(this.context.accumulator.idx);
+        index = this.context.accumulator.idx;
+        next = list.at(index);
         this.context.accumulator.current = next;
     }
     this.pushContext();
-    this.evaluate(predicate, new List([next]));
+    parms = [next];
+    if (predicate.inputs.length > 1) {
+        parms.push(index);
+    }
+    if (predicate.inputs.length > 2) {
+        parms.push(list);
+    }
+    this.evaluate(predicate, new List(parms));
 };
 
 Process.prototype.reportCombine = function (reporter, list) {
     // Fold - answer an aggregation of all list items from "left to right"
     // Distinguish between linked and arrayed lists.
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - accumulator
+    // #2 - element
+    // #3 - optional | index
+    // #4 - optional | source list
 
-    var next, current;
+    var next, current, index, parms;
     this.assertType(list, 'list');
     if (list.length() < 2) {
         this.returnValueToParentContext(list.length() ? list.at(1) : 0);
@@ -2445,12 +2499,14 @@ Process.prototype.reportCombine = function (reporter, list) {
         if (this.context.accumulator === null) {
             this.context.accumulator = {
                 source : list.cdr(),
+                idx : 1,
                 target : list.at(1),
                 remaining : list.length() - 1
             };
         } else if (this.context.inputs.length > 2) {
             this.context.accumulator.target = this.context.inputs.pop();
             this.context.accumulator.remaining -= 1;
+            this.context.accumulator.idx += 1;
             this.context.accumulator.source =
                 this.context.accumulator.source.cdr();
         }
@@ -2475,9 +2531,17 @@ Process.prototype.reportCombine = function (reporter, list) {
         this.context.accumulator.idx += 1;
         next = list.at(this.context.accumulator.idx);
     }
+    index = this.context.accumulator.idx;
     current = this.context.accumulator.target;
     this.pushContext();
-    this.evaluate(reporter, new List([current, next]));
+    parms = [current, next];
+    if (reporter.inputs.length > 2) {
+        parms.push(index);
+    }
+    if (reporter.inputs.length > 3) {
+        parms.push(list);
+    }
+    this.evaluate(reporter, new List(parms));
 };
 
 // Process interpolated primitives
@@ -5022,10 +5086,18 @@ Process.prototype.incrementVarNamed = function (name, delta) {
 // Process: Atomic HOFs using experimental JIT-compilation
 
 Process.prototype.reportAtomicMap = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
     this.assertType(list, 'list');
 	var result = [],
     	src = list.asArray(),
     	len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
      	func,
     	i;
 
@@ -5042,10 +5114,17 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
  	// to do: Insert some kind of user escape mechanism
 
 	for (i = 0; i < len; i += 1) {
+        parms = [src[i]];
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
   		result.push(
         	invoke(
             	func,
-                new List([src[i]]),
+                new List(parms),
                 null,
                 null,
                 null,
@@ -5058,10 +5137,18 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
 };
 
 Process.prototype.reportAtomicKeep = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
     this.assertType(list, 'list');
     var result = [],
         src = list.asArray(),
         len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
         func,
         i;
 
@@ -5077,10 +5164,17 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
     // iterate over the data in a single frame:
     // to do: Insert some kind of user escape mechanism
     for (i = 0; i < len; i += 1) {
+        parms = [src[i]];
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
     	if (
         	invoke(
             	func,
-                new List([src[i]]),
+                new List(parms),
                 null,
                 null,
                 null,
@@ -5095,9 +5189,17 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
 };
 
 Process.prototype.reportAtomicFindFirst = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
     this.assertType(list, 'list');
     var src = list.asArray(),
         len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
         func,
         i;
 
@@ -5113,10 +5215,17 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     // iterate over the data in a single frame:
     // to do: Insert some kind of user escape mechanism
     for (i = 0; i < len; i += 1) {
+        parms = [src[i]];
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
         if (
             invoke(
                 func,
-                new List([src[i]]),
+                new List(parms),
                 null,
                 null,
                 null,
@@ -5131,10 +5240,19 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
 };
 
 Process.prototype.reportAtomicCombine = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - accumulator
+    // #2 - element
+    // #3 - optional | index
+    // #4 - optional | source list
+
     this.assertType(list, 'list');
     var result = '',
         src = list.asArray(),
         len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
         func,
         i;
 
@@ -5155,9 +5273,16 @@ Process.prototype.reportAtomicCombine = function (reporter, list) {
     // iterate over the data in a single frame:
     // to do: Insert some kind of user escape mechanism
     for (i = 1; i < len; i += 1) {
+        parms = [result, src[i]];
+        if (formalParameterCount > 2) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 3) {
+            parms.push(list);
+        }
     	result = invoke(
         	func,
-            new List([result, src[i]]),
+            new List(parms),
             null,
             null,
             null,

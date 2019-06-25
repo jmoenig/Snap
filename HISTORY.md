@@ -31,6 +31,7 @@
     * new "shown?" predicate
     * new "write" command in pen category (used to be "label" in tools)
     * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
+    * 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
     * new JIT-compiler "blitz-HOF" primitives for "map", "keep", "find" & "combine" via "compile"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
@@ -86,6 +87,9 @@
     * Spanish
     * German
     * French
+
+### 2019-06-25
+* threads: 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
 
 ### 2019-06-24
 * removed "such that" from KEEP and FIND block labels
