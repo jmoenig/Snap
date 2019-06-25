@@ -259,7 +259,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2019-06-24'
+        '2019-06-25'
 };
 
 SnapTranslator.dict.si = {

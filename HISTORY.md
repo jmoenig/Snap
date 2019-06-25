@@ -96,6 +96,7 @@
 * adjusted Spanish translation to the switched order of inputs for COMBINE
 * adjusted Portuguese translation to the switched order of inputs for COMBINE
 * adjusted Catalan translation to the switched order of inputs for COMBINE
+* adjusted French translation to the switched order of inputs for COMBINE
 
 ### 2019-06-24
 * removed "such that" from KEEP and FIND block labels
