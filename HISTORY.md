@@ -93,6 +93,7 @@
 * objects, threads: renamed COMBINE label, switching the inputs
 * objects: took out "relabel" options for COMBINE
 * adjusted German translation to the switched order of inputs for COMBINE
+* adjusted Spanish translation to the switched order of inputs for COMBINE
 
 ### 2019-06-24
 * removed "such that" from KEEP and FIND block labels
