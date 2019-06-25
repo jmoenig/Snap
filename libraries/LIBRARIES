@@ -23,3 +23,4 @@ make-variables.xml	create variables in program	declare global or sprite-local va
 json.xml	Deal with JSON data	Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.
 parallel_module.xml	Parallelization	Run several scripts in parallel and wait until all are done.
 strings.xml	String processing	Extract substrings of a string in various ways
+help_translator.xml	Help translator	Utility for creating and translating help screens

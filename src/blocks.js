@@ -3293,7 +3293,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     return leftOver;
 };
 
-BlockMorph.prototype.showHelp = function () {
+BlockMorph.prototype.showHelp = function (lang) {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
         blockEditor,
@@ -3302,8 +3302,9 @@ BlockMorph.prototype.showHelp = function () {
         def,
         comment,
         block,
-        spec,
-        ctx;
+        spec;
+
+    lang = lang || SnapTranslator.language;
 
     if (this.isCustomBlock) {
         if (this.isGlobal) {
@@ -3322,17 +3323,50 @@ BlockMorph.prototype.showHelp = function () {
         }
     }
 
-    // pic.onload = function () {
-    //     help = newCanvas(new Point(pic.width, pic.height), true); // nonRetina
-    //     ctx = help.getContext('2d');
-    //     ctx.drawImage(pic, 0, 0);
-    //     new DialogBoxMorph().inform(
-    //         'Help',
-    //         null,
-    //         myself.world(),
-    //         help
-    //     );
-    // };
+    if (lang === 'old') {
+        pic.onload = function () {
+            var ctx;
+            help = newCanvas(new Point(pic.width, pic.height), true);
+            ctx = help.getContext('2d');
+            ctx.drawImage(pic, 0, 0, pic.width, pic.height);
+            new DialogBoxMorph().inform(
+                'Help',
+                null,
+                myself.world(),
+                help
+            );
+        };
+    } else {
+        pic.onload = function () {
+            var sf;
+            help = new Morph();
+            help.drawNew = function () {
+                var ctx;
+                this.image = newCanvas(this.extent());
+                ctx = this.image.getContext('2d');
+                ctx.drawImage(pic, 0, 0, this.width(), this.height());
+            };
+            help.setExtent(new Point(pic.width / 2, pic.height / 2));
+            sf = new ScrollFrameMorph();
+            sf.contents.add(help);
+            sf.setColor(DialogBoxMorph.prototype.color);
+            sf.setWidth(572);
+            sf.setHeight(Math.min(help.height(), 400));
+            new DialogBoxMorph().inform(
+                'Help',
+                null,
+                myself.world(),
+                sf
+            );
+        };
+        pic.onerror = function () {
+            if (lang === 'en') { // fall back to old help screens
+                myself.showHelp('old');
+            } else {
+                myself.showHelp('en'); // fall back to english help screens
+            }
+        };
+    }
 
     if (this.isCustomBlock) {
         def = this.isGlobal ? this.definition
@@ -3357,14 +3391,15 @@ BlockMorph.prototype.showHelp = function () {
             return;
         }
     }
-    // pic.src = ide.resourceURL('help', spec + '.png');
-
-    new HelpDialogMorph(
-        this,
-        this.scriptTarget
-            ? this.scriptTarget()
-            : this.parentThatIsA(IDE_Morph).currentSprite
-    ).popUp();
+    if (lang === 'old') { // temporary until screens are moved
+        pic.src = ide.resourceURL(
+            'help', spec + '.png'
+        );
+        return;
+    }
+    pic.src = ide.resourceURL(
+        'help', lang, spec + '.png'
+    );
 };
 
 // BlockMorph code mapping

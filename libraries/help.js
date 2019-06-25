@@ -144,15 +144,24 @@ HelpScreenMorph.prototype.imageLoaded = function () {
 }
 
 HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
-    var dict = {}, morph, i, item, itemMorph;
+    var dict = {}, input = new InputSlotMorph(),
+        morph, i, item, itemMorph, tempParent;
     items.forEach(function (item) {
         if (item.tag === 'line') {
             dict['~'] = null;
         } else if (item.tag === 'item') {
+            if (item.contents === '§_dir') {
+                // direction picker takes its color from its input's parent
+                tempParent = new Morph();
+                tempParent.setColor(
+                    SpriteMorph.prototype.blockColor['motion']
+                );
+                tempParent.add(input);
+            }
             dict[item.contents] = null;
         }
     });
-    morph = new InputSlotMorph().menuFromDict(dict, noEmptyOption);
+    morph = input.menuFromDict(dict, noEmptyOption);
     morph.drawNew();
     for (i = 0; i < items.length; i++) {
         item = items[i];
@@ -169,14 +178,17 @@ HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
 
 // SnapSerializer ///////////////////////////////////////////////////////////
 
-SnapSerializer.prototype.loadHelpScreen = function (xmlString, target, callback) {
+SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     // public - answer the HelpScreenMorph represented by xmlString
     var myself = this,
         model = this.parse(xmlString),
         screen = new HelpScreenMorph(callback),
-        padding = HelpScreenMorph.prototype.padding;
+        padding = HelpScreenMorph.prototype.padding
+        target = new SpriteMorph();
 
-    console.log(model);
+    this.project.stage = new StageMorph();
+    target.globalBlocks = this.project.stage.globalBlocks;
+
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
@@ -186,8 +198,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, target, callback)
                 model.require('thumbnail'), screen, target, 'black'
             );
         } else if (child.tag === 'blocks') {
-            myself.loadCustomBlocks(target, child);
-            myself.populateCustomBlocks(target, child);
+            myself.loadCustomBlocks(target, child, true);
+            myself.populateCustomBlocks(target, child, true);
         } else {
             var morph = myself.loadHelpScreenElement(
                 child, screen, target,
@@ -293,7 +305,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
 
     switch (element.tag) {
     case 'block-definition':
-        customBlock = detect(target.customBlocks, function (block) {
+        customBlock = detect(target.globalBlocks, function (block) {
             return block.blockSpec() === element.attributes.s;
         });
         morph = new PrototypeHatBlockMorph(customBlock);
@@ -389,6 +401,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         break;
     case 'script':
         morph = this.loadScript(element, target);
+        morph.fixBlockColor(null, true); // force zebra coloring
         break;
     case 'text':
         return processText(element.contents);
@@ -503,7 +516,7 @@ ImageMorph.prototype.init = function (src, width, height, onload) {
             onload();
         }
     };
-    this.pic.src = 'help/' + src;
+    this.pic.src = 'help/' + SnapTranslator.language + '/' + src;
 };
 
 ImageMorph.prototype.drawNew = function () {
