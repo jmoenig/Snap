@@ -88,6 +88,10 @@
     * German
     * French
 
+### 2019-06-26
+* updated manual and help screen for COMBINE, thank you, Brian!
+* updated CRAYONS library, thanks you, Brian!
+
 ### 2019-06-25
 * threads: 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
 * objects, threads: renamed COMBINE label, switching the inputs
