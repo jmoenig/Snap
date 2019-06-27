@@ -1,8 +1,8 @@
 # Snap<em>!</em> (BYOB) History
 
-## in development
-
-* New Features:
+## v5
+### 2019-06-27
+* **New Features:**
     * the "tools" library has been integrated as primitives 
     * export 1- /2- dimensional lists with atomic data as CSV
     * export n-dimensional lists with atomic data as JSON
@@ -49,7 +49,7 @@
     * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
-* Notable Changes:
+* **Notable Changes:**
     * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
     * added transparency (alpha) to pen colors
     * new drop-down options for sprite-layer control ("GO TO front/back")
@@ -67,7 +67,7 @@
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
     * more language options for the Text2Speech library, thanks Joan!
-* Notable Fixes:
+* **Notable Fixes:**
     * predicates inside generic WHEN hat blocks can now pass upvars
     * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
@@ -77,7 +77,7 @@
     * the language menu now has a "globe" icon (so it can be found in any language)
     * accept a number as input for a sound - interpret as index
     * fixed many costume sizes, thanks, Brian!
-* Translation Updates:
+* **Translation Updates:**
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
     * Indonesian, thanks, Emanuella!
@@ -88,9 +88,10 @@
     * German
     * French
 
-### 2019-06-26
+### 2019-06-27
 * updated manual and help screen for COMBINE, thank you, Brian!
 * updated CRAYONS library, thanks you, Brian!
+* prepared release
 
 ### 2019-06-25
 * threads: 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
