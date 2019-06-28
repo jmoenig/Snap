@@ -11456,16 +11456,22 @@ HandMorph.prototype.processMouseScroll = function (event) {
         morph = morph.parent;
     }
     if (morph) {
+        var x = event.deltaX;
+        var y = event.deltaY;
+        if (event.shiftKey && event.deltaX === 0) {
+            // Scroll horizontally (based on vertical scroll delta). This is
+            // needed for some browser/system combinations which do not set
+            // deltaX.
+            x = y;
+            y = 0; // Don't scroll vertically.
+        }
+
+        // Multiplier variable, to account for both pixel and line deltaModes.
+        var multiplier = event.deltaMode === 0x1 ? -1/3 : -1/53;
+
         morph.mouseScroll(
-            (event.detail / -3) || (
-                Object.prototype.hasOwnProperty.call(
-                    event,
-                    'wheelDeltaY'
-                ) ?
-                        event.wheelDeltaY / 120 :
-                        event.wheelDelta / 120
-            ),
-            event.wheelDeltaX / 120 || 0
+            y * multiplier,
+            x * multiplier
         );
     }
 };
@@ -12096,16 +12102,8 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
-    canvas.addEventListener( // Safari, Chrome
-        "mousewheel",
-        function (event) {
-            myself.hand.processMouseScroll(event);
-            event.preventDefault();
-        },
-        false
-    );
-    canvas.addEventListener( // Firefox
-        "DOMMouseScroll",
+    canvas.addEventListener(
+        "wheel",
         function (event) {
             myself.hand.processMouseScroll(event);
             event.preventDefault();
