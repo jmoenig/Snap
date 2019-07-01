@@ -2183,29 +2183,22 @@ Process.prototype.doForEach = function (upvar, list, script) {
 
     var next;
     this.assertType(list, 'list');
-    if (list.isLinked) {
-        if (this.context.accumulator === null) {
-            this.context.accumulator = {
-                source : list,
-                remaining : list.length()
-            };
-        }
-        if (this.context.accumulator.remaining === 0) {
-            return;
-        }
+    if (this.context.accumulator === null) {
+	this.context.accumulator = {
+	    source : list,
+	    remaining : list.length(),
+            idx : 0
+	};
+    }
+    if (this.context.accumulator.remaining === 0) {
+	return;
+    }
+    this.context.accumulator.remaining -= 1;
+    if (this.context.accumulator.source.isLinked) {
         next = this.context.accumulator.source.at(1);
-        this.context.accumulator.remaining -= 1;
         this.context.accumulator.source =
             this.context.accumulator.source.cdr();
     } else { // arrayed
-        if (this.context.accumulator === null) {
-            this.context.accumulator = {
-                idx : 0
-            };
-        }
-        if (this.context.accumulator.idx === list.length()) {
-            return;
-        }
         this.context.accumulator.idx += 1;
         next = list.at(this.context.accumulator.idx);
     }
