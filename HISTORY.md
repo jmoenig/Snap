@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * gliding animation when inserting  blocks using the keyboard
 * **Notable Fixes:**
     * list watchers occasionally didn't show cells after reassigning a changed list to a variable
     * FOREACH over a linked list failed for scripts mutating it
@@ -14,6 +15,7 @@
 * threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian!
 * cloud: fixed collection grid page size, thanks, Bernat! 
 * morphic: fixed a race condition in Morph.glideTo()
+* blocks: added gliding animation when inserting  blocks using the keyboard
 
 ## v5
 ### 2019-06-27

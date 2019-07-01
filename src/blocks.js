@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-June-03';
+modules.blocks = '2019-July-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12886,6 +12886,18 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
+    // insert the block after a short gliding animation
+    var myself = this;
+    this.world().add(block);
+    block.glideTo(
+        this.position(),
+        null,
+        null,
+        function () {myself.fillInBlock(block); }
+    );
+};
+
+ScriptFocusMorph.prototype.fillInBlock = function (block) {
     var pb, stage, ide, rcvr;
     block.isTemplate = false;
     block.isDraggable = true;
