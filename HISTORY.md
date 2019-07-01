@@ -4,10 +4,12 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * list watchers occasionally didn't show cells after reassigning a changed list to a variable
 * **Translation Updates:**
 
 ### 2019-07-01
 * new dev version
+* lists: fixed #2446
 
 ## v5
 ### 2019-06-27
