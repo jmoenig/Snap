@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-May-21';
+var morphicVersion = '2019-July-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3894,21 +3894,27 @@ Morph.prototype.slideBackTo = function (
 
 Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
     var world = this.world(),
-        myself = this;
-    world.animations.push(new Animation(
-        function (x) {myself.setLeft(x); },
-        function () {return myself.left(); },
-        -(this.left() - endPoint.x),
-        msecs || 100,
-        easing,
-        onComplete
-    ));
+        myself = this,
+        horizontal = new Animation(
+            function (x) {myself.setLeft(x); },
+            function () {return myself.left(); },
+            -(this.left() - endPoint.x),
+            msecs || 100,
+            easing
+        );
+    world.animations.push(horizontal);
     world.animations.push(new Animation(
         function (y) {myself.setTop(y); },
         function () {return myself.top(); },
         -(this.top() - endPoint.y),
         msecs || 100,
-        easing
+        easing,
+        function () {
+            horizontal.setter(horizontal.destination);
+            horizontal.isActive = false;
+            onComplete();
+        }
+        
     ));
 };
 

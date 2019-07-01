@@ -13,6 +13,7 @@
 * lists: fixed #2446
 * threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian!
 * cloud: fixed collection grid page size, thanks, Bernat! 
+* morphic: fixed a race condition in Morph.glideTo()
 
 ## v5
 ### 2019-06-27
