@@ -1,4 +1,13 @@
-# Snap<em>!</em> (BYOB) History
+# Snap! (BYOB) History
+
+## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+### 2019-07-01
+* new dev version
 
 ## v5
 ### 2019-06-27
