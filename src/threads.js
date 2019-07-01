@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-June-25';
+modules.threads = '2019-July-01';
 
 var ThreadManager;
 var Process;
@@ -2173,8 +2173,6 @@ Process.prototype.doWaitUntil = function (goalCondition) {
 // Process interpolated iteration primitives
 
 Process.prototype.doForEach = function (upvar, list, script) {
-
-//Process.prototype.reportFindFirst = function (predicate, list) {
     // perform a script for each element of a list, assigning the
     // current iteration's element to a variable with the name
     // specified in the "upvar" parameter, so it can be referenced

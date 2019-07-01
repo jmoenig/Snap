@@ -5,11 +5,13 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * list watchers occasionally didn't show cells after reassigning a changed list to a variable
+    * FOREACH over a linked list failed for scripts mutating it
 * **Translation Updates:**
 
 ### 2019-07-01
 * new dev version
 * lists: fixed #2446
+* threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian! 
 
 ## v5
 ### 2019-06-27
