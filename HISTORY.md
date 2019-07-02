@@ -4,10 +4,14 @@
 * **New Features:**
 * **Notable Changes:**
     * gliding animation when inserting  blocks using the keyboard
+    * optimized collision detection
 * **Notable Fixes:**
     * list watchers occasionally didn't show cells after reassigning a changed list to a variable
     * FOREACH over a linked list failed for scripts mutating it
 * **Translation Updates:**
+
+### 2019-07-02
+* morphic: optimized collision detection by only looking at the alpha channel data
 
 ### 2019-07-01
 * new dev version
