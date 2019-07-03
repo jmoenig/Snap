@@ -8,7 +8,11 @@
 * **Notable Fixes:**
     * list watchers occasionally didn't show cells after reassigning a changed list to a variable
     * FOREACH over a linked list failed for scripts mutating it
+    * eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
 * **Translation Updates:**
+
+### 2019-07-03
+* blocks: eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
 
 ### 2019-07-02
 * morphic: optimized collision detection by only looking at the alpha channel data
