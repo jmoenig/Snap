@@ -3,6 +3,11 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+## v5.0.1
+* **Notable Changes:**
     * gliding animation when inserting  blocks using the keyboard
     * optimized collision detection
 * **Notable Fixes:**
@@ -10,10 +15,10 @@
     * list watchers occasionally didn't show cells after reassigning a changed list to a variable
     * FOREACH over a linked list failed for scripts mutating it
     * eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
-* **Translation Updates:**
 
 ### 2019-07-04
 * gui: show "browser" source option in project dialog when (deprecated) locally stored projects still exist
+* maintenance release
 
 ### 2019-07-03
 * blocks: eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
