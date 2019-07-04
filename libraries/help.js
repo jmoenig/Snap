@@ -467,6 +467,9 @@ SnapSerializer.prototype.handleAnnotations = function (model, morph) {
     if (model.attributes['highlight']) {
         morph.annotationHighlight = true;
     }
+    if (model.attributes['ghost']) {
+        morph.annotationGhost = true;
+    }
 };
 
 SnapSerializer.prototype.loadBlockOld = SnapSerializer.prototype.loadBlock;
@@ -985,6 +988,11 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     this.script.forAllChildren(function (child) {
         if (child.annotationHighlight) {
             child.addHighlight();
+        }
+    });
+    this.script.forAllChildren(function (child) {
+        if (child.annotationGhost) {
+            child.ghost();
         }
     });
 
