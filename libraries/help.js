@@ -857,7 +857,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     }
 
     this.arrows.forEach(function (arrow) {
-        myself.remove(arrow);
+        arrow.destroy();
     });
     this.arrows = [];
 
