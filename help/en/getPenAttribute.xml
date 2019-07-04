@@ -1,0 +1,53 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getPenAttribute">
+                <l><item>hue</item></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="getPenAttribute">
+                        <l menu="1"><option>hue</option></l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item color="red" annotation="1">size</item>
+                        <item color="lime" annotation="2">hue</item>
+                        <item color="lime">saturation</item>
+                        <item color="lime">brightness</item>
+                        <item color="lime">transparency</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p arrow-color="red">
+                        <text>from</text>
+                        <script>
+                            <block s="setSize">
+                                <l>1</l>
+                            </block>
+                        </script>
+                    </small-p>
+                    <small-p arrow-color="lime">
+                        <text>from</text>
+                        <script>
+                            <block s="setPenHSVA">
+                                <l><option>hue</option></l>
+                                <l>50</l>
+                            </block>
+                        </script>
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <img src="getPenAttribute_graph.png" width="223" height="129"/>
+        </column>
+    </box>
+</help-screen>

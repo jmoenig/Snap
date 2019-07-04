@@ -90,7 +90,7 @@
                         <diagram rel-width="5">
                             <script>
                                 <block s="reportGet" bubble="1">
-                                    <l><option>dangling?</option></l>
+                                    <l><option>neighbors</option></l>
                                 </block>
                             </script>
                             <bubbles>

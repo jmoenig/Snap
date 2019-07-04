@@ -42,7 +42,7 @@
             <p>Choose which of two values to report.</p>
             <diagram>
                 <script>
-                    <block s="reportIfElse" annotation="1">
+                    <block s="reportIfElse" bubble="1">
                         <block s="reportEquals">
                             <l>2</l>
                             <l>3</l>
@@ -57,7 +57,7 @@
             </diagram>
             <diagram>
                 <script>
-                    <block s="reportIfElse" annotation="1">
+                    <block s="reportIfElse" bubble="1">
                         <block s="reportLessThan">
                             <l>2</l>
                             <l>3</l>

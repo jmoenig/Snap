@@ -1,0 +1,27 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getPenDown"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report true if sprite's pen is down.</p>
+            <p>The sprite draws as it moves if its pen is down.</p>
+            <p>
+                <text>Use</text>
+                <script>
+                    <block s="down"/>
+                </script>
+                <text>to put the pen down.</text>
+            </p>
+            <p>
+                <text>Use</text>
+                <script>
+                    <block s="up"/>
+                </script>
+                <text>to pick the pen up.</text>
+            </p>
+        </column>
+    </box>
+</help-screen>
