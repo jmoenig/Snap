@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-07-08
+* new dev version
+
 ## v5.0.1
 * **Notable Changes:**
     * gliding animation when inserting  blocks using the keyboard
