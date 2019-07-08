@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process, XML_Element, VectorPaintEditorMorph, WorldMap*/
 
-modules.objects = '2019-June-25';
+modules.objects = '2019-July-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -875,7 +875,24 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'filtered for %clr'
+            spec: 'filter %clr tolerance %n %',
+            defaults: [null, 15]
+        },
+        reportFuzzyTouchingColor: {
+            dev: true,
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'touching %clr tolerance %n ?',
+            defaults: [null, 15]
+        },
+        reportFuzzyColorIsTouchingColor: {
+            dev: true,
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'color %clr is touching %clr tolerance %n ?',
+            defaults: [null, null, 15]
         },
         reportAspect: {
             type: 'reporter',
@@ -1913,7 +1930,7 @@ SpriteMorph.prototype.rotationCenter = function () {
     return this.position().add(this.rotationOffset);
 };
 
-SpriteMorph.prototype.colorFiltered = function (aColor) {
+SpriteMorph.prototype.colorFiltered = function (aColor, tolerance) {
     // answer a new Morph containing my image filtered by aColor
     // ignore transparency (alpha)
     var morph = new Morph(),
@@ -1940,7 +1957,9 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
             src.data[i + 1],
             src.data[i + 2]
         );
-        if (clr.eq(aColor)) {
+        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
+            clr.eq(aColor)
+        ) {
             dta.data[i] = src.data[i];
             dta.data[i + 1] = src.data[i + 1];
             dta.data[i + 2] = src.data[i + 2];
@@ -2407,6 +2426,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(watcherToggle('reportThreadCount'));
             blocks.push(block('reportThreadCount'));
             blocks.push(block('colorFiltered'));
+            blocks.push(block('reportFuzzyTouchingColor'));
+            blocks.push(block('reportFuzzyColorIsTouchingColor'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
         }
@@ -7352,7 +7373,11 @@ StageMorph.prototype.clearProjectionLayer = function () {
     this.changed();
 };
 
-StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
+StageMorph.prototype.colorFiltered = function (
+    aColor,
+    excludedSprite,
+    tolerance
+) {
     // answer a new Morph containing my image filtered by aColor
     // ignore the excludedSprite, because its collision is checked
     // ignore transparency (alpha)
@@ -7381,7 +7406,9 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
             src.data[i + 1],
             src.data[i + 2]
         );
-        if (clr.eq(aColor)) {
+        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
+            clr.eq(aColor)
+        ) {
             dta.data[i] = src.data[i];
             dta.data[i + 1] = src.data[i + 1];
             dta.data[i + 2] = src.data[i + 2];

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-July-01';
+modules.threads = '2019-July-08';
 
 var ThreadManager;
 var Process;
@@ -3845,7 +3845,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     );
 };
 
-Process.prototype.reportTouchingColor = function (aColor) {
+Process.prototype.reportTouchingColor = function (aColor, tolerance) {
     // also check for any parts (subsprites)
     var thisObj = this.blockReceiver(),
         stage;
@@ -3853,36 +3853,15 @@ Process.prototype.reportTouchingColor = function (aColor) {
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (thisObj.isTouching(stage.colorFiltered(aColor, thisObj))) {
+            if (thisObj.isTouching(
+                stage.colorFiltered(aColor, thisObj, tolerance))
+            ) {
                 return true;
             }
             return thisObj.parts.some(
                 function (any) {
-                    return any.isTouching(stage.colorFiltered(aColor, any));
-                }
-            );
-        }
-    }
-    return false;
-};
-
-Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
-    // also check for any parts (subsprites)
-    var thisObj = this.blockReceiver(),
-        stage;
-
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage) {
-            if (thisObj.colorFiltered(color1).isTouching(
-                    stage.colorFiltered(color2, thisObj)
-                )) {
-                return true;
-            }
-            return thisObj.parts.some(
-                function (any) {
-                    return any.colorFiltered(color1).isTouching(
-                        stage.colorFiltered(color2, any)
+                    return any.isTouching(
+                        stage.colorFiltered(aColor, any, tolerance)
                     );
                 }
             );
@@ -3890,6 +3869,41 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     }
     return false;
 };
+
+Process.prototype.reportFuzzyTouchingColor =
+    Process.prototype.reportTouchingColor;
+
+Process.prototype.reportColorIsTouchingColor = function (
+    color1,
+    color2,
+    tolerance
+) {
+    // also check for any parts (subsprites)
+    var thisObj = this.blockReceiver(),
+        stage;
+
+    if (thisObj) {
+        stage = thisObj.parentThatIsA(StageMorph);
+        if (stage) {
+            if (thisObj.colorFiltered(color1, tolerance).isTouching(
+                    stage.colorFiltered(color2, thisObj, tolerance)
+                )) {
+                return true;
+            }
+            return thisObj.parts.some(
+                function (any) {
+                    return any.colorFiltered(color1, tolerance).isTouching(
+                        stage.colorFiltered(color2, any, tolerance)
+                    );
+                }
+            );
+        }
+    }
+    return false;
+};
+
+Process.prototype.reportFuzzyColorIsTouchingColor =
+    Process.prototype.reportColorIsTouchingColor;
 
 Process.prototype.reportAspect = function (aspect, location) {
     // sense colors and sprites anywhere,

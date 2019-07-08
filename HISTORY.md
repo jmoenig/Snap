@@ -2,12 +2,14 @@
 
 ## in development:
 * **New Features:**
+    * experimental tolerant color collision detection (in dev mode)
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
 
 ### 2019-07-08
 * new dev version
+* morphic, objects, threads: experimental tolerant color collision detection (in dev mode)
 
 ## v5.0.1
 * **Notable Changes:**

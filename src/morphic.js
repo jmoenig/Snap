@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-July-02';
+var morphicVersion = '2019-July-08';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1952,6 +1952,24 @@ Color.prototype.eq = function (aColor, observeAlpha) {
         this.r === aColor.r &&
         this.g === aColor.g &&
         this.b === aColor.b &&
+        (observeAlpha ? this.a === aColor.a : true);
+};
+
+Color.prototype.isCloseTo = function (aColor, observeAlpha, tolerance) {
+    // experimental - answer whether a color is "close" to another one by
+    // a given percentage. tolerance is the percentage by which each color
+    // channel may diverge, alpha needs to be the exact same unless ignored
+    var thres = 2.55 * (tolerance || 10);
+
+    function dist(a, b) {
+        var diff = a - b;
+        return diff < 0 ? 255 + diff : diff;
+    }
+
+    return aColor &&
+        dist(this.r, aColor.r) < thres &&
+        dist(this.g, aColor.g) < thres &&
+        dist(this.b, aColor.b) < thres &&
         (observeAlpha ? this.a === aColor.a : true);
 };
 
