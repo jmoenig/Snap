@@ -5,7 +5,11 @@
     * experimental tolerant color collision detection (in dev mode)
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
 * **Translation Updates:**
+
+### 2019-07-09
+* blocks: fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
 
 ### 2019-07-08
 * new dev version

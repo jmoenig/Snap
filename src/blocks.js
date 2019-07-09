@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-July-03';
+modules.blocks = '2019-July-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10852,7 +10852,7 @@ MultiArgMorph.prototype.init = function (
     this.noticesTransparentclick = true;
 
     // label text:
-    if (this.labelText) {
+    if (this.labelText || (this.slotSpec === '%cs')) {
         label = this.labelPart(this.labelText);
         this.add(label);
         label.hide();
