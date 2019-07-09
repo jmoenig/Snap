@@ -9,11 +9,9 @@
 ## v5.0.2
 * **New Features:**
     * experimental tolerant color collision detection (in dev mode)
-* **Notable Changes:**
 * **Notable Fixes:**
     * fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
     * updated the manual for the new WRITE block, thanks, Brian
-* **Translation Updates:**
 
 ### 2019-07-09
 * blocks: fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
