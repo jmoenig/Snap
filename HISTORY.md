@@ -2,9 +2,13 @@
 
 ## in development:
 * **New Features:**
+    * CSV-parsing auto-detects the most likely delimiter among comma, semi-colon, pipe and tab
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
+
+### 2019-07-10
+* threads: enhanced CSV-parsing to auto-detect the most likely delimiter among comma, semi-colon, pipe and tab
 
 ## v5.0.2
 * **New Features:**

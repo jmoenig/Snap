@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-July-08';
+modules.threads = '2019-July-10';
 
 var ThreadManager;
 var Process;
@@ -3449,6 +3449,29 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
 };
 
 Process.prototype.parseCSV = function (text) {
+    // try to address the kludge that Excel sometimes uses commas
+    // and sometimes semi-colons as delimiters, try to find out
+    // which makes more sense by examining the first line
+    return this.rawParseCSV(text, this.guessDelimiterCSV(text));
+};
+
+Process.prototype.guessDelimiterCSV = function (text) {
+    // assumes that the first line contains the column headers.
+    // report the first delimiter for which parsing the header
+    // yields more than a single field, otherwise default to comma
+    var delims = [',', ';', '|', '\t'],
+        len = delims.length,
+        firstLine = text.split('\n')[0],
+        i;
+    for (i = 0; i < len; i += 1) {
+        if (this.rawParseCSV(firstLine, delims[i]).length() > 1) {
+            return delims[i];
+        }
+    }
+    return delims[0];
+};
+
+Process.prototype.rawParseCSV = function (text, delim) {
     // RFC 4180
     // parse a csv table into a two-dimensional list.
     // if the table contains just a single row return it a one-dimensional
@@ -3462,6 +3485,7 @@ Process.prototype.parseCSV = function (text) {
         len = text.length,
         idx,
         char;
+    delim = delim || ',';
     for (idx = 0; idx < len; idx += 1) {
         char = text[idx];
         if (char === '\"') {
@@ -3469,7 +3493,7 @@ Process.prototype.parseCSV = function (text) {
                 fields[col] += char;
             }
             esc = !esc;
-        } else if (char === ',' && esc) {
+        } else if (char === delim && esc) {
             char = '';
             col += 1;
             fields[col] = char;
