@@ -5,8 +5,6 @@ const frames = Array.prototype.slice.call(document.getElementsByTagName('iframe'
 var driver = null,
     monkey = new WSMonkey();
 
-setupVue();
-
 frames.forEach(frame => {
     const url = window.location.href.replace(window.location.pathname, '');
     frame.setAttribute('src', url);
@@ -18,7 +16,7 @@ function startTests() {
             return promise.then(() => {
                 driver = new SnapDriver(frame.contentWindow.world);
                 driver.setWindow(frame.contentWindow);
-                monkey._world = frame.contentWindow.world; // update the world view for our monkey
+                monkey.setWorld(frame.contentWindow.world); // update the world view for our monkey
             });
         }, Promise.resolve())
         .then(() => {
@@ -55,30 +53,27 @@ function onIframesReady() {
     document.body.style.visibility = 'visible';
 }
 
-function setupVue() {
-    const app = new Vue({
-        el: '#footer',
-        data: {
-            wsToggleBtn: 'start',
-            monkey: monkey, // to watch for changes in monkey. Is there a better way? watchers?
-        },
+const connectionStatus = document.getElementById("connection-status");
+monkey.onStateChange = connected => {
+    if (connected) {
+        connectionStatus.classList.remove('red');
+        connectionStatus.classList.add('green');
+    } else {
+        connectionStatus.classList.remove('green');
+        connectionStatus.classList.add('red');
+    }
+};
 
-        computed: {
-            isPlaying() {
-                return !this.monkey._playOver;
-            }
-        },
+const connectionProfile = document.getElementById("websocket-connection");
+connectionProfile.onchange = function() {
+    const profile = connectionProfile.value;
 
-        methods: {
-            toggleWsMonkey() {
-                if (monkey.isPlaying) {
-                    monkey.stopPlaying();
-                    this.wsToggleBtn = 'start';
-                } else {
-                    monkey.startPlaying();
-                    this.wsToggleBtn = 'stop';
-                }
-            },
-        }
-    });
-}
+    monkey.stopPlaying();
+    if (profile === 'online') {
+        monkey.connect();
+    } else if (profile === 'offline') {
+        monkey.disconnect();
+    } else {
+        monkey.startPlaying();
+    }
+};

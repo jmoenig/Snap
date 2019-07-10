@@ -13,3 +13,16 @@ iframe#user1 {
   height: 2rem;
   padding: 0.5 0.5rem;
 }
+
+#websocket-connection {
+    display: inline-block;
+    width: auto;
+    height: auto;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}

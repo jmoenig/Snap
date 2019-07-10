@@ -8,7 +8,7 @@ class WSMonkey {
     constructor(aWorld) {
     // TODO total desired duration
         this._size = 200;
-        if (aWorld) this._setWorld(aWorld); // allow for early initialization
+        if (aWorld) this.setWorld(aWorld); // allow for early initialization
         this._connectedRatio = 0.7;
         this._durationRange = [200, 2000]; // ms
         this._playOver = true;
@@ -18,14 +18,30 @@ class WSMonkey {
         return this._world.children[0];
     }
 
-    _setWorld(aWorld) {
+    setWorld(aWorld) {
         this._world = aWorld;
+        const onConnect = this.ide.sockets.onConnect;
+        this.ide.sockets.onConnect = () => {
+            this.onStateChange(true);
+            onConnect.call(this.ide.sockets);
+        };
     }
 
     disconnect() {
         console.debug('disconnecting WS');
-        this.ide.sockets.onClose = () => {};
+        this.ide.sockets.onClose = () => {
+            this.onStateChange(false);
+        };
         this.ide.sockets.websocket.close();
+    }
+
+    connect() {
+        console.debug('connecting WS');
+        delete this.ide.sockets.onClose;
+        this.ide.sockets.onClose();
+    }
+
+    onStateChange(connected) {
     }
 
     get isClosed() {
@@ -46,12 +62,6 @@ class WSMonkey {
 
     get _status() {
         return this.ide.sockets.websocket.readyState;
-    }
-
-    connect() {
-        console.debug('connecting WS');
-        delete this.ide.sockets.onClose;
-        this.ide.sockets.onClose();
     }
 
     _genProfile() {

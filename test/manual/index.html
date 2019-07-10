@@ -9,11 +9,13 @@
   <body>
     <iframe id="user1"></iframe>
     <footer id="footer">
-      <div>
-        WSMonkey:
-        <button  @click="toggleWsMonkey">{{ wsToggleBtn }}</button>
-        <!-- watch and update the state of ws -->
-      </div>
+        WebSocket Connection:
+        <select id="websocket-connection">
+            <option value="online">online</option>
+            <option value="offline">offline</option>
+            <option value="chaos">chaos</option>
+        </select>
+        <span id="connection-status" class="dot green lighten-1"></span>
 
     </footer>
 
