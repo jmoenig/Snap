@@ -325,6 +325,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
             if (contains(
                 [
                     'messagesMenu',
+                    'messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
                     'objectsMenu',
                     'costumesMenu',
                     'soundsMenu',
@@ -2656,6 +2657,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
     return contains(
         [
             '§_messagesMenu',
+            '§_messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
             '§_objectsMenu',
             '§_costumesMenu',
             '§_soundsMenu',
