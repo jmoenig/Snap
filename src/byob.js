@@ -324,7 +324,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
             fname = this.declarations.get(inputName)[2].slice(2);
             if (contains(
                 [
-                    'messagesReceivedMenu',
+                    'messagesMenu',
                     'objectsMenu',
                     'costumesMenu',
                     'soundsMenu',
@@ -2655,7 +2655,7 @@ BlockLabelFragment.prototype.hasOptions = function () {
 BlockLabelFragment.prototype.hasSpecialMenu = function () {
     return contains(
         [
-            '§_messagesReceivedMenu',
+            '§_messagesMenu',
             '§_objectsMenu',
             '§_costumesMenu',
             '§_soundsMenu',
@@ -3764,7 +3764,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     }
 
     addSpecialOptions('(none)', '');
-    addSpecialOptions('messages', '§_messagesReceivedMenu');
+    addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
     // addSpecialOptions('data types', '§_typesMenu');
     addSpecialOptions('costumes', '§_costumesMenu');
