@@ -5484,11 +5484,11 @@ SpriteMorph.prototype.allMessageNames = function () {
     all.forEach(function (script) {
         script.allChildren().forEach(function (morph) {
             var txt;
-            if (morph.selector && contains(
-                ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait'],
-                morph.selector
+            if (morph instanceof InputSlotMorph && morph.choices && contains(
+                ['messagesMenu', 'messagesReceivedMenu'],
+                morph.choices
             )) {
-                txt = morph.inputs()[0].evaluate();
+                txt = morph.evaluate();
                 if (isString(txt) && txt !== '') {
                     if (!contains(msgs, txt)) {
                         msgs.push(txt);
