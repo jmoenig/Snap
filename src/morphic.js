@@ -5375,9 +5375,28 @@ CursorMorph.prototype.initializeTextarea = function () {
     this.updateTextAreaPosition();
     this.syncTextareaSelectionWith(this.target);
 
-
-    /* The following keyboard events causes special actions in Snap, so we
-    don't want the textarea to handle it:
+    
+    /**
+     * There are three cases when the textarea get some inputs:
+     * 
+     * 1. The inputs represents special shortcuts of Snap! system, so we
+     * don't want the textarea to handle it. These events are captured in
+     * "keydown" event handler.
+     * 
+     * 2. The inputs changed the content of the textarea, we need to update
+     * the content of its target morphic accordingly. This is handled in
+     * the "input" event handler.
+     * 
+     * 3. The input causes changes on the textarea, but the change will not
+     * trigger and "input" event (such changes include selection change, cursor
+     * movements). These are handled in "keyup" event handler.
+     * 
+     * Note that some changes in case 2 are not caused by keyboards (for example,
+     * select a word by clicking in IME window), so there are overlaps between
+     * case 2 and case 3. but no one can replace the other.
+     */
+    
+    /* Special shortcuts for Snap! system.
     - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
     - tab: goto next text field
     - esc: discard the editing
@@ -5417,10 +5436,8 @@ CursorMorph.prototype.initializeTextarea = function () {
             myself.target.escalateEvent('reactToKeystroke', event);
         }
     });
-
-    // For other keyboard events, first let the textarea element handle the
-    // events, then we take its state and update the target morph and cursor
-    // morph accordingly.
+    
+    // handle content change.
     this.textarea.addEventListener('input', function (event) {
         myself.world().currentKey = null;
 
@@ -5482,9 +5499,10 @@ CursorMorph.prototype.initializeTextarea = function () {
         myself.gotoSlot(textarea.selectionStart);
 
         myself.updateTextAreaPosition();
-        //target.escalateEvent('reactToKeystroke', event);
     });
-    
+
+    // handle selection change and cursor position change.
+
     this.textarea.addEventListener('keyup', function (event) {
         var textarea = myself.textarea;
         var target = myself.target;
