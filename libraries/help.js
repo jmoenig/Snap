@@ -134,15 +134,21 @@ HelpScreenMorph.prototype.createScriptDiagram = function (
 HelpScreenMorph.prototype.createImage = function (src, width, height) {
     var myself = this;
     this.imagesLoading += 1;
-    return new ImageMorph(src, width, height, function () {
-        myself.imageLoaded();
-    });
+    return new ImageMorph(
+        src, width, height,
+        function () {
+            myself.imageLoaded();
+        },
+        function () {
+            myself.loadCallback(new Error('could not load image ' + src));
+        }
+    );
 };
 
 HelpScreenMorph.prototype.imageLoaded = function () {
     this.imagesLoading -= 1;
     if (this.imagesLoading === 0) {
-        this.loadCallback(this);
+        this.loadCallback(null, this);
     }
 }
 
@@ -292,7 +298,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     screen.fixLayout();
 
     if (screen.imagesLoading === 0) {
-        callback(screen);
+        callback(null, screen);
     }
 };
 
@@ -519,11 +525,11 @@ ImageMorph.prototype = new Morph();
 ImageMorph.prototype.constructor = ImageMorph;
 ImageMorph.uber = Morph.prototype;
 
-function ImageMorph(src, width, height, onload) {
-    this.init(src, width, height, onload);
+function ImageMorph(src, width, height, onload, onerror) {
+    this.init(src, width, height, onload, onerror);
 }
 
-ImageMorph.prototype.init = function (src, width, height, onload) {
+ImageMorph.prototype.init = function (src, width, height, onload, onerror) {
     var myself = this;
 
     // initialize inherited properties:
@@ -538,6 +544,11 @@ ImageMorph.prototype.init = function (src, width, height, onload) {
             onload();
         }
     };
+    this.pic.onerror = function () {
+        if (typeof onerror === 'function') {
+            onerror();
+        }
+    }
     this.pic.src = 'help/' + SnapTranslator.language + '/' + src
                     + '?t=' + Date.now();
 };
