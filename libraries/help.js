@@ -325,8 +325,8 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
     case 'diagram':
         script = myself.loadHelpScreenElement(
             element.childNamed('block-definition')
-            || element.childNamed('menu')
-            || element.require('script'),
+                || element.childNamed('menu')
+                || element.require('script'),
             screen, target, textColor
         );
         morph = screen.createScriptDiagram(
@@ -419,10 +419,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             // width will be adjusted later
             morph.relativeWidth = +element.attributes['rel-width'];
         }
-        if (
-            morph instanceof AlignmentMorph
-            && element.attributes.padding
-        ) {
+        if (morph instanceof AlignmentMorph && element.attributes.padding) {
             morph.padding = +element.attributes.padding;
         }
         if (morph instanceof BlockMorph && element.attributes.scale) {
@@ -479,10 +476,10 @@ SnapSerializer.prototype.handleAnnotations = function (model, morph) {
         morph.annotationBubble = model.attributes['bubble'];
     }
     if (model.attributes['highlight']) {
-        morph.annotationHighlight = true;
+        morph.annotationHighlight = !!model.attributes['highlight'];
     }
     if (model.attributes['ghost']) {
-        morph.annotationGhost = true;
+        morph.annotationGhost = !!model.attributes['ghost'];
     }
 };
 
@@ -1192,7 +1189,7 @@ DiagramArrowMorph.prototype.drawNew = function () {
 
 // BlockMorph ///////////////////////////////////////////////////////////
 
-BlockMorph.prototype.addHighlight = function (oldHighlight) {
+BlockMorph.prototype.addDiagramHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,
         oldUseBlurredShadows = useBlurredShadows,
         highlight;
@@ -1213,7 +1210,7 @@ BlockMorph.prototype.addHighlight = function (oldHighlight) {
 
 // ArgMorph /////////////////////////////////////////////////////////////
 
-ArgMorph.prototype.addHighlight = BlockMorph.prototype.addHighlight;
+ArgMorph.prototype.addDiagramHighlight = BlockMorph.prototype.addDiagramHighlight;
 ArgMorph.prototype.removeHighlight = BlockMorph.prototype.removeHighlight;
 ArgMorph.prototype.toggleHighlight = ArgMorph.prototype.toggleHighlight;
 ArgMorph.prototype.highlight = BlockMorph.prototype.highlight;
