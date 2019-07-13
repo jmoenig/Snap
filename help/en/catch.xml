@@ -1,0 +1,170 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="catch %&apos;tag&apos; %&apos;action&apos;" type="command" category="control">
+            <header></header>
+            <code></code>
+            <translations>de:fange _ _&#xD;ca:agafa _ _&#xD;es:atrapar _ _&#xD;fr:attrape _ _&#xD;</translations>
+            <inputs>
+                <input type="%upvar"></input>
+                <input type="%cs"></input>
+            </inputs>
+            <script></script>
+        </block-definition>
+        <block-definition s="throw %&apos;cont&apos;" type="command" category="control">
+            <header></header>
+            <code></code>
+            <translations>de:wirf _&#xD;ca:llança _&#xD;es:lanzar _&#xD;fr:lance _&#xD;</translations>
+            <inputs>
+                <input type="%s">catchtag</input>
+            </inputs>
+            <script></script>
+        </block-definition>
+        <block-definition s="..." type="command" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+        </block-definition>
+        <block-definition s="??" type="predicate" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script></script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <custom-block s="catch %upvar %cs">
+                <l>tag</l>
+                <script/>
+            </custom-block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Allow early exit from a script.</p>
+            <row>
+                <script>
+                    <custom-block s="catch %upvar %cs">
+                        <l>tag</l>
+                        <script>
+                            <block s="doFor">
+                                <l>i</l>
+                                <l>1</l>
+                                <l>10</l>
+                                <script>
+                                    <block s="doSayFor">
+                                        <block var="i"/>
+                                        <l>2</l>
+                                    </block>
+                                    <block s="doIf">
+                                        <block s="reportEquals">
+                                            <block var="i"/>
+                                            <l>3</l>
+                                        </block>
+                                        <script>
+                                            <custom-block s="throw %s">
+                                                <block var="tag"/>
+                                            </custom-block>
+                                        </script>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </custom-block>
+                    <block s="bubble">
+                        <l>Done!</l>
+                    </block>
+                </script>
+                <img src="catch_alonzo.png" width="106" height="131"/>
+                <column rel-width="1">
+                    <img src="catch_bubbles.png" width="180" height="42"/>
+                    <p>
+                        <text>
+                            The loop was supposed to go until i=10, but the
+                        </text>
+                        <script>
+                            <custom-block s="throw %s">
+                                <block var="tag"/>
+                            </custom-block>
+                        </script>
+                        <text>
+                            block jumped out to the matching
+                        </text>
+                        <script>
+                            <custom-block s="catch %upvar %cs">
+                                <l>tag</l>
+                                <script/>
+                            </custom-block>
+                        </script>
+                    </p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <custom-block s="catch %upvar %cs">
+                        <l arrow-start="1">tag</l>
+                        <script>
+                            <custom-block s="..."/>
+                            <custom-block s="throw %s">
+                                <l arrow-end="1">catchtag</l>
+                            </custom-block>
+                            <custom-block s="..."/>
+                        </script>
+                    </custom-block>
+                </script>
+            </diagram>
+            <column rel-width="1">
+                <p>
+                    Drag the orange tag from the CATCH block to the THROW
+                    block.
+                </p>
+                <p>
+                    You can change the tag's name by clicking on it
+                    without dragging; then you can nest more than one
+                    CATCH block:
+                </p>
+            </column>
+            <diagram rel-width="2">
+                <script>
+                    <custom-block s="catch %upvar %cs">
+                        <l arrow-start="2">outer</l>
+                        <script>
+                            <block s="doForever">
+                                <script>
+                                    <custom-block s="..."/>
+                                    <custom-block s="catch %upvar %cs">
+                                        <l arrow-start="1">inner</l>
+                                        <script>
+                                            <block s="doRepeat">
+                                                <l>10</l>
+                                                <script>
+                                                    <block s="doIf">
+                                                        <custom-block s="??"/>
+                                                        <script>
+                                                            <custom-block s="throw %s">
+                                                                <l annotation="1" arrow-end="1,2">catchtag</l>
+                                                            </custom-block>
+                                                        </script>
+                                                    </block>
+                                                </script>
+                                            </block>
+                                        </script>
+                                    </custom-block>
+                                </script>
+                            </block>
+                        </script>
+                    </custom-block>
+                </script>
+                <annotations>
+                    <small-p>You can use either tag here!</small-p>
+                </annotations>
+            </diagram>
+        </row>
+    </box>
+</help-screen>
