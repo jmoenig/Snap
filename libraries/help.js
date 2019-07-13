@@ -485,7 +485,8 @@ SnapSerializer.prototype.handleAnnotations = function (model, morph) {
 
 SnapSerializer.prototype.loadBlockOld = SnapSerializer.prototype.loadBlock;
 SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
-    var block = this.loadBlockOld(model, isReporter, object),
+    var myself = this,
+        block = this.loadBlockOld(model, isReporter, object),
         migration, migrationOffset = 0, inputs;
     this.handleAnnotations(model, block);
     if (model.tag === 'block' && model.attributes.s) {
@@ -498,8 +499,15 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     }
     inputs = block.inputs();
     model.children.forEach(function (child, i) {
+        var input = inputs[i + migrationOffset], inputs2;
         if (!contains(['variables', 'comment', 'receiver'], child.tag)) {
-            this.handleAnnotations(child, inputs[i + migrationOffset]);
+            myself.handleAnnotations(child, input);
+        }
+        if (child.tag === 'list') {
+            inputs2 = input.inputs();
+            child.children.forEach(function (child2, i) {
+                myself.handleAnnotations(child2, inputs2[i]);
+            });
         }
     }, this);
     return block;
