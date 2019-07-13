@@ -337,10 +337,12 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                         var morph = myself.loadHelpScreenElement(
                             child, screen, target, textColor
                         );
-                        morph.arrowReverse =
+                        morph.annotationArrowReverse =
                             !!child.attributes['arrow-reverse'];
+                        morph.annotationArrowDetour =
+                            +child.attributes['arrow-detour'] || 0;
                         if (child.attributes['arrow-color']) {
-                            morph.arrowColor =
+                            morph.annotationArrowColor =
                                 child.attributes['arrow-color'];
                         }
                         return morph;
@@ -463,6 +465,12 @@ SnapSerializer.prototype.handleAnnotations = function (model, morph) {
     }
     if (model.attributes['arrow-end']) {
         morph.annotationArrowEnd = model.attributes['arrow-end'];
+    }
+    if (model.attributes['arrow-reverse']) {
+        morph.annotationArrowReverse = model.attributes['arrow-reverse'];
+    }
+    if (model.attributes['arrow-detour']) {
+        morph.annotationArrowDetour = +model.attributes['arrow-detour'] || 0;
     }
     if (model.attributes['arrow-color']) {
         morph.annotationArrowColor = model.attributes['arrow-color'];
@@ -920,7 +928,10 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         annotation = this.annotations[i - 1];
         annotated = this.getAnnotatedMorph('annotationID', i);
         if (annotated) {
-            if (
+            this.add(annotation);
+            if (annotation.annotationArrowDetour) {
+                arrowEnd = annotated.center();
+            } else if (
                 annotated instanceof CommandBlockMorph
                 || annotated instanceof MenuItemMorph
                 || annotated === annotated.topBlock()
@@ -973,9 +984,11 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             }
 
             arrow = new DiagramArrowMorph(
-                arrowStart, arrowEnd, annotation.arrowReverse
+                arrowStart, arrowEnd, false,
+                annotation.annotationArrowReverse,
+                annotation.annotationArrowDetour
             );
-            arrow.color = annotation.arrowColor || this.defaultArrowColor;
+            arrow.color = annotation.annotationArrowColor || this.defaultArrowColor;
             arrow.drawNew();
             this.arrows.push(arrow);
             this.add(arrow);
@@ -991,9 +1004,26 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         arrowStart = arrowStartMorph.center();
         arrowEndMorph = this.getAnnotatedMorph('annotationArrowEnd', i);
         arrowEnd = arrowEndMorph.center();
-        arrow = new DiagramArrowMorph(arrowStart, arrowEnd, false);
+        allArrows = arrowEndMorph.annotationArrowEnd
+            .split(',')
+            .map(function (n) {
+                return +n;
+            });
+        if (allArrows.length > 1) {
+            arrowEnd = arrowEnd.add(new Point(
+                this.padding * (-allArrows.length + 1) / 2
+                    + this.padding * allArrows.indexOf(i),
+                0
+            ));
+        }
+        arrow = new DiagramArrowMorph(
+            arrowStart, arrowEnd, true,
+            arrowStartMorph.annotationArrowReverse,
+            arrowStartMorph.annotationArrowDetour
+        );
         arrow.color = arrowStartMorph.annotationArrowColor
                         || this.defaultArrowColor;
+        diagramHeight = Math.max(diagramHeight, arrow.bottom() - this.top());
         arrow.drawNew();
         this.arrows.push(arrow);
         this.add(arrow);
@@ -1002,7 +1032,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
 
     this.script.forAllChildren(function (child) {
         if (child.annotationHighlight) {
-            child.addHighlight();
+            child.addDiagramHighlight();
         }
     });
     this.script.forAllChildren(function (child) {
@@ -1051,32 +1081,41 @@ DiagramArrowMorph.prototype = new Morph();
 DiagramArrowMorph.prototype.constructor = DiagramArrowMorph;
 DiagramArrowMorph.uber = Morph.prototype;
 
-DiagramArrowMorph.prototype.padding = 5;
-
-function DiagramArrowMorph(start, end, reverse) {
-    this.init(start, end, reverse);
+function DiagramArrowMorph(start, end, scriptToScript, reverse, detourSize) {
+    this.init(start, end, scriptToScript, reverse, detourSize);
 }
 
-DiagramArrowMorph.prototype.init = function (start, end, reverse) {
+DiagramArrowMorph.prototype.init = function (
+    start,
+    end,
+    scriptToScript,
+    reverse,
+    detourSize
+) {
     // additional properties:
     this.start = start;
     this.end = end;
+    // scriptToScript means the arrow is contained entirely within the
+    // annotated script (no outside annotation)
+    this.scriptToScript = scriptToScript;
     this.reverse = reverse;
+    this.detourSize = detourSize;
+    this.padding = 5 + detourSize;
 
     // initialize inherited properties:
     DiagramArrowMorph.uber.init.call(this);
 };
 
 DiagramArrowMorph.prototype.drawNew = function () {
-    var start, end, oldStart, ctx, theta, r;
+    var start, end, oldStart, ctx, theta, r, detourSize, x, y;
+
+    r = 5; // arrow head size
+    detourSize = this.detourSize;
 
     this.silentSetExtent(
         this.end.subtract(this.start).abs().add(this.padding * 2)
     );
-    this.setPosition(
-        this.start.min(this.end)
-            .subtract(DiagramArrowMorph.prototype.padding)
-    );
+    this.setPosition(this.start.min(this.end).subtract(this.padding));
 
     start = new Point(
         this.start.x < this.end.x
@@ -1100,36 +1139,52 @@ DiagramArrowMorph.prototype.drawNew = function () {
         end = oldStart;
     }
 
-    r = 5; // arrow head size
-    theta = end.subtract(start).theta();
-    end = end.subtract(new Point (
-        r * Math.cos(theta), r * Math.sin(theta)
-    ));
-
     this.image = newCanvas(this.extent());
     ctx = this.image.getContext('2d');
     ctx.strokeStyle = ctx.fillStyle = this.color.toString();
 
+    theta = end.subtract(start).theta();
     ctx.beginPath();
     ctx.lineWidth = 3;
-    ctx.moveTo(start.x, start.y);
-    ctx.lineTo(end.x, end.y);
+    ctx.moveTo(x = start.x, y = start.y);
+    if (detourSize > 0) {
+        if (!this.scriptToScript) {
+            ctx.lineTo(
+                x = x + detourSize * Math.cos(theta),
+                y = y + detourSize * Math.sin(theta)
+            );
+        }
+        theta -= Math.PI / 2;
+        ctx.lineTo(
+            x = x + detourSize * Math.cos(theta),
+            y = y + detourSize * Math.sin(theta)
+        );
+        theta += Math.PI;
+        ctx.lineTo(
+            x = end.x - detourSize * Math.cos(theta),
+            y = end.y - detourSize * Math.sin(theta)
+        );
+    }
+    end = end.subtract(new Point (
+        r * Math.cos(theta), r * Math.sin(theta)
+    ));
+    ctx.lineTo(x = end.x, y = end.y);
     ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(
-        end.x + r * Math.cos(theta),
-        end.y + r * Math.sin(theta),
+        x = end.x + r * Math.cos(theta),
+        y = end.y + r * Math.sin(theta),
     );
     theta += 2/3 * Math.PI;
     ctx.lineTo(
-        end.x + r * Math.cos(theta),
-        end.y + r * Math.sin(theta),
+        x = end.x + r * Math.cos(theta),
+        y = end.y + r * Math.sin(theta),
     );
     theta += 2/3 * Math.PI;
     ctx.lineTo(
-        end.x + r * Math.cos(theta),
-        end.y + r * Math.sin(theta),
+        x = end.x + r * Math.cos(theta),
+        y = end.y + r * Math.sin(theta),
     );
     ctx.closePath();
     ctx.fill();
