@@ -83,6 +83,9 @@ HelpScreenMorph.prototype.createBox = function (color) {
     if (color === 'blue') {
         box.color = new Color(214, 225, 235);
         box.borderColor = new Color(153, 156, 158);
+    } else if (color === 'black') {
+        box.color = new Color(50, 52, 54);
+        box.borderColor = new Color(153, 156, 158);
     } else { // gray is default
         box.color = new Color(133, 138, 140);
         box.borderColor = new Color(183, 186, 188);
