@@ -4,13 +4,18 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+* **Translation Updates:**
+
+## v5.0.4
+* **Notable Fixes:**
     * fixed a glitch when running a generic WHEN hat block with a literal Boolean input
     * fixed a bug in the SHOW PICTURE block of the "Pixels" library 
-* **Translation Updates:**
 
 ### 2019-07-10
 * threads: fixed a glitch when running a generic WHEN hat block with a literal Boolean input
-* fixed a bug in the SHOW PICTURE block of the "Pixels" library 
+* fixed a bug in the SHOW PICTURE block of the "Pixels" library
+* tweaked "messages" menu for custom blocks, thanks, Joan!
+* maintenance release
 
 ## v5.0.3
 * **Notable Change:**
