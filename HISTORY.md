@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-07-10
+* threads: fixed a glitch when running a generic WHEN hat block with a literal Boolean input 
+
 ## v5.0.3
 * **Notable Change:**
     * CSV-parsing auto-detects the most likely delimiter among comma, semi-colon, pipe and tab

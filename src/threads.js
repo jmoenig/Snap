@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-July-10';
+modules.threads = '2019-July-15';
 
 var ThreadManager;
 var Process;
@@ -460,7 +460,7 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     // since we're asking for the whole context instead of just the result
     // of the computation, we need to look at the result-context's first
     // input to find out whether the condition is met
-    if (test && test.inputs[0] === true) {
+    if (test === true || (test && test.inputs && test.inputs[0] === true)) {
         this.startProcess(
             block,
             receiver,
