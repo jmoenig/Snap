@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-April-25';
+modules.cloud = '2019-July-01';
 
 // Global stuff
 
@@ -982,7 +982,7 @@ Cloud.prototype.getUserCollections = function (
             '/collections?' +
             this.encodeDict({
                 page: page || '',
-                pageSize: page ? pageSize | 16 : '',
+                pagesize: page ? pageSize || 16 : '',
                 matchtext: searchTerm ? encodeURIComponent(searchTerm) : ''
             }),
         onSuccess,
@@ -1025,7 +1025,7 @@ Cloud.prototype.getCollections = function (
 ) {
     var dict = {
         page: page,
-        pageSize: page ? pageSize | 16 : '',
+        pagesize: page ? pageSize || 16 : '',
     };
 
     if (searchTerm) { dict.matchtext = encodeURIComponent(searchTerm); }

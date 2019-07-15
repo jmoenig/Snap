@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-May-29';
+modules.gui = '2019-July-10';
 
 // Declarations
 
@@ -3595,7 +3595,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5 - Beta -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 5.0.3\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2019 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -6078,7 +6078,8 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open') {
         this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
-        if (this.ide.world().currentKey === 16) { // shiftClicked
+        if (this.hasLocalProjects() || this.ide.world().currentKey === 16) {
+            // shift- clicked
             this.addSourceButton('local', localize('Browser'), 'globe');
         }
     }
@@ -6554,6 +6555,15 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     if (this.task === 'open') {
         this.clearDetails();
     }
+};
+
+ProjectDialogMorph.prototype.hasLocalProjects = function () {
+    // check and report whether old projects still exist in the
+    // browser's local storage, which as of v5 has been deprecated,
+    // so the user can recover and move them elsewhere
+    return Object.keys(localStorage).some(function (any) {
+        return any.indexOf('-snap-project-') === 0;
+    });
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {

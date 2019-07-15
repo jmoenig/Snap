@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-June-03';
+modules.blocks = '2019-July-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10896,9 +10896,11 @@ MultiArgMorph.prototype.init = function (
     this.noticesTransparentclick = true;
 
     // label text:
-    label = this.labelPart(this.labelText);
-    this.add(label);
-    label.hide();
+    if (this.labelText || (this.slotSpec === '%cs')) {
+        label = this.labelPart(this.labelText);
+        this.add(label);
+        label.hide();
+    }
 
     // left arrow:
     leftArrow = new ArrowMorph(
@@ -10931,7 +10933,7 @@ MultiArgMorph.prototype.init = function (
 };
 
 MultiArgMorph.prototype.label = function () {
-    return this.children[0];
+    return this.labelText ? this.children[0] : null;
 };
 
 MultiArgMorph.prototype.arrows = function () {
@@ -10992,18 +10994,19 @@ MultiArgMorph.prototype.setLabelColor = function (
 // MultiArgMorph layout:
 
 MultiArgMorph.prototype.fixLayout = function () {
+    var label, shadowColor, shadowOffset;
     if (this.slotSpec === '%t') {
         this.isStatic = true; // in this case I cannot be exchanged
     }
     if (this.parent) {
-        var label = this.label(), shadowColor, shadowOffset;
+        label = this.label();
         this.color = this.parent.color;
-        shadowColor = this.shadowColor ||
-            this.parent.color.darker(this.labelContrast);
-        shadowOffset = this.shadowOffset || label.shadowOffset;
         this.arrows().color = this.color;
-
-        if (this.labelText !== '') {
+        if (label) {
+            shadowColor = this.shadowColor ||
+                this.parent.color.darker(this.labelContrast);
+            shadowOffset = this.shadowOffset ||
+                (label ? label.shadowOffset : null);
             if (!label.shadowColor.eq(shadowColor)) {
                 label.shadowColor = shadowColor;
                 label.shadowOffset = shadowOffset;
@@ -11026,14 +11029,16 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow = arrows.children[1],
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
     if (this.inputs().length < (this.minInputs + 1)) {
-        label.hide();
+        if (label) {
+            label.hide();
+        }
         leftArrow.hide();
         rightArrow.setPosition(
             arrows.position().subtract(new Point(dim.x, 0))
         );
         arrows.setExtent(dim);
     } else {
-        if (this.labelText !== '') {
+        if (label) {
             label.show();
         }
         leftArrow.show();
@@ -12930,6 +12935,18 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
+    // insert the block after a short gliding animation
+    var myself = this;
+    this.world().add(block);
+    block.glideTo(
+        this.position(),
+        null,
+        null,
+        function () {myself.fillInBlock(block); }
+    );
+};
+
+ScriptFocusMorph.prototype.fillInBlock = function (block) {
     var pb, stage, ide, rcvr;
     block.isTemplate = false;
     block.isDraggable = true;

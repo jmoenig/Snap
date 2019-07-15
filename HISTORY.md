@@ -1,8 +1,66 @@
-# Snap<em>!</em> (BYOB) History
+# Snap! (BYOB) History
 
-## in development
+## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
 
-* New Features:
+## v5.0.3
+* **Notable Change:**
+    * CSV-parsing auto-detects the most likely delimiter among comma, semi-colon, pipe and tab
+
+### 2019-07-10
+* threads: enhanced CSV-parsing to auto-detect the most likely delimiter among comma, semi-colon, pipe and tab
+* maintenance release
+
+## v5.0.2
+* **New Feature:**
+    * experimental tolerant color collision detection (in dev mode)
+* **Notable Fixes:**
+    * fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
+    * updated the manual for the new WRITE block, thanks, Brian
+
+### 2019-07-09
+* blocks: fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
+* updated the manual for the new WRITE block, thanks, Brian (was #2448)
+* maintenance release
+
+### 2019-07-08
+* new dev version
+* morphic, objects, threads: experimental tolerant color collision detection (in dev mode)
+
+## v5.0.1
+* **Notable Changes:**
+    * gliding animation when inserting  blocks using the keyboard
+    * optimized collision detection
+* **Notable Fixes:**
+    * show "browser" source option in project dialog when (deprecated) locally stored projects still exist
+    * list watchers occasionally didn't show cells after reassigning a changed list to a variable
+    * FOREACH over a linked list failed for scripts mutating it
+    * eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
+
+### 2019-07-04
+* gui: show "browser" source option in project dialog when (deprecated) locally stored projects still exist
+* maintenance release
+
+### 2019-07-03
+* blocks: eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
+
+### 2019-07-02
+* morphic: optimized collision detection by only looking at the alpha channel data
+
+### 2019-07-01
+* new dev version
+* lists: fixed #2446
+* threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian!
+* cloud: fixed collection grid page size, thanks, Bernat! 
+* morphic: fixed a race condition in Morph.glideTo()
+* blocks: added gliding animation when inserting  blocks using the keyboard
+
+## v5
+### 2019-06-27
+* **New Features:**
     * the "tools" library has been integrated as primitives 
     * export 1- /2- dimensional lists with atomic data as CSV
     * export n-dimensional lists with atomic data as JSON
@@ -31,6 +89,7 @@
     * new "shown?" predicate
     * new "write" command in pen category (used to be "label" in tools)
     * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
+    * 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
     * new JIT-compiler "blitz-HOF" primitives for "map", "keep", "find" & "combine" via "compile"
     * new "for" loop and "if then else" reporter primitives in the Control category
     * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
@@ -48,7 +107,7 @@
     * graphic effects and sound attributes can now be animated with easing functions
     * enhanced support for embedding Snap in other website, thanks, Bernat!
     * export sounds
-* Notable Changes:
+* **Notable Changes:**
     * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
     * added transparency (alpha) to pen colors
     * new drop-down options for sprite-layer control ("GO TO front/back")
@@ -66,7 +125,7 @@
     * additional "publish / unpublish" buttons in the project dialog
     * buttons for saving & loading projects to disk in the project dialog
     * more language options for the Text2Speech library, thanks Joan!
-* Notable Fixes:
+* **Notable Fixes:**
     * predicates inside generic WHEN hat blocks can now pass upvars
     * eliminated "clicks" when playing music notes
     * "relabel" blocks with translated drop-down choices
@@ -76,7 +135,7 @@
     * the language menu now has a "globe" icon (so it can be found in any language)
     * accept a number as input for a sound - interpret as index
     * fixed many costume sizes, thanks, Brian!
-* Translation Updates:
+* **Translation Updates:**
     * Chinese, thanks, Simon!
     * Turkish, thanks, Turgut!
     * Indonesian, thanks, Emanuella!
@@ -86,6 +145,21 @@
     * Spanish
     * German
     * French
+
+### 2019-06-27
+* updated manual and help screen for COMBINE, thank you, Brian!
+* updated CRAYONS library, thanks you, Brian!
+* prepared release
+
+### 2019-06-25
+* threads: 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
+* objects, threads: renamed COMBINE label, switching the inputs
+* objects: took out "relabel" options for COMBINE
+* adjusted German translation to the switched order of inputs for COMBINE
+* adjusted Spanish translation to the switched order of inputs for COMBINE
+* adjusted Portuguese translation to the switched order of inputs for COMBINE
+* adjusted Catalan translation to the switched order of inputs for COMBINE
+* adjusted French translation to the switched order of inputs for COMBINE
 
 ### 2019-06-24
 * removed "such that" from KEEP and FIND block labels

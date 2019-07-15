@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume*/
 
-modules.lists = '2019-June-04';
+modules.lists = '2019-July-01';
 
 var List;
 var ListWatcherMorph;
@@ -605,7 +605,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.list = list || new List();
     this.start = 1;
     this.range = 100;
-    this.lastUpdated = Date.now();
+    this.lastUpdated = 0;
     this.lastCell = null;
     this.parentCell = parentCell || null; // for circularity detection
 

@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-May-21';
+var morphicVersion = '2019-July-08';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1952,6 +1952,24 @@ Color.prototype.eq = function (aColor, observeAlpha) {
         this.r === aColor.r &&
         this.g === aColor.g &&
         this.b === aColor.b &&
+        (observeAlpha ? this.a === aColor.a : true);
+};
+
+Color.prototype.isCloseTo = function (aColor, observeAlpha, tolerance) {
+    // experimental - answer whether a color is "close" to another one by
+    // a given percentage. tolerance is the percentage by which each color
+    // channel may diverge, alpha needs to be the exact same unless ignored
+    var thres = 2.55 * (tolerance || 10);
+
+    function dist(a, b) {
+        var diff = a - b;
+        return diff < 0 ? 255 + diff : diff;
+    }
+
+    return aColor &&
+        dist(this.r, aColor.r) < thres &&
+        dist(this.g, aColor.g) < thres &&
+        dist(this.b, aColor.b) < thres &&
         (observeAlpha ? this.a === aColor.a : true);
 };
 
@@ -3894,21 +3912,27 @@ Morph.prototype.slideBackTo = function (
 
 Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
     var world = this.world(),
-        myself = this;
-    world.animations.push(new Animation(
-        function (x) {myself.setLeft(x); },
-        function () {return myself.left(); },
-        -(this.left() - endPoint.x),
-        msecs || 100,
-        easing,
-        onComplete
-    ));
+        myself = this,
+        horizontal = new Animation(
+            function (x) {myself.setLeft(x); },
+            function () {return myself.left(); },
+            -(this.left() - endPoint.x),
+            msecs || 100,
+            easing
+        );
+    world.animations.push(horizontal);
     world.animations.push(new Animation(
         function (y) {myself.setTop(y); },
         function () {return myself.top(); },
         -(this.top() - endPoint.y),
         msecs || 100,
-        easing
+        easing,
+        function () {
+            horizontal.setter(horizontal.destination);
+            horizontal.isActive = false;
+            onComplete();
+        }
+        
     ));
 };
 
@@ -4448,19 +4472,18 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data;
+        data, len, i;
     if (!oImg.width || !oImg.height) {
         return false;
     }
     data = oImg.getContext('2d')
         .getImageData(1, 1, oImg.width, oImg.height)
         .data;
-    return detect(
-        data,
-        function (each) {
-            return each !== 0;
-        }
-    ) !== null;
+    len = data.length;
+    for(i = 3; i < len; i += 4) {
+        if (data[i] !== 0) {return true; }
+    }
+    return false;
 };
 
 Morph.prototype.overlappingImage = function (otherMorph) {

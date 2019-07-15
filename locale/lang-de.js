@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-06-24', // this, too, will appear in the Translators tab
+        '2019-06-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -793,16 +793,16 @@ SnapTranslator.dict.de = {
         'behalte Elemente, die %predRing aus %l',
     'find first item %predRing in %l':
         'finde das erste Element, das %predRing in %l',
-    'combine with %repRing items of %l':
-        'kombiniere mit %repRing die Elemente von %l',
+    'combine %l using %repRing':
+        'kombiniere die Elemente von %l mit %repRing',
     '%blitz map %repRing over %l':
         '%blitz wende %repRing an auf %l',
     '%blitz keep items %predRing from %l':
         '%blitz behalte Elemente, die %predRing aus %l',
     '%blitz find first item %predRing in %l':
         '%blitz finde das erste Element, das %predRing in %l',
-    '%blitz combine with %repRing items of %l':
-        '%blitz kombiniere mit %repRing die Elemente von %l',
+    '%blitz combine %l using %repRing':
+        '%blitz kombiniere die Elemente von %l mit %repRing',
     'for each %upvar in %l %cla':
         'für jedes %upvar von %l %cla',
     'item':
