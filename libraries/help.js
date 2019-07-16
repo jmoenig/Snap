@@ -869,8 +869,8 @@ ScriptDiagramMorph.prototype.drawNew = function () {
 };
 
 ScriptDiagramMorph.prototype.fixLayout = function () {
-    var i, scriptWidth, scriptHeight, scale, diagramHeight, menu,
-        bubbleValue, bubble, annotation, annotated, annotationWidth,
+    var i, scriptWidth, scriptHeight, scale, diagramWidth, diagramHeight,
+        menu, bubbleValue, bubble, annotation, annotated, annotationWidth,
         annotationX, annotationMinY, lineHeight, arrow, arrowStart, arrowEnd,
         arrowStartMorph, arrowEndMorph, allArrows, img, scaledImg, ctx;
 
@@ -883,6 +883,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     }
     scale = this.script.scriptScale || 1;
     scriptWidth *= scale;
+    diagramWidth = scriptWidth;
     scriptHeight *= scale;
     diagramHeight = scriptHeight;
 
@@ -924,11 +925,11 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         if (annotated) {
             this.add(menu);
             menu.setPosition(
-                this.position()
+                this.scriptDisplay.position()
                     .add(annotated.rightCenter().multiplyBy(scale))
                     .add(new Point(-10, 5))
             );
-            scriptWidth = Math.max(
+            diagramWidth = Math.max(
                 scriptWidth,
                 menu.right() - this.left()
             );
@@ -939,8 +940,8 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         }
     }
 
-    annotationX = this.left() + scriptWidth + this.margin;
-    annotationMinY = this.top();
+    annotationX = this.left() + diagramWidth + this.margin;
+    annotationMinY = this.scriptDisplay.top();
     annotationWidth = this.right() - annotationX;
     for (i = 1; i <= this.annotations.length; i++) {
         annotation = this.annotations[i - 1];
@@ -954,7 +955,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                 || annotated instanceof MenuItemMorph
                 || annotated === annotated.topBlock()
             ) {
-                arrowEnd = this.position().add(new Point(
+                arrowEnd = this.scriptDisplay.position().add(new Point(
                     annotated.right() + this.padding,
                     annotated.parts
                         // use y of center of label
@@ -962,12 +963,12 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
                         : annotated.center().y
                 ).multiplyBy(scale));
             } else if (i === 1) {
-                arrowEnd = this.position().add(new Point(
+                arrowEnd = this.scriptDisplay.position().add(new Point(
                     annotated.right(),
                     annotated.center().y
                 ).multiplyBy(scale));
             } else {
-                arrowEnd = this.position().add(
+                arrowEnd = this.scriptDisplay.position().add(
                     annotated.bottomCenter().multiplyBy(scale)
                 );
             }
