@@ -30,7 +30,7 @@
                             </block>
                         </script>
                         <bubbles>
-                            <img src="reportNewList_list1.png" width="109" height="95"/>
+                            <img src="reportNewList_list1.png" width="80" height="69"/>
                         </bubbles>
                     </diagram>
                     <small-p>Make an empty list.</small-p>
@@ -48,7 +48,7 @@
                             </block>
                         </script>
                         <bubbles>
-                            <img src="reportNewList_list2.png" width="109" height="123"/>
+                            <img src="reportNewList_list2.png" width="80" height="87"/>
                         </bubbles>
                     </diagram>
                     <small-p>

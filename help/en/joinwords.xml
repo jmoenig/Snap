@@ -36,7 +36,7 @@
                 </bubbles>
             </diagram>
             <diagram>
-                <script>
+                <script scale="0.9">
                     <block s="reportCombine" bubble="1">
                         <block s="reifyReporter">
                             <autolambda>

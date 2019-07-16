@@ -40,7 +40,7 @@
                     </block>
                 </script>
                 <bubbles>
-                    <img src="reportKeep_list1.png" width="108" height="94"/>
+                    <img src="reportKeep_list1.png" width="80" height="70"/>
                 </bubbles>
             </diagram>
             <diagram>
@@ -70,7 +70,7 @@
                     </block>
                 </script>
                 <bubbles>
-                    <img src="reportKeep_list2.png" width="107" height="93"/>
+                    <img src="reportKeep_list2.png" width="82" height="70"/>
                 </bubbles>
             </diagram>
         </column>

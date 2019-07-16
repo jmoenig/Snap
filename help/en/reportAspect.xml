@@ -22,7 +22,7 @@
                         <item color="red">brightness</item>
                         <item color="red">transparency</item>
                         <line/>
-                        <item color="blue" annotation="2">sprites</item>
+                        <item color="cyan" annotation="2">sprites</item>
                     </menu>
                 </menus>
                 <annotations>
@@ -30,7 +30,7 @@
                         The visible color at the chosen location. May come
                         from drawn lines, frontmost sprite (maybe this one.)
                     </small-p>
-                    <small-p arrow-color="blue">
+                    <small-p arrow-color="cyan">
                         A list of all sprites at this point, whether in front
                         of or behind me, including myself.
                     </small-p>

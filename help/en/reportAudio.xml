@@ -24,10 +24,10 @@
                         <item color="orange" annotation="1">volume</item>
                         <item color="orange">note</item>
                         <item color="orange">frequency</item>
-                        <item color="green" annotation="2">samples</item>
-                        <item color="green">sample rate</item>
-                        <item color="blue" annotation="3">spectrum</item>
-                        <item color="blue">resolution</item>
+                        <item color="lime" annotation="2">samples</item>
+                        <item color="lime">sample rate</item>
+                        <item color="cyan" annotation="3">spectrum</item>
+                        <item color="cyan">resolution</item>
                     </menu>
                 </menus>
                 <annotations>
@@ -36,13 +36,13 @@
                         characterizing the sound as a whole average volume,
                         dominant note number, and frequency.
                     </small-p>
-                    <small-p arrow-color="green">
+                    <small-p arrow-color="lime">
                         The next two options are time domain information:
                         a list of instantaneous volumes and a number
                         representing the number of samples per second
                         (sampling rate).
                     </small-p>
-                    <small-p arrow-color="blue">
+                    <small-p arrow-color="cyan">
                         The last two options are frequency domain
                         information: a histogram of frequencies and the
                         number of buckets in the histogram.
