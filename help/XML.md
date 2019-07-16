@@ -211,6 +211,7 @@ or a menu:
 | rel-width | number | none | See `<row>`. | 
 
 Attributes for script/menu components:
+
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | annotation | number | none | The component will be annotated with the nth element in the annotations list (1-indexed). |
@@ -221,6 +222,7 @@ Attributes for script/menu components:
 | arrow-end | number | none | |
 
 Attributes for annotations and `arrow-start` components:
+
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | arrow-reverse | true or false | false | Reverses the arrow. |
