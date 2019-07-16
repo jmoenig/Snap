@@ -309,7 +309,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
 
     function processText(text) {
         return text.trim().split(/\s+/).join(' ') // collapse whitespace
-                    .replace(/\s*\\n\s*/g, '\n'); // replace $br with \n
+                    .replace(/\s*\\n\s*/g, '\n'); // replace \n with newline
     }
 
     switch (element.tag) {
