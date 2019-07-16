@@ -905,7 +905,9 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             bubble = annotated.showBubble(
                 bubbleValue, false, new SpriteMorph(), true
             );
+            bubble.addShadow(new Point(2, 2), 80);
             this.add(bubble);
+            bubble.fullChanged();
             bubble.setTop(this.top());
             bubble.setLeft(this.scriptDisplay.right() + 2);
             this.scriptDisplay.setTop(bubble.bottom());
