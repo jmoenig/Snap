@@ -1,3 +1,30 @@
+/*
+
+    help.js
+
+    help screen translator for Snap!
+
+    written by Dylan Servilla
+
+    Copyright (C) 2019 by Dylan Servilla
+
+    This file is part of Snap! Help Translator library.
+
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 // HelpScreenMorph //////////////////////////////////////////////////////
 
 // HelpScreenMorph inherits from FrameMorph:
@@ -107,17 +134,17 @@ HelpScreenMorph.prototype.createRow = function () {
     return row;
 };
 
-HelpScreenMorph.prototype.createParagraph = function (text, size, color, italic) {
+HelpScreenMorph.prototype.createParagraph = function (str, size, color, italic) {
     var text = new TextMorph(
-        text, size, 'serif', false, italic, null, null, 'Baskerville'
+        str, size, 'serif', false, italic, null, null, 'Baskerville'
     );
     text.color = color;
     return text;
 };
 
-HelpScreenMorph.prototype.createRichParagraph = function (text, size, color, italic) {
+HelpScreenMorph.prototype.createRichParagraph = function (str, size, color, italic) {
     var text = new RichTextMorph(
-        text, size, 'serif', false, italic, null, null, 'Baskerville'
+        str, size, 'serif', false, italic, null, null, 'Baskerville'
     );
     text.color = color;
     return text;
@@ -150,7 +177,7 @@ HelpScreenMorph.prototype.imageLoaded = function () {
     if (this.imagesLoading === 0) {
         this.loadCallback(null, this);
     }
-}
+};
 
 HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
     var dict = {}, input = new InputSlotMorph(),
@@ -163,7 +190,7 @@ HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
                 // direction picker takes its color from its input's parent
                 tempParent = new Morph();
                 tempParent.setColor(
-                    SpriteMorph.prototype.blockColor['motion']
+                    SpriteMorph.prototype.blockColor.motion
                 );
                 tempParent.add(input);
             }
@@ -192,7 +219,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     var myself = this,
         model = this.parse(xmlString),
         screen = new HelpScreenMorph(callback),
-        padding = HelpScreenMorph.prototype.padding
+        padding = HelpScreenMorph.prototype.padding,
         target = new SpriteMorph();
 
     this.project.stage = new StageMorph();
@@ -226,8 +253,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
             morph.setWidth(parent.width() - padding);
         } else if (
             morph instanceof AlignmentMorph
-            || morph instanceof ScriptDiagramMorph
-            || morph instanceof TextMorph
+                || morph instanceof ScriptDiagramMorph
+                || morph instanceof TextMorph
         ) {
             if (parent instanceof BoxMorph) {
                 morph.silentSetWidth(parent.width() - 2 * padding);
@@ -243,7 +270,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
             if (
                 morph instanceof AlignmentMorph
-                && morph.orientation === 'row'
+                    && morph.orientation === 'row'
             ) {
                 // calculate the total known used width of row items
                 morph.usedWidth = morph.padding * (morph.children.length - 1)
@@ -265,7 +292,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
                     );
                 morph.relWidthDenominator = morph.children.reduce(
                     function (width, child) {
-                        return width + (child.relativeWidth || 0)
+                        return width + (child.relativeWidth || 0);
                     }, 0
                 );
             }
@@ -548,7 +575,7 @@ ImageMorph.prototype.init = function (src, width, height, onload, onerror) {
         if (typeof onerror === 'function') {
             onerror();
         }
-    }
+    };
     this.pic.src = 'help/' + SnapTranslator.language + '/' + src
                     + '?t=' + Date.now();
 };
@@ -849,8 +876,6 @@ ScriptDiagramMorph.prototype.init = function (
     bubbles,
     defaultArrowColor
 ) {
-    var myself = this;
-
     // additional properties:
     this.script = script;
     this.scriptDisplay = null;
@@ -1193,17 +1218,17 @@ DiagramArrowMorph.prototype.drawNew = function () {
     ctx.beginPath();
     ctx.moveTo(
         x = end.x + r * Math.cos(theta),
-        y = end.y + r * Math.sin(theta),
+        y = end.y + r * Math.sin(theta)
     );
     theta += 2/3 * Math.PI;
     ctx.lineTo(
         x = end.x + r * Math.cos(theta),
-        y = end.y + r * Math.sin(theta),
+        y = end.y + r * Math.sin(theta)
     );
     theta += 2/3 * Math.PI;
     ctx.lineTo(
         x = end.x + r * Math.cos(theta),
-        y = end.y + r * Math.sin(theta),
+        y = end.y + r * Math.sin(theta)
     );
     ctx.closePath();
     ctx.fill();
