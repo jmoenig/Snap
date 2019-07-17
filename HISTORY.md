@@ -6,6 +6,10 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.0.5
+* **Notable Fix:**
+    * fixed cloud project collection support, thanks Bernat!
+
 ## v5.0.4
 * **Notable Fixes:**
     * fixed a glitch when running a generic WHEN hat block with a literal Boolean input
