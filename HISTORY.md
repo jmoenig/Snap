@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-07-22
+* new dev version
+
 ## v5.0.5
 * **Notable Fix:**
     * fixed cloud project collection support, thanks Bernat!
