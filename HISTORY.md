@@ -8,6 +8,7 @@
 
 ### 2019-07-22
 * new dev version
+* morphic, blocks: support for enhanced character set keyboard input, thanks, @swiperthefox!
 
 ## v5.0.5
 * **Notable Fix:**
