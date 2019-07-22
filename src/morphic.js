@@ -5380,73 +5380,196 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
-    this.initializeClipboardHandler();
+    this.initializeTextarea();
 };
 
-CursorMorph.prototype.initializeClipboardHandler = function () {
-    // Add hidden text box for copying and pasting
-    var myself = this,
-        wrrld = this.target.world();
+CursorMorph.prototype.initializeTextarea = function () {
+    var myself = this;
 
-    this.clipboardHandler = document.createElement('textarea');
-    this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.top = window.outerHeight;
-    this.clipboardHandler.style.right = '101%'; // placed just out of view
+    this.textarea = document.createElement('textarea');
+    this.textarea.style.zIndex = -1;
+    this.textarea.style.position = 'absolute';
+    this.textarea.wrap = "off";
+    this.textarea.style.overflow = "hidden";
+    this.textarea.style.fontSize = this.target.fontSize + 'px';
+    this.textarea.autofocus = true;
+    this.textarea.value = this.target.text;
+    document.body.appendChild(this.textarea);
+    this.updateTextAreaPosition();
+    this.syncTextareaSelectionWith(this.target);
 
-    document.body.appendChild(this.clipboardHandler);
+    
+    /**
+     * There are three cases when the textarea get some inputs:
+     * 
+     * 1. The inputs represents special shortcuts of Snap! system, so we
+     * don't want the textarea to handle it. These events are captured in
+     * "keydown" event handler.
+     * 
+     * 2. The inputs changed the content of the textarea, we need to update
+     * the content of its target morphic accordingly. This is handled in
+     * the "input" event handler.
+     * 
+     * 3. The input causes changes on the textarea, but the change will not
+     * trigger and "input" event (such changes include selection change, cursor
+     * movements). These are handled in "keyup" event handler.
+     * 
+     * Note that some changes in case 2 are not caused by keyboards (for example,
+     * select a word by clicking in IME window), so there are overlaps between
+     * case 2 and case 3. but no one can replace the other.
+     */
+    
+    /* Special shortcuts for Snap! system.
+    - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
+    - tab: goto next text field
+    - esc: discard the editing
+    - enter / shift+enter: accept the editing
+    */
+    this.textarea.addEventListener('keydown', function (event) {
+        // other part of the world need to know the current key
+        myself.world().currentKey = event.keyCode;
 
-    this.clipboardHandler.value = this.target.selection();
-    this.clipboardHandler.focus();
-    this.clipboardHandler.select();
+        var keyName = event.key;
+        var shift = event.shiftKey;
+        var singleLineText = myself.target instanceof StringMorph;
 
-    this.clipboardHandler.addEventListener(
-        'keypress',
-        function (event) {
-            myself.processKeyPress(event);
-            this.value = myself.target.selection();
-            this.select();
-        },
-        false
-    );
-
-    this.clipboardHandler.addEventListener(
-        'keydown',
-        function (event) {
-            myself.processKeyDown(event);
-            if (event.shiftKey) {
-                wrrld.currentKey = 16;
+        if (!isNil(myself.target.receiver) &&
+                    (event.ctrlKey || event.metaKey)) {
+            if (keyName === 'd') {
+                myself.target.doIt();
+            } else if (keyName === 'i') {
+                myself.target.inspectIt();
+            } else if (keyName === 'p') {
+                myself.target.showIt();
             }
-            this.value = myself.target.selection();
-            this.select();
-
-            // Make sure tab prevents default
-            if (event.key === 'U+0009' ||
-                    event.key === 'Tab') {
-                myself.processKeyPress(event);
-                event.preventDefault();
+            event.preventDefault();
+        } else if (keyName === 'Tab' || keyName === 'U+0009') {
+            if (shift) {
+                myself.target.backTab(myself.target);
+            } else {
+                myself.target.tab(myself.target);
             }
-        },
-        false
-    );
+            event.preventDefault();
+            myself.target.escalateEvent('reactToEdit', myself.target);
+        } else if (keyName === 'Escape') {
+            myself.cancel();
+        } else if (keyName === "Enter" && (singleLineText || shift)) {
+            myself.accept();
+        } else {
+            myself.target.escalateEvent('reactToKeystroke', event);
+        }
+    });
+    
+    // handle content change.
+    this.textarea.addEventListener('input', function (event) {
+        myself.world().currentKey = null;
 
-    this.clipboardHandler.addEventListener(
-        'keyup',
-        function (event) {
-            wrrld.currentKey = null;
-        },
-        false
-    );
-
-    this.clipboardHandler.addEventListener(
-        'input',
-        function (event) {
-            if (this.value === '') {
-                myself.gotoSlot(myself.target.selectionStartSlot());
-                myself.target.deleteSelection();
+        var target = myself.target;
+        var textarea = myself.textarea;
+        var filteredContent;
+        
+        // filter invalid chars for numeric fields
+        function filterText (content) {
+            var points = 0;
+            var result = '';
+            for (var i=0; i < content.length; i++) {
+                var ch = content.charAt(i);
+                var valid = (
+                    ('0' <= ch && ch <= '9') || // digits
+                    (i === 0 && ch === '-')  || // leading '-'
+                    (ch === '.' && points === 0) // at most '.'
+                );
+                if (valid) {
+                    result += ch;
+                    if (ch === '.') points++;
+                }
             }
-        },
-        false
-    );
+            return result;
+        }
+        
+        if (target.isNumeric) {
+            filteredContent = filterText(textarea.value);
+        } else {
+            filteredContent = textarea.value;
+        }
+        
+        if (filteredContent.length < textarea.value.length) {
+            textarea.value = filteredContent;
+            var caret = Math.min(textarea.selectionStart, filteredContent.length);
+            textarea.selectionEnd = caret;
+            textarea.selectionStart = caret;
+        }
+        // target morph: copy the content and selection status to the target.        
+        target.text = filteredContent;
+        
+        if (textarea.selectionStart === textarea.selectionEnd) {
+            target.startMark = null;
+            target.endMark = null;
+        } else {
+            if (textarea.selectionDirection === 'backward') {
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
+            } else {
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
+            }
+        }
+        target.changed();
+        target.drawNew();
+        target.changed();
+
+        // cursor morph: copy the caret position to cursor morph.
+        myself.gotoSlot(textarea.selectionStart);
+
+        myself.updateTextAreaPosition();
+    });
+
+    // handle selection change and cursor position change.
+
+    this.textarea.addEventListener('keyup', function (event) {
+        var textarea = myself.textarea;
+        var target = myself.target;
+        
+        if (textarea.selectionStart === textarea.selectionEnd) {
+            target.startMark = null;
+            target.endMark = null;
+        } else {
+            if (textarea.selectionDirection === 'backward') {
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
+            } else {
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
+            }
+        }
+        target.changed();
+        target.drawNew();
+        target.changed();
+        myself.gotoSlot(textarea.selectionEnd);
+    });
+};
+
+CursorMorph.prototype.updateTextAreaPosition = function () {
+    function number2px (n) {
+        return Math.ceil(n) + 'px';
+    }
+    var origin = this.target.bounds.origin;
+    this.textarea.style.top = number2px(origin.y);
+    this.textarea.style.left = number2px(origin.x);
+};
+
+CursorMorph.prototype.syncTextareaSelectionWith = function (targetMorph) {
+    var start = targetMorph.startMark;
+    var end = targetMorph.endMark;
+
+    if (start === end) {
+        this.textarea.setSelectionRange(this.slot, this.slot, 'none');
+    } else if (start < end) {
+        this.textarea.setSelectionRange(start, end, 'forward');
+    } else {
+        this.textarea.setSelectionRange(end, start, 'backward');
+    }
+    this.textarea.focus();
 };
 
 // CursorMorph event processing:
@@ -5819,23 +5942,13 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    this.destroyClipboardHandler();
+    this.destroyTextarea();
     CursorMorph.uber.destroy.call(this);
 };
 
-CursorMorph.prototype.destroyClipboardHandler = function () {
-    var nodes = document.body.children,
-        each,
-        i;
-    if (this.clipboardHandler) {
-        for (i = 0; i < nodes.length; i += 1) {
-            each = nodes[i];
-            if (each === this.clipboardHandler) {
-                document.body.removeChild(this.clipboardHandler);
-                this.clipboardHandler = null;
-            }
-        }
-    }
+CursorMorph.prototype.destroyTextarea = function () {
+    document.body.removeChild(this.textarea);
+    this.textarea = null;
 };
 
 // CursorMorph utilities:
@@ -8976,10 +9089,11 @@ StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
         cursor = this.root().cursor;
+        this.endMark = this.text.length;
         if (cursor) {
             cursor.gotoSlot(this.text.length);
+            cursor.syncTextareaSelectionWith(this);
         }
-        this.endMark = this.text.length;
         this.drawNew();
         this.changed();
     }
@@ -9004,6 +9118,7 @@ StringMorph.prototype.shiftClick = function (pos) {
         }
         cursor.gotoPos(pos);
         this.endMark = cursor.slot;
+        cursor.syncTextareaSelectionWith(this);
         this.drawNew();
         this.changed();
     }
@@ -9049,6 +9164,7 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
             // last slot in multi line TextMorphs
             this.selectAll();
         }
+        this.root().cursor.syncTextareaSelectionWith(this);
     } else {
         this.escalateEvent('mouseDoubleClick', pos);
     }
@@ -9101,6 +9217,7 @@ StringMorph.prototype.enableSelecting = function () {
                 this.startMark = this.slotAt(pos);
                 this.endMark = this.startMark;
                 this.currentlySelecting = true;
+                this.root().cursor.syncTextareaSelectionWith(this);
                 if (!already) {this.escalateEvent('mouseDownLeft', pos); }
             }
         }
@@ -9112,6 +9229,7 @@ StringMorph.prototype.enableSelecting = function () {
             var newMark = this.slotAt(pos);
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
+                this.root().cursor.syncTextareaSelectionWith(this);
                 this.drawNew();
                 this.changed();
             }
@@ -12523,6 +12641,13 @@ WorldMorph.prototype.about = function () {
 };
 
 WorldMorph.prototype.edit = function (aStringOrTextMorph) {
+    if (this.lastEditedText === aStringOrTextMorph) {
+        return;
+    }
+    if (!isNil(this.lastEditedText)) {
+        this.stopEditing();
+    }
+
     var pos = getDocumentPositionOf(this.worldCanvas);
 
     if (!aStringOrTextMorph.isEditable) {
