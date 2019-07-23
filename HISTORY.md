@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-07-23
+* morphic: minor code reformatting for LINTers
+
 ### 2019-07-22
 * new dev version
 * morphic, blocks: support for enhanced character set keyboard input, thanks, @swiperthefox!

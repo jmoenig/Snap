@@ -1162,7 +1162,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-July-22';
+var morphicVersion = '2019-July-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5370,7 +5370,11 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.originalContents = this.target.text;
     this.originalAlignment = this.target.alignment;
     this.slot = this.target.text.length;
+    this.textarea = null;
+
     CursorMorph.uber.init.call(this);
+
+    // override inherited defaults
     ls = fontHeight(this.target.fontSize);
     this.setExtent(new Point(Math.max(Math.floor(ls / 20), 1), ls));
     this.drawNew();
@@ -5399,39 +5403,39 @@ CursorMorph.prototype.initializeTextarea = function () {
     this.syncTextareaSelectionWith(this.target);
 
     
-    /**
-     * There are three cases when the textarea get some inputs:
-     * 
-     * 1. The inputs represents special shortcuts of Snap! system, so we
-     * don't want the textarea to handle it. These events are captured in
-     * "keydown" event handler.
-     * 
-     * 2. The inputs changed the content of the textarea, we need to update
-     * the content of its target morphic accordingly. This is handled in
-     * the "input" event handler.
-     * 
-     * 3. The input causes changes on the textarea, but the change will not
-     * trigger and "input" event (such changes include selection change, cursor
-     * movements). These are handled in "keyup" event handler.
-     * 
-     * Note that some changes in case 2 are not caused by keyboards (for example,
-     * select a word by clicking in IME window), so there are overlaps between
-     * case 2 and case 3. but no one can replace the other.
-     */
-    
-    /* Special shortcuts for Snap! system.
-    - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
-    - tab: goto next text field
-    - esc: discard the editing
-    - enter / shift+enter: accept the editing
-    */
-    this.textarea.addEventListener('keydown', function (event) {
-        // other part of the world need to know the current key
-        myself.world().currentKey = event.keyCode;
+    /*
+        There are three cases when the textarea gets inputs:
 
-        var keyName = event.key;
-        var shift = event.shiftKey;
-        var singleLineText = myself.target instanceof StringMorph;
+        1. Inputs that represent special shortcuts of Snap!, so we
+        don't want the textarea to handle it. These events are captured in
+        "keydown" event handler.
+
+        2. inputs that change the content of the textarea, we need to update
+        the content of its target morph accordingly. This is handled in
+        the "input" event handler.
+
+        3. input that change the textarea without triggering an "input" event,
+        e.g. selection change, cursor movements. These are handled in the
+        "keyup" event handler.
+
+        Note that some changes in case 2 are not caused by keyboards (for
+        example, select a word by clicking in IME window), so there are overlaps
+        between case 2 and case 3. but no one can replace the other.
+    */
+    
+    this.textarea.addEventListener('keydown', function (event) {
+        /* Special shortcuts for Snap! system.
+            - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
+            - tab: goto next text field
+            - esc: discard the editing
+            - enter / shift+enter: accept the editing
+        */
+        var keyName = event.key,
+            shift = event.shiftKey,
+            singleLineText = myself.target instanceof StringMorph;
+
+        // other parts of the world need to know the current key
+        myself.world().currentKey = event.keyCode;
 
         if (!isNil(myself.target.receiver) &&
                     (event.ctrlKey || event.metaKey)) {
@@ -5460,28 +5464,32 @@ CursorMorph.prototype.initializeTextarea = function () {
         }
     });
     
-    // handle content change.
     this.textarea.addEventListener('input', function (event) {
+        // handle content change.
+        var target = myself.target,
+            textarea = myself.textarea,
+            filteredContent,
+            caret;
+        
         myself.world().currentKey = null;
 
-        var target = myself.target;
-        var textarea = myself.textarea;
-        var filteredContent;
-        
         // filter invalid chars for numeric fields
         function filterText (content) {
-            var points = 0;
-            var result = '';
-            for (var i=0; i < content.length; i++) {
-                var ch = content.charAt(i);
-                var valid = (
+            var points = 0,
+                result = '',
+                i, ch, valid;
+            for (i = 0; i < content.length; i += 1) {
+                ch = content.charAt(i);
+                valid = (
                     ('0' <= ch && ch <= '9') || // digits
                     (i === 0 && ch === '-')  || // leading '-'
                     (ch === '.' && points === 0) // at most '.'
                 );
                 if (valid) {
                     result += ch;
-                    if (ch === '.') points++;
+                    if (ch === '.') {
+                        points += 1;
+                    }
                 }
             }
             return result;
@@ -5495,7 +5503,7 @@ CursorMorph.prototype.initializeTextarea = function () {
         
         if (filteredContent.length < textarea.value.length) {
             textarea.value = filteredContent;
-            var caret = Math.min(textarea.selectionStart, filteredContent.length);
+            caret = Math.min(textarea.selectionStart, filteredContent.length);
             textarea.selectionEnd = caret;
             textarea.selectionStart = caret;
         }
@@ -5524,11 +5532,10 @@ CursorMorph.prototype.initializeTextarea = function () {
         myself.updateTextAreaPosition();
     });
 
-    // handle selection change and cursor position change.
-
     this.textarea.addEventListener('keyup', function (event) {
-        var textarea = myself.textarea;
-        var target = myself.target;
+        // handle selection change and cursor position change.
+        var textarea = myself.textarea,
+            target = myself.target;
         
         if (textarea.selectionStart === textarea.selectionEnd) {
             target.startMark = null;
@@ -5550,17 +5557,19 @@ CursorMorph.prototype.initializeTextarea = function () {
 };
 
 CursorMorph.prototype.updateTextAreaPosition = function () {
+    var origin = this.target.bounds.origin;
+
     function number2px (n) {
         return Math.ceil(n) + 'px';
     }
-    var origin = this.target.bounds.origin;
+
     this.textarea.style.top = number2px(origin.y);
     this.textarea.style.left = number2px(origin.x);
 };
 
 CursorMorph.prototype.syncTextareaSelectionWith = function (targetMorph) {
-    var start = targetMorph.startMark;
-    var end = targetMorph.endMark;
+    var start = targetMorph.startMark,
+        end = targetMorph.endMark;
 
     if (start === end) {
         this.textarea.setSelectionRange(this.slot, this.slot, 'none');
