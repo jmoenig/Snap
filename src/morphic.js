@@ -1153,7 +1153,7 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
-    Dariusz Dorożalski and @swiperthefox pioneered IME text editing.
+    Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
     Bernat Romagosa contributed to text editing and to the core design.
     Brian Harvey contributed to the design and implementation of submenus.
     Ken Kahn contributed to Chinese keboard entry and Android support.
