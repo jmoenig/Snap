@@ -1156,6 +1156,7 @@
     Dariusz Dorożalski and @swiperthefox pioneered IME text editing.
     Bernat Romagosa contributed to text editing and to the core design.
     Brian Harvey contributed to the design and implementation of submenus.
+    Ken Kahn contributed to Chinese keboard entry and Android support.
 
     - Jens Mönig
 */

@@ -6,8 +6,13 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.0.6
+* **Notable Fix:**
+    * IME text editing support, thanks, @swiperthefox!
+
 ### 2019-07-23
 * morphic: minor code reformatting for LINTers
+* prepared maintenance release
 
 ### 2019-07-22
 * new dev version
