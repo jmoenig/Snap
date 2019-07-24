@@ -748,9 +748,9 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
         }
     });
 
-    // remember the edited prototype spec
-    protoSpec = this.specFromFragments();
-
+    // remember the edited prototype spec,
+    // and prevent removing the last one
+    protoSpec = this.specFromFragments() || this.blockSpec;
 
     // update the prototype's type
     // and possibly exchange 'this' for 'myself'
