@@ -6,9 +6,12 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-07-24
+* byob: fixed #2041
+
 ## v5.0.6
 * **Notable Fix:**
-    * IME text editing support, thanks, @swiperthefox!
+    * IME text editing support, thanks, Zhenlei Jia @swiperthefox!
 
 ### 2019-07-23
 * morphic: minor code reformatting for LINTers
