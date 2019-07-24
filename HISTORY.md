@@ -4,11 +4,15 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
-    * fixed #2041
 * **Translation Updates:**
+
+## v5.0.7
+* **Notable Fix:**
+    * fixed #2041
 
 ### 2019-07-24
 * byob: fixed #2041
+* prepared maintenance release
 
 ## v5.0.6
 * **Notable Fix:**
