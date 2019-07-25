@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-July-22';
+modules.blocks = '2019-July-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11023,6 +11023,10 @@ MultiArgMorph.prototype.addInput = function (contents) {
             this.elementSpec === '%blockVars') {
         name = '';
         i = idx;
+        if (this.elementSpec === '%scriptVars') {
+            // compensate for missing label element
+            i += 1;
+        }
         while (i > 0) {
             name = String.fromCharCode(97 + (i - 1) % 26) + name;
             i = Math.floor((i - 1) / 26);
