@@ -11771,7 +11771,10 @@ HandMorph.prototype.processDrop = function (event) {
                 readSVG(file);
             } else if (file.type.indexOf("image") === 0) {
                 readImage(file);
-            } else if (file.type.indexOf("audio") === 0) {
+            } else if (file.type.indexOf("audio") === 0 ||
+                    file.type.indexOf("ogg") > -1) {
+                    // check the file-extension because Firefox
+                    // thinks OGGs are videos
                 readAudio(file);
             } else if ((file.type.indexOf("text") === 0) ||
                     contains(['txt', 'csv', 'json'], suffix)) {
