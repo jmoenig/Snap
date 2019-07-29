@@ -11467,7 +11467,8 @@ HandMorph.prototype.processMouseScroll = function (event) {
         }
 
         // Multiplier variable, to account for both pixel and line deltaModes.
-        var multiplier = event.deltaMode === 0x1 ? -1/3 : -1/53;
+        var DOM_DELTA_LINE = 1;
+        var multiplier = event.deltaMode === DOM_DELTA_LINE ? -1/3 : -1/53;
 
         morph.mouseScroll(
             y * multiplier,
