@@ -218,7 +218,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     // public - answer the HelpScreenMorph represented by xmlString
     var myself = this,
         model = this.parse(xmlString),
-        screen = new HelpScreenMorph(callback),
+        helpScreen = new HelpScreenMorph(callback),
         padding = HelpScreenMorph.prototype.padding,
         target = new SpriteMorph();
 
@@ -230,19 +230,19 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     }
     model.children.forEach(function (child) {
         if (child.tag === 'thumbnail') {
-            screen.thumbnail = myself.loadHelpScreenElement(
-                model.require('thumbnail'), screen, target, 'black'
+            helpScreen.thumbnail = myself.loadHelpScreenElement(
+                model.require('thumbnail'), helpScreen, target, 'black'
             );
         } else if (child.tag === 'blocks') {
             myself.loadCustomBlocks(target, child, true);
             myself.populateCustomBlocks(target, child, true);
         } else {
             var morph = myself.loadHelpScreenElement(
-                child, screen, target,
+                child, helpScreen, target,
                 child.attributes.color === 'blue' ? 'black' : 'white'
             );
             if (morph) {
-                screen.add(morph);
+                helpScreen.add(morph);
             }
         }
     });
@@ -300,8 +300,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         }
     }
 
-    screen.children.forEach(fixWidths);
-    screen.forAllChildren(function (child) {
+    helpScreen.children.forEach(fixWidths);
+    helpScreen.forAllChildren(function (child) {
         // Reflow text
         if (child instanceof TextMorph) {
             child.children.forEach(function (child) {
@@ -312,8 +312,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
             child.setExtent(child.extent());
         }
     });
-    screen.add(screen.thumbnail);
-    screen.forAllChildren(function (child) {
+    helpScreen.add(helpScreen.thumbnail);
+    helpScreen.forAllChildren(function (child) {
         if (
             child instanceof AlignmentMorph
             || child instanceof ScriptDiagramMorph
@@ -322,10 +322,10 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         }
     });
 
-    screen.fixLayout();
+    helpScreen.fixLayout();
 
-    if (screen.imagesLoading === 0) {
-        callback(null, screen);
+    if (helpScreen.imagesLoading === 0) {
+        callback(null, helpScreen);
     }
 };
 
