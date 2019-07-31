@@ -334,7 +334,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
 ) {
     var myself = this, morph, customBlock, script, textSize, italic;
 
-    function processText(text) {
+    function normalizeWhitespace(text) {
         return text.trim().replace(/\s+/g, ' ') // collapse whitespace
                     .replace(/\s*\\n\s*/g, '\n'); // replace \n with newline
     }
@@ -420,7 +420,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         italic = element.tag === 'i' || element.tag === 'small-i';
         if (element.children.length === 0) {
             morph = screen.createParagraph(
-                processText(element.contents),
+                normalizeWhitespace(element.contents),
                 textSize, element.attributes.color || textColor, italic
             );
         } else {
@@ -442,7 +442,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph.fixBlockColor(null, true); // force zebra coloring
         break;
     case 'text':
-        return processText(element.contents);
+        return normalizeWhitespace(element.contents);
     case 'thumbnail':
         morph = screen.createThumbnail();
         break;
