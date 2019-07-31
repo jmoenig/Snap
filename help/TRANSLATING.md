@@ -1,4 +1,4 @@
-# Translating help screens:
+# Translating Help Screens
 
 See CONTRIBUTING.md for a general guide on translating.
 
