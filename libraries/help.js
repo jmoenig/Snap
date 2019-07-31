@@ -576,8 +576,9 @@ ImageMorph.prototype.init = function (src, width, height, onload, onerror) {
             onerror();
         }
     };
-    this.pic.src = 'help/' + SnapTranslator.language + '/' + src
-                    + '?t=' + Date.now();
+    this.pic.src = IDE_Morph.prototype.resourceURL(
+        'help', SnapTranslator.language, src + '?t=' + Date.now()
+    );
 };
 
 ImageMorph.prototype.drawNew = function () {
