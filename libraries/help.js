@@ -335,7 +335,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
     var myself = this, morph, customBlock, script, textSize, italic;
 
     function processText(text) {
-        return text.trim().split(/\s+/).join(' ') // collapse whitespace
+        return text.trim().replace(/\s+/g, ' ') // collapse whitespace
                     .replace(/\s*\\n\s*/g, '\n'); // replace \n with newline
     }
 
