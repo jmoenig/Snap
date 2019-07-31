@@ -1,25 +1,26 @@
 # Translating Help Screens
 
-See CONTRIBUTING.md for a general guide on translating.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for a general guide on translating Snap!.
 
 ## 1. Setup
 
 If you haven't already downloaded a copy of the Snap! source, go to
-<https://github.com/jmoenig/Snap> and click "Clone or download".
+[GitHub](https://github.com/jmoenig/Snap) and click "Clone or download".
 
 For the Help translator library to work, you'll need to put Snap! on a local HTTP
-server. See <https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server#Running_a_simple_local_HTTP_server>
+server. See [Mozilla's documentation](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server#Running_a_simple_local_HTTP_server)
 for an example of how to do this.
 
 Create a copy of the `en` directory in the `help` directory, naming it the
-two-letter ISO 639-1 code for your language (see
+the same as code for the corresponding translation file in the `locale/` directory.
+(e.g. `help/ja_HIRA/` for the Japanese Hirogama translation.)
 <http://en.wikipedia.org/wiki/ISO_639-1>).
 
 ## 2. Translation
 
 Replace the English text in the XML files with the translated text.
 
-The translated versions of block labels will be used automatically. For example,
+The translated versions of block spec will be used automatically. For example,
 `<block s="show"/>` should be left as-is.
 
 Block inputs are not automatically translated unless enclosed in `<option>` tags.
