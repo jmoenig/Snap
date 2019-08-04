@@ -3314,7 +3314,9 @@ BlockMorph.prototype.showHelp = function (lang) {
         def,
         comment,
         block,
-        spec;
+        spec,
+        sf,
+        padding = 15;
 
     lang = lang || SnapTranslator.language;
 
@@ -3335,50 +3337,43 @@ BlockMorph.prototype.showHelp = function (lang) {
         }
     }
 
-    if (lang === 'old') {
-        pic.onload = function () {
+    pic.onload = function () {;
+        help = new Morph();
+        help.drawNew = function () {
             var ctx;
-            help = newCanvas(new Point(pic.width, pic.height), true);
-            ctx = help.getContext('2d');
-            ctx.drawImage(pic, 0, 0, pic.width, pic.height);
-            new DialogBoxMorph().inform(
-                'Help',
-                null,
-                myself.world(),
-                help
+            this.image = newCanvas(this.extent());
+            ctx = this.image.getContext('2d');
+            ctx.drawImage(pic, 0, 0, this.width() - padding, this.height());
+        };
+        if (lang === 'old') {
+            help.setExtent(new Point(pic.width + padding, pic.height + padding));
+        } else {
+            help.setExtent(
+                new Point(pic.width / 2 + padding, pic.height / 2)
             );
-        };
-    } else {
-        pic.onload = function () {
-            var sf;
-            help = new Morph();
-            help.drawNew = function () {
-                var ctx;
-                this.image = newCanvas(this.extent());
-                ctx = this.image.getContext('2d');
-                ctx.drawImage(pic, 0, 0, this.width(), this.height());
-            };
-            help.setExtent(new Point(pic.width / 2, pic.height / 2));
-            sf = new ScrollFrameMorph();
-            sf.contents.add(help);
-            sf.setColor(DialogBoxMorph.prototype.color);
-            sf.setWidth(572);
-            sf.setHeight(Math.min(help.height(), 400));
-            new DialogBoxMorph().inform(
-                'Help',
-                null,
-                myself.world(),
-                sf
-            );
-        };
-        pic.onerror = function () {
-            if (lang === 'en') { // fall back to old help screens
-                myself.showHelp('old');
-            } else {
-                myself.showHelp('en'); // fall back to english help screens
-            }
-        };
-    }
+        }
+        sf = new ScrollFrameMorph();
+        sf.contents.add(help);
+        sf.setColor(DialogBoxMorph.prototype.color);
+        sf.setWidth(help.width());
+        sf.setHeight(Math.min(help.height(), 400));
+        new DialogBoxMorph().inform(
+            'Help',
+            null,
+            myself.world(),
+            sf
+        );
+    };
+    pic.onerror = function () {
+        if (lang === 'old') {
+            return;
+        }
+        if (lang === 'en') { // fall back to old help screens
+            myself.showHelp('old');
+            return;
+        }
+        myself.showHelp('en'); // fall back to english help screens
+    };
 
     if (this.isCustomBlock) {
         def = this.isGlobal ? this.definition

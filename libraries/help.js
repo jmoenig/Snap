@@ -52,7 +52,7 @@ HelpScreenMorph.prototype.init = function (loadCallback) {
 
     // initialize inherited properties:
     HelpScreenMorph.uber.init.call(this);
-    this.setWidth(572);
+    this.setWidth(572 - this.padding);
     this.color = DialogBoxMorph.prototype.color;
 };
 
@@ -250,7 +250,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     function fixWidths (morph) {
         var parent = morph.parent;
         if (morph instanceof BoxMorph) {
-            morph.setWidth(parent.width() - padding);
+            morph.setWidth(parent.width());
         } else if (
             morph instanceof AlignmentMorph
                 || morph instanceof ScriptDiagramMorph
