@@ -1021,7 +1021,7 @@ Process.prototype.errorBubble = function (error, element) {
         img, blockImage;
 
     if (errorIsNested) {
-        img = element.fullImage();
+        img = element.errorPic();
         blockImage = new Morph();
         blockImage.silentSetExtent(new Point(img.width, img.height));
         blockImage.image = img;

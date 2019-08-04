@@ -3876,7 +3876,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
         gradient,
         rightX,
         holes = [];
-    
+
     this.parts().forEach(function (part) {
         if (part.isHole) {
             holes.push(part);
@@ -4347,6 +4347,19 @@ BlockMorph.prototype.scriptPic = function () {
     ctx.drawImage(scr, 0, 0);
     return pic;
 };
+
+BlockMorph.prototype.errorPic = function () {
+    // return a picture of myself, that approximately fits in "one line"
+    // filter any blocks beneath me, so that users only see the first
+    // block that caused an error.
+    if (this.nextBlock) {
+        var copy = this.fullCopy();
+        copy.removeChild(copy.nextBlock());
+        return copy.fullImage();
+    }
+
+    return this.fullImage();
+}
 
 // BlockMorph local method indicator drawing
 
