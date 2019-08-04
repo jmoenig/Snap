@@ -1001,50 +1001,40 @@ Process.prototype.expectReport = function () {
 
 Process.prototype.handleError = function (error, element) {
     // Visually indicate an error has occured in this script
-    var m = element;
-
     this.stop();
     this.errorFlag = true;
-    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-
-    this.topBlock.removeHighlight();
     this.topBlock.addErrorHighlight();
-
-    m.showBubble(
-	this.errorBubble(error, element),
-	this.exportResult,
-	this.receiver
+    this.topBlock.showBubble(
+        this.errorBubble(error, element),
+        this.exportResult,
+        this.receiver
     );
 };
 
 Process.prototype.errorBubble = function (error, element) {
     // Return a morph containing an image of the elment causing the error
-    // alongside the error message.
-    var errorMorph =  new Morph(),
-	errorIsNested = element !== this.topBlock,
-	errorText = (errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
-	img, blockImage, errorMessage;
-
-    errorMessage = new TextMorph(errorText, element.fontSize);
+    // above the text of error.
+    var errorMorph = new Morph(),
+        errorIsNested = element !== this.topBlock,
+        errorText = (errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
+        errorMessage = new TextMorph(errorText, element.fontSize),
+        img, blockImage;
 
     if (errorIsNested) {
-	img = element.fullImage();
-	blockImage = new Morph();
-	blockImage.silentSetExtent(new Point(
-	    img.width, img.height
-	));
-	blockImage.image = img;
-	errorMessage.setTop(blockImage.height() + 2);
-	errorMorph.add(blockImage);
-	errorMorph.setExtent(new Point(
-	    Math.max(blockImage.width(), errorMessage.width()),
-	    blockImage.height() + errorMessage.height()
-	));
+        img = element.fullImage();
+        blockImage = new Morph();
+        blockImage.silentSetExtent(new Point(img.width, img.height));
+        blockImage.image = img;
+        errorMessage.setTop(blockImage.height() + 2);
+        errorMorph.add(blockImage);
+        errorMorph.setExtent(new Point(
+            Math.max(blockImage.width(), errorMessage.width()),
+            blockImage.height() + errorMessage.height()
+        ));
     }
 
     errorMorph.add(errorMessage);
     errorMorph.alpha = 0;
-
     return errorMorph;
 }
 
