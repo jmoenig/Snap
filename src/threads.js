@@ -1000,47 +1000,53 @@ Process.prototype.expectReport = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element,
-	img,
-	errorMorph,
-	imageMorph,
-	errorMessage,
-	errorIsNested = element !== this.topBlock;
+    // Visually indicate an error has occured in this script
+    var m = element;
 
     this.stop();
     this.errorFlag = true;
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
 
     this.topBlock.removeHighlight();
-    errorMorph = new Morph();
-    errorMessage = new TextMorph(
-	(errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
-	m.fontSize
+    this.topBlock.addErrorHighlight();
+
+    m.showBubble(
+	this.errorBubble(error, element),
+	this.exportResult,
+	this.receiver
     );
+};
+
+Process.prototype.errorBubble = function (error, element) {
+    // Return a morph containing an image of the elment causing the error
+    // alongside the error message.
+    var errorMorph =  new Morph(),
+	errorIsNested = element !== this.topBlock,
+	errorText = (errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
+	img, blockImage, errorMessage;
+
+    errorMessage = new TextMorph(errorText, element.fontSize);
 
     if (errorIsNested) {
 	img = element.fullImage();
-	imageMorph = new Morph();
-	imageMorph.silentSetWidth(img.width);
-	imageMorph.silentSetHeight(img.height);
-	imageMorph.image = img;
-	errorMessage.setTop(imageMorph.height() + 2);
-	errorMorph.add(imageMorph);
+	blockImage = new Morph();
+	blockImage.silentSetExtent(new Point(
+	    img.width, img.height
+	));
+	blockImage.image = img;
+	errorMessage.setTop(blockImage.height() + 2);
+	errorMorph.add(blockImage);
 	errorMorph.setExtent(new Point(
-	    Math.max(imageMorph.width(), errorMessage.width()),
-	    imageMorph.height() + errorMessage.height()
+	    Math.max(blockImage.width(), errorMessage.width()),
+	    blockImage.height() + errorMessage.height()
 	));
     }
 
     errorMorph.add(errorMessage);
     errorMorph.alpha = 0;
-    this.topBlock.addErrorHighlight();
-    m.showBubble(
-	errorMorph,
-        this.exportResult,
-        this.receiver
-    );
-};
+
+    return errorMorph;
+}
 
 Process.prototype.errorObsolete = function () {
     throw new Error('a custom block definition is missing');
