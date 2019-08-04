@@ -2257,7 +2257,14 @@ SyntaxElementMorph.prototype.showBubble = function (
         Math.max(this.rounding - 2, 6),
         0
     );
-    if (!forHelpScreen) {
+    if (forHelpScreen) {
+        return bubble;
+   }
+   bubble.popUp(
+       wrrld,
+       pos,
+       isClickable
+   );
         bubble.popUp(
             wrrld,
             pos,
