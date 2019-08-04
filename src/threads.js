@@ -1001,10 +1001,14 @@ Process.prototype.expectReport = function () {
 
 Process.prototype.handleError = function (error, element) {
     // Visually indicate an error has occured in this script
+    // Attach a bubble to the block where the error occured, if visible.
+    var m = element;
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    this.topBlock.showBubble(
+    m.showBubble(
         this.errorBubble(error, element),
         this.exportResult,
         this.receiver
@@ -1012,15 +1016,17 @@ Process.prototype.handleError = function (error, element) {
 };
 
 Process.prototype.errorBubble = function (error, element) {
+    console.log(element)
+    window.errorElement = element;
     // Return a morph containing an image of the elment causing the error
     // above the text of error.
     var errorMorph = new Morph(),
-        errorIsNested = element !== this.topBlock,
+        errorIsNested = isNil(element.world()),
         errorText = (errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
-        errorMessage = new TextMorph(errorText, element.fontSize),
+        errorMessage = new TextMorph(errorText, SyntaxElementMorph.prototype.fontSize),
         img, blockImage;
 
-    if (errorIsNested) {
+    if (element) {
         img = element.errorPic();
         blockImage = new Morph();
         blockImage.silentSetExtent(new Point(img.width, img.height));
