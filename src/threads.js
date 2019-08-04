@@ -1003,11 +1003,10 @@ Process.prototype.handleError = function (error, element) {
     // Visually indicate an error has occured in this script
     // Attach a bubble to the block where the error occured, if visible.
     var m = element;
-    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
     m.showBubble(
         this.errorBubble(error, element),
         this.exportResult,
