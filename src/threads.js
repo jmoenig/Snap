@@ -1015,8 +1015,6 @@ Process.prototype.handleError = function (error, element) {
 };
 
 Process.prototype.errorBubble = function (error, element) {
-    console.log(element)
-    window.errorElement = element;
     // Return a morph containing an image of the elment causing the error
     // above the text of error.
     var errorMorph = new Morph(),
