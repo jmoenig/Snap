@@ -1019,8 +1019,11 @@ Process.prototype.errorBubble = function (error, element) {
     // above the text of error.
     var errorMorph = new Morph(),
         errorIsNested = isNil(element.world()),
-        errorText = (errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
-        errorMessage = new TextMorph(errorText, SyntaxElementMorph.prototype.fontSize),
+        errorPrefix = errorIsNested ? 'Inside a custom block:\n' : '',
+        errorMessage = new TextMorph(
+            errorPrefix + error.name + ':\n' + error.message,
+            SyntaxElementMorph.prototype.fontSize
+        ),
         img, blockImage;
 
     if (element) {
