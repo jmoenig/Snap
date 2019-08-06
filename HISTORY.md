@@ -7,11 +7,13 @@
 * **Notable Fixes:**
     * support for importing OGG audio files, thanks, Bernat!
 * **Translation Updates:**
+    * Chinese, thanks, Simon!
 
 ### 2019-08-06
 * new dev version
 * objects, threads: new experimental "paste on" block in the "pen" category, hidden in dev mode
 * morphic: support for importing OGG audio files, thanks, Bernat!
+* Chinese translation update, thanks, Simon!
 
 ## v5.0.8
 * **Notable Fix:**
