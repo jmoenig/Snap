@@ -1042,7 +1042,7 @@
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1083,12 +1083,12 @@
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1448,7 +1448,7 @@ function copy(target) {
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1482,7 +1482,7 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
-    
+
     [Jens]: like all other retina screen support implementations I've seen
     Bartosz's patch also does not address putImageData() compatibility when
     mixing retina-enabled and non-retina canvasses. If you need to manipulate
@@ -1620,7 +1620,7 @@ function enableRetinaSupport() {
     contextProto.drawImage = function(image) {
         var pixelRatio = getPixelRatio(image),
             sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -1812,12 +1812,12 @@ function normalizeCanvas(aCanvas, getCopy) {
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -3935,7 +3935,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
             horizontal.isActive = false;
             onComplete();
         }
-        
+
     ));
 };
 
@@ -5405,7 +5405,7 @@ CursorMorph.prototype.initializeTextarea = function () {
     this.updateTextAreaPosition();
     this.syncTextareaSelectionWith(this.target);
 
-    
+
     /*
         There are three cases when the textarea gets inputs:
 
@@ -5425,7 +5425,7 @@ CursorMorph.prototype.initializeTextarea = function () {
         example, select a word by clicking in IME window), so there are overlaps
         between case 2 and case 3. but no one can replace the other.
     */
-    
+
     this.textarea.addEventListener('keydown', function (event) {
         /* Special shortcuts for Snap! system.
             - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
@@ -5466,14 +5466,14 @@ CursorMorph.prototype.initializeTextarea = function () {
             myself.target.escalateEvent('reactToKeystroke', event);
         }
     });
-    
+
     this.textarea.addEventListener('input', function (event) {
         // handle content change.
         var target = myself.target,
             textarea = myself.textarea,
             filteredContent,
             caret;
-        
+
         myself.world().currentKey = null;
 
         // filter invalid chars for numeric fields
@@ -5497,22 +5497,22 @@ CursorMorph.prototype.initializeTextarea = function () {
             }
             return result;
         }
-        
+
         if (target.isNumeric) {
             filteredContent = filterText(textarea.value);
         } else {
             filteredContent = textarea.value;
         }
-        
+
         if (filteredContent.length < textarea.value.length) {
             textarea.value = filteredContent;
             caret = Math.min(textarea.selectionStart, filteredContent.length);
             textarea.selectionEnd = caret;
             textarea.selectionStart = caret;
         }
-        // target morph: copy the content and selection status to the target.        
+        // target morph: copy the content and selection status to the target.
         target.text = filteredContent;
-        
+
         if (textarea.selectionStart === textarea.selectionEnd) {
             target.startMark = null;
             target.endMark = null;
@@ -5539,7 +5539,7 @@ CursorMorph.prototype.initializeTextarea = function () {
         // handle selection change and cursor position change.
         var textarea = myself.textarea,
             target = myself.target;
-        
+
         if (textarea.selectionStart === textarea.selectionEnd) {
             target.startMark = null;
             target.endMark = null;
@@ -6610,7 +6610,7 @@ DialMorph.prototype.drawNew = function () {
     );
     ctx.closePath();
     ctx.fill();
-    
+
     // fill value
     angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
     ctx.fillStyle = (this.fillColor || this.color.darker()).toString();
@@ -8879,7 +8879,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // answer the slot (index) slots indicating the position of the
     // previous word to the left of aSlot
     var index = aSlot - 1;
-    
+
     // while the current character is non-word one, we skip it, so that
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
@@ -8898,7 +8898,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
 
 StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
-    
+
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
         index += 1;
     }
@@ -10578,8 +10578,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         vHeight = this.height() - this.scrollBarSize;
 
     this.changed();
-    if (this.contents.width() > this.width() +
-            MorphicPreferences.scrollBarSize) {
+    if (this.contents.width() > this.width()) {
         this.hBar.show();
         if (this.hBar.width() !== hWidth) {
             this.hBar.setWidth(hWidth);
@@ -10592,7 +10591,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
             )
         );
         this.hBar.start = 0;
-        this.hBar.stop = this.contents.width() - this.width();
+        this.hBar.stop = this.contents.width() - this.width() + this.scrollBarSize;
         this.hBar.size =
             this.width() / this.contents.width() * this.hBar.stop;
         this.hBar.value = this.left() - this.contents.left();
@@ -10601,8 +10600,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.hBar.hide();
     }
 
-    if (this.contents.height() > this.height() +
-            this.scrollBarSize) {
+    if (this.contents.height() > this.height()) {
         this.vBar.show();
         if (this.vBar.height() !== vHeight) {
             this.vBar.setHeight(vHeight);
@@ -10615,7 +10613,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
             )
         );
         this.vBar.start = 0;
-        this.vBar.stop = this.contents.height() - this.height();
+        this.vBar.stop = this.contents.height() - this.height() + this.scrollBarSize;
         this.vBar.size =
             this.height() / this.contents.height() * this.vBar.stop;
         this.vBar.value = this.top() - this.contents.top();
@@ -10667,6 +10665,10 @@ ScrollFrameMorph.prototype.scrollX = function (steps) {
         r = this.right(),
         newX;
 
+    if (this.vBar.isVisible) {
+        r -= this.vBar.width();
+    }
+
     newX = cl + steps;
     if (newX + cw < r) {
         newX = r - cw;
@@ -10685,6 +10687,10 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
         ch = this.contents.height(),
         b = this.bottom(),
         newY;
+
+    if (this.hBar.isVisible) {
+        b -= this.hBar.height();
+    }
 
     newY = ct + steps;
     if (newY + ch < b) {
