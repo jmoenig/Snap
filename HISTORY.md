@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-08-06
+* new dev version
+
 ## v5.0.8
 * **Notable Fix:**
     * fixed default names for 'script variables' block
