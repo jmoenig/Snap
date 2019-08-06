@@ -1476,6 +1476,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
             null,
             this.sliderColor
         );
+        this.spriteEditor.color = this.groupColor;
         this.spriteEditor.padding = 10;
         this.spriteEditor.growth = 50;
         this.spriteEditor.isDraggable = false;
