@@ -2,12 +2,14 @@
 
 ## in development:
 * **New Features:**
+    * new experimental "paste on" block in the "pen" category, currently hidden in dev mode
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
 
 ### 2019-08-06
 * new dev version
+* objects, threads: new experimental "paste on" block in the "pen" category, hidden in dev mode
 
 ## v5.0.8
 * **Notable Fix:**

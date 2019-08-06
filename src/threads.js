@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-July-15';
+modules.threads = '2019-August-06';
 
 var ThreadManager;
 var Process;
@@ -3761,6 +3761,31 @@ Process.prototype.setPenHSVA = Process.prototype.setHSVA;
 Process.prototype.changePenHSVA = Process.prototype.changeHSVA;
 Process.prototype.setBackgroundHSVA = Process.prototype.setHSVA;
 Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
+
+// Process pasting primitives
+
+Process.prototype.doPasteOn = function (name, thisObj, stage) {
+    // allow for lists of sprites and also check for temparary clones,
+    // as in Scratch 2.0,
+    var myself = this,
+        those;
+    thisObj = thisObj || this.blockReceiver();
+    stage = stage || thisObj.parentThatIsA(StageMorph);
+    if (stage.name === name) {
+        name = stage;
+    }
+    if (isSnapObject(name)) {
+        return thisObj.pasteOn(name);
+    }
+    if (name instanceof List) { // assume all elements to be sprites
+        those = name.itemsArray();
+    } else {
+        those = this.getObjectsNamed(name, thisObj, stage); // clones
+    }
+    those.forEach(function (each) {
+        myself.doPasteOn(each, thisObj, stage);
+    });
+};
 
 // Process temporary cloning (Scratch-style)
 
