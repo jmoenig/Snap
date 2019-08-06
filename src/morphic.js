@@ -1155,6 +1155,7 @@
     Bartosz Leper contributed retina display support.
     Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
     Bernat Romagosa contributed to text editing and to the core design.
+    Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
     Ken Kahn contributed to Chinese keboard entry and Android support.
 

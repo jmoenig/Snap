@@ -5,6 +5,7 @@
     * new experimental "paste on" block in the "pen" category, currently hidden in dev mode
 * **Notable Changes:**
 * **Notable Fixes:**
+    * resolved scroll bar conflicts (allow vertical scrolling past horizontal scroll bar), thanks, Michael!
     * support for importing OGG audio files, thanks, Bernat!
 * **Translation Updates:**
     * Chinese, thanks, Simon!
@@ -12,6 +13,7 @@
 ### 2019-08-06
 * new dev version
 * objects, threads: new experimental "paste on" block in the "pen" category, hidden in dev mode
+* morphic: resolved scroll bar conflicts (allow vertical scrolling past horizontal scroll bar), thanks, Michael!
 * morphic: support for importing OGG audio files, thanks, Bernat!
 * Chinese translation update, thanks, Simon!
 
