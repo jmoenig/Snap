@@ -3581,7 +3581,7 @@ SpriteMorph.prototype.doPlaySound = function (name) {
     if (sound) {
         aud = document.createElement('audio');
         aud.src = sound.audio.src;
-        ctx.resume();
+        ctx.resume(); // needed to fix tainted context in case of autoplay
         source = ctx.createMediaElementSource(aud);
         source.connect(gain);
         if (pan) {

@@ -7,6 +7,7 @@
     * "temporary?" attribute is now programmatically settable (in the SET->my... block)
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
 * **Translation Updates:**
     * German
 
@@ -15,6 +16,7 @@
 * blocks, threads: added "rgba" option to (aspect) AT (location) reporter in the sensing category
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
 * objects: made the "paste on" block avaible in the "pen" palette
+* fix for tainted audio context when the user interacts with an auto-playing project
 * German translation update
 
 ## v5.0.9
