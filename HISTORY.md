@@ -3,10 +3,10 @@
 ## in development:
 * **New Features:**
     * new "paste on" block in the pen category, prints a sprite onto another one
-    * new "r-g-b-a" option in "(aspect) AT (location)" sensing reporter, returns a 4-item list of values from 0-255 (same is pixels from a costume)
+    * new "r-g-b-a" option in "(aspect) AT (location)" sensing reporter, returns a 4-item list of values from 0-255 (same as pixels from a costume)
     * "temporary?" attribute is now programmatically settable (in the SET->my... block)
 * **Notable Changes:**
-    * generated costumes that are not in the wardrobe are not made persistent in the project (saved & restored)
+    * generated costumes that are not in the wardrobe are now made persistent in the project (saved & restored)
 * **Notable Fixes:**
     * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
 * **Translation Updates:**
