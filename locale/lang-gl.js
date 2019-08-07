@@ -2190,7 +2190,7 @@ SnapTranslator.dict.gl = {
     'uncheck to disable\nsprite inheritance features':
         'Desmarcar para desactivar\nfuncionalidades de herdanza de obxectos.',
     'check for sprite\ninheritance features':
-        'Marcar para activar\nfuncionalidades de herdanza de obxectos.'
+        'Marcar para activar\nfuncionalidades de herdanza de obxectos.',
 
 //More strings missed in de and pt translations
 
