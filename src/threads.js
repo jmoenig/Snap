@@ -3973,7 +3973,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     //      'saturation'    - hsv SATURATION on a scale of 0 - 100
     //      'brightness'    - hsv VALUE on a scale of 0 - 100
     //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
-    //      'rgba'          - list of rgba values on a scale of 0 - 255 each
+    //      'r-g-b-a'       - list of rgba values on a scale of 0 - 255 each
     //      'sprites'       - a list of sprites at the location, empty if none
     //
     // right input (location):
@@ -4049,7 +4049,7 @@ Process.prototype.reportAspect = function (aspect, location) {
 
     }
 
-    if (choice === 'rgba') {
+    if (choice === 'r-g-b-a') {
         return new List([clr.r, clr.g, clr.b, Math.round(clr.a * 255)]);
     }
     if (idx < 0 || idx > 3) {

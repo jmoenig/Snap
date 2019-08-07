@@ -1406,7 +1406,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     saturation : ['saturation'],
                     brightness : ['brightness'],
                     transparency : ['transparency'],
-                    rgba : ['rgba'],
+                    'r-g-b-a' : ['r-g-b-a'],
                     '~' : null,
                     sprites : ['sprites'],
                 },
