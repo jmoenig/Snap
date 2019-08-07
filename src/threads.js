@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-August-06';
+modules.threads = '2019-August-07';
 
 var ThreadManager;
 var Process;
@@ -3973,6 +3973,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     //      'saturation'    - hsv SATURATION on a scale of 0 - 100
     //      'brightness'    - hsv VALUE on a scale of 0 - 100
     //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
+    //      'rgba'          - list of rgba values on a scale of 0 - 255 each
     //      'sprites'       - a list of sprites at the location, empty if none
     //
     // right input (location):
@@ -4048,6 +4049,9 @@ Process.prototype.reportAspect = function (aspect, location) {
 
     }
 
+    if (choice === 'rgba') {
+        return new List([clr.r, clr.g, clr.b, Math.round(clr.a * 255)]);
+    }
     if (idx < 0 || idx > 3) {
         return;
     }
