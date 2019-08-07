@@ -622,7 +622,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
                 'name' : ['name'],
-                // 'temporary?' : ['temporary?'],
+                'temporary?' : ['temporary?'],
                 'dangling?' : ['dangling?'],
                 'draggable?' : ['draggable?'],
                 'rotation style' : ['rotation style'],

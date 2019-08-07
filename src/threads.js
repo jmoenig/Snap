@@ -4431,12 +4431,10 @@ Process.prototype.doSet = function (attribute, value) {
     case 'temporary?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
-        if (rcvr.world().isDevMode) {
-            if (value) {
-                rcvr.release();
-            } else {
-                rcvr.perpetuate();
-            }
+        if (value) {
+            rcvr.release();
+        } else {
+            rcvr.perpetuate();
         }
         break;
     case 'name':
