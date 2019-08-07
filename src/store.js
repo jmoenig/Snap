@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-June-02';
+modules.store = '2019-August-07';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 5.0, http://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 5.1, http://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -772,7 +772,9 @@ SnapSerializer.prototype.loadMediaModel = function (xmlNode) {
 SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks'),
-        dispatches = model.childNamed('dispatches');
+        dispatches = model.childNamed('dispatches'),
+        node,
+        costume;
 
     // load the instrument
     if (model.attributes.instrument) {
@@ -781,6 +783,20 @@ SnapSerializer.prototype.loadObject = function (object, model) {
 
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
+
+    // load the costume that's not in the wardrobe, if any
+    node = model.childNamed('costume');
+    if (node) {
+        costume = this.loadValue(node, object);
+        if (costume.loaded) {
+            object.wearCostume(costume, true);
+        } else {
+            costume.loaded = function () {
+                object.wearCostume(costume, true);
+                this.loaded = true;
+            };
+        }
+    }
 
     // load costumes unless they're inherited
     if (!(object.inheritanceInfo &&
@@ -1669,6 +1685,7 @@ StageMorph.prototype.toXML = function (serializer) {
             true
         ),
         thumbdata,
+        costumeIdx = this.getCostumeIdx(),
         ide = this.parentThatIsA(IDE_Morph);
 
     // catch cross-origin tainting exception when using SVG costumes
@@ -1711,6 +1728,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'sublistIDs="@" ' +
             'scheduled="@" ~>' +
             '<pentrails>$</pentrails>' +
+            '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
@@ -1731,7 +1749,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.name,
         StageMorph.prototype.dimensions.x,
         StageMorph.prototype.dimensions.y,
-        this.getCostumeIdx(),
+        costumeIdx,
         this.color.r,
         this.color.g,
         this.color.b,
@@ -1749,6 +1767,10 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableSublistIDs,
         StageMorph.prototype.frameRate !== 0,
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ? serializer.store(this.costume) : '',
+
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
@@ -1771,6 +1793,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),
         noScripts = this.inheritsAttribute('scripts');
@@ -1788,6 +1811,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' costume="@" color="@,@,@,@" pen="@" ~>' +
             '%' + // inheritance info
             '%' + // nesting info
+            '%' + // current costume
             (noCostumes ? '%' : '<costumes>%</costumes>') +
             (noSounds ? '%' : '<sounds>%</sounds>') +
             '<blocks>%</blocks>' +
@@ -1808,7 +1832,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
-        this.getCostumeIdx(),
+        costumeIdx,
         this.color.r,
         this.color.g,
         this.color.b,
@@ -1839,6 +1863,9 @@ SpriteMorph.prototype.toXML = function (serializer) {
 
                     + '"/>'
             : '',
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ? serializer.store(this.costume) : '',
 
         noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
         noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),

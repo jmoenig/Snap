@@ -6,6 +6,7 @@
     * new "rgba" option in "(aspect) AT (location)" sensing reporter, returns a 4-item list of values from 0-255 (same is pixels from a costume)
     * "temporary?" attribute is now programmatically settable (in the SET->my... block)
 * **Notable Changes:**
+    * generated costumes that are not in the wardrobe are not made persistent in the project (saved & restored)
 * **Notable Fixes:**
     * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
 * **Translation Updates:**
@@ -18,6 +19,7 @@
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
 * objects: made the "paste on" block avaible in the "pen" palette
 * fix for tainted audio context when the user interacts with an auto-playing project
+* store: persist temporary costumes that aren't in the wardrobe (e.g. generated graphics, maps, paste-ups) 
 * German translation update
 * Galician translation update, thanks, Miguel!
 
