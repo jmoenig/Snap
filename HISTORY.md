@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-08-07
+* new dev version
+
 ## v5.0.9
 * **New Feature:**
     * new experimental "paste on" block in the "pen" category, currently hidden in dev mode
