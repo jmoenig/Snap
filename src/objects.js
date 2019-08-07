@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-August-06';
+modules.objects = '2019-August-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -2324,24 +2324,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('write'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doPasteOn'));
-        }
-
-    /////////////////////////////////
-
+        blocks.push('-');
+        blocks.push(block('doPasteOn'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -8296,24 +8280,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setBackgroundHSVA'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doPasteOn'));
-        }
-
-    /////////////////////////////////
-
+        blocks.push('-');
+        blocks.push(block('doPasteOn'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 

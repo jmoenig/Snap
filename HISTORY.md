@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * new "paste on" block in the pen category, prints a sprite onto another one
     * new "rgba" option in "(aspect) AT (location)" sensing reporter, returns a 4-item list of values from 0-255 (same is pixels from a costume)
     * "temporary?" attribute is now programmatically settable (in the SET->my... block)
 * **Notable Changes:**
@@ -12,6 +13,7 @@
 * new dev version
 * blocks, threads: added "rgba" option to (aspect) AT (location) reporter in the sensing category
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
+* objects: made the "paste on" block avaible in the "pen" palette
 
 ## v5.0.9
 * **New Feature:**
