@@ -8,12 +8,14 @@
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
+    * German
 
 ### 2019-08-07
 * new dev version
 * blocks, threads: added "rgba" option to (aspect) AT (location) reporter in the sensing category
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
 * objects: made the "paste on" block avaible in the "pen" palette
+* German translation update
 
 ## v5.0.9
 * **New Feature:**

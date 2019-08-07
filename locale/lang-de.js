@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-06-25', // this, too, will appear in the Translators tab
+        '2019-08-07', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -485,6 +485,8 @@ SnapTranslator.dict.de = {
         'male aus',
     'write %s size %n':
         'schreibe %s Größe %n',
+    'paste on %spr':
+        'drucke auf %spr',
 
     // control:
     'when %greenflag clicked':
@@ -613,6 +615,8 @@ SnapTranslator.dict.de = {
     	'Entfernung',
     '%asp at %loc' :
         '%asp bei %loc',
+    'r-g-b-a':
+        'R-G-B-A Farbwerte',
     'sprites' :
         'Objekte',
     'reset timer':
