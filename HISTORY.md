@@ -10,6 +10,7 @@
     * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
 * **Translation Updates:**
     * German
+    * Galician, thanks, Miguel!
 
 ### 2019-08-07
 * new dev version
@@ -18,6 +19,7 @@
 * objects: made the "paste on" block avaible in the "pen" palette
 * fix for tainted audio context when the user interacts with an auto-playing project
 * German translation update
+* Galician translation update, thanks, Miguel!
 
 ## v5.0.9
 * **New Feature:**
