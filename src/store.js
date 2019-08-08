@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-August-07';
+modules.store = '2019-August-08';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -785,16 +785,21 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     this.loadNestingInfo(object, model);
 
     // load the costume that's not in the wardrobe, if any
-    node = model.childNamed('costume');
+    node = model.childNamed('wear');
     if (node) {
-        costume = this.loadValue(node, object);
-        if (costume.loaded) {
-            object.wearCostume(costume, true);
+        node = node.childNamed('costume') || node.childNamed('ref');
+        if (!node) {
+            console.log(object.name + ': missing costume to wear');
         } else {
-            costume.loaded = function () {
+            costume = this.loadValue(node, object);
+            if (costume.loaded) {
                 object.wearCostume(costume, true);
-                this.loaded = true;
-            };
+            } else {
+                costume.loaded = function () {
+                    object.wearCostume(costume, true);
+                    this.loaded = true;
+                };
+            }
         }
     }
 
@@ -1769,7 +1774,9 @@ StageMorph.prototype.toXML = function (serializer) {
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
 
         // current costume, if it's not in the wardrobe
-        !costumeIdx && this.costume ? serializer.store(this.costume) : '',
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
 
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
@@ -1865,7 +1872,9 @@ SpriteMorph.prototype.toXML = function (serializer) {
             : '',
 
         // current costume, if it's not in the wardrobe
-        !costumeIdx && this.costume ? serializer.store(this.costume) : '',
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
 
         noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
         noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),

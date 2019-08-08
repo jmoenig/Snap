@@ -13,6 +13,9 @@
     * German
     * Galician, thanks, Miguel!
 
+### 2019-08-08
+* store: allow wardrobe-less costumes to be shared among several sprites (e.g. when inheriting the "costume #" attribute)
+
 ### 2019-08-07
 * new dev version
 * blocks, threads: added "r-g-b-a" option to (aspect) AT (location) reporter in the sensing category
