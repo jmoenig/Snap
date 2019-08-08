@@ -15,6 +15,7 @@
 
 ### 2019-08-08
 * store: allow wardrobe-less costumes to be shared among several sprites (e.g. when inheriting the "costume #" attribute)
+* objects: fixed an issue when a sprite inherits both the wardrobe and the costume #
 
 ### 2019-08-07
 * new dev version
