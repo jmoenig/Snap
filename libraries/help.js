@@ -1047,7 +1047,9 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         if (annotated) {
             this.add(annotation);
             if (annotation.annotationArrowDetour) {
-                arrowEnd = annotated.center();
+                arrowEnd = this.scriptDisplay.position().add(
+                    annotated.center().multiplyBy(scale)
+                );
             } else if (
                 annotated instanceof CommandBlockMorph
                 || annotated instanceof MenuItemMorph
@@ -1107,6 +1109,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
             );
             arrow.color = annotation.annotationArrowColor || this.defaultArrowColor;
             arrow.drawNew();
+            diagramHeight = Math.max(diagramHeight, arrow.bottom() - this.top());
             this.arrows.push(arrow);
             this.add(arrow);
         }
@@ -1118,9 +1121,13 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         if (!arrowStartMorph) {
             break;
         }
-        arrowStart = arrowStartMorph.center();
+        arrowStart = this.scriptDisplay.position().add(
+            arrowStartMorph.center().multiplyBy(scale)
+        );
         arrowEndMorph = this.getAnnotatedMorph('annotationArrowEnd', i);
-        arrowEnd = arrowEndMorph.center();
+        arrowEnd = this.scriptDisplay.position().add(
+            arrowEndMorph.center().multiplyBy(scale)
+        );
         allArrows = arrowEndMorph.annotationArrowEnd
             .split(',')
             .map(function (n) {
@@ -1136,12 +1143,12 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
         arrow = new DiagramArrowMorph(
             arrowStart, arrowEnd, true,
             arrowStartMorph.annotationArrowReverse,
-            arrowStartMorph.annotationArrowDetour
+            arrowStartMorph.annotationArrowDetour || 0
         );
         arrow.color = arrowStartMorph.annotationArrowColor
                         || this.defaultArrowColor;
-        diagramHeight = Math.max(diagramHeight, arrow.bottom() - this.top());
         arrow.drawNew();
+        diagramHeight = Math.max(diagramHeight, arrow.bottom() - this.top());
         this.arrows.push(arrow);
         this.add(arrow);
         i += 1;
