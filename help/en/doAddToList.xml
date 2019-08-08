@@ -1,0 +1,67 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doAddToList">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <script>
+                    <block s="doAddToList">
+                        <l>rock</l>
+                        <block var="my list"/>
+                    </block>
+                    <block s="doAddToList">
+                        <l>paper</l>
+                        <block var="my list"/>
+                    </block>
+                    <block s="doAddToList">
+                        <l>scissors</l>
+                        <block var="my list"/>
+                    </block>
+                </script>
+                <img src="doAddToList_my_list.png" width="105" height="93"/>
+            </row>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportListItem">
+                            <l><option>any</option></l>
+                            <l>my list</l>
+                        </block>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Say one of the items in the list</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>Use this block to add an item to the end of a list.</p>
+            <script>
+                <block s="doAddToList">
+                    <l>your words or number here</l>
+                    <block var="your list"/>
+                </block>
+            </script>
+            <p>
+                <text>Make an empty list:</text>
+                <script>
+                    <block s="doSetVar">
+                        <l>my list</l>
+                        <block s="reportNewList">
+                            <list/>
+                        </block>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

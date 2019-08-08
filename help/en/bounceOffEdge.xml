@@ -1,0 +1,43 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="bounceOffEdge"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="forward" annotation="2">
+                                <l>10</l>
+                            </block>
+                            <block s="bounceOffEdge" annotation="3"/>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>Move 10 steps</small-p>
+                    <small-p>If at the edge of the stage, then turn around</small-p>
+                </annotations>
+            </diagram>
+            <img src="bounceOffEdge_cats.png" width="446" height="77"/>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="bounceOffEdge"/>
+                </script>
+                <text>
+                    checks to see if this sprite has reached the edge – and
+                    if it has, it turns away from the edge. (And then is
+                    ready for the next move.)
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

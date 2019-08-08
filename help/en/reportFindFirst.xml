@@ -1,0 +1,166 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportFindFirst">
+                <block s="reifyPredicate">
+                    <script/>
+                    <list/>
+                </block>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>
+                Reports the first item in the lsit that matches the
+                predicate.
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportFindFirst" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportGreaterThan">
+                                    <block s="reportStringSize">
+                                        <l/>
+                                    </block>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>the</l>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                                <l>at</l>
+                                <l>Berkeley</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>University</text>
+                </bubbles>
+            </diagram>
+            <p>Compare:</p>
+            <diagram>
+                <script>
+                    <block s="reportKeep" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportGreaterThan">
+                                    <block s="reportStringSize">
+                                        <l/>
+                                    </block>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>the</l>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                                <l>at</l>
+                                <l>Berkeley</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportKeep_list2.png" width="82" height="70"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script scale="0.9">
+                    <block s="reportFindFirst" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportEquals">
+                                    <l/>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>the</l>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                                <l>at</l>
+                                <l>Berkeley</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <bool>false</bool>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script scale="0.9">
+                    <block s="reportKeep" bubble="1">
+                        <block s="reifyPredicate">
+                            <autolambda>
+                                <block s="reportEquals">
+                                    <l/>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>the</l>
+                                <l>University</l>
+                                <l>of</l>
+                                <l>California</l>
+                                <l>at</l>
+                                <l>Berkeley</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportFindFirst_list.png" width="80" height="69"/>
+                </bubbles>
+            </diagram>
+            <p>
+                FIND FIRST reports False if not item in the list matches the
+                predicate.\n
+                (KEEP reports the empty list in that situation.)
+            </p>
+            <p>
+                <text>FIND FIRST means the same as</text>
+                <script>
+                    <block s="reportListItem">
+                        <l>1</l>
+                        <block s="reportKeep">
+                            <block s="reifyPredicate">
+                                <script/>
+                                <list/>
+                            </block>
+                            <l/>
+                        </block>
+                    </block>
+                </script>
+                <text>
+                    but FIND FIRST is faster if a match is found because it
+                    doesn't search the rest of the least.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

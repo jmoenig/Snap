@@ -1,0 +1,52 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="xPosition"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportLessThan">
+                                    <block s="yPosition"/>
+                                    <l>-145</l>
+                                </block>
+                                <script>
+                                    <block s="bubble" annotation="2">
+                                        <l>You win!</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If y position is less than -145</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <img src="yPosition_stage.png" width="125" height="107"/>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <img src="yPosition_watcher.png" width="136" height="21"/>
+            <column rel-width="1">
+                <p>
+                    To see this sprite's y position, click the checkbox next
+                    to the block.
+                </p>
+                <row padding="3">
+                    <img src="checkbox.png" width="15" height="15"/>
+                    <script>
+                        <block s="yPosition"/>
+                    </script>
+                </row>
+            </column>
+        </row>
+    </box>
+</help-screen>

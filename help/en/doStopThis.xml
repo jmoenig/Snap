@@ -1,0 +1,79 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doStopThis">
+                <l><option>all</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Stop some or all running scripts.</p>
+            <row>
+                <diagram rel-width="2">
+                    <script>
+                        <block s="doStopThis" annotation="1">
+                            <l menu="1"></l>
+                        </block>
+                    </script>
+                    <menus>
+                        <menu>
+                            <item>all</item>
+                            <item>this script</item>
+                            <item>this block</item>
+                            <item>all but this script</item>
+                            <item>other scripts in sprite</item>
+                        </menu>
+                    </menus>
+                </diagram>
+                <column rel-width="3">
+                    <small-p>
+                        <text>stop all: like pushing the red</text>
+                        <img src="doStopThis_stop.png" width="21" height="12"/>
+                        <text>button.</text>
+                    </small-p>
+                    <small-p>
+                        stop this script: stops the top-level script even if
+                        this block is inside a custom block definition.
+                    </small-p>
+                    <small-p>
+                        stop this block: stops the innermost call to the
+                        custom block that's running now (maybe leaving outer
+                        recursive calls still running).
+                    </small-p>
+                    <small-p>
+                        all but this script: stops scripts of all sprites
+                    </small-p>
+                    <small-p>
+                        other scripts in sprite: stops scripts in this sprite
+                        only
+                    </small-p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                This block changes shape depending on the option selected.
+                All, this script, and this block stop the script containing
+                the block, so no other block can go beneath it. (In Scratch
+                terms, this is a “cap block.”) The bottom two options allow
+                this script to keep running, so it has a tab at the bottom.
+                (It's a “stack block.”)
+            </p>
+            <row>
+                <script>
+                    <block s="doStopThis">
+                        <l><option>all</option></l>
+                    </block>
+                </script>
+                <script>
+                    <block s="doStopThis">
+                        <l><option>all but this script</option></l>
+                    </block>
+                </script>
+            </row>
+        </column>
+    </box>
+</help-screen>

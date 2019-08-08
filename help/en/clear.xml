@@ -1,0 +1,28 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="clear"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="clear" annotation="1"/>
+                </script>
+                <annotations>
+                    <p>Clears all pen marks and stamps from the stage</p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: The pen marks and stamps are not part of the background
+                costume. Therefore, when they are cleared, the background
+                costume remains unchanged.
+            </p>
+        </column>
+    </box>
+</help-screen>

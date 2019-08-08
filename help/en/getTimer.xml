@@ -1,0 +1,54 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doResetTimer"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doResetTimer" annotation="1"/>
+                    <block s="doWait" annotation="2">
+                        <block s="reportGreaterThan">
+                            <block s="reportTimer"/>
+                            <l>5</l>
+                        </block>
+                    </block>
+                    <block s="doForever">
+                        <script>
+                            <block s="doFaceTowards" annotation="3">
+                                <l>Sprite(2)</l>
+                            </block>
+                            <block s="forward">
+                                <l>10</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Set timer to 0</small-p>
+                    <small-p>Give Sprite(2) a lead of 5 seconds</small-p>
+                    <small-p>And then chase after it</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <img src="getTimer_watcher.png" width="83" height="21"/>
+            <column rel-width="1">
+                <p>
+                    To see the value of the timer, click the checkbox next to
+                    the block.
+                </p>
+                <row padding="3">
+                    <img src="checkbox.png" width="15" height="15"/>
+                    <script>
+                        <block s="reportTimer"/>
+                    </script>
+                </row>
+            </column>
+        </row>
+    </box>
+</help-screen>

@@ -1,0 +1,86 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveOnClone"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Clone initializtion script</p>
+            <row>
+                <script>
+                    <block s="receiveGo"/>
+                    <block s="doRepeat">
+                        <l>3</l>
+                        <script>
+                            <block s="createClone">
+                                <l>Sprite</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <img src="receiveOnClone_turtles1.png" width="133" height="78"/>
+                <p rel-width="1">
+                    (because the original and all three copies are in the
+                    same place and the same color)
+                </p>
+            </row>
+        </column>
+    </box>
+    <box color="gray">
+        <column>
+            <script>
+                <block s="receiveOnClone"/>
+                <block s="setPenHSVA">
+                    <l><option>hue</option></l>
+                    <block s="reportRandom">
+                        <l>1</l>
+                        <l>100</l>
+                    </block>
+                </block>
+                <block s="setPenHSVA">
+                    <l><option>saturation</option></l>
+                    <l>100</l>
+                </block>
+                <block s="setPenHSVA">
+                    <l><option>brightness</option></l>
+                    <l>100</l>
+                </block>
+                <block s="gotoXY">
+                    <block s="reportRandom">
+                        <l>-50</l>
+                        <l>50</l>
+                    </block>
+                    <block s="reportRandom">
+                        <l>-50</l>
+                        <l>50</l>
+                    </block>
+                </block>
+            </script>
+            <row>
+                <script>
+                    <block s="receiveGo"/>
+                    <block s="doRepeat">
+                        <l>3</l>
+                        <script>
+                            <block s="createClone">
+                                <l>Sprite</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <img src="receiveOnClone_turtles2.png" width="134" height="77"/>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: Snap! clones are not copies of the sprite; they
+                actually share information, so a change in the original may
+                be seen in the clones. See the “Object Oriented Porgramming
+                with Sprites” chapter in the Snap! Reference Manual.
+            </p>
+        </column>
+    </box>
+</help-screen>

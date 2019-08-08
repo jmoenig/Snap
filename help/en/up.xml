@@ -1,0 +1,28 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="up"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="down" annotation="1"/>
+                    <block s="forward" annotation="2">
+                        <l>80</l>
+                    </block>
+                    <block s="up" annotation="1"/>
+                    <block s="forward" annotation="2">
+                        <l>80</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Start leaving a pen trail</small-p>
+                    <small-p>Move</small-p>
+                </annotations>
+            </diagram>
+            <img src="up_cat.png" width="44" height="138"/>
+        </row>
+    </box>
+</help-screen>

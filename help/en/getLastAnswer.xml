@@ -1,0 +1,78 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportLastAnswer"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doAsk" annotation="1">
+                        <l>Do you want an apple or orange?</l>
+                    </block>
+                    <block s="doIf" annotation="2">
+                        <block s="reportEquals">
+                            <block s="reportLastAnswer"/>
+                            <l>apple</l>
+                        </block>
+                        <script>
+                            <block s="doSwitchToCostume" annotation="3">
+                                <l>holding an apple</l>
+                            </block>
+                        </script>
+                    </block>
+                    <block s="doIf" annotation="4">
+                        <block s="reportEquals">
+                            <block s="reportLastAnswer"/>
+                            <l>orange</l>
+                        </block>
+                        <script>
+                            <block s="doSwitchToCostume" annotation="5">
+                                <l>holding an orange</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Asks question and waits for person to type in an
+                        answer
+                    </small-p>
+                    <small-p>If the answer is “apple”</small-p>
+                    <small-p>Do this</small-p>
+                    <small-p>If the answer is “orange”</small-p>
+                    <small-p>Do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="doAsk">
+                        <l/>
+                    </block>
+                </script>
+                <text>asks a questiona nd stores the keyboard input in</text>
+                <script>
+                    <block s="reportLastAnswer"/>
+                </script>
+                <text>.</text>
+            </p>
+            <p>
+                <text>
+                    If you want to save the current answer, you can store it
+                    in a variable or list. For example:
+                </text>
+                <script>
+                    <block s="doSetVar">
+                        <l>your name</l>
+                        <block s="reportLastAnswer"/>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,81 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="setHeading">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <column rel-width="1">
+                <diagram>
+                    <script>
+                        <block s="setHeading" annotation="1">
+                            <l>0</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            <text>Point up</text>
+                            <img src="setHeading_cat1.png" width="14" height="28"/>
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <diagram>
+                    <script>
+                        <block s="setHeading" annotation="1">
+                            <l>45</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            <text>Point in this direction</text>
+                            <img src="setHeading_cat2.png" width="24" height="25"/>
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <diagram>
+                    <script>
+                        <block s="setHeading" annotation="1">
+                            <l>-45</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            <text>Point in this direction</text>
+                            <img src="setHeading_cat3.png" width="24" height="25"/>
+                        </small-p>
+                    </annotations>
+                </diagram>
+            </column>
+            <img src="setHeading_directions.png" width="140" height="129"/>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="setHeading">
+                        <l menu="1" annotation="1">0</l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>§_dir</item>
+                        <item>(90) right</item>
+                        <item>(-90) left</item>
+                        <item>(0) up</item>
+                        <item>(180) down</item>
+                        <item>random</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        Click to choose from the menu, or type in a number.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

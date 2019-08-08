@@ -1,0 +1,109 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportTextSplit">
+                <l>hello world</l>
+                <l> </l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report list of text split into words or lines.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportTextSplit" bubble="1">
+                            <l>hello world</l>
+                            <l> </l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportTextSplit_list1.png" width="80" height="87"/>
+                    </bubbles>
+                </diagram>
+                <p rel-width="1">
+                    Splitting on a character (space, in this example) can
+                    result in empty list elements if the character appears
+                    several times in a row in the text.
+                </p>
+            </row>
+            <row>
+                <diagram rel-width="3">
+                    <script>
+                        <block s="reportTextSplit" bubble="1">
+                            <l>nowhere   man</l>
+                            <l><option>whitespace</option></l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportTextSplit_list2.png" width="80" height="69"/>
+                    </bubbles>
+                </diagram>
+                <p rel-width="2">
+                    Choosing “whitespace” from the pulldown menu will treat
+                    any number of spaces, tabs, or newlines as a single
+                    separator, to make a list of words.
+                </p>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportTextSplit" bubble="1">
+                            <l>Yakko</l>
+                            <l><option>letter</option></l>
+                        </block>
+                    </script>
+                    <bubble>
+                        <img src="reportTextSplit_list3.png" width="80" height="104"/>
+                    </bubble>
+                </diagram>
+                <p rel-width="1">
+                    Split a text into individual characters (including
+                    spaces, newlines, and punctuation as list items).
+                </p>
+            </row>
+            <row>
+                <diagram rel-width="7">
+                    <script>
+                        <block s="reportTextSplit" bubble="1">
+                            <block s="reportURL">
+                                <l>snap.berkeley.edu</l>
+                            </block>
+                            <l><option>line</option></l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportTextSplit_list4.png" width="87" height="105"/>
+                    </bubbles>
+                </diagram>
+                <p rel-width="4">
+                    Split a multiline text into lines. (The newline
+                    character, the carriage return character, or the
+                    combination CR, NL all count as a single line break in
+                    the text.)
+                </p>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="reportTextSplit" bubble="1">
+                        <l>banana</l>
+                        <l>an</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportTextSplit_list5.png" width="80" height="70"/>
+                </bubbles>
+            </diagram>
+            <p rel-width="1">
+                It's not often useful, but you can use a multi-character
+                string as the separator. In this example, we get an empty
+                list item because “an” appears twice in a row in “banana.”
+            </p>
+        </row>
+    </box>
+</help-screen>

@@ -1,0 +1,75 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doInsertInList">
+                <l/>
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveInteraction" annotation="1">
+                        <l><option>clicked</option></l>
+                    </block>
+                    <block s="doInsertInList" annotation="2">
+                        <l>lamp</l>
+                        <l>1</l>
+                        <block var="my list"/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>When the lamp sprite is clicked</small-p>
+                    <small-p>
+                        Insert the item "lamp" at the first place in the list
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <p>Before:</p>
+                    <img src="doInsertInList_my_list_before.png" width="105" height="93"/>
+                </column>
+                <column rel-width="1">
+                    <p>After:</p>
+                    <img src="doInsertInList_my_list_after.png" width="105" height="93"/>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doInsertInList" annotation="1">
+                        <block var="score"/>
+                        <l>2</l>
+                        <block var="scoreboard"/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Inserts item at the specified place in the list
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doInsertInList" annotation="1">
+                        <l>Hello, world!</l>
+                        <l><option>any</option></l>
+                        <block var="greetings"/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Inserts item at a random place in the list
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

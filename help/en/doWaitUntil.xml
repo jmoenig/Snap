@@ -1,0 +1,51 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doWaitUntil">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doWaitUntil">
+                        <block s="reportTouchingObject" annotation="1">
+                            <l>clown</l>
+                        </block>
+                    </block>
+                    <block s="playSound" annotation="2">
+                        <l>laugh</l>
+                    </block>
+                    <block s="turn">
+                        <l>180</l>
+                    </block>
+                    <block s="forward">
+                        <l>50</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Wait until this happens</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>This whole stack will just run once. If you want</text>
+                <script>
+                    <block s="doWaitUntil">
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    to keep checking, but the whole stack inside a forever
+                    block.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

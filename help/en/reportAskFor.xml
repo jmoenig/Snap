@@ -1,0 +1,119 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportAskFor">
+                <l/>
+                <block s="reifyReporter">
+                    <script/>
+                    <list/>
+                </block>
+                <list/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Ask another object a question.</p>
+            <p>Ask a particular sprite where it is:</p>
+            <diagram>
+                <script>
+                    <block s="reportAskFor" bubble="1">
+                        <l>Sprite(3)</l>
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportNewList">
+                                    <list>
+                                        <block s="xPosition"/>
+                                        <block s="yPosition"/>
+                                    </list>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <list/>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportAskFor_list1.png" width="80" height="69"/>
+                </bubbles>
+            </diagram>
+            <p>Ask all sprites except myself where they are:</p>
+            <diagram>
+                <script scale="0.9">
+                    <block s="reportMap" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportAskFor">
+                                    <l highlight="true"/>
+                                    <block s="reifyReporter">
+                                        <autolambda>
+                                            <block s="reportNewList">
+                                                <list>
+                                                    <block s="xPosition"/>
+                                                    <block s="yPosition"/>
+                                                </list>
+                                            </block>
+                                        </autolambda>
+                                        <list/>
+                                    </block>
+                                    <list/>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportGet">
+                            <l><option>other sprites</option></l>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportAskFor_list2.png" width="129" height="52"/>
+                </bubbles>
+            </diagram>
+            <p>
+                (Each sprite is used, one at a time, to fill the empty slot
+                circled in green.)
+            </p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                The expression is evaluated in the environment of the other
+                object, so it usees that object's local variables and methods. If
+                you want to use one of the sender's variables inside the script,
+                leave an empty input slot in the script, click the right
+                arrowhead at the end of the ASK, and use the sender's variable as
+                input to ASK.
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportAskFor">
+                        <l>Sprite(3)</l>
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportNewList">
+                                    <list>
+                                        <l arrow-end="1"/>
+                                        <block var="its variable"/>
+                                    </list>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <list>
+                            <block var="my variable" arrow-start="1" arrow-detour="20"/>
+                        </list>
+                    </block>
+                </script>
+            </diagram>
+            <p>
+                In this example, “its variable” is defined in Sprite(3), so
+                it can be used inside the expression. “My variable” is
+                defined in the asking sprite, so it can't be used inside the
+                expression. Instead it is used as input to ASK, which fills
+                the empty slot in the LIST block with it.
+            </p>
+        </column>
+    </box>
+</help-screen>

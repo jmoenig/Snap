@@ -1,0 +1,74 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportTouchingColor">
+                <color>145,26,68,1</color>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportTouchingColor">
+                                    <color>255,0,0,1</color>
+                                </block>
+                                <script>
+                                    <block s="turn" annotation="2">
+                                        <l>180</l>
+                                    </block>
+                                    <block s="forward">
+                                        <l>10</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If sprite is touching this color</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <img src="reportTouchingColor_cat.png" width="188" height="69"/>
+                <p>Sprite is touching the color red</p>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportTouchingColor">
+                        <color annotation="1">145,26,68,1</color>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Get the eye dropper by clicking in the square.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <img src="reportColorIsTouchingColor_dropper.png" width="32" height="30"/>
+                <small-p>
+                    Use the eye dropper to click on the color you want.
+                </small-p>
+            </row>
+            <diagram>
+                <script>
+                    <block s="reportTouchingColor">
+                        <color annotation="1">255,0,0,1</color>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Color appears in square</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

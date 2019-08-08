@@ -1,0 +1,39 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doGlide">
+                <l/>
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doGlide" annotation="1">
+                        <l annotation="2">2</l>
+                        <l>150</l>
+                        <l>100</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Move smoothly to this point</small-p>
+                    <small-p>(Larger numbers make it go slower)</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="forward" annotation="1">
+                        <l>-10</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Move 10 steps in the opposite direction</small-p>
+                </annotations>
+            </diagram>
+            <img src="doGlide_stage.png" width="308" height="85"/>
+        </column>
+    </box>
+</help-screen>

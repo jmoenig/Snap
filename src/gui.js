@@ -5917,7 +5917,7 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                             request[rsp]
                         );
                     } else {
-                        throw new Error('unable to retrieve ' + url);
+                        callback.call(myself);
                     }
                 }
             };

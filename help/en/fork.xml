@@ -1,0 +1,57 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="fork">
+                <block s="reifyScript">
+                    <script/>
+                    <list/>
+                </block>
+                <list/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Run another script independently of this script.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="receiveGo"/>
+                        <block s="fork">
+                            <block s="reifyScript">
+                                <script>
+                                    <block s="doForever" annotation="1">
+                                        <script>
+                                            <block s="down"/>
+                                            <block s="forward">
+                                                <l>5</l>
+                                            </block>
+                                            <block s="up"/>
+                                            <block s="forward">
+                                                <l>5</l>
+                                            </block>
+                                        </script>
+                                    </block>
+                                </script>
+                                <list/>
+                            </block>
+                            <list/>
+                        </block>
+                        <block s="doForever" annotation="2">
+                            <script>
+                                <block s="turn">
+                                    <l>10</l>
+                                </block>
+                            </script>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>The move-and- draw script runs in parallel with</small-p>
+                        <small-p>the turn script.</small-p>
+                    </annotations>
+                </diagram>
+                <img src="fork_turtle.png" width="214" height="196"/>
+            </row>
+        </column>
+    </box>
+</help-screen>

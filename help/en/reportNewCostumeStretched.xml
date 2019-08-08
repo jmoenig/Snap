@@ -1,0 +1,115 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportNewCostumeStretched">
+                <l/>
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <p>Stretch a costume.</p>
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportNewCostumeStretched" bubble="1">
+                        <l>alonzo</l>
+                        <l>100</l>
+                        <l>50</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportNewCostumeStretched_alonzo1.png" width="48" height="40"/>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportNewCostumeStretched" bubble="1">
+                        <l>alonzo</l>
+                        <l>50</l>
+                        <l>100</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportNewCostumeStretched_alonzo2.png" width="48" height="40"/>
+                </bubbles>
+            </diagram>
+            <p>
+                Note that this is a reporter, not a command! It reports the
+                stretched costume. If you want the sprite to wear it, you have to say
+            </p>
+            <script>
+                <block s="doSwitchToCostume">
+                    <block s="reportNewCostumeStretched">
+                        <l>alonzo</l>
+                        <l>50</l>
+                        <l>100</l>
+                    </block>
+                </block>
+            </script>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: If the first input is a list of pixels rather than a
+                costume, then the x and y inputs are interpreted not as a
+                percent (of the costume's original dimensions) but as an
+                absolute number of pixels, so you can do this:
+            </p>
+            <script>
+                <block s="doSwitchToCostume">
+                    <block s="reportNewCostumeStretched">
+                        <block s="reportMap">
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportIfElse">
+                                        <block s="reportGreaterThan">
+                                            <block s="reportListItem">
+                                                <l>4</l>
+                                                <l/>
+                                            </block>
+                                            <l>0</l>
+                                        </block>
+                                        <block s="reportCONS">
+                                            <l>255</l>
+                                            <block s="reportCDR">
+                                                <l/>
+                                            </block>
+                                        </block>
+                                        <l/>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <block s="reportGetImageAttribute">
+                                <l><option>pixels</option></l>
+                                <block s="reportPenTrailsAsCostume"/>
+                            </block>
+                        </block>
+                        <block s="reportGetImageAttribute">
+                            <l><option>width</option></l>
+                            <block s="reportPenTrailsAsCostume"/>
+                        </block>
+                        <block s="reportGetImageAttribute">
+                            <l><option>height</option></l>
+                            <block s="reportPenTrailsAsCostume"/>
+                        </block>
+                    </block>
+                </block>
+            </script>
+            <p>
+                <text>1. Find</text>
+                <script>
+                    <block s="reportGetImageAttribute">
+                        <l><option>pixels</option></l>
+                        <l>some costume</l>
+                    </block>
+                </script>
+            </p>
+            <p>2. Transform the pixels using MAP</p>
+            <p>3. Use STRETCH to restore the width and height</p>
+        </column>
+    </box>
+</help-screen>

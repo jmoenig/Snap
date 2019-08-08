@@ -1,0 +1,113 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportIsIdentical">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports whether the two inputs are the same thing.</p>
+            <diagram>
+                <script>
+                    <block s="reportIsIdentical" annotation="1">
+                        <block s="reportNewList">
+                            <list>
+                                <l>a</l>
+                                <l>b</l>
+                            </list>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>a</l>
+                                <l>b</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <bool>false</bool>
+                </bubbles>
+                <annotations>
+                    <small-p>
+                        These two lists have the same items, but they're two
+                        different lists.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <script>
+                        <block s="doSetVar">
+                            <l>foo</l>
+                            <block s="reportNewList">
+                                <list>
+                                    <l>a</l>
+                                    <l>b</l>
+                                </list>
+                            </block>
+                        </block>
+                        <block s="doSetVar">
+                            <l>baz</l>
+                            <block var="foo"/>
+                        </block>
+                    </script>
+                    <diagram>
+                        <script>
+                            <block s="reportIsIdentical">
+                                <block var="foo"/>
+                                <block var="baz"/>
+                            </block>
+                        </script>
+                        <bubbles>
+                            <bool>true</bool>
+                        </bubbles>
+                    </diagram>
+                </column>
+                <column rel-width="1">
+                    <p>
+                        In this exmaple, the two inputs are the very same
+                        list; changing one will change the other too:
+                    </p>
+                    <script>
+                        <block s="doReplaceInList">
+                            <l>2</l>
+                            <block var="foo"/>
+                            <l>Hi!</l>
+                        </block>
+                    </script>
+                    <diagram>
+                        <script>
+                            <block var="baz" bubble="1"/>
+                        </script>
+                        <bubbles>
+                            <img src="reportIsIdentical_list.png" width="80" height="69"/>
+                        </bubbles>
+                    </diagram>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="reportIsIdentical">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    is useful mainly for lists, because lists are mutable:
+                    you can change what's inside a list, but it's still the
+                    same list, just changed, like changing the size of a
+                    costume. If your program mutates lists, then it might be
+                    important for you to know whether the one you're changing
+                    is the same as one used in another part of the project.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

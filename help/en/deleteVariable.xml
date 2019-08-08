@@ -1,0 +1,23 @@
+<help-screen version="1">
+    <thumbnail>
+        <img src="deleteVariable_button.png" width="115" height="18"/>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <img src="deleteVariable_menu.png" width="189" height="36"/>
+            <small-p rel-width="1">
+                Deletes all three blocks associated with the selected
+                variable (e.g. score)
+            </small-p>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: When a variable is deleted, any of its blocks used in
+                scripts will remain, but the scripts will not function
+                properly.
+            </p>
+        </column>
+    </box>
+</help-screen>

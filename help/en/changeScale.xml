@@ -1,0 +1,33 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="changeScale">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="changeScale" annotation="1">
+                        <l>10</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Grows the sprite by 10</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="changeScale" annotation="1">
+                        <l>-10</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Shrinks the sprite by 10</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

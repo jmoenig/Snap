@@ -1,0 +1,46 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportMouseDown"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportMouseDown"/>
+                                <script>
+                                    <block s="bubble" annotation="2">
+                                        <l>Click!</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If the mouse button is clicked</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportMouseDown" annotation="1"/>
+                </script>
+                <annotations>
+                    <small-p>
+                        Reports true if the mouse button is clicked anywhere
+                        on the screen
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

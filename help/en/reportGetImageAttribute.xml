@@ -1,0 +1,84 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="show picture %&apos;bitmap&apos;" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%l"></input>
+            </inputs>
+            <script></script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <block s="reportGetImageAttribute">
+                <l><option>width</option></l>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <diagram>
+            <script>
+                <block s="reportGetImageAttribute">
+                    <l menu="1"><option>width</option></l>
+                    <l menu="2"/>
+                </block>
+            </script>
+            <menus>
+                <menu>
+                    <item>width</item>
+                    <item>height</item>
+                    <item>pixels</item>
+                </menu>
+                <menu>
+                    <item>Turtle</item>
+                    <item>current</item>
+                    <line/>
+                    <item>alonzo</item>
+                    <item>ballerina</item>
+                    <item>bear2</item>
+                    <item>blue</item>
+                </menu>
+            </menus>
+        </diagram>
+        <diagram x="100">
+            <script>
+                <block s="reportGetImageAttribute" bubble="1">
+                    <l><option>pixels</option></l>
+                    <l>costume</l>
+                </block>
+            </script>
+            <bubbles>
+                <img src="reportGetImageAttribute_table.png" width="156" height="214"/>
+            </bubbles>
+        </diagram>
+    </box>
+    <box color="blue">
+        <column>
+            <p>Report attributes of a costume.</p>
+            <p>
+                Width and height are reported in pixels, but don't change in
+                presentation mode. Pixels are rpeported as a list of lists,
+                in which each sublist is the RGBA values for one pixel (Red,
+                Green, Blue, Alpha). “Alpha” is the opcaity (inverse of ghost
+                effect). All values are between 0 and 255.
+            </p>
+            <p>
+                <text>
+                    The pixel list does not have width or height information;
+                    it needs a width to make it a viewable costume.
+                </text>
+                <script>
+                    <custom-block s="show picture %l">
+                        <l/>
+                    </custom-block>
+                </script>
+                <text>
+                    in the Pixels library uses the current costume's width.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

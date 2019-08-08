@@ -1,0 +1,87 @@
+<help-screen version="1">
+    <libraries>
+        <library filename="word-sentence.xml"/>
+    </libraries>
+    <blocks>
+        <block-definition s="some function %&apos;s&apos;" type="reporter" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s"></input>
+            </inputs>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <custom-block s="sentence $arrowRight list %txt">
+                <l/>
+            </custom-block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Convert a sentence into a list of words.</p>
+            <diagram>
+                <script>
+                    <custom-block s="sentence $arrowRight list %txt" bubble="1">
+                        <l>Build Your Own Blocks</l>
+                    </custom-block> 
+                </script>
+                <bubbles>
+                    <img src="sentence$arrowRightlist_list.png" width="80" height="77"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>Use</text>
+                <script>
+                    <custom-block s="list $arrowRight sentence %l">
+                        <block s="reportMap">
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <custom-block s="some function %s">
+                                        <l/>
+                                    </custom-block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <custom-block s="sentence $arrowRight list %txt">
+                                <l>a bunch of words</l>
+                            </custom-block>
+                        </block>
+                    </custom-block>
+                </script>
+                <text>to do something to every word in a sentence:</text>
+            </p>
+            <diagram>
+                <script>
+                    <custom-block s="list $arrowRight sentence %l">
+                        <block s="reportMap">
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportJoinWords">
+                                        <list>
+                                            <l/>
+                                            <l>s</l>
+                                        </list>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                            <custom-block s="sentence $arrowRight list %txt">
+                                <l>boy ear thing</l>
+                            </custom-block>
+                        </block>
+                    </custom-block>
+                </script>
+                <bubbles>
+                    <text>boys ears things</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

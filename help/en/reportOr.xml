@@ -1,0 +1,43 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportOr">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="doIf" annotation="2">
+                                <block s="reportAnd">
+                                    <block s="reportTouchingObject">
+                                        <l><option>edge</option></l>
+                                    </block>
+                                    <block s="reportTouchingObject">
+                                        <l>Sprite(2)</l>
+                                    </block>
+                                </block>
+                                <script>
+                                    <block s="doPlayNote" annotation="3">
+                                        <l>60</l>
+                                        <l>0.2</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Forever</small-p>
+                    <small-p>If touching either the edge or Sprite(2)</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

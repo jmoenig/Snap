@@ -1,0 +1,98 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportRelationTo">
+                <l><option>distance</option></l>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportLessThan">
+                                    <block s="reportRelationTo">
+                                        <l><option>distance</option></l>
+                                        <l>dog</l>
+                                    </block>
+                                    <l>20</l>
+                                </block>
+                                <script>
+                                    <block s="doSwitchToCostume" annotation="2">
+                                        <l>scared cat</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        If distance to the dog sprite is less than 20
+                    </small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportRelationTo">
+                        <l menu="1"><option>distance</option></l>
+                        <l/>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item annotation="1">distance</item>
+                        <item>direction</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        Can also report how much you need to turn to be
+                        facing toward the other sprite.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>Select from the dropdown menu to choose:</p>
+            <diagram>
+                <script>
+                    <block s="reportRelationTo" annotation="1">
+                        <l><option>distance</option></l>
+                        <l><option>mouse-pointer</option></l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        <text>
+                            Reports the distance from this sprite to the
+                            pointer (
+                        </text>
+                        <img src="pointer.png" width="8" height="13"/>
+                        <text>)</text>
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportRelationTo" annotation="1">
+                        <l><option>distance</option></l>
+                        <l>Sprite(2)</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Reports the distance to another sprite
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

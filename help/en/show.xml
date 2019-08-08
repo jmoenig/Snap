@@ -1,0 +1,27 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="hide"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="hide" annotation="1"/>
+                </script>
+                <annotations>
+                    <small-p>Makes the sprite disappear</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="show" annotation="1"/>
+                </script>
+                <annotations>
+                    <small-p>Makes the sprite appear again</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

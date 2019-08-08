@@ -1,0 +1,38 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="changePenHSVA">
+                <l><option>hue</option></l>
+                <l>10</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="changePenHSVA">
+                        <l menu="1"><option>hue</option></l>
+                        <l annotation="1">10</l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>hue</item>
+                        <item>saturation</item>
+                        <item>brightness</item>
+                        <item>transparency</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        Numeric range is 0-100. Hue wraps around (mod 100).
+                        For the others, anything &lt;0 is 0, anything &gt;100
+                        is 100.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <img src="changePenHSVA_graph.png" width="170" height="98"/>
+        </row>
+    </box>
+</help-screen>

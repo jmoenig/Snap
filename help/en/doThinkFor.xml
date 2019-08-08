@@ -1,0 +1,34 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doThinkFor">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doThink" annotation="1">
+                        <l>I wonder...</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Show "I wonder..." in a think bubble for 2 seconds</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <img src="doThink_cat1.png" width="104" height="103"/>
+                    <p>Now</p>
+                </column>
+                <column rel-width="1">
+                    <img src="doThinkFor_cat2.png" width="66" height="103"/>
+                    <p>2 seconds later</p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

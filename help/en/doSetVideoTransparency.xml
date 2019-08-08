@@ -1,0 +1,22 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSetVideoTransparency">
+                <l>50</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Set the transparency of the video capture layer.</p>
+            <p>
+                The video layer is in front of the background, but behind
+                everything else. If, as usual, the stage background is solid
+                white, this just “ghosts” the video. If you have another
+                background, then dimming the video undims the background and
+                vice versa. Sprites and pen trails are always in front of the
+                video.
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,27 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveKey">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveKey" annotation="1">
+                        <l><option>m</option></l>
+                    </block>
+                    <block s="forward" annotation="2">
+                        <l>10</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Whenever this key is pressed</small-p>
+                    <small-p>Do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

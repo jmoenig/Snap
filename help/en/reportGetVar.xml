@@ -1,0 +1,76 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block var="variable"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportGreaterThan">
+                                    <block var="score"/>
+                                    <l>5</l>
+                                </block>
+                                <script>
+                                    <block s="doSayFor" annotation="2">
+                                        <l>You win!</l>
+                                        <l>2</l>
+                                    </block>
+                                    <block s="doStopThis" annotation="3">
+                                        <l><option>all</option></l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If the score is greater than 5</small-p>
+                    <small-p>Say “You win!” for 2 seconds</small-p>
+                    <small-p>Stop all scripts</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Click the checkbox (next to the block) to show the monitor on
+                the stage:
+            </p>
+            <row>
+                <row rel-width="1" padding="3">
+                    <img src="checkbox.png" width="15" height="15"/>
+                    <script>
+                        <block var="score"/>
+                    </script>
+                </row>
+                <column rel-width="1">
+                    <img src="reportGetVar_watcher.png" width="85" height="21"/>
+                </column>
+            </row>
+            <p>Right-click on the monitor to get different views:</p>
+            <row>
+                <img src="reportGetVar_context_menu.png" width="143" height="141"/>
+                <column rel-width="1">
+                    <row>
+                        <img src="reportGetVar_large_watcher.png" width="38" height="22"/>
+                        <p rel-width="1">Large readout</p>
+                    </row>
+                    <row>
+                        <img src="reportGetVar_slider_watcher.png" width="85" height="32"/>
+                        <p rel-width="1">Slider</p>
+                    </row>
+                    <p>
+                        Slider min and max value can be set in the
+                        right-click menu.
+                    </p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

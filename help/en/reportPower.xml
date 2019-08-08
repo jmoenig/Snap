@@ -1,0 +1,112 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="USE BIGNUMS %&apos;bool&apos;" type="command" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%b"></input>
+            </inputs>
+        </block-definition>
+   </blocks>
+    <thumbnail>
+        <script>
+            <block s="reportPower">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Exponentiation (power) function.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportPower" bubble="1" annotation="1">
+                            <l>3</l>
+                            <l>4</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>81</text>
+                    </bubbles>
+                    <annotations>
+                        <small-p>3×3×3×3</small-p>
+                    </annotations>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportPower" bubble="1" annotation="1">
+                            <l>3</l>
+                            <l>0.5</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>1.7320508075688772</text>
+                    </bubbles>
+                    <annotations>
+                        <small-p>√3</small-p>
+                    </annotations>
+                </diagram>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportPower" bubble="1" annotation="1">
+                            <l>3</l>
+                            <l>-1</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>0.3333333333333333</text>
+                    </bubbles>
+                    <annotations>
+                        <small-p>⅓</small-p>
+                    </annotations>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportPower" bubble="1" annotation="1">
+                            <l>-3</l>
+                            <l>0.5</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>NaN</text>
+                    </bubbles>
+                    <annotations>
+                        <small-p>√-3</small-p>
+                    </annotations>
+                </diagram>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportPower" bubble="1" annotation="1">
+                        <l>-3</l>
+                        <l>0.5</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>1.0605752387249068e-16+1.7320508075688772i</text>
+                </bubbles>
+                <annotations>
+                    <small-p>≈0+√3i</small-p>
+                </annotations>
+            </diagram>
+            <p>
+                Would you prefer this answer? Then load the “infinite
+                precision integers” library and do this:
+            </p>
+            <script>
+                <custom-block s="USE BIGNUMS %b">
+                    <l><bool>true</bool></l>
+                </custom-block>
+            </script>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,82 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportCallCC">
+                <block s="reifyScript">
+                    <script/>
+                    <list/>
+                </block>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Capture reporter continuation</p>
+            <diagram>
+                <script scale="0.9">
+                    <block s="setColor">
+                        <color>0,0,255,1</color>
+                    </block>
+                    <block s="setSize" annotation="1">
+                        <l>3</l>
+                    </block>
+                    <block s="down"/>
+                    <block s="forward">
+                        <l>100</l>
+                    </block>
+                    <block s="turn">
+                        <block s="reportSum">
+                            <l>30</l>
+                            <block s="reportCallCC">
+                                <block s="reifyScript">
+                                    <script>
+                                        <block s="doSetVar">
+                                            <l>turn move</l>
+                                            <block var="cont"/>
+                                        </block>
+                                        <block s="doReport">
+                                            <block var="cont"/>
+                                        </block>
+                                    </script>
+                                    <list>
+                                        <l>cont</l>
+                                    </list>
+                                </block>
+                            </block>
+                        </block>
+                    </block>
+                    <block s="forward">
+                        <l>100</l>
+                    </block>
+                </script>
+                <annotations>
+                    <img src="reportCallCC_turtle1.png" width="51" height="52" arrow-reverse="true"/>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="setColor">
+                        <color>255,165,29,1</color>
+                    </block>
+                    <block s="doRun" annotation="1">
+                        <block var="turn move"/>
+                        <list>
+                            <l>15</l>
+                        </list>
+                    </block>
+                </script>
+                <annotations>
+                    <img src="reportCallCC_turtle2.png" width="51" height="52" arrow-reverse="true"/>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <p>
+            Continuations are too complicaed to explain in a help screen, but
+            they're used to invent control structures such as the CATCH and
+            THROW too blocks. Read the chapter in the Snap! Reference Manual
+            if you want to know more.
+        </p>
+    </box>
+</help-screen>

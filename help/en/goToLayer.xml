@@ -1,0 +1,32 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="goToLayer">
+                <l><option>front</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <column rel-width="1">
+                <img src="goToLayer_before.png" width="56" height="93"/>
+                <p>Sprite1: Girl</p>
+                <p>Sprite2: Ball</p>
+            </column>
+            <column rel-width="2">
+                <p>
+                    <text>
+                        To make the girl look like she is holding the ball,
+                        tell the ball to
+                    </text>
+                    <script>
+                        <block s="goToLayer">
+                            <l><option>front</option></l>
+                        </block>
+                    </script>
+                </p>
+            </column>
+            <img src="goToLayer_after.png" width="53" height="88"/>
+        </row>
+    </box>
+</help-screen>

@@ -1,0 +1,57 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportKeyPressed">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="doIf">
+                                <block s="reportKeyPressed">
+                                    <l><option>space</option></l>
+                                </block>
+                                <script>
+                                    <block s="forward" annotation="2">
+                                        <l>2</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If this is true</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>Use</text>
+                <script>
+                    <block s="reportKeyPressed">
+                        <l><option>space</option></l>
+                    </block>
+                </script>
+                <text>instead of</text>
+                <script>
+                    <block s="receiveKey">
+                        <l><option>space</option></l>
+                    </block>
+                </script>
+                <text>
+                    when you want to keep, for example, the space key pressed
+                    continously.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

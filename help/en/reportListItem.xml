@@ -1,0 +1,87 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportListItem">
+                <l>1</l>
+                <l>list</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportListItem">
+                            <l><option>any</option></l>
+                            <l>phrases</l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Say one of the items from a list of phrases
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doIf" annotation="1">
+                        <block s="reportGreaterThan">
+                            <block var="score"/>
+                            <block s="reportListItem">
+                                <l>1</l>
+                                <l>top scores</l>
+                            </block>
+                        </block>
+                        <script>
+                            <block s="playSound" annotation="2">
+                                <l>clap</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        If the current score is greater than item 1 on a top
+                        score list
+                    </small-p>
+                    <small-p>Play a clapping sound</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                The item block reports the value of the item at the specified
+                place on a list.
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportListItem">
+                        <l menu="1" annotation="1">1</l>
+                        <block var="my list"/>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>1</item>
+                        <item>last</item>
+                        <item>any</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        Select from the menu or insert a number to indicate
+                        which item you want
+                    </small-p>
+                </annotations>
+            </diagram>
+            <p>
+                You can fit an item block into other blocks, for example:
+                say, switch to costume, play sound, or broadcast.
+            </p>
+        </column>
+    </box>
+</help-screen>

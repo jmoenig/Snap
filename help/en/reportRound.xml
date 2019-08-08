@@ -1,0 +1,63 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportRound">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever" annotation="1">
+                        <script>
+                            <block s="bubble" annotation="2">
+                                <block s="reportRound">
+                                    <block s="reportTimer"/>
+                                </block>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Keep doing this forever:</small-p>
+                    <small-p>
+                        Say how many seconds is on the timer (rounded to the
+                        nearest whole number)
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="reportRound">
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    gives the rounded value of a number. That means it turns
+                    a decimal number into the nearest whole number.
+                </text>
+            </p>
+            <p>
+                <text>For example:</text>
+                <script>
+                    <block s="reportRound">
+                        <l>5.1</l>
+                    </block>
+                </script>
+                <text>is 5, and</text>
+                <script>
+                    <block s="reportRound">
+                        <l>5.6</l>
+                    </block>
+                </script>
+                <text>is 6.</text>
+            </p>
+        </column>
+    </box>
+</help-screen>

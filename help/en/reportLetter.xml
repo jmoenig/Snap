@@ -1,0 +1,61 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportLetter">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportLetter">
+                            <l>1</l>
+                            <l>apple</l>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Says the first letter of the world apple
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doSetVar" annotation="1">
+                        <l>counter</l>
+                        <l>1</l>
+                    </block>
+                    <block s="doRepeat" annotation="2">
+                        <block s="reportStringSize">
+                            <l>Mississippi</l>
+                        </block>
+                        <script>
+                            <block s="bubble" annotation="3">
+                                <block s="reportLetter">
+                                    <block var="counter"/>
+                                    <l>Mississippi</l>
+                                </block>
+                                <l>1</l>
+                            </block>
+                            <block s="doChangeVar" annotation="4">
+                                <l>counter</l>
+                                <l>1</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Sets the value of the variable counter to 1</small-p>
+                    <small-p>Repeats for the number of letters in the word</small-p>
+                    <small-p>Says the letter at that place in the word</small-p>
+                    <small-p>Increases counter by 1</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

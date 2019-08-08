@@ -1,0 +1,80 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doForEach">
+                <l>item</l>
+                <l/>
+                <script/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Do something for each item of a list.</p>
+            <row>
+                <column rel-width="5">
+                    <diagram>
+                        <script>
+                            <block s="doForEach">
+                                <l>item</l>
+                                <block s="reportNewList">
+                                    <list>
+                                        <l>Yakko</l>
+                                        <l>Wakko</l>
+                                        <l>Dot</l>
+                                    </list>
+                                </block>
+                                <script>
+                                    <block s="doSayFor">
+                                        <block s="reportJoinWords">
+                                            <list>
+                                                <l>Hello </l>
+                                                <l highlight="true"/>
+                                            </list>
+                                        </block>
+                                        <l>2</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </diagram>
+                    <diagram>
+                        <script>
+                            <block s="doForEach">
+                                <l arrow-start="1">item</l>
+                                <block s="reportNewList">
+                                    <list>
+                                        <l>Yakko</l>
+                                        <l>Wakko</l>
+                                        <l>Dot</l>
+                                    </list>
+                                </block>
+                                <script>
+                                    <block s="doSayFor">
+                                        <block s="reportJoinWords">
+                                            <list>
+                                                <l>Hello </l>
+                                                <block var="item" highlight="true" arrow-end="1"/>
+                                            </list>
+                                        </block>
+                                        <l>2</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </diagram>
+                </column>
+                <p rel-width="4">
+                    There are two equivalent ways to represent the list item
+                    inside the script. They're equally good; different people
+                    have their own preference.
+                </p>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <img src="doForEach_alonzo.png" width="324" height="112"/>
+        </column>
+    </box>
+</help-screen>
