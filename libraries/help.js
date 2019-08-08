@@ -38,6 +38,10 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 HelpScreenMorph.prototype.padding = 15;
 HelpScreenMorph.prototype.verticalPadding = 10;
 
+// HelpScreenMorph library caching:
+
+HelpScreenMorph.prototype.libraryCache = {};
+
 // HelpScreenMorph instance creation:
 
 function HelpScreenMorph(loadCallback) {
@@ -212,6 +216,36 @@ HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
     return morph;
 };
 
+// HelpScreenMorph library caching (modified from LibraryImportDialogMorph):
+
+HelpScreenMorph.prototype.hasCachedLibrary = function (key) {
+    return HelpScreenMorph.prototype.libraryCache.hasOwnProperty(key);
+};
+
+HelpScreenMorph.prototype.cacheLibrary = function (key, blocks) {
+    HelpScreenMorph.prototype.libraryCache[key] = blocks ;
+};
+
+HelpScreenMorph.prototype.cachedLibrary = function (key) {
+    return HelpScreenMorph.prototype.libraryCache[key];
+};
+
+HelpScreenMorph.prototype.loadLibrary = function (fileName, callback) {
+    var myself = this;
+    if (this.hasCachedLibrary(fileName)) {
+        callback(this.cachedLibrary(fileName));
+    } else {
+        IDE_Morph.prototype.getURL(
+            IDE_Morph.prototype.resourceURL('libraries', fileName),
+            function(libraryXML) {
+                var blocks = new SnapSerializer().loadBlocks(libraryXML);
+                myself.cacheLibrary(fileName, blocks);
+                callback(blocks);
+            }
+        );
+    }
+};
+
 // SnapSerializer ///////////////////////////////////////////////////////////
 
 SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
@@ -220,32 +254,98 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         model = this.parse(xmlString),
         helpScreen = new HelpScreenMorph(callback),
         padding = HelpScreenMorph.prototype.padding,
-        target = new SpriteMorph();
+        stage = new StageMorph(),
+        target = new SpriteMorph(),
+        blocks,
+        libraries;
 
-    this.project.stage = new StageMorph();
+    this.project.stage = stage;
     target.globalBlocks = this.project.stage.globalBlocks;
 
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
-    model.children.forEach(function (child) {
-        if (child.tag === 'thumbnail') {
-            helpScreen.thumbnail = myself.loadHelpScreenElement(
-                model.require('thumbnail'), helpScreen, target, 'black'
-            );
-        } else if (child.tag === 'blocks') {
-            myself.loadCustomBlocks(target, child, true);
-            myself.populateCustomBlocks(target, child, true);
-        } else {
-            var morph = myself.loadHelpScreenElement(
-                child, helpScreen, target,
-                child.attributes.color === 'blue' ? 'black' : 'white'
-            );
-            if (morph) {
-                helpScreen.add(morph);
+    
+    blocks = model.childNamed('blocks');
+    if (blocks) {
+        myself.loadCustomBlocks(target, blocks, true);
+        myself.populateCustomBlocks(target, blocks, true);
+    }
+
+    libraries = model.childNamed('libraries');
+    if (libraries && libraries.children.length > 0) {
+        loadLibrary(0);
+    } else {
+        librariesLoaded();
+    }
+
+    function loadLibrary (index) {
+        var el = libraries.children[index];
+        if (el) {
+            if (el.tag === 'library' && el.attributes.filename) {
+                helpScreen.loadLibrary(el.attributes.filename, function (blocks) {
+                    blocks.forEach(function (def) {
+                        def.receiver = stage;
+                        stage.globalBlocks.push(def);
+                        stage.replaceDoubleDefinitionsFor(def);
+                    });
+                    loadLibrary(index + 1);
+                })
+            } else {
+                loadLibrary(index + 1);
             }
+        } else {
+            librariesLoaded();
         }
-    });
+    }
+
+    function librariesLoaded () {
+        model.children.forEach(function (child) {
+            if (child.tag === 'blocks' || child.tag === 'libraries') {
+                return;
+            } else if (child.tag === 'thumbnail') {
+                helpScreen.thumbnail = myself.loadHelpScreenElement(
+                    model.require('thumbnail'), helpScreen, target, 'black'
+                );
+            } else {
+                var morph = myself.loadHelpScreenElement(
+                    child, helpScreen, target,
+                    child.attributes.color === 'blue' ? 'black' : 'white'
+                );
+                if (morph) {
+                    helpScreen.add(morph);
+                }
+            }
+        });
+
+        helpScreen.children.forEach(fixWidths);
+        helpScreen.forAllChildren(function (child) {
+            // Reflow text
+            if (child instanceof TextMorph) {
+                child.children.forEach(function (child) {
+                    if (typeof child.fixLayout === 'function') {
+                        child.fixLayout();
+                    }
+                });
+                child.setExtent(child.extent());
+            }
+        });
+        helpScreen.add(helpScreen.thumbnail);
+        helpScreen.forAllChildren(function (child) {
+            if (
+                child instanceof AlignmentMorph
+                || child instanceof ScriptDiagramMorph
+            ) {
+                child.fixLayout();
+            }
+        });
+    
+        helpScreen.fixLayout();
+    
+        if (helpScreen.imagesLoading === 0) {
+            callback(null, helpScreen);
+        }
+    }
 
     function fixWidths (morph) {
         var parent = morph.parent;
@@ -253,8 +353,8 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
             morph.setWidth(parent.width());
         } else if (
             morph instanceof AlignmentMorph
-                || morph instanceof ScriptDiagramMorph
-                || morph instanceof TextMorph
+            || morph instanceof ScriptDiagramMorph
+            || morph instanceof TextMorph
         ) {
             if (parent instanceof BoxMorph) {
                 morph.silentSetWidth(parent.width() - 2 * padding);
@@ -270,7 +370,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
             if (
                 morph instanceof AlignmentMorph
-                    && morph.orientation === 'row'
+                && morph.orientation === 'row'
             ) {
                 // calculate the total known used width of row items
                 morph.usedWidth = morph.padding * (morph.children.length - 1)
@@ -298,34 +398,6 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
             }
             morph.children.forEach(fixWidths);
         }
-    }
-
-    helpScreen.children.forEach(fixWidths);
-    helpScreen.forAllChildren(function (child) {
-        // Reflow text
-        if (child instanceof TextMorph) {
-            child.children.forEach(function (child) {
-                if (typeof child.fixLayout === 'function') {
-                    child.fixLayout();
-                }
-            });
-            child.setExtent(child.extent());
-        }
-    });
-    helpScreen.add(helpScreen.thumbnail);
-    helpScreen.forAllChildren(function (child) {
-        if (
-            child instanceof AlignmentMorph
-            || child instanceof ScriptDiagramMorph
-        ) {
-            child.fixLayout();
-        }
-    });
-
-    helpScreen.fixLayout();
-
-    if (helpScreen.imagesLoading === 0) {
-        callback(null, helpScreen);
     }
 };
 

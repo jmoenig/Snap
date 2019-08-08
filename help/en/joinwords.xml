@@ -1,16 +1,7 @@
 <help-screen version="1">
-    <blocks>
-        <block-definition s="join words %&apos;words&apos;" type="reporter" category="operators">
-            <header></header>
-            <code></code>
-            <translations>de:füge Wörter zusammen _&#xD;ca:uneix les paraules _&#xD;es:unir las palabras _&#xD;fr:fusionne les mots _&#xD;</translations>
-            <inputs>
-                <input type="%mult%txt"></input>
-            </inputs>
-            <script>
-            </script>
-        </block-definition>
-    </blocks>
+    <libraries>
+        <library filename="word-sentence.xml"/>
+    </libraries>
     <thumbnail>
         <script>
             <custom-block s="join words %mult%txt">

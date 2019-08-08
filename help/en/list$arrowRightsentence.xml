@@ -1,23 +1,8 @@
 <help-screen version="1">
+    <libraries>
+        <library filename="word-sentence.xml"/>
+    </libraries>
     <blocks>
-        <block-definition s="list $arrowRight sentence %&apos;data&apos;" type="reporter" category="operators">
-            <header></header>
-            <code></code>
-            <translations>de:Liste $arrowRight Satz _&#xD;ca:llista $arrowRight frase _&#xD;es:lista $arrowRight frase _&#xD;fr:liste $arrowRight phrase _&#xD;</translations>
-            <inputs>
-                <input type="%l"></input>
-            </inputs>
-            <script></script>
-        </block-definition>
-        <block-definition s="sentence $arrowRight list %&apos;text&apos;" type="reporter" category="operators">
-            <header></header>
-            <code></code>
-            <translations>de:Satz $arrowRight Liste _&#xD;ca:frase $arrowRight llista _&#xD;es:frase $arrowRight lista _&#xD;fr:phrase $arrowRight liste _&#xD;</translations>
-            <inputs>
-                <input type="%txt"></input>
-            </inputs>
-            <script></script>
-        </block-definition>
         <block-definition s="some function %&apos;s&apos;" type="reporter" category="looks">
             <header></header>
             <code></code>
