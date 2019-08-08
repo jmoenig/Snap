@@ -9,6 +9,7 @@
     * generated costumes that are not in the wardrobe are now made persistent in the project (saved & restored)
 * **Notable Fixes:**
     * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
+    * saved clones no longer forget if they inherit the "costume #" attribute
 * **Translation Updates:**
     * German
     * Galician, thanks, Miguel!
@@ -16,6 +17,7 @@
 ### 2019-08-08
 * store: allow wardrobe-less costumes to be shared among several sprites (e.g. when inheriting the "costume #" attribute)
 * objects: fixed an issue when a sprite inherits both the wardrobe and the costume #
+* store, objects: fixed the bug that made clones forget inheritance of costume # when saved
 
 ### 2019-08-07
 * new dev version

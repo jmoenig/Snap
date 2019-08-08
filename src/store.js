@@ -520,9 +520,13 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             }
         });
         if (sprite.inheritsAttribute('costumes')) {
-            costume = sprite.costumes.asArray()[
-                sprite.inheritanceInfo.costumeNumber - 1
-            ];
+            if (sprite.inheritsAttribute('costume #')) {
+                costume = sprite.exemplar.costume;
+            } else {
+                costume = sprite.costumes.asArray()[
+                    sprite.inheritanceInfo.costumeNumber - 1
+                ];
+            }
             if (costume) {
                 if (costume.loaded) {
                     sprite.wearCostume(costume, true);

@@ -1910,12 +1910,12 @@ SpriteMorph.prototype.drawNew = function () {
             cst = this.costume;
             handle = setInterval(
                 function () {
-                    myself.wearCostume(cst);
+                    myself.wearCostume(cst, true);
                     clearInterval(handle);
                 },
                 100
             );
-            return myself.wearCostume(null);
+            return myself.wearCostume(null, true);
 
         }
     }
