@@ -3304,6 +3304,10 @@ Process.prototype.reportMonadic = function (fname, n) {
     case '2^':
         result = Math.pow(2, x);
         break;
+    case 'factorial':
+	fact = (n) => {return this.reportLessThan(n, 1) ? 1 : this.reportProduct(n, fact(this.reportDifference(n,1)));}
+        result = fact(x);
+        break;
     default:
         nop();
     }
