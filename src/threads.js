@@ -2238,7 +2238,7 @@ Process.prototype.doAsk = function (data) {
         activePrompter;
 
     stage.keysPressed = {};
-    if (!this.prompter) {
+    if (!this.prompter && !this.isTemporary) {
         activePrompter = detect(
             stage.children,
             function (morph) {return morph instanceof StagePrompterMorph; }
