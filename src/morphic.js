@@ -1042,7 +1042,7 @@
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1083,12 +1083,12 @@
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1153,7 +1153,11 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
+    Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Bernat Romagosa contributed to text editing and to the core design.
+    Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
+    Ken Kahn contributed to Chinese keboard entry and Android support.
 
     - Jens Mönig
 */
@@ -1162,7 +1166,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-January-10';
+var morphicVersion = '2019-August-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1445,7 +1449,7 @@ function copy(target) {
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1479,7 +1483,7 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
-    
+
     [Jens]: like all other retina screen support implementations I've seen
     Bartosz's patch also does not address putImageData() compatibility when
     mixing retina-enabled and non-retina canvasses. If you need to manipulate
@@ -1617,7 +1621,7 @@ function enableRetinaSupport() {
     contextProto.drawImage = function(image) {
         var pixelRatio = getPixelRatio(image),
             sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -1809,12 +1813,12 @@ function normalizeCanvas(aCanvas, getCopy) {
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1952,6 +1956,24 @@ Color.prototype.eq = function (aColor, observeAlpha) {
         this.r === aColor.r &&
         this.g === aColor.g &&
         this.b === aColor.b &&
+        (observeAlpha ? this.a === aColor.a : true);
+};
+
+Color.prototype.isCloseTo = function (aColor, observeAlpha, tolerance) {
+    // experimental - answer whether a color is "close" to another one by
+    // a given percentage. tolerance is the percentage by which each color
+    // channel may diverge, alpha needs to be the exact same unless ignored
+    var thres = 2.55 * (tolerance || 10);
+
+    function dist(a, b) {
+        var diff = a - b;
+        return diff < 0 ? 255 + diff : diff;
+    }
+
+    return aColor &&
+        dist(this.r, aColor.r) < thres &&
+        dist(this.g, aColor.g) < thres &&
+        dist(this.b, aColor.b) < thres &&
         (observeAlpha ? this.a === aColor.a : true);
 };
 
@@ -2845,34 +2867,24 @@ Node.prototype.siblings = function () {
     });
 };
 
-Node.prototype.parentThatIsA = function (constructor) {
+Node.prototype.parentThatIsA = function () {
     // including myself
-    if (this instanceof constructor) {
-        return this;
+    // Note: you can pass in multiple constructors to test for
+    var i;
+    for (i = 0; i < arguments.length; i += 1) {
+        if (this instanceof arguments[i]) {
+            return this;
+        }
     }
     if (!this.parent) {
         return null;
     }
-    return this.parent.parentThatIsA(constructor);
+    return this.parentThatIsA.apply(this.parent, arguments);
 };
 
 Node.prototype.parentThatIsAnyOf = function (constructors) {
-    // including myself
-    var yup = false,
-        myself = this;
-    constructors.forEach(function (each) {
-        if (myself.constructor === each) {
-            yup = true;
-            return;
-        }
-    });
-    if (yup) {
-        return this;
-    }
-    if (!this.parent) {
-        return null;
-    }
-    return this.parent.parentThatIsAnyOf(constructors);
+    // deprecated, use parentThatIsA instead
+    return this.parentThatIsA.apply(this, constructors);
 };
 
 // Morphs //////////////////////////////////////////////////////////////
@@ -3904,21 +3916,27 @@ Morph.prototype.slideBackTo = function (
 
 Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
     var world = this.world(),
-        myself = this;
-    world.animations.push(new Animation(
-        function (x) {myself.setLeft(x); },
-        function () {return myself.left(); },
-        -(this.left() - endPoint.x),
-        msecs || 100,
-        easing,
-        onComplete
-    ));
+        myself = this,
+        horizontal = new Animation(
+            function (x) {myself.setLeft(x); },
+            function () {return myself.left(); },
+            -(this.left() - endPoint.x),
+            msecs || 100,
+            easing
+        );
+    world.animations.push(horizontal);
     world.animations.push(new Animation(
         function (y) {myself.setTop(y); },
         function () {return myself.top(); },
         -(this.top() - endPoint.y),
         msecs || 100,
-        easing
+        easing,
+        function () {
+            horizontal.setter(horizontal.destination);
+            horizontal.isActive = false;
+            onComplete();
+        }
+
     ));
 };
 
@@ -4458,19 +4476,18 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data;
+        data, len, i;
     if (!oImg.width || !oImg.height) {
         return false;
     }
     data = oImg.getContext('2d')
         .getImageData(1, 1, oImg.width, oImg.height)
         .data;
-    return detect(
-        data,
-        function (each) {
-            return each !== 0;
-        }
-    ) !== null;
+    len = data.length;
+    for(i = 3; i < len; i += 4) {
+        if (data[i] !== 0) {return true; }
+    }
+    return false;
 };
 
 Morph.prototype.overlappingImage = function (otherMorph) {
@@ -5357,7 +5374,11 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.originalContents = this.target.text;
     this.originalAlignment = this.target.alignment;
     this.slot = this.target.text.length;
+    this.textarea = null;
+
     CursorMorph.uber.init.call(this);
+
+    // override inherited defaults
     ls = fontHeight(this.target.fontSize);
     this.setExtent(new Point(Math.max(Math.floor(ls / 20), 1), ls));
     this.drawNew();
@@ -5367,73 +5388,201 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
-    this.initializeClipboardHandler();
+    this.initializeTextarea();
 };
 
-CursorMorph.prototype.initializeClipboardHandler = function () {
-    // Add hidden text box for copying and pasting
-    var myself = this,
-        wrrld = this.target.world();
+CursorMorph.prototype.initializeTextarea = function () {
+    var myself = this;
 
-    this.clipboardHandler = document.createElement('textarea');
-    this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.top = window.outerHeight;
-    this.clipboardHandler.style.right = '101%'; // placed just out of view
+    this.textarea = document.createElement('textarea');
+    this.textarea.style.zIndex = -1;
+    this.textarea.style.position = 'absolute';
+    this.textarea.wrap = "off";
+    this.textarea.style.overflow = "hidden";
+    this.textarea.style.fontSize = this.target.fontSize + 'px';
+    this.textarea.autofocus = true;
+    this.textarea.value = this.target.text;
+    document.body.appendChild(this.textarea);
+    this.updateTextAreaPosition();
+    this.syncTextareaSelectionWith(this.target);
 
-    document.body.appendChild(this.clipboardHandler);
 
-    this.clipboardHandler.value = this.target.selection();
-    this.clipboardHandler.focus();
-    this.clipboardHandler.select();
+    /*
+        There are three cases when the textarea gets inputs:
 
-    this.clipboardHandler.addEventListener(
-        'keypress',
-        function (event) {
-            myself.processKeyPress(event);
-            this.value = myself.target.selection();
-            this.select();
-        },
-        false
-    );
+        1. Inputs that represent special shortcuts of Snap!, so we
+        don't want the textarea to handle it. These events are captured in
+        "keydown" event handler.
 
-    this.clipboardHandler.addEventListener(
-        'keydown',
-        function (event) {
-            myself.processKeyDown(event);
-            if (event.shiftKey) {
-                wrrld.currentKey = 16;
+        2. inputs that change the content of the textarea, we need to update
+        the content of its target morph accordingly. This is handled in
+        the "input" event handler.
+
+        3. input that change the textarea without triggering an "input" event,
+        e.g. selection change, cursor movements. These are handled in the
+        "keyup" event handler.
+
+        Note that some changes in case 2 are not caused by keyboards (for
+        example, select a word by clicking in IME window), so there are overlaps
+        between case 2 and case 3. but no one can replace the other.
+    */
+
+    this.textarea.addEventListener('keydown', function (event) {
+        /* Special shortcuts for Snap! system.
+            - ctrl-d, ctrl-i and ctrl-p: doit, inspect it and print it
+            - tab: goto next text field
+            - esc: discard the editing
+            - enter / shift+enter: accept the editing
+        */
+        var keyName = event.key,
+            shift = event.shiftKey,
+            singleLineText = myself.target instanceof StringMorph;
+
+        // other parts of the world need to know the current key
+        myself.world().currentKey = event.keyCode;
+
+        if (!isNil(myself.target.receiver) &&
+                    (event.ctrlKey || event.metaKey)) {
+            if (keyName === 'd') {
+                myself.target.doIt();
+            } else if (keyName === 'i') {
+                myself.target.inspectIt();
+            } else if (keyName === 'p') {
+                myself.target.showIt();
             }
-            this.value = myself.target.selection();
-            this.select();
-
-            // Make sure tab prevents default
-            if (event.key === 'U+0009' ||
-                    event.key === 'Tab') {
-                myself.processKeyPress(event);
-                event.preventDefault();
+            event.preventDefault();
+        } else if (keyName === 'Tab' || keyName === 'U+0009') {
+            if (shift) {
+                myself.target.backTab(myself.target);
+            } else {
+                myself.target.tab(myself.target);
             }
-        },
-        false
-    );
+            event.preventDefault();
+            myself.target.escalateEvent('reactToEdit', myself.target);
+        } else if (keyName === 'Escape') {
+            myself.cancel();
+        } else if (keyName === "Enter" && (singleLineText || shift)) {
+            myself.accept();
+        } else {
+            myself.target.escalateEvent('reactToKeystroke', event);
+        }
+    });
 
-    this.clipboardHandler.addEventListener(
-        'keyup',
-        function (event) {
-            wrrld.currentKey = null;
-        },
-        false
-    );
+    this.textarea.addEventListener('input', function (event) {
+        // handle content change.
+        var target = myself.target,
+            textarea = myself.textarea,
+            filteredContent,
+            caret;
 
-    this.clipboardHandler.addEventListener(
-        'input',
-        function (event) {
-            if (this.value === '') {
-                myself.gotoSlot(myself.target.selectionStartSlot());
-                myself.target.deleteSelection();
+        myself.world().currentKey = null;
+
+        // filter invalid chars for numeric fields
+        function filterText (content) {
+            var points = 0,
+                result = '',
+                i, ch, valid;
+            for (i = 0; i < content.length; i += 1) {
+                ch = content.charAt(i);
+                valid = (
+                    ('0' <= ch && ch <= '9') || // digits
+                    (i === 0 && ch === '-')  || // leading '-'
+                    (ch === '.' && points === 0) // at most '.'
+                );
+                if (valid) {
+                    result += ch;
+                    if (ch === '.') {
+                        points += 1;
+                    }
+                }
             }
-        },
-        false
-    );
+            return result;
+        }
+
+        if (target.isNumeric) {
+            filteredContent = filterText(textarea.value);
+        } else {
+            filteredContent = textarea.value;
+        }
+
+        if (filteredContent.length < textarea.value.length) {
+            textarea.value = filteredContent;
+            caret = Math.min(textarea.selectionStart, filteredContent.length);
+            textarea.selectionEnd = caret;
+            textarea.selectionStart = caret;
+        }
+        // target morph: copy the content and selection status to the target.
+        target.text = filteredContent;
+
+        if (textarea.selectionStart === textarea.selectionEnd) {
+            target.startMark = null;
+            target.endMark = null;
+        } else {
+            if (textarea.selectionDirection === 'backward') {
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
+            } else {
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
+            }
+        }
+        target.changed();
+        target.drawNew();
+        target.changed();
+
+        // cursor morph: copy the caret position to cursor morph.
+        myself.gotoSlot(textarea.selectionStart);
+
+        myself.updateTextAreaPosition();
+    });
+
+    this.textarea.addEventListener('keyup', function (event) {
+        // handle selection change and cursor position change.
+        var textarea = myself.textarea,
+            target = myself.target;
+
+        if (textarea.selectionStart === textarea.selectionEnd) {
+            target.startMark = null;
+            target.endMark = null;
+        } else {
+            if (textarea.selectionDirection === 'backward') {
+                target.startMark = textarea.selectionEnd;
+                target.endMark = textarea.selectionStart;
+            } else {
+                target.startMark = textarea.selectionStart;
+                target.endMark = textarea.selectionEnd;
+            }
+        }
+        target.changed();
+        target.drawNew();
+        target.changed();
+        myself.gotoSlot(textarea.selectionEnd);
+    });
+};
+
+CursorMorph.prototype.updateTextAreaPosition = function () {
+    var origin = this.target.bounds.origin;
+
+    function number2px (n) {
+        return Math.ceil(n) + 'px';
+    }
+
+    this.textarea.style.top = number2px(origin.y);
+    this.textarea.style.left = number2px(origin.x);
+};
+
+CursorMorph.prototype.syncTextareaSelectionWith = function (targetMorph) {
+    var start = targetMorph.startMark,
+        end = targetMorph.endMark;
+
+    if (start === end) {
+        this.textarea.setSelectionRange(this.slot, this.slot, 'none');
+    } else if (start < end) {
+        this.textarea.setSelectionRange(start, end, 'forward');
+    } else {
+        this.textarea.setSelectionRange(end, start, 'backward');
+    }
+    this.textarea.focus();
 };
 
 // CursorMorph event processing:
@@ -5806,23 +5955,13 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    this.destroyClipboardHandler();
+    this.destroyTextarea();
     CursorMorph.uber.destroy.call(this);
 };
 
-CursorMorph.prototype.destroyClipboardHandler = function () {
-    var nodes = document.body.children,
-        each,
-        i;
-    if (this.clipboardHandler) {
-        for (i = 0; i < nodes.length; i += 1) {
-            each = nodes[i];
-            if (each === this.clipboardHandler) {
-                document.body.removeChild(this.clipboardHandler);
-                this.clipboardHandler = null;
-            }
-        }
-    }
+CursorMorph.prototype.destroyTextarea = function () {
+    document.body.removeChild(this.textarea);
+    this.textarea = null;
 };
 
 // CursorMorph utilities:
@@ -5837,6 +5976,8 @@ CursorMorph.prototype.inspectKeyEvent = function (event) {
             event.charCode.toString() +
             '\nkeyCode: ' +
             event.keyCode.toString() +
+            '\nkey: ' +
+            event.key.toString() +
             '\nshiftKey: ' +
             event.shiftKey.toString() +
             '\naltKey: ' +
@@ -6470,7 +6611,7 @@ DialMorph.prototype.drawNew = function () {
     );
     ctx.closePath();
     ctx.fill();
-    
+
     // fill value
     angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
     ctx.fillStyle = (this.fillColor || this.color.darker()).toString();
@@ -8739,7 +8880,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // answer the slot (index) slots indicating the position of the
     // previous word to the left of aSlot
     var index = aSlot - 1;
-    
+
     // while the current character is non-word one, we skip it, so that
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
@@ -8758,7 +8899,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
 
 StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
-    
+
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
         index += 1;
     }
@@ -8961,10 +9102,11 @@ StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
         cursor = this.root().cursor;
+        this.endMark = this.text.length;
         if (cursor) {
             cursor.gotoSlot(this.text.length);
+            cursor.syncTextareaSelectionWith(this);
         }
-        this.endMark = this.text.length;
         this.drawNew();
         this.changed();
     }
@@ -8989,6 +9131,7 @@ StringMorph.prototype.shiftClick = function (pos) {
         }
         cursor.gotoPos(pos);
         this.endMark = cursor.slot;
+        cursor.syncTextareaSelectionWith(this);
         this.drawNew();
         this.changed();
     }
@@ -9034,6 +9177,7 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
             // last slot in multi line TextMorphs
             this.selectAll();
         }
+        this.root().cursor.syncTextareaSelectionWith(this);
     } else {
         this.escalateEvent('mouseDoubleClick', pos);
     }
@@ -9086,6 +9230,7 @@ StringMorph.prototype.enableSelecting = function () {
                 this.startMark = this.slotAt(pos);
                 this.endMark = this.startMark;
                 this.currentlySelecting = true;
+                this.root().cursor.syncTextareaSelectionWith(this);
                 if (!already) {this.escalateEvent('mouseDownLeft', pos); }
             }
         }
@@ -9097,6 +9242,7 @@ StringMorph.prototype.enableSelecting = function () {
             var newMark = this.slotAt(pos);
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
+                this.root().cursor.syncTextareaSelectionWith(this);
                 this.drawNew();
                 this.changed();
             }
@@ -10433,8 +10579,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         vHeight = this.height() - this.scrollBarSize;
 
     this.changed();
-    if (this.contents.width() > this.width() +
-            MorphicPreferences.scrollBarSize) {
+    if (this.contents.width() > this.width()) {
         this.hBar.show();
         if (this.hBar.width() !== hWidth) {
             this.hBar.setWidth(hWidth);
@@ -10447,7 +10592,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
             )
         );
         this.hBar.start = 0;
-        this.hBar.stop = this.contents.width() - this.width();
+        this.hBar.stop = this.contents.width() - this.width() + this.scrollBarSize;
         this.hBar.size =
             this.width() / this.contents.width() * this.hBar.stop;
         this.hBar.value = this.left() - this.contents.left();
@@ -10456,8 +10601,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.hBar.hide();
     }
 
-    if (this.contents.height() > this.height() +
-            this.scrollBarSize) {
+    if (this.contents.height() > this.height()) {
         this.vBar.show();
         if (this.vBar.height() !== vHeight) {
             this.vBar.setHeight(vHeight);
@@ -10470,7 +10614,7 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
             )
         );
         this.vBar.start = 0;
-        this.vBar.stop = this.contents.height() - this.height();
+        this.vBar.stop = this.contents.height() - this.height() + this.scrollBarSize;
         this.vBar.size =
             this.height() / this.contents.height() * this.vBar.stop;
         this.vBar.value = this.top() - this.contents.top();
@@ -10522,6 +10666,10 @@ ScrollFrameMorph.prototype.scrollX = function (steps) {
         r = this.right(),
         newX;
 
+    if (this.vBar.isVisible) {
+        r -= this.scrollBarSize;
+    }
+
     newX = cl + steps;
     if (newX + cw < r) {
         newX = r - cw;
@@ -10540,6 +10688,10 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
         ch = this.contents.height(),
         b = this.bottom(),
         newY;
+
+    if (this.hBar.isVisible) {
+        b -= this.scrollBarSize;
+    }
 
     newY = ct + steps;
     if (newY + ch < b) {
@@ -11626,7 +11778,10 @@ HandMorph.prototype.processDrop = function (event) {
                 readSVG(file);
             } else if (file.type.indexOf("image") === 0) {
                 readImage(file);
-            } else if (file.type.indexOf("audio") === 0) {
+            } else if (file.type.indexOf("audio") === 0 ||
+                    file.type.indexOf("ogg") > -1) {
+                    // check the file-extension because Firefox
+                    // thinks OGGs are videos
                 readAudio(file);
             } else if ((file.type.indexOf("text") === 0) ||
                     contains(['txt', 'csv', 'json'], suffix)) {
@@ -12508,6 +12663,13 @@ WorldMorph.prototype.about = function () {
 };
 
 WorldMorph.prototype.edit = function (aStringOrTextMorph) {
+    if (this.lastEditedText === aStringOrTextMorph) {
+        return;
+    }
+    if (!isNil(this.lastEditedText)) {
+        this.stopEditing();
+    }
+
     var pos = getDocumentPositionOf(this.worldCanvas);
 
     if (!aStringOrTextMorph.isEditable) {

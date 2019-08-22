@@ -28,11 +28,13 @@
 */
 
 // Global settings /////////////////////////////////////////////////////
+// cloud.js should be able to exist indepent of Snap!
+// (The module date is included for simplicity, but is not needed elsewhere.)
 
-/*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
-normalizeCanvas*/
+/*global modules, hex_sha512*/
 
-modules.cloud = '2019-January-11';
+modules = modules || {};
+modules.cloud = '2019-July-17';
 
 // Global stuff
 
@@ -45,9 +47,13 @@ function Cloud() {
 }
 
 Cloud.prototype.init = function () {
-    this.url = this.determineCloudDomain();
+    this.urlBasePath = '/api/v1';
+    this.url = this.determineCloudDomain() + this.urlBasePath;
     this.username = null;
 };
+
+// Projects larger than this are rejected.
+Cloud.MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 Cloud.prototype.knownDomains = {
     'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
@@ -144,6 +150,8 @@ Cloud.prototype.genericError = function () {
     throw new Error(Cloud.genericErrorMessage);
 };
 
+
+
 // Low level functionality
 
 Cloud.prototype.request = function (
@@ -156,12 +164,16 @@ Cloud.prototype.request = function (
     body) {
 
     var request = new XMLHttpRequest(),
-        myself = this;
+        myself = this,
+        fullPath = this.url +
+            (path.indexOf('%username') > -1 ?
+                path.replace('%username', encodeURIComponent(this.username)) :
+                path);
 
     try {
         request.open(
             method,
-            this.url + path,
+            fullPath,
             true
         );
         request.setRequestHeader(
@@ -224,7 +236,7 @@ Cloud.prototype.withCredentialsRequest = function (
                 myself.request(
                     method,
                     // %username is replaced by the actual username
-                    path.replace('%username', encodeURIComponent(username)),
+                    path,
                     onSuccess,
                     onError,
                     errorMsg,
@@ -249,7 +261,7 @@ Cloud.prototype.initSession = function (onSuccess) {
         'POST',
         '/init',
         function () { myself.checkCredentials(onSuccess); },
-        nop,
+        function () {},
         null,
         true
     );
@@ -267,7 +279,7 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
             	onSuccess.call(
                     null,
                     user.username,
-                    user.isadmin,
+                    user.role,
                     response ? JSON.parse(response) : null
                 );
             }
@@ -369,7 +381,6 @@ Cloud.prototype.changePassword = function (
         onError,
         'Could not change password'
     );
-
 };
 
 Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
@@ -395,79 +406,19 @@ Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
 
 // Projects
 
-Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
+Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
+    // Expects a body object with the following paramters:
+    // xml, media, thumbnail, remixID (optional), notes (optional)
     var myself = this;
     this.checkCredentials(
         function (username) {
             if (username) {
-                var xml = ide.serializer.serialize(ide.stage),
-                    thumbnail = normalizeCanvas(
-                    	ide.stage.thumbnail(
-                        	SnapSerializer.prototype.thumbnailSize
-                    )).toDataURL(),
-                    body, mediaSize, size;
-
-                ide.serializer.isCollectingMedia = true;
-                body = {
-                    notes: ide.projectNotes,
-                    xml: xml,
-                    media: ide.hasChangedMedia ?
-                        ide.serializer.mediaXML(ide.projectName) : null,
-                    thumbnail: thumbnail,
-                    remixID: ide.stage.remixID
-                };
-                ide.serializer.isCollectingMedia = false;
-                ide.serializer.flushMedia();
-
-                mediaSize = body.media ? body.media.length : 0;
-                size = body.xml.length + mediaSize;
-                if (mediaSize > 10485760) {
-                    new DialogBoxMorph().inform(
-                        'Snap!Cloud - Cannot Save Project',
-                        'The media inside this project exceeds 10 MB.\n' +
-                            'Please reduce the size of costumes or sounds.\n',
-                        ide.world(),
-                        ide.cloudIcon(null, new Color(180, 0, 0))
-                    );
-                    throw new Error('Project media exceeds 10 MB size limit');
-                }
-
-                // check if serialized data can be parsed back again
-                try {
-                    ide.serializer.parse(body.xml);
-                } catch (err) {
-                    ide.showMessage(
-                    	'Serialization of program data failed:\n' + err
-                    );
-                    throw new Error(
-                    	'Serialization of program data failed:\n' + err
-                    );
-                }
-                if (body.media !== null) {
-                    try {
-                        ide.serializer.parse(body.media);
-                    } catch (err) {
-                        ide.showMessage(
-                        	'Serialization of media failed:\n' + err
-                        );
-                        throw new Error(
-                        	'Serialization of media failed:\n' + err
-                        );
-                    }
-                }
-                ide.serializer.isCollectingMedia = false;
-                ide.serializer.flushMedia();
-
-                ide.showMessage(
-                	'Uploading ' + Math.round(size / 1024) + ' KB...'
-                );
-
                 myself.request(
                     'POST',
                     '/projects/' +
                         encodeURIComponent(username) +
                         '/' +
-                        encodeURIComponent(ide.projectName),
+                        encodeURIComponent(projectName),
                     onSuccess,
                     onError,
                     'Project could not be saved',
@@ -620,12 +571,11 @@ Cloud.prototype.getProjectVersionMetadata = function (
 
 Cloud.prototype.getRemixes = function (
 	username,
+    projectName,
     page,
     pageSize,
-    projectName,
     onSuccess,
-    onError,
-    withThumbnail
+    onError
 ) {
     var path = '/projects/' +
                 encodeURIComponent(username) + '/' +
@@ -776,3 +726,375 @@ Cloud.prototype.updateProjectName = function (
     );
 };
 
+// Collections
+
+Cloud.prototype.newCollection = function (
+        collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/%username/collections/' + encodeURIComponent(collectionName),
+        onSuccess,
+        onError,
+        'Could not create collection'
+    );
+};
+
+Cloud.prototype.getCollectionMetadata = function (
+        collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.request(
+        'GET',
+        '/users/' +
+            (collectionUsername ?
+                encodeURIComponent(collectionUsername) :
+                '%username') +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not fetch metadata for ' + collectionName
+    );
+};
+
+Cloud.prototype.getCollectionProjects = function (
+    collectionUsername,
+    page,
+    pageSize,
+    collectionName,
+    onSuccess,
+    onError,
+    withThumbnail
+) {
+    var path = '/users/' +
+                (collectionUsername ?
+                    encodeURIComponent(collectionUsername) :
+                    '%username') +
+                '/collections/' + encodeURIComponent(collectionName) +
+                '/projects';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    if (withThumbnail) {
+        path += (page ? '&' : '?') + 'withthumbnail=true';
+    }
+
+    this.request(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch projects'
+    );
+};
+
+Cloud.prototype.setCollectionThumbnail = function (
+    collectionUsername,
+    collectionName,
+    thumbnailId,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/thumbnail?id=' + encodeURIComponent(thumbnailId),
+        onSuccess,
+        onError,
+        'Could not set project thumbnail'
+    );
+};
+
+Cloud.prototype.updateCollectionDescription = function (
+	collectionUsername,
+    collectionName,
+    description,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not update collection description',
+        false, // wants raw response
+        JSON.stringify({ description: description })
+    );
+};
+
+Cloud.prototype.updateCollectionName = function (
+	collectionUsername,
+    collectionName,
+    newName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata',
+        onSuccess,
+        onError,
+        'Could not update collection name',
+        false, // wants raw response
+        JSON.stringify({ name: newName })
+    );
+};
+
+Cloud.prototype.shareCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?shared=true',
+        onSuccess,
+        onError,
+        'Could not share collection'
+    );
+};
+
+Cloud.prototype.unshareCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?shared=false&published=false',
+        onSuccess,
+        onError,
+        'Could not unshare collection'
+    );
+};
+
+Cloud.prototype.publishCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?published=true',
+        onSuccess,
+        onError,
+        'Could not publish collection'
+    );
+};
+
+Cloud.prototype.unpublishCollection = function (
+	collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/metadata?published=false',
+        onSuccess,
+        onError,
+        'Could not unpublish collection'
+    );
+};
+
+Cloud.prototype.addProjectToCollection = function (
+        collectionUsername,
+    collectionName,
+    projectUsername,
+    projectName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/projects',
+        onSuccess,
+        onError,
+        'Could not add project to collection',
+        false, // wants raw response
+        JSON.stringify({
+            username: projectUsername,
+            projectname: projectName
+        })
+    );
+};
+
+Cloud.prototype.removeProjectFromCollection = function (
+        collectionUsername,
+    collectionName,
+    projectId,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/projects/' + encodeURIComponent(projectId),
+        onSuccess,
+        onError,
+        'Could not remove project from collection'
+    );
+};
+
+Cloud.prototype.getUserCollections = function (
+        collectionUsername,
+    page,
+    pageSize,
+    searchTerm,
+    onSuccess,
+    onError
+) {
+    this[(collectionUsername !== this.username) ?
+            'request' :
+            'withCredentialsRequest'](
+        'GET',
+        '/users/' +
+            (collectionUsername ?
+                encodeURIComponent(collectionUsername) :
+                '%username') +
+            '/collections?' +
+            this.encodeDict(
+                page > 0 ?
+                    {
+                        page: page,
+                        pagesize: pageSize || 16,
+                        matchtext:
+                            searchTerm ? encodeURIComponent(searchTerm) : ''
+                    } : {}
+            ),
+        onSuccess,
+        onError,
+        'Could not fetch collections'
+    );
+};
+
+Cloud.prototype.getCollectionsContainingProject = function (
+        username,
+    projectName,
+    page,
+    pageSize,
+    onSuccess,
+    onError
+) {
+    var path = '/projects/' +
+                encodeURIComponent(username) + '/' +
+                encodeURIComponent(projectName) + '/collections';
+
+    if (page) {
+        path += '?page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    this.request(
+        'GET',
+        path,
+        onSuccess,
+        onError,
+        'Could not fetch collections for project ' + projectName
+    );
+};
+
+Cloud.prototype.getCollections = function (
+        page,
+    pageSize,
+    searchTerm,
+    onSuccess,
+    onError
+) {
+    var dict = {
+        page: page,
+        pagesize: page ? pageSize || 16 : '',
+    };
+
+    if (searchTerm) { dict.matchtext = encodeURIComponent(searchTerm); }
+
+    this.request(
+        'GET',
+        '/collections?' + this.encodeDict(dict),
+        onSuccess,
+        onError,
+        'Could not fetch collections'
+    );
+};
+
+Cloud.prototype.deleteCollection = function (
+        collectionUsername,
+    collectionName,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName),
+        onSuccess,
+        onError,
+        'Could not remove collection'
+    );
+};
+
+Cloud.prototype.addEditorToCollection = function (
+        collectionUsername,
+    collectionName,
+    editorUsername,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/editors',
+        onSuccess,
+        onError,
+        'Could not add editor to collection',
+        false, // wants raw response
+        JSON.stringify({
+            editor_username: editorUsername,
+        })
+    );
+};
+
+Cloud.prototype.removeEditorFromCollection = function (
+        collectionUsername,
+    collectionName,
+    editorUsername,
+    onSuccess,
+    onError
+) {
+    this.withCredentialsRequest(
+        'DELETE',
+        '/users/' + encodeURIComponent(collectionUsername) +
+            '/collections/' + encodeURIComponent(collectionName) +
+            '/editors/' + encodeURIComponent(editorUsername),
+        onSuccess,
+        onError,
+        'Could not remove editor from collection'
+    );
+};

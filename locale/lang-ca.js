@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2018-06-16', // this, too, will appear in the Translators tab
+        '2019-06-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -360,8 +360,10 @@ SnapTranslator.dict.ca = {
         'mostra',
     'hide':
         'amaga',
-    'go to front':
-        'vés al front',
+    'shown?':
+        'visible?',
+    'go to %layer layer':
+        'vés a la capa del %layer',
     'go back %n layers':
         'vés %n capes darrera',
 
@@ -409,12 +411,18 @@ SnapTranslator.dict.ca = {
         'baixa el llapis',
     'pen up':
         'puja el llapis',
+    'pen down?':
+        'llapis abaixat?',
     'set pen color to %clr':
         'fixa el color del llapis a %clr',
     'change pen color by %n':
         'augmenta en %n el color del llapis',
     'set pen color to %n':
         'fixa el color del llapis a %n',
+    'change pen %hsva by %n':
+        'augmenta %hsva del llapis en %n',
+    'set pen %hsva to %n':
+        'fixa %hsva del llapis a %n',
     'change pen shade by %n':
         'augmenta en %n la intensitat del llapis',
     'set pen shade to %n':
@@ -423,6 +431,12 @@ SnapTranslator.dict.ca = {
         'augmenta en %n la mida del llapis',
     'set pen size to %n':
         'fixa la mida del llapis en %n',
+    'set background color to %clr':
+        'fixa el color del fons a %clr',
+    'change background %hsva by %n':
+        'augmenta %hsva del fons en %n',
+    'set background %hsva to %n':
+        'fixa %hsva del fons a %n',
     'stamp':
         'estampa',
     'fill':
@@ -469,10 +483,14 @@ SnapTranslator.dict.ca = {
         'repeteix %n vegades %loop',
     'repeat until %b %loop':
         'repeteix fins %b %loop',
+    'for %upvar = %n to %n %cla':
+        'per %upvar = %n fins %n %cla',
     'if %b %c':
         'si %b llavors %c',
     'if %b %c else %c':
         'si %b llavors %c si no %c',
+    'if %b then %s else %s':
+        'si %b llavors %s si no %s',
     'report %s':
         'retorna %s',
     'stop %stopChoices':
@@ -555,14 +573,34 @@ SnapTranslator.dict.ca = {
         'mode turbo?',
     'set turbo mode to %b':
         'posa el mode turbo a %b',
-
+    'is %setting on?':
+        'paràmetre %setting actiu?',
+    'set %setting to %b':
+        'fixa el paràmetre %setting a %b',
+    'turbo mode':
+        'mode turbo',
+    'flat line ends':
+        'puntes de llapis planes',
+    'video %vid on %self':
+        '%vid del vídeo en %self',
+    'motion':
+        'moviment',
+    'snap':
+        'instantània',
+    'set video transparency to %n':
+        'fixa la transparència del vídeo a %n',
+    'video capture':
+        'captura de vídeo',
+    'mirror video':
+        'mirall sobre el vídeo',
     'filtered for %clr':
         'filtrat per a %clr',
     'stack size':
         'mida de la pila',
     'frames':
         'frames',
-
+    'object %self':
+        'objecte %self',
     // operators:
     '%n mod %n':
         'residu de dividir %n entre %n',
@@ -583,7 +621,7 @@ SnapTranslator.dict.ca = {
     'false':
         'fals',
     'join %words':
-        'unir %words',
+        'uneix %words',
     'split %s by %delim':
         'divideix %s per %delim',
     'hello':
@@ -632,6 +670,8 @@ SnapTranslator.dict.ca = {
     // lists:
     'list %exp':
         'llista %exp',
+    'numbers from %n to %n':
+        'nombres des de %n a %n',
     '%s in front of %l':
         'afegeix %s davant de %l',
     'item %idx of %l':
@@ -644,6 +684,28 @@ SnapTranslator.dict.ca = {
         '%l conté %s',
     'thing':
         'cosa',
+    'is %l empty?':
+        '%l buida?',
+    'map %repRing over %l':
+        'mapeja %repRing sobre %l',
+    'keep items %predRing from %l':
+        'manté els elements on %predRing de %l',
+    'find first item %predRing in %l':
+        'primer element on %predRing de %l',
+    'combine %l using %repRing':
+        'combina els elements de %l amb %repRing',
+    '%blitz map %repRing over %l':
+        '%blitz mapeja %repRing sobre %l',
+    '%blitz keep items %predRing from %l':
+        '%blitz manté els elements on %predRing de %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz primer element on %predRing de %l',
+    '%blitz combine %l using %repRing':
+        '%blitz combina els elements de %l amb %repRing',
+    'for each %upvar in %l %cla':
+        'per cada %upvar de %l %cla',
+    'item':
+        'element',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
@@ -735,10 +797,6 @@ SnapTranslator.dict.ca = {
         'Blocs',
     'For all Sprites':
         'Per a tots els objectes', 
-    'Import tools':
-        'Importa eines',
-    'load the official library of\npowerful blocks':
-        'Carrega la llibreria\noficial de blocs avançats',
     'Libraries...':
         'Llibreries...',
     'Import library':
@@ -860,11 +918,11 @@ SnapTranslator.dict.ca = {
     'check for smooth, predictable\nanimations across computers':
         'marqueu per aconseguir unes animacions\nmés suaus i a velocitat previsible en màquines diferents',
     'Flat line ends':
-        'Línies del llapis rectes',
+        'Puntes de llapis planes',
     'check for flat ends of lines':
-        'marqueu per fer que els\nextrems de les línies del\nllapis siguin rectes',
+        'marqueu per fer que\nles puntes dels llapis\nsiguin planes',
     'uncheck for round ends of lines':
-        'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
+        'desmarqueu per fer que\nles puntes dels llapis\nsiguin arrodonides',
     'Ternary Boolean slots':
         'Tres opcions per a les ranures booleanes',
     'Camera support':
@@ -899,7 +957,13 @@ SnapTranslator.dict.ca = {
         'ajuda...',
     'relabel...':
         'blocs similars...',
-    'duplicate':
+    'compile':
+        'compila',
+    'experimental!\nmake this reporter fast and uninterruptable\nCAUTION: Errors in the ring\ncan break your Snap! session!':
+    'és experimental!\naccelera aquest reportador executant-lo ininterrompudament\nCOMPTE: Errades en les condicions d\'entrada\npodrien penjar la sessió d\'Snap!',
+    'uncompile':
+        'descompila',
+     'duplicate':
         'duplica\'m',
     'make a copy\nand pick it up':
         'crea una còpia\ni fes-la servir',
@@ -929,6 +993,18 @@ SnapTranslator.dict.ca = {
         'esborra la definició d\'aquest bloc',
     'edit...':
         'edita...',
+    'duplicate block definition...':
+        'duplica la definició d\'aquest bloc',
+    'Same Named Blocks':
+        'Blocs amb el mateix nom',
+    'Another custom block with this name exists.\n':
+        'Ja existeix un altre block personalitzat amb el mateix nom.\n',
+    'Would you like to replace it?':
+        'Esteu segur que voleu reemplaçar-lo?',
+    'Local Block(s) in Global Definition':
+        'Blocs locals en una definició global',
+    'This global block definition contains one or more\nlocal custom blocks which must be removed first.':
+        'Aquest bloc global té un o més\nblocs locals. No poden estar dins la definició del bloc global.',
 
     // sprites:
     'edit':
@@ -1071,7 +1147,7 @@ SnapTranslator.dict.ca = {
     'Delete Project':
         'Esborra un projecte',
     'Are you sure you want to delete':
-        'Segur que vols esborrar',
+        'Esteu segur que voleu esborrar',
     'rename...':
         'canvia el nom...',
     'Recover':
@@ -1150,7 +1226,7 @@ SnapTranslator.dict.ca = {
     'Delete Custom Block':
         'Esborra el bloc personalitzat',
     'block deletion dialog text':
-        'Segur que vols esborrar la definició\nd\'aquest bloc?',
+        'Esteu segur que voleu esborrar la definició\nd\'aquest bloc?',
 
 
     // input dialog
@@ -1234,6 +1310,10 @@ SnapTranslator.dict.ca = {
         'Valor mínim del lliscador...',
     'Slider maximum value':
         'Valor màxim del lliscador...',
+    'raw data...':
+        'importa sense processar...',
+    'import without attempting to\nparse or format data':
+        'importa contingut sense tractar-lo ni donar-li format',
 
     // list watchers
     'length: ':
@@ -1268,6 +1348,16 @@ SnapTranslator.dict.ca = {
     'Empty':
         'Buit',
 
+    'front':
+        'davant',
+    'back':
+        'darrere',
+
+    // pen
+    'hue':
+        'tonalitat',
+    'transparency':
+        'transparència',
     // graphical effects
     'color':
         'color',
@@ -1415,6 +1505,8 @@ SnapTranslator.dict.ca = {
     // delimiters
     'letter':
         'lletra',
+    'word':
+        'paraula',
     'whitespace':
         'espai en blanc',
     'line':
@@ -1461,6 +1553,8 @@ SnapTranslator.dict.ca = {
         'àncora',
     'parent':
         'pare',
+    'temporary?':
+        'temporal?',
     'children':
         'fill',
     'clones':
@@ -1469,6 +1563,10 @@ SnapTranslator.dict.ca = {
         'altres clons',
     'dangling?':
         'penjat?',
+    'draggable':
+        'arrossegable?',
+    'rotation style':
+        'estil de rotació',
     'rotation x':
         'rotació x',
     'rotation y':
@@ -1594,7 +1692,7 @@ SnapTranslator.dict.ca = {
     'now connected.':
         'heu entrat.',
     'disconnected.':
-        'desconnectats.',
+        'desconnectat.',
     'Reset password':
         'Recupera la contrasenya',
     'Reset Password...':
@@ -1711,6 +1809,9 @@ SnapTranslator.dict.ca = {
         'obre una finestra\namb una imatge del comentari',
     'undo':
         'desfés',
+//Paint editors
+    'Vector Paint Editor':
+        'Editor vectorial d\'imatges',
     'Brush size':
         'Gruix del pinzell',
     'Constrain proportions of shapes?\n(you can also hold shift)':
@@ -1721,20 +1822,34 @@ SnapTranslator.dict.ca = {
         'Pinzell\n(dibuix lliure)',
     'Line tool\n(shift: vertical/horizontal)':
         'Línies\n(majúscula: vertical/horitzontal)',
+    'Line tool\n(shift: constrain to 45º)':
+        'Línies\n(majúscula: només angles de 45º)',
     'Stroked Rectangle\n(shift: square)':
         'Rectangle traçat\n(majúscula: quadrat)',
     'Filled Rectangle\n(shift: square)':
         'Rectangle ple\n(majúscula: quadrat)',
+    'Rectangle\n(shift: square)':
+        'Rectangle\n(majúscula: quadrat)',
     'Stroked Ellipse\n(shift: circle)':
         'El·lipse traçada\n(majúscula: circumferència)',
     'Filled Ellipse\n(shift: circle)':
         'El·lipse plena\n(majúscula: cercle)',
+    'Ellipse\n(shift: circle)':
+        'El·lipse\n(majúscula: cercle)',
+    'Selection tool':
+        'Eina de selecció',
+    'Closed brush\n(free draw)':
+        'Dibuix tancat\n(pinzell lliure)',
+    'Paint a shape\n(shift: edge color)':
+        'Coloreja la forma\n(majúscula: el traçat)',
     'Fill a region':
         'Ompla l\'àrea',
     'Set the rotation center':
         'Estableix el centre de rotació',
     'Pipette tool\n(pick a color anywhere)':
         'Capturador de color\n(captura el color de qualsevol lloc)',
+    'Polygon':
+        'Polígon',
     'Paint Editor':
         'Editor d\'imatges',
     'square':
@@ -1797,6 +1912,35 @@ SnapTranslator.dict.ca = {
         'goma d\'esborrar',
     'pipette':
         'pipeta',
+    'Pipette tool\n(pick a color from anywhere\nshift: fill color)':
+        'Capturador de color\n(captura un color de qualsevol lloc\nMajúscules: pel color d\'emplenament)',
+    'Edge color\n(left click)':
+        'Color del Traç\n(botó esquerre)',
+    'Fill color\n(right click)':
+        'Color d\'Emplenament\n(botó dret)',
+    'Bitmap':
+        'Mapa de bits',
+    'Top':
+        'A dalt',
+    'Bottom':
+        'A baix',
+    'Up':
+        'Amunt',
+    'Down':
+        'Avall',
+    'This will erase your current drawing.\n':
+        'El canvi d\'editor esborrarà el dibuix actual.\n',
+    'Are you sure you want to continue?':
+        'Esteu segur que voleu continuar?',
+    'Switch to vector editor?':
+        'Voleu canviar a l\'editor vectorial?',
+    'This will convert your vector objects into\nbitmaps,':
+        'El canvi convertirà els objectes vectorials en\nun mapa de bits,',
+    ' and you will not be able to convert\nthem back into vector drawings.\n':
+        ' i no es podrà tornar enrere\nni recuperar els objectes vectorials.\n',
+    'Convert to bitmap?':
+        'Voleu canviar a mapa de bits?',
+// més símbols
     'speechBubble':
         'bafarada',
     'speechBubbleOutline':
@@ -1819,6 +1963,39 @@ SnapTranslator.dict.ca = {
         'contorn de fletxa a la dreta',
     'robot':
         'robot',
+    'globe':
+        'món',
+    'stepForward':
+        'pas endavant',
+    'cross':
+        'creu',
+    'loop':
+        'bucle',
+    'turnBack':
+        'torna enrere',
+    'turnForward':
+        'torna endavant',
+    'magnifyingGlass':
+        'lupa',
+    'magnifierOutline':
+        'contorn de lupa',
+    'selection':
+        'selecció',
+    'polygon':
+        'polígon',
+    'closedBrush':
+        'pinzell tancat',
+    'camera':
+        'càmera',
+    'location':
+        'localització',
+    'footprints':
+        'petjades',
+    'keyboard':
+        'teclat',
+    'keyboardFilled':
+        'plantilla de teclat',
+//
     'turn pen trails into new costume...':
         'crea un nou vestit amb la imatge dibuixada…',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
@@ -1831,10 +2008,6 @@ SnapTranslator.dict.ca = {
         'mig',
     'last changed':
         'el darrer modificat',
-    'Are you sure you want to publish':
-        'Segur que vols compartir-ho?',
-    'Are you sure you want to unpublish':
-        'Segur que vols deixar-ho de compartir?',
     'Share Project':
         'Comparteix el Projecte',
     'Unshare Project':
@@ -1849,6 +2022,36 @@ SnapTranslator.dict.ca = {
         'no compartit.',
     'Unshare':
         'Deixa de compartir',
+    'Are you sure you want to unshare':
+        'Esteu segur que voleu deixar de compartir',
+    'Are you sure you want to share':
+        'Esteu segur que voleu compartir',
+    'Publish Project':
+        'Publica el Projecte',
+    'publishing\nproject...':
+        'publicant\nel projecte...',
+    'published.':
+        'publicat.',
+    'Are you sure you want to publish':
+        'Esteu segur que voleu publicar',
+    'Unpublish Project':
+        'Deixar de publicar el Projecte',
+    'unpublishing\nproject...':
+        'deixant de publicar\nel projecte...',
+    'unpublished.':
+        'no publicat',
+    'Publish':
+        'Publica',
+    'Unpublish':
+        'Despublica',
+    'Are you sure you want to unpublish':
+        'Esteu segur que voleu deixar de publicar',
+    'Replace Project':
+        'Substitueix el Projecte',
+    'Are you sure you want to replace':
+        'Esteu segur que voleu substituir el projecte original',
+    'Open Project':
+        'Obre el Projecte',
     'password has been changed.':
         's\'ha canviat la contrasenya.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
@@ -1926,7 +2129,7 @@ SnapTranslator.dict.ca = {
     'experimental -\nunder construction':
         'Experimental -\nen construcció',
     'Table view':
-        'Vista de tabla',
+        'Vista de taula',
     'open in another dialog...':
         'obriu en un altre formulari…',
     'check for multi-column\nlist view support':
@@ -2001,15 +2204,12 @@ SnapTranslator.dict.ca = {
 		'imatge de l\'escenari',
 	'processes':
 		'processos',
-	'map %repRing over %l':
-		'mapeja %repRing sobre %l',
-	'for %upvar in %l %cl':
-		'per cada %upvar dins %l %cl',
 	'show table %l':
 		'mostra la taula %l',
 	'%txtfun of %s':
 		'%txtfun de %s',
-
+    'stick to':
+        'ancora a',
 //IDE Messages
 	'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
 		'entrant en mode desenvolupador.\n\ndeshabilitada la captura d\'errades,\nutilitzeu la consola del navegador\nper veure els errors.',
@@ -2019,6 +2219,8 @@ SnapTranslator.dict.ca = {
 		'llindar per l\'arrossegament',
 	'redo the last undone block drop in this pane':
 		'refés l\'últim moviment\nde blocs desfet',
+    'cloud unavailable without a web server.':
+        'el núvol no està disponible sense un servidor web.',
 
 //costumes and backgrounds
 	'rename background':
@@ -2060,7 +2262,12 @@ SnapTranslator.dict.ca = {
 		'desmarqueu per no llançar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
 	'check to run\nthe edited script\nwhen moving the slider':
 		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
-
+    'Enable command drops in all rings':
+        'Permet arrossegar les comandes dins tots els encapsulaments',
+    'uncheck to disable\ndropping commands in reporter rings':
+        'desmarqueu per deshabilitar\nl\'arrossegament de comandes en\nencapsulaments reportadors',
+    'check to enable\ndropping commands in all rings':
+        'marqueu per habilitar\nl\'arrossegament de comandes en\ntots els encapsulaments',
 //Developer mode menus
 	'user features...':
 		'opcions d\'usuari...',
@@ -2290,5 +2497,203 @@ SnapTranslator.dict.ca = {
     'Camera not supported':
         'Webcam no disponible',
 	'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Comproveu que el navegador està actualitzat\ni la webcam ben configurada. \n\nAlguns navegadors també requereixen\nHTTPS per a utilitzar la càmera.\n\nPodeu provar canviant a l\'adreça el "http://"\nper "https://".'
+        'Comproveu que el navegador està actualitzat\ni la webcam ben configurada. \n\nAlguns navegadors també requereixen\nHTTPS per a utilitzar la càmera.\n\nPodeu provar canviant a l\'adreça el "http://"\nper "https://".',
+    'Uploading ':
+        'Pujant ',
+    'Repeat Password:':
+        'Repeteix la contrasenya:',
+    '%asp at %loc' :
+        '%asp en %loc' ,
+    'sprites':
+        'objectes',
+//Cloud messages
+    'Unverified account: ':
+        'Compte no verificat: ',
+    ' days left':
+        ' dies de termini',
+    'You are now logged in, and your account\nis enabled for three days.\n':
+        'Ara esteu validats, però el vostre compte\nés només vàlid per 3 dies.\n',
+    'Please use the verification link that\nwas sent to your email address when you\nsigned up.\n\n':
+        'Cal usar l\'enllaç de verificació que\ns\'ha enviat al vostre correu quan\nvau registrar l\'usuari',
+    'If you cannot find that email, please\ncheck your spam folder.':
+        'Si no l\'heu rebut,\ncomproveu primer el correu brossa.',
+    'If you still\ncannot find it, please use the "Resend\nVerification Email..." option in the cloud\nmenu.\n\n':
+        'I si no\npodeu trobar-ho, utilitzeu l\'opció de "Torna a enviar\nl\'email de verificació" a les opcions del Núvol\ndel menú d\'Snap!\n\n',
+    'You have ':
+        'Teniu ',
+    ' days left.':
+        ' dies de termini.',
+//micròfon
+    'microphone %audio':
+        '%audio del micròfon',
+    'volume':
+        'volum',
+    'note':
+        'nota',
+    'pitch':
+        'to',
+    'signals':
+        'senyals',
+    'frequencies':
+        'freqüències',
+    'bins':
+        'resolució',
+    'Microphone resolution...':
+        'Resolució del micròfon...',
+    'low':
+        'baixa',
+    'normal':
+        'normal',
+    'high':
+        'alta',
+    'max':
+        'màxima',
+//
+    'play %n Hz for %n secs':
+        'toca %n Hz durant %n segons',
+//libreries
+    'Text Costumes':
+        'Text als vestits',
+    'Provide getters and setters for all GUI-controlled global settings':
+        'Getters i Setters pel paràmetres de configuració de la interfície',
+    'Infinite precision integers, exact rationals, complex':
+        'Números sencers de precisió infinita, racionals exactes i complexos',
+    'Provide 100 selected colors':
+        'Paleta de 100 colors',
+    'Text to speech':
+        'Lector de text',
+    'Animation':
+        'Animacions',
+    'Pixels':
+        'Píxels',
+    'Audio Comp':
+        'Composició d\'audio',
+    '"Bigger" Data':
+        'Treballant amb "Big Data"',
+    'Frequency Distribution Analysis':
+        'Anàlisi de la distribució de freqüències',
+    'World Map':
+        'Mapa del món',
+    'create variables in program':
+        'Creant variables des del programa',
+    'Deal with JSON data':
+        'Tractament de dades JSON',
+    'Parallelization':
+        'Processos en paral·lel',
+    'String processing':
+        'Processant text',
+    'Standard library of powerful blocks (for, map, etc.)':
+        'Llibreria estàndard amb eines generals (for, map, etc.)',
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
+        'Construcció de bucles estàndard (while, until, etc.), construccions "named let" pròpies de Lisp (una generalització dels bucles "for"), iteració funcional (repeticions de crides a una funció) i composició de funcions.',
+    'Some standard functions on lists (append, reverse, etc.)':
+        'Funcions estàndard per a llistes (append, reverse, etc.)',
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
+        'Variació del tipus de dades "llistes" on els elements de la llista no són avaluats fins que s\'utilitzen. D\'aquesta manera es poden construir llistes amb milions d\'elements sense un gran consum de memòria i fins i tot construir llistes de mida infinita. (S\'inclou un bloc d\'exemple que reporta tots els números primers.)',
+    'Versions of +, x, AND, and OR that take more than two inputs.':
+        'Versions dels blocs +, x, AND i OR que tenen més de dues ranures',
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
+        'Una versió ampliada del bloc "URL" que permet treballar amb  crides "POST", "PUT", "DELETE" i "GET" i també triar el protocol "HTTP-HTTPS" i controlar les capçaleres',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
+        'Una de les idees importants en Logo i que va continuar Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.',
+    'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
+        'La mateixa idea que la comanda "switch" en llenguatges tipus C o "cond" en Lisp. Gràcies a Nathan Dinsmore per inventar la idea de tenir un bloc separat per a cada branca!',
+    'Report hand positions from LEAP Motion controller (leapmotion.com).':
+        'Reporta la posició de les mans des de un controlador de moviment LEAP (leapmotion.com).',
+    'Generate costumes from letters or words of text.':
+        'Genera vestits utilitzant lletres, paraules... o qualevol text.',
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
+        'Blocs per establir o reportar el color del llapis en RGB (vermell, verd i blau) o en HSV (tonalitat, saturació i valor).',
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
+        'Executa un programa i, si troba alguna errada, no atura el programa reportant una avís vermell sobre el bloc, sinó que permet definir un altre programa que pugui evitar aquesta errada. També inclou un bloc per enviar missatges d\'errades i també un altra per crear variables de programa i assignar el seu valor.',
+    'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
+        'De forma normal, les ranures només permeten escriure una línia de text. Aquesta llibreria ofereix un sol bloc "Multiline" que accepta múltiples línies de text. Aquest bloc es pot fer servir en altres entrades de text dels blocs per poder adquirir aquest caràcter multilínia',
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
+        'La llei de Eisenberg diu: Des de la programació s\'hauria de poder fer tot allò que es faci des de l\'entorn i les seves funcionalitats i configuració. I viceversa!',
+    'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
+        'Ens ofereix la implementació numèrica de Scheme. Cal habilitar els "Big Nums" (amb el bloc "USE BIGNUMS" a cert) per utilitzar-ho',
+    'to use instead of hue for better selection':
+        'Per poder tenir eines de selecció més ràpides i fàcils',
+    'output text using speech synthesis.':
+        'Gràcies a la síntesi de veu per l\'ordinador podem obtenir audio automàticament llegint un text',
+    'glide, grow and rotate using easing functions.':
+        'Fés llicar, crèixer i girar els objectes utilitzan diferents formes i filtres a les animacions',
+    'manipulate costumes pixel-wise.':
+        'Manipulem els píxels dels vestits',
+    'analyze, manipulate and generate sound samples.':
+        'Analitza, manipula i genera mostres de so',
+    '[EXPERIMENTAL] crunch large lists very fast':
+        '[EXPERIMENTAL] Juga mol ràpid amb llistes llargues',
+    '[EXPERIMENTAL] analyze data for frequency distribution':
+        '[EXPERIMENTAL] Analitza dades i disbribucions de les freqüències',
+    'declare global or sprite-local variables in a script':
+        'Declara i assigna variables (locals o globals) dins els programes',
+    'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
+        'Converteix les cadenes JSON en llistes utilitzant el bloc "listify". Utilitza els blocs de valors i claus per gestionar aquest tipus de llistes',
+    'Run several scripts in parallel and wait until all are done.':
+        'Executa diversos scripts en paral·lel i espereu que hagin acabat els processos abans d\'aturar-se',
+    'Extract substrings of a string in various ways':
+        'Extreu sub-cadenes de texts de diverses formes',
+//
+    'translations...':
+         'traduccions...',
+    'width':
+        'amplada',
+    'height':
+        'alçada',
+    'pixel':
+        'píxel',
+    'pixels':
+        'píxels',
+    '%img of costume %cst':
+        '%img del vestit %cst',
+    'stretch %cst x: %n y: %n %':
+        'estira %cst a x: %n y: %n %',
+    '%eff effect':
+        'efecte %eff',
+    'current':
+        'actual',
+    'play sound %snd at %rate Hz':
+        'toca el so %snd a %rate Hz',
+    '%aa of sound %snd':
+        '%aa del so %snd',
+    'duration':
+        'durada',
+    'length':
+        'longitud',
+    'number of channels':
+        'número de canals',
+    'sample rate':
+        'freqüència de mostreig',
+    'samples':
+        'mostres',
+    'change volume by %n':
+        'augmenta el volum en %n',
+    'set volume to %n %':
+        'fixa el volum a %n %',
+    'change balance by %n':
+        'augmenta el balanç en %n',
+    'set balance to %n':
+        'fixa el balanç a %n',
+    'balance':
+        'balanç',
+    'play frequency %n Hz':
+        'toca la freqüència %n Hz',
+    'stop frequency':
+        'atura la freqüència',
+    'pen %pen':
+        '%pen del llapis',
+    'write %s size %n':
+        'escriu %s de mida %n',
+    'draggable?':
+        'arrossegable?',
+    'frequency':
+        'freqüència',
+    'spectrum':
+        'espectre',
+    'resolution':
+        'resolució',
+    'neg':
+        'oposat'
+
 };

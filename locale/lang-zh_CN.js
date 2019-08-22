@@ -4,7 +4,7 @@
 
     Simplified Chinese translation for SNAP!
 
-    written by 五百刀/邓江华
+    written by 五百刀/邓江华/孟锡峰
 
     Copyright (C) 2016 by Jens Mönig
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2018-01-22',
+        '2019-08-06',
 
     // GUI
     // control bar:
@@ -346,12 +346,22 @@ SnapTranslator.dict.zh_CN = {
         '你好！',
     'Hmm...':
         '嗯……',
+    '%img of costume %cst':
+        '取 %img 于 %cst', 
+    'pixels':
+        '像素',
+    'current':
+        '当前造型',    
+    'stretch %cst x: %n y: %n %':
+        '拉伸 %cst 比例 x: %n y: %n %',               
     'change %eff effect by %n':
         '把 %eff 效果增加 %n',
     'set %eff effect to %n':
         '把 %eff 效果设定为 %n',
     'clear graphic effects':
         '清除所有图形效果',
+    '%eff effect':
+        '%eff 效果',        
     'change size by %n':
         '把角色的大小增加 %n',
     'set size to %n %':
@@ -362,8 +372,14 @@ SnapTranslator.dict.zh_CN = {
         '显示',
     'hide':
         '隐藏',
-    'go to front':
-        '移至最上层',
+    'shown?':
+        '已显示?',
+    'go to %layer layer':
+        '移至 %layer 层',
+    'front':
+        '顶',
+    'back':
+        '底',        
     'go back %n layers':
         '下移 %n 层',
 
@@ -621,11 +637,37 @@ SnapTranslator.dict.zh_CN = {
     'play sound %snd until done':
         '播放声音 %snd 直到播放完毕',
     'stop all sounds':
-        '停止所有声音',
+        '停止所有声音',     
     'rest for %n beats':
         '停止 %n 拍',
+    'play sound %snd at %rate Hz':
+        '播放声音 %snd 于频率 %rate 赫兹',        
     'play note %note for %n beats':
-        '弹奏音符 %note 拍长 %n',
+        '弹奏音符 %note 持续 %n 拍',
+    '%aa of sound %snd':
+        '取 %aa 于声音 %snd',
+    'duration':
+        '持续时间',
+    'length':
+        '长度',
+    'number of channels':
+        '通道数',
+    'sample rate':
+        '样本频率',
+    'samples':
+        '样本数据',          
+    'change volume by %n':
+        '把音量增加 %n',
+    'set volume to %n %':
+        '把音量设定为 %n %',  
+    'volume':
+        '音量',
+    'change balance by %n':
+        '把声音平衡增加 %n',
+    'set balance to %n':
+        '设置声音平衡为 %n',
+    'balance':
+        '声音平衡',                       
     'set instrument to %inst':
         '将乐器设定为 %inst',
     'change tempo by %n':
@@ -634,16 +676,32 @@ SnapTranslator.dict.zh_CN = {
         '把节奏设定为 %n',
     'tempo':
         '节奏',
+    'play frequency %n Hz':
+        '演奏频率 %n 赫兹',
+    'stop frequency':
+        '停止演奏频率',        
 
     // pen:
     'clear':
         '清空',
     'pen down':
         '落笔',
+    'pen down?':
+        '画笔已落下?',        
     'pen up':
         '抬笔',
     'set pen color to %clr':
-        '把画笔的颜色设定为 %clr',
+        '把画笔的颜色值设定为 %clr',        
+    'change pen %hsva by %n':
+        '把画笔的 %hsva 增加 %n',
+    'set pen %hsva to %n':
+        '把画笔的 %hsva 设定为 %n',        
+    'hue':
+        '色调',
+    'transparency':
+        '透明度',
+    'pen %pen':
+        '画笔的 %pen',        
     'change pen color by %n':
         '把画笔的颜色值增加 %n',
     'set pen color to %n':
@@ -656,10 +714,18 @@ SnapTranslator.dict.zh_CN = {
         '把画笔的大小增加 %n',
     'set pen size to %n':
         '把画笔的大小设定为 %n',
+    'set background color to %clr':
+        '把背景色设置为 %clr',
+    'change background %hsva by %n':
+        '把背景的 %hsva 增加 %n',        
+    'set background %hsva to %n':
+        '把背景的 %hsva 设定为 %n',        
     'stamp':
         '图章',
     'fill':
         '填充',
+    'write %s size %n':
+        '写字 %s 字号 %n',        
     'tip':
         '尖端',
     'middle':
@@ -682,6 +748,10 @@ SnapTranslator.dict.zh_CN = {
         '鼠标碰到',
     'mouse-departed':
         '鼠标离开',
+    'scrolled-up':
+        '向上滚动滚轮',
+    'scrolled-down':
+        '向下滚动滚轮',         
     'when %b':
         '当 %b',
     'when I receive %msgHat':
@@ -701,15 +771,19 @@ SnapTranslator.dict.zh_CN = {
     'wait until %b':
         '直到 %b 前都等待',
     'forever %loop':
-        '重复执行 %lop',
+        '重复执行 %loop',
     'repeat %n %loop':
-        '重复执行 %n %loop',
+        '重复执行 %n 次 %loop',
     'repeat until %b %loop':
         '重复执行直到 %b %loop',
+    'for %upvar = %n to %n %cla':
+        '重复执行 因子 %upvar 从 %n 到 %n %cla',        
     'if %b %c':
         '如果 %b %c',
     'if %b %c else %c':
         '如果 %b %c 否则 %c',
+    'if %b then %s else %s':
+        '如果 %b 返回 %s 否则 %s',        
     'report %s':
         '报告 %s',
     'stop %stopChoices':
@@ -776,6 +850,14 @@ SnapTranslator.dict.zh_CN = {
         '按下了鼠标？',
     'key %key pressed?':
         '按下了 %key 键？',
+    '%rel to %dst':
+        '%rel 到 %dst',    
+    '%asp at %loc' :
+        '%asp 于 %loc',    
+    'sprites':
+        '角色',
+    'object %self':
+        '对象 %self',                
     'distance to %dst':
         '到 %dst 的距离',
     'reset timer':
@@ -818,6 +900,40 @@ SnapTranslator.dict.zh_CN = {
         '时间戳',
     'day of week':
         '星期几',
+    'to':
+        '到',
+    'at':
+        '于',
+    'microphone %audio':
+        '麦克风 %audio',   
+    'note':
+        '音符',
+    'frequency':
+        '频率',
+    'spectrum':
+        '声谱',
+    'resolution':
+        '分辨率',
+    'video %vid on %self':
+        '视频 %vid 对 %self',
+    'snap':
+        '快照',
+    'motion':
+        '动作',
+    'set video transparency to %n':
+        '把视频透明度设置为 %n',       
+    'is %setting on?':
+        '%setting 已启用?',
+    'set %setting to %b':
+        '设置 %setting 为 %b',        
+    'turbo mode':
+        '超级模式',
+    'flat line ends':
+        '平头线条',
+    'video capture':
+        '视频捕捉',     
+    'mirror video':
+        '视频镜像',                                                 
 
     // operators:
     '%n mod %n':
@@ -908,6 +1024,22 @@ SnapTranslator.dict.zh_CN = {
         '把 %s 插入到第 %idx 项 %l',
     'replace item %idx of %l with %s':
         '把第 %idx 项 %l 替换为 %s',
+    'numbers from %n to %n':
+        '从 %n 到 %n 的数字',
+    'is %l empty?':
+        '%l 为空?',
+    'map %repRing over %l':
+        '映射 %repRing 数据来源 %l', 
+    'keep items %predRing from %l':
+        '保留满足条件 %predRing 的数据,来源 %l',  
+    'find first item %predRing in %l':
+        '满足条件 %predRing 的第一个数据,来源 %l',    
+    'combine %l using %repRing':
+        '合并 %l 方法为 %repRing',      
+    'for each %upvar in %l %cla':
+        '逐个执行 %upvar 来自 %l %cla',
+    'item':
+        '项目',                                      
 
     // other
     'Make a block':
@@ -923,6 +1055,8 @@ SnapTranslator.dict.zh_CN = {
         '官方网站',
     'Download source':
         '下载源代码',
+    'Camera support':
+        '摄像头支持',
     'Switch back to user mode':
         '回到用户模式',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
@@ -1448,6 +1582,8 @@ SnapTranslator.dict.zh_CN = {
     // custom blocks:
     'delete block definition...':
         '删除积木定义…',
+    'duplicate block definition...':
+        '复制积木定义…',
     'edit...':
         '编辑…',
 
@@ -1814,18 +1950,20 @@ SnapTranslator.dict.zh_CN = {
         '下(180)',
     'random':
         '任意',
-    'random position':
-        '任意位置',
+    'distance':
+        '距离',
 
     // collision detection
     'mouse-pointer':
         '鼠标指针',
+    'random position':
+        '任意位置',
+    'center':
+        '舞台中心',
     'edge':
         '边缘',
     'pen trails':
         '画笔轨迹',
-    'center':
-        '舞台中心',
 
     // costumes
     'Turtle':
@@ -1845,7 +1983,7 @@ SnapTranslator.dict.zh_CN = {
     'mosaic':
         '马赛克',
     'saturation':
-        '饱和度',
+        '饱和',
     'brightness':
         '亮度',
     'ghost':
@@ -2004,10 +2142,6 @@ SnapTranslator.dict.zh_CN = {
         '判断',
     'sprite':
         '角色',
-    'costume':
-        '造型',
-    'sound':
-        '声音',     
 
     // list indices
     'last':
@@ -2016,8 +2150,6 @@ SnapTranslator.dict.zh_CN = {
         '任意',
 
     // attributes
-    'my':
-        '属性',
     'neighbors':
         '邻居',
     'self':
@@ -2027,7 +2159,7 @@ SnapTranslator.dict.zh_CN = {
     'parts':
         '组件',
     'anchor':
-        '组合后角色',
+        '组合母体',
     'parent':
         '母角色',
     'children':
@@ -2036,6 +2168,10 @@ SnapTranslator.dict.zh_CN = {
         '克隆',
     'other clones':
         '其他克隆',
+    'costumes':
+        '造型',
+    'sounds':
+        '声音',
     'dangling?':
         '是否悬垂？',
     'rotation x':
@@ -2046,17 +2182,17 @@ SnapTranslator.dict.zh_CN = {
         '中心点x坐标',
     'center y':
         '中心店y坐标',
+    'pen is down?':
+        '画笔已落下？',
     'name':
         '名字',
     'stage':
         '舞台',
-    'distance':
-        '距离',
-    'costumes':
-        '造型',
-    'sounds':
-        '声音',   
-
+    'width':
+        '宽度',
+    'height':
+        '高度',
+                
     // Paint.js
     'Paint Editor':
         '画板',
@@ -2103,6 +2239,10 @@ SnapTranslator.dict.zh_CN = {
     'expecting':
         '此处要求填写',
     'input(s), but getting':
-        '个输入项，但实际得到输入项个数是'
+        '个输入项，但实际得到输入项个数是',    		
+    'Vector':
+        '矢量',
+    'Bitmap':
+        '位图'        
 
 };

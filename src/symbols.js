@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2019-January-14';
+modules.symbols = '2019-February-07';
 
 var SymbolMorph;
 
@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'loop',
+            'globe',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -141,7 +141,8 @@ SymbolMorph.prototype.names = [
     'location',
     'footprints',
     'keyboard',
-    'keyboardFilled'
+    'keyboardFilled',
+    'globe'
 ];
 
 // SymbolMorph instance creation:
@@ -339,6 +340,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolKeyboard(canvas, aColor);
     case 'keyboardFilled':
         return this.drawSymbolKeyboardFilled(canvas, aColor);
+    case 'globe':
+        return this.drawSymbolGlobe(canvas, aColor);
     default:
         return canvas;
     }
@@ -1825,5 +1828,39 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
            }
       }
     ctx.fillRect(u * 4, u * 7, k * 4, k);
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolGlobe = function (canvas, color) {
+    // answer a canvas showing a circle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 30, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
+    ctx.stroke();
+
+/* // more detailed version, commmented out
+    ctx.moveTo(l, w / 3);
+    ctx.lineTo(w - l, w / 3);
+    ctx.stroke();
+    ctx.moveTo(l, 2 * w / 3);
+    ctx.lineTo(w - l, 2 * w / 3);
+    ctx.stroke();
+*/
+
+    // single line version, looks better when small:
+    ctx.moveTo(l, w / 2);
+    ctx.lineTo(w - l, w / 2);
+    ctx.stroke();
+
+    ctx.moveTo(w / 2, 0);
+    ctx.arcTo(0, w / 2, w / 2, w, w * 0.75);
+    ctx.stroke();
+    ctx.moveTo(w / 2, 0);
+    ctx.arcTo(w, w / 2, w / 2, w, w * 0.75);
+    ctx.stroke();
     return canvas;
 };

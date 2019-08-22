@@ -181,16 +181,16 @@ SnapTranslator.dict.id = {
     'language_name':
         'Bahasa Indonesia', // the name as it should appear in the language menu
     'language_translator':
-        'Alexander Raphael Liu', // your name for the Translators tab
+        'Alexander Raphael Liu, Emmanuella Rumanti', // your name for the Translators tab
     'translator_e-mail':
         'raphaxander@gmail.com', // optional
     'last_changed':
-        '2016-5-2', // this, too, will appear in the Translators tab
+        '2019-01-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'tak bernama',
+        'tak berjudul',
     'development mode':
         'mode percobaan',
 
@@ -214,11 +214,11 @@ SnapTranslator.dict.id = {
     'Lists':
         'Daftar',
     'Other':
-        'Lain-lain',
+        'Lainnya',
 
     // editor:
     'draggable':
-        'bisa di drag',
+        'bisa diseret',
 
     // tabs:
     'Scripts':
@@ -240,7 +240,7 @@ SnapTranslator.dict.id = {
     'can rotate':
         'bisa berputar',
     'only face left/right':
-        'hanya boleh mengahadap kiri kanan',
+        'hanya boleh menghadap kiri/kanan',
 
     // new sprite button:
     'add a new sprite':
@@ -248,10 +248,10 @@ SnapTranslator.dict.id = {
 
     // tab help
     'costumes tab help':
-        'impor gambar dari site atau \n'
-            + 'sebiah file dengan cara men-drag file nya',
+        'impor gambar dari situs atau \n'
+            + 'sebuah file dengan cara menyeret berkasnya',
     'import a sound from your computer\nby dragging it into here':
-        'impor sebuah suara dari komputer mu dengan men-drag file nya kesini',
+        'impor sebuah suara dari komputermu dengan menyeret berkasnya ke sini',
 
     // primitive blocks:
 
@@ -293,9 +293,9 @@ SnapTranslator.dict.id = {
     'move %n steps':
         'maju %n langkah',
     'turn %clockwise %n degrees':
-        'berputar %clockwise %n derajad',
+        'berputar %clockwise %n derajat',
     'turn %counterclockwise %n degrees':
-        'berputar %counterclockwise %n derajad',
+        'berputar %counterclockwise %n derajat',
     'point in direction %dir':
         'tunjuk ke arah %dir',
     'point towards %dst':
@@ -313,9 +313,9 @@ SnapTranslator.dict.id = {
     'change y by %n':
         'ubah y sebanyak %n',
     'set y to %n':
-        'set y ke %n',
+        'atur y ke %n',
     'if on edge, bounce':
-        'jika ada di ujung, melambung',
+        'jika ada di pinggir, melambung',
     'x position':
         'posisi x',
     'y position':
@@ -331,11 +331,11 @@ SnapTranslator.dict.id = {
     'costume #':
         'nomor kostum',
     'say %s for %n secs':
-        'katakan %s untuk %n dtk.',
+        'katakan %s selama %n dtk.',
     'say %s':
         'katakan %s',
     'think %s for %n secs':
-        'pikirkan %s untuk %n dtk.',
+        'pikirkan %s selama %n dtk.',
     'think %s':
         'pikirkan %s',
     'Hello!':
@@ -347,7 +347,7 @@ SnapTranslator.dict.id = {
     'set %eff effect to %n':
         'atur efek %eff ke %n',
     'clear graphic effects':
-        'hapus efek grafik',
+        'hapus efek grafis',
     'change size by %n':
         'ubah ukuran sebanyak %n',
     'set size to %n %':
@@ -368,7 +368,7 @@ SnapTranslator.dict.id = {
     'console log %mult%s':
         'catat di konsol %mult%s',
     'alert %mult%s':
-        'tampilkan popup: %mult%s',
+        'tampilkan pop-up: %mult%s',
 
     // sound:
     'play sound %snd':
@@ -378,7 +378,7 @@ SnapTranslator.dict.id = {
     'stop all sounds':
         'hentikan semua suara',
     'rest for %n beats':
-        'istriahat untuk %n ketukan',
+        'istirahat selama %n ketukan',
     'play note %n for %n beats':
         'mainkan not %n selama %n ketukan',
     'change tempo by %n':
@@ -386,7 +386,7 @@ SnapTranslator.dict.id = {
     'set tempo to %n bpm':
         'atur tempo ke %n ketukan per menit',
     'tempo':
-        'ketukan',
+        'tempo',
 
     // pen:
     'clear':
@@ -394,7 +394,7 @@ SnapTranslator.dict.id = {
     'pen down':
         'turunkan pena',
     'pen up':
-        'naikan pena',
+        'naikkan pena',
     'set pen color to %clr':
         'atur warna pena ke %clr',
     'change pen color by %n':
@@ -416,25 +416,25 @@ SnapTranslator.dict.id = {
 
     // control:
     'when %greenflag clicked':
-        'Ketika %greenflag diklik',
+        'ketika %greenflag diklik',
     'when %keyHat key pressed':
-        'Ketika %keyHat ditekan',
+        'ketika %keyHat ditekan',
     'when I am %interaction':
-        'Ketika %interaction',
+        'ketika aku %interaction',
     'clicked':
-        'aku diklik',
+        'diklik',
     'pressed':
-        'aku ditekan',
+        'ditekan',
     'dropped':
-        'aku dijatuhkan',
+        'dijatuhkan',
     'mouse-entered':
-        'aku dimasuki tetikus/mouse',
+        'disentuh tetikus',
     'mouse-departed':
-        'tetikus/mouse keluar',
+        'ditinggalkan tetikus',
     'when %b':
-        'Ketika %b',
+        'ketika %b',
     'when I receive %msgHat':
-        'Ketika aku menerima %msgHat',
+        'ketika aku menerima %msgHat',
     'broadcast %msg':
         'beritakan %msg',
     'broadcast %msg and wait':
@@ -442,7 +442,7 @@ SnapTranslator.dict.id = {
     'Message name':
         'Nama pesan',
     'message':
-        'Pesan',
+        'pesan',
     'any message':
         'pesan apapun',
     'wait %n secs':
@@ -468,15 +468,15 @@ SnapTranslator.dict.id = {
     'this script':
         'skrip ini',
     'this block':
-        'blok ini',
+        'balok ini',
     'stop %stopOthersChoices':
         'hentikan %stopOthersChoices',
     'all but this script':
-        'semua selain skrip ini',
+        'semuanya selain skrip ini',
     'other scripts in sprite':
-        'skrip lain di karakter ini',
+        'skrip-skrip lain di karakter ini',
     'pause all %pause':
-        'paus semua %pause',
+        'hentikan sementara semua %pause',
     'run %cmdRing %inputs':
         'jalankan %cmdRing %inputs',
     'launch %cmdRing %inputs':
@@ -508,15 +508,15 @@ SnapTranslator.dict.id = {
     'ask %s and wait':
         'tanya %s dan tunggu',
     'what\'s your name?':
-        'Siapa namamu?',
+        'siapa namamu?',
     'answer':
         'jawaban',
     'mouse x':
-        'posisi x tetikus/mouse',
+        'posisi x tetikus',
     'mouse y':
-        'posisi y tetikus/mouse',
+        'posisi y tetikus',
     'mouse down?':
-        'tetikus/mouse diklik?',
+        'tetikus diklik?',
     'key %key pressed?':
         'kunci %key ditekan?',
     'distance to %dst':
@@ -530,7 +530,7 @@ SnapTranslator.dict.id = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'mode turbo nyala?',
+        'mode turbo menyala?',
     'set turbo mode to %b':
         'atur mode turbo ke %b',
 
@@ -555,7 +555,7 @@ SnapTranslator.dict.id = {
     '%b or %b':
         '%b atau %b',
     'not %b':
-        'bukan %b',
+        'tidak %b',
     'true':
         'benar',
     'false':
@@ -601,7 +601,7 @@ SnapTranslator.dict.id = {
     'show variable %var':
         'tampilkan variabel %var',
     'hide variable %var':
-        'sembunyikan Variable %var',
+        'sembunyikan variabel %var',
     'script variables %scriptVars':
         'skrip variabel %scriptVars',
 
@@ -631,30 +631,30 @@ SnapTranslator.dict.id = {
 
     // other
     'Make a block':
-        'buat block baru',
+        'Buat balok baru',
 
     // menus
     // snap menu
     'About...':
-        'Tentang Snap!...',
+        'Tentang...',
     'Reference manual':
         'Panduan',
     'Snap! website':
-        'Website Snap!',
+        'Situsweb Snap!',
     'Download source':
-        'Download kodenya',
+        'Unduh sumber',
     'Switch back to user mode':
-        'Kembali ke mode pengunna',
+        'Kembali ke mode pengguna',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'matikan konteks menu \ndeep-morphic dan \ntunjukan konteks \nmenu yang ramah',
+        'matikan menu konteks \ndeep-morphic dan \ntunjukan konteks \nmenu yang ramah',
     'Switch to dev mode':
-        'ganti ke mode percobaan',
+        'Ganti ke mode percobaan',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'nyalahkan Morphic \ncontext menu\ndan inspektor, \ntidak ramah!',
+        'Nyalakan Morphic \ncontext menu\ndan inspektor, \ntidak ramah pengguna!',
 
     // project menu
     'Project notes...':
-        'Catatan Projek...',
+        'Catatan projek...',
     'New':
         'Baru',
     'Open...':
@@ -667,23 +667,23 @@ SnapTranslator.dict.id = {
         'simpan projek ini\ndi folder downloads\n'
             + '(hanya untuk browser yang mendukung!)',
     'Save As...':
-        'Simpan sebagai',
+        'Simpan sebagai...',
     'Import...':
-        'Impor',
+        'Impor...',
     'file menu import hint':
         'impor sebuah projek yang sudah diekspor atau\n '
-            + 'pustaka blok,\n'
+            + 'pustaka balok,\n'
             + 'kostum atau suara',
     'Export project as plain text...':
-        'expor projek sebagai file .txt',
+        'Ekspor projek sebagai file .txt',
     'Export project...':
-        'Expor projek',
+        'Ekspor projek',
     'show project data as XML\nin a new browser window':
-        'tunjukan data projek sebagai XML\ndi jendela browser',
+        'tunjukkan data projek sebagai XML\ndi jendela peramban',
     'Export blocks...':
-        'Expor balok...',
+        'Ekspor balok...',
     'show global custom block definitions as XML\nin a new browser window':
-        'tunjukan definisi balok kostum global\nsebagai xml di jendela baru',
+        'tunjukkan definisi balok kostum global\nsebagai xml di jendela baru',
     'Unused blocks...':
           'Balok yang tidak dipakai',
     'find unused global custom blocks\nand remove their definitions':
@@ -693,11 +693,11 @@ SnapTranslator.dict.id = {
     'there are currently no unused\nglobal custom blocks in this project':
         'sekarang tidak ada balok kostum global\nyang tidak dipakai',
     'unused block(s) removed':
-        'blok yang tidak dipakai terhapus',
+        'balok yang tidak dipakai terhapus',
     'Export summary...':
-        'Expor ringkasan...',
+        'Ekspor ringkasan...',
     'open a new browser browser window\n with a summary of this project':
-        'buka jendela browser baru\ndengan ringkasan dari projek ini',
+        'buka jendela peramban baru\ndengan ringkasan dari projek ini',
     'Contents':
         'Konten',
     'Kind of':
@@ -713,17 +713,17 @@ SnapTranslator.dict.id = {
     'Import tools':
         'Impor peralatan',
     'load the official library of\npowerful blocks':
-        'impor modul resmi dari\nblok hebat',
+        'impor modul resmi dari\nbalok hebat',
     'Libraries...':
         'Pustaka...',
     'Import library':
-        'Import modul/pustaka',
+        'Impor pustaka',
 
     // cloud menu
     'Login...':
         'Masuk...',
     'Signup...':
-        'Daftar',
+        'Daftar...',
 
     // settings menu
     'Language...':
@@ -749,7 +749,7 @@ SnapTranslator.dict.id = {
     'Zebra coloring':
         'Warna zebra',
     'check to enable alternating\ncolors for nested blocks':
-        'centang untuk menyalahkan warna\nberganti di blok bersarang',
+        'centang untuk menyalahkan warna\nberganti di balok bersarang',
     'uncheck to disable alternating\ncolors for nested block':
         'jangan centang untu mematikan\nwarna berganti di balok bersarang',
     'Dynamic input labels':
@@ -869,7 +869,7 @@ SnapTranslator.dict.id = {
     'make a copy\nand pick it up':
         'buat kopi\ndat ambil',
     'only duplicate this block':
-        'hanya gandakan blok ini',
+        'hanya gandakan balok ini',
     'delete':
         'hapus',
     'script pic...':
@@ -889,13 +889,13 @@ SnapTranslator.dict.id = {
 
     // custom blocks:
     'delete block definition...':
-        'hapus definisi blok',
+        'hapus definisi balok',
     'edit...':
-        'edit...',
+        'sunting...',
 
     // sprites:
     'edit':
-        'edit',
+        'sunting',
     'move':
         'bergerak',
     'detach from':
@@ -903,11 +903,11 @@ SnapTranslator.dict.id = {
     'detach all parts':
         'lepaskan semua bagian',
     'export...':
-        'expor...',
+        'ekspor...',
 
     // stage:
     'show all':
-        'Tunjukan semua',
+        'tunjukkan semua',
     'pic...':
         'expor gambar...',
     'open a new window\nwith a picture of the stage':
@@ -923,19 +923,19 @@ SnapTranslator.dict.id = {
     'undrop':
         'undo jatuhkan',
     'undo the last\nblock drop\nin this pane':
-        'undo mendrag\ndan jatuhkan\nblok terakhir\ndi panel ini',
+        'undo mendrag\ndan jatuhkan\nbalok terakhir\ndi panel ini',
     'scripts pic...':
         'Gambar skrip',
     'open a new window\nwith a picture of all scripts':
         'buka jendela baru\ndengan gambar semua skrip',
     'make a block...':
-        'Buat blok baru.',
+        'buat balok baru.',
 
     // costumes
     'rename':
         'namakan ulang',
     'export':
-        'expor',
+        'ekspor',
     'rename costume':
         'namakan ulang kostum',
 
@@ -947,7 +947,7 @@ SnapTranslator.dict.id = {
     'Stop':
         'Berhenti',
     'Play':
-        'mainkan bunyi',
+        'Mainkan bunyi',
     'rename sound':
         'namakan ulang bunyi',
 
@@ -968,13 +968,13 @@ SnapTranslator.dict.id = {
     'OK':
         'OK',
     'Ok':
-        'oke',
+        'Oke',
     'Cancel':
         'Batalkan',
     'Yes':
         'Ya',
     'No':
-        'tidak',
+        'Tidak',
 
     // help
     'Help':
@@ -982,7 +982,7 @@ SnapTranslator.dict.id = {
 
     // zoom blocks
     'Zoom blocks':
-        'balok zoom',
+        'Balok zoom',
     'build':
         'bangun',
     'your own':
@@ -1006,7 +1006,7 @@ SnapTranslator.dict.id = {
 
     // Project Manager
     'Untitled':
-        'Tak bernama',
+        'Tak berjudul',
     'Open Project':
         'Buka projek',
     '(empty)':
@@ -1018,35 +1018,35 @@ SnapTranslator.dict.id = {
     'Are you sure you want to delete':
         'Apakah kamu yakin mau menghapus?',
     'rename...':
-        'Namakan ulang...',
+        'namakan ulang...',
 
     // costume editor
     'Costume Editor':
         'Editor kostum',
     'click or drag crosshairs to move the rotation center':
-        'Kilk atau drag crosshair nya untuk megerakan pusat rotasi',
+        'klik atau seret crosshair untuk memindahkan pusat rotasi',
 
     // project notes
     'Project Notes':
-        'Catatan projek',
+        'Catatan Projek',
 
     // new project
     'New Project':
-        'Projek baru',
+        'Projek Baru',
     'Replace the current project with a new one?':
-        'Ganti projek yang sudah ada denagn yang baru?',
+        'Ganti projek yang sudah ada dengan yang baru?',
 
     // save project
     'Save Project As...':
-        'Simpan projek sebagai',
+        'Simpan Projek Sebagai...',
 
     // export blocks
     'Export blocks':
-        'Expor balok',
+        'Ekspor balok',
     'Import blocks':
         'Impor balok',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'projek ini sepertinya tidak \npunya blok global buatan sendiri',
+        'projek ini sepertinya tidak \npunya balok global buatan sendiri',
     'select':
         'pilih',
     'none':
@@ -1060,7 +1060,7 @@ SnapTranslator.dict.id = {
 
     // block dialog
     'Change block':
-        'Ganti blok',
+        'Ganti balok',
     'Command':
         'Perintah',
     'Reporter':
@@ -1070,24 +1070,24 @@ SnapTranslator.dict.id = {
 
     // block editor
     'Block Editor':
-        'Editor blok',
+        'Editor Balok',
     'Apply':
         'Aplikasikan',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Hapus blok',
+        'Hapus Balok',
     'block deletion dialog text':
-        'Apakah anda yaking anda mau menghapus\n' +
-            'blok ini dan instans-nya?',
+        'Apakah kamu yakin kamu mau menghapus\n' +
+            'balok ini dan instansinya?',
 
     // input dialog
     'Create input name':
         'Buat nama input',
     'Edit input name':
-        'Edit nama input',
+        'Sunting nama input',
     'Edit label fragment':
-        'Edit bagian label',
+        'Sunting bagian label',
     'Title text':
         'Teks judul',
     'Input name':
@@ -1095,7 +1095,7 @@ SnapTranslator.dict.id = {
     'Delete':
         'Hapus',
     'Object':
-        'Objek',
+        'Obyek',
     'Number':
         'Angka',
     'Text':
@@ -1117,11 +1117,11 @@ SnapTranslator.dict.id = {
     'Single input.':
         'Input tunggal.',
     'Default Value:':
-        'Nilai default:',
+        'Nilai Standar:',
     'Multiple inputs (value is list of inputs)':
-        'Input multipel (nilai adalah daftar input)',
+        'Input majemuk (nilai adalah daftar input)',
     'Upvar - make internal variable visible to caller':
-        'Upvar - membuat var internal mirip dengan pemanggil',
+        'Upvar - buat var internal mirip dengan pemanggil',
 
     // About Snap
     'About Snap':
@@ -1135,11 +1135,11 @@ SnapTranslator.dict.id = {
     'Credits...':
         'Kredit...',
     'Translators...':
-        'Penerjemah',
+        'Penerjemah...',
     'License':
         'Lisensi',
     'current module versions:':
-        'Versi komponen sekarang',
+        'versi modul sekarang',
     'Contributors':
         'Kontributor',
     'Translations':
@@ -1153,11 +1153,11 @@ SnapTranslator.dict.id = {
     'slider':
         'slider',
     'slider min...':
-        'Minimum slider...',
+        'min slider...',
     'slider max...':
-        'Maksimum slider...',
+        'max slider...',
     'import...':
-        'Impor...',
+        'impor...',
     'Slider minimum value':
         'Nilai minimum slider:',
     'Slider maximum value':
@@ -1169,7 +1169,7 @@ SnapTranslator.dict.id = {
 
     // coments
     'add comment here...':
-        'tambahkan komen disini...',
+        'tambahkan komentar di sini...',
 
     // drow downs
     // directions
@@ -1186,15 +1186,15 @@ SnapTranslator.dict.id = {
     'mouse-pointer':
         'penunjuk tetikus/mouse',
     'edge':
-        'ujung',
+        'pinggir',
     'pen trails':
         'jejak pena',
 
     // costumes
     'Turtle':
-        'kura-kura',
+        'Kura-Kura',
     'Empty':
-        'kosong',
+        'Kosong',
 
     // graphical effects
     'brightness':
@@ -1212,9 +1212,9 @@ SnapTranslator.dict.id = {
     'space':
         'spasi',
     'up arrow':
-        'panah bawah',
-    'down arrow':
         'panah atas',
+    'down arrow':
+        'panah bawah',
     'right arrow':
         'panah kanan',
     'left arrow':
@@ -1296,17 +1296,17 @@ SnapTranslator.dict.id = {
 
     // messages
     'new...':
-        'Neu...',
+        'baru...',
 
     // math functions
     'abs':
-        'nilai absolut',
+        'abs',
     'ceiling':
-        'bulatkan keatas',
+        'ceiling',
     'floor':
-        'bulatkan kebawah',
+        'floor',
     'sqrt':
-        'akar',
+        'akar kuadrat',
     'sin':
         'sin',
     'cos':
@@ -1328,7 +1328,7 @@ SnapTranslator.dict.id = {
     'letter':
         'huruf',
     'whitespace':
-        'spasi',
+        'ruang putih',
     'line':
         'garis',
     'tab':
@@ -1338,13 +1338,13 @@ SnapTranslator.dict.id = {
 
     // data types
     'number':
-        'Zahl',
+        'angka',
     'text':
-        'Text',
+        'teks',
     'Boolean':
-        'Boole',
+        'Boolean',
     'list':
-        'Liste',
+        'daftar',
     'command':
         'perintah',
     'reporter':

@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-January-14';
+modules.store = '2019-August-08';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 5.0, http://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 5.1, http://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -264,7 +264,11 @@ SnapSerializer.prototype.watcherLabels = {
     yPosition: 'y position',
     direction: 'direction',
     getScale: 'size',
+    reportShown: 'shown?',
     getTempo: 'tempo',
+    getVolume: 'volume',
+    getPan: 'balance',
+    getPenDown: 'pen down?',
     getLastAnswer: 'answer',
     getLastMessage: 'message',
     getTimer: 'timer',
@@ -386,10 +390,21 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
     }
+    if (model.stage.attributes.color) {
+        project.stage.color = this.loadColor(model.stage.attributes.color);
+        project.stage.cachedHSV = project.stage.color.hsv();
+    }
     if (model.stage.attributes.scheduled === 'true') {
         project.stage.fps = 30;
         StageMorph.prototype.frameRate = 30;
     }
+    if (model.stage.attributes.volume) {
+        project.stage.volume = +model.stage.attributes.volume;
+    }
+    if (model.stage.attributes.pan) {
+        project.stage.pan = +model.stage.attributes.pan;
+    }
+
     model.pentrails = model.stage.childNamed('pentrails');
     if (model.pentrails) {
         project.pentrails = new Image();
@@ -505,9 +520,13 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             }
         });
         if (sprite.inheritsAttribute('costumes')) {
-            costume = sprite.costumes.asArray()[
-                sprite.inheritanceInfo.costumeNumber - 1
-            ];
+            if (sprite.inheritsAttribute('costume #')) {
+                costume = sprite.exemplar.costume;
+            } else {
+                costume = sprite.costumes.asArray()[
+                    sprite.inheritanceInfo.costumeNumber - 1
+                ];
+            }
             if (costume) {
                 if (costume.loaded) {
                     sprite.wearCostume(costume, true);
@@ -677,6 +696,12 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
         }
+        if (model.attributes.volume) {
+            sprite.volume = +model.attributes.volume;
+        }
+        if (model.attributes.pan) {
+            sprite.pan = +model.attributes.pan;
+        }
         project.stage.add(sprite);
         ide.sprites.add(sprite);
         sprite.scale = parseFloat(model.attributes.scale || '1');
@@ -751,7 +776,9 @@ SnapSerializer.prototype.loadMediaModel = function (xmlNode) {
 SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks'),
-        dispatches = model.childNamed('dispatches');
+        dispatches = model.childNamed('dispatches'),
+        node,
+        costume;
 
     // load the instrument
     if (model.attributes.instrument) {
@@ -760,6 +787,25 @@ SnapSerializer.prototype.loadObject = function (object, model) {
 
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
+
+    // load the costume that's not in the wardrobe, if any
+    node = model.childNamed('wear');
+    if (node) {
+        node = node.childNamed('costume') || node.childNamed('ref');
+        if (!node) {
+            console.log(object.name + ': missing costume to wear');
+        } else {
+            costume = this.loadValue(node, object);
+            if (costume.loaded) {
+                object.wearCostume(costume, true);
+            } else {
+                costume.loaded = function () {
+                    object.wearCostume(costume, true);
+                    this.loaded = true;
+                };
+            }
+        }
+    }
 
     // load costumes unless they're inherited
     if (!(object.inheritanceInfo &&
@@ -1081,6 +1127,14 @@ SnapSerializer.prototype.loadScript = function (model, object) {
     // private
     var topBlock, block, nextBlock,
         myself = this;
+
+    // Check whether we're importing a single script, not a script as part of a
+    // whole project
+    if (!this.project.stage) {
+        this.project.stage = object.parentThatIsA(StageMorph);
+        this.project.targetStage = this.project.stage;
+    }
+
     model.children.forEach(function (child) {
         nextBlock = myself.loadBlock(child, false, object);
         if (!nextBlock) {
@@ -1118,6 +1172,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     // private
     var block, info, inputs, isGlobal, receiver, migration,
         migrationOffset = 0;
+
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
@@ -1139,7 +1194,9 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
         */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
-            migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+            migration = SpriteMorph.prototype.blockMigrations[
+                model.attributes.s
+            ];
             if (migration) {
                 migrationOffset = migration.offset;
             }
@@ -1227,8 +1284,13 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     if (model.tag === 'script') {
         inp = this.loadScript(model, object);
         if (inp) {
-            input.add(inp);
-            input.fixLayout();
+            if (block.selector === 'reifyReporter') {
+                input.silentReplaceInput(input.children[0], inp);
+                input.fixLayout();
+            } else {
+                input.add(inp);
+                input.fixLayout();
+            }
         }
     } else if (model.tag === 'autolambda' && model.children[0]) {
         inp = this.loadBlock(model.children[0], true, object);
@@ -1381,6 +1443,12 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;
+        }
+        if (model.attributes.volume) {
+            v.volume = +model.attributes.volume;
+        }
+        if (model.attributes.pan) {
+            v.pan = +model.attributes.pan;
         }
         myself.project.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
@@ -1626,6 +1694,7 @@ StageMorph.prototype.toXML = function (serializer) {
             true
         ),
         thumbdata,
+        costumeIdx = this.getCostumeIdx(),
         ide = this.parentThatIsA(IDE_Morph);
 
     // catch cross-origin tainting exception when using SVG costumes
@@ -1657,8 +1726,10 @@ StageMorph.prototype.toXML = function (serializer) {
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
-            'costume="@" tempo="@" threadsafe="@" ' +
+            'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             '%' +
+            'volume="@" ' +
+            'pan="@" ' +
             'lines="@" ' +
             'ternary="@" ' +
             'codify="@" ' +
@@ -1666,6 +1737,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'sublistIDs="@" ' +
             'scheduled="@" ~>' +
             '<pentrails>$</pentrails>' +
+            '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
@@ -1686,11 +1758,17 @@ StageMorph.prototype.toXML = function (serializer) {
         this.name,
         StageMorph.prototype.dimensions.x,
         StageMorph.prototype.dimensions.y,
-        this.getCostumeIdx(),
+        costumeIdx,
+        this.color.r,
+        this.color.g,
+        this.color.b,
+        this.color.a,
         this.getTempo(),
         this.isThreadSafe,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        this.volume,
+        this.pan,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
@@ -1698,6 +1776,12 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableSublistIDs,
         StageMorph.prototype.frameRate !== 0,
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
+
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
@@ -1720,6 +1804,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),
         noScripts = this.inheritsAttribute('scripts');
@@ -1728,13 +1813,16 @@ SpriteMorph.prototype.toXML = function (serializer) {
         '<sprite name="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
             ' scale="@"' +
+            ' volume="@"' +
+            ' pan="@"' +
             ' rotation="@"' +
             '%' +
             ' draggable="@"' +
             '%' +
-            ' costume="@" color="@,@,@" pen="@" ~>' +
+            ' costume="@" color="@,@,@,@" pen="@" ~>' +
             '%' + // inheritance info
             '%' + // nesting info
+            '%' + // current costume
             (noCostumes ? '%' : '<costumes>%</costumes>') +
             (noSounds ? '%' : '<sounds>%</sounds>') +
             '<blocks>%</blocks>' +
@@ -1748,15 +1836,18 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.yPosition(),
         this.heading,
         this.scale,
+        this.volume,
+        this.pan,
         this.rotationStyle,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
-        this.getCostumeIdx(),
+        costumeIdx,
         this.color.r,
         this.color.g,
         this.color.b,
+        this.color.a,
         this.penPoint,
 
         // inheritance info
@@ -1783,6 +1874,11 @@ SpriteMorph.prototype.toXML = function (serializer) {
 
                     + '"/>'
             : '',
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
 
         noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
         noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),

@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2018 by Kartik Chandra
+    Copyright (C) 2019 by Kartik Chandra
 
     This file is part of Snap!.
 
@@ -78,7 +78,7 @@ StageMorph, isNil, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2018-March-19';
+modules.paint = '2019-February-22';
 
 // Declarations
 

@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2017-September-01';
+modules.tables = '2019-June-04';
 
 var Table;
 var TableCellMorph;
@@ -794,8 +794,12 @@ TableMorph.prototype.step = function () {
 TableMorph.prototype.update = function () {
     var oldCols, oldRows,
         version = this.table instanceof List ?
-            this.table.version(this.startRow, this.rows)
-                    : this.table.lastChanged;
+            this.table.version(
+                this.startRow,
+                this.rows,
+                this.startCol,
+                this.columns.length
+            ) : this.table.lastChanged;
     if (this.tableVersion === version && !this.wantsUpdate) {
         return;
     }
@@ -1059,11 +1063,11 @@ TableMorph.prototype.openInDialog = function () {
 };
 
 TableMorph.prototype.showListView = function () {
-    var view = this.parentThatIsAnyOf([
+    var view = this.parentThatIsA(
         SpriteBubbleMorph,
         SpeechBubbleMorph,
         CellMorph
-    ]);
+    );
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
         view.changed();

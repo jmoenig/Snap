@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2017-10-30',
+        '2019-06-25',
 
     // GUI
     // control bar:
@@ -247,13 +247,20 @@ SnapTranslator.dict.pt = {
     // botão de criação de novo actor:
     'add a new sprite':
         'adicionar um novo actor',
+    'add a new Turtle sprite':
+        'Adicionar um novo actor tartaruga.',
+    'paint a new sprite':
+        'Pintar um novo actor.',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'Tirar uma fotografia com a câmara\ne importá-la como novo actor.',
+
 
     // ajuda nos tabuladores
     'costumes tab help':
-        'Importa uma imagem de uma página Web ou de um\n'
-            + 'arquivo no teu computador arrastando-a para aqui',
+        'Importe uma imagem de uma página Web ou de um\n'
+            + 'arquivo do seu computador arrastando-a para aqui.',
     'import a sound from your computer\nby dragging it into here':
-        'Importa um som do teu computador\narrastando-o para aqui',
+        'Importe um som do seu computador\narrastando-o para aqui.',
 
     // blocos primitivos:
 
@@ -344,12 +351,18 @@ SnapTranslator.dict.pt = {
         'Olá!',
     'Hmm...':
         'Hmm…',
+    '%img of costume %cst':
+        '%img do traje %cst',
+    'stretch %cst x: %n y: %n %':
+        'o traje %cst escalado de (x: %n % , y: %n % )',
     'change %eff effect by %n':
         'adiciona ao efeito %eff o valor %n',
     'set %eff effect to %n':
         'altera o teu efeito %eff para %n',
     'clear graphic effects':
         'limpa os efeitos gráficos',
+    '%eff effect':
+        'o efeito %eff',
     'change size by %n':
         'adiciona %n % ao teu tamanho',
     'set size to %n %':
@@ -360,8 +373,14 @@ SnapTranslator.dict.pt = {
         'mostra-te',
     'hide':
         'esconde-te',
-    'go to front':
-        'vem para a frente',
+    'shown?':
+        'estás a ser mostrado',
+    'go to %layer layer':
+        'vai para %layer',
+    'front':
+        'a frente',
+    'back':
+        'trás',
     'go back %n layers':
         'recua %n camadas',
 
@@ -372,6 +391,11 @@ SnapTranslator.dict.pt = {
     'alert %mult%s':
         'mostra janela de alerta com %mult%s',
 
+    'pixels':
+        'píxeis',
+    'current':
+        'actual',
+
     // sons:
     'play sound %snd':
         'toca o som %snd',
@@ -381,6 +405,16 @@ SnapTranslator.dict.pt = {
         'pára todos os sons',
     'rest for %n beats':
         'faz uma pausa de %n tempos',
+    'play sound %snd at %rate Hz':
+        'toca o som %snd a %rate Hz',
+    '%aa of sound %snd':
+        '%aa do som %snd',
+    'duration':
+        'a duração',
+    'length':
+        'o número de amostras',
+    'number of channels':
+        'o número de canais',
     'play note %note for %n beats':
         'toca a nota %note durante %n tempos',
     'set instrument to %inst':
@@ -391,6 +425,22 @@ SnapTranslator.dict.pt = {
         'altera o teu andamento para %n bpm',
     'tempo':
         'o andamento',
+    'change volume by %n':
+        'adiciona %n % ao volume',
+    'set volume to %n %':
+        'altera o volume para %n %',
+    'change balance by %n':
+        'adiciona %n ao balanço',
+    'set balance to %n':
+        'altera o balanço para %n',
+    'balance':
+        'o balanço',
+    'play frequency %n Hz':
+        'toca a frequência %n Hz',
+    'stop frequency':
+        'pára de tocar a frequência',
+    'play %n Hz for %n secs':
+        'toca a frequência %n Hz durante %n s',
 
     // "instrumento", i.e. formas de onda:
     '(1) sine':
@@ -409,16 +459,22 @@ SnapTranslator.dict.pt = {
         'baixa a tua caneta',
     'pen up':
         'levanta a tua caneta',
+    'pen down?':
+        'a tua caneta está baixa',
     'set pen color to %clr':
         'altera a cor da tua caneta para %clr',
-    'change pen color by %n':
-        'adiciona %n à cor da tua caneta',
-    'set pen color to %n':
-        'altera a cor da tua caneta para %n',
-    'change pen shade by %n':
-        'adiciona %n ao tom da tua caneta',
-    'set pen shade to %n':
-        'altera o tom da tua caneta para %n',
+    'set background color to %clr':
+        'altera a cor do fundo para %clr',
+    'change pen %hsva by %n':
+        'adiciona a %hsva da tua caneta o valor %n',
+    'change background %hsva by %n':
+        'adiciona a %hsva do fundo o valor %n',
+    'set pen %hsva to %n':
+        'altera %hsva da tua caneta para %n',
+    'set background %hsva to %n':
+        'altera %hsva do fundo para %n',
+    'pen %pen':
+        '%pen da tua caneta',
     'change pen size by %n':
         'adiciona %n à espessura da tua caneta',
     'set pen size to %n':
@@ -427,6 +483,8 @@ SnapTranslator.dict.pt = {
         'carimba-te',
     'fill':
         'enche o palco',
+    'write %s size %n':
+        'escreve %s com tamanho %n',
 
     // controlo:
     'when %greenflag clicked':
@@ -449,6 +507,8 @@ SnapTranslator.dict.pt = {
         'rolar para baixo',
     'scrolled-up':
         'rolar para cima',
+    'stopped':
+        'parar',
     'when %b':
         'Quando %b',
     'when I receive %msgHat':
@@ -473,10 +533,14 @@ SnapTranslator.dict.pt = {
         'repete %n vezes %loop',
     'repeat until %b %loop':
         'até que %b , repete %loop',
+    'for %upvar = %n to %n %cla':
+        'para %upvar de %n a %n , repete %cla',
     'if %b %c':
         'se %b , então %c',
     'if %b %c else %c':
         'se %b , então %c senão, %c',
+    'if %b then %s else %s':
+        'se %b então %s , senão %s',
     'report %s':
         'reporta %s',
     'stop %stopChoices':
@@ -547,6 +611,10 @@ SnapTranslator.dict.pt = {
         '%rel até %dst',
     'distance':
         'a distância',
+    '%asp at %loc' :
+        '%asp em %loc',
+    'sprites' :
+        'os actores',
     'reset timer':
         'reinicia o cronómetro',
     'timer':
@@ -555,14 +623,20 @@ SnapTranslator.dict.pt = {
         '%att de %spr',
     'my %get':
         '%get',
+    'object %self':
+        'o objecto de %self',
     'http:// %s':
         'o recurso http:// %s',
-    'turbo mode?':
-        'o modo turbo está activo',
-    'set turbo mode to %b':
-        'alterar o modo turbo para %b',
+    'turbo mode':
+        'turbo',
+    'flat line ends':
+        'extremos das linhas planos',
+    'is %setting on?':
+        'o modo %setting está activo',
+    'set %setting to %b':
+        'altera o modo %setting para %b',
     'current %dates':
-        '%dates corrente',
+        '%dates actual',
     'year':
         'o ano',
     'month':
@@ -579,7 +653,44 @@ SnapTranslator.dict.pt = {
         'o segundo',
     'time in milliseconds':
         'o tempo (em milisegundos)',
-
+    'microphone %audio':
+        '%audio do microfone',
+    'volume':
+        'o volume',
+    'note':
+        'a nota',
+    'frequency':
+        'a frequência',
+    'samples':
+        'as amostras',
+    'sample rate':
+        'a frequência de amostragem',
+    'spectrum':
+        'o espectro',
+    'resolution':
+        'a resolução',
+    'Microphone resolution...':
+        'Resolução do microfone...',
+    'Microphone':
+        'Microfone',
+    'low':
+        'baixa',
+    'high':
+        'alta',
+    'max':
+        'máxima',
+    'video %vid on %self':
+        '%vid do vídeo em %self',
+    'motion':
+        'o movimento',
+    'snap':
+        'a fotografia',
+    'set video transparency to %n':
+        'altera a transparência do vídeo para %n',
+    'video capture':
+        'captura de vídeo',
+    'mirror video':
+        'vídeo espelhado',
     'filtered for %clr':
         'filtrado para %clr',
     'stack size':
@@ -609,7 +720,7 @@ SnapTranslator.dict.pt = {
     'join %words':
         'a junção de %words',
     'split %s by %delim':
-        'uma lista com os troços de %s entre %delim',
+        'uma lista com os troços de %s por %delim',
     'hello':
         'Olá',
     'world':
@@ -627,7 +738,7 @@ SnapTranslator.dict.pt = {
     'is %s identical to %s ?':
         '%s é idêntico a %s',
     'JavaScript function ( %mult%s ) { %code }':
-        'função JavaScript ( %mult%s ) { %code }',
+        'a função JavaScript ( %mult%s ) { %code }',
     'compile %repRing':
         'a compilação de %repRing',
 
@@ -660,6 +771,8 @@ SnapTranslator.dict.pt = {
     // listas:
     'list %exp':
         'uma lista com %exp',
+    'numbers from %n to %n':
+        'uma lista com os números de %n a %n',
     '%s in front of %l':
         'a prefixação de %s a %l',
     'item %idx of %l':
@@ -672,6 +785,28 @@ SnapTranslator.dict.pt = {
         '%l contém %s',
     'thing':
         'um valor',
+    'is %l empty?':
+        '%l está vazia',
+    'map %repRing over %l':
+        'a aplicação de %repRing aos itens de %l',
+    'keep items %predRing from %l':
+        'os itens tais que %predRing de %l',
+    'find first item %predRing in %l':
+        'o primeiro item tal que %predRing de %l',
+    'combine %l using %repRing':
+        'a combinação dos itens de %l com %repRing',
+    '%blitz map %repRing over %l':
+        '%blitz a aplicação de %repRing aos itens de %l',
+    '%blitz keep items %predRing from %l':
+        '%blitz os itens tais que %predRing de %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz o primeiro item tal que %predRing de %l',
+    '%blitz combine %l using %repRing':
+        '%blitz a combinação dos itens de %l com %repRing',
+    'for each %upvar in %l %cla':
+        'para cada %upvar de %l , repete %cla',
+    'item':
+        'o item',
     'add %s to %l':
         'acrescenta %s a %l',
     'delete %ida of %l':
@@ -708,18 +843,18 @@ SnapTranslator.dict.pt = {
     'Project notes...':
         'Notas deste projecto…',
     'New':
-        'Criar um novo projecto',
+        'Criar novo',
     'Open...':
-        'Abrir um projecto…',
+        'Abrir…',
     'Save':
-        'Guardar este projecto',
+        'Guardar',
     'Save to disk':
         'Guardar no disco',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'Guardar este projecto\nna sua pasta de descargas\n'
             + '(em navegadores que o suportem).',
     'Save As...':
-        'Guardar este projecto como…',
+        'Guardar como…',
     'Import...':
         'Importar…',
     'file menu import hint':
@@ -730,6 +865,8 @@ SnapTranslator.dict.pt = {
         'Exportar este projecto como texto simples…',
     'Export project...':
         'Exportar este projecto…',
+    'save project data as XML\nto your downloads folder':
+        'Guardar os dados do projecto no\nformato XML na sua pasta de descargas.',
     'show project data as XML\nin a new browser window':
         'Mostrar os dados do projecto no\nformato XML numa nova janela do navegador.',
     'Export blocks...':
@@ -763,20 +900,66 @@ SnapTranslator.dict.pt = {
         'Blocos',
     'For all Sprites':
         'Para todos os Actores',
-    'Import tools':
-        'Importar as ferramentas oficiais para este projecto',
-    'load the official library of\npowerful blocks':
-        'Importar para este projecto\na biblioteca oficial de blocos.',
     'Libraries...':
-        'Bibliotecas...',
+        'Bibliotecas…',
+    'Select categories of additional blocks to add to this project.':
+        'Seleccionar categorias de blocos adicionais a acrescentar a este projecto.',
+    'Select a costume from the media library':
+        'Seleccionar um traje da biblioteca de média.',
+    'Select a sound from the media library':
+        'Seleccionar um som da biblioteca de média.',
+
+    //Bibliotecas
     'Import library':
         'Importar biblioteca',
+    'Loading':
+        'Carregando',
+    'Imported':
+        'Importada',
+    'Iteration, composition':
+        'Iteração e composição',
+    'List utilities':
+        'Utilitários para listas',
+    'Variadic reporters':
+        'repórteres variádicos',
+    'Web services access (https)':
+        'Acesso a serviços web (https)',
+    'Multi-branched conditional (switch)':
+        'Comandos de selecção com múltiplos ramos',
+    'LEAP Motion controller':
+        'Controlador LEAP Motion',
+    'Words, sentences':
+        'Palavras e frases',
+    'Catch errors in a script':
+        'Capturar erros num guião',
+    'Set RGB or HSV pen color':
+        'Alterar ou obter corer RGB e HVS da caneta',
+    'Text to speech':
+        'Texto para fala',
+    'Provide 100 selected colors':
+        'Trabalhar com 100 cores pré-seleccionadas',
+    'Infinite precision integers, exact rationals, complex':
+        'Inteiros com precisão infinita, racionais exactos e números complexos',
+    'Provide getters and setters for all GUI-controlled global settings':
+        'Repórteres para obter e comandos para alterar todas as configurações globais',
+    'Allow multi-line text input to a block':
+        'Permitir texto com múltiplas linhas como entrada',
+    'create variables in program':
+        'Criar variáveis não locais (globais ou de objecto) num guião',
 
     // menu da nuvem
     'Login...':
         'Entrar na sua conta…',
     'Signup...':
         'Registar uma nova conta…',
+    'Logout':
+        'Sair',
+    'Change Password...':
+        'Alterar palavra-passe…',
+    'Reset Password...':
+        'Recuperar palavra-passe…',
+    'Resend Verification Email...':
+        'Reenviar Mensagem de Verificação…',
 
     // menu de preferências
     'Language...':
@@ -819,6 +1002,10 @@ SnapTranslator.dict.pt = {
     'uncheck to allow dropped\nreporters to kick out others':
         'Desassinalar para permitir que\nrepórteres largados '
             + 'desalojem outros.',
+    'check to turn on\n visible stepping (slow)':
+        'Assinalar para activar\nexecução passo a passo visível (lento).',
+    'uncheck to turn off\nvisible stepping':
+        'desassinalar para desactivar\nexecução passo a passo visível',
     'Long form input dialog':
         'Forma longa da caixa de diálogo dos parâmetros',
     'Plain prototype labels':
@@ -847,6 +1034,10 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar deslizadores\nnas ranhuras dos blocos.',
     'Retina display support':
         'Suporte para o ecrã retina',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'Desassinalar para menor resolução;\npoupa recursos computacionais.',
+    'check for higher resolution,\nuses more computing resources':
+        'Assinalar para maior resolução;\ngasta mais recursos computacionais.',
     'Codification support':
         'Suportar produção de código',
     'Clicking sound':
@@ -864,11 +1055,15 @@ SnapTranslator.dict.pt = {
     'check to prioritize\nscript execution':
         'Assinalar para dar prioridade\nà execução de guiões.',
     'uncheck to run scripts\nat normal speed':
-        'Desssinalar para executar os guiões\nà velocidade normal.',
+        'Desassinalar para executar os guiões\nà velocidade normal.',
     'check to enable\nIDE animations':
         'Assinalar para activar\nas animações do AID',
     'Flat design':
         'Design plano',
+    'check for alternative\nGUI design':
+        'Assinalar para um design alternativo\nda interface gráfica com o utilizador.',
+    'uncheck for default\nGUI design':
+        'Desassinalar para o design por omissão\nda interface gráfica com o utilizador.',
     'Nested auto-wrapping':
         'Quebras de linha aninhadas',
     'Keyboard Editing':
@@ -929,6 +1124,10 @@ SnapTranslator.dict.pt = {
         'ajuda…',
     'relabel...':
         'mudar para outro bloco…',
+    'compile':
+        'compilar',
+    'uncompile':
+        'descompilar',
     'duplicate':
         'duplicar',
     'make a copy\nand pick it up':
@@ -957,6 +1156,8 @@ SnapTranslator.dict.pt = {
     // blocos personalizados:
     'delete block definition...':
         'remover definição do bloco…',
+    'duplicate block definition...':
+        'duplicar definição do bloco…',
     'edit...':
         'editar…',
 
@@ -973,6 +1174,8 @@ SnapTranslator.dict.pt = {
         'Drehpunkt des Kostüms\nanzeigen und verschieben',
     'rotate':
         'rodar',
+    'stick to':
+        'prender a',
     'detach from':
         'soltar de',
     'detach all parts':
@@ -995,6 +1198,10 @@ SnapTranslator.dict.pt = {
         'fotografia…',
     'open a new window\nwith a picture of the stage':
         'Abrir uma nova janela com\numa fotografia do palco.',
+    'turn all pen trails and stamps\ninto a new background for the stage':
+        'Transforma todos os traços da caneta e\ncarimbagens num novo cenário do palco.',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'Transforma todos os traços da caneta e carimbagens num\nnovo traje do actor seleccionado neste momento.',
 
     // área de guiões:
     'clean up':
@@ -1026,7 +1233,7 @@ SnapTranslator.dict.pt = {
     'rename costume':
         'Qual o novo nome do traje?',
 
-    // sounds
+    // sons
     'Play sound':
         'Tocar som.',
     'Stop sound':
@@ -1038,11 +1245,13 @@ SnapTranslator.dict.pt = {
     'rename sound':
         'Qual o novo nome do som?',
 
-    // lists and tables
+    // listas e tabelas
     'list view...':
         'vista de lista…',
     'table view...':
         'vista de tabela…',
+    'Table view':
+        'Vista de tabela',
     'open in dialog...':
         'abrir em caixa de diálogo…',
     'reset columns':
@@ -1108,12 +1317,98 @@ SnapTranslator.dict.pt = {
         'Quer mesmo remover',
     'rename...':
         'alterar o nome…',
+    'Examples':
+        'Exemplos',
+    'Share':
+        'Partilhar',
+    'Unshare':
+        'Deixar de Partilhar',
+    'Publish':
+        'Publicar',
+    'Unpublish':
+        'Deixar de Publicar',
+    'Updating\nproject list...':
+        'Actualizando a\nlista de projectos…',
+    'Recover':
+        'Recuperar',
+    'Today':
+        'Hoje',
+    'Yesterday':
+        'Ontem',
 
     // editor de trajes
     'Costume Editor':
         'Editor de Trajes',
+    'Paint Editor':
+        'Editor de Pintura',
     'click or drag crosshairs to move the rotation center':
         'Clique ou arraste a mira para alterar o centro de rotação.',
+    'undo':
+        'desfazer',
+    'Vector':
+        'Vector',
+    'Paintbrush tool\n(free draw)':
+        'Pincel\n(desenho livre)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rectângulo\n(shift: quadrado)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Elipse\n(shift: circunferência)',
+    'Eraser tool':
+        'Borracha',
+    'Set the rotation center':
+        'Estabelecer centro de rotação',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Segmento de recta\n(shift: vertical/horizontal)',
+    'Filled Rectangle\n(shift: square)':
+        'Rectângulo preenchido\n(shift: quadrado)',
+    'Filled Ellipse\n(shift: circle)':
+        'Elipse preenchida\n(shift: círculo)',
+    'Fill a region':
+        'Balde de tinta',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipeta\n(recolher uma cor em qualquer lado)',
+    'Brush size':
+        'Espessura do pincel',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Preservar proporções das formas?\n(também pode pressionar shift)',
+    'grow':
+        'aumentar',
+    'shrink':
+        'reduzir',
+    'flip ↔':
+        'inverter ↔',
+    'flip ↕':
+        'inverter ↕',
+
+    'Vector Paint Editor':
+        'Editor de Pintura Vectorial',
+    'Rectangle\n(shift: square)':
+        'Rectângulo\n(shift: quadrado)',
+    'Ellipse\n(shift: circle)':
+        'Elipse\n(shift: círculo)',
+    'Selection tool':
+        'Selecção',
+    'Line tool\n(shift: constrain to 45º)':
+        'Linha\n(shift: restringe a 45°)',
+    'Closed brush\n(free draw)':
+        'Pincel fechado\n(desenho livre)',
+    'Paint a shape\n(shift: edge color)':
+        'Pintar uma forma\n(shift: cor de aresta)',
+    'Pipette tool\n(pick a color from anywhere\nshift: fill color)':
+        'Pipeta\n(recolher uma cor de qualquer lado\nshift: cor de preenchimento)',
+    'Edge color\n(left click)':
+        'Cor de aresta\n(clique esquerdo)',
+    'Fill color\n(right click)':
+        'Cor de preenchimento\n(clique direito)',
+   'Top':
+       'Topo',
+   'Bottom':
+       'Base',
+   'Up':
+       'Cima',
+   'Down':
+       'Baixo',
+
 
     // notas de projecto
     'Project Notes':
@@ -1128,6 +1423,8 @@ SnapTranslator.dict.pt = {
     // guardar projecto
     'Save Project As...':
         'Guardar Projecto Como…',
+    'Save Project':
+        'Guardar Projecto',
 
     // exportar blocos
     'Export blocks':
@@ -1258,6 +1555,10 @@ SnapTranslator.dict.pt = {
         'máximo do potenciómetro…',
     'import...':
         'importar…',
+    'raw data...':
+        'dados em bruto…',
+    'import without attempting to\nparse or format data':
+        'Importar sem tentar analisar ou formatar os dados',
     'Slider minimum value':
         'Valor mínimo do potenciómetro',
     'Slider maximum value':
@@ -1270,6 +1571,10 @@ SnapTranslator.dict.pt = {
     // comentários
     'add comment here...':
         'colocar aqui um comentário…',
+    'comment pic...':
+        'fotografia do comentário…',
+    'open a new window\nwith a picture of this comment':
+        'Abrir uma nova janela com\numa fotografia deste comentário.',
 
     // drop downs
     // direcções
@@ -1283,7 +1588,7 @@ SnapTranslator.dict.pt = {
         '180° (baixo)',
     'random':
         'um valor ao acaso',
-     'random position':
+    'random position':
         'um ponto ao acaso',
 
     // detecção de colisões
@@ -1298,13 +1603,28 @@ SnapTranslator.dict.pt = {
 
     // trajes
     'Turtle':
-        'tartaruga',
+        'Tartaruga',
     'Empty':
-        'vazio',
+        'Vazio',
+    'Paint a new costume':
+        'Pintar um novo traje.',
+    'Import a new costume from your webcam':
+        'Importar um novo traje da sua câmara.',
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Por favor assegure-se de que o seu navegador está actualizado\ne de que a sua câmara está correctamente configurada.\n\nAlguns navegadores também exigem que aceda ao Snap!\natravés de HTTPS para usar a câmara.\n\nPor favor substitua a parte "http://" do endereço\nno seu navegador por "https:// e tente de novo."',
+    'Camera':
+        'Câmara',
 
-    // efeitos gráficos
+    // sons
+    'Record a new sound':
+        'Gravar um novo som.',
+
+
+    // efeitos gráficos, cor da caneta
     'color':
-        'cor',
+        'a cor',
+    'hue':
+        'o matiz',
     'fisheye':
         'olho-de-peixe',
     'whirl':
@@ -1314,9 +1634,11 @@ SnapTranslator.dict.pt = {
     'mosaic':
         'mosaico',
     'saturation':
-        'saturação',
+        'a saturação',
     'brightness':
-        'brilho',
+        'o brilho',
+    'transparency':
+        'a transparência',
     'ghost':
         'fantasma',
     'negative':
@@ -1412,7 +1734,7 @@ SnapTranslator.dict.pt = {
     '9':
         '9',
 
-    // messagens
+    // mensagens
     'new...':
         'Nova…',
 
@@ -1449,6 +1771,8 @@ SnapTranslator.dict.pt = {
     // delimitadores
     'letter':
         'letra',
+    'word':
+        'palavra',
     'whitespace':
         'espaços em branco',
     'line':
@@ -1497,6 +1821,8 @@ SnapTranslator.dict.pt = {
         'a âncora',
     'parent':
         'o progenitor',
+    'temporary?':
+        'és temporário',
     'children':
         'os descendentes',
     'clones':
@@ -1505,6 +1831,10 @@ SnapTranslator.dict.pt = {
         'os outros clones',
     'dangling?':
         'estás pendurado',
+    'draggable?':
+        'és arrastável',
+    'rotation style':
+        'estilo de rotação',
     'rotation x':
         'a coordenada x de rotação',
     'rotation y':
@@ -1515,6 +1845,8 @@ SnapTranslator.dict.pt = {
         'a coordenada y do centro',
     'name':
         'o nome',
+    'costume':
+        'o traje',
     'stage':
         'o palco',
     'costumes':
@@ -1523,6 +1855,10 @@ SnapTranslator.dict.pt = {
         'os sons',
     'scripts':
         'os guiões',
+    'width':
+        'a largura',
+    'height':
+        'a altura',
 
     // herança
     'inherited':
@@ -1535,14 +1871,12 @@ SnapTranslator.dict.pt = {
     // em falta no ficheiro lang-de.js
     'log':
         'o logaritmo',
+    'neg':
+        'o simétrico',
     'url %s':
         'o recurso http:// %s',
     'delete %shd':
         'remove %shd',
-    'uncheck for lower resolution,\nsaves computing resources':
-        'Desassinalar para menor resolução;\npoupa recursos computacionais.',
-    'check for higher resolution,\nuses more computing resources':
-        'Assinalar para maior resolução;\ngasta mais recursos computacionais.',
     'First-Class Sprites':
         'Actores de primeira classe',
     'uncheck to disable support\nfor first-class sprites':
@@ -1561,14 +1895,6 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar o\narmazenamento das identidades de sublistas ligadas.',
     'uncheck to disable\nsaving linked sublist identities':
         'Desassinalar para desactivar o\narmazenamento das identidades de sublistas ligadas.',
-    'grow':
-        'aumentar',
-    'shrink':
-        'reduzir',
-    'flip ↔':
-        'inverter ↔',
-    'flip ↕':
-        'inverter ↕',
     'Export all scripts as pic...':
         'Exportar todos os guiões como fotografia…',
     'show a picture of all scripts\nand block definitions':
@@ -1577,8 +1903,6 @@ SnapTranslator.dict.pt = {
         'procurar blocos…',
     'costume name':
         'o nome do traje',
-    'Share':
-        'Partilhar',
     'Snap!Cloud':
         'Snap!Nuvem',
     'Cloud':
@@ -1599,10 +1923,6 @@ SnapTranslator.dict.pt = {
         'Registo de nova conta',
     'Sign in':
         'Entrar',
-    'Logout':
-        'Sair',
-    'Change Password...':
-        'Alterar palavra-passe…',
     'Change Password':
         'Alterar palavra-passe',
     'Account created.':
@@ -1615,8 +1935,6 @@ SnapTranslator.dict.pt = {
         'saiu.',
     'Reset password':
         'Recuperar palavra-passe',
-    'Reset Password...':
-        'Recuperar palavra-passe…',
     'User name:':
         'Nome de utilizador:',
     'Password:':
@@ -1681,12 +1999,8 @@ SnapTranslator.dict.pt = {
         'As palavras-passe\nnão correspondem.',
     'please agree to\nthe TOS':
         'Por favor concorde com\nos Termos do Serviço.',
-    'Examples':
-        'Exemplos',
     'You are not logged in':
         'Ainda não se autenticou',
-    'Updating\nproject list...':
-        'Actualizando a\nlista de projectos…',
     'Opening project...':
         'Abrindo o projecto…',
     'Fetching project\nfrom the cloud...':
@@ -1701,145 +2015,12 @@ SnapTranslator.dict.pt = {
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
     'saved.':
         'guardado.',
-    'options...':
-        'opções…',
-    'read-only':
-        'apenas leitura',
-    'Input Slot Options':
-        'Opções de Ranhura de Entrada',
-    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
-        'Introduza uma opção por linha. Opcionalmente, use "=" como separador\nentre chave e valor, e.g.\n   a resposta=42',
-    'paint a new sprite':
-        'Pintar um novo actor.',
-    'Paint a new costume':
-        'Pintar um novo traje.',
-    'add a new Turtle sprite':
-        'Adicionar um novo actor.',
-    'check for alternative\nGUI design':
-        'Assinalar para um design alternativo\nda interface gráfica com o utilizador.',
     'Rasterize SVGs':
         'Transformar SVG em mapas de bits',
     'check to rasterize\nSVGs on import':
         'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
-    'comment pic...':
-        'fotografia do comentário…',
-    'open a new window\nwith a picture of this comment':
-        'Abrir uma nova janela com\numa fotografia deste comentário.',
-    'undo':
-        'desfazer',
-    'Brush size':
-        'Espessura do pincel',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Preservar proporções das formas?\n(também pode pressionar shift)',
-    'Eraser tool':
-        'Borracha',
-    'Paintbrush tool\n(free draw)':
-        'Pincel\n(desenho livre)',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Segmento de recta\n(shift: vertical/horizontal)',
-    'Stroked Rectangle\n(shift: square)':
-        'Rectângulo\n(shift: quadrado)',
-    'Filled Rectangle\n(shift: square)':
-        'Rectângulo preenchido\n(shift: quadrado)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Elipse\n(shift: circunferência)',
-    'Filled Ellipse\n(shift: circle)':
-        'Elipse preenchida\n(shift: círculo)',
-    'Fill a region':
-        'Balde de tinta',
-    'Set the rotation center':
-        'Estabelecer centro de rotação',
-    'Pipette tool\n(pick a color anywhere)':
-        'Pipeta\n(recolher uma cor em qualquer lado)',
-    'Paint Editor':
-        'Editor de Pintura',
-    'square':
-        'quadrado',
-    'pointRight':
-        'triângulo para a direita',
-    'gears':
-        'roda dentada',
-    'file':
-        'arquivo',
-    'fullScreen':
-        'ecrã inteiro',
-    'normalScreen':
-        'ecrã normal',
-    'smallStage':
-        'palco pequeno',
-    'normalStage':
-        'palco normal',
-    'turtle':
-        'tartaruga',
-    'turtleOutline':
-        'contorno de tartaruga',
-    'pause':
-        'pausa',
-    'flag':
-        'bandeira',
-    'octagon':
-        'octógono',
-    'cloud':
-        'nuvem',
-    'cloudOutline':
-        'contorno de nuvem',
-    'cloudGradient':
-        'nuvem com gradiente',
-    'turnRight':
-        'girar à direita',
-    'turnLeft':
-        'girar à esquerda',
-    'storage':
-        'armazenagem',
-    'poster':
-        'póster',
-    'flash':
-        'relâmpago',
-    'brush':
-        'pincel',
-    'rectangle':
-        'rectângulo',
-    'rectangleSolid':
-        'rectângulo preenchido',
-    'circle':
-        'circunferência',
-    'circleSolid':
-        'círculo',
-    'crosshairs':
-        'mira',
-    'paintbucket':
-        'balde de tinta',
-    'eraser':
-        'borracha',
-    'pipette':
-        'pipeta',
-    'speechBubble':
-        'balão de fala',
-    'speechBubbleOutline':
-        'contorno de balão de fala',
-    'arrowUp':
-        'seta para cima',
-    'arrowUpOutline':
-        'contorno de seta para cima',
-    'arrowLeft':
-        'seta para a esquerda',
-    'arrowLeftOutline':
-        'contorno de seta para a esquerda',
-    'arrowDown':
-        'seta para baixo',
-    'arrowDownOutline':
-        'contorno de seta para baixo',
-    'arrowRight':
-        'seta para a direita',
-    'arrowRightOutline':
-        'contorno de seta para a direita',
-    'robot':
-        'robot',
     'turn pen trails into new costume...':
         'transformar traços da caneta em novo traje…',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'Transforma todos os traços da caneta\ne carimbagens num novo traje\n'
-            + 'do actor seleccionado neste momento',
     'pen':
         'caneta',
     'tip':
@@ -1864,28 +2045,18 @@ SnapTranslator.dict.pt = {
         'partilhado.',
     'unshared.':
         'deixado de partilhar.',
-    'Unshare':
-        'Não Partilhar',
     'password has been changed.':
         'a sua palavra-passe foi alterada.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
         'trajes SVG ainda não\nsão totalmente suportados\nem todos os navegadores',
-    'Save Project':
-        'Guardar Projecto',
     'script pic with result...':
         'fotografia do guião incluindo resultado…',
     'open a new window\nwith a picture of both\nthis script and its result':
         'Abrir uma nova janela com\numa fotografia tanto deste guião\ncomo do seu resultado.',
-    'Select categories of additional blocks to add to this project.':
-        'Seleccionar categorias de blocos adicionais a acrescentar a este projecto.',
     'Import sound':
         'Importar som',
-    'Select a sound from the media library':
-        'Seleccionar um som da biblioteca de média.',
     'Import':
         'Importar',
-    'Select a costume from the media library':
-        'Seleccionar um traje da biblioteca de média.',
     'edit rotation point only...':
         'editar apenas ponto de rotação…',
     'Export Project As...':
@@ -1939,8 +2110,6 @@ SnapTranslator.dict.pt = {
         'com variáveis de bloco',
     'experimental -\nunder construction':
         'Experimental – em construção',
-    'Table view':
-        'Vista de tabela',
     'open in another dialog...':
         'abrir noutra caixa de diálogo…',
     'check for multi-column\nlist view support':
@@ -1955,6 +2124,126 @@ SnapTranslator.dict.pt = {
         '(numa nova janela)',
     'save project data as XML\nto your downloads folder':
         'Guardar dados do projecto como XML\nna sua pasta de descarregamentos.',
+
+    // Símbolos em blocos personalizados:
+    'square':
+        'quadrado',
+    'pointRight':
+        'triângulo para a direita',
+    'stepForward':
+        'avançar um passo',
+    'gears':
+        'roda dentada',
+    'file':
+        'arquivo',
+    'fullScreen':
+        'ecrã inteiro',
+    'normalScreen':
+        'ecrã normal',
+    'smallStage':
+        'palco pequeno',
+    'normalStage':
+        'palco normal',
+    'turtle':
+        'tartaruga',
+    'turtleOutline':
+        'contorno de tartaruga',
+    'pause':
+        'pausa',
+    'flag':
+        'bandeira',
+    'octagon':
+        'octógono',
+    'cloud':
+        'nuvem',
+    'cloudOutline':
+        'contorno de nuvem',
+    'cloudGradient':
+        'nuvem com gradiente',
+    'turnRight':
+        'girar à direita',
+    'turnLeft':
+        'girar à esquerda',
+    'storage':
+        'armazenagem',
+    'poster':
+        'póster',
+    'flash':
+        'relâmpago',
+    'brush':
+        'pincel',
+    'rectangle':
+        'rectângulo',
+    'rectangleSolid':
+        'rectângulo preenchido',
+    'circle':
+        'circunferência',
+    'circleSolid':
+        'círculo',
+    'ellipse':
+        'elipse',
+    'cross':
+        'cruz',
+    'crosshairs':
+        'mira',
+    'paintbucket':
+        'balde de tinta',
+    'eraser':
+        'borracha',
+    'pipette':
+        'pipeta',
+    'speechBubble':
+        'balão de fala',
+    'speechBubbleOutline':
+        'contorno de balão de fala',
+    'loop':
+        'ciclo',
+    'turnBack':
+        'voltar para trás',
+    'turnForward':
+        'voltar para a frente',
+    'arrowUp':
+        'seta para cima',
+    'arrowUpOutline':
+        'contorno de seta para cima',
+    'arrowLeft':
+        'seta para a esquerda',
+    'arrowLeftOutline':
+        'contorno de seta para a esquerda',
+    'arrowDown':
+        'seta para baixo',
+    'arrowDownOutline':
+        'contorno de seta para baixo',
+    'arrowRight':
+        'seta para a direita',
+    'arrowRightOutline':
+        'contorno de seta para a direita',
+    'robot':
+        'robô',
+    'magnifyingGlass':
+        'lupa',
+    'magnifierOutline':
+        'contorno de lupa',
+    'selection':
+        'selecção',
+    'polygon':
+        'polígono',
+    'closedBrush':
+        'pincelada fechada',
+    'notes':
+        'nota',
+    'camera':
+        'câmara',
+    'location':
+        'localização',
+    'footprints':
+        'pegadas',
+    'keyboard':
+        'teclas',
+    'keyboardFilled':
+        'teclado',
+    'globe':
+        'globo',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
@@ -1971,12 +2260,14 @@ SnapTranslator.dict.pt = {
         'delimitador',
     'collection':
         'colecção',
-    'variables':
-        'variáveis',
+//    'variables':
+//        'variáveis',
     'parameters':
         'parâmetros',
     'code':
         'código',
+    'recording':
+        'Gravação',
     'header':
         'cabeçalho',
     'header mapping...':
@@ -2000,10 +2291,6 @@ SnapTranslator.dict.pt = {
         'Desassinalar para desactivar\na edição usando o teclado.',
     'check to enable\nkeyboard editing support':
         'Assinalar para activar\na edição usando o teclado.',
-    'check to turn on\nvisible stepping (slow)':
-        'assinalar para activar\nexecução passo a passo visível (lento)',
-    'uncheck to turn off\nvisible stepping':
-        'desassinalar para desactivar\nexecução passo a passo visível',
     'check to allow\nempty Boolean slots':
         'assinalar para permitir\nranhuras booleanas vazias',
     'uncheck to limit\nBoolean slots to true / false':
@@ -2021,5 +2308,257 @@ SnapTranslator.dict.pt = {
     'uncheck to disable\nsprite inheritance features':
         'Desassinalar para desactivar\nfuncionalidades de herança de actores.',
     'check for sprite\ninheritance features':
-        'Assinalar para activar\nfuncionalidades de herança de actores.'
+        'Assinalar para activar\nfuncionalidades de herança de actores.',
+    'compile %repRing for %n args':
+        'a compilação de %repRing para %n argumentos',
+    'Polygon':
+        'Polígono',
+    'cloud unavailable without a web server.':
+        'Nuvem indisponível sem um servidor web.',
+    'sound':
+        'som',
+
+    // Traduções de blocos personalizados:
+    'translations...':
+        'traduções…',
+    'Custom Block Translations':
+        'Traduções do Bloco Personalizado',
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs':
+        'Introduza uma tradução por linha.\nUtilize (:) para separar a língua da especificação traduzida do bloco\ne sublinhado (_) nos locais dos parâmetros, por exemplo:\n\n  pt:diz _ durante _ s',
+
+    // Opções de entradas de blocos personalizados:
+    'options':
+        'opções',
+    'Input Slot Options':
+        'Opções de Ranhura de Entrada',
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42':
+        'Introduza uma opção por linha.\nOpcionalmente, use "=" como separador entre chave e valor e {} para submenus. E.g.\n   a resposta=42',
+    'read-only':
+        'apenas leitura',
+    '(none)':
+        '(nenhum)',
+    'messages':
+        'as mensagens',
+    'objects':
+        'os objectos',
+    'variables':
+        'as variáveis',
+    'piano keyboard':
+        'um teclado de piano',
+    '360° dial':
+        'um mostrador de 360°',
+    'special':
+        'especial',
+    'multi-line':
+        'multilinha',
+
+    // Libraries:
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
+        'Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.',
+    'Some standard functions on lists (append, reverse, etc.)':        
+        'Algumas funções padrão sobre listas (acrescentar, inverter, etc.)',
+    'Streams (lazy lists)':
+        'Canais (listas preguiçosas)',
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
+        'Uma variação do tipo de dados lista para o qual cada item da lista não é calculado senão quando é necessário, pelo que pode criar listas com milhões de itens sem que isso demore demasiado tempo ou ocupe demasiada memória, ou mesmo listas de comprimento infinito.  (É incluído como exemplo um bloco que reporta todos os números primos.)', 
+    'Versions of +, x, AND, and OR that take more than two inputs.':
+        'Versões de +, x, E, e OU que aceitam mais do que duas entradas.',
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
+        'Uma versão estendida do bloco HTTP:// que permite realizar pedidos POST, PUT e DELETE, bem como GET, permite utilizar o protocolo seguro HTTPS e dá controlo sobre os cabeçalhos, etc.',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
+        'Um das grandes ideias do Logo que ficou de fora no Scratch é pensar no texto como estruturado em palavras e frases, em vez de só como uma cadeia de caracteres. Esta biblioteca reintroduz esta ideia.',
+    'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
+        'Tal como o «switch» em linguagens como o C ou o «cond» no Lisp.  Obrigado ao Nathan Dinsmore por inventar a ideia de ter um bloco separado para cada ramo!',
+    'Report hand positions from LEAP Motion controller (leapmotion.com).':
+        'Reportar posições das mãos dadas pelo controlador LEAP Motion (leapmotion.com).',
+    'Text Costumes':
+        'Trajes de texto',
+    'Generate costumes from letters or words of text.':
+        'Gerar trajes a partir de letras ou palavras de texto.',
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
+        'Alterar ou reportar a cor da caneta nos formatos RGB (vermelho/«red», verde/«green», azul/«blue») ou HSV (matiz/«hue«, saturação/«saturation», brilho/«value»).',
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
+        'Execute um guião; se ocorrer um erro, em vez de parar o guião com um halo vermelho, execute outro guião para lidar com o erro. Inclui também um bloco que causa um erro com uma mensagem dada como entrada. Inclui ainda um bloco para criar uma variável de guião inicializando-a imediatamente.',
+    'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
+        'Em geral as entradas de texto permitem apenas uma única linha.  O bloco MULTILINHA aceita texto multilinha na sua entrada e pode ser usado em ranhuras de entradas de texto de outros blocos.',
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
+        'Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.',
+    'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
+        'A torre numérica do Scheme completa. Usar «usa números grandes <verdadeiro>" para activar.',
+    'to use instead of hue for better selection':
+        'Para usar em vez da matiz de modo a permitir uma melhor selecção.',
+    'output text using speech synthesis.':
+        'Falar texto usando síntese de voz.',
+    'glide, grow and rotate using easing functions.':
+        'Deslizar, aumentar e rodar usando funções de forma (de «easing»).',
+    'Pixels':
+        'Píxeis',
+    'manipulate costumes pixel-wise.':
+        'Manipular trajes píxel a píxel.',
+    'Audio Comp':
+        'Computação áudio',
+    'analyze, manipulate and generate sound samples.':
+        'Analisar, manipular e gerar amostras de som.',
+    '"Bigger" Data':
+        'Dados «maiores»',
+    '[EXPERIMENTAL] crunch large lists very fast':
+        '[EXPERIMENTAL] Processar listas grandes de forma muito rápida.',
+    'Frequency Distribution Analysis':
+        'Análise da distribuição de frequências',
+    '[EXPERIMENTAL] analyze data for frequency distribution':
+        '[EXPERIMENTAL] Analisar dados para obter a sua distribuição de frequências.',
+    'World Map':
+        'Mapa do mundo',
+    '[EXPERIMENTAL] add interactive maps to projects':
+        '[EXPERIMENTAL] Adicionar mapas interactivos a projectos.',
+    'declare global or sprite-local variables in a script':
+        'Criar variáveis globais ou de objecto a partir de um guião.',
+    'Deal with JSON data':
+        'Lidar com dados JSON',
+    'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
+        'Converter em listas texto com formato JSON usando o bloco «a lista em» e obter dados dessas listas usando o bloco «o valor com chave em».',
+    'Parallelization':
+        'Paralelização',
+    'Run several scripts in parallel and wait until all are done.':
+        'Executar vários guiões em paralelo e esperar que todos eles terminem.',
+    'String processing':
+        'Processamento de cadeias de caracteres',
+    'Extract substrings of a string in various ways':
+        'Extrair partes de cadeias de caracteres de formas variadas',
+
+    // Biblioteca Animações:
+    'ghost effect':
+        'o efeito fantasma',
+    'color effect':
+        'o efeito cor',
+    'saturation effect':
+        'o efeito saturação',
+    'brightness effect':
+        'o efeito brilho',
+    'fisheye effect':
+        'o efeito olho-de-peixe',
+    'whirl effect':
+        'o efeito remoinho',
+    'pixelate effect':
+        'o efeito pixelização',
+    'mosaic effect':
+        'o efeito mosaico',
+    'negative effect':
+        'o efeito negativo',
+    'linear':
+        'linear',
+    'quadratic':
+        'quadrática',
+    'quadratic-in':
+        'quadrática à entrada',
+    'quadratic-out':
+        'quadrática à saída',
+    'quadratic-in-out':
+        'quadrática à entrada e à saída',
+    'cubic':
+        'cúbica',
+    'cubic-in':
+        'cúbica à entrada',
+    'cubic-out':
+        'cúbica à saída',
+    'cubic-in-out':
+        'cúbica à entrada e à saída',
+    'quart':
+        'quártica',
+    'quart-in':
+        'quártica à entrada',
+    'quart-out':
+        'quártica à saída',
+    'quart-in-out':
+        'quártica à entrada e à saída',
+    'sinusoidal':
+        'sinusoidal',
+    'sine-in':
+        'sinusoidal à entrada',
+    'sine-out':
+        'sinusoidal à saída',
+    'sine-in-out':
+        'sinusoidal à entrada e à saída',
+    'elastic':
+        'elástica',
+
+    // Biblioteca Eisenberg:
+    'Project notes':
+        'Notas do projecto',
+    'Project name':
+        'Nome do projecto',
+    'User':
+        'Utilizador',
+    'Presentation mode':
+        'Modo de apresentação',
+    'Language':
+        'Língua',
+    'Stage scale':
+        'Escala do palco',
+    'Execute on slider change':
+        'Executar quando o potenciometro varia',
+    'Keyboard edition':
+        'Edição com o teclado',
+    'Visible palette':
+        'Palete visível',
+
+    // Biblioteca Mapa do mundo:
+    'OpenStreetMap':
+        'OpenStreetMap',
+    'Wikimedia':
+        'Wikimedia',
+    'Watercolor':
+        'Aguarela',
+    'Toner':
+        'Tons',
+    'Terrain':
+        'Terreno',
+    'Topographic':
+        'Topográfico',
+    'Satellite':
+        'Satélite',
+    'Streets':
+        'Estradas',
+    'Shading':
+        'Sombreamento',
+    'Mapbox (experimental)':
+        'Mapbox (experimental)',
+
+    // Biblioteca aritmética do Scheme:
+    'number?':
+        'é número, o valor',
+    'complex?':
+        'é complexo, o valor',
+    'real?':
+        'é real, o valor',
+    'rational?':
+        'é racional, o valor',
+    'integer?':
+        'é inteiro, o valor',
+    'exact?':
+        'é exacto, o valor',
+    'inexact?':
+        'é inexacto, o valor',
+    'exact':
+        'a versão exacta',
+    'inexact':
+        'a versão inexacta',
+    'finite?':
+        'é finito, o valor',
+    'infinite?':
+        'é infinito, o valor',
+    'nan?':
+        'é NaN, o valor',
+    'numerator':
+        'o numerador',
+    'denominator':
+        'o denominador',
+    'real-part':
+        'a parte real',
+    'imag-part':
+        'a parte imaginária',
+    'magnitude':
+        'o módulo',
+    'angle':
+        'o argumento',
 };

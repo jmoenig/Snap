@@ -181,11 +181,11 @@ SnapTranslator.dict.el = {
     'language_name':
         'Ελληνικά', // the name as it should appear in the language menu
     'language_translator':
-        'Ino Samaras', // your name for the Translators tab
+        'Ino Samaras , Alexandros Prekates' ,// your name for the Translators tab
     'translator_e-mail':
-        'ino.samaras@berkeley.edu', // optional
+        'ino.samaras@berkeley.edu , aprekates@sch.gr' , // optional
     'last_changed':
-        '2018-01-19', // this, too, will appear in the Translators tab
+        '2019-01-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -204,11 +204,11 @@ SnapTranslator.dict.el = {
     'Pen':
         'Στυλό',
     'Control':
-        'Διαχείριση',
+        'Έλεγχος',
     'Sensing':
         'Αισθητήρες',
     'Operators':
-        'Χειριστές',
+        'Τελεστές',
     'Variables':
         'Μεταβλητές',
     'Lists':
@@ -227,12 +227,18 @@ SnapTranslator.dict.el = {
         'Κοστούμια',
     'Sounds':
         'Ήχοι',
+    'Backgrounds':
+        'Yπόβαθρα',
 
     // names:
     'Sprite':
-        'Στοιχείο',
+        'Φιγούρα',
     'Stage':
-        'Σκηνή',
+	'Σκηνή',
+
+    // Painting
+    'Paint a new costume':
+         'Ζωγράφισε ένα νέο κουστούμι',
 
     // rotation styles:
     'don\'t rotate':
@@ -244,7 +250,14 @@ SnapTranslator.dict.el = {
 
     // new sprite button:
     'add a new sprite':
-        'προσθέστε ένα νέο sprite',
+       'προσθέστε μια νέα φιγούρα',
+    'add a new Turtle sprite':
+        'πρόσθεσε μια καινούρα φιγούρα χελώνα',
+    'paint a new sprite':
+        'ζωγράφισε μια καινούργια φιγούρα',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'πάρε μια φωτογραφία με τη κάμερα\nτου υπολογιστή και εισηγαγέ τη\nσαν καινούργια φιγούρα',
+    
 
     // tab help
     'costumes tab help':
@@ -346,7 +359,7 @@ SnapTranslator.dict.el = {
     'set %eff effect to %n':
         'θέσε το εφέ %eff να είναι %n',
     'clear graphic effects':
-        'καθάρισε να γραφικά εφέ',
+        'καθάρισε τα γραφικά εφέ',
     'change size by %n':
         'άλλαξε το μέγεθος κατά %n',
     'set size to %n %':
@@ -378,8 +391,10 @@ SnapTranslator.dict.el = {
         'σταμάτα όλους τους ήχους',
     'rest for %n beats':
         'κάνε παύση για %n ρυθμούς',
-    'play note %n for %n beats':
-        'παίξε την νότα %n για %n ρυθμούς',
+    'play note %note for %n beats':
+         'παίξε την νότα %note για %n ρυθμούς',
+    'set instrument to %inst':
+         'θέσε το όργανο σε %inst' ,
     'change tempo by %n':
         'άλλαξε την ταχύτητα του ρυθμού κατά %n',
     'set tempo to %n bpm':
@@ -396,10 +411,18 @@ SnapTranslator.dict.el = {
         'στυλό πάνω',
     'set pen color to %clr':
         'θέσε το χρώμα του στυλού να είναι %clr',
-    'change pen color by %n':
-        'άλλαξε το χρώμα του στυλού κατά %n',
-    'set pen color to %n':
-        'θέσε το χρώμα του στυλού να είναι %n',
+    'change pen %hsva by %n':
+         'άλλαξε %hsva του στυλού κατά %n',
+    'hue':
+        'απόχρωση',
+    'saturation':
+         'κορεσμός',
+    'brightness':
+         'φωτεινότητα' ,
+    'transparency':
+         'διαφάνεια',
+    'set pen %hsva to %n':
+        'θέσε %hsva του στυλού να είναι %n',
     'change pen shade by %n':
         'άλλαξε την σκιά του στυλού κατά %n',
     'set pen shade to %n':
@@ -410,16 +433,36 @@ SnapTranslator.dict.el = {
         'θέσε το μέγεθος του στυλού να είναι %n',
     'stamp':
         'σφραγίδα',
+    'fill':
+         'γέμισμα',
 
     // control:
     'when %greenflag clicked':
         'όταν το %greenflag πατηθεί',
     'when %keyHat key pressed':
         'όταν το %keyHat πλήκτρο πατηθεί',
-    'when I am clicked':
-        'όταν κάνουν κλικ πάνω μου',
+    'when I am %interaction':
+        'όταν μου συμβεί %interaction',
+    'clicked':
+         'να μου κάνουν κλικ',
+    'pressed':
+          'να με πατάνε',
+    'dropped':
+          'να με αφήνουν',
+    'mouse-entered':
+          'να εισέρχεται ο δείκτης του ποντικίου',
+    'mouse-departed':
+           'να εξέρχεται ο δείκτης του ποντικίου',
+    'scrolled-down':
+    	'κύλιση-κάτω',
+    'scrolled-up':
+        'κύλιση-πάνω',
+    'stopped':
+        'σταματημένο',
+    'when %b':
+        'Όταν %b',
     'when I receive %msgHat':
-        'όταν λάβω το %msgHat',
+        'Όταν δεχτώ %msgHat',
     'broadcast %msg':
         'στείλε το %msg',
     'broadcast %msg and wait':
@@ -446,18 +489,26 @@ SnapTranslator.dict.el = {
         'αν %b %c αλλιώς %c',
     'report %s':
         'δήλωσε %s',
-    'stop block':
-        'σταμάτα το μπλοκ',
-    'stop script':
-        'σταμάτα το σενάριο',
-    'stop all %stop':
-        'σταμάτα τα όλα %stop',
+    'stop %stopChoices':
+        'σταμάτα %stopChoices',
+    'all':
+        'τα πάντα',
+    'this script':
+        'αυτό το σενάριο',
+    'this block':
+        'αυτό το μπλοκ',
+    'stop %stopOthersChoices':
+        'σταμάτα %stopOthersChoices',
+    'all but this scrip':
+        'τα πάντα εκτός από αυτό το σενάριο',
+    'other scripts in sprite':
+        'τα υπόλοιπα σενάρια της φιγούρας',
     'pause all %pause':
         'κάνε παύση σε όλα %pause',
     'run %cmdRing %inputs':
         'εκτέλεσε %cmdRing επάνω σε %inputs',
     'launch %cmdRing %inputs':
-        'ξεκίνα %cmdRing επάνς σε %inputs',
+        'ξεκίνα %cmdRing επάνω σε %inputs',
     'call %repRing %inputs':
         'κάλεσε %repRing επάνω σε %inputs',
     'run %cmdRing w/continuation':
@@ -467,13 +518,19 @@ SnapTranslator.dict.el = {
     'warp %c':
         'επιτάχυνση %c',
     'when I start as a clone':
-        'όταν ξεκινάω ως κλόνος',
+        'όταν ξεκινάω ως κλώνος',
     'create a clone of %cln':
-        'δημιούργησε έναν κλόνο του %cln',
+        'δημιούργησε έναν κλώνο του %cln',
+    'a new clone of %cln':
+        'ένας νέος κλώνος του %cln',
     'myself':
         'ο εαυτός μου',
     'delete this clone':
-        'κατάργησε αυτόν τον κλόνο',
+         'κατάργησε αυτόν τον κλόνο',
+    'tell %spr to %cmdRing %inputs':
+        'πες το %spr να %cmdRing  %inputs',
+    'ask %spr for %repRing %inputs':
+        'ρώτα %spr για %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -496,21 +553,46 @@ SnapTranslator.dict.el = {
         'είναι το ποντικι κάτω;',
     'key %key pressed?':
         'είναι το πλήκτρο %key πατημένο;',
-    'distance to %dst':
-        'απόσταση από %dst',
-    'reset timer':
+     '%rel to %dst':
+        '%rel από %dst',
+    'distance':
+    	'απόσταση',
+    '%asp at %loc' :
+        '%asp στο %loc',
+    'sprites' :
+        'φιγούρες',
+     'reset timer':
         'επανέφερε το χρονόμετρο',
     'timer':
         'χρονόμετρο',
     '%att of %spr':
         '%att του %spr',
+    'my %get':
+        'το δικό μου  %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'είναι σε λειτουργία τούρμπο;',
     'set turbo mode to %b':
         'θέσε την λειτουργεία τούρμπο να είναι %b',
-
+    'current %dates':
+        'τρέχων %dates',
+    'year':
+        'έτος',
+    'month':
+        'μήνας',
+    'date':
+        'ημερομηνία',
+    'day of week':
+        'ημέρα της εβδομάδας',
+    'hour':
+        'ώρα',
+    'minute':
+        'λεπτά',
+    'second':
+        'δευτερόλεπτα',
+    'time in milliseconds':
+        'χρόνος σε χιλιοστά του δευτερολέπτου', 
     'filtered for %clr':
         'φίλτραρε για %clr',
     'stack size':
@@ -539,6 +621,8 @@ SnapTranslator.dict.el = {
         'λάθος',
     'join %words':
         'συνένωσε %words',
+    'split %s by %delim':
+        'χώρισε %s ως προς το %delim',
     'hello':
         'γεια',
     'world':
@@ -555,7 +639,11 @@ SnapTranslator.dict.el = {
         'είναι το %s καποιο %typ ;',
     'is %s identical to %s ?':
         'είναι το %s παρόμοιο με το %s ?',
-
+    'JavaScript function ( %mult%s ) { %code }':
+        'JavaScript συνάρτηση( %mult%s ) { %code }',
+    'compile %repRing':
+    	'μεταγλώττισε %repRing',
+    
     'type of %s':
         'τύπος του %s',
 
@@ -566,6 +654,8 @@ SnapTranslator.dict.el = {
         'Όνομα μεταβλητής',
     'Script variable name':
         'Όνομα μεταβλητής του σεναρίου',
+    'inherit %shd':
+        'Κληρονόμησε %shd',
     'Delete a variable':
         'Κάτάργηση μιας μεταβλητής',
 
@@ -617,13 +707,13 @@ SnapTranslator.dict.el = {
     'Snap! website':
         'Snap! Ιστοσελίδα',
     'Download source':
-        'Κατέβασε την πηγή',
+        'Κατέβασε των πηγαίο κώδικα',
     'Switch back to user mode':
         'Επιστροφη στην λειτουργία του χρήστη',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'verl\u00e4sst Morphic',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'Εναλλαγή σε λειτουργία ανάπτυξη'  ,
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'erm\u00f6glicht Morphic Funktionen',
 
@@ -637,7 +727,11 @@ SnapTranslator.dict.el = {
     'Save':
         'Αποθήκευση',
     'Save As...':
-        'Αποθήκευση Ως...',
+         'Αποθήκευση Ως...',
+     'Save to disk':
+        'Αποθήκευση στο δίσκο',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+    'αποθήκευση αυτό το έργοn\στον φάκελό λήψεων\n(στους πλοηγούς που το υποστηρίζουν',
     'Import...':
         'Εισαγωγή...',
     'file menu import hint':
@@ -910,13 +1004,79 @@ SnapTranslator.dict.el = {
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+         'Επεξεργαστής κουστουμιών',
+    'Paint Editor':
+        'Επεξεργαστής ζωγραφικής',
     'click or drag crosshairs to move the rotation center':
         'Κάντε κλικ ή ρύρετε το στόχαστρο για να μετακινήσετε το άξονα περιστροφής',
+    'undo':
+        'αναίρεση',
+    'Vector':
+        'Διανυσματική Σχεδίαση',
+    'Paintbrush tool\n(free draw)':
+        'Πινέλο\n(ελεύθερη σχεδίαση)',
+    'Stroked Rectangle\n(shift: square)':
+        'Ορθογώνιο\n(Shift: τετράγωνο)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Έλλειψη\n(Shift: κύκλος)',
+    'Eraser tool':
+        'Σβήστρα',
+    'Set the rotation center':
+        'Θέσε το κέντρο περιστροφής',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Ευθεία γραμμή\n(Shift: κάθετη/οριζόντια)',
+    'Filled Rectangle\n(shift: square)':
+        'Γεμάτο Ορθογώνιο\n(Shift: τετράγωνο)',
+    'Filled Ellipse\n(shift: circle)':
+        'Γεμάτη Έλλειψη\n(Shift: κύκλος)',
+    'Fill a region':
+        'Γέμισε μια περιοχή',
+    'Pipette tool\n(pick a color anywhere)':
+        'Επιλογή χρώματος\n(διάλεξε ένα χρώμα από όπουδήποτε)',
+    'Brush size':
+        'Μέγεθος πινέλου',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Ενεργοποίηση περιορισμού σχημάτων\n(εναλλακτικά πατώντας shift)',
+    'grow':
+        'μεγάλωσε',
+     'shrink':
+       'μίκρυνε',
+     'flip ↔':
+       'εναλλαγή ↔',
+     'flip ↕':
+       'εναλλαγή ↕',
+    
+    'Vector Paint Editor':
+        'Επεξεργαστής Διανυσματικών γραφικών',
+    'Rectangle\n(shift: square)':
+        'Ορθογώνιο\n(Shift: Quadrat)',
+    'Ellipse\n(shift: circle)':
+        'Έλλειψη\n(Shift: κύκλος)',
+    'Selection tool':
+        'Εργαλείο επιλογής',
+    'Line tool\n(shift: constrain to 45º)':
+        'Ευθεία γραμμή\n(Shift: περιορισμός σε 45°)',
+    'Closed brush\n(free draw)':
+        'Πινέλο\n(ελεύθερη σχεδίαση)',
+    'Paint a shape\n(shift: secondary color)':
+        'Ζωγράφισε ένα σχήμα\n(Shift: δευτερεύων χρώμα)',
+    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+        'Εργαλείο επιλογής χρώματος\n(διάλεξε ένα χρώμα από οπουδήποτε\nshift: δευτερεύων χρώμα)',
+    'Primary color      Secondary color':
+        'Πρωτεύων χρώμα          Δευτερεύων χρώμα',
+    'Top':
+        'Πάνω',
+    'Bottom':
+       'Κάτω',
+   'Up':
+       'προς τα πάνω',
+   'Down':
+       'προς τα κάτω',
+
 
     // project notes
     'Project Notes':
-        'Σχόλα Εργασίας',
+        'Σχόλια Εργασίας',
 
     // new project
     'New Project':
@@ -956,7 +1116,7 @@ SnapTranslator.dict.el = {
     'Reporter':
         'Αναφορέας',
     'Predicate':
-        'Κατηγορούμενο',
+        'Κατηγόρημα',
 
     // block editor
     'Block Editor':

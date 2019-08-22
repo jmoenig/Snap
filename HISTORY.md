@@ -1,6 +1,732 @@
-# Snap<em>!</em> (BYOB) History
+# Snap! (BYOB) History
 
-## in development
+## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+## v5.1.0
+* **New Features:**
+    * new "paste on" block in the pen category, prints a sprite onto another one
+    * new "r-g-b-a" option in "(aspect) AT (location)" sensing reporter, returns a 4-item list of values from 0-255 (same as pixels from a costume)
+    * "temporary?" attribute is now programmatically settable (in the SET->my... block)
+* **Notable Changes:**
+    * generated costumes that are not in the wardrobe are now made persistent in the project (saved & restored)
+* **Notable Fixes:**
+    * fixed tainted audio context for auto-playing projects when the user interacts, thanks, Bernat!
+    * saved clones no longer forget if they inherit the "costume #" attribute
+* **Translation Updates:**
+    * German
+    * Galician, thanks, Miguel!
+
+### 2019-08-08
+* store: allow wardrobe-less costumes to be shared among several sprites (e.g. when inheriting the "costume #" attribute)
+* objects: fixed an issue when a sprite inherits both the wardrobe and the costume #
+* store, objects: fixed the bug that made clones forget inheritance of costume # when saved
+* prepared minor release
+
+### 2019-08-07
+* new dev version
+* blocks, threads: added "r-g-b-a" option to (aspect) AT (location) reporter in the sensing category
+* blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
+* objects: made the "paste on" block avaible in the "pen" palette
+* fix for tainted audio context when the user interacts with an auto-playing project
+* store: persist temporary costumes that aren't in the wardrobe (e.g. generated graphics, maps, paste-ups) 
+* German translation update
+* Galician translation update, thanks, Miguel!
+
+## v5.0.9
+* **New Feature:**
+    * new experimental "paste on" block in the "pen" category, currently hidden in dev mode
+* **Notable Fixes:**
+    * resolved scroll bar conflicts (allow vertical scrolling past horizontal scroll bar), thanks, Michael!
+    * support for importing OGG audio files, thanks, Bernat!
+* **Translation Update:**
+    * Chinese, thanks, Simon!
+
+### 2019-08-06
+* new dev version
+* objects, threads: new experimental "paste on" block in the "pen" category, hidden in dev mode
+* morphic: resolved scroll bar conflicts (allow vertical scrolling past horizontal scroll bar), thanks, Michael!
+* gui: fixed color of scripts scroll frame
+* morphic: support for importing OGG audio files, thanks, Bernat!
+* Chinese translation update, thanks, Simon!
+* prepared maintenance release
+
+## v5.0.8
+* **Notable Fix:**
+    * fixed default names for 'script variables' block
+
+### 2019-07-25
+* blocks: fixed default names for 'script variables' block
+* prepared maintenance release
+
+## v5.0.7
+* **Notable Fix:**
+    * fixed #2041
+
+### 2019-07-24
+* byob: fixed #2041
+* prepared maintenance release
+
+## v5.0.6
+* **Notable Fix:**
+    * IME text editing support, thanks, Zhenlei Jia @swiperthefox!
+
+### 2019-07-23
+* morphic: minor code reformatting for LINTers
+* prepared maintenance release
+
+### 2019-07-22
+* new dev version
+* morphic, blocks: support for enhanced character set keyboard input, thanks, @swiperthefox!
+
+## v5.0.5
+* **Notable Fix:**
+    * fixed cloud project collection support, thanks Bernat!
+
+## v5.0.4
+* **Notable Fixes:**
+    * fixed a glitch when running a generic WHEN hat block with a literal Boolean input
+    * fixed a bug in the SHOW PICTURE block of the "Pixels" library 
+
+### 2019-07-10
+* threads: fixed a glitch when running a generic WHEN hat block with a literal Boolean input
+* fixed a bug in the SHOW PICTURE block of the "Pixels" library
+* tweaked "messages" menu for custom blocks, thanks, Joan!
+* maintenance release
+
+## v5.0.3
+* **Notable Change:**
+    * CSV-parsing auto-detects the most likely delimiter among comma, semi-colon, pipe and tab
+
+### 2019-07-10
+* threads: enhanced CSV-parsing to auto-detect the most likely delimiter among comma, semi-colon, pipe and tab
+* maintenance release
+
+## v5.0.2
+* **New Feature:**
+    * experimental tolerant color collision detection (in dev mode)
+* **Notable Fixes:**
+    * fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
+    * updated the manual for the new WRITE block, thanks, Brian
+
+### 2019-07-09
+* blocks: fixed a layout glitch for variadic C-shaped input slots, thanks, Bernat, for reporting it!
+* updated the manual for the new WRITE block, thanks, Brian (was #2448)
+* maintenance release
+
+### 2019-07-08
+* new dev version
+* morphic, objects, threads: experimental tolerant color collision detection (in dev mode)
+
+## v5.0.1
+* **Notable Changes:**
+    * gliding animation when inserting  blocks using the keyboard
+    * optimized collision detection
+* **Notable Fixes:**
+    * show "browser" source option in project dialog when (deprecated) locally stored projects still exist
+    * list watchers occasionally didn't show cells after reassigning a changed list to a variable
+    * FOREACH over a linked list failed for scripts mutating it
+    * eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
+
+### 2019-07-04
+* gui: show "browser" source option in project dialog when (deprecated) locally stored projects still exist
+* maintenance release
+
+### 2019-07-03
+* blocks: eliminated an occasional empty label line when variadic inputs wrap as a whole, thanks, Mary, for reporting this bug!
+
+### 2019-07-02
+* morphic: optimized collision detection by only looking at the alpha channel data
+
+### 2019-07-01
+* new dev version
+* lists: fixed #2446
+* threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian!
+* cloud: fixed collection grid page size, thanks, Bernat! 
+* morphic: fixed a race condition in Morph.glideTo()
+* blocks: added gliding animation when inserting  blocks using the keyboard
+
+## v5
+### 2019-06-27
+* **New Features:**
+    * the "tools" library has been integrated as primitives 
+    * export 1- /2- dimensional lists with atomic data as CSV
+    * export n-dimensional lists with atomic data as JSON
+    * import CSV, Text, or JSON via drag & drop
+    * option to import CSV etc. as "raw data", i.e. unparsed
+    * parse JSON using the SPLIT reporter
+    * new "aspect AT location" reporter in Sensing category for sniffing colors and sprites
+    * new blocks for setting and changing the stage's background color
+    * new "microphone" reporter in Sensing for getting volume, note, pitch signals and frequencies
+    * new experimental live audio-scripting support
+    * new video capturing and video-motion detection support, thanks, Josep!
+    * new "object" reporter in the Sensing category for getting a sprite by its name
+    * blocks for changing and querying the "flat line ends" setting 
+    * selectors for changing and querying "draggable" and "rotation style" settings
+    * new sound + music "volume" feature + blocks
+    * new sound + music stereo "panning" feature + blocks
+    * new sound attribute getter reporter
+    * new "play sound at sample rate" command
+    * accept lists and lists of lists as inputs to all sound primitives
+    * new "play frequency" commands in the Sounds category
+    * pixel access primitives for bitmap and vector (!) graphics
+    * new "stretch" primitive for costumes, also for flipping
+    * new "get graphic effect" reporter
+    * new "get pen attribute" reporter
+    * new "pen down?" predicate
+    * new "shown?" predicate
+    * new "write" command in pen category (used to be "label" in tools)
+    * new "numbers", "is empty", "map","keep", "find", "combine" and "for each" primitives in list category
+    * 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
+    * new JIT-compiler "blitz-HOF" primitives for "map", "keep", "find" & "combine" via "compile"
+    * new "for" loop and "if then else" reporter primitives in the Control category
+    * added "neg", "lg" (log2) and "2^" selectors to monadic function reporter in Operators
+    * added "^" reporter (power of) in the Operators category
+    * added "width" and "height" to the MY blocks dropdown
+    * added "width" and "height" as attribute selectors of the OF primitive
+    * added "costume" selector to the MY attributes dropdown
+    * added plus (+) and minus (-) keys to sensing and key hat 
+    * special context-aware drop-downs for custom blocks
+    * new "stick to" submenu in the sprite context menu where applicable
+    * multi-line and monospaced "code" input slots for custom blocks
+    * new "string" library, thanks, Brian
+    * new "text costumes" library for generating costumes from letters or words of text
+    * new "World Map" extension and library for interactive maps
+    * graphic effects and sound attributes can now be animated with easing functions
+    * enhanced support for embedding Snap in other website, thanks, Bernat!
+    * export sounds
+* **Notable Changes:**
+    * added third hsv dimension to pen colors, changed SET and CHANGE pen blocks
+    * added transparency (alpha) to pen colors
+    * new drop-down options for sprite-layer control ("GO TO front/back")
+    * "loop arrow" symbol for primitive loops, also available for custom blocks
+    * optimized in-project storage of atomic-data lists (more efficient, less space) 
+    * remove all clones when the Green Flag is clicked
+    * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
+    * enable dropping commands into all rings
+    * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
+    * renamed "whitespace" option in SPLIT to "word"
+    * made the "name" attribute programmatically settable
+    * made the "temporary?" attibute readyble
+    * deprecated storing projects in the browser's localStorage
+    * deprecated some (useless) graphic effects
+    * additional "publish / unpublish" buttons in the project dialog
+    * buttons for saving & loading projects to disk in the project dialog
+    * more language options for the Text2Speech library, thanks Joan!
+* **Notable Fixes:**
+    * predicates inside generic WHEN hat blocks can now pass upvars
+    * eliminated "clicks" when playing music notes
+    * "relabel" blocks with translated drop-down choices
+    * transforming arrayed to linked lists without loosing the last element
+    * using "inherit" no longer un-hides the palette in presentation mode
+    * relabelling custom blocks with empty numerical input slots no longer fills in zeroes
+    * the language menu now has a "globe" icon (so it can be found in any language)
+    * accept a number as input for a sound - interpret as index
+    * fixed many costume sizes, thanks, Brian!
+* **Translation Updates:**
+    * Chinese, thanks, Simon!
+    * Turkish, thanks, Turgut!
+    * Indonesian, thanks, Emanuella!
+    * Greek, thanks, Alexandros!
+    * Catalan, thanks, Joan!
+    * Portuguese, thanks, Manuel!
+    * Spanish
+    * German
+    * French
+
+### 2019-06-27
+* updated manual and help screen for COMBINE, thank you, Brian!
+* updated CRAYONS library, thanks you, Brian!
+* prepared release
+
+### 2019-06-25
+* threads: 2 optional formal inputs for rings in MAP, KEEP, FIND, COMBINE: index and source list
+* objects, threads: renamed COMBINE label, switching the inputs
+* objects: took out "relabel" options for COMBINE
+* adjusted German translation to the switched order of inputs for COMBINE
+* adjusted Spanish translation to the switched order of inputs for COMBINE
+* adjusted Portuguese translation to the switched order of inputs for COMBINE
+* adjusted Catalan translation to the switched order of inputs for COMBINE
+* adjusted French translation to the switched order of inputs for COMBINE
+
+### 2019-06-24
+* removed "such that" from KEEP and FIND block labels
+* adjusted German, French, Portuguese, Spanish, Catalan translations
+* updated Catalan translation, thanks, Joan!
+* updated Portuguese translation, thanks, Manuel!
+* fixed #2417
+* fixed #2416
+
+### 2019-06-06
+* Maps: fixed a typecasting issue, thanks, Bernat!
+
+### 2019-06-04
+* Objects, Lists: fixed #682
+* Lists, Tables: fixed table watcher cell updates for costumes (save / load) 
+
+### 2019-06-03
+* Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
+* Blocks: fixed #1740
+* Blocks: fixed #670 and #1804
+
+### 2019-06-02
+* Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
+* Objects, Blocks: made "shown?" attribute inheritable 
+* Objects, Blocks: made "pen down?" attribute inheritable
+* Objects: made watchers immediately react to inheritance changes
+
+### 2019-06-01
+* Objects: new "pen down?" predicate
+* Objects: new "shown?" predicate
+* updated German translation for "shown?" and "pen down?"
+
+### 2019-05-31
+* Threads: optimized FOREACH performance for large linked lists
+* German translation update (FINDFIRST, WORD, TEMPORARY?)
+* Threads: also allow numbers as sprite names in SET
+* updated "animation" library (purged unused blocks)
+* updated "audioComp" library (purged unused blocks)
+* updated "frequency distribution" library (changed PIPE to use EMPTY prim)
+* Maps: added support for zxy, zyx and xyz style maps and satellite imagery
+* updated "World Map" library with options for Satellite, Streets and Shading
+
+### 2019-05-29
+* Threads, Objects: added "Find First" primitive to lists category
+* Blocks, Threads, Objects: added "blitz" version of FIND
+* Blocks, Threads, Objects:  renamed "whitespace" option in SPLIT to "word"
+* GUI, Threads: made "name" attribut programmatically settable, (I hate my life!)
+* Blocks: made the "temporary?" attibute readable (I hate my life even more!)
+
+### 2019-05-28
+* Maps: added various different tile hosts
+* added "set map style" command to maps library
+
+### 2019-05-25
+* added credits and license information to map costumes
+
+### 2019-05-24
+* new experimental Maps module, our own thin slippy maps client for Snap!
+* adjusted "World Map" library to the new client
+
+### 2019-05-23
+* Objects: changed WRITE block to print at the rotation center instead of the geometric one
+
+### 2019-05-21
+* Objects: fixed stage-size settings bug
+* new "World Map" library
+* enhanced detecting '+' and '-' keys for Firefox
+
+### 2019-05-20
+* Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
+* Objects: refactored projection layer update
+* Catalan translation update, thanks, Joan!
+
+### 2019-05-16
+* Objects: more refactoring to generalize projection extensions
+
+### 2019-05-15
+* Objects, Treads: refactored videoLayer so it can also be used for other extensions (maps, 3d)
+* Objects: refactored video frame capture
+
+### 2019-05-14
+* Objects: fixed originalCloneName reference when setting a new parent
+
+### 2019-05-12
+* Threads: fixed costume names and thumbnails for computed costumes
+
+### 2019-05-09
+* Blocks, Objects, Threads: tweaked new video-snap (still capture) feature 
+* Objects: fixed video still "snap on sprite" for Firefox
+* GUI: added credits in the "about" dialog for @jferran6 and @jguille2
+* German and Catalan translation updates
+
+### 2019-05-08
+* Blocks, Objects, Threads: integrated video capture control into global settings prims in Sensing
+* Blocks, Threads: added a %self menu
+* Blocks, Threads, Objects: Finalized Video ops
+* Objects, Threads, GUI: auto-start video capture when querying, stop video on stop-all
+* GUI, Objects: arranged video blocks in palette
+* Blocks, Objects, Threads: new video-snap (still capture) feature 
+
+### 2019-05-07
+* Blocks, Objects, Threads, Video: optimized video motion detection
+* Objects: actually stop the webcam, i.e. all tracks of the media stream when stopping video
+
+### 2019-05-06
+* Blocks, Objects, Threads, Video: New video motion detection feature by Josep Ferràndiz i Farré, under construction
+
+### 2019-05-03
+* Blocks: reverted reordering MY block dropdown by data type - back to similarities
+* Blocks: added "compile / un-compile" options to HOF-prims
+* Objects: added relabelling options for HOF-prims
+* German translation update
+* removed new HOF prims from the "atomic  HOFs" library (aka "Bigger Data")
+* edited "parallelization" library to use the new "is (list) empty" primitive
+
+### 2019-05-02
+* Blocks: reordered MY block dropdown by data type
+* Blocks, Threads: added "width" and "height" to the MY block's dropdown
+* Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
+* Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
+* updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
+* duplicated help-screens for "map" & friends for their atomic "blitz" variants
+* Objects: expose "import raw data" option in variable watcher context menu
+* German translation update for "raw data" importing feature
+* Threads: added JIT-Compiler support for new IF/ELSE reporter primitive
+
+### 2019-04-30
+* Blocks, Threads: added "id" to image attributes dropdown
+* Blocks, Threads: removed "id" from image attributes
+* Blocks, Threads: added "costume" selector to MY dropdown
+* German translation update
+* Objects: adjusted costume stretch minimum to 1 pixel
+
+### 2019-04-29
+* optimized animation library
+* Threads: stop audio frequency instances when "stop all" is executed
+
+### 2019-04-28
+* more helpscreens and bignum library update, thanks, Brian!
+* more language options for the Text2Speech library, thanks, Joan!
+* Objects, translations: changed "hz" typo to "Hz", thanks, Brian, for catching this!
+
+### 2019-04-27
+* Lists, Threads, Objects: new "is empty" predicate primitive in List category
+* Threads, Objects: new "numbers" constructor primitive in List category
+* Threads: renamed "aggregation" property to "accumulator"
+* GUI: removed "tools" library, yay!
+* updated German, Catalan, Spanish and French translations for former tools
+* renamed help screen for "is _ empty?"
+
+### 2019-04-26
+* updated Catalan translation (for new HOF prims)
+* updated Spanish translation (for new HOF prims)
+* updated French translation (for new HOF prims)
+* corrected French translation for "warp" to be "warp" instead of "englobe"
+* moved "for each" down in the lists pallette towards the imperative blocks
+* updated "tools" library (for new HOF prims)
+* removed "catch" etc. from "tools" library (has been moved to "iteration" lib)
+* updated "cases" library (for new HOF prims)
+* updated "bignums" library (for new HOF prims)
+* updated "crayons" library (for new HOF prims)
+* updated "animation" library (for new HOF prims)
+* updated "audio comp" library (for new HOF prims)
+* updated "parallelism" library (for new HOF prims)
+* renamed help screens for the new HOF prims
+* Theads: added support for single implicit parameter to FOR EACH prim
+
+### 2019-04-25
+* updated German translation (for new HOF prims)
+* Costume size fixes, yay! Thank you, Brian!!
+
+### 2019-04-24
+* Threads, Objects: new "combine" primitive in list category
+* Threads: added type-assertions for the new HOF prims
+* Threads, Objects: new "for" loop primitive in Control category
+* Threads, Objects: new "if then else" reporter primitive in Control category
+
+### 2019-04-23
+* Threads: fixed JS stack overflow issue for MAP primitive
+* Threads: new "map" and "for each" primitives in list category
+* Threads: new "keep" primitive in list category
+
+### 2019-04-22
+* Threads: fixed variable binding for "arguments", turned dictionary key into a Symbol
+
+### 2019-04-15
+* Catalan translation update
+
+### 2019-04-12
+* Objects: enabled text-variables as inputs for graphic effects / pen attributes
+* updated amination library with graphic effects and audio attributes
+
+### 2019-04-11
+* Blocks, Threads: renamed monadic selectors: "neg" to "-" and "log2" to "lg", added "2^"
+* Objects: moved costume-pixels primitives down in the palette towards the graphic effects
+* German translation update
+* re- renamed minus selector back to "neg"
+* updated tools library (removed "label", because it's now a primitive)
+* updated text-costumes library (removed "label", because it's now a primitive)
+* updated pixels-library (removed blocks that are now primitives)
+* updated audio-comp library (removed blocks that are now primitives)
+
+### 2019-04-10
+* Objects: took out MAP and FOREACH primitives (available in dev mode)
+* Objects: fixed #2371 (playing sounds in the stage)
+* GUI: fixed #2367 (changing project source after exporting to disk)
+* GUI: fixed #2373 (limit zoom blocks slider to 5x)
+
+### 2019-04-09
+* Blocks, Objects, Threads: new "getImageAttribute" reporter primitive
+* Objects, Threads: let "getImageAttribute" deal with null costumes
+* Objects, Threads: new "stretch" primitive for costumes, also for flipping
+* Threads: new feature: new costume from list of pixels
+* Objects, Threads: added "current" to costume input slot dropdown
+* Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
+* Objects: added reporter for graphic effects
+* Objects, Blocks: added pen attribute reporter
+* Objects: added "write" command to Pen category (same as "label" from tools
+* Objects: added "map" and "for each" primitives to List category
+* Objects: made HOF primitives hidable
+
+### 2019-04-08
+* Blocks, Objects, Threads: new "getSoundAttribute" reporter primitive
+* Blocks, Objects, Threads: new "play sound at sample rate" command primitive
+* Objects: added relabelling information for the new "play sound at sample rate" block
+* Objects, Threads: accept a number as input for a sound - interpret as index
+* Objects, Threads: accept lists and lists of lists as inputs to all sound playing primitives
+* Threads: accept lists and lists of lists as inputs to the "get sound attribute" primitive
+
+### 2019-04-05
+* Objects: eliminated "clicks" when playing music notes
+* Objects: eliminated "clicks" when playing a frequency
+* Widgets, Objects: Adjusted PianoKeyboard for the new audio engine
+* Objects: tweaked oscillator fade-out
+* Blocks, Threads: added "sample rate" selector to microphone drow-down
+* updated German translation for "sample rate"
+* Objects: stop microphone output when the user presses the stop button
+
+### 2019-04-04
+* Objects, Threads: new "play frequency" commands in the Sounds category
+* Objects, Store: renamed "pan left/right" to "balance"
+* updated German translation
+* moved "stage width" and "stage height" into attribute menu of the OF block for the stage
+* added 'volume' and 'balance' selectors to the OF block
+* Objects, Threads, Blocks: added inheritance support for "volume"
+* Objects, Threads, Blocks: added inheritance support for "balance"
+
+### 2019-04-03
+* Objects, Threads: Safari compatibility tweaks (only use StereoPanner if available)
+* Objects, Store: new feature: volume blocks
+* Objects: added relabelling information for the new volume blocks
+* Objects, Store: new feature: audio stereo-panning blocks
+* Objects: added relabelling information for the new stereo-panning blocks
+* German translation update for volume and panning blocks
+* updated AudioComp library for the new volume and stereo-panning features
+
+### 2019-04-02
+* Objects, Threads: lazily initialize volume property
+* Objects: use AudioContext to play recorded sounds
+* Objects: new audio scheme support for the stage
+* Objects: added basic stereo-panning support for sounds (under construction)
+* Objects, Threads: added basic stereo-panning support for notes
+* Objects: map volume to a logarithmic gain scale
+* Blocks, Threads: added "log2" function selector to monadic reporter, tweaked "log"
+
+### 2019-04-01
+* Objects: let the Microphone share the Note prototype's AudioContext
+* Objects: took out gain node from Note oscillator (will be used for "volume" setting)
+* Objects: refactored audio context sharing and lazy initialization
+* Objects, Threads: added volume support for notes (under construction)
+
+### 2019-03-31
+* Blocks, Threads: added "stage width" and "stage height" as gettable attributes to MY
+* updated German translation
+* updated AudioComp library (removed stage width/height blocks, added translation)
+
+### 2019-03-30
+* Objects: support multi-channel live-audio scripting
+* Threads, Objects: added JIT-compilation to live-audio scripting
+
+### 2019-03-28
+* Blocks, Threaeds, Objects: new experimental live audio scripting support
+
+### 2019-03-26
+* updated French translation
+* updated animation library with partial French translation
+
+### 2019-03-25
+* GUI: fixed unintentional pen trails when manually cloning or duplicating a sprite whose pen is down
+
+### 2019-03-18
+* Threads: replaced 'colorBehindSprite' with 'colorAtSprite'
+* Blocks: renamed some items of the microphone dropdown
+* updated German translation
+
+### 2019-03-17
+* Threads: renamed 'colorAtSprite' to 'colorBelowSprite' (first step to refactoring it altogether)
+
+### 2019-03-15
+* Objects: improved microphone pitch detection
+
+### 2019-03-14
+* atomic HOFs lib: consolidate names with tools lib, thanks, Brian
+* atomic HOFs lib: added translations from tools lib
+
+### 2019-03-13
+* Objects: Simplified and optimized pitch detection, made it work on Safari
+* Objects: made "play frequency" command experimental / only revealed in dev
+* added "play hz" and "stop hz" blocks to AudioComp libary
+* Objects: Optimized microphone volume detection
+
+### 2019-03-12
+* Threads: changed microphone volume (back) to a scale of 0-100
+* Threads, Objects: added "play frequency" primitive to "Sound" category
+* updated German translation for "play frequency" primitive
+* Objects, Threads: added "^" reporter (power of) in the Operators category
+* Objects: updated relabel-dictionary
+* updated Animation und AudioComp libraries with new powerOf primitive
+* disabled pitch detection for Safari, so at least the other microphone features work
+
+### 2019-03-11
+* added note / hz conversion blocks to audioComp library
+* ported multiline library to new (custom input slot) format
+* new "text costumes" library for generating costumes from letters or words of text
+* took out "b block" costume from catalog
+* added microphone "resolution" concept governing "bins" (buffer / bin sizes)
+* added microphone "resolution" settings to GUI
+* updated German translation for microphone settings
+* removed microphone resolution setters from audioComp library
+
+### 2019-03-10
+* Objects, Blocks, Threads: added microphone note and pitch detection
+* Tweaked note detection to only change when the audio signal is strong enough
+* updated German translation for pitch-detection
+* tweaked pitch detection to smoothen low audio signals
+
+### 2019-03-07
+* AudioComp lib: added block to set the microphone's buffer and fft sizes
+* German translation update (microphone features)
+* simplified "globe" symbol
+
+### 2019-03-06
+* AudioComp lib: turn off mic after 5 secs of idling
+* AudioComp lib: support Safari
+* removed "loudness / microphone" block from AudioComp lib (turned into primitive)
+* new "microphone" reporter in Sensing for getting volume, signals and frequencies
+* Objects: keep microphone always on when running Snap! locally
+* GUI: let users turn off microphone manually in the settings menu (in the offline version) 
+
+### 2019-03-05
+* GUI: added "globe" icon to language menu item
+* AudioComp lib: added @mjguzdial style live signal and fft support
+
+### 2019-03-04
+* GUI: deprecated storing projects in localStorage
+* GUI: reenabled publish / unpublish buttons in the project dialog
+* GUI: spread project dialog action buttons over 2 rows
+* GUI: changed project dialog's initial & miminum extent
+* Updated German translation
+
+### 2019-02-26
+* Symbols: new "globe" symbol
+* GUI: replaced "storage" icon in project dialog with "globe" symbol
+
+### 2019-02-26
+* GUI: made "inheritance support" setting hidden
+* Objects: disabled calls to world.worldCanvas.focus()
+
+### 2019-02-25
+* German translation for animation library
+* GUI, snap.html: don't focus embedded worlds
+
+### 2019-02-24
+* Catalan translation update, thanks, Joan!
+
+### 2019-02-23
+* new help screens for some blocks, thanks, Brian!
+
+### 2019-02-22
+* Paint, Sketch: fixed pipette bug for fill color introduced 
+* Tweaked German translation
+* Tweaked sharing scripts with global custom blocks among projects, thanks, Bernat! 
+
+### 2019-02-21
+* Blocks: fixed deleting a single command inside a stack
+
+### 2019-02-20
+* Tweaked German translation
+* Vector editor color name changes, thanks, Brian!
+
+### 2019-02-19
+* Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.
+* Udated German translation
+
+### 2019-02-18
+* Objects: enable sprite nesting via the context menu
+
+### 2019-02-15
+* BYOB: tweaked yesterday's fix...
+* Blocks: fixed a glitch in the custom block help mechanism (show only the prototype)
+
+### 2019-02-14
+* BYOB: keep empty numerical input slots in custom blocks empty when relabelling
+
+### 2019-02-07
+* Store: tweaked loading mechanism to enable command blocks inside reporter rings
+* Objects: tweaked spec for settings getter
+* Blocks: improved dropping command blocks into reporter rings
+* Morphic: simplified and optimized Node>>parentThatIsA / parentThatIsAnyOf
+* Blocks, Lists, Tables: refactored for optimized parent-by-type detection
+* Blocks: adjusted keyboard typing for command blocks inside reporter rings
+* GUI, Blocks: enable dropping command blocks into all rings by default. Yeah!
+
+### 2019-02-06
+* Blocks, BYOB: refactored custom block input options and drop-down menus
+* Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch)
+* Blocks: enable dropping commands into all rings, under constructions 
+
+### 2019-02-05
+* BYOB: radio button symbols for special slot / drop-down menu options
+
+### 2019-02-04
+* BYOB: new experimental feature: special context-aware drop-down menus for custom blocks
+* BYOB: identify multi-line input slots by the pilcrow symbol in the slot editor
+* BYOB: support default values in multi-line input slots inside custom blocks
+* Blocks: enable piano keyboard menu to work with textual values representable as numbers
+* Blocks: enable dial menu to work with textual values representable as numbers
+
+### 2019-02-01
+* BYOB: new experimental feature: special multi-line and monospaced input slot types
+
+### 2019-01-28
+* Threads, Objects: new "object" reporter in the Sensing category
+* Blocks, Objects, Threads: added "flat line ends" option to "turbo mode" accessor blocks
+* Blocks, Threads: added 'draggable' and 'rotation style' selectors to accessor blocks
+* Greek translation update, thanks, Alexandros!
+* German translation update
+* pushed version to "Beta"
+
+### 2019-01-25
+* Threads: tweaked CSV-parser to handle \r-only record delimiters
+* Cloud, GUI: Decouple cloud access from GUI, thanks, Michael and Bernat!
+* GUI: added ability to export sounds
+
+### 2019-01-24
+* Turkish translation update, thanks, Turgut!
+* updated audio-comp library blocks with new loop-arrow symbols
+
+### 2019-01-23
+* Objects, Threads: new blocks for setting and changing the stage's background color
+* Store: save stage's background color in project
+* updated German translation
+* Blocks: Tweaked rendering of C-shaped slots in predicates 
+* updated cases library blocks with new loop-arrow symbols
+* updated animation library blocks with new loop-arrow symbols, tweaked FOR block
+
+### 2019-01-22
+* Objects: Remove all clones when the Green Flag is clicked
+* Blocks: adjust label row below C-Slot to accomodate loop icon, if any
+* updated iteration-composition library blocks with new loop-arrow symbols
+* updated list-utilities library blocks with new loop-arrow symbols
+* Threads: cleaned up CSV parser
+* Objects: fixed pen hsv-cache invalidation for clones
+
+### 2019-01-21
+* let users make C-shape slots with loop arrow symbols. Sigh.
+* updated internal "for each" primitive block with new arrow symbol. Sigh. 
+* updated Indonesian translation, thanks, Emmanuella Rumanti 
+* updated FOR and FOREACH in tools library with new new loop-arrow symbols
+
+### 2019-01-19
+* fixed "Staatsgalerie bug" - relabel did not restore drop-down choice when localized
+
+### 2019-01-17
+* Greek translation update, thanks, Alexandros Prekates!
+* cloud: user role support, thanks, Bernat
 
 ### 2019-01-16
 * suppress 'loop' arrow symbol where label text follow the C-slot in translations
