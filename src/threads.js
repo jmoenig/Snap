@@ -2880,7 +2880,8 @@ Process.prototype.doAsk = function (data) {
         activePrompter;
 
     stage.keysPressed = {};
-    if (!this.prompter && !this.isTemporary) {
+    if (rcvr.isTemporary) { return; }
+    if (!this.prompter) {
         activePrompter = detect(
             stage.children,
             function (morph) {return morph instanceof StagePrompterMorph; }
