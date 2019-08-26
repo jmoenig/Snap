@@ -2626,6 +2626,8 @@ SnapTranslator.dict.ca = {
         '[EXPERIMENTAL] Processa llistes enormes molt ràpidament',
     '[EXPERIMENTAL] analyze data for frequency distribution':
         '[EXPERIMENTAL] Analitza dades per fer freqüències de distribució',
+    '[EXPERIMENTAL] add interactive maps to projects':
+        '[EXPERIMENTAL] Afegeix mapes cartogràfics interactius als teus projectes',
     'declare global or sprite-local variables in a script':
         'Declara i assigna variables (locals o globals) dins els programes',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
