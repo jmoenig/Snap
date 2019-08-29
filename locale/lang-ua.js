@@ -286,7 +286,6 @@ SnapTranslator.dict.ua = {
     // motion:
     'Stage selected:\nno motion primitives':
         'Обрана сцена:\nвідсутні блоки руху',
-
     'move %n steps':
         'перемістити на %n кроків',
     'turn %clockwise %n degrees':
@@ -339,7 +338,7 @@ SnapTranslator.dict.ua = {
         'Привіт!',
     'Hmm...':
         'Хмм...',
- '%img of costume %cst':
+    '%img of costume %cst':
         '%img образу %cst',
     'stretch %cst x: %n y: %n %':
         'розтягнути %cst x: %n y: %n %',
@@ -349,9 +348,8 @@ SnapTranslator.dict.ua = {
         'встановити ефект %eff в %n',
     'clear graphic effects':
         'очистити графічні ефекти',
- '%eff effect':
+    '%eff effect':
         'ефект %eff ',
-
     'change size by %n':
         'змінити розмір на %n %',
     'set size to %n %':
@@ -370,13 +368,10 @@ SnapTranslator.dict.ua = {
         'попереду',
     'back':
         'позаду',
-
-
     'go to front':
         'стати попереду всіх',
     'go back %n layers':
         'стати позаду %n рівнів',
-
     'development mode \ndebugging primitives:':
         'Режим розробки \n налагодження примітивів:',
     'console log %mult%s':
@@ -393,9 +388,9 @@ SnapTranslator.dict.ua = {
         'зупинити всі звуки',
     'rest for %n beats':
         'пауза %n тактів',
-   'play sound %snd at %rate Hz':
+    'play sound %snd at %rate Hz':
         'грати звук %snd як %rate Hz', 
-   '%aa of sound %snd':
+    '%aa of sound %snd':
         '%aa звуку %snd',
     'duration':
         'тривалість',
@@ -403,17 +398,11 @@ SnapTranslator.dict.ua = {
         'довжина',
     'number of channels':
         'номер каналу',
-
     'sample rate':
         'частота семплування',
-'samples':
+    'samples':
         'семпли',
-
-
-
-
-
-   'play note %note for %n beats':
+    'play note %note for %n beats':
         'грати ноту %note %n тактів',
     'change tempo by %n':
         'змінити темп на %n',
@@ -439,7 +428,7 @@ SnapTranslator.dict.ua = {
         '(3) пила (sawtooth)',
     '(4) triangle':
         '(4) трикутник (triangle)',
- 'change volume by %n':
+    'change volume by %n':
         'змінити гучність на %n',
     'set volume to %n %':
         'встановити гучність як %n %',
@@ -449,21 +438,18 @@ SnapTranslator.dict.ua = {
         'встановити баланс у %n',
     'balance':
         'баланс',
- 'volume':
+    'volume':
         'гучність',
- 'note':
+    'note':
         'нота',
     'frequency':
         'частота',
-
-
     'play frequency %n Hz':
         'відтворити частоту %n Hz',
     'stop frequency':
         'зупитнити відтворнення частоти',
     'play %n Hz for %n secs':
         'spiele %n Hz f\u00fcr %n Sek.',
- 
 
     // pen:
     'clear':
@@ -472,7 +458,7 @@ SnapTranslator.dict.ua = {
         'опустити олівець',
     'pen up':
         'підняти олівець',
- 'pen down?':
+    'pen down?':
         'олівець опущено?',
     'set pen color to %clr':
         'колір олівця %clr',
@@ -492,14 +478,13 @@ SnapTranslator.dict.ua = {
         'штамп',
     'fill':
         'заливка',
-     'change pen %hsva by %n':
+    'change pen %hsva by %n':
         'змінити властивість %hsva на %n',
-'set pen %hsva to %n':
+    'set pen %hsva to %n':
         'встановити властивість %hsva як %n',
-'pen %pen':
+    'pen %pen':
         'олівець %pen',
-
-'write %s size %n':
+    'write %s size %n':
         'написати %s розмір %n',
     'paste on %spr':
         'вставити на %spr',
@@ -551,13 +536,13 @@ SnapTranslator.dict.ua = {
         'повторити %n %loop',
     'repeat until %b %loop':
         'повторити поки не %b %loop',
- 'for %upvar = %n to %n %cla':
+    'for %upvar = %n to %n %cla':
         'для %upvar = %n до %n %cla',
     'if %b %c':
         'якщо %b %c',
     'if %b %c else %c':
         'якщо %b то %c інакше %c',
-'if %b then %s else %s':
+    'if %b then %s else %s':
         'якщо %b то %s інакше %s',
     'report %s':
         'результат %s',
@@ -627,7 +612,7 @@ SnapTranslator.dict.ua = {
         'клавішу %key натиснуто?',
     'distance to %dst':
         'відстань до %dst',
-     '%rel to %dst':
+    '%rel to %dst':
         '%rel до %dst',
     'distance':
     	'відстань',
@@ -639,56 +624,51 @@ SnapTranslator.dict.ua = {
         '%att у %spr',
     'my %get':
         'атрибут %get',
- 'object %self':
+    'object %self':
         'об`єкт %self',
-
-
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'режим турбо?',
     'set turbo mode to %b':
         'встановити турбо-режим %b',
-
     'filtered for %clr':
         'фільтрація для %clr',
     'stack size':
         'размір стека',
     'frames':
         'рамки',
-'microphone %audio':
+    'microphone %audio':
         'мікрофон %audio',
-
-'video %vid on %self':
+    'video %vid on %self':
         'відео %vid на %self',
-'motion':
+    'motion':
         'рух',
     'snap':
         'Snap',
-
-'set video transparency to %n':
+    'set video transparency to %n':
         'встановити прозорість відео в %n',
- 'is %setting on?':
+    'is %setting on?':
         'чи %setting ввімкнено?',
- 'video capture':
+    'video capture':
         'відеозапис',
     'mirror video':
         'дзеркальне відео',
-'turbo mode':
+    'turbo mode':
         'режим турбо',
- 'set %setting to %b':
+    'set %setting to %b':
         'задати %setting як %b',
- 'temporary?':
+    'temporary?':
         'тимчасовий?',   
     'width':
         'ширина',
     'height':
         'висота',
-'rotation style':
+    'rotation style':
         'стиль обертання',
-'draggable?':
+    'draggable?':
         'відчутній?',
-'spectrum':
+    'spectrum':
         'спектр частот',
     'resolution':
         'якість',
@@ -744,7 +724,7 @@ SnapTranslator.dict.ua = {
         '%s тотожно %s ?',
     'split %s by %delim':
         'розділити %s по %delim',
- 'JavaScript function ( %mult%s ) { %code }':
+    'JavaScript function ( %mult%s ) { %code }':
         'функція JavaScript ( %mult%s ) { %code }',
     'type of %s':
         'тип %s',
@@ -773,11 +753,8 @@ SnapTranslator.dict.ua = {
     // lists:
     'list %exp':
         'список %exp',
-
-'numbers from %n to %n':
+    'numbers from %n to %n':
         'числа від %n до %n',
-
-
     '%s in front of %l':
         '%s попереду %l',
     'item %idx of %l':
@@ -790,12 +767,8 @@ SnapTranslator.dict.ua = {
         '%l вміщує %s',
     'thing':
         'що-небудь',
- 'is %l empty?':
+    'is %l empty?':
         'чи %l порожнє?',
-
-
-
-
     'map %repRing over %l':
         'встановити %repRing над %l',
     'keep items %predRing from %l':
@@ -804,9 +777,6 @@ SnapTranslator.dict.ua = {
         'знайти перший елемент %predRing в %l',
     'combine %l using %repRing':
         'поєднати елементи %l із %repRing',
-
-
-
     '%blitz map %repRing over %l':
         '%blitz wende %repRing an auf %l',
     '%blitz keep items %predRing from %l':
@@ -815,17 +785,10 @@ SnapTranslator.dict.ua = {
         '%blitz finde das erste Element, das %predRing in %l',
     '%blitz combine %l using %repRing':
         '%blitz kombiniere die Elemente von %l mit %repRing',
-
-
     'for each %upvar in %l %cla':
         'для кожного %upvar в %l %cla',
     'item':
         'елемент',
-
-
-
-
-
     'add %s to %l':
         'додати %s до %l',
     'delete %ida of %l':
@@ -907,14 +870,14 @@ SnapTranslator.dict.ua = {
         'Додати образ з бібліотеки',
     'Select a sound from the media library':
         'Добдати звук з бібліотеки',
- //Libraries
+
+    // Libraries
     'Import library':
         'Імпортувати бібліотеки',
     'Loading':
         'Завантаження',
     'Imported':
         'Імпортовано',
-    
 
     // cloud menu
     'Login...':
@@ -929,20 +892,6 @@ SnapTranslator.dict.ua = {
         'Скинути пароль...',
     'Resend Verification Email...':
         'Повтор надсилання підтвердження електронною поштою ..',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // settings menu
     'Language...':
@@ -1085,12 +1034,8 @@ SnapTranslator.dict.ua = {
         'вимкніть, щоб відмінити\nнаслідування властивостей спрайтів',
     'check for sprite\ninheritance features':
         'увімкніть, щоб задіяти\nнаслідування властивостей спрайтів',
-
-
      'Error\nexpecting list but getting nothing':
         'Помилка\nне вказано список',
-
-
 
     // inputs
     'with inputs':
@@ -1207,7 +1152,7 @@ SnapTranslator.dict.ua = {
         'експорт',
     'rename costume':
         'перейменувати образ',
- 'pixels':
+    'pixels':
         'пікселі',
 
     // sounds
@@ -1237,8 +1182,7 @@ SnapTranslator.dict.ua = {
         'Браузер',
     'Examples':
         'Приклади',
-    
-    
+
     // buttons
     'OK':
         'OK',
@@ -1513,9 +1457,9 @@ SnapTranslator.dict.ua = {
         'насиченість',
     'brightness':
         'яскравість',
- 'hue':
+    'hue':
         'відтінок',
- 'transparency':
+    'transparency':
         'прозорість',
 
     // keys
@@ -1637,8 +1581,7 @@ SnapTranslator.dict.ua = {
     // delimiters
     'letter':
         'літерам',
-
-'word':
+    'word':
         'словам',
     'whitespace':
         'пробілом',
@@ -1648,7 +1591,7 @@ SnapTranslator.dict.ua = {
         'табуляторам',
     'cr':
         'кінцям рядків',
-        
+
     // data types
     'number':
         'число',
@@ -1680,11 +1623,9 @@ SnapTranslator.dict.ua = {
         'зʼєднання встановлено',
     'undo':
         'відмінити',
-
-  'Error':
+    'Error':
         'Помилка',
 
-        
     // attributes
     'neighbors':
         'сусіди',
@@ -1738,27 +1679,26 @@ SnapTranslator.dict.ua = {
         'Розмір пера',
     'Constrain proportions of shapes?\n(you can also hold shift)':
         'Зберігати пропорції фігур (коло, квадрат)?\nможна використати Shift',
-	'Paintbrush tool\n(free draw)':
-		'пензлик (довільне малювання)',
-	'Stroked Rectangle\n(shift: square)':
-		'Прямокутник\n(shift: квадрат)',
-	'Stroked Ellipse\n(shift: circle)':
-		'Еліпс\n(shift: коло)',
-	'Eraser tool':
-		'Гумка',
-	'Set the rotation center':
-		'Встановлення центру обертання',
-	'Line tool\n(shift: vertical/horizontal)':
-		'Лінія\n(shift: вертикальна/горизонтальна)',
-	'Filled Rectangle\n(shift: square)':
-		'Зафарбований прямокутник\n(shift: квадрат)',
-	'Filled Ellipse\n(shift: circle)':
-		'Зафарбований еліпс\n(shift: круг)',
-	'Fill a region':
-		'Заливка',
-	'Pipette tool\n(pick a color anywhere)':
-		'Вибір кольору\n(взяти колір кліком на будь-яку точку)',
-
+    'Paintbrush tool\n(free draw)':
+        'пензлик (довільне малювання)',
+    'Stroked Rectangle\n(shift: square)':
+        'Прямокутник\n(shift: квадрат)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Еліпс\n(shift: коло)',
+    'Eraser tool':
+        'Гумка',
+    'Set the rotation center':
+        'Встановлення центру обертання',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Лінія\n(shift: вертикальна/горизонтальна)',
+    'Filled Rectangle\n(shift: square)':
+        'Зафарбований прямокутник\n(shift: квадрат)',
+    'Filled Ellipse\n(shift: circle)':
+        'Зафарбований еліпс\n(shift: круг)',
+    'Fill a region':
+        'Заливка',
+    'Pipette tool\n(pick a color anywhere)':
+        'Вибір кольору\n(взяти колір кліком на будь-яку точку)',
     'experimental -\nunder construction':
         'експериментальна можливість -\nв розробці',
     'Camera':
@@ -1787,5 +1727,4 @@ SnapTranslator.dict.ua = {
         'час в мілісекундах',
     'costume name':
         'Імʼя образу'
-    
 };

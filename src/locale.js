@@ -600,5 +600,5 @@ SnapTranslator.dict.ua = {
     'translator_e-mail':
         'kseryj@gmail.com',
     'last_changed':
-        '2018-10-14'
+        '2018-08-21'
 };
