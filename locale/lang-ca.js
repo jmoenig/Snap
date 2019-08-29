@@ -441,6 +441,8 @@ SnapTranslator.dict.ca = {
         'estampa',
     'fill':
         'omple',
+    'paste on %spr':
+        'estampa sobre %spr',
 
     // control:
     'when %greenflag clicked':
@@ -601,6 +603,9 @@ SnapTranslator.dict.ca = {
         'frames',
     'object %self':
         'objecte %self',
+    'r-g-b-a':
+        'color RGBA',
+
     // operators:
     '%n mod %n':
         'residu de dividir %n entre %n',
@@ -666,6 +671,9 @@ SnapTranslator.dict.ca = {
         'amaga la variable %var',
     'script variables %scriptVars':
         'variables de programa %scriptVars',
+
+    'my':
+        'atribut',
 
     // lists:
     'list %exp':
