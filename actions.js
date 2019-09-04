@@ -743,7 +743,7 @@ ActionManager.prototype._getBlockState = function(id) {
     // Use the last connection unless the last connection was to the
     // top of a command block and it has a position set
     if (target && !(ActionManager.isWeakTarget(target) && position)) {
-        state = [this._targetOf[id]];
+        state = [target];
     } else if (position) {
         state = [position.x, position.y];
     } else {  // newly created
@@ -1662,15 +1662,14 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     this.__recordTarget(block.id, rawTarget);
 
     // Resolve the target
+    var targetBlock;  // block associated with the target
     if (block instanceof CommandBlockMorph) {
         target.element = this.getBlockFromId(target.element);
-        this.ensureNotDragging(target.element);
-        owner = this.getBlockOwner(target.element);
-        scripts = target.element.parentThatIsA(ScriptsMorph);
-        //
+        targetBlock = target.element;
+
         // If we are placing blocks btwn existing connected blocks,
         // we will need to update the target of the existing bottom block, too
-        targetNextBlock = target.loc === 'bottom' ? target.element.nextBlock() : target.element;
+        targetNextBlock = target.loc === 'bottom' ? targetBlock.nextBlock() : targetBlock;
 
         if (block.parent) {
             if (target.loc === 'bottom') {
@@ -1685,22 +1684,27 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.disconnectBlock(block, scripts);
 
         target = this.getBlockFromId(target);
-        this.ensureNotDragging(target);
-        owner = this.getBlockOwner(target);
-        scripts = target.parentThatIsA(ScriptsMorph);
+        targetBlock = target;
 
         // If the target is a RingMorph, it will be overwritten rather than popped out
         if (target instanceof RingMorph) {
             this.__clearBlockRecords(target.id);
         }
-        var isReplacingReporter = block instanceof ReporterBlockMorph &&
-            target instanceof ReporterBlockMorph;
 
-        if (isReplacingReporter) {
-            this.__recordTarget(block.id, this._getCurrentTarget(target));
-        }
     } else {
         logger.error('Unsupported "onMoveBlock":', block);
+    }
+
+    this.ensureNotDragging(targetBlock);
+    owner = this.getBlockOwner(targetBlock);
+    scripts = targetBlock.parentThatIsA(ScriptsMorph);
+
+    // Update targets for displaced reporter blocks
+    var isReplacingReporter = block instanceof ReporterBlockMorph &&
+        target instanceof ReporterBlockMorph;
+
+    if (isReplacingReporter) {
+        this.__recordTarget(block.id, this._getCurrentTarget(target));
     }
 
     isTargetDragging = !scripts;
