@@ -1651,6 +1651,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     var myself = this,
         block = this.deserializeBlock(id),
         isNewBlock = !this._blocks[block.id],
+        targetNextBlock = null,
         target = copy(rawTarget),
         isTargetDragging = false,
         afterMove,
@@ -1666,6 +1667,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.ensureNotDragging(target.element);
         owner = this.getBlockOwner(target.element);
         scripts = target.element.parentThatIsA(ScriptsMorph);
+        //
+        // If we are placing blocks btwn existing connected blocks,
+        // we will need to update the target of the existing bottom block, too
+        targetNextBlock = target.loc === 'bottom' ? target.element.nextBlock() : target.element;
+
         if (block.parent) {
             if (target.loc === 'bottom') {
                 this.disconnectBlock(block, scripts);
@@ -1731,6 +1737,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         if (ActionManager.isWeakTarget(target)) {
             var topBlock = block.topBlock();
             myself._positionOf[topBlock.id] = myself.getStandardPosition(scripts, topBlock.position());
+        }
+
+        if (targetNextBlock) {
+            myself.__recordTarget(targetNextBlock.id, myself._getCurrentTarget(targetNextBlock));
         }
 
         if (block.fixChildrensBlockColor) {

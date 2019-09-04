@@ -160,6 +160,32 @@ describe('blocks', function() {
                     throw err;
                 });
         });
+
+        it('should update target of bottom block during splice', async function() {
+            const {SnapUndo, copy} = driver.globals();
+            const spriteScriptId = driver.ide().currentSprite.id + '/scripts';
+            const point = new Point(300, 300);
+
+            // Create a couple blocks
+            const topBlock = await driver.addBlock('forward', point);
+            const middleBlock = await driver.addBlock('doGlide', point);
+            const bottomBlock = await driver.addBlock('turnLeft', point);
+
+            let target = {
+                element: topBlock,
+                point: topBlock.bottomAttachPoint(),
+                loc: 'bottom'
+            };
+            await SnapActions.moveBlock(bottomBlock, copy(target));
+            await SnapActions.moveBlock(middleBlock, copy(target));
+            await SnapActions.setBlockPosition(bottomBlock, new Point(500, 500));
+
+            await SnapUndo.undo(spriteScriptId);
+
+            const msg = 'Blocks should be in correct order after undo';
+            expect(topBlock.nextBlock()).toBe(middleBlock, msg);
+            expect(middleBlock.nextBlock()).toBe(bottomBlock, msg);
+        });
     });
 
     describe('rpc', function() {
