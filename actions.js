@@ -1669,7 +1669,9 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
         // If we are placing blocks btwn existing connected blocks,
         // we will need to update the target of the existing bottom block, too
-        targetNextBlock = target.loc === 'bottom' ? targetBlock.nextBlock() : targetBlock;
+        targetNextBlock = target.loc === 'bottom' ?
+            targetBlock.nextBlock && targetBlock.nextBlock() :
+            targetBlock;
 
         if (block.parent) {
             if (target.loc === 'bottom') {
