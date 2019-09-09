@@ -1589,8 +1589,8 @@ ActionManager.prototype.getBlockFromId = function(id) {
         editor;
 
     // If the id is a custom block id, it is referencing the PrototypeHatBlockMorph
-    if (this._customBlocks[id]) {
-        return this._getCustomBlockEditor(id)
+    if (this._customBlocks[blockId]) {
+        block = this._getCustomBlockEditor(blockId)
             .body.contents  // get ScriptsMorph of BlockEditorMorph
             .children.find(function(child) {
                 return child instanceof PrototypeHatBlockMorph;
