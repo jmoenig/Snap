@@ -1024,7 +1024,7 @@ SnapTranslator.dict.gl = {
     'detach from':
         'soltar de',
     'detach all parts':
-        'soltar todas as partes',able
+        'soltar todas as partes',
     'export...':
         'exportar…',
     'parent...':
