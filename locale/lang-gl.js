@@ -413,7 +413,7 @@ SnapTranslator.dict.gl = {
     'pen down':
         'baixar lapis',
     'pen up':
-        'subir lapis',,
+        'subir lapis',
     'pen down?':
         'lapis abaixo?',
     'set pen color to %clr':
