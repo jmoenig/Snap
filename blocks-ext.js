@@ -11,6 +11,7 @@ BlockMorph.prototype.showHelp = function() {
     var myself = this,
         help,
         block,
+        nb,
         inputs = this.inputs(),
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
@@ -41,8 +42,23 @@ BlockMorph.prototype.showHelp = function() {
             + metadata.slice(0,3).join(', ') + ' ...';
     }
 
+    // Get a copy of the block to display to the user
     block = this.fullCopy();
+    if (block instanceof CommandBlockMorph) {
+        nb = block.nextBlock();
+        if (nb) {
+            nb.destroy();
+        }
+    }
+    block.inputs().slice(2).forEach(function(child) {  // clear rpc args
+        if (child instanceof HintInputSlotMorph) {
+            child.setContents('');
+        } else {
+            child.userDestroy();
+        }
+    })
     block.addShadow();
+
     new DialogBoxMorph().inform(
         'Help',
         help,
