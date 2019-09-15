@@ -9575,37 +9575,6 @@ Costume.prototype.stretched = function (w, h) {
 
 // Costume actions
 
-Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
-    var myself = this,
-        editor = new PaintEditorMorph();
-    editor.oncancel = oncancel || nop;
-    editor.openIn(
-        aWorld,
-        isnew ?
-                newCanvas(StageMorph.prototype.dimensions, true) :
-                this.contents,
-        isnew ?
-                null :
-                this.rotationCenter,
-        function (img, rc) {
-            myself.contents = img;
-            myself.rotationCenter = rc;
-            myself.version = Date.now();
-            aWorld.changed();
-            if (anIDE) {
-                if (anIDE.currentSprite instanceof SpriteMorph) {
-                    // don't shrinkwrap stage costumes
-                    myself.shrinkWrap();
-                }
-                anIDE.currentSprite.wearCostume(myself, true); // don't shadow
-                anIDE.hasChangedMedia = true;
-            }
-            (onsubmit || nop)();
-        },
-        anIDE
-    );
-};
-
 Costume.prototype.editRotationPointOnly = function (aWorld) {
     var editor = new CostumeEditorMorph(this),
         action,
@@ -9798,41 +9767,6 @@ SVG_Costume.prototype.parseShapes = function () {
             return window[child.attributes.prototype].fromSVG(child);
         });
     }
-};
-
-SVG_Costume.prototype.edit = function (
-    aWorld,
-    anIDE,
-    isnew,
-    oncancel,
-    onsubmit
-) {
-    var myself = this,
-        editor;
-
-    editor = new VectorPaintEditorMorph();
-
-    editor.oncancel = oncancel || nop;
-    editor.openIn(
-        aWorld,
-        isnew ? newCanvas(StageMorph.prototype.dimensions) : this.contents,
-        isnew ? new Point(240, 180) : myself.rotationCenter,
-        function (img, rc, shapes) {
-            myself.contents = img;
-            myself.rotationCenter = rc;
-            myself.shapes = shapes;
-            myself.version = Date.now();
-            aWorld.changed();
-            if (anIDE) {
-                if (isnew) {anIDE.currentSprite.addCostume(myself); }
-                anIDE.currentSprite.wearCostume(myself);
-                anIDE.hasChangedMedia = true;
-            }
-            (onsubmit || nop)();
-        },
-        anIDE,
-        this.shapes || []
-    );
 };
 
 // SVG_Costume pixel access
