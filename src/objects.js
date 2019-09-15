@@ -3435,6 +3435,11 @@ SpriteMorph.prototype.addCostume = function (costume) {
     this.costumes.add(costume);
 };
 
+SpriteMorph.prototype.replaceCostume = function (cosOld, cos) {
+    var cosIdx = this.costumes.asArray().indexOf(cosOld) + 1;
+    this.costumes.put(cos, cosIdx);
+};
+    
 SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
     var x = this.xPosition ? this.xPosition() : null,
         y = this.yPosition ? this.yPosition() : null,

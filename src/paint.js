@@ -355,17 +355,19 @@ PaintEditorMorph.prototype.cancel = function () {
 };
 
 PaintEditorMorph.prototype.switchToVector = function () {
-    var myself = this;
-    this.object = new SVG_Costume(new Image(), '', new Point(0,0));
-    this.object.edit(
-        this.world(),
-        this.ide,
-        true,
-        this.oncancel,
-        function() {
-            myself.ide.currentSprite.changed();
-        }
-    );
+    var anIDE = this.ide,
+        myself = this,
+        editor = new VectorPaintEditorMorph(),
+        aWorld = this.world();
+    editor.oncancel = this.oncancel;
+    editor.openIn(
+        aWorld,
+        new Image(),
+        null,
+        myself.callback,
+        anIDE);
+
+    this.destroy();
 };
 
 PaintEditorMorph.prototype.populatePropertiesMenu = function () {

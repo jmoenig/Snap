@@ -2364,25 +2364,32 @@ IDE_Morph.prototype.addNewSprite = function () {
 
 IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        cos = new Costume(),
-        myself = this;
-
+        cosName = sprite.newCostumeName(localize('Untitled')),
+        myself = this,
+        editor = new PaintEditorMorph(),
+        aWorld = this.world();
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
     this.stage.add(sprite);
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
     this.selectSprite(sprite);
-    cos.edit(
-        this.world(),
-        this,
-        true,
-        function () {myself.removeSprite(sprite); },
-        function () {
+    editor.oncancel = function () { myself.removeSprite(sprite); };
+    editor.openIn(
+        aWorld,
+        newCanvas(StageMorph.prototype.dimensions, true),
+        null,
+        function (img, rc, shapes) {
+            cos = createCostume(img, cosName, rc, shapes);
+            aWorld.changed();
+            if (!(cos instanceof SVG_Costume))
+                cos.shrinkWrap();
+            sprite.wearCostume(cos, true); // don't shadow
+            this.hasChangedMedia = true;
+            sprite.shadowAttribute('costumes');
             sprite.addCostume(cos);
-            sprite.wearCostume(cos);
-        }
-    );
+        },
+        this);
 };
 
 IDE_Morph.prototype.newCamSprite = function () {
@@ -8325,11 +8332,33 @@ CostumeIconMorph.prototype.editCostume = function () {
         }
     }
 
-    this.object.edit(
-        this.world(),
-        this.parentThatIsA(IDE_Morph),
-        false // not a new costume, retain existing rotation center
-    );
+    var cosOld = this.object,
+        cosName = cosOld.name,
+        anIDE = this.parentThatIsA(IDE_Morph),
+        sprite = anIDE.currentSprite,
+        myself = this,
+        editor = (cosOld instanceof SVG_Costume) ? new VectorPaintEditorMorph() : new PaintEditorMorph(),
+        shapes = (cosOld instanceof SVG_Costume) ? cosOld.shapes : null,
+        aWorld = this.world();
+    editor.oncancel = nop;
+    editor.openIn(
+        aWorld,
+        cosOld.contents,
+        cosOld.rotationCenter,
+        function (img, rc, shapes) {
+            cos = createCostume(img, cosName, rc, shapes);
+            if (sprite instanceof SpriteMorph && !(cos instanceof SVG_Costume)) {
+                // don't shrinkwrap stage costumes
+                cos.shrinkWrap();
+            }
+            sprite.replaceCostume(cosOld, cos);
+            sprite.wearCostume(cos, true); // don't shadow
+            sprite.shadowAttribute('costumes');
+            aWorld.changed();
+            anIDE.hasChangedMedia = true;
+        },
+        anIDE,
+        shapes);
 };
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
@@ -8791,21 +8820,51 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.updateList();
 };
 
+function createCostume(img, name, rotationCenter, shapes) {
+    var cos;
+    if (shapes)
+    {
+        if (shapes.length === 0)
+            return null;
+        cos = new SVG_Costume(img, name, rotationCenter);
+        cos.shapes = shapes;
+    }
+    else
+    {
+        cos = new Costume(img, name, rotationCenter);
+    }
+    
+    cos.version = Date.now();
+    return cos;
+}
+
 WardrobeMorph.prototype.paintNew = function () {
-    var cos = new Costume(
-            newCanvas(null, true),
-            this.sprite.newCostumeName(localize('Untitled'))
-        ),
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
-    cos.edit(this.world(), ide, true, null, function () {
-        myself.sprite.shadowAttribute('costumes');
-        myself.sprite.addCostume(cos);
-        myself.updateList();
-        if (ide) {
-            ide.currentSprite.wearCostume(cos);
-        }
-    });
+    var cosName = this.sprite.newCostumeName(localize('Untitled')),
+        anIDE = this.parentThatIsA(IDE_Morph),
+        myself = this,
+        editor = new PaintEditorMorph(),
+        aWorld = this.world();
+    editor.oncancel = nop;
+    editor.openIn(
+        aWorld,
+        newCanvas(StageMorph.prototype.dimensions, true),
+        null,
+        function (img, rc, shapes) {
+            cos = createCostume(img, cosName, rc, shapes);
+            aWorld.changed();
+            if (anIDE) {
+                if (anIDE.currentSprite instanceof SpriteMorph && !(cos instanceof SVG_Costume)) {
+                    // don't shrinkwrap stage costumes
+                    cos.shrinkWrap();
+                }
+                anIDE.currentSprite.wearCostume(cos, true); // don't shadow
+                anIDE.hasChangedMedia = true;
+            }
+            myself.sprite.shadowAttribute('costumes');
+            myself.sprite.addCostume(cos);
+            myself.updateList();
+        },
+        anIDE);
 };
 
 WardrobeMorph.prototype.newFromCam = function () {

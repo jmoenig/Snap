@@ -998,22 +998,24 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
 };
 
 VectorPaintEditorMorph.prototype.convertToBitmap = function () {
-    var canvas = newCanvas(StageMorph.prototype.dimensions);
-
-    this.object = new Costume();
+    var canvas = newCanvas(StageMorph.prototype.dimensions),
+        anIDE = this.ide,
+        myself = this,
+        editor = new PaintEditorMorph(),
+        aWorld = this.world();
 
     this.shapes.forEach(function(each) {
         canvas.getContext('2d').drawImage(each.image, 0, 0);
     });
 
-    this.object.rotationCenter = this.paper.rotationCenter.copy();
-    this.object.contents = canvas;
-    this.object.edit(
-        this.world(),
-        this.ide,
-        false,
-        this.oncancel
-    );
+
+    editor.oncancel = this.oncancel;
+    editor.openIn(
+        aWorld,
+        canvas,
+        this.paper.rotationCenter.copy(),
+        myself.callback,
+        anIDE);
 
     this.destroy();
 };
@@ -1050,17 +1052,20 @@ VectorPaintEditorMorph.prototype.openIn = function (
     this.paper.drawNew();
     this.paper.changed();
 
-    // make sure shapes are initialized and can be rendered
-    shapes.forEach(function (shape) {
-        shape.drawOn(myself.paper);
-    });
-    // copy the shapes for editing and re-render the copies
-    this.shapes = shapes.map(function (eachShape) {
-        return eachShape.copy();
-    });
-    this.shapes.forEach(function (shape) {
-        shape.drawOn(myself.paper);
-    });
+    if (shapes) {
+        // make sure shapes are initialized and can be rendered
+        shapes.forEach(function (shape) {
+            shape.drawOn(myself.paper);
+        });
+        // copy the shapes for editing and re-render the copies
+        this.shapes = shapes.map(function (eachShape) {
+            return eachShape.copy();
+        });
+        this.shapes.forEach(function (shape) {
+            shape.drawOn(myself.paper);
+        });
+    } else this.shapes = [];
+    
     // init the rotation center, if any
     if (oldrc && !isEmpty) {
         this.paper.automaticCrosshairs = false;
