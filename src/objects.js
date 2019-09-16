@@ -9376,6 +9376,28 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 // Costume instance creation
 
+// factory for creating correct costume type:
+// - Costume (from bitmap) if shapes is null
+// - SVG_Costume (from vector shapes) if shapes is not null
+//   (array of objects of type VectorShape expected)
+function createCostume(img, name, rotationCenter, shapes) {
+    var cos;
+    if (shapes)
+    {
+        if (shapes.length === 0)
+            return null;
+        cos = new SVG_Costume(img, name, rotationCenter);
+        cos.shapes = shapes;
+    }
+    else
+    {
+        cos = new Costume(img, name, rotationCenter);
+    }
+    
+    cos.version = Date.now();
+    return cos;
+}
+
 function Costume(canvas, name, rotationCenter) {
     this.contents = canvas ? normalizeCanvas(canvas, true)
             : newCanvas(null, true);

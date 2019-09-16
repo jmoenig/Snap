@@ -8820,24 +8820,6 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.updateList();
 };
 
-function createCostume(img, name, rotationCenter, shapes) {
-    var cos;
-    if (shapes)
-    {
-        if (shapes.length === 0)
-            return null;
-        cos = new SVG_Costume(img, name, rotationCenter);
-        cos.shapes = shapes;
-    }
-    else
-    {
-        cos = new Costume(img, name, rotationCenter);
-    }
-    
-    cos.version = Date.now();
-    return cos;
-}
-
 WardrobeMorph.prototype.paintNew = function () {
     var cosName = this.sprite.newCostumeName(localize('Untitled')),
         anIDE = this.parentThatIsA(IDE_Morph),
