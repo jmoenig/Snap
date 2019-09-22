@@ -850,7 +850,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportURL: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'http:// %s',
+            spec: 'url %s',
             defaults: ['snap.berkeley.edu']
         },
         reportIsFastTracking: {
