@@ -927,6 +927,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%fun of %n',
             defaults: [null, 10]
         },
+        reportPower: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n ^ %n'
+        },
         reportModulus: {
             type: 'reporter',
             category: 'operators',
@@ -1294,10 +1299,18 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMouseY: ['reportMouseX'],
 
     // operators:
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum'],
+    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
+        'reportPower', 'reportModulus'],
+    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
+        'reportPower', 'reportModulus'],
+    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
+        'reportPower', 'reportModulus'],
+    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
+        'reportPower', 'reportModulus'],
+    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
+        'reportQuotient', 'reportModulus'],
+    reportModulus: ['reportDifference', 'reportProduct', 'reportSum',
+        'reportQuotient', 'reportPower'],
     reportLessThan: ['reportEquals', 'reportGreaterThan'],
     reportEquals: ['reportLessThan', 'reportGreaterThan'],
     reportGreaterThan: ['reportEquals', 'reportLessThan'],
@@ -2075,6 +2088,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportDifference'));
         blocks.push(block('reportProduct'));
         blocks.push(block('reportQuotient'));
+        blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
         blocks.push(block('reportRound'));
@@ -2878,6 +2892,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '*': 'reportProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
+            '^': 'reportPower',
             '=': 'reportEquals',
             '<': 'reportLessThan',
             '>': 'reportGreaterThan',
@@ -6476,6 +6491,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportDifference'));
         blocks.push(block('reportProduct'));
         blocks.push(block('reportQuotient'));
+        blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
         blocks.push(block('reportRound'));
