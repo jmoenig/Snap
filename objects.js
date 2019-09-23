@@ -8588,6 +8588,8 @@ WatcherMorph.prototype.mouseClickLeft = function () {
 
 WatcherMorph.prototype.userMenu = function () {
     var myself = this,
+        ide = this.parentThatIsA(IDE_Morph),
+        shiftClicked = (this.world().currentKey === 16),
         menu = new MenuMorph(this),
         on = '\u25CF',
         off = '\u25CB',
@@ -8630,6 +8632,10 @@ WatcherMorph.prototype.userMenu = function () {
         );
     }
 
+    if (ide && ide.isAppMode) { // prevent context menu in app mode
+        return;
+    }
+
     menu.addItem(
         (this.style === 'normal' ? on : off) + ' ' + localize('normal'),
         'styleNormal'
@@ -8655,71 +8661,56 @@ WatcherMorph.prototype.userMenu = function () {
         menu.addLine();
         menu.addItem(
             'import...',
-            function () {
-                var inp = document.createElement('input'),
-                    ide = myself.parentThatIsA(IDE_Morph);
-                if (ide.filePicker) {
-                    document.body.removeChild(ide.filePicker);
-                    ide.filePicker = null;
-                }
-                inp.type = 'file';
-                inp.style.color = "transparent";
-                inp.style.backgroundColor = "transparent";
-                inp.style.border = "none";
-                inp.style.outline = "none";
-                inp.style.position = "absolute";
-                inp.style.top = "0px";
-                inp.style.left = "0px";
-                inp.style.width = "0px";
-                inp.style.height = "0px";
-                inp.style.display = "none";
-                inp.addEventListener(
-                    "change",
-                    function () {
-                        var file;
-
-                        function txtOnlyMsg(ftype) {
-                            ide.inform(
-                                'Unable to import',
-                                'Snap! can only import "text" files.\n' +
-                                    'You selected a file of type "' +
-                                    ftype +
-                                    '".'
-                            );
-                        }
-
-                        function readText(aFile) {
-                            var frd = new FileReader();
-                            frd.onloadend = function (e) {
-                                myself.target.setVar(
-                                    myself.getter,
-                                    e.target.result
-                                );
-                            };
-
-                            if (aFile.type.indexOf("text") === 0) {
-                                frd.readAsText(aFile);
-                            } else {
-                                txtOnlyMsg(aFile.type);
-                            }
-                        }
-
-                        document.body.removeChild(inp);
-                        ide.filePicker = null;
-                        if (inp.files.length > 0) {
-                            file = inp.files[inp.files.length - 1];
-                            readText(file);
-                        }
-                    },
-                    false
-                );
-                document.body.appendChild(inp);
-                ide.filePicker = inp;
-                inp.click();
-            }
+            'importData'
         );
-        if (this.currentValue &&
-                (isString(this.currentValue) || !isNaN(+this.currentValue))) {
+        menu.addItem(
+            'raw data...',
+            function () {myself.importData(true); },
+            'import without attempting to\nparse or format data'//,
+        );
+        if (shiftClicked) {
+            if (this.currentValue instanceof List &&
+                    this.currentValue.canBeCSV()) {
+                menu.addItem(
+                    'export as CSV...',
+                    function () {
+                        var ide = myself.parentThatIsA(IDE_Morph);
+                        ide.saveFileAs(
+                            myself.currentValue.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            myself.getter // variable name
+                        );
+                    },
+                    null,
+                    new Color(100, 0, 0)
+                );
+            }
+            if (this.currentValue instanceof List &&
+                    this.currentValue.canBeJSON()) {
+                menu.addItem(
+                    'export as JSON...',
+                    function () {
+                        var ide = myself.parentThatIsA(IDE_Morph);
+                        ide.saveFileAs(
+                            myself.currentValue.asJSON(true), // guess objects
+                            'text/json;charset=utf-8',
+                            myself.getter // variable name
+                        );
+                    },
+                    null,
+                    new Color(100, 0, 0)
+                );
+            }
+        }
+        if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
+            if (shiftClicked) {
+                menu.addItem(
+                    'parse',
+                    'parseTxt',
+                    'try to convert\nraw data into a list',
+                    new Color(100, 0, 0)
+                );
+            }
             menu.addItem(
                 'export...',
                 function () {
@@ -8727,6 +8718,32 @@ WatcherMorph.prototype.userMenu = function () {
                     ide.saveFileAs(
                         myself.currentValue.toString(),
                         'text/plain;charset=utf-8',
+                        myself.getter // variable name
+                    );
+                }
+            );
+        } else if (this.currentValue instanceof List &&
+                this.currentValue.canBeCSV()) {
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        myself.getter // variable name
+                    );
+                }
+            );
+        } else if (this.currentValue instanceof List &&
+                this.currentValue.canBeJSON()) {
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.asJSON(true), // guessObjects
+                        'text/json;charset=utf-8',
                         myself.getter // variable name
                     );
                 }

@@ -11050,6 +11050,7 @@ HandMorph.prototype.processDrop = function (event) {
         droppedImage(canvas, name)
         droppedSVG(image, name)
         droppedAudio(audio, name)
+        droppedText(text, name, type)
 
     events to interested Morphs at the mouse pointer
 */
@@ -11120,7 +11121,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         frd.onloadend = function (e) {
-            target.droppedText(e.target.result, aFile.name);
+            target.droppedText(e.target.result, aFile.name, aFile.type);
         };
         frd.readAsText(aFile);
     }
@@ -11171,14 +11172,23 @@ HandMorph.prototype.processDrop = function (event) {
     if (files.length > 0) {
         for (i = 0; i < files.length; i += 1) {
             file = files[i];
+            suffix = file.name.slice(
+                file.name.lastIndexOf('.') + 1
+            ).toLowerCase();
             if (file.type.indexOf("svg") !== -1
                     && !MorphicPreferences.rasterizeSVGs) {
                 readSVG(file);
             } else if (file.type.indexOf("image") === 0) {
                 readImage(file);
-            } else if (file.type.indexOf("audio") === 0) {
+            } else if (file.type.indexOf("audio") === 0 ||
+                    file.type.indexOf("ogg") > -1) {
+                    // check the file-extension because Firefox
+                    // thinks OGGs are videos
                 readAudio(file);
-            } else if (file.type.indexOf("text") === 0) {
+            } else if ((file.type.indexOf("text") === 0) ||
+                    contains(['txt', 'csv', 'json'], suffix)) {
+                    // check the file-extension because Windows
+                    // doesn't specify CSVs to be text/csv, sigh
                 readText(file);
             } else { // assume it's meant to be binary
                 readBinary(file);

@@ -2619,6 +2619,167 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     return new List(str.split(del));
 };
 
+Process.prototype.reportTextSplit = function (string, delimiter) {
+    var types = ['text', 'number'],
+        strType = this.reportTypeOf(string),
+        delType = this.reportTypeOf(this.inputOption(delimiter)),
+        str,
+        del;
+    if (!contains(types, strType)) {
+        throw new Error('expecting text instead of a ' + strType);
+    }
+    if (!contains(types, delType)) {
+        throw new Error('expecting a text delimiter instead of a ' + delType);
+    }
+    str = isNil(string) ? '' : string.toString();
+    switch (this.inputOption(delimiter)) {
+    case 'line':
+        // Unicode compliant line splitting (platform independent)
+        // http://www.unicode.org/reports/tr18/#Line_Boundaries
+        del = /\r\n|[\n\v\f\r\x85\u2028\u2029]/;
+        break;
+    case 'tab':
+        del = '\t';
+        break;
+    case 'cr':
+        del = '\r';
+        break;
+    case 'word':
+    case 'whitespace':
+        str = str.trim();
+        del = /\s+/;
+        break;
+    case 'letter':
+        del = '';
+        break;
+    case 'csv':
+        return this.parseCSV(string);
+    case 'json':
+        return this.parseJSON(string);
+    /*
+    case 'csv records':
+        return this.parseCSVrecords(string);
+    case 'csv fields':
+        return this.parseCSVfields(string);
+    */
+    default:
+        del = isNil(delimiter) ? '' : delimiter.toString();
+    }
+    return new List(str.split(del));
+};
+
+Process.prototype.parseCSV = function (text) {
+    // try to address the kludge that Excel sometimes uses commas
+    // and sometimes semi-colons as delimiters, try to find out
+    // which makes more sense by examining the first line
+    return this.rawParseCSV(text, this.guessDelimiterCSV(text));
+};
+
+Process.prototype.guessDelimiterCSV = function (text) {
+    // assumes that the first line contains the column headers.
+    // report the first delimiter for which parsing the header
+    // yields more than a single field, otherwise default to comma
+    var delims = [',', ';', '|', '\t'],
+        len = delims.length,
+        firstLine = text.split('\n')[0],
+        i;
+    for (i = 0; i < len; i += 1) {
+        if (this.rawParseCSV(firstLine, delims[i]).length() > 1) {
+            return delims[i];
+        }
+    }
+    return delims[0];
+};
+
+Process.prototype.rawParseCSV = function (text, delim) {
+    // RFC 4180
+    // parse a csv table into a two-dimensional list.
+    // if the table contains just a single row return it a one-dimensional
+    // list of fields instead (for backwards-compatibility)
+    var prev = '',
+        fields = [''],
+        records = [fields],
+        col = 0,
+        r = 0,
+        esc = true,
+        len = text.length,
+        idx,
+        char;
+    delim = delim || ',';
+    for (idx = 0; idx < len; idx += 1) {
+        char = text[idx];
+        if (char === '\"') {
+            if (esc && char === prev) {
+                fields[col] += char;
+            }
+            esc = !esc;
+        } else if (char === delim && esc) {
+            char = '';
+            col += 1;
+            fields[col] = char;
+        } else if (char === '\r' && esc) {
+            r += 1;
+            records[r] = [''];
+            fields = records[r];
+            col = 0;
+        } else if (char === '\n' && esc) {
+            if (prev !== '\r') {
+                r += 1;
+                records[r] = [''];
+                fields = records[r];
+                col = 0;
+            }
+        } else {
+            fields[col] += char;
+        }
+        prev = char;
+    }
+
+    // remove the last record, if it is empty
+    if (records[records.length - 1].length === 1 &&
+            records[records.length - 1][0] === '')
+    {
+        records.pop();
+    }
+
+    // convert arrays to Snap! Lists
+    records = new List(records.map(
+        function (row) {return new List(row); })
+    );
+
+    // for backwards compatibility return the first row if it is the only one
+    if (records.length() === 1) {
+        return records.at(1);
+    }
+    return records;
+};
+
+Process.prototype.parseJSON = function (string) {
+    // Bernat's original Snapi contribution
+    function listify(jsonObject) {
+        if (jsonObject instanceof Array) {
+            return new List(
+                jsonObject.map(function(eachElement) {
+                    return listify(eachElement);
+                })
+            );
+        } else if (jsonObject instanceof Object) {
+            return new List(
+                Object.keys(jsonObject).map(function(eachKey) {
+                    return new List([
+                        eachKey,
+                        listify(jsonObject[eachKey])
+                    ]);
+                })
+            );
+        } else {
+            return jsonObject;
+        }
+    }
+
+    return listify(JSON.parse(string));
+};
+
 // Process debugging
 
 Process.prototype.alert = function (data) {
