@@ -47,8 +47,8 @@ function Cloud() {
 }
 
 Cloud.prototype.init = function () {
-    this.urlBasePath = '/api/v1';
-    this.url = this.determineCloudDomain() + this.urlBasePath;
+    this.apiBasePath = '/api/v1';
+    this.url = this.determineCloudDomain() + this.apiBasePath;
     this.username = null;
 };
 
@@ -1098,3 +1098,17 @@ Cloud.prototype.removeEditorFromCollection = function (
         'Could not remove editor from collection'
     );
 };
+
+// Paths to front-end pages
+/*
+    This list of paths is incomplete, we will add them as necessary.
+    Important: a path is a string *without* a domain.
+    These paths are not prefixed by `apiBasePath`.
+*/
+
+Cloud.prototype.showProjectPath = function (username, projectname) {
+    return '/project?' + this.encodeDict({
+        user: username,
+        project: projectname
+    });
+}
