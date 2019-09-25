@@ -3850,7 +3850,6 @@ IDE_Morph.prototype.newProject = function () {
     Process.prototype.enableLiveCoding = false;
     this.setProjectName('');
     this.projectNotes = '';
-    this.projectUsername = '';
     this.createStage();
     this.add(this.stage);
     this.createCorral();
