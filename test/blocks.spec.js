@@ -85,6 +85,61 @@ describe('blocks', function() {
                 });
         });
 
+        it('should set active editor on move block to editor', async function() {
+            const {ScriptsMorph} = driver.globals();
+            const sprite = driver.ide().currentSprite;
+            const spec = 'sprite block %s';
+            const definition = new CustomBlockDefinition(spec, sprite);
+
+            await SnapActions.addCustomBlock(definition, sprite);
+
+            driver.selectCategory('custom');
+            const block = driver.palette().contents.children
+                .find(item => item instanceof CustomCommandBlockMorph);
+
+            // Open the editor
+            driver.rightClick(block);
+            const editBtn = driver.dialog().children.find(item => item.action === 'edit');
+            driver.click(editBtn);
+
+            // Add two blocks
+            driver.selectCategory('motion');
+            const forwardBlock = driver.palette().contents.children
+                .find(item => item.selector === 'forward');
+
+            const editor = driver.dialog();
+            const scripts = editor.body.contents;
+            const hatBlock = scripts.children[0];
+
+            let dropPosition = hatBlock.bottomAttachPoint()
+                .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
+                .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
+
+            driver.dragAndDrop(forwardBlock, dropPosition);
+
+            // Attach another block...
+            const turnBlock = driver.palette().contents.children
+                .find(item => item.selector === 'turnLeft');
+
+            await driver.expect(
+                        () => hatBlock.nextBlock(),
+                        'first block not connected'
+            );
+            dropPosition = hatBlock.nextBlock().bottomAttachPoint()
+                .add(new Point(turnBlock.width()/2, turnBlock.height()/2))
+                .subtract(turnBlock.topAttachPoint().subtract(turnBlock.topLeft()));
+
+            driver.dragAndDrop(turnBlock, dropPosition);
+            const {world} = driver.globals();
+            const [ide] = world.children;
+            await driver.expect(
+                () => hatBlock.nextBlock().nextBlock(),
+                'Could not attach second block'
+            );
+            const msg = 'Active editor is ' + ide.activeEditor.constructor.name;
+            expect(ide.activeEditor).toBe(editor, msg);
+        });
+
         // Test attaching a command block to the proto hat block
         it('should be able to attach cmd to prototype hat block', function() {
             var sprite = driver.ide().currentSprite,

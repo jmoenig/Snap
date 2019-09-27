@@ -47,9 +47,9 @@ describe('actions', function() {
 
         SnapActions.currentEvent = {replayType: 1};
         driver.selectSprite('Sprite');
-        expect(!!SnapActions.canAnimate(stage)).toBe(false);
+        expect(!!SnapActions.canAnimate(stage.id)).toBe(false);
         driver.selectStage();
-        expect(!!SnapActions.canAnimate(stage)).toBe(true);
+        expect(!!SnapActions.canAnimate(stage.id)).toBe(true);
     });
 
     describe('collaboration', function() {
