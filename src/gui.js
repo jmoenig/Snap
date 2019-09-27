@@ -2385,7 +2385,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
             if (!(cos instanceof SVG_Costume))
                 cos.shrinkWrap();
             sprite.wearCostume(cos, true); // don't shadow
-            this.hasChangedMedia = true;
+            myself.hasChangedMedia = true;
             sprite.shadowAttribute('costumes');
             sprite.addCostume(cos);
         },
