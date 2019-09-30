@@ -375,15 +375,21 @@ NetsProcess.prototype.parseRPCResult = function (result) {
 };
 
 function listToArray(list) {
-    if (! (list instanceof List)){
+    if (!(list instanceof List)){
         return list;
     }
-    var combinedArray = [], v;
-    if (list === null) return null;
-    var array = list.asArray();
+    var combinedArray = [],
+        array = list.asArray(),
+        element;
+
     for(var i = 0; i < array.length; i++) {
-        v = array[i];
-        combinedArray.push(typeof v === 'object' ?  listToArray(v) : v);
+        element = array[i];
+        if (element instanceof List) {
+            element = listToArray(element);
+        } else if (isObject(element)) {
+            element = SnapActions.serializer.store(element);
+        }
+        combinedArray.push(element);
     }
     return combinedArray;
 }
