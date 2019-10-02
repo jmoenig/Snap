@@ -7967,7 +7967,7 @@ InputSlotMorph.prototype.getURL = function (url) {
 };
 
 InputSlotMorph.prototype.rpcNames = function () {
-    var rpcs = JSON.parse(utils.getUrlSyncCached('/rpc')),
+    var rpcs = JSON.parse(utils.getUrlSync('/rpc')),
         dict = {};
 
     for (var i = 0; i < rpcs.length; i++) {
