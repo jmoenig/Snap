@@ -266,6 +266,9 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
             stage.rpcError = 'Request too large';
             return;
         }
+        if (this.rpcRequest.status === 404) {
+            return this.errorRPCNotAvailable.apply(this, rpc.split('/'));
+        }
         contentType = this.rpcRequest.getResponseHeader('content-type');
         if (contentType && contentType.indexOf('image') === 0) {
             image = this.getCostumeFromRPC(rpc, params);
@@ -394,6 +397,10 @@ function listToArray(list) {
     }
     return combinedArray;
 }
+
+NetsProcess.prototype.errorRPCNotAvailable = function (service, rpc) {
+    throw new Error('Cannot invoke "' + rpc + '" from "' + service + '". Service or RPC is not available.');
+};
 
 NetsProcess.prototype.doRunRPC =
 NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
