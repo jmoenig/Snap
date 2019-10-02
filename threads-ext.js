@@ -387,6 +387,7 @@ function listToArray(list) {
         if (element instanceof List) {
             element = listToArray(element);
         } else if (isObject(element)) {
+            SnapActions.serializer.flush();
             element = SnapActions.serializer.store(element);
         }
         combinedArray.push(element);
