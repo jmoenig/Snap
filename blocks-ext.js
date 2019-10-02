@@ -358,6 +358,20 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
     return dict;
 };
 
+RPCInputSlotMorph.prototype.evaluate = function() {
+    var fields,
+        rpc;
+
+    if (!this.isCurrentRPCSupported) {
+        rpc = InputSlotMorph.prototype.evaluate.call(this);
+        fields = this.getFieldNames(rpc);
+        if (this.isCurrentRPCSupported) {
+            this.fields = fields;
+        }
+    }
+    return RPCInputSlotMorph.uber.evaluate.call(this);
+};
+
 // HintInputSlotMorph //////////////////////////////////////////////
 // I am an input slot with greyed out hint text when I am empty
 
