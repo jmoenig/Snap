@@ -294,13 +294,11 @@ function RPCInputSlotMorph() {
         'methodSignature',
         function(rpcMethod) {
             if (!this.fieldsFor || !this.fieldsFor[rpcMethod]) {
-                try {
-                    this.methodSignature();
-                } catch (e) { // let the projects load when the service is not supported
-                    /* eslint-disable no-console */
-                    console.error(e);
-                    /* eslint-enable no-console */
-                    world.children[0].showMessage && world.children[0].showMessage(e.message);
+                this.methodSignature();
+                var isSupported = !!this.fieldsFor;
+                if (!isSupported) {
+                    var msg = 'Service "' + this.getRPCName() + '" is not available';
+                    world.children[0].showMessage && world.children[0].showMessage(msg);
                     this.fieldsFor = {};
                 }
             }
@@ -334,6 +332,7 @@ RPCInputSlotMorph.prototype.getRPCName = function () {
 // sets this.fieldsFor and returns the method signature dict
 RPCInputSlotMorph.prototype.methodSignature = function () {
     var actionNames,
+        block,
         rpc,
         dict = {};
 
@@ -341,12 +340,16 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
     if (rpc) {
         // stores information on a specific service's rpcs
         try {
-            this.fieldsFor = JSON.parse(utils.getUrlSyncCached('/rpc/' + rpc)).rpcs;
+            this.fieldsFor = JSON.parse(utils.getUrlSync('/rpc/' + rpc)).rpcs;
+            actionNames = Object.keys(this.fieldsFor);
+            this.isCurrentRPCSupported = true;
         } catch (e) {
-            throw new Error('Service "' + rpc + '" is not available');
+            this.isCurrentRPCSupported = false;
+            block = this.parentThatIsA(BlockMorph);
+            block.showBubble(localize('Service "' + rpc + '" is not available'));
+            actionNames = [];
         }
 
-        actionNames = Object.keys(this.fieldsFor);
         for (var i = actionNames.length; i--;) {
             var aName = actionNames[i];
             if (!this.fieldsFor[aName].deprecated) dict[aName] = aName;
