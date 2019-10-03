@@ -432,7 +432,7 @@ NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
 
 NetsProcess.prototype.getJSFromRPCDropdown = function (rpc, action, params) {
     if (rpc && action) {
-        return this.getJSFromRPC(['', rpc, action].join('/'), params);
+        return this.getJSFromRPC([rpc, action].join('/'), params);
     }
 };
 
