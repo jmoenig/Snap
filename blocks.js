@@ -7966,16 +7966,6 @@ InputSlotMorph.prototype.getURL = function (url) {
     }
 };
 
-InputSlotMorph.prototype.rpcNames = function () {
-    var rpcs = JSON.parse(utils.getUrlSync('/rpc')),
-        dict = {};
-
-    for (var i = 0; i < rpcs.length; i++) {
-        dict[rpcs[i]] = rpcs[i];
-    }
-    return dict;
-};
-
 InputSlotMorph.prototype.rpcActions = function () {
     var field = this.parent.inputs()[0],
         dict = {},
