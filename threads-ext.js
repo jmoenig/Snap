@@ -303,7 +303,7 @@ NetsProcess.prototype.getCostumeFromRPC = function (rpc, action, params) {
     if (arguments.length === 2) {
         params = action;
     } else {
-        rpc = ['', rpc, action].join('/');
+        rpc = [encodeURIComponent(rpc), encodeURIComponent(action)].join('/');
 
         // Add the width and height of the stage as default params
         if (!params.width) {
@@ -432,7 +432,7 @@ NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
 
 NetsProcess.prototype.getJSFromRPCDropdown = function (rpc, action, params) {
     if (rpc && action) {
-        return this.getJSFromRPC([rpc, action].join('/'), params);
+        return this.getJSFromRPC([encodeURIComponent(rpc), encodeURIComponent(action)].join('/'), params);
     }
 };
 
