@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-July-17';
+modules.cloud = '2019-October-09';
 
 // Global stuff
 
@@ -1111,4 +1111,4 @@ Cloud.prototype.showProjectPath = function (username, projectname) {
         user: username,
         project: projectname
     });
-}
+};
