@@ -1535,7 +1535,7 @@ VectorPaintEditorMorph.prototype.getSVG = function () {
     svg.attributes.xmlns = 'http://www.w3.org/2000/svg';
     svg.attributes.snap = 'http://snap.berkeley.edu/run';
     svg.attributes.version = '1.1';
-    svg.attributes.preserveAspectRatio = 'xMinYMin meet';
+    svg.attributes.preserveAspectRatio = 'none meet';
     svg.attributes.viewBox =
         bounds.left() + ' ' + bounds.top() + ' ' +
         (bounds.right() - bounds.left()) + ' ' +
