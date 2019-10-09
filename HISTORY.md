@@ -8,6 +8,8 @@
 
 ### 2019-10-09
 * new dev version
+* Morphic collision detection off-by-1 fix, thanks, @DarDoro
+* translation updates for: Catalan, Ukrainian, Galician and Turkish
 
 ## v5.1.0
 * **New Features:**
