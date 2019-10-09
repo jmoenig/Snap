@@ -5908,13 +5908,14 @@ IDE_Morph.prototype.urlParameters = function () {
     var parameters = location.hash.slice(location.hash.indexOf(':') + 1);
 
     return this.cloud.parseDict(parameters);
-}
+};
 
 IDE_Morph.prototype.hasCloudProject = function () {
     var params = this.urlParameters();
 
-    return params.hasOwnProperty('Username') && params.hasOwnProperty('ProjectName');
-}
+    return params.hasOwnProperty('Username') &&
+        params.hasOwnProperty('ProjectName');
+};
 
 // IDE_Morph HTTP data fetching
 
