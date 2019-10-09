@@ -2640,11 +2640,13 @@ IDE_Morph.prototype.cloudMenu = function () {
     if (this.hasCloudProject()) {
         menu.addLine();
         menu.addItem(
-            'open in community site',
+            'Open in Community Site',
             function () {
                 var dict = myself.urlParameters();
                 window.open(
-                    myself.cloud.showProjectPath(dict.Username, dict.ProjectName),
+                    myself.cloud.showProjectPath(
+                        dict.Username, dict.ProjectName
+                    ),
                     '_blank'
                 );
             }
