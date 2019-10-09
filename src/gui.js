@@ -2637,6 +2637,19 @@ IDE_Morph.prototype.cloudMenu = function () {
             'changeCloudPassword'
         );
     }
+    if (this.hasCloudProject()) {
+        menu.addLine();
+        menu.addItem(
+            'open in community site',
+            function () {
+                var dict = myself.urlParameters();
+                window.open(
+                    myself.cloud.showProjectPath(dict.Username, dict.ProjectName),
+                    '_blank'
+                );
+            }
+        );
+    }
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
@@ -5890,6 +5903,18 @@ IDE_Morph.prototype.setCloudURL = function () {
         this.cloud.knownDomains
     );
 };
+
+IDE_Morph.prototype.urlParameters = function () {
+    var parameters = location.hash.slice(location.hash.indexOf(':') + 1);
+
+    return this.cloud.parseDict(parameters);
+}
+
+IDE_Morph.prototype.hasCloudProject = function () {
+    var params = this.urlParameters();
+
+    return params.hasOwnProperty('Username') && params.hasOwnProperty('ProjectName');
+}
 
 // IDE_Morph HTTP data fetching
 
