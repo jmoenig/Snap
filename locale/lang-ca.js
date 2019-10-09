@@ -2595,7 +2595,7 @@ SnapTranslator.dict.ca = {
     'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
         'Una versió ampliada del bloc "URL" que permet treballar amb  crides "POST", "PUT", "DELETE" i "GET" i també triar el protocol "HTTP-HTTPS" i controlar les capçaleres',
     'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.':
-        'Una de les idees importants en Logo i que va continuar Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.',
+        'Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.',
     'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
         'La mateixa idea que la comanda "switch" en llenguatges tipus C o "cond" en Lisp. Gràcies a Nathan Dinsmore per inventar la idea de tenir un bloc separat per a cada branca!',
     'Report hand positions from LEAP Motion controller (leapmotion.com).':
@@ -2605,7 +2605,7 @@ SnapTranslator.dict.ca = {
     'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
         'Blocs per establir o reportar el color del llapis en RGB (vermell, verd i blau) o en HSV (tonalitat, saturació i valor).',
     'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
-        'Executa un programa i, si troba alguna errada, no atura el programa reportant una avís vermell sobre el bloc, sinó que permet definir un altre programa que pugui evitar aquesta errada. També inclou un bloc per enviar missatges d\'errades i també un altra per crear variables de programa i assignar el seu valor.',
+        'Executa un programa i, si troba alguna errada, no atura el programa reportant un avís vermell sobre el bloc, sinó que permet definir un altre programa que pugui evitar aquesta errada. També inclou un bloc per enviar missatges d\'errades i també un altre per crear variables de programa i assignar el seu valor.',
     'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
         'De forma normal, les ranures només permeten escriure una línia de text. Aquesta llibreria ofereix un sol bloc "Multiline" que accepta múltiples línies de text. Aquest bloc es pot fer servir en altres entrades de text dels blocs per poder adquirir aquest caràcter multilínia',
     'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
@@ -2613,25 +2613,27 @@ SnapTranslator.dict.ca = {
     'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
         'Ens ofereix la implementació numèrica de Scheme. Cal habilitar els "Big Nums" (amb el bloc "USE BIGNUMS" a cert) per utilitzar-ho',
     'to use instead of hue for better selection':
-        'Per poder tenir eines de selecció més ràpides i fàcils',
+        'Es pot utilitzar en comptes de la tonalitat del llapis per a una selecció més senzilla de colors',
     'output text using speech synthesis.':
         'Gràcies a la síntesi de veu per l\'ordinador podem obtenir audio automàticament llegint un text',
     'glide, grow and rotate using easing functions.':
-        'Fés llicar, crèixer i girar els objectes utilitzan diferents formes i filtres a les animacions',
+        'Fés lliscar, crèixer i girar els objectes utilitzant diferents formes i filtres a les animacions',
     'manipulate costumes pixel-wise.':
         'Manipulem els píxels dels vestits',
     'analyze, manipulate and generate sound samples.':
         'Analitza, manipula i genera mostres de so',
     '[EXPERIMENTAL] crunch large lists very fast':
-        '[EXPERIMENTAL] Juga mol ràpid amb llistes llargues',
+        '[EXPERIMENTAL] Processa llistes enormes molt ràpidament',
     '[EXPERIMENTAL] analyze data for frequency distribution':
-        '[EXPERIMENTAL] Analitza dades i disbribucions de les freqüències',
+        '[EXPERIMENTAL] Analitza dades per fer freqüències de distribució',
+    '[EXPERIMENTAL] add interactive maps to projects':
+        '[EXPERIMENTAL] Afegeix mapes cartogràfics interactius als teus projectes',
     'declare global or sprite-local variables in a script':
         'Declara i assigna variables (locals o globals) dins els programes',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
         'Converteix les cadenes JSON en llistes utilitzant el bloc "listify". Utilitza els blocs de valors i claus per gestionar aquest tipus de llistes',
     'Run several scripts in parallel and wait until all are done.':
-        'Executa diversos scripts en paral·lel i espereu que hagin acabat els processos abans d\'aturar-se',
+        'Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d\'aturar-se',
     'Extract substrings of a string in various ways':
         'Extreu sub-cadenes de texts de diverses formes',
 //
