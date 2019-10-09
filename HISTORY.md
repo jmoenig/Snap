@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-10-09
+* new dev version
+
 ## v5.1.0
 * **New Features:**
     * new "paste on" block in the pen category, prints a sprite onto another one
