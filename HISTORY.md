@@ -2,14 +2,21 @@
 
 ## in development:
 * **New Features:**
+    * new cloud-menu entry: "Open in Community Site", thanks, Michael!
 * **Notable Changes:**
 * **Notable Fixes:**
+    * morphic collision detection off-by-1 fix, thanks, Dariusz!
 * **Translation Updates:**
+    * Catalan
+    * Ukrainian, thanks, 
+    * Galician, thanks, Bernat
+    * Turkish, thanks, Turgut!
 
 ### 2019-10-09
 * new dev version
-* Morphic collision detection off-by-1 fix, thanks, @DarDoro
+* morphic: collision detection off-by-1 fix, thanks, @DarDoro
 * translation updates for: Catalan, Ukrainian, Galician and Turkish
+* gui: new cloud- menu entry: "Open in Community Site", thanks, Michael!
 
 ## v5.1.0
 * **New Features:**
