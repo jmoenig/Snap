@@ -6,6 +6,8 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * morphic collision detection off-by-1 fix, thanks, Dariusz!
+    * fixed a typo in the OF-reporter's help screen, thanks, @jasonappah
+    * enable costumes created in the vector editor to be stretchable in Firefox, thanks, @coproc
 * **Translation Updates:**
     * Catalan
     * Ukrainian, thanks, 
@@ -17,6 +19,8 @@
 * morphic: collision detection off-by-1 fix, thanks, @DarDoro
 * translation updates for: Catalan, Ukrainian, Galician and Turkish
 * gui: new cloud- menu entry: "Open in Community Site", thanks, Michael!
+* fixed a typo in the OF-reporter's help screen, thanks, @jasonappah
+* enable costumes created in the vector editor to be stretchable in Firefox, thanks, @coproc
 
 ## v5.1.0
 * **New Features:**

@@ -59,7 +59,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2019-February-22';
+modules.sketch = '2019-October-09';
 
 // Declarations
 
