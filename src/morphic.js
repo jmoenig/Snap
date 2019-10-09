@@ -4481,7 +4481,7 @@ Morph.prototype.isTouching = function (otherMorph) {
         return false;
     }
     data = oImg.getContext('2d')
-        .getImageData(1, 1, oImg.width, oImg.height)
+        .getImageData(0, 0, oImg.width, oImg.height)
         .data;
     len = data.length;
     for(i = 3; i < len; i += 4) {
