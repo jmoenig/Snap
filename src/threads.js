@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-August-07';
+modules.threads = '2019-October-11';
 
 var ThreadManager;
 var Process;
@@ -4933,7 +4933,7 @@ Process.prototype.costumeNamed = function (name) {
     );
 };
 
-Process.prototype.reportNewCostume = function (pixels, width, height) {
+Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     // private
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
@@ -4953,7 +4953,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        this.blockReceiver().newCostumeName(localize('snap'))
+        name || this.blockReceiver().newCostumeName(localize('snap'))
     );
 };
 

@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * new cloud-menu entry: "Open in Community Site", thanks, Michael!
+    * accept a list of pixels in the SWITCH TO COSTUME block
 * **Notable Changes:**
 * **Notable Fixes:**
     * morphic collision detection off-by-1 fix, thanks, Dariusz!
@@ -13,6 +14,9 @@
     * Ukrainian, thanks, 
     * Galician, thanks, Bernat
     * Turkish, thanks, Turgut!
+
+### 2019-10-11
+* objects, threads: accept a list of pixels in the SWITCH TO COSTUME block
 
 ### 2019-10-09
 * new dev version
