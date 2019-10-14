@@ -760,12 +760,23 @@
     events:
 
     Whenever the user presses a key on the keyboard while a text element
-    is being edited, a
+    is being edited, first a
 
         reactToKeystroke(event)
 
     is escalated up its parent chain, the "event" parameter being the
     original one received by the World.
+
+    Whenever the input changes, by adding or removing one or more characters,
+    an additional
+
+        reactToInput(event)
+
+    is escalated up its parent chain, the "event" parameter again being the
+    original one received by the World or by the IME element.
+
+    Note that the "reactToKeystroke" event gets triggered before the input
+    changes, and thus befgore the "reactToInput" event fires.
 
     Once the user has completed the edit, the following events are
     dispatched:
@@ -1166,7 +1177,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-09';
+var morphicVersion = '2019-October-14';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5534,6 +5545,10 @@ CursorMorph.prototype.initializeTextarea = function () {
         myself.gotoSlot(textarea.selectionStart);
 
         myself.updateTextAreaPosition();
+
+        // the "reactToInput" event gets triggered AFTER "reactToKeystroke"
+        myself.target.escalateEvent('reactToInput', event);
+
     });
 
     this.textarea.addEventListener('keyup', function (event) {

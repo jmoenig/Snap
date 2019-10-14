@@ -15,6 +15,9 @@
     * Galician, thanks, Bernat
     * Turkish, thanks, Turgut!
 
+### 2019-10-14
+* morphic: new "reactToInput" text-editing event
+
 ### 2019-10-11
 * objects, threads: accept a list of pixels in the SWITCH TO COSTUME block
 
