@@ -8972,11 +8972,12 @@ TextMorph.prototype.slotAt = function (aPoint) {
     // in account how far from the middle of the character it is,
     // so the cursor can be moved accordingly
 
-    var charX = 0,
+    var charX,
         row = 0,
         col = 0,
         shadowHeight = Math.abs(this.shadowOffset.y),
-        context = this.image.getContext('2d');
+        context = this.image.getContext('2d'),
+        textWidth;
 
     while (aPoint.y - this.top() >
             ((fontHeight(this.fontSize) + shadowHeight) * row)) {
@@ -8984,6 +8985,14 @@ TextMorph.prototype.slotAt = function (aPoint) {
     }
     row = Math.max(row, 1);
 
+    textWidth = context.measureText(this.lines[row - 1]).width;
+    if (this.alignment === 'right') {
+        charX = this.width() - textWidth;
+    } else if (this.alignment === 'center') {
+        charX = (this.width() - textWidth) / 2;
+    } else { // 'left'
+        charX = 0;
+    }
     while (aPoint.x - this.left() > charX) {
         charX += context.measureText(this.lines[row - 1][col]).width;
         col += 1;
