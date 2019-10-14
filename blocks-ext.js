@@ -15,7 +15,8 @@ BlockMorph.prototype.showHelp = function() {
         inputs = this.inputs(),
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
-        metadata = JSON.parse(RPCInputSlotMorph.prototype.getURL.call(this, '/rpc/' + serviceName));
+        metadata = JSON.parse(RPCInputSlotMorph.prototype.getURL.call(this, '/rpc/' + serviceName)),
+        serviceNames;
 
     // build the help message
     if (serviceName !== '') {
@@ -38,8 +39,9 @@ BlockMorph.prototype.showHelp = function() {
         }
         if (!help) help = 'Description not available';
     } else {
-        help = 'Get information from different providers, save information and more. \nTo get more help select one of the services:'
-            + metadata.slice(0,3).join(', ') + ' ...';
+        serviceNames = metadata.slice(0,3).map(function(md) {return md.name;});
+        help = 'Get information from different providers, save information and more. \nTo get more help select one of the services: '
+            + serviceNames.join(', ') + ' ...';
     }
 
     // Get a copy of the block to display to the user
