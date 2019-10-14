@@ -4,6 +4,7 @@
 * **New Features:**
     * new cloud-menu entry: "Open in Community Site", thanks, Michael!
     * accept a list of pixels in the SWITCH TO COSTUME block
+    * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll! 
 * **Notable Changes:**
 * **Notable Fixes:**
     * made "i" upvar inside FOR loop's C-Shape slot mutable by user script
@@ -25,6 +26,7 @@
 * gui: fixed ProjectDialog's search field behavior for IME 
 * threads: fixed MY PARTS so mutating the result list has no effect
 * threads: made "i" upvar inside FOR loop's C-Shape slot mutable by user script
+* URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll!
 
 ### 2019-10-11
 * objects, threads: accept a list of pixels in the SWITCH TO COSTUME block
