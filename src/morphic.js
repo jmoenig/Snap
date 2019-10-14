@@ -1322,6 +1322,14 @@ function isWordChar(aCharacter) {
     return aCharacter.match(/[A-zÀ-ÿ0-9]/);
 }
 
+function isURLChar(aCharacter) {
+    return aCharacter.match(/[A-z0-9./:?&_+%-]/);
+}
+
+function isURL(text) {
+    return /^https?:\/\//.test(text);
+}
+
 function newCanvas(extentPoint, nonRetina) {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
@@ -9166,7 +9174,31 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         }
         this.currentlySelecting = true;
     } else {
-        this.escalateEvent('mouseClickLeft', pos);
+        var slot = this.slotAt(pos),
+            clickedText,
+            startMark,
+            endMark;
+
+        if (slot === this.text.length) {
+            slot -= 1;
+        }
+
+        startMark = slot;
+        while (startMark > 1 && isURLChar(this.text[startMark-1])) {
+            startMark -= 1;
+        }
+
+        endMark = slot;
+        while (endMark < this.text.length - 1 && isURLChar(this.text[endMark + 1])) {
+            endMark += 1;
+        }
+
+        clickedText = this.text.substring(startMark, endMark + 1);
+        if (isURL(clickedText)) {
+            window.open(clickedText, '_blank');
+        } else {
+            this.escalateEvent('mouseClickLeft', pos);
+        }
     }
 };
 
