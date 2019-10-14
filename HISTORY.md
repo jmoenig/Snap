@@ -6,6 +6,7 @@
     * accept a list of pixels in the SWITCH TO COSTUME block
 * **Notable Changes:**
 * **Notable Fixes:**
+    * made "i" upvar inside FOR loop's C-Shape slot mutable by user script
     * typing strings into the search-field again shows relevant blocks (regression from IME)
     * fixed project dialog's search-field behevior (regression from IME)
     * morphic collision detection off-by-1 fix, thanks, Dariusz!
@@ -23,6 +24,7 @@
 * objects: fixed #2485 (find blocks and text-entry mode feature)
 * gui: fixed ProjectDialog's search field behavior for IME 
 * threads: fixed MY PARTS so mutating the result list has no effect
+* threads: made "i" upvar inside FOR loop's C-Shape slot mutable by user script
 
 ### 2019-10-11
 * objects, threads: accept a list of pixels in the SWITCH TO COSTUME block

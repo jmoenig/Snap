@@ -2207,28 +2207,28 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.evaluate(script, new List([next]), true);
 };
 
-Process.prototype.doFor = function (upvar, start, end, script) {
+Process.prototype.doFor = function (upvar, start, end, script) { // +++
     // perform a script for every integer step between start and stop,
     // assigning the current iteration index to a variable with the
     // name specified in the "upvar" parameter, so it can be referenced
     // within the script.
 
-    var dta;
-    if (this.context.accumulator === null) {
-        this.context.accumulator = {
-            idx : Math.floor(start),
+    var vars = this.context.outerContext.variables,
+        dta = this.context.accumulator;
+    if (dta === null) {
+        dta = this.context.accumulator = {
             test : start < end ?
-                function () {return this.idx > end; }
-                    : function () {return this.idx < end; },
+                function () {return vars.getVar(upvar) > end; }
+                    : function () {return vars.getVar(upvar) < end; },
             step : start < end ? 1 : -1,
             parms : new List() // empty parameters, reusable to avoid GC
         };
+        vars.addVar(upvar);
+        vars.setVar(upvar, Math.floor(start));
+    } else {
+        vars.changeVar(upvar, dta.step);
     }
-    dta = this.context.accumulator;
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, dta.idx);
     if (dta.test()) {return; }
-    dta.idx += dta.step;
     this.pushContext('doYield');
     this.pushContext();
     this.evaluate(script, dta.parms, true);
