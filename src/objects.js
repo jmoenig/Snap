@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-11';
+modules.objects = '2019-October-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -3176,7 +3176,7 @@ SpriteMorph.prototype.searchBlocks = function (
     };
 
     searchPane.reactToKeystroke = function (evt) {
-        var search, idx, code = evt ? evt.keyCode : 0;
+        var idx, code = evt ? evt.keyCode : 0;
         switch (code) {
         case 38: // up arrow
             if (!scriptFocus || !selection) {return; }
@@ -3197,16 +3197,20 @@ SpriteMorph.prototype.searchBlocks = function (
             showSelection();
             return;
         default:
-            search = searchBar.getValue();
-            if (search !== oldSearch) {
-                oldSearch = search;
-                show(myself.blocksMatching(
-                    search,
-                    search.length < 2,
-                    types,
-                    varNames
-                ));
-            }
+            nop();
+        }
+    };
+
+    searchPane.reactToInput = function (evt) {
+        var search = searchBar.getValue();
+        if (search !== oldSearch) {
+            oldSearch = search;
+            show(myself.blocksMatching(
+                search,
+                search.length < 2,
+                types,
+                varNames
+            ));
         }
     };
 
