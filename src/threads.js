@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-11';
+modules.threads = '2019-October-14';
 
 var ThreadManager;
 var Process;
@@ -4293,8 +4293,9 @@ Process.prototype.reportGet = function (query) {
                         each !== thisObj;
                 })
             );
-        case 'parts':
-            return new List(thisObj.parts || []);
+        case 'parts': // shallow copy to disable side-effects
+            return new List((thisObj.parts || [])
+                .map(function (each) {return each; }));
         case 'anchor':
             return thisObj.anchor || '';
         case 'parent':
