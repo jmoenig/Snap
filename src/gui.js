@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-October-09';
+modules.gui = '2019-October-14';
 
 // Declarations
 
@@ -6421,7 +6421,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     this.body.add(this.magnifyingGlass);
     this.body.add(this.filterField);
 
-    this.filterField.reactToKeystroke = function (evt) {
+    this.filterField.reactToInput = function (evt) {
         var text = this.getValue();
 
         myself.listField.elements =
