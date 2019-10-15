@@ -6,8 +6,9 @@
     * accept a list of pixels in the SWITCH TO COSTUME block
     * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll! 
 * **Notable Changes:**
-* **Notable Fixes:**
     * made "i" upvar inside FOR loop's C-Shape slot mutable by user script
+    * prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
+* **Notable Fixes:**
     * typing strings into the search-field again shows relevant blocks (regression from IME)
     * fixed project dialog's search-field behevior (regression from IME)
     * morphic collision detection off-by-1 fix, thanks, Dariusz!
@@ -19,6 +20,9 @@
     * Ukrainian, thanks, 
     * Galician, thanks, Bernat
     * Turkish, thanks, Turgut!
+
+### 2019-10-15
+* gui: prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
 
 ### 2019-10-14
 * morphic: new "reactToInput" text-editing event
