@@ -2,6 +2,13 @@
 
 ## in development:
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+
+## v5.1.1:
+* **New Features:**
     * new cloud-menu entry: "Open in Community Site", thanks, Michael!
     * accept a list of pixels in the SWITCH TO COSTUME block
     * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll! 
@@ -28,6 +35,7 @@
 * updated German translation
 * gui: simplified asset loading scheduler
 * gui: display a permenent warning when using IE
+* prepared release
 
 ### 2019-10-14
 * morphic: new "reactToInput" text-editing event
