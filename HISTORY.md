@@ -25,6 +25,7 @@
 ### 2019-10-15
 * gui: prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
 * updated German translation
+* gui: simplified asset loading scheduler
 
 ### 2019-10-14
 * morphic: new "reactToInput" text-editing event

@@ -456,7 +456,6 @@ IDE_Morph.prototype.openIn = function (world) {
                         function () {
                             msg = myself.showMessage('Opening project...');
                         },
-                        function () {nop(); }, // yield (bug in Chrome)
                         function () {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
@@ -496,7 +495,6 @@ IDE_Morph.prototype.openIn = function (world) {
                         function () {
                             msg = myself.showMessage('Opening project...');
                         },
-                        function () {nop(); }, // yield (bug in Chrome)
                         function () {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
@@ -2735,15 +2733,12 @@ IDE_Morph.prototype.cloudMenu = function () {
                                             'Opening project...'
                                         );
                                     },
-                                    function () {nop(); }, // yield (Chrome)
                                     function () {
                                         myself.rawOpenCloudDataString(
                                             projectData
                                         );
-                                    },
-                                    function () {
                                         msg.destroy();
-                                    }
+                                    },
                                 ]);
                             },
                             myself.cloudError()
@@ -4333,13 +4328,10 @@ IDE_Morph.prototype.openProjectString = function (str) {
         function () {
             msg = myself.showMessage('Opening project...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenProjectString(str);
-        },
-        function () {
             msg.destroy();
-        }
+        },
     ]);
 };
 
@@ -4379,11 +4371,8 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         function () {
             msg = myself.showMessage('Opening project\n' + size + ' KB...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenCloudDataString(str);
-        },
-        function () {
             msg.destroy();
         }
     ]);
@@ -4435,13 +4424,10 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
         function () {
             msg = myself.showMessage('Opening blocks...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenBlocksString(str, name, silently);
-        },
-        function () {
             msg.destroy();
-        }
+        },
     ]);
 };
 
@@ -4482,13 +4468,10 @@ IDE_Morph.prototype.openSpritesString = function (str) {
         function () {
             msg = myself.showMessage('Opening sprite...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenSpritesString(str);
-        },
-        function () {
             msg.destroy();
-        }
+        },
     ]);
 };
 
@@ -4524,13 +4507,10 @@ IDE_Morph.prototype.openScriptString = function (str) {
         function () {
             msg = myself.showMessage('Opening script...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenScriptString(str);
-        },
-        function () {
             msg.destroy();
-        }
+        },
     ]);
 };
 
@@ -4573,13 +4553,10 @@ IDE_Morph.prototype.openDataString = function (str, name, type) {
         function () {
             msg = myself.showMessage('Opening data...');
         },
-        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenDataString(str, name, type);
-        },
-        function () {
             msg.destroy();
-        }
+        },
     ]);
 };
 
