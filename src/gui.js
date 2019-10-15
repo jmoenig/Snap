@@ -550,6 +550,8 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         interpretUrlAnchors.call(this);
     }
+
+    this.warnAboutIE();
 };
 
 // IDE_Morph construction
@@ -6000,6 +6002,42 @@ IDE_Morph.prototype.prompt = function (message, callback, choices, key) {
         null,
         choices
     );
+};
+
+// IDE_Morph bracing against IE
+
+IDE_Morph.prototype.warnAboutIE = function () {
+    var dlg, txt;
+    if (this.isIE()) {
+        dlg = new DialogBoxMorph();
+        txt = new TextMorph(
+            'Please do not use Internet Explorer.\n' +
+                'Snap! runs best in a web-standards\n' +
+                'compliant browser',
+            dlg.fontSize,
+            dlg.fontStyle,
+            true,
+            false,
+            'center',
+            null,
+            null,
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            new Color(255, 255, 255)
+        );
+
+        dlg.key = 'IE-Warning';
+        dlg.labelString = "Internet Explorer";
+        dlg.createLabel();
+        dlg.addBody(txt);
+        dlg.drawNew();
+        dlg.fixLayout();
+        dlg.popUp(this.world());
+    }
+};
+
+IDE_Morph.prototype.isIE = function () {
+    var ua = navigator.userAgent;
+    return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

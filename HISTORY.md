@@ -8,6 +8,7 @@
 * **Notable Changes:**
     * made "i" upvar inside FOR loop's C-Shape slot mutable by user script
     * prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
+    * display a permanent warning when using IE
 * **Notable Fixes:**
     * typing strings into the search-field again shows relevant blocks (regression from IME)
     * fixed project dialog's search-field behevior (regression from IME)
@@ -26,6 +27,7 @@
 * gui: prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
 * updated German translation
 * gui: simplified asset loading scheduler
+* gui: display a permenent warning when using IE
 
 ### 2019-10-14
 * morphic: new "reactToInput" text-editing event
