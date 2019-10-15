@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-08-07', // this, too, will appear in the Translators tab
+        '2019-10-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -964,6 +964,8 @@ SnapTranslator.dict.de = {
         'Passwort zurücksetzen...',
     'Resend Verification Email...':
         'Bestätigungsmail nochmal senden...',
+    'Open in Community Site':
+        'Projektseite anzeigen',
 
     // settings menu
     'Language...':
