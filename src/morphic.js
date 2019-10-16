@@ -1177,7 +1177,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-14';
+var morphicVersion = '2019-October-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8660,6 +8660,7 @@ StringMorph.prototype.init = function (
     this.isBold = bold || false;
     this.isItalic = italic || false;
     this.isEditable = false;
+    this.enableLinks = false; // set to "true" if I can contain clickable URLs
     this.isNumeric = isNumeric || false;
     this.isPassword = false;
     this.shadowOffset = shadowOffset || new Point(0, 0);
@@ -9173,7 +9174,7 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
             cursor.gotoPos(pos);
         }
         this.currentlySelecting = true;
-    } else {
+    } else if (this.enableLinks) {
         var slot = this.slotAt(pos),
             clickedText,
             startMark,
@@ -9189,7 +9190,8 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         }
 
         endMark = slot;
-        while (endMark < this.text.length - 1 && isURLChar(this.text[endMark + 1])) {
+        while (endMark < this.text.length - 1 &&
+                isURLChar(this.text[endMark + 1])) {
             endMark += 1;
         }
 
@@ -9199,6 +9201,8 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         } else {
             this.escalateEvent('mouseClickLeft', pos);
         }
+    } else {
+        this.escalateEvent('mouseClickLeft', pos);
     }
 };
 
@@ -9367,6 +9371,7 @@ TextMorph.prototype.init = function (
     this.maxLineWidth = 0;
     this.backgroundColor = null;
     this.isEditable = false;
+    this.enableLinks = false; // set to "true" if I can contain clickable URLs
 
     //additional properties for ad-hoc evaluation:
     this.receiver = null;
