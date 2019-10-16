@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
 * **Notable Fixes:**
 * **Translation Updates:**
 
@@ -10,6 +11,7 @@
 * new dev version
 * morphic: added "enableLinks" flag to text elements, off by default
 * widgets: made only URLs inside dialog boxes' bodies clickable
+* threads: running STOP ALL now also pauses (pauses and resumes) all generic WHEN hat blocks
 
 ## v5.1.1:
 * **New Features:**

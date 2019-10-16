@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-14';
+modules.threads = '2019-October-16';
 
 var ThreadManager;
 var Process;
@@ -1924,6 +1924,12 @@ Process.prototype.doStopAll = function () {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
+            if (stage.enableCustomHatBlocks) {
+                stage.threads.pauseCustomHatBlocks =
+                    !stage.threads.pauseCustomHatBlocks;
+            } else {
+                stage.threads.pauseCustomHatBlocks = false;
+            }
             stage.stopAllActiveSounds();
             stage.threads.resumeAll(stage);
             stage.keysPressed = {};
@@ -1942,7 +1948,8 @@ Process.prototype.doStopAll = function () {
         ide = stage.parentThatIsA(IDE_Morph);
         if (ide) {
             ide.controlBar.pauseButton.refresh();
-            ide.nextSteps([ // catch forever loops
+            ide.controlBar.stopButton.refresh();
+            ide.nextSteps([ // catch forever loops //
                 nop,
                 function () {stage.stopAllActiveSounds(); }
             ]);
