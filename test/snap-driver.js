@@ -11,6 +11,10 @@ SnapDriver.prototype.globals = function() {
     return this._window;
 };
 
+SnapDriver.prototype.disableExitPrompt = function() {
+    this._window.onbeforeunload = () => {};
+};
+
 // Convenience Getters
 SnapDriver.prototype.world = function() {
     return this._world;
