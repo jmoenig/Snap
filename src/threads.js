@@ -1949,10 +1949,6 @@ Process.prototype.doStopAll = function () {
         if (ide) {
             ide.controlBar.pauseButton.refresh();
             ide.controlBar.stopButton.refresh();
-            ide.nextSteps([ // catch forever loops //
-                nop,
-                function () {stage.stopAllActiveSounds(); }
-            ]);
         }
     }
 };

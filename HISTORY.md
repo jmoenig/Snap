@@ -5,6 +5,7 @@
 * **Notable Changes:**
     * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
 * **Notable Fixes:**
+    * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
 * **Translation Updates:**
 
 ### 2019-10-16
@@ -12,6 +13,7 @@
 * morphic: added "enableLinks" flag to text elements, off by default
 * widgets: made only URLs inside dialog boxes' bodies clickable
 * threads: running STOP ALL now also pauses (pauses and resumes) all generic WHEN hat blocks
+* threads: removed a conflicting thread from STOP ALL - loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
 
 ## v5.1.1:
 * **New Features:**
