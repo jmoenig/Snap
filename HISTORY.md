@@ -8,6 +8,8 @@
 
 ### 2019-10-16
 * new dev version
+* morphic: added "enableLinks" flag to text elements, off by default
+* widgets: made only URLs inside dialog boxes' bodies clickable
 
 ## v5.1.1:
 * **New Features:**
