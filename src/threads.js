@@ -2214,7 +2214,7 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.evaluate(script, new List([next]), true);
 };
 
-Process.prototype.doFor = function (upvar, start, end, script) { // +++
+Process.prototype.doFor = function (upvar, start, end, script) {
     // perform a script for every integer step between start and stop,
     // assigning the current iteration index to a variable with the
     // name specified in the "upvar" parameter, so it can be referenced
