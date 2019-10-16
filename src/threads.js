@@ -4907,6 +4907,11 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
 
 Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     var cst;
+    if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
+        throw new Error(
+            'expecting a finite number\nbut getting Infinity or NaN'
+        );
+    }
     if (name instanceof List) {
         return this.reportNewCostume(name, xP, yP);
     }

@@ -6,6 +6,7 @@
     * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
 * **Notable Fixes:**
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
+    * assert that dimensions given for STRETCH are finite numbers (avoid crash)
 * **Translation Updates:**
 
 ### 2019-10-16
@@ -14,6 +15,7 @@
 * widgets: made only URLs inside dialog boxes' bodies clickable
 * threads: running STOP ALL now also pauses (pauses and resumes) all generic WHEN hat blocks
 * threads: removed a conflicting thread from STOP ALL - loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
+* threads: assert that dimensions given for STRETCH block are finite numbers
 
 ## v5.1.1:
 * **New Features:**
