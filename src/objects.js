@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-14';
+modules.objects = '2019-October-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -5575,6 +5575,8 @@ SpriteMorph.prototype.setPivot = function (worldCoordinate) {
     }
 };
 
+// SpriteMorph dimension getters
+
 SpriteMorph.prototype.xCenter = function () {
     var stage = this.parentThatIsA(StageMorph);
 
@@ -5597,6 +5599,54 @@ SpriteMorph.prototype.yCenter = function () {
         return (stage.center().y - this.center().y) / stage.scale;
     }
     return this.center().y;
+};
+
+SpriteMorph.prototype.xLeft = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (this.left() - stage.center().x) / stage.scale;
+    }
+    return this.left();
+};
+
+SpriteMorph.prototype.xRight = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (this.right() - stage.center().x) / stage.scale;
+    }
+    return this.right();
+};
+ 
+SpriteMorph.prototype.yTop = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (stage.center().y - this.top()) / stage.scale;
+    }
+    return this.top();
+};
+
+SpriteMorph.prototype.yBottom = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (stage.center().y - this.bottom()) / stage.scale;
+    }
+    return this.bottom();
 };
 
 // SpriteMorph message broadcasting

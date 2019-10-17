@@ -2,12 +2,16 @@
 
 ## in development:
 * **New Features:**
+    * added selectors for sprites' bounding box (left, right, top, bottom) to MY dropdown
 * **Notable Changes:**
     * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
 * **Notable Fixes:**
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
 * **Translation Updates:**
+
+### 2019-10-17
+* objects, blocks, threads: added selectors for sprites' bounding box (left, right, top, bottom) to MY dropdown
 
 ### 2019-10-16
 * new dev version

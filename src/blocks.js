@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-August-07';
+modules.blocks = '2019-October-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8975,6 +8975,10 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
     dict.height = ['height'];
+    dict.left = ['left'];
+    dict.right = ['right'];
+    dict.top = ['top'];
+    dict.bottom = ['bottom'];
     dict['rotation style'] = ['rotation style'];
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];
