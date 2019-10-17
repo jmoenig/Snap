@@ -1,4 +1,4 @@
-/* globals WSMonkey, SnapDriver, Vue */
+/* globals WSMonkey, SnapDriver */
 /* eslint-disable no-console, no-unused-vars */
 
 const frames = Array.prototype.slice.call(document.getElementsByTagName('iframe'));
@@ -14,7 +14,7 @@ function startTests() {
     return frames
         .reduce((promise, frame) => {
             return promise.then(() => {
-                driver = new SnapDriver(frame.contentWindow.world);
+                driver = new SnapDriver();
                 driver.setWindow(frame.contentWindow);
                 monkey.setWorld(frame.contentWindow.world); // update the world view for our monkey
             });

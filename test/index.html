@@ -34,7 +34,7 @@
               .reduce((promise, frame) => {
                   return promise.then(() => {
                       const id = frame.getAttribute('id');
-                      driver = new SnapDriver(frame.contentWindow.world);
+                      driver = new SnapDriver();
                       driver.setWindow(frame.contentWindow);
                       return driver.login('test');
                   });
