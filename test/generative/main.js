@@ -74,7 +74,7 @@ function getOptions() {
         });
 
     // Set defaults
-    opts.seed = opts.seed || Date.now();
+    opts.seed = opts.seed ? parseInt(opts.seed) : Date.now();
     opts.width = opts.width || document.body.getBoundingClientRect().width;
     opts.height = opts.height || document.body.getBoundingClientRect().height;
     opts.count = opts.count || -1;
