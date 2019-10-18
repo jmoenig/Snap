@@ -4951,15 +4951,17 @@ Process.prototype.costumeNamed = function (name) {
 };
 
 Process.prototype.reportNewCostume = function (pixels, width, height, name) {
-    var rcvr = this.blockReceiver(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        canvas, ctx, src, dta, i, k, px;
+    var rcvr, stage, canvas, ctx, src, dta, i, k, px;
 
     this.assertType(pixels, 'list');
     if (this.inputOption(width) === 'current') {
+        rcvr = this.blockReceiver();
+        stage = rcvr.parentThatIsA(StageMorph);
         width = rcvr.costume ? rcvr.costume.width() : stage.dimensions.x;
     }
     if (this.inputOption(height) === 'current') {
+        rcvr = rcvr || this.blockReceiver();
+        stage = stage || rcvr.parentThatIsA(StageMorph);
         height = rcvr.costume ? rcvr.costume.height() : stage.dimensions.y;
     }
     width = Math.abs(Math.floor(+width));
@@ -4983,7 +4985,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        name || rcvr.newCostumeName(localize('snap'))
+        name || (rcvr || this.blockReceiver()).newCostumeName(localize('snap'))
     );
 };
 
