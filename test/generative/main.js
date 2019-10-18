@@ -1,4 +1,4 @@
-/* globals SnapDriver, InteractionGenerator */
+/* globals SnapDriver, GenerativeTester */
 /* eslint-disable no-console, no-unused-vars */
 
 const frame = document.getElementsByTagName('iframe')[0];
@@ -27,7 +27,7 @@ window.onload = async function onIframeReady() {
 
 async function runTest(driver, options) {
     const {SnapActions, SnapUndo, UndoManager, copy} = driver.globals();
-    const tester = new InteractionGenerator(driver, null, options.seed);
+    const tester = new GenerativeTester(driver, null, options.seed);
     let remainingActions = options.count;
     let undoCount = 0;
 

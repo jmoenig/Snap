@@ -6,14 +6,14 @@
     const range = (start, end) => [...Array(end-start)].map((_, i) => start+i);
 
     // set the seed?
-    function InteractionGenerator(driver, actions, seed=Date.now()) {
+    function GenerativeTester(driver, actions, seed=Date.now()) {
         this.driver = driver;
         this.setSeed(seed);
         this.actionDict = this.getActionDict();
         this.actions = actions || Object.keys(this.actionDict);
     }
 
-    InteractionGenerator.prototype.getActionDict = function() {
+    GenerativeTester.prototype.getActionDict = function() {
         const sample = this.sample.bind(this);
         const random = this.random.bind(this);
         const randInt = (min, max) => Math.floor(random() * (max - min)) + min;
@@ -40,21 +40,21 @@
         };
     };
 
-    InteractionGenerator.prototype.setSeed = function(seed) {
+    GenerativeTester.prototype.setSeed = function(seed) {
         this.seed = seed;
         this.random = new Math.seedrandom(seed);
     };
 
-    InteractionGenerator.prototype.act = async function() {
+    GenerativeTester.prototype.act = async function() {
         const action = this.sample(this.actions);
         const args = this.actionDict[action].map(fn => fn(this.driver));
         await this.driver[action].apply(this.driver, args.slice());
         return {action, args};
     };
 
-    InteractionGenerator.prototype.sample = function(list) {
+    GenerativeTester.prototype.sample = function(list) {
         return list[Math.floor(this.random() * list.length)];
     };
 
-    global.InteractionGenerator = InteractionGenerator;
+    global.GenerativeTester = GenerativeTester;
 })(this);
