@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-10-15', // this, too, will appear in the Translators tab
+        '2019-10-18', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1865,6 +1865,14 @@ SnapTranslator.dict.de = {
         'Breite',
     'height':
         'Höhe',
+    'left':
+        'Rand links',
+    'right':
+        'Rand rechts',
+    'top':
+        'Rand oben',
+    'bottom':
+        'Rand unten',
 
     // inheritance
     'inherited':

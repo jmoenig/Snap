@@ -9,9 +9,11 @@
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
 * **Translation Updates:**
+    * German
 
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage
+* German translation update (left, right, top, bottom selectors in MY)
 
 ### 2019-10-17
 * objects, blocks, threads: added selectors for sprites' bounding box (left, right, top, bottom) to MY dropdown
