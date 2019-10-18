@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-17';
+modules.blocks = '2019-October-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1138,6 +1138,16 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 }
             );
             part.setContents(1);
+            break;
+        case '%dim':
+            part = new InputSlotMorph(
+                null,
+                true,
+                {
+                    current : ['current']
+                }
+            );
+            // part.setContents( ['current']);
             break;
         case '%rel':
             part = new InputSlotMorph(
@@ -2372,6 +2382,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %inst   - white roundish type-in slot with drop-down for instruments
     %ida    - white roundish type-in slot with drop-down for list indices
     %idx    - white roundish type-in slot for indices incl. "any"
+    %dim    - white roundish type-in slot for dimensinos incl. "current"
     %obj    - specially drawn slot for object reporters
     %rel    - chameleon colored rectangular drop-down for relation options
     %spr    - chameleon colored rectangular drop-down for object-names

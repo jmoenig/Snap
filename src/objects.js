@@ -312,6 +312,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%img of costume %cst',
             defaults: [['width']]
         },
+        reportNewCostume: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'new costume %l width: %dim height: %dim'
+        },
         reportNewCostumeStretched: {
             type: 'reporter',
             category: 'looks',
@@ -2210,6 +2215,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doThink'));
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
+        blocks.push(block('reportNewCostume'));
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -8268,6 +8274,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
+        blocks.push(block('reportNewCostume'));
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push('-');
         blocks.push(block('changeEffect'));

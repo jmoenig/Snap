@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-17';
+modules.threads = '2019-October-18';
 
 var ThreadManager;
 var Process;
@@ -4915,17 +4915,17 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
 
 Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     var cst;
-    if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
-        throw new Error(
-            'expecting a finite number\nbut getting Infinity or NaN'
-        );
-    }
     if (name instanceof List) {
         return this.reportNewCostume(name, xP, yP);
     }
     cst = this.costumeNamed(name);
     if (!cst) {
         return new Costume();
+    }
+    if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
+        throw new Error(
+            'expecting a finite number\nbut getting Infinity or NaN'
+        );
     }
     return cst.stretched(
         Math.round(cst.width() * +xP / 100),
@@ -4951,16 +4951,29 @@ Process.prototype.costumeNamed = function (name) {
 };
 
 Process.prototype.reportNewCostume = function (pixels, width, height, name) {
-    // private
+    var rcvr = this.blockReceiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        canvas, ctx, src, dta, i, k, px;
+
+    this.assertType(pixels, 'list');
+    if (this.inputOption(width) === 'current') {
+        width = rcvr.costume ? rcvr.costume.width() : stage.dimensions.x;
+    }
+    if (this.inputOption(height) === 'current') {
+        height = rcvr.costume ? rcvr.costume.height() : stage.dimensions.y;
+    }
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
+    if (!isFinite(width * height) || isNaN(width * height)) {
+       throw new Error(
+           'expecting a finite number\nbut getting Infinity or NaN'
+       );
+    }
 
-    var canvas = newCanvas(new Point(width, height), true),
-        ctx = canvas.getContext('2d'),
-        src = pixels.asArray(),
-        dta = ctx.createImageData(width, height),
-        i, k, px;
-
+    canvas = newCanvas(new Point(width, height), true);
+    ctx = canvas.getContext('2d');
+    src = pixels.asArray();
+    dta = ctx.createImageData(width, height);
     for (i = 0; i < src.length; i += 1) {
         px = src[i].asArray();
         for (k = 0; k < 4; k += 1) {
@@ -4970,7 +4983,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        name || this.blockReceiver().newCostumeName(localize('snap'))
+        name || rcvr.newCostumeName(localize('snap'))
     );
 };
 

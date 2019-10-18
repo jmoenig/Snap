@@ -2,7 +2,8 @@
 
 ## in development:
 * **New Features:**
-    * added selectors for sprites' and the stage's bounding box (left, right, top, bottom) to MY dropdown
+    * new primitive in "looks": NEW COSTUME from a list of pixels and dimensions, allowing CURRENT
+    * added selectors for sprites' and the stage's bounding box (LEFT, RIGHT, TOP, BOTTOM) to MY dropdown
 * **Notable Changes:**
     * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
 * **Notable Fixes:**
@@ -14,6 +15,7 @@
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage
 * German translation update (left, right, top, bottom selectors in MY)
+* blocks, objects, threads: added "new costume" primitive reporter to "looks" category
 
 ### 2019-10-17
 * objects, blocks, threads: added selectors for sprites' bounding box (left, right, top, bottom) to MY dropdown
