@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-17';
+modules.objects = '2019-October-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -9033,6 +9033,32 @@ StageMorph.prototype.getLastAnswer
 
 StageMorph.prototype.reportThreadCount
     = SpriteMorph.prototype.reportThreadCount;
+
+// StageMorph dimension getters
+
+StageMorph.prototype.xCenter = function () {
+    return 0;
+};
+
+StageMorph.prototype.yCenter = function () {
+    return 0;
+};
+
+StageMorph.prototype.xLeft = function () {
+    return this.dimensions.x * -0.5;
+};
+
+StageMorph.prototype.xRight = function () {
+   return this.dimensions.x / 2;
+};
+
+StageMorph.prototype.yTop = function () {
+    return this.dimensions.y / 2;
+};
+
+StageMorph.prototype.yBottom = function () {
+   return this.dimensions.y * -0.5;
+};
 
 // StageMorph message broadcasting
 
