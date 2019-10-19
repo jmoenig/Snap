@@ -46,6 +46,7 @@
         StageHandleMorph
         PaletteHandleMorph
         CamSnapshotDialogMorph
+        SoundRecorderDialogMorph
 
 
     credits
@@ -55,6 +56,8 @@
     Ian Reynolds contributed handling and visualization of sounds
     Michael Ball contributed the LibraryImportDialogMorph and countless
     utilities to load libraries from relative urls
+    Bernat Romagosa contributed more things than I can mention,
+    including interfacing to the camera and microphone
 
 */
 
@@ -76,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-October-16';
+modules.gui = '2019-October-19';
 
 // Declarations
 
@@ -92,6 +95,7 @@ var JukeboxMorph;
 var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
+var SoundRecorderDialogMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
