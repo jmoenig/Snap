@@ -18,6 +18,8 @@
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category
 * objects, threads: added sampling rate input to "new sound" primitive
 * threads: changed default name for new costumes created with STRETCH etc. to localized 'costume'
+* threads: generate stereo sounds
+* threads: added list type assertion for samples to "new sound" primitive
 
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage

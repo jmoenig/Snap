@@ -2826,6 +2826,7 @@ Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
         myself = this;
 
     if (isNil(this.context.accumulator)) {
+        this.assertType(samples, 'list'); // check only the first time
         this.context.accumulator = {
             audio: null
         };
