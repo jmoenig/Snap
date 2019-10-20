@@ -7,6 +7,7 @@
     * added selectors for sprites' and the stage's bounding box (LEFT, RIGHT, TOP, BOTTOM) to MY dropdown
 * **Notable Changes:**
     * running STOP ALL now also toggles (pauses and resumes) all generic WHEN hat blocks (just like pressing the stop button)
+    * changed default name for new costumes created with STRETCH etc. to localized 'costume'
 * **Notable Fixes:**
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
@@ -16,6 +17,7 @@
 ### 2019-10-20
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category
 * objects, threads: added sampling rate input to "new sound" primitive
+* threads: changed default name for new costumes created with STRETCH etc. to localized 'costume'
 
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage

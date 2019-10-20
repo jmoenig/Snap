@@ -5078,7 +5078,9 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     ctx.putImageData(dta, 0, 0);
     return new Costume(
         canvas,
-        name || (rcvr || this.blockReceiver()).newCostumeName(localize('snap'))
+        name || (rcvr || this.blockReceiver()).newCostumeName(
+            localize('costume')
+        )
     );
 };
 
