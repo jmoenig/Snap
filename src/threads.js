@@ -2818,7 +2818,7 @@ Process.prototype.encodeSound = function (samples, rate) {
 
 // Process first-class sound creation from samples, interpolated
 
-Process.prototype.reportNewSoundFromSamples = function (samples) {
+Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
     // interpolated
     var audio, blob, reader,
         myself = this;
@@ -2829,7 +2829,7 @@ Process.prototype.reportNewSoundFromSamples = function (samples) {
         };
         audio = new Audio();
         blob = this.audioBufferToWaveBlob(
-            this.encodeSound(samples, 44100).audioBuffer,
+            this.encodeSound(samples, rate || 44100).audioBuffer,
             samples.length()
         );
         reader = new FileReader();

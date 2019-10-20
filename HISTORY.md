@@ -15,6 +15,7 @@
 
 ### 2019-10-20
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category
+* objects, threads: added sampling rate input to "new sound" primitive
 
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage
