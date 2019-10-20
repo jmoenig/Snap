@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-18';
+modules.threads = '2019-October-20';
 
 var ThreadManager;
 var Process;
@@ -2814,6 +2814,99 @@ Process.prototype.encodeSound = function (samples, rate) {
     source.buffer = arrayBuffer;
     source.audioBuffer = source.buffer;
     return source;
+};
+
+// Process first-class sound creation from samples, interpolated
+
+Process.prototype.reportNewSoundFromSamples = function (samples) {
+    // interpolated
+    var audio, blob, reader,
+        myself = this;
+
+    if (isNil(this.context.accumulator)) {
+        this.context.accumulator = {
+            audio: null
+        };
+        audio = new Audio();
+        blob = this.audioBufferToWaveBlob(
+            this.encodeSound(samples, 44100).audioBuffer,
+            samples.length()
+        );
+        reader = new FileReader();
+        reader.onload = function () {
+            audio.src = reader.result;
+            myself.context.accumulator.audio = audio;
+        };
+        reader.readAsDataURL(blob);
+    }
+    if (this.context.accumulator.audio) {
+        return new Sound(
+            this.context.accumulator.audio,
+            this.blockReceiver().newSoundName(localize('sound'))
+        );
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.audioBufferToWaveBlob = function (aBuffer, len) {
+    // Convert AudioBuffer to a Blob using WAVE representation
+    // taken from:
+    // https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file/
+
+    var numOfChan = aBuffer.numberOfChannels,
+    length = len * numOfChan * 2 + 44,
+    buffer = new ArrayBuffer(length),
+    view = new DataView(buffer),
+    channels = [], i, sample,
+    offset = 0,
+    pos = 0;
+
+    function setUint16(data) {
+        view.setUint16(pos, data, true);
+        pos += 2;
+    }
+
+    function setUint32(data) {
+        view.setUint32(pos, data, true);
+        pos += 4;
+    }
+
+    // write WAVE header
+    setUint32(0x46464952);      // "RIFF"
+    setUint32(length - 8);      // file length - 8
+    setUint32(0x45564157);      // "WAVE"
+
+    setUint32(0x20746d66);      // "fmt " chunk
+    setUint32(16);              // length = 16
+    setUint16(1);               // PCM (uncompressed)
+    setUint16(numOfChan);
+    setUint32(aBuffer.sampleRate);
+    setUint32(aBuffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
+    setUint16(numOfChan * 2);   // block-align
+    setUint16(16);              // 16-bit (hardcoded in this demo)
+
+    setUint32(0x61746164);      // "data" - chunk
+    setUint32(length - pos - 4); // chunk length
+
+    // write interleaved data
+    for (i = 0; i < aBuffer.numberOfChannels; i += 1) {
+        channels.push(aBuffer.getChannelData(i));
+    }
+
+    while (pos < length) {
+        for (i = 0; i < numOfChan; i += 1) { // interleave channels
+            sample = Math.max(-1, Math.min(1, channels[i][offset])); // clamp
+            // scale to 16-bit signed int:
+            sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
+            view.setInt16(pos, sample, true); // write 16-bit sample
+            pos += 2;
+        }
+        offset += 1; // next source sample
+    }
+
+    // create Blob
+    return new Blob([buffer], {type: "audio/wav"});
 };
 
 // Process audio input (interpolated)
