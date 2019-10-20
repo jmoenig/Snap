@@ -9012,6 +9012,9 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
 StageMorph.prototype.reportSounds
     = SpriteMorph.prototype.reportSounds;
 
+StageMorph.prototype.newSoundName
+    = SpriteMorph.prototype.newSoundName;
+
 // StageMorph volume
 
 StageMorph.prototype.setVolume
