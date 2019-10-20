@@ -2819,7 +2819,9 @@ Process.prototype.encodeSound = function (samples, rate) {
 // Process first-class sound creation from samples, interpolated
 
 Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
-    // interpolated
+    // this method inspired by: https://github.com/Jam3/audiobuffer-to-wav
+    // https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file
+
     var audio, blob, reader,
         myself = this;
 
@@ -2828,9 +2830,13 @@ Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
             audio: null
         };
         audio = new Audio();
-        blob = this.audioBufferToWaveBlob(
-            this.encodeSound(samples, rate || 44100).audioBuffer,
-            samples.length()
+        blob = new Blob(
+            [
+                this.audioBufferToWav(
+                    this.encodeSound(samples, rate || 44100).audioBuffer
+                )
+            ],
+            {type: "audio/wav"}
         );
         reader = new FileReader();
         reader.onload = function () {
@@ -2849,64 +2855,93 @@ Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
     this.pushContext();
 };
 
-Process.prototype.audioBufferToWaveBlob = function (aBuffer, len) {
-    // Convert AudioBuffer to a Blob using WAVE representation
-    // taken from:
-    // https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file/
+Process.prototype.audioBufferToWav = function (buffer, opt) {
+    var numChannels = buffer.numberOfChannels,
+        sampleRate = buffer.sampleRate,
+        format = (opt || {}).float32 ? 3 : 1,
+        bitDepth = format === 3 ? 32 : 16,
+        result;
 
-    var numOfChan = aBuffer.numberOfChannels,
-    length = len * numOfChan * 2 + 44,
-    buffer = new ArrayBuffer(length),
-    view = new DataView(buffer),
-    channels = [], i, sample,
-    offset = 0,
-    pos = 0;
+    function interleave(inputL, inputR) {
+        var length = inputL.length + inputR.length,
+            result = new Float32Array(length),
+            index = 0,
+            inputIndex = 0;
 
-    function setUint16(data) {
-        view.setUint16(pos, data, true);
-        pos += 2;
-    }
-
-    function setUint32(data) {
-        view.setUint32(pos, data, true);
-        pos += 4;
-    }
-
-    // write WAVE header
-    setUint32(0x46464952);      // "RIFF"
-    setUint32(length - 8);      // file length - 8
-    setUint32(0x45564157);      // "WAVE"
-
-    setUint32(0x20746d66);      // "fmt " chunk
-    setUint32(16);              // length = 16
-    setUint16(1);               // PCM (uncompressed)
-    setUint16(numOfChan);
-    setUint32(aBuffer.sampleRate);
-    setUint32(aBuffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
-    setUint16(numOfChan * 2);   // block-align
-    setUint16(16);              // 16-bit (hardcoded in this demo)
-
-    setUint32(0x61746164);      // "data" - chunk
-    setUint32(length - pos - 4); // chunk length
-
-    // write interleaved data
-    for (i = 0; i < aBuffer.numberOfChannels; i += 1) {
-        channels.push(aBuffer.getChannelData(i));
-    }
-
-    while (pos < length) {
-        for (i = 0; i < numOfChan; i += 1) { // interleave channels
-            sample = Math.max(-1, Math.min(1, channels[i][offset])); // clamp
-            // scale to 16-bit signed int:
-            sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
-            view.setInt16(pos, sample, true); // write 16-bit sample
-            pos += 2;
+        while (index < length) {
+            result[index++] = inputL[inputIndex];
+            result[index++] = inputR[inputIndex];
+            inputIndex += 1;
         }
-        offset += 1; // next source sample
+        return result;
     }
 
-    // create Blob
-    return new Blob([buffer], {type: "audio/wav"});
+    if (numChannels === 2) {
+        result = interleave(
+            buffer.getChannelData(0),
+            buffer.getChannelData(1)
+        );
+    } else {
+        result = buffer.getChannelData(0);
+    }
+    return this.encodeWAV(result, format, sampleRate, numChannels, bitDepth);
+};
+
+Process.prototype.encodeWAV = function (
+    samples,
+    format,
+    sampleRate,
+    numChannels,
+    bitDepth
+) {
+    var bytesPerSample = bitDepth / 8,
+        blockAlign = numChannels * bytesPerSample,
+        buffer = new ArrayBuffer(44 + samples.length * bytesPerSample),
+        view = new DataView(buffer);
+
+    function writeFloat32(output, offset, input) {
+        for (var i = 0; i < input.length; i += 1, offset += 4) {
+            output.setFloat32(offset, input[i], true);
+        }
+    }
+
+    function floatTo16BitPCM(output, offset, input) {
+        var i, s;
+        for (i = 0; i < input.length; i += 1, offset += 2) {
+            s = Math.max(-1, Math.min(1, input[i]));
+            output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        }
+    }
+
+    function writeString(view, offset, string) {
+        for (var i = 0; i < string.length; i += 1) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+        }
+    }
+
+    writeString(view, 0, 'RIFF'); // RIFF identifier
+    // RIFF chunk length:
+    view.setUint32(4, 36 + samples.length * bytesPerSample, true);
+    writeString(view, 8, 'WAVE'); // RIFF type
+    writeString(view, 12, 'fmt '); // format chunk identifier
+    view.setUint32(16, 16, true); // format chunk length
+    view.setUint16(20, format, true); // sample format (raw)
+    view.setUint16(22, numChannels, true); // channel count
+    view.setUint32(24, sampleRate, true); // sample rate
+    // byte rate (sample rate * block align):
+    view.setUint32(28, sampleRate * blockAlign, true);
+    // block align (channel count * bytes per sample):
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitDepth, true); // bits per sample
+    writeString(view, 36, 'data'); // data chunk identifier
+    // data chunk length:
+    view.setUint32(40, samples.length * bytesPerSample, true);
+    if (format === 1) { // Raw PCM
+        floatTo16BitPCM(view, 44, samples);
+    } else {
+        writeFloat32(view, 44, samples);
+    }
+    return buffer;
 };
 
 // Process audio input (interpolated)
