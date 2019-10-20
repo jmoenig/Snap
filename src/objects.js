@@ -481,7 +481,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportNewSoundFromSamples: {
             type: 'reporter',
             category: 'sound',
-            spec: 'new sound %l sample rate %rate Hz',
+            spec: 'new sound %l rate %rate Hz',
             defaults: [null, 44100]
         },
         doRest: {
