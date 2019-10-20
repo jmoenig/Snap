@@ -20,6 +20,7 @@
 * threads: changed default name for new costumes created with STRETCH etc. to localized 'costume'
 * threads: generate stereo sounds
 * threads: added list type assertion for samples to "new sound" primitive
+* objects: tweaked labels for "new costume" and "new sound" primitives
 
 ### 2019-10-18
 * objects, blocks, threads: added dimension getters for the stage

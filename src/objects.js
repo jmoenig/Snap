@@ -315,7 +315,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportNewCostume: {
             type: 'reporter',
             category: 'looks',
-            spec: 'new costume %l width: %dim height: %dim'
+            spec: 'new costume %l width %dim height %dim'
         },
         reportNewCostumeStretched: {
             type: 'reporter',
@@ -481,7 +481,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportNewSoundFromSamples: {
             type: 'reporter',
             category: 'sound',
-            spec: 'new sound %l at %rate Hz',
+            spec: 'new sound %l sample rate %rate Hz',
             defaults: [null, 44100]
         },
         doRest: {
