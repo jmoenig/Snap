@@ -13,10 +13,12 @@
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
 * **Translation Updates:**
+    * English
     * German
 
 ### 2019-10-21
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed
+* updated English and German translations for `__shout__go__`
 
 ### 2019-10-20
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category

@@ -123,7 +123,11 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-12-22',
+        '2019-10-21',
+
+    // symbols in dropdowns
+    '__shout__go__':
+        'green flag clicked',
 
     // rewordings in English avoiding having to adjust all other translations
     'any':
@@ -160,7 +164,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2019-10-18'
+        '2019-10-21'
 };
 
 SnapTranslator.dict.it = {
