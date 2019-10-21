@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-20';
+modules.threads = '2019-October-21';
 
 var ThreadManager;
 var Process;
@@ -3100,7 +3100,7 @@ Process.prototype.doBroadcast = function (message) {
 
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         thisObj,
-        msg = message,
+        msg = this.inputOption(message),
         trg,
         rcvrs,
         myself = this,

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-18';
+modules.blocks = '2019-October-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8691,7 +8691,7 @@ InputSlotMorph.prototype.menuFromDict = function (
     noEmptyOption,
     enableKeyboard)
 {
-    var key, dial,
+    var key, dial, flag,
     	myself = this,
         menu = new MenuMorph(
             this.userSetContents,
@@ -8733,6 +8733,12 @@ InputSlotMorph.prototype.menuFromDict = function (
        			menu.addLine();
 			    menu.items.push(dial);
             	menu.addLine();
+            } else if (key === '__shout__go__') {
+                // show the green flag symbol
+                flag = new SymbolMorph('flag');
+                flag.size = this.fontSize * 1.5;
+                flag.setColor(new Color(0, 200, 0));
+                menu.addItem(flag, ['__shout__go__']);
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
@@ -8760,6 +8766,9 @@ InputSlotMorph.prototype.messagesMenu = function () {
     allNames.forEach(function (name) {
         dict[name] = name;
     });
+    if (this.world().currentKey === 16) { // shift
+        dict.__shout__go__ = ['__shout__go__'];
+    }
     if (allNames.length > 0) {
         dict['~'] = null;
     }
@@ -8791,7 +8800,9 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
         }
     });
     allNames.forEach(function (name) {
-        dict[name] = name;
+        if (name !== '__shout__go__') {
+            dict[name] = name;
+        }
     });
     dict['~'] = null;
     dict['new...'] = function () {
