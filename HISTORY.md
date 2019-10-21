@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * new media creation primitives:
     * new primitive in "looks": NEW COSTUME from a list of pixels and dimensions, allowing CURRENT
     * new primitive in "sound": NEW SOUND from a list of samples
     * added selectors for sprites' and the stage's bounding box (LEFT, RIGHT, TOP, BOTTOM) to MY dropdown
@@ -19,6 +20,7 @@
 ### 2019-10-21
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed
 * updated English and German translations for `__shout__go__`
+* updated German translation for new media creation primitives
 
 ### 2019-10-20
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category

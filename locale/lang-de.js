@@ -353,6 +353,8 @@ SnapTranslator.dict.de = {
         'Hmm...',
     '%img of costume %cst':
         '%img von Kostüm %cst',
+    'new costume %l width %dim height %dim':
+        'neues Kostüm %l Breite %dim Höhe %dim',
     'stretch %cst x: %n y: %n %':
         'strecke %cst x: %n y: %n %',
     'change %eff effect by %n':
@@ -415,6 +417,8 @@ SnapTranslator.dict.de = {
         'Länge',
     'number of channels':
         'Anzahl Kanäle',
+    'new sound %l rate %rate Hz':
+        'neuer Klang %l Abtastrate %rate Hz',
     'play note %note for %n beats':
         'spiele Note %note f\u00fcr %n Schl\u00e4ge',
     'set instrument to %inst':
