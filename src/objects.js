@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-20';
+modules.objects = '2019-October-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -2220,8 +2220,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doThinkFor'));
         blocks.push(block('doThink'));
         blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostume'));
+        blocks.push('-');
+        blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -2270,9 +2271,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
+        blocks.push(block('reportNewSoundFromSamples'));
+        blocks.push('-');
         blocks.push(block('doPlaySoundAtRate'));
         blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));
@@ -8299,8 +8301,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostume'));
+        blocks.push('-');
+        blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -8341,9 +8344,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
+        blocks.push(block('reportNewSoundFromSamples'));
+        blocks.push('-');
         blocks.push(block('doPlaySoundAtRate'));
         blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));

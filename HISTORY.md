@@ -21,6 +21,7 @@
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed
 * updated English and German translations for `__shout__go__`
 * updated German translation for new media creation primitives
+* objects: rearranged "looks" and "sound" palettes for new media creation primitives
 
 ### 2019-10-20
 * objects, threads: added "new sound" from list of samples primitive reporter to "sound" category
