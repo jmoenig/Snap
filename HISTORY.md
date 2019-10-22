@@ -1,6 +1,6 @@
 # Snap! (BYOB) History
 
-## v5.2.0 in development:
+## v5.2.0 in development (RC):
 * **New Features:**
     * new media creation primitives:
     * new primitive in "looks": NEW COSTUME from a list of pixels and dimensions, allowing CURRENT
@@ -20,6 +20,7 @@
 
 ### 2019-10-22
 * morphic: url-clicking fix by @brollb, updated morphic documentation
+* pushed dev version to release-candidate status
 
 ### 2019-10-21
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed
