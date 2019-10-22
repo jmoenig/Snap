@@ -12,6 +12,7 @@
     * changed default name for new costumes created with STRETCH etc. to localized 'costume'
 * **Notable Fixes:**
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
+    * fixed pixel-manipulation distortions on newly imported hi-res images
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
     * fixed occasional "dead clicks" on buttons and menu items
 * **Translation Updates:**
@@ -21,6 +22,7 @@
 ### 2019-10-22
 * morphic: url-clicking fix by @brollb, updated morphic documentation
 * pushed dev version to release-candidate status
+* objects: normalized (de-retinized) costume thumbnails, fixed pixel-manipulation distortions on newly imported hi-res images
 
 ### 2019-10-21
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed

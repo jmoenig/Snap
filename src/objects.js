@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-21';
+modules.objects = '2019-October-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -9789,7 +9789,7 @@ Costume.prototype.thumbnail = function (extentPoint) {
         ),
         xOffset = (extentPoint.x - (src.width * scale)) / 2,
         yOffset = (extentPoint.y - (src.height * scale)) / 2,
-        trg = newCanvas(extentPoint),
+        trg = newCanvas(extentPoint, true),
         ctx = trg.getContext('2d');
 
     if (!src || src.width + src.height === 0) {return trg; }
