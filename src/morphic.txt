@@ -1,3 +1,4 @@
+
     morphic.js
 
     a lively Web-GUI
@@ -8,7 +9,7 @@
 
     Copyright (C) 2019 by Jens Mönig
 
-    this documentation last changed: January 1, 2019
+    this documentation last changed: October 22, 2019
 
     This file is part of Snap!.
 
@@ -654,7 +655,7 @@
     Those are dispatched as
 
         droppedAudio(anAudio, name)
-        droppedText(aString, name)
+        droppedText(aString, name, type)
 
     events to interested Morphs at the mouse pointer.
 
@@ -760,12 +761,23 @@
     events:
 
     Whenever the user presses a key on the keyboard while a text element
-    is being edited, a
+    is being edited, first a
 
         reactToKeystroke(event)
 
     is escalated up its parent chain, the "event" parameter being the
     original one received by the World.
+
+    Whenever the input changes, by adding or removing one or more characters,
+    an additional
+
+        reactToInput(event)
+
+    is escalated up its parent chain, the "event" parameter again being the
+    original one received by the World or by the IME element.
+
+    Note that the "reactToKeystroke" event gets triggered before the input
+    changes, and thus befgore the "reactToInput" event fires.
 
     Once the user has completed the edit, the following events are
     dispatched:
@@ -1042,7 +1054,7 @@
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1083,12 +1095,12 @@
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1153,6 +1165,11 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
+    Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Bernat Romagosa contributed to text editing and to the core design.
+    Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
+    Ken Kahn contributed to Chinese keboard entry and Android support.
+    Brian Broll contributed clickable URLs in text elements.
 
     - Jens Mönig

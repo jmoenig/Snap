@@ -1,6 +1,6 @@
 # Snap! (BYOB) History
 
-## in development:
+## v5.2.0 in development:
 * **New Features:**
     * new media creation primitives:
     * new primitive in "looks": NEW COSTUME from a list of pixels and dimensions, allowing CURRENT
@@ -13,9 +13,13 @@
 * **Notable Fixes:**
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
+    * fixed occasional "dead clicks" on buttons and menu items
 * **Translation Updates:**
     * English
     * German
+
+### 2019-10-22
+* morphic: url-clicking fix by @brollb, updated morphic documentation
 
 ### 2019-10-21
 * blocks, threads: new experimental entry for "green flag pressed" in the BROADCAST block's dropdown when the shift key is pressed
