@@ -14,10 +14,14 @@
     * loading a project that fires STOP ALL from a WHEN hat block no longer "hangs" Snap
     * fixed pixel-manipulation distortions on newly imported hi-res images
     * assert that dimensions given for STRETCH are finite numbers (avoid crash)
+    * disabled direct editing of list watchers for non-literal typed lists (such as costumes, avoids unloadable projects)
     * fixed occasional "dead clicks" on buttons and menu items
 * **Translation Updates:**
     * English
     * German
+
+### 2019-10-23
+* lists: disabled direct editing of list watchers for non-literal typed lists (such as costumes)
 
 ### 2019-10-22
 * morphic: url-clicking fix by @brollb, updated morphic documentation

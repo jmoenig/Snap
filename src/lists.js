@@ -60,9 +60,9 @@
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable, isSnapObject, Costume*/
+TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-July-01';
+modules.lists = '2019-October-23';
 
 var List;
 var ListWatcherMorph;
@@ -656,6 +656,11 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.plusButton.outlineColor = this.color;
     this.plusButton.drawNew();
     this.plusButton.fixLayout();
+
+    // disable direct editing for non-literal typed lists (such as costumes):
+    if (this.list.type && !contains(['text', 'number'], this.list.type)) {
+        this.plusButton.hide();
+    }
 
     ListWatcherMorph.uber.init.call(
         this,
