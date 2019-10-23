@@ -44,6 +44,11 @@ describe('ide', function() {
             ide.exportMultiRoleXml();
             ide.exportSingleRoleXml();
         });
+
+        it('"export to Snap!" should include sprites in export', function() {
+            const xml = driver.ide().getSnapXml();
+            expect(xml.includes('<sprites></sprites>')).toBe(false, 'Exported xml has no sprites!');
+        });
     });
 
     describe('lang', function() {

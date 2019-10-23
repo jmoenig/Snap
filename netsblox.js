@@ -1,12 +1,9 @@
 /* global RoomMorph, IDE_Morph, StageMorph, List, SnapCloud, VariableFrame,
    WebSocketManager, SpriteMorph, Point, RoomEditorMorph, localize, Process,
-   Morph, AlignmentMorph, ToggleButtonMorph, StringMorph, Color, TabMorph,
-   InputFieldMorph, MorphicPreferences, ToggleMorph, MenuMorph, TextMorph
-   NetsBloxSerializer, nop, SnapActions, DialogBoxMorph, hex_sha512, SnapUndo,
-   ScrollFrameMorph, SnapUndo, LibraryImportDialogMorph, CollaboratorDialogMorph,
-   SnapSerializer, isRetinaSupported, isRetinaEnabled, useBlurredShadows,
-   BlockMorph, SyntaxElementMorph, ScriptsMorph, InputSlotDialogMorph, ArgMorph,
-   BlockLabelPlaceHolderMorph, TableMorph, newCanvas*/
+   StringMorph, Color, TabMorph, InputFieldMorph, MorphicPreferences, MenuMorph,
+   TextMorph, NetsBloxSerializer, nop, SnapActions, DialogBoxMorph, hex_sha512,
+   SnapUndo, ScrollFrameMorph, SnapUndo, CollaboratorDialogMorph,
+   SnapSerializer, newCanvas, detect, WatcherMorph*/
 // Netsblox IDE (subclass of IDE_Morph)
 
 NetsBloxMorph.prototype = new IDE_Morph();
@@ -50,7 +47,6 @@ NetsBloxMorph.prototype.openIn = function (world) {
         var m = new MenuMorph(null, 'Loading...');
         m.popUpCenteredInWorld(world);
 
-        var startTime = Date.now();
         // Currently, we wait until the ws connection is established before
         // opening a project. After removing dependency on the ws connection,
         // we should be able to remove this and open projects w/o any ws conn
@@ -397,38 +393,12 @@ NetsBloxMorph.prototype.projectMenu = function () {
         menu.items.splice(10, 0, [
             localize('Export to Snap! project...'),
             function () {
-                var isSavingHistory = SnapSerializer.prototype.isSavingHistory;
-                var name = myself.room.getRoleCount() === 1 ?
-                    myself.room.name : myself.projectName;
+                var str = myself.getSnapXml();
+                var name = this.room.getRoleCount() === 1 ?
+                    this.room.name : this.projectName;
 
-                if (myself.room.getRoleCount() > 1) {
-                    myself.inform(
-                        'Multiple Roles Detected',
-                        'As a Snap! project is equivalent to a role in NetsBlox,\n' +
-                        'we can only export a single role to a Snap! project at\n' +
-                        'a time.\n\nTo migrate the remaining roles, please export\n' +
-                        'them all individually.',
-                        myself.world()
-                    );
-                }
-
-                // remove the watcher for the RPC error...
-                var rpcErrWatcher = detect(
-                    myself.stage.children,
-                    function(child) {
-                        return child instanceof WatcherMorph &&
-                            child.getter === 'reportRPCError';
-                    }
-                );
-                var index = myself.stage.children.indexOf(rpcErrWatcher);
-                myself.stage.children.splice(index, 1);
-
-                SnapSerializer.prototype.isSavingHistory = false;
-                myself.exportRole(name, shiftClicked);
-                SnapSerializer.prototype.isSavingHistory = isSavingHistory;
-
-                // restore the RPC error watcher
-                myself.stage.children.splice(index, 0, rpcErrWatcher);
+                myself.saveXMLAs(str, name);
+                myself.showMessage('Exported!', 1);
             },
             'export "' + myself.projectName + '" as Snap!-compatible XML',
             new Color(100, 0, 0)
@@ -544,6 +514,45 @@ NetsBloxMorph.prototype.exportMultiRoleXml = function () {
         type: 'export-room',
         action: 'export'
     });
+};
+
+NetsBloxMorph.prototype.getSnapXml = function() {
+    var isSavingHistory = SnapSerializer.prototype.isSavingHistory;
+
+    if (this.room.getRoleCount() > 1) {
+        this.inform(
+            'Multiple Roles Detected',
+            'As a Snap! project is equivalent to a role in NetsBlox,\n' +
+            'we can only export a single role to a Snap! project at\n' +
+            'a time.\n\nTo migrate the remaining roles, please export\n' +
+            'them all individually.',
+            this.world()
+        );
+    }
+
+    // remove the watcher for the RPC error...
+    var rpcErrWatcher = detect(
+        this.stage.children,
+        function(child) {
+            return child instanceof WatcherMorph &&
+                child.getter === 'reportRPCError';
+        }
+    );
+    if (rpcErrWatcher) {
+        var index = this.stage.children.indexOf(rpcErrWatcher);
+        this.stage.children.splice(index, 1);
+    }
+
+    SnapSerializer.prototype.isSavingHistory = false;
+    //this.exportRole(name, shiftClicked);  // FIXME
+    var str = this.serializer.serialize(this.stage);
+    SnapSerializer.prototype.isSavingHistory = isSavingHistory;
+
+    // restore the RPC error watcher
+    if (rpcErrWatcher) {
+        this.stage.children.splice(index, 0, rpcErrWatcher);
+    }
+    return str;
 };
 
 NetsBloxMorph.prototype.getSerializedRole = function () {
