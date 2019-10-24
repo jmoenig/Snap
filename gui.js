@@ -4702,7 +4702,8 @@ IDE_Morph.prototype.openDataString = function (str, name, type) {
 };
 
 IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
-    var data, vName, dlg,
+    var myself = this,
+        data, vName, dlg,
         globals = this.currentSprite.globalVariables();
 
     function newVarName(name) {
@@ -4729,20 +4730,20 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
             data = str;
     }
     vName = newVarName(name || 'data');
-    return SnapActions.addVariable(vName, true).then(() => {
+    return SnapActions.addVariable(vName, true).then(function() {
         globals.setVar(vName, data);
-        this.currentSprite.toggleVariableWatcher(vName, true); // global
-        this.flushBlocksCache('variables');
-        this.currentCategory = 'variables';
-        this.categories.children.forEach(function (each) {
+        myself.currentSprite.toggleVariableWatcher(vName, true); // global
+        myself.flushBlocksCache('variables');
+        myself.currentCategory = 'variables';
+        myself.categories.children.forEach(function (each) {
             each.refresh();
         });
-        this.refreshPalette(true);
+        myself.refreshPalette(true);
         if (data instanceof List) {
             dlg = new TableDialogMorph(data);
             dlg.labelString = localize(dlg.labelString) + ': ' + vName;
             dlg.createLabel();
-            dlg.popUp(this.world());
+            dlg.popUp(myself.world());
         }
     });
 };
