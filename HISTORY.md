@@ -6,6 +6,14 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.2.1:
+* **Notable Fix:**
+    * optimized collision detection
+
+### 2019-10-24
+* morphic, objects: optimized collision detection
+* prepared patch
+
 ## v5.2.0:
 * **New Features:**
     * new media creation primitives:
