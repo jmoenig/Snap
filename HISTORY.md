@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
-## v5.2.0 in development (RC):
+## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+## v5.2.0:
 * **New Features:**
     * new media creation primitives:
     * new primitive in "looks": NEW COSTUME from a list of pixels and dimensions, allowing CURRENT
@@ -19,6 +25,9 @@
 * **Translation Updates:**
     * English
     * German
+
+### 2019-10-24
+* prepared release
 
 ### 2019-10-23
 * lists: disabled direct editing of list watchers for non-literal typed lists (such as costumes)
