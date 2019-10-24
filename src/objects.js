@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-22';
+modules.objects = '2019-October-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1912,7 +1912,6 @@ SpriteMorph.prototype.drawNew = function () {
             1000
         );
         this.silentSetExtent(new Point(newX, newX));
-        this.image = newCanvas(this.extent(), true);
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
@@ -1927,7 +1926,6 @@ SpriteMorph.prototype.drawNew = function () {
                 100
             );
             return myself.wearCostume(null, true);
-
         }
     }
     this.version = Date.now(); // for observer optimization
@@ -4247,14 +4245,15 @@ SpriteMorph.prototype.goBack = function (layers) {
 SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        oImg = newCanvas(oRect.extent(), true),
-        ctx = oImg.getContext('2d');
+        oImg, ctx;
 
     if (oRect.width() < 1 || oRect.height() < 1 ||
             !this.image.width || !this.image.height
             || !otherSprite.image.width || !otherSprite.image.height) {
-        return newCanvas(new Point(1, 1), true);
+        return false;
     }
+    oImg = newCanvas(oRect.extent(), true);
+    ctx = oImg.getContext('2d');
     ctx.drawImage(
         this.image,
         this.left() - oRect.left(),
