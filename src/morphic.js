@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-22';
+var morphicVersion = '2019-October-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4497,9 +4497,8 @@ Morph.prototype.evaluateString = function (code) {
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
         data, len, i;
-    if (!oImg.width || !oImg.height) {
-        return false;
-    }
+
+    if (!oImg) {return false; }
     data = oImg.getContext('2d')
         .getImageData(0, 0, oImg.width, oImg.height)
         .data;
@@ -4514,11 +4513,13 @@ Morph.prototype.overlappingImage = function (otherMorph) {
     var fb = this.fullBounds(),
         otherFb = otherMorph.fullBounds(),
         oRect = fb.intersect(otherFb),
-        oImg = newCanvas(oRect.extent()),
-        ctx = oImg.getContext('2d');
+        oImg, ctx;
+
     if (oRect.width() < 1 || oRect.height() < 1) {
-        return newCanvas(new Point(1, 1));
+        return false;
     }
+    oImg = newCanvas(oRect.extent());
+    ctx = oImg.getContext('2d');
     ctx.drawImage(
         this.fullImage(),
         oRect.origin.x - fb.origin.x,
@@ -4895,6 +4896,7 @@ PenMorph.prototype.drawNew = function (facing) {
         this.wantsRedraw = true;
         return;
     }
+
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
     len = this.width() / 2;
