@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-24';
+modules.objects = '2019-October-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -4242,30 +4242,36 @@ SpriteMorph.prototype.goBack = function (layers) {
 
 // SpriteMorph collision detection optimization
 
-SpriteMorph.prototype.overlappingImage = function (otherSprite) {
+SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        oImg, ctx;
-
+        thisImg = this.image,
+        thatImg = otherSprite.image;
+        
     if (oRect.width() < 1 || oRect.height() < 1 ||
-            !this.image.width || !this.image.height
-            || !otherSprite.image.width || !otherSprite.image.height) {
+        !this.image.width || !this.image.height ||
+        !otherSprite.image.width || !otherSprite.image.height
+    ) {
         return false;
     }
-    oImg = newCanvas(oRect.extent(), true);
-    ctx = oImg.getContext('2d');
-    ctx.drawImage(
-        this.image,
-        this.left() - oRect.left(),
-        this.top() - oRect.top()
-    );
-    ctx.globalCompositeOperation = 'source-in';
-    ctx.drawImage(
-        otherSprite.image,
-        otherSprite.left() - oRect.left(),
-        otherSprite.top() - oRect.top()
-    );
-    return oImg;
+    if (thisImg.isRetinaEnabled !== thatImg.isRetinaEnabled) {
+        thisImg = normalizeCanvas(thisImg, true);
+        thatImg = normalizeCanvas(thatImg, true);
+    }
+    return [
+        thisImg.getContext("2d").getImageData(
+            oRect.left() - this.left(),
+            oRect.top() - this.top(),
+            oRect.width(),
+            oRect.height()
+        ).data,
+        thatImg.getContext("2d").getImageData(
+            oRect.left() - otherSprite.left(),
+            oRect.top() - otherSprite.top(),
+            oRect.width(),
+            oRect.height()
+        ).data
+    ];
 };
 
 // SpriteMorph pen ops
@@ -7570,11 +7576,7 @@ StageMorph.prototype.penTrailsMorph = function () {
     morph = new Morph();
     trails = this.penTrails();
     morph.bounds = this.bounds.copy();
-    if (this.image.width === trails.width) {
-        morph.image = trails;
-        return morph;
-    }
-    morph.image = newCanvas(this.extent());
+    morph.image = newCanvas(this.extent(), true);
     ctx = morph.image.getContext('2d');
     ctx.drawImage(
         trails,

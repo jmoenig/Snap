@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-24';
+var morphicVersion = '2019-October-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4495,43 +4495,46 @@ Morph.prototype.evaluateString = function (code) {
 // Morph collision detection:
 
 Morph.prototype.isTouching = function (otherMorph) {
-    var oImg = this.overlappingImage(otherMorph),
-        data, len, i;
+    var data = this.overlappingPixels(otherMorph),
+        len, i;
 
-    if (!oImg) {return false; }
-    data = oImg.getContext('2d')
-        .getImageData(0, 0, oImg.width, oImg.height)
-        .data;
-    len = data.length;
-    for(i = 3; i < len; i += 4) {
-        if (data[i] !== 0) {return true; }
+    if (!data) {return false; }
+    len = data[0].length;
+    for (i = 3; i < len; i += 4) {
+        if (data[0][i] && data[1][i]) {return true; }
     }
     return false;
 };
 
-Morph.prototype.overlappingImage = function (otherMorph) {
+Morph.prototype.overlappingPixels = function (otherMorph) {
     var fb = this.fullBounds(),
         otherFb = otherMorph.fullBounds(),
         oRect = fb.intersect(otherFb),
-        oImg, ctx;
+        thisImg, thatImg;
 
     if (oRect.width() < 1 || oRect.height() < 1) {
         return false;
     }
-    oImg = newCanvas(oRect.extent());
-    ctx = oImg.getContext('2d');
-    ctx.drawImage(
-        this.fullImage(),
-        oRect.origin.x - fb.origin.x,
-        oRect.origin.y - fb.origin.y
-    );
-    ctx.globalCompositeOperation = 'source-in';
-    ctx.drawImage(
-        otherMorph.fullImage(),
-        otherFb.origin.x - oRect.origin.x,
-        otherFb.origin.y - oRect.origin.y
-    );
-    return oImg;
+    thisImg = this.fullImage();
+    thatImg = otherMorph.fullImage();
+    if (thisImg.isRetinaEnabled !== thatImg.isRetinaEnabled) {
+        thisImg = normalizeCanvas(thisImg, true);
+        thatImg = normalizeCanvas(thatImg, true);
+    }
+    return [
+        thisImg.getContext("2d").getImageData(
+            oRect.left() - this.left(),
+            oRect.top() - this.top(),
+            oRect.width(),
+            oRect.height()
+        ).data,
+        thatImg.getContext("2d").getImageData(
+            oRect.left() - otherMorph.left(),
+            oRect.top() - otherMorph.top(),
+            oRect.width(),
+            oRect.height()
+        ).data
+    ];
 };
 
 // ShadowMorph /////////////////////////////////////////////////////////
