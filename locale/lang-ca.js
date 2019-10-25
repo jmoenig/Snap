@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-06-25', // this, too, will appear in the Translators tab
+        '2019-10-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -344,12 +344,20 @@ SnapTranslator.dict.ca = {
         'Hola!',
     'Hmm...':
         'Hmm...',
+    '%img of costume %cst':
+        '%img del vestit %cst',
+    'stretch %cst x: %n y: %n %':
+        'estira %cst a x: %n y: %n %',
+    'new costume %l width %dim height %dim':
+        'nou vestit %l d\'amplada %dim i alçada %dim',
     'change %eff effect by %n':
         'augmenta l\'efecte %eff en %n',
     'set %eff effect to %n':
         'fixa l\'efecte %eff a %n',
     'clear graphic effects':
         'treu els efectes gràfics',
+    '%eff effect':
+        'efecte %eff',
     'change size by %n':
         'augmenta %n la mida',
     'set size to %n %':
@@ -381,6 +389,12 @@ SnapTranslator.dict.ca = {
         'toca el so %snd fins que acabi',
     'stop all sounds':
         'atura tots els sons',
+    'play sound %snd at %rate Hz':
+        'toca el so %snd a %rate Hz',
+    '%aa of sound %snd':
+        '%aa del so %snd',
+    'new sound %l rate %rate Hz':
+        'nou so %l a %rate Hz',
     'rest for %n beats':
         'fes silenci durant %n temps',
     'play note %note for %n beats':
@@ -2655,18 +2669,8 @@ SnapTranslator.dict.ca = {
         'píxel',
     'pixels':
         'píxels',
-    '%img of costume %cst':
-        '%img del vestit %cst',
-    'stretch %cst x: %n y: %n %':
-        'estira %cst a x: %n y: %n %',
-    '%eff effect':
-        'efecte %eff',
     'current':
         'actual',
-    'play sound %snd at %rate Hz':
-        'toca el so %snd a %rate Hz',
-    '%aa of sound %snd':
-        '%aa del so %snd',
     'duration':
         'durada',
     'length':
@@ -2704,6 +2708,8 @@ SnapTranslator.dict.ca = {
     'resolution':
         'resolució',
     'neg':
-        'oposat'
+        'oposat',
+    '__shout__go__':
+        'bandera verda premuda'
 
 };
