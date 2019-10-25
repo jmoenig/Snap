@@ -288,6 +288,7 @@ InputSlotMorph.prototype.rpcNames = function () {
     var services = JSON.parse(utils.getUrlSync('/rpc')),
         menuDict = {},
         category,
+        subMenu,
         name;
 
     function sortDict(dict) {
@@ -310,10 +311,14 @@ InputSlotMorph.prototype.rpcNames = function () {
         if (services[i].categories.length) {
             for (var j = services[i].categories.length; j--;) {
                 category = services[i].categories[j];
-                if (!menuDict[category]) {
-                    menuDict[category] = {};
+                subMenu = menuDict;
+                for (var c = 0; c < category.length; c++) {
+                    if (!subMenu[category[c]]) {
+                        subMenu[category[c]] = {};
+                    }
+                    subMenu = subMenu[category[c]];
                 }
-                menuDict[category][name] = name;
+                subMenu[name] = name;
             }
         } else {
             menuDict[name] = name;
