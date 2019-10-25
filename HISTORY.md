@@ -6,6 +6,14 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.2.3:
+* **Notable Changes:*
+    * added sprite dimension selectors to the OF reporter's dropdown menu
+
+### 2019-10-25
+* blocks, threads: added sprite dimension selectors to the OF reporter's dropdown menu
+* prepared patch
+
 ## v5.2.2:
 * **Notable Fix:**
     * more optimizations for collision detection

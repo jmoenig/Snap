@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-21';
+modules.blocks = '2019-October-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9041,6 +9041,10 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'size' : ['size'],
             'width': ['width'],
             'height': ['height'],
+            'left' : ['left'],
+            'right' : ['right'],
+            'top' : ['top'],
+            'bottom' : ['bottom'],
             'volume' : ['volume'],
             'balance' : ['balance']
         };
@@ -9051,7 +9055,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'volume' : ['volume'],
             'balance' : ['balance'],
             'width': ['width'],
-            'height': ['height']
+            'height': ['height'],
+            'left' : ['left'],
+            'right' : ['right'],
+            'top' : ['top'],
+            'bottom' : ['bottom']
         };
     }
     varNames = obj.variables.names();
