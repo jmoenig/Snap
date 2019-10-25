@@ -1,5 +1,5 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
-   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil,
+   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil, SnapCloud
    ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world, utils*/
 // Extensions to the Snap blocks
 
@@ -286,6 +286,7 @@ StructInputSlotMorph.prototype.updateField = function(field, value) {
 
 InputSlotMorph.prototype.rpcNames = function () {
     var services = JSON.parse(utils.getUrlSync('/rpc')),
+        hasAuthoredServices,
         menuDict = {},
         category,
         subMenu,
@@ -325,7 +326,22 @@ InputSlotMorph.prototype.rpcNames = function () {
         }
     }
 
-    return sortDict(menuDict);
+    menuDict = sortDict(menuDict);
+
+    hasAuthoredServices = SnapCloud.username && menuDict.Community &&
+        menuDict.Community[SnapCloud.username];
+    if (hasAuthoredServices) {
+        subMenu = {};
+        subMenu[SnapCloud.username] = menuDict.Community[SnapCloud.username];
+        Object.keys(menuDict.Community).forEach(function(key) {
+            if (key !== SnapCloud.username) {
+                subMenu[key] = menuDict.Community[key];
+            }
+        });
+        menuDict.Community = subMenu;
+    }
+
+    return menuDict;
 };
 
 RPCInputSlotMorph.prototype = new StructInputSlotMorph();
