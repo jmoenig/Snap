@@ -9,7 +9,8 @@
 ## v5.2.2:
 * **Notable Fix:**
     * more optimizations for collision detection
-    * prepared patch
+    * **Translation Update:**
+    * Catalan
 
 ### 2019-10-25
 * morphic, objects: optimized collision detection yet more
