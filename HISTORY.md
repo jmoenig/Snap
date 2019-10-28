@@ -4,13 +4,15 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
-    * optimized backgrounds and pen trails frame rate
+    * optimized performance for backgrounds and pen trails
+    * removed "current" option from "switch to costume" block's drop-down menu
 * **Translation Updates:**
 
 ### 2019-10-28
 * new dev version
 * morphic: enable recycling and deep copying canvas elements
 * objects, maps: recycle Stage layers - optimizes backgrounds and pen trails frame rate
+* blocks: removed "current" option from "switch to costume" block's drop-down menu
 
 ## v5.2.3:
 * **Notable Changes:*

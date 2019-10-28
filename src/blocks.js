@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-25';
+modules.blocks = '2019-October-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9076,7 +9076,8 @@ InputSlotMorph.prototype.attributesMenu = function () {
 };
 
 InputSlotMorph.prototype.costumesMenu = function () {
-    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
         dict,
         allNames = [];
     if (rcvr instanceof SpriteMorph) {
@@ -9084,7 +9085,9 @@ InputSlotMorph.prototype.costumesMenu = function () {
     } else { // stage
         dict = {Empty : ['Empty']};
     }
-    dict.current = ['current'];
+    if (block.selector !== 'doSwitchToCostume') {
+        dict.current = ['current'];
+    }
     rcvr.costumes.asArray().forEach(function (costume) {
         allNames = allNames.concat(costume.name);
     });
