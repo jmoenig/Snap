@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-25';
+modules.objects = '2019-October-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -7447,10 +7447,12 @@ StageMorph.prototype.setScale = function (number) {
 // StageMorph rendering
 
 StageMorph.prototype.drawNew = function () {
-    var ctx;
-    StageMorph.uber.drawNew.call(this);
+    this.image = newCanvas(this.extent(), true, this.image);
+    var ctx = this.image.getContext('2d');
+    ctx.save();
+    ctx.fillStyle = this.color.toString();
+    ctx.fillRect(0, 0, this.width(), this.height());
     if (this.costume) {
-        ctx = this.image.getContext('2d');
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
             this.costume.contents,
@@ -7459,6 +7461,7 @@ StageMorph.prototype.drawNew = function () {
         );
         this.image = this.applyGraphicsEffects(this.image);
     }
+    ctx.restore();
     this.version = Date.now(); // for observer optimization
 };
 
@@ -7555,7 +7558,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
-    this.trailsCanvas = newCanvas(this.dimensions);
+    this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
     this.changed();
 };
 

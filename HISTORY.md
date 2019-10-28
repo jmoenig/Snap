@@ -4,11 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * optimized backgrounds and pen trails frame rate
 * **Translation Updates:**
 
 ### 2019-10-28
 * new dev version
 * morphic: enable recycling and deep copying canvas elements
+* objects, maps: recycle Stage layers - optimizes backgrounds and pen trails frame rate
 
 ## v5.2.3:
 * **Notable Changes:*
