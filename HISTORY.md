@@ -8,6 +8,7 @@
 
 ### 2019-10-28
 * new dev version
+* morphic: enable recycling and deep copying canvas elements
 
 ## v5.2.3:
 * **Notable Changes:*

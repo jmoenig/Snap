@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-25';
+var morphicVersion = '2019-October-28';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1331,19 +1331,42 @@ function isURL(text) {
     return /^https?:\/\//.test(text);
 }
 
-function newCanvas(extentPoint, nonRetina) {
+function newCanvas(extentPoint, nonRetina, recycleMe) {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
     // by default retina support is automatic
+    // optional existing canvas to be used again
     var canvas, ext;
-    ext = extentPoint || {x: 0, y: 0};
-    canvas = document.createElement('canvas');
-    canvas.width = ext.x;
-    canvas.height = ext.y;
+    ext = extentPoint ||
+            (recycleMe ? new Point(recycleMe.width, recycleMe.height)
+                : {x: 0, y: 0});
+    if (recycleMe && recycleMe.isRetinaEnabled !== nonRetina &&
+            ext.x === recycleMe.width && ext.y === recycleMe.height) {
+        canvas = recycleMe;
+        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    } else {
+        canvas = document.createElement('canvas');
+        canvas.width = ext.x;
+        canvas.height = ext.y;
+    }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
     }
     return canvas;
+}
+
+function copyCanvas(aCanvas) {
+    // answer a deep copy of a canvas element respecting its retina status
+    var c;
+    if (aCanvas && aCanvas.width && aCanvas.height) {
+        c = newCanvas(
+            new Point(aCanvas.width, aCanvas.height),
+            !aCanvas.isRetinaEnabled
+        );
+        c.getContext("2d").drawImage(aCanvas, 0, 0);
+        return c;
+    }
+    return aCanvas;
 }
 
 function getMinimumFontHeight() {
