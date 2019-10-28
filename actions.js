@@ -483,9 +483,10 @@ ActionManager.prototype.rejectPredecessorsInQueue = function(queue, event) {
 
     // ensure that we found the given action
     if (action) {
+        var error = new Error('Action Rejected (concurrent action accepted).');
         var next = queue.shift();
         while (next !== action) {
-            next.reject();
+            next.reject(error);
             next = queue.shift();
         }
         return action;
@@ -3093,14 +3094,14 @@ ActionManager.prototype.onMessage = function(msg) {
     }
 };
 
-ActionManager.prototype.onActionReject = function(action) {
+ActionManager.prototype.onActionReject = function(action, reason) {
     var queue = this._attemptedLocalActions,
-        item = queue.find(function(item) { return item.equals(action)}),
+        item = queue.find(function(item) { return item.equals(action); }),
         index = queue.indexOf(item);
 
     if (index > -1) {
         queue.splice(index, 1);
-        item.reject();
+        item.reject(new Error(reason));
     }
 };
 
