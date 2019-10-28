@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-10-28
+* new dev version
+
 ## v5.2.3:
 * **Notable Changes:*
     * added sprite dimension selectors to the OF reporter's dropdown menu
