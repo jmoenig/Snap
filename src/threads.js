@@ -2220,15 +2220,17 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     var vars = this.context.outerContext.variables,
         dta = this.context.accumulator;
     if (dta === null) {
+        this.assertType(+start, 'number');
+        this.assertType(+end, 'number');
         dta = this.context.accumulator = {
-            test : start < end ?
-                function () {return vars.getVar(upvar) > end; }
-                    : function () {return vars.getVar(upvar) < end; },
-            step : start < end ? 1 : -1,
+            test : +start < +end ?
+                function () {return vars.getVar(upvar) > +end; }
+                    : function () {return vars.getVar(upvar) < +end; },
+            step : +start < +end ? 1 : -1,
             parms : new List() // empty parameters, reusable to avoid GC
         };
         vars.addVar(upvar);
-        vars.setVar(upvar, Math.floor(start));
+        vars.setVar(upvar, Math.floor(+start));
     } else {
         vars.changeVar(upvar, dta.step);
     }

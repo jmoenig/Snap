@@ -7,6 +7,7 @@
     * optimized performance for sprite rendering and rotation
     * added support for counting down using the "numbers" reporter
 * **Notable Fixes:**
+    * fixed FOR so it can take numbers entered as text (bug report by Kathy from Piazza)
     * removed "current" option from "switch to costume" block's drop-down menu
 * **Translation Updates:**
 
@@ -14,6 +15,7 @@
 * threads: added support for counting down using the "numbers" reporter
 * morphic: improved canvas recycling
 * objects: optimized sprite rendering and rotating
+* threads: FOR so it can take numbers entered as text (bug report by Kathy from Piazza)
 
 ### 2019-10-28
 * new dev version
