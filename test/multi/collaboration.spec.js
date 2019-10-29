@@ -11,22 +11,19 @@ describe('collaboration', function() {
 
     describe('same user', function() {
         let blockId = null;
-        before(function() {
-            return driver.user2.openProject(projectName, false)
-                .then(() => driver.user2.waitForDialogBox())
-                .then(() => {
-                    const dialog = driver.user2.dialog();
-                    const joinBtn = dialog.buttons.children[0];
-                    driver.user2.click(joinBtn);
-                    return driver.user1.addBlock('show');
-                })
-                .then(block => {
-                    expect(block).toBeTruthy();
-                    blockId = block.id;
-                });
+        before(async function() {
+            await driver.user2.openProject(projectName, false);
+            await driver.user2.waitForDialogBox();
+            const dialog = driver.user2.dialog();
+            const joinBtn = dialog.buttons.children[0];
+            driver.user2.click(joinBtn);
+            await driver.user2.waitUntil(() => driver.user2.ide().room.name === projectName);
+            const block = await driver.user1.addBlock('show');
+            expect(block).toBeTruthy();
+            blockId = block.id;
         });
 
-        it('should add block across clients', function() {
+        it('should add (show) block across clients', function() {
             return driver.user2.expect(
                 () => {
                     const sprite = driver.user2.ide().currentSprite;
@@ -50,32 +47,31 @@ describe('collaboration', function() {
         const user2 = 'test2';
         let oldProjectId;
         let oldRoleId;
-        before(() => {
-            return driver.user2.login(user2)
-                .then(() => driver.user1.inviteCollaborator(user2))
-                .then(() => driver.user2.expect(
-                    () => {
-                        const dialog = driver.user2.dialog();
-                        const key = dialog && dialog.key;
-                        return key && key.includes('decideCollab');
-                    },
-                    `Prospective collaborator never received invite`
-                ))
-                .then(() => {  // accept the invite and open the project
-                    oldProjectId = driver.user2.globals().SnapCloud.projectId;
-                    oldRoleId = driver.user2.globals().SnapCloud.roleId;
-                    const dialog = driver.user2.dialogs()
-                        .find(dialog => dialog.key.includes('decideCollab'));
-                    dialog.ok();
-                    return driver.user2.expect(
-                        () => driver.user2.isShowingDialogKey(key => key.includes('decideOpen')),
-                        `Did not prompt user to open shared project`
-                    );
-                })
-                .then(() => {
-                    const openDialog = driver.user2.dialog();
-                    openDialog.ok();
-                });
+        before(async () => {
+            await driver.user2.login(user2);
+            driver.user1.inviteCollaborator(user2);
+            await driver.user2.expect(
+                () => {
+                    const dialog = driver.user2.dialog();
+                    const key = dialog && dialog.key;
+                    return key && key.includes('decideCollab');
+                },
+                `Prospective collaborator never received invite`
+            );
+
+            oldProjectId = driver.user2.globals().SnapCloud.projectId;
+            oldRoleId = driver.user2.globals().SnapCloud.roleId;
+            const dialog = driver.user2.dialogs()
+                .filter(dialog => dialog.key)
+                .find(dialog => dialog.key.includes('decideCollab'));
+            dialog.ok();
+
+            await driver.user2.expect(
+                () => driver.user2.isShowingDialogKey(key => key.includes('decideOpen')),
+                `Did not prompt user to open shared project`
+            );
+            const openDialog = driver.user2.dialog();
+            openDialog.ok();
         });
 
         after(() => driver.user2.login('test'));
