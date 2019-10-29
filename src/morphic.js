@@ -1337,10 +1337,11 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     // by default retina support is automatic
     // optional existing canvas to be used again
     var canvas, ext;
+    nonRetina = nonRetina || false;
     ext = (extentPoint ||
             (recycleMe ? new Point(recycleMe.width, recycleMe.height)
                 : new Point(0, 0))).floor();
-    if (recycleMe && recycleMe.isRetinaEnabled !== nonRetina &&
+    if (recycleMe && (recycleMe.isRetinaEnabled || false) !== nonRetina &&
             ext.x === recycleMe.width && ext.y === recycleMe.height) {
         canvas = recycleMe;
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
