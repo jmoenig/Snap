@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-28';
+modules.objects = '2019-October-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -1721,6 +1721,11 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         arr = [],
         cb, effect;
 
+    // make sure the clone has its own canvas to recycle
+    c.image = null;
+    c.drawNew();
+
+    // un-share individual properties
     c.instances = [];
     c.stopTalking();
     c.color = this.color.copy();
@@ -1829,6 +1834,7 @@ SpriteMorph.prototype.drawNew = function () {
         isLoadingCostume,
         cst,
         pic, // (flipped copy of) actual costume based on my rotation style
+        imageSide,
         stageScale,
         newX,
         corners = [],
@@ -1883,13 +1889,26 @@ SpriteMorph.prototype.drawNew = function () {
 
         // create a new, adequately dimensioned canvas
         // and draw the costume on it
-        this.image = newCanvas(costumeExtent, true);
+        if (this.rotationStyle === 1) { // rotate freely in all directions
+            imageSide = Math.sqrt(
+                Math.pow(pic.width(), 2) + Math.pow(pic.height(), 2)
+            ) * this.scale * stageScale;
+            this.image = newCanvas(
+                new Point(imageSide, imageSide),
+                true,
+                this.image
+            );
+        } else { // don't actually rotate
+            this.image = newCanvas(costumeExtent, true, this.image);
+        }
         this.silentSetExtent(costumeExtent);
         ctx = this.image.getContext('2d');
+        ctx.save();
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
+        ctx.restore();
 
         // apply graphics effects to image
         this.image = this.applyGraphicsEffects(this.image);
@@ -1913,7 +1932,7 @@ SpriteMorph.prototype.drawNew = function () {
         );
         this.silentSetExtent(new Point(newX, newX));
         this.setCenter(currentCenter, true); // just me
-        SpriteMorph.uber.drawNew.call(this, facing);
+        SpriteMorph.uber.drawNew.call(this, facing, this.image); // recycle
         this.rotationOffset = this.extent().divideBy(2);
         this.image = this.applyGraphicsEffects(this.image);
         if (isLoadingCostume) { // retry until costume is done loading
@@ -1994,10 +2013,10 @@ SpriteMorph.prototype.getImageData = function () {
     if (this.version !== this.imageData.version) {
         var stage = this.parentThatIsA(StageMorph),
             ext = this.extent(),
-            newExtent = {
-                x: Math.floor(ext.x / stage.scale),
-                y: Math.floor(ext.y / stage.scale)
-            },
+            newExtent = new Point(
+                Math.floor(ext.x / stage.scale),
+                Math.floor(ext.y / stage.scale)
+            ),
             canvas = newCanvas(newExtent, true),
             canvasContext,
             imageData;
@@ -2008,8 +2027,12 @@ SpriteMorph.prototype.getImageData = function () {
             Math.floor(ext.y),
             0, 0, newExtent.x, newExtent.y
         );
-        imageData = canvas.getContext("2d")
-            .getImageData(0, 0, newExtent.x, newExtent.y).data;
+        imageData = canvasContext.getImageData(
+            0,
+            0,
+            newExtent.x,
+            newExtent.y
+        ).data;
         this.imageData = {
             version : this.version,
             pixels : new Uint32Array(imageData.buffer.slice(0))
@@ -2023,18 +2046,24 @@ SpriteMorph.prototype.projectionSnap = function() {
         center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
         cst = this.costume || this.image,
+        w, h,
         offset,
         snap,
         ctx;
 
     if (cst instanceof Costume) {
         cst = cst.contents;
+        w = cst.width;
+        h = cst.height;
+    } else {
+        w = this.width();
+        h = this.height();
     }
     offset = new Point(
-        Math.floor(center.x - (cst.width / 2)),
-        Math.floor(center.y - (cst.height / 2))
+        Math.floor(center.x - (w / 2)),
+        Math.floor(center.y - (h / 2))
     );
-    snap = newCanvas(new Point(cst.width, cst.height), true);
+    snap = newCanvas(new Point(w, h), true);
     ctx = snap.getContext('2d');
     ctx.drawImage(cst, 0, 0);
     ctx.globalCompositeOperation = 'source-in';
@@ -4249,6 +4278,7 @@ SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
         thatImg = otherSprite.image;
         
     if (oRect.width() < 1 || oRect.height() < 1 ||
+        !this.image || !otherSprite.image ||
         !this.image.width || !this.image.height ||
         !otherSprite.image.width || !otherSprite.image.height
     ) {
@@ -4587,7 +4617,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
   // For every effect: apply transform of that effect(canvas, stored value)
   // Graphic effects from Scratch are heavily based on ScratchPlugin.c
 
-    var ctx, imagedata;
+    var ctx, imagedata, w, h;
 
     function transform_fisheye(imagedata, value) {
         var pixels, newImageData, newPixels, centerX, centerY,
@@ -4868,12 +4898,14 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     if (this.graphicsChanged()) {
-        if (!canvas.width || !canvas.height) {
+        w = Math.ceil(this.width());
+        h = Math.ceil(this.height());
+        if (!canvas.width || !canvas.height || !w || !h) {
             // too small to get image data, abort
             return canvas;
         }
         ctx = canvas.getContext("2d");
-        imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        imagedata = ctx.getImageData(0, 0, w, h);
 
         if (this.graphicsValues.fisheye) {
             imagedata = transform_fisheye(
@@ -6856,17 +6888,17 @@ SpriteMorph.prototype.inheritedMethods = function () {
 // SpriteMorph thumbnail
 
 SpriteMorph.prototype.thumbnail = function (extentPoint) {
-/*
-    answer a new Canvas of extentPoint dimensions containing
-    my thumbnail representation keeping the originial aspect ratio
-*/
+    // answer a new Canvas of extentPoint dimensions containing
+    // my thumbnail representation keeping the originial aspect ratio
     var src = this.image, // at this time sprites aren't composite morphs
+        w = this.width(),
+        h = this.height(),
         scale = Math.min(
-            (extentPoint.x / src.width),
-            (extentPoint.y / src.height)
+            (extentPoint.x / w),
+            (extentPoint.y / h)
         ),
-        xOffset = (extentPoint.x - (src.width * scale)) / 2,
-        yOffset = (extentPoint.y - (src.height * scale)) / 2,
+        xOffset = (extentPoint.x - (w * scale)) / 2,
+        yOffset = (extentPoint.y - (h * scale)) / 2,
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
@@ -6887,7 +6919,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
     if (this.isCorpse) {
         ctx.globalAlpha = 0.3;
     }
-    if (src.width && src.height) {
+    if (w && h) {
         ctx.scale(scale, scale);
         ctx.drawImage(
             src,

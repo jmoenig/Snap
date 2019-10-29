@@ -3,15 +3,17 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * optimized performance for backgrounds and pen trails
+    * optimized performance for sprite rendering and rotation
     * added support for counting down using the "numbers" reporter
 * **Notable Fixes:**
-    * optimized performance for backgrounds and pen trails
     * removed "current" option from "switch to costume" block's drop-down menu
 * **Translation Updates:**
 
 ### 2019-10-29
 * threads: added support for counting down using the "numbers" reporter
 * morphic: improved canvas recycling
+* objects: optimized sprite rendering and rotating
 
 ### 2019-10-28
 * new dev version
