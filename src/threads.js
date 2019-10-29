@@ -1832,9 +1832,9 @@ Process.prototype.reportNumbers = function (start, end) {
     // without blocking the UI
 
     var dta;
-    this.assertType(+start, 'number');
-    this.assertType(+end, 'number');
     if (this.context.accumulator === null) {
+        this.assertType(start, 'number');
+        this.assertType(end, 'number');
         this.context.accumulator = {
             target : new List(),
             end : null,
@@ -2220,8 +2220,8 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     var vars = this.context.outerContext.variables,
         dta = this.context.accumulator;
     if (dta === null) {
-        this.assertType(+start, 'number');
-        this.assertType(+end, 'number');
+        this.assertType(start, 'number');
+        this.assertType(end, 'number');
         dta = this.context.accumulator = {
             test : +start < +end ?
                 function () {return vars.getVar(upvar) > +end; }
