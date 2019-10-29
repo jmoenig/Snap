@@ -3,10 +3,14 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * added support for counting down using the "numbers" reporter
 * **Notable Fixes:**
     * optimized performance for backgrounds and pen trails
     * removed "current" option from "switch to costume" block's drop-down menu
 * **Translation Updates:**
+
+### 2019-10-29
+* threads: added support for counting down using the "numbers" reporter
 
 ### 2019-10-28
 * new dev version

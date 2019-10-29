@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-25';
+modules.threads = '2019-October-29';
 
 var ThreadManager;
 var Process;
@@ -1838,20 +1838,21 @@ Process.prototype.reportNumbers = function (start, end) {
         this.context.accumulator = {
             target : new List(),
             end : null,
-            idx : +start
+            idx : +start,
+            step: +end > +start ? +1 : -1
         };
         this.context.accumulator.target.isLinked = true;
         this.context.accumulator.end = this.context.accumulator.target;
     }
     dta = this.context.accumulator;
-    if (dta.idx > +end) {
+    if (dta.step === 1 ? dta.idx > +end : dta.idx < +end) {
         dta.end.rest = new List();
         this.returnValueToParentContext(dta.target.cdr());
         return;
     }
     dta.end.rest = dta.target.cons(dta.idx);
     dta.end = dta.end.rest;
-    dta.idx += 1;
+    dta.idx += dta.step;
     this.pushContext();
 };
 
