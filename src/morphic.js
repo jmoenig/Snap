@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-28';
+var morphicVersion = '2019-October-29';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1337,13 +1337,14 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     // by default retina support is automatic
     // optional existing canvas to be used again
     var canvas, ext;
-    ext = extentPoint ||
+    ext = (extentPoint ||
             (recycleMe ? new Point(recycleMe.width, recycleMe.height)
-                : {x: 0, y: 0});
+                : new Point(0, 0))).floor();
     if (recycleMe && recycleMe.isRetinaEnabled !== nonRetina &&
             ext.x === recycleMe.width && ext.y === recycleMe.height) {
         canvas = recycleMe;
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        return canvas;
     } else {
         canvas = document.createElement('canvas');
         canvas.width = ext.x;
@@ -4535,7 +4536,11 @@ Morph.prototype.overlappingPixels = function (otherMorph) {
         oRect = fb.intersect(otherFb),
         thisImg, thatImg;
 
-    if (oRect.width() < 1 || oRect.height() < 1) {
+    if (oRect.width() < 1 || oRect.height() < 1 ||
+        !this.image || !otherMorph.image ||
+        !this.image.width || !this.image.height ||
+        !otherMorph.image.width || !otherMorph.image.height
+    ) {
         return false;
     }
     thisImg = this.fullImage();
@@ -4911,9 +4916,11 @@ PenMorph.prototype.changed = function () {
 
 // PenMorph display:
 
-PenMorph.prototype.drawNew = function (facing) {
+PenMorph.prototype.drawNew = function (facing, recycleImage) {
     // my orientation can be overridden with the "facing" parameter to
     // implement Scratch-style rotation styles
+    // if a recycleImage canvas is given, it will be reused
+    // instead of creating a new one
 
     var context, start, dest, left, right, len,
         direction = facing || this.heading;
@@ -4923,7 +4930,7 @@ PenMorph.prototype.drawNew = function (facing) {
         return;
     }
 
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), null, recycleImage);
     context = this.image.getContext('2d');
     len = this.width() / 2;
     start = this.center().subtract(this.bounds.origin);

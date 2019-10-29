@@ -11,6 +11,7 @@
 
 ### 2019-10-29
 * threads: added support for counting down using the "numbers" reporter
+* morphic: improved canvas recycling
 
 ### 2019-10-28
 * new dev version
