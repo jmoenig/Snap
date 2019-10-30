@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
 
-modules.objects = '2019-October-29';
+modules.objects = '2019-October-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1890,6 +1890,18 @@ SpriteMorph.prototype.drawNew = function () {
         // create a new, adequately dimensioned canvas
         // and draw the costume on it
         if (this.rotationStyle === 1) { // rotate freely in all directions
+            // create a canvas that is big enough, so the sprite's current
+            // costume can be fully rotated inside, so we can recycle
+            // the canvas for re-rendering until the sprite's or the stage's
+            // scale changes.
+            // note that the canvas will be too big for most situations, but
+            // the sprite's bounds indicate the actually visible area.
+            // recycling canvas elements instead of creating new ones whenever
+            // we render a sprite boosts performance for recent browser
+            // architectures that move canvas elements to the GPU for
+            // rendering (which is a pain in the ass and an altogether
+            // bad idea for any serious GUI but looks oh-so-nice for
+            // some flashy graphic effects in the Apple store).
             imageSide = Math.sqrt(
                 Math.pow(pic.width(), 2) + Math.pow(pic.height(), 2)
             ) * this.scale * stageScale;

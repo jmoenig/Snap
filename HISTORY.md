@@ -13,6 +13,7 @@
 
 ### 2019-10-30
 * threads: optimized HOF primitives to only assert input types once
+* objects: documented new canvas architecture for sprites
 
 ### 2019-10-29
 * threads: added support for counting down using the "numbers" reporter
