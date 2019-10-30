@@ -11,6 +11,9 @@
     * removed "current" option from "switch to costume" block's drop-down menu
 * **Translation Updates:**
 
+### 2019-10-30
+* threads: optimized HOF primitives to only assert input types once
+
 ### 2019-10-29
 * threads: added support for counting down using the "numbers" reporter
 * morphic: improved canvas recycling

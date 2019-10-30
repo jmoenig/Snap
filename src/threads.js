@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-29';
+modules.threads = '2019-October-30';
 
 var ThreadManager;
 var Process;
@@ -2184,16 +2184,16 @@ Process.prototype.doForEach = function (upvar, list, script) {
     // Distinguish between linked and arrayed lists.
 
     var next;
-    this.assertType(list, 'list');
     if (this.context.accumulator === null) {
-	this.context.accumulator = {
-	    source : list,
-	    remaining : list.length(),
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            source : list,
+            remaining : list.length(),
             idx : 0
-	};
+        };
     }
     if (this.context.accumulator.remaining === 0) {
-	return;
+        return;
     }
     this.context.accumulator.remaining -= 1;
     if (this.context.accumulator.source.isLinked) {
@@ -2268,9 +2268,9 @@ Process.prototype.reportMap = function (reporter, list) {
     // #3 - optional | source list
 
     var next, index, parms;
-    this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = {
                 source : list,
                 idx : 1,
@@ -2302,6 +2302,7 @@ Process.prototype.reportMap = function (reporter, list) {
         this.context.accumulator.source = this.context.accumulator.source.cdr();
     } else { // arrayed
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = [];
         } else if (this.context.inputs.length > 2) {
             this.context.accumulator.push(this.context.inputs.pop());
@@ -2337,9 +2338,9 @@ Process.prototype.reportKeep = function (predicate, list) {
     // #3 - optional | source list
 
     var next, index, parms;
-    this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = {
                 source : list,
                 idx: 1,
@@ -2373,6 +2374,7 @@ Process.prototype.reportKeep = function (predicate, list) {
         next = this.context.accumulator.source.at(1);
     } else { // arrayed
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = {
                 idx : 0,
                 target : []
@@ -2416,9 +2418,9 @@ Process.prototype.reportFindFirst = function (predicate, list) {
     // #3 - optional | source list
 
     var next, index, parms;
-    this.assertType(list, 'list');
     if (list.isLinked) {
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = {
                 source : list,
                 idx : 1,
@@ -2444,6 +2446,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
         next = this.context.accumulator.source.at(1);
     } else { // arrayed
         if (this.context.accumulator === null) {
+            this.assertType(list, 'list');
             this.context.accumulator = {
                 idx : 0,
                 current : null
