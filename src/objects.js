@@ -10260,6 +10260,7 @@ Note.prototype.getAudioContext = function () {
     if (!this.audioContext) {
         this.setupContext();
     }
+    this.audioContext.resume();
     return this.audioContext;
 };
 

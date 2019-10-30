@@ -6,6 +6,13 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.2.5:
+* **Notable Fix:**
+    * resume AudioContext on every request
+
+### 2019-10-30
+* objects: resume AudioContext on every request
+
 ## v5.2.4:
 * **Notable Changes:**
     * optimized performance for backgrounds and pen trails
