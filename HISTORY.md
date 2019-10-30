@@ -3,17 +3,22 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+## v5.2.4:
+* **Notable Changes:**
     * optimized performance for backgrounds and pen trails
     * optimized performance for sprite rendering and rotation
     * added support for counting down using the "numbers" reporter
 * **Notable Fixes:**
     * fixed FOR so it can take numbers entered as text (bug report by Kathy from Piazza)
     * removed "current" option from "switch to costume" block's drop-down menu
-* **Translation Updates:**
 
 ### 2019-10-30
 * threads: optimized HOF primitives to only assert input types once
 * objects: documented new canvas architecture for sprites
+* prepared release
 
 ### 2019-10-29
 * threads: added support for counting down using the "numbers" reporter
