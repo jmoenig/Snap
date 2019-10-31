@@ -29,6 +29,12 @@ WebSocketManager.MessageHandlers = {
         this.inActionRequest = false;
     },
 
+    'reload-project': function(msg) {
+        console.error(msg.err);
+        var message = msg.message + '\n\nPlease reopen the project to continue editing.';
+        this.ide.inform(localize('Project Reload Required'), message);
+    },
+
     'report-version': function(msg) {
         var version = msg.body;
         if (!this.serverVersion) {
@@ -43,7 +49,6 @@ WebSocketManager.MessageHandlers = {
         this.onConnect();
     },
 
-    // Game play message
     'message': function(msg) {
         var dstId = msg.dstId,
             messageType = msg.msgType,

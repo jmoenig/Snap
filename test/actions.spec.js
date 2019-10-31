@@ -203,6 +203,17 @@ describe('actions', function() {
             };
             SnapActions.onReceiveAction({id: -1});
         });
+
+        it('should show reload prompt if actions not found', async function() {
+            sockets.sendJSON({
+                type: 'request-actions',
+                actionId: 100
+            });
+            await driver.expect(
+                () => driver.isShowingDialogKey(key => key.includes('Reload Required')),
+                'Reload prompt not shown.'
+            );
+        });
     });
 
     describe('then/catch', function() {
