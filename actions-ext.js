@@ -56,7 +56,6 @@ UndoManager.Invert.deleteMessageType = function() {
 };
 
 SnapActions.serializer = new NetsBloxSerializer();
-SnapActions.__sessionId = Date.now();
 SnapActions.enableCollaboration =
 SnapActions.disableCollaboration = function() {};
 SnapActions.isCollaborating = function() {
@@ -75,19 +74,12 @@ SnapActions.send = function(event) {
     if (!this.isUserAction(event)) {
         this.lastSent = event.id;
     }
-    if (event.type !== 'openProject') {
-        // Netsblox addition: start
-        socket.send(JSON.stringify({
-            type: 'user-action',
-            action: event
-        }));
-        // Netsblox addition: end
-    }
-};
-
-SnapActions.submitAction = function(action) {
-    this.recordActionNB(copy(action));
-    return ActionManager.prototype.submitAction.call(this, action);
+    // Netsblox addition: start
+    socket.send(JSON.stringify({
+        type: 'user-action',
+        action: event
+    }));
+    // Netsblox addition: end
 };
 
 SnapActions.onMessage = function(msg) {
@@ -126,17 +118,6 @@ SnapActions.onReceiveAction = function(msg) {
     }
 
     ActionManager.prototype.onReceiveAction.apply(this, arguments);
-};
-
-SnapActions.recordActionNB = function(action) {
-    var socket = this.ide().sockets,
-        msg = {};
-
-    // Record the action
-    msg.type = 'record-action';
-    msg.sessionId = this.__sessionId;
-    msg.action = action;
-    socket.sendMessage(msg);
 };
 
 SnapActions.completeAction = function(error) {
