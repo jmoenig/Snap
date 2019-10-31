@@ -112,78 +112,69 @@ describe('save', function() {
                 describe('from unsaved', function() {
                     const existingName = `existing-${Date.now()}`;
 
-                    before(function() {
-                        return driver.reset()
-                            .then(() => driver.addBlock('doIf'))
-                            .then(() => driver.saveProjectAs(existingName));
+                    before(async function() {
+                        await driver.reset();
+                        await driver.addBlock('doIf');
+                        await driver.saveProjectAs(existingName);
                     });
 
-                    beforeEach(function() {
-                        return driver.reset()
-                            .then(() => driver.addBlock('doIfElse'));
+                    beforeEach(async function() {
+                        await driver.reset();
+                        await driver.addBlock('doIfElse');
                     });
 
-                    it('should not make a copy', function() {
+                    it('should not make a copy', async function() {
                         const name = `save-as-unsaved-${Date.now()}`;
                         const saveAs = `${name}-SAVE-AS`;
-                        return driver.setProjectName(name)
-                            .then(() => driver.addBlock('forward'))
-                            .then(() => driver.saveProjectAs(saveAs))
-                            .then(() => openProjectsBrowser())
-                            .then(dialog => {
-                                return driver.waitUntil(() => {
-                                    // Click the cloud icon
-                                    const cloudSrc = dialog.srcBar.children[0];
-                                    driver.click(cloudSrc);
+                        await driver.setProjectName(name);
+                        await driver.addBlock('forward');
+                        await driver.saveProjectAs(saveAs);
+                        const dialog = await openProjectsBrowser();
+                        await driver.waitUntil(() => {
+                            const cloudSrc = dialog.srcBar.children[0];
+                            driver.click(cloudSrc);
 
-                                    const projectList = dialog.listField.listContents
-                                        .children.map(child => child.labelString);
-                                    const hasOriginal = projectList.includes(name);
-                                    const hasSaveAsVersion = projectList.includes(saveAs);
+                            const projectList = dialog.listField.listContents
+                                .children.map(child => child.labelString);
+                            const hasOriginal = projectList.includes(name);
+                            const hasSaveAsVersion = projectList.includes(saveAs);
 
-                                    return !hasOriginal && hasSaveAsVersion;
-                                });
-                            });
+                            return !hasOriginal && hasSaveAsVersion;
+                        });
                     });
 
-                    it('should prompt for overwrite if conflicting exists', function() {
-                        return driver.saveProjectAs(existingName, false)
-                            .then(() => {
-                                const menu = driver.dialog();
-                                expect(menu.key.includes('decideReplace')).toBeTruthy();
-                            });
+                    it('should prompt for overwrite if conflicting exists', async function() {
+                        await driver.saveProjectAs(existingName, false);
+                        await driver.expect(
+                            () => driver.isShowingDialogKey(key => key.includes('decideReplace')),
+                            'No overwrite prompt for conflicting project names'
+                        );
                     });
 
-                    it('should save as given name on overwrite', function() {
+                    it('should save as given name on overwrite', async function() {
                         const originalName = `original-name-${Date.now()}`;
-                        return driver.setProjectName(originalName)
-                            .then(() => driver.saveProjectAs(existingName, false))
-                            .then(() => {
-                                const menu = driver.dialog();
-                                menu.ok();
-                                return driver.expect(
-                                    showingSaveMsg,
-                                    `Did not show save message on overwrite`
-                                );
-                            })
-                            .then(() => openProjectsBrowser())
-                            .then(browser => {
-                                const names = getProjectList(browser);
-                                expect(names).toContain(existingName);
-                                expect(names).toNotContain(originalName);
-                            });
+                        await driver.setProjectName(originalName);
+                        await driver.saveProjectAs(existingName, false);
+                        const menu = driver.dialogs().pop();
+                        menu.ok();
+                        await driver.expect(
+                            showingSaveMsg,
+                            `Did not show save message on overwrite`
+                        );
+                        const browser = await openProjectsBrowser();
+                        const names = getProjectList(browser);
+                        expect(names).toContain(existingName);
+                        expect(names).toNotContain(originalName);
                     });
 
-                    it('should not save if not overwriting', function() {
+                    it('should not save if not overwriting', async function() {
                         const originalName = `original-name-${Date.now()}`;
-                        return driver.setProjectName(originalName)
-                            .then(() => driver.saveProjectAs(existingName, false))
-                            .then(() => {
-                                const menu = driver.dialog();
-                                menu.cancel();
-                                const dialog = driver.dialog();
-                                expect(dialog.task).toBe('save');
-                            });
+                        await driver.setProjectName(originalName);
+                        await driver.saveProjectAs(existingName, false);
+                        const menu = driver.dialog();
+                        menu.cancel();
+                        const dialog = driver.dialog();
+                        expect(dialog.task).toBe('save');
                     });
                 });
             });

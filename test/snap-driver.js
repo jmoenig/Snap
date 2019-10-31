@@ -278,43 +278,39 @@ SnapDriver.prototype.moveToRole = function(name) {
     }
 };
 
-SnapDriver.prototype.login = function(name, password='password') {
+SnapDriver.prototype.login = async function(name, password='password') {
     const btn = this.ide().controlBar.cloudButton;
     this.click(btn);
 
-    const dropdown = this.dialog();
+    let dropdown = this.dialog();
     const logoutBtn = dropdown.children.find(item => item.action === 'logout');
     const isLoggedIn = !!logoutBtn;
-    let prepare = Promise.resolve();
 
     if (isLoggedIn) {
         this.click(logoutBtn);
-        prepare = this.expect(
+        await this.expect(
             () => this.isShowingDialogTitle(title => title.includes('disconnected')),
             `Did not see logout message`
         );
     }
 
-    return prepare
-        .then(() => {
-            this.click(btn);
+    this.click(btn);
 
-            // click the login button
-            const dropdown = this.dialog();
-            const loginBtn = dropdown.children.find(item => item.action === 'initializeCloud');
-            this.click(loginBtn);
+    // click the login button
+    dropdown = this.dialog();
+    const loginBtn = dropdown.children.find(item => item.action === 'initializeCloud');
+    this.click(loginBtn);
 
-            // enter login credentials
-            console.log(`logging in as ${name}`);
-            this.keys(name);
-            this.keys('\t');
-            this.keys(password);
-            this.dialog().ok();
-            return this.expect(
-                () => this.isShowingDialogTitle(title => title.includes('connected')),
-                `Did not see connected message`
-            );
-        });
+    // enter login credentials
+    console.log(`logging in as ${name}`);
+    this.keys(name);
+    this.keys('\t');
+    this.keys(password);
+    this.dialog().ok();
+    await this.expect(
+        () => !!this.isShowingDialogTitle(title => title.includes('connected')),
+        `Did not see connected message`
+    );
 };
 
 SnapDriver.prototype.logout = async function() {
@@ -336,7 +332,7 @@ SnapDriver.prototype.logout = async function() {
     }
 };
 
-SnapDriver.prototype.inviteCollaborator = function(username) {
+SnapDriver.prototype.inviteCollaborator = async function(username) {
     const controlBar = this.ide().controlBar;
     this.click(controlBar.cloudButton);
 
@@ -344,29 +340,25 @@ SnapDriver.prototype.inviteCollaborator = function(username) {
     const collabs = dropdown.children.find(item => item.action === 'manageCollaborators');
     this.click(collabs);
 
-    console.log('inviting', username);
-    return this
-        .expect(
-            () => this.dialog(),
-            `Collaborator dialog did not appear`
-        )
-        .then(() => {
-            const dialog = this.dialog();
-            console.log(dialog);
-            const otherUserItem = dialog.listField.elements
-                .find(element => element.username === username);
+    await this.expect(
+        () => this.dialog(),
+        `Collaborator dialog did not appear`
+    );
 
-            dialog.listField.select(otherUserItem);
+    const dialog = this.dialog();
+    const otherUserItem = dialog.listField.elements
+        .find(element => element.username === username);
 
-            // click the invite button
-            const inviteBtn = dialog.buttons.children.find((btn => btn.action === 'ok'));
-            this.click(inviteBtn);
-        });
+    dialog.listField.select(otherUserItem);
+
+    // click the invite button
+    const inviteBtn = dialog.buttons.children.find((btn => btn.action === 'ok'));
+    this.click(inviteBtn);
 };
 
 SnapDriver.prototype.isShowingDialog = function(testFn) {
     const dialogs = this.dialogs();
-    return dialogs.find(testFn);
+    return !!dialogs.find(testFn);
 };
 
 SnapDriver.prototype.isShowingDialogTitle = function(testFn) {
@@ -430,24 +422,25 @@ SnapDriver.prototype.waitForDialogBox = function() {
     );
 };
 
-SnapDriver.prototype.waitUntilProjectsLoaded = function() {
+SnapDriver.prototype.waitUntilProjectsLoaded = async function() {
     const dialog = this.dialog();
+    const isUpdateTitle = title => title.includes('Updating\nproject');
+    const isShowingUpdateMsg = () => this.isShowingDialogTitle(isUpdateTitle);
+
     if (dialog && dialog.source.includes('cloud')) {
-        return this.expect(
+        const oldProjectList = dialog.projectList;
+        await this.expect(
             () => {
-                const isShowingUpdateMsg = this.dialogs().length === 2;
-                const projectDialog = this.dialogs()
-                    .find(d => d instanceof this.globals().ProjectDialogMorph);
-                const hasLoadedProjects = this.getProjectList(projectDialog)[0] !== '(empty)';
-                return isShowingUpdateMsg || hasLoadedProjects;
+                const hasLoadedProjects = dialog.projectList !== oldProjectList;
+                return isShowingUpdateMsg() || hasLoadedProjects;
             },
             'Did not see "update project list" message'
-        )
-            .then(() => this.expect(
-                () => this.dialogs().length === 1,
-                '"update project list" message did not disappear'
-            )
-            );
+        );
+
+        await this.expect(
+            () => !isShowingUpdateMsg(),
+            '"update project list" message did not disappear'
+        );
     } else {
         return Promise.resolve();
     }
