@@ -6,10 +6,12 @@
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
+    * German
 
 ### 2019-11-01
 * new dev version
 * expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data"
+* German translation update for "idx" and "data"
 
 ## v5.2.5:
 * **Notable Fix:**
