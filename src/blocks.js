@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-28';
+modules.blocks = '2019-November-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11053,7 +11053,8 @@ MultiArgMorph.prototype.drawNew = function () {
 MultiArgMorph.prototype.addInput = function (contents) {
     var i, name,
         newPart = this.labelPart(this.slotSpec),
-        idx = this.children.length - 1;
+        idx = this.children.length - 1,
+        wantMore = false;
     // newPart.alpha = this.alpha ? 1 : (1 - this.alpha) / 2;
     if (contents) {
         newPart.setContents(contents);
@@ -11071,12 +11072,27 @@ MultiArgMorph.prototype.addInput = function (contents) {
         }
         newPart.setContents(name);
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
-        newPart.setContents('#' + idx);
+        if (this.is3ArgRingInHOF() && idx < 4) {
+            newPart.setContents([
+                localize('item'),
+                localize('idx'),
+                localize('data')
+            ][idx - 1]);
+            if (idx === 1) { // fully expand to 3 items
+                wantMore = true;
+            }
+        } else {
+            newPart.setContents('#' + idx);
+        }
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
     newPart.drawNew();
     this.fixLayout();
+    if (wantMore) { // expand to 3 inputs in certain HOFs
+        this.addInput();
+        this.addInput();
+    }
 };
 
 MultiArgMorph.prototype.removeInput = function () {
@@ -11093,6 +11109,33 @@ MultiArgMorph.prototype.removeInput = function () {
         }
     }
     this.fixLayout();
+};
+
+MultiArgMorph.prototype.is3ArgRingInHOF = function () {
+    // answer true if I am embedded into a ring inside a HOF block
+    // that supports 3 parameters ("item, idx, data")
+    // of which there are currently only MAP, KEEP and FIND
+    // and their atomic counterparts
+    var ring = this.parent,
+        block;
+    if (ring) {
+        block = ring.parent;
+        if (block instanceof ReporterBlockMorph) {
+            return block.inputs()[0] === ring &&
+                contains(
+                    [
+                        'reportMap',
+                        'reportAtomicMap',
+                        'reportKeep',
+                        'reportAtomicKeep',
+                        'reportFindFirst',
+                        'reportAtomicFindFirst'
+                    ],
+                    block.selector
+                );
+        }
+    }
+    return false;
 };
 
 // MultiArgMorph events:
