@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-01
+* new dev version
+
 ## v5.2.5:
 * **Notable Fix:**
     * resume AudioContext on every request
