@@ -11053,8 +11053,8 @@ MultiArgMorph.prototype.drawNew = function () {
 MultiArgMorph.prototype.addInput = function (contents) {
     var i, name,
         newPart = this.labelPart(this.slotSpec),
-        idx = this.children.length - 1,
-        wantMore = false;
+        idx = this.children.length - 1;
+        // wantMore = false;
     // newPart.alpha = this.alpha ? 1 : (1 - this.alpha) / 2;
     if (contents) {
         newPart.setContents(contents);
@@ -11078,9 +11078,11 @@ MultiArgMorph.prototype.addInput = function (contents) {
                 localize('idx'),
                 localize('data')
             ][idx - 1]);
+            /* commented out for now
             if (idx === 1) { // fully expand to 3 items
                 wantMore = true;
             }
+            */
         } else {
             newPart.setContents('#' + idx);
         }
@@ -11089,10 +11091,12 @@ MultiArgMorph.prototype.addInput = function (contents) {
     this.children.splice(idx, 0, newPart);
     newPart.drawNew();
     this.fixLayout();
+    /* commented out for now
     if (wantMore) { // expand to 3 inputs in certain HOFs
         this.addInput();
         this.addInput();
     }
+    */
 };
 
 MultiArgMorph.prototype.removeInput = function () {
