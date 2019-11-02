@@ -12,6 +12,7 @@
 ### 2019-11-01
 * blocks: limit expanding rings in special HOFs to 3 parameters
 * blocks renamed default special HOF parameters to "item, index, list"
+* updated German translation
 
 ### 2019-11-01
 * new dev version
