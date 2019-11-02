@@ -2,6 +2,13 @@
 
 ## in development:
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+
+## v5.3.0:
+* **New Features:**
     * expanding the rings in "map", "keep" and "find" shows 3 inputs named "value", "index" and "list" 
     * limited expanding rings in special HOFs to 3 parameters
     * calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
@@ -19,6 +26,7 @@
 * threads: calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * blocks: renamed default special HOF parameter "item" to "value"
 * updated German translation for "value"
+* prepared release
 
 ### 2019-11-01
 * new dev version
