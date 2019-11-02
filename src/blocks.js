@@ -11078,7 +11078,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
         if (this.is3ArgRingInHOF() && idx < 4) {
             newPart.setContents([
-                localize('item'),
+                localize('value'),
                 localize('index'),
                 localize('list')
             ][idx - 1]);
