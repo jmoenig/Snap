@@ -815,6 +815,8 @@ SnapTranslator.dict.de = {
         'für jedes %upvar von %l %cla',
     'item':
         'Element',
+    'value':
+        'Wert',
     'index':
         'Index',
     'add %s to %l':

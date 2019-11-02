@@ -18,6 +18,7 @@
 * blocks: dropping a ring parameter inside a reporter-ring no longer replaces the ring
 * threads: calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * blocks: renamed default special HOF parameter "item" to "value"
+* updated German translation for "value"
 
 ### 2019-11-01
 * new dev version
