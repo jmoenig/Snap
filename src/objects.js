@@ -82,9 +82,9 @@ VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, VideoMotion,
 SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
+HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-October-30';
+modules.objects = '2019-November-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1722,8 +1722,10 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         cb, effect;
 
     // make sure the clone has its own canvas to recycle
-    c.image = null;
-    c.drawNew();
+    // needs to be copied instead of redrawn, because at
+    // this time the clone is not yet onstage and therefore
+    // has no access to the stage's scale
+    c.image = copyCanvas(this.image);
 
     // un-share individual properties
     c.instances = [];

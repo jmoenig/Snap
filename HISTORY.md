@@ -14,8 +14,9 @@
     * calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * **Notable Changes:**
     * dropping a ring parameter inside a reporter-ring no longer replaces the ring
-* **Notable Fixes:**
-* **Translation Updates:**
+* **Notable Fix:**
+    * fixed the initial scale of new clones when the stage has been resized
+* **Translation Update:**
     * German
 
 ### 2019-11-02
@@ -26,6 +27,7 @@
 * threads: calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * blocks: renamed default special HOF parameter "item" to "value"
 * updated German translation for "value"
+* objects: fixed the initial scale of new clones when the stage has been resized
 * prepared release
 
 ### 2019-11-01
