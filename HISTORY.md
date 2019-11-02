@@ -3,13 +3,15 @@
 ## in development:
 * **New Features:**
     * expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data" 
+    * limited expanding rings in special HOFs to 3 parameters
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
     * German
 
 ### 2019-11-01
-* blocks: limit expanding rings in special HOFs to 2 parameters
+* blocks: limit expanding rings in special HOFs to 3 parameters
+* blocks renamed default special HOF parameters to "item, index, list"
 
 ### 2019-11-01
 * new dev version
