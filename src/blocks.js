@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-November-01';
+modules.blocks = '2019-November-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11016,8 +11016,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
+        inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
-    if (this.inputs().length < (this.minInputs + 1)) {
+    if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
         }
@@ -11026,11 +11027,15 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             arrows.position().subtract(new Point(dim.x, 0))
         );
         arrows.setExtent(dim);
+    } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
+        rightArrow.hide();
+        arrows.setExtent(dim);
     } else {
         if (label) {
             label.show();
         }
         leftArrow.show();
+        rightArrow.show();
         rightArrow.setPosition(leftArrow.topCenter());
         arrows.bounds.corner = rightArrow.bottomRight().copy();
     }

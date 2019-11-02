@@ -9,6 +9,9 @@
     * German
 
 ### 2019-11-01
+* blocks: limit expanding rings in special HOFs to 2 parameters
+
+### 2019-11-01
 * new dev version
 * expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data"
 * German translation update for "idx" and "data"
