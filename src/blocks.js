@@ -6268,7 +6268,8 @@ RingMorph.prototype.vanishForSimilar = function () {
             || (this.parent instanceof RingCommandSlotMorph)) {
         return null;
     }
-    if (block.selector === 'reportGetVar' ||
+    if ((block.selector === 'reportGetVar' &&
+            !contains(this.inputNames(), block.blockSpec)) ||
         // block.selector === 'reportListItem' ||
         block.selector === 'reportJSFunction' ||
         block.selector === 'reportAttributeOf' ||

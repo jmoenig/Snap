@@ -5,6 +5,7 @@
     * expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data" 
     * limited expanding rings in special HOFs to 3 parameters
 * **Notable Changes:**
+    * dropping a ring parameter inside a reporter-ring no longer replaces the ring
 * **Notable Fixes:**
 * **Translation Updates:**
     * German
@@ -13,6 +14,7 @@
 * blocks: limit expanding rings in special HOFs to 3 parameters
 * blocks renamed default special HOF parameters to "item, index, list"
 * updated German translation
+* blocks: dropping a ring parameter inside a reporter-ring no longer replaces the ring
 
 ### 2019-11-01
 * new dev version
