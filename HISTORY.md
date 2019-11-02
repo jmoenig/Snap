@@ -4,17 +4,19 @@
 * **New Features:**
     * expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data" 
     * limited expanding rings in special HOFs to 3 parameters
+    * calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * **Notable Changes:**
     * dropping a ring parameter inside a reporter-ring no longer replaces the ring
 * **Notable Fixes:**
 * **Translation Updates:**
     * German
 
-### 2019-11-01
+### 2019-11-02
 * blocks: limit expanding rings in special HOFs to 3 parameters
 * blocks renamed default special HOF parameters to "item, index, list"
 * updated German translation
 * blocks: dropping a ring parameter inside a reporter-ring no longer replaces the ring
+* threads: calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 
 ### 2019-11-01
 * new dev version

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-October-30';
+modules.threads = '2019-November-02';
 
 var ThreadManager;
 var Process;
@@ -727,6 +727,9 @@ Process.prototype.evaluateContext = function () {
     if (isString(exp)) {
         return this[exp].apply(this, this.context.inputs);
     }
+    if (exp instanceof Variable) { // special case for empty reporter rings
+        this.returnValueToParentContext(exp.value);
+    }
     this.popContext(); // default: just ignore it
 };
 
@@ -1048,7 +1051,6 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
             // and remember the number of detected empty slots
             context.emptySlots = i;
         }
-
     } else {
         context.expression = this.enableLiveCoding ||
             this.enableSingleStepping ? [this.context.expression]
@@ -1116,6 +1118,7 @@ Process.prototype.evaluate = function (
         caller = this.context.parentContext,
         exit,
         runnable,
+        expr,
         parms = args.asArray(),
         i,
         value;
@@ -1158,10 +1161,24 @@ Process.prototype.evaluate = function (
         // assign implicit parameters if there are no formal ones
         if (context.inputs.length === 0) {
             // in case there is only one input
-            // assign it to all empty slots
+            // assign it to all empty slots...
             if (parms.length === 1) {
-                for (i = 1; i <= context.emptySlots; i += 1) {
-                    outer.variables.addVar(i, parms[0]);
+                // ... unless it's an empty reporter ring,
+                // in which special case it gets treated as the ID-function;
+                // experimental feature jens is not at all comfortable with
+                if (!context.emptySlots) {
+                    expr = context.expression;
+                    if (expr instanceof Array &&
+                            expr.length === 1 &&
+                            expr[0].selector &&
+                            expr[0].selector === 'reifyReporter' &&
+                            !expr[0].contents()) {
+                        runnable.expression = new Variable(parms[0]);
+                    }
+                } else {
+                    for (i = 1; i <= context.emptySlots; i += 1) {
+                        outer.variables.addVar(i, parms[0]);
+                    }
                 }
 
             // if the number of inputs matches the number
