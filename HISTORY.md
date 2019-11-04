@@ -9,6 +9,7 @@
 ### 2019-11-04
 * new dev version
 * morphic: limit translation of menu items to specially marked ones
+* blocks: translate "my" submenu label in "set" block
 
 ## v5.3.0:
 * **New Features:**

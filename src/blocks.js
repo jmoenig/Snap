@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-November-02';
+modules.blocks = '2019-November-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -618,7 +618,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         if (block.selector === 'doSetVar') {
             // add settable object attributes
             dict['~'] = null;
-            dict.my = {
+            dict[localize('my')] = {
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
                 'name' : ['name'],
