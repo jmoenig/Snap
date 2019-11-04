@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-29';
+var morphicVersion = '2019-November-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8204,8 +8204,12 @@ MenuMorph.prototype.addItem = function (
         * an icon (either a Morph or a Canvas)
         * a tuple of format: [icon, string]
     */
+    var lbl = labelString || 'close';
+    if (action instanceof Array && action.length === 1 && isString(action[0])) {
+        lbl = localize(action[0]);
+    }
     this.items.push([
-        localize(labelString || 'close'),
+        lbl,
         action || nop,
         hint,
         color,

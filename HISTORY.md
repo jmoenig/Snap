@@ -8,6 +8,7 @@
 
 ### 2019-11-04
 * new dev version
+* morphic: limit translation of menu items to specially marked ones
 
 ## v5.3.0:
 * **New Features:**
