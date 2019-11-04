@@ -377,12 +377,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
-        //doScreenshot: {
-            //type: 'command',
-            //category: 'looks',
-            //spec: 'save %imgsource as costume named %s',
-            //defaults: [['pen trails'], localize('screenshot')]
-        //},
 
         // Looks - Debugging primitives for development mode
         reportCostumes: {
@@ -1848,8 +1842,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
         }
 
     /////////////////////////////////
@@ -5425,24 +5417,6 @@ SpriteMorph.prototype.newCostumeName = function (name, ignoredCostume) {
     return newName;
 };
 
-SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
-    var canvas,
-        stage = this.parentThatIsA(StageMorph),
-        costume;
-    data = this.newCostumeName(data);
-    if (imgSource[0] === undefined) {
-        return;
-    }
-    if (imgSource[0] === "pen trails") {
-        canvas = stage.trailsCanvas;
-        costume = new Costume(canvas, data).copy(); // prevent mutation
-    } else if (imgSource[0] === "stage image") {
-        canvas = stage.fullImageClassic();
-        costume = new Costume(canvas, data);
-    }
-    this.addCostume(costume);
-};
-
 // SpriteHighlightMorph /////////////////////////////////////////////////
 
 // SpriteHighlightMorph inherits from Morph:
@@ -6275,8 +6249,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
         }
 
     /////////////////////////////////
@@ -6855,9 +6827,6 @@ StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 
 // StageMorph block rendering
-
-StageMorph.prototype.doScreenshot
-    = SpriteMorph.prototype.doScreenshot;
 
 StageMorph.prototype.newCostumeName
     = SpriteMorph.prototype.newCostumeName;
