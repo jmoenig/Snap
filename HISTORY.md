@@ -4,6 +4,7 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * no longer translate variable names in drop-down menus for which translation exist
 * **Translation Updates:**
 
 ### 2019-11-04
