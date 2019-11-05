@@ -8205,7 +8205,7 @@ MenuMorph.prototype.addItem = function (
         * a tuple of format: [icon, string]
     */
     this.items.push([
-        labelString || 'close',
+        localize(labelString || 'close'),
         action || nop,
         hint,
         color,
