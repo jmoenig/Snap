@@ -929,16 +929,17 @@ Process.prototype.errorObsolete = function () {
 // Process Lambda primitives
 
 Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
+    var isProcess = this instanceof Process;
     var context = new Context(
             null,
             null,
-            this.context ? this.context.outerContext : null
+            (isProcess && this.context) ? this.context.outerContext : null
         ),
         i = 0;
 
     if (topBlock) {
-        context.expression = this.enableLiveCoding ||
-            this.enableSingleStepping ?
+        context.expression = (isProcess && (this.enableLiveCoding ||
+            this.enableSingleStepping)) ?
                 topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
@@ -964,7 +965,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
 
     context.inputs = parameterNames.asArray();
     context.receiver
-        = this.context ? this.context.receiver : topBlock.receiver();
+        = (isProcess && this.context) ? this.context.receiver : topBlock.receiver();
 
     return context;
 };
