@@ -244,29 +244,56 @@ describe('blocks', function() {
     });
 
     describe('rpc', function() {
-        before(() => driver.reset());
+        beforeEach(() => driver.reset());
 
-        it('should populate method with `setField`', function() {
+        it('should populate method with `setField`', async function() {
             // create rpc block
-            let block = null;
-            return driver.addBlock('getJSFromRPCStruct')
-                .then(_block => {
-                    block = _block;
-                    const serviceField = block.inputs()[0];
-                    // set the service to weather
-                    return SnapActions.setField(serviceField, 'Weather');
-                })
-                .then(() => {
-                    var methodField = block.inputs()[1];
-                    // set the method to `humidity`
-                    return SnapActions.setField(methodField, 'humidity');
-                })
-                .then(() => {
-                    return driver.expect(
-                        () => block.inputs().length >= 3,
-                        `argument inputs not created!`
-                    );
-                });
+            const block = await driver.addBlock('getJSFromRPCStruct');
+            const serviceField = block.inputs()[0];
+            // set the service to weather
+            await SnapActions.setField(serviceField, 'Weather');
+            var methodField = block.inputs()[1];
+            // set the method to `humidity`
+            await SnapActions.setField(methodField, 'humidity');
+            await driver.expect(
+                () => block.inputs().length >= 3,
+                `argument inputs not created!`
+            );
+        });
+
+        it('should preserve argument order when RPC doesn\'t exist', async () => {
+            let block = await driver.addBlock('getJSFromRPCStruct');
+            const serviceField = block.inputs()[0];
+            await SnapActions.setField(serviceField, 'MadeUpService');
+
+            const [/*service*/, rpc] = block.inputs();
+            rpc.methodSignature = function() {
+                rpc.fieldsFor = {
+                    MadeUpRPC: {
+                        args: [{name:'a'}, {name: 'b'}]
+                    }
+                };
+                this.isCurrentRPCSupported = true;
+                return {MadeUpRPC: 'MadeUpRPC'};
+            };
+            await SnapActions.setField(rpc, 'MadeUpRPC');
+            let [/*service*/, /*rpc*/, a, b] = block.inputs();
+            await SnapActions.setField(a, 'first');
+            await SnapActions.setField(b, 'second');
+
+            driver.ide().setBlocksScale(1);  // force a project reload
+
+            block.isOldBlock = true;
+            await driver.expect(
+                () => {
+                    block = SnapActions.getBlockFromId(block.id);
+                    return !block.isOldBlock;
+                },
+                'Timeout while waiting for setting block zoom to take effect.'
+            );
+            [/*service*/, /*rpc*/, a, b] = block.inputs();
+            expect(a.evaluate()).toBe('first', 'Expected first input to be "first"');
+            expect(b.evaluate()).toBe('second', 'Expected second input to be "second"');
         });
     });
 });

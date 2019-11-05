@@ -186,7 +186,9 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
             removed = [],
             scripts = this.parentThatIsA(ScriptsMorph),
             inputs = this.parent.inputs(),
-            myInpIndex = inputs.indexOf(this);
+            myInpIndex = inputs.indexOf(this),
+            index,
+            content;
 
         // Remove the "i" fields after the current morph
         for (i = 0; i < this.fieldContent.length; i++) {
@@ -212,7 +214,13 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
         // Create new struct fields
         this.fieldContent = [];
         for (i = 0; i < this.fields.length; i++) {
-            this.fieldContent.push(this.updateField(this.fields[i], values[i]));
+            index = myIndex + i + 1;
+            content = this.getFieldValue(this.fields[i], values[i]);
+
+            this.parent.children.splice(index, 0, content);
+            content.parent = this.parent;
+
+            this.fieldContent.push(content);
         }
 
         inputs = this.parent.inputs();
@@ -263,26 +271,6 @@ StructInputSlotMorph.prototype.setDefaultFieldArg = function(index) {
     return arg;
 };
 
-
-StructInputSlotMorph.prototype.updateField = function(field, value) {
-    // Create the input slot w/ greyed out text
-    // Value is either:
-    // + scripts
-    // + blocks
-    // + values
-    // + colors
-    // + undefined
-    // + string
-
-    // Add the fields at the correct place wrt the current morph
-    var index = this.parent.children.indexOf(this) + this.fields.indexOf(field) + 1,
-        result = this.getFieldValue(field, value);
-
-    this.parent.children.splice(index, 0, result);
-    result.parent = this.parent;
-
-    return result;
-};
 
 InputSlotMorph.prototype.rpcNames = function () {
     var services = JSON.parse(utils.getUrlSync('/rpc')),
