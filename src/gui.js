@@ -79,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-November-05';
+modules.gui = '2019-November-06';
 
 // Declarations
 

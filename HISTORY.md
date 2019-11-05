@@ -6,8 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
-### 2019-11-05
+### 2019-11-06
 * new dev version
+* morphic, blocks: reverted recent changes to tranlation mechanism
 
 ## v5.3.1:
 * **Notable Fixes:**
