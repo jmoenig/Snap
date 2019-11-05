@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-05
+* new dev version
+
 ## v5.3.1:
 * **Notable Fixes:**
     * no longer translate variable names in drop-down menus for which translations exist
