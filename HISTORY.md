@@ -4,12 +4,16 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
-    * no longer translate variable names in drop-down menus for which translation exist
-    * fixed zero extent costume creation, thanks, Bernat!
 * **Translation Updates:**
+
+## v5.3.1:
+* **Notable Fixes:**
+    * no longer translate variable names in drop-down menus for which translations exist
+    * fixed zero extent costume creation, thanks, Bernat!
 
 ### 2019-11-05
 * threads: fixed zero extent costume creation, thanks, Bernat!
+* prepared release
 
 ### 2019-11-04
 * new dev version
