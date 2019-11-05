@@ -207,7 +207,8 @@ describe('actions', function() {
         it('should show reload prompt if actions not found', async function() {
             sockets.sendJSON({
                 type: 'request-actions',
-                actionId: 100
+                actionId: 100,
+                silent: false,
             });
             await driver.expect(
                 () => driver.isShowingDialogKey(key => key.includes('Reload Required')),
