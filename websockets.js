@@ -404,7 +404,7 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
 
 WebSocketManager.prototype.onConnect = function() {
     var myself = this;
-    SnapActions.requestMissingActions();
+    SnapActions.requestMissingActions(true);
     return this.updateRoomInfo()
         .then(function() {
             while (myself.messages.length) {

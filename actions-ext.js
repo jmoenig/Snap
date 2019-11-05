@@ -92,13 +92,14 @@ SnapActions.onMessage = function(msg) {
     }
 };
 
-SnapActions.requestMissingActions = function() {
+SnapActions.requestMissingActions = function(silent) {
     var socket = this.ide().sockets;
     if (!socket.inActionRequest) {
         socket.inActionRequest = true;
         return socket.sendJSON({
             type: 'request-actions',
-            actionId: this.lastSeen
+            actionId: this.lastSeen,
+            silent: silent,
         });
     }
 };
@@ -114,7 +115,7 @@ SnapActions.onReceiveAction = function(msg) {
     var missingActions = lastId < (msg.id - 1);
 
     if (missingActions) {
-        return this.requestMissingActions();
+        return this.requestMissingActions(false);
     }
 
     ActionManager.prototype.onReceiveAction.apply(this, arguments);
