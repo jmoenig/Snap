@@ -714,6 +714,10 @@ SnapTranslator.dict.ca = {
         'manté els elements on %predRing de %l',
     'find first item %predRing in %l':
         'primer element on %predRing de %l',
+    'value':
+        'valor',
+    'index':
+        'índex',
     'combine %l using %repRing':
         'combina els elements de %l amb %repRing',
     '%blitz map %repRing over %l':
