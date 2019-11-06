@@ -8745,7 +8745,10 @@ InputSlotMorph.prototype.menuFromDict = function (
                     (typeof choices[key] !== 'function')) {
                 menu.addMenu(
                     key,
-                    this.menuFromDict(choices[key],true));
+                    this.menuFromDict(choices[key],true),
+                    null,  // indicator
+                    true   // verbatim?
+                );
             } else {
                 menu.addItem(
                     key,
