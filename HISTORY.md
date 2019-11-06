@@ -14,6 +14,7 @@
 * objects: don't translate variable names in "delete a variable" button menu
 * blocks: don't translate variable names in "inherit" block menu
 * blocks: fixed dropdown menu generation for untranslated items
+* blocks: don't translate message names in drow-down menus
 
 ## v5.3.1:
 * **Notable Fixes:**

@@ -8779,7 +8779,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
         }
     });
     allNames.forEach(function (name) {
-        dict[name] = name;
+        dict[name] = [name, false]; // don't translate
     });
     if (this.world().currentKey === 16) { // shift
         dict.__shout__go__ = ['__shout__go__'];
@@ -8816,7 +8816,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     });
     allNames.forEach(function (name) {
         if (name !== '__shout__go__') {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         }
     });
     dict['~'] = null;
