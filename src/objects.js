@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-November-02';
+modules.objects = '2019-November-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2599,7 +2599,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                         myself
                     );
                     myself.deletableVariableNames().forEach(function (name) {
-                        menu.addItem(name, name);
+                        menu.addItem(
+                            name,
+                            name,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            true // verbatim - don't translate
+                        );
                     });
                     menu.popUpAtHand(myself.world());
                 },
@@ -8654,7 +8664,17 @@ StageMorph.prototype.blockTemplates = function (category) {
                         myself
                     );
                     myself.variables.allNames().forEach(function (name) {
-                        menu.addItem(name, name);
+                        menu.addItem(
+                            name,
+                            name,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            true // verbatim - don't translate
+                        );
                     });
                     menu.popUpAtHand(myself.world());
                 },
