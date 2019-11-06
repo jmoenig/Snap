@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-11-05', // this, too, will appear in the Translators tab
+        '2019-11-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1954,6 +1954,14 @@ SnapTranslator.dict.ca = {
         'Amunt',
     'Down':
         'Avall',
+    'top':
+        'superior',
+    'bottom':
+        'inferior',
+    'left':
+        'esquerra',
+    'right':
+        'dreta',
     'This will erase your current drawing.\n':
         'El canvi d\'editor esborrarà el dibuix actual.\n',
     'Are you sure you want to continue?':
