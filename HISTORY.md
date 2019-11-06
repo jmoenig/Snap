@@ -12,6 +12,7 @@
 * morphic: added support for "verbatim" (untranslated) menu items
 * blocks: don't translate variable names in drop-down menus
 * objects: don't translate variable names in "delete a variable" button menu
+* blocks: don't translate variable names in "inherit" block menu
 
 ## v5.3.1:
 * **Notable Fixes:**

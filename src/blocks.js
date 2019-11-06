@@ -9146,7 +9146,7 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
      	// inside TELL, ASK or OF or when initializing a new clone
         vars = rcvr.variables.names();
         vars.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
         attribs = rcvr.attributes;
         /*
@@ -9161,7 +9161,7 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     	// only show shadowed vars and attributes
         vars = rcvr.inheritedVariableNames(true);
         vars.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false];
         });
         attribs = rcvr.shadowedAttributes();
         /*
