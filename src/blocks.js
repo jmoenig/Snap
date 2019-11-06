@@ -8749,7 +8749,7 @@ InputSlotMorph.prototype.menuFromDict = function (
             } else if (choices[key].length === 2) { // don't translate
                 menu.addItem(
                     key,
-                    choices[key],
+                    choices[key][0],
                     null, // hint
                     null, // color
                     null, // bold
