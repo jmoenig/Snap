@@ -8855,7 +8855,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -8880,7 +8880,7 @@ InputSlotMorph.prototype.locationMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -8909,7 +8909,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -8932,7 +8932,7 @@ InputSlotMorph.prototype.clonablesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -8951,7 +8951,7 @@ InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
     if (includeMyself) {
         dict.myself = ['myself'];
     }
-    dict[stage.name] = stage.name;
+    dict[stage.name] = [stage.name, false]; // don't translate
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames.push(morph.name);
@@ -8960,7 +8960,7 @@ InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -9081,7 +9081,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
     if (varNames.length > 0) {
         dict['~'] = null;
         varNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     obj.allBlocks(true).forEach(function (def, i) {
@@ -9109,7 +9109,7 @@ InputSlotMorph.prototype.costumesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;
@@ -9125,7 +9125,7 @@ InputSlotMorph.prototype.soundsMenu = function () {
     });
     if (allNames.length > 0) {
         allNames.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
     }
     return dict;

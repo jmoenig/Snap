@@ -15,6 +15,7 @@
 * blocks: don't translate variable names in "inherit" block menu
 * blocks: fixed dropdown menu generation for untranslated items
 * blocks: don't translate message names in drow-down menus
+* blocks: don't translate names in dropdowns
 
 ## v5.3.1:
 * **Notable Fixes:**
