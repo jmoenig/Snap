@@ -578,7 +578,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     var block = this.parentThatIsA(BlockMorph),
         rcvr,
         tempVars = [],
-        dict;
+        dict = {};
 
     if (!block) {
         return {};
@@ -611,9 +611,11 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         }
     });
     if (rcvr) {
-        dict = rcvr.variables.allNamesDict();
+        rcvr.variables.allNames().forEach(function (name) {
+            dict[name] = [name, false]; // don't translate
+        });
         tempVars.forEach(function (name) {
-            dict[name] = name;
+            dict[name] = [name, false]; // don't translate
         });
         if (block.selector === 'doSetVar') {
             // add settable object attributes
@@ -8744,7 +8746,19 @@ InputSlotMorph.prototype.menuFromDict = function (
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
                 menu.addMenu(key, this.menuFromDict(choices[key], true));
-            } else {
+            } else if (choices[key].length === 2) { // don't translate
+                menu.addItem(
+                    key,
+                    choices[key],
+                    null, // hint
+                    null, // color
+                    null, // bold
+                    null, // italic
+                    null, // doubleClickAction
+                    null, // shortcut
+                    true // verbatim - do not translate
+                );
+            } else { // translate
                 menu.addItem(key, choices[key]);
             }
         }
