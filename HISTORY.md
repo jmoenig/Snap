@@ -6,6 +6,13 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.3.2:
+* **Notable Fixes:**
+    * fixed #2518 (broken localization system)
+    * fixed size of MY help screen, thanks, Brian
+* **Translation Updates:**
+    * Catalan, thanks, Joan
+
 ### 2019-11-06
 * new dev version
 * morphic, blocks: reverted recent changes to tranlation mechanism
@@ -16,6 +23,8 @@
 * blocks: fixed dropdown menu generation for untranslated items
 * blocks: don't translate message names in drow-down menus
 * blocks: don't translate names in dropdowns
+* help: fixed size of MY help screen, thanks, Brian
+* prepared release
 
 ## v5.3.1:
 * **Notable Fixes:**
