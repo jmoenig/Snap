@@ -578,7 +578,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     var block = this.parentThatIsA(BlockMorph),
         rcvr,
         tempVars = [],
-        dict = {};
+        dict;
 
     if (!block) {
         return {};
@@ -611,11 +611,9 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         }
     });
     if (rcvr) {
-        rcvr.variables.allNames().forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
-        });
+        dict = rcvr.variables.allNamesDict();
         tempVars.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
         if (block.selector === 'doSetVar') {
             // add settable object attributes
@@ -8745,21 +8743,21 @@ InputSlotMorph.prototype.menuFromDict = function (
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
-                menu.addMenu(key, this.menuFromDict(choices[key], true));
-            } else if (choices[key].length === 2) { // don't translate
+                menu.addMenu(
+                    key,
+                    this.menuFromDict(choices[key],true));
+            } else {
                 menu.addItem(
                     key,
-                    choices[key][0],
+                    choices[key],
                     null, // hint
                     null, // color
                     null, // bold
                     null, // italic
                     null, // doubleClickAction
                     null, // shortcut
-                    true // verbatim - do not translate
+                    choices[key].length  === 1 || typeof choices[key] === 'function' ? false : true  // verbatim?
                 );
-            } else { // translate
-                menu.addItem(key, choices[key]);
             }
         }
     }
@@ -8779,7 +8777,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
         }
     });
     allNames.forEach(function (name) {
-        dict[name] = [name, false]; // don't translate
+        dict[name] = name;
     });
     if (this.world().currentKey === 16) { // shift
         dict.__shout__go__ = ['__shout__go__'];
@@ -8816,7 +8814,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     });
     allNames.forEach(function (name) {
         if (name !== '__shout__go__') {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         }
     });
     dict['~'] = null;
@@ -8855,7 +8853,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -8880,7 +8878,7 @@ InputSlotMorph.prototype.locationMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -8909,7 +8907,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -8932,7 +8930,7 @@ InputSlotMorph.prototype.clonablesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -8951,7 +8949,7 @@ InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
     if (includeMyself) {
         dict.myself = ['myself'];
     }
-    dict[stage.name] = [stage.name, false]; // don't translate
+    dict[stage.name] = stage.name;
     stage.children.forEach(function (morph) {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames.push(morph.name);
@@ -8960,7 +8958,7 @@ InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -9081,7 +9079,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
     if (varNames.length > 0) {
         dict['~'] = null;
         varNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     obj.allBlocks(true).forEach(function (def, i) {
@@ -9109,7 +9107,7 @@ InputSlotMorph.prototype.costumesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -9125,7 +9123,7 @@ InputSlotMorph.prototype.soundsMenu = function () {
     });
     if (allNames.length > 0) {
         allNames.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
     }
     return dict;
@@ -9146,7 +9144,7 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
      	// inside TELL, ASK or OF or when initializing a new clone
         vars = rcvr.variables.names();
         vars.forEach(function (name) {
-            dict[name] = [name, false]; // don't translate
+            dict[name] = name;
         });
         attribs = rcvr.attributes;
         /*
@@ -9161,7 +9159,7 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     	// only show shadowed vars and attributes
         vars = rcvr.inheritedVariableNames(true);
         vars.forEach(function (name) {
-            dict[name] = [name, false];
+            dict[name] = name;
         });
         attribs = rcvr.shadowedAttributes();
         /*
