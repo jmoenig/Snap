@@ -8194,7 +8194,8 @@ MenuMorph.prototype.addItem = function (
     bold, // bool
     italic, // bool
     doubleClickAction, // optional, when used as list contents
-    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    verbatim // optional bool, don't translate if true
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -8205,14 +8206,15 @@ MenuMorph.prototype.addItem = function (
         * a tuple of format: [icon, string]
     */
     this.items.push([
-        localize(labelString || 'close'),
+        verbatim ? labelString || 'close' : localize(labelString || 'close'),
         action || nop,
         hint,
         color,
         bold || false,
         italic || false,
         doubleClickAction,
-        shortcut]);
+        shortcut,
+        verbatim]);
 };
 
 MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {

@@ -9,6 +9,7 @@
 ### 2019-11-06
 * new dev version
 * morphic, blocks: reverted recent changes to tranlation mechanism
+* morphic: added support for "verbatim" (untranslated) menu items
 
 ## v5.3.1:
 * **Notable Fixes:**
