@@ -24,6 +24,7 @@
 * blocks: don't translate message names in drow-down menus
 * blocks: don't translate names in dropdowns
 * help: fixed size of MY help screen, thanks, Brian
+* byob: don't translate items in dropdowns
 * prepared release
 
 ## v5.3.1:
