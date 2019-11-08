@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2019-November-06';
+modules.byob = '2019-July-24';
 
 // Declarations
 
@@ -356,8 +356,7 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
             stack[stack.length - 1][pair[0]] = dict;
             stack.push(dict);
         } else {
-            // don't translate
-            dict[pair[0]] = [(isNil(pair[1]) ? pair[0] : pair[1]), false];
+            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
         }
     });
     return dict;

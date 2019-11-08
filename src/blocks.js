@@ -8644,9 +8644,7 @@ InputSlotMorph.prototype.setContents = function (data) {
       	dta = ''; // make sure the contents text emptied
     } else { // assume dta is a localizable choice if it's a key in my choices
         cnts.isItalic = false;
-        if (!isNil(this.choices) &&
-                this.choices[dta] instanceof Array &&
-                this.choices[dta].length === 1) {
+        if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
             return this.setContents(this.choices[dta]);
         }
     }
