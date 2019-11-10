@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjmoenig%2FSnap.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjmoenig%2FSnap?ref=badge_shield)
+
 
 Snap! Build Your Own Blocks
 
@@ -26,3 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 Want to use Snap! but scared by the open-source license? Get in touch with us,
 we'll make it work.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjmoenig%2FSnap.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjmoenig%2FSnap?ref=badge_large)
