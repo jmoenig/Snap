@@ -5,8 +5,9 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed submenu translation control for dropdowns
+    * fixed help screens for "distance to _" and "answer" primitives
 * **Translation Updates:**
-    * Catalan, thanks, Joan
+    * Catalan
 
 ### 2019-11-12
 * new dev version
