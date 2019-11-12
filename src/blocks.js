@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-November-06';
+modules.blocks = '2019-November-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -618,7 +618,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         if (block.selector === 'doSetVar') {
             // add settable object attributes
             dict['~'] = null;
-            dict.my = {
+            dict.my = [{// wrap the submenu into a 1-item array to translate it
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
                 'name' : ['name'],
@@ -628,10 +628,10 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'rotation style' : ['rotation style'],
                 'rotation x' : ['rotation x'],
                 'rotation y' : ['rotation y']
-            };
+            }];
             if (this.world().currentKey === 16) { // shift
-                dict.my['~'] = null;
-                dict.my['microphone modifier'] = ['microphone modifier'];
+                dict.my[0]['~'] = null; // don't forget we're inside an array...
+                dict.my[0]['microphone modifier'] = ['microphone modifier'];
             }
         }
         return dict;
@@ -8747,7 +8747,16 @@ InputSlotMorph.prototype.menuFromDict = function (
                     key,
                     this.menuFromDict(choices[key],true),
                     null,  // indicator
-                    true   // verbatim?
+                    true   // verbatim? - don't translate
+                );
+            } else if (choices[key] instanceof Array &&
+                    choices[key][0] instanceof Object &&
+                    typeof choices[key][0] !== 'function') {
+                menu.addMenu(
+                    key,
+                    this.menuFromDict(choices[key][0],true),
+                    null,  // indicator
+                    false  // verbatim? - do translate, if inside an array
                 );
             } else {
                 menu.addItem(
@@ -8759,7 +8768,8 @@ InputSlotMorph.prototype.menuFromDict = function (
                     null, // italic
                     null, // doubleClickAction
                     null, // shortcut
-                    choices[key].length  === 1 || typeof choices[key] === 'function' ? false : true  // verbatim?
+                    !(choices[key] instanceof Array) &&
+                        typeof choices[key] !== 'function' // verbatim?
                 );
             }
         }

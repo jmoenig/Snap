@@ -4,10 +4,14 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed submenu translation control for dropdowns
 * **Translation Updates:**
+    * Catalan, thanks, Joan
 
 ### 2019-11-12
 * new dev version
+* drop-down menu translation improvements by Joan
+* submenu-title translation control
 
 ## v5.3.2:
 * **Notable Fixes:**
@@ -26,6 +30,7 @@
 * blocks: fixed dropdown menu generation for untranslated items
 * blocks: don't translate message names in drow-down menus
 * blocks: don't translate names in dropdowns
+* byob: don't translate items in dropdowns
 * help: fixed size of MY help screen, thanks, Brian
 * prepared release
 

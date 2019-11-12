@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-November-06';
+var morphicVersion = '2019-November-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8218,11 +8218,33 @@ MenuMorph.prototype.addItem = function (
 };
 
 MenuMorph.prototype.addMenu = function (label, aMenu, indicator, verbatim) {
-    this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator, null, verbatim);
+    this.addPair(
+        label,
+        aMenu,
+        isNil(indicator) ? '\u25ba' : indicator,
+        null,
+        verbatim // don't translate
+    );
 };
 
-MenuMorph.prototype.addPair = function (label, action, shortcut, hint, verbatim) {
-    this.addItem(label, action, hint, null, null, null, null, shortcut, verbatim);
+MenuMorph.prototype.addPair = function (
+    label,
+    action,
+    shortcut,
+    hint,
+    verbatim // don't translate
+) {
+    this.addItem(
+        label,
+        action,
+        hint,
+        null,
+        null,
+        null,
+        null,
+        shortcut,
+        verbatim
+    );
 };
 
 MenuMorph.prototype.addLine = function (width) {
