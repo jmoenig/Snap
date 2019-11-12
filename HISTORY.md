@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-12
+* new dev version
+
 ## v5.3.2:
 * **Notable Fixes:**
     * fixed #2518 (broken localization system)
