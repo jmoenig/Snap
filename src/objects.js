@@ -6418,7 +6418,17 @@ SpriteMorph.prototype.chooseExemplar = function () {
             (this.exemplar ? this.exemplar.name : localize('none'))
     );
     other.forEach(function (eachSprite) {
-        menu.addItem(eachSprite.name, eachSprite);
+        menu.addItem(
+            eachSprite.name,
+            eachSprite,
+            null, // hint
+            null, // color
+            null, // bold
+            null, // italic
+            null, // doubleClickAction
+            null, // shortcut
+            true  // verbatim
+        );
     });
     menu.addLine();
     menu.addItem(localize('none'), null);
