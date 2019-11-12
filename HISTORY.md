@@ -4,10 +4,7 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
-    * fixed submenu translation control for dropdowns
-    * fixed help screens for "distance to _" and "answer" primitives
 * **Translation Updates:**
-    * Catalan
 
 ## v5.3.3:
 * **Notable Change:**
