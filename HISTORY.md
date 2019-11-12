@@ -9,10 +9,21 @@
 * **Translation Updates:**
     * Catalan
 
+## v5.3.3:
+* **Notable Change:**
+    * dropdown translation improvements, thanks, Joan!
+* **Notable Fixes:**
+    * fixed submenu translation control for dropdowns
+    * fixed help screens for "distance to _" and "answer" primitives, thanks, Brian and Michael!
+* **Translation Update:**
+    * Catalan
+
 ### 2019-11-12
 * new dev version
 * drop-down menu translation improvements by Joan
 * submenu-title translation control
+* help screen fixes by Brian and Michael 
+* prepared release
 
 ## v5.3.2:
 * **Notable Fixes:**
