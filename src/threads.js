@@ -5922,7 +5922,7 @@ VariableFrame.prototype.silentFind = function (name) {
     answer the closest variable frame containing
     the specified variable. Otherwise return null.
 */
-    if (this.vars[name] !== undefined) {
+    if (this.vars[name] !== undefined && !(this.vars[name] instanceof Function)) {
         return this;
     }
     if (this.parentFrame) {
