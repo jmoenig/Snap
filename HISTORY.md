@@ -4,10 +4,12 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
 * **Translation Updates:**
 
 ### 2019-11-13
 * new dev version
+* threads: allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
 
 ## v5.3.3:
 * **Notable Change:**

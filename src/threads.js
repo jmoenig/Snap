@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-November-05';
+modules.threads = '2019-November-13';
 
 var ThreadManager;
 var Process;
@@ -5904,10 +5904,8 @@ VariableFrame.prototype.root = function () {
 };
 
 VariableFrame.prototype.find = function (name) {
-/*
-    answer the closest variable frame containing
-    the specified variable. otherwise throw an exception.
-*/
+    // answer the closest variable frame containing
+    // the specified variable. otherwise throw an exception.
     var frame = this.silentFind(name);
     if (frame) {return frame; }
     throw new Error(
@@ -5918,11 +5916,9 @@ VariableFrame.prototype.find = function (name) {
 };
 
 VariableFrame.prototype.silentFind = function (name) {
-/*
-    answer the closest variable frame containing
-    the specified variable. Otherwise return null.
-*/
-    if (this.vars[name] !== undefined) {
+    // answer the closest variable frame containing
+    // the specified variable. Otherwise return null.
+    if (this.vars[name] instanceof Variable) {
         return this;
     }
     if (this.parentFrame) {
