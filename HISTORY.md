@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-13
+* new dev version
+
 ## v5.3.3:
 * **Notable Change:**
     * dropdown translation improvements, thanks, Joan!
