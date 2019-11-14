@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-November-12';
+modules.objects = '2019-November-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -2055,17 +2055,18 @@ SpriteMorph.prototype.getImageData = function () {
     return this.imageData.pixels;
 };
 
-SpriteMorph.prototype.projectionSnap = function() {
+SpriteMorph.prototype.projectionSnap = function() { // +++
     var stage = this.parentThatIsA(StageMorph),
         center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
         cst = this.costume || this.image,
-        w, h,
+        w, h, rot,
         offset,
         snap,
         ctx;
 
     if (cst instanceof Costume) {
+        rot = cst.rotationCenter.copy();
         cst = cst.contents;
         w = cst.width;
         h = cst.height;
@@ -2082,7 +2083,7 @@ SpriteMorph.prototype.projectionSnap = function() {
     ctx.drawImage(cst, 0, 0);
     ctx.globalCompositeOperation = 'source-in';
     ctx.drawImage(stage.projectionLayer(), -offset.x, -offset.y);
-    return new Costume(snap, this.newCostumeName(localize('snap')));
+    return new Costume(snap, this.newCostumeName(localize('snap')), rot);
 };
 
 // SpriteMorph block instantiation
