@@ -5,7 +5,11 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
+    * disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
 * **Translation Updates:**
+
+### 2019-11-14
+* disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
 
 ### 2019-11-13
 * new dev version
