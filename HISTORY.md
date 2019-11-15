@@ -6,6 +6,10 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.3.6:
+* **Notable Fix:**
+    * fixed variadic reporters library 
+
 ## v5.3.5:
 * **Notable Fix:**
     * make sure list watchers are correctly initiailized 
