@@ -6,6 +6,10 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## v5.3.5:
+* **Notable Fix:**
+    * make sure list watchers are correctly initiailized 
+
 ## v5.3.4:
 * **Notable Fixes:**
     * allowed reserved JS object property names as variable names in Snap (e.g. "constructor")

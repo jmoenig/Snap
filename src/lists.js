@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-November-14';
+modules.lists = '2019-November-15';
 
 var List;
 var ListWatcherMorph;
@@ -601,10 +601,7 @@ function ListWatcherMorph(list, parentCell) {
 
 ListWatcherMorph.prototype.init = function (list, parentCell) {
     var myself = this,
-        readOnly = this.list.type && !contains(
-                ['text', 'number'],
-                this.list.type
-            );
+        readOnly;
 
     this.list = list || new List();
     this.start = 1;
@@ -650,6 +647,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.arrow.setBottom(this.handle.top());
     this.handle.add(this.arrow);
 
+    readOnly = this.list.type && !contains(['text', 'number'], this.list.type);
     if (readOnly) {
         this.plusButton = null;
     } else {
