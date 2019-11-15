@@ -277,7 +277,8 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
             }
             return image;
         } else {  // assume text
-            response = decodeURIComponent(escape(String.fromCharCode.apply(null, new Uint8Array(this.rpcRequest.response))));
+            var text = new TextDecoder('utf-8').decode(new Uint8Array(this.rpcRequest.response));
+            response = decodeURIComponent(escape(text));
             stage = this.homeContext.receiver.parentThatIsA(StageMorph);
             if (this.rpcRequest.status < 200 || this.rpcRequest.status > 299) {
                 stage.rpcError = response;
