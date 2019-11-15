@@ -7,7 +7,11 @@
     * allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
     * disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
     * now preserving the sprite's rotation point when taking a video-snap on it
+    * now preventing costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
 * **Translation Updates:**
+
+### 2019-11-15
+* objects: prevent costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
 
 ### 2019-11-14
 * lists: disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
