@@ -6954,7 +6954,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
     if (this.isCorpse) {
         ctx.globalAlpha = 0.3;
     }
-    if (w && h) {
+    if (w && h && src.width && src.height) {
         ctx.scale(scale, scale);
         ctx.drawImage(
             src,

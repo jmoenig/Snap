@@ -8,10 +8,12 @@
     * disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
     * now preserving the sprite's rotation point when taking a video-snap on it
     * now preventing costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
+    * now catching sub-pixel sized thumbnails
 * **Translation Updates:**
 
 ### 2019-11-15
 * objects: prevent costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
+* objects: catch sub-pixel sized thumbnails 
 
 ### 2019-11-14
 * lists: disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
