@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-18
+* new dev version
+
 ## v5.3.6:
 * **Notable Fix:**
     * fixed variadic reporters library 
