@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-November-13';
+modules.threads = '2019-November-18';
 
 var ThreadManager;
 var Process;
@@ -2099,7 +2099,11 @@ Process.prototype.reportGlobalFlag = function (name) {
     case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
     case 'video capture':
-        return !isNil(stage.projectionSource);
+        return !isNil(stage.projectionSource) &&
+            stage.projectionLayer()
+                .getContext('2d')
+                .getImageData(0, 0, 1, 1)
+                .data[3] > 0;
     case 'mirror video':
         return stage.mirrorVideo;
     default:

@@ -4,10 +4,12 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * only report video capture as "on" when the camera actually records something
 * **Translation Updates:**
 
 ### 2019-11-18
 * new dev version
+* threads: only report video capture as "on" when the camera actually records something
 
 ## v5.3.6:
 * **Notable Fix:**
