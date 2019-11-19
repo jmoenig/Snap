@@ -71,7 +71,7 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var dstId = targetRole instanceof List ? {contents: targetRole.asArray()} : targetRole;
+    var dstId = targetRole instanceof List ? targetRole.asArray() : targetRole;
     var sendMessage = function() {
         ide.sockets.sendMessage({
             type: 'message',

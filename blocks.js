@@ -1258,8 +1258,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                'roleNames',
-                true
+                'roleNames'
             );
             break;
         case '%rpcNames':
@@ -7951,8 +7950,8 @@ InputSlotMorph.prototype.roleNames = function () {
         }
     }
 
-    dict['others in room'] = 'others in room';
-    dict['everyone in room'] = 'everyone in room';
+    dict['others in room'] = ['others in room'];
+    dict['everyone in room'] = ['everyone in room'];
     return dict;
 };
 
