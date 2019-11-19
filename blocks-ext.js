@@ -219,6 +219,7 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
 
             this.parent.children.splice(index, 0, content);
             content.parent = this.parent;
+            content.drawNew();
 
             this.fieldContent.push(content);
         }

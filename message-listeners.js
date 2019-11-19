@@ -23,12 +23,8 @@ MessageOutputSlotMorph.prototype.evaluate = function() {
     return this.fields;
 };
 
-MessageOutputSlotMorph.prototype.updateField = function(field) {
-    var result = new ReadOnlyTemplateSlotMorph(field);
-    this.parent.add(result);
-    //result.fixLayout();
-    result.drawNew();
-    return result;
+MessageOutputSlotMorph.prototype.getFieldValue = function(field) {
+    return new ReadOnlyTemplateSlotMorph(field);
 };
 
 // A template slot morph that overrides the ReporterBlockMorph's mouseClickLeft
