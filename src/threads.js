@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
 
-modules.threads = '2019-November-18';
+modules.threads = '2019-November-19';
 
 var ThreadManager;
 var Process;
@@ -2079,7 +2079,7 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
         break;
     case 'video capture':
         if (bool) {
-            stage.startVideo();
+            this.startVideo(stage);
         } else {
             stage.stopProjection();
         }
@@ -4864,6 +4864,20 @@ Process.prototype.reportVideo = function(attribute, name) {
         return stage.projectionSnap();
     }
     return -1;
+};
+
+Process.prototype.startVideo = function(stage) {
+    // interpolated
+    if (this.reportGlobalFlag('video capture')) {return; }
+    if (!stage.projectionSource || !stage.projectionSource.stream) {
+        // wait until video is turned on
+        if (!this.context.accumulator) {
+            this.context.accumulator = true; // started video
+            stage.startVideo();
+        }
+    }
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 // Process code mapping

@@ -4,8 +4,12 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * wait until the camera actually records something when turning video capture "on"
     * only report video capture as "on" when the camera actually records something
 * **Translation Updates:**
+
+### 2019-11-19
+* threads: when turning video capture "on" wait until the camera actually records something
 
 ### 2019-11-18
 * new dev version
