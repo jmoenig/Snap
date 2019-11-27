@@ -33,6 +33,8 @@ async function runTest(driver, options) {
 
     while (remainingActions--) {
         await tester.act();
+        await waitUntilActionsSettled(SnapActions);
+
         // Test that the last action can be undone (and redone)
         if (undoCount < SnapUndo.allEvents.length) {
             const lastEvent = copy(SnapUndo.allEvents[SnapUndo.allEvents.length - 1]);
@@ -42,6 +44,7 @@ async function runTest(driver, options) {
                 event.owner = lastEvent.owner;
                 event.isReplay = true;
                 lastEvent.isReplay = true;
+
                 await SnapActions.applyEvent(event);
                 await driver.sleep(250);
                 await SnapActions.applyEvent(lastEvent);
@@ -50,6 +53,14 @@ async function runTest(driver, options) {
         }
         await driver.sleep(250);
     }
+}
+
+async function waitUntilActionsSettled(SnapActions) {
+    const pendingActions = SnapActions._attemptedLocalActions
+        .concat(SnapActions._pendingLocalActions)
+        .map(action => action.promise);
+
+    await Promise.allSettled(pendingActions);
 }
 
 function isIDELoaded(driver) {
