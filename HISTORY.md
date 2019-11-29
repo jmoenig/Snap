@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-11-29
+* new dev version
+
 ## v5.3.7:
 * **Notable Fixes:**
     * wait until the camera actually records something when turning video capture "on"

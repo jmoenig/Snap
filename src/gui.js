@@ -79,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-November-19';
+modules.gui = '2019-November-29';
 
 // Declarations
 
@@ -3626,7 +3626,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5.3.7\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 5.3.8 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2019 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
