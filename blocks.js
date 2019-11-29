@@ -5212,7 +5212,11 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         new DialogBoxMorph(
             this,
             function(spec) {
-                SnapActions.setBlockSpec(this, spec);
+                if (this.id) {
+                    SnapActions.setBlockSpec(this, spec);
+                } else {
+                    this.userSetSpec(spec);
+                }
             },
             this
         ).prompt(
