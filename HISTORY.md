@@ -3,11 +3,13 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * optimized color collision detection
 * **Notable Fixes:**
 * **Translation Updates:**
 
 ### 2019-11-29
 * new dev version
+* objects, threads: optimized color collision detection
 
 ## v5.3.7:
 * **Notable Fixes:**

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-November-15';
+modules.objects = '2019-November-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -889,29 +889,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
-        },
-        colorFiltered: {
-            dev: true,
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'filter %clr tolerance %n %',
-            defaults: [null, 15]
-        },
-        reportFuzzyTouchingColor: {
-            dev: true,
-            only: SpriteMorph,
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'touching %clr tolerance %n ?',
-            defaults: [null, 15]
-        },
-        reportFuzzyColorIsTouchingColor: {
-            dev: true,
-            only: SpriteMorph,
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'color %clr is touching %clr tolerance %n ?',
-            defaults: [null, null, 15]
         },
         reportAspect: {
             type: 'reporter',
@@ -1980,46 +1957,6 @@ SpriteMorph.prototype.rotationCenter = function () {
     return this.position().add(this.rotationOffset);
 };
 
-SpriteMorph.prototype.colorFiltered = function (aColor, tolerance) {
-    // answer a new Morph containing my image filtered by aColor
-    // ignore transparency (alpha)
-    var morph = new Morph(),
-        ext = this.extent(),
-        ctx,
-        src,
-        clr,
-        i,
-        dta;
-
-    src = normalizeCanvas(this.image, true).getContext('2d').getImageData(
-        0,
-        0,
-        ext.x,
-        ext.y
-    );
-    morph.image = newCanvas(ext, true);
-    morph.bounds = this.bounds.copy();
-    ctx = morph.image.getContext('2d');
-    dta = ctx.createImageData(ext.x, ext.y);
-    for (i = 0; i < ext.x * ext.y * 4; i += 4) {
-        clr = new Color(
-            src.data[i],
-            src.data[i + 1],
-            src.data[i + 2]
-        );
-        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
-            clr.eq(aColor)
-        ) {
-            dta.data[i] = src.data[i];
-            dta.data[i + 1] = src.data[i + 1];
-            dta.data[i + 2] = src.data[i + 2];
-            dta.data[i + 3] = 255;
-        }
-    }
-    ctx.putImageData(dta, 0, 0);
-    return morph;
-};
-
 SpriteMorph.prototype.getImageData = function () {
     // used for video motion detection.
     // Get sprite image data scaled to 1 an converted to ABGR array,
@@ -2490,9 +2427,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(watcherToggle('reportThreadCount'));
             blocks.push(block('reportThreadCount'));
-            blocks.push(block('colorFiltered'));
-            blocks.push(block('reportFuzzyTouchingColor'));
-            blocks.push(block('reportFuzzyColorIsTouchingColor'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
         }
@@ -4294,18 +4228,80 @@ SpriteMorph.prototype.goBack = function (layers) {
     this.parent.changed();
 };
 
-// SpriteMorph collision detection optimization
+// SpriteMorph collision detection
+
+SpriteMorph.prototype.reportTouchingColor = function (aColor) {
+    var stage = this.parentThatIsA(StageMorph),
+        data, len, i;
+
+    if (stage) {
+        if (this.wantsRedraw && this.isWarped) {
+            this.endWarp();
+            this.startWarp();
+        }
+        data = this.overlappingPixels(stage);
+        if (!data) {return false; }
+        len = data[0].length;
+        for (i = 3; i < len; i += 4) {
+            if (data[0][i] && data[1][i]) {
+                if (
+                    data[1][i - 3] === aColor.r &&
+                    data[1][i - 2] === aColor.g &&
+                    data[1][i - 1] === aColor.b
+                ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+SpriteMorph.prototype.reportColorIsTouchingColor = function (
+    thisColor,
+    thatColor
+) {
+    var stage = this.parentThatIsA(StageMorph),
+        data, len, i;
+
+    if (stage) {
+        if (this.wantsRedraw && this.isWarped) {
+            this.endWarp();
+            this.startWarp();
+        }
+        data = this.overlappingPixels(stage);
+        if (!data) {return false; }
+        len = data[0].length;
+        for (i = 3; i < len; i += 4) {
+            if (data[0][i] && data[1][i]) {
+                if (
+                    data[0][i - 3] === thisColor.r &&
+                    data[0][i - 2] === thisColor.g &&
+                    data[0][i - 1] === thisColor.b &&
+                    data[1][i - 3] === thatColor.r &&
+                    data[1][i - 2] === thatColor.g &&
+                    data[1][i - 1] === thatColor.b
+                ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
 
 SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
         thisImg = this.image,
         thatImg = otherSprite.image;
-        
-    if (oRect.width() < 1 || oRect.height() < 1 ||
-        !this.image || !otherSprite.image ||
-        !this.image.width || !this.image.height ||
-        !otherSprite.image.width || !otherSprite.image.height
+
+    if (otherSprite instanceof StageMorph) {
+        // only check for color collision
+        thatImg = otherSprite.thumbnail(otherSprite.extent(), this, true);
+    }
+    if (oRect.width() < 1 || oRect.height() < 1 || !thisImg || !thatImg ||
+        !thisImg.width || !thisImg.height || !thatImg.width || !thatImg.height
     ) {
         return false;
     }
@@ -7675,52 +7671,6 @@ StageMorph.prototype.clearProjectionLayer = function () {
     this.changed();
 };
 
-StageMorph.prototype.colorFiltered = function (
-    aColor,
-    excludedSprite,
-    tolerance
-) {
-    // answer a new Morph containing my image filtered by aColor
-    // ignore the excludedSprite, because its collision is checked
-    // ignore transparency (alpha)
-    var morph = new Morph(),
-        ext = this.extent(),
-        img = this.thumbnail(ext, excludedSprite),
-        ctx,
-        src,
-        clr,
-        i,
-        dta;
-
-    src = normalizeCanvas(img, true).getContext('2d').getImageData(
-        0,
-        0,
-        ext.x,
-        ext.y
-    );
-    morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(ext, true);
-    ctx = morph.image.getContext('2d');
-    dta = ctx.createImageData(ext.x, ext.y);
-    for (i = 0; i < ext.x * ext.y * 4; i += 4) {
-        clr = new Color(
-            src.data[i],
-            src.data[i + 1],
-            src.data[i + 2]
-        );
-        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
-            clr.eq(aColor)
-        ) {
-            dta.data[i] = src.data[i];
-            dta.data[i + 1] = src.data[i + 1];
-            dta.data[i + 2] = src.data[i + 2];
-            dta.data[i + 3] = 255;
-        }
-    }
-    ctx.putImageData(dta, 0, 0);
-    return morph;
-};
-
 // StageMorph video capture
 
 StageMorph.prototype.startVideo = function() {
@@ -8570,7 +8520,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(watcherToggle('reportThreadCount'));
             blocks.push(block('reportThreadCount'));
-            blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
         }
@@ -8843,18 +8792,20 @@ StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
 // StageMorph thumbnail
 
-StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
-/*
-    answer a new Canvas of extentPoint dimensions containing
-    my thumbnail representation keeping the originial aspect ratio
-*/
+StageMorph.prototype.thumbnail = function (
+    extentPoint,
+    excludedSprite,
+    nonRetina
+) {
+    // answer a new Canvas of extentPoint dimensions containing
+    // my thumbnail representation keeping the originial aspect ratio
     var myself = this,
         src = this.image,
         scale = Math.min(
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        trg = newCanvas(extentPoint),
+        trg = newCanvas(extentPoint, nonRetina),
         ctx = trg.getContext('2d'),
         fb,
         fimg;
