@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2019-12-02
+* new dev version
+
 ## v5.3.8:
 * **Notable Change:**
     * optimized color collision detection
