@@ -1559,6 +1559,9 @@ SpriteMorph.prototype.blockAlternatives = {
 
     changeSize: ['setSize'],
     setSize: ['changeSize'],
+    
+    reportPenTrailsAsCostume: ['reportPentrailsAsSVG'],
+    reportPentrailsAsSVG: ['reportPenTrailsAsCostume'],
 
     // control:
     doBroadcast: ['doBroadcastAndWait'],
