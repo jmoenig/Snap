@@ -20,6 +20,7 @@
 * gui: added "svg" entry to the stage icon's context menu
 * objects: renamed "pen trails (SVG)" to "pen vectors"
 * German translation update
+* cleaned up change markers
 
 ## v5.3.8:
 * **Notable Change:**

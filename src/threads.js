@@ -5112,7 +5112,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     );
 };
 
-Process.prototype.reportPentrailsAsSVG = function () { // +++
+Process.prototype.reportPentrailsAsSVG = function () {
     // interpolated
     var stage, svg, acc;
 

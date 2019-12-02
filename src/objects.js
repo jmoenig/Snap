@@ -5195,7 +5195,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
-        // record for future svg conversion // +++
+        // record for later svg conversion
         this.parent.trailsLog.push(
            [
                 this.snapPoint(start),
@@ -5291,7 +5291,7 @@ SpriteMorph.prototype.floodFill = function () {
 
 // SpriteMorph pen trails as costume
 
-SpriteMorph.prototype.reportPenTrailsAsCostume = function () { // +++
+SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
     var cst = new Costume(
         this.parentThatIsA(StageMorph).trailsCanvas,
         this.newCostumeName(localize('Costume'))
@@ -5633,9 +5633,9 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     this.positionTalkBubble();
 };
 
-// SpriteMorph coordinate conversion // +++
+// SpriteMorph coordinate conversion
 
-SpriteMorph.prototype.snapPoint = function(aPoint) { // +++
+SpriteMorph.prototype.snapPoint = function(aPoint) {
     var stage = this.parentThatIsA(StageMorph),
         origin = stage.center();
     return new Point(
@@ -7464,7 +7464,7 @@ StageMorph.prototype.init = function (globals) {
     this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
-    this.trailsLog = []; // +++ each line being [p1, p2, color, width, cap]
+    this.trailsLog = []; // each line being [p1, p2, color, width, cap]
     this.isThreadSafe = false;
 
     this.microphone = new Microphone(); // audio input, do not persist
@@ -7670,7 +7670,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
     this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
-    this.trailsLog = []; // +++
+    this.trailsLog = [];
     this.changed();
 };
 
@@ -8834,12 +8834,11 @@ StageMorph.prototype.userMenu = function () {
                     : 'turn all pen trails and stamps\n' +
                         'into a new background for the stage'
     );
-    // +++ experimental
     if (this.trailsLog.length) {
         menu.addItem(
             'svg...',
             'exportTrailsLogAsSVG',
-            'export pen trails line segments as SVG'
+            'export pen trails\nline segments as SVG'
         );
     }
     return menu;
@@ -8924,19 +8923,19 @@ StageMorph.prototype.thumbnail = function (
     return trg;
 };
 
-// StageMorph - exporting the pen trails as SVG // +++
+// StageMorph - exporting the pen trails as SVG
 
-StageMorph.prototype.exportTrailsLogAsSVG = function () { // +++
+StageMorph.prototype.exportTrailsLogAsSVG = function () {
     var ide = this.parentThatIsA(IDE_Morph);
 
     ide.saveFileAs(
         this.trailsLogAsSVG().src,
-        'image/svg', // +++'image/svg+xml',
+        'image/svg',
         ide.projectName || this.name
     );
 };
 
-StageMorph.prototype.trailsLogAsSVG = function () { // +++
+StageMorph.prototype.trailsLogAsSVG = function () {
     var myself = this,
         bottomLeft = this.trailsLog[0][0],
         topRight = bottomLeft,
@@ -8984,7 +8983,7 @@ StageMorph.prototype.trailsLogAsSVG = function () { // +++
     };
 };
 
-StageMorph.prototype.normalizePoint = function (snapPoint) { // +++
+StageMorph.prototype.normalizePoint = function (snapPoint) {
     return new Point(snapPoint.x, -snapPoint.y);
 };
 

@@ -8024,7 +8024,7 @@ SpriteIconMorph.prototype.userMenu = function () {
             menu.addItem(
                 'svg...',
                 function () {myself.object.exportTrailsLogAsSVG(); },
-                'export pen trails line segments as SVG'
+                'export pen trails\nline segments as SVG'
             );
         }
         return menu;
