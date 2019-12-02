@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
     * export pen trails as SVG
-    * access pen trails as SVG_Costume: new "pen trails (SVG)" reporter (experimental, hidden in dev)
+    * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
@@ -17,6 +17,7 @@
 * threads: catch empty trails log when trying to generate a vector trails costume
 * objects: support relabelling "pen trails" to "pen trails (SVG)" and vice-versa
 * gui: added "svg" entry to the stage icon's context menu
+* objects: renamed "pen trails (SVG)" to "pen vectors"
 
 ## v5.3.8:
 * **Notable Change:**

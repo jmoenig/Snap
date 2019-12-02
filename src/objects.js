@@ -699,7 +699,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'pen',
-            spec: 'pen trails (SVG)'
+            spec: 'pen vectors'
         },
 
         // Control
