@@ -12,6 +12,7 @@
 * new dev version
 * objects: export pen trails as SVG (under construction)
 * threads: new "pen trails (SVG)" reporter (experimental, hidden in dev)
+* objects, threads: adjusted rotation center of SVG-pen-trails
 
 ## v5.3.8:
 * **Notable Change:**

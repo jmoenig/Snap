@@ -5288,7 +5288,7 @@ SpriteMorph.prototype.floodFill = function () {
 
 // SpriteMorph pen trails as costume
 
-SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
+SpriteMorph.prototype.reportPenTrailsAsCostume = function () { // +++
     var cst = new Costume(
         this.parentThatIsA(StageMorph).trailsCanvas,
         this.newCostumeName(localize('Costume'))
@@ -8927,7 +8927,7 @@ StageMorph.prototype.exportTrailsLogAsSVG = function () { // +++
     var ide = this.parentThatIsA(IDE_Morph);
 
     ide.saveFileAs(
-        this.trailsLogAsSVG(),
+        this.trailsLogAsSVG().src,
         'image/svg', // +++'image/svg+xml',
         ide.projectName || this.name
     );
@@ -8981,7 +8981,10 @@ StageMorph.prototype.trailsLogAsSVG = function () { // +++
             '" />';
     });
     svg += '</svg>';
-    return svg;
+    return {
+        src : svg,
+        rot : new Point(-box.origin.x, box.corner.y)
+    };
 };
 
 StageMorph.prototype.normalizePoint = function (snapPoint) { // +++

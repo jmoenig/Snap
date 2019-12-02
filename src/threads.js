@@ -5121,18 +5121,21 @@ Process.prototype.reportPentrailsAsSVG = function () { // +++
         svg = stage.trailsLogAsSVG();
         this.context.accumulator = {
             img : new Image(),
+            rot : svg.rot,
             ready : false
         };
         acc = this.context.accumulator;
         acc.img.onload = function () {
             acc.ready = true;
         };
-        acc.img.src = 'data:image/svg+xml,' + svg;
+        acc.img.src = 'data:image/svg+xml,' + svg.src;
+        acc.img.rot = svg.rotationShift;
     } else if (this.context.accumulator.ready) {
         this.returnValueToParentContext(
             new SVG_Costume(
                 this.context.accumulator.img,
-                this.blockReceiver().newCostumeName(localize('Costume'))
+                this.blockReceiver().newCostumeName(localize('Costume')),
+                this.context.accumulator.rot
             )
         );
         return;
