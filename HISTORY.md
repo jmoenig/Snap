@@ -7,6 +7,7 @@
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
+    * German
 
 ### 2019-12-02
 * new dev version
@@ -18,6 +19,7 @@
 * objects: support relabelling "pen trails" to "pen trails (SVG)" and vice-versa
 * gui: added "svg" entry to the stage icon's context menu
 * objects: renamed "pen trails (SVG)" to "pen vectors"
+* German translation update
 
 ## v5.3.8:
 * **Notable Change:**

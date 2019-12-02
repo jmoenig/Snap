@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-11-02', // this, too, will appear in the Translators tab
+        '2019-12-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -491,6 +491,8 @@ SnapTranslator.dict.de = {
         'schreibe %s Größe %n',
     'paste on %spr':
         'drucke auf %spr',
+    'pen vectors':
+        'Vektor-Malspuren',
 
     // control:
     'when %greenflag clicked':
@@ -1212,6 +1214,12 @@ SnapTranslator.dict.de = {
         'Bild exportieren...',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+    'svg...':
+        'SVG exportieren...',
+    'export pen trails\nline segments as SVG':
+        'Striche in Malspuren als\nVektorgraphik exportieren',
+    'there are currently no\nvectorizable pen trail segments':
+        'momentan gibt es keine\nvektorisierbaren Malspuren',
     'turn all pen trails and stamps\ninto a new background for the stage':
         'Hintergrund aus allen Malspuren und\nStempelabdrücken auf der Bühne erstellen',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
