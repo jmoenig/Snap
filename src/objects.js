@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-November-29';
+modules.objects = '2019-December-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -688,13 +688,18 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen trails'
         },
-
-        // Pen - experimental primitives for development mode
         doPasteOn: {
-            dev: true,
             type: 'command',
             category: 'pen',
             spec: 'paste on %spr'
+        },
+
+        // Pen - experimental primitives for development mode
+        reportPentrailsAsSVG: {
+            dev: true,
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen trails (SVG)'
         },
 
         // Control
@@ -2320,6 +2325,22 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPasteOn'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportPentrailsAsSVG'));
+        }
+
+    ////////////////////////////////
 
     } else if (cat === 'control') {
 
@@ -5171,6 +5192,18 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
+        // record for future svg conversion // +++
+        this.parent.trailsLog.push(
+           [
+                this.snapPoint(start),
+                this.snapPoint(dest),
+                this.color.copy(),
+                this.size,
+                this.useFlatLineEnds ? 'butt' : 'round'
+            ]
+        );
+
+        // draw on the pen-trails layer
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
         if (this.useFlatLineEnds) {
@@ -5595,6 +5628,17 @@ SpriteMorph.prototype.bounceOffEdge = function () {
         fb.amountToTranslateWithin(stage.bounds)
     ));
     this.positionTalkBubble();
+};
+
+// SpriteMorph coordinate conversion // +++
+
+SpriteMorph.prototype.snapPoint = function(aPoint) { // +++
+    var stage = this.parentThatIsA(StageMorph),
+        origin = stage.center();
+    return new Point(
+        (aPoint.x - origin.x) / stage.scale,
+        (origin.y - aPoint.y) / stage.scale
+    );
 };
 
 // SpriteMorph rotation center / fixation point manipulation
@@ -7417,6 +7461,7 @@ StageMorph.prototype.init = function (globals) {
     this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
+    this.trailsLog = []; // +++ each line being [p1, p2, color, width, cap]
     this.isThreadSafe = false;
 
     this.microphone = new Microphone(); // audio input, do not persist
@@ -7622,6 +7667,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
     this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
+    this.trailsLog = []; // +++
     this.changed();
 };
 
@@ -8421,6 +8467,22 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportPentrailsAsSVG'));
+        }
+
+    /////////////////////////////////
+
     } else if (cat === 'control') {
 
         blocks.push(block('receiveGo'));
@@ -8769,6 +8831,14 @@ StageMorph.prototype.userMenu = function () {
                     : 'turn all pen trails and stamps\n' +
                         'into a new background for the stage'
     );
+    // +++ experimental
+    if (this.trailsLog.length) {
+        menu.addItem(
+            'svg...',
+            'exportTrailsLogAsSVG',
+            'export pen trails line segments as SVG'
+        );
+    }
     return menu;
 };
 
@@ -8849,6 +8919,73 @@ StageMorph.prototype.thumbnail = function (
         }
     });
     return trg;
+};
+
+// StageMorph - exporting the pen trails as SVG // +++
+
+StageMorph.prototype.exportTrailsLogAsSVG = function () { // +++
+    var ide = this.parentThatIsA(IDE_Morph);
+
+    ide.saveFileAs(
+        this.trailsLogAsSVG(),
+        'image/svg', // +++'image/svg+xml',
+        ide.projectName || this.name
+    );
+};
+
+StageMorph.prototype.trailsLogAsSVG = function () { // +++
+    var myself = this,
+        bottomLeft = this.trailsLog[0][0],
+        topRight = bottomLeft,
+        maxWidth = this.trailsLog[0][3],
+        shift,
+        box,
+        p1, p2,
+        svg;
+
+    // determine bounding box and max line width
+    this.trailsLog.forEach(function (line) {
+        bottomLeft = bottomLeft.min(line[0]);
+        bottomLeft = bottomLeft.min(line[1]);
+        topRight = topRight.max(line[0]);
+        topRight = topRight.max(line[1]);
+        maxWidth = Math.max(maxWidth, line[3]);
+    });
+    box = bottomLeft.corner(topRight).expandBy(maxWidth / 2);
+    shift = new Point(-bottomLeft.x, topRight.y).translateBy(maxWidth / 2);
+    svg = '<svg ' +
+        'viewBox="0 0 ' + box.width() + ' ' + box.height() + '" ' +
+        'width="' + box.width() + '" height="' + box.height() + '" ' +
+        // 'style="background-color:black" ' + // for supporting backgrounds
+        'xmlns="http://www.w3.org/2000/svg">';
+
+    // to do:
+    // * add source comment ("exported from Snap! etc."
+    // * add "keep aspect ratio" governance
+    // * catch / disable if the trails log is empty
+    // * catch if the trails contain non-vectorizable elements (stamp, fill)
+    // * decide how to handle background colors
+    // * consider a logging limit to prevent an overflowing queue
+
+    // for debugging the viewBox:
+    // svg += '<rect width="100%" height="100%" fill="black"/>'
+
+    this.trailsLog.forEach(function (line) {
+        p1 = myself.normalizePoint(line[0]).translateBy(shift);
+        p2 = myself.normalizePoint(line[1]).translateBy(shift);
+        svg += '<line x1="' + p1.x + '" y1="' + p1.y +
+            '" x2="' + p2.x + '" y2="' + p2.y + '" ' +
+            'style="stroke:' + line[2].toString() + ';' +
+            'stroke-width:' + line[3] +
+            ';stroke-linecap:' + line[4] +
+            '" />';
+    });
+    svg += '</svg>';
+    return svg;
+};
+
+StageMorph.prototype.normalizePoint = function (snapPoint) { // +++
+    return new Point(snapPoint.x, -snapPoint.y);
 };
 
 // StageMorph hiding and showing:

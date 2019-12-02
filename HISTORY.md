@@ -2,12 +2,14 @@
 
 ## in development:
 * **New Features:**
+    * export pen trails as SVG
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
 
 ### 2019-12-02
 * new dev version
+* objects: export pen trails as SVG (under construction)
 
 ## v5.3.8:
 * **Notable Change:**
