@@ -53,15 +53,15 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
+/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph, Map,
 MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
-TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-November-29';
+modules.threads = '2019-December-02';
 
 var ThreadManager;
 var Process;
@@ -5110,6 +5110,34 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
             localize('costume')
         )
     );
+};
+
+Process.prototype.reportPentrailsAsSVG = function () { // +++
+    // interpolated
+    var stage, svg, acc;
+
+    if (!this.context.accumulator) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        svg = stage.trailsLogAsSVG();
+        this.context.accumulator = {
+            img : new Image(),
+            ready : false
+        };
+        acc = this.context.accumulator;
+        acc.img.onload = function () {
+            acc.ready = true;
+        };
+        acc.img.src = 'data:image/svg+xml,' + svg;
+    } else if (this.context.accumulator.ready) {
+        this.returnValueToParentContext(
+            new SVG_Costume(
+                this.context.accumulator.img,
+                this.blockReceiver().newCostumeName(localize('Costume'))
+            )
+        );
+        return;
+    }
+    this.pushContext();
 };
 
 // Process constant input options
