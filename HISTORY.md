@@ -14,6 +14,7 @@
 * threads: new "pen trails (SVG)" reporter (experimental, hidden in dev)
 * objects, threads: adjusted rotation center of SVG-pen-trails
 * objects: added aspect racio governance and generator tags to trails SVGs
+* threads: catch empty trails log when trying to generate a vector trails costume
 
 ## v5.3.8:
 * **Notable Change:**

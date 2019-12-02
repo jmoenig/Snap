@@ -5118,6 +5118,11 @@ Process.prototype.reportPentrailsAsSVG = function () { // +++
 
     if (!this.context.accumulator) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (!stage.trailsLog.length) {
+            throw new Error (localize(
+                'there are currently no\nvectorizable pen trail segments'
+            ));
+        }
         svg = stage.trailsLogAsSVG();
         this.context.accumulator = {
             img : new Image(),
