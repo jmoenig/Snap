@@ -16,6 +16,7 @@
 * objects: added aspect racio governance and generator tags to trails SVGs
 * threads: catch empty trails log when trying to generate a vector trails costume
 * objects: support relabelling "pen trails" to "pen trails (SVG)" and vice-versa
+* gui: added "svg" entry to the stage icon's context menu
 
 ## v5.3.8:
 * **Notable Change:**

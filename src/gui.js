@@ -8020,6 +8020,13 @@ SpriteIconMorph.prototype.userMenu = function () {
             },
             'open a new window\nwith a picture of the stage'
         );
+        if (this.object.trailsLog.length) {
+            menu.addItem(
+                'svg...',
+                function () {myself.object.exportTrailsLogAsSVG(); },
+                'export pen trails line segments as SVG'
+            );
+        }
         return menu;
     }
     if (!(this.object instanceof SpriteMorph)) {return null; }
