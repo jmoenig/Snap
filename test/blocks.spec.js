@@ -28,6 +28,22 @@ describe('blocks', function() {
             .then(block => SnapActions.setSelector(block, 'doIf'));
     });
 
+    it('should not add duplicate block to palette on slideBackTo', async function() {
+        const palette = driver.palette();
+        const blockCount = palette.contents.children.length;
+        const block = palette.contents.children[0];
+        const stageCenter = driver.ide().stage.center();
+        await driver.dragAndDrop(block, stageCenter);
+        await driver.sleep(500);
+        await driver.expect(
+            () => {
+                return palette.contents.children.length === blockCount;
+            },
+            'Added duplicate (non-template) block to palette.',
+            {maxWait: 100}
+        );
+    });
+
     describe('custom', function() {
         beforeEach(() => {
             return driver.reset()
