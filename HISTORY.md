@@ -2,12 +2,16 @@
 
 ## in development:
 * **New Features:**
+    * log pen vectors
     * export pen trails as SVG
     * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Translation Updates:**
     * German
+
+### 2019-12-03
+* objects, blocks, threads, gui: added "log pen vectors" session setting
 
 ### 2019-12-02
 * new dev version

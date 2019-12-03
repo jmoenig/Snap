@@ -79,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-December-02';
+modules.gui = '2019-December-03';
 
 // Declarations
 
@@ -2866,6 +2866,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableSingleStepping,
         'uncheck to turn off\nvisible stepping',
         'check to turn on\n visible stepping (slow)',
+        false
+    );
+    addPreference(
+        'Log pen vectors',
+        function () {
+            StageMorph.prototype.enablePenLogging =
+                !StageMorph.prototype.enablePenLogging;
+        },
+        StageMorph.prototype.enablePenLogging,
+        'uncheck to turn off\nlogging pen vectors',
+        'check to turn on\nlogging pen vectors',
         false
     );
     addPreference(

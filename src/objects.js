@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-December-02';
+modules.objects = '2019-December-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -5196,15 +5196,17 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 
     if (this.isDown) {
         // record for later svg conversion
-        this.parent.trailsLog.push(
-           [
-                this.snapPoint(start),
-                this.snapPoint(dest),
-                this.color.copy(),
-                this.size,
-                this.useFlatLineEnds ? 'butt' : 'round'
-            ]
-        );
+        if (StageMorph.prototype.enablePenLogging) {
+            this.parent.trailsLog.push(
+                [
+                    this.snapPoint(start),
+                    this.snapPoint(dest),
+                    this.color.copy(),
+                    this.size,
+                    this.useFlatLineEnds ? 'butt' : 'round'
+                ]
+            );
+        }
 
         // draw on the pen-trails layer
         context.lineWidth = this.size;
@@ -7414,6 +7416,7 @@ StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
 StageMorph.prototype.enableInheritance = true;
 StageMorph.prototype.enableSublistIDs = false;
+StageMorph.prototype.enablePenLogging = false; // for SVG generation
 
 // StageMorph instance creation
 

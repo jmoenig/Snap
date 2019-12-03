@@ -2077,6 +2077,9 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     case 'flat line ends':
         SpriteMorph.prototype.useFlatLineEnds = bool;
         break;
+    case 'log pen vectors':
+        StageMorph.prototype.enablePenLogging = bool;
+        break;
     case 'video capture':
         if (bool) {
             this.startVideo(stage);
@@ -2098,6 +2101,8 @@ Process.prototype.reportGlobalFlag = function (name) {
         return this.reportIsFastTracking();
     case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
+    case 'log pen vectors':
+        return StageMorph.prototype.enablePenLogging;
     case 'video capture':
         return !isNil(stage.projectionSource) &&
             stage.projectionLayer()
