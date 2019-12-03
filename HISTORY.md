@@ -12,6 +12,7 @@
 
 ### 2019-12-03
 * objects, blocks, threads, gui: added "log pen vectors" session setting
+* updated German translation
 
 ### 2019-12-02
 * new dev version

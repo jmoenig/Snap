@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-12-02', // this, too, will appear in the Translators tab
+        '2019-12-03', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -707,6 +707,8 @@ SnapTranslator.dict.de = {
         'Stapelgr\u00f6\u00dfe',
     'frames':
         'Rahmenz\u00e4hler',
+    'log pen vectors':
+        'Vektoraufzeichnung',
 
     // operators:
     '%n mod %n':
@@ -1112,6 +1114,13 @@ SnapTranslator.dict.de = {
         'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
+    'Log pen vectors':
+        'Malstiftvektoren aufzeichnen',
+    'uncheck to turn off\nlogging pen vectors':
+        'ausschalten, um Malstiftbewegungen\nnicht mehr aufzuzeichnen',
+    'check to turn on\nlogging pen vectors':
+        'einschalten, um Malstiftbewegungen\nals Vektor aufzuzeichnen',
+
 
     // inputs
     'with inputs':
