@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-December-02';
+modules.threads = '2019-December-05';
 
 var ThreadManager;
 var Process;
@@ -5119,7 +5119,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
 
 Process.prototype.reportPentrailsAsSVG = function () {
     // interpolated
-    var stage, svg, acc;
+    var rcvr, stage, svg, acc, offset;
 
     if (!this.context.accumulator) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
@@ -5141,11 +5141,16 @@ Process.prototype.reportPentrailsAsSVG = function () {
         acc.img.src = 'data:image/svg+xml,' + svg.src;
         acc.img.rot = svg.rotationShift;
     } else if (this.context.accumulator.ready) {
+        offset = new Point(0, 0);
+        rcvr = this.blockReceiver();
+        if (rcvr instanceof SpriteMorph) {
+            offset = new Point(rcvr.xPosition(), -rcvr.yPosition());
+        }
         this.returnValueToParentContext(
             new SVG_Costume(
                 this.context.accumulator.img,
                 this.blockReceiver().newCostumeName(localize('Costume')),
-                this.context.accumulator.rot
+                this.context.accumulator.rot.translateBy(offset)
             )
         );
         return;

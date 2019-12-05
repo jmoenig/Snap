@@ -10,6 +10,9 @@
 * **Translation Updates:**
     * German
 
+### 2019-12-05
+* threads: set the rotation point of "pen vectors" costumes to the position of the sprite that creates them
+
 ### 2019-12-03
 * objects, blocks, threads, gui: added "log pen vectors" session setting
 * updated German translation
