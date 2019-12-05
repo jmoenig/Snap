@@ -379,13 +379,9 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
             try {
                 model = SnapActions.serializer.parse(value);
                 nodes = model.children;
-                project = null;
-
-                // Check if the project is the receiver somewhere
-                for (var i = 0; !project && i < nodes.length; i++) {
-                    receiver = nodes[i].childNamed('receiver');
-                    project = receiver && receiver.childNamed('project');
-                }
+                project = model.allChildren().find(function(node) {
+                    return node.tag === 'project';
+                });
 
                 // If the receiver is the project...
                 if (project) {
