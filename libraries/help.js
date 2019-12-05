@@ -35,8 +35,10 @@ HelpScreenMorph.uber = FrameMorph.prototype;
 
 // HelpScreenMorph layout settings:
 
+HelpScreenMorph.prototype.screenWidth = 572;
 HelpScreenMorph.prototype.padding = 15;
 HelpScreenMorph.prototype.verticalPadding = 10;
+HelpScreenMorph.prototype.font = 'Baskerville, "Libre Baskerville"';
 
 // HelpScreenMorph library caching:
 
@@ -56,7 +58,7 @@ HelpScreenMorph.prototype.init = function (loadCallback) {
 
     // initialize inherited properties:
     HelpScreenMorph.uber.init.call(this);
-    this.setWidth(572 - this.padding);
+    this.setWidth(HelpScreenMorph.prototype.screenWidth - this.padding);
     this.color = DialogBoxMorph.prototype.color;
 };
 
@@ -138,17 +140,23 @@ HelpScreenMorph.prototype.createRow = function () {
     return row;
 };
 
-HelpScreenMorph.prototype.createParagraph = function (str, size, color, italic) {
+HelpScreenMorph.prototype.createParagraph = function (
+    str, size, color, italic
+) {
     var text = new TextMorph(
-        str, size, 'serif', false, italic, null, null, 'Baskerville'
+        str, size, 'serif', false, italic, null, null,
+        HelpScreenMorph.prototype.font
     );
     text.color = color;
     return text;
 };
 
-HelpScreenMorph.prototype.createRichParagraph = function (str, size, color, italic) {
+HelpScreenMorph.prototype.createRichParagraph = function (
+    str, size, color, italic
+) {
     var text = new RichTextMorph(
-        str, size, 'serif', false, italic, null, null, 'Baskerville'
+        str, size, 'serif', false, italic, null, null,
+        HelpScreenMorph.prototype.font
     );
     text.color = color;
     return text;
