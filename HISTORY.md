@@ -6,12 +6,14 @@
     * export pen trails as SVG
     * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
 * **Notable Changes:**
+    * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
 * **Notable Fixes:**
 * **Translation Updates:**
     * German
 
 ### 2019-12-05
 * threads: set the rotation point of "pen vectors" costumes to the position of the sprite that creates them
+* objects: set the rotation point of "pen trails" costumes to the position of the sprite that creates them
 
 ### 2019-12-03
 * objects, blocks, threads, gui: added "log pen vectors" session setting

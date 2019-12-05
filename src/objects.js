@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-December-03';
+modules.objects = '2019-December-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -5299,6 +5299,9 @@ SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
         this.newCostumeName(localize('Costume'))
     );
     cst.shrinkWrap();
+    cst.rotationCenter = cst.rotationCenter.translateBy(
+        new Point(this.xPosition(), -this.yPosition())
+    );
     return cst;
 };
 
