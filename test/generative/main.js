@@ -32,7 +32,10 @@ async function runTest(driver, options) {
     let undoCount = 0;
 
     while (remainingActions--) {
-        await tester.act();
+        const action = await tester.act();
+        if (options.verbose) {
+            console.log(action);
+        }
         await waitUntilActionsSettled(SnapActions);
 
         // Test that the last action can be undone (and redone)
@@ -89,6 +92,7 @@ function getOptions() {
     opts.width = opts.width || document.body.getBoundingClientRect().width;
     opts.height = opts.height || document.body.getBoundingClientRect().height;
     opts.count = opts.count || -1;
+    opts.verbose = opts.verbose === 'true' || opts.verbose === '1';
 
     return opts;
 }
