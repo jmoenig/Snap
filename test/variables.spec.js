@@ -13,10 +13,10 @@ describe('variables', function() {
 
                 // serialize/deserialize the event
                 SnapUndo.reset();
-                serializer.loadReplayHistory(xml);
+                const allEvents = serializer.loadReplayHistory(xml);
 
                 // undo the last event
-                var event = SnapUndo.getInverseEvent(SnapUndo.allEvents.pop());
+                const event = SnapUndo.getInverseEvent(allEvents.pop());
                 return SnapActions.applyEvent(event);
             });
     });

@@ -57,7 +57,7 @@ BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas*/
+normalizeCanvas, SnapUndo*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -479,7 +479,14 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
 SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     // private
     var myself = this,
-        project = {sprites: {}},
+        project = {
+            sprites: {},
+            undo: {
+                allEvents: [],
+                eventHistory: {},
+                undoCount: {},
+            }
+        },
         model,
         nameID;
 
@@ -513,7 +520,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     model.globalVariables = model.project.childNamed('variables');
     project.globalVariables = new VariableFrame();
     project.collabStartIndex = +(model.project.attributes.collabStartIndex || 0);
-    this.loadReplayHistory(xmlNode.childNamed('replay'));
+    project.undo.allEvents = this.loadReplayHistory(xmlNode.childNamed('replay'));
 
     /* Stage */
 
@@ -737,17 +744,21 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
 
 SnapSerializer.prototype.loadReplayHistory = function (xml) {
     var queue = xml ? xml.children : [],
+        allEvents = [],
         event;
 
     for (var e = queue.length; e--;) {
         event = this.parseEvent(null, queue[e], true);
-        SnapUndo.allEvents.unshift(event);
+        allEvents.unshift(event);
     }
+
+    return allEvents;
 };
 
 SnapSerializer.prototype.loadHistory = function (model) {
     var queues = model ? model.children : [],
         queue,
+        undo = this.project.undo,
         event,
         id,
         rIndex,
@@ -755,19 +766,19 @@ SnapSerializer.prototype.loadHistory = function (model) {
 
     for (var i = queues.length; i--;) {
         id = queues[i].attributes.id;
-        rIndex = SnapUndo.allEvents.length - 1;
-        SnapUndo.undoCount[id] = +queues[i].attributes['undo-count'] || 0;
-        SnapUndo.eventHistory[id] = [];
+        rIndex = undo.allEvents.length - 1;
+        undo.undoCount[id] = +queues[i].attributes['undo-count'] || 0;
+        undo.eventHistory[id] = [];
         queue = queues[i].children;
         for (var e = queue.length; e--;) {
             eventId = +queue[e].attributes.id;
-            while (rIndex >= 0 && SnapUndo.allEvents[rIndex].id !== eventId) {
+            while (rIndex >= 0 && undo.allEvents[rIndex].id !== eventId) {
                 rIndex--;
             }
             if (rIndex >= 0) {
-                event = SnapUndo.allEvents[rIndex];
+                event = undo.allEvents[rIndex];
                 event.owner = id;
-                SnapUndo.eventHistory[id].unshift(event);
+                undo.eventHistory[id].unshift(event);
             } else {
                 console.error('Could not load historical event from replay:', queue[e]);
             }
@@ -1768,6 +1779,10 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //})
 
     ide.world().keyboardReceiver = project.stage;
+
+    SnapUndo.allEvents = project.undo.allEvents;
+    SnapUndo.eventHistory = project.undo.eventHistory;
+    SnapUndo.undoCount = project.undo.undoCount;
 
     return project;
 };
