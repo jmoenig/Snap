@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2019-12-07
+* threads: turn "log pen trails" off when loading or creating a new project
+
 ### 2019-12-05
 * threads: set the rotation point of "pen vectors" costumes to the position of the sprite that creates them
 * objects: set the rotation point of "pen trails" costumes to the position of the sprite that creates them
