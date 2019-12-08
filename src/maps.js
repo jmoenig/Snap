@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-June-06';
+modules.maps = '2019-October-28';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -287,7 +287,7 @@ WorldMap.prototype.render = function () {
         }
     }
 
-    this.canvas = newCanvas(this.extent, true);
+    this.canvas = newCanvas(this.extent, true, this.canvas);
     ctx = this.canvas.getContext('2d');
     for (x = 0; x < tileGrid.x; x += 1) {
         for (y = 0; y < tileGrid.y; y += 1) {

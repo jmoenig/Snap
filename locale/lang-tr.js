@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2018 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -181,11 +181,11 @@ SnapTranslator.dict.tr = {
     'language_name':
         'Türkçe', // the name as it should appear in the language menu (Dil menüsünde görünmesi gereken isim)
     'language_translator':
-        'Hakan Atas - www.3drobolab.com, Turgut Güneysu', // your name for the Translators tab (Çevirenlerin isimleri)
+        'Hakan Atas - www.3drobolab.com, Turgut Güneysu', // your name for the Translators tab
     'translator_e-mail':
         'hakanatas@gmail.com, tguneysu@msn.com, mustafaipekbayrak@gmail.com', // optional (Mail adresleri)
     'last_changed':
-        '2019-01-22', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
+        '2019-06-30', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
 
     // GUI
     // control bar:
@@ -324,9 +324,9 @@ SnapTranslator.dict.tr = {
     'if on edge, bounce':
         'kenardaysan sek',
     'x position':
-        'x-pozisyonu',
+        'x-konumu',
     'y position':
-        'y-pozisyonu',
+        'y-konumu',
     'direction':
         'yön',
 
@@ -337,6 +337,8 @@ SnapTranslator.dict.tr = {
         'sonraki kostüm',
     'costume #':
         'kostüm #',
+    'costume name':
+        'kostüm adı',		
     'say %s for %n secs':
         '%s de %n saniye',
     'say %s':
@@ -349,6 +351,10 @@ SnapTranslator.dict.tr = {
         'Merhaba!',
     'Hmm...':
         'Hmm...',
+    '%img of costume %cst':
+        '%img kostümünün: %cst',
+    'stretch %cst x: %n y: %n %':
+        'esnet %cst x: %n y: %n %',						   
     'change %eff effect by %n':
         '%eff etkisini %n değiştir',
     'set %eff effect to %n':
@@ -356,15 +362,17 @@ SnapTranslator.dict.tr = {
     'clear graphic effects':
         'görsel etkileri temizle',
     'change size by %n':
-        'büyüklüğü %n değiştir',
+        'boyutu %n değiştir',
     'set size to %n %':
-        'büyüklüğü % %n yap',
+        'boyutu % %n yap',
     'size':
-        'büyüklük',
+        'boyut',
     'show':
         'göster',
     'hide':
         'gizle',
+    'shown?':
+        'görünüyor mu?',		
     'go to front':
         'öne git',
     'go to %layer layer':
@@ -383,6 +391,10 @@ SnapTranslator.dict.tr = {
     'alert %mult%s':
         'uyarı: %mult%s',
 
+    'pixels':
+        'pikseller',
+    'current':
+        'şu anki',				  
     // sound:
     'play sound %snd':
         '%snd sesini çal',
@@ -392,6 +404,20 @@ SnapTranslator.dict.tr = {
         'tüm sesleri durdur',
     'rest for %n beats':
         '%n vuruş sus',
+    'play sound %snd at %rate Hz':
+        '%snd sesini %rate Hz de çal',
+	'%aa of sound %snd':
+        '%aa sesinin: %snd',
+    'duration':
+        'süresi (sn)',
+    'length':
+        'örnekleme sayısı',
+    'number of channels':
+        'kanal sayısı',
+	'sample rate':
+        'örnekleme hızı',
+	'samples':
+        'örneklemeleri',
     'play note %note for %n beats':
         '%note notasını %n vuruş çal',
     'set instrument to %inst':
@@ -402,7 +428,24 @@ SnapTranslator.dict.tr = {
         'tempoyu %n yap',
     'tempo':
         'tempo',
-
+    'change volume by %n':
+        'ses seviyesini %n değiştir',
+    'set volume to %n %':
+        'ses seviyesini % %n yap',
+	'volume':
+		'ses seviyesi',
+    'change balance by %n':
+        'balansı %n değiştir',
+    'set balance to %n':
+        'balansı %n yap',
+    'balance':
+        'balans',
+    'play frequency %n Hz':
+        '%n Hz frekansı çal',
+    'stop frequency':
+        'frekans çalmayı durdur',
+    'play %n Hz for %n secs':
+        '%n Hz frekansı %n sn çal',
     // "instruments", i.e. wave forms
     '(1) sine':
         '(1) Sinus',
@@ -421,16 +464,22 @@ SnapTranslator.dict.tr = {
         'kalemi bastır',
     'pen up':
         'kalemi kaldır',
+    'pen down?':
+        'kalem basılı mı?',						  
     'set pen color to %clr':
         'kalemin rengini %clr yap',
-    'change pen color by %n':
-        'kalemin rengini %n değiştir',
-    'set pen color to %n':
-        'kalemin rengini %n yap',
+    'set background color to %clr':
+        'arka plan rengini %clr yap',
     'change pen %hsva by %n':
         'Kalemin %hsva  %n değiştir',
+    'change background %hsva by %n':
+        'arka plan %hsva  %n değiştir',
     'set pen %hsva to %n':
         'Kalemin %hsva  %n yap',
+    'set background %hsva to %n':
+        'arka plan %hsva  %n yap',
+    'pen %pen':
+        'kalemin %pen',					   
     'change pen size by %n':
         'kalemin kalınlığını %n değiştir',
     'set pen size to %n':
@@ -439,14 +488,15 @@ SnapTranslator.dict.tr = {
         'damgala',
     'fill':
         'doldur',
-
-
-
+    'write %s size %n':
+        '%s yaz %n boyutunda',
+    'paste on %spr':
+        '%spr ye yapıştır',
     // control:
     'when %greenflag clicked':
         '%greenflag tıklanınca',
     'when %keyHat key pressed':
-        '%keyHat tuşu basılınca',
+        '%keyHat tuşuna basılınca',
     'when I am %interaction':
         'kukla %interaction zaman',
     'clicked':
@@ -483,32 +533,36 @@ SnapTranslator.dict.tr = {
         '%n sn bekle',
     'wait until %b':
         '%b olana kadar bekle',
-    'forever %c':
-        'sürekli %c',
-    'repeat %n %c':
-        'tekrarla %n kere %c',
-    'repeat until %b %c':
-        'tekrarla %b olana kadar %c',
+    'forever %loop':
+        'sürekli tekrarla %loop',
+    'repeat %n %loop':
+        '%n kere tekrarla %loop',
+    'repeat until %b %loop':
+        '%b olana kadar tekrarla %loop',
+    'for %upvar = %n to %n %cla':
+        '%upvar = %n den %n kadar tekrarla %cla',				
     'if %b %c':
         'eğer %b %c',
     'if %b %c else %c':
         'eğer %b %c değilse %c',
+    'if %b then %s else %s':
+        'eğer %b bunu yap %s değilse %s',						
     'report %s':
         'bildir %s',
     'stop %stopChoices':
         'durdur %stopChoices',
     'all':
-        'tümü',
+        'tümünü',
     'this script':
-        'bu betik',
+        'bu betiği',
     'this block':
-        'bu blok',
+        'bu bloğu',
     'stop %stopOthersChoices':
         'durdur %stopOthersChoices',
     'all but this script':
-        'bu betik hariç diğerleri',
+        'bu betik hariç diğerlerini',
     'other scripts in sprite':
-        'bu kukla içindeki diğer betikler',
+        'bu kuklanın diğer betikleri',
     'pause all %pause':
         'tümünü beklet %pause',
     'run %cmdRing %inputs':
@@ -528,15 +582,15 @@ SnapTranslator.dict.tr = {
     'create a clone of %cln':
         '%cln klonunu oluştur',
     'a new clone of %cln':
-        '%cln in yeni bir klonu',
+        '%cln yeni bir klonu',
     'myself':
-        'kendim',
+        'kendimin',
     'delete this clone':
         'bu klonu sil',
     'tell %spr to %cmdRing %inputs':
         'söyle %spr bunu yapsın %cmdRing  %inputs',
     'ask %spr for %repRing %inputs':
-        'sor %spr bunun cevabı %repRing %inputs',
+        'sor %spr bunun cevabını %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -563,8 +617,8 @@ SnapTranslator.dict.tr = {
         '%rel buna: %dst',
     'distance':
         'mesafe',
-//    '%asp at %loc' :
-//        '%asp bei %loc',
+    '%asp at %loc' :
+        '%asp konumunda: %loc',
     'sprites' :
         'kuklalar',
     'reset timer':
@@ -576,12 +630,18 @@ SnapTranslator.dict.tr = {
         '%att bunun: %spr',
     'my %get':
         'benim %get',
+    'object %self':
+        '%self nesnesi',					  
     'http:// %s':
         'http:// %s',
-    'turbo mode?':
-        'turbo mod?',
-    'set turbo mode to %b':
-        'turbo modu %b yap',
+    'turbo mode':
+        'turbo mod',
+    'flat line ends':
+        'düz çizgi bitimleri',
+    'is %setting on?':
+        '%setting seçimi ne?',		   
+    'set %setting to %b':
+        '%setting ayarını %b yap',
     'current %dates':
         'şu anki %dates',
     'year':
@@ -600,13 +660,50 @@ SnapTranslator.dict.tr = {
         'saniye',
     'time in milliseconds':
         'milisaniye',
-
+    'microphone %audio':
+        'Mikrofon %audio',
+    'volume':
+        'ses seviyesi',
+    'note':
+        'nota',
+    'frequency':
+        'frekans',
+    'samples':
+        'örneklemeler',
+    'sample rate':
+        'örnekleme hızı',
+    'spectrum':
+        'spektrum',
+    'resolution':
+        'çözünürlük',
+    'Microphone resolution...':
+        'Mikrofon çözünürlüğü...',
+    'Microphone':
+        'Mikrofon',
+    'low':
+        'alçak',
+    'high':
+        'yüksek',
+    'max':
+        'maksimum',
+    'video %vid on %self':
+        'Video %vid bunun: %self',
+    'motion':
+        'klipi',
+    'snap':
+        'karesi',
+    'set video transparency to %n':
+        'video saydamlığını %n yap' ,
+    'video capture':
+        'video kaydetme',
+    'mirror video':
+        'video yansı görüntü',
     'filtered for %clr':
         '%clr için filtrele',
     'stack size':
         'yığıt boyutu',
     'frames':
-        'çerçeveler',
+        'kareler',
 
     // operators:
     '%n mod %n':
@@ -638,7 +735,7 @@ SnapTranslator.dict.tr = {
     'letter %idx of %s':
         '%idx harfi bunun: %s',
     'length of %s':
-        '%s in uzunluğu',
+        '%s kaç harf',
     'unicode of %s':
         '%s harfinin unicode değeri',
     'unicode %n as letter':
@@ -652,7 +749,7 @@ SnapTranslator.dict.tr = {
     'compile %repRing':
         'derle %repRing',
     'type of %s':
-        '%s un tipi',
+        '%s tipi',
 
     // variables:
     'Make a variable':
@@ -680,18 +777,42 @@ SnapTranslator.dict.tr = {
     // lists:
     'list %exp':
         'liste %exp',
+    'numbers from %n to %n':
+        '%n - %n arası sayılar',
     '%s in front of %l':
         '%s i %l en öne koy',
     'item %idx of %l':
         'öğe %idx  %l listesinin',
     'all but first of %l':
-        '%l in ilk elemanı hariç tümü',
+        '%l nin ilk elemanı hariç tümü',
     'length of %l':
         '%l nin uzunluğu',
     '%l contains %s':
-        '%l %s i içeriyor',
+        '%l %s i içeriyor mu?',
     'thing':
         'şey',
+    'is %l empty?':
+        '%l listesi boş mu?',
+    'map %repRing over %l':
+        '%repRing bildireni %l listesine uygula',
+    'keep items %predRing from %l':
+        '%predRing karşılaştırmasını %l listesine uygula',
+    'find first item %predRing in %l':
+        '%predRing karşılaştırmasına uyan %l listesinin ilk öğesi',
+    'combine %l using %repRing':
+        '%l listesinin %repRing bildirenine uyanlarını birleştir',
+//    '%blitz map %repRing over %l':
+//        '%blitz wende %repRing an auf %l',
+//    '%blitz keep items %predRing from %l':
+//        '%blitz behalte Elemente, die %predRing aus %l',
+//    '%blitz find first item %predRing in %l':
+//        '%blitz finde das erste Element, das %predRing in %l',
+//    '%blitz combine %l using %repRing':
+//        '%blitz kombiniere die Elemente von %l mit %repRing',
+    'for each %upvar in %l %cla':
+        'tekrarla her %upvar için %l listesinin %cla',
+    'item':
+        'öğesi',										  
     'add %s to %l':
         '%s i %l ye ekle',
     'delete %ida of %l':
@@ -904,7 +1025,7 @@ SnapTranslator.dict.tr = {
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         'mobil araçlar için\nsanal klavye desteğini\nkaldırmak için seçimi kaldırın',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'mobil araçlar için\nsanal klavye desteğini\naktifleştirmek için seçim yapın',
+        'mobil araçlarin sanal klavye desteğini\naktifleştirmek için seçim yapın',
     'Input sliders':
         'Girdi sürgüleri',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1002,6 +1123,10 @@ SnapTranslator.dict.tr = {
         'yardım...',
     'relabel...':
         'yeniden adlandır...',
+    'compile':
+        'derle',
+    'uncompile':
+        'derlemeyi geri al',
     'duplicate':
         'kopyala',
     'make a copy\nand pick it up':
@@ -1046,7 +1171,9 @@ SnapTranslator.dict.tr = {
     'edit the costume\'s\nrotation center':
         'kostümün dönme\nmerkezini düzenle',
     'rotate':
-        'Dön',
+        'Dön',			  
+    'stick to':			   
+        'kuklaya bağla',
     'detach from':
         'kukladan ayır: ',
     'detach all parts':
@@ -1190,6 +1317,12 @@ SnapTranslator.dict.tr = {
         'Örnekler',
     'Share':
         'Paylaş',
+    'Unshare':
+        'Paylaşma',
+    'Publish':
+        'Yayımla',
+    'Unpublish':
+        'Yayımlama',			  
     'Updating\nproject list...':
         'Proje listesi güncelleniyor...',
     'Recover':
@@ -1268,6 +1401,10 @@ SnapTranslator.dict.tr = {
         'dikey çevir \u2195',
     'Primary color      Secondary color':
         '1ci Renk               2ci Renk',
+    'Edge color\n(left click)':
+        'Kenar rengi\n(sol tıkla)',
+    'Fill color\n(right click)':
+        'Doldurma rengi\n(sağ tıkla)',		
     'Top':
         'Üst',
     'Bottom':
@@ -1315,7 +1452,7 @@ SnapTranslator.dict.tr = {
     'rename all...':
         'tümünün adını değiştir...',
     'rename all blocks that\naccess this variable':
-        'bu bloğu kullanan tüm blokların adını değiştir',
+        'bu değişkeni kullanan tüm blokların adını değiştir',
 
     // block dialog
     'Change block':
@@ -1418,6 +1555,10 @@ SnapTranslator.dict.tr = {
         'sürgü en yüksek...',
     'import...':
         'içeri aktar...',
+    'raw data...':
+        'işlenmemiş veri...',
+    'import without attempting to\nparse or format data':
+        'veriyi ayrıştırmaya veya \nbiçimlendirmeye çalışmadan içe aktar',						   
     'Slider minimum value':
         'Sürgünün en düşük değeri',
     'Slider maximum value':
@@ -1451,11 +1592,11 @@ SnapTranslator.dict.tr = {
 
     // collision detection
     'mouse-pointer':
-        'fare-imlecine',
+        'fare-imleci',
     'edge':
         'kenara',
     'pen trails':
-        'kalem izlerine',
+        'kalem izleri',
     'center':
         'orta noktaya',
 
@@ -1477,8 +1618,6 @@ SnapTranslator.dict.tr = {
     'Record a new sound':
         'Yeni bir ses kaydedin',
 
-
-
     // graphical effects
     'color':
         'renk',
@@ -1497,7 +1636,7 @@ SnapTranslator.dict.tr = {
     'brightness':
         'parlaklık',
     'transparency':
-        'şeffaflık',
+        'saydamlık',
     'ghost':
         'şeffaflık',
     'negative':
@@ -1629,6 +1768,8 @@ SnapTranslator.dict.tr = {
     // delimiters
     'letter':
         'harf',
+    'word':
+        'kelime',			 
     'whitespace':
         'harf olmayan',
     'line':
@@ -1647,6 +1788,8 @@ SnapTranslator.dict.tr = {
         'Mantıksal',
     'list':
         'liste',
+    'sound':
+        'ses',		
     'command':
         'komut',
     'reporter':
@@ -1676,6 +1819,8 @@ SnapTranslator.dict.tr = {
         'bağlı olduğum',
     'parent':
         'üst öğem',
+    'temporary?':
+        'geçici?',					 
     'children':
         'alt öğem',
     'clones':
@@ -1683,7 +1828,11 @@ SnapTranslator.dict.tr = {
     'other clones':
         'öteki klonlar',
     'dangling?':
-        'serbest dönebilmem?',
+        'serbest dönebilir?',
+    'draggable?':
+        'sürüklenebilir ayarım?',
+    'rotation style':
+        'dönme tipi',		   
     'rotation x':
         'dönme x',
     'rotation y':
@@ -1693,7 +1842,9 @@ SnapTranslator.dict.tr = {
     'center y':
         'merkez y',
     'name':
-        'adım',
+        'adı',
+    'costume':
+        'kostüm',		
     'stage':
         'sahnem',
     'costumes':
@@ -1702,6 +1853,12 @@ SnapTranslator.dict.tr = {
         'seslerim',
     'scripts':
         'betiklerim',
+    'width':
+        'genişliği',
+    'height':
+        'yüksekliği',				
+    'pixels':
+        'pikselleri',				
 
     // inheritance
     'inherited':

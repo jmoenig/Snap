@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2019-April-05';
+modules.widgets = '2019-October-16';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1565,6 +1565,7 @@ DialogBoxMorph.prototype.inform = function (
         this.key = 'inform' + title + textString;
     }
 
+    txt.enableLinks = true; // let the user click on URLs to open in new tab
     this.labelString = title;
     this.createLabel();
     if (pic) {this.setPicture(pic); }
