@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-November-15';
+modules.lists = '2019-December-08';
 
 var List;
 var ListWatcherMorph;
@@ -425,7 +425,7 @@ List.prototype.asCSV = function () {
         rows = [];
     
     function encodeCell(atomicValue) {
-        var string = atomicValue.toString(),
+        var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
         if (string.indexOf('\"') ===  -1 &&
                 (string.indexOf('\n') === -1) &&

@@ -8,8 +8,12 @@
 * **Notable Changes:**
     * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
 * **Notable Fixes:**
+    * support null-serialization in list-csv conversions
 * **Translation Updates:**
     * German
+
+### 2019-12-08
+* lists: support null-serialization in list-csv conversions
 
 ### 2019-12-07
 * threads: turn "log pen trails" off when loading or creating a new project
