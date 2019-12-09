@@ -12,6 +12,9 @@
 * **Translation Updates:**
     * German
 
+### 2019-12-09
+* store: save and restore "log pen trails" setting in project file
+
 ### 2019-12-08
 * lists: support null-serialization in list-csv conversions
 
