@@ -24,6 +24,7 @@
         <script type="text/javascript" src="polyfill.js"></script>
         <script type="text/javascript" src="morphic.js"></script>
         <script type="text/javascript" src="locale.js"></script>
+        <script type="text/javascript" src="video.js"></script>
         <script type="text/javascript" src="widgets.js"></script>
         <script type="text/javascript" src="blocks.js"></script>
         <script type="text/javascript" src="blocks-ext.js"></script>

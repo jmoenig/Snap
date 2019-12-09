@@ -1817,6 +1817,65 @@ Process.prototype.reportIsFastTracking = function () {
     return false;
 };
 
+Process.prototype.doSetGlobalFlag = function (name, bool) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    name = this.inputOption(name);
+    this.assertType(bool, 'Boolean');
+    switch (name) {
+    case 'turbo mode':
+        this.doSetFastTracking(bool);
+        break;
+    case 'flat line ends':
+        SpriteMorph.prototype.useFlatLineEnds = bool;
+        break;
+    case 'video capture':
+        if (bool) {
+            stage.startVideo();
+        } else {
+            stage.stopProjection();
+        }
+        break;
+    case 'mirror video':
+        stage.mirrorVideo = bool;
+        break;
+    }
+};
+
+Process.prototype.reportGlobalFlag = function (name) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    name = this.inputOption(name);
+    switch (name) {
+    case 'turbo mode':
+        return this.reportIsFastTracking();
+    case 'flat line ends':
+        return SpriteMorph.prototype.useFlatLineEnds;
+    case 'video capture':
+        return !isNil(stage.projectionSource);
+    case 'mirror video':
+        return stage.mirrorVideo;
+    default:
+        return '';
+    }
+};
+
+Process.prototype.doSetFastTracking = function (bool) {
+    var ide;
+    if (!this.reportIsA(bool, 'Boolean')) {
+        return;
+    }
+    if (this.homeContext.receiver) {
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        if (ide) {
+            if (bool) {
+                ide.startFastTracking();
+            } else {
+                ide.stopFastTracking();
+            }
+        }
+    }
+};
+
+
 Process.prototype.doSetFastTracking = function (bool) {
     var ide;
     if (!this.reportIsA(bool, 'Boolean')) {
@@ -2081,6 +2140,232 @@ Process.prototype.doStopAllSounds = function () {
         });
         stage.stopAllActiveSounds();
     }
+};
+
+Process.prototype.doPlaySoundAtRate = function (name, rate) {
+    var sound, samples, ctx, gain, pan, source, rcvr;
+
+    if (!(name instanceof List)) {
+        sound = name instanceof Sound ? name
+            : (typeof name === 'number' ? this.blockReceiver().sounds.at(name)
+                : detect(
+                    this.blockReceiver().sounds.asArray(),
+                    function (s) {return s.name === name.toString(); }
+            )
+        );
+        if (!sound.audioBuffer) {
+            this.decodeSound(sound);
+            return;
+        }
+        samples = this.reportGetSoundAttribute('samples', sound);
+    } else {
+        samples = name;
+    }
+
+    rcvr = this.blockReceiver();
+    ctx = rcvr.audioContext();
+    gain = rcvr.getGainNode();
+    pan = rcvr.getPannerNode();
+    source = this.encodeSound(samples, rate);
+    rcvr.setVolume(rcvr.volume);
+    source.connect(gain);
+    if (pan) {
+        gain.connect(pan);
+        pan.connect(ctx.destination);
+        rcvr.setPan(rcvr.pan);
+    } else {
+        gain.connect(ctx.destination);
+    }
+    source.pause = source.stop;
+    source.ended = false;
+    source.onended = function () {this.ended = true; };
+    source.start();
+    rcvr.parentThatIsA(StageMorph).activeSounds.push(source);
+    return source;
+};
+
+Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
+    var sound = soundName instanceof Sound ? soundName
+            : (typeof soundName === 'number' ?
+                    this.blockReceiver().sounds.at(soundName)
+                : (soundName instanceof List ? this.encodeSound(soundName)
+                    : detect(
+                        this.blockReceiver().sounds.asArray(),
+                        function (s) {return s.name === soundName.toString(); }
+                    )
+                )
+            ),
+        option = this.inputOption(choice);
+
+    if (option === 'name') {
+        return sound.name;
+    }
+
+    if (!sound.audioBuffer) {
+        this.decodeSound(sound);
+        return;
+    }
+
+    switch (option) {
+    case 'samples':
+        if (!sound.cachedSamples) {
+            sound.cachedSamples = function (sound) {
+                var buf = sound.audioBuffer,
+                    result, i;
+                if (buf.numberOfChannels > 1) {
+                    result = new List();
+                    for (i = 0; i < buf.numberOfChannels; i += 1) {
+                        result.add(new List(buf.getChannelData(i)));
+                    }
+                    return result;
+                }
+                return new List(buf.getChannelData(0));
+            } (sound);
+        }
+        return sound.cachedSamples;
+    case 'sample rate':
+        return sound.audioBuffer.sampleRate;
+    case 'duration':
+        return sound.audioBuffer.duration;
+    case 'length':
+        return sound.audioBuffer.length;
+    case 'number of channels':
+        return sound.audioBuffer.numberOfChannels;
+    default:
+        return 0;
+    }
+};
+
+Process.prototype.decodeSound = function (sound, callback) {
+    // private - callback is optional and invoked with sound as argument
+    var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx,
+        myself = this;
+    if (sound.audioBuffer) {
+        return (callback || nop)(sound);
+    }
+    if (!sound.isDecoding) {
+        base64 = sound.audio.src.split(',')[1];
+        binaryString = window.atob(base64);
+        len = binaryString.length;
+        bytes = new Uint8Array(len);
+        for (i = 0; i < len; i += 1)        {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        arrayBuffer = bytes.buffer;
+        audioCtx = Note.prototype.getAudioContext();
+        sound.isDecoding = true;
+        audioCtx.decodeAudioData(
+            arrayBuffer,
+            function(buffer) {
+                sound.audioBuffer = buffer;
+                sound.isDecoding = false;
+            },
+            function (err) {
+                sound.isDecoding = false;
+                myself.handleError(err);
+            }
+        );
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.encodeSound = function (samples, rate) {
+    // private
+    var rcvr = this.blockReceiver(),
+        ctx = rcvr.audioContext(),
+        channels = (samples.at(1) instanceof List) ? samples.length() : 1,
+        frameCount = (channels === 1) ?
+            samples.length()
+            : samples.at(1).length(),
+        arrayBuffer = ctx.createBuffer(channels, frameCount, +rate || 44100),
+        i,
+        source;
+
+    if (!arrayBuffer.copyToChannel) {
+        arrayBuffer.copyToChannel = function (src, channel) {
+            var buffer = this.getChannelData(channel);
+            for (i = 0; i < src.length; i += 1) {
+                buffer[i] = src[i];
+            }
+        };
+    }
+    if (channels === 1) {
+        arrayBuffer.copyToChannel(
+            Float32Array.from(samples.asArray()),
+            0,
+            0
+        );
+    } else {
+        for (i = 0; i < channels; i += 1) {
+            arrayBuffer.copyToChannel(
+                Float32Array.from(samples.at(i + 1).asArray()),
+                i,
+                0
+            );
+        }
+    }
+    source = ctx.createBufferSource();
+    source.buffer = arrayBuffer;
+    source.audioBuffer = source.buffer;
+    return source;
+};
+
+// Process audio input (interpolated)
+
+Process.prototype.reportAudio = function (choice) {
+    var stage = this.blockReceiver().parentThatIsA(StageMorph),
+        selection = this.inputOption(choice);
+    if (selection === 'resolution') {
+        return stage.microphone.binSize();
+    }
+    if (selection === 'modifier') {
+        return stage.microphone.modifier;
+    }
+    if (stage.microphone.isOn()) {
+        switch (selection) {
+        case 'volume':
+            return stage.microphone.volume * 100;
+        case 'frequency':
+            return stage.microphone.pitch;
+        case 'note':
+            return stage.microphone.note;
+        case 'samples':
+            return new List(stage.microphone.signals);
+        case 'sample rate':
+            return stage.microphone.audioContext.sampleRate;
+        case 'output':
+            return new List(stage.microphone.output);
+        case 'spectrum':
+            return new List(stage.microphone.frequencies);
+        default:
+            return null;
+        }
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.setMicrophoneModifier = function (modifier) {
+    var stage = this.blockReceiver().parentThatIsA(StageMorph),
+        invalid = [
+            'sprite',
+            'stage',
+            'list',
+            'costume',
+            'sound',
+            'number',
+            'text',
+            'Boolean'
+        ];
+    if (!modifier || contains(invalid, this.reportTypeOf(modifier))) {
+        stage.microphone.modifier = null;
+        stage.microphone.stop();
+        return;
+    }
+    stage.microphone.modifier = modifier;
+    stage.microphone.compiledModifier = this.reportCompiled(modifier, 1);
+    stage.microphone.compilerProcess = this;
 };
 
 // Process user prompting primitives (interpolated)
@@ -3348,6 +3633,58 @@ Process.prototype.reportDate = function (datefn) {
         result += 1;
     }
     return result;
+};
+
+// Process video motion detection primitives
+
+Process.prototype.doSetVideoTransparency = function(factor) {
+    var stage;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.projectionTransparency = Math.max(0, Math.min(100, factor));
+        }
+    }
+};
+
+Process.prototype.reportVideo = function(attribute, name) {
+    var thisObj = this.blockReceiver(),
+        stage = thisObj.parentThatIsA(StageMorph),
+        thatObj = this.getOtherObject(name, thisObj, stage);
+
+    if (!stage.projectionSource || !stage.projectionSource.stream) {
+        // wait until video is turned on
+        if (!this.context.accumulator) {
+            this.context.accumulator = true; // started video
+            stage.startVideo();
+        }
+        this.pushContext('doYield');
+        this.pushContext();
+        return;
+    }
+
+    switch (this.inputOption(attribute)) {
+    case 'motion':
+        if (thatObj instanceof SpriteMorph) {
+            stage.videoMotion.getLocalMotion(thatObj);
+            return thatObj.motionAmount;
+        }
+        stage.videoMotion.getStageMotion();
+        return stage.videoMotion.motionAmount;
+    case 'direction':
+        if (thatObj instanceof SpriteMorph) {
+            stage.videoMotion.getLocalMotion(thatObj);
+            return thatObj.motionDirection;
+        }
+        stage.videoMotion.getStageMotion();
+        return stage.videoMotion.motionDirection;
+    case 'snap':
+        if (thatObj instanceof SpriteMorph) {
+            return thatObj.projectionSnap();
+        }
+        return stage.projectionSnap();
+    }
+    return -1;
 };
 
 // Process code mapping

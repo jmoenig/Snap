@@ -72,15 +72,14 @@ DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph,
 ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,
-TextMorph, contains, degrees, detect, newCanvas, nop, radians, Array,
-CursorMorph, Date, FrameMorph, HandMorph, Math, MenuMorph, Morph,
-MorphicPreferences, Object, PenMorph, Point, Rectangle, ScrollFrameMorph,
-SliderMorph, String, StringMorph, TextMorph, contains, copy, degrees, detect,
-document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
-modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
-SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
-BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
+TextMorph, contains, degrees, detect, newCanvas, nop, radians, CursorMorph,
+FrameMorph, HandMorph, MenuMorph, Morph, MorphicPreferences, PenMorph,
+Point, Rectangle, ScrollFrameMorph, SliderMorph, StringMorph, TextMorph,
+contains, copy, degrees, detect, isString, newCanvas, nop, radians, modules,
+IDE_Morph, VariableDialogMorph, Context, List, SpeechBubbleMorph, RingMorph,
+isNil, TableDialogMorph, BlockEditorMorph, BlockDialogMorph,
+PrototypeHatBlockMorph, localize, TableMorph, TableFrameMorph, normalizeCanvas,
+BooleanSlotMorph, VideoMotion*/
 
 modules.objects = '2017-January-13';
 
@@ -847,15 +846,17 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'url %s',
             defaults: ['snap.berkeley.edu']
         },
-        reportIsFastTracking: {
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'turbo mode?'
-        },
-        doSetFastTracking: {
+        doSetGlobalFlag: {
             type: 'command',
             category: 'sensing',
-            spec: 'set turbo mode to %b'
+            spec: 'set %setting to %b',
+            defaults: [['video capture']]
+        },
+        reportGlobalFlag: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'is %setting on?',
+            defaults: [['turbo mode']]
         },
         reportDate: {
             type: 'reporter',
@@ -867,6 +868,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'my %get',
             defaults: [['neighbors']]
+        },
+        reportAudio: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'microphone %audio',
+            defaults: [['volume']]
         },
 
         // Operators
@@ -1199,7 +1206,21 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'other',
             spec: 'code of %cmdRing'
-        }
+        },
+
+        // Video motion
+        doSetVideoTransparency: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'set video transparency to %n',
+            defaults: [50]
+        },
+        reportVideo: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'video %vid on %self',
+            defaults: [['motion'], ['myself']]
+        },
     };
 };
 
@@ -1230,6 +1251,16 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportFalse: {
             selector: 'reportBoolean',
             inputs: [false]
+        },
+        reportIsFastTracking: {
+            selector: 'reportGlobalFlag',
+            inputs: [['turbo mode']],
+            offset: 1
+        },
+        doSetFastTracking: {
+            selector: 'doSetGlobalFlag',
+            inputs: [['turbo mode']],
+            offset: 1
         }
     };
 };
@@ -1627,6 +1658,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
     ctx.putImageData(dta, 0, 0);
     return morph;
 };
+
 
 // SpriteMorph block instantiation
 
@@ -2037,9 +2069,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         blocks.push(block('reportURL'));
+        blocks.push(block('reportAudio'));
+        blocks.push(block('reportVideo'));
+        blocks.push(block('doSetVideoTransparency'));
         blocks.push('-');
-        blocks.push(block('reportIsFastTracking'));
-        blocks.push(block('doSetFastTracking'));
+        blocks.push(block('reportGlobalFlag'));
+        blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
         blocks.push(block('reportUsername'));
@@ -5503,6 +5538,8 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
+    this.microphone = new Microphone(); // audio input, do not persist
+
     this.graphicsValues = {
         'color': 0,
         'fisheye': 0,
@@ -5516,6 +5553,18 @@ StageMorph.prototype.init = function (globals) {
         'saturation': 0,
         'brightness': 0
     };
+
+    // projection layer - for video, maps, 3D extensions etc., transient
+    this.projectionSource = null; // offscreen DOM element for video, maps, 3D
+    this.getProjectionImage = null; // function to return a blittable image
+    this.stopProjectionSource = null; // function to turn off video stream etc.
+    this.continuousProjection = false; // turn ON for video
+    this.projectionCanvas = null;
+    this.projectionTransparency = 50;
+
+    // video motion detection, transient
+    this.mirrorVideo = true;
+    this.videoMotion = null;
 
     StageMorph.uber.init.call(this);
 
@@ -5619,6 +5668,27 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
             w,
             h
         );
+        // projection layer (webcam, maps, etc.)
+        if (this.projectionSource) {
+            ws = w / this.scale;
+            hs = h / this.scale;
+            context.save();
+            context.scale(this.scale, this.scale);
+            context.globalAlpha = 1 - (this.projectionTransparency / 100);
+            context.drawImage(
+                this.projectionLayer(),
+                sl / this.scale,
+                st / this.scale,
+                ws,
+                hs,
+                area.left() / this.scale,
+                area.top() / this.scale,
+                ws,
+                hs
+            );
+            context.restore();
+            this.version = Date.now(); // update watcher icons
+        }
 
         // pen trails
         ws = w / this.scale;
@@ -5690,6 +5760,18 @@ StageMorph.prototype.penTrailsMorph = function () {
     return morph;
 };
 
+StageMorph.prototype.projectionLayer = function () {
+    if (!this.projectionCanvas) {
+        this.projectionCanvas = newCanvas(this.dimensions, true);
+    }
+    return this.projectionCanvas;
+};
+
+StageMorph.prototype.clearProjectionLayer = function () {
+    this.projectionCanvas = null;
+    this.changed();
+};
+
 StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     // answer a new Morph containing my image filtered by aColor
     // ignore the excludedSprite, because its collision is checked
@@ -5729,6 +5811,115 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     ctx.putImageData(dta, 0, 0);
     return morph;
 };
+
+StageMorph.prototype.startVideo = function() {
+    var myself = this;
+
+    function noCameraSupport() {
+        var dialog = new DialogBoxMorph();
+        dialog.inform(
+            localize('Camera not supported'),
+            localize('Please make sure your web browser is up to date\n' +
+                'and your camera is properly configured.'),
+            this.world
+        );
+        dialog.fixLayout();
+        dialog.drawNew();
+        if (myself.projectionSource) {
+            myself.projectionSource.remove();
+            myself.projectionSource = null;
+        }
+    }
+    if (this.projectionSource) { // video capture has already been started
+        return;
+    }
+
+    this.projectionSource = document.createElement('video');
+    this.projectionSource.width = this.dimensions.x;
+    this.projectionSource.height = this.dimensions.y;
+    this.projectionSource.hidden = true;
+    document.body.appendChild(this.projectionSource);
+    if (!this.videoMotion) {
+        this.videoMotion = new VideoMotion(
+            this.dimensions.x,
+            this.dimensions.y
+        );
+    }
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                myself.getProjectionImage = myself.getVideoImage;
+                myself.stopProjectionSource = myself.stopVideo;
+                myself.continuousProjection = true;
+                myself.projectionSource.srcObject = stream;
+                myself.projectionSource.play().catch(noCameraSupport);
+                myself.projectionSource.stream = stream;
+            })
+            .catch(noCameraSupport);
+    }
+};
+
+StageMorph.prototype.getVideoImage = function () {
+    return this.projectionSource;
+};
+
+StageMorph.prototype.stopVideo = function() {
+    if (this.projectionSource && this.projectionSource.stream) {
+        this.projectionSource.stream.getTracks().forEach(
+            function (track) {track.stop(); }
+        );
+    }
+    this.videoMotion = null;
+};
+
+StageMorph.prototype.stopProjection = function() {
+    if (this.projectionSource) {
+        this.stopProjectionSource();
+        this.projectionSource.remove();
+        this.projectionSource = null;
+        this.continuousProjection = false;
+    }
+    this.clearProjectionLayer();
+};
+
+StageMorph.prototype.projectionSnap = function() {
+    var snap = newCanvas(this.dimensions, true),
+        ctx = snap.getContext('2d');
+    ctx.drawImage(this.projectionLayer(), 0, 0);
+    return new Costume(snap, this.newCostumeName(localize('snap')));
+};
+
+// StageMorph pixel access:
+
+StageMorph.prototype.getPixelColor = function (aPoint) {
+    var point, context, data;
+	if (this.trailsCanvas) {
+        point = aPoint.subtract(this.bounds.origin);
+        context = this.penTrailsMorph().image.getContext('2d');
+        data = context.getImageData(point.x, point.y, 1, 1);
+        if (data.data[3] === 0) {
+            if (this.projectionCanvas) {
+                point = point.divideBy(this.scale);
+                context = this.projectionCanvas.getContext('2d');
+                data = context.getImageData(point.x, point.y, 1, 1);
+                return new Color(
+                    data.data[0],
+                    data.data[1],
+                    data.data[2],
+                    data.data[3] / 255
+                );
+            }
+        	return StageMorph.uber.getPixelColor.call(this, aPoint);
+        }
+        return new Color(
+            data.data[0],
+            data.data[1],
+            data.data[2],
+            data.data[3] / 255
+        );
+ 	}
+};
+
 
 // StageMorph accessing
 
@@ -5877,6 +6068,39 @@ StageMorph.prototype.step = function () {
         });
         this.lastWatcherUpdate = Date.now();
     }
+
+    // projection layer update (e.g. video frame capture)
+    if (this.continuousProjection && this.projectionSource) {
+        this.updateProjection();
+    }
+};
+
+StageMorph.prototype.updateProjection = function () {
+    var context = this.projectionLayer().getContext('2d');
+    context.save();
+    if (this.mirrorVideo) {
+        context.translate(this.dimensions.x, 0);
+        context.scale(-1, 1);
+    }
+    context.drawImage(
+        this.getProjectionImage(),
+        0,
+        0,
+        this.projectionSource.width,
+        this.projectionSource.height
+    );
+    if (this.videoMotion) {
+        this.videoMotion.addFrame(
+            context.getImageData(
+                0,
+                0,
+                this.projectionSource.width,
+                this.projectionSource.height
+            ).data
+        );
+    }
+    context.restore();
+    this.changed();
 };
 
 StageMorph.prototype.stepGenericConditions = function (stopAll) {
@@ -6418,9 +6642,12 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
 
         blocks.push(block('reportURL'));
+        blocks.push(block('reportAudio'));
+        blocks.push(block('reportVideo'));
+        blocks.push(block('doSetVideoTransparency'));
         blocks.push('-');
-        blocks.push(block('reportIsFastTracking'));
-        blocks.push(block('doSetFastTracking'));
+        blocks.push(block('reportGlobalFlag'));
+        blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
         blocks.push(block('reportUsername'));
@@ -7824,6 +8051,16 @@ Note.prototype.setupContext = function () {
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
+Note.prototype.getAudioContext = function () {
+    // lazily initializes and shares the Note prototype's audio context
+    // to be used by all other Snap! objects requiring audio,
+    // e.g. the microphone, the sprites, etc.
+    if (!this.audioContext) {
+        this.setupContext();
+    }
+    return this.audioContext;
+};
+
 // Note playing
 
 Note.prototype.play = function () {
@@ -7847,6 +8084,298 @@ Note.prototype.stop = function () {
         this.oscillator.stop(0);
         this.oscillator = null;
     }
+};
+
+// Microphone /////////////////////////////////////////////////////////
+
+// I am a microphone and know about volume, note, pitch, as well as
+// signals and frequencies.
+// mostly meant to be a singleton of the stage
+// I stop when I'm not queried something for 5 seconds
+// to free up system resources
+//
+// modifying and metering output is currently experimental
+// and only fully works in Chrome. Modifiers work in Firefox, but only with
+// a significant lag, metering output is currently not supported by Firefox.
+// Safari... well, let's not talk about Safari :-)
+
+function Microphone() {
+    // web audio components:
+    this.audioContext = null; // shared with Note.prototype.audioContext
+    this.sourceStream = null;
+    this.processor = null;
+    this.analyser = null;
+
+    // parameters:
+    this.resolution = 2;
+    this.GOOD_ENOUGH_CORRELATION = 0.96;
+
+    // modifier
+    this.modifier = null;
+    this.compiledModifier = null;
+    this.compilerProcess = null;
+
+    // memory alloc
+    this.correlations = [];
+    this.wrapper = new List([0]);
+    this.outChannels = [];
+
+    // metered values:
+    this.volume = 0;
+    this.signals = [];
+    this.output = [];
+    this.frequencies = [];
+    this.pitch = -1;
+
+    // asynch control:
+    this.isStarted = false;
+    this.isReady = false;
+
+    // idling control:
+    this.isAutoStop = (location.protocol !== 'file:');
+    this.lastTime = Date.now();
+}
+
+Microphone.prototype.isOn = function () {
+    if (this.isReady) {
+        this.lastTime = Date.now();
+        return true;
+    }
+    this.start();
+    return false;
+};
+
+// Microphone shared properties
+
+Microphone.prototype.binSizes = [256, 512, 1024, 2048, 4096];
+
+// Microphone resolution
+
+Microphone.prototype.binSize = function () {
+    return this.binSizes[this.resolution - 1];
+};
+
+Microphone.prototype.setResolution = function (num) {
+    if (contains([1, 2, 3, 4], num)) {
+        if (this.isReady) {
+            this.stop();
+        }
+        this.resolution = num;
+    }
+};
+
+// Microphone ops
+
+Microphone.prototype.start = function () {
+    var myself = this;
+
+    if (this.isStarted) {return; }
+    this.isStarted = true;
+    this.isReady = false;
+    this.audioContext = Note.prototype.getAudioContext();
+
+    navigator.mediaDevices.getUserMedia(
+        {
+            "audio": {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+            "optional": []
+            },
+        }
+    ).then(function (stream) {
+        myself.setupNodes(stream);
+    }).catch(nop);
+};
+
+Microphone.prototype.stop = function () {
+    this.processor.onaudioprocess = null;
+    this.sourceStream.getTracks().forEach(function (track) {
+        track.stop();}
+    );
+    this.processor.disconnect();
+    this.analyser.disconnect();
+    this.processor = null;
+    this.analyser = null;
+    this.audioContext = null;
+    this.isReady = false;
+    this.isStarted = false;
+};
+
+// Microphone initialization
+
+Microphone.prototype.setupNodes = function (stream) {
+    this.sourceStream = stream;
+    this.createProcessor();
+    this.createAnalyser();
+    this.analyser.connect(this.processor);
+    this.processor.connect(this.audioContext.destination);
+    this.audioContext.createMediaStreamSource(stream).connect(this.analyser);
+    this.lastTime = Date.now();
+};
+
+Microphone.prototype.createAnalyser = function () {
+    var bufLength;
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.fftSize = this.binSizes[this.resolution];
+    bufLength = this.analyser.frequencyBinCount;
+    this.frequencies = new Uint8Array(bufLength);
+
+    // setup pitch detection correlations:
+    this.correlations = new Array(Math.floor(bufLength/2));
+};
+
+Microphone.prototype.createProcessor = function () {
+    var myself = this;
+    this.processor = this.audioContext.createScriptProcessor(
+        this.binSizes[this.resolution - 1]
+    );
+
+    this.processor.onaudioprocess = function (event) {
+        myself.stepAudio(event);
+    };
+
+    this.processor.clipping = false;
+    this.processor.lastClip = 0;
+    this.processor.clipLevel = 0.98;
+    this.processor.averaging = 0.95;
+    this.processor.clipLag = 750;
+};
+
+// Microphone stepping
+
+Microphone.prototype.stepAudio = function (event) {
+    var channels, i;
+    if (this.isAutoStop &&
+            ((Date.now() - this.lastTime) > 5000) &&
+            !this.modifier
+    ) {
+        this.stop();
+        return;
+    }
+
+    // signals:
+    this.signals = event.inputBuffer.getChannelData(0);
+
+    // output:
+    if (this.modifier) {
+        channels = event.outputBuffer.numberOfChannels;
+        if (this.outChannels.length !== channels) {
+            this.outChannels = new Array(channels);
+        }
+        for (i = 0; i < channels; i += 1) {
+            this.outChannels[i] = event.outputBuffer.getChannelData(i);
+        }
+        this.output = this.outChannels[0];
+    } else {
+        this.output = event.outputBuffer.getChannelData(0);
+    }
+
+    // frequency bins:
+    this.analyser.getByteFrequencyData(this.frequencies);
+
+    // pitch & volume:
+    this.pitch = this.detectPitchAndVolume(
+        this.signals,
+        this.audioContext.sampleRate
+    );
+
+    // note:
+    if (this.pitch > 0) {
+        this.note = Math.round(
+            12 * (Math.log(this.pitch / 440) / Math.log(2))
+        ) + 69;
+    }
+
+    this.isReady = true;
+    this.isStarted = false;
+};
+
+Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
+    // https://en.wikipedia.org/wiki/Autocorrelation
+    // thanks to Chris Wilson:
+    // https://plus.google.com/+ChrisWilson/posts/9zHsF9PCDAL
+    // https://github.com/cwilso/PitchDetect/
+
+    var SIZE = buf.length,
+        MAX_SAMPLES = Math.floor(SIZE/2),
+        best_offset = -1,
+        best_correlation = 0,
+        rms = 0,
+        foundGoodCorrelation = false,
+        correlations = this.correlations,
+        channels = this.outChannels.length,
+        correlation,
+        lastCorrelation,
+        offset,
+        shift,
+        i,
+        k,
+        val,
+        modified;
+
+    for (i = 0; i < SIZE; i += 1) {
+        val = buf[i];
+        if (Math.abs(val) >= this.processor.clipLevel) {
+            this.processor.clipping = true;
+            this.processor.lastClip = window.performance.now();
+        }
+        rms += val * val;
+
+        // apply modifier, if any
+        if (this.modifier) {
+            this.wrapper.contents[0] = val;
+            modified = invoke(
+                this.compiledModifier,
+                this.wrapper,
+                null,
+                null,
+                null,
+                null,
+                this.compilerProcess
+            );
+            for (k = 0; k < channels; k += 1) {
+                this.outChannels[k][i] = modified;
+            }
+        }
+    }
+    rms = Math.sqrt(rms/SIZE);
+    this.volume = Math.max(rms, this.volume * this.processor.averaging);
+    if (rms < 0.01)
+        return this.pitch;
+
+    lastCorrelation = 1;
+    for (offset = 1; offset < MAX_SAMPLES; offset += 1) {
+        correlation = 0;
+
+        for (i = 0; i < MAX_SAMPLES; i += 1) {
+            correlation += Math.abs((buf[i]) - (buf[i + offset]));
+        }
+        correlation = 1 - (correlation/MAX_SAMPLES);
+        correlations[offset] = correlation;
+        if ((correlation > this.GOOD_ENOUGH_CORRELATION)
+            && (correlation > lastCorrelation)
+        ) {
+            foundGoodCorrelation = true;
+            if (correlation > best_correlation) {
+                best_correlation = correlation;
+                best_offset = offset;
+            }
+        } else if (foundGoodCorrelation) {
+            shift = (correlations[best_offset + 1] -
+                correlations[best_offset - 1]) /
+                    correlations[best_offset];
+            return sampleRate / (best_offset + (8 * shift));
+        }
+        lastCorrelation = correlation;
+    }
+    if (best_correlation > 0.01) {
+        return sampleRate / best_offset;
+    }
+    return this.pitch;
 };
 
 // CellMorph //////////////////////////////////////////////////////////
