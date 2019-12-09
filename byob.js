@@ -2441,7 +2441,7 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
 
             if (frag.isDeleted) {
                 SnapActions.deleteBlockLabel(myself.parent.definition, myself);
-            } else {
+            } else if (frag.labelString) {
                 SnapActions.updateBlockLabel(myself.parent.definition, myself, frag);
             }
         },
