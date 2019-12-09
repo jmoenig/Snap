@@ -302,8 +302,12 @@ describe('blocks', function() {
             block.isOldBlock = true;
             await driver.expect(
                 () => {
-                    block = SnapActions.getBlockFromId(block.id);
-                    return !block.isOldBlock;
+                    try {
+                        block = SnapActions.getBlockFromId(block.id);
+                        return !block.isOldBlock;
+                    } catch (err) {  // block still being loaded
+                        return false;
+                    }
                 },
                 'Timeout while waiting for setting block zoom to take effect.'
             );
