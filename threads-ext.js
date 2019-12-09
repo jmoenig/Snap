@@ -411,21 +411,16 @@ NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
         query= {};
 
     // build a json obj
-    var isPortable = SnapActions.serializer.isSavingPortable;
     SnapActions.serializer.flush();
-    SnapActions.serializer.isSavingHistory = false;
-    SnapActions.serializer.isSavingPortable = true;
     argNames.forEach(function(name, index) {
         if (values[index] instanceof List) {
             query[name] = listToArray(values[index]);
         } else if (isObject(values[index])) {
-            query[name] = SnapActions.serializer.store(values[index]);
+            query[name] = SnapActions.serializer.getPortableXML(values[index]);
         } else {
             query[name] = values[index];
         }
     });
-    SnapActions.serializer.isSavingHistory = true;
-    SnapActions.serializer.isSavingPortable = isPortable;
     SnapActions.serializer.flush();
 
     return this.getJSFromRPCDropdown(rpc, action, query);

@@ -57,7 +57,7 @@ BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas, SnapUndo*/
+normalizeCanvas, SnapActions, copy, SnapUndo*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -79,6 +79,7 @@ function XML_Serializer() {
     this.contents = [];
     this.media = [];
     this.isCollectingMedia = false;
+    this.dependencies = null;
 }
 
 // XML_Serializer preferences settings:
@@ -118,10 +119,17 @@ XML_Serializer.prototype.store = function (object, mediaID) {
         return this.format('<ref id="@"></ref>', object[this.idProperty]);
     }
     this.add(object);
-    return object.toXML(this, mediaID).replace(
-        '~',
-        this.format('id="@"', object[this.idProperty])
-    );
+    if (this.isSavingPortable && object.toPortableXML) {
+        return object.toPortableXML(this, mediaID).replace(
+            '~',
+            this.format('id="@"', object[this.idProperty])
+        );
+    } else {
+        return object.toXML(this, mediaID).replace(
+            '~',
+            this.format('id="@"', object[this.idProperty])
+        );
+    }
 };
 
 XML_Serializer.prototype.mediaXML = function () {
@@ -318,6 +326,7 @@ XML_Serializer.prototype.flush = function () {
         delete obj[myself.idProperty];
     });
     this.contents = [];
+    this.dependencies = null;
 };
 
 XML_Serializer.prototype.flushMedia = function () {
@@ -458,12 +467,31 @@ SnapSerializer.prototype.load = function (xmlString, ide) {
     return this.loadProjectModel(this.parse(xmlString), ide);
 };
 
+SnapSerializer.prototype.getPortableXML = function (object) {
+    var isPortable = this.isSavingPortable,
+        isSavingHistory = this.isSavingHistory,
+        xml;
+
+    this.isSavingPortable = true;
+    this.isSavingHistory = false;
+    if (object.getPortableDependencies) {
+        this.dependencies = object.getPortableDependencies();
+    }
+    xml = this.store(object);
+    this.isSavingPortable = isPortable;
+    this.isSavingHistory = isSavingHistory;
+    this.dependencies = null;
+
+    return xml;
+};
+
 SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
     // public - answer a new Project represented by the given XML top node
     // show a warning if the origin apps differ
 
     var appInfo = xmlNode.attributes.app,
-        app = appInfo ? appInfo.split(' ')[0] : null;
+        app = appInfo ? appInfo.split(' ')[0] : null,
+        model;
 
     if (ide && app && app !== this.app.split(' ')[0]) {
         ide.inform(
@@ -473,7 +501,9 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
                 '\n\nand may be incompatible or fail to load here.'
         );
     }
-    return this.rawLoadProjectModel(xmlNode);
+    model = this.rawLoadProjectModel(xmlNode);
+    this.objects = {};
+    return model;
 };
 
 SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
@@ -666,8 +696,6 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         );
     }
 
-    this.objects = {};
-
     /* Watchers */
 
     model.sprites.childrenNamed('watcher').forEach(function (model) {
@@ -738,7 +766,6 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
             watcher.cellMorph.contentsMorph.handle.drawNew();
         }
     });
-    this.objects = {};
     return project;
 };
 
@@ -1800,18 +1827,21 @@ Array.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var thumbnail = normalizeCanvas(
-            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
-            true
-        ),
-        thumbdata,
+    var thumbnail,
+        thumbdata = null,
         ide = this.parentThatIsA(IDE_Morph);
 
     // catch cross-origin tainting exception when using SVG costumes
-    try {
-        thumbdata = thumbnail.toDataURL('image/png');
-    } catch (error) {
-        thumbdata = null;
+    if (!serializer.isSavingPortable) {
+        thumbnail = normalizeCanvas(
+            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+            true
+        );
+        try {
+            thumbdata = thumbnail.toDataURL('image/png');
+        } catch (error) {
+            thumbdata = null;
+        }
     }
 
     function code(key) {
@@ -1898,6 +1928,106 @@ StageMorph.prototype.toXML = function (serializer) {
     );
 };
 
+StageMorph.prototype.toPortableXML = function (serializer, mediaID) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        customBlocks = this.customBlocks,
+        globalBlocks = this.globalBlocks;
+
+    if (serializer.dependencies) {
+        customBlocks = customBlocks.filter(function(block) {
+            return serializer.dependencies.customBlocks.includes(block);
+        });
+        globalBlocks = globalBlocks.filter(function(block) {
+            return serializer.dependencies.customBlocks.includes(block);
+        });
+    }
+
+
+    function code(key) {
+        var str = '';
+        Object.keys(StageMorph.prototype[key]).forEach(
+            function (selector) {
+                str += (
+                    '<' + selector + '>' +
+                        XML_Element.prototype.escape(
+                            StageMorph.prototype[key][selector]
+                        ) +
+                        '</' + selector + '>'
+                );
+            }
+        );
+        return str;
+    }
+
+    this.removeAllClones();
+    return serializer.format(
+        '<project collabStartIndex="@" name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<stage name="@" width="@" height="@" collabId="@" ' +
+            'costume="@" tempo="@" threadsafe="@" ' +
+            'lines="@" ' +
+            'codify="@" ' +
+            'inheritance="@" ' +
+            'sublistIDs="@" ' +
+            'scheduled="@" ~>' +
+            '<pentrails>$</pentrails>' +
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<variables>%</variables>' +
+            '<blocks>%</blocks>' +
+            '<messageTypes>%</messageTypes>' +
+            '<scripts>%</scripts><sprites>%</sprites>' +
+            '</stage>' +
+            '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '<history>%</history>' +
+            '<replay>%</replay>' +
+            '</project>',
+        SnapActions.lastSeen,
+        (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
+        serializer.app,
+        serializer.version,
+        (ide && ide.projectNotes) ? ide.projectNotes : '',
+        '',
+        this.name,
+        StageMorph.prototype.dimensions.x,
+        StageMorph.prototype.dimensions.y,
+        this.id,
+        this.getCostumeIdx(),
+        this.getTempo(),
+        this.isThreadSafe,
+        SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
+        this.enableCodeMapping,
+        this.enableInheritance,
+        this.enableSublistIDs,
+        StageMorph.prototype.frameRate !== 0,
+        '',
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        serializer.store(this.variables),
+        serializer.store(customBlocks),
+        serializer.store(this.messageTypes),
+        serializer.dependencies ? '' :
+            serializer.store(this.scripts),
+        serializer.store(this.children),
+        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+            function (a, b) {return a + ' ' + b; },
+            ''
+        ),
+        code('codeHeaders'),
+        code('codeMappings'),
+        serializer.store(globalBlocks),
+        (ide && ide.globalVariables) ?
+            serializer.store(ide.globalVariables) : '',
+        '',
+        ''
+    );
+};
+
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
@@ -1967,6 +2097,82 @@ SpriteMorph.prototype.toXML = function (serializer) {
     );
 };
 
+SpriteMorph.prototype.toPortableXML = function (serializer) {
+    // TODO: Export w/o costumes and w/ only the listed variable names
+    var stage = this.parentThatIsA(StageMorph),
+        ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
+        idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        customBlocks = this.customBlocks || [];
+
+    if (serializer.dependencies) {
+        customBlocks = customBlocks.filter(function(block) {
+            return serializer.dependencies.customBlocks.includes(block);
+        });
+    }
+
+    return serializer.format(
+        '<sprite name="@" collabId="@" idx="@" x="@" y="@"' +
+            ' heading="@"' +
+            ' scale="@"' +
+            ' rotation="@"' +
+            ' draggable="@"' +
+            '%' +
+            ' costume="@" color="@,@,@" pen="@" ~>' +
+            '%' + // inheritance info
+            '%' + // nesting info
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<variables>%</variables>' +
+            '<blocks>%</blocks>' +
+            '<scripts>%</scripts>' +
+            '</sprite>',
+        this.name,
+        this.id,
+        idx,
+        this.xPosition(),
+        this.yPosition(),
+        this.heading,
+        this.scale,
+        this.rotationStyle,
+        this.isDraggable,
+        this.isVisible ? '' : ' hidden="true"',
+        this.getCostumeIdx(),
+        this.color.r,
+        this.color.g,
+        this.color.b,
+        this.penPoint,
+
+        // inheritance info
+        this.exemplar
+            ? '<inherit exemplar="' +
+                    this.exemplar.name
+                    + '"/>'
+            : '',
+
+        // nesting info
+        this.anchor
+            ? '<nest anchor="' +
+                    this.anchor.name +
+                    '" synch="'
+                    + this.rotatesWithAnchor
+                    + (this.scale === this.nestingScale ? '' :
+                            '"'
+                            + ' scale="'
+                            + this.nestingScale)
+
+                    + '"/>'
+            : '',
+
+        serializer.dependencies ? serializer.store(new List()) :
+            serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        serializer.store(this.variables),
+        !this.customBlocks ?
+                    '' : serializer.store(customBlocks),
+        serializer.dependencies ? '' : serializer.store(this.scripts)
+    );
+};
+
 Costume.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;
 
 Costume.prototype.toXML = function (serializer) {
@@ -2002,6 +2208,43 @@ Sound.prototype.toXML = function (serializer) {
 VariableFrame.prototype.toXML = function (serializer) {
     var myself = this;
     return Object.keys(this.vars).reduce(function (vars, v) {
+        var val = myself.vars[v].value,
+            dta;
+        if (myself.vars[v].isTransient) {
+            dta = serializer.format(
+                '<variable name="@" transient="true"/>',
+                v)
+            ;
+        } else if (val === undefined || val === null) {
+            dta = serializer.format('<variable name="@"/>', v);
+        } else {
+            dta = serializer.format(
+                '<variable name="@">%</variable>',
+                v,
+                typeof val === 'object' ?
+                        (isSnapObject(val) ? ''
+                                : serializer.store(val))
+                                : typeof val === 'boolean' ?
+                                        serializer.format(
+                                            '<bool>$</bool>', val
+                                        )
+                                        : serializer.format('<l>$</l>', val)
+            );
+        }
+        return vars + dta;
+    }, '');
+};
+
+VariableFrame.prototype.toPortableXML = function (serializer) {
+    var myself = this,
+        variableNames = Object.keys(this.vars);
+
+    if (serializer.dependencies) {
+        variableNames = variableNames
+            .filter(name => serializer.dependencies.variables.includes(name));
+    }
+
+    return variableNames.reduce(function (vars, v) {
         var val = myself.vars[v].value,
             dta;
         if (myself.vars[v].isTransient) {
@@ -2396,6 +2639,89 @@ Context.prototype.toXML = function (serializer) {
         this.receiver ? serializer.store(this.receiver) : '',
         this.outerContext ? serializer.store(this.outerContext) : ''
     );
+};
+
+Context.prototype.toPortableXML = function (serializer) {
+    var myself = this,
+        variables = new VariableFrame(),
+        varNames,
+        name,
+        outerContextVars,
+        xml,
+        vf;
+
+    if (this.outerContext) {
+        outerContextVars = this.outerContext.variables;
+
+        if (this.expression) {
+            varNames = [];
+            SnapActions.traverse(this.expression, function(block) {
+                name = block.blockSpec;
+                if (block.selector === 'reportGetVar' && !varNames.includes(name)) {
+                    varNames.push(name);
+                }
+            });
+
+            variables.vars = copy(this.outerContext.variables.vars);
+            varNames.forEach(function(name) {
+                vf = myself.outerContext.variables.silentFind(name) ||
+                    myself.receiver.variables.silentFind(name);
+                if (vf) {
+                    variables.vars[name] = vf.vars[name];
+                }
+            });
+            this.outerContext.variables = variables;
+        }
+    }
+
+    xml = this.toXML(serializer);
+
+    this.outerContext.variables = outerContextVars || this.outerContext.variables;
+
+    return xml;
+};
+
+Context.prototype.getPortableDependencies = function (block, visited) {
+    var dependencies,
+        name,
+        isCustomBlock;
+
+    dependencies = {
+        variables: [],
+        customBlocks: [],
+    };
+
+    if (!block) {
+        block = this.expression;
+    }
+
+    if (!visited) {
+        visited = {};
+    }
+
+    if (visited[block.id]) {
+        return dependencies;
+    }
+
+    isCustomBlock = block instanceof CustomCommandBlockMorph ||
+        block instanceof CustomReporterBlockMorph;
+
+    if (isCustomBlock) {
+        dependencies = this.getPortableDependencies(block.definition.body.expression, visited);
+    }
+
+    SnapActions.traverse(block, function(block) {
+        name = block.blockSpec;
+        if (block.selector === 'reportGetVar' &&
+            !dependencies.variables.includes(name)) {
+            dependencies.variables.push(name);
+        } else if (block.selector === 'evaluateCustomBlock' && !dependencies.customBlocks.includes(block.definition)) {
+            dependencies.customBlocks.push(block.definition);
+        }
+    });
+
+    visited[block.id] = true;
+    return dependencies;
 };
 
 // Comments

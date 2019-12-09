@@ -335,14 +335,12 @@ WebSocketManager.prototype.serializeMessage = function(message) {
             content;
 
         this.serializer.flush();
-        this.serializer.isSavingHistory = false;
         for (var i = fields.length; i--;) {
             content = message.content[fields[i]];
             if (isObject(content)) {
-                message.content[fields[i]] = this.serializer.store(content);
+                message.content[fields[i]] = this.serializer.getPortableXML(content);
             }
         }
-        this.serializer.isSavingHistory = true;
         this.serializer.flush();
     }
 
@@ -364,9 +362,7 @@ WebSocketManager.prototype.deserializeMessage = function(message) {
 };
 
 WebSocketManager.prototype.deserializeData = function(dataList) {
-    var receiver,
-        project,
-        nodes,
+    var project,
         model;
 
     SnapActions.serializer.project = {
@@ -377,13 +373,12 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
     return dataList.map(function(value) {
         if (value[0] === '<') {
             try {
+                console.log('Received serialized format:', value.length);
                 model = SnapActions.serializer.parse(value);
-                nodes = model.children;
                 project = model.allChildren().find(function(node) {
                     return node.tag === 'project';
                 });
 
-                // If the receiver is the project...
                 if (project) {
                     SnapActions.serializer.rawLoadProjectModel(project);
                 }
