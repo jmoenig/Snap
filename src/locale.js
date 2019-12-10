@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-December-03';
+modules.locale = '2019-December-10';
 
 // Global stuff
 
@@ -605,4 +605,15 @@ SnapTranslator.dict.ua = {
         'kseryj@gmail.com',
     'last_changed':
         '2018-08-21'
+};
+
+SnapTranslator.dict.sk = {
+    'language_name':
+        'Sloven\u010Dina',
+    'language_translator':
+        'Peter Luka\u010Dovi\u010D',
+    'translator_e-mail':
+        'peter_lukacovic@outlook.com',
+    'last_changed':
+        '2019-12-10'
 };

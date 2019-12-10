@@ -10,7 +10,11 @@
 * **Notable Fixes:**
     * support null-serialization in list-csv conversions
 * **Translation Updates:**
+    * NEW Slovak translation, thanks, Peter Lukacovic
     * German
+
+### 2019-12-10
+* NEW Slovak translation, thanks, Peter Lukacovic
 
 ### 2019-12-09
 * store: save and restore "log pen trails" setting in project file
