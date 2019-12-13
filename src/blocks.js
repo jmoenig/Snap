@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-December-03';
+modules.blocks = '2019-December-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2851,7 +2851,9 @@ BlockMorph.prototype.userMenu = function () {
         }
     }
 
-    // JIT-compile HOFs - experimental
+    // direct relabelling:
+    // - JIT-compile HOFs - experimental
+    // - vector pen trails
     if (
         contains(
             ['reportMap', 'reportKeep', 'reportFindFirst', 'reportCombine'],
@@ -2892,6 +2894,27 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
+            function () {
+                myself.setSelector(alternatives[myself.selector]);
+                myself.changed();
+            }
+        );
+    } else if (
+        contains(
+            ['reportPenTrailsAsCostume', 'reportPentrailsAsSVG'],
+            this.selector
+        )
+    ) {
+        alternatives = {
+            reportPenTrailsAsCostume : 'reportPentrailsAsSVG',
+            reportPentrailsAsSVG : 'reportPenTrailsAsCostume'
+        };
+        menu.addItem(
+            localize(
+                SpriteMorph.prototype.blocks[
+                    alternatives[myself.selector]
+                ].spec
+            ),
             function () {
                 myself.setSelector(alternatives[myself.selector]);
                 myself.changed();

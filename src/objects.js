@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-December-05';
+modules.objects = '2019-December-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -688,18 +688,15 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen trails'
         },
+        reportPentrailsAsSVG: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen vectors'
+        },
         doPasteOn: {
             type: 'command',
             category: 'pen',
             spec: 'paste on %spr'
-        },
-
-        // Pen - experimental primitives for development mode
-        reportPentrailsAsSVG: {
-            dev: true,
-            type: 'reporter',
-            category: 'pen',
-            spec: 'pen vectors'
         },
 
         // Control
@@ -1560,9 +1557,6 @@ SpriteMorph.prototype.blockAlternatives = {
     changeSize: ['setSize'],
     setSize: ['changeSize'],
     
-    reportPenTrailsAsCostume: ['reportPentrailsAsSVG'],
-    reportPentrailsAsSVG: ['reportPenTrailsAsCostume'],
-
     // control:
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
@@ -2328,22 +2322,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPasteOn'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportPentrailsAsSVG'));
-        }
-
-    ////////////////////////////////
 
     } else if (cat === 'control') {
 
@@ -8475,22 +8453,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPasteOn'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportPentrailsAsSVG'));
-        }
-
-    /////////////////////////////////
 
     } else if (cat === 'control') {
 

@@ -13,6 +13,9 @@
     * NEW Slovak translation, thanks, Peter Lukacovic
     * German
 
+### 2019-12-13
+* added direct relabelling option to pen trails blocks' context menus
+
 ### 2019-12-10
 * NEW Slovak translation, thanks, Peter Lukacovic
 
