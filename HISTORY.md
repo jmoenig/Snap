@@ -6,6 +6,7 @@
     * export pen trails as SVG
     * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
     * new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
+    * new Snap! API: programmatically get and set global variables from outside Snap!
 * **Notable Changes:**
     * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
 * **Notable Fixes:**
@@ -16,6 +17,7 @@
 
 ### 2019-12-15
 * gui, threads:  new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
+* gui: added global variable access methods to the new Snap! API
 
 ### 2019-12-13
 * added direct relabelling option to pen trails blocks' context menus

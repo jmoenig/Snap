@@ -6102,6 +6102,23 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
     });
 };
 
+IDE_Morph.prototype.getVarNames = function () {
+    // return an array of all global variable names
+    return this.stage.globalVariables().names();
+};
+
+IDE_Morph.prototype.getVar = function (name) {
+    // return the value of the global variable indicated by name
+    // raise an error if no global variable of that name exists
+    return this.stage.globalVariables().getVar(name);
+};
+
+IDE_Morph.prototype.setVar = function (name, value) {
+    // set the value of the global variable indicated by name to the given value
+    // raise an error if no global variable of that name exists
+    this.stage.globalVariables().setVar(name, value);
+};
+
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
 // ProjectDialogMorph inherits from DialogBoxMorph:
