@@ -6061,6 +6061,8 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph external communication API - experimental
 /*
     programmatically trigger scripts from outside of Snap!
+    add message listeners to Snap! broadcasts and access
+    global variables
 */
 
 IDE_Morph.prototype.broadcast = function(message, callback) {
@@ -6069,7 +6071,7 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
     // if a callback is supplied wait for all processes to terminate
     // then call the callback, same as using the "broadcast and wait" block
 
-    var rcvrs = this.stage.children.concat(this.stage),
+    var rcvrs = this.sprites.contents.concat(this.stage),
         myself = this,
         procs = [];
 
@@ -6100,6 +6102,26 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
             ));
         });
     });
+    (this.stage.messageCallbacks[message] || []).forEach(function (callback) {
+        callback();
+    });
+};
+
+IDE_Morph.prototype.addMessageListener = function (message, callback) {
+    // associate a callback function with a broadcast message,
+    // whenever the message is broadcast, the callback is executed,
+    // you can add multiple callbacks to a message, they will be
+    // executed in the order you added them
+    var funcs;
+    if (!isString(message)) {
+        throw new Error('message must be a String');
+    }
+    funcs = this.stage.messageCallbacks[message];
+    if (funcs instanceof Array) {
+        funcs.push(callback);
+    } else {
+        this.stage.messageCallbacks[message] = [callback];
+    }
 };
 
 IDE_Morph.prototype.getVarNames = function () {

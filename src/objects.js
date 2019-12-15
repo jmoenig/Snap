@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-December-13';
+modules.objects = '2019-December-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -7485,6 +7485,9 @@ StageMorph.prototype.init = function (globals) {
 
     // world map client - experimental, transient
     this.worldMap = new WorldMap();
+
+    // Snap! API event listeners - experimental, transient
+    this.messageCallbacks = {}; // name : [functions]
 
     StageMorph.uber.init.call(this);
 

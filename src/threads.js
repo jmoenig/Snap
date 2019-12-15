@@ -3180,6 +3180,9 @@ Process.prototype.doBroadcast = function (message) {
                 });
             }
         });
+        (stage.messageCallbacks[msg] || []).forEach(function (callback) {
+            callback();
+        });
     }
     return procs;
 };
