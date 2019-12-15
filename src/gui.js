@@ -68,8 +68,8 @@ ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,
-BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph,
+BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize, List,
+ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, isString,
 CommentMorph, CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
@@ -79,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-December-07';
+modules.gui = '2019-December-15';
 
 // Declarations
 
@@ -6056,6 +6056,50 @@ IDE_Morph.prototype.warnAboutIE = function () {
 IDE_Morph.prototype.isIE = function () {
     var ua = navigator.userAgent;
     return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+};
+
+// IDE_Morph external communication API - experimental
+/*
+    programmatically trigger scripts from outside of Snap!
+*/
+
+IDE_Morph.prototype.broadcast = function(message, callback) {
+    // same as using the broadcast block - launch all scripts
+    // in the current project reacting to the specified message,
+    // if a callback is supplied wait for all processes to terminate
+    // then call the callback, same as using the "broadcast and wait" block
+
+    var rcvrs = this.stage.children.concat(this.stage),
+        myself = this,
+        procs = [];
+
+    function wait() {
+        if (procs.some(function (any) {return any.isRunning(); })) {
+            return;
+        }
+        if (callback instanceof Function) {
+            myself.onNextStep = function () {
+                callback();
+                callback = null;
+            };
+        }
+    }
+
+    if (!isString(message)) {
+        throw new Error('message must be a String');
+    }
+    this.stage.lastMessage = message;
+    rcvrs.forEach(function (sprite) {
+        sprite.allHatBlocksFor(message).forEach(function (block) {
+            procs.push(myself.stage.threads.startProcess(
+                block,
+                sprite,
+                myself.stage.isThreadSafe,
+                false,
+                callback instanceof Function ? wait : null
+            ));
+        });
+    });
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-December-05';
+modules.threads = '2019-December-15';
 
 var ThreadManager;
 var Process;
@@ -398,6 +398,8 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                         );
                     }
                 }
+            } else if (proc.onComplete instanceof Function) {
+                proc.onComplete();
             }
         } else {
             remaining.push(proc);
