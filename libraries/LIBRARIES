@@ -1,6 +1,7 @@
 iteration-composition.xml	Iteration, composition	Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.
 list-utilities.xml	List utilities	Some standard functions on lists (append, reverse, etc.)
 stream-tools.xml	Streams (lazy lists)	A variation on the list data type in which each list item aren't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)
+atomic_HOFs_module.xml	"Bigger" Data	[EXPERIMENTAL] crunch large lists very fast
 variadic-reporters.xml	Variadic reporters	Versions of +, x, AND, and OR that take more than two inputs.
 httpBlocks.xml	Web services access (https)	An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.
 word-sentence.xml	Words, sentences	One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.
