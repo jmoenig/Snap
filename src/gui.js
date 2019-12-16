@@ -61,7 +61,7 @@
 
 */
 
-/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Map,
 ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, normalizeCanvas,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
@@ -6131,6 +6131,19 @@ IDE_Morph.prototype.addMessageListener = function (message, callback) {
     } else {
         this.stage.messageCallbacks[message] = [callback];
     }
+};
+
+IDE_Morph.prototype.getMessages = function () {
+    // return an array of all broadcast messages in the current project
+    var allNames = [],
+        dict = new Map();
+    this.sprites.contents.concat(this.stage).forEach(function (sprite) {
+        allNames = allNames.concat(sprite.allMessageNames());
+    });
+    allNames.forEach(function (name) {
+        dict.set(name);
+    });
+    return Array.from(dict.keys());
 };
 
 IDE_Morph.prototype.getVarNames = function () {
