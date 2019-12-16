@@ -447,5 +447,57 @@ describe('ide', function() {
             );
         });
     });
+
+    describe('embedded api', function() {
+        after(() => delete driver.ide().droppedText);
+
+        it('should be able to set variables', async function() {
+            const frame = document.getElementsByTagName('iframe')[0];
+            const key = 'testVariable';
+            const value = 'test variable value';
+            frame.contentWindow.postMessage({
+                type: 'set-variable',
+                key: key,
+                value: value,
+            });
+            await driver.expect(
+                () => driver.globals().externalVariables[key] === value,
+                'Did not set external variable',
+            );
+        });
+
+        it('should be able to delete variables', async function() {
+            const frame = document.getElementsByTagName('iframe')[0];
+            const key = 'testVariable';
+            const value = 'test variable value';
+            driver.globals().externalVariables[key] = value;
+            frame.contentWindow.postMessage({
+                type: 'delete-variable',
+                key: key,
+            });
+            await driver.expect(
+                () => driver.globals().externalVariables[key] === undefined,
+                'Did not delete external variable',
+            );
+        });
+
+        it('should be able to import text', function(done) {
+            const frame = document.getElementsByTagName('iframe')[0];
+            const name = 'hello.xml';
+            const content = 'content';
+
+            driver.ide().droppedText = function(text, filename) {
+                if (text === content && filename === name) {
+                    done();
+                }
+            };
+
+            frame.contentWindow.postMessage({
+                type: 'import',
+                name: name,
+                content: content,
+            });
+        });
+    });
 });
 

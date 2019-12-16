@@ -345,6 +345,7 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         this.interpretUrlAnchors();
     }
+    this.initializeEmbeddedAPI();
     window.dispatchEvent(new CustomEvent("ideLoaded"));
 };
 
