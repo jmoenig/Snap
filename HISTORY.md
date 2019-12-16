@@ -19,6 +19,7 @@
 ### 2019-12-16
 * gui, objects: added ability to add general message listeners for "any" message
 * gui: added IDE >> getMessages() to Snap! API
+* gui: refactored IDE >> addMessageListenerForAll(callback)
 
 ### 2019-12-15
 * gui, threads:  new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
