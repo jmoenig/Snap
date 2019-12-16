@@ -79,7 +79,7 @@ BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-December-15';
+modules.gui = '2019-December-16';
 
 // Declarations
 
@@ -6102,6 +6102,9 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
             ));
         });
     });
+    (this.stage.messageCallbacks[''] || []).forEach(function (callback) {
+        callback(message);
+    });
     (this.stage.messageCallbacks[message] || []).forEach(function (callback) {
         callback();
     });
@@ -6111,9 +6114,15 @@ IDE_Morph.prototype.addMessageListener = function (message, callback) {
     // associate a callback function with a broadcast message,
     // whenever the message is broadcast, the callback is executed,
     // you can add multiple callbacks to a message, they will be
-    // executed in the order you added them
+    // executed in the order you added them.
+    // Note: Only passing a callback or associating a callback with
+    // an empty string attaches the callback to "any" message, taking
+    // the actual message as argument
     var funcs;
-    if (!isString(message)) {
+    if (message instanceof Function && isNil(callback)) {
+        callback = message;
+        message = '';
+    } else if (!isString(message)) {
         throw new Error('message must be a String');
     }
     funcs = this.stage.messageCallbacks[message];

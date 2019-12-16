@@ -16,6 +16,9 @@
     * NEW Slovak translation, thanks, Peter Lukacovic
     * German
 
+### 2019-12-16
+* gui, objects: added ability to add general message listeners for "any" message
+
 ### 2019-12-15
 * gui, threads:  new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
 * gui: added global variable access methods to the new Snap! API
