@@ -1292,7 +1292,7 @@ ActionManager.prototype._duplicateSprite = function(sprite) {
 
 // Helper method
 ActionManager.prototype._getOpeningSpriteTag = function(str) {
-    var regex = /<sprite.*?[^\\]>/,
+    var regex = /<sprite\b[^>]+[^\\]>/,
         match = str.match(regex);
 
     return match[0];
