@@ -1052,8 +1052,8 @@ ActionManager.prototype._setCommentText = function(comment, value) {
 };
 
 ActionManager.prototype._unringify = function(block) {
-    var ring = this.getOutermostRing(block),
-        parent = this.getParentWithId(block);
+    var parent = this.getParentWithId(block),
+        ring = parent.parentThatIsA(RingMorph);
 
     // Get the last block before the ring
     while (parent !== ring) {
@@ -1071,29 +1071,15 @@ ActionManager.prototype.getParentWithId = function(block) {
     return block.parent;
 };
 
-ActionManager.prototype.getOutermostRing = function(block, immediate) {
-    var parent;
-
-    if (immediate) {
+ActionManager.prototype._ringify = function(block) {
+    // If contained in a ringmorph, get the outermost ring
+    var ringId = this.newId(),
         parent = this.getParentWithId(block);
-    } else {
-        parent = block.parentThatIsA(RingMorph);
-    }
 
     while (parent instanceof RingMorph) {
         block = parent;
         parent = this.getParentWithId(block);
     }
-
-    return block;
-
-};
-
-ActionManager.prototype._ringify = function(block) {
-    // If contained in a ringmorph, get the outermost ring
-    var ringId = this.newId();
-
-    block = this.getOutermostRing(block, true);
 
     return [block.id, ringId];
 };
