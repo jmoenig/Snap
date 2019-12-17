@@ -5857,6 +5857,7 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
 
 ScriptsMorph.prototype = new FrameMorph();
 ScriptsMorph.prototype.constructor = ScriptsMorph;
+ScriptsMorph.prototype.undoCategory = 'scripts';
 ScriptsMorph.uber = FrameMorph.prototype;
 
 // ScriptsMorph preference settings
@@ -13400,7 +13401,6 @@ CommentMorph.prototype.stackHeight = function () {
 
 ScriptFocusMorph.prototype = new BoxMorph();
 ScriptFocusMorph.prototype.constructor = ScriptFocusMorph;
-ScriptsMorph.prototype.undoCategory = 'scripts';
 ScriptFocusMorph.uber = BoxMorph.prototype;
 
 // ScriptFocusMorph instance creation:

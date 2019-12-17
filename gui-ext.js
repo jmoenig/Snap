@@ -1,6 +1,6 @@
 /* globals ProjectDialogMorph, ensureFullUrl, localize, nop,
    IDE_Morph, Process, SnapCloud, BlockExportDialogMorph, DialogBoxMorph,
-   detect
+   detect, Point
    */
 
 ProjectDialogMorph.prototype._deleteProject =

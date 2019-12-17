@@ -1,3 +1,10 @@
+/* globals CommentMorph, CLIENT_ID, SnapSerializer, SnapUndo, isNil,
+ SnapCloud, SyntaxElementMorph, BlockEditorMorph, Point, ArgMorph,
+ ScriptsMorph, StageMorph, CommandBlockMorph, ReporterBlockMorph,
+ PrototypeHatBlockMorph, BlockMorph, RingMorph, TemplateSlotMorph,
+ SERVER_URL, detect, WorldMorph, ColorSlotMorph, JukeboxMorph,
+ CommandSlotMorph, copy, CSlotMorph, HandMorph, StringMorph, Color,
+ InputSlotMorph, BlockLabelFragment, WardrobeMorph, IDE_Morph*/
 var logger = {
     log: console.log.bind(console),
     debug: console.info.bind(console),
@@ -479,7 +486,7 @@ ActionManager.prototype.onReceiveAction = function(msg) {
 };
 
 ActionManager.prototype.rejectPredecessorsInQueue = function(queue, event) {
-    var action = queue.find(function(action) { return action.equals(event)});
+    var action = queue.find(function(action) { return action.equals(event);});
 
     // ensure that we found the given action
     if (action) {
@@ -646,10 +653,6 @@ ActionManager.prototype.getBlockOwnerId = function(block) {
     }
 
     return this._blockToOwnerId[blockId];
-};
-
-ActionManager.prototype.getBlockOwner = function(block) {
-    return this.getOwnerFromId(this.getBlockOwnerId(blockId));
 };
 
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
@@ -1123,8 +1126,7 @@ ActionManager.prototype._addSound = function(sound, owner, focus) {
     if (sizeInMb > SIZE_THRESHOLD) {
         logger.error('audio file is too big', sound);
 
-        var nb = world.children[0];
-        nb.simpleNotification('Audio file is too big.');
+        this.ide().simpleNotification('Audio file is too big.');
 
         // replace it with an error sound
         sound.audio.src = SERVER_URL + '/Sounds/Meow.wav';
@@ -1563,11 +1565,6 @@ ActionManager.prototype._getCustomBlockEditor = function(id, block) {
     return editor;
 };
 
-ActionManager.prototype.getBlockOwner = function(block) {
-    var ownerId = this._blockToOwnerId[block.id];
-    return this._owners[ownerId];
-};
-
 ActionManager.prototype.getBlockFromId = function(id) {
     var ids = id.split('/'),
         blockId = ids.shift(),
@@ -1641,8 +1638,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         target = copy(rawTarget),
         isTargetDragging = false,
         afterMove,
-        scripts,
-        owner;
+        scripts;
 
     this.ensureNotDragging(block);
     this.__recordTarget(block.id, rawTarget);
@@ -1906,7 +1902,7 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
                 } else {
                     return [child];
                 }
-            }).reduce(function (l1, l2) { return l1.concat(l2)}, []);
+            }).reduce(function (l1, l2) { return l1.concat(l2); }, []);
             this.__clearBlockRecords(id);
         }
 
@@ -3195,7 +3191,7 @@ ActionManager.OwnerFor.setStageSize =
 ActionManager.OwnerFor.importBlocks =
 ActionManager.OwnerFor.importSprites =
 ActionManager.OwnerFor.openProject =
-ActionManager.OwnerFor.duplicateSprites =
+ActionManager.OwnerFor.duplicateSprite =
 ActionManager.OwnerFor.addSprite = function() {
     return null;
 };

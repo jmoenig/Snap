@@ -154,7 +154,7 @@ NetsProcess.prototype.doSocketRequest = function (msgInfo) {
             requestId: requestId,
             content: contents
         });
-    }else if (this.reply ){
+    } else if (this.reply) {
         // request has already been made and we received the reply
         requestId = this.requestId;
         var reply = this.reply;
