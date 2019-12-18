@@ -18,6 +18,7 @@
 
 ### 2019-12-18
 * gui, api: rearranged Snap! API into its own file
+* added API documentation
 
 ### 2019-12-16
 * gui, objects: added ability to add general message listeners for "any" message
