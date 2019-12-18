@@ -2,7 +2,7 @@
 
 Jens Mönig, Dec. 18, 2019
 
-This document describes how Snap! can be accessed from an outside program to start scripts, send and retreive information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
+This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
 This experimental Snap! API is a set of methods for an IDE_Morph containing a Snap! project. These methods are maintained to work with future versions of Snap! They can be used to trigger scripts, get feedback from running scripts, and access the project's global variables.
 
