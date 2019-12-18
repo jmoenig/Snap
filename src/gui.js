@@ -61,25 +61,24 @@
 
 */
 
-/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Map,
-ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Audio,
+ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame, Sound,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, normalizeCanvas,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
-AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
-ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,
-BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize, List,
-ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, isString,
-CommentMorph, CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph,
-BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
-XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
-isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder,
-BlockEditorMorph, BlockDialogMorph*/
+AlignmentMorph, TabMorph, Costume, MorphicPreferences,BlockMorph, ToggleMorph,
+InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,  localize,
+BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, List, ArgMorph,
+Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, CommentMorph, saveAs,
+CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
+BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph,
+BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
+disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
+Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-December-16';
+modules.gui = '2019-December-18';
 
 // Declarations
 
@@ -6056,114 +6055,6 @@ IDE_Morph.prototype.warnAboutIE = function () {
 IDE_Morph.prototype.isIE = function () {
     var ua = navigator.userAgent;
     return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
-};
-
-// IDE_Morph external communication API - experimental
-/*
-    programmatically trigger scripts from outside of Snap!
-    add message listeners to Snap! broadcasts and access
-    global variables
-*/
-
-IDE_Morph.prototype.broadcast = function(message, callback) {
-    // same as using the broadcast block - launch all scripts
-    // in the current project reacting to the specified message,
-    // if a callback is supplied wait for all processes to terminate
-    // then call the callback, same as using the "broadcast and wait" block
-
-    var rcvrs = this.sprites.contents.concat(this.stage),
-        myself = this,
-        procs = [];
-
-    function wait() {
-        if (procs.some(function (any) {return any.isRunning(); })) {
-            return;
-        }
-        if (callback instanceof Function) {
-            myself.onNextStep = function () {
-                callback();
-                callback = null;
-            };
-        }
-    }
-
-    if (!isString(message)) {
-        throw new Error('message must be a String');
-    }
-    this.stage.lastMessage = message;
-    rcvrs.forEach(function (sprite) {
-        sprite.allHatBlocksFor(message).forEach(function (block) {
-            procs.push(myself.stage.threads.startProcess(
-                block,
-                sprite,
-                myself.stage.isThreadSafe,
-                false,
-                callback instanceof Function ? wait : null
-            ));
-        });
-    });
-    (this.stage.messageCallbacks[''] || []).forEach(function (callback) {
-        callback(message);
-    });
-    (this.stage.messageCallbacks[message] || []).forEach(function (callback) {
-        callback();
-    });
-};
-
-IDE_Morph.prototype.addMessageListenerForAll = function (callback) {
-    // associate a monadic callback with all broadcasts.
-    // whenever a message is broadcast the callback is called
-    // with the current message as argument
-    this.addMessageListener('', callback);
-};
-
-IDE_Morph.prototype.addMessageListener = function (message, callback) {
-    // associate a callback function with a broadcast message,
-    // whenever the message is broadcast, the callback is executed,
-    // you can add multiple callbacks to a message, they will be
-    // executed in the order you added them.
-    // Note: ssociating a callback with an empty string attaches the
-    // callback to "any" message, taking the actual message as argument
-    var funcs;
-    if (!isString(message)) {
-        throw new Error('message must be a String');
-    }
-    funcs = this.stage.messageCallbacks[message];
-    if (funcs instanceof Array) {
-        funcs.push(callback);
-    } else {
-        this.stage.messageCallbacks[message] = [callback];
-    }
-};
-
-IDE_Morph.prototype.getMessages = function () {
-    // return an array of all broadcast messages in the current project
-    var allNames = [],
-        dict = new Map();
-    this.sprites.contents.concat(this.stage).forEach(function (sprite) {
-        allNames = allNames.concat(sprite.allMessageNames());
-    });
-    allNames.forEach(function (name) {
-        dict.set(name);
-    });
-    return Array.from(dict.keys());
-};
-
-IDE_Morph.prototype.getVarNames = function () {
-    // return an array of all global variable names
-    return this.stage.globalVariables().names();
-};
-
-IDE_Morph.prototype.getVar = function (name) {
-    // return the value of the global variable indicated by name
-    // raise an error if no global variable of that name exists
-    return this.stage.globalVariables().getVar(name);
-};
-
-IDE_Morph.prototype.setVar = function (name, value) {
-    // set the value of the global variable indicated by name to the given value
-    // raise an error if no global variable of that name exists
-    this.stage.globalVariables().setVar(name, value);
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
