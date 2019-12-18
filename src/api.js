@@ -109,7 +109,7 @@
     ========================================
     The addMessageListener() method sets up a function that will be called
     whenever the specified message is broadcast. Multiple message listeners
-    can be set up per message, they all the executed in the order in which
+    can be set up per message, they all get executed in the order in which
     they were added.
 
         syntax:

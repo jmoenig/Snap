@@ -47,7 +47,7 @@ undefined
 
 
 ### IDE_Morph.prototype.addMessageListenerForAll()
-The addMessageListenerForAll() method sets up a function that will be called whenever a message is broadcast. The function takes one argument, the message being broadcast, and can be used to react to any message. Multiple message listeners can be set up, they all the executed in the order in which they were added.
+The addMessageListenerForAll() method sets up a function that will be called whenever a message is broadcast. The function takes one argument, the message being broadcast, and can be used to react to any message. Multiple message listeners can be set up, they all get executed in the order in which they were added.
 
 #### syntax
     ide.addMessageListenerForAll(callback);
