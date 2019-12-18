@@ -12,6 +12,7 @@
     * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
 * **Notable Fixes:**
     * support null-serialization in list-csv conversions
+    * avoid circular inheritance when using blocks to set sprites' parents
 * **Translation Updates:**
     * NEW Slovak translation, thanks, Peter Lukacovic
     * German
@@ -19,6 +20,7 @@
 ### 2019-12-18
 * gui, api: rearranged Snap! API into its own file
 * added API documentation
+* threads: avoid circular inheritance when using blocks to set sprites' parents
 
 ### 2019-12-16
 * gui, objects: added ability to add general message listeners for "any" message
