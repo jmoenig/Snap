@@ -2,13 +2,18 @@
 
 ## in development:
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Translation Updates:**
+
+
+## 5.4.0:
+* **New Features:**
     * log pen vectors
     * export pen trails as SVG
     * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
-    * new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
-    * new Snap! API: programmatically add message listeners to get notified and react to broadcasts from outside Snap!
-    * new Snap! API: programmatically get and set global variables from outside Snap!
-* **Notable Changes:**
+    * new Snap! API: broadcast and react to messages, access global variables from outside Snap!
+* **Notable Change:**
     * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
 * **Notable Fixes:**
     * support null-serialization in list-csv conversions
@@ -19,6 +24,7 @@
 
 ### 2019-12-19
 * objects, threads: refactored inheritance circularity avoidance
+* prepared release
 
 ### 2019-12-18
 * gui, api: rearranged Snap! API into its own file
