@@ -3600,7 +3600,8 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
     var str = this.serializer.serialize(this.blocks),
         ide = this.world().children[0],
         stage = ide.stage,
-        msgs = '';
+        msgs = '',
+        projectName = ide.room.name || localize('Untitled');
 
     for (var i = 0; i < this.msgs.length; i++) {
         msgs += '<messageType>' +
@@ -3619,7 +3620,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '</blocks>';
         ide.saveXMLAs(
             str,
-            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+            projectName + ' ' + localize('blocks')
         );
     } else {
         new DialogBoxMorph().inform(
