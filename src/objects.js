@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-December-15';
+modules.objects = '2019-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -6462,8 +6462,20 @@ SpriteMorph.prototype.chooseExemplar = function () {
     menu.popUpAtHand(this.world());
 };
 
-SpriteMorph.prototype.setExemplar = function (another) {
+SpriteMorph.prototype.setExemplar = function (another, enableError) {
     var ide;
+
+    // check for circularity
+    if (another instanceof SpriteMorph &&
+            contains(another.allExemplars(), this)) {
+        if (enableError) {
+            throw new Error(
+                localize('unable to inherit\n(disabled or circular?)')
+            );
+        }
+        return; // silently fail so stored projects can still be loaded
+    }
+
     this.emancipate();
     this.exemplar = another;
     if (another) {

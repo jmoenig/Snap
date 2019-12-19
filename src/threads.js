@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-December-18';
+modules.threads = '2019-December-19';
 
 var ThreadManager;
 var Process;
@@ -4554,14 +4554,7 @@ Process.prototype.doSet = function (attribute, value) {
     case 'parent':
         this.assertType(rcvr, 'sprite');
         value = value instanceof SpriteMorph ? value : null;
-        // avoid circularity
-        if (value instanceof SpriteMorph &&
-                contains(value.allExemplars(), rcvr)) {
-            throw new Error(
-                localize('unable to inherit\n(disabled or circular?)')
-            );
-        }
-        rcvr.setExemplar(value);
+        rcvr.setExemplar(value, true); // throw an error in case of circularity
         break;
     case 'temporary?':
         this.assertType(rcvr, 'sprite');

@@ -17,6 +17,9 @@
     * NEW Slovak translation, thanks, Peter Lukacovic
     * German
 
+### 2019-12-19
+* objects, threads: refactored inheritance circularity avoidance
+
 ### 2019-12-18
 * gui, api: rearranged Snap! API into its own file
 * added API documentation
