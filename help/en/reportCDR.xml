@@ -72,7 +72,7 @@
                     </block>
                 </script>
                 <text>
-                    on a list; then it will be a a dynamic array rather than
+                    on a list, then it will be a a dynamic array rather than
                     a linked list, so this block has to convert to linked
                     form.
                 </text>

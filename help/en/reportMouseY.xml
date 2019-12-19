@@ -20,7 +20,7 @@
                 <annotations>
                     <small-p>Keep doing this:</small-p>
                     <small-p>
-                        Set the sprite's transparency to the mouse's x
+                        Set the sprite's transparency to the mouse's y
                         position
                     </small-p>
                 </annotations>

@@ -28,7 +28,7 @@
                     </block>
                 </script>
                 <annotations>
-                    <small-p>If direction equals 0 (poiinting up)</small-p>
+                    <small-p>If direction equals 0 (pointing up)</small-p>
                     <small-p>Then do this</small-p>
                 </annotations>
             </diagram>

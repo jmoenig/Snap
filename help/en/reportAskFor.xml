@@ -80,7 +80,7 @@
         <column>
             <p>
                 The expression is evaluated in the environment of the other
-                object, so it usees that object's local variables and methods. If
+                object, so it uses that object's local variables and methods. If
                 you want to use one of the sender's variables inside the script,
                 leave an empty input slot in the script, click the right
                 arrowhead at the end of the ASK, and use the sender's variable as

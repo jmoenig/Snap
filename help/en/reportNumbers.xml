@@ -67,7 +67,7 @@
                         </block>
                     </script>
                     <bubbles>
-                        <img src="reportNumbers_list1.png" width="80" height="87"/>
+                        <img src="reportNumbers_list2.png" width="80" height="87"/>
                     </bubbles>
                 </diagram>
             </row>
@@ -89,7 +89,7 @@
         <column>
             <block-definition s="prime? %n"/>
             <p>
-                A number n is prime if the lsit of its factors in the range
+                A number n is prime if the list of its factors in the range
                 [2,n-1] is empty.
             </p>
             <row>
@@ -122,7 +122,7 @@
                     </block>
                 </script>
                 <bubbles>
-                    <img src="reportNumbers_list1.png" width="80" height="87"/>
+                    <img src="reportNumbers_list4.png" width="80" height="87"/>
                 </bubbles>
             </diagram>
         </column>

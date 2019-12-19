@@ -19,7 +19,7 @@
                 <column rel-width="1">
                     <p>
                         The text slope follows the sprite's direction. The
-                        sprite is left at the end of the test so that you can
+                        sprite is left at the end of the text so that you can
                         find out how long it is.
                     </p>
                     <p>The text is in monospace (Courier) font.</p>

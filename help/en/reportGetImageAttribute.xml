@@ -60,9 +60,9 @@
             <p>Report attributes of a costume.</p>
             <p>
                 Width and height are reported in pixels, but don't change in
-                presentation mode. Pixels are rpeported as a list of lists,
+                presentation mode. Pixels are reported as a list of lists,
                 in which each sublist is the RGBA values for one pixel (Red,
-                Green, Blue, Alpha). “Alpha” is the opcaity (inverse of ghost
+                Green, Blue, Alpha). “Alpha” is the opacity (inverse of ghost
                 effect). All values are between 0 and 255.
             </p>
             <p>

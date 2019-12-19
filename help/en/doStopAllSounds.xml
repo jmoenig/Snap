@@ -19,7 +19,7 @@
                 <annotations>
                     <small-p>When I receive this message</small-p>
                     <small-p>Stop playing all sounds</small-p>
-                    <small-p>And start playing this sond</small-p>
+                    <small-p>And start playing this sound</small-p>
                 </annotations>
             </diagram>
         </column>

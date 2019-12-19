@@ -65,8 +65,8 @@
                 <text>to do something to every word in a sentence:</text>
             </p>
             <diagram>
-                <script>
-                    <custom-block s="list $arrowRight sentence %l">
+                <script scale="0.9">
+                    <custom-block s="list $arrowRight sentence %l" bubble="1">
                         <block s="reportMap">
                             <block s="reifyReporter">
                                 <autolambda>

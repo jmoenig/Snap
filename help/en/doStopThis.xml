@@ -42,11 +42,11 @@
                         recursive calls still running).
                     </small-p>
                     <small-p>
-                        all but this script: stops scripts of all sprites
+                        all but this script: stops scripts of all sprites.
                     </small-p>
                     <small-p>
                         other scripts in sprite: stops scripts in this sprite
-                        only
+                        only.
                     </small-p>
                 </column>
             </row>

@@ -11,8 +11,9 @@
         <column>
             <diagram>
                 <script>
-                    <block s="doThink" annotation="1">
+                    <block s="doThinkFor" annotation="1">
                         <l>I wonder...</l>
+                        <l>2</l>
                     </block>
                 </script>
                 <annotations>

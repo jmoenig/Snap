@@ -46,7 +46,7 @@
                         </block>
                     </script>
                     <annotations>
-                        <small-p>The move-and- draw script runs in parallel with</small-p>
+                        <small-p>The move-and-draw script runs in parallel with</small-p>
                         <small-p>the turn script.</small-p>
                     </annotations>
                 </diagram>

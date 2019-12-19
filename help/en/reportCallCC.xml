@@ -73,9 +73,9 @@
     </box>
     <box color="blue">
         <p>
-            Continuations are too complicaed to explain in a help screen, but
+            Continuations are too complicated to explain in a help screen, but
             they're used to invent control structures such as the CATCH and
-            THROW too blocks. Read the chapter in the Snap! Reference Manual
+            THROW tool blocks. Read the chapter in the Snap! Reference Manual
             if you want to know more.
         </p>
     </box>

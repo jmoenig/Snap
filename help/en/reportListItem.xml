@@ -14,7 +14,7 @@
                     <block s="bubble" annotation="1">
                         <block s="reportListItem">
                             <l><option>any</option></l>
-                            <l>phrases</l>
+                            <block var="phrases"/>
                         </block>
                     </block>
                 </script>
@@ -31,7 +31,7 @@
                             <block var="score"/>
                             <block s="reportListItem">
                                 <l>1</l>
-                                <l>top scores</l>
+                                <block var="top scores"/>
                             </block>
                         </block>
                         <script>

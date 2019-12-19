@@ -8,7 +8,7 @@
     </thumbnail>
     <box color="gray">
         <column>
-            <p>Report data form microphone.</p>
+            <p>Report data from microphone.</p>
             <p>
                 This block collects and analyzes a short (0.01 to 0.1 second)
                 burst of sound.
@@ -55,7 +55,7 @@
         <column>
             <p>
                 “Time domain” means that the list items are the instantaneous
-                volume at each moment, measured thosuands of times per seocnd.
+                volume at each moment, measured thousands of times per second.
                 “Frequency domain” means that the list items are the volume
                 over the entire burst of sound at each note frequency.
             </p>

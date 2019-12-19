@@ -58,8 +58,8 @@
                 (Note: The particular settings available in the menu of this
                 block are just the ones Jens has needed for some project of
                 his. If you'd like to be able to read and set all the
-                settings in your project, load the “Provide getts and setters
-                for all GUI controls” library.)
+                settings in your project, load the “Provide getters and
+                setters for all GUI controls” library.)
             </p>
             <i>
                 “Anything you can do from the GUI, you should be able to do

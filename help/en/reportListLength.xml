@@ -37,7 +37,7 @@
                     <small-p>Set the counter value to 1</small-p>
                     <small-p>Repeat for the number of items in the list</small-p>
                     <small-p>Say the item at that place in the list</small-p>
-                    <small-p>Increase the counter 1</small-p>
+                    <small-p>Increase the counter by 1</small-p>
                 </annotations>
             </diagram>
         </column>

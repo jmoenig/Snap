@@ -13,7 +13,7 @@
                 <script>
                     <block s="doIfElse" annotation="1">
                         <block s="reportListContainsItem">
-                            <l>my list</l>
+                            <block var="my list"/>
                             <l>banana</l>
                         </block>
                         <script>

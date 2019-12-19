@@ -29,7 +29,7 @@
                     </block>
                 </script>
                 <text>
-                    sends a mesages to all the sprites (and the stage). This
+                    sends a message to all the sprites (and the stage). This
                     is useful if you want to tell other sprites when to do
                     something.
                 </text>

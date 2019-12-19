@@ -68,7 +68,7 @@
                 </column>
                 <column rel-width="1">
                     <p>
-                        In this exmaple, the two inputs are the very same
+                        In this example, the two inputs are the very same
                         list; changing one will change the other too:
                     </p>
                     <script>

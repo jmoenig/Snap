@@ -42,7 +42,7 @@
                 <script>
                     <block s="removeClone"/>
                 </script>
-                <text>but onlt the clone is actually deleted.</text>
+                <text>but only the clone is actually deleted.</text>
             </p>
         </column>
     </box>
@@ -51,7 +51,7 @@
             <p>
                 Note: Snap! clones are not copies of the sprite; they
                 actually share information, so a change in the original may
-                be seen in the clones. See the “Object Oriented Porgramming
+                be seen in the clones. See the “Object Oriented Programming
                 with Sprites” chapter in the Snap! Reference Manual.
             </p>
         </column>

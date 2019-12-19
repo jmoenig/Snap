@@ -55,7 +55,7 @@
                         <l/>
                     </block>
                 </script>
-                <text>asks a questiona nd stores the keyboard input in</text>
+                <text>asks a question and stores the keyboard input in</text>
                 <script>
                     <block s="reportLastAnswer"/>
                 </script>

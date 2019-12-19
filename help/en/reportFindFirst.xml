@@ -13,7 +13,7 @@
     <box color="gray">
         <column>
             <p>
-                Reports the first item in the lsit that matches the
+                Reports the first item in the list that matches the
                 predicate.
             </p>
             <diagram>
@@ -138,7 +138,7 @@
                 </bubbles>
             </diagram>
             <p>
-                FIND FIRST reports False if not item in the list matches the
+                FIND FIRST reports False if no item in the list matches the
                 predicate.\n
                 (KEEP reports the empty list in that situation.)
             </p>
@@ -158,7 +158,7 @@
                 </script>
                 <text>
                     but FIND FIRST is faster if a match is found because it
-                    doesn't search the rest of the least.
+                    doesn't search the rest of the list.
                 </text>
             </p>
         </column>
