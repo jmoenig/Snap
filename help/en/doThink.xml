@@ -13,7 +13,7 @@
                     <block s="doThink" annotation="1">
                         <l>I wonder...</l>
                     </block>
-                    <block s="doThink" annotation="2">
+                    <block s="doWait" annotation="2">
                         <l>1</l>
                     </block>
                     <block s="doThink" annotation="3">
