@@ -15,7 +15,7 @@
                     </block>
                 </script>
                 <annotations>
-                    <small-p>Grows the sprite by 10</small-p>
+                    <small-p>Grows the sprite by 10% of original size</small-p>
                 </annotations>
             </diagram>
             <diagram>
@@ -25,7 +25,7 @@
                     </block>
                 </script>
                 <annotations>
-                    <small-p>Shrinks the sprite by 10</small-p>
+                    <small-p>Shrinks the sprite by 10% of original size</small-p>
                 </annotations>
             </diagram>
         </column>

@@ -25,6 +25,21 @@
                         </block>
                     </script>
                 </p>
+		<p>
+		</p>
+		<diagram>
+		  <script>	
+	    <block s="goToLayer">
+		      <l menu="1"><option></option></l>
+		    </block>
+		  </script>
+		  <menus>
+		    <menu>
+		      <item>front</item>
+		      <item>back</item>
+		    </menu>
+		  </menus>
+		</diagram>
             </column>
             <img src="goToLayer_after.png" width="53" height="88"/>
         </row>

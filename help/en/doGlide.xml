@@ -23,16 +23,6 @@
                     <small-p>(Larger numbers make it go slower)</small-p>
                 </annotations>
             </diagram>
-            <diagram>
-                <script>
-                    <block s="forward" annotation="1">
-                        <l>-10</l>
-                    </block>
-                </script>
-                <annotations>
-                    <small-p>Move 10 steps in the opposite direction</small-p>
-                </annotations>
-            </diagram>
             <img src="doGlide_stage.png" width="308" height="85"/>
         </column>
     </box>

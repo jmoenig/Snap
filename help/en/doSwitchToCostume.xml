@@ -55,6 +55,18 @@
                     </block>
                 </script>
             </row>
+            <p>
+                You can also use an actual computed costume:
+            </p>
+                <script>
+                    <block s="doSwitchToCostume">
+                        <block s="reportNewCostumeStretched">
+			  <l>happy face</l>
+			  <l>200</l>
+			  <l>100</l>
+			</block>
+                    </block>
+                </script>
         </column>
     </box>
 </help-screen>
