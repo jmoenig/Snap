@@ -19,20 +19,21 @@
                 </script>
                 <menus>
                     <menu>
-                        <item annotation="1">name</item>
-                        <item annotation="2">duration</item>
-                        <item>length</item>
-                        <item>number of channels</item>
+                        <item>name</item>
+                        <item annotation="1">duration</item>
+                        <item annotation="2">length</item>
+                        <item annotation="3">number of channels</item>
                         <item>sample rate</item>
-                        <item annotation="3">samples</item>
+                        <item annotation="4">samples</item>
                     </menu>
                 </menus>
                 <annotations>
-                    <small-p>“Number of channels” is 2 for stereo.</small-p>
                     <small-p>
-                        “Duration” is in seconds; “length” is in the number
-                        of samples. Duration = Length / Sample rate.
-                    </small-p>
+		        “Duration” is in seconds.
+			Duration = Length / Sample rate.
+		    </small-p>
+		    <small-p>“Length” is in the number of samples.</small-p>
+                    <small-p>“Number of channels” is 2 for stereo.</small-p>
                     <small-p>
                         “Samples” is a list containing the actual numeric
                         samples (volume at each instant).

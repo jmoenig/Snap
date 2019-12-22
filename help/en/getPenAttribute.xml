@@ -17,8 +17,8 @@
                 <menus>
                     <menu>
                         <item color="red" annotation="1">size</item>
-                        <item color="lime" annotation="2">hue</item>
-                        <item color="lime">saturation</item>
+                        <item color="lime">hue</item>
+                        <item color="lime" annotation="2">saturation</item>
                         <item color="lime">brightness</item>
                         <item color="lime">transparency</item>
                     </menu>

@@ -44,12 +44,12 @@
                 You can refer to a costume by name or by number. For example:
             </p>
             <row>
-                <script>
+                <script scale="0.6">
                     <block s="doSwitchToCostume">
                         <l>happy face</l>
                     </block>
                 </script>
-                <script>
+                <script scale="0.6">
                     <block s="doSwitchToCostume">
                         <block var="which one"/>
                     </block>
@@ -58,7 +58,7 @@
             <p>
                 You can also use an actual computed costume:
             </p>
-                <script>
+                <script scale="0.6">
                     <block s="doSwitchToCostume">
                         <block s="reportNewCostumeStretched">
 			  <l>happy face</l>

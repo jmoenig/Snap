@@ -10,7 +10,7 @@
         <column>
             <p>
                 <text>
-                    Create a clone of the selected sprite, with the same
+                    Report a new clone of the selected sprite, with the same
                     position, direction, costumes, sounds, local variables,
                     local blocks, and scripts. Most of these properties are
                     shared with the original, so that a change in the
