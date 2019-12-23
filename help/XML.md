@@ -53,19 +53,21 @@ Aligns its contents in a row.
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| padding | number | 15 | How far apart the content elements are. | 
+| padding | number | 15 | How far apart the content elements are. |
+| fill-width | true or false | true | If a column should stretch its contents to fill as much horizontal space as possible. |
+| width | number | none |
 
 Some elements, like `<script>`, have a fixed width, while others, like `<p>`,
-have a variable width. By default, variable-width elements are their parent's
-width:
+have a variable width. By default, variable-width elements take up as much
+horizontal space as possible, dividing it evenly amongst themselves.
 ```
 <column>
     <p>I am my parent's width.</p>
     <p>I am also my parent's width.
 </column>
 <row>
-    <p>I am my parent's width.</p>
-    <p>I am also my parent's width. That doesn't work well in this context.</p>
+    <p>I am half my parent's width.</p>
+    <p>I am also half my parent's width.</p>
 </row>
 ```
 
@@ -91,6 +93,26 @@ variable-width elements:
 </row>
 ```
 
+This behavior can be turned off by setting `fill-width="false"` for the
+containing row. In this case, the text will be a single, fixed-width line:
+```
+<row>
+    <p>I'm a single line, and I take up as much space as I need.</p>
+    <img src="image.png" width="100" height="100"/>
+</row>
+```
+
+You can also specify your own fixed width using the `width` attribute:
+```
+<row>
+    <p width="100">
+        My width is 100. If my text exceeds 100 pixels in width,
+        I will flow onto a new line and take up more vertical space.
+    </p>
+    <img src="image.png" width="100" height="100"/>
+</row>
+```
+
 ### `<column>`
 
 Aligns its contents in a column.
@@ -98,6 +120,8 @@ Aligns its contents in a column.
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | padding | number | 10 | How far apart the content elements are. | 
+| width | number | none |
+| rel-width | number | none | See `<row>`. |
 
 ## Content Elements
 
@@ -125,7 +149,8 @@ Two:
 ```
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| rel-width | number | none | See `<row>`. | 
+| width | number | none |
+| rel-width | number | none | See `<row>`. |
 
 ### `<img>`
 
@@ -135,7 +160,7 @@ An image.
 | --- | --- | --- |
 | src | a file path, relative to the language's help directory | none |
 | width | number | none |
-| width | number | none |
+| height | number | none |
 
 ### `<script>`
 
@@ -208,6 +233,7 @@ or a menu:
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
+| width | number | none |
 | rel-width | number | none | See `<row>`. | 
 
 Attributes for script/menu components:
