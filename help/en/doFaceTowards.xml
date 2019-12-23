@@ -26,7 +26,7 @@
                 <annotations>
                     <small-p>Point the sprite towards...</small-p>
                     <small-p>anywhere on the stage</small-p>
-                    <small-p>where the mouse is pointing</small-p>
+                    <small-p arrow-horizontal="true">where the mouse is pointing</small-p>
                     <small-p>the point (0, 0)</small-p>
                     <small-p>another sprite's position</small-p>
                 </annotations>

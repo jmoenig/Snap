@@ -225,9 +225,10 @@ Attributes for annotations and `arrow-start` components:
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| arrow-reverse | true or false | false | Reverses the arrow. |
-| arrow-detour | number | 0 | The arrow will bend by this many pixels. This attribute can be used to prevent the arrow from overlapping important parts of a script. |
 | arrow-color | CSS color | black/white | Default depends on the color of the box the diagram is contained in. |
+| arrow-detour | number | 0 | The arrow will bend by this many pixels. This attribute can be used to prevent the arrow from overlapping important parts of a script. |
+| arrow-reverse | true or false | false | Reverses the arrow. |
+| arrow-horizontal | true or false | false | Forces the annotation to be positioned so that its arrow is horizontal. Any annotations above are positioned higher than normal. See `doGotoObject.xml` for an example. |
 
 Valid bubble contents:
 - `<text>Text</text>`
