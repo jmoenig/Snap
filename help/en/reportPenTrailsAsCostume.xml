@@ -28,8 +28,9 @@
         </column>
     </box>
     <box color="blue">
-        <column>
             <p>What can you do with the reported costume?</p>
+	    <column>
+	    <row>
             <i>Add it to your costumes.</i>
             <script>
                 <block s="doAddToList">
@@ -39,7 +40,11 @@
                     </block>
                 </block>
             </script>
+	    </row>
+	    <row>
             <i>Modify it.</i>
+            <img src="reportPenTrailsAsCostume_transform_pentrails.png" width="90" height="29"/>
+	    </row>
             <script>
                 <block s="doSwitchToCostume">
                     <block s="reportNewCostumeStretched">
@@ -81,7 +86,6 @@
                     </block>
                 </block>
             </script>
-            <img src="reportPenTrailsAsCostume_transform_pentrails.png" width="90" height="29"/>
-        </column>
+    </column>
     </box>
 </help-screen>

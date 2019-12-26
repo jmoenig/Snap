@@ -6,15 +6,20 @@
         <row>
             <img src="deleteVariable_menu.png" width="189" height="36"/>
             <small-p rel-width="1">
-                Deletes all three blocks associated with the selected
-                variable (e.g. score)
+	      <text>Deletes the selected
+                variable (e.g. score) and its orange reporter
+	      </text>
+	      <script>
+		<block var="score" />
+	      </script>
+	      <text>.</text>
             </small-p>
         </row>
     </box>
     <box color="blue">
         <column>
             <p>
-                Note: When a variable is deleted, any of its blocks used in
+                Note: When a variable is deleted, any copies of its reporter used in
                 scripts will remain, but the scripts will not function
                 properly.
             </p>

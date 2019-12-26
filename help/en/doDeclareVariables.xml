@@ -105,16 +105,25 @@
             <column rel-width="1">
                 <p>Object Oriented Programming:</p>
                 <p>
+		  <text>
                     If a reporter reports a script, and that script uses a
                     script variable created outside the reported script (such
-                    as the use of count in the script that new counter
+                    as the use of
+		  </text>
+		  <script><block var="count" /></script>
+		  <text>
+		    in the script that
+		  </text>
+		  <script><custom-block s="new counter" /></script>
+		  <text>
                     reports) then the script variable isn't temporary!
+		  </text>
                 </p>
                 <diagram>
                     <script>
                         <block s="doSetVar">
                             <l>my counter</l>
-                            <custom-block s="new counter"/>
+                            <custom-block s="new counter" />
                         </block>
                         <block s="doSayFor" annotation="1">
                             <block s="evaluate">
