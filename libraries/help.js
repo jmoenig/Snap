@@ -327,18 +327,18 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
         });
 
         helpScreen.children.forEach(fixWidths);
+        helpScreen.add(helpScreen.thumbnail);
         helpScreen.forAllChildren(function (child) {
-            // Reflow text
+            // Reflow rich text
             if (child instanceof TextMorph) {
                 child.children.forEach(function (child) {
                     if (typeof child.fixLayout === 'function') {
                         child.fixLayout();
                     }
                 });
-                child.setExtent(child.extent());
+                child.setWidth(child.width());
             }
         });
-        helpScreen.add(helpScreen.thumbnail);
         helpScreen.forAllChildren(function (child) {
             if (
                 child instanceof AlignmentMorph
@@ -356,30 +356,39 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     }
 
     function fixWidths (morph) {
-        var parent = morph.parent;
+        var parent = morph.parent, maxWidth;
         if (morph instanceof BoxMorph) {
             morph.setWidth(parent.width());
         } else if (
-            (morph instanceof AlignmentMorph
-                && morph.orientation === 'column')
-            || (morph instanceof AlignmentMorph
-                && morph.orientation === 'row' && morph.fillWidth)
+            morph instanceof AlignmentMorph
             || morph instanceof ScriptDiagramMorph
             || morph instanceof TextMorph
         ) {
-            if (parent instanceof BoxMorph) {
-                morph.silentSetWidth(parent.width() - 2 * padding);
-            } else if (
+            if (
                 morph.relativeWidth != null
                 && parent instanceof AlignmentMorph
                 && parent.orientation === 'row'
             ) {
                 if (morph.relativeWidth !== 0) {
-                    morph.silentSetWidth(
-                        morph.relativeWidth / parent.relWidthDenominator
-                        * (parent.width() - parent.usedWidth)
-                    );
+                    if (morph instanceof AlignmentMorph) {
+                        morph.fixLayout();
+                    }
+                    maxWidth = morph.relativeWidth
+                        / parent.relWidthDenominator
+                        * (parent.width() - parent.usedWidth);
+                    if (
+                        morph instanceof TextMorph
+                        && morph.width() <= maxWidth
+                    ) {
+                        parent.usedWidth += morph.width();
+                        parent.relWidthDenominator -= morph.relativeWidth;
+                        morph.relativeWidth = 0;
+                    } else {
+                        morph.silentSetWidth(maxWidth);
+                    }
                 }
+            } else if (parent instanceof BoxMorph) {
+                morph.silentSetWidth(parent.width() - 2 * padding);
             } else {
                 morph.silentSetWidth(parent.width());
             }
@@ -393,11 +402,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
                 morph.usedWidth = morph.padding * (morph.children.length - 1)
                     + morph.children.reduce(
                         function (width, child) {
-                            if (
-                                child instanceof AlignmentMorph
-                                || child instanceof ScriptDiagramMorph
-                                || child instanceof TextMorph
-                            ) {
+                            if (child.relativeWidth) {
                                 return width;
                             } else if (child instanceof BlockMorph) {
                                 return width
@@ -542,10 +547,6 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                 // width will be adjusted later
                 morph.relativeWidth = +element.attributes['rel-width'] || 1;
             }
-        }
-        if (morph instanceof AlignmentMorph && morph.orientation === 'row') {
-            morph.fillWidth = element.attributes['fill-width']
-                ? (element.attributes['fill-width'] === 'true') : true;
         }
         if (morph instanceof AlignmentMorph && element.attributes.padding) {
             morph.padding = +element.attributes.padding;
@@ -879,10 +880,10 @@ RichTextMorph.prototype.drawNew = function () {
         for (j = 0; j < line.length; j = j + 1) {
             word = line[j];
             if (word instanceof Morph) {
-                word.setPosition(new Point(
+                word.setPosition(this.position().add(new Point(
                     x + offx, 
                     y - (this.calculateWordHeight(word) / 2) + offy
-                ));
+                )));
             } else {
                 context.fillText(
                     word, x + offx,
@@ -1015,6 +1016,7 @@ ScriptDiagramMorph.prototype.fixLayout = function () {
     this.scriptDisplay = new Morph();
     this.scriptDisplay.setExtent(new Point(scriptWidth, scriptHeight));
     this.add(this.scriptDisplay);
+    this.scriptDisplay.setPosition(this.position());
 
     this.arrows.forEach(function (arrow) {
         arrow.destroy();

@@ -59,6 +59,7 @@ Aligns its contents in a row.
 
 Some elements, like `<script>`, have a fixed width, while others, like `<p>`,
 have a variable width. By default, variable-width elements take up as much
+horizontal space as needed. If the contents overflow, they take up as much
 horizontal space as possible, dividing it evenly amongst themselves.
 ```
 <column>
@@ -90,15 +91,6 @@ variable-width elements:
     <img src="image.png" width="100" height="100"/>
     <p rel-width="1">My width is 1/4 * (parent's width - 100 - 100)</p>
     <p rel-width="3"> My width is 3/4 * (parent's width - 100 - 100)</p>
-</row>
-```
-
-This behavior can be turned off by setting `fill-width="false"` for the
-containing row. In this case, the text will be a single, fixed-width line:
-```
-<row>
-    <p>I'm a single line, and I take up as much space as I need.</p>
-    <img src="image.png" width="100" height="100"/>
 </row>
 ```
 
