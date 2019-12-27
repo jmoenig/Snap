@@ -43,15 +43,13 @@
                 the stage:
             </p>
             <row>
-                <row rel-width="1" padding="3">
+                <row padding="3">
                     <img src="checkbox.png" width="15" height="15"/>
                     <script>
                         <block var="score"/>
                     </script>
                 </row>
-                <column rel-width="1">
-                    <img src="reportGetVar_watcher.png" width="85" height="21"/>
-                </column>
+                <img src="reportGetVar_watcher.png" width="85" height="21"/>
             </row>
             <p>Right-click on the monitor to get different views:</p>
             <row>
