@@ -440,6 +440,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         });
         morph = new PrototypeHatBlockMorph(customBlock);
         morph.nextBlock(customBlock.body.expression);
+        morph.fixBlockColor(null, true); // force zebra coloring
         break;
     case 'bool':
         return element.contents === 'true';
