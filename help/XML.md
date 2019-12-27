@@ -53,22 +53,19 @@ Aligns its contents in a row.
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| padding | number | 15 | How far apart the content elements are. |
-| fill-width | true or false | true | If a column should stretch its contents to fill as much horizontal space as possible. |
-| width | number | none |
+| padding | number | 15 | How far apart the content elements are. | 
 
 Some elements, like `<script>`, have a fixed width, while others, like `<p>`,
-have a variable width. By default, variable-width elements take up as much
-horizontal space as needed. If the contents overflow, they take up as much
-horizontal space as possible, dividing it evenly amongst themselves.
+have a variable width. By default, variable-width elements are their parent's
+width:
 ```
 <column>
     <p>I am my parent's width.</p>
     <p>I am also my parent's width.
 </column>
 <row>
-    <p>I am half my parent's width.</p>
-    <p>I am also half my parent's width.</p>
+    <p>I am my parent's width.</p>
+    <p>I am also my parent's width. That doesn't work well in this context.</p>
 </row>
 ```
 
@@ -94,17 +91,6 @@ variable-width elements:
 </row>
 ```
 
-You can also specify your own fixed width using the `width` attribute:
-```
-<row>
-    <p width="100">
-        My width is 100. If my text exceeds 100 pixels in width,
-        I will flow onto a new line and take up more vertical space.
-    </p>
-    <img src="image.png" width="100" height="100"/>
-</row>
-```
-
 ### `<column>`
 
 Aligns its contents in a column.
@@ -112,8 +98,6 @@ Aligns its contents in a column.
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | padding | number | 10 | How far apart the content elements are. | 
-| width | number | none |
-| rel-width | number | none | See `<row>`. |
 
 ## Content Elements
 
@@ -141,8 +125,7 @@ Two:
 ```
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| width | number | none |
-| rel-width | number | none | See `<row>`. |
+| rel-width | number | none | See `<row>`. | 
 
 ### `<img>`
 
@@ -152,7 +135,7 @@ An image.
 | --- | --- | --- |
 | src | a file path, relative to the language's help directory | none |
 | width | number | none |
-| height | number | none |
+| width | number | none |
 
 ### `<script>`
 
@@ -225,7 +208,6 @@ or a menu:
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| width | number | none |
 | rel-width | number | none | See `<row>`. | 
 
 Attributes for script/menu components:
@@ -243,10 +225,9 @@ Attributes for annotations and `arrow-start` components:
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| arrow-color | CSS color | black/white | Default depends on the color of the box the diagram is contained in. |
-| arrow-detour | number | 0 | The arrow will bend by this many pixels. This attribute can be used to prevent the arrow from overlapping important parts of a script. |
 | arrow-reverse | true or false | false | Reverses the arrow. |
-| arrow-horizontal | true or false | false | Forces the annotation to be positioned so that its arrow is horizontal. Any annotations above are positioned higher than normal. See `doGotoObject.xml` for an example. |
+| arrow-detour | number | 0 | The arrow will bend by this many pixels. This attribute can be used to prevent the arrow from overlapping important parts of a script. |
+| arrow-color | CSS color | black/white | Default depends on the color of the box the diagram is contained in. |
 
 Valid bubble contents:
 - `<text>Text</text>`

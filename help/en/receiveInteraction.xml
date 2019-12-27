@@ -25,7 +25,7 @@
                     <small-p>
                         Clicked, even before mouse button is released
                     </small-p>
-                    <small-p arrow-horizontal="true">
+                    <small-p>
                         Clicked, dragged (moved), and then released
                     </small-p>
                     <small-p>Entered by mouse, without clicking</small-p>
