@@ -9,7 +9,7 @@
             <diagram>
                 <script>
                     <block s="doResetTimer" annotation="1"/>
-                    <block s="doWait" annotation="2">
+                    <block s="doWaitUntil" annotation="2">
                         <block s="reportGreaterThan">
                             <block s="reportTimer"/>
                             <l>5</l>

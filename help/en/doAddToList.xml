@@ -31,9 +31,8 @@
                     <block s="bubble" annotation="1">
                         <block s="reportListItem">
                             <l><option>any</option></l>
-                            <l>my list</l>
+                            <block var="my list"/>
                         </block>
-                        <l>2</l>
                     </block>
                 </script>
                 <annotations>
@@ -45,12 +44,50 @@
     <box color="blue">
         <column>
             <p>Use this block to add an item to the end of a list.</p>
+	    <row>
             <script>
                 <block s="doAddToList">
-                    <l>your words or number here</l>
-                    <block var="your list"/>
+                    <l>781</l>
+                    <block var="my list"/>
                 </block>
             </script>
+            <script>
+                <block s="doAddToList">
+                    <block s="reportNewList">
+		      <list>
+		      <l>alpha</l>
+		      <l>beta</l>
+		      <l>gamma</l>
+		      </list>
+		    </block>
+                    <block var="my list"/>
+                </block>
+            </script>
+	    </row>
+	    <row>
+            <script>
+                <block s="doAddToList">
+		  <block s="reifyReporter">
+		    <autolambda>
+		      <block s="reportSum">
+			<l/>
+			<l/>
+		      </block>
+		    </autolambda>
+		    <list/>
+		  </block>
+		  <block var="my list"/>
+                </block>
+            </script>
+            <script>
+                <block s="doAddToList">
+                    <block s="newClone">
+		      <l><option>myself</option></l>
+		    </block>
+		    <block var="my list"/>
+                </block>
+            </script>
+	    </row>
             <p>
                 <text>Make an empty list:</text>
                 <script>

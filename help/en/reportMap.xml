@@ -70,8 +70,8 @@
         <column>
             <diagram>
                 <script>
-                    <block s="reportMap" annotation="1">
-                        <block s="reifyReporter">
+                    <block s="reportMap">
+                        <block s="reifyReporter" annotation="1">
                             <script/>
                             <list/>
                         </block>

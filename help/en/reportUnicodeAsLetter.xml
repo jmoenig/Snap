@@ -11,8 +11,7 @@
             <p>Reports the letter with a given code.</p>
             <p>
                 Letters and other characters are represented inside the
-                computer using a numeric code called Unicode. Type or paste
-                a single character into the input to get its Unicode number.
+                computer using a numeric code called Unicode. Give a Unicode number as input to find out what character it represents.
             </p>
             <row>
                 <diagram rel-width="1">

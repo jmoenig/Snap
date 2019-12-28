@@ -66,7 +66,7 @@
                 </column>
                 <column rel-width="1">
                     <img src="reportAudio_instrument.png" width="203" height="72"/>
-                    <p>Simple musical instrument with harmonies</p>
+                    <p>Simple musical instrument with harmonics</p>
                 </column>
             </row>
         </column>

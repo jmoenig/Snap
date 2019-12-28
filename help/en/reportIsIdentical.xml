@@ -12,7 +12,7 @@
             <p>Reports whether the two inputs are the same thing.</p>
             <diagram>
                 <script>
-                    <block s="reportIsIdentical" annotation="1">
+                    <block s="reportIsIdentical" bubble="1" annotation="1">
                         <block s="reportNewList">
                             <list>
                                 <l>a</l>
@@ -56,7 +56,7 @@
                     </script>
                     <diagram>
                         <script>
-                            <block s="reportIsIdentical">
+                            <block s="reportIsIdentical" bubble="1">
                                 <block var="foo"/>
                                 <block var="baz"/>
                             </block>

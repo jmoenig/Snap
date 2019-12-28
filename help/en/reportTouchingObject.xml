@@ -39,7 +39,7 @@
                     <p>Not touching...</p>
                 </column>
                 <column rel-width="1">
-                    <img src="reportTouchingObject_not_touching.png" width="152" height="107"/>
+                    <img src="reportTouchingObject_touching.png" width="152" height="107"/>
                     <p>Touching...</p>
                 </column>
             </row>

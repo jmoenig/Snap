@@ -16,7 +16,7 @@
                             <block s="doIf" annotation="2">
                                 <block s="reportColorIsTouchingColor">
                                     <color>103,65,38,1</color>
-                                    <color>155,102,1,1</color>
+                                    <color>255,102,0,1</color>
                                 </block>
                                 <script>
                                     <block s="doPlayNote" annotation="3">

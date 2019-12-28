@@ -17,7 +17,7 @@
                             <block s="changeXPosition" annotation="3">
                                 <l>1</l>
                             </block>
-                            <block s="changeYPosition" annotation="4">
+                            <block s="setYPosition" annotation="4">
                                 <block s="reportProduct">
                                     <l>100</l>
                                     <block s="reportMonadic">
@@ -34,7 +34,7 @@
                     <small-p>Forever</small-p>
                     <small-p>Move to the right</small-p>
                     <small-p>
-                        Set the y position to a function of the x
+                        Set the y position to a function of the x position
                     </small-p>
                 </annotations>
             </diagram>
@@ -60,12 +60,12 @@
                         <item>ceiling</item>
                         <item>floor</item>
                         <item>sqrt</item>
-                        <item>sin</item>
-                        <item>cos</item>
-                        <item>tan</item>
-                        <item>asin</item>
-                        <item>acos</item>
-                        <item>atan</item>
+                        <item color="yellow" annotation="2">sin</item>
+                        <item color="yellow">cos</item>
+                        <item color="yellow">tan</item>
+                        <item color="yellow">asin</item>
+                        <item color="yellow">acos</item>
+                        <item color="yellow">atan</item>
                         <item>ln</item>
                         <item>log</item>
                         <item>lg</item>
@@ -79,6 +79,10 @@
                         This block performs a mathematical function. Choose
                         the math function from the block's drop down menu.
                     </p>
+		    <p>
+		        Note: Trig functions are based on angles in
+			degrees, not radians!
+		    </p>
                 </annotations>
             </diagram>
         </column>

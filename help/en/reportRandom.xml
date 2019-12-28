@@ -11,13 +11,13 @@
         <column>
             <diagram>
                 <script>
-                    <block s="forward" annotation="1">
+                    <block s="setXPosition" annotation="1">
                         <block s="reportRandom">
                             <l>-240</l>
                             <l>240</l>
                         </block>
                     </block>
-                    <block s="forward" annotation="1">
+                    <block s="setYPosition" annotation="1">
                         <block s="reportRandom">
                             <l>-180</l>
                             <l>180</l>
@@ -31,6 +31,14 @@
                     </small-p>
                 </annotations>
             </diagram>
+	    <p>
+	      <text>This can be abbreviated with</text>
+	      <script>
+		<block s="doGotoObject">
+		  <l>random position</l>
+		</block>
+	      </script>
+	    </p>
         </column>
     </box>
     <box color="blue">
@@ -62,6 +70,23 @@
                     </small-p>
                 </annotations>
             </diagram>
+	    <diagram>
+	      <script>
+		<block s="reportRandom" bubble="1" annotation="1">
+		  <l>1</l>
+		  <l>5.3</l>
+		</block>
+	      </script>
+	      <bubbles>
+		<text>2.94103681</text>
+	      </bubbles>
+	      <annotations>
+		<small-p>
+		  If either input isn't an integer, then the result can be
+		  any value between the input values, not just whole numbers.
+		</small-p>
+	      </annotations>
+	    </diagram>
         </column>
     </box>
 </help-screen>

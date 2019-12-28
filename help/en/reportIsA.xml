@@ -105,8 +105,8 @@
             <column rel-width="2">
                 <p>
                     The possible types are number, text, Boolean (true or
-                    false), list, command (a script or jigsaw-shaped command
-                    block), sprite, costume, sound (object-oriented types),
+                    false), list, sprite, costume, sound (object-oriented types), command (a script or jigsaw-shaped command
+                    block),
                     reporter (an oval block that reports a value), and
                     predicate (a hexagonal block that reports true or false).
                 </p>

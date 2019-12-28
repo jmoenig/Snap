@@ -52,8 +52,14 @@
                 </menus>
                 <annotations>
                     <small-p>
-                        Can also report how much you need to turn to be
+		      <text>
+                        Can also report what
+		      </text>
+		      <script><block s="direction" /></script>
+		      <text>
+			to face in order to be
                         facing toward the other sprite.
+		      </text>
                     </small-p>
                 </annotations>
             </diagram>

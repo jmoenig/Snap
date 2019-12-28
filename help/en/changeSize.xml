@@ -10,8 +10,8 @@
         <row>
             <diagram rel-width="1">
                 <script>
-                    <block s="changeSize" annotation="1">
-                        <l/>
+                    <block s="setSize" annotation="1">
+                        <l>1</l>
                     </block>
                     <block s="down"></block>
                     <block s="doRepeat" annotation="2">

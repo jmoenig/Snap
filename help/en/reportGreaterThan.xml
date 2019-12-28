@@ -37,4 +37,35 @@
             </diagram>
         </column>
     </box>
+    <box color="blue">
+      <column>
+      <row>
+	<diagram rel-width="1">
+	  <script>
+	  <block s="reportGreaterThan" bubble="1">
+	    <l>bagel</l>
+	    <l>lox</l>
+	  </block>
+	  </script>
+	  <bubbles>
+	    <bool>false</bool>
+	  </bubbles>
+	</diagram>
+	<diagram rel-width="1">
+	  <script>
+	  <block s="reportGreaterThan" bubble="1">
+	    <l>mac</l>
+	    <l>cheese</l>
+	  </block>
+	  </script>
+	  <bubbles>
+	    <bool>true</bool>
+	  </bubbles>
+	</diagram>
+      </row>
+      <row>
+      <p>If the inputs aren't numbers, they're compared in alphabetical order.</p>
+      </row>
+      </column>
+    </box>
 </help-screen>

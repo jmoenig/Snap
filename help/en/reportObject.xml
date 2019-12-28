@@ -17,6 +17,7 @@
                 </script>
                 <menus>
                     <menu>
+		        <item>Myself</item>
                         <item>Stage</item>
                         <line/>
                         <item>Purple</item>
