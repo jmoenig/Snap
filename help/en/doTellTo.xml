@@ -78,8 +78,8 @@
             </p>
             <diagram>
                 <script>
-                    <block s="doTellTo" annotation="1">
-                        <l/>
+                    <block s="doTellTo">
+                        <l>Sprite(2)</l>
                         <block s="reifyScript">
                             <script>
                                 <block s="doRepeat">
@@ -104,7 +104,7 @@
                         </list>
                     </block>
                 </script>
-                <annotations>
+	    </diagram>
                     <small-p>
                         In this example, "his variable" is defined in
                         Sprite(2), so it can be used inside the script. "My
@@ -113,8 +113,6 @@
                         as input to TELL, which fills the empty slot in the
                         MOVE block with it.
                     </small-p>
-                </annotations>
-            </diagram>
         </column>
     </box>
 </help-screen>

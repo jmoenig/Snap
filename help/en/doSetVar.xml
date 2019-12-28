@@ -3,7 +3,7 @@
         <script>
             <block s="doSetVar">
                 <l>variable</l>
-                <l>0</l>
+                <l></l>
             </block>
         </script>
     </thumbnail>

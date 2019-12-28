@@ -13,7 +13,7 @@
                 clones.)
             </p>
             <row>
-                <column rel-width="4">
+                <column rel-width="1">
                     <p>BEFORE</p>
                     <column padding="2">
                         <row padding="3">
@@ -36,7 +36,7 @@
                         </row>
                     </column>
                 </column>
-                <column rel-width="3">
+                <column rel-width="1">
                     <p>Run</p>
                     <script>
                         <block s="doDeleteAttr">
@@ -44,14 +44,22 @@
                         </block>
                     </script>
                 </column>
-                <column rel-width="4">
+                <column rel-width="3">
                     <p>AFTER</p>
                     <column padding="2">
                         <row padding="3">
                             <img src="checkbox_unchecked.png" width="15" height="15"/>
-                            <script>
-                                <block s="xPosition"/>
-                            </script>
+                            <diagram>
+                                <script>
+                                    <block s="xPosition" ghost="true" annotation="1"/>
+                                </script>
+                                <annotations>
+                                    <small-p>
+                                        Pale background in palette for
+                                        inherited property.
+                                    </small-p>
+                                </annotations>
+                            </diagram>
                         </row>
                         <row padding="3">
                             <img src="checkbox_unchecked.png" width="15" height="15"/>
@@ -61,17 +69,9 @@
                         </row>
                         <row padding="3">
                             <img src="checkbox_unchecked.png" width="15" height="15"/>
-                            <diagram rel-width="1">
                                 <script>
-                                    <block s="direction" ghost="true" annotation="1"/>
+                                    <block s="direction"/>
                                 </script>
-                                <annotations>
-                                    <small-p>
-                                        Pale background in palette for
-                                        inherited property.
-                                    </small-p>
-                                </annotations>
-                            </diagram>
                         </row>
                     </column>
                 </column>

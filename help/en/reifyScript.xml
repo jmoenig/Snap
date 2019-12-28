@@ -25,7 +25,8 @@
         <column>
             <p>Reports a script or block as a value.</p>
             <row>
-                <diagram rel-width="1">
+	      <column rel-width="2">
+                <diagram>
                     <script>
                         <block s="reportSum" bubble="1">
                             <l>2</l>
@@ -36,7 +37,7 @@
                         <text>5</text>
                     </bubbles>
                 </diagram>
-                <diagram rel-width="2">
+                <diagram>
                     <script>
                         <block s="reifyReporter" bubble="1">
                             <autolambda>
@@ -62,9 +63,9 @@
                         </script>
                     </bubbles>
                 </diagram>
-            </row>
-            <row>
-                <diagram rel-width="1">
+	      </column>
+	      <column rel-width="3">
+                <diagram>
                     <script>
                         <block s="reifyScript">
                             <script>
@@ -77,7 +78,7 @@
                         </block>
                     </script>
                 </diagram>
-                <diagram rel-width="2">
+                <diagram>
                     <script>
                         <block s="reifyScript" annotation="1">
                             <script annotation="2"/>
@@ -96,6 +97,7 @@
                         </small-p>
                     </annotations>
                 </diagram>
+	      </column>
             </row>
         </column>
     </box>

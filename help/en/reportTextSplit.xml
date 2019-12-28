@@ -64,7 +64,7 @@
                 </p>
             </row>
             <row>
-                <diagram rel-width="7">
+                <diagram rel-width="12">
                     <script>
                         <block s="reportTextSplit" bubble="1">
                             <block s="reportURL">
@@ -74,7 +74,7 @@
                         </block>
                     </script>
                     <bubbles>
-                        <img src="reportTextSplit_list4.png" width="87" height="105"/>
+                        <img src="reportTextSplit_list4.png" width="166" height="153"/>
                     </bubbles>
                 </diagram>
                 <p rel-width="4">

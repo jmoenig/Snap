@@ -24,7 +24,7 @@
                     <small-p>Report current year, e.g., 2015</small-p>
                     <small-p>Report month of year, Jan=1, Dec=12</small-p>
                     <small-p>Report day number within month, 1-31</small-p>
-                    <small-p>Report day of week (Sun=0, Mon=1, ... Sat=6)</small-p>
+                    <small-p arrow-horizontal="true">Report day of week (Sun=0, Mon=1, ... Sat=6)</small-p>
                     <small-p>Report hour of day, 0-23</small-p>
                     <small-p>Report minute within hour, 0-59</small-p>
                     <small-p>Report second within minute, 0-50</small-p>
