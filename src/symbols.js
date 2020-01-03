@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2019-February-07';
+modules.symbols = '2020-January-03';
 
 var SymbolMorph;
 
@@ -186,10 +186,14 @@ SymbolMorph.prototype.setLabelColor = function (
 
 SymbolMorph.prototype.drawNew = function () {
     var ctx, x, y, sx, sy;
-    this.image = newCanvas(new Point(
-        this.symbolWidth() + Math.abs(this.shadowOffset.x),
-        this.size + Math.abs(this.shadowOffset.y)
-    ));
+    this.image = newCanvas(
+        new Point(
+            this.symbolWidth() + Math.abs(this.shadowOffset.x),
+            this.size + Math.abs(this.shadowOffset.y)
+        ),
+        false,
+        this.image
+    );
     this.silentSetWidth(this.image.width);
     this.silentSetHeight(this.image.height);
     ctx = this.image.getContext('2d');

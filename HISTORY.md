@@ -14,6 +14,7 @@
 * blocks: recycle cached Canvasses
 * widgets: recycle cached Canvasses
 * byob: recycle cached Canvasses
+* symbols: recycle cached Canvasses
 
 ## 5.4.0:
 * **New Features:**
