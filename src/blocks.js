@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-December-13';
+modules.blocks = '2020-January-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5040,7 +5040,7 @@ CommandBlockMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
 
@@ -5833,7 +5833,7 @@ ReporterBlockMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
 
@@ -7671,7 +7671,7 @@ CommandSlotMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
     context.fillRect(0, 0, this.width(), this.height());
@@ -8000,7 +8000,7 @@ RingCommandSlotMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
 
@@ -8234,7 +8234,7 @@ CSlotMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
 
@@ -9537,7 +9537,7 @@ InputSlotMorph.prototype.drawNew = function () {
     var context, borderColor, r;
 
     // initialize my surface property
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     if (this.cachedNormalColor) { // if flashing
         borderColor = this.color;
@@ -9901,7 +9901,7 @@ TemplateSlotMorph.prototype.drawNew = function () {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     context.fillStyle = this.cachedClr;
     this.drawRounded(context);
@@ -10155,7 +10155,7 @@ BooleanSlotMorph.prototype.drawNew = function (progress) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     this.drawDiamond(context, progress);
     this.drawLabel(context, textLabel);
@@ -10561,7 +10561,7 @@ ArrowMorph.prototype.setSize = function (size) {
 
 ArrowMorph.prototype.drawNew = function () {
     // initialize my surface property
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     var context = this.image.getContext('2d'),
         pad = this.padding,
         h = this.height(),
@@ -10767,7 +10767,7 @@ ColorSlotMorph.prototype.drawNew = function () {
     this.silentSetExtent(new Point(side, side));
 
     // initialize my surface property
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     if (this.parent) {
         borderColor = this.parent.color;
@@ -11518,7 +11518,7 @@ FunctionSlotMorph.prototype.drawNew = function () {
     var context, borderColor;
 
     // initialize my surface property
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     if (this.parent) {
         borderColor = this.parent.color;
