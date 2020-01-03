@@ -9,6 +9,7 @@
 ### 2020-01-03
 * new dev version
 * Morphic: recycle cached Canvasses
+* gui: recycle cached Canvasses
 
 ## 5.4.0:
 * **New Features:**

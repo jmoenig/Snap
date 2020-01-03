@@ -581,7 +581,7 @@ IDE_Morph.prototype.createLogo = function () {
     this.logo = new Morph();
     this.logo.texture = this.logoURL;
     this.logo.drawNew = function () {
-        this.image = newCanvas(this.extent());
+        this.image = newCanvas(this.extent(), false, this.image);
         var context = this.image.getContext('2d'),
             gradient = context.createLinearGradient(
                 0,
@@ -8147,15 +8147,15 @@ SpriteIconMorph.prototype.createBackgrounds = function () {
         return null;
     }
 
-    this.normalImage = newCanvas(ext);
+    this.normalImage = newCanvas(ext, false, this.normalImage);
     context = this.normalImage.getContext('2d');
     this.drawBackground(context, this.color);
 
-    this.highlightImage = newCanvas(ext);
+    this.highlightImage = newCanvas(ext, false, this.highlightImage);
     context = this.highlightImage.getContext('2d');
     this.drawBackground(context, this.highlightColor);
 
-    this.pressImage = newCanvas(ext);
+    this.pressImage = newCanvas(ext, false, this.pressImage);
     context = this.pressImage.getContext('2d');
     this.drawOutline(context);
     this.drawBackground(context, this.pressColor);
@@ -9341,8 +9341,8 @@ StageHandleMorph.prototype.init = function (target) {
 // StageHandleMorph drawing:
 
 StageHandleMorph.prototype.drawNew = function () {
-    this.normalImage = newCanvas(this.extent());
-    this.highlightImage = newCanvas(this.extent());
+    this.normalImage = newCanvas(this.extent(), false, this.normalImage);
+    this.highlightImage = newCanvas(this.extent(), false, this.highlightImage);
     this.drawOnCanvas(
         this.normalImage,
         this.color
@@ -9634,7 +9634,11 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     }
 
     this.videoView.setExtent(stage.dimensions);
-    this.videoView.image = newCanvas(stage.dimensions);
+    this.videoView.image = newCanvas(
+        stage.dimensions,
+        true, // retina, maybe overkill here
+        this.videoView.image
+    );
 
     this.videoView.drawOn = function (aCanvas) {
         var context = aCanvas.getContext('2d'),
