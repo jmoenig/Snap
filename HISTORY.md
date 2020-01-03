@@ -6,6 +6,7 @@
     * optimized loading projects
 * **Notable Fixes:**
 * **Translation Updates:**
+    * Catalan
 
 ### 2020-01-03
 * new dev version
@@ -17,6 +18,7 @@
 * byob: recycle cached Canvasses
 * symbols: recycle cached Canvasses
 * symbols: recycle cached Canvasses
+* Catalan translation update
 
 ## 5.4.0:
 * **New Features:**
