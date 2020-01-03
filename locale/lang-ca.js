@@ -2722,6 +2722,8 @@ SnapTranslator.dict.ca = {
     'neg':
         'oposat',
     '__shout__go__':
-        'bandera verda premuda'
+        'bandera verda premuda',
+    'new costume %l width %dim height %dim':
+        'nou vestit %l amplada %dim alçada %dim'
 
 };
