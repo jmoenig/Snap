@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * optimized loading projects
 * **Notable Fixes:**
 * **Translation Updates:**
 
@@ -14,6 +15,7 @@
 * blocks: recycle cached Canvasses
 * widgets: recycle cached Canvasses
 * byob: recycle cached Canvasses
+* symbols: recycle cached Canvasses
 * symbols: recycle cached Canvasses
 
 ## 5.4.0:
