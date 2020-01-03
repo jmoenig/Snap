@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2010-2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-November-12';
+var morphicVersion = '2020-January-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1335,14 +1335,18 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
     // by default retina support is automatic
-    // optional existing canvas to be used again
+    // optional existing canvas to be used again, unless it is marked as
+    // being shared among Morphs (dataset property "morphicShare")
     var canvas, ext;
     nonRetina = nonRetina || false;
     ext = (extentPoint ||
             (recycleMe ? new Point(recycleMe.width, recycleMe.height)
                 : new Point(0, 0))).floor();
-    if (recycleMe && (recycleMe.isRetinaEnabled || false) !== nonRetina &&
-            ext.x === recycleMe.width && ext.y === recycleMe.height) {
+    if (recycleMe &&
+            !recycleMe.dataset.morphicShare &&
+            (recycleMe.isRetinaEnabled || false) !== nonRetina &&
+            ext.x === recycleMe.width && ext.y === recycleMe.height
+    ) {
         canvas = recycleMe;
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         return canvas;
@@ -1449,6 +1453,14 @@ function copy(target) {
     var value, c, property, keys, l, i;
 
     if (typeof target !== 'object') {
+        if (target instanceof HTMLCanvasElement) {
+            // tag canvas elements as being shared,
+            // so the next time when rerendering a Morph
+            // instead of recycling the shared canvas a
+            // new unshared one get created
+            // see newCanvas() function
+            target.dataset.morphicShare = 'true';
+        }
         return target;
     }
     value = target.valueOf();
@@ -3392,7 +3404,7 @@ Morph.prototype.setColor = function (aColor) {
 
 Morph.prototype.drawNew = function () {
     // initialize my surface property
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
     context.fillRect(0, 0, this.width(), this.height());
@@ -4627,8 +4639,8 @@ HandleMorph.prototype.init = function (
 // HandleMorph drawing:
 
 HandleMorph.prototype.drawNew = function () {
-    this.normalImage = newCanvas(this.extent());
-    this.highlightImage = newCanvas(this.extent());
+    this.normalImage = newCanvas(this.extent(), false, this.normalImage);
+    this.highlightImage = newCanvas(this.extent(), false, this.highlightImage);
     if (this.type === 'movePivot') {
         this.drawCrosshairsOnCanvas(this.normalImage, 0.6);
         this.drawCrosshairsOnCanvas(this.highlightImage, 0.5);
@@ -5182,7 +5194,7 @@ ColorPaletteMorph.prototype.drawNew = function () {
     var context, ext, x, y, h, l;
 
     ext = this.extent();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     this.choice = new Color();
     for (x = 0; x <= ext.x; x += 1) {
@@ -5291,7 +5303,7 @@ GrayPaletteMorph.prototype.drawNew = function () {
     var context, ext, gradient;
 
     ext = this.extent();
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     this.choice = new Color();
     gradient = context.createLinearGradient(0, 0, ext.x, ext.y);
@@ -6079,7 +6091,7 @@ BoxMorph.prototype.init = function (edge, border, borderColor) {
 BoxMorph.prototype.drawNew = function () {
     var context;
 
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
     if ((this.edge === 0) && (this.border === 0)) {
         BoxMorph.uber.drawNew.call(this);
@@ -6641,7 +6653,7 @@ DialMorph.prototype.drawNew = function () {
       	inner = face * 0.85,
        	outer = face * 0.95;
 
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     ctx = this.image.getContext('2d');
 
     // draw a light border:
@@ -6905,7 +6917,7 @@ CircleBoxMorph.prototype.drawNew = function () {
     if (this.autoOrient) {
         this.autoOrientation();
     }
-    this.image = newCanvas(this.extent());
+    this.image = newCanvas(this.extent(), false, this.image);
     context = this.image.getContext('2d');
 
     if (this.orientation === 'vertical') {
@@ -7022,6 +7034,7 @@ SliderButtonMorph.prototype.drawNew = function () {
     }
     this.normalImage = this.image;
 
+    this.image = null; // make sure not to reuse ther image canvas
     this.color = this.highlightColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
     if (this.is3D || !MorphicPreferences.isFlat) {
@@ -7029,6 +7042,7 @@ SliderButtonMorph.prototype.drawNew = function () {
     }
     this.highlightImage = this.image;
 
+    this.image = null; // make sure not to reuse ther image canvas
     this.color = this.pressColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
     if (this.is3D || !MorphicPreferences.isFlat) {
@@ -8673,6 +8687,11 @@ StringMorph.prototype = new Morph();
 StringMorph.prototype.constructor = StringMorph;
 StringMorph.uber = Morph.prototype;
 
+// StringMorph shared properties:
+
+// context for measuring text dimensions, used by StringMorphs and TextMorphs
+StringMorph.prototype.measureCtx = newCanvas().getContext("2d");
+
 // StringMorph instance creation:
 
 function StringMorph(
@@ -8784,14 +8803,10 @@ StringMorph.prototype.drawNew = function () {
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
-    // initialize my surface property
-    this.image = newCanvas();
-    context = this.image.getContext('2d');
-    context.font = this.font();
-
-    // set my extent
+    // determine my extent
+    this.measureCtx.font = this.font();
     width = Math.max(
-        context.measureText(txt).width + Math.abs(shadowOffset.x),
+        this.measureCtx.measureText(txt).width + Math.abs(shadowOffset.x),
         1
     );
     this.bounds.corner = this.bounds.origin.add(
@@ -8800,8 +8815,10 @@ StringMorph.prototype.drawNew = function () {
             fontHeight(this.fontSize) + Math.abs(shadowOffset.y)
         )
     );
-    this.image.width = width;
-    this.image.height = this.height();
+
+    // initialize my surface property
+    this.image = newCanvas(this.extent(), false, this.image);
+    context = this.image.getContext('2d');
 
     // prepare context for drawing text
     context.font = this.font();
@@ -9377,6 +9394,11 @@ TextMorph.prototype = new Morph();
 TextMorph.prototype.constructor = TextMorph;
 TextMorph.uber = Morph.prototype;
 
+// TextMorph shared properties:
+
+// context for measuring text dimensions, shared with StringMorph prototype
+TextMorph.prototype.measureCtx = StringMorph.prototype.measureCtx;
+
 // TextMorph instance creation:
 
 function TextMorph(
@@ -9464,8 +9486,7 @@ TextMorph.prototype.font = StringMorph.prototype.font;
 TextMorph.prototype.parse = function () {
     var myself = this,
         paragraphs = this.text.split('\n'),
-        canvas = newCanvas(),
-        context = canvas.getContext('2d'),
+        context = this.measureCtx,
         oldline = '',
         newline,
         w,
@@ -9518,9 +9539,6 @@ TextMorph.prototype.drawNew = function () {
     var context, height, i, line, width, shadowHeight, shadowWidth,
         offx, offy, x, y, start, stop, p, c;
 
-    this.image = newCanvas();
-    context = this.image.getContext('2d');
-    context.font = this.font();
     this.parse();
 
     // set my extent
@@ -9536,8 +9554,8 @@ TextMorph.prototype.drawNew = function () {
             new Point(this.maxWidth + shadowWidth, height)
         );
     }
-    this.image.width = this.width();
-    this.image.height = this.height();
+
+    this.image = newCanvas(this.extent(), false, this.image);
 
     // prepare context for drawing text
     context = this.image.getContext('2d');
@@ -10018,17 +10036,17 @@ TriggerMorph.prototype.createBackgrounds = function () {
     var context,
         ext = this.extent();
 
-    this.normalImage = newCanvas(ext);
+    this.normalImage = newCanvas(ext, false, this.normalImage);
     context = this.normalImage.getContext('2d');
     context.fillStyle = this.color.toString();
     context.fillRect(0, 0, ext.x, ext.y);
 
-    this.highlightImage = newCanvas(ext);
+    this.highlightImage = newCanvas(ext, false, this.highlightImage);
     context = this.highlightImage.getContext('2d');
     context.fillStyle = this.highlightColor.toString();
     context.fillRect(0, 0, ext.x, ext.y);
 
-    this.pressImage = newCanvas(ext);
+    this.pressImage = newCanvas(ext, false, this.pressImage);
     context = this.pressImage.getContext('2d');
     context.fillStyle = this.pressColor.toString();
     context.fillRect(0, 0, ext.x, ext.y);
