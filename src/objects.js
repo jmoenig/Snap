@@ -10326,13 +10326,13 @@ Note.prototype.audioContext = null;
 
 Note.prototype.fadeIn = new Float32Array(2);
 Note.prototype.fadeIn[0] = [0.0];
-Note.prototype.fadeIn[1] = [1.0];
+Note.prototype.fadeIn[1] = [0.2];
 
 Note.prototype.fadeOut = new Float32Array(2);
-Note.prototype.fadeOut[0] = [1.0];
+Note.prototype.fadeOut[0] = [0.2];
 Note.prototype.fadeOut[1] = [0.0];
 
-Note.prototype.fadeTime = 0.005;
+Note.prototype.fadeTime = 0.01;
 
 // Note audio context
 
