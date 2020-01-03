@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2019-October-28';
+modules.blocks = '2019-December-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -618,7 +618,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         if (block.selector === 'doSetVar') {
             // add settable object attributes
             dict['~'] = null;
-            dict.my = {
+            dict.my = [{// wrap the submenu into a 1-item array to translate it
                 'anchor' : ['anchor'],
                 'parent' : ['parent'],
                 'name' : ['name'],
@@ -628,10 +628,10 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'rotation style' : ['rotation style'],
                 'rotation x' : ['rotation x'],
                 'rotation y' : ['rotation y']
-            };
+            }];
             if (this.world().currentKey === 16) { // shift
-                dict.my['~'] = null;
-                dict.my['microphone modifier'] = ['microphone modifier'];
+                dict.my[0]['~'] = null; // don't forget we're inside an array...
+                dict.my[0]['microphone modifier'] = ['microphone modifier'];
             }
         }
         return dict;
@@ -1464,6 +1464,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 {
                     'turbo mode' : ['turbo mode'],
                     'flat line ends' : ['flat line ends'],
+                    'log pen vectors' : ['log pen vectors'],
                     'video capture' : ['video capture'],
                     'mirror video' : ['mirror video']
                 },
@@ -2850,7 +2851,9 @@ BlockMorph.prototype.userMenu = function () {
         }
     }
 
-    // JIT-compile HOFs - experimental
+    // direct relabelling:
+    // - JIT-compile HOFs - experimental
+    // - vector pen trails
     if (
         contains(
             ['reportMap', 'reportKeep', 'reportFindFirst', 'reportCombine'],
@@ -2891,6 +2894,27 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
+            function () {
+                myself.setSelector(alternatives[myself.selector]);
+                myself.changed();
+            }
+        );
+    } else if (
+        contains(
+            ['reportPenTrailsAsCostume', 'reportPentrailsAsSVG'],
+            this.selector
+        )
+    ) {
+        alternatives = {
+            reportPenTrailsAsCostume : 'reportPentrailsAsSVG',
+            reportPentrailsAsSVG : 'reportPenTrailsAsCostume'
+        };
+        menu.addItem(
+            localize(
+                SpriteMorph.prototype.blocks[
+                    alternatives[myself.selector]
+                ].spec
+            ),
             function () {
                 myself.setSelector(alternatives[myself.selector]);
                 myself.changed();
@@ -6268,7 +6292,8 @@ RingMorph.prototype.vanishForSimilar = function () {
             || (this.parent instanceof RingCommandSlotMorph)) {
         return null;
     }
-    if (block.selector === 'reportGetVar' ||
+    if ((block.selector === 'reportGetVar' &&
+            !contains(this.inputNames(), block.blockSpec)) ||
         // block.selector === 'reportListItem' ||
         block.selector === 'reportJSFunction' ||
         block.selector === 'reportAttributeOf' ||
@@ -8742,9 +8767,34 @@ InputSlotMorph.prototype.menuFromDict = function (
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
-                menu.addMenu(key, this.menuFromDict(choices[key], true));
+                menu.addMenu(
+                    key,
+                    this.menuFromDict(choices[key],true),
+                    null,  // indicator
+                    true   // verbatim? - don't translate
+                );
+            } else if (choices[key] instanceof Array &&
+                    choices[key][0] instanceof Object &&
+                    typeof choices[key][0] !== 'function') {
+                menu.addMenu(
+                    key,
+                    this.menuFromDict(choices[key][0],true),
+                    null,  // indicator
+                    false  // verbatim? - do translate, if inside an array
+                );
             } else {
-                menu.addItem(key, choices[key]);
+                menu.addItem(
+                    key,
+                    choices[key],
+                    null, // hint
+                    null, // color
+                    null, // bold
+                    null, // italic
+                    null, // doubleClickAction
+                    null, // shortcut
+                    !(choices[key] instanceof Array) &&
+                        typeof choices[key] !== 'function' // verbatim?
+                );
             }
         }
     }
@@ -11016,8 +11066,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
+        inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
-    if (this.inputs().length < (this.minInputs + 1)) {
+    if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
         }
@@ -11026,11 +11077,15 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             arrows.position().subtract(new Point(dim.x, 0))
         );
         arrows.setExtent(dim);
+    } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
+        rightArrow.hide();
+        arrows.setExtent(dim);
     } else {
         if (label) {
             label.show();
         }
         leftArrow.show();
+        rightArrow.show();
         rightArrow.setPosition(leftArrow.topCenter());
         arrows.bounds.corner = rightArrow.bottomRight().copy();
     }
@@ -11054,7 +11109,6 @@ MultiArgMorph.prototype.addInput = function (contents) {
     var i, name,
         newPart = this.labelPart(this.slotSpec),
         idx = this.children.length - 1;
-    // newPart.alpha = this.alpha ? 1 : (1 - this.alpha) / 2;
     if (contents) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars' ||
@@ -11071,7 +11125,15 @@ MultiArgMorph.prototype.addInput = function (contents) {
         }
         newPart.setContents(name);
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
-        newPart.setContents('#' + idx);
+        if (this.is3ArgRingInHOF() && idx < 4) {
+            newPart.setContents([
+                localize('value'),
+                localize('index'),
+                localize('list')
+            ][idx - 1]);
+        } else {
+            newPart.setContents('#' + idx);
+        }
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
@@ -11093,6 +11155,33 @@ MultiArgMorph.prototype.removeInput = function () {
         }
     }
     this.fixLayout();
+};
+
+MultiArgMorph.prototype.is3ArgRingInHOF = function () {
+    // answer true if I am embedded into a ring inside a HOF block
+    // that supports 3 parameters ("item, idx, data")
+    // of which there are currently only MAP, KEEP and FIND
+    // and their atomic counterparts
+    var ring = this.parent,
+        block;
+    if (ring) {
+        block = ring.parent;
+        if (block instanceof ReporterBlockMorph) {
+            return block.inputs()[0] === ring &&
+                contains(
+                    [
+                        'reportMap',
+                        'reportAtomicMap',
+                        'reportKeep',
+                        'reportAtomicKeep',
+                        'reportFindFirst',
+                        'reportAtomicFindFirst'
+                    ],
+                    block.selector
+                );
+        }
+    }
+    return false;
 };
 
 // MultiArgMorph events:

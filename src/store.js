@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-August-08';
+modules.store = '2019-December-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 5.1, http://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 5.4, http://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -403,6 +403,10 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.pan) {
         project.stage.pan = +model.stage.attributes.pan;
+    }
+    if (model.stage.attributes.penlog) {
+        StageMorph.prototype.enablePenLogging =
+            (model.stage.attributes.penlog === 'true');
     }
 
     model.pentrails = model.stage.childNamed('pentrails');
@@ -1727,6 +1731,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
+            'penlog="@" ' +
             '%' +
             'volume="@" ' +
             'pan="@" ' +
@@ -1765,6 +1770,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
+        this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.volume,

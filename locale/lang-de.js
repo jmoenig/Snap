@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2019-10-21', // this, too, will appear in the Translators tab
+        '2019-12-03', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -491,6 +491,8 @@ SnapTranslator.dict.de = {
         'schreibe %s Größe %n',
     'paste on %spr':
         'drucke auf %spr',
+    'pen vectors':
+        'Vektor-Malspuren',
 
     // control:
     'when %greenflag clicked':
@@ -705,6 +707,8 @@ SnapTranslator.dict.de = {
         'Stapelgr\u00f6\u00dfe',
     'frames':
         'Rahmenz\u00e4hler',
+    'log pen vectors':
+        'Vektoraufzeichnung',
 
     // operators:
     '%n mod %n':
@@ -815,6 +819,10 @@ SnapTranslator.dict.de = {
         'für jedes %upvar von %l %cla',
     'item':
         'Element',
+    'value':
+        'Wert',
+    'index':
+        'Index',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
@@ -1106,6 +1114,13 @@ SnapTranslator.dict.de = {
         'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
+    'Log pen vectors':
+        'Malstiftvektoren aufzeichnen',
+    'uncheck to turn off\nlogging pen vectors':
+        'ausschalten, um Malstiftbewegungen\nnicht mehr aufzuzeichnen',
+    'check to turn on\nlogging pen vectors':
+        'einschalten, um Malstiftbewegungen\nals Vektor aufzuzeichnen',
+
 
     // inputs
     'with inputs':
@@ -1208,6 +1223,12 @@ SnapTranslator.dict.de = {
         'Bild exportieren...',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+    'svg...':
+        'SVG exportieren...',
+    'export pen trails\nline segments as SVG':
+        'Striche in Malspuren als\nVektorgraphik exportieren',
+    'there are currently no\nvectorizable pen trail segments':
+        'momentan gibt es keine\nvektorisierbaren Malspuren',
     'turn all pen trails and stamps\ninto a new background for the stage':
         'Hintergrund aus allen Malspuren und\nStempelabdrücken auf der Bühne erstellen',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':

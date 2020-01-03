@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2019-October-29';
+var morphicVersion = '2019-November-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8194,7 +8194,8 @@ MenuMorph.prototype.addItem = function (
     bold, // bool
     italic, // bool
     doubleClickAction, // optional, when used as list contents
-    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    verbatim // optional bool, don't translate if true
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -8205,22 +8206,45 @@ MenuMorph.prototype.addItem = function (
         * a tuple of format: [icon, string]
     */
     this.items.push([
-        localize(labelString || 'close'),
+        verbatim ? labelString || 'close' : localize(labelString || 'close'),
         action || nop,
         hint,
         color,
         bold || false,
         italic || false,
         doubleClickAction,
-        shortcut]);
+        shortcut,
+        verbatim]);
 };
 
-MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {
-    this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator);
+MenuMorph.prototype.addMenu = function (label, aMenu, indicator, verbatim) {
+    this.addPair(
+        label,
+        aMenu,
+        isNil(indicator) ? '\u25ba' : indicator,
+        null,
+        verbatim // don't translate
+    );
 };
 
-MenuMorph.prototype.addPair = function (label, action, shortcut, hint) {
-    this.addItem(label, action, hint, null, null, null, null, shortcut);
+MenuMorph.prototype.addPair = function (
+    label,
+    action,
+    shortcut,
+    hint,
+    verbatim // don't translate
+) {
+    this.addItem(
+        label,
+        action,
+        hint,
+        null,
+        null,
+        null,
+        null,
+        shortcut,
+        verbatim
+    );
 };
 
 MenuMorph.prototype.addLine = function (width) {

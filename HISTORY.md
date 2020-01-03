@@ -6,6 +6,207 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+
+## 5.4.0:
+* **New Features:**
+    * log pen vectors
+    * export pen trails as SVG
+    * access pen trails as SVG_Costume: new "pen vectors" reporter variant of "pen trails"
+    * new Snap! API: broadcast and react to messages, access global variables from outside Snap!
+* **Notable Change:**
+    * when creating a costume from pen trails (raster or vector) make its rotation center the position of the sprite
+* **Notable Fixes:**
+    * support null-serialization in list-csv conversions
+    * avoid circular inheritance when using blocks to set sprites' parents
+* **Translation Updates:**
+    * NEW Slovak translation, thanks, Peter Lukacovic
+    * German
+
+### 2019-12-19
+* objects, threads: refactored inheritance circularity avoidance
+* prepared release
+
+### 2019-12-18
+* gui, api: rearranged Snap! API into its own file
+* added API documentation
+* threads: avoid circular inheritance when using blocks to set sprites' parents
+
+### 2019-12-16
+* gui, objects: added ability to add general message listeners for "any" message
+* gui: added IDE >> getMessages() to Snap! API
+* gui: refactored IDE >> addMessageListenerForAll(callback)
+
+### 2019-12-15
+* gui, threads:  new Snap! API: programmatically broadcast messages and optionally wait from outside Snap!
+* gui: added global variable access methods to the new Snap! API
+* gui, objects: added ability to add message listeners to broadcasts
+
+### 2019-12-13
+* added direct relabelling option to pen trails blocks' context menus
+
+### 2019-12-10
+* NEW Slovak translation, thanks, Peter Lukacovic
+
+### 2019-12-09
+* store: save and restore "log pen trails" setting in project file
+
+### 2019-12-08
+* lists: support null-serialization in list-csv conversions
+
+### 2019-12-07
+* threads: turn "log pen trails" off when loading or creating a new project
+
+### 2019-12-05
+* threads: set the rotation point of "pen vectors" costumes to the position of the sprite that creates them
+* objects: set the rotation point of "pen trails" costumes to the position of the sprite that creates them
+
+### 2019-12-03
+* objects, blocks, threads, gui: added "log pen vectors" session setting
+* updated German translation
+
+### 2019-12-02
+* new dev version
+* objects: export pen trails as SVG (under construction)
+* threads: new "pen trails (SVG)" reporter (experimental, hidden in dev)
+* objects, threads: adjusted rotation center of SVG-pen-trails
+* objects: added aspect racio governance and generator tags to trails SVGs
+* threads: catch empty trails log when trying to generate a vector trails costume
+* objects: support relabelling "pen trails" to "pen trails (SVG)" and vice-versa
+* gui: added "svg" entry to the stage icon's context menu
+* objects: renamed "pen trails (SVG)" to "pen vectors"
+* German translation update
+* cleaned up change markers
+
+## v5.3.8:
+* **Notable Change:**
+    * optimized color collision detection
+
+### 2019-11-29
+* new dev version
+* objects, threads: optimized color collision detection
+* prepared release
+
+## v5.3.7:
+* **Notable Fixes:**
+    * wait until the camera actually records something when turning video capture "on"
+    * only report video capture as "on" when the camera actually records something
+
+### 2019-11-19
+* threads: when turning video capture "on" wait until the camera actually records something
+* prepared release
+
+### 2019-11-18
+* new dev version
+* threads: only report video capture as "on" when the camera actually records something
+
+## v5.3.6:
+* **Notable Fix:**
+    * fixed variadic reporters library 
+
+## v5.3.5:
+* **Notable Fix:**
+    * make sure list watchers are correctly initiailized 
+
+## v5.3.4:
+* **Notable Fixes:**
+    * allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
+    * disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
+    * now preserving the sprite's rotation point when taking a video-snap on it
+    * now preventing costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
+    * now catching sub-pixel sized thumbnails
+
+### 2019-11-15
+* objects: prevent costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
+* objects: catch sub-pixel sized thumbnails 
+* prepared release
+
+### 2019-11-14
+* lists: disabled direct editing of list watchers for non-literal typed lists (such as costumes) in speech bubbles and prompters
+* objects: preserve the sprite's rotation point when taking a video-snap on it
+
+### 2019-11-13
+* new dev version
+* threads: allowed reserved JS object property names as variable names in Snap (e.g. "constructor")
+
+## v5.3.3:
+* **Notable Change:**
+    * dropdown translation improvements, thanks, Joan!
+* **Notable Fixes:**
+    * fixed submenu translation control for dropdowns
+    * fixed help screens for "distance to _" and "answer" primitives, thanks, Brian and Michael!
+* **Translation Update:**
+    * Catalan
+
+### 2019-11-12
+* new dev version
+* drop-down menu translation improvements by Joan
+* submenu-title translation control
+* help screen fixes by Brian and Michael 
+* prepared release
+
+## v5.3.2:
+* **Notable Fixes:**
+    * fixed #2518 (broken localization system)
+    * fixed size of MY help screen, thanks, Brian
+* **Translation Updates:**
+    * Catalan, thanks, Joan
+
+### 2019-11-06
+* new dev version
+* morphic, blocks: reverted recent changes to tranlation mechanism
+* morphic: added support for "verbatim" (untranslated) menu items
+* blocks: don't translate variable names in drop-down menus
+* objects: don't translate variable names in "delete a variable" button menu
+* blocks: don't translate variable names in "inherit" block menu
+* blocks: fixed dropdown menu generation for untranslated items
+* blocks: don't translate message names in drow-down menus
+* blocks: don't translate names in dropdowns
+* byob: don't translate items in dropdowns
+* help: fixed size of MY help screen, thanks, Brian
+* prepared release
+
+## v5.3.1:
+* **Notable Fixes:**
+    * no longer translate variable names in drop-down menus for which translations exist
+    * fixed zero extent costume creation, thanks, Bernat!
+
+### 2019-11-05
+* threads: fixed zero extent costume creation, thanks, Bernat!
+* prepared release
+
+### 2019-11-04
+* new dev version
+* morphic: limit translation of menu items to specially marked ones
+* blocks: translate "my" submenu label in "set" block
+
+## v5.3.0:
+* **New Features:**
+    * expanding the rings in "map", "keep" and "find" shows 3 inputs named "value", "index" and "list" 
+    * limited expanding rings in special HOFs to 3 parameters
+    * calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
+* **Notable Changes:**
+    * dropping a ring parameter inside a reporter-ring no longer replaces the ring
+* **Notable Fix:**
+    * fixed the initial scale of new clones when the stage has been resized
+* **Translation Update:**
+    * German
+
+### 2019-11-02
+* blocks: limit expanding rings in special HOFs to 3 parameters
+* blocks: renamed default special HOF parameters to "item, index, list"
+* updated German translation
+* blocks: dropping a ring parameter inside a reporter-ring no longer replaces the ring
+* threads: calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
+* blocks: renamed default special HOF parameter "item" to "value"
+* updated German translation for "value"
+* objects: fixed the initial scale of new clones when the stage has been resized
+* prepared release
+
+### 2019-11-01
+* new dev version
+* expanding the rings in "map", "keep" and "find" shows 3 inputs named "item", "idx" and "data"
+* German translation update for "idx" and "data"
+
 ## v5.2.5:
 * **Notable Fix:**
     * resume AudioContext on every request

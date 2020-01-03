@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2019-October-18';
+modules.locale = '2019-December-10';
 
 // Global stuff
 
@@ -164,7 +164,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2019-10-21'
+        '2019-12-03'
 };
 
 SnapTranslator.dict.it = {
@@ -373,7 +373,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2019-10-25'
+        '2019-11-06'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -605,4 +605,15 @@ SnapTranslator.dict.ua = {
         'kseryj@gmail.com',
     'last_changed':
         '2018-08-21'
+};
+
+SnapTranslator.dict.sk = {
+    'language_name':
+        'Sloven\u010Dina',
+    'language_translator':
+        'Peter Luka\u010Dovi\u010D',
+    'translator_e-mail':
+        'peter_lukacovic@outlook.com',
+    'last_changed':
+        '2019-12-10'
 };

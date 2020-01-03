@@ -61,25 +61,24 @@
 
 */
 
-/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
-ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Audio,
+ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame, Sound,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, normalizeCanvas,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
-AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
-ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,
-BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph,
-CommentMorph, CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph,
-BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
-XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
-isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder,
-BlockEditorMorph, BlockDialogMorph*/
+AlignmentMorph, TabMorph, Costume, MorphicPreferences,BlockMorph, ToggleMorph,
+InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,  localize,
+BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, List, ArgMorph,
+Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, CommentMorph, saveAs,
+CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
+BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph,
+BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
+disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
+Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-October-30';
+modules.gui = '2019-December-19';
 
 // Declarations
 
@@ -2869,6 +2868,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
+        'Log pen vectors',
+        function () {
+            StageMorph.prototype.enablePenLogging =
+                !StageMorph.prototype.enablePenLogging;
+        },
+        StageMorph.prototype.enablePenLogging,
+        'uncheck to turn off\nlogging pen vectors',
+        'check to turn on\nlogging pen vectors',
+        false
+    );
+    addPreference(
         'Ternary Boolean slots',
         function () {
         	BooleanSlotMorph.prototype.isTernary =
@@ -3626,7 +3636,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5.2.5\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 5.4.0\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2019 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3863,6 +3873,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.enableCodeMapping = false;
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
+    StageMorph.prototype.enablePenLogging = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
     Process.prototype.enableLiveCoding = false;
     this.setProjectName('');
@@ -4350,6 +4361,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
+    StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -4392,6 +4404,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
+    StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -8020,6 +8033,13 @@ SpriteIconMorph.prototype.userMenu = function () {
             },
             'open a new window\nwith a picture of the stage'
         );
+        if (this.object.trailsLog.length) {
+            menu.addItem(
+                'svg...',
+                function () {myself.object.exportTrailsLogAsSVG(); },
+                'export pen trails\nline segments as SVG'
+            );
+        }
         return menu;
     }
     if (!(this.object instanceof SpriteMorph)) {return null; }

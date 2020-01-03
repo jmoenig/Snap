@@ -53,15 +53,15 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
+/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph, Map,
 MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
-TableFrameMorph, ColorSlotMorph, isSnapObject, Map, newCanvas, Symbol*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-October-30';
+modules.threads = '2019-December-19';
 
 var ThreadManager;
 var Process;
@@ -398,6 +398,8 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                         );
                     }
                 }
+            } else if (proc.onComplete instanceof Function) {
+                proc.onComplete();
             }
         } else {
             remaining.push(proc);
@@ -727,6 +729,9 @@ Process.prototype.evaluateContext = function () {
     if (isString(exp)) {
         return this[exp].apply(this, this.context.inputs);
     }
+    if (exp instanceof Variable) { // special case for empty reporter rings
+        this.returnValueToParentContext(exp.value);
+    }
     this.popContext(); // default: just ignore it
 };
 
@@ -1048,7 +1053,6 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
             // and remember the number of detected empty slots
             context.emptySlots = i;
         }
-
     } else {
         context.expression = this.enableLiveCoding ||
             this.enableSingleStepping ? [this.context.expression]
@@ -1116,6 +1120,7 @@ Process.prototype.evaluate = function (
         caller = this.context.parentContext,
         exit,
         runnable,
+        expr,
         parms = args.asArray(),
         i,
         value;
@@ -1158,10 +1163,24 @@ Process.prototype.evaluate = function (
         // assign implicit parameters if there are no formal ones
         if (context.inputs.length === 0) {
             // in case there is only one input
-            // assign it to all empty slots
+            // assign it to all empty slots...
             if (parms.length === 1) {
-                for (i = 1; i <= context.emptySlots; i += 1) {
-                    outer.variables.addVar(i, parms[0]);
+                // ... unless it's an empty reporter ring,
+                // in which special case it gets treated as the ID-function;
+                // experimental feature jens is not at all comfortable with
+                if (!context.emptySlots) {
+                    expr = context.expression;
+                    if (expr instanceof Array &&
+                            expr.length === 1 &&
+                            expr[0].selector &&
+                            expr[0].selector === 'reifyReporter' &&
+                            !expr[0].contents()) {
+                        runnable.expression = new Variable(parms[0]);
+                    }
+                } else {
+                    for (i = 1; i <= context.emptySlots; i += 1) {
+                        outer.variables.addVar(i, parms[0]);
+                    }
                 }
 
             // if the number of inputs matches the number
@@ -2060,9 +2079,12 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     case 'flat line ends':
         SpriteMorph.prototype.useFlatLineEnds = bool;
         break;
+    case 'log pen vectors':
+        StageMorph.prototype.enablePenLogging = bool;
+        break;
     case 'video capture':
         if (bool) {
-            stage.startVideo();
+            this.startVideo(stage);
         } else {
             stage.stopProjection();
         }
@@ -2081,8 +2103,14 @@ Process.prototype.reportGlobalFlag = function (name) {
         return this.reportIsFastTracking();
     case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
+    case 'log pen vectors':
+        return StageMorph.prototype.enablePenLogging;
     case 'video capture':
-        return !isNil(stage.projectionSource);
+        return !isNil(stage.projectionSource) &&
+            stage.projectionLayer()
+                .getContext('2d')
+                .getImageData(0, 0, 1, 1)
+                .data[3] > 0;
     case 'mirror video':
         return stage.mirrorVideo;
     default:
@@ -3152,6 +3180,12 @@ Process.prototype.doBroadcast = function (message) {
                 });
             }
         });
+        (stage.messageCallbacks[''] || []).forEach(function (callback) {
+            callback(msg); // for "any" message, pass it along as argument
+        });
+        (stage.messageCallbacks[msg] || []).forEach(function (callback) {
+            callback(); // for a particular message
+        });
     }
     return procs;
 };
@@ -4032,66 +4066,6 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     );
 };
 
-Process.prototype.reportTouchingColor = function (aColor, tolerance) {
-    // also check for any parts (subsprites)
-    var thisObj = this.blockReceiver(),
-        stage;
-
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage) {
-            if (thisObj.isTouching(
-                stage.colorFiltered(aColor, thisObj, tolerance))
-            ) {
-                return true;
-            }
-            return thisObj.parts.some(
-                function (any) {
-                    return any.isTouching(
-                        stage.colorFiltered(aColor, any, tolerance)
-                    );
-                }
-            );
-        }
-    }
-    return false;
-};
-
-Process.prototype.reportFuzzyTouchingColor =
-    Process.prototype.reportTouchingColor;
-
-Process.prototype.reportColorIsTouchingColor = function (
-    color1,
-    color2,
-    tolerance
-) {
-    // also check for any parts (subsprites)
-    var thisObj = this.blockReceiver(),
-        stage;
-
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage) {
-            if (thisObj.colorFiltered(color1, tolerance).isTouching(
-                    stage.colorFiltered(color2, thisObj, tolerance)
-                )) {
-                return true;
-            }
-            return thisObj.parts.some(
-                function (any) {
-                    return any.colorFiltered(color1, tolerance).isTouching(
-                        stage.colorFiltered(color2, any, tolerance)
-                    );
-                }
-            );
-        }
-    }
-    return false;
-};
-
-Process.prototype.reportFuzzyColorIsTouchingColor =
-    Process.prototype.reportColorIsTouchingColor;
-
 Process.prototype.reportAspect = function (aspect, location) {
     // sense colors and sprites anywhere,
     // use sprites to read/write data encoded in colors.
@@ -4580,8 +4554,7 @@ Process.prototype.doSet = function (attribute, value) {
     case 'parent':
         this.assertType(rcvr, 'sprite');
         value = value instanceof SpriteMorph ? value : null;
-        // needed: circularity avoidance
-        rcvr.setExemplar(value);
+        rcvr.setExemplar(value, true); // throw an error in case of circularity
         break;
     case 'temporary?':
         this.assertType(rcvr, 'sprite');
@@ -4843,6 +4816,20 @@ Process.prototype.reportVideo = function(attribute, name) {
         return stage.projectionSnap();
     }
     return -1;
+};
+
+Process.prototype.startVideo = function(stage) {
+    // interpolated
+    if (this.reportGlobalFlag('video capture')) {return; }
+    if (!stage.projectionSource || !stage.projectionSource.stream) {
+        // wait until video is turned on
+        if (!this.context.accumulator) {
+            this.context.accumulator = true; // started video
+            stage.startVideo();
+        }
+    }
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 // Process code mapping
@@ -5135,6 +5122,47 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
             localize('costume')
         )
     );
+};
+
+Process.prototype.reportPentrailsAsSVG = function () {
+    // interpolated
+    var rcvr, stage, svg, acc, offset;
+
+    if (!this.context.accumulator) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (!stage.trailsLog.length) {
+            throw new Error (localize(
+                'there are currently no\nvectorizable pen trail segments'
+            ));
+        }
+        svg = stage.trailsLogAsSVG();
+        this.context.accumulator = {
+            img : new Image(),
+            rot : svg.rot,
+            ready : false
+        };
+        acc = this.context.accumulator;
+        acc.img.onload = function () {
+            acc.ready = true;
+        };
+        acc.img.src = 'data:image/svg+xml,' + svg.src;
+        acc.img.rot = svg.rotationShift;
+    } else if (this.context.accumulator.ready) {
+        offset = new Point(0, 0);
+        rcvr = this.blockReceiver();
+        if (rcvr instanceof SpriteMorph) {
+            offset = new Point(rcvr.xPosition(), -rcvr.yPosition());
+        }
+        this.returnValueToParentContext(
+            new SVG_Costume(
+                this.context.accumulator.img,
+                this.blockReceiver().newCostumeName(localize('Costume')),
+                this.context.accumulator.rot.translateBy(offset)
+            )
+        );
+        return;
+    }
+    this.pushContext();
 };
 
 // Process constant input options
@@ -5887,10 +5915,8 @@ VariableFrame.prototype.root = function () {
 };
 
 VariableFrame.prototype.find = function (name) {
-/*
-    answer the closest variable frame containing
-    the specified variable. otherwise throw an exception.
-*/
+    // answer the closest variable frame containing
+    // the specified variable. otherwise throw an exception.
     var frame = this.silentFind(name);
     if (frame) {return frame; }
     throw new Error(
@@ -5901,11 +5927,9 @@ VariableFrame.prototype.find = function (name) {
 };
 
 VariableFrame.prototype.silentFind = function (name) {
-/*
-    answer the closest variable frame containing
-    the specified variable. Otherwise return null.
-*/
-    if (this.vars[name] !== undefined) {
+    // answer the closest variable frame containing
+    // the specified variable. Otherwise return null.
+    if (this.vars[name] instanceof Variable) {
         return this;
     }
     if (this.parentFrame) {

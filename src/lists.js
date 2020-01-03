@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-October-23';
+modules.lists = '2019-December-08';
 
 var List;
 var ListWatcherMorph;
@@ -425,7 +425,7 @@ List.prototype.asCSV = function () {
         rows = [];
     
     function encodeCell(atomicValue) {
-        var string = atomicValue.toString(),
+        var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
         if (string.indexOf('\"') ===  -1 &&
                 (string.indexOf('\n') === -1) &&
@@ -600,7 +600,8 @@ function ListWatcherMorph(list, parentCell) {
 }
 
 ListWatcherMorph.prototype.init = function (list, parentCell) {
-    var myself = this;
+    var myself = this,
+        readOnly;
 
     this.list = list || new List();
     this.start = 1;
@@ -646,20 +647,20 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.arrow.setBottom(this.handle.top());
     this.handle.add(this.arrow);
 
-    this.plusButton = new PushButtonMorph(
-        this.list,
-        'add',
-        '+'
-    );
-    this.plusButton.padding = 0;
-    this.plusButton.edge = 0;
-    this.plusButton.outlineColor = this.color;
-    this.plusButton.drawNew();
-    this.plusButton.fixLayout();
-
-    // disable direct editing for non-literal typed lists (such as costumes):
-    if (this.list.type && !contains(['text', 'number'], this.list.type)) {
-        this.plusButton.hide();
+    readOnly = this.list.type && !contains(['text', 'number'], this.list.type);
+    if (readOnly) {
+        this.plusButton = null;
+    } else {
+        this.plusButton = new PushButtonMorph(
+            this.list,
+            'add',
+            '+'
+        );
+        this.plusButton.padding = 0;
+        this.plusButton.edge = 0;
+        this.plusButton.outlineColor = this.color;
+        this.plusButton.drawNew();
+        this.plusButton.fixLayout();
     }
 
     ListWatcherMorph.uber.init.call(
@@ -676,7 +677,9 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     ));
     this.add(this.label);
     this.add(this.frame);
-    this.add(this.plusButton);
+    if (!readOnly) {
+        this.add(this.plusButton);
+    }
     this.add(this.handle);
     this.handle.drawNew();
     this.update();
@@ -877,9 +880,10 @@ ListWatcherMorph.prototype.fixLayout = function () {
 
     this.label.setCenter(this.center());
     this.label.setBottom(this.bottom() - 3);
-    this.plusButton.setLeft(this.left() + 3);
-    this.plusButton.setBottom(this.bottom() - 3);
-
+    if (this.plusButton) {
+        this.plusButton.setLeft(this.left() + 3);
+        this.plusButton.setBottom(this.bottom() - 3);
+    }
     Morph.prototype.trackChanges = true;
     this.changed();
 

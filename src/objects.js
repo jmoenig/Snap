@@ -82,9 +82,9 @@ VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, VideoMotion,
 SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap*/
+HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2019-October-30';
+modules.objects = '2019-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -688,10 +688,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen trails'
         },
-
-        // Pen - experimental primitives for development mode
+        reportPentrailsAsSVG: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen vectors'
+        },
         doPasteOn: {
-            dev: true,
             type: 'command',
             category: 'pen',
             spec: 'paste on %spr'
@@ -889,29 +891,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
-        },
-        colorFiltered: {
-            dev: true,
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'filter %clr tolerance %n %',
-            defaults: [null, 15]
-        },
-        reportFuzzyTouchingColor: {
-            dev: true,
-            only: SpriteMorph,
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'touching %clr tolerance %n ?',
-            defaults: [null, 15]
-        },
-        reportFuzzyColorIsTouchingColor: {
-            dev: true,
-            only: SpriteMorph,
-            type: 'predicate',
-            category: 'sensing',
-            spec: 'color %clr is touching %clr tolerance %n ?',
-            defaults: [null, null, 15]
         },
         reportAspect: {
             type: 'reporter',
@@ -1577,7 +1556,7 @@ SpriteMorph.prototype.blockAlternatives = {
 
     changeSize: ['setSize'],
     setSize: ['changeSize'],
-
+    
     // control:
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
@@ -1722,8 +1701,10 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         cb, effect;
 
     // make sure the clone has its own canvas to recycle
-    c.image = null;
-    c.drawNew();
+    // needs to be copied instead of redrawn, because at
+    // this time the clone is not yet onstage and therefore
+    // has no access to the stage's scale
+    c.image = copyCanvas(this.image);
 
     // un-share individual properties
     c.instances = [];
@@ -1978,46 +1959,6 @@ SpriteMorph.prototype.rotationCenter = function () {
     return this.position().add(this.rotationOffset);
 };
 
-SpriteMorph.prototype.colorFiltered = function (aColor, tolerance) {
-    // answer a new Morph containing my image filtered by aColor
-    // ignore transparency (alpha)
-    var morph = new Morph(),
-        ext = this.extent(),
-        ctx,
-        src,
-        clr,
-        i,
-        dta;
-
-    src = normalizeCanvas(this.image, true).getContext('2d').getImageData(
-        0,
-        0,
-        ext.x,
-        ext.y
-    );
-    morph.image = newCanvas(ext, true);
-    morph.bounds = this.bounds.copy();
-    ctx = morph.image.getContext('2d');
-    dta = ctx.createImageData(ext.x, ext.y);
-    for (i = 0; i < ext.x * ext.y * 4; i += 4) {
-        clr = new Color(
-            src.data[i],
-            src.data[i + 1],
-            src.data[i + 2]
-        );
-        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
-            clr.eq(aColor)
-        ) {
-            dta.data[i] = src.data[i];
-            dta.data[i + 1] = src.data[i + 1];
-            dta.data[i + 2] = src.data[i + 2];
-            dta.data[i + 3] = 255;
-        }
-    }
-    ctx.putImageData(dta, 0, 0);
-    return morph;
-};
-
 SpriteMorph.prototype.getImageData = function () {
     // used for video motion detection.
     // Get sprite image data scaled to 1 an converted to ABGR array,
@@ -2058,12 +1999,13 @@ SpriteMorph.prototype.projectionSnap = function() {
         center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
         cst = this.costume || this.image,
-        w, h,
+        w, h, rot,
         offset,
         snap,
         ctx;
 
     if (cst instanceof Costume) {
+        rot = cst.rotationCenter.copy();
         cst = cst.contents;
         w = cst.width;
         h = cst.height;
@@ -2078,9 +2020,9 @@ SpriteMorph.prototype.projectionSnap = function() {
     snap = newCanvas(new Point(w, h), true);
     ctx = snap.getContext('2d');
     ctx.drawImage(cst, 0, 0);
-    ctx.globalCompositeOperation = 'source-in';
+    ctx.globalCompositeOperation = 'source-atop';
     ctx.drawImage(stage.projectionLayer(), -offset.x, -offset.y);
-    return new Costume(snap, this.newCostumeName(localize('snap')));
+    return new Costume(snap, this.newCostumeName(localize('snap')), rot);
 };
 
 // SpriteMorph block instantiation
@@ -2487,9 +2429,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(watcherToggle('reportThreadCount'));
             blocks.push(block('reportThreadCount'));
-            blocks.push(block('colorFiltered'));
-            blocks.push(block('reportFuzzyTouchingColor'));
-            blocks.push(block('reportFuzzyColorIsTouchingColor'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
         }
@@ -2597,7 +2536,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                         myself
                     );
                     myself.deletableVariableNames().forEach(function (name) {
-                        menu.addItem(name, name);
+                        menu.addItem(
+                            name,
+                            name,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            true // verbatim - don't translate
+                        );
                     });
                     menu.popUpAtHand(myself.world());
                 },
@@ -4281,18 +4230,80 @@ SpriteMorph.prototype.goBack = function (layers) {
     this.parent.changed();
 };
 
-// SpriteMorph collision detection optimization
+// SpriteMorph collision detection
+
+SpriteMorph.prototype.reportTouchingColor = function (aColor) {
+    var stage = this.parentThatIsA(StageMorph),
+        data, len, i;
+
+    if (stage) {
+        if (this.wantsRedraw && this.isWarped) {
+            this.endWarp();
+            this.startWarp();
+        }
+        data = this.overlappingPixels(stage);
+        if (!data) {return false; }
+        len = data[0].length;
+        for (i = 3; i < len; i += 4) {
+            if (data[0][i] && data[1][i]) {
+                if (
+                    data[1][i - 3] === aColor.r &&
+                    data[1][i - 2] === aColor.g &&
+                    data[1][i - 1] === aColor.b
+                ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+SpriteMorph.prototype.reportColorIsTouchingColor = function (
+    thisColor,
+    thatColor
+) {
+    var stage = this.parentThatIsA(StageMorph),
+        data, len, i;
+
+    if (stage) {
+        if (this.wantsRedraw && this.isWarped) {
+            this.endWarp();
+            this.startWarp();
+        }
+        data = this.overlappingPixels(stage);
+        if (!data) {return false; }
+        len = data[0].length;
+        for (i = 3; i < len; i += 4) {
+            if (data[0][i] && data[1][i]) {
+                if (
+                    data[0][i - 3] === thisColor.r &&
+                    data[0][i - 2] === thisColor.g &&
+                    data[0][i - 1] === thisColor.b &&
+                    data[1][i - 3] === thatColor.r &&
+                    data[1][i - 2] === thatColor.g &&
+                    data[1][i - 1] === thatColor.b
+                ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
 
 SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
         thisImg = this.image,
         thatImg = otherSprite.image;
-        
-    if (oRect.width() < 1 || oRect.height() < 1 ||
-        !this.image || !otherSprite.image ||
-        !this.image.width || !this.image.height ||
-        !otherSprite.image.width || !otherSprite.image.height
+
+    if (otherSprite instanceof StageMorph) {
+        // only check for color collision
+        thatImg = otherSprite.thumbnail(otherSprite.extent(), this, true);
+    }
+    if (oRect.width() < 1 || oRect.height() < 1 || !thisImg || !thatImg ||
+        !thisImg.width || !thisImg.height || !thatImg.width || !thatImg.height
     ) {
         return false;
     }
@@ -5162,6 +5173,20 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
+        // record for later svg conversion
+        if (StageMorph.prototype.enablePenLogging) {
+            this.parent.trailsLog.push(
+                [
+                    this.snapPoint(start),
+                    this.snapPoint(dest),
+                    this.color.copy(),
+                    this.size,
+                    this.useFlatLineEnds ? 'butt' : 'round'
+                ]
+            );
+        }
+
+        // draw on the pen-trails layer
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
         if (this.useFlatLineEnds) {
@@ -5252,6 +5277,9 @@ SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
         this.newCostumeName(localize('Costume'))
     );
     cst.shrinkWrap();
+    cst.rotationCenter = cst.rotationCenter.translateBy(
+        new Point(this.xPosition(), -this.yPosition())
+    );
     return cst;
 };
 
@@ -5586,6 +5614,17 @@ SpriteMorph.prototype.bounceOffEdge = function () {
         fb.amountToTranslateWithin(stage.bounds)
     ));
     this.positionTalkBubble();
+};
+
+// SpriteMorph coordinate conversion
+
+SpriteMorph.prototype.snapPoint = function(aPoint) {
+    var stage = this.parentThatIsA(StageMorph),
+        origin = stage.center();
+    return new Point(
+        (aPoint.x - origin.x) / stage.scale,
+        (origin.y - aPoint.y) / stage.scale
+    );
 };
 
 // SpriteMorph rotation center / fixation point manipulation
@@ -6406,15 +6445,37 @@ SpriteMorph.prototype.chooseExemplar = function () {
             (this.exemplar ? this.exemplar.name : localize('none'))
     );
     other.forEach(function (eachSprite) {
-        menu.addItem(eachSprite.name, eachSprite);
+        menu.addItem(
+            eachSprite.name,
+            eachSprite,
+            null, // hint
+            null, // color
+            null, // bold
+            null, // italic
+            null, // doubleClickAction
+            null, // shortcut
+            true  // verbatim
+        );
     });
     menu.addLine();
     menu.addItem(localize('none'), null);
     menu.popUpAtHand(this.world());
 };
 
-SpriteMorph.prototype.setExemplar = function (another) {
+SpriteMorph.prototype.setExemplar = function (another, enableError) {
     var ide;
+
+    // check for circularity
+    if (another instanceof SpriteMorph &&
+            contains(another.allExemplars(), this)) {
+        if (enableError) {
+            throw new Error(
+                localize('unable to inherit\n(disabled or circular?)')
+            );
+        }
+        return; // silently fail so stored projects can still be loaded
+    }
+
     this.emancipate();
     this.exemplar = another;
     if (another) {
@@ -6931,7 +6992,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
     if (this.isCorpse) {
         ctx.globalAlpha = 0.3;
     }
-    if (w && h) {
+    if (w && h && src.width && src.height) {
         ctx.scale(scale, scale);
         ctx.drawImage(
             src,
@@ -7348,6 +7409,7 @@ StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
 StageMorph.prototype.enableInheritance = true;
 StageMorph.prototype.enableSublistIDs = false;
+StageMorph.prototype.enablePenLogging = false; // for SVG generation
 
 // StageMorph instance creation
 
@@ -7398,6 +7460,7 @@ StageMorph.prototype.init = function (globals) {
     this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
+    this.trailsLog = []; // each line being [p1, p2, color, width, cap]
     this.isThreadSafe = false;
 
     this.microphone = new Microphone(); // audio input, do not persist
@@ -7434,6 +7497,9 @@ StageMorph.prototype.init = function (globals) {
 
     // world map client - experimental, transient
     this.worldMap = new WorldMap();
+
+    // Snap! API event listeners - experimental, transient
+    this.messageCallbacks = {}; // name : [functions]
 
     StageMorph.uber.init.call(this);
 
@@ -7603,6 +7669,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
     this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
+    this.trailsLog = [];
     this.changed();
 };
 
@@ -7650,52 +7717,6 @@ StageMorph.prototype.projectionLayer = function () {
 StageMorph.prototype.clearProjectionLayer = function () {
     this.projectionCanvas = null;
     this.changed();
-};
-
-StageMorph.prototype.colorFiltered = function (
-    aColor,
-    excludedSprite,
-    tolerance
-) {
-    // answer a new Morph containing my image filtered by aColor
-    // ignore the excludedSprite, because its collision is checked
-    // ignore transparency (alpha)
-    var morph = new Morph(),
-        ext = this.extent(),
-        img = this.thumbnail(ext, excludedSprite),
-        ctx,
-        src,
-        clr,
-        i,
-        dta;
-
-    src = normalizeCanvas(img, true).getContext('2d').getImageData(
-        0,
-        0,
-        ext.x,
-        ext.y
-    );
-    morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(ext, true);
-    ctx = morph.image.getContext('2d');
-    dta = ctx.createImageData(ext.x, ext.y);
-    for (i = 0; i < ext.x * ext.y * 4; i += 4) {
-        clr = new Color(
-            src.data[i],
-            src.data[i + 1],
-            src.data[i + 2]
-        );
-        if ((tolerance && clr.isCloseTo(aColor, false, tolerance)) ||
-            clr.eq(aColor)
-        ) {
-            dta.data[i] = src.data[i];
-            dta.data[i + 1] = src.data[i + 1];
-            dta.data[i + 2] = src.data[i + 2];
-            dta.data[i + 3] = 255;
-        }
-    }
-    ctx.putImageData(dta, 0, 0);
-    return morph;
 };
 
 // StageMorph video capture
@@ -8547,7 +8568,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(watcherToggle('reportThreadCount'));
             blocks.push(block('reportThreadCount'));
-            blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
         }
@@ -8652,7 +8672,17 @@ StageMorph.prototype.blockTemplates = function (category) {
                         myself
                     );
                     myself.variables.allNames().forEach(function (name) {
-                        menu.addItem(name, name);
+                        menu.addItem(
+                            name,
+                            name,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            true // verbatim - don't translate
+                        );
                     });
                     menu.popUpAtHand(myself.world());
                 },
@@ -8787,6 +8817,13 @@ StageMorph.prototype.userMenu = function () {
                     : 'turn all pen trails and stamps\n' +
                         'into a new background for the stage'
     );
+    if (this.trailsLog.length) {
+        menu.addItem(
+            'svg...',
+            'exportTrailsLogAsSVG',
+            'export pen trails\nline segments as SVG'
+        );
+    }
     return menu;
 };
 
@@ -8810,18 +8847,20 @@ StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
 // StageMorph thumbnail
 
-StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
-/*
-    answer a new Canvas of extentPoint dimensions containing
-    my thumbnail representation keeping the originial aspect ratio
-*/
+StageMorph.prototype.thumbnail = function (
+    extentPoint,
+    excludedSprite,
+    nonRetina
+) {
+    // answer a new Canvas of extentPoint dimensions containing
+    // my thumbnail representation keeping the originial aspect ratio
     var myself = this,
         src = this.image,
         scale = Math.min(
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        trg = newCanvas(extentPoint),
+        trg = newCanvas(extentPoint, nonRetina),
         ctx = trg.getContext('2d'),
         fb,
         fimg;
@@ -8865,6 +8904,70 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         }
     });
     return trg;
+};
+
+// StageMorph - exporting the pen trails as SVG
+
+StageMorph.prototype.exportTrailsLogAsSVG = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+
+    ide.saveFileAs(
+        this.trailsLogAsSVG().src,
+        'image/svg',
+        ide.projectName || this.name
+    );
+};
+
+StageMorph.prototype.trailsLogAsSVG = function () {
+    var myself = this,
+        bottomLeft = this.trailsLog[0][0],
+        topRight = bottomLeft,
+        maxWidth = this.trailsLog[0][3],
+        shift,
+        box,
+        p1, p2,
+        svg;
+
+    // determine bounding box and max line width
+    this.trailsLog.forEach(function (line) {
+        bottomLeft = bottomLeft.min(line[0]);
+        bottomLeft = bottomLeft.min(line[1]);
+        topRight = topRight.max(line[0]);
+        topRight = topRight.max(line[1]);
+        maxWidth = Math.max(maxWidth, line[3]);
+    });
+    box = bottomLeft.corner(topRight).expandBy(maxWidth / 2);
+    shift = new Point(-bottomLeft.x, topRight.y).translateBy(maxWidth / 2);
+    svg = '<svg xmlns="http://www.w3.org/2000/svg" ' +
+        'preserveAspectRatio="none" ' +
+        'viewBox="0 0 ' + box.width() + ' ' + box.height() + '" ' +
+        'width="' + box.width() + '" height="' + box.height() + '" ' +
+        // 'style="background-color:black" ' + // for supporting backgrounds
+        '>';
+    svg += '<!-- Generated by Snap! - http://snap.berkeley.edu/ -->';
+
+    // for debugging the viewBox:
+    // svg += '<rect width="100%" height="100%" fill="black"/>'
+
+    this.trailsLog.forEach(function (line) {
+        p1 = myself.normalizePoint(line[0]).translateBy(shift);
+        p2 = myself.normalizePoint(line[1]).translateBy(shift);
+        svg += '<line x1="' + p1.x + '" y1="' + p1.y +
+            '" x2="' + p2.x + '" y2="' + p2.y + '" ' +
+            'style="stroke:' + line[2].toString() + ';' +
+            'stroke-width:' + line[3] +
+            ';stroke-linecap:' + line[4] +
+            '" />';
+    });
+    svg += '</svg>';
+    return {
+        src : svg,
+        rot : new Point(-box.origin.x, box.corner.y)
+    };
+};
+
+StageMorph.prototype.normalizePoint = function (snapPoint) {
+    return new Point(snapPoint.x, -snapPoint.y);
 };
 
 // StageMorph hiding and showing:
