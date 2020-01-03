@@ -12,6 +12,7 @@
 * gui: recycle cached Canvasses
 * objects: recycle cached Canvasses
 * blocks: recycle cached Canvasses
+* widgets: recycle cached Canvasses
 
 ## 5.4.0:
 * **New Features:**
