@@ -6,6 +6,8 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2020-01-03
+* new dev version
 
 ## 5.4.0:
 * **New Features:**
