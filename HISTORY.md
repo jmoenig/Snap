@@ -3,9 +3,16 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
-    * optimized loading projects
 * **Notable Fixes:**
 * **Translation Updates:**
+
+
+## 5.4.1:
+* **Notable Change:**
+    * optimized loading projects
+* **Notable Fix:**
+    * reduced distortion and clicks when playing notes
+* **Translation Update:**
     * Catalan
 
 ### 2020-01-03
@@ -19,6 +26,8 @@
 * symbols: recycle cached Canvasses
 * symbols: recycle cached Canvasses
 * Catalan translation update
+* objects: tweaked notes to reduce distortion and clicks
+* prepared minor release
 
 ## 5.4.0:
 * **New Features:**
