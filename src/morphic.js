@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-January-03';
+var morphicVersion = '2020-January-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1451,16 +1451,7 @@ function getDocumentPositionOf(aDOMelement) {
 function copy(target) {
     // answer a shallow copy of target
     var value, c, property, keys, l, i;
-
     if (typeof target !== 'object') {
-        if (target instanceof HTMLCanvasElement) {
-            // tag canvas elements as being shared,
-            // so the next time when rerendering a Morph
-            // instead of recycling the shared canvas a
-            // new unshared one get created
-            // see newCanvas() function
-            target.dataset.morphicShare = 'true';
-        }
         return target;
     }
     value = target.valueOf();
@@ -1473,6 +1464,14 @@ function copy(target) {
         keys = Object.keys(target);
         for (l = keys.length, i = 0; i < l; i += 1) {
             property = keys[i];
+            if (target[property] instanceof HTMLCanvasElement) {
+                // tag canvas elements as being shared,
+                // so the next time when rerendering a Morph
+                // instead of recycling the shared canvas a
+                // new unshared one get created
+                // see newCanvas() function
+                target[property].dataset.morphicShare = 'true';
+            }
             c[property] = target[property];
         }
     } else {

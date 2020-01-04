@@ -6,6 +6,13 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## 5.4.2:
+* **Notable Fix:**
+    * prevent Morphs from sharing canvasses when rerendering
+
+### 2020-01-04
+* morphic: fixed tagging of shared Canvasses
+* prepared patch
 
 ## 5.4.1:
 * **Notable Change:**
