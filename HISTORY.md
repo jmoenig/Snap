@@ -6,6 +6,14 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## 5.4.3:
+* **Notable Fix**
+    * render Boolean slots correctly after mouse-over
+
+### 2020-01-06
+* blocks: reset BooleanSlotMorph canvas context's global alpha after rendering the slider button 
+* prepared patch
+
 ## 5.4.2:
 * **Notable Fix:**
     * prevent Morphs from sharing canvasses when rerendering

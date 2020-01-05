@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-January-03';
+modules.blocks = '2020-January-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10419,7 +10419,10 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
     context.closePath();
     context.fill();
 
-    if (MorphicPreferences.isFlat) {return; }
+    if (MorphicPreferences.isFlat) {
+        context.globalAlpha = 1;
+        return;
+    }
 
     // add 3D-Effect
     // outline:
@@ -10483,6 +10486,7 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
         false
     );
     context.stroke();
+    context.globalAlpha = 1;
 };
 
 BooleanSlotMorph.prototype.textLabel = function () {

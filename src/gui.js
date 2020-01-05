@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-January-04';
+modules.gui = '2020-January-06';
 
 // Declarations
 
@@ -3636,7 +3636,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5.4.2\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 5.4.3\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2020 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
