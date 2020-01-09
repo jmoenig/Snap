@@ -10,6 +10,22 @@ describe('ide', function() {
         return driver.reset();
     });
 
+    describe('menus', function() {
+        it('should show services in dropdown', function() {
+            const {localize} = driver.globals();
+            const {projectButton} = driver.ide().controlBar;
+            driver.click(projectButton);
+            const dialog = driver.dialog();
+            const servicesItem = dialog.items
+                .find(item => item[0] === localize('Services...'));
+            const [, serviceIndexFn] = servicesItem;
+            serviceIndexFn.call(driver.ide());
+
+            const services = driver.dialog().items;
+            expect(services.length > 1).toBe(true, 'Not listing service libraries');
+        });
+    });
+
     describe('export', function() {
         it('should export locally if only one role', function(done) {
             var ide = driver.ide();

@@ -440,7 +440,7 @@ NetsBloxMorph.prototype.projectMenu = function () {
     item = [
         'Services...',
         function () {
-            var names = this.getMediaList('rpc'),
+            var names = this.getMediaList('servicelibs'),
                 headerText = localize('Import') + ' ' + localize('Service'),
                 mediaMenu = new MenuMorph(
                     myself,
@@ -451,7 +451,7 @@ NetsBloxMorph.prototype.projectMenu = function () {
                 mediaMenu.addItem(
                     item.name,
                     function () {
-                        var url = myself.resourceURL('rpc', item.fileName);
+                        var url = myself.resourceURL('servicelibs', item.fileName);
                         myself.droppedText(myself.getURL(url), name);
                     },
                     item.help
