@@ -6,6 +6,14 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## 5.4.4:
+* **Notable Fix**
+    * fixed strings library format
+
+### 2020-01-10
+* fixed strings library format
+* prepared patch
+
 ## 5.4.3:
 * **Notable Fix**
     * render Boolean slots correctly after mouse-over
