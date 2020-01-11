@@ -8,16 +8,18 @@
         <row>
             <diagram rel-width="1">
                 <script>
-                    <block s="down" />
-                    <block s="forward">
+                    <block s="down" annotation="1"/>
+                    <block s="forward" annotation="2">
                         <l>80</l>
                     </block>
-                    <block s="up" annotation="1"/>
-                    <block s="forward" annotation="2">
+                    <block s="up" annotation="3"/>
+                    <block s="forward" annotation="4">
                         <l>80</l>
                     </block>
                 </script>
                 <annotations>
+                    <small-p>Start leaving a pen trail</small-p>
+                    <small-p>Move</small-p>
                     <small-p>Stop leaving a pen trail</small-p>
                     <small-p>Move</small-p>
                 </annotations>

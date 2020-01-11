@@ -80,7 +80,7 @@
             </diagram>
             <diagram>
                 <script>
-                    <block s="reportMap">
+                    <block s="reportMap" bubble="1">
                         <block s="reifyReporter">
                             <autolambda>
                                 <block s="reportSum">

@@ -22,11 +22,11 @@
             </diagram>
             <row>
                 <column rel-width="1">
-                    <img src="doThink_cat1.png" width="104" height="103"/>
+                    <img src="doThink_alonzo1.png" width="105" height="100"/>
                     <p>Now</p>
                 </column>
                 <column rel-width="1">
-                    <img src="doThinkFor_cat2.png" width="66" height="103"/>
+                    <img src="doThinkFor_alonzo2.png" width="67" height="100"/>
                     <p>2 seconds later</p>
                 </column>
             </row>

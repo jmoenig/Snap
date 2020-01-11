@@ -37,7 +37,7 @@
                 </annotations>
             </diagram>
             <row>
-                <img src="changePenHSVA_graph.png" width="170" height="98"/>
+                <img src="changePenHSVA_graph.svg" width="170" height="98"/>
                 <diagram rel-width="1">
                     <script>
                         <block s="reportAspect" bubble="1" annotation="1">

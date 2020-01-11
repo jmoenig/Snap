@@ -7,26 +7,28 @@
         </script>
     </thumbnail>
     <box color="gray">
-        <row>
-            <column rel-width="1">
-                <img src="goBack_before.png" width="109" height="108"/>
-                <p>Sprite1: Cake</p>
-                <p>Sprites 2,3,4,5: Candles</p>
-            </column>
-            <column rel-width="2">
-                <p>
-                    <text>
-                        To make the candles look like they are on top of the
-                        cake, the cake has to
-                    </text>
-                    <script>
-                        <block s="goBack">
-                            <l>4</l>
-                        </block>
-                    </script>
-                </p>
-            </column>
-            <img src="goBack_after.png" width="109" height="108"/>
-        </row>
+        <column>
+            <row>
+                <column rel-width="1">
+                    <img src="goBack_before.png" width="109" height="108"/>
+                    <p>Sprite1: Cake</p>
+                </column>
+                <column rel-width="2">
+                    <p>
+                        <text>
+                            To make the candles look like they are on top of the
+                            cake, the cake has to
+                        </text>
+                        <script>
+                            <block s="goBack">
+                                <l>4</l>
+                            </block>
+                        </script>
+                    </p>
+                </column>
+                <img src="goBack_after.png" width="109" height="108"/>
+            </row>
+            <p>Sprites 2,3,4,5: Candles</p>
+        </column>
     </box>
 </help-screen>

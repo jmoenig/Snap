@@ -47,7 +47,7 @@
     </box>
     <box color="blue">
         <column>
-            <img src="getPenAttribute_graph.png" width="223" height="129"/>
+            <img src="changePenHSVA_graph.svg" width="223" height="129"/>
         </column>
     </box>
 </help-screen>

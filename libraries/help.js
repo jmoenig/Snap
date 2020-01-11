@@ -1235,7 +1235,12 @@ ScriptDiagramMorph.prototype.addAnnotation = function (
         arrowEnd.y - lineHeight / 2
     ));
     if (!annotation.annotationArrowHorizontal) {
-        annotation.setTop(Math.max(minTop, annotation.top()));
+        if (annotation.top() < minTop && minTop - annotation.top() > 3) {
+            // Don't bother enforcing minTop if the change would be
+            // miniscule. This will keep the annotation's arrow straight,
+            // which looks better.
+            annotation.setTop(minTop);
+        }
         if (maxBottom > -1) {
             annotation.setBottom(Math.min(maxBottom, annotation.bottom()));
         }

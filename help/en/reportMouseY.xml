@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="reportMouseX"/>
+            <block s="reportMouseY"/>
         </script>
     </thumbnail>
     <box color="gray">
@@ -12,7 +12,7 @@
                         <script>
                             <block s="setEffect" annotation="2">
                                 <l><option>ghost</option></l>
-                                <block s="reportMouseX"/>
+                                <block s="reportMouseY"/>
                             </block>
                         </script>
                     </block>

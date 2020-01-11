@@ -13,7 +13,7 @@
                 <p>Sprite1: Girl</p>
                 <p>Sprite2: Ball</p>
             </column>
-            <column rel-width="2">
+            <column rel-width="3">
                 <p>
                     <text>
                         To make the girl look like she is holding the ball,
@@ -25,21 +25,19 @@
                         </block>
                     </script>
                 </p>
-		<p>
-		</p>
-		<diagram>
-		  <script>	
-	    <block s="goToLayer">
-		      <l menu="1"><option></option></l>
-		    </block>
-		  </script>
-		  <menus>
-		    <menu>
-		      <item>front</item>
-		      <item>back</item>
-		    </menu>
-		  </menus>
-		</diagram>
+                <diagram>
+                <script>	
+                    <block s="goToLayer">
+                        <l menu="1"><option></option></l>
+                        </block>
+                    </script>
+                    <menus>
+                        <menu>
+                        <item>front</item>
+                        <item>back</item>
+                        </menu>
+                    </menus>
+                </diagram>
             </column>
             <img src="goToLayer_after.png" width="53" height="88"/>
         </row>

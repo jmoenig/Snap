@@ -14,7 +14,7 @@
                 <diagram rel-width="1">
                     <script>
                         <block s="reportTextSplit" bubble="1">
-                            <l>hello world</l>
+                            <l>nowhere man</l>
                             <l> </l>
                         </block>
                     </script>
@@ -54,9 +54,9 @@
                             <l><option>letter</option></l>
                         </block>
                     </script>
-                    <bubble>
+                    <bubbles>
                         <img src="reportTextSplit_list3.png" width="80" height="104"/>
-                    </bubble>
+                    </bubbles>
                 </diagram>
                 <p rel-width="1">
                     Split a text into individual characters (including
@@ -64,8 +64,8 @@
                 </p>
             </row>
             <row>
-                <diagram rel-width="12">
-                    <script>
+                <diagram rel-width="9">
+                    <script scale="0.9">
                         <block s="reportTextSplit" bubble="1">
                             <block s="reportURL">
                                 <l>snap.berkeley.edu</l>
@@ -74,7 +74,7 @@
                         </block>
                     </script>
                     <bubbles>
-                        <img src="reportTextSplit_list4.png" width="166" height="153"/>
+                        <img src="reportTextSplit_list4.png" width="145" height="137"/>
                     </bubbles>
                 </diagram>
                 <p rel-width="4">

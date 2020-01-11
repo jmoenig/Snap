@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="xPosition"/>
+            <block s="yPosition"/>
         </script>
     </thumbnail>
     <box color="gray">

@@ -57,38 +57,36 @@
                 </annotations>
             </diagram>
             <row>
-		<column rel-width="2">
                 <block-definition s="square %n %b"/>
-		</column>
-                <column rel-width="3">
-		  <diagram>
-                    <script>
-                        <custom-block s="square %n %b" annotation="1">
-                            <l>100</l>
-                            <l><bool>true</bool></l>
-                        </custom-block>
-                    </script>
-		    <annotations>
-                    <small-p>
-                        This says, “draw a square with side 200 steps, after
-                        putting the pen down first.”
-                    </small-p>
-		    </annotations>
-		  </diagram>
-		  <diagram>
-                    <script>
-                        <custom-block s="square %n %b" annotation="1">
-                            <l>100</l>
-                            <l><bool>false</bool></l>
-                        </custom-block>
-                    </script>
-		    <annotations>
-                    <small-p>
-                        This says, “draw a square with side 100 steps, and don't
-                        put the pen down first.”
-                    </small-p>
-		    </annotations>
-		</diagram>
+                <column>
+                    <diagram>
+                        <script>
+                            <custom-block s="square %n %b" annotation="1">
+                                <l>100</l>
+                                <l><bool>true</bool></l>
+                            </custom-block>
+                        </script>
+                        <annotations>
+                            <small-p>
+                                This says, “draw a square with side 200 steps, after
+                                putting the pen down first.”
+                            </small-p>
+                        </annotations>
+                    </diagram>
+                    <diagram>
+                        <script>
+                            <custom-block s="square %n %b" annotation="1">
+                                <l>100</l>
+                                <l><bool>false</bool></l>
+                            </custom-block>
+                        </script>
+                        <annotations>
+                            <small-p>
+                                This says, “draw a square with side 100 steps, and don't
+                                put the pen down first.”
+                            </small-p>
+                        </annotations>
+                    </diagram>
                 </column>
             </row>
         </column>

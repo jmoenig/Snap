@@ -27,7 +27,7 @@
                     <small-p arrow-horizontal="true">Report day of week (Sun=0, Mon=1, ... Sat=6)</small-p>
                     <small-p>Report hour of day, 0-23</small-p>
                     <small-p>Report minute within hour, 0-59</small-p>
-                    <small-p>Report second within minute, 0-50</small-p>
+                    <small-p>Report second within minute, 0-59</small-p>
                     <small-p>Report milliseconds since midnight, Jan 1, 1970</small-p>
                 </annotations>
             </diagram>

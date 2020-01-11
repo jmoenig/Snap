@@ -1,7 +1,7 @@
 <help-screen version="1">
     <thumbnail>
         <script>
-            <block s="hide"/>
+            <block s="show"/>
         </script>
     </thumbnail>
     <box color="gray">

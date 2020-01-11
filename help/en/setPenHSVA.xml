@@ -32,7 +32,7 @@
                     </small-p>
                 </annotations>
             </diagram>
-            <img src="changePenHSVA_graph.png" width="170" height="98"/>
+            <img src="changePenHSVA_graph.svg" width="170" height="98"/>
         </row>
     </box>
 </help-screen>
