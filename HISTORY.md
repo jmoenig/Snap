@@ -7,12 +7,16 @@
 * **Translation Updates:**
 
 ## 5.4.4:
-* **Notable Fix**
+* **Notable Fixes**
     * fixed strings library format
+    * automatically remove orphaned variable watchers
+
+### 2020-01-11
+* objects: automatically remove orphaned variable watchers
+* prepared patch
 
 ### 2020-01-10
 * fixed strings library format
-* prepared patch
 
 ## 5.4.3:
 * **Notable Fix**

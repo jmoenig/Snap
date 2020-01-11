@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-January-03';
+modules.objects = '2020-January-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -11282,9 +11282,18 @@ WatcherMorph.prototype.update = function () {
                 newValue = Math.round(newValue * 1000000000) / 1000000000;
             }
         }
+        if (newValue === undefined) {
+            // console.log('removing watcher for', this.labelText);
+            this.destroy();
+            return;
+        }
         if (newValue !== this.currentValue ||
                 isInherited !== this.isGhosted ||
-                (newValue.version && (newValue.version !== this.version))) {
+                (!isNil(newValue) &&
+                    newValue.version &&
+                    (newValue.version !== this.version)
+                )
+        ) {
             this.changed();
             this.cellMorph.contents = newValue;
             this.isGhosted = isInherited;
