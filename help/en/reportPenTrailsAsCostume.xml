@@ -30,16 +30,21 @@
     <box color="blue">
         <column>
             <p>What can you do with the reported costume?</p>
-            <i>Add it to your costumes.</i>
-            <script>
-                <block s="doAddToList">
-                    <block s="reportPenTrailsAsCostume"/>
-                    <block s="reportGet">
-                        <l><option>costumes</option></l>
+            <row>
+                <i>Add it to your costumes.</i>
+                <script>
+                    <block s="doAddToList">
+                        <block s="reportPenTrailsAsCostume"/>
+                        <block s="reportGet">
+                            <l><option>costumes</option></l>
+                        </block>
                     </block>
-                </block>
-            </script>
-            <i>Modify it.</i>
+                </script>
+            </row>
+            <row>
+                <i>Modify it.</i>
+                <img src="reportPenTrailsAsCostume_transform_pentrails.png" width="90" height="29"/>
+            </row>
             <script>
                 <block s="doSwitchToCostume">
                     <block s="reportNewCostumeStretched">
@@ -81,7 +86,6 @@
                     </block>
                 </block>
             </script>
-            <img src="reportPenTrailsAsCostume_transform_pentrails.png" width="90" height="29"/>
         </column>
     </box>
 </help-screen>

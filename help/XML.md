@@ -4,6 +4,14 @@
 
 ```
 <help-screen version="1">
+    <libraries>
+        <!-- Optional -->
+        <library filename="bignumbers.xml"/>
+        <!--
+            Put libraries here so their blocks can be used in the help
+            screen.
+        -->
+    </libraries>
     <blocks>
         <!-- Optional -->
         <!--
@@ -58,23 +66,25 @@ Aligns its contents in a row.
 | width | number | none |
 
 Some elements, like `<script>`, have a fixed width, while others, like `<p>`,
-have a variable width. By default, variable-width elements take up as much
-horizontal space as needed. If the contents overflow, they take up as much
-horizontal space as possible, dividing it evenly amongst themselves.
+have a variable width. By default, paragraphs take up as much horizontal
+space as needed. If the contents overflow, they take up as much horizontal
+space as possible, dividing it evenly among themselves.
 ```
 <column>
     <p>I am my parent's width.</p>
-    <p>I am also my parent's width.
+    <p>I am also my parent's width.</p>
 </column>
 <row>
     <p>I am half my parent's width.</p>
     <p>I am also half my parent's width.</p>
 </row>
 ```
+Columns and script diagrams with text annotations are also considered
+variable-width and will evenly divide horizontal space among themselves.
 
-The `rel-width` (relative width) attribute can be used to change this, by
-specifying elements' widths as a ratio. For example, the widths of these
-elements are 2:1:
+The `rel-width` (relative width) attribute can be used to change this
+behavior, by specifying elements' widths as a ratio. For example, the widths
+of these elements are 2:1:
 ```
 <row>
     <p rel-width="1">I am one-third my parent's width.</p>
@@ -113,7 +123,7 @@ Aligns its contents in a column.
 | --- | --- | --- | --- |
 | padding | number | 10 | How far apart the content elements are. | 
 | width | number | none |
-| rel-width | number | none | See `<row>`. |
+| rel-width | number | 1 | See `<row>`. |
 
 ## Content Elements
 
@@ -142,7 +152,7 @@ Two:
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | width | number | none |
-| rel-width | number | none | See `<row>`. |
+| rel-width | number | 1 | See `<row>`. |
 
 ### `<img>`
 
@@ -160,16 +170,17 @@ A script. This can just be copied and pasted from a project.
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
-| scale | number | 1 | Changes the size of the script. Only works when in a diagram. |
+| scale | number | 1 | Changes the size of the script. |
 
 ### `<block-definition>`
 
-Displays a custom block definition, taken from the `<blocks>` element.
+Displays a custom block definition, taken from the libraries in `<libraries>`
+or the block definitions in `<blocks>`.
 
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | s | the custom block's spec | none | This is the same block spec used in `<custom-block>` elements in a `<script>`. |
-| scale | number | 1 | Changes the size of the script. Only works when in a diagram. |
+| scale | number | 1 | Changes the size of the script. |
 
 ### `<menu>`
 
@@ -226,7 +237,7 @@ or a menu:
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | width | number | none |
-| rel-width | number | none | See `<row>`. | 
+| rel-width | number | 1 when there are annotations, none otherwise | See `<row>`. | 
 
 Attributes for script/menu components:
 
