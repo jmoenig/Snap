@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Change balance for sounds.</header>
     <box color="gray">
         <column>
-            <p>Change balance for sounds.</p>
             <p>
                 0 is normal. -100 is left channel only; 100 is right channel
                 only.

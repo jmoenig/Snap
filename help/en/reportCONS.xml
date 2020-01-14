@@ -63,9 +63,11 @@
             </block>
         </script>
     </thumbnail>
+    <header>
+        Report a list that extends another list with one new item.
+    </header>
     <box color="gray">
         <column>
-            <p>Report a list that extends another list with one new item.</p>
             <row>
                 <diagram rel-width="4">
                     <script>

@@ -11,9 +11,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Ask another object a question.</header>
     <box color="gray">
         <column>
-            <p>Ask another object a question.</p>
             <p>Ask a particular sprite where it is:</p>
             <diagram>
                 <script>

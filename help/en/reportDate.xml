@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report current date or time</header>
     <box color="gray">
         <column>
-            <p>Report current date or time</p>
             <diagram>
                 <menu>
                     <item annotation="1">year</item>

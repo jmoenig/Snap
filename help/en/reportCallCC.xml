@@ -9,9 +9,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Capture reporter continuation</header>
     <box color="gray">
         <column>
-            <p>Capture reporter continuation</p>
             <diagram>
                 <script scale="0.9">
                     <block s="setColor">

@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report web page text.</header>
     <box color="gray">
         <column>
-            <p>Report web page text.</p>
             <diagram>
                 <script>
                     <block s="reportURL" bubble="1">
@@ -16,7 +16,7 @@
                     </block>
                 </script>
                 <bubbles>
-                    <img src="reportURL_html.png" width="360" height="147"/>
+                    <img src="reportURL_html.png" width="350" height="132"/>
                 </bubbles>
             </diagram>
             <p>Hint: Use SPLIT to see the result as a list of lines.</p>
@@ -30,7 +30,7 @@
                     </block>
                 </script>
                 <bubbles>
-                    <img src="reportURL_list.png" width="87" height="105"/>
+                    <img src="reportURL_list.png" width="144" height="136"/>
                 </bubbles>
             </diagram>
         </column>

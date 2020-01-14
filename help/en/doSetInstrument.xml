@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Set sound (timbre) for notes.</header>
     <box color="gray">
         <column>
-            <p>Set sound (timbre) for notes.</p>
             <diagram>
                 <script>
                     <block s="doSetInstrument">

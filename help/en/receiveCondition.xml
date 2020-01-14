@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Start script when any test is true.</header>
     <box color="gray">
         <column>
-            <p>Start script when any test is true.</p>
             <row>
                 <column rel-width="1">
                     <script>

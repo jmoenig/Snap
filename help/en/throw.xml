@@ -25,9 +25,9 @@
             </custom-block>
         </script>
     </thumbnail>
+    <header>Allow early exit from a script.</header>
     <box color="gray">
         <column>
-            <p>Allow early exit from a script.</p>
             <row>
                 <script>
                     <custom-block s="catch %upvar %cs">

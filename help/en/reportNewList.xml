@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Reports a newly created list with the given items.</header>
     <box color="gray">
         <column>
-            <p>Reports a newly created list with the given items.</p>
             <diagram>
                 <script>
                     <block s="reportNewList" annotation="1">

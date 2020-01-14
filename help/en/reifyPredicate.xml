@@ -21,35 +21,23 @@
             </script>
         </row>
     </thumbnail>
+    <header>Reports a script or block as a value.</header>
     <box color="gray">
-        <column>
-            <p>Reports a script or block as a value.</p>
-            <row>
-	      <column rel-width="2">
-                <diagram>
-                    <script>
-                        <block s="reportSum" bubble="1">
-                            <l>2</l>
-                            <l>3</l>
-                        </block>
-                    </script>
-                    <bubbles>
-                        <text>5</text>
-                    </bubbles>
-                </diagram>
-                <diagram>
-                    <script>
-                        <block s="reifyReporter" bubble="1">
-                            <autolambda>
-                                <block s="reportSum">
-                                    <l>2</l>
-                                    <l>3</l>
-                                </block>
-                            </autolambda>
-                            <list/>
-                        </block>
-                    </script>
-                    <bubbles>
+        <row>
+            <box color="blue" rel-width="46">
+                <column>
+                    <diagram>
+                        <script>
+                            <block s="reportSum" bubble="1">
+                                <l>2</l>
+                                <l>3</l>
+                            </block>
+                        </script>
+                        <bubbles>
+                            <text>5</text>
+                        </bubbles>
+                    </diagram>
+                    <diagram>
                         <script>
                             <block s="reifyReporter" bubble="1">
                                 <autolambda>
@@ -61,10 +49,23 @@
                                 <list/>
                             </block>
                         </script>
-                    </bubbles>
-                </diagram>
-	      </column>
-	      <column rel-width="3">
+                        <bubbles>
+                            <script>
+                                <block s="reifyReporter" bubble="1">
+                                    <autolambda>
+                                        <block s="reportSum">
+                                            <l>2</l>
+                                            <l>3</l>
+                                        </block>
+                                    </autolambda>
+                                    <list/>
+                                </block>
+                            </script>
+                        </bubbles>
+                    </diagram>
+                </column>
+            </box>
+            <column rel-width="54">
                 <diagram>
                     <script>
                         <block s="reifyScript">
@@ -97,9 +98,8 @@
                         </small-p>
                     </annotations>
                 </diagram>
-	      </column>
-            </row>
-        </column>
+            </column>
+        </row>
     </box>
     <box color="blue">
         <column>

@@ -43,9 +43,9 @@
             </script>
         </row>
     </thumbnail>
+    <header>Reports “true” or “false.”</header>
     <box color="gray">
         <column>
-            <p>Reports “true” or “false.”</p>
             <diagram>
                 <script>
                     <block s="reportBoolean" annotation="1">

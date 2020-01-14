@@ -44,9 +44,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report a list of consecutive numbers.</header>
     <box color="gray">
         <column>
-            <p>Report a list of consecutive numbers.</p>
             <row padding="0">
                 <diagram rel-width="1">
                     <script>

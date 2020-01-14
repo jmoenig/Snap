@@ -4,9 +4,9 @@
             <block s="receiveOnClone"/>
         </script>
     </thumbnail>
+    <header>Clone initialization script</header>
     <box color="gray">
         <column>
-            <p>Clone initialization script</p>
             <row>
                 <script>
                     <block s="receiveGo"/>

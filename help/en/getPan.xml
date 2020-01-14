@@ -4,9 +4,9 @@
             <block s="getPan"/>
         </script>
     </thumbnail>
+    <header>Report stereo balance for sounds.</header>
     <box color="gray">
         <column>
-            <p>Report stereo balance for sounds.</p>
             <p>
                 0 is normal. -100 is left channel only; 100 is right channel
                 only.

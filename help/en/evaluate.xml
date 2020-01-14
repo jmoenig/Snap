@@ -67,9 +67,9 @@
             </script>
         </column>
     </thumbnail>
+    <header>Call a reporter or predicate block.</header>
     <box color="gray">
         <column>
-            <p>Call a reporter or predicate block.</p>
             <diagram>
                 <block-definition s="map %repRing over %l" scale="0.9"/>
                 <annotations>

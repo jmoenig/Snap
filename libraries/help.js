@@ -63,67 +63,43 @@ HelpScreenMorph.prototype.init = function (loadCallback) {
 };
 
 HelpScreenMorph.prototype.fixLayout = function () {
-    var padding = this.padding, verticalPadding = this.verticalPadding,
-        nextY = verticalPadding, thumbnail = this.thumbnail;
-    function resizeBox (box) {
-        var startX, startY, width = 0, height = 0;
-        if (box !== thumbnail) {
-            box.moveBy(new Point(0, nextY));
-        }
-        startX = box.left();
-        startY = box.top();
-        box.children.forEach(function (child) {
-            child.moveBy(new Point (
-                (child.shiftRight || 0) + padding,
-                (child.shiftDown || 0) + padding
-            ));
-            if (box !== thumbnail) {
-                if (child.right() > box.right()) {
-                    child.setWidth(box.right() - padding - child.left());
-                }
-                if (child.top() < thumbnail.bottom() + padding) {
-                    child.setTop(thumbnail.bottom() + padding);
-                }
-            }
-            width = Math.max(width, child.right() - startX);
-            height = Math.max(height, child.bottom() - startY);
-        });
-        box.setHeight(height + padding);
-        if (box === thumbnail) {
-            box.setWidth(width + padding);
-        } else {
-            nextY += box.height() + verticalPadding;
-        }
+    var myself = this, padding = this.padding,
+        verticalPadding = this.verticalPadding, nextY = verticalPadding,
+        headerLineHeight;
+
+    this.add(this.thumbnail);
+    this.thumbnail.fixLayout();
+    if (this.header) {
+        this.add(this.header);
+        this.header.setLeft(this.thumbnail.right() + padding);
+        this.header.setWidth(
+            this.right() - this.header.left() - padding
+        );
+        headerLineHeight = this.header instanceof RichTextMorph
+            ? this.header.calculateLineHeight(this.header.lines[0])
+            : fontHeight(this.header.fontSize);
+        this.header.setTop(
+            verticalPadding + (this.thumbnail.height() - verticalPadding) / 2
+            - headerLineHeight / 2
+        );
     }
-    resizeBox(thumbnail);
-    this.children.forEach(function (box) {
-        if (box !== thumbnail) {
-            resizeBox(box);
+
+    this.children.forEach(function (child) {
+        if (child instanceof HelpBoxMorph && child !== myself.thumbnail) {
+            child.moveBy(new Point(0, nextY));
+            child.fixLayout();
+            nextY += child.height() + verticalPadding;
         }
     });
     this.setHeight(nextY - verticalPadding);
 };
 
 HelpScreenMorph.prototype.createThumbnail = function () {
-    var box = new BoxMorph();
-    box.color = new Color(214, 225, 235);
-    box.borderColor = new Color(153, 156, 158);
-    return box;
+    return new HelpBoxMorph('blue', true);
 };
 
 HelpScreenMorph.prototype.createBox = function (color) {
-    var box = new BoxMorph();
-    if (color === 'blue') {
-        box.color = new Color(214, 225, 235);
-        box.borderColor = new Color(153, 156, 158);
-    } else if (color === 'black') {
-        box.color = new Color(50, 52, 54);
-        box.borderColor = new Color(153, 156, 158);
-    } else { // gray is default
-        box.color = new Color(133, 138, 140);
-        box.borderColor = new Color(183, 186, 188);
-    }
-    return box;
+    return new HelpBoxMorph(color);
 };
 
 HelpScreenMorph.prototype.createColumn = function () {
@@ -141,10 +117,10 @@ HelpScreenMorph.prototype.createRow = function () {
 };
 
 HelpScreenMorph.prototype.createParagraph = function (
-    str, size, color, italic
+    str, size, color, bold, italic
 ) {
     var text = new TextMorph(
-        str, size, 'serif', false, italic, null, null,
+        str, size, 'serif', bold, italic, null, null,
         HelpScreenMorph.prototype.font
     );
     text.color = color;
@@ -152,10 +128,10 @@ HelpScreenMorph.prototype.createParagraph = function (
 };
 
 HelpScreenMorph.prototype.createRichParagraph = function (
-    str, size, color, italic
+    str, size, color, bold, italic
 ) {
     var text = new RichTextMorph(
-        str, size, 'serif', false, italic, null, null,
+        str, size, 'serif', bold, italic, null, null,
         HelpScreenMorph.prototype.font
     );
     text.color = color;
@@ -175,7 +151,7 @@ HelpScreenMorph.prototype.createImage = function (src, width, height) {
     this.imagesLoading += 1;
     return new ImageMorph(
         src, width, height,
-        function () {
+        function (img) {
             myself.imageLoaded();
         },
         function () {
@@ -221,6 +197,7 @@ HelpScreenMorph.prototype.createMenu = function (items, noEmptyOption) {
             itemMorph.annotationID = item.attributes.annotation;
         }
     }
+    morph.adjustWidths();
     return morph;
 };
 
@@ -261,7 +238,6 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
     var myself = this,
         model = this.parse(xmlString),
         helpScreen = new HelpScreenMorph(callback),
-        padding = HelpScreenMorph.prototype.padding,
         stage = new StageMorph(),
         target = new SpriteMorph(),
         blocks,
@@ -309,42 +285,21 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
 
     function librariesLoaded () {
         model.children.forEach(function (child) {
+            var morph;
             if (child.tag === 'blocks' || child.tag === 'libraries') {
                 return;
-            } else if (child.tag === 'thumbnail') {
-                helpScreen.thumbnail = myself.loadHelpScreenElement(
-                    model.require('thumbnail'), helpScreen, target, 'black'
-                );
-            } else {
-                var morph = myself.loadHelpScreenElement(
-                    child, helpScreen, target,
-                    child.attributes.color === 'blue' ? 'black' : 'white'
-                );
-                if (morph) {
-                    helpScreen.add(morph);
-                }
             }
-        });
-
-        helpScreen.children.forEach(fixWidths);
-        helpScreen.add(helpScreen.thumbnail);
-        helpScreen.forAllChildren(function (child) {
-            // Reflow rich text
-            if (child instanceof TextMorph) {
-                child.children.forEach(function (child) {
-                    if (typeof child.fixLayout === 'function') {
-                        child.fixLayout();
-                    }
-                });
-                child.setWidth(child.width());
-            }
-        });
-        helpScreen.forAllChildren(function (child) {
-            if (
-                child instanceof AlignmentMorph
-                || child instanceof ScriptDiagramMorph
+            morph = myself.loadHelpScreenElement(
+                child, helpScreen, target, 'white'
+            );
+            if (child.tag === 'thumbnail') {
+                helpScreen.thumbnail = morph;
+            } else if (
+                child.tag === 'header' || child.tag === 'small-header'
             ) {
-                child.fixLayout();
+                helpScreen.header = morph;
+            } else if (morph) {
+                helpScreen.add(morph);
             }
         });
     
@@ -354,79 +309,15 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
             callback(null, helpScreen);
         }
     }
-
-    function fixWidths (morph) {
-        var parent = morph.parent, maxWidth;
-        if (morph instanceof BoxMorph) {
-            morph.setWidth(parent.width());
-        } else if (
-            morph instanceof AlignmentMorph
-            || morph instanceof ScriptDiagramMorph
-            || morph instanceof TextMorph
-        ) {
-            if (
-                morph.relativeWidth != null
-                && parent instanceof AlignmentMorph
-                && parent.orientation === 'row'
-            ) {
-                if (morph.relativeWidth !== 0) {
-                    if (morph instanceof AlignmentMorph) {
-                        morph.fixLayout();
-                    }
-                    maxWidth = morph.relativeWidth
-                        / parent.relWidthDenominator
-                        * (parent.width() - parent.usedWidth);
-                    if (
-                        morph instanceof TextMorph
-                        && morph.width() <= maxWidth
-                    ) {
-                        parent.usedWidth += morph.width();
-                        parent.relWidthDenominator -= morph.relativeWidth;
-                        morph.relativeWidth = 0;
-                    } else {
-                        morph.silentSetWidth(maxWidth);
-                    }
-                }
-            } else if (parent instanceof BoxMorph) {
-                morph.silentSetWidth(parent.width() - 2 * padding);
-            } else {
-                morph.silentSetWidth(parent.width());
-            }
-        }
-        if (morph instanceof AlignmentMorph || morph instanceof BoxMorph) {
-            if (
-                morph instanceof AlignmentMorph
-                && morph.orientation === 'row'
-            ) {
-                // calculate the total known used width of row items
-                morph.usedWidth = morph.padding * (morph.children.length - 1)
-                    + morph.children.reduce(
-                        function (width, child) {
-                            if (child.relativeWidth) {
-                                return width;
-                            } else if (child instanceof BlockMorph) {
-                                return width
-                                    + child.stackFullBounds().width();
-                            } else {
-                                return width + child.width();
-                            }
-                        }, 0
-                    );
-                morph.relWidthDenominator = morph.children.reduce(
-                    function (width, child) {
-                        return width + (child.relativeWidth || 0);
-                    }, 0
-                );
-            }
-            morph.children.forEach(fixWidths);
-        }
-    }
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (
     element, screen, target, textColor
 ) {
-    var myself = this, morph, customBlock, script, textSize, italic;
+    var myself = this, morph, customBlock, script, textSize, bold, italic,
+        smallTextTags = ['small-header', 'small-p', 'small-i'],
+        boldTextTags = ['header', 'small-header'],
+        italicTextTags = ['i', 'small-i'];
 
     function normalizeWhitespace(text) {
         return text.trim().replace(/\s+/g, ' ') // collapse whitespace
@@ -446,6 +337,8 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         return element.contents === 'true';
     case 'box':
         morph = screen.createBox(element.attributes.color);
+        textColor = element.attributes.color === 'blue'
+                        ? 'black' : 'white';
         break;
     case 'column':
         morph = screen.createColumn();
@@ -499,24 +392,31 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             element.attributes['no-empty-option']
         );
         break;
+    case 'header':
+    case 'small-header':
     case 'p':
     case 'small-p':
     case 'i':
     case 'small-i':
-        textSize = element.tag === 'small-p' || element.tag === 'small-i'
+        if (element.attributes.color) {
+            textColor = element.attributes.color;
+        }
+        textSize = contains(smallTextTags, element.tag)
                         ? 14 : 18;
-        italic = element.tag === 'i' || element.tag === 'small-i';
+        bold = contains(boldTextTags, element.tag);
+        italic = contains(italicTextTags, element.tag);
         if (element.children.length === 0) {
             morph = screen.createParagraph(
                 normalizeWhitespace(element.contents),
-                textSize, element.attributes.color || textColor, italic
+                textSize, textColor, bold, italic
             );
         } else {
-            morph = screen.createRichParagraph(null, textSize, textColor);
+            morph = screen.createRichParagraph(
+                null, textSize, textColor, bold, italic
+            );
             morph.text = element.children.map(function (child) {
                 return myself.loadHelpScreenElement(
-                    child, screen, target,
-                    element.attributes.color || textColor, italic
+                    child, screen, target, textColor
                 );
             });
             morph.drawNew();
@@ -548,6 +448,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         }
         if (
             morph instanceof AlignmentMorph
+            || morph instanceof HelpBoxMorph
             || morph instanceof ScriptDiagramMorph
             || morph instanceof TextMorph
         ) {
@@ -660,6 +561,207 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
     }, this);
     return block;
+};
+
+// HelpBoxMorph /////////////////////////////////////////////////////////////
+
+HelpBoxMorph.prototype = new BoxMorph();
+HelpBoxMorph.prototype.constructor = HelpBoxMorph;
+HelpBoxMorph.uber = BoxMorph.prototype;
+
+function HelpBoxMorph(color, isThumbnail) {
+    this.init(color, isThumbnail);
+}
+
+HelpBoxMorph.prototype.init = function (color, isThumbnail) {
+    // initialize inherited properties:
+    HelpBoxMorph.uber.init.call(this);
+
+    this.setColorName(color);
+    this.isThumbnail = isThumbnail || false;
+};
+
+HelpBoxMorph.prototype.setColorName = function (color) {
+    if (color === this.colorName) {
+        return;
+    }
+    this.colorName = color;
+    if (color === 'blue') {
+        this.color = new Color(214, 225, 235);
+        this.borderColor = new Color(153, 156, 158);
+    } else if (color === 'black') {
+        this.color = new Color(50, 52, 54);
+        this.borderColor = new Color(153, 156, 158);
+    } else { // gray is default
+        this.color = new Color(133, 138, 140);
+        this.borderColor = new Color(183, 186, 188);
+    }
+};
+
+HelpBoxMorph.prototype.fixChildrenExtents = function () {
+    var screen = this.parentThatIsA(HelpScreenMorph),
+        padding = screen.padding;
+
+    function fixWidth (morph) {
+        var parent = morph.parent, maxWidth;
+
+        if (morph.isThumbnail || morph === screen.header) {
+            return;
+        }
+
+        if (
+            morph instanceof AlignmentMorph
+            || morph instanceof HelpBoxMorph
+            || morph instanceof ScriptDiagramMorph
+            || morph instanceof TextMorph
+        ) {
+            if (
+                morph.relativeWidth != null
+                && parent instanceof AlignmentMorph
+                && parent.orientation === 'row'
+            ) {
+                if (morph.relativeWidth !== 0) {
+                    if (morph instanceof AlignmentMorph) {
+                        morph.fixLayout();
+                    }
+                    maxWidth = morph.relativeWidth
+                        / parent.relWidthDenominator
+                        * (parent.width() - parent.usedWidth);
+                    if (
+                        morph instanceof TextMorph
+                        && morph.width() <= maxWidth
+                    ) {
+                        parent.usedWidth += morph.width();
+                        parent.relWidthDenominator -= morph.relativeWidth;
+                        morph.relativeWidth = 0;
+                    } else {
+                        morph.silentSetWidth(maxWidth);
+                    }
+                }
+            } else if (parent instanceof HelpBoxMorph) {
+                morph.silentSetWidth(parent.width() - 2 * padding);
+            } else {
+                morph.silentSetWidth(parent.width());
+            }
+        }
+        if (morph instanceof AlignmentMorph && morph.orientation === 'row') {
+            // calculate the total known used width of row items
+            morph.usedWidth = morph.padding * (morph.children.length - 1)
+                + morph.children.reduce(
+                    function (width, child) {
+                        if (child.relativeWidth) {
+                            return width;
+                        } else if (child instanceof BlockMorph) {
+                            return width
+                                + child.stackFullBounds().width();
+                        } else {
+                            return width + child.width();
+                        }
+                    }, 0
+                );
+            morph.relWidthDenominator = morph.children.reduce(
+                function (width, child) {
+                    return width + (child.relativeWidth || 0);
+                }, 0
+            );
+        }
+        if (
+            morph instanceof AlignmentMorph
+            || morph instanceof HelpBoxMorph
+        ) {
+            morph.children.forEach(fixWidth);
+        }
+    }
+
+    function fixHeight (morph) {
+        if (morph instanceof AlignmentMorph) {
+            if (morph.orientation === 'row') {
+                // height of boxes depends on the height of other row items
+                morph.children.forEach(function (child) {
+                    if (!(child instanceof HelpBoxMorph)) {
+                        fixHeight(child);
+                    }
+                });
+                morph.fixLayout();
+                morph.children.forEach(function (child) {
+                    if (child instanceof HelpBoxMorph) {
+                        fixHeight(child);
+                    }
+                });
+                morph.fixLayout();
+            } else {
+                morph.children.forEach(fixHeight);
+                morph.fixLayout();
+            }
+        } else if (
+            morph instanceof HelpBoxMorph
+            || morph instanceof ScriptDiagramMorph
+        ) {
+            morph.fixLayout();
+        }
+    }
+
+    if (!this.isThumbnail) {
+        this.children.forEach(fixWidth);
+    }
+    this.forAllChildren(function (child) {
+        // Reflow rich text
+        if (child instanceof TextMorph) {
+            child.children.forEach(function (child) {
+                if (typeof child.fixLayout === 'function') {
+                    child.fixLayout();
+                }
+            });
+            child.setWidth(child.width());
+        }
+    });
+    this.children.forEach(fixHeight);
+};
+
+HelpBoxMorph.prototype.fixLayout = function () {
+    var screen = this.parentThatIsA(HelpScreenMorph),
+        padding = screen.padding, myself = this,
+        startX, startY, width = 0, height = 0;
+
+    if (this.parent instanceof HelpScreenMorph && !this.isThumbnail) {
+        this.setWidth(this.parent.width());
+    }
+    this.fixChildrenExtents();
+    startX = this.left();
+    startY = this.top();
+    this.children.forEach(function (child) {
+        child.moveBy(new Point (
+            (child.shiftRight || 0) + padding,
+            (child.shiftDown || 0) + padding
+        ));
+        if (myself.parent === screen && !myself.isThumbnail) {
+            if (child.right() > myself.right()) {
+                child.setWidth(myself.right() - padding - child.left());
+            }
+            if (child.top() < screen.thumbnail.bottom() + padding) {
+                child.setTop(screen.thumbnail.bottom() + padding);
+            }
+            if (
+                screen.header
+                && child.top() < screen.header.bottom() + padding
+            ) {
+                child.setTop(screen.header.bottom() + padding);
+            }
+        }
+        width = Math.max(width, child.right() - startX);
+        height = Math.max(height, child.bottom() - startY);
+    });
+    if (this.isThumbnail) {
+        this.setWidth(width + padding);
+    }
+    if (
+        this.parent instanceof AlignmentMorph
+        && this.parent.orientation === 'row'
+    ) {
+        this.setHeight(Math.max(height + padding, this.parent.height()));
+    } else {
+        this.setHeight(height + padding);
+    }
 };
 
 // ImageMorph ///////////////////////////////////////////////////////////////

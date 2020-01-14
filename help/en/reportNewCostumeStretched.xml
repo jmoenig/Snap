@@ -8,8 +8,8 @@
             </block>
         </script>
     </thumbnail>
+    <header>Stretch a costume.</header>
     <box color="gray">
-        <p>Stretch a costume.</p>
         <column>
             <diagram>
                 <script>

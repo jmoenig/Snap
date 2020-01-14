@@ -37,9 +37,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Choose which of two values to report.</header>
     <box color="gray">
         <column>
-            <p>Choose which of two values to report.</p>
             <diagram>
                 <script>
                     <block s="reportIfElse" bubble="1">

@@ -4,9 +4,9 @@
             <block s="reportShown"/>
         </script>
     </thumbnail>
+    <header>Report true if sprite is shown.</header>
     <box color="gray">
         <column>
-            <p>Report true if sprite is shown.</p>
             <p>
                 <text>Use</text>
                 <script>

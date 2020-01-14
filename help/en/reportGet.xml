@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Reports properties of this sprite and its family.</header>
     <box color="gray">
         <column>
-            <p>Reports properties of this sprite and its family.</p>
             <row>
                 <diagram rel-width="1">
                     <script>

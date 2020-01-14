@@ -4,9 +4,9 @@
             <block s="getLastMessage"/>
         </script>
     </thumbnail>
+    <header>Report the most recently broadcast message.</header>
     <box color="gray">
         <column>
-            <p>Report the most recently broadcast message.</p>
             <script>
                 <block s="doBroadcast">
                     <l>hi there</l>

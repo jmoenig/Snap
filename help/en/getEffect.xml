@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report the value of a costume effect.</header>
     <box color="gray">
         <column>
-            <p>Report the value of a costume effect.</p>
             <diagram>
                 <script>
                     <block s="setEffect" annotation="1">

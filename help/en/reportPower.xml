@@ -17,9 +17,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Exponentiation (power) function.</header>
     <box color="gray">
         <column>
-            <p>Exponentiation (power) function.</p>
             <row>
                 <diagram rel-width="1">
                     <script>

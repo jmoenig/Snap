@@ -7,9 +7,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Reports whether the two inputs are the same thing.</header>
     <box color="gray">
         <column>
-            <p>Reports whether the two inputs are the same thing.</p>
             <diagram>
                 <script>
                     <block s="reportIsIdentical" bubble="1" annotation="1">

@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Set volume for sounds.</header>
     <box color="gray">
         <column>
-            <p>Set volume for sounds.</p>
             <p>
                 100% is the maximum sound possible.
                 50% is already quite soft!

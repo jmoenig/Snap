@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Set the transparency of the video capture layer.</header>
     <box color="gray">
         <column>
-            <p>Set the transparency of the video capture layer.</p>
             <p>
                 The video layer is in front of the background, but behind
                 everything else. If, as usual, the stage background is solid

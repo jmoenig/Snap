@@ -8,9 +8,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Do something for each item of a list.</header>
     <box color="gray">
         <column>
-            <p>Do something for each item of a list.</p>
             <row>
                 <column rel-width="5">
                     <diagram>

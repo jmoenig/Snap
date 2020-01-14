@@ -19,9 +19,9 @@
             </custom-block>
         </script>
     </thumbnail>
+    <header>Convert a list of words into a sentence.</header>
     <box color="gray">
         <column>
-            <p>Convert a list of words into a sentence.</p>
             <diagram>
                 <script>
                     <custom-block s="list $arrowRight sentence %l" bubble="1">

@@ -6,12 +6,12 @@
             </block>
         </script>
     </thumbnail>
+    <header>
+        Share a property with your parent.
+        \n(This only works for clones.)
+    </header>
     <box color="gray">
         <column>
-            <p>
-                Share a property with your parent. (This only works for
-                clones.)
-            </p>
             <row>
                 <column rel-width="1">
                     <p>BEFORE</p>
@@ -36,7 +36,7 @@
                         </row>
                     </column>
                 </column>
-                <column rel-width="1">
+                <column rel-width="1.25">
                     <p>Run</p>
                     <script>
                         <block s="doDeleteAttr">

@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report global flag.</header>
     <box color="gray">
         <column>
-            <p>Report global flag.</p>
             <diagram>
                 <script>
                     <block s="reportGlobalFlag">

@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Start script when sprite is...</header>
     <box color="gray">
         <column>
-            <p>Start script when sprite is...</p>
             <diagram>
                 <menu>
                     <item annotation="1">clicked</item>

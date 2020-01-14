@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Run fast; don't draw intermediate steps.</header>
     <box color="black">
         <column>
-            <p>Run fast; don't draw intermediate steps.</p>
             <row padding="22">
                 <script>
                     <block s="doRepeat">

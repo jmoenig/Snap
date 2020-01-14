@@ -7,9 +7,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Reports information from video capture.</header>
     <box color="gray">
         <column>
-            <p>Reports information from video capture.</p>
             <p>
                 The second input is a menu of sprites, and restricts the
                 block's attention to the part of the stage taken up by the

@@ -6,17 +6,17 @@
             </block>
         </script>
     </thumbnail>
+    <header>
+        <text>Reports</text>
+        <script>
+            <block s="reportBoolean">
+                <l><bool>true</bool></l>
+            </block>
+        </script>
+        <text>if its input is the empty list.</text>
+    </header>
     <box color="gray">
         <column>
-            <p>
-                <text>Reports</text>
-                <script>
-                    <block s="reportBoolean">
-                        <l><bool>true</bool></l>
-                    </block>
-                </script>
-                <text>if its input is the empty list.</text>
-            </p>
             <row>
                 <column rel-width="1">
                     <diagram>

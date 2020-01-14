@@ -4,9 +4,9 @@
             <block s="doPauseAll"/>
         </script>
     </thumbnail>
+    <header>Pause all running scripts.</header>
     <box color="gray">
         <column>
-            <p>Pause all running scripts.</p>
             <p>
                 <text>
                     Running this block is like pushing the pause button

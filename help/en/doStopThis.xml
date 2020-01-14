@@ -6,9 +6,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Stop some or all running scripts.</header>
     <box color="gray">
         <column>
-            <p>Stop some or all running scripts.</p>
             <row>
                 <diagram rel-width="2">
                     <script>

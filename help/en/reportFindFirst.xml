@@ -10,12 +10,11 @@
             </block>
         </script>
     </thumbnail>
+    <header>
+        Reports the first item in the list that matches the predicate.
+    </header>
     <box color="gray">
         <column>
-            <p>
-                Reports the first item in the list that matches the
-                predicate.
-            </p>
             <diagram>
                 <script>
                     <block s="reportFindFirst" bubble="1">

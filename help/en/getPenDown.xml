@@ -4,9 +4,9 @@
             <block s="getPenDown"/>
         </script>
     </thumbnail>
+    <header>Report true if sprite's pen is down.</header>
     <box color="gray">
         <column>
-            <p>Report true if sprite's pen is down.</p>
             <p>The sprite draws as it moves if its pen is down.</p>
             <p>
                 <text>Use</text>

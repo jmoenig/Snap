@@ -4,9 +4,9 @@
             <block s="reportPenTrailsAsCostume"/>
         </script>
     </thumbnail>
+    <header>Report lines drawn on stage as a costume.</header>
     <box color="gray">
         <column>
-            <p>Report lines drawn on stage as a costume.</p>
             <row>
                 <img src="reportPenTrailsAsCostume_stage.png" width="148" height="112"/>
                 <column rel-width="1">

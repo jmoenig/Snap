@@ -4,9 +4,9 @@
             <block s="floodFill"/>
         </script>
     </thumbnail>
+    <header>Change the color of a solid-color area.</header>
     <box color="gray">
         <column>
-            <p>Change the color of a solid-color area.</p>
             <row>
                 <diagram rel-width="1">
                     <script>

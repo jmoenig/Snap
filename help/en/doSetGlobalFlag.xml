@@ -7,9 +7,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Set global flag.</header>
     <box color="gray">
         <column>
-            <p>Set global flag.</p>
             <row>
                 <diagram rel-width="1">
                     <script>

@@ -4,9 +4,9 @@
             <block s="doCallCC"/>
         </script>
     </thumbnail>
+    <header>Capture command continuation</header>
     <box color="gray">
         <column>
-            <p>Capture command continuation</p>
             <diagram>
                 <script scale="0.9">
                     <block s="setSize">

@@ -57,7 +57,7 @@
     </box>
     <box color="blue">
         <column>
-            <p>Report attributes of a costume.</p>
+            <header>Report attributes of a costume.</header>
             <p>
                 Width and height are reported in pixels, but don't change in
                 presentation mode. Pixels are reported as a list of lists,

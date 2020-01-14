@@ -10,9 +10,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Run another script independently of this script.</header>
     <box color="gray">
         <column>
-            <p>Run another script independently of this script.</p>
             <row>
                 <diagram rel-width="1">
                     <script>

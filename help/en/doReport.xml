@@ -53,9 +53,9 @@
             </block>
         </script>
     </thumbnail>
+    <header>Report a value from a custom block to its caller.</header>
     <box color="gray">
         <column>
-            <p>Report a value from a custom block to its caller.</p>
             <diagram>
                 <block-definition s="absolute value of %s"/>
                 <annotations>
