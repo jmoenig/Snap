@@ -676,13 +676,18 @@ ImageMorph.prototype.init = function (src, width, height, onload, onerror) {
     var myself = this;
 
     // initialize inherited properties:
-    HelpScreenMorph.uber.init.call(this);
+    ImageMorph.uber.init.call(this);
 
+    this.diagram = null;
     this.setExtent(new Point(width, height));
     this.pic = new Image();
     this.pic.onload = function () {
         myself.drawNew();
         myself.changed();
+        if (myself.diagram) {
+            // redraw containing diagram
+            myself.diagram.drawNew();
+        }
         if (typeof onload === 'function') {
             onload();
         }
@@ -993,12 +998,15 @@ ScriptDiagramMorph.prototype.init = function (
     bubbles,
     defaultArrowColor
 ) {
-    var myself = this, scriptWidth, scriptHeight, diagramWidth,
-        diagramHeight, img, scaledImg, ctx;
+    var myself = this, scriptWidth, scriptHeight, displayWidth,
+        displayHeight;
 
     // additional properties:
     this.script = script;
-    this.scriptDisplay = null;
+    this.scriptContainer = new Morph();
+    this.scriptContainer.drawNew = function () {
+        this.image = newCanvas(new Point(1, 1));
+    };
     this.scriptScale = 1;
     this.annotations = annotations || [];
     this.menus = menus || [];
@@ -1006,6 +1014,7 @@ ScriptDiagramMorph.prototype.init = function (
     this.defaultArrowColor = defaultArrowColor;
     this.arrows = [];
     this.widthNoBubble = 0;
+    this.widthNoAnnotations = 0;
     this.heightNoAnnotations = 0;
 
     // initialize inherited properties:
@@ -1019,72 +1028,9 @@ ScriptDiagramMorph.prototype.init = function (
         scriptHeight = this.script.height();
     }
     this.scriptScale = this.script.scriptScale || 1;
-    scriptWidth *= this.scriptScale;
-    diagramWidth = scriptWidth;
-    scriptHeight *= this.scriptScale;
-    diagramHeight = scriptHeight;
-
-    this.scriptDisplay = new Morph();
-    this.scriptDisplay.setExtent(new Point(scriptWidth, scriptHeight));
-    this.add(this.scriptDisplay);
-    this.scriptDisplay.setPosition(this.position());
-
-    this.widthNoBubble = diagramWidth;
-
-    this.bubbles.forEach(function (bubbleValue, i) {
-        var annotated, bubble;
-        annotated = myself.getAnnotatedMorph('annotationBubble', i + 1);
-        if (annotated) {
-            bubble = annotated.showBubble(
-                bubbleValue, false, new SpriteMorph(), true
-            );
-            bubble.addShadow(new Point(2, 2), 80);
-            myself.add(bubble);
-            bubble.fullChanged();
-            bubble.setTop(myself.top());
-            bubble.setLeft(myself.scriptDisplay.right() + 2);
-            myself.scriptDisplay.setTop(
-                Math.max(script.top(), bubble.bottom())
-            );
-            diagramWidth = Math.max(
-                diagramWidth,
-                bubble.fullBounds().right() - myself.left()
-            );
-            diagramHeight = Math.max(
-                diagramHeight,
-                myself.scriptDisplay.bottom() - myself.top()
-            );
-        }
-    });
-
-    this.menus.forEach(function (menu, i) {
-        var annotated;
-        annotated = myself.getAnnotatedMorph('annotationMenu', i + 1);
-        if (annotated) {
-            myself.add(menu);
-            menu.setPosition(
-                myself.scriptDisplay.position()
-                    .add(
-                        annotated.rightCenter().add(new Point(-10, 5))
-                            .multiplyBy(myself.scriptScale)
-                    )
-            );
-            myself.widthNoBubble = Math.max(
-                myself.widthNoBubble,
-                menu.fullBounds().right() - myself.left()
-            );
-            diagramWidth = Math.max(
-                diagramWidth,
-                menu.fullBounds().right() - myself.left()
-            );
-            diagramHeight = Math.max(
-                diagramHeight,
-                menu.fullBounds().bottom() - myself.top()
-            );
-        }
-    });
-
-    this.heightNoAnnotations = diagramHeight;
+    displayWidth = scriptWidth;
+    displayHeight = scriptHeight;
+    this.widthNoBubble = displayWidth;
 
     this.script.forAllChildren(function (child) {
         if (child.annotationHighlight) {
@@ -1096,19 +1042,88 @@ ScriptDiagramMorph.prototype.init = function (
             child.ghost();
         }
     });
+    this.scriptContainer.add(this.script);
 
-    img = this.script.fullImage();
-    scaledImg = newCanvas(new Point(scriptWidth, scriptHeight));
-    ctx = scaledImg.getContext('2d');
-    ctx.drawImage(img, 0, 0, scriptWidth, scriptHeight);
-    this.scriptDisplay.image = scaledImg;
+    this.bubbles.forEach(function (bubbleValue, i) {
+        var annotated, bubble;
+        annotated = myself.getAnnotatedMorph('annotationBubble', i + 1);
+        if (annotated) {
+            if (bubbleValue instanceof ImageMorph) {
+                // diagram will need to be redrawn on image load
+                bubbleValue.diagram = myself;
+            }
+            bubble = annotated.showBubble(
+                bubbleValue, false, new SpriteMorph(), true
+            );
+            bubble.addShadow(new Point(2, 2), 80);
+            myself.scriptContainer.add(bubble);
+            bubble.fullChanged();
+            bubble.setTop(2);
+            bubble.setLeft(myself.script.right() + 2);
+            if (annotations.length === 0) {
+                myself.script.setTop(
+                    Math.max(
+                        myself.script.top(),
+                        bubble.bottom() - scriptHeight / 2
+                    )
+                );
+            } else {
+                // bubble is higher to make room for annotations
+                myself.script.setTop(
+                    Math.max(myself.script.top(), bubble.bottom())
+                );
+            }
+            displayWidth = Math.max(
+                displayWidth, bubble.fullBounds().right()
+            );
+            displayHeight = Math.max(
+                displayHeight, myself.script.bottom()
+            );
+        }
+    });
+
+    this.menus.forEach(function (menu, i) {
+        var annotated;
+        annotated = myself.getAnnotatedMorph('annotationMenu', i + 1);
+        if (annotated) {
+            myself.scriptContainer.add(menu);
+            menu.setPosition(annotated.rightCenter().add(new Point(-10, 5)));
+            myself.widthNoBubble = Math.max(
+                myself.widthNoBubble,
+                menu.fullBounds().right() - myself.left()
+            );
+            displayWidth = Math.max(
+                displayWidth,
+                menu.fullBounds().right() - myself.left()
+            );
+            displayHeight = Math.max(
+                displayHeight,
+                menu.fullBounds().bottom() - myself.top()
+            );
+        }
+    });
+
+    this.scriptContainer.setExtent(new Point(displayWidth, displayHeight));
+    displayWidth *= this.scriptScale;
+    displayHeight *= this.scriptScale;
+    this.widthNoBubble *= this.scriptScale;
     // default extent doesn't include annotations
-    this.setWidth(diagramWidth);
-    this.setHeight(diagramHeight);
+    this.widthNoAnnotations = displayWidth;
+    this.heightNoAnnotations = displayHeight;
+    this.setExtent(new Point(displayWidth, displayHeight));
+
+    this.drawNew();
 };
 
 ScriptDiagramMorph.prototype.drawNew = function () {
-    this.image = newCanvas(new Point(1, 1));
+    var img, scaledImg, ctx;
+    img = this.scriptContainer.fullImage();
+    scaledImg = newCanvas(this.extent());
+    ctx = scaledImg.getContext('2d');
+    ctx.drawImage(
+        img, 0, 0, this.widthNoAnnotations, this.heightNoAnnotations
+    );
+    this.image = scaledImg;
 };
 
 ScriptDiagramMorph.prototype.fixLayout = function () {
@@ -1126,7 +1141,7 @@ ScriptDiagramMorph.prototype.addAnnotations = function () {
         lastCreated, annotation, arrow, arrowStart, arrowEnd,
         arrowStartMorph, arrowEndMorph, allArrows;
 
-    minTop = this.scriptDisplay.top();
+    minTop = this.top() + this.script.top() * this.scriptScale;
     annotationsHeight = 0;
     horizontalArrows = [];
     this.annotations.forEach(function (annotation, i) {
@@ -1168,11 +1183,11 @@ ScriptDiagramMorph.prototype.addAnnotations = function () {
         if (!arrowStartMorph) {
             break;
         }
-        arrowStart = this.scriptDisplay.position().add(
+        arrowStart = this.position().add(
             arrowStartMorph.center().multiplyBy(this.scriptScale)
         );
         arrowEndMorph = this.getAnnotatedMorph('annotationArrowEnd', i);
-        arrowEnd = this.scriptDisplay.position().add(
+        arrowEnd = this.position().add(
             arrowEndMorph.center().multiplyBy(this.scriptScale)
         );
         allArrows = arrowEndMorph.annotationArrowEnd
@@ -1223,7 +1238,7 @@ ScriptDiagramMorph.prototype.addAnnotation = function (
 
     this.add(annotation);
     if (annotation.annotationArrowDetour) {
-        arrowEnd = this.scriptDisplay.position().add(
+        arrowEnd = this.position().add(
             annotated.center().multiplyBy(this.scriptScale)
         );
     } else if (
@@ -1231,20 +1246,19 @@ ScriptDiagramMorph.prototype.addAnnotation = function (
         || annotated instanceof MenuItemMorph
         || annotated === annotated.topBlock()
     ) {
-        arrowEnd = this.scriptDisplay.position().add(new Point(
+        arrowEnd = this.position().add(new Point(
             annotated.right() + this.padding,
             annotated.parts
-                // use y of center of label
                 ? annotated.parts()[0].center().y
                 : annotated.center().y
         ).multiplyBy(this.scriptScale));
     } else if (id === 1) {
-        arrowEnd = this.scriptDisplay.position().add(new Point(
+        arrowEnd = this.position().add(new Point(
             annotated.right(),
             annotated.center().y
         ).multiplyBy(this.scriptScale));
     } else {
-        arrowEnd = this.scriptDisplay.position().add(
+        arrowEnd = this.position().add(
             annotated.bottomCenter().multiplyBy(this.scriptScale)
         );
     }
@@ -1314,7 +1328,7 @@ ScriptDiagramMorph.prototype.getAnnotatedMorph = function (attribute, id) {
         }
         return null;
     }
-    return check(this.script) || check(this);
+    return check(this.scriptContainer);
 };
 
 // DiagramArrowMorph ////////////////////////////////////////////////////
