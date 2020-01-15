@@ -66,7 +66,6 @@ Aligns its contents in a row.
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | padding | number | 15 | How far apart the content elements are. |
-| fill-width | true or false | true | If a column should stretch its contents to fill as much horizontal space as possible. |
 | width | number | none |
 
 Some elements, like `<script>`, have a fixed width, while others, like `<p>`,
