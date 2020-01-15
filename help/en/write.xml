@@ -22,7 +22,9 @@
                         sprite is left at the end of the text so that you can
                         find out how long it is.
                     </p>
-                    <p>The text is in monospace (Courier) font.</p>
+                    <p font="Courier">
+                        The text is in monospace (Courier) font.
+                    </p>
                 </column>
                 <img src="write_down.png" width="274" height="124"/>
             </row>

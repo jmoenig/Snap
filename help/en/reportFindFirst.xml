@@ -137,12 +137,17 @@
                 </bubbles>
             </diagram>
             <p>
-                FIND FIRST reports False if no item in the list matches the
-                predicate.\n
-                (KEEP reports the empty list in that situation.)
+                <text font="Courier">Find first</text>
+                <text>
+                    reports False if no item in the list matches the
+                    predicate.\n(
+                </text>
+                <text font="Courier">Keep</text>
+                <text>reports the empty list in that situation.)</text>
             </p>
             <p>
-                <text>FIND FIRST means the same as</text>
+                <text font="Courier">Find first</text>
+                <text>means the same as</text>
                 <script>
                     <block s="reportListItem">
                         <l>1</l>
@@ -155,9 +160,11 @@
                         </block>
                     </block>
                 </script>
+                <text>but</text>
+                <text font="Courier">find first</text>
                 <text>
-                    but FIND FIRST is faster if a match is found because it
-                    doesn't search the rest of the list.
+                    is faster if a match is found because it doesn't search
+                    the rest of the list.
                 </text>
             </p>
         </column>

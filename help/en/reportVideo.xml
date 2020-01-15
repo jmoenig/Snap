@@ -42,8 +42,14 @@
                     in the video.
                 </small-p>
                 <small-p>
-                    Reports a number, the direction in which the object is
-                    moving, suitable for use as input in POINT IN DIRECTION.
+                    <text>
+                        Reports a number, the direction in which the object
+                        is moving, suitable for use as input in
+                    </text>
+                    <text font="Courier">
+                        point in direction
+                    </text>
+                    <text>.</text>
                 </small-p>
             </annotations>
         </diagram>

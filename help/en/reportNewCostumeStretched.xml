@@ -108,8 +108,15 @@
                     </block>
                 </script>
             </p>
-            <p>2. Transform the pixels using MAP</p>
-            <p>3. Use STRETCH to restore the width and height</p>
+            <p>
+                <text>2. Transform the pixels using</text>
+                <text font="Courier" color="red">map</text>
+            </p>
+            <p>
+                <text>3. Use</text>
+                <text font="Courier" color="purple">stretch</text>
+                <text>to restore the width and height</text>
+            </p>
         </column>
     </box>
 </help-screen>

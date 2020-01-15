@@ -26,6 +26,10 @@
             help screen
         -->
     </thumbnail>
+    <header>
+        <!-- Optional -->
+        A title that displays to the right of the thumbnail.
+    </header>
     <box color="gray">
         <!-- Main content box -->
     </box>
@@ -127,7 +131,7 @@ Aligns its contents in a column.
 
 ## Content Elements
 
-### `<p>`, `<small-p>`, `<i>`, `<small-i>`
+### `<p>`, `<small-p>`, `<i>`, `<small-i>`, `<header>`, `<small-header>`
 
 Paragraph elements. `<p>` is normal text, while `<i>` is italic. The default
 font size is 18px, while the small variants are 14px.
@@ -146,13 +150,19 @@ Two:
             <l/>
         </block>
     </script>
-    <text>which are inlined.</text>
+    <text>which are inlined. You can make certain text a</text>
+    <text color="red">different color</text>
+    <text>or</text>
+    <text font="Courier">different font</text>
+    <text>.</text>
 </p>
 ```
 | Attribute | Value | Default | Comment |
 | --- | --- | --- | --- |
 | width | number | none |
 | rel-width | number | 1 | See `<row>`. |
+| color | CSS color | white or black |
+| font | CSS font | Baskerville, "Libre Baskerville" |
 
 ### `<img>`
 

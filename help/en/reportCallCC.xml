@@ -72,11 +72,21 @@
         </column>
     </box>
     <box color="blue">
-        <p>
-            Continuations are too complicated to explain in a help screen, but
-            they're used to invent control structures such as the CATCH and
-            THROW tool blocks. Read the chapter in the Snap! Reference Manual
-            if you want to know more.
-        </p>
+        <column>
+            <p>
+                <text>
+                    Continuations are too complicated to explain in a help
+                    screen, but they're used to invent control structures
+                    such as the
+                </text>
+                <text font="Courier">catch</text>
+                <text>and</text>
+                <text font="Courier">throw</text>
+                <text>
+                    tool blocks. Read the chapter in the Snap! Reference
+                    Manual if you want to know more.
+                </text>
+            </p>
+        </column>
     </box>
 </help-screen>

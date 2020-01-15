@@ -117,22 +117,20 @@ HelpScreenMorph.prototype.createRow = function () {
 };
 
 HelpScreenMorph.prototype.createParagraph = function (
-    str, size, color, bold, italic
+    str, size, font, color, bold, italic
 ) {
     var text = new TextMorph(
-        str, size, 'serif', bold, italic, null, null,
-        HelpScreenMorph.prototype.font
+        str, size, 'serif', bold, italic, null, null, font
     );
     text.color = color;
     return text;
 };
 
 HelpScreenMorph.prototype.createRichParagraph = function (
-    str, size, color, bold, italic
+    str, size, font, color, bold, italic
 ) {
     var text = new RichTextMorph(
-        str, size, 'serif', bold, italic, null, null,
-        HelpScreenMorph.prototype.font
+        str, size, 'serif', bold, italic, null, null, font
     );
     text.color = color;
     return text;
@@ -290,7 +288,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
                 return;
             }
             morph = myself.loadHelpScreenElement(
-                child, helpScreen, target, 'white'
+                child, helpScreen, target, helpScreen.font, 'white'
             );
             if (child.tag === 'thumbnail') {
                 helpScreen.thumbnail = morph;
@@ -312,7 +310,7 @@ SnapSerializer.prototype.loadHelpScreen = function (xmlString, callback) {
 };
 
 SnapSerializer.prototype.loadHelpScreenElement = function (
-    element, screen, target, textColor
+    element, screen, target, textFont, textColor
 ) {
     var myself = this, morph, customBlock, script, textSize, bold, italic,
         smallTextTags = ['small-header', 'small-p', 'small-i'],
@@ -348,7 +346,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             element.childNamed('block-definition')
                 || element.childNamed('menu')
                 || element.require('script'),
-            screen, target, textColor
+            screen, target, textFont, textColor
         );
         morph = screen.createScriptDiagram(
             script,
@@ -356,7 +354,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
                 ? element.require('annotations').children.map(
                     function (child) {
                         var morph = myself.loadHelpScreenElement(
-                            child, screen, target, textColor
+                            child, screen, target, textFont, textColor
                         );
                         myself.handleAnnotations(child, morph);
                         return morph;
@@ -365,14 +363,14 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             element.childNamed('menus')
                 ? element.childNamed('menus').children.map(function (child) {
                     return myself.loadHelpScreenElement(
-                        child, screen, target, textColor
+                        child, screen, target, textFont, textColor
                     );
                 })
                 : [],
             element.childNamed('bubbles')
                 ? element.childNamed('bubbles').children.map(function (child) {
                     return myself.loadHelpScreenElement(
-                        child, screen, target, textColor
+                        child, screen, target, textFont, textColor
                     );
                 })
                 : [],
@@ -401,6 +399,9 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         if (element.attributes.color) {
             textColor = element.attributes.color;
         }
+        if (element.attributes.font) {
+            textFont = element.attributes.font;
+        }
         textSize = contains(smallTextTags, element.tag)
                         ? 14 : 18;
         bold = contains(boldTextTags, element.tag);
@@ -408,15 +409,15 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         if (element.children.length === 0) {
             morph = screen.createParagraph(
                 normalizeWhitespace(element.contents),
-                textSize, textColor, bold, italic
+                textSize, textFont, textColor, bold, italic
             );
         } else {
             morph = screen.createRichParagraph(
-                null, textSize, textColor, bold, italic
+                null, textSize, textFont, textColor, bold, italic
             );
             morph.text = element.children.map(function (child) {
                 return myself.loadHelpScreenElement(
-                    child, screen, target, textColor
+                    child, screen, target, textFont, textColor
                 );
             });
             morph.drawNew();
@@ -430,7 +431,12 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
         morph.fixBlockColor(null, true); // force zebra coloring
         break;
     case 'text':
-        return normalizeWhitespace(element.contents);
+        return element.attributes.font || element.attributes.color
+            ? {
+                text: normalizeWhitespace(element.contents),
+                font: element.attributes.font,
+                color: element.attributes.color
+            } : normalizeWhitespace(element.contents);
     case 'thumbnail':
         morph = screen.createThumbnail();
         break;
@@ -486,7 +492,7 @@ SnapSerializer.prototype.loadHelpScreenElement = function (
             // add children
             element.children.forEach(function (child) {
                 var childMorph = myself.loadHelpScreenElement(
-                    child, screen, target, textColor
+                    child, screen, target, textFont, textColor
                 );
                 if (childMorph) {
                     morph.add(childMorph);
@@ -886,25 +892,36 @@ RichTextMorph.prototype.parse = function () {
         context = canvas.getContext('2d'),
         line = [],
         lineWidth = 0,
-        w;
+        w,
+        prependSpace = false,
+        nextWord;
 
     context.font = this.font();
     this.maxLineWidth = 0;
     this.lines = [];
     this.words = [];
 
-    this.text.forEach(function (word) {
+    this.text.forEach(function (item) {
         var paragraphs, i, p;
-        if (word instanceof Morph) {
-            myself.words.push(word);
-            if (word.parent !== this) {
-                myself.add(word);
+        if (item instanceof Morph) {
+            myself.words.push(item);
+            if (item.parent !== this) {
+                myself.add(item);
             }
         } else {
-            paragraphs = word.split('\n');
+            paragraphs = (item.text || item).split('\n');
             for (i = 0; i < paragraphs.length; i++) {
                 p = paragraphs[i];
-                myself.words = myself.words.concat(p.split(' '));
+                myself.words = myself.words.concat(
+                    p.split(' ').map(function (word) {
+                        return item.font || item.color
+                            ? {
+                                text: word,
+                                font: item.font,
+                                color: item.color
+                            } : word;
+                    })
+                );
                 if (i < paragraphs.length - 1) {
                     myself.words.push('\n');
                 }
@@ -912,17 +929,25 @@ RichTextMorph.prototype.parse = function () {
         }
     });
 
-    this.words.forEach(function (word) {
+    this.words.forEach(function (word, i) {
         if (word === '\n') {
             myself.lines.push(line);
             myself.maxLineWidth = Math.max(myself.maxLineWidth, lineWidth);
             line = [];
             lineWidth = 0;
         } else {
-            if (!(word instanceof Morph)) {
-                word = word + ' ';
+            if (prependSpace) {
+                if (word.font === myself.words[i-1].font) {
+                    context.font = myself.font(word.font);
+                } else {
+                    context.font = myself.font();
+                }
+                w = context.measureText(' ').width;
+            } else {
+                w = 0;
             }
-            w = myself.calculateWordWidth(word);
+            context.font = myself.font(word.font);
+            w += myself.calculateWordWidth(word);
             if (myself.maxWidth > 0 && lineWidth + w > myself.maxWidth) {
                 myself.lines.push(line);
                 myself.maxLineWidth = Math.max(
@@ -932,8 +957,36 @@ RichTextMorph.prototype.parse = function () {
                 line = [word];
                 lineWidth = w;
             } else {
-                line.push(word);
+                if (prependSpace) {
+                    if (word instanceof Morph) {
+                        line.push(' ');
+                        line.push(word);
+                    } else if (typeof word === 'string') {
+                        line.push(' ' + word);
+                    } else if (word.font === myself.words[i-1].font) {
+                        word.text = ' ' + word.text;
+                        line.push(word);
+                    } else {
+                        line.push(' ');
+                        line.push(word);
+                    }
+                } else {
+                    line.push(word);
+                }
                 lineWidth += w;
+            }
+            nextWord = myself.words[i+1];
+            if (
+                word === '(' || nextWord == null || (
+                    typeof nextWord === 'string' && (
+                        contains(['.', ',', '!', '\n'], myself.words[i+1])
+                        || myself.words[i+1].startsWith(')')
+                    )
+                )
+            ) {
+                prependSpace = false;
+            } else {
+                prependSpace = true;
             }
         }
     });
@@ -941,13 +994,29 @@ RichTextMorph.prototype.parse = function () {
     this.maxLineWidth = Math.max(this.maxLineWidth, lineWidth);
 };
 
+RichTextMorph.prototype.font = function (fontName) {
+    // answer a font string, e.g. 'bold italic 12px sans-serif'
+    fontName = fontName || this.fontName;
+    var font = '';
+    if (this.isBold) {
+        font = font + 'bold ';
+    }
+    if (this.isItalic) {
+        font = font + 'italic ';
+    }
+    return font +
+        this.fontSize + 'px ' +
+        (fontName ? fontName + ', ' : '') +
+        this.fontStyle;
+};
+
 RichTextMorph.prototype.drawNew = function () {
     var myself = this, context, height, width, i, j, line, lineHeight, word,
-        shadowHeight, shadowWidth, offx, offy, x, y;
+        shadowHeight, shadowWidth, offx, offy, x, y,
+        defaultColor = this.color.toString();
 
     this.image = newCanvas();
     context = this.image.getContext('2d');
-    context.font = this.font();
     this.parse();
 
     // set my extent
@@ -986,7 +1055,6 @@ RichTextMorph.prototype.drawNew = function () {
     // now draw the actual text
     offx = Math.abs(Math.min(this.shadowOffset.x, 0));
     offy = Math.abs(Math.min(this.shadowOffset.y, 0));
-    context.fillStyle = this.color.toString();
 
     y = 0;
     for (i = 0; i < this.lines.length; i++) {
@@ -1009,9 +1077,12 @@ RichTextMorph.prototype.drawNew = function () {
                     y - (this.calculateWordHeight(word) / 2) + offy
                 )));
             } else {
+                context.font = this.font(word.font);
+                context.fillStyle = word.color || defaultColor;
                 context.fillText(
-                    word, x + offx,
-                    y + (this.calculateWordHeight(word) / 2) + offy
+                    word.text || word, x + offx,
+                    y + (this.calculateWordHeight(word) / 2)
+                        + offy
                 );
             }
             x += this.calculateWordWidth(word);
@@ -1030,11 +1101,11 @@ RichTextMorph.prototype.drawNew = function () {
 RichTextMorph.prototype.calculateWordWidth = function (word) {
     var canvas = newCanvas(),
         context = canvas.getContext('2d');
-    context.font = this.font();
+    context.font = this.font(word.font);
     if (word instanceof Morph) {
-        return word.width() + context.measureText(' ').width;
+        return word.width();
     }
-    return context.measureText(word).width;
+    return context.measureText(word.text || word).width;
 };
 
 RichTextMorph.prototype.calculateLineWidth = function (line) {

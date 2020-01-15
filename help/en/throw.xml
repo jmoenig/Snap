@@ -19,9 +19,8 @@
     </blocks>
     <thumbnail>
         <script>
-            <custom-block s="catch %upvar %cs">
-                <l>tag</l>
-                <script/>
+            <custom-block s="throw %s">
+                <block var="tag"/>
             </custom-block>
         </script>
     </thumbnail>
@@ -89,66 +88,76 @@
     </box>
     <box color="blue">
         <row>
-            <diagram rel-width="1">
-                <script>
-                    <custom-block s="catch %upvar %cs">
-                        <l arrow-start="1">tag</l>
-                        <script>
-                            <custom-block s="..."/>
-                            <custom-block s="throw %s">
-                                <l arrow-end="1">catchtag</l>
-                            </custom-block>
-                            <custom-block s="..."/>
-                        </script>
-                    </custom-block>
-                </script>
-            </diagram>
             <column rel-width="1">
+                <diagram>
+                    <script>
+                        <custom-block s="catch %upvar %cs">
+                            <l arrow-start="1">tag</l>
+                            <script>
+                                <custom-block s="..."/>
+                                <custom-block s="throw %s">
+                                    <l arrow-end="1">catchtag</l>
+                                </custom-block>
+                                <custom-block s="..."/>
+                            </script>
+                        </custom-block>
+                    </script>
+                </diagram>
                 <p>
-                    Drag the orange tag from the CATCH block to the THROW
-                    block.
-                </p>
-                <p>
-                    You can change the tag's name by clicking on it
-                    without dragging; then you can nest more than one
-                    CATCH block:
+                    <text>Drag the orange tag from the</text>
+                    <text font="Courier">catch</text>
+                    <text>block to the</text>
+                    <text font="Courier">throw</text>
+                    <text>block.</text>
                 </p>
             </column>
-            <diagram rel-width="2">
-                <script>
-                    <custom-block s="catch %upvar %cs">
-                        <l arrow-start="2">outer</l>
-                        <script>
-                            <block s="doForever">
-                                <script>
-                                    <custom-block s="..."/>
-                                    <custom-block s="catch %upvar %cs">
-                                        <l arrow-start="1">inner</l>
-                                        <script>
-                                            <block s="doRepeat">
-                                                <l>10</l>
-                                                <script>
-                                                    <block s="doIf">
-                                                        <custom-block s="??"/>
-                                                        <script>
-                                                            <custom-block s="throw %s">
-                                                                <l annotation="1" arrow-end="1,2">catchtag</l>
-                                                            </custom-block>
-                                                        </script>
-                                                    </block>
-                                                </script>
-                                            </block>
-                                        </script>
-                                    </custom-block>
-                                </script>
-                            </block>
-                        </script>
-                    </custom-block>
-                </script>
-                <annotations>
-                    <small-p>You can use either tag here!</small-p>
-                </annotations>
-            </diagram>
+            <column rel-width="1">
+                <p>
+                    <text>
+                        You can change the tag's name by clicking on it
+                        without dragging; then you can nest more than one
+                    </text>
+                    <text font="Courier">catch</text>
+                    <text>block:</text>
+                </p>
+            </column>
+            <column rel-width="2">
+                <diagram>
+                    <script>
+                        <custom-block s="catch %upvar %cs">
+                            <l arrow-start="2">outer</l>
+                            <script>
+                                <block s="doForever">
+                                    <script>
+                                        <custom-block s="..."/>
+                                        <custom-block s="catch %upvar %cs">
+                                            <l arrow-start="1">inner</l>
+                                            <script>
+                                                <block s="doRepeat">
+                                                    <l>10</l>
+                                                    <script>
+                                                        <block s="doIf">
+                                                            <custom-block s="??"/>
+                                                            <script>
+                                                                <custom-block s="throw %s">
+                                                                    <l annotation="1" arrow-end="1,2">catchtag</l>
+                                                                </custom-block>
+                                                            </script>
+                                                        </block>
+                                                    </script>
+                                                </block>
+                                            </script>
+                                        </custom-block>
+                                    </script>
+                                </block>
+                            </script>
+                        </custom-block>
+                    </script>
+                    <annotations>
+                        <small-p>You can use either tag here!</small-p>
+                    </annotations>
+                </diagram>
+            </column>
         </row>
     </box>
 </help-screen>
