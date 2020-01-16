@@ -580,7 +580,7 @@ SnapTranslator.dict.de = {
     'warp %c':
         'Warp %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'Wenn ich als Klon starte',
     'create a clone of %cln':
         'klone %cln',
     'a new clone of %cln':
