@@ -464,54 +464,103 @@ describe('ide', function() {
         });
     });
 
-    describe('embedded api', function() {
-        after(() => delete driver.ide().droppedText);
-
-        it('should be able to set variables', async function() {
+    describe('embedded', function() {
+        describe('load', function() {
             const frame = document.getElementsByTagName('iframe')[0];
-            const key = 'testVariable';
-            const value = 'test variable value';
-            frame.contentWindow.postMessage({
-                type: 'set-variable',
-                key: key,
-                value: value,
-            });
-            await driver.expect(
-                () => driver.globals().externalVariables[key] === value,
-                'Did not set external variable',
-            );
-        });
-
-        it('should be able to delete variables', async function() {
-            const frame = document.getElementsByTagName('iframe')[0];
-            const key = 'testVariable';
-            const value = 'test variable value';
-            driver.globals().externalVariables[key] = value;
-            frame.contentWindow.postMessage({
-                type: 'delete-variable',
-                key: key,
-            });
-            await driver.expect(
-                () => driver.globals().externalVariables[key] === undefined,
-                'Did not delete external variable',
-            );
-        });
-
-        it('should be able to import text', function(done) {
-            const frame = document.getElementsByTagName('iframe')[0];
-            const name = 'hello.xml';
-            const content = 'content';
-
-            driver.ide().droppedText = function(text, filename) {
-                if (text === content && filename === name) {
+            after(done => {
+                reloadIframe(frame);
+                frame.onload = async () => {
+                    await driver.login('test');
                     done();
-                }
-            };
+                };
+            });
 
-            frame.contentWindow.postMessage({
-                type: 'import',
-                name: name,
-                content: content,
+            it('should load IDE w/o url anchors', function(done) {
+                reloadIframe(frame);
+                frame.onload = () => {
+                    const {IDE_Morph} = driver.globals();
+                    const ide = frame.contentWindow.world.children.find(morph => {
+                        return morph instanceof IDE_Morph;
+                    });
+                    if (ide) {
+                        done();
+                    } else {
+                        done(new Error('IDE not loaded!'));
+                    }
+                };
+            });
+
+            it('should load IDE w/ url anchors', done => {
+                reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
+                frame.onload = () => {
+                    const {IDE_Morph} = driver.globals();
+                    const ide = frame.contentWindow.world.children.find(morph => {
+                        return morph instanceof IDE_Morph;
+                    });
+                    if (ide) {
+                        done();
+                    } else {
+                        done(new Error('IDE not loaded!'));
+                    }
+                };
+            });
+
+            function reloadIframe(frame, url=window.origin) {
+                driver.disableExitPrompt();
+                driver.setWindow(frame.contentWindow);
+                frame.setAttribute('src', url);
+            }
+        });
+
+        describe('api', function() {
+            after(() => delete driver.ide().droppedText);
+
+            it('should be able to set variables', async function() {
+                const frame = document.getElementsByTagName('iframe')[0];
+                const key = 'testVariable';
+                const value = 'test variable value';
+                frame.contentWindow.postMessage({
+                    type: 'set-variable',
+                    key: key,
+                    value: value,
+                });
+                await driver.expect(
+                    () => driver.globals().externalVariables[key] === value,
+                    'Did not set external variable',
+                );
+            });
+
+            it('should be able to delete variables', async function() {
+                const frame = document.getElementsByTagName('iframe')[0];
+                const key = 'testVariable';
+                const value = 'test variable value';
+                driver.globals().externalVariables[key] = value;
+                frame.contentWindow.postMessage({
+                    type: 'delete-variable',
+                    key: key,
+                });
+                await driver.expect(
+                    () => driver.globals().externalVariables[key] === undefined,
+                    'Did not delete external variable',
+                );
+            });
+
+            it('should be able to import text', function(done) {
+                const frame = document.getElementsByTagName('iframe')[0];
+                const name = 'hello.xml';
+                const content = 'content';
+
+                driver.ide().droppedText = function(text, filename) {
+                    if (text === content && filename === name) {
+                        done();
+                    }
+                };
+
+                frame.contentWindow.postMessage({
+                    type: 'import',
+                    name: name,
+                    content: content,
+                });
             });
         });
     });

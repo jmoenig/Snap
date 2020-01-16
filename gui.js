@@ -282,6 +282,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var usr, myself = this, urlLanguage = null;
 
+    this.projectName = 'myRole';
+
     // get persistent user data, if any
     if (localStorage) {
         usr = localStorage['-snap-user'];
@@ -341,12 +343,48 @@ IDE_Morph.prototype.openIn = function (world) {
 
     if (this.userLanguage) {
         this.loadNewProject = true;
-        this.setLanguage(this.userLanguage, this.interpretUrlAnchors);
+        this.setLanguage(this.userLanguage, this.onOpen);
     } else {
-        this.interpretUrlAnchors();
+        this.onOpen();
     }
     this.initializeEmbeddedAPI();
     window.dispatchEvent(new CustomEvent("ideLoaded"));
+};
+
+IDE_Morph.prototype.onOpen = function () {
+    var myself = this,
+        onConnect = this.sockets.onConnect,
+        hasUrlAnchors = location.href.indexOf('?') > -1 || location.hash,
+        opened = false;
+
+    if (hasUrlAnchors) {
+        var m = new MenuMorph(null, 'Loading...'),
+            maxWait = 750;
+
+        m.popUpCenteredInWorld(this.world());
+
+        // Currently, we wait until the ws connection is established before
+        // opening a project. After removing dependency on the ws connection,
+        // we should be able to remove this and open projects w/o any ws conn
+        this.sockets.onConnect = function() {
+            m.destroy();
+            opened = true;
+            myself.sockets.onConnect = onConnect;
+            myself.interpretUrlAnchors();
+            myself.sockets.onConnect();
+            return;
+        };
+
+        setTimeout(function() {
+            if (!opened) {  // Make sure it opens regardless
+                m.destroy();
+                myself.interpretUrlAnchors();
+            }
+        }, maxWait);
+
+    } else {
+        this.interpretUrlAnchors();
+    }
 };
 
 IDE_Morph.prototype.interpretUrlAnchors = function (loc) {

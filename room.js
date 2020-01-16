@@ -180,7 +180,11 @@ RoomMorph.prototype.getCurrentOccupants = function(name) {
     name = name || this.getCurrentRoleName();
     var role = this.getRole(name);
 
-    return role.users.slice();
+    if (role) {
+        return role.users.slice();
+    } else {
+        return [];
+    }
 };
 
 RoomMorph.prototype.isLeader = function() {
