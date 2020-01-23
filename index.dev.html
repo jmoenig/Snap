@@ -9,7 +9,8 @@
             var REMOTE_SERVER_URL = undefined,
                 SERVER_URL = REMOTE_SERVER_URL || window.location.origin, // connect to the remote server or fall back to the local server
                 SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, ''),
-                CLIENT_ID = '_netsblox' + new Date().getTime(); // generate a client_id w/ low collision probability
+                CLIENT_ID = '_netsblox' + new Date().getTime(), // generate a client_id w/ low collision probability
+                SERVICES_URL = SERVER_URL + '/services';
         </script>
         <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="polyfill.js"></script>

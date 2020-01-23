@@ -17,7 +17,8 @@
         <script type="text/javascript">
             var SERVER_URL = "{{= it.baseUrl}}" || window.location.origin,
                 SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, ''),
-                CLIENT_ID = '{{= it.clientId }}';
+                CLIENT_ID = '{{= it.clientId }}',
+                SERVICES_URL = {{= it.servicesUrl? "'" + it.servicesUrl + "'" : "SERVER_URL + '/services'" }};
         </script>
         {{ if (it.isDevMode) { }}
         <script type="text/javascript" src="utils.js"></script>

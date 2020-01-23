@@ -1,6 +1,6 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil, SnapCloud
-   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world, utils*/
+   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world, utils, SERVICES_URL*/
 // Extensions to the Snap blocks
 
 
@@ -15,7 +15,8 @@ BlockMorph.prototype.showHelp = function() {
         inputs = this.inputs(),
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
-        metadata = JSON.parse(RPCInputSlotMorph.prototype.getURL.call(this, '/rpc/' + serviceName)),
+        url = SERVICES_URL + '/' + serviceName,
+        metadata = JSON.parse(utils.getUrlSync(url)),
         serviceNames;
 
     // build the help message
@@ -274,7 +275,7 @@ StructInputSlotMorph.prototype.setDefaultFieldArg = function(index) {
 
 
 InputSlotMorph.prototype.rpcNames = function () {
-    var services = JSON.parse(utils.getUrlSync('/rpc')),
+    var services = JSON.parse(utils.getUrlSync(SERVICES_URL)),
         hasAuthoredServices,
         menuDict = {},
         category,
@@ -385,13 +386,15 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
     var actionNames,
         block,
         rpc,
+        url,
         dict = {};
 
     rpc = this.getRPCName();
     if (rpc) {
         // stores information on a specific service's rpcs
         try {
-            this.fieldsFor = JSON.parse(utils.getUrlSync('/rpc/' + rpc)).rpcs;
+            url = SERVICES_URL + '/' + rpc;
+            this.fieldsFor = JSON.parse(utils.getUrlSync(url)).rpcs;
             actionNames = Object.keys(this.fieldsFor);
             this.isCurrentRPCSupported = true;
         } catch (e) {

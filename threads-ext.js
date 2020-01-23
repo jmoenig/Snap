@@ -1,5 +1,5 @@
-/* global ThreadManager, ensureFullUrl, Process, Context, IDE_Morph, Costume, StageMorph,
-   List, SnapActions, isObject, newCanvas, Point, SnapCloud */
+/* global Process, Context, IDE_Morph, Costume, StageMorph, List, SnapActions,
+ isObject, newCanvas, Point, SnapCloud, SERVICES_URL */
 
 // NetsProcess Overrides
 NetsProcess.prototype = new Process();
@@ -231,7 +231,8 @@ NetsProcess.prototype.createRPCUrl = function (rpc) {
         projectId = encodeURIComponent(SnapCloud.projectId),
         roleId = encodeURIComponent(SnapCloud.roleId);
 
-    return ensureFullUrl('/rpc/'+rpc+'?uuid='+uuid+'&projectId='+projectId + '&roleId=' + roleId);
+    return SERVICES_URL + '/' + rpc + '?uuid=' + uuid + '&projectId=' +
+        projectId + '&roleId=' + roleId;
 };
 
 NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
