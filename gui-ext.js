@@ -545,3 +545,33 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
     window.externalVariables = externalVariables;
     window.addEventListener('message', receiveMessage, false);
 };
+
+IDE_Morph.prototype.getMediaListFromURL = function (url, callback) {
+    // Invoke the given callback with a list of files in a directory
+    // based on the contents file.
+    // If no callback is specified, synchronously return the list of files
+    // Note: Synchronous fetching has been deprecated and should be switched
+    var async = callback instanceof Function,
+        myself = this,
+        data;
+
+    function alphabetically(x, y) {
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
+    }
+
+    if (async) {
+        this.getURL(
+            url,
+            function (txt) {
+                var data = myself.parseResourceFile(txt);
+                data.sort(alphabetically);
+                callback.call(this, data);
+            }
+        );
+    } else {
+        data = this.parseResourceFile(this.getURL(url));
+        data.sort(alphabetically);
+        return data;
+    }
+};
+

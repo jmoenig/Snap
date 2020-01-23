@@ -3,7 +3,7 @@
    StringMorph, Color, TabMorph, InputFieldMorph, MorphicPreferences, MenuMorph,
    TextMorph, NetsBloxSerializer, nop, SnapActions, DialogBoxMorph, hex_sha512,
    SnapUndo, ScrollFrameMorph, SnapUndo, CollaboratorDialogMorph,
-   SnapSerializer, newCanvas, detect, WatcherMorph*/
+   SnapSerializer, newCanvas, detect, WatcherMorph, SERVICES_URL */
 // Netsblox IDE (subclass of IDE_Morph)
 
 NetsBloxMorph.prototype = new IDE_Morph();
@@ -403,7 +403,8 @@ NetsBloxMorph.prototype.projectMenu = function () {
     item = [
         'Services...',
         function () {
-            var names = this.getMediaList('servicelibs'),
+            var url = myself.serviceURL('servicelibs', 'SERVICELIBS'),
+                names = this.getMediaListFromURL(url),
                 headerText = localize('Import') + ' ' + localize('Service'),
                 mediaMenu = new MenuMorph(
                     myself,
@@ -414,7 +415,7 @@ NetsBloxMorph.prototype.projectMenu = function () {
                 mediaMenu.addItem(
                     item.name,
                     function () {
-                        var url = myself.resourceURL('servicelibs', item.fileName);
+                        var url = myself.serviceURL('servicelibs', item.fileName);
                         myself.droppedText(myself.getURL(url), name);
                     },
                     item.help
@@ -427,6 +428,11 @@ NetsBloxMorph.prototype.projectMenu = function () {
     menu.items.splice(menu.items.length-2, 0, item);
 
     return menu;
+};
+
+NetsBloxMorph.prototype.serviceURL = function() {
+    var path = Array.prototype.slice.call(arguments, 0);
+    return SERVICES_URL + '/' + path.join('/');
 };
 
 NetsBloxMorph.prototype.requestAndroidApp = function(name) {

@@ -3491,33 +3491,8 @@ IDE_Morph.prototype.resourceURL = function () {
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname, callback) {
-    // Invoke the given callback with a list of files in a directory
-    // based on the contents file.
-    // If no callback is specified, synchronously return the list of files
-    // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
-        async = callback instanceof Function,
-        myself = this,
-        data;
-
-    function alphabetically(x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    }
-
-    if (async) {
-        this.getURL(
-            url,
-            function (txt) {
-                var data = myself.parseResourceFile(txt);
-                data.sort(alphabetically);
-                callback.call(this, data);
-            }
-        );
-    } else {
-        data = this.parseResourceFile(this.getURL(url));
-        data.sort(alphabetically);
-        return data;
-    }
+    var url = this.resourceURL(dirname, dirname.toUpperCase());
+    return this.getMediaListFromURL.call(this, url, callback);
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
