@@ -6,6 +6,9 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+### 2020-01-28
+* new dev version
+
 ## 5.4.4:
 * **Notable Fixes**
     * fixed strings library format
