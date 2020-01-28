@@ -9805,26 +9805,32 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
     this.body.fixLayout();
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(function (stream) {
-                myself.mediaRecorder = new MediaRecorder(stream);
-                myself.mediaRecorder.ondataavailable = function (event) {
-                    audioChunks.push(event.data);
+        navigator.mediaDevices.getUserMedia(
+            {
+                audio: {
+                    channelCount: 1 // force mono, currently only works on FF
+                }
+                
+            }
+        ).then(function (stream) {
+            myself.mediaRecorder = new MediaRecorder(stream);
+            myself.mediaRecorder.ondataavailable = function (event) {
+                audioChunks.push(event.data);
+            };
+            myself.mediaRecorder.onstop = function (event) {
+                var buffer = new Blob(audioChunks),
+                    reader = new window.FileReader();
+                reader.readAsDataURL(buffer);
+                reader.onloadend = function() {
+                    var base64 = reader.result;
+                    base64 = 'data:audio/ogg;base64,' +
+                        base64.split(',')[1];
+                    myself.audioElement.src = base64;
+                    myself.audioElement.load();
+                    audioChunks = [];
                 };
-                myself.mediaRecorder.onstop = function (event) {
-					var buffer = new Blob(audioChunks),
-						reader = new window.FileReader();
-					reader.readAsDataURL(buffer);
-					reader.onloadend = function() {
-   						var base64 = reader.result;
-    					base64 = 'data:audio/ogg;base64,' +
-         	               base64.split(',')[1];
-						myself.audioElement.src = base64;
-                    	myself.audioElement.load();
-                    	audioChunks = [];
-					};
-                };
-            });
+            };
+        });
     }
 
     this.addButton('ok', 'Save');
