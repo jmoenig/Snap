@@ -505,6 +505,25 @@ describe('ide', function() {
                 };
             });
 
+            it('should set var immediately load IDE w/ url anchors', done => {
+                reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
+                frame.onload = async () => {
+                    const key = 'testVariable';
+                    const value = 'test variable value';
+                    frame.contentWindow.postMessage({
+                        type: 'set-variable',
+                        key: key,
+                        value: value,
+                    });
+
+                    await driver.expect(
+                        () => driver.globals().externalVariables[key] === value,
+                        'Did not set external variable',
+                    );
+                    done();
+                };
+            });
+
             function reloadIframe(frame, url=window.origin) {
                 driver.disableExitPrompt();
                 driver.setWindow(frame.contentWindow);
