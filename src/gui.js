@@ -74,7 +74,7 @@ CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
 BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
-Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph*/
+Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -2432,12 +2432,14 @@ IDE_Morph.prototype.recordNewSound = function () {
         myself = this;
 
     soundRecorder = new SoundRecorderDialogMorph(
-        function (sound) {
-            if (sound) {
-                myself.currentSprite.addSound(
-                	sound,
+        function (audio) {
+            var sound;
+            if (audio) {
+                sound = myself.currentSprite.addSound(
+                	audio,
                     myself.newSoundName('recording')
                 );
+                myself.makeSureRecordingIsMono(sound);
                 myself.spriteBar.tabBar.tabTo('sounds');
                 myself.hasChangedMedia = true;
             }
@@ -2445,6 +2447,163 @@ IDE_Morph.prototype.recordNewSound = function () {
 
     soundRecorder.key = 'microphone';
     soundRecorder.popUp(this.world());
+};
+
+IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
+    // private and temporary, a horrible kludge to work around browsers'
+    // reluctance to implement audio recording constraints that let us
+    // record sound in mono only. As of January 2020 the audio channelCount
+    // constraint only works in Firefox, hence this terrible function to
+    // force convert a stereo sound to mono for Chrome.
+    // If this code is still here next year, something is very wrong.
+    // -Jens
+
+    decodeSound(sound, makeMono);
+
+    function decodeSound(sound, callback) {
+        var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx;
+        if (sound.audioBuffer) {
+            return callback (sound);
+        }
+        base64 = sound.audio.src.split(',')[1];
+        binaryString = window.atob(base64);
+        len = binaryString.length;
+        bytes = new Uint8Array(len);
+        for (i = 0; i < len; i += 1)        {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        arrayBuffer = bytes.buffer;
+        audioCtx = Note.prototype.getAudioContext();
+        sound.isDecoding = true;
+        audioCtx.decodeAudioData(
+            arrayBuffer,
+            function(buffer) {
+                sound.audioBuffer = buffer;
+                return callback (sound);
+            },
+            function (err) {throw err; }
+        );
+    }
+
+    function makeMono(sound) {
+        var samples, audio, blob, reader;
+        if (sound.audioBuffer.numberOfChannels === 1) {return; }
+        samples = sound.audioBuffer.getChannelData(0);
+
+        audio = new Audio();
+        blob = new Blob(
+            [
+                audioBufferToWav(
+                    encodeSound(samples, 44100).audioBuffer
+                )
+            ],
+            {type: "audio/wav"}
+        );
+        reader = new FileReader();
+        reader.onload = function () {
+            audio.src = reader.result;
+            sound.audio = audio; // .... aaaand we're done!
+            sound.audioBuffer = null;
+            sound.cachedSamples = null;
+            sound.isDecoding = false;
+            // console.log('made mono', sound);
+        };
+        reader.readAsDataURL(blob);
+
+    }
+
+    function encodeSound(samples, rate) {
+        var ctx = Note.prototype.getAudioContext(),
+            frameCount = samples.length,
+            arrayBuffer = ctx.createBuffer(1, frameCount, +rate || 44100),
+            i,
+            source;
+
+        if (!arrayBuffer.copyToChannel) {
+            arrayBuffer.copyToChannel = function (src, channel) {
+                var buffer = this.getChannelData(channel);
+                for (i = 0; i < src.length; i += 1) {
+                    buffer[i] = src[i];
+                }
+            };
+        }
+        arrayBuffer.copyToChannel(
+            Float32Array.from(samples),
+            0,
+            0
+        );
+        source = ctx.createBufferSource();
+        source.buffer = arrayBuffer;
+        source.audioBuffer = source.buffer;
+        return source;
+    }
+
+    function audioBufferToWav(buffer, opt) {
+        var sampleRate = buffer.sampleRate,
+            format = (opt || {}).float32 ? 3 : 1,
+            bitDepth = format === 3 ? 32 : 16,
+            result;
+
+        result = buffer.getChannelData(0);
+        return encodeWAV(result, format, sampleRate, 1, bitDepth);
+    }
+
+    function encodeWAV(
+        samples,
+        format,
+        sampleRate,
+        numChannels,
+        bitDepth
+    ) {
+        var bytesPerSample = bitDepth / 8,
+            blockAlign = numChannels * bytesPerSample,
+            buffer = new ArrayBuffer(44 + samples.length * bytesPerSample),
+            view = new DataView(buffer);
+
+        function writeFloat32(output, offset, input) {
+            for (var i = 0; i < input.length; i += 1, offset += 4) {
+                output.setFloat32(offset, input[i], true);
+            }
+        }
+
+        function floatTo16BitPCM(output, offset, input) {
+            var i, s;
+            for (i = 0; i < input.length; i += 1, offset += 2) {
+                s = Math.max(-1, Math.min(1, input[i]));
+                output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+        }
+
+        function writeString(view, offset, string) {
+            for (var i = 0; i < string.length; i += 1) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        writeString(view, 0, 'RIFF'); // RIFF identifier
+        // RIFF chunk length:
+        view.setUint32(4, 36 + samples.length * bytesPerSample, true);
+        writeString(view, 8, 'WAVE'); // RIFF type
+        writeString(view, 12, 'fmt '); // format chunk identifier
+        view.setUint32(16, 16, true); // format chunk length
+        view.setUint16(20, format, true); // sample format (raw)
+        view.setUint16(22, numChannels, true); // channel count
+        view.setUint32(24, sampleRate, true); // sample rate
+        // byte rate (sample rate * block align):
+        view.setUint32(28, sampleRate * blockAlign, true);
+        // block align (channel count * bytes per sample):
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitDepth, true); // bits per sample
+        writeString(view, 36, 'data'); // data chunk identifier
+        // data chunk length:
+        view.setUint32(40, samples.length * bytesPerSample, true);
+        if (format === 1) { // Raw PCM
+            floatTo16BitPCM(view, 44, samples);
+        } else {
+            writeFloat32(view, 44, samples);
+        }
+        return buffer;
+    }
 };
 
 IDE_Morph.prototype.duplicateSprite = function (sprite) {

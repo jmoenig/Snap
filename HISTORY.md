@@ -9,6 +9,7 @@
 ### 2020-01-28
 * new dev version
 * gui: record sounds in mono
+* gui: force stereo audio recordings to mono
 
 ## 5.4.4:
 * **Notable Fixes**

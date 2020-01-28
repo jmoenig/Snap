@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-January-11';
+modules.objects = '2020-January-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -3584,8 +3584,10 @@ SpriteMorph.prototype.reportCostumes = function () {
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
+    var sound = new Sound(audio, name);
     this.shadowAttribute('sounds');
-    this.sounds.add(new Sound(audio, name));
+    this.sounds.add(sound);
+    return sound;
 };
 
 SpriteMorph.prototype.doPlaySound = function (name) {
