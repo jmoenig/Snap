@@ -6,10 +6,17 @@
 * **Notable Fixes:**
 * **Translation Updates:**
 
+## 5.4.5:
+* **Notable Change:**
+    * always record audio in mono
+* **Translation Update:**
+    * German, thanks, Sven!
+
 ### 2020-01-28
 * new dev version
 * gui: record sounds in mono
-* gui: force stereo audio recordings to mono
+* gui, objects: force stereo audio recordings to mono
+* Germans translation tweak, thanks, Sven!
 
 ## 5.4.4:
 * **Notable Fixes**
