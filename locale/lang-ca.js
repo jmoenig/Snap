@@ -2724,7 +2724,7 @@ SnapTranslator.dict.ca = {
     '__shout__go__':
         'bandera verda premuda',
     'download script':
-        'descarrega el bloc de programa',
+        'descarrega el programa',
     'pen vectors':
         'vectors dibuixats',
     'Log pen vectors':
