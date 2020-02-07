@@ -2125,6 +2125,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
 
     // check for encoded data-sets, CSV, JSON
+    fileType = fileType || 'text';
     if (fileType.indexOf('csv') !== -1 || ext === 'csv') {
         return this.openDataString(aString, lbl, 'csv');
     }

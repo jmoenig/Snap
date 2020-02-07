@@ -529,15 +529,16 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         receiveMessage;
 
     receiveMessage = function(event) {
-        switch (event.data.type) {
+        var data = event.data;
+        switch (data.type) {
         case 'import':
-            self.droppedText(event.data.content, event.data.name);
+            self.droppedText(data.content, data.name, data.fileType);
             break;
         case 'set-variable':
-            externalVariables[event.data.key] = event.data.value;
+            externalVariables[data.key] = data.value;
             break;
         case 'delete-variable':
-            delete externalVariables[event.data.key];
+            delete externalVariables[data.key];
             break;
         }
     };
