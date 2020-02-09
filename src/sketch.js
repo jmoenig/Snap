@@ -977,10 +977,9 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
             function () {
                 if (myself.shapes.length > 0) {
                     myself.ide.confirm(
-                        'This will convert your vector objects into\n' +
-                        'bitmaps, and you will not be able to convert\n' +
-                        'them back into vector drawings.\n' +
-                        'Are you sure you want to continue?',
+                        localize('This will convert your vector objects into\nbitmaps,')
+                            + localize(' and you will not be able to convert\nthem back into vector drawings.\n')
+                            + localize('Are you sure you want to continue?'),
                         'Convert to bitmap?',
                         function () {
                             myself.convertToBitmap();

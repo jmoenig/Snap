@@ -237,8 +237,8 @@ PaintEditorMorph.prototype.buildEdits = function () {
         function () {
             if (myself.paper.undoBuffer.length > 0) {
                 myself.ide.confirm(
-                    'This will erase your current drawing.\n' +
-                    'Are you sure you want to continue?',
+                    localize('This will erase your current drawing.\n') +
+                    localize('Are you sure you want to continue?'),
                     'Switch to vector editor?',
                     function () {
                         myself.switchToVector();
