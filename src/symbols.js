@@ -45,11 +45,23 @@ modules.symbols = '2020-February-10';
 
 var SymbolMorph;
 
-/*
+///*
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
+    'storage',
+    'poster',
+    'flash',
+    'brush',
+    'rectangle',
+    'rectangleSolid',
+    'circle',
+    'circleSolid',
+    'ellipse',
+    ].map(sym => new SymbolMorph(sym, 50, new Color(250, 250, 250), new Point(-1, -1), new Color(20, 20, 20)));
+/*
+    [
         new SymbolMorph(
             'globe',
             50,
@@ -58,8 +70,9 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(20, 20, 20)
         )
     ];
-};
 */
+};
+//*/
 
 // SymbolMorph //////////////////////////////////////////////////////////
 
@@ -100,8 +113,8 @@ SymbolMorph.prototype.names = [
     'cloud',
     'cloudGradient',
     'cloudOutline',
-    'turnRight',
 
+    'turnRight',
     'turnLeft',
     'storage',
     'poster',
@@ -112,6 +125,7 @@ SymbolMorph.prototype.names = [
     'circle',
     'circleSolid',
     'ellipse',
+   
     'line',
     'cross',
     'crosshairs',
@@ -837,7 +851,7 @@ SymbolMorph.prototype.renderSymbolStorage = function (ctx, color) {
         r = h,
         unit = h / 11;
 
-    function drawDisk(bottom, fillTop) {
+    function drawDisk(bottom) {
         ctx.fillStyle = color.toString();
         ctx.beginPath();
         ctx.arc(w / 2, bottom - h, r, radians(60), radians(120), false);
@@ -855,39 +869,21 @@ SymbolMorph.prototype.renderSymbolStorage = function (ctx, color) {
 
         ctx.fillStyle = color.darker(25).toString();
         ctx.beginPath();
-
-        if (fillTop) {
-            ctx.arc(
-                w / 2,
-                bottom - h - unit * 2,
-                r,
-                radians(120),
-                radians(60),
-                true
-            );
-        }
-
         ctx.arc(
             w / 2,
             bottom + unit * 6 + 1,
             r,
-            radians(60),
-            radians(120),
-            true
+            radians(-120), // 60
+            radians(-60), // 120
+            false // true
         );
-        ctx.closePath();
-
-        if (fillTop) {
-            ctx.fill();
-        } else {
-            ctx.stroke();
-        }
+        ctx.stroke();
     }
 
     ctx.strokeStyle = color.toString();
     drawDisk(h);
     drawDisk(h - unit * 3);
-    drawDisk(h - unit * 6, false);
+    drawDisk(h - unit * 6);
 };
 
 SymbolMorph.prototype.renderSymbolPoster = function (ctx, color) {
