@@ -50,11 +50,6 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'poster',
-    'flash',
-    'brush',
-    'rectangle',
-    'rectangleSolid',
     'circle',
     'circleSolid',
     'ellipse',
@@ -112,7 +107,6 @@ SymbolMorph.prototype.names = [
     'cloud',
     'cloudGradient',
     'cloudOutline',
-
     'turnRight',
     'turnLeft',
     'storage',
@@ -1024,6 +1018,7 @@ SymbolMorph.prototype.renderSymbolCircle = function (ctx, color) {
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+    ctx.beginPath();
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
 };
@@ -1033,6 +1028,7 @@ SymbolMorph.prototype.renderSymbolCircleSolid = function (ctx, color) {
     var w = this.symbolWidth();
 
     ctx.fillStyle = color.toString();
+    ctx.beginPath();
     ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
 };
