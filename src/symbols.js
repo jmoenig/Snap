@@ -50,7 +50,6 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'notes',
     'camera',
     'location',
     'footprints',
@@ -1645,16 +1644,13 @@ SymbolMorph.prototype.renderSymbolCamera = function (ctx, color) {
     ctx.lineTo(w * 3 / 8 , l);
     ctx.lineTo(w / 4 , h / 4);
     ctx.lineTo(l , h / 4);
-    ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(l, h * 5 / 6); // +++ instead of fill()
 
     // camera lens
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out'; // +++ review this
-    ctx.beginPath();
     ctx.arc(w / 2, h / 2, r, radians(0), radians(360), false);
-    ctx.fill();
-    ctx.restore();
+
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
 };
 
 SymbolMorph.prototype.renderSymbolLocation = function (ctx, color) {
