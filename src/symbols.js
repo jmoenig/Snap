@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'octagon',
+            'cloud',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -97,8 +97,8 @@ SymbolMorph.prototype.names = [
     'pause',
     'flag',
     'octagon',
-
     'cloud',
+
     'cloudOutline',
     'cloudGradient',
     'turnRight',
@@ -259,7 +259,8 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolOctagon(ctx, aColor);
         break;
     case 'cloud':
-        return this.drawSymbolCloud(canvas, aColor);
+        this.renderSymbolCloud(ctx, aColor);
+        break;
     case 'cloudOutline':
         return this.drawSymbolCloudOutline(canvas, aColor);
     case 'cloudGradient':
@@ -674,11 +675,10 @@ SymbolMorph.prototype.renderSymbolOctagon = function (ctx, color) {
     ctx.fill();
 };
 
-SymbolMorph.prototype.drawSymbolCloud = function (canvas, color) {
+SymbolMorph.prototype.renderSymbolCloud = function (ctx, color) {
     // answer a canvas showing an cloud
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+    var w = this.symbolWidth(),
+        h = this.size,
         r1 = h * 2 / 5,
         r2 = h / 4,
         r3 = h * 3 / 10,
@@ -692,8 +692,6 @@ SymbolMorph.prototype.drawSymbolCloud = function (canvas, color) {
     ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolCloudGradient = function (canvas, color) {
