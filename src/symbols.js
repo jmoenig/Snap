@@ -50,7 +50,6 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'camera',
     'location',
     'footprints',
     'keyboard',
@@ -1644,7 +1643,7 @@ SymbolMorph.prototype.renderSymbolCamera = function (ctx, color) {
     ctx.lineTo(w * 3 / 8 , l);
     ctx.lineTo(w / 4 , h / 4);
     ctx.lineTo(l , h / 4);
-    ctx.lineTo(l, h * 5 / 6); // +++ instead of fill()
+    ctx.lineTo(l, h * 5 / 6);
 
     // camera lens
     ctx.arc(w / 2, h / 2, r, radians(0), radians(360), false);
@@ -1662,17 +1661,17 @@ SymbolMorph.prototype.renderSymbolLocation = function (ctx, color) {
     // pin
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r, r, radians(-210), radians(30), false);
+
+    ctx.moveTo(0, r);
+    ctx.arc(r, r, r, radians(-180), radians(0), false);
     ctx.lineTo(r, h);
-    ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(0, r);
 
     // hole
-    ctx.globalCompositeOperation = 'destination-out'; // +++ review, apply to "gears"
-    ctx.beginPath();
     ctx.arc(r, r, r * 0.5, radians(0), radians(360), false);
-    ctx.closePath();
-    ctx.fill();
+
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
 };
 
 SymbolMorph.prototype.renderSymbolFootprints = function (ctx, color) {
