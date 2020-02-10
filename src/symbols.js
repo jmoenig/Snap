@@ -41,11 +41,11 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-January-03';
+modules.symbols = '2020-February-10';
 
 var SymbolMorph;
 
-/*
+// /*
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
@@ -59,7 +59,7 @@ WorldMorph.prototype.customMorphs = function () {
         )
     ];
 };
-*/
+//*/
 
 // SymbolMorph //////////////////////////////////////////////////////////
 
@@ -165,9 +165,10 @@ SymbolMorph.prototype.init = function (
     this.shadowOffset = shadowOffset || new Point(0, 0);
     this.shadowColor = shadowColor || null;
 
-    SymbolMorph.uber.init.call(this, true); // silently
+    SymbolMorph.uber.init.call(this);
     this.color = color || new Color(0, 0, 0);
-    this.drawNew();
+    this.fixLayout();
+    this.rerender();
 };
 
 // SymbolMorph zebra coloring:
@@ -184,44 +185,40 @@ SymbolMorph.prototype.setLabelColor = function (
 
 // SymbolMorph displaying:
 
-SymbolMorph.prototype.drawNew = function () {
-    var ctx, x, y, sx, sy;
-    this.image = newCanvas(
-        new Point(
-            this.symbolWidth() + Math.abs(this.shadowOffset.x),
-            this.size + Math.abs(this.shadowOffset.y)
-        ),
-        false,
-        this.image
-    );
-    this.silentSetWidth(this.image.width);
-    this.silentSetHeight(this.image.height);
-    ctx = this.image.getContext('2d');
+SymbolMorph.prototype.fixLayout = function () {
+    // determine my extent
+    this.bounds.setWidth(this.symbolWidth() + Math.abs(this.shadowOffset.x));
+    this.bounds.setHeight(this.size + Math.abs(this.shadowOffset.y));
+}
+
+SymbolMorph.prototype.render = function (ctx) {
+    var x, y, sx, sy;
     sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x;
     sy = this.shadowOffset.y < 0 ? 0 : this.shadowOffset.y;
     x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0;
     y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
     if (this.shadowColor) {
-        ctx.drawImage(
-            this.symbolCanvasColored(this.shadowColor),
-            sx,
-            sy
-        );
+        ctx.save();
+        ctx.translate(sx, sy);
+        this.renderShape(ctx, this.shadowColor)
+        ctx.restore();
     }
-    ctx.drawImage(
-        this.symbolCanvasColored(this.color),
-        x,
-        y
-    );
+    ctx.save();
+    ctx.translate(x, y);
+    this.renderShape(ctx, this.color)
+    ctx.restore();
 };
 
-SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
+SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     // private
+    
+/* // +++ is this ever used, I don't think so
     if (this.name instanceof Costume) {
         return this.name.thumbnail(new Point(this.symbolWidth(), this.size));
     }
+*/
 
-    var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
+//    var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
 
     switch (this.name) {
     case 'square':
@@ -345,7 +342,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
     case 'keyboardFilled':
         return this.drawSymbolKeyboardFilled(canvas, aColor);
     case 'globe':
-        return this.drawSymbolGlobe(canvas, aColor);
+        this.renderSymbolGlobe(ctx, aColor);
+        break;
     default:
         return canvas;
     }
@@ -355,9 +353,11 @@ SymbolMorph.prototype.symbolWidth = function () {
     // private
     var size = this.size;
 
+/* +++ refactor
     if (this.name instanceof Costume) {
         return (size / this.name.height()) * this.name.width();
     }
+*/
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
@@ -1835,36 +1835,40 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
     return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolGlobe = function (canvas, color) {
-    // answer a canvas showing a circle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
+    var w = this.symbolWidth(),
         l = Math.max(w / 30, 0.5);
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+
+    ctx.beginPath();
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
 
-/* // more detailed version, commmented out
+    // more detailed version, commmented out
+    /*
     ctx.moveTo(l, w / 3);
     ctx.lineTo(w - l, w / 3);
     ctx.stroke();
     ctx.moveTo(l, 2 * w / 3);
     ctx.lineTo(w - l, 2 * w / 3);
     ctx.stroke();
-*/
-
+    */
+    
     // single line version, looks better when small:
+    ctx.beginPath();
     ctx.moveTo(l, w / 2);
     ctx.lineTo(w - l, w / 2);
     ctx.stroke();
 
-    ctx.moveTo(w / 2, 0);
-    ctx.arcTo(0, w / 2, w / 2, w, w * 0.75);
+    ctx.beginPath();
+    ctx.moveTo(w / 2, l / 2);
+    ctx.arcTo(0, w / 2, w / 2, w, w * 0.66);
     ctx.stroke();
-    ctx.moveTo(w / 2, 0);
-    ctx.arcTo(w, w / 2, w / 2, w, w * 0.75);
+
+    ctx.beginPath();
+    ctx.moveTo(w / 2, l / 2);
+    ctx.arcTo(w, w / 2, w / 2, w, w * 0.66);
     ctx.stroke();
-    return canvas;
 };
