@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'cloudGradient',
+            'cloudOutline',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -99,8 +99,8 @@ SymbolMorph.prototype.names = [
     'octagon',
     'cloud',
     'cloudGradient',
-
     'cloudOutline',
+
     'turnRight',
     'turnLeft',
     'storage',
@@ -265,7 +265,8 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolCloudGradient(ctx, aColor);
         break;
     case 'cloudOutline':
-        return this.drawSymbolCloudOutline(canvas, aColor);
+        this.renderSymbolCloudOutline(ctx, aColor);
+        break;
     case 'turnRight':
         return this.drawSymbolTurnRight(canvas, aColor);
     case 'turnLeft':
@@ -725,11 +726,10 @@ SymbolMorph.prototype.renderSymbolCloudGradient = function (ctx, color) {
     ctx.fill();
 };
 
-SymbolMorph.prototype.drawSymbolCloudOutline = function (canvas, color) {
-    // answer a canvas showing an cloud
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolCloudOutline = function (ctx, color) {
+    // draw cloud
+    var w = this.symbolWidth(),
+        h = this.size,
         r1 = h * 2 / 5,
         r2 = h / 4,
         r3 = h * 3 / 10,
@@ -743,8 +743,6 @@ SymbolMorph.prototype.drawSymbolCloudOutline = function (canvas, color) {
     ctx.arc(w - r3 - 1, h - r3 - 1, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolTurnRight = function (canvas, color) {
