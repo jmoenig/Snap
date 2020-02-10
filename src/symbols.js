@@ -30,8 +30,8 @@
     needs morphic.js
 
 
-    prerequisites:
-    --------------
+    credits:
+    --------
     additional symbols have been contributed by members of the Snap!
     open-source community, especially by Bernat Romagosa
 
