@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'pause',
+            'flag',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -95,8 +95,8 @@ SymbolMorph.prototype.names = [
     'turtleOutline',
     'stage',
     'pause',
-
     'flag',
+
     'octagon',
     'cloud',
     'cloudOutline',
@@ -253,7 +253,8 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolPause(ctx, aColor);
         break;
     case 'flag':
-        return this.drawSymbolFlag(canvas, aColor);
+        this.renderSymbolFlag(ctx, aColor);
+        break;
     case 'octagon':
         return this.drawSymbolOctagon(canvas, aColor);
     case 'cloud':
@@ -626,18 +627,17 @@ SymbolMorph.prototype.renderSymbolPause = function (ctx, color) {
     ctx.fillRect(w * 3, 0, w * 2, h);
 };
 
-SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
-    // answer a canvas showing a flag
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        l = Math.max(w / 12, 1),
-        h = canvas.height;
+SymbolMorph.prototype.renderSymbolFlag = function (ctx, color) {
+    // draw a flag
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 12, 1);
 
     ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(l / 2, 0);
-    ctx.lineTo(l / 2, canvas.height);
+    ctx.lineTo(l / 2, h);
     ctx.stroke();
 
     ctx.lineWidth = h / 2;
@@ -652,8 +652,6 @@ SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
         h * 0.5
     );
     ctx.stroke();
-
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolOctagon = function (canvas, color) {
