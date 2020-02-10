@@ -50,9 +50,11 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'circle',
-    'circleSolid',
-    'ellipse',
+    'line',
+    'cross',
+    'crosshairs',
+    'paintbucket',
+    'eraser',
     ].map(sym => new SymbolMorph(sym, 50, new Color(250, 250, 250), new Point(-1, -1), new Color(20, 20, 20)));
 /*
     [
@@ -124,6 +126,7 @@ SymbolMorph.prototype.names = [
     'crosshairs',
     'paintbucket',
     'eraser',
+
     'pipette',
     'speechBubble',
     'speechBubbleOutline',
@@ -1042,6 +1045,7 @@ SymbolMorph.prototype.renderSymbolLine = function (ctx, color) {
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.lineCap = 'round';
+    ctx.beginPath();
     ctx.moveTo(l, l);
     ctx.lineTo(w - l, h - l);
     ctx.stroke();
