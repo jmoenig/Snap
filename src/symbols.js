@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'globe',
+            'pause',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -92,10 +92,10 @@ SymbolMorph.prototype.names = [
     'smallStage',
     'normalStage',
     'turtle',
-
-    'stage',
     'turtleOutline',
+    'stage',
     'pause',
+
     'flag',
     'octagon',
     'cloud',
@@ -244,14 +244,14 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolTurtle(ctx, aColor);
         break;
     case 'turtleOutline':
-        return this.renderSymbolTurtleOutline(ctx, aColor);
+        this.renderSymbolTurtleOutline(ctx, aColor);
         break;
-
     case 'stage':
-        return this.drawSymbolStop(canvas, aColor);
-
+        this.renderSymbolStop(ctx, aColor);
+        break;
     case 'pause':
-        return this.drawSymbolPause(canvas, aColor);
+        this.renderSymbolPause(ctx, aColor);
+        break;
     case 'flag':
         return this.drawSymbolFlag(canvas, aColor);
     case 'octagon':
@@ -616,15 +616,14 @@ SymbolMorph.prototype.renderSymbolTurtleOutline = function (ctx, color) {
     ctx.stroke();
 };
 
-SymbolMorph.prototype.drawSymbolPause = function (canvas, color) {
-    // answer a canvas showing two parallel rectangles
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width / 5;
+SymbolMorph.prototype.renderSymbolPause = function (ctx, color) {
+    // draw two parallel rectangles
+    var w = this.symbolWidth() / 5,
+        h = this.size;
 
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, w * 2, canvas.height);
-    ctx.fillRect(w * 3, 0, w * 2, canvas.height);
-    return canvas;
+    ctx.fillRect(0, 0, w * 2, h);
+    ctx.fillRect(w * 3, 0, w * 2, h);
 };
 
 SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
