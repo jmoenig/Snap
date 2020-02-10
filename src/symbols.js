@@ -50,11 +50,13 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'magnifyingGlass',
-    'magnifierOutline',
-    'selection',
-    'polygon',
-    'closedBrush'
+    'notes',
+    'camera',
+    'location',
+    'footprints',
+    'keyboard',
+    'keyboardFilled',
+    'globe'
     ].map(sym => new SymbolMorph(sym, 50, new Color(250, 250, 250), new Point(-1, -1), new Color(20, 20, 20)));
 /*
     [
@@ -139,7 +141,6 @@ SymbolMorph.prototype.names = [
     'arrowDownOutline',
     'arrowRight',
     'arrowRightOutline',
-
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
@@ -1597,8 +1598,10 @@ SymbolMorph.prototype.renderSymbolNotes = function (ctx, color) {
     ctx.strokeStyle = color.toString();
     ctx.fillStyle = color.toString();
 
+    ctx.beginPath();
     ctx.arc(r, size - r, r, radians(0), radians(360), false);
     ctx.fill();
+    ctx.beginPath();
     ctx.arc(size - r, size - (r * 2), r, radians(0), radians(360), false);
     ctx.fill();
 
