@@ -2570,11 +2570,11 @@ Rectangle.prototype.setTo = function (left, top, right, bottom) {
 // Rectangle mutating
 
 Rectangle.prototype.setWidth = function (width) {
-    this.corner.x += width;
+    this.corner.x = this.origin.x + width;
 };
 
 Rectangle.prototype.setHeight = function (height) {
-    this.corner.y += height;
+    this.corner.y = this.origin.y + height;
 };
 
 // Rectangle accessing - getting:

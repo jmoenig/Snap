@@ -49,14 +49,19 @@ var SymbolMorph;
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
     return [
-        new SymbolMorph(
-            'globe',
-            50,
-            new Color(250, 250, 250),
-            new Point(-1, -1),
-            new Color(20, 20, 20)
-        )
-    ];
+        'camera',
+        'location',
+        'footprints',
+        'keyboard',
+        'keyboardFilled',
+        'globe'
+    ].map(sym => new SymbolMorph(
+        sym,
+        50,
+        new Color(250, 250, 250),
+        new Point(-1, -1),
+        new Color(20, 20, 20)
+    ));
 };
 */
 
@@ -191,11 +196,11 @@ SymbolMorph.prototype.fixLayout = function () {
 };
 
 SymbolMorph.prototype.render = function (ctx) {
-    var x, y, sx, sy;
-    sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x;
-    sy = this.shadowOffset.y < 0 ? 0 : this.shadowOffset.y;
-    x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0;
-    y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
+    var sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x,
+        sy = this.shadowOffset.y < 0 ? 0 : this.shadowOffset.y,
+        x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0,
+        y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
+
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);
