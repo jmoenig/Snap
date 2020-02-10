@@ -1059,9 +1059,11 @@ SymbolMorph.prototype.renderSymbolCross = function (ctx, color) {
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.lineCap = 'round';
+    ctx.beginPath();
     ctx.moveTo(l, w / 2);
     ctx.lineTo(w - l, w / 2);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, l);
     ctx.lineTo(w / 2, w - l);
     ctx.stroke();
@@ -1075,12 +1077,15 @@ SymbolMorph.prototype.renderSymbolCrosshairs = function (ctx, color) {
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+    ctx.beginPath();
     ctx.moveTo(l, h / 2);
     ctx.lineTo(w - l, h / 2);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, l);
     ctx.lineTo(w / 2, h - l);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 2);
     ctx.arc(w / 2, w / 2, w / 3 - l, radians(0), radians(360), false);
     ctx.stroke();
