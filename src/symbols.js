@@ -45,19 +45,10 @@ modules.symbols = '2020-February-10';
 
 var SymbolMorph;
 
-///*
+/*
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
-
     return [
-    'location',
-    'footprints',
-    'keyboard',
-    'keyboardFilled',
-    'globe'
-    ].map(sym => new SymbolMorph(sym, 50, new Color(250, 250, 250), new Point(-1, -1), new Color(20, 20, 20)));
-/*
-    [
         new SymbolMorph(
             'globe',
             50,
@@ -66,9 +57,8 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(20, 20, 20)
         )
     ];
-*/
 };
-//*/
+*/
 
 // SymbolMorph //////////////////////////////////////////////////////////
 
@@ -145,7 +135,6 @@ SymbolMorph.prototype.names = [
     'selection',
     'polygon',
     'closedBrush',
-
     'notes',
     'camera',
     'location',
@@ -1741,11 +1730,11 @@ SymbolMorph.prototype.renderSymbolKeyboardFilled = function (ctx, color) {
         row, col;
 
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, w, h);
-    ctx.globalCompositeOperation = 'destination-out'; // +++ review
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
     for (row = 0; row < 2; row += 1) {
         for (col = 0; col < 5; col += 1) {
-            ctx.fillRect(
+            ctx.rect(
                   ((u + k) * col) + u,
                   ((u + k) * row) + u,
                    k,
@@ -1753,7 +1742,10 @@ SymbolMorph.prototype.renderSymbolKeyboardFilled = function (ctx, color) {
             );
            }
       }
-    ctx.fillRect(u * 4, u * 7, k * 4, k);
+    ctx.rect(u * 4, u * 7, k * 4, k);
+
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
 };
 
 SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
