@@ -400,8 +400,7 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolGlobe(ctx, aColor);
         break;
     default:
-        // +++ to do: raise an error
-        return ;
+        throw new Error('unknown symbol name: "' + this.name + '"');
     }
 };
 
