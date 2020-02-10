@@ -56,89 +56,7 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(250, 250, 250),
             new Point(-1, -1),
             new Color(20, 20, 20)
-        ),
-
-            new SymbolMorph(
-                'square',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'pointRight',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-
-,
-            new SymbolMorph(
-                'stepForward',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'gears',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'file',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'fullScreen',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'normalScreen',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'smallStage',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'normalStage',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-,
-            new SymbolMorph(
-                'turtle',
-                50,
-                new Color(250, 250, 250),
-                new Point(-1, -1),
-                new Color(20, 20, 20)
-            )
-
+        )
     ];
 };
 //*/
@@ -296,30 +214,42 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     // private
     switch (this.name) {
     case 'square':
-        return this.renderSymbolStop(ctx, aColor);
+        this.renderSymbolStop(ctx, aColor);
+        break;
     case 'pointRight':
-        return this.renderSymbolPointRight(ctx, aColor);
+        this.renderSymbolPointRight(ctx, aColor);
+        break;
     case 'stepForward':
-        return this.renderSymbolStepForward(ctx, aColor);
+        this.renderSymbolStepForward(ctx, aColor);
+        break;
     case 'gears':
-        return this.renderSymbolGears(ctx, aColor);
+        this.renderSymbolGears(ctx, aColor);
+        break;
     case 'file':
-        return this.renderSymbolFile(ctx, aColor);
+        this.renderSymbolFile(ctx, aColor);
+        break;
     case 'fullScreen':
-        return this.renderSymbolFullScreen(ctx, aColor);
+        this.renderSymbolFullScreen(ctx, aColor);
+        break;
     case 'normalScreen':
-        return this.renderSymbolNormalScreen(ctx, aColor);
+        this.renderSymbolNormalScreen(ctx, aColor);
+        break;
     case 'smallStage':
-        return this.renderSymbolSmallStage(ctx, aColor);
+        this.renderSymbolSmallStage(ctx, aColor);
+        break;
     case 'normalStage':
-        return this.renderSymbolNormalStage(ctx, aColor);
+        this.renderSymbolNormalStage(ctx, aColor);
+        break;
     case 'turtle':
-        return this.renderSymbolTurtle(ctx, aColor);
+        this.renderSymbolTurtle(ctx, aColor);
+        break;
+    case 'turtleOutline':
+        return this.renderSymbolTurtleOutline(ctx, aColor);
+        break;
 
     case 'stage':
         return this.drawSymbolStop(canvas, aColor);
-    case 'turtleOutline':
-        return this.drawSymbolTurtleOutline(canvas, aColor);
+
     case 'pause':
         return this.drawSymbolPause(canvas, aColor);
     case 'flag':
@@ -671,20 +601,19 @@ SymbolMorph.prototype.renderSymbolTurtle = function (ctx, color) {
     ctx.fill();
 };
 
-SymbolMorph.prototype.drawSymbolTurtleOutline = function (canvas, color) {
-    // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+SymbolMorph.prototype.renderSymbolTurtleOutline = function (ctx, color) {
+    // draw a LOGO turtle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(h / 2, h / 2);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolPause = function (canvas, color) {
