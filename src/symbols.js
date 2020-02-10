@@ -50,11 +50,11 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'line',
-    'cross',
-    'crosshairs',
-    'paintbucket',
-    'eraser',
+    'magnifyingGlass',
+    'magnifierOutline',
+    'selection',
+    'polygon',
+    'closedBrush'
     ].map(sym => new SymbolMorph(sym, 50, new Color(250, 250, 250), new Point(-1, -1), new Color(20, 20, 20)));
 /*
     [
@@ -120,13 +120,11 @@ SymbolMorph.prototype.names = [
     'circle',
     'circleSolid',
     'ellipse',
-   
     'line',
     'cross',
     'crosshairs',
     'paintbucket',
     'eraser',
-
     'pipette',
     'speechBubble',
     'speechBubbleOutline',
@@ -141,12 +139,14 @@ SymbolMorph.prototype.names = [
     'arrowDownOutline',
     'arrowRight',
     'arrowRightOutline',
+
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
     'selection',
     'polygon',
     'closedBrush',
+
     'notes',
     'camera',
     'location',
@@ -1502,10 +1502,12 @@ SymbolMorph.prototype.renderSymbolMagnifyingGlass = function (ctx, color) {
     gradient.addColorStop(0, color.inverted().lighter(50).toString());
     gradient.addColorStop(1, color.inverted().darker(25).toString());
     ctx.fillStyle = gradient;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.fill();
 
     ctx.lineWidth = l / 2;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.stroke();
 
@@ -1529,6 +1531,7 @@ SymbolMorph.prototype.renderSymbolMagnifierOutline = function (ctx, color) {
     ctx.strokeStyle = color.toString();
 
     ctx.lineWidth = l * 0.5;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.stroke();
 
