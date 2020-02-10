@@ -50,7 +50,6 @@ WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
 
     return [
-    'storage',
     'poster',
     'flash',
     'brush',
@@ -897,22 +896,31 @@ SymbolMorph.prototype.renderSymbolPoster = function (ctx, color) {
     ctx.strokeStyle = color.toString();
 
     ctx.lineWidth = w / 15;
+
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w / 6, h);
     ctx.stroke();
 
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w / 2, h);
     ctx.stroke();
 
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w * 5 / 6, h);
     ctx.stroke();
 
-    ctx.fillRect(0, 0, w, bottom);
-    ctx.clearRect(0, bottom, w, w / 20);
-
-    ctx.clearRect(w - edge, bottom - edge, edge + 1, edge + 1);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, bottom - edge);
+    ctx.lineTo(w - edge, bottom - edge);
+    ctx.lineTo(w - edge, bottom);
+    ctx.lineTo(0, bottom);
+    ctx.closePath();
+    ctx.fill();
 
     ctx.fillStyle = color.darker(25).toString();
     ctx.beginPath();
