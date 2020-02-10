@@ -56,7 +56,89 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(250, 250, 250),
             new Point(-1, -1),
             new Color(20, 20, 20)
-        )
+        ),
+
+            new SymbolMorph(
+                'square',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'pointRight',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+
+,
+            new SymbolMorph(
+                'stepForward',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'gears',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'file',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'fullScreen',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'normalScreen',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'smallStage',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'normalStage',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+,
+            new SymbolMorph(
+                'turtle',
+                50,
+                new Color(250, 250, 250),
+                new Point(-1, -1),
+                new Color(20, 20, 20)
+            )
+
     ];
 };
 //*/
@@ -92,6 +174,7 @@ SymbolMorph.prototype.names = [
     'smallStage',
     'normalStage',
     'turtle',
+
     'stage',
     'turtleOutline',
     'pause',
@@ -152,7 +235,7 @@ function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
 }
 
 SymbolMorph.prototype.init = function (
-    name, // or costume
+    name,
     size,
     color,
     shadowOffset,
@@ -160,7 +243,7 @@ SymbolMorph.prototype.init = function (
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
-    this.name = name || 'square'; // can also be a costume
+    this.name = name || 'square';
     this.size = size || ((size === 0) ? 0 : 50);
     this.shadowOffset = shadowOffset || new Point(0, 0);
     this.shadowColor = shadowColor || null;
@@ -211,36 +294,28 @@ SymbolMorph.prototype.render = function (ctx) {
 
 SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     // private
-    
-/* // +++ is this ever used, I don't think so
-    if (this.name instanceof Costume) {
-        return this.name.thumbnail(new Point(this.symbolWidth(), this.size));
-    }
-*/
-
-//    var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
-
     switch (this.name) {
     case 'square':
-        return this.drawSymbolStop(canvas, aColor);
+        return this.renderSymbolStop(ctx, aColor);
     case 'pointRight':
-        return this.drawSymbolPointRight(canvas, aColor);
+        return this.renderSymbolPointRight(ctx, aColor);
     case 'stepForward':
-        return this.drawSymbolStepForward(canvas, aColor);
+        return this.renderSymbolStepForward(ctx, aColor);
     case 'gears':
-        return this.drawSymbolGears(canvas, aColor);
+        return this.renderSymbolGears(ctx, aColor);
     case 'file':
-        return this.drawSymbolFile(canvas, aColor);
+        return this.renderSymbolFile(ctx, aColor);
     case 'fullScreen':
-        return this.drawSymbolFullScreen(canvas, aColor);
+        return this.renderSymbolFullScreen(ctx, aColor);
     case 'normalScreen':
-        return this.drawSymbolNormalScreen(canvas, aColor);
+        return this.renderSymbolNormalScreen(ctx, aColor);
     case 'smallStage':
-        return this.drawSymbolSmallStage(canvas, aColor);
+        return this.renderSymbolSmallStage(ctx, aColor);
     case 'normalStage':
-        return this.drawSymbolNormalStage(canvas, aColor);
+        return this.renderSymbolNormalStage(ctx, aColor);
     case 'turtle':
-        return this.drawSymbolTurtle(canvas, aColor);
+        return this.renderSymbolTurtle(ctx, aColor);
+
     case 'stage':
         return this.drawSymbolStop(canvas, aColor);
     case 'turtleOutline':
@@ -353,11 +428,6 @@ SymbolMorph.prototype.symbolWidth = function () {
     // private
     var size = this.size;
 
-/* +++ refactor
-    if (this.name instanceof Costume) {
-        return (size / this.name.height()) * this.name.width();
-    }
-*/
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
@@ -391,133 +461,115 @@ SymbolMorph.prototype.symbolWidth = function () {
     }
 };
 
-SymbolMorph.prototype.drawSymbolStop = function (canvas, color) {
-    // answer a canvas showing a vertically centered square
-    var ctx = canvas.getContext('2d');
-
+SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
+    // draw a vertically centered square
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    return canvas;
+    ctx.fillRect(0, 0, this.symbolWidth(), this.size);
 };
 
-SymbolMorph.prototype.drawSymbolPointRight = function (canvas, color) {
-    // answer a canvas showing a right-pointing, equilateral triangle
-    var ctx = canvas.getContext('2d');
-
+SymbolMorph.prototype.renderSymbolPointRight = function (ctx, color) {
+    // draw a right-pointing, equilateral triangle
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, Math.round(canvas.height / 2));
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(this.symbolWidth(), Math.round(this.size / 2));
+    ctx.lineTo(0, this.size);
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolStepForward = function (canvas, color) {
-    // answer a canvas showing a right-pointing triangle
+SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
+    // draw a canvas showing a right-pointing triangle
     // followed by a vertical bar
-    var ctx = canvas.getContext('2d');
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width * 0.75, Math.round(canvas.height / 2));
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(w * 0.75, Math.round(h / 2));
+    ctx.lineTo(0, h);
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.fill();
     ctx.fillRect(
-        canvas.width * 0.75,
+        w * 0.75,
         0,
-        canvas.width * 0.25,
-        canvas.height
+        w * 0.25,
+        h
     );
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolGears = function (canvas, color) {
-    // answer a canvas showing gears
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+    // draw a canvas showing gears
+    var w = this.symbolWidth(),
         r = w / 2,
         e = w / 6;
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 7;
-
+    ctx.lineWidth = w / 7;
     ctx.beginPath();
-    ctx.arc(r, r, w, radians(0), radians(360), true);
     ctx.arc(r, r, e * 1.5, radians(0), radians(360), false);
-    ctx.closePath();
-    ctx.clip();
-
     ctx.moveTo(0, r);
     ctx.lineTo(w, r);
-    ctx.stroke();
-
     ctx.moveTo(r, 0);
     ctx.lineTo(r, w);
-    ctx.stroke();
-
     ctx.moveTo(e, e);
     ctx.lineTo(w - e, w - e);
-    ctx.stroke();
-
     ctx.moveTo(w - e, e);
     ctx.lineTo(e, w - e);
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolFile = function (canvas, color) {
-    // answer a canvas showing a page symbol
-    var ctx = canvas.getContext('2d'),
-        w = Math.min(canvas.width, canvas.height) / 2;
+SymbolMorph.prototype.renderSymbolFile = function (ctx, color) {
+    // draw a page symbol
+    var height = this.size,
+        width = this.symbolWidth(),
+        w = Math.min(width, height) / 2
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(w, 0);
     ctx.lineTo(w, w);
-    ctx.lineTo(canvas.width, w);
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(width, w);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
     ctx.closePath();
     ctx.fill();
 
     ctx.fillStyle = color.darker(25).toString();
     ctx.beginPath();
     ctx.moveTo(w, 0);
-    ctx.lineTo(canvas.width, w);
+    ctx.lineTo(width, w);
     ctx.lineTo(w, w);
     ctx.lineTo(w, 0);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolFullScreen = function (canvas, color) {
-    // answer a canvas showing two arrows pointing diagonally outwards
-    var ctx = canvas.getContext('2d'),
-        h = canvas.height,
-        c = canvas.width / 2,
-        off = canvas.width / 20,
-        w = canvas.width / 2;
+SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
+    // draw two arrows pointing diagonally outwards
+    var h = this.size,
+        width = this.symbolWidth(),
+        c = width / 2,
+        off = width / 20,
+        w = width / 2;
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = width / 5;
+    ctx.beginPath();
     ctx.moveTo(c - off, c + off);
-    ctx.lineTo(0, h);
+//    ctx.lineTo(0, h);
+    ctx.lineTo(off * 2, h - off * 2);
     ctx.stroke();
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = width / 5;
+    ctx.beginPath();
     ctx.moveTo(c + off, c - off);
-    ctx.lineTo(h, 0);
+    ctx.lineTo(h - off * 2, off * 2);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
@@ -535,28 +587,27 @@ SymbolMorph.prototype.drawSymbolFullScreen = function (canvas, color) {
     ctx.lineTo(h, w);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolNormalScreen = function (canvas, color) {
-    // answer a canvas showing two arrows pointing diagonally inwards
-    var ctx = canvas.getContext('2d'),
-        h = canvas.height,
-        c = canvas.width / 2,
-        off = canvas.width / 20,
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolNormalScreen = function (ctx, color) {
+    // draw two arrows pointing diagonally inwards
+    var h = this.size,
+        w = this.symbolWidth(),
+        c = w / 2,
+        off = w / 20;
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = w / 5;
+    ctx.beginPath();
     ctx.moveTo(c - off * 3, c + off * 3);
-    ctx.lineTo(0, h);
+    ctx.lineTo(off, h - off);
     ctx.stroke();
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = w / 5;
+    ctx.beginPath();
     ctx.moveTo(c + off * 3, c - off * 3);
-    ctx.lineTo(h, 0);
+    ctx.lineTo(h - off, off);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
@@ -574,15 +625,12 @@ SymbolMorph.prototype.drawSymbolNormalScreen = function (canvas, color) {
     ctx.lineTo(c - off, w);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolSmallStage = function (canvas, color) {
-    // answer a canvas showing a stage toggling symbol
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolSmallStage = function (ctx, color) {
+    // draw a stage toggling symbol
+    var w = this.symbolWidth(),
+        h = this.size,
         w2 = w / 2,
         h2 = h / 2;
 
@@ -592,14 +640,12 @@ SymbolMorph.prototype.drawSymbolSmallStage = function (canvas, color) {
     ctx.fillStyle = color.toString();
     ctx.fillRect(w2, 0, w2, h2);
 
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolNormalStage = function (canvas, color) {
-    // answer a canvas showing a stage toggling symbol
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolNormalStage = function (ctx, color) {
+    // draw a stage toggling symbol
+    var w = this.symbolWidth(),
+        h = this.size,
         w2 = w / 2,
         h2 = h / 2;
 
@@ -608,23 +654,21 @@ SymbolMorph.prototype.drawSymbolNormalStage = function (canvas, color) {
 
     ctx.fillStyle = color.darker(25).toString();
     ctx.fillRect(w2, 0, w2, h2);
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurtle = function (canvas, color) {
-    // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+SymbolMorph.prototype.renderSymbolTurtle = function (ctx, color) {
+    // draw a LOGO turtle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(h / 2, h / 2);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolTurtleOutline = function (canvas, color) {
@@ -1836,6 +1880,7 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
 };
 
 SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
+    // draw a stylized globe
     var w = this.symbolWidth(),
         l = Math.max(w / 30, 0.5);
 
