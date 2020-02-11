@@ -2435,7 +2435,6 @@ Process.prototype.reportURL = function (url) {
         if (!/^https?:\/\//.test(url)) {
             url = 'http://' + url;
         }
-        console.log('url is', url)
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
         this.httpRequest.send(null);

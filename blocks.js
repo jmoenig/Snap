@@ -4894,11 +4894,13 @@ HatBlockMorph.prototype.init = function () {
     this.setExtent(new Point(300, 150));
 };
 
-// finds the readout child morph
 HatBlockMorph.prototype.readout = function () {
-    for (var i=0; i<this.children.length; i++) {
-        if (this.children[i] instanceof SpeechBubbleMorph) return this.children[i];
-    }
+    return detect(
+        this.children,
+        function(child) {
+            return child instanceof SpeechBubbleMorph;
+        }
+    );
 };
 
 // finds and returns the msg queue for this hatblock
