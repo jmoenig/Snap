@@ -2569,6 +2569,11 @@ Rectangle.prototype.setTo = function (left, top, right, bottom) {
 
 // Rectangle mutating
 
+Rectangle.prototype.setExtent = function(aPoint) {
+    this.setWidth(aPoint.x);
+    this.setHeight(aPoint.y);
+};
+
 Rectangle.prototype.setWidth = function (width) {
     this.corner.x = this.origin.x + width;
 };
@@ -3352,10 +3357,8 @@ Morph.prototype.scrollIntoView = function () {
 Morph.prototype.setExtent = function (aPoint) {
     if (aPoint.eq(this.extent())) {return; }
     this.changed();
-    this.bounds.corner = new Point(
-        this.bounds.origin.x + Math.max(aPoint.x, 0),
-        this.bounds.origin.y + Math.max(aPoint.y, 0)
-    );
+    this.bounds.setWidth(aPoint.x);
+    this.bounds.setHeight(aPoint.y);
     this.fixLayout();
     this.rerender();
 };
@@ -7679,11 +7682,6 @@ InspectorMorph.prototype.fixLayout = function () {
 
     // resizer
     this.resizer.fixLayout();
-};
-
-InspectorMorph.prototype.setExtent = function (aPoint) {
-    InspectorMorph.uber.setExtent.call(this, aPoint);
-    this.fixLayout();
 };
 
 // InspectorMorph editing ops:
