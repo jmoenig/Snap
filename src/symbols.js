@@ -1792,6 +1792,7 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
 };
 
 // register examples with the World demo menu
+// comment out to shave off a millisecond loading speed ;-)
 
 (function () {
     var bright = new Color(250, 250, 250),
@@ -1803,7 +1804,7 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
         SymbolMorph.prototype.names.map(sym =>
             new SymbolMorph(
                 sym,
-                40,
+                30,
                 bright,
                 offset,
                 dark

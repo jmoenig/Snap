@@ -12129,8 +12129,9 @@ WorldMorph.prototype.userCreateMorph = function () {
     var myself = this, menu, newMorph;
 
     function create(aMorph) {
-        aMorph.isDraggable = true;
-        aMorph.pickUp(myself);
+        var cpy = aMorph.fullCopy();
+        cpy.isDraggable = true;
+        cpy.pickUp(myself);
     }
 
     menu = new MenuMorph(this, 'make a morph');
