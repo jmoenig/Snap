@@ -1176,7 +1176,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-February-10';
+var morphicVersion = '2020-February-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4331,6 +4331,12 @@ Morph.prototype.developersMenu = function () {
 
 Morph.prototype.userMenu = function () {
     return null;
+};
+
+Morph.prototype.addToDemoMenu = function (aMorphOrMenuArray) {
+    // register a Morph or a Menu with Morphs with the World's demos menu
+    // a menu can be added in the form of a two-item array: [name, [morphs]]
+    WorldMorph.prototype.customMorphs.push(aMorphOrMenuArray);
 };
 
 // Morph menu actions
@@ -8087,8 +8093,8 @@ MenuMorph.prototype.popup = function (world, pos) {
 
 MenuMorph.prototype.scroll = function () {
     // private - move all items into a scroll frame
-     var scroller = new ScrollFrameMorph(),
-          start = this.label ? 1 : 0,
+    var scroller = new ScrollFrameMorph(),
+        start = this.label ? 1 : 0,
         first = this.children[start];
 
     scroller.setPosition(first.position());
@@ -9905,27 +9911,19 @@ MenuItemMorph.prototype.createLabelPart = function (source) {
     return this.createIcon(source);
 };
 
-MenuItemMorph.prototype.createIcon = function (source) { // +++ under construction
+MenuItemMorph.prototype.createIcon = function (source) {
     // source can be either a Morph or an HTMLCanvasElement
-    var icon = new Morph(),
-        src;
-    // +++ to do: tell Morph to cache the image
-    icon.isCachingImage = true; // +++ review
-    icon.cachedImage = source instanceof Morph ? source.fullImage() : source; // +++ review this
-    // adjust shadow dimensions
-    if (source instanceof Morph && source.getShadow()) {
-        src = icon.cachedImage;
-        icon.cachedImage = newCanvas(
-            source.fullBounds().extent().subtract(
-                this.shadowBlur * (useBlurredShadows ? 1 : 2)
-            )
-        );
-        icon.cachedImage.getContext('2d').drawImage(src, 0, 0); // +++ review
+    var icon;
+
+    if (source instanceof Morph) {
+        return source.fullCopy();
     }
-    icon.setExtent(new Point(
-        icon.cachedImage.width,
-        icon.cachedImage.height)
-    );
+    // assume a Canvas
+    icon = new Morph();
+    icon.isCachingImage = true;
+    icon.cachedImage = source; // should we copy the canvas?
+    icon.bounds.setWidth(source.width);
+    icon.bounds.setHeight(source.height);
     return icon;
 };
 
@@ -10045,13 +10043,27 @@ MenuItemMorph.prototype.delaySubmenu = function () {
 };
 
 MenuItemMorph.prototype.popUpSubmenu = function () {
-    var menu = this.parentThatIsA(MenuMorph);
+    var menu = this.parentThatIsA(MenuMorph),
+        world = this.world(),
+        scroller;
+
     if (!(this.action instanceof MenuMorph)) {return; }
     this.action.createItems();
     this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
     this.action.addShadow(new Point(2, 2), 80);
     this.action.keepWithin(this.world());
     if (this.action.items.length < 1 && !this.action.title) {return; }
+
+    if (this.action.bottom() > world.bottom()) {
+        // scroll menu items if the menu is taller than the world
+        this.action.removeShadow();
+        scroller = this.action.scroll();
+        this.action.bounds.corner.y = world.bottom() - 2;
+        this.action.addShadow(new Point(2, 2), 80);
+        scroller.setHeight(world.bottom() - scroller.top() - 6);
+        scroller.adjustScrollBars(); // ?
+     }
+    
     menu.add(this.action);
     menu.submenu = this.action;
     menu.submenu.world = menu.world; // keyboard control
@@ -11571,6 +11583,10 @@ WorldMorph.prototype = new FrameMorph();
 WorldMorph.prototype.constructor = WorldMorph;
 WorldMorph.uber = FrameMorph.prototype;
 
+// WorldMorph global settings & examples
+
+WorldMorph.prototype.customMorphs = [];
+
 // WorldMorph instance creation:
 
 function WorldMorph(aCanvas, fillPage) {
@@ -11830,7 +11846,7 @@ WorldMorph.prototype.resetKeyboardHandler = function () {
     this.keyboardHandler.value = '';
     this.keyboardHandler.style.top = number2px(pos.y);
     this.keyboardHandler.style.left = number2px(pos.x);
-}
+};
 
 WorldMorph.prototype.initEventListeners = function () {
     var canvas = this.worldCanvas;
@@ -12238,10 +12254,18 @@ WorldMorph.prototype.userCreateMorph = function () {
         create(foo);
     });
     menu.addItem('pen', () => create(new PenMorph()));
-    if (this.customMorphs) {
+    if (this.customMorphs.length) {
         menu.addLine();
-        this.customMorphs().forEach(morph => {
-            menu.addItem(morph.toString(), () => create(morph));
+        this.customMorphs.forEach(item => {
+            var sub;
+            if (item instanceof Array) { // assume [name, [morphs]]
+                sub = new MenuMorph();
+                item[1].forEach(morph => sub.addItem(morph,
+                    () => create(morph)));
+                menu.addMenu(item[0], sub);
+            } else { // assume a Morph
+                menu.addItem(item.toString(), () => create(item));
+            }
         });
     }
     menu.popUpAtHand(this);

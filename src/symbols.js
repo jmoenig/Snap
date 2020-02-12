@@ -41,29 +41,9 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-February-10';
+modules.symbols = '2020-February-12';
 
 var SymbolMorph;
-
-/*
-WorldMorph.prototype.customMorphs = function () {
-    // add examples to the world's demo menu
-    return [
-        'camera',
-        'location',
-        'footprints',
-        'keyboard',
-        'keyboardFilled',
-        'globe'
-    ].map(sym => new SymbolMorph(
-        sym,
-        50,
-        new Color(250, 250, 250),
-        new Point(-1, -1),
-        new Color(20, 20, 20)
-    ));
-};
-*/
 
 // SymbolMorph //////////////////////////////////////////////////////////
 
@@ -165,14 +145,24 @@ SymbolMorph.prototype.init = function (
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
     this.name = name || 'square';
-    this.size = size || ((size === 0) ? 0 : 50);
+    this.size = size || 50; // +++ ?? ((size === 0) ? 0 : 50);
     this.shadowOffset = shadowOffset || new Point(0, 0);
     this.shadowColor = shadowColor || null;
-
     SymbolMorph.uber.init.call(this);
     this.color = color || new Color(0, 0, 0);
     this.fixLayout();
     this.rerender();
+};
+
+// SymbolMorph string representation: 'a SymbolMorph: "square"'
+
+SymbolMorph.prototype.toString = function () {
+    return 'a ' +
+        (this.constructor.name ||
+            this.constructor.toString().split(' ')[1].split('(')[0]) +
+        ': "' +
+        this.name +
+        '"';
 };
 
 // SymbolMorph zebra coloring:
@@ -1790,3 +1780,24 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
     ctx.arcTo(w, w / 2, w / 2, w, w * 0.66);
     ctx.stroke();
 };
+
+// register examples with the World demo menu
+
+(function () {
+    var bright = new Color(250, 250, 250),
+        dark = new Color(20, 20, 20),
+        offset = new Point(-1, -1);
+       
+    SymbolMorph.prototype.addToDemoMenu([
+        'Symbols',
+        SymbolMorph.prototype.names.map(sym =>
+            new SymbolMorph(
+                sym,
+                40,
+                bright,
+                offset,
+                dark
+            )
+        )
+    ]);
+})();
