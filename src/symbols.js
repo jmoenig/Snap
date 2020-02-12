@@ -1795,7 +1795,7 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var bright = new Color(250, 250, 250),
+    var bright = new Color(230, 230, 230),
         dark = new Color(20, 20, 20),
         offset = new Point(-1, -1);
        
