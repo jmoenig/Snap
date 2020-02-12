@@ -2048,7 +2048,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     }
 
     // set my extent (silently, because we'll redraw later anyway):
-    this.silentSetExtent(new Point(blockWidth, blockHeight));
+    // this.silentSetExtent(new Point(blockWidth, blockHeight)); // +++
+    this.bounds.setWidth(blockWidth);
+    this.bounds.setHeight(blockHeight);
 
     // adjust CSlots
     parts.forEach(function (part) {
@@ -2076,7 +2078,7 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     });
 
     // redraw in order to erase CSlot backgrounds
-    if (!silently) {this.drawNew(); }
+    // if (!silently) {this.drawNew(); } // +++ change to rerender() ?
 
     // position next block:
     if (nb) {
@@ -7380,7 +7382,7 @@ ArgMorph.prototype.init = function (type, silently) {
     this.isHole = false;
     ArgMorph.uber.init.call(this, silently);
     this.color = new Color(0, 17, 173);
-    this.setExtent(new Point(50, 50), silently);
+    // this.setExtent(new Point(50, 50), silently); // +++ ???
 };
 
 // ArgMorph preferences settings:
@@ -7626,7 +7628,8 @@ CommandSlotMorph.prototype.fixLayout = function () {
                 + this.dent
         );
     }
-    if (this.parent.fixLayout) {
+    // if (this.parent.fixLayout) { // +++
+    if (this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
     }
 };
@@ -8601,7 +8604,8 @@ InputSlotMorph.prototype.init = function (
 
     contents.fontSize = this.fontSize;
     contents.isShowingBlanks = true;
-    contents.drawNew();
+    // contents.drawNew(); // +++
+    contents.fixLayout(); // +++
 
 	this.selectedBlock = null;
 
@@ -8678,7 +8682,8 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta.toString) {
         cnts.text = dta.toString();
     }
-    cnts.drawNew();
+    // cnts.drawNew(); // +++
+    cnts.fixLayout(); // +++ ?
 
     // remember the constant, if any
     this.constant = isConstant ? data : null;
@@ -11503,6 +11508,7 @@ FunctionSlotMorph.prototype.init = function (isPredicate, silently) {
     FunctionSlotMorph.uber.init.call(this, null, true); // silently
     this.isPredicate = isPredicate || false;
     this.color = this.rfColor;
+    /* // +++
     this.setExtent(
         new Point(
             (this.fontSize + this.edge * 2) * 2,
@@ -11510,6 +11516,7 @@ FunctionSlotMorph.prototype.init = function (isPredicate, silently) {
         ),
         silently
     );
+    */
 };
 
 FunctionSlotMorph.prototype.getSpec = function () {
