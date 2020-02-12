@@ -177,13 +177,23 @@ SymbolMorph.prototype.setLabelColor = function (
     this.setColor(textColor);
 };
 
-// SymbolMorph displaying:
+// SymbolMorph layout:
+
+SymbolMorph.prototype.setExtent = function (aPoint) {
+    if (this.size === aPoint.y) {return; }
+    this.changed();
+    this.size = aPoint.y;
+    this.fixLayout();
+    this.rerender();
+};
 
 SymbolMorph.prototype.fixLayout = function () {
     // determine my extent
     this.bounds.setWidth(this.symbolWidth() + Math.abs(this.shadowOffset.x));
     this.bounds.setHeight(this.size + Math.abs(this.shadowOffset.y));
 };
+
+// SymbolMorph displaying:
 
 SymbolMorph.prototype.render = function (ctx) {
     var sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x,
