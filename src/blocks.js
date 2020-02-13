@@ -2495,7 +2495,8 @@ BlockMorph.prototype.init = function (silently) {
     this.isCorpse = false; // marked for deletion fom a custom block definition
 
     BlockMorph.uber.init.call(this, silently);
-    this.color = new Color(0, 17, 173);
+    // +++ this.color = new Color(0, 17, 173);
+    this.color = new Color(122, 122, 122);
     this.cachedInputs = null;
 };
 
@@ -13577,8 +13578,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
-            [new CommandBlockMorph(), 'Command'],
             [new HatBlockMorph(), 'Hat'],
+            [new CommandBlockMorph(), 'Command'],
             [new ReporterBlockMorph(), 'Reporter'],
             [new ReporterBlockMorph(true), 'Predicate']
         ]
