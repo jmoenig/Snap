@@ -1801,14 +1801,15 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
        
     SymbolMorph.prototype.addToDemoMenu([
         'Symbols',
-        SymbolMorph.prototype.names.map(sym =>
+        SymbolMorph.prototype.names.map(sym => [
             new SymbolMorph(
                 sym,
                 30,
                 bright,
                 offset,
                 dark
-            )
-        )
+            ),
+            sym
+        ])
     ]);
 })();

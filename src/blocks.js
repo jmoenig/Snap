@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-January-06';
+modules.blocks = '2020-February-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13570,3 +13570,15 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         }
     }
 };
+
+// register examples with the World demo menu
+// comment out to shave off a millisecond loading speed ;-)
+
+(function () {
+    BlockMorph.prototype.addToDemoMenu([
+        'Syntax',
+        [
+            [new CommandBlockMorph(), 'Command']
+        ]
+    ]);
+})();
