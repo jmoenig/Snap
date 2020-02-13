@@ -2507,6 +2507,12 @@ BlockMorph.prototype.scriptTarget = function () {
     // this method only gives the desired result within the context of
     // the user actively clicking on a block inside the IDE
     // there is no direct relationship between a block and a sprite.
+
+/*
+    // +++ disabled while working on rendering
+    return;
+*/
+
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide;
     if (scripts) {
@@ -2658,6 +2664,10 @@ BlockMorph.prototype.rebuild = function (contrast) {
 // BlockMorph menu:
 
 BlockMorph.prototype.userMenu = function () {
+
+// +++ disabled while working on rendering
+    return;
+
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
@@ -4313,6 +4323,10 @@ BlockMorph.prototype.focus = function () {
 };
 
 BlockMorph.prototype.activeProcess = function () {
+
+// +++ disabled while working on rendering
+return;
+
     var top = this.topBlock(),
         receiver = top.scriptTarget(),
         stage;

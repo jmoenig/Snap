@@ -12260,7 +12260,7 @@ WorldMorph.prototype.userCreateMorph = function () {
             if (item instanceof Array) { // assume [name, [morphs]]
                 sub = new MenuMorph();
                 item[1].forEach(morph => sub.addItem(morph,
-                    () => create(morph)));
+                    () => create(morph instanceof Array ? morph[0] : morph)));
                 menu.addMenu(item[0], sub);
             } else { // assume a Morph
                 menu.addItem(item.toString(), () => create(item));
