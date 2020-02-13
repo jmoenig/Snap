@@ -699,6 +699,10 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
 // SyntaxElementMorph copy-on-write support:
 
 SyntaxElementMorph.prototype.selectForEdit = function () {
+
+// +++ disabled while developing
+return this;
+
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide = this.parentThatIsA(IDE_Morph),
         rcvr = ide ? ide.currentSprite : null,
@@ -2496,7 +2500,7 @@ BlockMorph.prototype.init = function (silently) {
 
     BlockMorph.uber.init.call(this, silently);
     // +++ this.color = new Color(0, 17, 173);
-    this.color = new Color(122, 122, 122);
+    this.color = new Color(102, 102, 102);
     this.cachedInputs = null;
 };
 
@@ -4613,7 +4617,7 @@ CommandBlockMorph.prototype.init = function () {
     CommandBlockMorph.uber.init.call(this);
 
     // this.setExtent(new Point(200, 100)); // +++
-    this.bounds.setExtent(new Point(60, 24));
+    this.bounds.setExtent(new Point(60, 24).multiplyBy(this.scale)); // +++ for testing only
     this.rerender(); // should probably be fixLayout() at some poimt
 
     this.partOfCustomCommand = false;
@@ -5067,8 +5071,6 @@ CommandBlockMorph.prototype.render = function (ctx) { // +++
     this.drawBody(ctx);
     this.drawBottom(ctx);
 
-    return; // +++
-
     // add 3D-Effect:
     if (!MorphicPreferences.isFlat) {
         this.drawTopDentEdge(ctx, 0, 0);
@@ -5207,7 +5209,7 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
     ctx.stroke();
 
     lgx = x + this.corner + this.inset;
-    leftGradient = context.createLinearGradient(
+    leftGradient = ctx.createLinearGradient(
         lgx - this.edge,
         y + this.edge,
         lgx,
@@ -5453,7 +5455,7 @@ function HatBlockMorph() {
 
 HatBlockMorph.prototype.init = function () {
     HatBlockMorph.uber.init.call(this);
-    this.bounds.setExtent(new Point(120, 36));
+    this.bounds.setExtent(new Point(120, 36).multiplyBy(this.scale)); // +++ for testing only
     this.rerender(); // +++ also fixLayout
 };
 
@@ -5634,7 +5636,7 @@ ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
  
-    this.bounds.setExtent(new Point(50, 22));
+    this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale)); // +++ for testing purposes only
     this.rerender(); // +++
  
     this.cachedSlotSpec = null; // don't serialize
@@ -5921,8 +5923,6 @@ ReporterBlockMorph.prototype.drawRounded = function (ctx) {
     ctx.fill();
 
     if (MorphicPreferences.isFlat) {return; }
-
-    return; // +++
 
     // add 3D-Effect:
     ctx.lineWidth = this.edge;
@@ -13589,6 +13589,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
+    SyntaxElementMorph.prototype.setScale(2);
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
