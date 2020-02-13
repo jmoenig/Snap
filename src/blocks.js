@@ -700,7 +700,7 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
 
 SyntaxElementMorph.prototype.selectForEdit = function () {
 
-// +++ disabled while developing
+// +++ disabled while working on rendering
 return this;
 
     var scripts = this.parentThatIsA(ScriptsMorph),
@@ -2512,10 +2512,8 @@ BlockMorph.prototype.scriptTarget = function () {
     // the user actively clicking on a block inside the IDE
     // there is no direct relationship between a block and a sprite.
 
-/*
-    // +++ disabled while working on rendering
-    return;
-*/
+// +++ disabled while working on rendering
+return;
 
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide;
@@ -2670,7 +2668,7 @@ BlockMorph.prototype.rebuild = function (contrast) {
 BlockMorph.prototype.userMenu = function () {
 
 // +++ disabled while working on rendering
-    return;
+return;
 
     var menu = new MenuMorph(this),
         world = this.world(),
