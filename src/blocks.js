@@ -29,7 +29,7 @@
 
     prerequisites:
     --------------
-    needs morphic.js and symbols.js
+    needs morphic.js, symbols.js and widgets.js
 
 
     hierarchy
@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-February-13';
+modules.blocks = '2020-February-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2599,7 +2599,9 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
         myself.add(part);
         if (!(part instanceof CommandSlotMorph ||
                 part instanceof StringMorph)) {
-            part.drawNew();
+            // +++ part.drawNew();
+            part.fixLayout() // +++ ??
+            part.rerender(); // +++
         }
         if (part instanceof RingMorph) {
             part.fixBlockColor();
@@ -7394,6 +7396,7 @@ ArgMorph.prototype.init = function (type, silently) {
     this.isHole = false;
     ArgMorph.uber.init.call(this, silently);
     this.color = new Color(0, 17, 173);
+    this.rerender(); // +++ ??
     // this.setExtent(new Point(50, 50), silently); // +++ ???
 };
 
@@ -7448,25 +7451,25 @@ ArgMorph.prototype.getSpec = function () {
 
 // ArgMorph drawing
 
-ArgMorph.prototype.drawNew = function () {
+ArgMorph.prototype.render = function (ctx) {
     if (this.type === 'list') {
-        this.image = this.listIcon();
+        this.image = this.listIcon(); // +++ refactor to not use a Canvas or to share a single one
         this.silentSetExtent(new Point(
             this.image.width,
             this.image.height
         ));
-    } else if (this.type === 'object') {
+    } else if (this.type === 'object') { // +++ refactor to not use a Canvas or to share a single one
         this.image = this.objectIcon();
         this.silentSetExtent(new Point(
             this.image.width,
             this.image.height
         ));
     } else {
-        ArgMorph.uber.drawNew.call(this);
+        ArgMorph.uber.render.call(this, ctx);
     }
 };
 
-ArgMorph.prototype.listIcon = function () {
+ArgMorph.prototype.listIcon = function () { // +++ rafactor to turn into a Symbol?
     var frame = new Morph(),
         first = new CellMorph(),
         second = new CellMorph(),
@@ -9550,12 +9553,10 @@ InputSlotMorph.prototype.unflash = function () {
 
 // InputSlotMorph drawing:
 
-InputSlotMorph.prototype.drawNew = function () {
-    var context, borderColor, r;
+InputSlotMorph.prototype.render = function (ctx) {
+    var borderColor, r;
 
     // initialize my surface property
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
     if (this.cachedNormalColor) { // if flashing
         borderColor = this.color;
     } else if (this.parent) {
@@ -9563,9 +9564,9 @@ InputSlotMorph.prototype.drawNew = function () {
     } else {
         borderColor = new Color(120, 120, 120);
     }
-    context.fillStyle = this.color.toString();
+    ctx.fillStyle = this.color.toString();
     if (this.isReadOnly && !this.cachedNormalColor) { // unless flashing
-        context.fillStyle = borderColor.darker().toString();
+        ctx.fillStyle = borderColor.darker().toString();
     }
 
     // cache my border colors
@@ -9575,19 +9576,19 @@ InputSlotMorph.prototype.drawNew = function () {
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
     if (!this.isNumeric) {
-        context.fillRect(
+        ctx.fillRect(
             this.edge,
             this.edge,
             this.width() - this.edge * 2,
             this.height() - this.edge * 2
         );
         if (!MorphicPreferences.isFlat) {
-            this.drawRectBorder(context);
+            this.drawRectBorder(ctx);
         }
     } else {
         r = (this.height() - (this.edge * 2)) / 2;
-        context.beginPath();
-        context.arc(
+        ctx.beginPath();
+        ctx.arc(
             r + this.edge,
             r + this.edge,
             r,
@@ -9595,7 +9596,7 @@ InputSlotMorph.prototype.drawNew = function () {
             radians(-90),
             false
         );
-        context.arc(
+        ctx.arc(
             this.width() - r - this.edge,
             r + this.edge,
             r,
@@ -9603,16 +9604,16 @@ InputSlotMorph.prototype.drawNew = function () {
             radians(90),
             false
         );
-        context.closePath();
-        context.fill();
+        ctx.closePath();
+        ctx.fill();
         if (!MorphicPreferences.isFlat) {
-            this.drawRoundBorder(context);
+            this.drawRoundBorder(ctx);
         }
     }
 
 	// draw my "wish" block, if any
 	if (this.selectedBlock) {
- 		context.drawImage(
+ 		ctx.drawImage(
         	this.selectedBlock.fullImageClassic(),
             this.edge + this.typeInPadding,
             this.edge
@@ -9621,19 +9622,19 @@ InputSlotMorph.prototype.drawNew = function () {
 
 };
 
-InputSlotMorph.prototype.drawRectBorder = function (context) {
+InputSlotMorph.prototype.drawRectBorder = function (ctx) {
     var shift = this.edge * 0.5,
         gradient;
 
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -9641,15 +9642,15 @@ InputSlotMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.edge, shift);
-    context.lineTo(this.width() - this.edge - shift, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, shift);
+    ctx.lineTo(this.width() - this.edge - shift, shift);
+    ctx.stroke();
 
-    context.shadowOffsetY = 0;
+    ctx.shadowOffsetY = 0;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         this.edge,
@@ -9657,17 +9658,17 @@ InputSlotMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, this.edge);
-    context.lineTo(shift, this.height() - this.edge - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, this.edge);
+    ctx.lineTo(shift, this.height() - this.edge - shift);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         this.height() - this.edge,
         0,
@@ -9675,13 +9676,13 @@ InputSlotMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.edge, this.height() - shift);
-    context.lineTo(this.width() - this.edge, this.height() - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, this.height() - shift);
+    ctx.lineTo(this.width() - this.edge, this.height() - shift);
+    ctx.stroke();
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         this.width() - this.edge,
         0,
         this.width(),
@@ -9689,36 +9690,36 @@ InputSlotMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.width() - shift, this.edge);
-    context.lineTo(this.width() - shift, this.height() - this.edge);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.width() - shift, this.edge);
+    ctx.lineTo(this.width() - shift, this.height() - this.edge);
+    ctx.stroke();
 
 };
 
-InputSlotMorph.prototype.drawRoundBorder = function (context) {
+InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     var shift = this.edge * 0.5,
         r = (this.height() - (this.edge * 2)) / 2,
         start,
         end,
         gradient;
 
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // straight top edge:
     start = r + this.edge;
     end = this.width() - r - this.edge;
     if (end > start) {
 
-        context.shadowOffsetX = shift;
-        context.shadowOffsetY = shift;
-        context.shadowBlur = this.edge;
-        context.shadowColor = this.color.darker(80).toString();
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
 
-        gradient = context.createLinearGradient(
+        gradient = ctx.createLinearGradient(
             0,
             0,
             0,
@@ -9726,20 +9727,20 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
         );
         gradient.addColorStop(0, this.cachedClr);
         gradient.addColorStop(1, this.cachedClrDark);
-        context.strokeStyle = gradient;
-        context.beginPath();
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
 
-        context.moveTo(start, shift);
-        context.lineTo(end, shift);
-        context.stroke();
+        ctx.moveTo(start, shift);
+        ctx.lineTo(end, shift);
+        ctx.stroke();
 
-        context.shadowOffsetX = 0;
-        context.shadowOffsetY = 0;
-        context.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
     }
 
     // straight bottom edge:
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         this.height() - this.edge,
         0,
@@ -9747,21 +9748,21 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r + this.edge, this.height() - shift);
-    context.lineTo(this.width() - r - this.edge, this.height() - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r + this.edge, this.height() - shift);
+    ctx.lineTo(this.width() - r - this.edge, this.height() - shift);
+    ctx.stroke();
 
     r = this.height() / 2;
 
-    context.shadowOffsetX = shift;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetX = shift;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
     // top edge: left corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         r,
         r,
         r - this.edge,
@@ -9771,9 +9772,9 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         r,
         r,
         r - shift,
@@ -9782,14 +9783,14 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
         false
     );
 
-    context.stroke();
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         this.width() - r,
         r,
         r - this.edge,
@@ -9799,9 +9800,9 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         this.width() - r,
         r,
         r - shift,
@@ -9809,7 +9810,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
         radians(90),
         false
     );
-    context.stroke();
+    ctx.stroke();
 };
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
@@ -9976,6 +9977,7 @@ function BooleanSlotMorph(initialValue) {
 BooleanSlotMorph.prototype.init = function (initialValue) {
     this.value = (typeof initialValue === 'boolean') ? initialValue : null;
     this.isUnevaluated = false;
+    this.progress = 0; // for animation state, not persisted
     BooleanSlotMorph.uber.init.call(this);
 };
 
@@ -9999,11 +10001,9 @@ BooleanSlotMorph.prototype.isBinary = function () {
         !isNil(this.parentThatIsA(ScriptsMorph));
 };
 
-BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
+BooleanSlotMorph.prototype.setContents = function (boolOrNull) {
     this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
-    if (silently) {return; }
-    this.drawNew();
-    this.changed();
+    this.rerender(); // +++
 };
 
 BooleanSlotMorph.prototype.toggleValue = function () {
@@ -10028,24 +10028,23 @@ BooleanSlotMorph.prototype.toggleValue = function () {
         }
     }
     if (ide && !ide.isAnimating) {
-        this.drawNew();
-        this.changed();
+        this.rerender(); // +++
         return;
     }
-    this.drawNew(3);
-    this.changed();
+    this.progress = 3;
+    this.rerender();
     this.nextSteps ([
         function () {
-            this.drawNew(2);
-            this.changed();
+            this.prgress = 2;
+            this.rerender();
         },
         function () {
-            this.drawNew(1);
-            this.changed();
+            this.prgress = 1;
+            this.rerender();
         },
         function () {
-            this.drawNew();
-            this.changed();
+            this.prgress = 0;
+            this.rerender();
         },
     ]);
 };
@@ -10063,19 +10062,19 @@ BooleanSlotMorph.prototype.mouseEnter = function () {
     if (this.value === false && !this.isBinary()) {
         var oldValue = this.value;
         this.value = null;
-        this.drawNew(3);
-        this.changed();
+        this.progress = 3; // +++ does this ever get displayed?
+        this.rerender();
         this.value = oldValue;
         return;
     }
-    this.drawNew(1);
-    this.changed();
+    this.progress = 1;
+    this.rerender();
 };
 
 BooleanSlotMorph.prototype.mouseLeave = function () {
     if (this.isStatic) {return; }
-    this.drawNew();
-    this.changed();
+    this.progress = 0;
+    this.rerender();
 };
 
 // BooleanSlotMorph menu:
@@ -10144,27 +10143,31 @@ BooleanSlotMorph.prototype.mappedCode = function () {
     return StageMorph.prototype.codeMappings.boolFalse || 'false';
 };
 
-// BooleanSlotMorph drawing:
+// BooleanSlotMorph layout: // +++
 
-BooleanSlotMorph.prototype.drawNew = function (progress) {
-    // "progress" is an optional number sliding the knob
-    // on a range between 0 and 4
-    var context,
-        textLabel = this.isStatic ? this.textLabel() : null,
+BooleanSlotMorph.prototype.fixLayout = function () {
+    // determine my extent
+    var textLabel = this.isStatic ? this.textLabel() : null,
         h;
 
     if (textLabel) {
         h = textLabel.height + (this.edge * 3);
-        this.silentSetExtent(new Point(
-            textLabel.width + (h * 1.5) + (this.edge * 2),
-            h
-        ));
+        this.bounds.setWidth(textLabel.width + (h * 1.5) + (this.edge * 2));
+        this.bounds.setHeight(h);
     } else {
-        this.silentSetExtent(new Point(
-            (this.fontSize + this.edge * 2) * 2,
-            this.fontSize + this.edge * 2
-        ));
+        this.bounds.setWidth((this.fontSize + this.edge * 2) * 2);
+        this.bounds.setHeight(this.fontSize + this.edge * 2);
     }
+    console.log('bounds', this.bounds.toString()); // +++
+}
+
+// BooleanSlotMorph drawing:
+
+BooleanSlotMorph.prototype.render = function (ctx) {
+    // "progress" is an optional number sliding the knob // +++ update this comment
+    // on a range between 0 and 4
+    var textLabel = this.isStatic ? this.textLabel() : null;
+
     if (!(this.cachedNormalColor)) { // unless flashing
         this.color = this.parent ?
                 this.parent.color : new Color(200, 200, 200);
@@ -10172,14 +10175,12 @@ BooleanSlotMorph.prototype.drawNew = function (progress) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    this.drawDiamond(context, progress);
-    this.drawLabel(context, textLabel);
-    this.drawKnob(context, progress);
+    this.drawDiamond(ctx, this.progress);
+    this.drawLabel(ctx, textLabel);
+    this.drawKnob(ctx, this.progress);
 };
 
-BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
+BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     var w = this.width(),
         h = this.height(),
         r = h / 2,
@@ -10189,67 +10190,67 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
 
     // draw the 'flat' shape:
     if (this.cachedNormalColor) { // if flashing
-        context.fillStyle = this.color.toString();
+        ctx.fillStyle = this.color.toString();
     } else {
         switch (this.value) {
         case true:
-            context.fillStyle = 'rgb(0, 200, 0)';
+            ctx.fillStyle = 'rgb(0, 200, 0)';
             break;
         case false:
-            context.fillStyle = 'rgb(200, 0, 0)';
+            ctx.fillStyle = 'rgb(200, 0, 0)';
             break;
         default:
-            context.fillStyle = this.color.darker(25).toString();
+            ctx.fillStyle = this.color.darker(25).toString();
         }
     }
 
     if (progress && !this.isEmptySlot()) {
         // left half:
-        context.fillStyle = 'rgb(0, 200, 0)';
-        context.beginPath();
-        context.moveTo(0, r);
-        context.lineTo(r, 0);
-        context.lineTo(w2, 0);
-        context.lineTo(w2, h);
-        context.lineTo(r, h);
-        context.closePath();
-        context.fill();
+        ctx.fillStyle = 'rgb(0, 200, 0)';
+        ctx.beginPath();
+        ctx.moveTo(0, r);
+        ctx.lineTo(r, 0);
+        ctx.lineTo(w2, 0);
+        ctx.lineTo(w2, h);
+        ctx.lineTo(r, h);
+        ctx.closePath();
+        ctx.fill();
 
         // right half:
-        context.fillStyle = 'rgb(200, 0, 0)';
-        context.beginPath();
-        context.moveTo(w2, 0);
-        context.lineTo(w - r, 0);
-        context.lineTo(w, r);
-        context.lineTo(w - r, h);
-        context.lineTo(w2, h);
-        context.closePath();
-        context.fill();
+        ctx.fillStyle = 'rgb(200, 0, 0)';
+        ctx.beginPath();
+        ctx.moveTo(w2, 0);
+        ctx.lineTo(w - r, 0);
+        ctx.lineTo(w, r);
+        ctx.lineTo(w - r, h);
+        ctx.lineTo(w2, h);
+        ctx.closePath();
+        ctx.fill();
     } else {
-        context.beginPath();
-        context.moveTo(0, r);
-        context.lineTo(r, 0);
-        context.lineTo(w - r, 0);
-        context.lineTo(w, r);
-        context.lineTo(w - r, h);
-        context.lineTo(r, h);
-        context.closePath();
-        context.fill();
+        ctx.beginPath();
+        ctx.moveTo(0, r);
+        ctx.lineTo(r, 0);
+        ctx.lineTo(w - r, 0);
+        ctx.lineTo(w, r);
+        ctx.lineTo(w - r, h);
+        ctx.lineTo(r, h);
+        ctx.closePath();
+        ctx.fill();
     }
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    context.shadowOffsetX = shift;
-    context.shadowBlur = shift;
-    context.shadowColor = 'black';
+    ctx.shadowOffsetX = shift;
+    ctx.shadowBlur = shift;
+    ctx.shadowColor = 'black';
 
     // top edge: left corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         r,
         this.edge * 0.6,
@@ -10257,19 +10258,19 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, r);
-    context.lineTo(r, shift);
-    context.closePath();
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, r);
+    ctx.lineTo(r, shift);
+    ctx.closePath();
+    ctx.stroke();
 
     // top edge: straight line
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -10277,18 +10278,18 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r, shift);
-    context.lineTo(w - r, shift);
-    context.closePath();
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r, shift);
+    ctx.lineTo(w - r, shift);
+    ctx.closePath();
+    ctx.stroke();
 
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         w - r - (this.edge * 0.6),
         h - (this.edge * 0.6),
         w - r,
@@ -10296,15 +10297,15 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - r, h - shift);
-    context.lineTo(w - shift, r);
-    context.closePath();
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - r, h - shift);
+    ctx.lineTo(w - shift, r);
+    ctx.closePath();
+    ctx.stroke();
 
     // bottom edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -10312,15 +10313,15 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r, h - shift);
-    context.lineTo(w - r - shift, h - shift);
-    context.closePath();
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r, h - shift);
+    ctx.lineTo(w - r - shift, h - shift);
+    ctx.closePath();
+    ctx.stroke();
 };
 
-BooleanSlotMorph.prototype.drawLabel = function (context, textLabel) {
+BooleanSlotMorph.prototype.drawLabel = function (ctx, textLabel) {
     var w = this.width(),
         r = this.height() / 2 - this.edge,
         r2 = r / 2,
@@ -10339,52 +10340,52 @@ BooleanSlotMorph.prototype.drawLabel = function (context, textLabel) {
             x = this.width() - (this.height() / 2) - textLabel.width;
         }
     if (!MorphicPreferences.isFlat) {
-        context.shadowOffsetX = -shift;
-        context.shadowOffsetY = -shift;
-        context.shadowBlur = shift;
-        context.shadowColor = this.value ? 'rgb(0, 100, 0)' : 'rgb(100, 0, 0)';
+        ctx.shadowOffsetX = -shift;
+        ctx.shadowOffsetY = -shift;
+        ctx.shadowBlur = shift;
+        ctx.shadowColor = this.value ? 'rgb(0, 100, 0)' : 'rgb(100, 0, 0)';
     }
-        context.drawImage(textLabel, x, y);
+        ctx.drawImage(textLabel, x, y);
         return;
     }
     // "tick:"
     x = r + (this.edge * 2) + shift;
     if (!MorphicPreferences.isFlat) {
-        context.shadowOffsetX = -shift;
-        context.shadowOffsetY = -shift;
-        context.shadowBlur = shift;
-        context.shadowColor = 'rgb(0, 100, 0)';
+        ctx.shadowOffsetX = -shift;
+        ctx.shadowOffsetY = -shift;
+        ctx.shadowBlur = shift;
+        ctx.shadowColor = 'rgb(0, 100, 0)';
     }
-    context.strokeStyle = 'white';
-    context.lineWidth = this.edge + shift;
-    context.lineCap = 'round';
-    context.lineJoin = 'miter';
-    context.beginPath();
-    context.moveTo(x - r2, y);
-    context.lineTo(x, y + r2);
-    context.lineTo(x + r2, r2 + this.edge);
-    context.stroke();
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = this.edge + shift;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'miter';
+    ctx.beginPath();
+    ctx.moveTo(x - r2, y);
+    ctx.lineTo(x, y + r2);
+    ctx.lineTo(x + r2, r2 + this.edge);
+    ctx.stroke();
 
     // "cross:"
     x = w - y - (this.edge * 2);
     if (!MorphicPreferences.isFlat) {
-        context.shadowOffsetX = -shift;
-        context.shadowOffsetY = -shift;
-        context.shadowBlur = shift;
-        context.shadowColor = 'rgb(100, 0, 0)';
+        ctx.shadowOffsetX = -shift;
+        ctx.shadowOffsetY = -shift;
+        ctx.shadowBlur = shift;
+        ctx.shadowColor = 'rgb(100, 0, 0)';
     }
-    context.strokeStyle = 'white';
-    context.lineWidth = this.edge;
-    context.lineCap = 'butt';
-    context.beginPath();
-    context.moveTo(x - r2, y - r2);
-    context.lineTo(x + r2, y + r2);
-    context.moveTo(x - r2, y + r2);
-    context.lineTo(x + r2, y - r2);
-    context.stroke();
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = this.edge;
+    ctx.lineCap = 'butt';
+    ctx.beginPath();
+    ctx.moveTo(x - r2, y - r2);
+    ctx.lineTo(x + r2, y + r2);
+    ctx.moveTo(x - r2, y + r2);
+    ctx.lineTo(x + r2, y - r2);
+    ctx.stroke();
 };
 
-BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
+BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     var w = this.width(),
         r = this.height() / 2,
         shift = this.edge / 2,
@@ -10404,56 +10405,56 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
     case false:
         x = r + slideStep;
         if (!MorphicPreferences.isFlat) {
-            context.shadowOffsetX = shift;
-            context.shadowOffsetY = 0;
-            context.shadowBlur = shift;
-            context.shadowColor = 'black';
+            ctx.shadowOffsetX = shift;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = shift;
+            ctx.shadowColor = 'black';
         }
         break;
     case true:
         x = w - r - slideStep;
         if (!MorphicPreferences.isFlat) {
-            context.shadowOffsetX = 0;
-            context.shadowOffsetY = 0;
-            context.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 0;
         }
         break;
     default:
         if (!progress) {return; }
         x = r;
         if (!MorphicPreferences.isFlat) {
-            context.shadowOffsetX = shift;
-            context.shadowOffsetY = 0;
-            context.shadowBlur = shift;
-            context.shadowColor = 'black';
+            ctx.shadowOffsetX = shift;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = shift;
+            ctx.shadowColor = 'black';
         }
-        context.globalAlpha = 0.2 * ((progress || 0) + 1);
+        ctx.globalAlpha = 0.2 * ((progress || 0) + 1);
     }
 
-    context.fillStyle = color.toString();
-    context.beginPath();
-    context.arc(x, y, r, radians(0), radians(360));
-    context.closePath();
-    context.fill();
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(x, y, r, radians(0), radians(360));
+    ctx.closePath();
+    ctx.fill();
 
     if (MorphicPreferences.isFlat) {
-        context.globalAlpha = 1;
+        ctx.globalAlpha = 1;
         return;
     }
 
     // add 3D-Effect
     // outline:
-    context.shadowOffsetX = 0;
-    context.shadowBlur = 0;
-    context.shadowColor = 'black';
-    context.lineWidth = outline;
-    context.strokeStyle = outlineColor.toString();
-    context.beginPath();
-    context.arc(x, y, r - (outline / 2), radians(0), radians(360));
-    context.stroke();
+    ctx.shadowOffsetX = 0;
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'black';
+    ctx.lineWidth = outline;
+    ctx.strokeStyle = outlineColor.toString();
+    ctx.beginPath();
+    ctx.arc(x, y, r - (outline / 2), radians(0), radians(360));
+    ctx.stroke();
 
     // top-left:
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         x,
         y,
         r - outline - this.edge,
@@ -10464,11 +10465,11 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
     gradient.addColorStop(1, topColor.toString());
     gradient.addColorStop(0, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.arc(
         x,
         y,
         r - outline - this.edge / 2,
@@ -10476,10 +10477,10 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
         radians(270),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // bottom-right:
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         x,
         y,
         r - outline - this.edge,
@@ -10490,11 +10491,11 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
     gradient.addColorStop(1, bottomColor.toString());
     gradient.addColorStop(0, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.arc(
         x,
         y,
         r - outline - this.edge / 2,
@@ -10502,8 +10503,8 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
         radians(90),
         false
     );
-    context.stroke();
-    context.globalAlpha = 1;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
 };
 
 BooleanSlotMorph.prototype.textLabel = function () {
@@ -10538,7 +10539,7 @@ BooleanSlotMorph.prototype.textLabel = function () {
     lbl = this.value ? t : f;
     x = (img.width - lbl.width) / 2;
     y = (img.height - lbl.height) / 2;
-    img.getContext('2d').drawImage(lbl, x, y);
+    img.getctx('2d').drawImage(lbl, x, y);
     return img;
 };
 
@@ -13594,10 +13595,10 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     c.setSpec('this is a test');
 
     ci = new CommandBlockMorph();
-    ci.setSpec('block with input %s unit');
+    ci.setSpec('block with input %s unit %n number');
 
     cm = new CommandBlockMorph();
-    cm.setSpec('number %n');
+    cm.setSpec('bool %b ?');
 
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
@@ -13607,8 +13608,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [new ReporterBlockMorph(), 'Reporter'],
             [new ReporterBlockMorph(true), 'Predicate'],
             [c, 'with label text'],
-            [ci, 'with input'],
-            [cm, 'input slots']
+            [ci, 'editable input slots'],
+            [cm, 'symbolic slots']
         ]
     ]);
 })();
