@@ -13587,14 +13587,28 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    SyntaxElementMorph.prototype.setScale(2);
+    var c, ci, cm;
+    SyntaxElementMorph.prototype.setScale(2.5);
+
+    c = new CommandBlockMorph();
+    c.setSpec('this is a test');
+
+    ci = new CommandBlockMorph();
+    ci.setSpec('block with input %s unit');
+
+    cm = new CommandBlockMorph();
+    cm.setSpec('number %n');
+
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
             [new HatBlockMorph(), 'Hat'],
             [new CommandBlockMorph(), 'Command'],
             [new ReporterBlockMorph(), 'Reporter'],
-            [new ReporterBlockMorph(true), 'Predicate']
+            [new ReporterBlockMorph(true), 'Predicate'],
+            [c, 'with label text'],
+            [ci, 'with input'],
+            [cm, 'input slots']
         ]
     ]);
 })();
