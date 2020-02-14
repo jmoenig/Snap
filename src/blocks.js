@@ -10012,21 +10012,8 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     if (target !== this) {
         return this.toggleValue.call(target);
     }
-    ide = this.parentThatIsA(IDE_Morph);
-    if (this.isStatic || this.isBinary()) {
-        this.setContents(!this.value, true);
-    } else {
-        switch (this.value) {
-        case true:
-            this.value = false;
-            break;
-        case false:
-            this.value = null;
-            break;
-        default:
-            this.value = true;
-        }
-    }
+    // ide = this.parentThatIsA(IDE_Morph); // +++ disabled while working on rendering
+    this.value = this.nextValue();
     if (ide && !ide.isAnimating) {
         this.rerender(); // +++
         return;
@@ -10035,18 +10022,32 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     this.rerender();
     this.nextSteps ([
         function () {
-            this.prgress = 2;
+            this.progress = 2;
             this.rerender();
         },
         function () {
-            this.prgress = 1;
+            this.progress = 1;
             this.rerender();
         },
         function () {
-            this.prgress = 0;
+            this.progress = 0;
             this.rerender();
         },
     ]);
+};
+
+BooleanSlotMorph.prototype.nextValue = function () {
+    if (this.isStatic || this.isBinary()) {
+        return !this.value;
+    }
+    switch (this.value) {
+    case true:
+        return false;
+    case false:
+        return null;
+    default:
+        return true;
+    }
 };
 
 // BooleanSlotMorph events:
@@ -10059,15 +10060,11 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
     if (this.isStatic) {return; }
-    if (this.value === false && !this.isBinary()) {
-        var oldValue = this.value;
-        this.value = null;
-        this.progress = 3; // +++ does this ever get displayed?
-        this.rerender();
-        this.value = oldValue;
-        return;
+    if (this.nextValue() === null) {
+        this.progress = -1; // 'fade'
+    } else {
+        this.progress = 1;
     }
-    this.progress = 1;
     this.rerender();
 };
 
@@ -10143,7 +10140,7 @@ BooleanSlotMorph.prototype.mappedCode = function () {
     return StageMorph.prototype.codeMappings.boolFalse || 'false';
 };
 
-// BooleanSlotMorph layout: // +++
+// BooleanSlotMorph layout:
 
 BooleanSlotMorph.prototype.fixLayout = function () {
     // determine my extent
@@ -10190,6 +10187,8 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     // draw the 'flat' shape:
     if (this.cachedNormalColor) { // if flashing
         ctx.fillStyle = this.color.toString();
+    } else if (progress < 0 ) { // 'fade' +++
+        ctx.fillStyle = this.color.darker(25).toString();
     } else {
         switch (this.value) {
         case true:
@@ -10203,7 +10202,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         }
     }
 
-    if (progress && !this.isEmptySlot()) {
+    if (progress > 0 && !this.isEmptySlot()) {
         // left half:
         ctx.fillStyle = 'rgb(0, 200, 0)';
         ctx.beginPath();
@@ -10328,7 +10327,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx, textLabel) {
         x,
         y = this.height() / 2;
 
-    if (this.isEmptySlot()) {
+    if (this.isEmptySlot() || this.progress < 0) {
         return;
     }
     if (textLabel) {
@@ -10388,7 +10387,7 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     var w = this.width(),
         r = this.height() / 2,
         shift = this.edge / 2,
-        slideStep = (this.width() - this.height()) / 4 * (progress || 0),
+        slideStep = (this.width() - this.height()) / 4 * Math.max(0, (progress || 0)),
         gradient,
         x,
         y = r,
@@ -10409,6 +10408,9 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
             ctx.shadowBlur = shift;
             ctx.shadowColor = 'black';
         }
+        if (progress < 0) {
+            ctx.globalAlpha = 0.6;
+        }
         break;
     case true:
         x = w - r - slideStep;
@@ -10427,7 +10429,7 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
             ctx.shadowBlur = shift;
             ctx.shadowColor = 'black';
         }
-        ctx.globalAlpha = 0.2 * ((progress || 0) + 1);
+        ctx.globalAlpha = 0.6;
     }
 
     ctx.fillStyle = color.toString();
