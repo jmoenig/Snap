@@ -10571,48 +10571,49 @@ ArrowMorph.prototype.init = function (direction, size, padding, color) {
 
     ArrowMorph.uber.init.call(this, true); // silently
     this.color = color || new Color(0, 0, 0);
-    this.setExtent(new Point(this.size, this.size));
+    this.bounds.setExtent(new Point(this.size, this.size)); // +++ refactor
+    this.rerender();
 };
 
 ArrowMorph.prototype.setSize = function (size) {
     var min = Math.max(size, 1);
     this.size = size;
-    this.setExtent(new Point(min, min));
+    this.changed();
+    this.bounds.setExtent(new Point(min, min)); // +++
+    this.rerender();
 };
 
 // ArrowMorph displaying:
 
-ArrowMorph.prototype.drawNew = function () {
+ArrowMorph.prototype.render = function (ctx) {
     // initialize my surface property
-    this.image = newCanvas(this.extent(), false, this.image);
-    var context = this.image.getContext('2d'),
-        pad = this.padding,
+    var pad = this.padding,
         h = this.height(),
         h2 = Math.floor(h / 2),
         w = this.width(),
         w2 = Math.floor(w / 2);
 
-    context.fillStyle = this.color.toString();
-    context.beginPath();
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
     if (this.direction === 'down') {
-        context.moveTo(pad, h2);
-        context.lineTo(w - pad, h2);
-        context.lineTo(w2, h - pad);
+        ctx.moveTo(pad, h2);
+        ctx.lineTo(w - pad, h2);
+        ctx.lineTo(w2, h - pad);
     } else if (this.direction === 'up') {
-        context.moveTo(pad, h2);
-        context.lineTo(w - pad, h2);
-        context.lineTo(w2, pad);
+        ctx.moveTo(pad, h2);
+        ctx.lineTo(w - pad, h2);
+        ctx.lineTo(w2, pad);
     } else if (this.direction === 'left') {
-        context.moveTo(pad, h2);
-        context.lineTo(w2, pad);
-        context.lineTo(w2, h - pad);
+        ctx.moveTo(pad, h2);
+        ctx.lineTo(w2, pad);
+        ctx.lineTo(w2, h - pad);
     } else { // 'right'
-        context.moveTo(w2, pad);
-        context.lineTo(w - pad, h2);
-        context.lineTo(w2, h - pad);
+        ctx.moveTo(w2, pad);
+        ctx.lineTo(w - pad, h2);
+        ctx.lineTo(w2, h - pad);
     }
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 };
 
 // TextSlotMorph //////////////////////////////////////////////////////
@@ -13589,7 +13590,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cm;
+    var c, ci, cb, cm, cd;
     SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13598,8 +13599,14 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     ci = new CommandBlockMorph();
     ci.setSpec('block with input %s unit %n number');
 
+    cb = new CommandBlockMorph();
+    cb.setSpec('bool %b ?');
+
     cm = new CommandBlockMorph();
-    cm.setSpec('bool %b ?');
+    cm.setSpec('month %month');
+
+    cd = new CommandBlockMorph();
+    cd.setSpec('direction %dir degrees');
 
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
@@ -13610,7 +13617,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [new ReporterBlockMorph(true), 'Predicate'],
             [c, 'with label text'],
             [ci, 'editable input slots'],
-            [cm, 'symbolic slots']
+            [cb, 'Boolean slot'],
+            [cm, 'menu input'],
+            [cd, 'direction input']
         ]
     ]);
 })();
