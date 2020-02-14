@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-January-03';
+modules.widgets = '2020-February-14';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -175,8 +175,8 @@ PushButtonMorph.prototype.init = function (
 
     // override inherited properites:
     this.color = PushButtonMorph.prototype.color;
-    this.drawNew();
     this.fixLayout();
+    this.rerender();
 };
 
 // PushButtonMorph layout:
@@ -185,7 +185,7 @@ PushButtonMorph.prototype.fixLayout = function () {
     // make sure I at least encompass my label
     if (this.label !== null) {
         var padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
-        this.setExtent(new Point(
+        this.bounds.setExtent(new Point( // +++ turn into 2 statements width and height
             Math.max(this.label.width(), this.labelMinExtent.x) + padding,
             Math.max(this.label instanceof StringMorph ?
                     this.label.rawHeight() :
@@ -587,7 +587,8 @@ ToggleButtonMorph.prototype.init = function (
     }
 
     this.refresh();
-    this.drawNew();
+    // +++ this.drawNew();
+    this.rerender(); // +++
 };
 
 // ToggleButtonMorph events
@@ -3605,6 +3606,9 @@ PianoMenuMorph.prototype.destroy = function () {
 
 // PianoKeyMorph ///////////////////////////////////////////////////////
 
+// +++ disabled for now while working on rendering
+/*
+
 PianoKeyMorph.prototype = new MenuItemMorph();
 PianoKeyMorph.prototype.constructor = PianoKeyMorph;
 PianoKeyMorph.uber = MenuItemMorph.prototype;
@@ -3721,3 +3725,4 @@ PianoKeyMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
 };
+*/

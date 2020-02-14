@@ -10158,7 +10158,6 @@ BooleanSlotMorph.prototype.fixLayout = function () {
         this.bounds.setWidth((this.fontSize + this.edge * 2) * 2);
         this.bounds.setHeight(this.fontSize + this.edge * 2);
     }
-    console.log('bounds', this.bounds.toString()); // +++
 }
 
 // BooleanSlotMorph drawing:
