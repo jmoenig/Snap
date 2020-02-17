@@ -756,11 +756,10 @@ SyntaxElementMorph.prototype.dark = function () {
 
 // SyntaxElementMorph color changing:
 
-SyntaxElementMorph.prototype.setColor = function (aColor, silently) {
+SyntaxElementMorph.prototype.setColor = function (aColor) { // ++++
     if (aColor) {
         if (!this.color.eq(aColor)) {
             this.color = aColor;
-            if (!silently) {this.drawNew(); }
             this.children.forEach(function (child) {
                 if ((!silently || child instanceof TemplateSlotMorph) &&
                 		!(child instanceof BlockHighlightMorph)) {
@@ -768,7 +767,7 @@ SyntaxElementMorph.prototype.setColor = function (aColor, silently) {
                     child.changed();
                 }
             });
-            this.changed();
+            this.rerender();
         }
     }
 };
@@ -1609,7 +1608,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%clr':
             part = new ColorSlotMorph();
@@ -1677,7 +1676,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%clockwise':
             part = new SymbolMorph('turnRight');
@@ -1687,7 +1686,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%counterclockwise':
             part = new SymbolMorph('turnLeft');
@@ -1697,7 +1696,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%greenflag':
             part = new SymbolMorph('flag');
@@ -1707,7 +1706,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%stop':
             part = new SymbolMorph('octagon');
@@ -1717,7 +1716,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%pause':
             part = new SymbolMorph('pause');
@@ -1727,7 +1726,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%blitz':
             part = new SymbolMorph('flash');
@@ -1737,7 +1736,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%list':
             part = new SymbolMorph('list');
@@ -1804,7 +1803,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.shadowColor = this.color.darker(this.labelContrast);
         part.shadowOffset = MorphicPreferences.isFlat ?
                 new Point() : this.embossing;
-        part.drawNew();
+        part.fixLayout();
     } else {
         part = new StringMorph(
             spec, // text
@@ -9890,18 +9889,15 @@ TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
 
 // TemplateSlotMorph drawing:
 
-TemplateSlotMorph.prototype.drawNew = function () {
-    var context;
+TemplateSlotMorph.prototype.render = function (ctx) {
     if (this.parent instanceof Morph) {
         this.color = this.parent.color.copy();
     }
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    context.fillStyle = this.cachedClr;
-    this.drawRounded(context);
+    ctx.fillStyle = this.cachedClr;
+    this.drawRounded(ctx);
 };
 
 TemplateSlotMorph.prototype.drawRounded = ReporterBlockMorph
@@ -13569,11 +13565,11 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl;
+    var c, ci, cb, cm, cd, co, cl, cu;
     SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
-    c.setSpec('this is a test');
+    c.setSpec('this is a %greenflag test $globe');
 
     ci = new CommandBlockMorph();
     ci.setSpec('block with input %s unit %n number');
@@ -13593,6 +13589,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cl = new CommandBlockMorph();
     cl.setSpec('list %l');
 
+    cu = new CommandBlockMorph();
+    cu.setSpec('list %upvar');
+
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
@@ -13606,7 +13605,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [cm, 'menu input'],
             [cd, 'direction input'],
             [co, 'object input'],
-            [cl, 'list input']
+            [cl, 'list input'],
+            [cu, 'upvar input']
         ]
     ]);
 })();
