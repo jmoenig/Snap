@@ -126,7 +126,8 @@ SymbolMorph.prototype.names = [
     'footprints',
     'keyboard',
     'keyboardFilled',
-    'globe'
+    'globe',
+    'list'
 ];
 
 // SymbolMorph instance creation:
@@ -399,6 +400,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'globe':
         this.renderSymbolGlobe(ctx, aColor);
         break;
+    case 'list':
+        this.renderSymbolList(ctx, aColor);
+        break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
@@ -415,6 +419,7 @@ SymbolMorph.prototype.symbolWidth = function () {
         return size * 0.6;
     case 'flash':
     case 'file':
+    case 'list':
         return size * 0.8;
     case 'smallStage':
     case 'normalStage':
@@ -1789,6 +1794,29 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
     ctx.moveTo(w / 2, l / 2);
     ctx.arcTo(w, w / 2, w / 2, w, w * 0.66);
     ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
+    // draw a stylized list
+    var w = this.symbolWidth(),
+        h = this.size,
+        padding = h / 10,
+        item = h / 5,
+        row;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
+    for (row = 0; row < 4; row += 1) {
+        ctx.rect(
+            padding,
+            ((padding + item) * row) + padding,
+            w - item,
+            item
+        );
+    }
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
 };
 
 // register examples with the World demo menu
