@@ -1739,6 +1739,15 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     new Point() : this.embossing;
             part.drawNew();
             break;
+        case '%list':
+            part = new SymbolMorph('list');
+            part.size = this.fontSize;
+            part.color = new Color(255, 255, 255);
+            part.shadowColor = this.color.darker(this.labelContrast);
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
+            part.fixLayout();
+            break;
 
         // Video motion
 
@@ -1770,25 +1779,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
-/*
-        // allow costumes as label symbols
-        // has issues when loading costumes (asynchronously)
-        // commented out for now
-
-        var rcvr = this.definition.receiver || this.scriptTarget(),
-            id = spec.slice(1),
-            cst;
-        if (!rcvr) {return this.labelPart('%stop'); }
-        cst = detect(
-            rcvr.costumes.asArray(),
-            function (each) {return each.name === id; }
-        );
-        part = new SymbolMorph(cst);
-        part.size = this.fontSize * 1.5;
-        part.color = new Color(255, 255, 255);
-        part.isProtectedLabel = true; // doesn't participate in zebraing
-        part.drawNew();
-*/
 
         // allow GUI symbols as label icons
         // usage: $symbolName[-size-r-g-b], size and color values are optional
@@ -7376,7 +7366,8 @@ ScriptsMorph.prototype.scriptTarget = function () {
     however, if my 'type' attribute is set to one of the following
     values, I act as an iconic slot myself:
 
-        'list'    - a list symbol
+        'list'      - a list symbol
+        'object'    - a turtle symbol
 */
 
 // ArgMorph inherits from SyntaxElementMorph:
@@ -7454,6 +7445,8 @@ ArgMorph.prototype.getSpec = function () {
 ArgMorph.prototype.createIcon = function () {
     switch (this.type) {
     case 'list':
+        this.icon = this.labelPart('%list')
+        this.add(this.icon);
         break;
     case 'object':
         this.icon = this.labelPart('%turtle')
@@ -7481,69 +7474,16 @@ ArgMorph.prototype.render = function (ctx) {
         if (block) {
             this.icon.shadowColor = block.color.darker(this.labelContrast);
         }
-    } else {
-        ArgMorph.uber.render.call(this, ctx);
+        switch (this.type) {
+        case 'list':
+            this.color = new Color(255, 140, 0); // list color
+            break;
+        default:
+            return; // don't draw anything except the icon
+        }
     }
+    ArgMorph.uber.render.call(this, ctx);
 };
-
-/* // +++ remove
-ArgMorph.prototype.render = function (ctx) {
-    if (this.type === 'list') {
-        this.image = this.listIcon(); // +++ refactor to not use a Canvas or to share a single one
-        this.silentSetExtent(new Point(
-            this.image.width,
-            this.image.height
-        ));
-    } else if (this.type === 'object') { // +++ refactor to not use a Canvas or to share a single one
-        this.image = this.objectIcon();
-        this.silentSetExtent(new Point(
-            this.image.width,
-            this.image.height
-        ));
-    } else {
-        ArgMorph.uber.render.call(this, ctx);
-    }
-};
-*/
-
-ArgMorph.prototype.listIcon = function () { // +++ refactor to turn into a Symbol?
-    var frame = new Morph(),
-        first = new CellMorph(),
-        second = new CellMorph(),
-        source,
-        icon,
-        context,
-        ratio;
-
-    frame.color = new Color(255, 255, 255);
-    second.setPosition(first.bottomLeft().add(new Point(
-        0,
-        this.fontSize / 3
-    )));
-    first.add(second);
-    first.setPosition(frame.position().add(this.fontSize));
-    frame.add(first);
-    frame.bounds.corner = second.bounds.corner.add(this.fontSize);
-    frame.drawNew();
-    source = frame.fullImage();
-    ratio = (this.fontSize + this.edge) / source.height;
-    icon = newCanvas(new Point(
-        Math.ceil(source.width * ratio) + 1,
-        Math.ceil(source.height * ratio) + 1
-    ));
-    context = icon.getContext('2d');
-    context.fillStyle = 'black';
-    context.fillRect(0, 0, icon.width, icon.height);
-    context.scale(ratio, ratio);
-    context.drawImage(source, 1 / ratio, 1 / ratio);
-    return icon;
-};
-
-/*// +++ remove
-ArgMorph.prototype.objectIcon = function () {
-    return this.labelPart('%turtle').image;
-};
-*/
 
 // ArgMorph evaluation
 
@@ -13629,7 +13569,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co;
+    var c, ci, cb, cm, cd, co, cl;
     SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13650,6 +13590,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     co = new CommandBlockMorph();
     co.setSpec('object %obj');
 
+    cl = new CommandBlockMorph();
+    cl.setSpec('list %l');
+
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
@@ -13662,7 +13605,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [cb, 'Boolean slot'],
             [cm, 'menu input'],
             [cd, 'direction input'],
-            [co, 'object input']
+            [co, 'object input'],
+            [cl, 'list input']
         ]
     ]);
 })();
