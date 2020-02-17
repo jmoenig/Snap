@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-February-14';
+modules.blocks = '2020-February-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2483,7 +2483,7 @@ function BlockMorph() {
     this.init();
 }
 
-BlockMorph.prototype.init = function (silently) {
+BlockMorph.prototype.init = function () {
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
@@ -2493,7 +2493,7 @@ BlockMorph.prototype.init = function (silently) {
     this.category = null; // for zebra coloring (non persistent)
     this.isCorpse = false; // marked for deletion fom a custom block definition
 
-    BlockMorph.uber.init.call(this, silently);
+    BlockMorph.uber.init.call(this);
     // +++ this.color = new Color(0, 17, 173);
     this.color = new Color(102, 102, 102);
     this.cachedInputs = null;
@@ -2594,8 +2594,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
         myself.add(part);
         if (!(part instanceof CommandSlotMorph ||
                 part instanceof StringMorph)) {
-            // +++ part.drawNew();
-            part.fixLayout() // +++ ??
+            part.fixLayout() // +++
             part.rerender(); // +++
         }
         if (part instanceof RingMorph) {
@@ -8135,11 +8134,6 @@ CSlotMorph.prototype.init = function () {
     this.isLambda = false; // see Process.prototype.evaluateInput
     this.isLoop = false; // has a loop arrow symbol
     this.color = new Color(0, 17, 173);
-    this.bounds.setExtent( // +++ is this needed?
-        new Point(230, this.corner * 4 + this.cSlotPadding)
-    );
-    this.fixLayout(); // +++ needed?
-    this.rerender(); // +++ needed?
 };
 
 CSlotMorph.prototype.getSpec = function () {
@@ -8182,7 +8176,7 @@ CSlotMorph.prototype.fixLayout = function () {
                 this.top() + this.corner
             )
         );
-        this.bounds.setHeight(nb.fullBounds().height() + this.corner); // +++ migrated
+        this.bounds.setHeight(nb.fullBounds().height() + this.corner);
         this.bounds. setWidth(
             nb.fullBounds().width() + (this.cSlotPadding * 2)
         );
@@ -8603,8 +8597,7 @@ InputSlotMorph.prototype.init = function (
 
     contents.fontSize = this.fontSize;
     contents.isShowingBlanks = true;
-    // contents.drawNew(); // +++
-    contents.fixLayout(); // +++
+    contents.fixLayout();
 
 	this.selectedBlock = null;
 
@@ -8681,8 +8674,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta.toString) {
         cnts.text = dta.toString();
     }
-    // cnts.drawNew(); // +++
-    cnts.fixLayout(); // +++ ?
+    cnts.fixLayout();
 
     // remember the constant, if any
     this.constant = isConstant ? data : null;
@@ -9984,7 +9976,7 @@ BooleanSlotMorph.prototype.isBinary = function () {
 
 BooleanSlotMorph.prototype.setContents = function (boolOrNull) {
     this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
-    this.rerender(); // +++
+    this.rerender();
 };
 
 BooleanSlotMorph.prototype.toggleValue = function () {
@@ -9996,7 +9988,7 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     // ide = this.parentThatIsA(IDE_Morph); // +++ disabled while working on rendering
     this.value = this.nextValue();
     if (ide && !ide.isAnimating) {
-        this.rerender(); // +++
+        this.rerender();
         return;
     }
     this.progress = 3;
