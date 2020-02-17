@@ -6722,13 +6722,13 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
 
 ScriptsMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
-        ide = this.parentThatIsA(IDE_Morph),
+        ide = null, // ++++ ide = this.parentThatIsA(IDE_Morph),
         shiftClicked = this.world().currentKey === 16,
         blockEditor,
         myself = this,
-        obj = this.scriptTarget(),
+        obj = null, // ++++ obj = this.scriptTarget(),
         hasUndropQueue,
-        stage = obj.parentThatIsA(StageMorph);
+        stage = null; // ++++ stage = obj.parentThatIsA(StageMorph);
 
     function addOption(label, toggle, test, onHint, offHint) {
         var on = '\u2611 ',
@@ -6740,12 +6740,14 @@ ScriptsMorph.prototype.userMenu = function () {
         );
     }
 
+/*
     if (!ide) {
         blockEditor = this.parentThatIsA(BlockEditorMorph);
         if (blockEditor) {
             ide = blockEditor.target.parentThatIsA(IDE_Morph);
         }
     }
+*/
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
@@ -7290,6 +7292,9 @@ ScriptsMorph.prototype.mouseClickLeft = function (pos) {
 };
 
 ScriptsMorph.prototype.selectForEdit = function () {
+    // +++ disabled while working on rendering
+    return this; // +++
+
     var ide = this.parentThatIsA(IDE_Morph),
         rcvr = ide ? ide.currentSprite : null;
     if (rcvr && rcvr.inheritsAttribute('scripts')) {
@@ -13563,7 +13568,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl, cu, cs;
+    var c, ci, cb, cm, cd, co, cl, cu, cs, scripts;
     SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13593,6 +13598,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cs = new CommandBlockMorph();
     cs.setSpec('control %b %ca');
 
+    scripts = new ScriptsMorph();
+
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
@@ -13608,7 +13615,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [co, 'object input'],
             [cl, 'list input'],
             [cu, 'upvar input'],
-            [cs, 'loop input']
+            [cs, 'loop input'],
+            [scripts, 'scripts']
         ]
     ]);
 })();
