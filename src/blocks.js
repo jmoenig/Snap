@@ -756,23 +756,29 @@ SyntaxElementMorph.prototype.dark = function () {
 
 // SyntaxElementMorph color changing:
 
-SyntaxElementMorph.prototype.setColor = function (aColor) { // ++++
+SyntaxElementMorph.prototype.setColor = function (aColor) {
+    var block;
     if (aColor) {
         if (!this.color.eq(aColor)) {
+            block = this.parentThatIsA(BlockMorph);
             this.color = aColor;
-            this.children.forEach(function (child) {
-                if ((!silently || child instanceof TemplateSlotMorph) &&
-                		!(child instanceof BlockHighlightMorph)) {
-                    child.drawNew();
-                    child.changed();
-                }
-            });
+            if (block) {
+                this.children.forEach(morph => {
+                    if (morph instanceof StringMorph ||
+                            morph instanceof SymbolMorph) {
+                        morph.shadowColor = block.color.darker(
+                            block.labelContrast
+                        );
+                        morph.rerender();
+                    }
+                });
+            }
             this.rerender();
         }
     }
-};
+}
 
-SyntaxElementMorph.prototype.setLabelColor = function (
+SyntaxElementMorph.prototype.setLabelColor = function ( // +++ review this
     textColor,
     shadowColor,
     shadowOffset
