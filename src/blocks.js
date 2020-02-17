@@ -762,17 +762,17 @@ SyntaxElementMorph.prototype.setColor = function (aColor) {
         if (!this.color.eq(aColor)) {
             block = this.parentThatIsA(BlockMorph);
             this.color = aColor;
-            if (block) {
-                this.children.forEach(morph => {
-                    if (morph instanceof StringMorph ||
-                            morph instanceof SymbolMorph) {
-                        morph.shadowColor = block.color.darker(
-                            block.labelContrast
-                        );
-                        morph.rerender();
-                    }
-                });
-            }
+            this.children.forEach(morph => {
+                if (block && (morph instanceof StringMorph ||
+                        morph instanceof SymbolMorph)) {
+                    morph.shadowColor = block.color.darker(
+                        block.labelContrast
+                    );
+                    morph.rerender();
+                } else if (morph instanceof CommandSlotMorph) {
+                    morph.setColor(aColor);
+                }
+            });
             this.rerender();
         }
     }
@@ -7671,7 +7671,6 @@ CommandSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    ctx = this.image.getContext('2d');
     ctx.fillStyle = this.cachedClr;
     ctx.fillRect(0, 0, this.width(), this.height());
 
@@ -8234,6 +8233,11 @@ CSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
+    ctx.fillStyle = this.cachedClr;
+
+    // +++ draw a darker background +++ take out after implement transparent slots
+    ctx.fillStyle = this.color.darker(25).toString();
+    ctx.fillRect(0, 0, this.width(), this.height());
     ctx.fillStyle = this.cachedClr;
 
     // draw the 'flat' shape:
