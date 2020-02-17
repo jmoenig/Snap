@@ -1667,7 +1667,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     new Point() : this.embossing;
-            part.drawNew();
+            part.fixLayout();
             break;
         case '%turtleOutline':
             part = new SymbolMorph('turtleOutline');
@@ -7391,13 +7391,13 @@ function ArgMorph(type) {
     this.init(type);
 }
 
-ArgMorph.prototype.init = function (type, silently) {
+ArgMorph.prototype.init = function (type) {
     this.type = type || null;
+    this.icon = null;
     this.isHole = false;
-    ArgMorph.uber.init.call(this, silently);
+    ArgMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
-    this.rerender(); // +++ ??
-    // this.setExtent(new Point(50, 50), silently); // +++ ???
+    this.createIcon();
 };
 
 // ArgMorph preferences settings:
@@ -7451,6 +7451,42 @@ ArgMorph.prototype.getSpec = function () {
 
 // ArgMorph drawing
 
+ArgMorph.prototype.createIcon = function () {
+    switch (this.type) {
+    case 'list':
+        break;
+    case 'object':
+        this.icon = this.labelPart('%turtle')
+        this.add(this.icon);
+        break;
+    default:
+        nop(); // no icon
+    }
+};
+
+ArgMorph.prototype.fixLayout = function () {
+    if (this.icon) {
+        this.icon.setPosition(this.position());
+        this.bounds.setExtent(this.icon.extent());
+    } else {
+        ArgMorph.uber.fixLayout.call(this);
+    }
+}
+
+ArgMorph.prototype.render = function (ctx) {
+    // make sure my icon's shadow color matches my block's color
+    var block;
+    if (this.icon) {
+        block = this.parentThatIsA(BlockMorph);
+        if (block) {
+            this.icon.shadowColor = block.color.darker(this.labelContrast);
+        }
+    } else {
+        ArgMorph.uber.render.call(this, ctx);
+    }
+};
+
+/* // +++ remove
 ArgMorph.prototype.render = function (ctx) {
     if (this.type === 'list') {
         this.image = this.listIcon(); // +++ refactor to not use a Canvas or to share a single one
@@ -7468,8 +7504,9 @@ ArgMorph.prototype.render = function (ctx) {
         ArgMorph.uber.render.call(this, ctx);
     }
 };
+*/
 
-ArgMorph.prototype.listIcon = function () { // +++ rafactor to turn into a Symbol?
+ArgMorph.prototype.listIcon = function () { // +++ refactor to turn into a Symbol?
     var frame = new Morph(),
         first = new CellMorph(),
         second = new CellMorph(),
@@ -7502,9 +7539,11 @@ ArgMorph.prototype.listIcon = function () { // +++ rafactor to turn into a Symbo
     return icon;
 };
 
+/*// +++ remove
 ArgMorph.prototype.objectIcon = function () {
     return this.labelPart('%turtle').image;
 };
+*/
 
 // ArgMorph evaluation
 
@@ -13590,7 +13629,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd;
+    var c, ci, cb, cm, cd, co;
     SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13608,6 +13647,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cd = new CommandBlockMorph();
     cd.setSpec('direction %dir degrees');
 
+    co = new CommandBlockMorph();
+    co.setSpec('object %obj');
+
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
@@ -13619,7 +13661,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [ci, 'editable input slots'],
             [cb, 'Boolean slot'],
             [cm, 'menu input'],
-            [cd, 'direction input']
+            [cd, 'direction input'],
+            [co, 'object input']
         ]
     ]);
 })();
