@@ -2065,7 +2065,7 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
                 );
                 adjustMultiWidth = myself.corner;
             } else {
-                part.setWidth(blockWidth - myself.edge - ico);
+                part.bounds.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;
             }
         }
@@ -8197,7 +8197,7 @@ CSlotMorph.prototype.fixLayout = function () {
         ); // default
     }
     if (this.parent && this.parent.fixLayout) {
-        // +++ this.parent.fixLayout(); // disabled for now while working on rendering
+        this.parent.fixLayout();
     }
 };
 
@@ -13595,7 +13595,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cu.setSpec('list %upvar');
 
     cs = new CommandBlockMorph();
-    cs.setSpec('control %b %c');
+    cs.setSpec('control %b %ca');
 
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
