@@ -4852,7 +4852,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
     scripts.lastDroppedBlock = this;
     if (target === null) {
         this.startLayout();
-        this.fixBlockColor();
+        // +++ this.fixBlockColor(); // +++ disabled while working on rendering
         this.endLayout();
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
         if (hand) {
@@ -4922,7 +4922,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
             function (cmd) {cmd.fixBlockColor(); }
         );
     }
-    this.fixBlockColor();
+    // +++ this.fixBlockColor(); // +++ disabled while working on rendering
     this.endLayout();
     CommandBlockMorph.uber.snap.call(this); // align stuck comments
     if (hand) {
@@ -6507,7 +6507,7 @@ ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
     this.feedbackMorph.border = 0;
     this.feedbackMorph.edge = 0;
     this.feedbackMorph.alpha = 1;
-    this.feedbackMorph.setExtent(new Point(
+    this.feedbackMorph.bounds.setExtent(new Point( // +++ refactor
         target.element.width(),
         Math.max(
             SyntaxElementMorph.prototype.corner,
@@ -6515,8 +6515,8 @@ ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
         )
     ));
     this.feedbackMorph.color = this.feedbackColor;
-    this.feedbackMorph.drawNew();
-    this.feedbackMorph.changed();
+    // +++ this.feedbackMorph.drawNew();
+    // +++ this.feedbackMorph.changed();
     y = target.point.y;
     if (target.loc === 'bottom') {
         if (target.type === 'block') {
