@@ -6531,8 +6531,7 @@ ScriptsMorph.prototype.showCSlotWrapFeedback = function (srcBlock, trgBlock) {
     this.feedbackMorph.color = clr.copy();
     this.feedbackMorph.color.a = 0.1;
     this.feedbackMorph.borderColor = clr;
-    this.feedbackMorph.drawNew();
-    this.feedbackMorph.changed();
+    this.feedbackMorph.rerender();
 };
 
 ScriptsMorph.prototype.closestInput = function (reporter, hand) {
