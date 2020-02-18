@@ -431,7 +431,8 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     if (oldArg.cachedSlotSpec) {oldArg.cachedSlotSpec = null; }
     if (newArg.cachedSlotSpec) {newArg.cachedSlotSpec = null; }
 
-    this.startLayout();
+    // +++ this.startLayout(); // +++ take out, right?
+    this.changed();
     if (newArg.parent) {
         newArg.parent.removeChild(newArg);
     }
@@ -450,7 +451,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
                 || (oldArg instanceof RingMorph && oldArg.contents())) {
             scripts.add(oldArg);
             oldArg.moveBy(replacement.extent());
-            oldArg.fixBlockColor();
+            // +++ oldArg.fixBlockColor(); // +++ disabled while working on rendering
         }
     }
     if (replacement instanceof MultiArgMorph
@@ -461,13 +462,14 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
             this.fixLabelColor();
         }
     } else {
-        replacement.drawNew();
+        // +++ replacement.drawNew();
         this.fixLayout();
     }
     this.cachedInputs = null;
-    this.endLayout();
+    //this.endLayout();
 };
 
+/* // +++ to be removed when all references have been adjusted
 SyntaxElementMorph.prototype.silentReplaceInput = function (oldArg, newArg) {
     // used by the Serializer or when programatically
     // changing blocks
@@ -500,11 +502,12 @@ SyntaxElementMorph.prototype.silentReplaceInput = function (oldArg, newArg) {
             this.fixLabelColor();
         }
     } else {
-        replacement.drawNew();
+        // +++ replacement.drawNew();
         this.fixLayout();
     }
     this.cachedInputs = null;
 };
+*/
 
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     var idx = this.parts().indexOf(arg),
@@ -549,7 +552,8 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             }
         }
     }
-    this.silentReplaceInput(arg, deflt);
+// +++    this.silentReplaceInput(arg, deflt);
+    this.replaceInput(arg, deflt);
     if (deflt instanceof MultiArgMorph) {
         deflt.refresh();
     } else if (deflt instanceof RingMorph) {
@@ -5677,7 +5681,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         }
     }
     this.startLayout();
-    this.fixBlockColor();
+    // +++ this.fixBlockColor(); // +++ disabled while working on rendering
     this.endLayout();
     ReporterBlockMorph.uber.snap.call(this);
     if (hand) {
@@ -6488,8 +6492,7 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
         this.feedbackMorph.borderColor = this.feedbackColor;
     }
     this.feedbackMorph.color.a = 0.5;
-    this.feedbackMorph.drawNew();
-    this.feedbackMorph.changed();
+    this.feedbackMorph.rerender();
 };
 
 ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
