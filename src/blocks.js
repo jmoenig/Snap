@@ -3876,7 +3876,7 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
 
 // BlockMorph drawing
 
-BlockMorph.prototype.eraseHoles = function (context) {
+BlockMorph.prototype.eraseHoles = function (ctx) {
     var myself = this,
         isRing = this instanceof RingMorph,
         shift = this.edge * 0.5,
@@ -3895,7 +3895,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
     });
     if (this.isPredicate && (holes.length > 0)) {
         rightX = this.width() - this.rounding;
-        context.clearRect(
+        ctx.clearRect(
             rightX,
             0,
             this.width(),
@@ -3903,7 +3903,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
         );
 
         // draw a 3D-ish vertical right edge
-        gradient = context.createLinearGradient(
+        gradient = ctx.createLinearGradient(
             rightX - this.edge,
             0,
             this.width(),
@@ -3911,19 +3911,19 @@ BlockMorph.prototype.eraseHoles = function (context) {
         );
         gradient.addColorStop(0, this.color.toString());
         gradient.addColorStop(1, this.dark());
-        context.lineWidth = this.edge;
-        context.lineJoin = 'round';
-        context.lineCap = 'round';
-        context.strokeStyle = gradient;
-        context.beginPath();
-        context.moveTo(rightX - shift, this.edge + shift);
-        context.lineTo(rightX - shift, this.height() - this.edge - shift);
-        context.stroke();
+        ctx.lineWidth = this.edge;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+        ctx.moveTo(rightX - shift, this.edge + shift);
+        ctx.lineTo(rightX - shift, this.height() - this.edge - shift);
+        ctx.stroke();
     }
     holes.forEach(function (hole) {
         var w = hole.width(),
             h = Math.floor(hole.height()) - 2; // Opera needs this
-        context.clearRect(
+        ctx.clearRect(
             hole.bounds.origin.x - myself.bounds.origin.x + 1,
             hole.bounds.origin.y - myself.bounds.origin.y + 1,
             isRing ? w - 2 : w + 1,
@@ -4361,7 +4361,7 @@ BlockMorph.prototype.scriptPic = function () {
 
 // BlockMorph local method indicator drawing
 
-BlockMorph.prototype.drawMethodIcon = function (context) {
+BlockMorph.prototype.drawMethodIcon = function (ctx) {
     var ext = this.methodIconExtent(),
         w = ext.x,
         h = ext.y,
@@ -4377,21 +4377,21 @@ BlockMorph.prototype.drawMethodIcon = function (context) {
     if (this instanceof CommandBlockMorph) {
         y += this.corner;
     }
-    context.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+    ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
 
     // pin
-    context.beginPath();
-    context.arc(x + r, y + r, r, radians(-210), radians(30), false);
-    context.lineTo(x + r, y + h);
-    context.closePath();
-    context.fill();
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r, radians(-210), radians(30), false);
+    ctx.lineTo(x + r, y + h);
+    ctx.closePath();
+    ctx.fill();
 
     // hole
-    context.fillStyle = this.cachedClr;
-    context.beginPath();
-    context.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
-    context.closePath();
-    context.fill();
+    ctx.fillStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
+    ctx.closePath();
+    ctx.fill();
 };
 
 // BlockMorph dragging and dropping
@@ -5041,7 +5041,7 @@ CommandBlockMorph.prototype.render = function (ctx) { // +++
     }
 
     // erase CommandSlots
-    // this.eraseHoles(context); // +++ gotta change this
+    // this.eraseHoles(ctx); // +++ gotta change this
 };
 
 CommandBlockMorph.prototype.drawBody = function (ctx) {
@@ -7954,25 +7954,22 @@ RingCommandSlotMorph.prototype.getSpec = function () {
 
 // RingCommandSlotMorph drawing:
 
-RingCommandSlotMorph.prototype.drawNew = function () {
-    var context;
+RingCommandSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    context.fillStyle = this.cachedClr;
+    ctx.fillStyle = this.cachedClr;
 
     // draw the 'flat' shape:
-    this.drawFlat(context);
+    this.drawFlat(ctx);
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    this.drawEdges(context);
+    this.drawEdges(ctx);
 };
 
-RingCommandSlotMorph.prototype.drawFlat = function (context) {
+RingCommandSlotMorph.prototype.drawFlat = function (ctx) {
     var isFilled = this.nestedBlock() !== null,
         ins = (isFilled ? this.inset : this.inset / 2),
         dent = (isFilled ? this.dent : this.dent / 2),
@@ -7985,12 +7982,12 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
 
     // top half:
 
-    context.beginPath();
-    context.moveTo(0, h / 2);
-    context.lineTo(edge, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
+    ctx.lineTo(edge, h / 2);
 
     // top left:
-    context.arc(
+    ctx.arc(
         this.corner + edge,
         this.corner + edge,
         this.corner,
@@ -8000,20 +7997,20 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
     );
 
     // dent:
-    context.lineTo(this.corner + ins + edge + rf * 2, edge);
-    context.lineTo(indent + edge + rf * 2, this.corner + edge);
-    context.lineTo(
+    ctx.lineTo(this.corner + ins + edge + rf * 2, edge);
+    ctx.lineTo(indent + edge + rf * 2, this.corner + edge);
+    ctx.lineTo(
         indent + edge  + rf * 2 + (dent - rf * 2),
         this.corner + edge
     );
-    context.lineTo(
+    ctx.lineTo(
         indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
         edge
     );
-    context.lineTo(this.width() - this.corner - edge, edge);
+    ctx.lineTo(this.width() - this.corner - edge, edge);
 
     // top right:
-    context.arc(
+    ctx.arc(
         w - this.corner - edge,
         this.corner + edge,
         this.corner,
@@ -8022,20 +8019,20 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
         false
     );
 
-    context.lineTo(w - this.edge, h / 2);
-    context.lineTo(w, h / 2);
-    context.lineTo(w, 0);
-    context.lineTo(0, 0);
-    context.closePath();
-    context.fill();
+    ctx.lineTo(w - this.edge, h / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
+    ctx.fill();
 
     // bottom half:
-    context.beginPath();
-    context.moveTo(w, h / 2);
-    context.lineTo(w - edge, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(w, h / 2);
+    ctx.lineTo(w - edge, h / 2);
 
     // bottom right:
-    context.arc(
+    ctx.arc(
         this.width() - this.corner - edge,
         y,
         this.corner,
@@ -8045,7 +8042,7 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
     );
 
     // bottom left:
-    context.arc(
+    ctx.arc(
         this.corner + edge,
         y,
         this.corner,
@@ -8054,12 +8051,12 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
         false
     );
 
-    context.lineTo(edge, h / 2);
-    context.lineTo(0, h / 2);
-    context.lineTo(0, h);
-    context.lineTo(w, h);
-    context.closePath();
-    context.fill();
+    ctx.lineTo(edge, h / 2);
+    ctx.lineTo(0, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
 
 };
 
@@ -11055,14 +11052,18 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
 
 MultiArgMorph.prototype.refresh = function () {
     this.inputs().forEach(function (input) {
-        input.drawNew();
+        // +++ input.drawNew();
+        input.fixLayout(); // +++ ???
+        input.rerender(); // +++ ???
     });
 };
 
+/* +++ this should probably just be removed
 MultiArgMorph.prototype.drawNew = function () {
     MultiArgMorph.uber.drawNew.call(this);
     this.refresh();
 };
+*/
 
 // MultiArgMorph arity control:
 
@@ -11389,14 +11390,18 @@ ArgLabelMorph.prototype.fixLayout = function () {
 
 ArgLabelMorph.prototype.refresh = function () {
     this.inputs().forEach(function (input) {
-        input.drawNew();
+        // input.drawNew(); // +++ ??
+        input.fixLayout();
+        input.rerender(); // +++ ??
     });
 };
 
+/* +++ maybe this should be integrated into fixLayout()? or removed altogether?
 ArgLabelMorph.prototype.drawNew = function () {
     ArgLabelMorph.uber.drawNew.call(this);
     this.refresh();
 };
+*/
 
 // ArgLabelMorph label color:
 
@@ -11477,12 +11482,10 @@ FunctionSlotMorph.prototype.getSpec = function () {
 
 // FunctionSlotMorph drawing:
 
-FunctionSlotMorph.prototype.drawNew = function () {
-    var context, borderColor;
+FunctionSlotMorph.prototype.render = function (ctx) {
+    var borderColor;
 
     // initialize my surface property
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
     if (this.parent) {
         borderColor = this.parent.color;
     } else {
@@ -11496,13 +11499,13 @@ FunctionSlotMorph.prototype.drawNew = function () {
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
     if (this.isPredicate) {
-        this.drawDiamond(context);
+        this.drawDiamond(ctx);
     } else {
-        this.drawRounded(context);
+        this.drawRounded(ctx);
     }
 };
 
-FunctionSlotMorph.prototype.drawRounded = function (context) {
+FunctionSlotMorph.prototype.drawRounded = function (ctx) {
     var h = this.height(),
         r = Math.min(this.rounding, h / 2),
         w = this.width(),
@@ -11510,11 +11513,11 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         gradient;
 
     // draw the 'flat' shape:
-    context.fillStyle = this.color.toString();
-    context.beginPath();
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
 
     // top left:
-    context.arc(
+    ctx.arc(
         r,
         r,
         r,
@@ -11524,7 +11527,7 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
 
     // top right:
-    context.arc(
+    ctx.arc(
         w - r,
         r,
         r,
@@ -11534,7 +11537,7 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
 
     // bottom right:
-    context.arc(
+    ctx.arc(
         w - r,
         h - r,
         r,
@@ -11544,7 +11547,7 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
 
     // bottom left:
-    context.arc(
+    ctx.arc(
         r,
         h - r,
         r,
@@ -11553,20 +11556,20 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         false
     );
 
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // bottom left corner
-    context.strokeStyle = this.cachedClr; //gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.beginPath();
+    ctx.arc(
         r,
         h - r,
         r - shift,
@@ -11574,12 +11577,12 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         radians(180),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // top right corner
-    context.strokeStyle = this.cachedClr; //gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.beginPath();
+    ctx.arc(
         w - r,
         r,
         r - shift,
@@ -11587,17 +11590,17 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         radians(0),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // normal gradient edges
 
-    context.shadowOffsetX = shift;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetX = shift;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
     // top edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -11605,14 +11608,14 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r - shift, shift);
-    context.lineTo(w - r + shift, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r - shift, shift);
+    ctx.lineTo(w - r + shift, shift);
+    ctx.stroke();
 
     // top edge: left corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         r,
         r,
         r - this.edge,
@@ -11622,9 +11625,9 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         r,
         r,
         r - shift,
@@ -11632,24 +11635,24 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         radians(270),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // left edge: straight vertical line
-    gradient = context.createLinearGradient(0, 0, this.edge, 0);
+    gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, r);
-    context.lineTo(shift, h - r);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, r);
+    ctx.lineTo(shift, h - r);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         w - r,
         h - r,
         r - this.edge,
@@ -11659,9 +11662,9 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         w - r,
         h - r,
         r - shift,
@@ -11669,10 +11672,10 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
         radians(90),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // bottom edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -11680,25 +11683,25 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r - shift, h - shift);
-    context.lineTo(w - r + shift, h - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r - shift, h - shift);
+    ctx.lineTo(w - r + shift, h - shift);
+    ctx.stroke();
 
     // right edge: straight vertical line
-    gradient = context.createLinearGradient(w - this.edge, 0, w, 0);
+    gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - shift, r + shift);
-    context.lineTo(w - shift, h - r);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - shift, r + shift);
+    ctx.lineTo(w - shift, h - r);
+    ctx.stroke();
 
 };
 
-FunctionSlotMorph.prototype.drawDiamond = function (context) {
+FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
     var w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
@@ -11707,50 +11710,50 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
         gradient;
 
     // draw the 'flat' shape:
-    context.fillStyle = this.color.toString();
-    context.beginPath();
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
 
-    context.moveTo(0, h2);
-    context.lineTo(r, 0);
-    context.lineTo(w - r, 0);
-    context.lineTo(w, h2);
-    context.lineTo(w - r, h);
-    context.lineTo(r, h);
+    ctx.moveTo(0, h2);
+    ctx.lineTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.lineTo(w, h2);
+    ctx.lineTo(w - r, h);
+    ctx.lineTo(r, h);
 
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // half-tone edges
     // bottom left corner
-    context.strokeStyle = this.cachedClr;
-    context.beginPath();
-    context.moveTo(shift, h2);
-    context.lineTo(r, h - shift);
-    context.stroke();
+    ctx.strokeStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.moveTo(shift, h2);
+    ctx.lineTo(r, h - shift);
+    ctx.stroke();
 
     // top right corner
-    context.strokeStyle = this.cachedClr;
-    context.beginPath();
-    context.moveTo(w - shift, h2);
-    context.lineTo(w - r, shift);
-    context.stroke();
+    ctx.strokeStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.moveTo(w - shift, h2);
+    ctx.lineTo(w - r, shift);
+    ctx.stroke();
 
     // normal gradient edges
     // top edge: left corner
 
-    context.shadowOffsetX = shift;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetX = shift;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         r,
@@ -11758,14 +11761,14 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, h2);
-    context.lineTo(r, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, h2);
+    ctx.lineTo(r, shift);
+    ctx.stroke();
 
     // top edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -11773,18 +11776,18 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r, shift);
-    context.lineTo(w - r, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r, shift);
+    ctx.lineTo(w - r, shift);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         w - r,
         0,
         w,
@@ -11792,14 +11795,14 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - r, h - shift);
-    context.lineTo(w - shift, h2);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - r, h - shift);
+    ctx.lineTo(w - shift, h2);
+    ctx.stroke();
 
     // bottom edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -11807,11 +11810,11 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r + shift, h - shift);
-    context.lineTo(w - r - shift, h - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r + shift, h - shift);
+    ctx.lineTo(w - r - shift, h - shift);
+    ctx.stroke();
 };
 
 // ReporterSlotMorph ///////////////////////////////////////////////////
@@ -12008,7 +12011,7 @@ RingReporterSlotMorph.prototype.fixLayout = function () {
 
 // RingReporterSlotMorph drawing:
 
-RingReporterSlotMorph.prototype.drawRounded = function (context) {
+RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
     var h = this.height(),
         r = Math.min(this.rounding, h / 2),
         w = this.width(),
@@ -12016,14 +12019,14 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         gradient;
 
     // draw the 'flat' shape:
-    context.fillStyle = this.cachedClr; //this.color.toString();
+    ctx.fillStyle = this.cachedClr; //this.color.toString();
 
     // top half:
-    context.beginPath();
-    context.moveTo(0, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
 
     // top left:
-    context.arc(
+    ctx.arc(
         r,
         r,
         r,
@@ -12033,7 +12036,7 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
 
     // top right:
-    context.arc(
+    ctx.arc(
         w - r,
         r,
         r,
@@ -12042,18 +12045,18 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         false
     );
 
-    context.lineTo(w, h / 2);
-    context.lineTo(w, 0);
-    context.lineTo(0, 0);
-    context.closePath();
-    context.fill();
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
+    ctx.fill();
 
     // bottom half:
-    context.beginPath();
-    context.moveTo(w, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(w, h / 2);
 
     // bottom right:
-    context.arc(
+    ctx.arc(
         w - r,
         h - r,
         r,
@@ -12063,7 +12066,7 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
 
     // bottom left:
-    context.arc(
+    ctx.arc(
         r,
         h - r,
         r,
@@ -12072,23 +12075,23 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         false
     );
 
-    context.lineTo(0, h / 2);
-    context.lineTo(0, h);
-    context.lineTo(w, h);
-    context.closePath();
-    context.fill();
+    ctx.lineTo(0, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // bottom left corner
-    context.strokeStyle = this.cachedClr; //gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.beginPath();
+    ctx.arc(
         r,
         h - r,
         r - shift,
@@ -12096,12 +12099,12 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         radians(180),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // top right corner
-    context.strokeStyle = this.cachedClr; //gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.beginPath();
+    ctx.arc(
         w - r,
         r,
         r - shift,
@@ -12109,17 +12112,17 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         radians(0),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // normal gradient edges
 
-    context.shadowOffsetX = shift;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetX = shift;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
     // top edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -12127,14 +12130,14 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r - shift, shift);
-    context.lineTo(w - r + shift, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r - shift, shift);
+    ctx.lineTo(w - r + shift, shift);
+    ctx.stroke();
 
     // top edge: left corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         r,
         r,
         r - this.edge,
@@ -12144,9 +12147,9 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         r,
         r,
         r - shift,
@@ -12154,24 +12157,24 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         radians(270),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // left edge: straight vertical line
-    gradient = context.createLinearGradient(0, 0, this.edge, 0);
+    gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, r);
-    context.lineTo(shift, h - r);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, r);
+    ctx.lineTo(shift, h - r);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         w - r,
         h - r,
         r - this.edge,
@@ -12181,9 +12184,9 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
         w - r,
         h - r,
         r - shift,
@@ -12191,10 +12194,10 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
         radians(90),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // bottom edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -12202,24 +12205,24 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r - shift, h - shift);
-    context.lineTo(w - r + shift, h - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r - shift, h - shift);
+    ctx.lineTo(w - r + shift, h - shift);
+    ctx.stroke();
 
     // right edge: straight vertical line
-    gradient = context.createLinearGradient(w - this.edge, 0, w, 0);
+    gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - shift, r + shift);
-    context.lineTo(w - shift, h - r);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - shift, r + shift);
+    ctx.lineTo(w - shift, h - r);
+    ctx.stroke();
 };
 
-RingReporterSlotMorph.prototype.drawDiamond = function (context) {
+RingReporterSlotMorph.prototype.drawDiamond = function (ctx) {
     var w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
@@ -12228,60 +12231,60 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
         gradient;
 
     // draw the 'flat' shape:
-    context.fillStyle = this.cachedClr;
-    context.beginPath();
+    ctx.fillStyle = this.cachedClr;
+    ctx.beginPath();
 
-    context.moveTo(0, 0);
-    context.lineTo(0, h2);
-    context.lineTo(r, 0);
-    context.lineTo(w - r, 0);
-    context.lineTo(w, h2);
-    context.lineTo(w, 0);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, h2);
+    ctx.lineTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.lineTo(w, h2);
+    ctx.lineTo(w, 0);
 
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
-    context.moveTo(w, h2);
-    context.lineTo(w - r, h);
-    context.lineTo(r, h);
-    context.lineTo(0, h2);
-    context.lineTo(0, h);
-    context.lineTo(w, h);
+    ctx.moveTo(w, h2);
+    ctx.lineTo(w - r, h);
+    ctx.lineTo(r, h);
+    ctx.lineTo(0, h2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(w, h);
 
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
     if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // half-tone edges
     // bottom left corner
-    context.strokeStyle = this.cachedClr;
-    context.beginPath();
-    context.moveTo(shift, h2);
-    context.lineTo(r, h - shift);
-    context.stroke();
+    ctx.strokeStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.moveTo(shift, h2);
+    ctx.lineTo(r, h - shift);
+    ctx.stroke();
 
     // top right corner
-    context.strokeStyle = this.cachedClr;
-    context.beginPath();
-    context.moveTo(w - shift, h2);
-    context.lineTo(w - r, shift);
-    context.stroke();
+    ctx.strokeStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.moveTo(w - shift, h2);
+    ctx.lineTo(w - r, shift);
+    ctx.stroke();
 
     // normal gradient edges
     // top edge: left corner
 
-    context.shadowOffsetX = shift;
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge;
-    context.shadowColor = this.color.darker(80).toString();
+    ctx.shadowOffsetX = shift;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge;
+    ctx.shadowColor = this.color.darker(80).toString();
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         r,
@@ -12289,14 +12292,14 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, h2);
-    context.lineTo(r, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, h2);
+    ctx.lineTo(r, shift);
+    ctx.stroke();
 
     // top edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -12304,18 +12307,18 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClrDark);
     gradient.addColorStop(0, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r, shift);
-    context.lineTo(w - r, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r, shift);
+    ctx.lineTo(w - r, shift);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
     // bottom edge: right corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         w - r,
         0,
         w,
@@ -12323,14 +12326,14 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - r, h - shift);
-    context.lineTo(w - shift, h2);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - r, h - shift);
+    ctx.lineTo(w - shift, h2);
+    ctx.stroke();
 
     // bottom edge: straight line
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -12338,11 +12341,11 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
     );
     gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClrBright);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(r + shift, h - shift);
-    context.lineTo(w - r - shift, h - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r + shift, h - shift);
+    ctx.lineTo(w - r - shift, h - shift);
+    ctx.stroke();
 };
 
 // CommentMorph //////////////////////////////////////////////////////////
