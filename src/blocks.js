@@ -6516,8 +6516,7 @@ ScriptsMorph.prototype.showCommentDropFeedback = function (comment, hand) {
     this.feedbackMorph.color = comment.color.copy();
     this.feedbackMorph.color.a = 0.25;
     this.feedbackMorph.borderColor = comment.titleBar.color;
-    this.feedbackMorph.drawNew();
-    this.feedbackMorph.changed();
+    this.feedbackMorph.rerender();
 };
 
 ScriptsMorph.prototype.showCSlotWrapFeedback = function (srcBlock, trgBlock) {
@@ -6872,8 +6871,8 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 };
 
 ScriptsMorph.prototype.addComment = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        blockEditor = this.parentThatIsA(BlockEditorMorph),
+    var ide = null, // +++ ide = this.parentThatIsA(IDE_Morph), // +++ disabled while working on rendering
+        blockEditor = null, // +++ blockEditor = this.parentThatIsA(BlockEditorMorph), // +++ disabled while working on rendering
         world = this.world();
     new CommentMorph().pickUp(world);
     // register the drop-origin, so the element can
@@ -12407,7 +12406,7 @@ CommentMorph.prototype.init = function (contents) {
     this.contents.isEditable = true;
     this.contents.enableSelecting();
     this.contents.maxWidth = 90 * scale;
-    this.contents.drawNew();
+    this.contents.fixLayout();
     this.handle = new HandleMorph(
         this.contents,
         80,
@@ -12477,10 +12476,7 @@ CommentMorph.prototype.layoutChanged = function () {
 CommentMorph.prototype.fixLayout = function () {
     var label,
         tw = this.contents.width() + 2 * this.padding,
-        myself = this,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        myself = this;
 
     if (this.title) {
         this.title.destroy();
@@ -12513,7 +12509,7 @@ CommentMorph.prototype.fixLayout = function () {
     this.contents.setLeft(this.titleBar.left() + this.padding);
     this.contents.setTop(this.titleBar.bottom() + this.padding);
     this.arrow.direction = this.isCollapsed ? 'right' : 'down';
-    this.arrow.drawNew();
+    this.arrow.rerender();
     this.arrow.setCenter(this.titleBar.center());
     this.arrow.setLeft(this.titleBar.left() + this.padding);
     if (this.title) {
@@ -12521,19 +12517,17 @@ CommentMorph.prototype.fixLayout = function () {
             this.arrow.topRight().add(new Point(this.padding, 0))
         );
     }
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
-    this.silentSetHeight(
+    this.bounds.setHeight(
         this.titleBar.height()
             + (this.isCollapsed ? 0 :
                     this.padding
                         + this.contents.height()
                         + this.padding)
     );
-    this.silentSetWidth(this.titleBar.width());
-    this.drawNew();
-    this.handle.drawNew();
-    this.changed();
+    this.bounds.setWidth(this.titleBar.width());
+    this.rerender();
+    this.handle.fixLayout();
 };
 
 // CommentMorph menu:
@@ -12546,8 +12540,8 @@ CommentMorph.prototype.userMenu = function () {
         "duplicate",
         function () {
             var dup = myself.fullCopy(),
-                ide = myself.parentThatIsA(IDE_Morph),
-                blockEditor = myself.parentThatIsA(BlockEditorMorph),
+                ide = null, // +++ ide = myself.parentThatIsA(IDE_Morph), // +++ disabled while working on rendering
+                blockEditor = null, // +++ blockEditor = myself.parentThatIsA(BlockEditorMorph), // +++ disabled while working on rendering
                 world = myself.world();
             dup.pickUp(world);
             // register the drop-origin, so the comment can
@@ -12681,7 +12675,7 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
             this.anchor = new Morph();
             this.anchor.color = this.titleBar.color;
         }
-        this.anchor.silentSetPosition(new Point(
+        this.anchor.setPosition(new Point(
             this.block.right(),
             this.top() + this.edge
         ));
@@ -12689,9 +12683,8 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
             this.left(),
             this.top() + this.edge + 1
         );
-        this.anchor.drawNew();
+        this.anchor.rerender();
         this.addBack(this.anchor);
-        this.anchor.changed();
     }
 };
 
