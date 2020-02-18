@@ -469,46 +469,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     //this.endLayout();
 };
 
-/* // +++ to be removed when all references have been adjusted
-SyntaxElementMorph.prototype.silentReplaceInput = function (oldArg, newArg) {
-    // used by the Serializer or when programatically
-    // changing blocks
-    var i = this.children.indexOf(oldArg),
-        replacement;
-
-    if (i === -1) {
-        return;
-    }
-
-    if (oldArg.cachedSlotSpec) {oldArg.cachedSlotSpec = null; }
-    if (newArg.cachedSlotSpec) {newArg.cachedSlotSpec = null; }
-
-    if (newArg.parent) {
-        newArg.parent.removeChild(newArg);
-    }
-    if (oldArg instanceof MultiArgMorph && this.dynamicInputLabels) {
-        replacement = new ArgLabelMorph(newArg);
-    } else {
-        replacement = newArg;
-    }
-    replacement.parent = this;
-    this.children[i] = replacement;
-
-    if (replacement instanceof MultiArgMorph
-            || replacement instanceof ArgLabelMorph
-            || replacement.constructor === CommandSlotMorph) {
-        replacement.fixLayout();
-        if (this.fixLabelColor) { // special case for variadic continuations
-            this.fixLabelColor();
-        }
-    } else {
-        // +++ replacement.drawNew();
-        this.fixLayout();
-    }
-    this.cachedInputs = null;
-};
-*/
-
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     var idx = this.parts().indexOf(arg),
         inp = this.inputs().indexOf(arg),
@@ -552,7 +512,6 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             }
         }
     }
-// +++    this.silentReplaceInput(arg, deflt);
     this.replaceInput(arg, deflt);
     if (deflt instanceof MultiArgMorph) {
         deflt.refresh();
@@ -3199,7 +3158,7 @@ BlockMorph.prototype.ringify = function () {
     top.fullChanged();
     if (this.parent instanceof SyntaxElementMorph) {
         if (this instanceof ReporterBlockMorph) {
-            this.parent.silentReplaceInput(this, ring);
+            this.parent.replaceInput(this, ring);
             ring.embed(this);
         } else if (top) { // command
             if (top instanceof HatBlockMorph) {
@@ -3235,7 +3194,7 @@ BlockMorph.prototype.unringify = function () {
     top.fullChanged();
     if (ring.parent instanceof SyntaxElementMorph) {
         if (block instanceof ReporterBlockMorph) {
-            ring.parent.silentReplaceInput(ring, block);
+            ring.parent.replaceInput(ring, block);
         } else if (scripts) {
             scripts.add(block);
             block.setFullCenter(center);
@@ -3313,7 +3272,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     this.inputs().forEach(function (inp) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph) {
-            myself.silentReplaceInput(inp, old.fullCopy());
+            myself.replaceInput(inp, old.fullCopy());
         } else if (old && inp instanceof InputSlotMorph) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
@@ -3626,13 +3585,13 @@ BlockMorph.prototype.codeDefinitionHeader = function () {
     if (this.isCustomBlock) {return block; }
     block.inputs().forEach(function (input) {
         var part = new TemplateSlotMorph('#' + count);
-        block.silentReplaceInput(input, part);
+        block.replaceInput(input, part);
         count += 1;
     });
     block.isPrototype = true;
     hat.setCategory("control");
     hat.setSpec('%s');
-    hat.silentReplaceInput(hat.inputs()[0], block);
+    hat.replaceInput(hat.inputs()[0], block);
     if (this.category === 'control') {
         hat.alternateBlockColor();
     }
@@ -3647,13 +3606,13 @@ BlockMorph.prototype.codeMappingHeader = function () {
 
     block.inputs().forEach(function (input) {
         var part = new TemplateSlotMorph('<#' + count + '>');
-        block.silentReplaceInput(input, part);
+        block.replaceInput(input, part);
         count += 1;
     });
     block.isPrototype = true;
     hat.setCategory("control");
     hat.setSpec('%s');
-    hat.silentReplaceInput(hat.inputs()[0], block);
+    hat.replaceInput(hat.inputs()[0], block);
     if (this.category === 'control') {
         hat.alternateBlockColor();
     }
@@ -6267,19 +6226,19 @@ RingMorph.prototype.embed = function (aBlock, inputNames) {
         this.setSpec('%rp %ringparms');
         this.selector = 'reifyPredicate';
         slot = this.parts()[0];
-        slot.silentReplaceInput(slot.contents(), aBlock);
+        slot.replaceInput(slot.contents(), aBlock);
     } else if (aBlock instanceof BooleanSlotMorph) {
         this.isStatic = false;
         this.setSpec('%rp %ringparms');
         this.selector = 'reifyPredicate';
         slot = this.parts()[0];
-        slot.silentReplaceInput(slot.contents(), aBlock);
+        slot.replaceInput(slot.contents(), aBlock);
     } else { // reporter or input slot)
         this.isStatic = false;
         this.setSpec('%rr %ringparms');
         this.selector = 'reifyReporter';
         slot = this.parts()[0];
-        slot.silentReplaceInput(slot.contents(), aBlock);
+        slot.replaceInput(slot.contents(), aBlock);
     }
 
     // set my inputs, if any
@@ -6314,7 +6273,7 @@ RingMorph.prototype.vanishForSimilar = function () {
         block.selector === 'reportCompiled' ||
         (block instanceof RingMorph)
     ) {
-        this.parent.silentReplaceInput(this, block);
+        this.parent.replaceInput(this, block);
     }
 };
 
@@ -12025,7 +11984,7 @@ RingReporterSlotMorph.prototype.attachTargets = function () {
 RingReporterSlotMorph.prototype.nestedBlock = function (block) {
     if (block) {
         var nb = this.nestedBlock();
-        this.silentReplaceInput(this.children[0], block);
+        this.replaceInput(this.children[0], block);
         if (nb) {
             block.bottomBlock().nextBlock(nb);
         }
