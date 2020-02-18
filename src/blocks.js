@@ -8100,6 +8100,7 @@ CSlotMorph.prototype.init = function () {
     this.isLambda = false; // see Process.prototype.evaluateInput
     this.isLoop = false; // has a loop arrow symbol
     this.color = new Color(0, 17, 173);
+    this.setExtent(new Point(230, this.corner * 4 + this.cSlotPadding));
 };
 
 CSlotMorph.prototype.getSpec = function () {
