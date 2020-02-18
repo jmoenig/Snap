@@ -431,7 +431,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     if (oldArg.cachedSlotSpec) {oldArg.cachedSlotSpec = null; }
     if (newArg.cachedSlotSpec) {newArg.cachedSlotSpec = null; }
 
-    // +++ this.startLayout(); // +++ take out, right?
     this.changed();
     if (newArg.parent) {
         newArg.parent.removeChild(newArg);
@@ -462,11 +461,10 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
             this.fixLabelColor();
         }
     } else {
-        // +++ replacement.drawNew();
+        replacement.fixLayout();
         this.fixLayout();
     }
     this.cachedInputs = null;
-    //this.endLayout();
 };
 
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
