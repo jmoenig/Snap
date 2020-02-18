@@ -290,14 +290,14 @@ function SyntaxElementMorph() {
     this.init();
 }
 
-SyntaxElementMorph.prototype.init = function (silently) {
+SyntaxElementMorph.prototype.init = function () {
     this.cachedClr = null;
     this.cachedClrBright = null;
     this.cachedClrDark = null;
     this.cachedNormalColor = null; // for single-stepping
     this.isStatic = false; // if true, I cannot be exchanged
 
-    SyntaxElementMorph.uber.init.call(this, silently);
+    SyntaxElementMorph.uber.init.call(this);
 
     this.defaults = [];
     this.cachedInputs = null;
@@ -1800,7 +1800,7 @@ SyntaxElementMorph.prototype.isObjInputFragment = function () {
 
 // SyntaxElementMorph layout:
 
-SyntaxElementMorph.prototype.fixLayout = function (silently) {
+SyntaxElementMorph.prototype.fixLayout = function () {
     var nb,
         parts = this.parts(),
         myself = this,
@@ -2010,7 +2010,6 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     }
 
     // set my extent (silently, because we'll redraw later anyway):
-    // this.silentSetExtent(new Point(blockWidth, blockHeight)); // +++
     this.bounds.setWidth(blockWidth);
     this.bounds.setHeight(blockHeight);
 
@@ -2533,7 +2532,7 @@ BlockMorph.prototype.parseSpec = function (spec) {
     return result;
 };
 
-BlockMorph.prototype.setSpec = function (spec, silently, definition) {
+BlockMorph.prototype.setSpec = function (spec, silently, definition) { // +++ calls to this need to ber adjusted to remove "silently" parm
     var myself = this,
         part,
         inputIdx = -1;
@@ -2579,7 +2578,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) {
         }
     });
     this.blockSpec = spec;
-    this.fixLayout(silently);
+    this.fixLayout();
     this.cachedInputs = null;
 };
 
@@ -4124,9 +4123,9 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
     }
 };
 
-BlockMorph.prototype.forceNormalColoring = function (silently) {
+BlockMorph.prototype.forceNormalColoring = function () {
     var clr = SpriteMorph.prototype.blockColor[this.category];
-    this.setColor(clr, silently);
+    this.setColor(clr);
     this.setLabelColor(
         new Color(255, 255, 255),
         clr.darker(this.labelContrast),
@@ -7944,8 +7943,8 @@ function RingCommandSlotMorph() {
     this.init();
 }
 
-RingCommandSlotMorph.prototype.init = function (silently) {
-    RingCommandSlotMorph.uber.init.call(this, silently);
+RingCommandSlotMorph.prototype.init = function () {
+    RingCommandSlotMorph.uber.init.call(this);
     this.isHole = true;
     this.noticesTransparentClick = true;
     this.color = new Color(0, 17, 173);
@@ -10509,7 +10508,7 @@ ArrowMorph.prototype.init = function (direction, size, padding, color) {
     this.size = size || ((size === 0) ? 0 : 50);
     this.padding = padding || 0;
 
-    ArrowMorph.uber.init.call(this, true); // silently
+    ArrowMorph.uber.init.call(this);
     this.color = color || new Color(0, 0, 0);
     this.bounds.setExtent(new Point(this.size, this.size)); // +++ refactor
     this.rerender();
@@ -10661,7 +10660,7 @@ function ColorSlotMorph(clr) {
 }
 
 ColorSlotMorph.prototype.init = function (clr) {
-    ColorSlotMorph.uber.init.call(this, null, true); // silently
+    ColorSlotMorph.uber.init.call(this);
     this.setColor(clr || new Color(145, 26, 68));
 };
 
@@ -10890,7 +10889,7 @@ MultiArgMorph.prototype.init = function (
     this.shadowOffset = shadowOffset || null;
 
     this.canBeEmpty = true;
-    MultiArgMorph.uber.init.call(this, null, true); // silently
+    MultiArgMorph.uber.init.call(this);
 
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
@@ -11334,7 +11333,7 @@ ArgLabelMorph.prototype.init = function (argMorph, labelTxt) {
     var label;
 
     this.labelText = localize(labelTxt || 'input list:');
-    ArgLabelMorph.uber.init.call(this, null, true); // silently
+    ArgLabelMorph.uber.init.call(this);
 
     this.isStatic = true; // I cannot be exchanged
 
@@ -11459,8 +11458,8 @@ function FunctionSlotMorph(isPredicate) {
     this.init(isPredicate);
 }
 
-FunctionSlotMorph.prototype.init = function (isPredicate, silently) {
-    FunctionSlotMorph.uber.init.call(this, null, true); // silently
+FunctionSlotMorph.prototype.init = function (isPredicate) {
+    FunctionSlotMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
     this.color = this.rfColor;
     /* // +++
