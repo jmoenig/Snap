@@ -846,7 +846,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%cmdRing':
             part = new RingMorph();
-            part.color = SpriteMorph.prototype.blockColor.other;
+            // ++++ part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyScript';
             part.setSpec('%rc %ringparms');
             part.isDraggable = true;
@@ -2558,7 +2558,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) { // +++ ca
             part.rerender(); // +++
         }
         if (part instanceof RingMorph) {
-            part.fixBlockColor();
+            // ++++ part.fixBlockColor(); // +++ disabled while working on rendering
         }
         if (part instanceof MultiArgMorph ||
                 part.constructor === CommandSlotMorph ||
@@ -10918,7 +10918,7 @@ MultiArgMorph.prototype.init = function (
     // control panel:
     arrows.add(leftArrow);
     arrows.add(rightArrow);
-    arrows.drawNew();
+    arrows.rerender(); // +++
     arrows.acceptsDrops = false;
 
     this.add(arrows);
@@ -11007,7 +11007,7 @@ MultiArgMorph.prototype.fixLayout = function () {
             if (!label.shadowColor.eq(shadowColor)) {
                 label.shadowColor = shadowColor;
                 label.shadowOffset = shadowOffset;
-                label.drawNew();
+                label.rerender(); // +++
             }
         }
 
@@ -11047,7 +11047,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow.setPosition(leftArrow.topCenter());
         arrows.bounds.corner = rightArrow.bottomRight().copy();
     }
-    arrows.drawNew();
+    arrows.rerender(); // +++ arrows.drawNew();
 };
 
 MultiArgMorph.prototype.refresh = function () {
@@ -13524,7 +13524,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl, cu, cs, rc, scripts;
+    var c, ci, cb, cm, cd, co, cl, cu, cs, cmd, rc, scripts;
     // SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13554,6 +13554,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cs = new CommandBlockMorph();
     cs.setSpec('control %b %ca');
 
+    cmd = new CommandBlockMorph();
+    cmd.setSpec('command ring %cmdRing');
+
     rc = new ReporterBlockMorph();
     rc.setSpec('color %clr');
 
@@ -13575,6 +13578,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [cl, 'list input'],
             [cu, 'upvar input'],
             [cs, 'loop input'],
+            [cmd, 'cmd input'],
             [rc, 'color input'],
             [scripts, 'scripts']
         ]
