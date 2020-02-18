@@ -1176,7 +1176,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-February-12';
+var morphicVersion = '2020-February-18';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -11722,12 +11722,6 @@ WorldMorph.prototype.fillPage = function () {
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
     // answer the color at the given point.
-
-/*
-    // original method, now deprecated as of 4/4/2017 because Chrome
-    // "taints" the on-screen canvas as soon as its image data is
-    // requested, significantly slowing down subsequent blittings
-
     var dta = this.worldCanvas.getContext('2d').getImageData(
         point.x,
         point.y,
@@ -11735,14 +11729,6 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
         1
     ).data;
     return new Color(dta[0], dta[1], dta[2]);
-*/
-
-    var clr = this.topMorphAt(point).getPixelColor(point);
-    // IMPORTANT:
-    // all callers of getGlobalPixelColor should make provisions for retina
-    // display support, which gets null-pixels interlaced with non-null ones:
-    // if (!clr.a) {/* ignore */ }
-    return clr;
 };
 
 // WorldMorph events:
