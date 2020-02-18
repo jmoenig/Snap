@@ -10723,21 +10723,22 @@ ColorSlotMorph.prototype.evaluate = function () {
 
 // ColorSlotMorph drawing:
 
-ColorSlotMorph.prototype.drawNew = function () {
-    var context, borderColor, side;
+ColorSlotMorph.prototype.fixLayout = function () {
+    // determine my extent
+    var side = this.fontSize + this.edge * 2 + this.typeInPadding * 2;
+    this.bounds.setWidth(side);
+    this.bounds.setHeight(side);
+};
 
-    side = this.fontSize + this.edge * 2 + this.typeInPadding * 2;
-    this.silentSetExtent(new Point(side, side));
+ColorSlotMorph.prototype.render = function (ctx) {
+    var borderColor;
 
-    // initialize my surface property
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
     if (this.parent) {
         borderColor = this.parent.color;
     } else {
         borderColor = new Color(120, 120, 120);
     }
-    context.fillStyle = this.color.toString();
+    ctx.fillStyle = this.color.toString();
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
@@ -10745,14 +10746,14 @@ ColorSlotMorph.prototype.drawNew = function () {
         .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
-    context.fillRect(
+    ctx.fillRect(
         this.edge,
         this.edge,
         this.width() - this.edge * 2,
         this.height() - this.edge * 2
     );
     if (!MorphicPreferences.isFlat) {
-        this.drawRectBorder(context);
+        this.drawRectBorder(ctx);
     }
 };
 
@@ -13529,8 +13530,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl, cu, cs, scripts;
-    SyntaxElementMorph.prototype.setScale(2.5);
+    var c, ci, cb, cm, cd, co, cl, cu, cs, rc, scripts;
+    // SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
     c.setSpec('this is a %greenflag test $globe');
@@ -13559,6 +13560,9 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cs = new CommandBlockMorph();
     cs.setSpec('control %b %ca');
 
+    rc = new ReporterBlockMorph();
+    rc.setSpec('color %clr');
+
     scripts = new ScriptsMorph();
 
     BlockMorph.prototype.addToDemoMenu([
@@ -13577,6 +13581,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [cl, 'list input'],
             [cu, 'upvar input'],
             [cs, 'loop input'],
+            [rc, 'color input'],
             [scripts, 'scripts']
         ]
     ]);
