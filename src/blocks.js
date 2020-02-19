@@ -510,6 +510,9 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             }
         }
     }
+    if (deflt.icon) { // +++ refactor this special case
+        deflt.fixLayout();
+    }
     this.replaceInput(arg, deflt);
     if (deflt instanceof MultiArgMorph) {
         deflt.refresh();
