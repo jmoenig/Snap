@@ -10068,12 +10068,11 @@ BooleanSlotMorph.prototype.mappedCode = function () {
 
 BooleanSlotMorph.prototype.fixLayout = function () {
     // determine my extent
-    var textLabel = this.isStatic ? this.textLabel() : null,
-        h;
-
-    if (textLabel) {
-        h = textLabel.height + (this.edge * 3);
-        this.bounds.setWidth(textLabel.width + (h * 1.5) + (this.edge * 2));
+    var text, h;
+    if (this.isStatic) {
+        text = this.textLabelExtent();
+        h = text.y + (this.edge * 3);
+        this.bounds.setWidth(text.x + (h * 1.5) + (this.edge * 2));
         this.bounds.setHeight(h);
     } else {
         this.bounds.setWidth((this.fontSize + this.edge * 2) * 2);
@@ -10086,8 +10085,6 @@ BooleanSlotMorph.prototype.fixLayout = function () {
 BooleanSlotMorph.prototype.render = function (ctx) {
     // "progress" is an optional number sliding the knob // +++ update this comment
     // on a range between 0 and 4
-    var textLabel = this.isStatic ? this.textLabel() : null;
-
     if (!(this.cachedNormalColor)) { // unless flashing
         this.color = this.parent ?
                 this.parent.color : new Color(200, 200, 200);
@@ -10096,7 +10093,7 @@ BooleanSlotMorph.prototype.render = function (ctx) {
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
     this.drawDiamond(ctx, this.progress);
-    this.drawLabel(ctx, textLabel);
+    this.drawLabel(ctx);
     this.drawKnob(ctx, this.progress);
 };
 
@@ -10243,33 +10240,47 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.stroke();
 };
 
-BooleanSlotMorph.prototype.drawLabel = function (ctx, textLabel) {
+BooleanSlotMorph.prototype.drawLabel = function (ctx) {
     var w = this.width(),
         r = this.height() / 2 - this.edge,
         r2 = r / 2,
         shift = this.edge / 2,
+        text,
         x,
         y = this.height() / 2;
 
     if (this.isEmptySlot() || this.progress < 0) {
         return;
     }
-    if (textLabel) {
-        y = (this.height() - textLabel.height) / 2;
+
+    if (this.isStatic) { // draw the full text label
+        text = this.textLabelExtent();
+        y = this.height() - (this.height() - text.y) / 2;
         if (this.value) {
             x = this.height() / 2;
         } else {
-            x = this.width() - (this.height() / 2) - textLabel.width;
+            x = this.width() - (this.height() / 2) - text.x;
         }
-    if (!MorphicPreferences.isFlat) {
-        ctx.shadowOffsetX = -shift;
-        ctx.shadowOffsetY = -shift;
-        ctx.shadowBlur = shift;
-        ctx.shadowColor = this.value ? 'rgb(0, 100, 0)' : 'rgb(100, 0, 0)';
-    }
-        ctx.drawImage(textLabel, x, y);
+        ctx.save();
+        if (!MorphicPreferences.isFlat) {
+            ctx.shadowOffsetX = -shift;
+            ctx.shadowOffsetY = -shift;
+            ctx.shadowBlur = shift;
+            ctx.shadowColor = this.value ? 'rgb(0, 100, 0)' : 'rgb(100, 0, 0)';
+        }
+        ctx.font = new StringMorph(null, this.fontSize, null, true).font();
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillStyle = 'rgb(255, 255, 255';
+        ctx.fillText(
+            localize(this.value ? 'true' : 'false'),
+            x,
+            y
+        )
+        ctx.restore();
         return;
     }
+
     // "tick:"
     x = r + (this.edge * 2) + shift;
     if (!MorphicPreferences.isFlat) {
@@ -10432,40 +10443,21 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     ctx.globalAlpha = 1;
 };
 
-BooleanSlotMorph.prototype.textLabel = function () {
-    if (this.isEmptySlot()) {return null; }
-    var t, f, img, lbl, x, y;
+BooleanSlotMorph.prototype.textLabelExtent = function () {
+    var t, f;
     t = new StringMorph(
         localize('true'),
         this.fontSize,
         null,
-        true, // bold
-        null,
-        null,
-        null,
-        null,
-        new Color(255, 255, 255)
-    ).getImage();
+        true // bold
+    );
     f = new StringMorph(
         localize('false'),
         this.fontSize,
         null,
-        true, // bold
-        null,
-        null,
-        null,
-        null,
-        new Color(255, 255, 255)
-    ).getImage();
-    img = newCanvas(new Point(
-        Math.max(t.width, f.width),
-        Math.max(t.height, f.height)
-    ));
-    lbl = this.value ? t : f;
-    x = (img.width - lbl.width) / 2;
-    y = (img.height - lbl.height) / 2;
-    img.getContext('2d').drawImage(lbl, x, y);
-    return img;
+        true // bold
+    );
+    return new Point(Math.max(t.width(), f.width()), t.height());
 };
 
 // ArrowMorph //////////////////////////////////////////////////////////
