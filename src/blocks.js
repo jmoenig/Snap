@@ -6465,16 +6465,13 @@ ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
     this.feedbackMorph.border = 0;
     this.feedbackMorph.edge = 0;
     this.feedbackMorph.alpha = 1;
-    this.feedbackMorph.bounds.setExtent(new Point( // +++ refactor
-        target.element.width(),
-        Math.max(
+    this.feedbackMorph.bounds.setWidth(target.element.width());
+    this.feedbackMorph.bounds.setHeight(Math.max(
             SyntaxElementMorph.prototype.corner,
             SyntaxElementMorph.prototype.feedbackMinHeight
         )
-    ));
+    );
     this.feedbackMorph.color = this.feedbackColor;
-    // +++ this.feedbackMorph.drawNew();
-    // +++ this.feedbackMorph.changed();
     y = target.point.y;
     if (target.loc === 'bottom') {
         if (target.type === 'block') {
@@ -7092,6 +7089,7 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
 };
 
 ScriptsMorph.prototype.addToolbar = function () {
+console.log('here')
     var toolBar = new AlignmentMorph(),
     	myself = this,
         shade = new Color(140, 140, 140);
@@ -7106,7 +7104,6 @@ ScriptsMorph.prototype.addToolbar = function () {
     toolBar.undoButton.padding = 2;
     // toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
     toolBar.undoButton.labelShadowColor = shade;
-    toolBar.undoButton.drawNew();
     toolBar.undoButton.fixLayout();
     toolBar.add(toolBar.undoButton);
 
@@ -7119,7 +7116,6 @@ ScriptsMorph.prototype.addToolbar = function () {
     toolBar.redoButton.padding = 2;
     // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
     toolBar.redoButton.labelShadowColor = shade;
-    toolBar.redoButton.drawNew();
     toolBar.redoButton.fixLayout();
     toolBar.add(toolBar.redoButton);
 
@@ -7140,7 +7136,6 @@ ScriptsMorph.prototype.addToolbar = function () {
     toolBar.keyboardButton.hint = 'use the keyboard\nto enter blocks';
     //toolBar.keyboardButton.pressColor = new Color(40, 40, 40);
     toolBar.keyboardButton.labelShadowColor = shade;
-    toolBar.keyboardButton.drawNew();
     toolBar.keyboardButton.fixLayout();
     toolBar.add(toolBar.keyboardButton);
 
@@ -9276,7 +9271,7 @@ InputSlotMorph.prototype.fixLayout = function () {
             );
         }
     }
-    this.setExtent(new Point(width, height));
+    this.bounds.setExtent(new Point(width, height));
 
     if (this.isNumeric) {
         contents.setPosition(new Point(
@@ -13531,7 +13526,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     c.setSpec('this is a %greenflag test $globe');
 
     ci = new CommandBlockMorph();
-    ci.setSpec('block with input %s unit %n number');
+    ci.setSpec('block with input %s unit %mult%n number');
 
     cb = new CommandBlockMorph();
     cb.setSpec('bool %b ?');
