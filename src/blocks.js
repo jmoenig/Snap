@@ -247,7 +247,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
     this.scale = scale;
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
-    this.edge = 1.000001 * scale;
+    this.edge = scale;
     this.inset = 6 * scale;
     this.hatHeight = 12 * scale;
     this.hatWidth = 70 * scale;
@@ -12351,7 +12351,7 @@ CommentMorph.prototype.init = function (contents) {
     this.isCollapsed = false;
     this.titleBar = new BoxMorph(
         this.rounding,
-        1.000001 * scale, // shadow bug in Chrome,
+        scale,
         new Color(255, 255, 180)
     );
     this.titleBar.color = new Color(255, 255, 180);
@@ -12384,7 +12384,7 @@ CommentMorph.prototype.init = function (contents) {
     CommentMorph.uber.init.call(
         this,
         this.rounding,
-        1.000001 * scale, // shadow bug in Chrome,
+        scale,
         new Color(255, 255, 180)
     );
     this.color = new Color(255, 255, 220);
