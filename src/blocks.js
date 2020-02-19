@@ -853,7 +853,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%repRing':
             part = new RingMorph();
-            part.color = SpriteMorph.prototype.blockColor.other;
+            // ++++part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyReporter';
             part.setSpec('%rr %ringparms');
             part.isDraggable = true;
@@ -861,7 +861,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%predRing':
             part = new RingMorph(true);
-            part.color = SpriteMorph.prototype.blockColor.other;
+            // ++++ part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyPredicate';
             part.setSpec('%rp %ringparms');
             part.isDraggable = true;
@@ -5734,9 +5734,11 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
 
 ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
     var label;
+    /* +++ disabled while working on rendering +++
     if (this.parent instanceof BlockInputFragmentMorph) {
         return this.parent.mouseClickLeft();
     }
+    */
     if (this.parent instanceof TemplateSlotMorph) {
         if (this.parent.parent && this.parent.parent.parent &&
                 this.parent.parent.parent instanceof RingMorph) {
@@ -9810,6 +9812,7 @@ TemplateSlotMorph.prototype.contents = function () {
 TemplateSlotMorph.prototype.setContents = function (aString) {
     var tmp = this.template();
     tmp.setSpec(aString);
+    return; // ++++ disabled while working on rendering ++++
     tmp.fixBlockColor(); // fix zebra coloring
     tmp.fixLabelColor();
 };
@@ -11099,7 +11102,8 @@ MultiArgMorph.prototype.addInput = function (contents) {
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
-    newPart.drawNew();
+    // +++ newPart.drawNew();
+    newPart.fixLayout(); // +++
     this.fixLayout();
 };
 
@@ -11485,7 +11489,6 @@ FunctionSlotMorph.prototype.getSpec = function () {
 FunctionSlotMorph.prototype.render = function (ctx) {
     var borderColor;
 
-    // initialize my surface property
     if (this.parent) {
         borderColor = this.parent.color;
     } else {
@@ -11856,7 +11859,7 @@ ReporterSlotMorph.prototype.emptySlot = function () {
         shrink = this.rfBorder * 2 + this.edge * 2;
     empty.color = this.rfColor;
     empty.alpha = 0;
-    empty.setExtent(new Point(
+    empty.bounds.setExtent(new Point(
         (this.fontSize + this.edge * 2) * 2 - shrink,
         this.fontSize + this.edge * 2 - shrink
     ));
@@ -11907,7 +11910,8 @@ ReporterSlotMorph.prototype.fixLayout = function () {
 
 /*
     I am a ReporterBlock-shaped input slot for use in RingMorphs.
-    I can only nest reporter blocks (both round and diamond).
+    I can nest reporter blocks (both round and diamond) as well
+    as command blocks (jigsaw shaped).
 
     My command spec is %rr for reporters (round) and %rp for
     predicates (diamond)
@@ -13524,7 +13528,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl, cu, cs, cmd, rc, scripts;
+    var c, ci, cb, cm, cd, co, cl, cu, cs, cmd, rings, rc, scripts;
     // SyntaxElementMorph.prototype.setScale(2.5);
 
     c = new CommandBlockMorph();
@@ -13555,7 +13559,10 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     cs.setSpec('control %b %ca');
 
     cmd = new CommandBlockMorph();
-    cmd.setSpec('command ring %cmdRing');
+    cmd.setSpec('command %cmdRing');
+    
+    rings = new CommandBlockMorph();
+    rings.setSpec('reporter %repRing predicate %predRing');
 
     rc = new ReporterBlockMorph();
     rc.setSpec('color %clr');
@@ -13578,7 +13585,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             [cl, 'list input'],
             [cu, 'upvar input'],
             [cs, 'loop input'],
-            [cmd, 'cmd input'],
+            [cmd, 'cmd ring input'],
+            [rings, 'reporter rings input'],
             [rc, 'color input'],
             [scripts, 'scripts']
         ]
