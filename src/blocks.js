@@ -410,6 +410,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     var scripts = this.parentThatIsA(ScriptsMorph),
         replacement = newArg,
         idx = this.children.indexOf(oldArg),
+        block,
         i = 0;
 
     // try to find the ArgLabel embedding the newArg,
@@ -461,7 +462,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
             this.fixLabelColor();
         }
     } else {
-        replacement.fixLayout();
         this.fixLayout();
     }
     this.cachedInputs = null;
@@ -2072,10 +2072,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             return;
         }
     } else if (this instanceof ReporterBlockMorph) {
-        if (this.parent) {
-            if (this.parent.fixLayout) {
-                return this.parent.fixLayout();
-            }
+        if (this.parent && this.parent.fixLayout) {
+            return this.parent.fixLayout();
         }
     }
 
@@ -5648,7 +5646,6 @@ ReporterBlockMorph.prototype.snap = function (hand) {
 ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
     var oldPos = this.position();
 
-    nop(handMorph);
     if ((this.parent instanceof BlockMorph)
             || (this.parent instanceof MultiArgMorph)
             || (this.parent instanceof ReporterSlotMorph)) {
@@ -7589,7 +7586,6 @@ CommandSlotMorph.prototype.fixLayout = function () {
                 + this.dent
         );
     }
-    // if (this.parent.fixLayout) { // +++
     if (this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
     }
@@ -11895,7 +11891,7 @@ ReporterSlotMorph.prototype.isEmptySlot = function () {
 
 ReporterSlotMorph.prototype.fixLayout = function () {
     var contents = this.contents();
-    this.setExtent(contents.extent().add(
+    this.bounds.setExtent(contents.extent().add(
         this.edge * 2 + this.rfBorder * 2
     ));
     contents.setCenter(this.center());
