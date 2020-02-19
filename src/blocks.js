@@ -141,7 +141,7 @@ String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
-CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
+DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
@@ -410,7 +410,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     var scripts = this.parentThatIsA(ScriptsMorph),
         replacement = newArg,
         idx = this.children.indexOf(oldArg),
-        block,
         i = 0;
 
     // try to find the ArgLabel embedding the newArg,
@@ -740,7 +739,7 @@ SyntaxElementMorph.prototype.setColor = function (aColor) {
             this.rerender();
         }
     }
-}
+};
 
 SyntaxElementMorph.prototype.setLabelColor = function (
     textColor,
@@ -7088,7 +7087,6 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
 };
 
 ScriptsMorph.prototype.addToolbar = function () {
-console.log('here')
     var toolBar = new AlignmentMorph(),
     	myself = this,
         shade = new Color(140, 140, 140);
@@ -7404,11 +7402,11 @@ ArgMorph.prototype.getSpec = function () {
 ArgMorph.prototype.createIcon = function () {
     switch (this.type) {
     case 'list':
-        this.icon = this.labelPart('%list')
+        this.icon = this.labelPart('%list');
         this.add(this.icon);
         break;
     case 'object':
-        this.icon = this.labelPart('%turtle')
+        this.icon = this.labelPart('%turtle');
         this.add(this.icon);
         break;
     default:
@@ -7423,7 +7421,7 @@ ArgMorph.prototype.fixLayout = function () {
     } else {
         ArgMorph.uber.fixLayout.call(this);
     }
-}
+};
 
 ArgMorph.prototype.render = function (ctx) {
     // make sure my icon's shadow color matches my block's color
@@ -10078,7 +10076,7 @@ BooleanSlotMorph.prototype.fixLayout = function () {
         this.bounds.setWidth((this.fontSize + this.edge * 2) * 2);
         this.bounds.setHeight(this.fontSize + this.edge * 2);
     }
-}
+};
 
 // BooleanSlotMorph drawing:
 
@@ -10276,7 +10274,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
             localize(this.value ? 'true' : 'false'),
             x,
             y
-        )
+        );
         ctx.restore();
         return;
     }
