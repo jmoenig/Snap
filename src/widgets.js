@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-February-14';
+modules.widgets = '2020-February-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3027,7 +3027,7 @@ InputFieldMorph.prototype.init = function (
 
     contents.alpha = 0;
     contents.fontSize = this.fontSize;
-    contents.drawNew();
+    contents.fixLayout();
 
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
@@ -3037,7 +3037,7 @@ InputFieldMorph.prototype.init = function (
     this.add(contents);
     this.add(arrow);
     contents.isDraggable = false;
-    this.drawNew();
+    this.fixLayout();
 };
 
 // InputFieldMorph accessing:
@@ -3076,8 +3076,9 @@ InputFieldMorph.prototype.setContents = function (aStringOrFloat) {
     } else if (aStringOrFloat.toString) {
         cnts.text.text = aStringOrFloat.toString();
     }
-    cnts.drawNew();
     cnts.changed();
+    cnts.fixLayout();
+    cnts.rerender();
 };
 
 InputFieldMorph.prototype.edit = function () {
@@ -3163,12 +3164,12 @@ InputFieldMorph.prototype.fixLayout = function () {
         arrow.setSize(0);
         arrow.hide();
     }
-    this.silentSetHeight(
+    this.bounds.setHeight(
         contents.height()
             + this.edge * 2
             + this.typeInPadding * 2
     );
-    this.silentSetWidth(Math.max(
+    this.bounds.setWidth(Math.max(
         contents.minWidth
             + this.edge * 2
             + this.typeInPadding * 2,
@@ -3180,12 +3181,12 @@ InputFieldMorph.prototype.fixLayout = function () {
             (this.choices ? arrow.width() + this.typeInPadding : 0)
     );
 
-    contents.silentSetPosition(new Point(
+    contents.setPosition(new Point(
         this.edge,
         this.edge
     ).add(this.typeInPadding).add(this.position()));
 
-    arrow.silentSetPosition(new Point(
+    arrow.setPosition(new Point(
         this.right() - arrow.width() - this.edge,
         contents.top()
     ));
@@ -3228,14 +3229,9 @@ InputFieldMorph.prototype.normalizeSpaces
 
 // InputFieldMorph drawing:
 
-InputFieldMorph.prototype.drawNew = function () {
-    var context, borderColor;
+InputFieldMorph.prototype.render = function (ctx) {
+    var borderColor;
 
-    this.fixLayout();
-
-    // initialize my surface property
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
     if (this.parent) {
         if (this.parent.color.eq(new Color(255, 255, 255))) {
             this.color = this.parent.color.darker(this.contrast * 0.1);
@@ -3246,7 +3242,7 @@ InputFieldMorph.prototype.drawNew = function () {
     } else {
         borderColor = new Color(120, 120, 120);
     }
-    context.fillStyle = this.color.toString();
+    ctx.fillStyle = this.color.toString();
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
@@ -3254,31 +3250,31 @@ InputFieldMorph.prototype.drawNew = function () {
         .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
-    context.fillRect(
+    ctx.fillRect(
         this.edge,
         this.edge,
         this.width() - this.edge * 2,
         this.height() - this.edge * 2
     );
 
-    this.drawRectBorder(context);
+    this.drawRectBorder(ctx);
 };
 
-InputFieldMorph.prototype.drawRectBorder = function (context) {
+InputFieldMorph.prototype.drawRectBorder = function (ctx) {
     var shift = this.edge * 0.5,
         gradient;
 
     if (MorphicPreferences.isFlat && !this.is3D) {return; }
 
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    context.shadowOffsetY = shift;
-    context.shadowBlur = this.edge * 4;
-    context.shadowColor = this.cachedClrDark;
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge * 4;
+    ctx.shadowColor = this.cachedClrDark;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -3287,15 +3283,15 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
 
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.edge, shift);
-    context.lineTo(this.width() - this.edge - shift, shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, shift);
+    ctx.lineTo(this.width() - this.edge - shift, shift);
+    ctx.stroke();
 
-    context.shadowOffsetY = 0;
+    ctx.shadowOffsetY = 0;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         this.edge,
@@ -3303,17 +3299,17 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(shift, this.edge);
-    context.lineTo(shift, this.height() - this.edge - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, this.edge);
+    ctx.lineTo(shift, this.height() - this.edge - shift);
+    ctx.stroke();
 
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         this.height() - this.edge,
         0,
@@ -3321,13 +3317,13 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.edge, this.height() - shift);
-    context.lineTo(this.width() - this.edge, this.height() - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, this.height() - shift);
+    ctx.lineTo(this.width() - this.edge, this.height() - shift);
+    ctx.stroke();
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         this.width() - this.edge,
         0,
         this.width(),
@@ -3335,11 +3331,11 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(this.width() - shift, this.edge);
-    context.lineTo(this.width() - shift, this.height() - this.edge);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.width() - shift, this.edge);
+    ctx.lineTo(this.width() - shift, this.height() - this.edge);
+    ctx.stroke();
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
