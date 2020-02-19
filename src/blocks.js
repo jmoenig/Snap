@@ -510,7 +510,7 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             }
         }
     }
-    if (deflt.icon) { // +++ refactor this special case
+    if (deflt.icon || deflt instanceof BooleanSlotMorph) { // +++ refactor this special case
         deflt.fixLayout();
     }
     this.replaceInput(arg, deflt);
