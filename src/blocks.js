@@ -742,7 +742,7 @@ SyntaxElementMorph.prototype.setColor = function (aColor) {
     }
 }
 
-SyntaxElementMorph.prototype.setLabelColor = function ( // +++ review this
+SyntaxElementMorph.prototype.setLabelColor = function (
     textColor,
     shadowColor,
     shadowOffset
@@ -2455,7 +2455,6 @@ BlockMorph.prototype.init = function () {
     this.isCorpse = false; // marked for deletion fom a custom block definition
 
     BlockMorph.uber.init.call(this);
-    // +++ this.color = new Color(0, 17, 173);
     this.color = new Color(102, 102, 102);
     this.cachedInputs = null;
 };
@@ -2555,8 +2554,8 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) { // +++ ca
         myself.add(part);
         if (!(part instanceof CommandSlotMorph ||
                 part instanceof StringMorph)) {
-            part.fixLayout() // +++
-            part.rerender(); // +++
+            part.fixLayout();
+            part.rerender();
         }
         if (part instanceof RingMorph) {
             // ++++ part.fixBlockColor(); // +++ disabled while working on rendering
@@ -4566,9 +4565,9 @@ function CommandBlockMorph() {
 CommandBlockMorph.prototype.init = function () {
     CommandBlockMorph.uber.init.call(this);
 
-    // this.setExtent(new Point(200, 100)); // +++
-    this.bounds.setExtent(new Point(60, 24).multiplyBy(this.scale)); // +++ for testing only
-    this.rerender(); // should probably be fixLayout() at some poimt
+    this.bounds.setExtent(new Point(60, 24).multiplyBy(this.scale));
+    this.fixLayout();
+    this.rerender();
 
     this.partOfCustomCommand = false;
     this.exitTag = null;
@@ -5010,7 +5009,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
 
 // CommandBlockMorph drawing:
 
-CommandBlockMorph.prototype.render = function (ctx) { // +++
+CommandBlockMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
@@ -5405,8 +5404,9 @@ function HatBlockMorph() {
 
 HatBlockMorph.prototype.init = function () {
     HatBlockMorph.uber.init.call(this);
-    this.bounds.setExtent(new Point(120, 36).multiplyBy(this.scale)); // +++ for testing only
-    this.rerender(); // +++ also fixLayout
+    this.bounds.setExtent(new Point(120, 36).multiplyBy(this.scale));
+    this.fixLayout();
+    this.rerender();
 };
 
 // HatBlockMorph enumerating:
@@ -5586,8 +5586,9 @@ ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
  
-    this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale)); // +++ for testing purposes only
-    this.rerender(); // +++
+    this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
+    this.fixLayout();
+    this.rerender();
  
     this.cachedSlotSpec = null; // don't serialize
     this.isLocalVarTemplate = null; // don't serialize
@@ -10444,7 +10445,7 @@ BooleanSlotMorph.prototype.textLabel = function () {
         null,
         null,
         new Color(255, 255, 255)
-    ).image;
+    ).getImage();
     f = new StringMorph(
         localize('false'),
         this.fontSize,
@@ -10455,7 +10456,7 @@ BooleanSlotMorph.prototype.textLabel = function () {
         null,
         null,
         new Color(255, 255, 255)
-    ).image;
+    ).getImage();
     img = newCanvas(new Point(
         Math.max(t.width, f.width),
         Math.max(t.height, f.height)
@@ -10463,7 +10464,7 @@ BooleanSlotMorph.prototype.textLabel = function () {
     lbl = this.value ? t : f;
     x = (img.width - lbl.width) / 2;
     y = (img.height - lbl.height) / 2;
-    img.getctx('2d').drawImage(lbl, x, y);
+    img.getContext('2d').drawImage(lbl, x, y);
     return img;
 };
 
@@ -13497,11 +13498,17 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 // comment out to shave off a millisecond loading speed ;-)
 
 (function () {
-    var c, ci, cb, cm, cd, co, cl, cu, cs, cmd, rings, rc, scripts;
+    var h, b, c, ci, cb, cm, cd, co, cl, cu, cs, cmd, rings, rc, scripts;
     // SyntaxElementMorph.prototype.setScale(2.5);
 
+    h = new HatBlockMorph();
+    h.setSpec('When %greenflag pressed');
+
+    b = new ReporterBlockMorph(true);
+    b.setSpec('%bool');
+
     c = new CommandBlockMorph();
-    c.setSpec('this is a %greenflag test $globe');
+    c.setSpec('this is a test $globe');
 
     ci = new CommandBlockMorph();
     ci.setSpec('block with input %s unit %mult%n number');
@@ -13541,10 +13548,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     BlockMorph.prototype.addToDemoMenu([
         'Syntax',
         [
-            [new HatBlockMorph(), 'Hat'],
-            [new CommandBlockMorph(), 'Command'],
-            [new ReporterBlockMorph(), 'Reporter'],
-            [new ReporterBlockMorph(true), 'Predicate'],
+            [h, 'hat'],
+            [b, 'predicate'],
             [c, 'with label text'],
             [ci, 'editable input slots'],
             [cb, 'Boolean slot'],
