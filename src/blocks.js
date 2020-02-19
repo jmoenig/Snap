@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-February-17';
+modules.blocks = '2020-February-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4180,7 +4180,7 @@ BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
         } else if (morph instanceof SyntaxElementMorph) {
             morph.fixBlockColor(myself, isForced);
             if (morph instanceof BooleanSlotMorph) {
-                morph.drawNew();
+                morph.fixLayout(); // +++ ???
             }
         }
     });
@@ -4228,7 +4228,6 @@ BlockMorph.prototype.fullCopy = function () {
 BlockMorph.prototype.reactToTemplateCopy = function () {
     if (this.isLocalVarTemplate) {
     	this.isLocalVarTemplate = null;
-        this.drawNew();
         this.fixLayout();
     }
     this.forceNormalColoring();
@@ -4414,11 +4413,7 @@ BlockMorph.prototype.wantsDropOf = function (aMorph) {
 
 BlockMorph.prototype.reactToDropOf = function (droppedMorph) {
     droppedMorph.isDraggable = false;
-    if (droppedMorph instanceof InputSlotMorph) {
-        droppedMorph.drawNew();
-    } else if (droppedMorph instanceof MultiArgMorph) {
-        droppedMorph.fixLayout();
-    }
+    droppedMorph.fixLayout();
     this.fixLayout();
     this.buildSpec();
 };
@@ -7389,8 +7384,8 @@ ArgMorph.prototype.reactToSliderEdit = function () {
 
 ArgMorph.prototype.justDropped = function () {
     if (!(this instanceof CommandSlotMorph)) {
-        this.drawNew();
-        this.changed();
+        this.fixLayout();
+        this.rerender();
     }
 };
 
@@ -9331,7 +9326,7 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
         cnts = this.contents();
         this.constant = null;
         cnts.isItalic = false;
-        cnts.drawNew();
+        cnts.rerender(); // +++ also fixLayout()?
     }
 };
 
@@ -9464,8 +9459,7 @@ InputSlotMorph.prototype.flash = function () {
     if (!this.cachedNormalColor) {
         this.cachedNormalColor = this.color;
         this.color = this.activeHighlight;
-        this.drawNew();
-        this.changed();
+        this.rerender();
     }
 };
 
@@ -9475,8 +9469,7 @@ InputSlotMorph.prototype.unflash = function () {
         var clr = this.cachedNormalColor;
         this.cachedNormalColor = null;
         this.color = clr;
-        this.drawNew();
-        this.changed();
+        this.rerender();
     }
 };
 
@@ -10576,7 +10569,7 @@ TextSlotMorph.prototype.init = function (
         );
 
     contents.fontSize = this.fontSize;
-    contents.drawNew();
+    contents.fixLayout();
 
     this.isUnevaluated = false;
     this.choices = choiceDict || null; // object, function or selector
@@ -10789,9 +10782,8 @@ BlockHighlightMorph.prototype.updateReadout = function () {
     }
     if (readout) {
         readout.contents = this.threadCount.toString();
-        readout.fullChanged();
-        readout.drawNew();
-        readout.fullChanged();
+        readout.fixLayout();
+        readout.rerender();
     } else {
         readout = new SpeechBubbleMorph(
             this.threadCount.toString(),
@@ -11041,23 +11033,15 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow.setPosition(leftArrow.topCenter());
         arrows.bounds.corner = rightArrow.bottomRight().copy();
     }
-    arrows.rerender(); // +++ arrows.drawNew();
+    arrows.rerender();
 };
 
 MultiArgMorph.prototype.refresh = function () {
     this.inputs().forEach(function (input) {
-        // +++ input.drawNew();
-        input.fixLayout(); // +++ ???
-        input.rerender(); // +++ ???
+        input.fixLayout();
+        input.rerender();
     });
 };
-
-/* +++ this should probably just be removed
-MultiArgMorph.prototype.drawNew = function () {
-    MultiArgMorph.uber.drawNew.call(this);
-    this.refresh();
-};
-*/
 
 // MultiArgMorph arity control:
 
@@ -11093,8 +11077,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
-    // +++ newPart.drawNew();
-    newPart.fixLayout(); // +++
+    newPart.fixLayout();
     this.fixLayout();
 };
 
@@ -11373,7 +11356,7 @@ ArgLabelMorph.prototype.fixLayout = function () {
             if (!label.shadowColor.eq(shadowColor)) {
                 label.shadowColor = shadowColor;
                 label.shadowOffset = shadowOffset;
-                label.drawNew();
+                label.rerender();
             }
         }
     }
@@ -11385,18 +11368,10 @@ ArgLabelMorph.prototype.fixLayout = function () {
 
 ArgLabelMorph.prototype.refresh = function () {
     this.inputs().forEach(function (input) {
-        // input.drawNew(); // +++ ??
         input.fixLayout();
-        input.rerender(); // +++ ??
+        input.rerender();
     });
 };
-
-/* +++ maybe this should be integrated into fixLayout()? or removed altogether?
-ArgLabelMorph.prototype.drawNew = function () {
-    ArgLabelMorph.uber.drawNew.call(this);
-    this.refresh();
-};
-*/
 
 // ArgLabelMorph label color:
 
@@ -11410,7 +11385,7 @@ ArgLabelMorph.prototype.setLabelColor = function (
         label.color = textColor;
         label.shadowColor = shadowColor;
         label.shadowOffset = shadowOffset;
-        label.drawNew();
+        label.rerender();
     }
 };
 
@@ -12442,7 +12417,7 @@ CommentMorph.prototype.fullCopy = function () {
 
 CommentMorph.prototype.setTextWidth = function (pixels) {
     this.contents.maxWidth = pixels;
-    this.contents.drawNew();
+    this.contents.fixLayout();
     this.fixLayout();
 };
 
@@ -12880,7 +12855,7 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
             SyntaxElementMorph.prototype.edge * 2,
             SyntaxElementMorph.prototype.reporterDropFeedbackPadding
         ));
-    this.drawNew();
+    this.rerender();
     delete this.fps;
     delete this.step;
     this.show();
