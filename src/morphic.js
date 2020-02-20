@@ -1180,7 +1180,7 @@
 
 var morphicVersion = '2020-February-20';
 var modules = {}; // keep track of additional loaded modules
-var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
+var useBlurredShadows = true;
 
 const ZERO = new Point();
 Object.freeze(ZERO);
@@ -1405,29 +1405,6 @@ function getMinimumFontHeight() {
         }
     }
     return 0;
-}
-
-function getBlurredShadowSupport() { // +++ review, take out
-    // check for Chrome issue 90001
-    // http://code.google.com/p/chromium/issues/detail?id=90001
-    var source, target, ctx;
-    source = document.createElement('canvas');
-    source.width = 10;
-    source.height = 10;
-    ctx = source.getContext('2d');
-    ctx.fillStyle = 'rgb(255, 0, 0)';
-    ctx.beginPath();
-    ctx.arc(5, 5, 5, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fill();
-    target = document.createElement('canvas');
-    target.width = 10;
-    target.height = 10;
-    ctx = target.getContext('2d');
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = 'rgba(0, 0, 255, 1)';
-    ctx.drawImage(source, 0, 0);
-    return ctx.getImageData(0, 0, 1, 1).data[3] ? true : false;
 }
 
 function getDocumentPositionOf(aDOMelement) {
