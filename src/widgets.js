@@ -1035,7 +1035,7 @@ TabMorph.prototype.drawEdges = function (
 // ToggleMorph ///////////////////////////////////////////////////////
 
 /*
-    I am a PushButton which toggles a check mark ( becoming check box)
+    I am a PushButton which toggles a check mark (becoming check box)
     or a bullet (becoming a radio button). I can have both or either an
     additional label and an additional pictogram, whereas the pictogram
     can be either an instance of (any) Morph, in which case the pictogram
@@ -1559,7 +1559,6 @@ DialogBoxMorph.prototype.inform = function (
         this.addBody(txt);
     }
     this.addButton('ok', 'OK');
-    this.drawNew();
     this.fixLayout();
     this.popUp(world);
 };
@@ -1594,7 +1593,6 @@ DialogBoxMorph.prototype.askYesNo = function (
     this.addButton('ok', 'Yes');
     this.addButton('cancel', 'No');
     this.fixLayout();
-    this.drawNew();
     this.fixLayout();
     this.popUp(world);
 };
@@ -1691,11 +1689,9 @@ DialogBoxMorph.prototype.prompt = function (
     }
 
     this.addBody(txt);
-    txt.drawNew();
+    txt.fixLayout();
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.drawNew();
     this.fixLayout();
     this.popUp(world);
 };
@@ -1744,16 +1740,16 @@ DialogBoxMorph.prototype.promptCode = function (
     text.isEditable = true;
 
     frame.setHeight(size / 4);
-    frame.fixLayout = nop;
+    frame.fixLayout = nop; // +++ ???
     frame.edge = InputFieldMorph.prototype.edge;
     frame.fontSize = InputFieldMorph.prototype.fontSize;
     frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.render = InputFieldMorph.prototype.render; // +++ ?? was: drawNew
     frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     frame.addContents(text);
-    text.drawNew();
+    text.fixLayout();
 
     if (pic) {this.setPicture(pic); }
 
@@ -1772,13 +1768,11 @@ DialogBoxMorph.prototype.promptCode = function (
     bdy.fixLayout();
 
     this.addBody(bdy);
-    frame.drawNew();
-    bdy.drawNew();
+    // +++ frame.drawNew();
+    // +++ bdy.drawNew();
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.drawNew();
     this.fixLayout();
     this.popUp(world);
     text.edit();
@@ -1851,12 +1845,14 @@ DialogBoxMorph.prototype.promptVector = function (
 
     this.addBody(bdy);
 
+/* +++ to be removed, right?
     vec.drawNew();
     xCol.drawNew();
     xInp.drawNew();
     yCol.drawNew();
     yInp.drawNew();
     bdy.fixLayout();
+*/
 
     this.addButton('ok', 'OK');
 
@@ -1872,8 +1868,6 @@ DialogBoxMorph.prototype.promptVector = function (
     }
 
     this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.drawNew();
     this.fixLayout();
 
     this.edit = function () {
@@ -1955,7 +1949,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
         btn.outlineGradient = myself.buttonOutlineGradient;
         btn.padding = myself.buttonPadding;
         btn.contrast = myself.buttonContrast;
-        btn.drawNew();
         btn.fixLayout();
         return btn;
     }
@@ -2116,7 +2109,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
         chk.outlineColor = this.buttonOutlineColor;
         chk.outlineGradient = this.buttonOutlineGradient;
         chk.contrast = this.buttonContrast;
-        chk.drawNew();
         chk.fixLayout();
         bdy.add(chk);
     }
@@ -2134,6 +2126,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
     this.addBody(bdy);
 
+/* +++ to be removed, right?
     usr.drawNew();
     dof.drawNew();
     mCol.drawNew();
@@ -2145,11 +2138,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
     opw.drawNew();
     eml.drawNew();
     bdy.fixLayout();
+*/
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.drawNew();
     this.fixLayout();
 
     function validInputs() {
@@ -2176,7 +2168,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
             checklist = [usr, bmn, byr, eml, pw1, pw2];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
-        } else if (purpose === 'resetPassword' || purpose === 'resendVerification') {
+        } else if (purpose === 'resetPassword' ||
+                purpose === 'resendVerification') {
             checklist = [usr];
         }
 
@@ -2408,7 +2401,7 @@ DialogBoxMorph.prototype.createLabel = function () {
             this.titleBarColor.darker(this.contrast)
         );
         this.label.color = this.titleTextColor;
-        this.label.drawNew();
+        this.label.fixLayout();
         this.add(this.label);
     }
 };
@@ -2435,7 +2428,6 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
     button.outlineGradient = this.buttonOutlineGradient;
     button.padding = this.buttonPadding;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     button.fixLayout();
     this.buttons.add(button);
     return button;
@@ -2447,9 +2439,10 @@ DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas) {
         morph = aMorphOrCanvas;
     } else {
         morph = new Morph();
-        morph.image = aMorphOrCanvas;
-        morph.silentSetWidth(aMorphOrCanvas.width);
-        morph.silentSetHeight(aMorphOrCanvas.height);
+        morph.isCachingImage = true;
+        morph.cachedImage = aMorphOrCanvas;
+        morph.bounds.setWidth(aMorphOrCanvas.width);
+        morph.bounds.setHeight(aMorphOrCanvas.height);
     }
     this.addHead(morph);
 };
@@ -2476,6 +2469,7 @@ DialogBoxMorph.prototype.addShadow = function () {nop(); };
 DialogBoxMorph.prototype.removeShadow = function () {nop(); };
 
 DialogBoxMorph.prototype.fixLayout = function () {
+    // determine by extent and arrange my components
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2, w;
 
     if (this.head) {
@@ -2483,8 +2477,8 @@ DialogBoxMorph.prototype.fixLayout = function () {
             this.padding,
             th + this.padding
         )));
-        this.silentSetWidth(this.head.width() + this.padding * 2);
-        this.silentSetHeight(
+        this.bounds.setWidth(this.head.width() + this.padding * 2);
+        this.bounds.setHeight(
             this.head.height()
                 + this.padding * 2
                 + th
@@ -2497,11 +2491,11 @@ DialogBoxMorph.prototype.fixLayout = function () {
                 0,
                 this.padding
             )));
-            this.silentSetWidth(Math.max(
+            this.bounds.setWidth(Math.max(
                 this.width(),
                 this.body.width() + this.padding * 2
             ));
-            this.silentSetHeight(
+            this.bounds.setHeight(
                 this.height()
                     + this.body.height()
                     + this.padding
@@ -2520,8 +2514,8 @@ DialogBoxMorph.prototype.fixLayout = function () {
                 this.padding,
                 th + this.padding
             )));
-            this.silentSetWidth(this.body.width() + this.padding * 2);
-            this.silentSetHeight(
+            this.bounds.setWidth(this.body.width() + this.padding * 2);
+            this.bounds.setHeight(
                 this.body.height()
                     + this.padding * 2
                     + th
@@ -2536,12 +2530,12 @@ DialogBoxMorph.prototype.fixLayout = function () {
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.buttons.height()
                     + this.padding
         );
-        this.silentSetWidth(Math.max(
+        this.bounds.setWidth(Math.max(
                 this.width(),
                 this.buttons.width()
                         + (2 * this.padding)
@@ -2560,7 +2554,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
 */
 
 DialogBoxMorph.prototype.shadowImage = function (off, color) {
-    // fallback for Windows Chrome-Shadow bug
+    // flat mode
     var fb, img, outline, sha, ctx,
         offset = off || new Point(7, 7),
         clr = color || new Color(0, 0, 0);
@@ -2635,14 +2629,8 @@ DialogBoxMorph.prototype.processKeyDown = function (event) {
 
 // DialogBoxMorph drawing
 
-DialogBoxMorph.prototype.drawNew = function () {
-    this.fullChanged();
-    Morph.prototype.trackChanges = false;
-    DialogBoxMorph.uber.removeShadow.call(this);
-    this.fixLayout();
-
-    var context,
-        gradient,
+DialogBoxMorph.prototype.render = function (ctx) {
+    var gradient,
         w = this.width(),
         h = this.height(),
         th = Math.floor(
@@ -2655,14 +2643,11 @@ DialogBoxMorph.prototype.drawNew = function () {
 
     // this.alpha = isFlat ? 0.9 : 1;
 
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-
     // title bar
     if (isFlat) {
-        context.fillStyle = this.titleBarColor.toString();
+        ctx.fillStyle = this.titleBarColor.toString();
     } else {
-        gradient = context.createLinearGradient(0, 0, 0, th);
+        gradient = ctx.createLinearGradient(0, 0, 0, th);
         gradient.addColorStop(
             0,
             this.titleBarColor.lighter(this.contrast / 2).toString()
@@ -2671,37 +2656,34 @@ DialogBoxMorph.prototype.drawNew = function () {
             1,
             this.titleBarColor.darker(this.contrast).toString()
         );
-        context.fillStyle = gradient;
+        ctx.fillStyle = gradient;
     }
-    context.beginPath();
+    ctx.beginPath();
     this.outlinePathTitle(
-        context,
+        ctx,
         isFlat ? 0 : this.corner
     );
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
     // flat shape
     // body
-    context.fillStyle = this.color.toString();
-    context.beginPath();
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
     this.outlinePathBody(
-        context,
+        ctx,
         isFlat ? 0 : this.corner
     );
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 
     if (isFlat) {
-        DialogBoxMorph.uber.addShadow.call(this);
-        Morph.prototype.trackChanges = true;
-        this.fullChanged();
         return;
     }
 
     // 3D-effect
     // bottom left corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.corner,
         0,
@@ -2710,17 +2692,17 @@ DialogBoxMorph.prototype.drawNew = function () {
     gradient.addColorStop(0, this.color.toString());
     gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
 
-    context.lineWidth = this.corner;
-    context.lineCap = 'round';
-    context.strokeStyle = gradient;
+    ctx.lineWidth = this.corner;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(this.corner, h - shift);
-    context.lineTo(this.corner + 1, h - shift);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.corner, h - shift);
+    ctx.lineTo(this.corner + 1, h - shift);
+    ctx.stroke();
 
     // bottom edge
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.corner,
         0,
@@ -2729,17 +2711,17 @@ DialogBoxMorph.prototype.drawNew = function () {
     gradient.addColorStop(0, this.color.toString());
     gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
 
-    context.lineWidth = this.corner;
-    context.lineCap = 'butt';
-    context.strokeStyle = gradient;
+    ctx.lineWidth = this.corner;
+    ctx.lineCap = 'butt';
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(this.corner, h - shift);
-    context.lineTo(w - this.corner, h - shift);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.corner, h - shift);
+    ctx.lineTo(w - this.corner, h - shift);
+    ctx.stroke();
 
     // right body edge
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         w - this.corner,
         0,
         w,
@@ -2748,20 +2730,20 @@ DialogBoxMorph.prototype.drawNew = function () {
     gradient.addColorStop(0, this.color.toString());
     gradient.addColorStop(1, this.color.darker(this.contrast).toString());
 
-    context.lineWidth = this.corner;
-    context.lineCap = 'butt';
-    context.strokeStyle = gradient;
+    ctx.lineWidth = this.corner;
+    ctx.lineCap = 'butt';
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(w - shift, th);
-    context.lineTo(w - shift, h - this.corner);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(w - shift, th);
+    ctx.lineTo(w - shift, h - this.corner);
+    ctx.stroke();
 
     // bottom right corner
     x = w - this.corner;
     y = h - this.corner;
 
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         x,
         y,
         0,
@@ -2772,12 +2754,12 @@ DialogBoxMorph.prototype.drawNew = function () {
     gradient.addColorStop(0, this.color.toString());
     gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
 
-    context.lineCap = 'butt';
+    ctx.lineCap = 'butt';
 
-    context.strokeStyle = gradient;
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.arc(
+    ctx.beginPath();
+    ctx.arc(
         x,
         y,
         shift,
@@ -2785,10 +2767,10 @@ DialogBoxMorph.prototype.drawNew = function () {
         radians(0),
         true
     );
-    context.stroke();
+    ctx.stroke();
 
     // left body edge
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         this.corner,
@@ -2800,16 +2782,16 @@ DialogBoxMorph.prototype.drawNew = function () {
     );
     gradient.addColorStop(1, this.color.toString());
 
-    context.lineCap = 'butt';
-    context.strokeStyle = gradient;
+    ctx.lineCap = 'butt';
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(shift, th);
-    context.lineTo(shift, h - this.corner * 2);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(shift, th);
+    ctx.lineTo(shift, h - this.corner * 2);
+    ctx.stroke();
 
     // left vertical bottom corner
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         this.corner,
@@ -2821,25 +2803,21 @@ DialogBoxMorph.prototype.drawNew = function () {
     );
     gradient.addColorStop(1, this.color.toString());
 
-    context.lineCap = 'round';
-    context.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(shift, h - this.corner * 2);
-    context.lineTo(shift, h - this.corner - shift);
-    context.stroke();
-
-    DialogBoxMorph.uber.addShadow.call(this);
-    Morph.prototype.trackChanges = true;
-    this.fullChanged();
+    ctx.beginPath();
+    ctx.moveTo(shift, h - this.corner * 2);
+    ctx.lineTo(shift, h - this.corner - shift);
+    ctx.stroke();
 };
 
-DialogBoxMorph.prototype.outlinePathTitle = function (context, radius) {
+DialogBoxMorph.prototype.outlinePathTitle = function (ctx, radius) {
     var w = this.width(),
         h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
 
     // top left:
-    context.arc(
+    ctx.arc(
         radius,
         radius,
         radius,
@@ -2848,7 +2826,7 @@ DialogBoxMorph.prototype.outlinePathTitle = function (context, radius) {
         false
     );
     // top right:
-    context.arc(
+    ctx.arc(
         w - radius,
         radius,
         radius,
@@ -2857,26 +2835,26 @@ DialogBoxMorph.prototype.outlinePathTitle = function (context, radius) {
         false
     );
     // bottom right:
-    context.lineTo(w, h);
+    ctx.lineTo(w, h);
 
     // bottom left:
-    context.lineTo(0, h);
+    ctx.lineTo(0, h);
 };
 
-DialogBoxMorph.prototype.outlinePathBody = function (context, radius) {
+DialogBoxMorph.prototype.outlinePathBody = function (ctx, radius) {
     var w = this.width(),
         h = this.height(),
         th = Math.floor(fontHeight(this.titleFontSize)) +
             this.titlePadding * 2;
 
     // top left:
-    context.moveTo(0, th);
+    ctx.moveTo(0, th);
 
     // top right:
-    context.lineTo(w, th);
+    ctx.lineTo(w, th);
 
     // bottom right:
-    context.arc(
+    ctx.arc(
         w - radius,
         h - radius,
         radius,
@@ -2885,7 +2863,7 @@ DialogBoxMorph.prototype.outlinePathBody = function (context, radius) {
         false
     );
     // bottom left:
-    context.arc(
+    ctx.arc(
         radius,
         h - radius,
         radius,

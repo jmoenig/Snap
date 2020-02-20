@@ -33,21 +33,6 @@
                 world = new WorldMorph(document.getElementById('world'));
                 world.isDevMode = true; // +++
                 // new IDE_Morph().openIn(world);
-
-                var mo = new PushButtonMorph(
-                    null, // target
-                    function () {console.log('tiggered'); },
-                    'Click!',
-                    null, // environment
-                    'this is a hint',
-                    null // label color
-                );
-                mo.setPosition(new Point(100, 100));
-                // mo.setExtent(new Point(15, 300));
-                mo.fixLayout();
-                world.add(mo);
-
-
                 loop();
 			};
             function loop() {
