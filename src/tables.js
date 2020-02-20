@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-January-03';
+modules.tables = '2020-February-20';
 
 var Table;
 var TableCellMorph;
@@ -274,7 +274,7 @@ TableCellMorph.uber = Morph.prototype;
 
 // TableCellMorph global setting:
 
-TableCellMorph.prototype.listSymbol = ArgMorph.prototype.listIcon();
+TableCellMorph.prototype.listSymbol = null; // +++ disabled while working on rendering +++ ArgMorph.prototype.listIcon();
 
 // TableCellMorph instance creation:
 
