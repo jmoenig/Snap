@@ -2904,9 +2904,10 @@ AlignmentMorph.prototype.init = function (orientation, padding) {
 
 // AlignmentMorph displaying and layout
 
-AlignmentMorph.prototype.drawNew = function () {
-    this.image = newCanvas(new Point(1, 1), false, this.image);
-    this.fixLayout();
+AlignmentMorph.prototype.render = function (ctx) {
+    // override to not draw anything, as alignments are just containers
+    // for layout of their components
+    nop(ctx);
 };
 
 AlignmentMorph.prototype.fixLayout = function () {
