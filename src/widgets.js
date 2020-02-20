@@ -1522,6 +1522,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     // override inherited properites:
     this.isDraggable = true;
     this.noDropShadow = true;
+    this.fullShadowSource = false;
     this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.createButtons();
