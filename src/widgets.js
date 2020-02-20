@@ -1846,15 +1846,6 @@ DialogBoxMorph.prototype.promptVector = function (
 
     this.addBody(bdy);
 
-/* +++ to be removed, right?
-    vec.drawNew();
-    xCol.drawNew();
-    xInp.drawNew();
-    yCol.drawNew();
-    yInp.drawNew();
-    bdy.fixLayout();
-*/
-
     this.addButton('ok', 'OK');
 
     if (deflt instanceof Point) {
@@ -2126,20 +2117,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
     if (pic) {this.setPicture(pic); }
 
     this.addBody(bdy);
-
-/* +++ to be removed, right?
-    usr.drawNew();
-    dof.drawNew();
-    mCol.drawNew();
-    bmn.drawNew();
-    yCol.drawNew();
-    byr.drawNew();
-    pw1.drawNew();
-    pw2.drawNew();
-    opw.drawNew();
-    eml.drawNew();
-    bdy.fixLayout();
-*/
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
@@ -2466,9 +2443,6 @@ DialogBoxMorph.prototype.addBody = function (aMorph) {
 
 // DialogBoxMorph layout
 
-// +++ DialogBoxMorph.prototype.addShadow = function () {nop(); };
-// +++ DialogBoxMorph.prototype.removeShadow = function () {nop(); };
-
 DialogBoxMorph.prototype.fixLayout = function () {
     // determine by extent and arrange my components
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2, w;
@@ -2551,70 +2525,6 @@ DialogBoxMorph.prototype.fixLayout = function () {
     this.addShadow(new Point(2, 2), 80);
 
 };
-
-// DialogBoxMorph shadow
-
-/*
-    only take the 'plain' image, so the box rounding doesn't become
-    conflicted by the scrolling scripts pane
-*/
-
-/*
-DialogBoxMorph.prototype.shadowImage = function (off, color) {
-    // flat mode
-    var fb, img, outline, sha, ctx,
-        offset = off || new Point(7, 7),
-        clr = color || new Color(0, 0, 0);
-    fb = this.extent();
-    img = this.image;
-    outline = newCanvas(fb);
-    ctx = outline.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.drawImage(
-        img,
-        -offset.x,
-        -offset.y
-    );
-    sha = newCanvas(fb);
-    ctx = sha.getContext('2d');
-    ctx.drawImage(outline, 0, 0);
-    ctx.globalCompositeOperation = 'source-atop';
-    ctx.fillStyle = clr.toString();
-    ctx.fillRect(0, 0, fb.x, fb.y);
-    return sha;
-};
-
-DialogBoxMorph.prototype.shadowImageBlurred = function (off, color) {
-    var fb, img, sha, ctx,
-        offset = off || new Point(7, 7),
-        blur = this.shadowBlur,
-        clr = color || new Color(0, 0, 0);
-    fb = this.extent().add(blur * 2);
-    img = this.image;
-    sha = newCanvas(fb);
-    ctx = sha.getContext('2d');
-    ctx.shadowOffsetX = offset.x;
-    ctx.shadowOffsetY = offset.y;
-    ctx.shadowBlur = blur;
-    ctx.shadowColor = clr.toString();
-    ctx.drawImage(
-        img,
-        blur - offset.x,
-        blur - offset.y
-    );
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.drawImage(
-        img,
-        blur - offset.x,
-        blur - offset.y
-    );
-    return sha;
-};
-*/
 
 // DialogBoxMorph keyboard events
 
