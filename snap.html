@@ -5,8 +5,8 @@
         <title>Snap! Build Your Own Blocks 6.0.0 - dev -</title>
         <link rel="shortcut icon" href="src/favicon.ico">
         <script type="text/javascript" src="src/morphic.js?version=2020-02-10"></script>
-        <script type="text/javascript" src="src/widgets.js?version=2020-01-03"></script>
         <script type="text/javascript" src="src/symbols.js?version=2020-02-10"></script>
+        <script type="text/javascript" src="src/widgets.js?version=2020-01-03"></script>
         <script type="text/javascript" src="src/blocks.js?version=2020-02-11"></script>
 <!--
         <script type="text/javascript" src="src/threads.js?version=2019-12-19"></script>
@@ -33,6 +33,21 @@
                 world = new WorldMorph(document.getElementById('world'));
                 world.isDevMode = true; // +++
                 // new IDE_Morph().openIn(world);
+
+                var mo = new PushButtonMorph(
+                    null, // target
+                    function () {console.log('tiggered'); },
+                    'Click!',
+                    null, // environment
+                    'this is a hint',
+                    null // label color
+                );
+                mo.setPosition(new Point(100, 100));
+                // mo.setExtent(new Point(15, 300));
+                mo.fixLayout();
+                world.add(mo);
+
+
                 loop();
 			};
             function loop() {

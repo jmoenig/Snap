@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-February-19';
+modules.widgets = '2020-February-20';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -166,8 +166,6 @@ PushButtonMorph.prototype.init = function (
     this.label = null;
     this.labelMinExtent = new Point(0, 0);
     this.hint = hint || null;
-    this.template = template || null; // for pre-computed backbrounds
-    // if a template is specified, its background images are used as cache
     this.isDisabled = false;
 
     // initialize inherited properties:
@@ -175,6 +173,7 @@ PushButtonMorph.prototype.init = function (
 
     // override inherited properites:
     this.color = PushButtonMorph.prototype.color;
+    this.createLabel();
     this.fixLayout();
     this.rerender();
 };
@@ -185,12 +184,16 @@ PushButtonMorph.prototype.fixLayout = function () {
     // make sure I at least encompass my label
     if (this.label !== null) {
         var padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
-        this.bounds.setExtent(new Point( // +++ turn into 2 statements width and height
-            Math.max(this.label.width(), this.labelMinExtent.x) + padding,
-            Math.max(this.label instanceof StringMorph ?
-                    this.label.rawHeight() :
-                        this.label.height(), this.labelMinExtent.y) + padding
-        ));
+        this.bounds.setWidth(
+            Math.max(this.label.width(), this.labelMinExtent.x) + padding
+        );
+        this.bounds.setHeight(
+            Math.max(
+                this.label instanceof StringMorph ?
+                    this.label.rawHeight() : this.label.height(),
+                this.labelMinExtent.y
+            ) + padding
+        );
         this.label.setCenter(this.center());
     }
 };
@@ -221,15 +224,44 @@ PushButtonMorph.prototype.mouseLeave = function () {
 
 // PushButtonMorph drawing:
 
-PushButtonMorph.prototype.outlinePath = BoxMorph.prototype.outlinePath;
+PushButtonMorph.prototype.render = function (ctx) {
+    if (this.userState === 'highlight') {
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.highlightColor);
+        this.drawEdges(
+            ctx,
+            this.highlightColor,
+            this.highlightColor.lighter(this.contrast),
+            this.highlightColor.darker(this.contrast)
+        );
+    } else if (this.userState === 'pressed') {
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.pressColor);
+        this.drawEdges(
+            ctx,
+            this.pressColor,
+            this.pressColor.darker(this.contrast),
+            this.pressColor.lighter(this.contrast)
+        );
+    } else {
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.color);
+        this.drawEdges(
+            ctx,
+            this.color,
+            this.color.lighter(this.contrast),
+            this.color.darker(this.contrast)
+        );
+    }
+};
 
-PushButtonMorph.prototype.drawOutline = function (context) {
+PushButtonMorph.prototype.drawOutline = function (ctx) {
     var outlineStyle,
         isFlat = MorphicPreferences.isFlat && !this.is3D;
 
     if (!this.outline || isFlat) {return null; }
     if (this.outlineGradient) {
-        outlineStyle = context.createLinearGradient(
+        outlineStyle = ctx.createLinearGradient(
             0,
             0,
             0,
@@ -240,34 +272,34 @@ PushButtonMorph.prototype.drawOutline = function (context) {
     } else {
         outlineStyle = this.outlineColor.toString();
     }
-    context.fillStyle = outlineStyle;
-    context.beginPath();
+    ctx.fillStyle = outlineStyle;
+    ctx.beginPath();
     this.outlinePath(
-        context,
+        ctx,
         isFlat ? 0 : this.corner,
         0
     );
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 };
 
-PushButtonMorph.prototype.drawBackground = function (context, color) {
+PushButtonMorph.prototype.drawBackground = function (ctx, color) {
     var isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    context.fillStyle = color.toString();
-    context.beginPath();
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
     this.outlinePath(
-        context,
+        ctx,
         isFlat ? 0 : Math.max(this.corner - this.outline, 0),
         this.outline
     );
-    context.closePath();
-    context.fill();
-    context.lineWidth = this.outline;
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = this.outline;
 };
 
 PushButtonMorph.prototype.drawEdges = function (
-    context,
+    ctx,
     color,
     topColor,
     bottomColor
@@ -279,7 +311,7 @@ PushButtonMorph.prototype.drawEdges = function (
         gradient;
 
     // top:
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         this.outline,
         0,
@@ -288,16 +320,16 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, topColor.toString());
     gradient.addColorStop(1, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.moveTo(minInset, this.outline + this.edge / 2);
-    context.lineTo(w - minInset, this.outline + this.edge / 2);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.moveTo(minInset, this.outline + this.edge / 2);
+    ctx.lineTo(w - minInset, this.outline + this.edge / 2);
+    ctx.stroke();
 
     // top-left corner:
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         this.corner,
         this.corner,
         Math.max(this.corner - this.outline - this.edge, 0),
@@ -308,11 +340,11 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, color.toString());
     gradient.addColorStop(1, topColor.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.arc(
         this.corner,
         this.corner,
         Math.max(this.corner - this.outline - this.edge / 2, 0),
@@ -320,10 +352,10 @@ PushButtonMorph.prototype.drawEdges = function (
         radians(270),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // left:
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         this.outline,
         0,
         this.outline + this.edge,
@@ -332,16 +364,16 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, topColor.toString());
     gradient.addColorStop(1, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.moveTo(this.outline + this.edge / 2, minInset);
-    context.lineTo(this.outline + this.edge / 2, h - minInset);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.moveTo(this.outline + this.edge / 2, minInset);
+    ctx.lineTo(this.outline + this.edge / 2, h - minInset);
+    ctx.stroke();
 
     // bottom:
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.outline,
         0,
@@ -350,16 +382,16 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, bottomColor.toString());
     gradient.addColorStop(1, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.moveTo(minInset, h - this.outline - this.edge / 2);
-    context.lineTo(w - minInset, h - this.outline - this.edge / 2);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.moveTo(minInset, h - this.outline - this.edge / 2);
+    ctx.lineTo(w - minInset, h - this.outline - this.edge / 2);
+    ctx.stroke();
 
     // bottom-right corner:
-    gradient = context.createRadialGradient(
+    gradient = ctx.createRadialGradient(
         w - this.corner,
         h - this.corner,
         Math.max(this.corner - this.outline - this.edge, 0),
@@ -370,11 +402,11 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, color.toString());
     gradient.addColorStop(1, bottomColor.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.arc(
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.arc(
         w - this.corner,
         h - this.corner,
         Math.max(this.corner - this.outline - this.edge / 2, 0),
@@ -382,10 +414,10 @@ PushButtonMorph.prototype.drawEdges = function (
         radians(90),
         false
     );
-    context.stroke();
+    ctx.stroke();
 
     // right:
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         w - this.outline,
         0,
         w - this.outline - this.edge,
@@ -394,62 +426,16 @@ PushButtonMorph.prototype.drawEdges = function (
     gradient.addColorStop(0, bottomColor.toString());
     gradient.addColorStop(1, color.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = this.edge;
-    context.beginPath();
-    context.moveTo(w - this.outline - this.edge / 2, minInset);
-    context.lineTo(w - this.outline - this.edge / 2, h - minInset);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.beginPath();
+    ctx.moveTo(w - this.outline - this.edge / 2, minInset);
+    ctx.lineTo(w - this.outline - this.edge / 2, h - minInset);
+    ctx.stroke();
 };
 
-PushButtonMorph.prototype.createBackgrounds = function () {
-    var context,
-        ext = this.extent();
-
-    if (this.template) { // take the backgrounds images from the template
-        this.image = this.template.image;
-        this.normalImage = this.template.normalImage;
-        this.highlightImage = this.template.highlightImage;
-        this.pressImage = this.template.pressImage;
-        return null;
-    }
-
-    this.normalImage = newCanvas(ext, false, this.normalImage);
-    context = this.normalImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.color);
-    this.drawEdges(
-        context,
-        this.color,
-        this.color.lighter(this.contrast),
-        this.color.darker(this.contrast)
-    );
-
-    this.highlightImage = newCanvas(ext, false, this.highlightImage);
-    context = this.highlightImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.highlightColor);
-    this.drawEdges(
-        context,
-        this.highlightColor,
-        this.highlightColor.lighter(this.contrast),
-        this.highlightColor.darker(this.contrast)
-    );
-
-    this.pressImage = newCanvas(ext, false, this.pressImage);
-    context = this.pressImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.pressColor);
-    this.drawEdges(
-        context,
-        this.pressColor,
-        this.pressColor.darker(this.contrast),
-        this.pressColor.lighter(this.contrast)
-    );
-
-    this.image = this.normalImage;
-};
+PushButtonMorph.prototype.outlinePath = BoxMorph.prototype.outlinePath;
 
 PushButtonMorph.prototype.createLabel = function () {
     var shading = !MorphicPreferences.isFlat || this.is3D;
@@ -464,7 +450,6 @@ PushButtonMorph.prototype.createLabel = function () {
             this.label.shadowColor = this.labelShadowColor;
         }
         this.label.color = this.labelColor;
-        this.label.drawNew();
     } else {
         this.label = new StringMorph(
             localize(this.labelString),
@@ -488,7 +473,7 @@ PushButtonMorph.prototype.disable = function () {
     this.forAllChildren(function (child) {
         child.alpha = 0.3;
     });
-    this.changed();
+    this.rerender();
 };
 
 PushButtonMorph.prototype.enable = function () {
@@ -496,7 +481,7 @@ PushButtonMorph.prototype.enable = function () {
     this.forAllChildren(function (child) {
         child.alpha = 1;
     });
-    this.changed();
+    this.rerender();
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////
