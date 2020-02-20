@@ -1521,6 +1521,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
 
     // override inherited properites:
     this.isDraggable = true;
+    this.noDropShadow = true;
     this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.createButtons();
@@ -2465,8 +2466,8 @@ DialogBoxMorph.prototype.addBody = function (aMorph) {
 
 // DialogBoxMorph layout
 
-DialogBoxMorph.prototype.addShadow = function () {nop(); };
-DialogBoxMorph.prototype.removeShadow = function () {nop(); };
+// +++ DialogBoxMorph.prototype.addShadow = function () {nop(); };
+// +++ DialogBoxMorph.prototype.removeShadow = function () {nop(); };
 
 DialogBoxMorph.prototype.fixLayout = function () {
     // determine by extent and arrange my components
@@ -2544,6 +2545,11 @@ DialogBoxMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh a shallow shadow
+    this.removeShadow();
+    this.addShadow(new Point(2, 2), 80);
+
 };
 
 // DialogBoxMorph shadow
@@ -2553,6 +2559,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
     conflicted by the scrolling scripts pane
 */
 
+/*
 DialogBoxMorph.prototype.shadowImage = function (off, color) {
     // flat mode
     var fb, img, outline, sha, ctx,
@@ -2607,6 +2614,7 @@ DialogBoxMorph.prototype.shadowImageBlurred = function (off, color) {
     );
     return sha;
 };
+*/
 
 // DialogBoxMorph keyboard events
 

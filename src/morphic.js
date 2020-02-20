@@ -68,6 +68,7 @@
 
      * keyboard navigation can be activated for any visible menu by pressing an arbitrary key
 
+    * new "noDropShadow" property for Morphs that already have built-in shadows (Menus, SpeechBubbles)
 
     documentation contents
     ----------------------
@@ -1176,7 +1177,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-February-18';
+var morphicVersion = '2020-February-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3060,6 +3061,7 @@ Morph.prototype.init = function () {
     this.isTemplate = false;
     this.acceptsDrops = false;
     this.isFreeForm = false;
+    this.noDropShadow = false;
     this.fps = 0;
     this.customContextMenu = null;
     this.lastTime = Date.now();
@@ -5974,6 +5976,7 @@ SpeechBubbleMorph.prototype.init = function (
         border || ((border === 0) ? 0 : 1),
         borderColor || new Color(140, 140, 140)
     );
+    this.noDropShadow = true;
     this.color = color || new Color(230, 230, 230);
     this.fixLayout();
 };
@@ -7820,6 +7823,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
 
     // override inherited properties:
     this.isDraggable = false;
+    this.noDropShadow = true;
 
     // immutable properties:
     this.border = null;
@@ -11039,7 +11043,7 @@ HandMorph.prototype.grab = function (aMorph) {
     if (this.children.length === 0) {
         this.world.stopEditing();
         this.grabOrigin = aMorph.situation();
-        if (!(aMorph instanceof MenuMorph)) {
+        if (!aMorph.noDropShadow) {
             aMorph.addShadow();
         }
         if (aMorph.prepareToBeGrabbed) {
@@ -11062,7 +11066,7 @@ HandMorph.prototype.drop = function () {
         this.changed();
         target.add(morphToDrop);
         morphToDrop.changed();
-        if (!(morphToDrop instanceof MenuMorph)) {
+        if (!morphToDrop.noDropShadow) {
 	        morphToDrop.removeShadow();
         }
         this.children = [];
