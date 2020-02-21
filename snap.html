@@ -35,20 +35,20 @@
             window.onload = function () {
                 world = new WorldMorph(document.getElementById('world'));
                 world.isDevMode = false;
-                //new IDE_Morph().openIn(world);
-
+                // new IDE_Morph().openIn(world);
+///*
                 var t = new ToggleButtonMorph(
                     null,
                     null,
                     () => world.isDevMode = !world.isDevMode,
-                    new SymbolMorph('gears'), //'dev mode',
+                    [new SymbolMorph('gears'), new SymbolMorph('globe')], //'dev mode',
                     () => world.isDevMode,
                     null,
                     'hacker possibilities'
                 );
                 t.setPosition(new Point(100, 100));
                 world.add(t);
-
+//*/
                 loop();
 			};
             function loop() {
