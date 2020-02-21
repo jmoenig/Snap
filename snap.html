@@ -34,8 +34,8 @@
             var world;
             window.onload = function () {
                 world = new WorldMorph(document.getElementById('world'));
-                world.isDevMode = true; // +++
-                // new IDE_Morph().openIn(world);
+                world.isDevMode = false;
+                new IDE_Morph().openIn(world);
                 loop();
 			};
             function loop() {

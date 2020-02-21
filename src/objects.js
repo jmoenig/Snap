@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-January-28';
+modules.objects = '2020-February-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1654,7 +1654,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.paletteCache = {}; // not to be serialized (!)
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
-    this.wasWarped = false; // not to be serialized, used for fast-tracking
+    this.wasWarped = false; // not to be serialized, used for fast-tracking // +++ is this needed anymore?
 
     this.graphicsValues = {
         'color': 0,
@@ -1676,6 +1676,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.cachedPropagation = false; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
+    // video- and rendering state
+    this.imageExtent = new Point(0, 0);
     this.imageData = {}; // version: date, pixels: Uint32Array
     this.motionAmount = 0;
     this.motionDirection = 0;
@@ -1683,13 +1685,13 @@ SpriteMorph.prototype.init = function (globals) {
 
     SpriteMorph.uber.init.call(this);
 
+    this.isCachingImage = true;
     this.cachedHSV = this.color.hsv();
     this.isDraggable = true;
     this.isDown = false;
     this.heading = 90;
-    this.changed();
-    this.drawNew();
-    this.changed();
+    this.fixLayout();
+    this.rerender();
 };
 
 // SpriteMorph duplicating (fullCopy)
@@ -1807,13 +1809,25 @@ SpriteMorph.prototype.setName = function (string) {
 
 // SpriteMorph rendering
 
-SpriteMorph.prototype.drawNew = function () {
+SpriteMorph.prototype.getImage = function () {
+    // overrides inherited method to allow for an image exceeding my bounds
+    // to accommodate rotation and to disable retina resolution to
+    // optimize graphics performance
+    if (this.shouldRerender || !this.cachedImage) {
+        this.cachedImage = newCanvas(this.imageExtent, true, this.cachedImage);
+        this.render(this.cachedImage.getContext('2d'));
+        this.shouldRerender = false;
+    }
+    return this.cachedImage;
+};
+
+SpriteMorph.prototype.fixLayout = function () {
+    // determine my extent and the extent designated for my cached image
     var myself = this,
         currentCenter,
         facing, // actual costume heading based on my rotation style
         isFlipped,
         isLoadingCostume,
-        cst,
         pic, // (flipped copy of) actual costume based on my rotation style
         imageSide,
         stageScale,
@@ -1822,14 +1836,8 @@ SpriteMorph.prototype.drawNew = function () {
         origin,
         shift,
         corner,
-        costumeExtent,
-        ctx,
-        handle;
+        costumeExtent;
 
-    if (this.isWarped) {
-        this.wantsRedraw = true;
-        return;
-    }
     currentCenter = this.center();
     isLoadingCostume = this.costume &&
         typeof this.costume.loaded === 'function';
@@ -1844,32 +1852,34 @@ SpriteMorph.prototype.drawNew = function () {
         }
     }
     if (this.costume && !isLoadingCostume) {
-        pic = isFlipped ? this.costume.flipped() : this.costume;
+         pic = isFlipped ? this.costume.flipped() : this.costume;
 
-        // determine the rotated costume's bounding box
-        corners = pic.bounds().corners().map(function (point) {
-            return point.rotateBy(
-                radians(facing - 90),
-                myself.costume.center()
-            );
-        });
-        origin = corners[0];
-        corner = corners[0];
-        corners.forEach(function (point) {
-            origin = origin.min(point);
-            corner = corner.max(point);
-        });
-        costumeExtent = origin.corner(corner)
-            .extent().multiplyBy(this.scale * stageScale);
+         // determine the rotated costume's bounding box
+         corners = pic.bounds().corners().map(function (point) {
+             return point.rotateBy(
+                 radians(facing - 90),
+                 myself.costume.center()
+             );
+         });
+         origin = corners[0];
+         corner = corners[0];
+         corners.forEach(function (point) {
+             origin = origin.min(point);
+             corner = corner.max(point);
+         });
+         costumeExtent = origin.corner(corner)
+             .extent().multiplyBy(this.scale * stageScale);
 
-        // determine the new relative origin of the rotated shape
-        shift = new Point(0, 0).rotateBy(
-            radians(-(facing - 90)),
-            pic.center()
-        ).subtract(origin);
+         // determine the new relative origin of the rotated shape
+         shift = new Point(0, 0).rotateBy(
+             radians(-(facing - 90)),
+             pic.center()
+         ).subtract(origin);
 
-        // create a new, adequately dimensioned canvas
-        // and draw the costume on it
+        // determine an adequately dimensioned image extent, so the
+        // shape on the canvas ran be rotated without having to create
+        // a new canvas each time
+
         if (this.rotationStyle === 1) { // rotate freely in all directions
             // create a canvas that is big enough, so the sprite's current
             // costume can be fully rotated inside, so we can recycle
@@ -1886,30 +1896,16 @@ SpriteMorph.prototype.drawNew = function () {
             imageSide = Math.sqrt(
                 Math.pow(pic.width(), 2) + Math.pow(pic.height(), 2)
             ) * this.scale * stageScale;
-            this.image = newCanvas(
-                new Point(imageSide, imageSide),
-                true,
-                this.image
-            );
+            this.imageExtent = Point(imageSide, imageSide);
         } else { // don't actually rotate
-            this.image = newCanvas(costumeExtent, true, this.image);
+            this.imageExtent = costumeExtent;
         }
-        this.silentSetExtent(costumeExtent);
-        ctx = this.image.getContext('2d');
-        ctx.save();
-        ctx.scale(this.scale * stageScale, this.scale * stageScale);
-        ctx.translate(shift.x, shift.y);
-        ctx.rotate(radians(facing - 90));
-        ctx.drawImage(pic.contents, 0, 0);
-        ctx.restore();
+        this.bounds.setExtent(costumeExtent);
 
-        // apply graphics effects to image
-        this.image = this.applyGraphicsEffects(this.image);
-
-        // adjust my position to the rotation
+        // adjust my position to the rotation // +++ why do we need this?
         this.setCenter(currentCenter, true); // just me
 
-        // determine my rotation offset
+        // determine my rotation offset // +++ why do we need this?
         this.rotationOffset = shift
             .translateBy(pic.rotationCenter)
             .rotateBy(radians(-(facing - 90)), shift)
@@ -1923,11 +1919,61 @@ SpriteMorph.prototype.drawNew = function () {
             ),
             1000
         );
-        this.silentSetExtent(new Point(newX, newX));
+        this.bounds.setWidth(newX);
+        this.bounds.setHeight(newX);
         this.setCenter(currentCenter, true); // just me
-        SpriteMorph.uber.drawNew.call(this, facing, this.image); // recycle
         this.rotationOffset = this.extent().divideBy(2);
-        this.image = this.applyGraphicsEffects(this.image);
+    }
+    this.version = Date.now();
+ };
+
+SpriteMorph.prototype.render = function (ctx) {
+    var myself = this,
+        facing, // actual costume heading based on my rotation style
+        isFlipped,
+        isLoadingCostume,
+        cst,
+        pic, // (flipped copy of) actual costume based on my rotation style
+        stageScale,
+        origin,
+        shift,
+        handle;
+
+    isLoadingCostume = this.costume &&
+        typeof this.costume.loaded === 'function';
+    stageScale = this.parent instanceof StageMorph ?
+            this.parent.scale : 1;
+    facing = this.rotationStyle ? this.heading : 90;
+    if (this.rotationStyle === 2) {
+        facing = 90;
+        if ((this.heading > 180 && (this.heading < 360))
+                || (this.heading < 0 && (this.heading > -180))) {
+            isFlipped = true;
+        }
+    }
+    if (this.costume && !isLoadingCostume) {
+        pic = isFlipped ? this.costume.flipped() : this.costume;
+
+        // determine the relative origin of the rotated shape
+        origin = pic.bounds().origin.rotateBy(
+            radians(facing - 90),
+            this.costume.center()
+        );
+        shift = new Point(0, 0).rotateBy(
+            radians(-(facing - 90)),
+            pic.center()
+        ).subtract(origin);
+
+        ctx.save();
+        ctx.scale(this.scale * stageScale, this.scale * stageScale);
+        ctx.translate(shift.x, shift.y);
+        ctx.rotate(radians(facing - 90));
+        ctx.drawImage(pic.contents, 0, 0);
+        ctx.restore();
+
+    } else {
+        SpriteMorph.uber.render.call(this, ctx);
+
         if (isLoadingCostume) { // retry until costume is done loading
             cst = this.costume;
             handle = setInterval(
@@ -1940,10 +1986,11 @@ SpriteMorph.prototype.drawNew = function () {
             return myself.wearCostume(null, true);
         }
     }
-    this.version = Date.now(); // for observer optimization
+    // apply graphics effects to image
+    // +++ this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // +++ graphic effects disabled while working on rendering
 };
 
-SpriteMorph.prototype.endWarp = function () {
+SpriteMorph.prototype.endWarp = function () { // +++ is this needed anymore?
     this.isWarped = false;
     if (this.wantsRedraw) {
         var x = this.xPosition(),
@@ -1975,7 +2022,7 @@ SpriteMorph.prototype.getImageData = function () {
             imageData;
         canvasContext = canvas.getContext("2d");
         canvasContext.drawImage(
-            this.image,
+            this.getImage(),
             0, 0, Math.floor(ext.x),
             Math.floor(ext.y),
             0, 0, newExtent.x, newExtent.y
@@ -1998,7 +2045,7 @@ SpriteMorph.prototype.projectionSnap = function() {
     var stage = this.parentThatIsA(StageMorph),
         center = this.center().subtract(stage.position())
             .divideBy(stage.scale),
-        cst = this.costume || this.image,
+        cst = this.costume || this.getImage(),
         w, h, rot,
         offset,
         snap,
