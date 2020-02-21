@@ -80,12 +80,12 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global TriggerMorph, modules, Color, Point, BoxMorph, radians,
-newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
+StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-February-20';
+modules.widgets = '2020-February-21';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -572,8 +572,7 @@ ToggleButtonMorph.prototype.init = function (
     }
 
     this.refresh();
-    // +++ this.drawNew();
-    this.rerender(); // +++
+    this.rerender();
 };
 
 // ToggleButtonMorph events
@@ -581,8 +580,8 @@ ToggleButtonMorph.prototype.init = function (
 ToggleButtonMorph.prototype.mouseEnter = function () {
     var contents = this.hint instanceof Function ? this.hint() : this.hint;
     if (!this.state) {
-        this.image = this.highlightImage;
-        this.changed();
+        this.userState = 'highlight';
+        this.rerender();
     }
     if (contents) {
         this.bubbleHelp(contents);
@@ -591,8 +590,8 @@ ToggleButtonMorph.prototype.mouseEnter = function () {
 
 ToggleButtonMorph.prototype.mouseLeave = function () {
     if (!this.state) {
-        this.image = this.normalImage;
-        this.changed();
+        this.userState = 'normal';
+        this.rerender();
     }
     if (this.schedule) {
         this.schedule.isActive = false;
@@ -604,15 +603,15 @@ ToggleButtonMorph.prototype.mouseLeave = function () {
 
 ToggleButtonMorph.prototype.mouseDownLeft = function () {
     if (!this.state) {
-        this.image = this.pressImage;
-        this.changed();
+        this.userState = 'pressed';
+        this.rerender();
     }
 };
 
 ToggleButtonMorph.prototype.mouseClickLeft = function () {
     if (!this.state) {
-        this.image = this.highlightImage;
-        this.changed();
+        this.userState = 'highlight';
+        this.rerender();
     }
     this.trigger(); // allow me to be triggered again to force-update others
 };
@@ -640,19 +639,19 @@ ToggleButtonMorph.prototype.refresh = function () {
         this.state = this.target[this.query]();
     }
     if (this.state) {
-        this.image = this.pressImage;
+        this.userState = 'pressed';
         if (this.trueStateLabel) {
             this.label.hide();
             this.trueStateLabel.show();
         }
     } else {
-        this.image = this.normalImage;
+        this.userState = 'normal';
         if (this.trueStateLabel) {
             this.label.show();
             this.trueStateLabel.hide();
         }
     }
-    this.changed();
+    this.rerender();
 };
 
 // ToggleButtonMorph layout:
@@ -661,14 +660,15 @@ ToggleButtonMorph.prototype.fixLayout = function () {
     if (this.label !== null) {
         var lw = Math.max(this.label.width(), this.labelMinExtent.x),
             padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
-        this.setExtent(new Point(
-            (this.minWidth ?
-                    Math.max(this.minWidth, lw) + padding
-                    : lw + padding),
+        this.bounds.setWidth(this.minWidth ?
+                Math.max(this.minWidth, lw) + padding
+                    : lw + padding
+        );
+        this.bounds.setHeight(
             Math.max(this.label instanceof StringMorph ?
                     this.label.rawHeight() :
                         this.label.height(), this.labelMinExtent.y) + padding
-        ));
+        );
         this.label.setCenter(this.center());
         if (this.trueStateLabel) {
             this.trueStateLabel.setCenter(this.center());
@@ -687,65 +687,51 @@ ToggleButtonMorph.prototype.fixLayout = function () {
 
 // ToggleButtonMorph drawing
 
-ToggleButtonMorph.prototype.createBackgrounds = function () {
+ToggleButtonMorph.prototype.render = function (ctx) {
 /*
     basically the same as inherited from PushButtonMorph, except for
-    not inverting the pressImage 3D-ish border (because it stays that way),
+    not inverting the pressed 3D-ish border (because it stays that way),
     and optionally coloring the left edge in the press-color, previewing
-    the selection color (e.g. in the case of Scratch palette-category
+    the selection color (e.g. in the case of Snap palette-category
     selector. the latter is done in the drawEdges() method.
 */
-    var context,
-        ext = this.extent();
-
-    if (this.template) { // take the backgrounds images from the template
-        this.image = this.template.image;
-        this.normalImage = this.template.normalImage;
-        this.highlightImage = this.template.highlightImage;
-        this.pressImage = this.template.pressImage;
-        return null;
+    switch (this.userState) {
+    case 'highlight':
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.highlightColor);
+        this.drawEdges(
+            ctx,
+            this.highlightColor,
+            this.highlightColor.lighter(this.contrast),
+            this.highlightColor.darker(this.contrast)
+        );
+        break;
+    case 'pressed':
+        // note: don't invert the 3D-ish edges for 'pressed' state, because
+        // it will stay that way, and should not look inverted (or should it?)
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.pressColor);
+        this.drawEdges(
+            ctx,
+            this.pressColor,
+            this.pressColor.lighter(40),
+            this.pressColor.darker(40)
+        );
+        break;
+    default:
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.color);
+        this.drawEdges(
+            ctx,
+            this.color,
+            this.color.lighter(this.contrast),
+            this.color.darker(this.contrast)
+        );
     }
-
-    this.normalImage = newCanvas(ext, false, this.normalImage);
-    context = this.normalImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.color);
-    this.drawEdges(
-        context,
-        this.color,
-        this.color.lighter(this.contrast),
-        this.color.darker(this.contrast)
-    );
-
-    this.highlightImage = newCanvas(ext, false, this.highlightImage);
-    context = this.highlightImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.highlightColor);
-    this.drawEdges(
-        context,
-        this.highlightColor,
-        this.highlightColor.lighter(this.contrast),
-        this.highlightColor.darker(this.contrast)
-    );
-
-    // note: don't invert the 3D-ish edges for pressedImage, because
-    // it will stay that way, and should not look inverted (or should it?)
-    this.pressImage = newCanvas(ext, false, this.pressImage);
-    context = this.pressImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.pressColor);
-    this.drawEdges(
-        context,
-        this.pressColor,
-        this.pressColor.lighter(40),
-        this.pressColor.darker(40)
-    );
-
-    this.image = this.normalImage;
 };
 
 ToggleButtonMorph.prototype.drawEdges = function (
-    context,
+    ctx,
     color,
     topColor,
     bottomColor
@@ -754,7 +740,7 @@ ToggleButtonMorph.prototype.drawEdges = function (
 
     ToggleButtonMorph.uber.drawEdges.call(
         this,
-        context,
+        ctx,
         color,
         topColor,
         bottomColor
@@ -762,8 +748,8 @@ ToggleButtonMorph.prototype.drawEdges = function (
 
     if (this.hasPreview) { // indicate the possible selection color
         if (MorphicPreferences.isFlat && !this.is3D) {
-            context.fillStyle = this.pressColor.toString();
-            context.fillRect(
+            ctx.fillStyle = this.pressColor.toString();
+            ctx.fillRect(
                 this.outline,
                 this.outline,
                 this.corner,
@@ -771,7 +757,7 @@ ToggleButtonMorph.prototype.drawEdges = function (
             );
             return;
         }
-        gradient = context.createLinearGradient(
+        gradient = ctx.createLinearGradient(
             0,
             0,
             this.corner,
@@ -779,24 +765,24 @@ ToggleButtonMorph.prototype.drawEdges = function (
         );
         gradient.addColorStop(0, this.pressColor.lighter(40).toString());
         gradient.addColorStop(1, this.pressColor.darker(40).toString());
-        context.fillStyle = gradient; // this.pressColor.toString();
-        context.beginPath();
+        ctx.fillStyle = gradient; // this.pressColor.toString();
+        ctx.beginPath();
         this.previewPath(
-            context,
+            ctx,
             Math.max(this.corner - this.outline, 0),
             this.outline
         );
-        context.closePath();
-        context.fill();
+        ctx.closePath();
+        ctx.fill();
     }
 };
 
-ToggleButtonMorph.prototype.previewPath = function (context, radius, inset) {
+ToggleButtonMorph.prototype.previewPath = function (ctx, radius, inset) {
     var offset = radius + inset,
         h = this.height();
 
     // top left:
-    context.arc(
+    ctx.arc(
         offset,
         offset,
         radius,
@@ -805,7 +791,7 @@ ToggleButtonMorph.prototype.previewPath = function (context, radius, inset) {
         false
     );
     // bottom left:
-    context.arc(
+    ctx.arc(
         offset,
         h - offset,
         radius,
@@ -899,24 +885,6 @@ ToggleButtonMorph.prototype.createLabel = function () {
     if (this.trueStateLabel) {
         this.add(this.trueStateLabel);
     }
-};
-
-// ToggleButtonMorph hiding and showing:
-
-/*
-    override the inherited behavior to recursively hide/show all
-    children, so that my instances get restored correctly when
-    hiding/showing my parent.
-*/
-
-ToggleButtonMorph.prototype.hide = function () {
-    this.isVisible = false;
-    this.changed();
-};
-
-ToggleButtonMorph.prototype.show = function () {
-    this.isVisible = true;
-    this.changed();
 };
 
 // TabMorph ///////////////////////////////////////////////////////
