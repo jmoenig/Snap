@@ -863,7 +863,8 @@ ToggleButtonMorph.prototype.createLabel = function () {
                         this.labelShadowOffset : none;
                 this.label.shadowColor = this.labelShadowColor;
                 this.label.color = this.labelColor;
-                this.label.drawNew();
+                this.label.fixLayout();
+                this.label.rerender();
             }
         } else if (this.labelString instanceof Morph) {
             this.label = this.labelString.fullCopy();
