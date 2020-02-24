@@ -562,8 +562,8 @@ IDE_Morph.prototype.openIn = function (world) {
 IDE_Morph.prototype.buildPanes = function () {
     this.createLogo();
     this.createControlBar();
-    return; // +++
     this.createCategories();
+    return; // +++
     this.createPalette();
     this.createStage();
     this.createSpriteBar();
@@ -1034,7 +1034,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
-    this.categories.silentSetWidth(this.paletteWidth);
+    this.categories.bounds.setWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
         var labelWidth = 75,
