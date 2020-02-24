@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-February-21';
+modules.widgets = '2020-February-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1084,8 +1084,8 @@ ToggleMorph.prototype.init = function (
         hint,
         template
     );
+    this.fixLayout();
     this.refresh();
-    this.drawNew();
 };
 
 // ToggleMorph layout:
@@ -1094,13 +1094,10 @@ ToggleMorph.prototype.fixLayout = function () {
     var padding = this.padding * 2 + this.outline * 2,
         y;
     if (this.tick !== null) {
-        this.silentSetHeight(this.tick.rawHeight() + padding);
-        this.silentSetWidth(this.tick.width() + padding);
-
-        this.setExtent(new Point(
-            Math.max(this.width(), this.height()),
-            Math.max(this.width(), this.height())
-        ));
+        this.bounds.setHeight(this.tick.rawHeight() + padding);
+        this.bounds.setWidth(this.tick.width() + padding);
+        this.bounds.setWidth(Math.max(this.width(), this.height()));
+        this.bounds.setHeight(Math.max(this.width(), this.height()));
         this.tick.setCenter(this.center());
     }
     if (this.state) {
@@ -1241,18 +1238,6 @@ ToggleMorph.prototype.mouseLeave = function () {
         this.tick.setCenter(this.center());
     }
 };
-
-// ToggleMorph hiding and showing:
-
-/*
-    override the inherited behavior to recursively hide/show all
-    children, so that my instances get restored correctly when
-    hiding/showing my parent.
-*/
-
-ToggleMorph.prototype.hide = ToggleButtonMorph.prototype.hide;
-
-ToggleMorph.prototype.show = ToggleButtonMorph.prototype.show;
 
 // ToggleElementMorph /////////////////////////////////////////////////////
 /*
