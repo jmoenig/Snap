@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-February-21';
+modules.objects = '2020-February-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -2800,7 +2800,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     searchButton.padding = 1;
     searchButton.hint = localize('find blocks') + '...';
     searchButton.labelShadowColor = shade;
-    searchButton.drawNew();
     searchButton.fixLayout();
 	palette.toolBar.add(searchButton);
 
@@ -2813,7 +2812,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     makeButton.padding = 1;
     makeButton.hint = localize('Make a block') + '...';
     makeButton.labelShadowColor = shade;
-    makeButton.drawNew();
     makeButton.fixLayout();
     palette.toolBar.add(makeButton);
 

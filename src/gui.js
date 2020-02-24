@@ -563,8 +563,8 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createLogo();
     this.createControlBar();
     this.createCategories();
-    return; // +++
     this.createPalette();
+    return; // +++
     this.createStage();
     this.createSpriteBar();
     this.createSpriteEditor();
