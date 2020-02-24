@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-January-28';
+modules.gui = '2020-February-24';
 
 // Declarations
 
@@ -562,6 +562,7 @@ IDE_Morph.prototype.openIn = function (world) {
 IDE_Morph.prototype.buildPanes = function () {
     this.createLogo();
     this.createControlBar();
+    return; // +++
     this.createCategories();
     this.createPalette();
     this.createStage();
@@ -647,7 +648,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar = new Morph();
     this.controlBar.color = this.frameColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
-    this.controlBar.mouseClickLeft = function () {
+    this.controlBar.mouseClickLeft = function () { // +++ is this needed?
         this.world().fillPage();
     };
     this.add(this.controlBar);
@@ -676,7 +677,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'stage size\nsmall & normal';
     button.fixLayout();
     button.refresh();
@@ -708,7 +708,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'app & edit\nmodes';
     button.fixLayout();
     button.refresh();
@@ -741,7 +740,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     button.hint = 'Visible stepping';
     button.fixLayout();
     button.refresh();
@@ -776,7 +774,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = new Color(200, 0, 0);
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
     button.refresh();
@@ -808,7 +805,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = new Color(255, 220, 0);
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'pause/resume\nall scripts';
     button.fixLayout();
     button.refresh();
@@ -832,7 +828,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = new Color(0, 200, 0);
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'start green\nflag scripts';
     button.fixLayout();
     startButton = button;
@@ -875,7 +870,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'open, save, & annotate project';
     button.fixLayout();
     projectButton = button;
@@ -899,7 +893,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'edit settings';
     button.fixLayout();
     settingsButton = button;
@@ -922,7 +915,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'cloud operations';
     button.fixLayout();
     cloudButton = button;
@@ -975,7 +967,8 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.refreshSlider = function () {
         if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
-            slider.drawNew();
+            slider.fixLayout();  // +++ ??
+            slider.rerender(); // +++ ??
             slider.show();
         } else {
             slider.hide();
@@ -1026,7 +1019,7 @@ IDE_Morph.prototype.createControlBar = function () {
             myself.frameColor.darker(myself.buttonContrast)
         );
         this.label.color = myself.buttonLabelColor;
-        this.label.drawNew();
+        this.label.fixLayout();
         this.add(this.label);
         this.label.setCenter(this.center());
         this.label.setLeft(this.settingsButton.right() + padding);

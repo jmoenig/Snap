@@ -35,8 +35,8 @@
             window.onload = function () {
                 world = new WorldMorph(document.getElementById('world'));
                 world.isDevMode = false;
-                // new IDE_Morph().openIn(world);
-///*
+                new IDE_Morph().openIn(world);
+/*
                 var t = new ToggleButtonMorph(
                     null,
                     null,
@@ -48,7 +48,7 @@
                 );
                 t.setPosition(new Point(100, 100));
                 world.add(t);
-//*/
+*/
                 loop();
 			};
             function loop() {
