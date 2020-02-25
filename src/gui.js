@@ -568,7 +568,6 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createSpriteBar();
     this.createSpriteEditor();
     this.createCorralBar();
-    return; // +++
     this.createCorral();
 };
 

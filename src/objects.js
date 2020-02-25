@@ -7550,6 +7550,7 @@ StageMorph.prototype.init = function (globals) {
 
     StageMorph.uber.init.call(this);
 
+    this.isCachingImage = true;
     this.cachedHSV = this.color.hsv();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
@@ -7568,14 +7569,12 @@ StageMorph.prototype.setScale = function (number) {
 
     if (delta === 1) {return; }
     this.cachedPenTrailsMorph = null;
-    Morph.prototype.trackChanges = false;
     this.scale = number;
     this.setExtent(this.dimensions.multiplyBy(number));
 
     // now move and resize all children - sprites, bubbles, watchers etc..
     this.children.forEach(function (morph) {
         relativePos = morph.position().subtract(pos);
-        morph.drawNew();
         morph.setPosition(
             relativePos.multiplyBy(delta).add(pos),
             true // just me (for nested sprites)
@@ -7597,15 +7596,13 @@ StageMorph.prototype.setScale = function (number) {
             morph.setBottom(myself.bottom());
         }
     });
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
 };
 
 // StageMorph rendering
 
-StageMorph.prototype.drawNew = function () {
-    this.image = newCanvas(this.extent(), true, this.image);
-    var ctx = this.image.getContext('2d');
+StageMorph.prototype.render = function (ctx) {
+    // +++ to do: make sure to also draw the additional layers either here
+    // +++ or in drawOn()
     ctx.save();
     ctx.fillStyle = this.color.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
@@ -7616,25 +7613,25 @@ StageMorph.prototype.drawNew = function () {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
-        this.image = this.applyGraphicsEffects(this.image);
+        // +++ this.image = this.applyGraphicsEffects(this.image); // +++ disabled while working on rendering
     }
     ctx.restore();
     this.version = Date.now(); // for observer optimization
 };
 
-StageMorph.prototype.drawOn = function (aCanvas, aRect) {
+/* +++ commented out for refactoring
+StageMorph.prototype.drawOn = function (ctx, rect) {
     // make sure to draw the pen trails canvas as well
-    var rectangle, area, delta, src, context, w, h, sl, st, ws, hs;
+    var rectangle, area, delta, src, w, h, sl, st, ws, hs;
     if (!this.isVisible) {
         return null;
     }
-    rectangle = aRect || this.bounds;
-    area = rectangle.intersect(this.bounds);
-    if (area.extent().gt(new Point(0, 0))) {
+    // +++ rectangle = rect || this.bounds; // +++ we don't need this, right?
+    area = rectangle.intersect(this.bounds); // okay, we need to review all of this
+    if (area.extent().gt(Zero)) {
         delta = this.position().neg();
-        src = area.copy().translateBy(delta);
-        context = aCanvas.getContext('2d');
-        context.globalAlpha = this.alpha;
+        src = area.translateBy(delta);
+        ctx.globalAlpha = this.alpha;
 
         sl = src.left();
         st = src.top();
@@ -7712,6 +7709,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         context.restore();
     }
 };
+*/
 
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
@@ -7727,7 +7725,7 @@ StageMorph.prototype.penTrails = function () {
     return this.trailsCanvas;
 };
 
-StageMorph.prototype.penTrailsMorph = function () {
+StageMorph.prototype.penTrailsMorph = function () { // +++ review and refactor
     // for collision detection purposes
     var morph, trails, ctx;
 
@@ -7735,10 +7733,11 @@ StageMorph.prototype.penTrailsMorph = function () {
         return this.cachedPenTrailsMorph;
     }
     morph = new Morph();
+    morph.isCachingImage = true;
     trails = this.penTrails();
     morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(this.extent(), true);
-    ctx = morph.image.getContext('2d');
+    morph.cachedImage = newCanvas(this.extent(), true);
+    ctx = morph.cachedImage.getContext('2d');
     ctx.drawImage(
         trails,
         0,
@@ -7747,14 +7746,14 @@ StageMorph.prototype.penTrailsMorph = function () {
         trails.height,
         0,
         0,
-        this.image.width,
-        this.image.height
+        this.getImage().width, // +++ ??
+        this.getImage().height
     );
     this.cachedPenTrailsMorph = morph;
     return morph;
 };
 
-StageMorph.prototype.projectionLayer = function () {
+StageMorph.prototype.projectionLayer = function () { // +++ review and recycle
     if (!this.projectionCanvas) {
         this.projectionCanvas = newCanvas(this.dimensions, true);
     }
@@ -9073,9 +9072,8 @@ StageMorph.prototype.changeColorComponentHSVA
 
 StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
-        this.color = aColor.copy();
-        this.drawNew();
-        this.changed();
+        this.color = aColor.copy(); // +++ why copy?
+        this.rerender();
         this.cachedHSV = this.color.hsv();
     }
 };
