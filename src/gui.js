@@ -8031,12 +8031,13 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     }
 
     this.thumbnail = new Morph();
+    this.thumbnail.isCachingImage = true; // +++ review thumbnails
     this.thumbnail.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
-        this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+        this.thumbnail.cachedImage = this.object.fullThumbnail(this.thumbSize); // +++ recycle canvas
         this.createRotationButton();
     } else {
-        this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+        this.thumbnail.cachedImage = this.object.thumbnail(this.thumbSize);
     }
     this.add(this.thumbnail);
 };
@@ -8099,7 +8100,6 @@ SpriteIconMorph.prototype.createRotationButton = function () {
     button.labelMinExtent = new Point(11, 11);
     button.padding = 0;
     button.pressColor = button.color;
-    button.drawNew();
     // button.hint = 'rotate synchronously\nwith anchor';
     button.fixLayout();
     button.refresh();

@@ -8901,7 +8901,7 @@ StageMorph.prototype.thumbnail = function (
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
     var myself = this,
-        src = this.image,
+        src = this.getImage(),
         scale = Math.min(
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
