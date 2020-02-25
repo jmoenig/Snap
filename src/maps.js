@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-October-28';
+modules.maps = '2020-February-25';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -334,7 +334,7 @@ WorldMap.prototype.initializeCredits = function () {
         ' ' + this.api.credits + ' ',
         8
     );
-    normalizeCanvas(this.creditsTxt.image);
+    normalizeCanvas(this.creditsTxt.getImage());
     this.creditsBG = newCanvas(this.creditsTxt.extent(), true);
     ctx = this.creditsBG.getContext('2d');
     ctx.fillStyle = 'white';
