@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-February-24';
+modules.objects = '2020-February-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -7010,7 +7010,7 @@ SpriteMorph.prototype.inheritedMethods = function () {
 SpriteMorph.prototype.thumbnail = function (extentPoint) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
-    var src = this.image, // at this time sprites aren't composite morphs
+    var src = this.getImage(), // at this time sprites aren't composite morphs
         w = this.width(),
         h = this.height(),
         scale = Math.min(

@@ -565,8 +565,8 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createCategories();
     this.createPalette();
     this.createStage();
-    return; // +++
     this.createSpriteBar();
+    return; // +++
     this.createSpriteEditor();
     this.createCorralBar();
     this.createCorral();
@@ -1303,8 +1303,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     this.rotationStyleButtons = rotationStyleButtons;
 
     thumbnail = new Morph();
+    thumbnail.isCachingImage = true; // +++ review and refactor this to reuse the canvas
     thumbnail.setExtent(thumbSize);
-    thumbnail.image = this.currentSprite.thumbnail(thumbSize);
+    thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
     thumbnail.setPosition(
         rotationStyleButtons[0].topRight().add(new Point(5, 3))
     );
@@ -1314,7 +1315,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     thumbnail.step = function () {
         if (thumbnail.version !== myself.currentSprite.version) {
-            thumbnail.image = myself.currentSprite.thumbnail(thumbSize);
+            thumbnail.cachedImage = myself.currentSprite.thumbnail(thumbSize); // +++ refactor this to reuse the canvas
             thumbnail.changed();
             thumbnail.version = myself.currentSprite.version;
         }
@@ -1326,7 +1327,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
     this.spriteBar.add(nameField);
     this.spriteBar.nameField = nameField;
-    nameField.drawNew();
+    nameField.fixLayout();
     nameField.accept = function () {
         var newName = nameField.getValue();
         myself.currentSprite.setName(
@@ -1360,10 +1361,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     padlock.tick.shadowColor = new Color(); // black
     padlock.tick.color = this.buttonLabelColor;
     padlock.tick.isBold = false;
-    padlock.tick.drawNew();
+    padlock.tick.fixLayout();
 
     padlock.setPosition(nameField.bottomLeft().add(2));
-    padlock.drawNew();
+    padlock.fixLayout();
     this.spriteBar.add(padlock);
     if (this.currentSprite instanceof StageMorph) {
         padlock.hide();
@@ -1397,7 +1398,6 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
     tab.fixLayout();
     tabBar.add(tab);
 
@@ -1418,7 +1418,6 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
     tab.fixLayout();
     tabBar.add(tab);
 
@@ -1437,7 +1436,6 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
     tab.fixLayout();
     tabBar.add(tab);
 
