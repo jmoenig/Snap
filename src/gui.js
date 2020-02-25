@@ -566,9 +566,9 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createPalette();
     this.createStage();
     this.createSpriteBar();
-    return; // +++
     this.createSpriteEditor();
     this.createCorralBar();
+    return; // +++
     this.createCorral();
 };
 
@@ -1558,7 +1558,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton.labelShadowColor = colors[1];
     newbutton.labelColor = this.buttonLabelColor;
     newbutton.contrast = this.buttonContrast;
-    newbutton.drawNew();
     newbutton.hint = "add a new Turtle sprite";
     newbutton.fixLayout();
     newbutton.setCenter(this.corralBar.center());
@@ -1580,7 +1579,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.labelShadowColor = colors[1];
     paintbutton.labelColor = this.buttonLabelColor;
     paintbutton.contrast = this.buttonContrast;
-    paintbutton.drawNew();
     paintbutton.hint = "paint a new sprite";
     paintbutton.fixLayout();
     paintbutton.setCenter(this.corralBar.center());
@@ -1605,7 +1603,6 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton.labelShadowColor = colors[1];
         cambutton.labelColor = this.buttonLabelColor;
         cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
         cambutton.hint = "take a camera snapshot and\n" +
         	"import it as a new sprite";
         cambutton.fixLayout();
