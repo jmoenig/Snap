@@ -8125,14 +8125,14 @@ SpriteIconMorph.prototype.step = function () {
 SpriteIconMorph.prototype.fixLayout = function () {
     if (!this.thumbnail || !this.label) {return null; }
 
-    this.setWidth(
+    this.bounds.setWidth(
         this.thumbnail.width()
             + this.outline * 2
             + this.edge * 2
             + this.padding * 2
     );
 
-    this.setHeight(
+    this.bounds.setHeight(
         this.thumbnail.height()
             + this.outline * 2
             + this.edge * 2
