@@ -8718,7 +8718,6 @@ InputSlotMorph.prototype.menuFromDict = function (
 {
     var key, dial, flag,
     	myself = this,
-        rcvr,
         menu = new MenuMorph(
             this.userSetContents,
             null,
@@ -8732,8 +8731,7 @@ InputSlotMorph.prototype.menuFromDict = function (
  	}
 
     if (choices instanceof Function) {
-        rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
-        choices = choices.call(rcvr);
+        choices = choices.call(this);
     } else if (isString(choices)) {
         choices = this[choices](enableKeyboard);
         if (!choices) { // menu has already happened
