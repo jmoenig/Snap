@@ -163,7 +163,8 @@ SymbolMorph.prototype.toString = function () {
             this.constructor.toString().split(' ')[1].split('(')[0]) +
         ': "' +
         this.name +
-        '"';
+        '" ' +
+        this.bounds;
 };
 
 // SymbolMorph zebra coloring:
@@ -1819,6 +1820,7 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
     ctx.fillRect(0, 0, w, h);
 };
 
+/*
 // register examples with the World demo menu
 // comment out to shave off a millisecond loading speed ;-)
 
@@ -1841,3 +1843,4 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
         ])
     ]);
 })();
+*/

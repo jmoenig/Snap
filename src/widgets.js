@@ -183,6 +183,7 @@ PushButtonMorph.prototype.init = function (
 PushButtonMorph.prototype.fixLayout = function () {
     // make sure I at least encompass my label
     if (this.label !== null) {
+        this.updateLabelColors();
         var padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
         this.bounds.setWidth(
             Math.max(this.label.width(), this.labelMinExtent.x) + padding
@@ -466,6 +467,18 @@ PushButtonMorph.prototype.createLabel = function () {
     this.add(this.label);
 };
 
+PushButtonMorph.prototype.updateLabelColors = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    if (this.label) {
+        this.label.color = this.labelColor;
+        if (shading) {
+            this.label.shadowOffset = this.labelShadowOffset;
+            this.label.shadowColor = this.labelShadowColor;
+        }
+        this.label.fixLayout(true); // just me
+    }
+};
+
 // PushButtonMorph states
 
 PushButtonMorph.prototype.disable = function () {
@@ -658,8 +671,11 @@ ToggleButtonMorph.prototype.refresh = function () {
 
 ToggleButtonMorph.prototype.fixLayout = function () {
     if (this.label !== null) {
-        var lw = Math.max(this.label.width(), this.labelMinExtent.x),
-            padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
+        var padding = this.padding * 2 + this.outline * 2 + this.edge * 2,
+            lw;
+
+        this.updateLabelColors();
+        lw = Math.max(this.label.width(), this.labelMinExtent.x);
         this.bounds.setWidth(this.minWidth ?
                 Math.max(this.minWidth, lw) + padding
                     : lw + padding

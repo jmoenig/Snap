@@ -13484,6 +13484,8 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     }
 };
 
+
+/*
 // register examples with the World demo menu
 // comment out to shave off a millisecond loading speed ;-)
 
@@ -13556,3 +13558,4 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         ]
     ]);
 })();
+*/

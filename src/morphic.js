@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-February-20';
+var morphicVersion = '2020-February-26';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8401,7 +8401,7 @@ StringMorph.prototype.font = function () {
         this.fontStyle;
 };
 
-StringMorph.prototype.fixLayout = function () {
+StringMorph.prototype.fixLayout = function (justMe) {
     // determine my extent depending on my current settings
     var width,
         shadowOffset = this.shadowOffset || new Point(),
@@ -8421,7 +8421,7 @@ StringMorph.prototype.fixLayout = function () {
     );
 
     // notify my parent of layout change
-    if (this.parent) {
+    if (!justMe && this.parent) {
         if (this.parent.fixLayout) {
             this.parent.fixLayout();
         }
