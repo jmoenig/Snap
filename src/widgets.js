@@ -940,6 +940,7 @@ function TabMorph(
 
 TabMorph.prototype.fixLayout = function () {
     if (this.label !== null) {
+        this.updateLabelColors();
         this.setExtent(new Point(
             this.label.width()
                 + this.padding * 2
