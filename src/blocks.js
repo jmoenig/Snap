@@ -7098,9 +7098,10 @@ ScriptsMorph.prototype.addToolbar = function () {
         new SymbolMorph("turnBack", 12)
     );
     toolBar.undoButton.alpha = 0.2;
-    toolBar.undoButton.padding = 2;
+    toolBar.undoButton.padding = 4;
     // toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
     toolBar.undoButton.labelShadowColor = shade;
+    toolBar.undoButton.edge = 0;
     toolBar.undoButton.fixLayout();
     toolBar.add(toolBar.undoButton);
 
@@ -7110,9 +7111,10 @@ ScriptsMorph.prototype.addToolbar = function () {
         new SymbolMorph("turnForward", 12)
     );
     toolBar.redoButton.alpha = 0.2;
-    toolBar.redoButton.padding = 2;
+    toolBar.redoButton.padding = 4;
     // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
     toolBar.redoButton.labelShadowColor = shade;
+    toolBar.redoButton.edge = 0;
     toolBar.redoButton.fixLayout();
     toolBar.add(toolBar.redoButton);
 
@@ -7129,7 +7131,8 @@ ScriptsMorph.prototype.addToolbar = function () {
 		}
     );
     toolBar.keyboardButton.alpha = 0.2;
-    toolBar.keyboardButton.padding = 2;
+    toolBar.keyboardButton.padding = 4;
+    toolBar.keyboardButton.edge = 0;
     toolBar.keyboardButton.hint = 'use the keyboard\nto enter blocks';
     //toolBar.keyboardButton.pressColor = new Color(40, 40, 40);
     toolBar.keyboardButton.labelShadowColor = shade;
