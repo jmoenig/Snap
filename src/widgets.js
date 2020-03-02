@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-February-24';
+modules.widgets = '2020-March-02';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -126,7 +126,7 @@ PushButtonMorph.prototype.contrast = 60;
 
 PushButtonMorph.prototype.edge = 2;
 PushButtonMorph.prototype.corner = 5;
-PushButtonMorph.prototype.outline = 1.00001;
+PushButtonMorph.prototype.outline = 1;
 PushButtonMorph.prototype.padding = 3;
 
 // PushButtonMorph instance creation:
