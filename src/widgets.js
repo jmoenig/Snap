@@ -906,6 +906,19 @@ ToggleButtonMorph.prototype.createLabel = function () {
     }
 };
 
+ToggleButtonMorph.prototype.updateLabelColors = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    ToggleButtonMorph.uber.updateLabelColors.call(this);
+    if (this.trueStateLabel) {
+        this.trueStateLabel.color = this.labelColor;
+        if (shading) {
+            this.trueStateLabel.shadowOffset = this.labelShadowOffset;
+            this.trueStateLabel.shadowColor = this.labelShadowColor;
+        }
+        this.trueStateLabel.fixLayout(true); // just me
+    }
+};
+
 // TabMorph ///////////////////////////////////////////////////////
 
 // TabMorph inherits from ToggleButtonMorph:
