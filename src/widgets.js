@@ -471,6 +471,7 @@ PushButtonMorph.prototype.updateLabelColors = function () {
     var shading = !MorphicPreferences.isFlat || this.is3D;
     if (this.label) {
         this.label.color = this.labelColor;
+        this.label.fontSize = this.fontSize; // ++++
         if (shading) {
             this.label.shadowOffset = this.labelShadowOffset;
             this.label.shadowColor = this.labelShadowColor;
