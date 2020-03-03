@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-02';
+modules.blocks = '2020-March-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -450,7 +450,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
                 || (oldArg instanceof RingMorph && oldArg.contents())) {
             scripts.add(oldArg);
             oldArg.moveBy(replacement.extent());
-            // +++ oldArg.fixBlockColor(); // +++ disabled while working on rendering
+            oldArg.fixBlockColor();
         }
     }
     if (replacement instanceof MultiArgMorph
@@ -662,10 +662,6 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
 // SyntaxElementMorph copy-on-write support:
 
 SyntaxElementMorph.prototype.selectForEdit = function () {
-
-// +++ disabled while working on rendering
-return this;
-
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide = this.parentThatIsA(IDE_Morph),
         rcvr = ide ? ide.currentSprite : null,
@@ -2465,10 +2461,6 @@ BlockMorph.prototype.scriptTarget = function () {
     // this method only gives the desired result within the context of
     // the user actively clicking on a block inside the IDE
     // there is no direct relationship between a block and a sprite.
-
-// +++ disabled while working on rendering
-return;
-
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide;
     if (scripts) {
@@ -2557,7 +2549,7 @@ BlockMorph.prototype.setSpec = function (spec, silently, definition) { // +++ ca
             part.rerender();
         }
         if (part instanceof RingMorph) {
-            // ++++ part.fixBlockColor(); // +++ disabled while working on rendering
+            part.fixBlockColor();
         }
         if (part instanceof MultiArgMorph ||
                 part.constructor === CommandSlotMorph ||
@@ -2621,10 +2613,6 @@ BlockMorph.prototype.rebuild = function (contrast) {
 // BlockMorph menu:
 
 BlockMorph.prototype.userMenu = function () {
-
-// +++ disabled while working on rendering
-return;
-
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
@@ -4279,10 +4267,6 @@ BlockMorph.prototype.focus = function () {
 };
 
 BlockMorph.prototype.activeProcess = function () {
-
-// +++ disabled while working on rendering
-return;
-
     var top = this.topBlock(),
         receiver = top.scriptTarget(),
         stage;
@@ -4806,7 +4790,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
     scripts.lastDroppedBlock = this;
     if (target === null) {
         this.startLayout();
-        // +++ this.fixBlockColor(); // +++ disabled while working on rendering
+        this.fixBlockColor();
         this.endLayout();
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
         if (hand) {
@@ -4876,7 +4860,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
             function (cmd) {cmd.fixBlockColor(); }
         );
     }
-    // +++ this.fixBlockColor(); // +++ disabled while working on rendering
+    this.fixBlockColor();
     this.endLayout();
     CommandBlockMorph.uber.snap.call(this); // align stuck comments
     if (hand) {
@@ -5633,7 +5617,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         }
     }
     this.startLayout();
-    // +++ this.fixBlockColor(); // +++ disabled while working on rendering
+    this.fixBlockColor();
     this.endLayout();
     ReporterBlockMorph.uber.snap.call(this);
     if (hand) {
@@ -5729,11 +5713,9 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
 
 ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
     var label;
-    /* +++ disabled while working on rendering +++
     if (this.parent instanceof BlockInputFragmentMorph) {
         return this.parent.mouseClickLeft();
     }
-    */
     if (this.parent instanceof TemplateSlotMorph) {
         if (this.parent.parent && this.parent.parent.parent &&
                 this.parent.parent.parent instanceof RingMorph) {
@@ -6862,8 +6844,8 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 };
 
 ScriptsMorph.prototype.addComment = function () {
-    var ide = null, // +++ ide = this.parentThatIsA(IDE_Morph), // +++ disabled while working on rendering
-        blockEditor = null, // +++ blockEditor = this.parentThatIsA(BlockEditorMorph), // +++ disabled while working on rendering
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
         world = this.world();
     new CommentMorph().pickUp(world);
     // register the drop-origin, so the element can
@@ -7243,9 +7225,6 @@ ScriptsMorph.prototype.mouseClickLeft = function (pos) {
 };
 
 ScriptsMorph.prototype.selectForEdit = function () {
-    // +++ disabled while working on rendering
-    return this; // +++
-
     var ide = this.parentThatIsA(IDE_Morph),
         rcvr = ide ? ide.currentSprite : null;
     if (rcvr && rcvr.inheritsAttribute('scripts')) {
@@ -9801,7 +9780,6 @@ TemplateSlotMorph.prototype.contents = function () {
 TemplateSlotMorph.prototype.setContents = function (aString) {
     var tmp = this.template();
     tmp.setSpec(aString);
-    return; // ++++ disabled while working on rendering ++++
     tmp.fixBlockColor(); // fix zebra coloring
     tmp.fixLabelColor();
 };
@@ -9937,7 +9915,7 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     if (target !== this) {
         return this.toggleValue.call(target);
     }
-    // ide = this.parentThatIsA(IDE_Morph); // +++ disabled while working on rendering
+    ide = this.parentThatIsA(IDE_Morph);
     this.value = this.nextValue();
     if (ide && !ide.isAnimating) {
         this.rerender();
@@ -12507,8 +12485,8 @@ CommentMorph.prototype.userMenu = function () {
         "duplicate",
         function () {
             var dup = myself.fullCopy(),
-                ide = null, // +++ ide = myself.parentThatIsA(IDE_Morph), // +++ disabled while working on rendering
-                blockEditor = null, // +++ blockEditor = myself.parentThatIsA(BlockEditorMorph), // +++ disabled while working on rendering
+                ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph),
                 world = myself.world();
             dup.pickUp(world);
             // register the drop-origin, so the comment can
