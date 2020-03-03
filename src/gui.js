@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-February-24';
+modules.gui = '2020-March-03';
 
 // Declarations
 
@@ -9476,6 +9476,7 @@ function StageHandleMorph(target) {
 
 StageHandleMorph.prototype.init = function (target) {
     this.target = target || null;
+    this.userState = 'normal'; // or 'highlight'
     HandleMorph.uber.init.call(this);
     this.color = MorphicPreferences.isFlat ?
             IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
@@ -9486,62 +9487,57 @@ StageHandleMorph.prototype.init = function (target) {
 
 // StageHandleMorph drawing:
 
-StageHandleMorph.prototype.drawNew = function () {
-    this.normalImage = newCanvas(this.extent(), false, this.normalImage);
-    this.highlightImage = newCanvas(this.extent(), false, this.highlightImage);
-    this.drawOnCanvas(
-        this.normalImage,
-        this.color
-    );
-    this.drawOnCanvas(
-        this.highlightImage,
-        MorphicPreferences.isFlat ?
-                new Color(245, 245, 255) : new Color(100, 100, 255),
-        this.color
-    );
-    this.image = this.normalImage;
-    this.fixLayout();
+StageHandleMorph.prototype.render = function (ctx) {
+    if (this.userState === 'highlight') {
+        this.renderOn(
+            ctx,
+            MorphicPreferences.isFlat ?
+                    new Color(245, 245, 255) : new Color(100, 100, 255),
+            this.color
+        );
+    } else { // assume 'normal'
+        this.renderOn(ctx, this.color);
+    }
 };
 
-StageHandleMorph.prototype.drawOnCanvas = function (
-    aCanvas,
+StageHandleMorph.prototype.renderOn = function (
+    ctx,
     color,
     shadowColor
 ) {
-    var context = aCanvas.getContext('2d'),
-        l = aCanvas.height / 8,
-        w = aCanvas.width / 6,
+    var l = this.height() / 8,
+        w = this.width() / 6,
         r = w / 2,
         x,
         y,
         i;
 
-    context.lineWidth = w;
-    context.lineCap = 'round';
-    y = aCanvas.height / 2;
+    ctx.lineWidth = w;
+    ctx.lineCap = 'round';
+    y = this.height() / 2;
 
-    context.strokeStyle = color.toString();
-    x = aCanvas.width / 12;
+    ctx.strokeStyle = color.toString();
+    x = this.width() / 12;
     for (i = 0; i < 3; i += 1) {
         if (i > 0) {
-            context.beginPath();
-            context.moveTo(x, y - (l - r));
-            context.lineTo(x, y + (l - r));
-            context.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y - (l - r));
+            ctx.lineTo(x, y + (l - r));
+            ctx.stroke();
         }
         x += (w * 2);
         l *= 2;
     }
     if (shadowColor) {
-        context.strokeStyle = shadowColor.toString();
-        x = aCanvas.width / 12 + w;
-        l = aCanvas.height / 8;
+        ctx.strokeStyle = shadowColor.toString();
+        x = this.width() / 12 + w;
+        l = this.height() / 8;
         for (i = 0; i < 3; i += 1) {
             if (i > 0) {
-                context.beginPath();
-                context.moveTo(x, y - (l - r));
-                context.lineTo(x, y + (l - r));
-                context.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y - (l - r));
+                ctx.lineTo(x, y + (l - r));
+                ctx.stroke();
             }
             x += (w * 2);
             l *= 2;
@@ -9593,13 +9589,13 @@ StageHandleMorph.prototype.mouseDownLeft = function (pos) {
 // StageHandleMorph events:
 
 StageHandleMorph.prototype.mouseEnter = function () {
-    this.image = this.highlightImage;
-    this.changed();
+    this.userState = 'highlight';
+    this.rerender();
 };
 
 StageHandleMorph.prototype.mouseLeave = function () {
-    this.image = this.normalImage;
-    this.changed();
+    this.userState = 'normal';
+    this.rerender();
 };
 
 StageHandleMorph.prototype.mouseDoubleClick = function () {
