@@ -553,6 +553,7 @@ describe('ide', function() {
                         table instanceof List && firstItem instanceof List,
                         'CSV not imported as list of lists'
                     );
+                    done();
                 };
             });
 
