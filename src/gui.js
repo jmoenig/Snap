@@ -580,10 +580,9 @@ IDE_Morph.prototype.createLogo = function () {
 
     this.logo = new Morph();
     this.logo.texture = this.logoURL;
-    this.logo.drawNew = function () {
-        this.image = newCanvas(this.extent(), false, this.image);
-        var context = this.image.getContext('2d'),
-            gradient = context.createLinearGradient(
+
+    this.logo.render = function (ctx) {
+            gradient = ctx.createLinearGradient(
                 0,
                 0,
                 this.width(),
@@ -591,17 +590,16 @@ IDE_Morph.prototype.createLogo = function () {
             );
         gradient.addColorStop(0, 'black');
         gradient.addColorStop(0.5, myself.frameColor.toString());
-        context.fillStyle = MorphicPreferences.isFlat ?
+        ctx.fillStyle = MorphicPreferences.isFlat ?
                 myself.frameColor.toString() : gradient;
-        context.fillRect(0, 0, this.width(), this.height());
+        ctx.fillRect(0, 0, this.width(), this.height());
         if (this.texture) {
-            this.drawTexture(this.texture);
+            this.renderTexture(this.texture, ctx);
         }
     };
 
-    this.logo.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(
+    this.logo.renderCachedTexture = function (ctx) {
+        ctx.drawImage(
             this.cachedTexture,
             5,
             Math.round((this.height() - this.cachedTexture.height) / 2)
