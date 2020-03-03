@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-02';
+modules.widgets = '2020-March-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2509,8 +2509,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
 
     // refresh a shallow shadow
     this.removeShadow();
-    this.addShadow(new Point(2, 2), 80);
-
+    this.addShadow();
 };
 
 // DialogBoxMorph keyboard events
