@@ -3471,9 +3471,6 @@ PianoMenuMorph.prototype.destroy = function () {
 
 // PianoKeyMorph ///////////////////////////////////////////////////////
 
-// +++ disabled for now while working on rendering
-/*
-
 PianoKeyMorph.prototype = new MenuItemMorph();
 PianoKeyMorph.prototype.constructor = PianoKeyMorph;
 PianoKeyMorph.uber = MenuItemMorph.prototype;
@@ -3551,10 +3548,9 @@ PianoKeyMorph.prototype.createLabel = function () {
     this.label = new Morph();
     icon = this.createIcon(this.labelString[0]);
     this.label.add(icon);
-    this.label.drawNew();
-    this.silentSetExtent(icon.extent());
+    this.bounds.setExtent(icon.extent());
     this.label.bounds = this.position().extent(this.label.extent());
-    this.label.silentSetExtent(new Point(0, 0));
+    this.label.bounds.setExtent(ZERO);
     this.add(this.label);
 };
 
@@ -3590,4 +3586,3 @@ PianoKeyMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
 };
-*/

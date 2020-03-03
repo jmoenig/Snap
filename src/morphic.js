@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-February-26';
+var morphicVersion = '2020-March-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -9609,7 +9609,7 @@ TriggerMorph.prototype.init = function (
     this.action = action || null;
     this.doubleClickAction = doubleClickAction || null;
     this.environment = environment || null;
-    this.labelString = labelString || null;
+    this.labelString = labelString || ' ';
     this.label = null;
     this.hint = hint || null; // null, String, or Function
     this.schedule = null; // animation slot for displaying hints
