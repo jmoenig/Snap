@@ -582,7 +582,7 @@ IDE_Morph.prototype.createLogo = function () {
     this.logo.texture = this.logoURL;
 
     this.logo.render = function (ctx) {
-            gradient = ctx.createLinearGradient(
+        var gradient = ctx.createLinearGradient(
                 0,
                 0,
                 this.width(),
@@ -593,7 +593,9 @@ IDE_Morph.prototype.createLogo = function () {
         ctx.fillStyle = MorphicPreferences.isFlat ?
                 myself.frameColor.toString() : gradient;
         ctx.fillRect(0, 0, this.width(), this.height());
-        if (this.texture) {
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
             this.renderTexture(this.texture, ctx);
         }
     };
