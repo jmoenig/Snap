@@ -3861,7 +3861,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     translatorsBtn = dlg.addButton(
         function () {
             dlg.body.text = translations;
-            dlg.body.drawNew();
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3869,7 +3869,6 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Translators...'
@@ -3877,7 +3876,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     btn2 = dlg.addButton(
         function () {
             dlg.body.text = aboutTxt;
-            dlg.body.drawNew();
+            dlg.body.fixLayout();
             btn1.show();
             btn2.hide();
             btn3.show();
@@ -3885,7 +3884,6 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.show();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Back...'
@@ -3894,7 +3892,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     licenseBtn = dlg.addButton(
         function () {
             dlg.body.text = noticeTxt;
-            dlg.body.drawNew();
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3902,7 +3900,6 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'License...'
@@ -3910,7 +3907,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     btn3 = dlg.addButton(
         function () {
             dlg.body.text = versions;
-            dlg.body.drawNew();
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3918,7 +3915,6 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Modules...'
@@ -3926,7 +3922,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     btn4 = dlg.addButton(
         function () {
             dlg.body.text = creditsTxt;
-            dlg.body.drawNew();
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             translatorsBtn.show();
@@ -3934,14 +3930,12 @@ IDE_Morph.prototype.aboutSnap = function () {
             btn4.hide();
             licenseBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Credits...'
     );
     translatorsBtn.hide();
     dlg.fixLayout();
-    dlg.drawNew();
 };
 
 IDE_Morph.prototype.editProjectNotes = function () {
