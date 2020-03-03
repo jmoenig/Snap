@@ -3782,7 +3782,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5.4.5\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 6.0.0 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2020 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -9621,6 +9621,7 @@ function PaletteHandleMorph(target) {
 
 PaletteHandleMorph.prototype.init = function (target) {
     this.target = target || null;
+    this.userState = 'normal';
     HandleMorph.uber.init.call(this);
     this.color = MorphicPreferences.isFlat ?
             new Color(255, 255, 255) : new Color(190, 190, 190);
@@ -9631,11 +9632,11 @@ PaletteHandleMorph.prototype.init = function (target) {
 
 // PaletteHandleMorph drawing:
 
-PaletteHandleMorph.prototype.drawNew =
-    StageHandleMorph.prototype.drawNew;
+PaletteHandleMorph.prototype.render =
+    StageHandleMorph.prototype.render;
 
-PaletteHandleMorph.prototype.drawOnCanvas =
-    StageHandleMorph.prototype.drawOnCanvas;
+PaletteHandleMorph.prototype.renderOn =
+    StageHandleMorph.prototype.renderOn;
 
 // PaletteHandleMorph layout:
 
