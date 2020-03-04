@@ -2348,6 +2348,8 @@ IDE_Morph.prototype.addNewSprite = function () {
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
     this.stage.add(sprite);
+    sprite.fixLayout();
+    sprite.rerender();
 
     // randomize sprite properties
     sprite.setColorComponentHSVA(0, rnd.call(this, 0, 100));
