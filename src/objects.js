@@ -1677,7 +1677,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
     // video- and rendering state
-    this.imageExtent = new Point(0, 0);
+    this.imageExtent = new Point(0, 0); // +++ ZERO ?
     this.imageData = {}; // version: date, pixels: Uint32Array
     this.motionAmount = 0;
     this.motionDirection = 0;
@@ -1814,7 +1814,11 @@ SpriteMorph.prototype.getImage = function () {
     // to accommodate rotation and to disable retina resolution to
     // optimize graphics performance
     if (this.shouldRerender || !this.cachedImage) {
-        this.cachedImage = newCanvas(this.imageExtent, true, this.cachedImage);
+        this.cachedImage = newCanvas(
+            this.costume ? this.imageExtent : this.extent(),
+            !isNil(this.costume), // retina
+            this.cachedImage
+        );
         this.render(this.cachedImage.getContext('2d'));
         this.shouldRerender = false;
     }
@@ -1896,7 +1900,7 @@ SpriteMorph.prototype.fixLayout = function () {
             imageSide = Math.sqrt(
                 Math.pow(pic.width(), 2) + Math.pow(pic.height(), 2)
             ) * this.scale * stageScale;
-            this.imageExtent = Point(imageSide, imageSide);
+            this.imageExtent = new Point(imageSide, imageSide);
         } else { // don't actually rotate
             this.imageExtent = costumeExtent;
         }
@@ -4207,8 +4211,7 @@ SpriteMorph.prototype.setColorComponentHSVA = function (idx, num) {
         this.color.set_hsv.apply(this.color, this.cachedHSV);
     }
     if (!this.costume) {
-        this.drawNew();
-        this.changed();
+        this.rerender();
     }
     this.gotoXY(x, y);
 };
@@ -7579,11 +7582,13 @@ StageMorph.prototype.setScale = function (number) {
     // now move and resize all children - sprites, bubbles, watchers etc..
     this.children.forEach(function (morph) {
         relativePos = morph.position().subtract(pos);
+        morph.fixLayout();
         morph.setPosition(
             relativePos.multiplyBy(delta).add(pos),
             true // just me (for nested sprites)
         );
         if (morph instanceof SpriteMorph) {
+            morph.rerender();
             bubble = morph.talkBubble();
             if (bubble) {
                 bubble.setScale(number);
@@ -7595,7 +7600,6 @@ StageMorph.prototype.setScale = function (number) {
             } else {
                 morph.setWidth(myself.dimensions.x - 20);
             }
-            morph.fixLayout();
             morph.setCenter(myself.center());
             morph.setBottom(myself.bottom());
         }
