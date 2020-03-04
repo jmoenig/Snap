@@ -79,13 +79,13 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global TriggerMorph, modules, Color, Point, BoxMorph, radians,
+/*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO,
 StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-03';
+modules.widgets = '2020-March-04';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3265,10 +3265,9 @@ PianoMenuMorph.prototype.init = function (
             this.addItem(key, choices[key]);
         }
     }
-    this.drawNew();
 };
 
-PianoMenuMorph.prototype.drawNew = function () {
+PianoMenuMorph.prototype.createItems = function () {
     var myself = this,
         item,
         fb,
@@ -3292,7 +3291,7 @@ PianoMenuMorph.prototype.drawNew = function () {
     }
     this.color = new Color(255, 255, 255);
     this.borderColor = new Color(60, 60, 60);
-    this.silentSetExtent(new Point(0, 0));
+    this.bounds.setExtent(new Point(0, 0));
 
     x = this.left() + 1;
     y = this.top() + (this.fontSize * 1.5) + 2;
@@ -3336,8 +3335,7 @@ PianoMenuMorph.prototype.drawNew = function () {
     label.setPosition(new Point((fb.width() / 2) - this.fontSize, 2));
     this.add(label);
     fb = this.fullBounds();
-    this.silentSetExtent(fb.extent().add(2));
-    MenuMorph.uber.drawNew.call(this);
+    this.bounds.setExtent(fb.extent().add(2));
 };
 
 // PianoMenuMorph keyboard selecting a key:
@@ -3565,12 +3563,10 @@ PianoKeyMorph.prototype.mouseEnter = function () {
         piano.hasFocus = true;
     }
     this.label.children[0].hide();
-    this.image = this.highlightImage;
-    this.changed();
+    this.userState = 'highlight';
+    this.rerender();
     this.feedback.text = this.labelString[1];
-    this.feedback.changed();
-    this.feedback.drawNew();
-    this.feedback.changed();
+    this.feedback.fixLayout(); // +++
     this.note.play(soundType);
     setTimeout(
         function () {
@@ -3583,6 +3579,6 @@ PianoKeyMorph.prototype.mouseEnter = function () {
 PianoKeyMorph.prototype.mouseLeave = function () {
     this.note.stop(true);
     this.label.children[0].show();
-    this.image = this.normalImage;
-    this.changed();
+    this.userState = 'normal';
+    this.rerender();
 };
