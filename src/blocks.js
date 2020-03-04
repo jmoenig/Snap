@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-03';
+modules.blocks = '2020-March-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3981,9 +3981,9 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
         fb = this.fullBounds(),
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
                 blur : border;
-    highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.bounds.setExtent(fb.extent().add(edge * 2));
     highlight.color = color;
-    highlight.image = useBlurredShadows && !MorphicPreferences.isFlat ?
+    highlight.cachedImage = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
@@ -4054,9 +4054,9 @@ BlockMorph.prototype.outline = function (color, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
         edge = border;
-    highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.bounds.setExtent(fb.extent().add(edge * 2));
     highlight.color = color;
-    highlight.image = this.highlightImage(color, border);
+    highlight.cachedImage = this.highlightImage(color, border);
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
     return highlight;
 };
@@ -10737,6 +10737,11 @@ function BlockHighlightMorph() {
     this.threadCount = 0;
     this.init();
 }
+
+BlockHighlightMorph.prototype.init = function () {
+    BlockHighlightMorph.uber.init.call(this);
+    this.isCachingImage = true;
+};
 
 // BlockHighlightMorph thread count readout
 
