@@ -3559,14 +3559,14 @@ PianoKeyMorph.prototype.mouseEnter = function () {
     if (piano) {
         piano.unselectAllItems();
         piano.selection = this;
-        piano.world.keyboardReceiver = piano;
+        piano.world.keyboardFocus = piano;
         piano.hasFocus = true;
     }
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
     this.feedback.text = this.labelString[1];
-    this.feedback.fixLayout(); // +++
+    this.feedback.fixLayout();
     this.note.play(soundType);
     setTimeout(
         function () {
