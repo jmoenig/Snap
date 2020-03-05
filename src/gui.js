@@ -3701,20 +3701,12 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
             isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
             isSound = contains(['wav', 'mp3'], suffix),
-            cstTemplate,
-            sndTemplate,
             icon;
 
         if (isSound) {
-            sndTemplate = icon = new SoundIconMorph(
-                new Sound(new Audio(), item.name),
-                sndTemplate
-            );
+            icon = new SoundIconMorph(new Sound(new Audio(), item.name));
         } else {
-            cstTemplate = icon = new CostumeIconMorph(
-                new Costume(turtle.image, item.name),
-                cstTemplate
-            );
+            icon = new CostumeIconMorph(new Costume(turtle.image, item.name));
         }
         icon.isDraggable = false;
         icon.userMenu = nop;
@@ -8393,21 +8385,18 @@ CostumeIconMorph.prototype.fontSize = 9;
 
 // CostumeIconMorph instance creation:
 
-function CostumeIconMorph(aCostume, aTemplate) {
-    this.init(aCostume, aTemplate);
+function CostumeIconMorph(aCostume) {
+    this.init(aCostume);
 }
 
-CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
+CostumeIconMorph.prototype.init = function (aCostume) {
     var colors, action, query, myself = this;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
-
-    }
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
     action = function () {
         // make my costume the current one
@@ -8446,8 +8435,7 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -8646,21 +8634,18 @@ TurtleIconMorph.prototype.fontSize = 9;
 
 // TurtleIconMorph instance creation:
 
-function TurtleIconMorph(aSpriteOrStage, aTemplate) {
-    this.init(aSpriteOrStage, aTemplate);
+function TurtleIconMorph(aSpriteOrStage) {
+    this.init(aSpriteOrStage);
 }
 
-TurtleIconMorph.prototype.init = function (aSpriteOrStage, aTemplate) {
+TurtleIconMorph.prototype.init = function (aSpriteOrStage) {
     var colors, action, query, myself = this;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
-
-    }
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
     action = function () {
         // make my costume the current one
@@ -8699,8 +8684,7 @@ TurtleIconMorph.prototype.init = function (aSpriteOrStage, aTemplate) {
         'default', // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -8854,7 +8838,6 @@ WardrobeMorph.prototype.updateList = function () {
         oldFlag = Morph.prototype.trackChanges,
         oldPos = this.contents.position(),
         icon,
-        template,
         txt,
         paintbutton,
         cambutton;
@@ -8905,7 +8888,7 @@ WardrobeMorph.prototype.updateList = function () {
             this,
             "newFromCam",
             new SymbolMorph("camera", 15)
-            );
+        );
         cambutton.padding = 0;
         cambutton.corner = 12;
         cambutton.color = IDE_Morph.prototype.groupColor;
@@ -8952,7 +8935,7 @@ WardrobeMorph.prototype.updateList = function () {
     y = txt.bottom() + padding;
 
     this.sprite.costumes.asArray().forEach(function (costume) {
-        template = icon = new CostumeIconMorph(costume, template);
+        icon = new CostumeIconMorph(costume);
         icon.setPosition(new Point(x, y));
         myself.addContents(icon);
         y = icon.bottom() + padding;
@@ -9075,21 +9058,18 @@ SoundIconMorph.prototype.fontSize = 9;
 
 // SoundIconMorph instance creation:
 
-function SoundIconMorph(aSound, aTemplate) {
-    this.init(aSound, aTemplate);
+function SoundIconMorph(aSound) {
+    this.init(aSound);
 }
 
-SoundIconMorph.prototype.init = function (aSound, aTemplate) {
+SoundIconMorph.prototype.init = function (aSound) {
     var colors, action, query;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
-
-    }
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
     action = function () {
         nop(); // When I am selected (which is never the case for sounds)
@@ -9113,8 +9093,7 @@ SoundIconMorph.prototype.init = function (aSound, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -9321,7 +9300,6 @@ JukeboxMorph.prototype.updateList = function () {
         padding = 4,
         oldFlag = Morph.prototype.trackChanges,
         icon,
-        template,
         txt,
         ide = this.sprite.parentThatIsA(IDE_Morph),
         recordButton;
@@ -9372,7 +9350,7 @@ JukeboxMorph.prototype.updateList = function () {
     y = recordButton.bottom() + padding;
 
     this.sprite.sounds.asArray().forEach(function (sound) {
-        template = icon = new SoundIconMorph(sound, template);
+        icon = new SoundIconMorph(sound);
         icon.setPosition(new Point(x, y));
         myself.addContents(icon);
         y = icon.bottom() + padding;
