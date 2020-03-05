@@ -8588,8 +8588,8 @@ CostumeIconMorph.prototype.exportCostume = function () {
 
 // CostumeIconMorph drawing
 
-CostumeIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+CostumeIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 // CostumeIconMorph inheritance
 
@@ -8757,8 +8757,8 @@ TurtleIconMorph.prototype.fixLayout
 
 // TurtleIconMorph drawing
 
-TurtleIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+TurtleIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 // TurtleIconMorph user menu
 
