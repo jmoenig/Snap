@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-03';
+modules.gui = '2020-March-05';
 
 // Declarations
 
@@ -8276,39 +8276,25 @@ SpriteIconMorph.prototype.mouseDoubleClick = function () {
 
 // SpriteIconMorph drawing
 
-SpriteIconMorph.prototype.createBackgrounds = function () {
-//    only draw the edges if I am selected
-    var context,
-        ext = this.extent();
-
-    if (this.template) { // take the backgrounds images from the template
-        this.image = this.template.image;
-        this.normalImage = this.template.normalImage;
-        this.highlightImage = this.template.highlightImage;
-        this.pressImage = this.template.pressImage;
-        return null;
+SpriteIconMorph.prototype.render = function (ctx) {
+    // only draw the edges if I am selected
+    switch (this.userState) {
+    case 'highlight':
+        this.drawBackground(ctx, this.highlightColor);
+        break;
+    case 'pressed':
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.pressColor);
+        this.drawEdges(
+            ctx,
+            this.pressColor,
+            this.pressColor.lighter(40),
+            this.pressColor.darker(40)
+        );
+        break;
+    default:
+        this.drawBackground(ctx, this.color);
     }
-
-    this.normalImage = newCanvas(ext, false, this.normalImage);
-    context = this.normalImage.getContext('2d');
-    this.drawBackground(context, this.color);
-
-    this.highlightImage = newCanvas(ext, false, this.highlightImage);
-    context = this.highlightImage.getContext('2d');
-    this.drawBackground(context, this.highlightColor);
-
-    this.pressImage = newCanvas(ext, false, this.pressImage);
-    context = this.pressImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.pressColor);
-    this.drawEdges(
-        context,
-        this.pressColor,
-        this.pressColor.lighter(this.contrast),
-        this.pressColor.darker(this.contrast)
-    );
-
-    this.image = this.normalImage;
 };
 
 // SpriteIconMorph drag & drop
