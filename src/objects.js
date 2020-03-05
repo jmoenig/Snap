@@ -7263,10 +7263,10 @@ SpriteMorph.prototype.highlight = function (color, border) {
         edge = border,
         ctx;
 
-    highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.bounds.setExtent(fb.extent().add(edge * 2));
     highlight.color = color;
-    highlight.image = this.highlightImage(color, border);
-    ctx = highlight.image.getContext('2d');
+    highlight.cachedImage = this.highlightImage(color, border);
+    ctx = highlight.cachedImage.getContext('2d');
     ctx.drawImage(
         this.highlightImage(new Color(255, 255, 255), 4),
         border - 4,
@@ -7289,7 +7289,7 @@ SpriteMorph.prototype.highlight = function (color, border) {
 SpriteMorph.prototype.highlightImage = function (color, border) {
     var fb, img, hi, ctx, out;
     fb = this.extent();
-    img = this.image;
+    img = this.getImage();
 
     hi = newCanvas(fb.add(border * 2));
     ctx = hi.getContext('2d');
@@ -7430,6 +7430,11 @@ SpriteHighlightMorph.uber = Morph.prototype;
 function SpriteHighlightMorph() {
     this.init();
 }
+
+SpriteHighlightMorph.prototype.init = function () {
+    SpriteHighlightMorph.uber.init.call(this);
+    this.isCachingImage = true;
+};
 
 // StageMorph /////////////////////////////////////////////////////////
 
