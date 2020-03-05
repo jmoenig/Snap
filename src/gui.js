@@ -1628,7 +1628,7 @@ IDE_Morph.prototype.createCorralBar = function () {
 
 IDE_Morph.prototype.createCorral = function () {
     // assumes the corral bar has already been created
-    var frame, template, padding = 5, myself = this;
+    var frame, padding = 5, myself = this;
 
     this.createStageHandle();
     this.createPaletteHandle();
@@ -1661,8 +1661,7 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.sprites.asArray().forEach(function (morph) {
         if (!morph.isTemporary) {
-            template = new SpriteIconMorph(morph, template);
-            frame.contents.add(template);
+            frame.contents.add(new SpriteIconMorph(morph));
         }
     });
 
@@ -7952,21 +7951,18 @@ SpriteIconMorph.prototype.fontSize = 9;
 
 // SpriteIconMorph instance creation:
 
-function SpriteIconMorph(aSprite, aTemplate) {
-    this.init(aSprite, aTemplate);
+function SpriteIconMorph(aSprite) {
+    this.init(aSprite);
 }
 
-SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
+SpriteIconMorph.prototype.init = function (aSprite) {
     var colors, action, query, hover, myself = this;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
-
-    }
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
     action = function () {
         // make my sprite the current one
@@ -8007,8 +8003,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        hover, // hint
-        aTemplate // optional, for cached background images
+        hover // hint
     );
 
     // override defaults and build additional components
@@ -8302,7 +8297,7 @@ SpriteIconMorph.prototype.prepareToBeGrabbed = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         idx;
     this.mouseClickLeft(); // select me
-    this.alpha = 0.85;
+    this.alpha = 0.5;
     if (ide) {
         idx = ide.sprites.asArray().indexOf(this.object);
         ide.sprites.remove(idx + 1);

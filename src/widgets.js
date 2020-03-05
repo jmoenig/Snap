@@ -526,7 +526,7 @@ function ToggleButtonMorph(
     query, // predicate/selector
     environment,
     hint,
-    template, // optional, for cached background images
+    template, // optional, for cached background images // +++ needs to be removed!!
     minWidth, // <num> optional, if specified label will left-align
     hasPreview, // <bool> show press color on left edge (e.g. category)
     isPicture // treat label as picture, i.e. don't apply typography
