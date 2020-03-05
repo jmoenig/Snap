@@ -1928,7 +1928,6 @@ SpriteMorph.prototype.fixLayout = function () {
         this.setCenter(currentCenter, true); // just me
         this.rotationOffset = this.extent().divideBy(2);
     }
-    this.version = Date.now();
  };
 
 SpriteMorph.prototype.render = function (ctx) {
@@ -1992,6 +1991,7 @@ SpriteMorph.prototype.render = function (ctx) {
     }
     // apply graphics effects to image
     // +++ this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // +++ graphic effects disabled while working on rendering
+    this.version = Date.now();
 };
 
 SpriteMorph.prototype.endWarp = function () { // +++ is this needed anymore?

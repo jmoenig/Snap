@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2019-December-09';
+modules.store = '2020-March-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1289,7 +1289,8 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         inp = this.loadScript(model, object);
         if (inp) {
             if (block.selector === 'reifyReporter') {
-                input.silentReplaceInput(input.children[0], inp);
+//+++                input.silentReplaceInput(input.children[0], inp);
+                input.replaceInput(input.children[0], inp);
                 input.fixLayout();
             } else {
                 input.add(inp);
@@ -1299,7 +1300,8 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     } else if (model.tag === 'autolambda' && model.children[0]) {
         inp = this.loadBlock(model.children[0], true, object);
         if (inp) {
-            input.silentReplaceInput(input.children[0], inp);
+//            input.silentReplaceInput(input.children[0], inp);
+            input.replaceInput(input.children[0], inp);
             input.fixLayout();
         }
     } else if (model.tag === 'list') {
@@ -1317,7 +1319,8 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         });
         input.fixLayout();
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
-        block.silentReplaceInput(input, this.loadBlock(model, true, object));
+//        block.silentReplaceInput(input, this.loadBlock(model, true, object));
+        block.replaceInput(input, this.loadBlock(model, true, object));
     } else if (model.tag === 'color') {
         input.setColor(this.loadColor(model.contents));
     } else {
@@ -1462,7 +1465,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
-        v.drawNew();
+        // +++ v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(v, model);
         return v;
@@ -1667,7 +1670,8 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     } else {
         ide.hasChangedMedia = true;
     }
-    project.stage.drawNew();
+// +++    project.stage.drawNew();
+    project.stage.fixLayout();
     ide.createCorral();
     ide.selectSprite(sprite);
     ide.fixLayout();

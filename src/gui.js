@@ -1303,7 +1303,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     thumbnail = new Morph();
     thumbnail.isCachingImage = true; // +++ review and refactor this to reuse the canvas
-    thumbnail.setExtent(thumbSize);
+    thumbnail.bounds.setExtent(thumbSize);
     thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
     thumbnail.setPosition(
         rotationStyleButtons[0].topRight().add(new Point(5, 3))
@@ -2108,7 +2108,6 @@ IDE_Morph.prototype.stopFastTracking = function () {
     this.stage.isFastTracked = false;
     this.stage.fps = this.stage.frameRate;
     this.controlBar.startButton.labelString = new SymbolMorph('flag', 14);
-    this.controlBar.startButton.drawNew();
     this.controlBar.startButton.fixLayout();
 };
 
@@ -8028,7 +8027,7 @@ SpriteIconMorph.prototype.createThumbnail = function () {
 
     this.thumbnail = new Morph();
     this.thumbnail.isCachingImage = true; // +++ review thumbnails
-    this.thumbnail.setExtent(this.thumbSize);
+    this.thumbnail.bounds.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
         this.thumbnail.cachedImage = this.object.fullThumbnail(this.thumbSize); // +++ recycle canvas
         this.createRotationButton();
