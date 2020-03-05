@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-02';
+modules.objects = '2020-March-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3503,8 +3503,8 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
     }
     this.changed();
     this.costume = costume;
-    this.drawNew();
-    this.changed();
+    this.fixLayout();
+    this.rerender();
     if (isWarped) {
         this.startWarp();
     }

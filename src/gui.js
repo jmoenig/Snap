@@ -8874,7 +8874,6 @@ WardrobeMorph.prototype.updateList = function () {
     paintbutton.labelShadowColor = paintbutton.highlightColor;
     paintbutton.labelColor = TurtleIconMorph.prototype.labelColor;
     paintbutton.contrast = this.buttonContrast;
-    paintbutton.drawNew();
     paintbutton.hint = "Paint a new costume";
     paintbutton.setPosition(new Point(x, y));
     paintbutton.fixLayout();
@@ -8899,7 +8898,6 @@ WardrobeMorph.prototype.updateList = function () {
         cambutton.labelShadowColor = paintbutton.highlightColor;
         cambutton.labelColor = TurtleIconMorph.prototype.labelColor;
         cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
         cambutton.hint = "Import a new costume from your webcam";
         cambutton.setPosition(new Point(x, y));
         cambutton.fixLayout();
