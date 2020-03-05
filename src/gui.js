@@ -8030,11 +8030,12 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     this.thumbnail.bounds.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
         this.thumbnail.cachedImage = this.object.fullThumbnail(this.thumbSize); // +++ recycle canvas
+        this.add(this.thumbnail);
         this.createRotationButton();
     } else {
         this.thumbnail.cachedImage = this.object.thumbnail(this.thumbSize);
+        this.add(this.thumbnail);
     }
-    this.add(this.thumbnail);
 };
 
 SpriteIconMorph.prototype.createLabel = function () {
@@ -8098,7 +8099,6 @@ SpriteIconMorph.prototype.createRotationButton = function () {
     // button.hint = 'rotate synchronously\nwith anchor';
     button.fixLayout();
     button.refresh();
-    button.changed();
     this.rotationButton = button;
     this.add(this.rotationButton);
 };
