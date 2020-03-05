@@ -1060,7 +1060,6 @@ IDE_Morph.prototype.createCategories = function () {
             },
             null, // env
             null, // hint
-            null, // template cache
             labelWidth, // minWidth
             true // has preview
         );

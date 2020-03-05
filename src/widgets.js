@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-04';
+modules.widgets = '2020-March-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -136,16 +136,14 @@ function PushButtonMorph(
     action,
     labelString,
     environment,
-    hint,
-    template
+    hint
 ) {
     this.init(
         target,
         action,
         labelString,
         environment,
-        hint,
-        template
+        hint
     );
 }
 
@@ -154,8 +152,7 @@ PushButtonMorph.prototype.init = function (
     action,
     labelString,
     environment,
-    hint,
-    template
+    hint
 ) {
     // additional properties:
     this.is3D = false; // for "flat" design exceptions
@@ -526,7 +523,6 @@ function ToggleButtonMorph(
     query, // predicate/selector
     environment,
     hint,
-    template, // optional, for cached background images // +++ needs to be removed!!
     minWidth, // <num> optional, if specified label will left-align
     hasPreview, // <bool> show press color on left edge (e.g. category)
     isPicture // treat label as picture, i.e. don't apply typography
@@ -539,7 +535,6 @@ function ToggleButtonMorph(
         query,
         environment,
         hint,
-        template,
         minWidth,
         hasPreview,
         isPicture
@@ -554,7 +549,6 @@ ToggleButtonMorph.prototype.init = function (
     query,
     environment,
     hint,
-    template,
     minWidth,
     hasPreview,
     isPicture
@@ -574,8 +568,7 @@ ToggleButtonMorph.prototype.init = function (
         action,
         labelString,
         environment,
-        hint,
-        template
+        hint
     );
 
     // override default colors if others are specified
@@ -1061,7 +1054,6 @@ function ToggleMorph(
     query, // predicate/selector
     environment,
     hint,
-    template,
     element, // optional Morph or Canvas to display
     builder // method which constructs the element (only for Morphs)
 ) {
@@ -1073,7 +1065,6 @@ function ToggleMorph(
         query,
         environment,
         hint,
-        template,
         element,
         builder
     );
@@ -1087,7 +1078,6 @@ ToggleMorph.prototype.init = function (
     query,
     environment,
     hint,
-    template,
     element,
     builder
 ) {
@@ -1112,8 +1102,7 @@ ToggleMorph.prototype.init = function (
         action,
         (style === 'checkbox' ? '\u2713' : '\u25CF'),
         environment,
-        hint,
-        template
+        hint
     );
     this.fixLayout();
     this.refresh();
