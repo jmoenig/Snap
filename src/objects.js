@@ -1687,6 +1687,7 @@ SpriteMorph.prototype.init = function (globals) {
     SpriteMorph.uber.init.call(this);
 
     this.isCachingImage = true;
+    this.isFreeForm = true;
     this.cachedHSV = this.color.hsv();
     this.isDraggable = true;
     this.isDown = false;
