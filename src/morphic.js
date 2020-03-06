@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-03';
+var morphicVersion = '2020-March-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4964,6 +4964,7 @@ PenMorph.prototype.render = function (ctx, facing) {
 
 PenMorph.prototype.setHeading = function (degrees) {
     this.heading = ((+degrees % 360) + 360) % 360;
+    this.fixLayout();
     this.rerender();
 };
 

@@ -68,7 +68,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph,
+/*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph, ZERO,
 DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph,
 ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
@@ -1677,7 +1677,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
     // video- and rendering state
-    this.imageExtent = new Point(0, 0); // +++ ZERO ?
+    this.imageExtent = ZERO;
+    this.imageOffset = ZERO;
     this.imageData = {}; // version: date, pixels: Uint32Array
     this.motionAmount = 0;
     this.motionDirection = 0;
@@ -1838,7 +1839,6 @@ SpriteMorph.prototype.fixLayout = function () {
         newX,
         corners = [],
         origin,
-        shift,
         corner,
         costumeExtent;
 
@@ -1875,7 +1875,7 @@ SpriteMorph.prototype.fixLayout = function () {
              .extent().multiplyBy(this.scale * stageScale);
 
          // determine the new relative origin of the rotated shape
-         shift = new Point(0, 0).rotateBy(
+         this.imageOffset = ZERO.rotateBy(
              radians(-(facing - 90)),
              pic.center()
          ).subtract(origin);
@@ -1910,9 +1910,9 @@ SpriteMorph.prototype.fixLayout = function () {
         this.setCenter(currentCenter, true); // just me
 
         // determine my rotation offset // +++ why do we need this?
-        this.rotationOffset = shift
+        this.rotationOffset = this.imageOffset
             .translateBy(pic.rotationCenter)
-            .rotateBy(radians(-(facing - 90)), shift)
+            .rotateBy(radians(-(facing - 90)), this.imageOffset)
             .scaleBy(this.scale * stageScale);
     } else {
         facing = isFlipped ? -90 : facing;
@@ -1938,8 +1938,6 @@ SpriteMorph.prototype.render = function (ctx) {
         cst,
         pic, // (flipped copy of) actual costume based on my rotation style
         stageScale,
-        origin,
-        shift,
         handle;
 
     isLoadingCostume = this.costume &&
@@ -1956,20 +1954,9 @@ SpriteMorph.prototype.render = function (ctx) {
     }
     if (this.costume && !isLoadingCostume) {
         pic = isFlipped ? this.costume.flipped() : this.costume;
-
-        // determine the relative origin of the rotated shape
-        origin = pic.bounds().origin.rotateBy(
-            radians(facing - 90),
-            this.costume.center()
-        );
-        shift = new Point(0, 0).rotateBy(
-            radians(-(facing - 90)),
-            pic.center()
-        ).subtract(origin);
-
         ctx.save();
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
-        ctx.translate(shift.x, shift.y);
+        ctx.translate(this.imageOffset.x, this.imageOffset.y);
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
         ctx.restore();
@@ -7576,7 +7563,6 @@ StageMorph.prototype.setScale = function (number) {
         pos = this.position(),
         relativePos,
         bubble,
-        oldFlag = Morph.prototype.trackChanges,
         myself = this;
 
     if (delta === 1) {return; }
