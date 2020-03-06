@@ -9233,8 +9233,8 @@ SoundIconMorph.prototype.exportSound = function () {
     ide.saveAudioAs(this.object.audio, this.object.name);
 };
 
-SoundIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+SoundIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 SoundIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
@@ -9254,6 +9254,9 @@ SoundIconMorph.prototype.disinherit = function () {
 
 SoundIconMorph.prototype.prepareToBeGrabbed = function () {
     this.disinherit();
+    this.userState = 'pressed';
+    this.state = true;
+    this.rerender();
     this.removeSound();
 };
 
