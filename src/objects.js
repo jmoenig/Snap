@@ -1652,7 +1652,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
-    this.rotationOffset = new Point(); // not to be serialized (!)
+    this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking // +++ is this needed anymore?
 
@@ -1906,10 +1906,10 @@ SpriteMorph.prototype.fixLayout = function () {
         }
         this.bounds.setExtent(costumeExtent);
 
-        // adjust my position to the rotation // +++ why do we need this?
-        this.setCenter(currentCenter, true); // just me
+        // adjust my position to the rotation
+        this.setCenter(currentCenter, true);
 
-        // determine my rotation offset // +++ why do we need this?
+        // determine my rotation offset
         this.rotationOffset = this.imageOffset
             .translateBy(pic.rotationCenter)
             .rotateBy(radians(-(facing - 90)), this.imageOffset)

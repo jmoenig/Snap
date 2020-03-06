@@ -4509,7 +4509,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this
         );
     }
-    this.stopFastTracking();
+    this.stopFastTracking(); // +++ ??
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {

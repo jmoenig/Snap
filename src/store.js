@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-March-05';
+modules.store = '2020-March-06';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -715,7 +715,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.isDraggable = model.attributes.draggable !== 'false';
         sprite.isVisible = model.attributes.hidden !== 'true';
         sprite.heading = parseFloat(model.attributes.heading) || 0;
-        sprite.drawNew();
+        sprite.fixLayout();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
     });
@@ -752,6 +752,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     this.mediaDict = {};
 
 //    ide.stage.drawNew();
+    ide.stage.fixLayout(); // +++
+    ide.stage.rerender(); // +++
     ide.createCorral();
     ide.fixLayout();
 };
@@ -1465,7 +1467,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
-        // +++ v.drawNew();
+        v.fixLayout();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(v, model);
         return v;
@@ -1670,7 +1672,6 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     } else {
         ide.hasChangedMedia = true;
     }
-// +++    project.stage.drawNew();
     project.stage.fixLayout();
     ide.createCorral();
     ide.selectSprite(sprite);
