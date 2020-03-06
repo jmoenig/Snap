@@ -10820,7 +10820,8 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
     this.color = color || new Color(255, 140, 0);
     this.isBig = false;
     this.version = null; // only for observing sprites
-    this.drawNew();
+    // this.drawNew(); +++
+    this.rerender(); // +++ ??
 };
 
 // CellMorph accessing:
@@ -10828,15 +10829,15 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
 CellMorph.prototype.big = function () {
     this.isBig = true;
     this.changed();
-    this.drawNew();
-    this.changed();
+    this.fixLayout(true);  // just me // +++ ???
+    this.rerender();
 };
 
 CellMorph.prototype.normal = function () {
     this.isBig = false;
     this.changed();
-    this.drawNew();
-    this.changed();
+    this.fixLayout(true); // just me // +++ ???
+    this.rerender();
 };
 
 // CellMorph circularity testing:
@@ -10852,11 +10853,12 @@ CellMorph.prototype.isCircular = function (list) {
 
 // CellMorph layout:
 
-CellMorph.prototype.fixLayout = function () {
+CellMorph.prototype.fixLayout = function (justMe) {
     var listwatcher;
-    this.changed();
-    this.drawNew();
-    this.changed();
+    if (justMe) {return; }
+
+    // +++ to do: move layout code from old "drawNew()" here
+
     if (this.parent && this.parent.fixLayout) { // variable watcher
         this.parent.fixLayout();
     } else {
@@ -10875,13 +10877,13 @@ CellMorph.prototype.update = function () {
         return;
     }
     if (this.version !== this.contents.version) {
-        this.drawNew();
+        this.rerender(); // +++ ??
         this.version = this.contents.version;
     }
 };
 
-CellMorph.prototype.drawNew = function (toggle, type) {
-    var context,
+CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
+    var toggle, type, // +++ old parameters, not sure if they're ever used
         txt,
         img,
         fontSize = SyntaxElementMorph.prototype.fontSize,
@@ -10895,6 +10897,7 @@ CellMorph.prototype.drawNew = function (toggle, type) {
     }
 
     // re-build my contents
+    // +++ all of this should definitely be moved to fixLayout() or to update()
     if (toggle || (this.contentsMorph && !isSameList && !isSameTable)) {
         this.contentsMorph.destroy();
         this.version = null;
@@ -11001,10 +11004,10 @@ CellMorph.prototype.drawNew = function (toggle, type) {
     }
 
     // adjust my layout
-    this.silentSetHeight(this.contentsMorph.height()
+    this.bounds.setHeight(this.contentsMorph.height()
         + this.edge
         + this.border * 2);
-    this.silentSetWidth(Math.max(
+    this.bounds.setWidth(Math.max(
         this.contentsMorph.width() + this.edge * 2,
         (this.contents instanceof Context ||
             this.contents instanceof List ? 0 :
@@ -11012,34 +11015,32 @@ CellMorph.prototype.drawNew = function (toggle, type) {
     ));
 
     // draw my outline
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
     if ((this.edge === 0) && (this.border === 0)) {
-        BoxMorph.uber.drawNew.call(this);
+        BoxMorph.uber.render.call(this, ctx);
         return null;
     }
-    context.fillStyle = this.color.toString();
-    context.beginPath();
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
     this.outlinePath(
-        context,
+        ctx,
         Math.max(this.edge - this.border, 0),
         this.border
     );
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
     if (this.border > 0 && !MorphicPreferences.isFlat) {
-        context.lineWidth = this.border;
-        context.strokeStyle = this.borderColor.toString();
-        context.beginPath();
-        this.outlinePath(context, this.edge, this.border / 2);
-        context.closePath();
-        context.stroke();
+        ctx.lineWidth = this.border;
+        ctx.strokeStyle = this.borderColor.toString();
+        ctx.beginPath();
+        this.outlinePath(ctx, this.edge, this.border / 2);
+        ctx.closePath();
+        ctx.stroke();
 
-        context.shadowOffsetX = this.border;
-        context.shadowOffsetY = this.border;
-        context.shadowBlur = this.border;
-        context.shadowColor = this.color.darker(80).toString();
-        this.drawShadow(context, this.edge, this.border / 2);
+        ctx.shadowOffsetX = this.border;
+        ctx.shadowOffsetY = this.border;
+        ctx.shadowBlur = this.border;
+        ctx.shadowColor = this.color.darker(80).toString();
+        this.drawShadow(ctx, this.edge, this.border / 2);
     }
 
     // position my contents
@@ -11348,10 +11349,12 @@ WatcherMorph.prototype.update = function () {
                     this.cellMorph.setColor(this.readoutColor);
                 }
             }
-            this.cellMorph.drawNew();
+            // +++ this.cellMorph.drawNew();
+            this.cellMorph.fixLayout(); // +++
             if (!isNaN(newValue)) {
                 this.sliderMorph.value = newValue;
-                this.sliderMorph.drawNew();
+                // +++ this.sliderMorph.drawNew();
+                this.sliderMorph.fixLayout(); // +++
             }
             this.fixLayout();
             if (this.currentValue && this.currentValue.version) {
@@ -11390,7 +11393,7 @@ WatcherMorph.prototype.fixLayout = function () {
     var fontSize = SyntaxElementMorph.prototype.fontSize, isList,
         myself = this;
 
-    this.changed();
+    // +++ this.changed();
 
     // create my parts
     if (this.labelMorph === null) {
@@ -11445,7 +11448,7 @@ WatcherMorph.prototype.fixLayout = function () {
         this.sliderMorph.hide();
         this.cellMorph.big();
         this.cellMorph.setPosition(this.position());
-        this.setExtent(this.cellMorph.extent().subtract(1));
+        this.bounds.setExtent(this.cellMorph.extent().subtract(1)); // +++ refactor
         return;
     }
 
@@ -11473,14 +11476,14 @@ WatcherMorph.prototype.fixLayout = function () {
     }
 
     if (this.style === 'slider') {
-        this.sliderMorph.silentSetPosition(new Point(
+        this.sliderMorph.setPosition(new Point( // +++ was: 'silent'
             this.labelMorph.left(),
             this.cellMorph.bottom()
                 + SyntaxElementMorph.prototype.typeInPadding
         ));
         this.sliderMorph.setWidth(this.cellMorph.right()
             - this.labelMorph.left());
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.cellMorph.height()
                 + this.sliderMorph.height()
                 + this.border * 2
@@ -11497,8 +11500,12 @@ WatcherMorph.prototype.fixLayout = function () {
         this.labelMorph.right()
     ) + this.edge
         + SyntaxElementMorph.prototype.typeInPadding;
+
+/* +++
     this.drawNew();
     this.changed();
+*/
+
 };
 
 // WatcherMorph events:
