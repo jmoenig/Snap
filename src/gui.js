@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-05';
+modules.gui = '2020-March-06';
 
 // Declarations
 
@@ -9109,7 +9109,7 @@ SoundIconMorph.prototype.createThumbnail = function () {
         this.thumbnail.destroy();
     }
     this.thumbnail = new Morph();
-    this.thumbnail.setExtent(this.thumbSize);
+    this.thumbnail.bounds.setExtent(this.thumbSize);
     this.add(this.thumbnail);
     label = new StringMorph(
         this.createInfo(),
@@ -9130,7 +9130,6 @@ SoundIconMorph.prototype.createThumbnail = function () {
         'toggleAudioPlaying',
         (this.object.previewAudio ? 'Stop' : 'Play')
     );
-    this.button.drawNew();
     this.button.hint = 'Play sound';
     this.button.fixLayout();
     this.thumbnail.add(this.button);
@@ -9337,7 +9336,6 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton.labelShadowColor = recordButton.highlightColor;
     recordButton.labelColor = TurtleIconMorph.prototype.labelColor;
     recordButton.contrast = this.buttonContrast;
-    recordButton.drawNew();
     recordButton.hint = 'Record a new sound';
     recordButton.fixLayout();
     recordButton.label.setColor(new Color(255, 20, 20));
