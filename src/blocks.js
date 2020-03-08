@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-04';
+modules.blocks = '2020-March-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -424,10 +424,11 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         });
     }
 
+/* +++ refactor this, first, find out if this exception is at all relevant
     if ((idx === -1) || (scripts === null)) {
         return null;
     }
-
+*/
     if (oldArg.cachedSlotSpec) {oldArg.cachedSlotSpec = null; }
     if (newArg.cachedSlotSpec) {newArg.cachedSlotSpec = null; }
 
@@ -445,7 +446,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     }
     replacement.parent = this;
     this.children[idx] = replacement;
-    if (oldArg instanceof ReporterBlockMorph) {
+    if (oldArg instanceof ReporterBlockMorph && scripts) { // +++ added test for scripts when deserializing
         if (!(oldArg instanceof RingMorph)
                 || (oldArg instanceof RingMorph && oldArg.contents())) {
             scripts.add(oldArg);
