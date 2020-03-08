@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-06';
+modules.gui = '2020-March-08';
 
 // Declarations
 
@@ -2098,15 +2098,18 @@ IDE_Morph.prototype.startFastTracking = function () {
     this.stage.isFastTracked = true;
     this.stage.fps = 0;
     this.controlBar.startButton.labelString = new SymbolMorph('flash', 14);
-    this.controlBar.startButton.drawNew();
+    this.controlBar.startButton.createLabel();
     this.controlBar.startButton.fixLayout();
+    this.controlBar.startButton.rerender();
 };
 
 IDE_Morph.prototype.stopFastTracking = function () {
     this.stage.isFastTracked = false;
     this.stage.fps = this.stage.frameRate;
     this.controlBar.startButton.labelString = new SymbolMorph('flag', 14);
+    this.controlBar.startButton.createLabel();
     this.controlBar.startButton.fixLayout();
+    this.controlBar.startButton.rerender();
 };
 
 IDE_Morph.prototype.runScripts = function () {
