@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-March-06';
+modules.store = '2020-March-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -536,8 +536,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
                     sprite.wearCostume(costume, true);
                 } else {
                     costume.loaded = function () {
-                        sprite.wearCostume(costume, true);
                         this.loaded = true;
+                        sprite.wearCostume(costume, true);
                     };
                 }
             }
@@ -715,9 +715,9 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.isDraggable = model.attributes.draggable !== 'false';
         sprite.isVisible = model.attributes.hidden !== 'true';
         sprite.heading = parseFloat(model.attributes.heading) || 0;
-        sprite.fixLayout();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
+        sprite.fixLayout();
     });
 
     // restore inheritance and nesting associations
@@ -751,7 +751,6 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     this.project = {};
     this.mediaDict = {};
 
-//    ide.stage.drawNew();
     ide.stage.fixLayout(); // +++
     ide.stage.rerender(); // +++
     ide.createCorral();
@@ -806,8 +805,8 @@ SnapSerializer.prototype.loadObject = function (object, model) {
                 object.wearCostume(costume, true);
             } else {
                 costume.loaded = function () {
-                    object.wearCostume(costume, true);
                     this.loaded = true;
+                    object.wearCostume(costume, true);
                 };
             }
         }
@@ -893,8 +892,8 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
                 object.wearCostume(costume, true);
             } else {
                 costume.loaded = function () {
-                    object.wearCostume(costume, true);
                     this.loaded = true;
+                    object.wearCostume(costume, true);
                 };
             }
         }
@@ -1467,9 +1466,10 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
-        v.fixLayout();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(v, model);
+        v.fixLayout();
+
         return v;
     case 'context':
         v = new Context(null);
