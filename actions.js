@@ -773,27 +773,32 @@ ActionManager.prototype._setBlockPosition = function(block, position) {
 
 ActionManager.prototype._setBlocksPositions = function(ids, positions) {
     var myself = this,
-        block = this.getBlockFromId(ids[0]),
-        scripts = block.parentThatIsA(ScriptsMorph),
-        stdPositions,
-        oldPositions;
+        newPositions = [],
+        currentPositions = [],
+        scripts,
+        block,
+        i;
 
     // Remove any comments (undefined position)
-    for (var i = ids.length; i--;) {
+    for (i = ids.length; i--;) {
         if (!positions[i]) {
             ids.splice(i, 1);
             positions.splice(i, 1);
         }
     }
-    oldPositions = ids.map(function(id) {
-        return myself._positionOf[id];
-    });
 
-    stdPositions = positions.map(function(pos) {
-        return myself.getStandardPosition(scripts, pos);
-    });
+    for (i = 0; i < ids.length; i++) {
+        block = myself.getBlockFromId(ids[i]);
+        scripts = block.parentThatIsA(ScriptsMorph);
+        currentPositions.push(
+            this.getStandardPosition(scripts, block.position())
+        );
+        newPositions.push(
+            this.getStandardPosition(scripts, positions[i])
+        );
+    }
 
-    return [ids, stdPositions, oldPositions];
+    return [ids, newPositions, currentPositions];
 };
 
 // Custom Blocks
