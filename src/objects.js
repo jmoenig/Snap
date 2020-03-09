@@ -4223,9 +4223,9 @@ SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
     if (!this.color.eq(aColor, true)) { // observeAlpha
-        this.color = aColor.copy();
+        this.color = aColor.copy(); // +++ why copy?
         if (!this.costume) {
-            this.drawNew();
+            this.rerender();
             this.silentGotoXY(x, y);
         }
         this.cachedHSV = this.color.hsv();
