@@ -5360,28 +5360,6 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
     }
 };
 
-SpriteMorph.prototype.silentMoveBy = function (delta, justMe) {
-    SpriteMorph.uber.silentMoveBy.call(this, delta);
-    if (!justMe && this.parent instanceof HandMorph) {
-        this.parts.forEach(function (part) {
-            part.moveBy(delta);
-        });
-        this.instances.forEach(function (instance) {
-            if (instance.cachedPropagation) {
-                var inheritsX = instance.inheritsAttribute('x position'),
-                    inheritsY = instance.inheritsAttribute('y position');
-                if (inheritsX && inheritsY) {
-                    instance.moveBy(delta);
-                } else if (inheritsX) {
-                    instance.moveBy(new Point(delta.x, 0));
-                } else if (inheritsY) {
-                    instance.moveBy(new Point(0, delta.y));
-                }
-            }
-        });
-    }
-};
-
 SpriteMorph.prototype.rootForGrab = function () {
     if (this.anchor) {
         return this.anchor.rootForGrab();
@@ -7600,6 +7578,20 @@ StageMorph.prototype.setScale = function (number) {
             morph.setBottom(myself.bottom());
         }
     });
+};
+
+StageMorph.prototype.moveBy = function (delta) {
+    // override the inherited method to skip attached sprite parts,
+    // because they are also level-1 children of the stage and thus
+    // will be moved individually
+    var children = this.children,
+        i = children.length;
+    this.changed();
+    this.bounds = this.bounds.translateBy(delta);
+    this.changed();
+    for (i; i > 0; i -= 1) {
+        children[i - 1].moveBy(delta, true); // justMe - skip sprite parts
+    }
 };
 
 // StageMorph rendering
