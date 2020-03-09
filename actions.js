@@ -842,7 +842,7 @@ ActionManager.prototype._deleteCustomBlocks = function(blocks) {
 
 ActionManager.prototype._importBlocks = function(str, lbl) {
     // Get unique ids for each of the blocks
-    var model = this.uniqueIdForImport(str),
+    var model = this.assignUniqueIds(str),
         ids;
 
     // need to get the ids for each of the sprites (so we can delete them on undo!)
@@ -1234,7 +1234,7 @@ ActionManager.prototype._openProject = function(str) {
     return [str];
 };
 
-ActionManager.prototype.uniqueIdForImport = function (str) {
+ActionManager.prototype.assignUniqueIds = function (str) {
     var model = this.serializer.parse(str),
         children = model.allChildren();
 
@@ -1260,39 +1260,26 @@ ActionManager.prototype._renameSprite = function(sprite, name) {
 
 ActionManager.prototype._duplicateSprite = function(sprite) {
     var id = this.newId(),
+        idString = 'collabId="' + id + '"',
         newSprite = sprite.copy(),
         ide = this.ide(),
         str,
-        start,
-        end,
         serialized;
 
     newSprite.id = id;
     newSprite.setName(ide.newSpriteName(sprite.name));
     newSprite.parent = ide.stage;
 
-    // Create new ids for all the sprite's children
     serialized = this.serialize(newSprite);
 
-    start = '<sprites>' + this._getOpeningSpriteTag(serialized);
-    end = '</sprites>';
-
-    str = this.uniqueIdForImport(serialized).toString();
-    str = str.replace(/<sprite.*?[^\\]>/, start) + end;  // preserve sprite's id
+    str = this.assignUniqueIds(serialized).toString();
+    str = '<sprites>' + str.replace(/collabId="item_[0-9_]*"/, idString) + '</sprites>';
 
     return [str, null, id];
 };
 
-// Helper method
-ActionManager.prototype._getOpeningSpriteTag = function(str) {
-    var regex = /<sprite\b[^>]+[^\\]>/,
-        match = str.match(regex);
-
-    return match[0];
-};
-
 ActionManager.prototype._importSprites = function(str) {
-    var model = this.uniqueIdForImport(str),
+    var model = this.assignUniqueIds(str),
         ids;
 
     // need to get the ids for each of the sprites (so we can delete them on undo!)
