@@ -5041,6 +5041,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 };
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
+return; // +++ disabled while working on rendering
     var eff = effect instanceof Array ? effect[0] : effect.toString();
     if (!contains(
             [
