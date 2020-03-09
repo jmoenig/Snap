@@ -7977,8 +7977,8 @@ StageMorph.prototype.step = function () {
     var current, elapsed, leftover, ide, world = this.world();
 
     // handle keyboard events
-    if (world.keyboardReceiver === null) {
-        world.keyboardReceiver = this;
+    if (world.keyboardFocus === null) {
+        world.keyboardFocus = this;
     }
     if (world.currentKey === null) {
         this.keyPressed = null;
