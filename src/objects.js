@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-05';
+modules.objects = '2020-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -4616,11 +4616,11 @@ SpriteMorph.prototype.setScale = function (percentage, noShadow) {
     // set my (absolute) scale in percent
     var x = this.xPosition(),
         y = this.yPosition(),
-        isWarped = this.isWarped,
+        isWarped = this.isWarped, // +++ should be obsolete, remove
         realScale,
         growth;
 
-    if (isWarped) {
+    if (isWarped) { // +++ should be obsolete, remove
         this.endWarp();
     }
     realScale = (+percentage || 0) / 100;
@@ -4630,9 +4630,12 @@ SpriteMorph.prototype.setScale = function (percentage, noShadow) {
 
     // apply to myself
     this.changed();
-    this.drawNew();
-    this.changed();
-    if (isWarped) {
+    this.fixLayout();
+    this.rerender();
+    // +++ this.drawNew();
+    // +++ this.changed();
+
+    if (isWarped) { // should be obsolete, remove
         this.startWarp();
     }
     this.silentGotoXY(x, y, true); // just me
