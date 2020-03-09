@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-06';
+var morphicVersion = '2020-March-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4514,11 +4514,7 @@ Morph.prototype.overlappingPixels = function (otherMorph) {
         oRect = fb.intersect(otherFb),
         thisImg, thatImg;
 
-    if (oRect.width() < 1 || oRect.height() < 1 ||
-        !this.image || !otherMorph.image ||
-        !this.image.width || !this.image.height ||
-        !otherMorph.image.width || !otherMorph.image.height
-    ) {
+    if (oRect.width() < 1 || oRect.height() < 1) {
         return false;
     }
     thisImg = this.fullImage();

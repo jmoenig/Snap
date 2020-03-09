@@ -4337,8 +4337,8 @@ SpriteMorph.prototype.reportColorIsTouchingColor = function (
 SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        thisImg = this.image,
-        thatImg = otherSprite.image;
+        thisImg = this.getImage(),
+        thatImg = otherSprite.getImage();
 
     if (otherSprite instanceof StageMorph) {
         // only check for color collision
