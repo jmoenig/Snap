@@ -4373,31 +4373,36 @@ SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
 
 SpriteMorph.prototype.doStamp = function () {
     var stage = this.parent,
-        context = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped,
-        originalAlpha = context.globalAlpha;
+        ctx = stage.penTrails().getContext('2d'),
+        isWarped = this.isWarped, // +++ should be obsolete
+        img = this.getImage();
 
-    if (this.image.width < 1 || (this.image.height < 1)) {
+    if (img.width < 1 || (img.height < 1)) {
         // too small to draw
         return;
     }
-    if (isWarped) {
+    /* +++
+    if (isWarped) { // t+++ his should be obsolete and removable
         this.endWarp();
     }
-    context.save();
-    context.scale(1 / stage.scale, 1 / stage.scale);
-    context.globalAlpha = this.alpha;
-    context.drawImage(
-        this.image,
-        (this.left() - stage.left()),
-        (this.top() - stage.top())
+    */
+    ctx.save();
+    ctx.scale(1 / stage.scale, 1 / stage.scale);
+    ctx.globalAlpha = this.alpha;
+    ctx.drawImage(
+        img,
+        this.left() - stage.left(),
+        this.top() - stage.top()
     );
-    context.globalAlpha = originalAlpha;
-    context.restore();
+    ctx.restore();
     this.changed();
-    if (isWarped) {
+
+    /* +++
+    if (isWarped) { // +++ this should be obsolete
         this.startWarp();
     }
+    */
+    
     stage.cachedPenTrailsMorph = null;
 };
 
