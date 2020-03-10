@@ -210,7 +210,6 @@ ActionManager.prototype.initializeRecords = function() {
     this._soundToOwner = {};
 
     // Additional records for undo/redo support
-    this._positionOf = {};
     this._targetOf = {};
     this._targetFor = {};
     this._blockToOwnerId = {};
@@ -658,12 +657,6 @@ ActionManager.prototype.getBlockOwnerId = function(block) {
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
 // These are decorators which take the args from the public API and return the args for
 // the event to be sent to the other collaborators (and received by the onEventName methods)
-ActionManager.prototype.getStandardPosition = function(scripts, position) {
-    var scale = SyntaxElementMorph.prototype.scale;
-    position = position.subtract(scripts.topLeft()).divideBy(scale);
-    return position;
-};
-
 ActionManager.prototype._getStatementIds = function(block) {
     var ids = [];
 
@@ -675,7 +668,7 @@ ActionManager.prototype._getStatementIds = function(block) {
 };
 
 ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) {
-    var stdPosition = this.getStandardPosition(scripts, position),
+    var stdPosition = this.convertToStandardPosition(scripts, position),
         serialized,
         ids;
 
@@ -703,7 +696,8 @@ ActionManager.prototype._replaceBlock = function(block, newBlock) {
 
 ActionManager.prototype._removeBlock = function(block, userDestroy) {
     var serialized = this.serializeBlock(block, true, userDestroy),
-        position = this._positionOf[block.id],
+        scripts = block.parentThatIsA(ScriptsMorph),
+        position = scripts ? this.getStandardPosition(block) : this.getLastGrabPosition(),
         target = this._targetOf[block.id],
         ownerId = this._blockToOwnerId[block.id],
         args = [
@@ -745,14 +739,16 @@ ActionManager.isWeakTarget = function(target) {
 
 ActionManager.prototype._getBlockState = function(id) {
     var target = this._targetOf[id],
-        position = this._positionOf[id],
+        isNewBlock = !this._blocks[id],
+        position,
         state;
 
     // Use the last connection unless the last connection was to the
     // top of a command block and it has a position set
     if (target && !(ActionManager.isWeakTarget(target) && position)) {
         state = [target];
-    } else if (position) {
+    } else if (!isNewBlock) {
+        position = this.getStandardPosition(this.getBlockFromId(id));
         state = [position.x, position.y];
     } else {  // newly created
         state = [];
@@ -764,8 +760,7 @@ ActionManager.prototype._getBlockState = function(id) {
 
 ActionManager.prototype._setBlockPosition = function(block, position) {
     var id = block.id,
-        scripts = block.parentThatIsA(ScriptsMorph),
-        standardPosition = this.getStandardPosition(scripts, position),
+        standardPosition = this.getStandardPosition(block, position),
         oldState = this._getBlockState(id);
 
     return [id, standardPosition.x, standardPosition.y, oldState];
@@ -791,10 +786,10 @@ ActionManager.prototype._setBlocksPositions = function(ids, positions) {
         block = myself.getBlockFromId(ids[i]);
         scripts = block.parentThatIsA(ScriptsMorph);
         currentPositions.push(
-            this.getStandardPosition(scripts, block.position())
+            this.getStandardPosition(block)
         );
         newPositions.push(
-            this.getStandardPosition(scripts, positions[i])
+            this.convertToStandardPosition(scripts, positions[i])
         );
     }
 
@@ -961,7 +956,7 @@ ActionManager.prototype._getSpliceEvent = function(target) {
     return null;
 };
 
-ActionManager.prototype._moveBlock = function(block, target) {
+ActionManager.prototype._moveBlock = function(block, target, position) {
     var isNewBlock = !block.id,
         serialized,
         ids,
@@ -997,13 +992,18 @@ ActionManager.prototype._moveBlock = function(block, target) {
 
     // Record the old state (for undo support)
     args.push(spliceEvent);
-    id = target.loc === 'top' ? block.topBlock().id : block.id;
-    oldState = this._getBlockState(id);
 
     if (isNewBlock) {
         ids = this._getStatementIds(block);
         oldState = [ids];
         block.destroy();
+    } else if (position) {
+        var scripts = block.parentThatIsA(ScriptsMorph);
+        position = this.convertToStandardPosition(scripts, position);
+        oldState = [ block.id, position.x, position.y ];
+    } else {
+        id = target.loc === 'top' ? block.topBlock().id : block.id;
+        oldState = this._getBlockState(id);
     }
 
     args.push(oldState);
@@ -1332,7 +1332,6 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
     // Check if editing a custom block
     position = new Point(x, y);
     editor = block.parentThatIsA(BlockEditorMorph);
-    this._positionOf[id] = position;
     if (editor) {  // not a custom block
         scripts = editor.body.contents;
     }
@@ -1374,6 +1373,25 @@ ActionManager.prototype.onSetBlocksPositions = function(ids, positions) {
     }
 };
 
+ActionManager.prototype.getLastGrabPosition = function() {
+    var hand = this.ide().root().hand,
+        origin = hand.grabOrigin && hand.grabOrigin.origin;
+
+    return origin && hand.grabOrigin.position.add(origin.position());
+};
+
+ActionManager.prototype.getStandardPosition = function(block, position) {
+    var scripts = block.parentThatIsA(ScriptsMorph);
+    position = position || block.position();
+    return this.convertToStandardPosition(scripts, position);
+};
+
+ActionManager.prototype.convertToStandardPosition = function(scripts, position) {
+    var scale = SyntaxElementMorph.prototype.scale;
+    position = position.subtract(scripts.topLeft()).divideBy(scale);
+    return position;
+};
+
 ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
     var scale = SyntaxElementMorph.prototype.scale;
     position = position.multiplyBy(scale).add(scripts.topLeft());
@@ -1411,7 +1429,7 @@ ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
 
     block = this.deserializeBlock(block);
     ownerId = this._blockToOwnerId[block.id];
-    position = this._positionOf[block.id];
+    position = this.getStandardPosition(block);
 
     this._onRemoveBlock(block.id, true, function(err) {
         if (err) {
@@ -1700,18 +1718,15 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         }
 
         if (isNewBlock) {
-            myself._positionOf[block.id] = myself.getStandardPosition(scripts, block.position());
             myself.registerBlocks(block, ownerId);
         }
 
         if (target instanceof ReporterBlockMorph) {
             myself.__clearTarget(target.id);
-            myself._positionOf[target.id] = myself.getStandardPosition(scripts, target.position());
         }
 
         if (ActionManager.isWeakTarget(target)) {
             var topBlock = block.topBlock();
-            myself._positionOf[topBlock.id] = myself.getStandardPosition(scripts, topBlock.position());
         }
 
         if (targetNextBlock) {
@@ -2175,8 +2190,6 @@ ActionManager.prototype.onRingify = function(blockId, ringId) {
         this._blockToOwnerId[ring.id] = ownerId;
 
         // Record the ring state
-        this._positionOf[ring.id] = this.getStandardPosition(scripts, ring.position());
-
         // If it is a Reporter, potentially may need to update the target
         if (block instanceof ReporterBlockMorph && this._targetOf[block.id]) {
             this.__recordTarget(ring.id, this._targetOf[block.id]);
@@ -2737,9 +2750,6 @@ ActionManager.prototype._registerBlockState = function(block, initial) {
 
         if (target) {
             this.__recordTarget(block.id, target);
-        } else if (scripts) {
-            standardPosition = this.getStandardPosition(scripts, block.position());
-            this._positionOf[block.id] = standardPosition;
         }
 
         // Record the field values if it has any
@@ -2969,7 +2979,6 @@ ActionManager.prototype.__clearCostumeRecords = function(id) {
 
 ActionManager.prototype.__clearBlockRecords = function(id) {
     delete this._blocks[id];
-    delete this._positionOf[id];
     delete this._blockToOwnerId[id];
 
     if (this._targetFor[id]) {
