@@ -1978,7 +1978,7 @@ SpriteMorph.prototype.render = function (ctx) {
         }
     }
     // apply graphics effects to image
-    this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // ++++
+    this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
     this.version = Date.now();
 };
 
@@ -7595,8 +7595,6 @@ StageMorph.prototype.moveBy = function (delta) {
 // StageMorph rendering
 
 StageMorph.prototype.render = function (ctx) {
-    // +++ to do: make sure to also draw the additional layers either here
-    // +++ or in drawOn()
     ctx.save();
     ctx.fillStyle = this.color.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
@@ -7607,103 +7605,68 @@ StageMorph.prototype.render = function (ctx) {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
-        this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // ++++
+        this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
     }
     ctx.restore();
     this.version = Date.now(); // for observer optimization
 };
 
-/* +++ commented out for refactoring
 StageMorph.prototype.drawOn = function (ctx, rect) {
-    // make sure to draw the pen trails canvas as well
-    var rectangle, area, delta, src, w, h, sl, st, ws, hs;
-    if (!this.isVisible) {
-        return null;
+    // draw pen trails and webcam layers
+    var clipped = rect.intersect(this.bounds),
+        pos, src, w, h, sl, st, ws, hs;
+
+    if (!this.isVisible || !clipped.extent().gt(ZERO)) {
+        return;
     }
-    // +++ rectangle = rect || this.bounds; // +++ we don't need this, right?
-    area = rectangle.intersect(this.bounds); // okay, we need to review all of this
-    if (area.extent().gt(Zero)) {
-        delta = this.position().neg();
-        src = area.translateBy(delta);
-        ctx.globalAlpha = this.alpha;
 
-        sl = src.left();
-        st = src.top();
-        w = Math.min(src.width(), this.image.width - sl);
-        h = Math.min(src.height(), this.image.height - st);
+    // costume, if any, and background color
+    StageMorph.uber.drawOn.call(this, ctx, rect);
 
-        if (w < 1 || h < 1) {
-            return null;
-        }
-        context.drawImage(
-            this.image,
-            sl,
-            st,
-            w,
-            h,
-            area.left(),
-            area.top(),
-            w,
-            h
+    pos = this.position();
+    src = clipped.translateBy(pos.neg());
+    sl = src.left();
+    st = src.top();
+    w = src.width();
+    h = src.height();
+    ws = w / this.scale;
+    hs = h / this.scale;
+
+    ctx.save();
+    ctx.scale(this.scale, this.scale);
+
+    // projection layer (e.g. webcam)
+    if (this.projectionSource) {
+        ctx.globalAlpha = 1 - (this.projectionTransparency / 100);
+        ctx.drawImage(
+            this.projectionLayer(),
+            sl / this.scale,
+            st / this.scale,
+            ws,
+            hs,
+            clipped.left() / this.scale,
+            clipped.top() / this.scale,
+            ws,
+            hs
         );
-        // projection layer (webcam, maps, etc.)
-        if (this.projectionSource) {
-            ws = w / this.scale;
-            hs = h / this.scale;
-            context.save();
-            context.scale(this.scale, this.scale);
-            context.globalAlpha = 1 - (this.projectionTransparency / 100);
-            context.drawImage(
-                this.projectionLayer(),
-                sl / this.scale,
-                st / this.scale,
-                ws,
-                hs,
-                area.left() / this.scale,
-                area.top() / this.scale,
-                ws,
-                hs
-            );
-            context.restore();
-            this.version = Date.now(); // update watcher icons
-        }
-
-        // pen trails
-        ws = w / this.scale;
-        hs = h / this.scale;
-        context.save();
-        context.scale(this.scale, this.scale);
-        try {
-            context.drawImage(
-                this.penTrails(),
-                sl / this.scale,
-                st / this.scale,
-                ws,
-                hs,
-                area.left() / this.scale,
-                area.top() / this.scale,
-                ws,
-                hs
-            );
-        } catch (err) { // sometimes triggered only by Firefox
-            // console.log(err);
-            context.restore();
-            context.drawImage(
-                this.penTrails(),
-                0,
-                0,
-                this.dimensions.x,
-                this.dimensions.y,
-                this.left(),
-                this.top(),
-                this.dimensions.x * this.scale,
-                this.dimensions.y * this.scale
-            );
-        }
-        context.restore();
+        this.version = Date.now(); // update watcher icons
     }
+
+    // pen trails
+    ctx.drawImage(
+        this.penTrails(),
+        sl / this.scale,
+        st / this.scale,
+        ws,
+        hs,
+        clipped.left() / this.scale,
+        clipped.top() / this.scale,
+        ws,
+        hs
+    );
+
+    ctx.restore();
 };
-*/
 
 StageMorph.prototype.clearPenTrails = function () {
     this.cachedPenTrailsMorph = null;
