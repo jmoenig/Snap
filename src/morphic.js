@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-09';
+var morphicVersion = '2020-March-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -5937,9 +5937,19 @@ function SpeechBubbleMorph(
     border,
     borderColor,
     padding,
-    isThought
+    isThought,
+    noShadow
 ) {
-    this.init(contents, color, edge, border, borderColor, padding, isThought);
+    this.init(
+        contents,
+        color,
+        edge,
+        border,
+        borderColor,
+        padding,
+        isThought,
+        noShadow
+    );
 }
 
 SpeechBubbleMorph.prototype.init = function (
@@ -5949,7 +5959,8 @@ SpeechBubbleMorph.prototype.init = function (
     border,
     borderColor,
     padding,
-    isThought // bool or anything but "true" to draw no hook at all
+    isThought, // bool or anything but "true" to draw no hook at all
+    noShadow // explicit TRUE to suppress
 ) {
     this.isPointingRight = true; // orientation of text
     this.contents = contents || '';
@@ -5962,6 +5973,7 @@ SpeechBubbleMorph.prototype.init = function (
         border || ((border === 0) ? 0 : 1),
         borderColor || new Color(140, 140, 140)
     );
+    this.hasShadow = noShadow !== true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
     this.color = color || new Color(230, 230, 230);
@@ -6046,9 +6058,10 @@ SpeechBubbleMorph.prototype.fixLayout = function () {
     ));
 
     // refresh a shallow shadow
-    this.removeShadow();
-    this.addShadow(new Point(2, 2), 80);
-
+    if (this.hasShadow) {
+        this.removeShadow();
+        this.addShadow(new Point(2, 2), 80);
+    }
 };
 
 SpeechBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
