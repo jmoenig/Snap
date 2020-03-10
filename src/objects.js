@@ -5674,7 +5674,9 @@ SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
     ).divideBy(this.scale).rotateBy(radians(90 - this.heading));
     normal = this.costume.rotationCenter.add(new Point(delta.x, -delta.y));
     this.costume.rotationCenter = normal;
-    this.drawNew();
+    this.changed();
+    this.fixLayout();
+    this.changed();
 };
 
 SpriteMorph.prototype.moveRotationCenter = function () {
