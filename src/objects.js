@@ -74,7 +74,7 @@ ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,  nop,
 TextMorph, contains, degrees, detect, newCanvas, radians, Array, CursorMorph,
-Date, FrameMorph, HandMorph, Math, MenuMorph, Morph, invoke, MorphicPreferences,
+Date, FrameMorph, Math, MenuMorph, Morph, invoke, MorphicPreferences,
 Object, PenMorph, Point, Rectangle, ScrollFrameMorph, SliderMorph, String,
 StringMorph, TextMorph, contains, copy, degrees, detect, document, isNaN,
 isString, newCanvas, nop, parseFloat, radians, window, modules, IDE_Morph,
@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-09';
+modules.objects = '2020-March-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -1978,7 +1978,7 @@ SpriteMorph.prototype.render = function (ctx) {
         }
     }
     // apply graphics effects to image
-    // +++ this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // +++ graphic effects disabled while working on rendering
+    this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // ++++
     this.version = Date.now();
 };
 
@@ -5041,7 +5041,6 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 };
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
-return; // +++ disabled while working on rendering
     var eff = effect instanceof Array ? effect[0] : effect.toString();
     if (!contains(
             [
@@ -5068,8 +5067,7 @@ return; // +++ disabled while working on rendering
     } else {
         this.graphicsValues[eff] = +value;
     }
-    this.drawNew();
-    this.changed();
+    this.rerender();
 };
 
 SpriteMorph.prototype.getEffect = function (effect) {
@@ -7609,7 +7607,7 @@ StageMorph.prototype.render = function (ctx) {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
-        // +++ this.image = this.applyGraphicsEffects(this.image); // +++ disabled while working on rendering
+        this.cachedImage = this.applyGraphicsEffects(this.cachedImage); // ++++
     }
     ctx.restore();
     this.version = Date.now(); // for observer optimization
