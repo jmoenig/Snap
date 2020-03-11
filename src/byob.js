@@ -1695,14 +1695,11 @@ BlockDialogMorph.prototype.openForChange = function (
 // category buttons
 
 BlockDialogMorph.prototype.createCategoryButtons = function () {
-    var myself = this,
-        oldFlag = Morph.prototype.trackChanges;
+    var myself = this;
 
-    Morph.prototype.trackChanges = false;
     SpriteMorph.prototype.categories.forEach(function (cat) {
         myself.addCategoryButton(cat);
     });
-    Morph.prototype.trackChanges = oldFlag;
 };
 
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
@@ -1734,7 +1731,6 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
         function () {return myself.category === category; }, // query
         null, // env
         null, // hint
-        null, // template cache
         labelWidth, // minWidth
         true // has preview
     );
@@ -1762,10 +1758,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         t = this.categories.top(),
         i = 0,
         row,
-        col,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        col;
 
     this.categories.children.forEach(function (button) {
         i += 1;
@@ -1786,9 +1779,6 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         3 * xPadding + 2 * buttonWidth,
         (rows + 1) * yPadding + rows * buttonHeight + 2 * border
     ));
-
-    Morph.prototype.trackChanges = oldFlag;
-    this.categories.changed();
 };
 
 // type radio buttons
@@ -1905,7 +1895,6 @@ BlockDialogMorph.prototype.addScopeButton = function (action, label, query) {
     button.outlineGradient = this.buttonOutlineGradient;
     button.contrast = this.buttonContrast;
 
-    button.drawNew();
     button.fixLayout();
     this.scopes.add(button);
     return button;
@@ -1952,8 +1941,8 @@ BlockDialogMorph.prototype.fixLayout = function () {
             this.padding,
             th + this.padding
         )));
-        this.silentSetWidth(this.body.width() + this.padding * 2);
-        this.silentSetHeight(
+        this.bounds.setWidth(this.body.width() + this.padding * 2);
+        this.bounds.setHeight(
             this.body.height()
                 + this.padding * 2
                 + th
@@ -1962,7 +1951,7 @@ BlockDialogMorph.prototype.fixLayout = function () {
             this.categories.setCenter(this.body.center());
             this.categories.setTop(this.body.top());
             this.body.setTop(this.categories.bottom() + this.padding);
-            this.silentSetHeight(
+            this.bounds.setHeight(
                 this.height()
                     + this.categories.height()
                     + this.padding
@@ -1971,19 +1960,19 @@ BlockDialogMorph.prototype.fixLayout = function () {
     } else if (this.head) { // when changing an existing prototype
         if (this.types) {
             this.types.fixLayout();
-            this.silentSetWidth(
+            this.bounds.setWidth(
                 Math.max(this.types.width(), this.head.width())
                     + this.padding * 2
             );
         } else {
-            this.silentSetWidth(
+            this.bounds.setWidth(
                 Math.max(this.categories.width(), this.head.width())
                     + this.padding * 2
             );
         }
         this.head.setCenter(this.center());
         this.head.setTop(th + this.padding);
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.head.height()
                 + this.padding * 2
                 + th
@@ -1991,7 +1980,7 @@ BlockDialogMorph.prototype.fixLayout = function () {
         if (this.categories) {
             this.categories.setCenter(this.center());
             this.categories.setTop(this.head.bottom() + this.padding);
-            this.silentSetHeight(
+            this.bounds.setHeight(
                 this.height()
                     + this.categories.height()
                     + this.padding
@@ -2006,12 +1995,12 @@ BlockDialogMorph.prototype.fixLayout = function () {
 
     if (this.types) {
         this.types.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.types.height()
                     + this.padding
         );
-        this.silentSetWidth(Math.max(
+        this.bounds.setWidth(Math.max(
             this.width(),
             this.types.width() + this.padding * 2
         ));
@@ -2025,12 +2014,12 @@ BlockDialogMorph.prototype.fixLayout = function () {
 
     if (this.scopes) {
         this.scopes.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.scopes.height()
                     + (this.padding / 3)
         );
-        this.silentSetWidth(Math.max(
+        this.bounds.setWidth(Math.max(
             this.width(),
             this.scopes.width() + this.padding * 2
         ));
@@ -2042,7 +2031,7 @@ BlockDialogMorph.prototype.fixLayout = function () {
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.buttons.height()
                     + this.padding

@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-05';
+modules.widgets = '2020-March-10';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1337,47 +1337,52 @@ ToggleElementMorph.prototype.init = function (
 
 // ToggleElementMorph drawing:
 
-ToggleElementMorph.prototype.createBackgrounds = function () {
+ToggleElementMorph.prototype.render = function (ctx) {
     var shading = !MorphicPreferences.isFlat || this.is3D;
 
     this.color = this.element.color;
     this.element.removeShadow();
     this.element[this.builder]();
-    if (shading) {
-        this.element.addShadow(this.shadowOffset, this.shadowAlpha);
+    if (this.userState !== 'pressed') {
+        this.element.removeShadow();
+        this.element.setColor(this.inactiveColor);
+        this.element[this.builder](this.contrast);
+        if (this.userState === 'highlight') {
+            this.element.removeShadow();
+            this.element.setColor(this.color.lighter(this.contrast));
+            this.element[this.builder](this.contrast);
+        }
     }
-    this.silentSetExtent(this.element.fullBounds().extent()); // w/ shadow
-    this.pressImage = this.element.fullImage();
-
-    this.element.removeShadow();
-    this.element.setColor(this.inactiveColor);
-    this.element[this.builder](this.contrast);
     if (shading) {
-        this.element.addShadow(this.shadowOffset, 0);
+        this.element.addShadow(
+            this.shadowOffset,
+            this.userState === 'normal' ? 0 : this.shadowAlpha
+        );
     }
-    this.normalImage = this.element.fullImage();
+    ctx.drawImage(this.element.fullImage(), 0, 0);
 
-    this.element.removeShadow();
-    this.element.setColor(this.color.lighter(this.contrast));
-    this.element[this.builder](this.contrast);
-    if (shading) {
-        this.element.addShadow(this.shadowOffset, this.shadowAlpha);
-    }
-    this.highlightImage = this.element.fullImage();
-
+    // reset element
     this.element.removeShadow();
     this.element.setColor(this.color);
     this.element[this.builder]();
-    this.image = this.normalImage;
 };
 
 ToggleElementMorph.prototype.setColor = function (aColor) {
     this.element.setColor(aColor);
-    this.createBackgrounds();
+    this.fixLayout();
     this.refresh();
 };
 
 // ToggleElementMorph layout:
+
+ToggleElementMorph.prototype.fixLayout = function () {
+    this.element.fixLayout();
+    this.bounds.setExtent(
+        this.element.fullBounds().extent().add(
+            this.shadowBlur * 2
+        )
+    );
+};
 
 ToggleElementMorph.prototype.createLabel = function () {
     var y;
