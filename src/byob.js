@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-06';
+modules.byob = '2020-March-10';
 
 // Declarations
 
@@ -965,7 +965,8 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
         part.shadowOffset = this.embossing;
-        part.drawNew();
+        part.fixLayout();
+        part.rerender();
     }
     return part;
 };
@@ -2120,7 +2121,6 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     }
     scripts.add(proto);
     proto.fixBlockColor(null, true);
-    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
