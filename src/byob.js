@@ -1847,7 +1847,6 @@ BlockDialogMorph.prototype.addTypeButton = function (action, label, query) {
     button.outlineGradient = this.buttonOutlineGradient;
     button.contrast = this.buttonContrast;
 
-    button.drawNew();
     button.fixLayout();
     this.types.add(button);
     return button;
@@ -3839,8 +3838,8 @@ VariableDialogMorph.prototype.fixLayout = function () {
             this.padding,
             th + this.padding
         )));
-        this.silentSetWidth(this.body.width() + this.padding * 2);
-        this.silentSetHeight(
+        this.bounds.setWidth(this.body.width() + this.padding * 2);
+        this.bounds.setHeight(
             this.body.height()
                 + this.padding * 2
                 + th
@@ -3854,12 +3853,12 @@ VariableDialogMorph.prototype.fixLayout = function () {
 
     if (this.types) {
         this.types.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.types.height()
                     + this.padding
         );
-        this.silentSetWidth(Math.max(
+        this.bounds.setWidth(Math.max(
             this.width(),
             this.types.width() + this.padding * 2
         ));
@@ -3873,7 +3872,7 @@ VariableDialogMorph.prototype.fixLayout = function () {
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
-        this.silentSetHeight(
+        this.bounds.setHeight(
             this.height()
                     + this.buttons.height()
                     + this.padding
