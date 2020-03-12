@@ -1355,7 +1355,7 @@ CustomReporterBlockMorph.prototype.refresh = function (aDefinition) {
     if (this.parent instanceof SyntaxElementMorph) {
         this.parent.cachedInputs = null;
     }
-    this.fixLayout(); // +++ ??? rerender() ???
+    this.fixLayout();
 };
 
 CustomReporterBlockMorph.prototype.mouseClickLeft = function () {
@@ -3069,7 +3069,6 @@ InputSlotDialogMorph.prototype.init = function (
     this.slots = null;
     this.isExpanded = false;
     this.category = category || 'other';
-    this.cachedRadioButton = null; // "template" for radio button backgrounds
     this.noDelete = false;
 
     // initialize inherited properties:
@@ -3152,9 +3151,9 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
             myself.types.children.forEach(function (c) {
                 c.refresh();
             });
+            myself.changed();
             myself.fixLayout();
             myself.rerender();
-            // +++ myself.drawNew(); // +++
             myself.edit();
         }
     };
@@ -3254,8 +3253,8 @@ InputSlotDialogMorph.prototype.fixLayout = function () {
     );
 
     // set dialog box dimensions:
-    this.silentSetHeight(this.buttons.bottom() - this.top() + this.padding);
-    this.silentSetWidth(this.slots.right() - this.left() + this.padding);
+    this.bounds.setHeight(this.buttons.bottom() - this.top() + this.padding);
+    this.bounds.setWidth(this.slots.right() - this.left() + this.padding);
 };
 
 InputSlotDialogMorph.prototype.open = function (
@@ -3520,7 +3519,6 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
         query,
         null,
         null,
-        this.cachedRadioButton,
         element.fullImage(), // delete the "fullImage()" part for interactive
         'rebuild'
     );
@@ -3531,9 +3529,6 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     button.fixLayout();
     button.label.isBold = false;
     button.label.setColor(new Color(255, 255, 255));
-    if (!this.cachedRadioButton) {
-        this.cachedRadioButton = button;
-    }
     this.slots.add(button);
     return button;
 };
@@ -3550,8 +3545,7 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
         label,
         query,
         null,
-        null,
-        this.cachedRadioButton
+        null
     );
     button.edge = this.buttonEdge / 2;
     button.outline = this.buttonOutline / 2;
@@ -3562,9 +3556,6 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
     // button.label.isBold = false;
     button.label.setColor(new Color(255, 255, 255));
     this.slots.add(button);
-    if (!this.cachedRadioButton) {
-        this.cachedRadioButton = button;
-    }
     return button;
 };
 

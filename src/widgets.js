@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-10';
+modules.widgets = '2020-March-12';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -468,7 +468,7 @@ PushButtonMorph.prototype.updateLabelColors = function () {
     var shading = !MorphicPreferences.isFlat || this.is3D;
     if (this.label) {
         this.label.color = this.labelColor;
-        this.label.fontSize = this.fontSize; // ++++
+        this.label.fontSize = this.fontSize;
         if (shading) {
             this.label.shadowOffset = this.labelShadowOffset;
             this.label.shadowColor = this.labelShadowColor;
@@ -1193,11 +1193,12 @@ ToggleMorph.prototype.createLabel = function () {
                 );
             } else if (this.element instanceof HTMLCanvasElement) {
                 this.toggleElement = new Morph();
-                this.toggleElement.silentSetExtent(new Point(
+                this.toggleElement.isCachingImage = true;
+                this.toggleElement.bounds.setExtent(new Point(
                     this.element.width,
                     this.element.height
                 ));
-                this.toggleElement.image = this.element;
+                this.toggleElement.cachedImage = this.element;
             }
             this.add(this.toggleElement);
         }
