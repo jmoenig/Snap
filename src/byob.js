@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-10';
+modules.byob = '2020-March-12';
 
 // Declarations
 
@@ -661,7 +661,6 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) {
 
     // make (double) sure I'm colored correctly
     this.forceNormalColoring();
-    // +++ this.drawNew();
     this.fixBlockColor(null, true);
 };
 
@@ -1356,8 +1355,7 @@ CustomReporterBlockMorph.prototype.refresh = function (aDefinition) {
     if (this.parent instanceof SyntaxElementMorph) {
         this.parent.cachedInputs = null;
     }
-    // +++ this.drawNew();
-    this.fixLayout(); // ??? rerender() ???
+    this.fixLayout(); // +++ ??? rerender() ???
 };
 
 CustomReporterBlockMorph.prototype.mouseClickLeft = function () {
@@ -1485,26 +1483,24 @@ JaggedBlockMorph.prototype.init = function (spec) {
 
 // JaggedBlockMorph drawing:
 
-JaggedBlockMorph.prototype.drawNew = function () {
+JaggedBlockMorph.prototype.render = function (ctx) {
     var context;
 
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    context.fillStyle = this.cachedClr;
+    ctx.fillStyle = this.cachedClr;
 
-    this.drawBackground(context);
+    this.drawBackground(ctx);
     if (!MorphicPreferences.isFlat) {
-        this.drawEdges(context);
+        this.drawEdges(ctx);
     }
 
     // erase holes
-    this.eraseHoles(context);
+    this.eraseHoles(ctx);
 };
 
-JaggedBlockMorph.prototype.drawBackground = function (context) {
+JaggedBlockMorph.prototype.drawBackground = function (ctx) {
     var w = this.width(),
         h = this.height(),
         jags = Math.round(h / this.jag),
@@ -1512,34 +1508,34 @@ JaggedBlockMorph.prototype.drawBackground = function (context) {
         i,
         y;
 
-    context.fillStyle = this.cachedClr;
-    context.beginPath();
+    ctx.fillStyle = this.cachedClr;
+    ctx.beginPath();
 
-    context.moveTo(0, 0);
-    context.lineTo(w, 0);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
 
     y = 0;
     for (i = 0; i < jags; i += 1) {
         y += delta / 2;
-        context.lineTo(w - this.jag / 2, y);
+        ctx.lineTo(w - this.jag / 2, y);
         y += delta / 2;
-        context.lineTo(w, y);
+        ctx.lineTo(w, y);
     }
 
-    context.lineTo(0, h);
+    ctx.lineTo(0, h);
     y = h;
     for (i = 0; i < jags; i += 1) {
         y -= delta / 2;
-        context.lineTo(this.jag / 2, y);
+        ctx.lineTo(this.jag / 2, y);
         y -= delta / 2;
-        context.lineTo(0, y);
+        ctx.lineTo(0, y);
     }
 
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
 };
 
-JaggedBlockMorph.prototype.drawEdges = function (context) {
+JaggedBlockMorph.prototype.drawEdges = function (ctx) {
     var w = this.width(),
         h = this.height(),
         jags = Math.round(h / this.jag),
@@ -1549,11 +1545,11 @@ JaggedBlockMorph.prototype.drawEdges = function (context) {
         i,
         y;
 
-    context.lineWidth = this.edge;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         0,
         0,
@@ -1561,25 +1557,25 @@ JaggedBlockMorph.prototype.drawEdges = function (context) {
     );
     gradient.addColorStop(0, this.cachedClrBright);
     gradient.addColorStop(1, this.cachedClr);
-    context.strokeStyle = gradient;
+    ctx.strokeStyle = gradient;
 
-    context.beginPath();
-    context.moveTo(shift, shift);
-    context.lineTo(w - shift, shift);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(shift, shift);
+    ctx.lineTo(w - shift, shift);
+    ctx.stroke();
 
     y = 0;
     for (i = 0; i < jags; i += 1) {
-        context.strokeStyle = this.cachedClrDark;
-        context.beginPath();
-        context.moveTo(w - shift, y);
+        ctx.strokeStyle = this.cachedClrDark;
+        ctx.beginPath();
+        ctx.moveTo(w - shift, y);
         y += delta / 2;
-        context.lineTo(w - this.jag / 2 - shift, y);
-        context.stroke();
+        ctx.lineTo(w - this.jag / 2 - shift, y);
+        ctx.stroke();
         y += delta / 2;
     }
 
-    gradient = context.createLinearGradient(
+    gradient = ctx.createLinearGradient(
         0,
         h - this.edge,
         0,
@@ -1587,20 +1583,20 @@ JaggedBlockMorph.prototype.drawEdges = function (context) {
     );
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
-    context.strokeStyle = gradient;
-    context.beginPath();
-    context.moveTo(w - shift, h - shift);
-    context.lineTo(shift, h - shift);
-    context.stroke();
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(w - shift, h - shift);
+    ctx.lineTo(shift, h - shift);
+    ctx.stroke();
 
     y = h;
     for (i = 0; i < jags; i += 1) {
-        context.strokeStyle = this.cachedClrBright;
-        context.beginPath();
-        context.moveTo(shift, y);
+        ctx.strokeStyle = this.cachedClrBright;
+        ctx.beginPath();
+        ctx.moveTo(shift, y);
         y -= delta / 2;
-        context.lineTo(this.jag / 2 + shift, y);
-        context.stroke();
+        ctx.lineTo(this.jag / 2 + shift, y);
+        ctx.stroke();
         y -= delta / 2;
     }
 };
@@ -1832,6 +1828,7 @@ BlockDialogMorph.prototype.addBlockTypeButton = function (
         'rebuild'
     );
     button.refresh();
+    button.fixLayout();
     this.types.add(button);
     return button;
 };
@@ -2767,14 +2764,14 @@ BlockLabelFragmentMorph.prototype.init = function (text) {
 BlockLabelFragmentMorph.prototype.mouseEnter = function () {
     this.sO = this.shadowOffset;
     this.shadowOffset = this.sO.neg();
-    this.drawNew();
-    this.changed();
+    this.fixLayout();
+    this.rerender();
 };
 
 BlockLabelFragmentMorph.prototype.mouseLeave = function () {
     this.shadowOffset = this.sO;
-    this.drawNew();
-    this.changed();
+    this.fixLayout();
+    this.rerender();
 };
 
 BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
@@ -3137,7 +3134,6 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
         if (myself.fragment.type === null) {
             myself.isExpanded = false;
             arrow.hide();
-            myself.drawNew();
         } else {
             arrow.show();
             if (myself.isExpanded) {
@@ -3145,8 +3141,8 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
             } else {
                 arrow.direction = 'right';
             }
-            arrow.drawNew();
-            arrow.changed();
+            arrow.fixLayout();
+            arrow.rerender();
         }
     };
 
@@ -3156,7 +3152,9 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
             myself.types.children.forEach(function (c) {
                 c.refresh();
             });
-            myself.drawNew();
+            myself.fixLayout();
+            myself.rerender();
+            // +++ myself.drawNew(); // +++
             myself.edit();
         }
     };
@@ -3172,7 +3170,7 @@ InputSlotDialogMorph.prototype.addBlockTypeButton
 
 InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.textfield.choices = fragmentType ? null : this.symbolMenu;
-    this.textfield.drawNew();
+    this.textfield.fixLayout();
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(function (c) {
         c.refresh();
@@ -3280,7 +3278,6 @@ InputSlotDialogMorph.prototype.open = function (
     this.createLabel();
     if (pic) {this.setPicture(pic); }
     this.addBody(txt);
-    txt.drawNew();
     this.textfield = txt;
     this.addButton('ok', 'OK');
     if (!noDeleteButton) {
@@ -3289,8 +3286,6 @@ InputSlotDialogMorph.prototype.open = function (
         this.noDelete = true;
     }
     this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.drawNew();
     this.fixLayout();
     this.popUp(world);
     this.add(this.types); // make the types come to front
@@ -3381,7 +3376,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput = new InputFieldMorph(this.fragment.defaultValue);
     defInput.contents().fontSize = defLabel.fontSize;
     defInput.contrast = 90;
-    defInput.contents().drawNew();
     defInput.setWidth(50);
     defInput.refresh = function () {
         if (myself.isExpanded && contains(
@@ -3400,7 +3394,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     };
     this.slots.defaultInputField = defInput;
     this.slots.add(defInput);
-    defInput.drawNew();
 
     defSwitch = new BooleanSlotMorph(this.fragment.defaultValue);
     defSwitch.refresh = function () {
@@ -3415,7 +3408,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     };
     this.slots.defaultSwitch = defSwitch;
     this.slots.add(defSwitch);
-    defSwitch.drawNew();
 
     // loop arrow checkbox //
     loopArrow = new ToggleMorph(
@@ -3432,7 +3424,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
             function () {return myself.fragment.type === '%ca'; },
             null, // environment
             null, // hint
-            null, // template
             new SymbolMorph(
                 'loop',
                 this.fontSize * 0.7,
@@ -3537,7 +3528,6 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     button.outline = this.buttonOutline / 2;
     button.outlineColor = this.buttonOutlineColor;
     button.outlineGradient = this.buttonOutlineGradient;
-    button.drawNew();
     button.fixLayout();
     button.label.isBold = false;
     button.label.setColor(new Color(255, 255, 255));
@@ -3568,7 +3558,6 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
     button.outlineColor = this.buttonOutlineColor;
     button.outlineGradient = this.buttonOutlineGradient;
 
-    button.drawNew();
     button.fixLayout();
     // button.label.isBold = false;
     button.label.setColor(new Color(255, 255, 255));
