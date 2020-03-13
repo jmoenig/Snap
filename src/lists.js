@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-December-08';
+modules.lists = '2020-March-13';
 
 var List;
 var ListWatcherMorph;
@@ -659,7 +659,6 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         this.plusButton.padding = 0;
         this.plusButton.edge = 0;
         this.plusButton.outlineColor = this.color;
-        this.plusButton.drawNew();
         this.plusButton.fixLayout();
     }
 
@@ -681,7 +680,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         this.add(this.plusButton);
     }
     this.add(this.handle);
-    this.handle.drawNew();
+    this.handle.fixLayout();
     this.update();
     this.fixLayout();
 };
@@ -804,7 +803,6 @@ ListWatcherMorph.prototype.update = function (anyway) {
             button.edge = 0;
             button.corner = 1;
             button.outlineColor = this.color.darker();
-            button.drawNew();
             button.fixLayout();
 
             this.frame.contents.add(cell);
@@ -836,7 +834,6 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
     } else {
         this.label.color = new Color(0, 0, 0);
     }
-    this.label.drawNew();
     this.label.setCenter(this.center());
     this.label.setBottom(this.bottom() - 3);
 };
@@ -866,15 +863,14 @@ ListWatcherMorph.prototype.setStartIndex = function (index) {
 
 ListWatcherMorph.prototype.fixLayout = function () {
     if (!this.label) {return; }
-    Morph.prototype.trackChanges = false;
     if (this.frame) {
         this.arrangeCells();
-        this.frame.silentSetPosition(this.position().add(3));
+        this.frame.setPosition(this.position().add(3));
         this.frame.bounds.corner = this.bounds.corner.subtract(new Point(
             3,
             17
         ));
-        this.frame.drawNew();
+        this.frame.fixLayout();
         this.frame.contents.adjustBounds();
     }
 
@@ -884,8 +880,6 @@ ListWatcherMorph.prototype.fixLayout = function () {
         this.plusButton.setLeft(this.left() + 3);
         this.plusButton.setBottom(this.bottom() - 3);
     }
-    Morph.prototype.trackChanges = true;
-    this.changed();
 
     if (this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
