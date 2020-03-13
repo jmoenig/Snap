@@ -10818,10 +10818,31 @@ CellMorph.prototype.isCircular = function (list) {
 // CellMorph layout:
 
 CellMorph.prototype.fixLayout = function (justMe) {
-    var listwatcher;
+    var isSameList = this.contentsMorph instanceof ListWatcherMorph
+            && (this.contentsMorph.list === this.contents),
+        isSameTable = this.contentsMorph instanceof TableFrameMorph
+            && (this.contentsMorph.tableMorph.table === this.contents),
+        listwatcher;
+
     if (justMe) {return; }
 
-    // +++ to do: move layout code from old "drawNew()" here
+    this.createContents();
+
+    // adjust my dimensions
+    this.bounds.setHeight(this.contentsMorph.height()
+        + this.edge
+        + this.border * 2);
+    this.bounds.setWidth(Math.max(
+        this.contentsMorph.width() + this.edge * 2,
+        (this.contents instanceof Context ||
+            this.contents instanceof List ? 0 :
+                    SyntaxElementMorph.prototype.fontSize * 3.5)
+    ));
+
+   // position my contents
+    if (!isSameList && !isSameTable) {
+        this.contentsMorph.setCenter(this.center());
+    }
 
     if (this.parent && this.parent.fixLayout) { // variable watcher
         this.parent.fixLayout();
@@ -10830,6 +10851,125 @@ CellMorph.prototype.fixLayout = function (justMe) {
         if (listwatcher) {
             listwatcher.fixLayout();
         }
+    }
+};
+
+CellMorph.prototype.createContents = function () {
+    // re-build my contents
+    var type, toggle, // +++ old parameters, not sure if they're ever used and how
+       txt,
+       img,
+       fontSize = SyntaxElementMorph.prototype.fontSize,
+       isSameList = this.contentsMorph instanceof ListWatcherMorph
+               && (this.contentsMorph.list === this.contents),
+       isSameTable = this.contentsMorph instanceof TableFrameMorph
+               && (this.contentsMorph.tableMorph.table === this.contents);
+
+    // +++ to do: combine both tests into a single exit condition
+
+    if (this.contentsMorph && !isSameList && !isSameTable) {
+        this.contentsMorph.destroy();
+        this.version = null;
+    }
+
+    if (!isSameList && !isSameTable) {
+        if (this.contents instanceof Morph) {
+            if (isSnapObject(this.contents)) {
+                img = this.contents.thumbnail(new Point(40, 40));
+                this.contentsMorph = new Morph();
+                this.contentsMorph.silentSetWidth(img.width);
+                this.contentsMorph.silentSetHeight(img.height);
+                this.contentsMorph.image = img;
+                this.version = this.contents.version;
+            } else {
+                this.contentsMorph = this.contents;
+            }
+        } else if (isString(this.contents)) {
+            txt  = this.contents.length > 500 ?
+                    this.contents.slice(0, 500) + '...' : this.contents;
+            this.contentsMorph = new TextMorph(
+                txt,
+                fontSize,
+                null,
+                true,
+                false,
+                'left' // was formerly 'center', reverted b/c of code-mapping
+            );
+            if (this.isEditable) {
+                this.contentsMorph.isEditable = true;
+                this.contentsMorph.enableSelecting();
+            }
+            this.contentsMorph.setColor(new Color(255, 255, 255));
+        } else if (typeof this.contents === 'boolean') {
+            img = SpriteMorph.prototype.booleanMorph.call(
+                null,
+                this.contents
+            ).fullImage();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof HTMLCanvasElement) {
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(this.contents.width);
+            this.contentsMorph.silentSetHeight(this.contents.height);
+            this.contentsMorph.image = this.contents;
+        } else if (this.contents instanceof Context) {
+            img = this.contents.image();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof Costume) {
+            img = this.contents.thumbnail(new Point(40, 40));
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof Sound) {
+            this.contentsMorph = new SymbolMorph('notes', 30);
+        } else if (this.contents instanceof List) {
+            if ('table' === type || (!toggle && this.contents.isTable())) {
+                this.contentsMorph = new TableFrameMorph(new TableMorph(
+                    this.contents,
+                    10
+                ));
+                this.contentsMorph.expand(new Point(200, 150));
+            } else {
+                if (this.isCircular()) {
+                    this.contentsMorph = new TextMorph(
+                        '(...)',
+                        fontSize,
+                        null,
+                        false, // bold
+                        true, // italic
+                        'center'
+                    );
+                    this.contentsMorph.setColor(new Color(255, 255, 255));
+                } else {
+                    this.contentsMorph = new ListWatcherMorph(
+                        this.contents,
+                        this
+                    );
+                }
+            }
+            this.contentsMorph.isDraggable = false;
+        } else {
+            this.contentsMorph = new TextMorph(
+                !isNil(this.contents) ? this.contents.toString() : '',
+                fontSize,
+                null,
+                true,
+                false,
+                'center'
+            );
+            if (this.isEditable) {
+                this.contentsMorph.isEditable = true;
+                this.contentsMorph.enableSelecting();
+            }
+            this.contentsMorph.setColor(new Color(255, 255, 255));
+        }
+        this.add(this.contentsMorph);
     }
 };
 
@@ -10860,6 +11000,7 @@ CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
         fontSize = fontSize * 1.5;
     }
 
+/* // +++
     // re-build my contents
     // +++ all of this should definitely be moved to fixLayout() or to update()
     if (toggle || (this.contentsMorph && !isSameList && !isSameTable)) {
@@ -10966,8 +11107,10 @@ CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
         }
         this.add(this.contentsMorph);
     }
+*/
 
-    // adjust my layout
+    // adjust my dimensions
+/* //  +++
     this.bounds.setHeight(this.contentsMorph.height()
         + this.edge
         + this.border * 2);
@@ -10977,6 +11120,7 @@ CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
             this.contents instanceof List ? 0 :
                     SyntaxElementMorph.prototype.fontSize * 3.5)
     ));
+*/
 
     // draw my outline
     if ((this.edge === 0) && (this.border === 0)) {
@@ -11008,9 +11152,11 @@ CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
     }
 
     // position my contents
+/* // +++
     if (toggle || (!isSameList && !isSameTable)) {
         this.contentsMorph.setCenter(this.center());
     }
+*/
 };
 
 CellMorph.prototype.drawShadow = function (context, radius, inset) {
