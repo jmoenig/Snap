@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-10';
+modules.objects = '2020-March-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -2190,9 +2190,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             } else {
                 ide = myself.parentThatIsA(IDE_Morph);
                 myself.addVariable(pair[0], pair[1]);
-                if (!myself.showingVariableWatcher(pair[0])) {
-                    myself.toggleVariableWatcher(pair[0], pair[1]);
-                }
+                myself.toggleVariableWatcher(pair[0], pair[1]);
                 ide.flushBlocksCache('variables'); // b/c of inheritance
                 ide.refreshPalette();
             }
@@ -6033,6 +6031,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
         globals = this.globalVariables(),
         watcher,
         others;
+        
     if (stage === null) {
         return null;
     }
@@ -6063,9 +6062,9 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     if (others.length > 0) {
         watcher.setTop(others[others.length - 1].bottom());
     }
-    stage.add(watcher);
-    watcher.fixLayout();
+    watcher.fixLayout(); // ++++
     watcher.keepWithin(stage);
+    stage.add(watcher);
     return watcher;
 };
 
@@ -11314,7 +11313,7 @@ WatcherMorph.prototype.update = function () {
                     this.cellMorph.setColor(this.readoutColor);
                 }
             }
-            // +++ this.cellMorph.drawNew();
+            // +++ this.cellMorph.drawNew(); ++++
             this.cellMorph.fixLayout(); // +++
             if (!isNaN(newValue)) {
                 this.sliderMorph.value = newValue;
@@ -11358,7 +11357,7 @@ WatcherMorph.prototype.fixLayout = function () {
     var fontSize = SyntaxElementMorph.prototype.fontSize, isList,
         myself = this;
 
-    // +++ this.changed();
+    // ++++ needs to be decoupled: determining bounds vs. creating submorphs
 
     // create my parts
     if (this.labelMorph === null) {
@@ -11465,12 +11464,6 @@ WatcherMorph.prototype.fixLayout = function () {
         this.labelMorph.right()
     ) + this.edge
         + SyntaxElementMorph.prototype.typeInPadding;
-
-/* +++
-    this.drawNew();
-    this.changed();
-*/
-
 };
 
 // WatcherMorph events:

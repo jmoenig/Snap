@@ -665,7 +665,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     ListWatcherMorph.uber.init.call(
         this,
         SyntaxElementMorph.prototype.rounding,
-        1.000001, // shadow bug in Chrome,
+        1,
         new Color(120, 120, 120)
     );
 

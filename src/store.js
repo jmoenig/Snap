@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-March-09';
+modules.store = '2020-March-13';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -613,7 +613,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 
         // set watcher's contentsMorph's extent if it is showing a list and
         // its monitor dimensions are given
-        if (watcher.currentValue instanceof List) {
+        if (watcher.currentValue instanceof List &&
+                watcher.cellMorph.contentsMorph) { // ++++ review if needed at all
             extX = model.attributes.extX;
             if (extX) {
                 watcher.cellMorph.contentsMorph.setWidth(+extX);
