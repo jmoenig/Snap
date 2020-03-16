@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-March-13';
+modules.store = '2020-March-16';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -624,7 +624,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
                 watcher.cellMorph.contentsMorph.setHeight(+extY);
             }
             // adjust my contentsMorph's handle position
-            watcher.cellMorph.contentsMorph.handle.drawNew();
+            watcher.cellMorph.contentsMorph.handle.fixLayout();
         }
     });
 
