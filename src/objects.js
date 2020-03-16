@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-13';
+modules.objects = '2020-March-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -6062,7 +6062,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     if (others.length > 0) {
         watcher.setTop(others[others.length - 1].bottom());
     }
-    watcher.fixLayout(); // ++++
+    watcher.fixLayout();
     watcher.keepWithin(stage);
     stage.add(watcher);
     return watcher;
@@ -10784,8 +10784,7 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
     this.color = color || new Color(255, 140, 0);
     this.isBig = false;
     this.version = null; // only for observing sprites
-    // this.drawNew(); +++
-    this.rerender(); // +++ ??
+    this.fixLayout();
 };
 
 // CellMorph accessing:
@@ -10793,14 +10792,14 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
 CellMorph.prototype.big = function () {
     this.isBig = true;
     this.changed();
-    this.fixLayout(true);  // just me // +++ ???
+    this.fixLayout(true);
     this.rerender();
 };
 
 CellMorph.prototype.normal = function () {
     this.isBig = false;
     this.changed();
-    this.fixLayout(true); // just me // +++ ???
+    this.fixLayout(true);
     this.rerender();
 };
 
@@ -11459,12 +11458,10 @@ WatcherMorph.prototype.update = function () {
                     this.cellMorph.setColor(this.readoutColor);
                 }
             }
-            // +++ this.cellMorph.drawNew(); ++++
-            this.cellMorph.fixLayout(); // +++
+            this.cellMorph.fixLayout();
             if (!isNaN(newValue)) {
                 this.sliderMorph.value = newValue;
-                // +++ this.sliderMorph.drawNew();
-                this.sliderMorph.fixLayout(); // +++
+                this.sliderMorph.fixLayout();
             }
             this.fixLayout();
             if (this.currentValue && this.currentValue.version) {
@@ -11586,7 +11583,7 @@ WatcherMorph.prototype.fixLayout = function () {
     }
 
     if (this.style === 'slider') {
-        this.sliderMorph.setPosition(new Point( // +++ was: 'silent'
+        this.sliderMorph.setPosition(new Point(
             this.labelMorph.left(),
             this.cellMorph.bottom()
                 + SyntaxElementMorph.prototype.typeInPadding
