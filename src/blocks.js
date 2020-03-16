@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-10';
+modules.blocks = '2020-March-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2138,14 +2138,15 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         if (isSnapObject(value)) {
             img = value.thumbnail(new Point(40, 40));
             morphToShow = new Morph();
-            morphToShow.silentSetWidth(img.width);
-            morphToShow.silentSetHeight(img.height);
-            morphToShow.image = img;
+            morphToShow.isCachingImage = true;
+            morphToShow.bounds.setWidth(img.width);
+            morphToShow.bounds.setHeight(img.height);
+            morphToShow.cachedImage = img;
             morphToShow.version = value.version;
             morphToShow.step = function () {
                 if (this.version !== value.version) {
                     img = value.thumbnail(new Point(40, 40));
-                    this.image = img;
+                    this.cachedImage = img;
                     this.version = value.version;
                     this.changed();
                 }
@@ -2153,24 +2154,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         } else {
             img = value.fullImage();
             morphToShow = new Morph();
-            morphToShow.silentSetWidth(img.width);
-            morphToShow.silentSetHeight(img.height);
-            morphToShow.image = img;
+            morphToShow.isCachingImage = true;
+            morphToShow.bounds.setWidth(img.width);
+            morphToShow.bounds.setHeight(img.height);
+            morphToShow.cachedImage = img;
         }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
         morphToShow = new Morph();
-        morphToShow.silentSetWidth(img.width);
-        morphToShow.silentSetHeight(img.height);
-        morphToShow.image = img;
+        morphToShow = new Morph();
+        morphToShow.isCachingImage = true;
+        morphToShow.bounds.setWidth(img.width);
+        morphToShow.bounds.setHeight(img.height);
+        morphToShow.cachedImage = img;
     } else if (value instanceof Sound) {
         morphToShow = new SymbolMorph('notes', 30);
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
-        morphToShow.silentSetWidth(img.width);
-        morphToShow.silentSetHeight(img.height);
-        morphToShow.image = img;
+        morphToShow.isCachingImage = true;
+        morphToShow.bounds.setWidth(img.width);
+        morphToShow.bounds.setHeight(img.height);
+        morphToShow.cachedImage = img;
     } else if (typeof value === 'boolean') {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,
