@@ -10876,9 +10876,10 @@ CellMorph.prototype.createContents = function () {
             if (isSnapObject(this.contents)) {
                 img = this.contents.thumbnail(new Point(40, 40));
                 this.contentsMorph = new Morph();
-                this.contentsMorph.silentSetWidth(img.width);
-                this.contentsMorph.silentSetHeight(img.height);
-                this.contentsMorph.image = img;
+                this.contentsMorph.isCachingImage = true;
+                this.contentsMorph.bounds.setWidth(img.width);
+                this.contentsMorph.bounds.setHeight(img.height);
+                this.contentsMorph.cachedImage = img;
                 this.version = this.contents.version;
             } else {
                 this.contentsMorph = this.contents;
