@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-16';
+modules.objects = '2020-March-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -7817,7 +7817,7 @@ StageMorph.prototype.getPixelColor = function (aPoint) {
     var point, context, data;
 	if (this.trailsCanvas) {
         point = aPoint.subtract(this.bounds.origin);
-        context = this.penTrailsMorph().image.getContext('2d');
+        context = this.penTrailsMorph().getImage().getContext('2d');
         data = context.getImageData(point.x, point.y, 1, 1);
         if (data.data[3] === 0) {
             if (this.projectionCanvas) {
