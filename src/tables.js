@@ -64,9 +64,9 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, Point, newCanvas, Morph, fontHeight, SliderMorph, isString,
+/*global modules, Point, Morph, fontHeight, SliderMorph, isString,
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph,
-SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph, List,
+SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
@@ -274,7 +274,7 @@ TableCellMorph.uber = Morph.prototype;
 
 // TableCellMorph global setting:
 
-TableCellMorph.prototype.listSymbol = null; // +++ disabled while working on rendering +++ ArgMorph.prototype.listIcon();
+TableCellMorph.prototype.listSymbol = new SymbolMorph('list', 30).getImage();
 
 // TableCellMorph instance creation:
 
@@ -286,6 +286,7 @@ TableCellMorph.prototype.init = function (data, extent, isLabel) {
     // additional properties:
     this.data = data;
     this.isLabel = isLabel || false;
+    this.labelString = null;
 
     // initialize inherited properties:
     TableCellMorph.uber.init.call(this, true);
@@ -300,12 +301,8 @@ TableCellMorph.prototype.setData = function (data, extent) {
     this.data = data;
     if (extent && (!extent.eq(this.extent()))) {
         this.bounds.setExtent(extent);
-        this.rerender(); // +++ ?? better: fixLayout()?
-    } else {
-        // this.drawData(); // +++ maybe just call changed() now?
-        // this.rerender(); // +++ ???
     }
-    // note: don't call changed(), let the TableMorph handle it instead
+    this.rerender();
 };
 
 TableCellMorph.prototype.getData = function () {
@@ -313,11 +310,7 @@ TableCellMorph.prototype.getData = function () {
 };
 
 TableCellMorph.prototype.render = function (ctx) {
-    this.drawData(null, null, ctx); // ++++
-};
-
-TableCellMorph.prototype.drawData = function (lbl, bg, ctx) {
-    var dta = lbl || this.dataRepresentation(this.data),
+    var dta = this.labelString || this.dataRepresentation(this.data),
         fontSize = SyntaxElementMorph.prototype.fontSize,
         empty = TableMorph.prototype.highContrast ? 'rgb(220, 220, 220)'
                 : 'transparent',
@@ -326,7 +319,8 @@ TableCellMorph.prototype.drawData = function (lbl, bg, ctx) {
                 (this.data instanceof Array ? 'italic'  : '')
                         : this.shouldBeList() ? 'bold' : '',
         font = fontStyle + ' ' + fontSize + 'px Helvetica, Arial, sans-serif',
-        background = bg || (this.isLabel ? empty
+        background = this.labelString ? 'rgb(220, 220, 250)'
+            : (this.isLabel ? empty
                 : (this.shouldBeList() ? orphaned
                         : (this.isOvershooting() ? 'white'
                                 : (isNil(this.data) ? empty : 'white')))),
@@ -338,7 +332,6 @@ TableCellMorph.prototype.drawData = function (lbl, bg, ctx) {
         x,
         y;
 
-    // +++ ctx.clearRect(0, 0, width, height); // +++ not really, right?
     ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
@@ -401,7 +394,7 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Costume) {
         return dta.thumbnail(new Point(40, 40));
     } else if (dta instanceof Sound) {
-        return new SymbolMorph('notes', 30).image;
+        return new SymbolMorph('notes', 30).getImage();
     } else if (dta instanceof List) {
         return this.listSymbol;
         // return new ListWatcherMorph(dta).fullImageClassic();
@@ -449,24 +442,22 @@ TableCellMorph.prototype.mouseDoubleClick = function (pos) {
 };
 
 TableCellMorph.prototype.mouseEnter = function () {
-return; // +++
     var tm, x, c;
     if (this.isLabel) {
         tm = this.parentThatIsA(TableMorph);
         x = tm.world().hand.left() - tm.left();
         c = tm.columnAt(x);
         if (c > 0) {
-            this.drawData(c, 'rgb(220, 220, 250)');
-            this.changed();
+            this.labelString = c;
+            this.rerender();
         }
     }
 };
 
 TableCellMorph.prototype.mouseLeave = function () {
-return; // +++
     if (this.isLabel) {
-        this.drawData();
-        this.changed();
+        this.labelString = null;
+        this.rerender();
     }
 };
 
@@ -568,7 +559,6 @@ TableMorph.prototype.init = function (
     // this.fps = 3; // this will slow down the sliders (!)
     if (extent) {this.bounds.setExtent(extent); }
     this.initScrollBars();
-    // +++ this.drawNew();
     this.fixLayout();
 };
 
@@ -617,7 +607,7 @@ TableMorph.prototype.updateScrollBars = function () {
             this.hBar.rangeSize() * this.columns.length / this.table.cols(),
             this.hBar.rangeSize() / 10
         );
-        this.hBar.fixLayout(); // +++
+        this.hBar.fixLayout();
     }
 
     this.vBar.stop = this.maxStartRow;
@@ -634,6 +624,25 @@ TableMorph.prototype.updateScrollBars = function () {
     }
 };
 
+TableMorph.prototype.fixLayout = function () {
+    TableMorph.uber.fixLayout.call(this);
+
+    // determine and cache layout information
+    this.rowLabelWidth = this.rowLabelsWidth();
+    this.columns = this.columnsLayout();
+    this.rows = this.visibleRows();
+
+    this.buildCells();
+
+    // fix scroll bars layout
+    this.hBar.setWidth(this.width() - this.vBar.width());
+    this.hBar.setLeft(this.left());
+    this.hBar.setBottom(this.bottom());
+    this.vBar.setHeight(this.height() - this.hBar.height());
+    this.vBar.setRight(this.right());
+    this.vBar.setTop(this.top());
+};
+
 TableMorph.prototype.render = function (ctx) {
     var w, i;
     ctx.fillStyle = 'rgb(220, 220, 220)';
@@ -643,11 +652,6 @@ TableMorph.prototype.render = function (ctx) {
         0
     );
     ctx.fill();
-
-    // determine and cache layout information // +++ move this to fixLayout, so we don't need to be calling it here
-    this.rowLabelWidth = this.rowLabelsWidth();
-    this.columns = this.columnsLayout();
-    this.rows = this.visibleRows();
 
     // optionally draw grid
     if (this.highContrast && this.table.cols() > 1) {
@@ -665,16 +669,6 @@ TableMorph.prototype.render = function (ctx) {
                 this.padding
         );
     }
-
-    this.buildCells(); // +++ move this to fixLayout
-
-    // fix scroll bars layout
-    this.hBar.setWidth(this.width() - this.vBar.width());
-    this.hBar.setLeft(this.left());
-    this.hBar.setBottom(this.bottom());
-    this.vBar.setHeight(this.height() - this.hBar.height());
-    this.vBar.setRight(this.right());
-    this.vBar.setTop(this.top());
 };
 
 TableMorph.prototype.buildCells = function () {
@@ -720,7 +714,6 @@ TableMorph.prototype.buildCells = function () {
     this.add(this.hBar);
     this.add(this.vBar);
     this.updateScrollBars();
-    // this.changed(); // +++ remove this, I guess...
 };
 
 TableMorph.prototype.drawData = function (noScrollUpdate) {
@@ -1133,8 +1126,7 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
         );
     }
 
-    // +++ this.drawNew();
-    this.fixLayout(); // +++ ??
+    this.fixLayout();
 };
 
 TableFrameMorph.prototype.fixLayout = function () {
@@ -1145,13 +1137,6 @@ TableFrameMorph.prototype.fixLayout = function () {
         this.parent.fixLayout();
     }
 };
-
-/* // +++ is this needed at all?
-TableFrameMorph.prototype.setExtent = function (aPoint, silently) {
-    TableFrameMorph.uber.setExtent.call(this, aPoint, silently);
-    this.fixLayout();
-};
-*/
 
 // TableFrameMorph result / speech balloon support:
 
