@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-February-20';
+modules.tables = '2020-March-17';
 
 var Table;
 var TableCellMorph;
@@ -292,17 +292,18 @@ TableCellMorph.prototype.init = function (data, extent, isLabel) {
 
     // override inherited properites:
     this.noticesTransparentClick = true;
-    if (extent) {this.silentSetExtent(extent); }
-    this.drawNew();
+    if (extent) {this.bounds.setExtent(extent); }
+    this.fixLayout();
 };
 
 TableCellMorph.prototype.setData = function (data, extent) {
     this.data = data;
     if (extent && (!extent.eq(this.extent()))) {
-        this.silentSetExtent(extent);
-        this.drawNew();
+        this.bounds.setExtent(extent);
+        this.rerender(); // +++ ?? better: fixLayout()?
     } else {
-        this.drawData();
+        // this.drawData(); // +++ maybe just call changed() now?
+        // this.rerender(); // +++ ???
     }
     // note: don't call changed(), let the TableMorph handle it instead
 };
@@ -311,14 +312,12 @@ TableCellMorph.prototype.getData = function () {
     return this.data instanceof Array ? this.data[0] : this.data;
 };
 
-TableCellMorph.prototype.drawNew = function () {
-    this.image = newCanvas(this.extent(), false, this.image);
-    this.drawData();
+TableCellMorph.prototype.render = function (ctx) {
+    this.drawData(null, null, ctx); // ++++
 };
 
-TableCellMorph.prototype.drawData = function (lbl, bg) {
+TableCellMorph.prototype.drawData = function (lbl, bg, ctx) {
     var dta = lbl || this.dataRepresentation(this.data),
-        context = this.image.getContext('2d'),
         fontSize = SyntaxElementMorph.prototype.fontSize,
         empty = TableMorph.prototype.highContrast ? 'rgb(220, 220, 220)'
                 : 'transparent',
@@ -339,39 +338,39 @@ TableCellMorph.prototype.drawData = function (lbl, bg) {
         x,
         y;
 
-    context.clearRect(0, 0, width, height);
-    context.fillStyle = background;
+    // +++ ctx.clearRect(0, 0, width, height); // +++ not really, right?
+    ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
-            this, context, SyntaxElementMorph.prototype.corner + 1, 0
+            this, ctx, SyntaxElementMorph.prototype.corner + 1, 0
         );
-        context.fill();
+        ctx.fill();
     } else if (this.isOvershooting()) {
-        this.raggedBoxPath(context);
-        context.fill();
+        this.raggedBoxPath(ctx);
+        ctx.fill();
     } else {
-        context.fillRect(0, 0, width, height);
+        ctx.fillRect(0, 0, width, height);
     }
 
     if (!dta) {return; }
     if (dta instanceof HTMLCanvasElement) {
         x = Math.max((width - dta.width) / 2, 0);
         y = Math.max((height - dta.height) / 2, 0);
-        context.shadowOffsetX = 4;
-        context.shadowOffsetY = 4;
-        context.shadowBlur = 4;
-        context.shadowColor = 'lightgray';
-        context.drawImage(dta, x, y);
+        ctx.shadowOffsetX = 4;
+        ctx.shadowOffsetY = 4;
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = 'lightgray';
+        ctx.drawImage(dta, x, y);
     } else { // text
-        context.font = font;
-        context.textAlign = 'left';
-        context.textBaseline = 'bottom';
-        txtWidth = context.measureText(dta).width;
+        ctx.font = font;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        txtWidth = ctx.measureText(dta).width;
         txtHeight = fontHeight(fontSize);
-        context.fillStyle = foreground;
+        ctx.fillStyle = foreground;
         x = Math.max((width - txtWidth) / 2, 0);
         y = Math.max((height - txtHeight) / 2, 0);
-        context.fillText(dta, x, txtHeight + y);
+        ctx.fillText(dta, x, txtHeight + y);
     }
 };
 
@@ -380,7 +379,7 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         if (isSnapObject(dta)) {
             return dta.thumbnail(new Point(40, 40));
         } else {
-            return dta.fullImageClassic();
+            return dta.fullImage();
         }
     } else if (isString(dta)) {
         return dta.length > 100 ? dta.slice(0, 100) + '...' : dta;
@@ -450,6 +449,7 @@ TableCellMorph.prototype.mouseDoubleClick = function (pos) {
 };
 
 TableCellMorph.prototype.mouseEnter = function () {
+return; // +++
     var tm, x, c;
     if (this.isLabel) {
         tm = this.parentThatIsA(TableMorph);
@@ -463,6 +463,7 @@ TableCellMorph.prototype.mouseEnter = function () {
 };
 
 TableCellMorph.prototype.mouseLeave = function () {
+return; // +++
     if (this.isLabel) {
         this.drawData();
         this.changed();
@@ -565,9 +566,10 @@ TableMorph.prototype.init = function (
 
     // override inherited properites:
     // this.fps = 3; // this will slow down the sliders (!)
-    if (extent) {this.silentSetExtent(extent); }
+    if (extent) {this.bounds.setExtent(extent); }
     this.initScrollBars();
-    this.drawNew();
+    // +++ this.drawNew();
+    this.fixLayout();
 };
 
 TableMorph.prototype.initScrollBars = function () {
@@ -615,7 +617,7 @@ TableMorph.prototype.updateScrollBars = function () {
             this.hBar.rangeSize() * this.columns.length / this.table.cols(),
             this.hBar.rangeSize() / 10
         );
-        this.hBar.drawNew();
+        this.hBar.fixLayout(); // +++
     }
 
     this.vBar.stop = this.maxStartRow;
@@ -628,21 +630,21 @@ TableMorph.prototype.updateScrollBars = function () {
             this.vBar.rangeSize() * this.rows / this.table.rows(),
             this.vBar.rangeSize() / 10
         );
-        this.vBar.drawNew();
+        this.vBar.fixLayout();
     }
 };
 
-TableMorph.prototype.drawNew = function () {
-    var context, w, i;
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    context.fillStyle = 'rgb(220, 220, 220)';
+TableMorph.prototype.render = function (ctx) {
+    var w, i;
+    ctx.fillStyle = 'rgb(220, 220, 220)';
     BoxMorph.prototype.outlinePath.call(
-        this, context, SyntaxElementMorph.prototype.corner + 1, 0
+        this,
+        ctx, SyntaxElementMorph.prototype.corner + 1,
+        0
     );
-    context.fill();
+    ctx.fill();
 
-    // determine and cache layout information
+    // determine and cache layout information // +++ move this to fixLayout, so we don't need to be calling it here
     this.rowLabelWidth = this.rowLabelsWidth();
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
@@ -653,8 +655,8 @@ TableMorph.prototype.drawNew = function () {
         for (i = this.startCol; i <= this.table.cols(); i += 1) {
             w += (this.colWidth(i) + this.padding);
         }
-        context.fillStyle = 'darkGray';
-        context.fillRect(
+        ctx.fillStyle = 'darkGray';
+        ctx.fillRect(
             this.padding + this.rowLabelWidth,
             this.padding + this.colLabelHeight,
             w,
@@ -664,7 +666,7 @@ TableMorph.prototype.drawNew = function () {
         );
     }
 
-    this.buildCells();
+    this.buildCells(); // +++ move this to fixLayout
 
     // fix scroll bars layout
     this.hBar.setWidth(this.width() - this.vBar.width());
@@ -718,7 +720,7 @@ TableMorph.prototype.buildCells = function () {
     this.add(this.hBar);
     this.add(this.vBar);
     this.updateScrollBars();
-    this.changed();
+    // this.changed(); // +++ remove this, I guess...
 };
 
 TableMorph.prototype.drawData = function (noScrollUpdate) {
@@ -1131,7 +1133,8 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
         );
     }
 
-    this.drawNew();
+    // +++ this.drawNew();
+    this.fixLayout(); // +++ ??
 };
 
 TableFrameMorph.prototype.fixLayout = function () {
@@ -1143,10 +1146,12 @@ TableFrameMorph.prototype.fixLayout = function () {
     }
 };
 
+/* // +++ is this needed at all?
 TableFrameMorph.prototype.setExtent = function (aPoint, silently) {
     TableFrameMorph.uber.setExtent.call(this, aPoint, silently);
     this.fixLayout();
 };
+*/
 
 // TableFrameMorph result / speech balloon support:
 
