@@ -9437,20 +9437,22 @@ SpriteBubbleMorph.prototype.init = function (
 
     SpriteBubbleMorph.uber.init.call(
         this,
-        this.dataAsMorph(data),
+        this.data,
         sprite.bubbleColor,
         null,
         null,
         isQuestion ? sprite.blockColor.sensing : sprite.bubbleBorderColor,
         null,
-        isThought
+        isThought,
+        true // no shadow
     );
 };
 
 // SpriteBubbleMorph contents formatting
 
-SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
-    var contents,
+SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
+    var toggle = false, // +++ former argument governing whether a list is shown as table view or list view
+        contents,
         isTable,
         sprite = SpriteMorph.prototype,
         isText,
@@ -9565,7 +9567,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         // scale contents image
         scaledImg = newCanvas(contents.extent().multiplyBy(this.scale));
         scaledImg.getContext('2d').drawImage(
-            contents.image,
+            contents.cachedImage,
             0,
             0,
             scaledImg.width,
@@ -9590,26 +9592,20 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 
 SpriteBubbleMorph.prototype.fixLayout = function () {
     var sprite = SpriteMorph.prototype,
-        toggle; // +++ old parameter used to switch from table to list view, to be replaced
+        toggle; // ++++ old parameter used to switch from table to list view, to be replaced
 
-    if (this.data instanceof List) {
-        this.fixLayoutForList();
-        return;
+    // rebuild my contents
+    if (!(this.contentsMorph instanceof ListWatcherMorph ||
+            this.contentsMorph instanceof TableFrameMorph)) {
+        this.contentsMorph.destroy();
+        this.contentsMorph = this.dataAsMorph(this.data);
     }
+    this.add(this.contentsMorph);
 
     // scale my settings
     this.edge = sprite.bubbleCorner * this.scale;
     this.border = sprite.bubbleBorder * this.scale;
     this.padding = sprite.bubbleCorner / 2 * this.scale;
-
-    // re-build my contents
-    // ++++ to do: move this into a separate method, then collapse both
-    // fixLayout() methods into a single one
-    if (this.contentsMorph) {
-        this.contentsMorph.destroy();
-    }
-    this.contentsMorph = this.dataAsMorph(this.data, toggle);
-    this.add(this.contentsMorph);
 
     // adjust my dimensions
     this.bounds.setWidth(this.contentsMorph.width()
@@ -9620,9 +9616,6 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
         + this.padding * 2
         + 2);
 
-    // draw my outline // +++ to be removed, should we call uber >> fixLayout()??
-    // ++++ SpeechBubbleMorph.uber.drawNew.call(this);
-
     // position my contents
     this.contentsMorph.setPosition(this.position().add(
         new Point(
@@ -9630,42 +9623,6 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
             this.border + this.padding + 1
         )
     ));
-};
-
-// SpriteBubbleMorph resizing:
-
-SpriteBubbleMorph.prototype.fixLayoutForList = function () {
-// ++++ to do: collapse this into a a single method
-    // to be used when resizing list watchers
-
-    var sprite = SpriteMorph.prototype;
-
-    this.changed();
-    // scale my settings
-    this.edge = sprite.bubbleCorner * this.scale;
-    this.border = sprite.bubbleBorder * this.scale;
-    this.padding = sprite.bubbleCorner / 2 * this.scale;
-
-    // adjust my layout
-    this.bounds.setWidth(this.contentsMorph.width()
-        + (this.padding ? this.padding * 2 : this.edge * 2));
-    this.bounds.setHeight(this.contentsMorph.height()
-        + this.edge
-        + this.border * 2
-        + this.padding * 2
-        + 2);
-
-    // draw my outline
-    // ++++ SpeechBubbleMorph.uber.drawNew.call(this);
-
-    // position my contents
-    this.contentsMorph.setPosition(this.position().add(
-        new Point(
-            this.padding || this.edge,
-            this.border + this.padding + 1
-        )
-    ));
-    // +++ this.changed();
 };
 
 // Costume /////////////////////////////////////////////////////////////
@@ -10855,13 +10812,11 @@ CellMorph.prototype.fixLayout = function (justMe) {
         this.contentsMorph.setCenter(this.center());
     }
 
-    if (this.parent && this.parent.fixLayout) { // variable watcher
+    if (this.parent) {
+        // ++++ to do: reflow list watcher parent
+        this.parent.changed();
         this.parent.fixLayout();
-    } else {
-        listwatcher = this.parentThatIsA(ListWatcherMorph);
-        if (listwatcher) {
-            listwatcher.fixLayout();
-        }
+        this.parent.rerender();
     }
 };
 
