@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-17';
+modules.objects = '2020-March-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -5147,22 +5147,21 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.show();
     if (!bubble.isPointingRight) {
         bubble.isPointingRight = true;
-        bubble.drawNew();
-        bubble.changed();
+        bubble.fixLayout();
+        bubble.rerender();
     }
     bubble.setLeft(this.right());
     bubble.setBottom(this.top());
     while (!this.isTouching(bubble) && bubble.bottom() < middle) {
-        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stageScale));
+        bubble.moveBy(new Point(-1, 1).scaleBy(stageScale));
     }
     if (!stage) {return null; }
     if (bubble.right() > stage.right()) {
         bubble.isPointingRight = false;
-        bubble.drawNew();
+        bubble.fixLayout();
         bubble.setRight(this.center().x);
     }
     bubble.keepWithin(stage);
-    bubble.changed();
 };
 
 // dragging and dropping adjustments b/c of talk bubbles and parts
@@ -9462,14 +9461,15 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
             contents = new Morph();
-            contents.silentSetWidth(img.width);
-            contents.silentSetHeight(img.height);
-            contents.image = img;
+            contents.isCachingImage = true;
+            contents.bounds.setWidth(img.width);
+            contents.bounds.setHeight(img.height);
+            contents.cachedImage = img;
             contents.version = data.version;
             contents.step = function () {
                 if (this.version !== data.version) {
                     img = data.thumbnail(new Point(40, 40));
-                    this.image = img;
+                    this.cachedImage = img;
                     this.version = data.version;
                     this.changed();
                 }
@@ -9490,22 +9490,25 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
-        contents.silentSetWidth(img.width);
-        contents.silentSetHeight(img.height);
-        contents.image = img;
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
     } else if (data instanceof Costume) {
         img = data.thumbnail(new Point(40, 40));
-        contents = new Morph();
-        contents.silentSetWidth(img.width);
-        contents.silentSetHeight(img.height);
-        contents.image = img;
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
     } else if (data instanceof HTMLCanvasElement) {
+        img = data;
         contents = new Morph();
-        contents.silentSetWidth(data.width);
-        contents.silentSetHeight(data.height);
-        contents.image = data;
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
     } else if (data instanceof List) {
         if (toggle && this.contentsMorph) {
             isTable = (this.contentsMorph instanceof ListWatcherMorph);
@@ -9534,9 +9537,10 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
     } else if (data instanceof Context) {
         img = data.image();
         contents = new Morph();
-        contents.silentSetWidth(img.width);
-        contents.silentSetHeight(img.height);
-        contents.image = img;
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
     } else {
         contents = new TextMorph(
             data.toString(),
@@ -9567,7 +9571,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
             scaledImg.width,
             scaledImg.height
         );
-        contents.image = scaledImg;
+        contents.cachedImage = scaledImg;
         contents.bounds = contents.bounds.scaleBy(this.scale);
     }
     return contents;
@@ -9578,14 +9582,20 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
 SpriteBubbleMorph.prototype.setScale = function (scale) {
     this.scale = scale;
     this.changed();
-    this.drawNew();
-    this.changed();
+    this.fixLayout();
+    this.rerender();
 };
 
-// SpriteBubbleMorph drawing:
+// SpriteBubbleMorph layout:
 
-SpriteBubbleMorph.prototype.drawNew = function (toggle) {
-    var sprite = SpriteMorph.prototype;
+SpriteBubbleMorph.prototype.fixLayout = function () {
+    var sprite = SpriteMorph.prototype,
+        toggle; // +++ old parameter used to switch from table to list view, to be replaced
+
+    if (this.data instanceof List) {
+        this.fixLayoutForList();
+        return;
+    }
 
     // scale my settings
     this.edge = sprite.bubbleCorner * this.scale;
@@ -9593,23 +9603,25 @@ SpriteBubbleMorph.prototype.drawNew = function (toggle) {
     this.padding = sprite.bubbleCorner / 2 * this.scale;
 
     // re-build my contents
+    // ++++ to do: move this into a separate method, then collapse both
+    // fixLayout() methods into a single one
     if (this.contentsMorph) {
         this.contentsMorph.destroy();
     }
     this.contentsMorph = this.dataAsMorph(this.data, toggle);
     this.add(this.contentsMorph);
 
-    // adjust my layout
-    this.silentSetWidth(this.contentsMorph.width()
+    // adjust my dimensions
+    this.bounds.setWidth(this.contentsMorph.width()
         + (this.padding ? this.padding * 2 : this.edge * 2));
-    this.silentSetHeight(this.contentsMorph.height()
+    this.bounds.setHeight(this.contentsMorph.height()
         + this.edge
         + this.border * 2
         + this.padding * 2
         + 2);
 
-    // draw my outline
-    SpeechBubbleMorph.uber.drawNew.call(this);
+    // draw my outline // +++ to be removed, should we call uber >> fixLayout()??
+    // ++++ SpeechBubbleMorph.uber.drawNew.call(this);
 
     // position my contents
     this.contentsMorph.setPosition(this.position().add(
@@ -9622,9 +9634,9 @@ SpriteBubbleMorph.prototype.drawNew = function (toggle) {
 
 // SpriteBubbleMorph resizing:
 
-SpriteBubbleMorph.prototype.fixLayout = function () {
+SpriteBubbleMorph.prototype.fixLayoutForList = function () {
+// ++++ to do: collapse this into a a single method
     // to be used when resizing list watchers
-    // otherwise use drawNew() to force re-layout
 
     var sprite = SpriteMorph.prototype;
 
@@ -9635,16 +9647,16 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
     this.padding = sprite.bubbleCorner / 2 * this.scale;
 
     // adjust my layout
-    this.silentSetWidth(this.contentsMorph.width()
+    this.bounds.setWidth(this.contentsMorph.width()
         + (this.padding ? this.padding * 2 : this.edge * 2));
-    this.silentSetHeight(this.contentsMorph.height()
+    this.bounds.setHeight(this.contentsMorph.height()
         + this.edge
         + this.border * 2
         + this.padding * 2
         + 2);
 
     // draw my outline
-    SpeechBubbleMorph.uber.drawNew.call(this);
+    // ++++ SpeechBubbleMorph.uber.drawNew.call(this);
 
     // position my contents
     this.contentsMorph.setPosition(this.position().add(
@@ -9653,7 +9665,7 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
             this.border + this.padding + 1
         )
     ));
-    this.changed();
+    // +++ this.changed();
 };
 
 // Costume /////////////////////////////////////////////////////////////
