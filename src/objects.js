@@ -10813,10 +10813,15 @@ CellMorph.prototype.fixLayout = function (justMe) {
     }
 
     if (this.parent) {
-        // ++++ to do: reflow list watcher parent
         this.parent.changed();
         this.parent.fixLayout();
         this.parent.rerender();
+        listwatcher = this.parentThatIsA(ListWatcherMorph);
+        if (listwatcher) {
+            listwatcher.changed();
+            listwatcher.fixLayout();
+            listwatcher.rerender();
+        }
     }
 };
 
