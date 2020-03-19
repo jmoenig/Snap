@@ -9036,8 +9036,7 @@ StageMorph.prototype.setColorComponentHSVA = function (idx, num) {
         this.cachedHSV[idx] = n / 100;
         this.color.set_hsv.apply(this.color, this.cachedHSV);
     }
-    this.drawNew();
-    this.changed();
+    this.rerender();
 };
 
 StageMorph.prototype.getColorComponentHSLA
