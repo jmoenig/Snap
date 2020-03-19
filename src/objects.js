@@ -5172,6 +5172,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     if (bubble.right() > stage.right()) {
         bubble.isPointingRight = false;
         bubble.fixLayout();
+        bubble.rerender();
         bubble.setRight(this.center().x);
     }
     bubble.keepWithin(stage);
