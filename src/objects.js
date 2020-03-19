@@ -4145,10 +4145,21 @@ SpriteMorph.prototype.hide = function () {
 };
 
 SpriteMorph.prototype.setVisibility = function (bool, noShadow) {
+    var bubble = this.talkBubble();
+
     if (bool) {
         SpriteMorph.uber.show.call(this);
     } else {
         SpriteMorph.uber.hide.call(this);
+    }
+
+    // propagate to speech bubble, if any
+    if (bubble) {
+        if (bool) {
+            bubble.show();
+        } else {
+            bubble.hide();
+        }
     }
 
     // progagate to parts
