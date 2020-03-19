@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-18';
+modules.objects = '2020-March-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -4334,6 +4334,8 @@ SpriteMorph.prototype.reportColorIsTouchingColor = function (
 
 SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
+    // the same applies for speech balloons, where it's enough to
+    // test the encompassing shape only
     var oRect = this.bounds.intersect(otherSprite.bounds),
         thisImg = this.getImage(),
         thatImg = otherSprite.getImage();
@@ -9446,6 +9448,9 @@ SpriteBubbleMorph.prototype.init = function (
         isThought,
         true // no shadow
     );
+
+    this.isCachingImage = true;
+    this.rerender();
 };
 
 // SpriteBubbleMorph contents formatting
