@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-16';
+modules.blocks = '2020-March-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9526,7 +9526,7 @@ InputSlotMorph.prototype.render = function (ctx) {
 	// draw my "wish" block, if any
 	if (this.selectedBlock) {
  		ctx.drawImage(
-        	this.selectedBlock.fullImageClassic(),
+        	this.selectedBlock.fullImage(),
             this.edge + this.typeInPadding,
             this.edge
         );
