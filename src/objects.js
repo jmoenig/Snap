@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-19';
+modules.objects = '2020-March-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -7672,6 +7672,7 @@ StageMorph.prototype.drawOn = function (ctx, rect) {
     }
 
     // pen trails
+    ctx.globalAlpha = 1;
     ctx.drawImage(
         this.penTrails(),
         sl / this.scale,
