@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-10';
+var morphicVersion = '2020-March-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -6037,7 +6037,7 @@ SpeechBubbleMorph.prototype.fixLayout = function () {
     this.add(this.contentsMorph);
 
     // adjust my layout
-    this.setExtent(
+    this.bounds.setExtent(
         new Point(
             this.contentsMorph.width() +
                 (this.padding ? this.padding * 2 : this.edge * 2),
