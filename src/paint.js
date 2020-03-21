@@ -512,7 +512,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
             // needed for retina-display support
             return;
         }
-        color.a = 255;
+        color.a = 1;
         myself.propertiesControls.colorpicker.action(color);
     };
 
