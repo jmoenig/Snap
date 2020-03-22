@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-10';
+modules.gui = '2020-March-22';
 
 // Declarations
 
@@ -1324,8 +1324,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
                 if (myself.currentSprite instanceof SpriteMorph) {
                     myself.currentSprite.rotationStyle = rotationStyle;
                     myself.currentSprite.changed();
-                    myself.currentSprite.drawNew();
-                    myself.currentSprite.changed();
+                    myself.currentSprite.fixLayout();
+                    myself.currentSprite.rerender();
                 }
                 rotationStyleButtons.forEach(function (each) {
                     each.refresh();
