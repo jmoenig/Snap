@@ -5491,7 +5491,6 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     */
         scrpt.blockSequence().forEach(function (block) {
             block.setScale(num);
-            block.drawNew();
             block.setSpec(block.blockSpec);
         });
         scrpt.changed();

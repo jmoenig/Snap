@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-March-12';
+modules.widgets = '2020-March-22';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1644,8 +1644,8 @@ DialogBoxMorph.prototype.prompt = function (
     this.reactToChoice = function (inp) {
         if (sld) {
             sld.value = inp * 100;
-            sld.drawNew();
-            sld.changed();
+            sld.fixLayout();
+            sld.rerender();
         }
         if (sliderAction) {
             sliderAction(inp);
@@ -1657,8 +1657,8 @@ DialogBoxMorph.prototype.prompt = function (
         if (sld) {
             inp = Math.max(inp, sliderMin);
             sld.value = inp * 100;
-            sld.drawNew();
-            sld.changed();
+            sld.fixLayout();
+            sld.rerender();
         }
         if (sliderAction) {
             sliderAction(inp);
