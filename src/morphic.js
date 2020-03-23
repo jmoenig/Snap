@@ -43,11 +43,11 @@
 
      "silent" - functions are no longer needed:
 
-     * silentSetExtent
+     * silentSetExtent => bounds.setExtent()
      * silentMoveBy
      * silentSetPosition
-     * silentSetWidth
-     * silentSetHeight
+     * silentSetWidth => bounds.setWidth()
+     * silentSetHeight = bounds.setHeight()
 
      likewise "silent" parameters are no longer needed and supported
 
@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-20';
+var morphicVersion = '2020-March-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8832,7 +8832,8 @@ StringMorph.prototype.selectAll = function () {
             cursor.gotoSlot(this.text.length);
             cursor.syncTextareaSelectionWith(this);
         }
-        this.changed();
+        this.fixLayout();
+        this.rerender();
     }
 };
 

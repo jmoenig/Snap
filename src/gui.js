@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-22';
+modules.gui = '2020-March-23';
 
 // Declarations
 
@@ -5493,7 +5493,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
             block.setScale(num);
             block.setSpec(block.blockSpec);
         });
-        scrpt.changed();
+        scrpt.fullChanged();
     };
 
     new DialogBoxMorph(
