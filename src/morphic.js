@@ -11677,12 +11677,18 @@ WorldMorph.prototype.condenseDamages = function () {
         return trgt;
     }
 
-    var again = true, size = this.broken.length;
+    this.broken = condense(this.broken);
+
+    /* // overy eager mechanism, commented out for performance
+    var again = true,
+        size = this.broken.length;
+    
     while (again) {
         this.broken = condense(this.broken);
         again = (this.broken.length < size);
         size = this.broken.length;
     }
+    */
 };
 
 WorldMorph.prototype.doOneCycle = function () {

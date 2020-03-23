@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-19';
+modules.blocks = '2020-March-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9800,7 +9800,7 @@ TemplateSlotMorph.prototype.evaluate = function () {
 
 TemplateSlotMorph.prototype.fixLayout = function () {
     var template = this.template();
-    this.setExtent(template.extent().add(this.edge * 2 + 2));
+    this.bounds.setExtent(template.extent().add(this.edge * 2 + 2));
     template.setPosition(this.position().add(this.edge + 1));
     if (this.parent) {
         if (this.parent.fixLayout) {
@@ -12801,7 +12801,7 @@ ScriptFocusMorph.prototype.manifestStatement = function () {
     this.edge = 0;
     this.alpha = 1;
     this.color = this.editor.feedbackColor;
-    this.setExtent(new Point(
+    this.bounds.setExtent(new Point(
         newScript ?
                 SyntaxElementMorph.prototype.hatWidth : this.element.width(),
         Math.max(
