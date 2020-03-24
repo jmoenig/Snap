@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-23';
+var morphicVersion = '2020-March-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11662,24 +11662,51 @@ WorldMorph.prototype.condenseDamages = function () {
     // thereby reducing the array of brokens to a manageable size
 
     function condense(src) {
-        var trgt = [], hit;
-        src.forEach(rect => {
-            hit = detect(
-                trgt,
-                each => each.isNearTo(rect, 20)
-            );
+        var trgt = [],
+            len = src.length,
+            rect,
+            test = each => each.isNearTo(rect, 20),
+            hit, i;
+
+        for (i = 0; i < len; i += 1) {
+            rect = src[i];
+            hit = detect(trgt, test);
             if (hit) {
                 hit.mergeWith(rect);
             } else {
                 trgt.push(rect);
             }
-        });
+        }
         return trgt;
     }
 
-    this.broken = condense(this.broken);
+    function mergeAll(rects) {
+        var left = rects[0].origin.x,
+            top = rects[0].origin.y,
+            right = rects[0].corner.x,
+            bottom = rects[0].corner.y,
+            len = rects.length,
+            each,
+            i;
 
-    /* // overy eager mechanism, commented out for performance
+        for (i = 1; i < len; i += 1) {
+            each = rects[i];
+            left = Math.min(left, each.origin.x);
+            top = Math.min(top, each.origin.y);
+            right = Math.max(right, each.corner.x);
+            bottom = Math.max(bottom, each.corner.y);
+        }
+
+        return new Rectangle(left, top, right, bottom);
+    }
+
+    if (this.broken.length > 1000) {
+        this.broken = [mergeAll(this.broken)];
+    } else {
+        this.broken = condense(this.broken);
+    }
+
+    /* // overly eager reduction algorithm, commented out for performance
     var again = true,
         size = this.broken.length;
     
