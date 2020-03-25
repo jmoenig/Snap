@@ -9324,7 +9324,7 @@ InputSlotMorph.prototype.reactToEdit = function () {
     this.contents().clearSelection();
 };
 
-InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
+InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) { // +++ is this ever called?
     this.onNextStep = function () {
         aStringOrTextMorph.selectAll();
     };
