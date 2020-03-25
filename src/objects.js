@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-20';
+modules.objects = '2020-March-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -3519,7 +3519,6 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
             }
         }
     });
-
 };
 
 SpriteMorph.prototype.getCostumeIdx = function () {
@@ -9515,6 +9514,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
     } else if (data instanceof Costume) {
         img = data.thumbnail(new Point(40, 40));
+        contents = new Morph();
         contents.isCachingImage = true;
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
