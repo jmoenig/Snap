@@ -1178,7 +1178,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-24';
+var morphicVersion = '2020-March-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8964,7 +8964,7 @@ StringMorph.prototype.selectBetweenWordsAt = function (slot) {
 };
 
 StringMorph.prototype.enableSelecting = function () {
-    this.mouseDownLeft = (pos) => {
+    this.mouseDownLeft = function (pos) {
         var crs = this.root().cursor,
             already = crs ? crs.target === this : false;
         if (this.world().currentKey === 16) {
@@ -8982,7 +8982,7 @@ StringMorph.prototype.enableSelecting = function () {
             }
         }
     };
-    this.mouseMove = (pos) => {
+    this.mouseMove = function (pos) {
         if (this.isEditable &&
                 this.currentlySelecting &&
                 (!this.isDraggable)) {
