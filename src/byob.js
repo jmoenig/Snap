@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-12';
+modules.byob = '2020-March-25';
 
 // Declarations
 
@@ -770,7 +770,8 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
             hat.silentReplaceInput(this, myself);
         } else {
             this.isPredicate = (hat.type === 'predicate');
-            this.drawNew();
+            this.fixLayout();
+            this.rerender();
         }
     }
     myself.setCategory(hat.blockCategory || 'other');
