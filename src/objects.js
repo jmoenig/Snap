@@ -3484,6 +3484,7 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume),
         isWarped = this.isWarped;
+
     if (isWarped) {
         this.endWarp();
     }

@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2020-March-19';
+modules.maps = '2020-March-25';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -287,7 +287,10 @@ WorldMap.prototype.render = function () {
         }
     }
 
-    this.canvas = newCanvas(this.extent, true, this.canvas);
+    // create a new canvas. Note, we cannot reuse the existing canvas,
+    // because it could be queried while tiles are still rendering
+    this.canvas = newCanvas(this.extent, true);
+
     ctx = this.canvas.getContext('2d');
     for (x = 0; x < tileGrid.x; x += 1) {
         for (y = 0; y < tileGrid.y; y += 1) {
