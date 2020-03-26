@@ -5800,43 +5800,26 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 
 // ReporterBlockMorph drawing:
 
-ReporterBlockMorph.prototype.render = function (ctx) {
-    this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
-    ctx.fillStyle = this.cachedClr;
-
+ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
     if (this.isPredicate) {
-        this.drawDiamond(ctx);
+        this.outlinePathDiamond(ctx, inset);
     } else {
-        this.drawRounded(ctx);
+        this.outlinePathOval(ctx, inset);
     }
-
-    // draw location pin icon if applicable
-    if (this.hasLocationPin()) {
-        this.drawMethodIcon(ctx);
-    }
-
-    // erase CommandSlots
-    this.eraseHoles(ctx);
 };
 
-ReporterBlockMorph.prototype.drawRounded = function (ctx) {
+ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
+    // draw the 'flat' shape
     var h = this.height(),
         r = Math.min(this.rounding, h / 2),
-        w = this.width(),
-        shift = this.edge / 2,
-        gradient;
-
-    // draw the 'flat' shape:
-    ctx.fillStyle = this.cachedClr;
-    ctx.beginPath();
+        radius = Math.max(r - inset, 0),
+        w = this.width();
 
     // top left:
     ctx.arc(
         r,
         r,
-        r,
+        radius,
         radians(-180),
         radians(-90),
         false
@@ -5846,7 +5829,7 @@ ReporterBlockMorph.prototype.drawRounded = function (ctx) {
     ctx.arc(
         w - r,
         r,
-        r,
+        radius,
         radians(-90),
         radians(-0),
         false
@@ -5856,7 +5839,7 @@ ReporterBlockMorph.prototype.drawRounded = function (ctx) {
     ctx.arc(
         w - r,
         h - r,
-        r,
+        radius,
         radians(0),
         radians(90),
         false
@@ -5866,18 +5849,44 @@ ReporterBlockMorph.prototype.drawRounded = function (ctx) {
     ctx.arc(
         r,
         h - r,
-        r,
+        radius,
         radians(90),
         radians(180),
         false
     );
+};
 
-    ctx.closePath();
-    ctx.fill();
+ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
+    // draw the 'flat' shape:
+    var w = this.width(),
+        h = this.height(),
+        h2 = Math.floor(h / 2),
+        r = this.rounding;
 
-    if (MorphicPreferences.isFlat) {return; }
+    ctx.moveTo(inset, h2);
+    ctx.lineTo(r, inset);
+    ctx.lineTo(w - r, inset);
+    ctx.lineTo(w - inset, h2);
+    ctx.lineTo(w - r, h - inset);
+    ctx.lineTo(r, h - inset);
+};
 
-    // add 3D-Effect:
+ReporterBlockMorph.prototype.drawEdges = function (ctx) {
+    if (this.isPredicate) {
+        this.drawEdgesDiamond(ctx);
+    } else {
+        this.drawEdgesOval(ctx);
+    }
+};
+
+ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
+    // add 3D-Effect
+    var h = this.height(),
+        r = Math.min(this.rounding, h / 2),
+        w = this.width(),
+        shift = this.edge / 2,
+        gradient;
+
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -6026,10 +6035,10 @@ ReporterBlockMorph.prototype.drawRounded = function (ctx) {
     ctx.moveTo(w - shift, r + shift);
     ctx.lineTo(w - shift, h - r);
     ctx.stroke();
-
 };
 
-ReporterBlockMorph.prototype.drawDiamond = function (ctx) {
+ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
+    // add 3D-Effec
     var w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
@@ -6037,23 +6046,6 @@ ReporterBlockMorph.prototype.drawDiamond = function (ctx) {
         shift = this.edge / 2,
         gradient;
 
-    // draw the 'flat' shape:
-    ctx.fillStyle = this.cachedClr;
-    ctx.beginPath();
-
-    ctx.moveTo(0, h2);
-    ctx.lineTo(r, 0);
-    ctx.lineTo(w - r, 0);
-    ctx.lineTo(w, h2);
-    ctx.lineTo(w - r, h);
-    ctx.lineTo(r, h);
-
-    ctx.closePath();
-    ctx.fill();
-
-    if (MorphicPreferences.isFlat) {return; }
-
-    // add 3D-Effect:
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
