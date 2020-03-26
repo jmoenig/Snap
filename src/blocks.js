@@ -5002,15 +5002,30 @@ CommandBlockMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    ctx.fillStyle = this.cachedClr;
 
-    // draw the 'flat' shape:
-    this.drawTop(ctx);
-    this.drawBody(ctx);
-    this.drawBottom(ctx);
+    if (MorphicPreferences.isFlat) {
+        // draw the outline
+        ctx.fillStyle = this.cachedClrDark;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
 
-    // add 3D-Effect:
-    if (!MorphicPreferences.isFlat) {
+        // draw the inner filled shaped
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0.5);
+        ctx.closePath();
+        ctx.fill();
+    } else {
+        // draw the flat shape
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
+    
+        // add 3D-Effect:
         this.drawTopDentEdge(ctx, 0, 0);
         this.drawBottomDentEdge(ctx, 0, this.height() - this.corner);
         this.drawLeftEdge(ctx);
@@ -5028,86 +5043,66 @@ CommandBlockMorph.prototype.render = function (ctx) {
     // this.eraseHoles(ctx); // +++ gotta change this
 };
 
-CommandBlockMorph.prototype.drawBody = function (ctx) {
-    ctx.fillRect(
-        0,
-        Math.floor(this.corner),
-        this.width(),
-        this.height() - Math.floor(this.corner * 3) + 1
-    );
-};
-
-CommandBlockMorph.prototype.drawTop = function (ctx) {
-    ctx.beginPath();
+CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
+    var indent = this.corner * 2 + this.inset,
+        bottom = this.height() - this.corner,
+        bottomCorner = this.height() - this.corner * 2,
+        radius = Math.max(this.corner - inset, 0);
 
     // top left:
     ctx.arc(
         this.corner,
         this.corner,
-        this.corner,
+        radius,
         radians(-180),
         radians(-90),
         false
     );
 
-    // dent:
-    this.drawDent(ctx, 0, 0);
+    // top dent:
+    ctx.lineTo(this.corner + this.inset, inset);
+    ctx.lineTo(indent, this.corner + inset);
+    ctx.lineTo(indent + this.dent, this.corner + inset);
+    ctx.lineTo(this.corner * 3 + this.inset + this.dent, inset);
+    ctx.lineTo(this.width() - this.corner, inset);
 
     // top right:
     ctx.arc(
         this.width() - this.corner,
         this.corner,
-        this.corner,
+        radius,
         radians(-90),
         radians(-0),
         false
     );
 
-    ctx.closePath();
-    ctx.fill();
-};
+    // bottom right:
+    ctx.arc(
+        this.width() - this.corner,
+        bottomCorner,
+        radius,
+        radians(0),
+        radians(90),
+        false
+    );
 
-CommandBlockMorph.prototype.drawBottom = function (ctx) {
-    var y = this.height() - (this.corner * 2);
-
-    ctx.beginPath();
+    if (!this.isStop()) {
+        ctx.lineTo(this.width() - this.corner, bottom - inset);
+        ctx.lineTo(this.corner * 3 + this.inset + this.dent, bottom - inset);
+        ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
+        ctx.lineTo(indent, bottom + this.corner - inset);
+        ctx.lineTo(this.corner + this.inset, bottom - inset);
+    }
 
     // bottom left:
     ctx.arc(
         this.corner,
-        y,
-        this.corner,
+        bottomCorner,
+        radius,
+        radians(90),
         radians(180),
-        radians(90),
-        true
+        false
     );
-
-    if (!this.isStop()) {
-        this.drawDent(ctx, 0, this.height() - this.corner);
-    }
-
-    // bottom right:
-    ctx.arc(
-        this.width() - this.corner,
-        y,
-        this.corner,
-        radians(90),
-        radians(0),
-        true
-    );
-
-    ctx.closePath();
-    ctx.fill();
-};
-
-CommandBlockMorph.prototype.drawDent = function (ctx, x, y) {
-    var indent = x + this.corner * 2 + this.inset;
-
-    ctx.lineTo(x + this.corner + this.inset, y);
-    ctx.lineTo(indent, y + this.corner);
-    ctx.lineTo(indent + this.dent, y + this.corner);
-    ctx.lineTo(x + this.corner * 3 + this.inset + this.dent, y);
-    ctx.lineTo(this.width() - this.corner, y);
 };
 
 CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
