@@ -4347,7 +4347,47 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
-// BlockMorph local method indicator drawing
+// BlockMorph drawing
+
+BlockMorph.prototype.render = function (ctx) {
+    this.cachedClr = this.color.toString();
+    this.cachedClrBright = this.bright();
+    this.cachedClrDark = this.dark();
+
+    if (MorphicPreferences.isFlat) {
+        // draw the outline
+        ctx.fillStyle = this.cachedClrDark;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // draw the inner filled shaped
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0.5);
+        ctx.closePath();
+        ctx.fill();
+    } else {
+        // draw the flat shape
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
+    
+        // add 3D-Effect:
+        this.drawEdges(ctx);
+    }
+
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
+        this.drawMethodIcon(ctx);
+    }
+
+    // erase CommandSlots
+    // this.eraseHoles(ctx); // +++ gotta change this
+};
 
 BlockMorph.prototype.drawMethodIcon = function (ctx) {
     var ext = this.methodIconExtent(),
@@ -4998,51 +5038,6 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
 
 // CommandBlockMorph drawing:
 
-CommandBlockMorph.prototype.render = function (ctx) {
-    this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
-
-    if (MorphicPreferences.isFlat) {
-        // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0);
-        ctx.closePath();
-        ctx.fill();
-
-        // draw the inner filled shaped
-        ctx.fillStyle = this.cachedClr;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0.5);
-        ctx.closePath();
-        ctx.fill();
-    } else {
-        // draw the flat shape
-        ctx.fillStyle = this.cachedClr;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0);
-        ctx.closePath();
-        ctx.fill();
-    
-        // add 3D-Effect:
-        this.drawTopDentEdge(ctx, 0, 0);
-        this.drawBottomDentEdge(ctx, 0, this.height() - this.corner);
-        this.drawLeftEdge(ctx);
-        this.drawRightEdge(ctx);
-        this.drawTopLeftEdge(ctx);
-        this.drawBottomRightEdge(ctx);
-    }
-
-    // draw location pin icon if applicable
-    if (this.hasLocationPin()) {
-        this.drawMethodIcon(ctx);
-    }
-
-    // erase CommandSlots
-    // this.eraseHoles(ctx); // +++ gotta change this
-};
-
 CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
     var indent = this.corner * 2 + this.inset,
         bottom = this.height() - this.corner,
@@ -5103,6 +5098,15 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         radians(180),
         false
     );
+};
+
+CommandBlockMorph.prototype.drawEdges = function (ctx) {
+    this.drawTopDentEdge(ctx, 0, 0);
+    this.drawBottomDentEdge(ctx, 0, this.height() - this.corner);
+    this.drawLeftEdge(ctx);
+    this.drawRightEdge(ctx);
+    this.drawTopLeftEdge(ctx);
+    this.drawBottomRightEdge(ctx);
 };
 
 CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
