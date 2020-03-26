@@ -9833,15 +9833,21 @@ TemplateSlotMorph.prototype.render = function (ctx) {
     if (this.parent instanceof Morph) {
         this.color = this.parent.color.copy();
     }
-    this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
-    ctx.fillStyle = this.cachedClr;
-    this.drawRounded(ctx);
+    BlockMorph.prototype.render.call(this, ctx);
 };
 
-TemplateSlotMorph.prototype.drawRounded = ReporterBlockMorph
-    .prototype.drawRounded;
+TemplateSlotMorph.prototype.outlinePath =
+    ReporterBlockMorph.prototype.outlinePathOval;
+
+TemplateSlotMorph.prototype.outlinePath =
+    ReporterBlockMorph.prototype.outlinePathOval;
+
+TemplateSlotMorph.prototype.drawEdges = ReporterBlockMorph
+    .prototype.drawEdgesOval;
+
+TemplateSlotMorph.prototype.hasLocationPin = function () {
+    return false;
+};
 
 // TemplateSlotMorph single-stepping
 
