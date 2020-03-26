@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-23';
+modules.blocks = '2020-March-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5404,19 +5404,20 @@ HatBlockMorph.prototype.blockSequence = function () {
 
 // HatBlockMorph drawing:
 
-HatBlockMorph.prototype.drawTop = function (ctx) {
-    var s = this.hatWidth,
+HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
+    var indent = this.corner * 2 + this.inset,
+        bottom = this.height() - this.corner,
+        bottomCorner = this.height() - this.corner * 2,
+        radius = Math.max(this.corner - inset, 0),
+        s = this.hatWidth,
         h = this.hatHeight,
         r = ((4 * h * h) + (s * s)) / (8 * h),
         a = degrees(4 * Math.atan(2 * h / s)),
         sa = a / 2,
         sp = Math.min(s * 1.7, this.width() - this.corner);
 
-    ctx.beginPath();
-
-    ctx.moveTo(0, h + this.corner);
-
     // top arc:
+    ctx.moveTo(inset, h + this.corner);
     ctx.arc(
         s / 2,
         r,
@@ -5438,22 +5439,38 @@ HatBlockMorph.prototype.drawTop = function (ctx) {
     ctx.arc(
         this.width() - this.corner,
         h + this.corner,
-        this.corner,
+        radius,
         radians(-90),
         radians(-0),
         false
     );
 
-    ctx.closePath();
-    ctx.fill();
-};
+    // bottom right:
+    ctx.arc(
+        this.width() - this.corner,
+        bottomCorner,
+        radius,
+        radians(0),
+        radians(90),
+        false
+    );
 
-HatBlockMorph.prototype.drawBody = function (ctx) {
-    ctx.fillRect(
-        0,
-        this.hatHeight + Math.floor(this.corner) - 1,
-        this.width(),
-        this.height() - Math.floor(this.corner * 3) - this.hatHeight + 2
+    if (!this.isStop()) {
+        ctx.lineTo(this.width() - this.corner, bottom - inset);
+        ctx.lineTo(this.corner * 3 + this.inset + this.dent, bottom - inset);
+        ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
+        ctx.lineTo(indent, bottom + this.corner - inset);
+        ctx.lineTo(this.corner + this.inset, bottom - inset);
+    }
+
+    // bottom left:
+    ctx.arc(
+        this.corner,
+        bottomCorner,
+        radius,
+        radians(90),
+        radians(180),
+        false
     );
 };
 
@@ -5495,9 +5512,7 @@ HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     ctx.stroke();
 };
 
-HatBlockMorph.prototype.drawTopDentEdge = function () {
-    return null;
-};
+HatBlockMorph.prototype.drawTopDentEdge = nop;
 
 HatBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
     var shift = this.edge * 0.5,
