@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-26';
+modules.blocks = '2020-March-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3867,9 +3867,141 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
     ide.refreshPalette();
 };
 
+// BlockMorph thumbnail and script pic
+
+BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
+    var nb = this.nextBlock(),
+        fadeout = 12,
+        ext,
+        trgt,
+        ctx,
+        gradient;
+
+    if (nb) {nb.isVisible = false; }
+    ext = this.fullBounds().extent();
+    trgt = newCanvas(new Point(
+        clipWidth ? Math.min(ext.x * scale, clipWidth) : ext.x * scale,
+        ext.y * scale
+    ));
+    ctx = trgt.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.drawImage(this.fullImage(), 0, 0);
+    // draw fade-out
+    if (clipWidth && ext.x * scale > clipWidth) {
+        gradient = ctx.createLinearGradient(
+            trgt.width / scale - fadeout,
+            0,
+            trgt.width / scale,
+            0
+        );
+        gradient.addColorStop(0, 'transparent');
+        gradient.addColorStop(1, 'black');
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = gradient;
+        ctx.fillRect(
+            trgt.width / scale - fadeout,
+            0,
+            trgt.width / scale,
+            trgt.height / scale
+        );
+    }
+    if (nb) {nb.isVisible = true; }
+    return trgt;
+};
+
+BlockMorph.prototype.scriptPic = function () {
+    // answer a canvas image that also includes comments
+    var scr = this.fullImage(),
+        fb = this.stackFullBounds(),
+        pic = newCanvas(fb.extent()),
+        ctx = pic.getContext('2d');
+    this.allComments().forEach(function (comment) {
+        ctx.drawImage(
+            comment.fullImageClassic(),
+            comment.fullBounds().left() - fb.left(),
+            comment.top() - fb.top()
+        );
+    });
+    ctx.drawImage(scr, 0, 0);
+    return pic;
+};
+
 // BlockMorph drawing
 
-BlockMorph.prototype.eraseHoles = function (ctx) {
+BlockMorph.prototype.render = function (ctx) {
+    this.cachedClr = this.color.toString();
+    this.cachedClrBright = this.bright();
+    this.cachedClrDark = this.dark();
+
+    if (MorphicPreferences.isFlat) {
+        // draw the outline
+        ctx.fillStyle = this.cachedClrDark;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // draw the inner filled shaped
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0.5);
+        ctx.closePath();
+        ctx.fill();
+    } else {
+        // draw the flat shape
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+        ctx.closePath();
+        ctx.fill();
+    
+        // add 3D-Effect:
+        this.drawEdges(ctx);
+    }
+
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
+        this.drawMethodIcon(ctx);
+    }
+
+    // erase CommandSlots
+    // this.eraseHoles(ctx); // +++ gotta change this
+};
+
+BlockMorph.prototype.drawMethodIcon = function (ctx) {
+    var ext = this.methodIconExtent(),
+        w = ext.x,
+        h = ext.y,
+        r = w / 2,
+        x = this.edge + this.labelPadding,
+        y = this.edge,
+        isNormal =
+            this.color === SpriteMorph.prototype.blockColor[this.category];
+
+    if (this.isPredicate) {
+        x = this.rounding;
+    }
+    if (this instanceof CommandBlockMorph) {
+        y += this.corner;
+    }
+    ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+
+    // pin
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r, radians(-210), radians(30), false);
+    ctx.lineTo(x + r, y + h);
+    ctx.closePath();
+    ctx.fill();
+
+    // hole
+    ctx.fillStyle = this.cachedClr;
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
+    ctx.closePath();
+    ctx.fill();
+};
+
+BlockMorph.prototype.eraseHoles = function (ctx) { // +++ should be obsolete, to be removed
     var myself = this,
         isRing = this instanceof RingMorph,
         shift = this.edge * 0.5,
@@ -4286,140 +4418,6 @@ BlockMorph.prototype.activeProcess = function () {
         }
     }
     return null;
-};
-
-// BlockMorph thumbnail and script pic
-
-BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
-    var nb = this.nextBlock(),
-        fadeout = 12,
-        ext,
-        trgt,
-        ctx,
-        gradient;
-
-    if (nb) {nb.isVisible = false; }
-    ext = this.fullBounds().extent();
-    trgt = newCanvas(new Point(
-        clipWidth ? Math.min(ext.x * scale, clipWidth) : ext.x * scale,
-        ext.y * scale
-    ));
-    ctx = trgt.getContext('2d');
-    ctx.scale(scale, scale);
-    ctx.drawImage(this.fullImage(), 0, 0);
-    // draw fade-out
-    if (clipWidth && ext.x * scale > clipWidth) {
-        gradient = ctx.createLinearGradient(
-            trgt.width / scale - fadeout,
-            0,
-            trgt.width / scale,
-            0
-        );
-        gradient.addColorStop(0, 'transparent');
-        gradient.addColorStop(1, 'black');
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = gradient;
-        ctx.fillRect(
-            trgt.width / scale - fadeout,
-            0,
-            trgt.width / scale,
-            trgt.height / scale
-        );
-    }
-    if (nb) {nb.isVisible = true; }
-    return trgt;
-};
-
-BlockMorph.prototype.scriptPic = function () {
-    // answer a canvas image that also includes comments
-    var scr = this.fullImage(),
-        fb = this.stackFullBounds(),
-        pic = newCanvas(fb.extent()),
-        ctx = pic.getContext('2d');
-    this.allComments().forEach(function (comment) {
-        ctx.drawImage(
-            comment.fullImageClassic(),
-            comment.fullBounds().left() - fb.left(),
-            comment.top() - fb.top()
-        );
-    });
-    ctx.drawImage(scr, 0, 0);
-    return pic;
-};
-
-// BlockMorph drawing
-
-BlockMorph.prototype.render = function (ctx) {
-    this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
-
-    if (MorphicPreferences.isFlat) {
-        // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0);
-        ctx.closePath();
-        ctx.fill();
-
-        // draw the inner filled shaped
-        ctx.fillStyle = this.cachedClr;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0.5);
-        ctx.closePath();
-        ctx.fill();
-    } else {
-        // draw the flat shape
-        ctx.fillStyle = this.cachedClr;
-        ctx.beginPath();
-        this.outlinePath(ctx, 0);
-        ctx.closePath();
-        ctx.fill();
-    
-        // add 3D-Effect:
-        this.drawEdges(ctx);
-    }
-
-    // draw location pin icon if applicable
-    if (this.hasLocationPin()) {
-        this.drawMethodIcon(ctx);
-    }
-
-    // erase CommandSlots
-    // this.eraseHoles(ctx); // +++ gotta change this
-};
-
-BlockMorph.prototype.drawMethodIcon = function (ctx) {
-    var ext = this.methodIconExtent(),
-        w = ext.x,
-        h = ext.y,
-        r = w / 2,
-        x = this.edge + this.labelPadding,
-        y = this.edge,
-        isNormal =
-            this.color === SpriteMorph.prototype.blockColor[this.category];
-
-    if (this.isPredicate) {
-        x = this.rounding;
-    }
-    if (this instanceof CommandBlockMorph) {
-        y += this.corner;
-    }
-    ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
-
-    // pin
-    ctx.beginPath();
-    ctx.arc(x + r, y + r, r, radians(-210), radians(30), false);
-    ctx.lineTo(x + r, y + h);
-    ctx.closePath();
-    ctx.fill();
-
-    // hole
-    ctx.fillStyle = this.cachedClr;
-    ctx.beginPath();
-    ctx.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
-    ctx.closePath();
-    ctx.fill();
 };
 
 // BlockMorph dragging and dropping
