@@ -5069,6 +5069,12 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         false
     );
 
+    // C-Slots
+    this.parts().filter(part => part instanceof CSlotMorph).forEach(slot => {
+        var off = slot.position().subtract(this.position()); // +++ optimize
+        slot.outlinePath(ctx, inset, off);
+    });
+
     // bottom right:
     ctx.arc(
         this.width() - this.corner,
@@ -5280,7 +5286,8 @@ CommandBlockMorph.prototype.drawLeftEdge = function (ctx) {
     ctx.stroke();
 };
 
-CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
+CommandBlockMorph.prototype.drawRightEdge = function (ctx) { // +++ tweak for C-slots
+return; // +++ disabled while working on C-Slot rendering
     var shift = this.edge * 0.5,
         x = this.width(),
         gradient;
@@ -7334,7 +7341,7 @@ function ArgMorph(type) {
 ArgMorph.prototype.init = function (type) {
     this.type = type || null;
     this.icon = null;
-    this.isHole = false;
+    this.isHole = false; // +++ review and possibly remove the isHole property, because CSlots and RingSlots can no longer be treated the same. Or can they?
     ArgMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
     this.createIcon();
@@ -8164,6 +8171,7 @@ CSlotMorph.prototype.loop = function () {
 CSlotMorph.prototype.render = function (ctx) {
     // position loop symbol, if any
     this.fixLoopLayout();
+return; // +++ disabled while working on rendering
 
     // init
     this.cachedClr = this.color.toString();
@@ -8189,49 +8197,53 @@ CSlotMorph.prototype.render = function (ctx) {
     this.drawRightEdge(ctx);
 };
 
-CSlotMorph.prototype.drawFlat = function (ctx) {
-    ctx.beginPath();
+CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
+    var ox = offset.x,
+        oy = offset.y,
+        radius = Math.max(this.corner - inset, 0);
 
-    // top line:
-    ctx.moveTo(0, 0);
-    ctx.lineTo(this.width(), 0);
+    // top corner:
+    ctx.lineTo(this.width() + ox - inset, oy);
 
     // top right:
     ctx.arc(
-        this.width() - this.corner,
-        0,
-        this.corner,
+        this.width() - this.corner + ox,
+        oy,
+        radius,
         radians(90),
         radians(0),
         true
     );
 
     // jigsaw shape:
-    ctx.lineTo(this.width() - this.corner, this.corner);
     ctx.lineTo(
-        (this.inset * 2) + (this.corner * 3) + this.dent,
-        this.corner
+        this.width() - this.corner + ox, // +++++
+        this.corner + oy - inset
     );
     ctx.lineTo(
-        (this.inset * 2) + (this.corner * 2) + this.dent,
-        this.corner * 2
+        (this.inset * 2) + (this.corner * 3) + this.dent + ox,
+        this.corner + oy - inset
     );
     ctx.lineTo(
-        (this.inset * 2) + (this.corner * 2),
-        this.corner * 2
+        (this.inset * 2) + (this.corner * 2) + this.dent + ox,
+        this.corner * 2 + oy - inset
     );
     ctx.lineTo(
-        (this.inset * 2) + this.corner,
-        this.corner
+        (this.inset * 2) + (this.corner * 2) + ox,
+        this.corner * 2 + oy - inset
     );
     ctx.lineTo(
-        this.inset + this.corner,
-        this.corner
+        (this.inset * 2) + this.corner + ox,
+        this.corner + oy - inset
+    );
+    ctx.lineTo(
+        this.inset + this.corner + ox,
+        this.corner + oy - inset
     );
     ctx.arc(
-        this.inset + this.corner,
-        this.corner * 2,
-        this.corner,
+        this.inset + this.corner + ox,
+        this.corner * 2 + oy,
+        this.corner + inset,
         radians(270),
         radians(180),
         true
@@ -8239,34 +8251,29 @@ CSlotMorph.prototype.drawFlat = function (ctx) {
 
     // bottom:
     ctx.lineTo(
-        this.inset,
-        this.height() - (this.corner * 2)
+        this.inset + ox - inset,
+        this.height() - (this.corner * 2) + oy
     );
     ctx.arc(
-        this.inset + this.corner,
-        this.height() - (this.corner * 2),
-        this.corner,
+        this.inset + this.corner  + ox,
+        this.height() - (this.corner * 2) + oy,
+        this.corner + inset,
         radians(180),
         radians(90),
         true
     );
     ctx.lineTo(
-        this.width() - this.corner,
-        this.height() - this.corner
+        this.width() - this.corner + ox,
+        this.height() - this.corner + oy + inset
     );
     ctx.arc(
-        this.width() - this.corner,
-        this.height(),
-        this.corner,
+        this.width() - this.corner + ox,
+        this.height() + oy,
+        radius,
         radians(-90),
         radians(-0),
         false
     );
-    ctx.lineTo(0, this.height());
-
-    // fill:
-    ctx.closePath();
-    ctx.fill();
 };
 
 CSlotMorph.prototype.drawTopRightEdge = function (ctx) {
