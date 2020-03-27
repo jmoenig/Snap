@@ -8171,7 +8171,8 @@ CSlotMorph.prototype.loop = function () {
 CSlotMorph.prototype.render = function (ctx) {
     // position loop symbol, if any
     this.fixLoopLayout();
-return; // +++ disabled while working on rendering
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // init
     this.cachedClr = this.color.toString();
@@ -8179,17 +8180,8 @@ return; // +++ disabled while working on rendering
     this.cachedClrDark = this.dark();
     ctx.fillStyle = this.cachedClr;
 
-    // +++ draw a darker background +++ take out after implement transparent slots
-    ctx.fillStyle = this.color.darker(25).toString();
-    ctx.fillRect(0, 0, this.width(), this.height());
-    ctx.fillStyle = this.cachedClr;
-
-    // draw the 'flat' shape:
-    this.drawFlat(ctx);
-
-    if (MorphicPreferences.isFlat) {return; }
-
-    // add 3D-Effect:
+    // only add 3D-Effect here, rendering of the flat shape happens at the
+    // encompassing block level
     this.drawTopRightEdge(ctx);
     this.drawTopEdge(ctx, this.inset, this.corner);
     this.drawTopLeftEdge(ctx);
