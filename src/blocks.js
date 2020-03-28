@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-27';
+modules.blocks = '2020-March-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5040,7 +5040,9 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
     var indent = this.corner * 2 + this.inset,
         bottom = this.height() - this.corner,
         bottomCorner = this.height() - this.corner * 2,
-        radius = Math.max(this.corner - inset, 0);
+        radius = Math.max(this.corner - inset, 0),
+        pos = this.position(),
+        cslots = this.parts().filter(part => part instanceof CSlotMorph);
 
     // top left:
     ctx.arc(
@@ -5070,9 +5072,8 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
     );
 
     // C-Slots
-    this.parts().filter(part => part instanceof CSlotMorph).forEach(slot => {
-        var off = slot.position().subtract(this.position()); // +++ optimize
-        slot.outlinePath(ctx, inset, off);
+    cslots.forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
     });
 
     // bottom right:
@@ -5286,11 +5287,15 @@ CommandBlockMorph.prototype.drawLeftEdge = function (ctx) {
     ctx.stroke();
 };
 
-CommandBlockMorph.prototype.drawRightEdge = function (ctx) { // +++ tweak for C-slots
-return; // +++ disabled while working on C-Slot rendering
+CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
+        cslots = this.parts().filter(part => part instanceof CSlotMorph),
         x = this.width(),
         gradient;
+
+    if (cslots.length) {
+        return; // +++ to do: add complext right edge here
+    }
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
     gradient.addColorStop(0, this.cachedClr);
