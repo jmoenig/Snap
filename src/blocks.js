@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-28';
+modules.blocks = '2020-March-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5290,12 +5290,10 @@ CommandBlockMorph.prototype.drawLeftEdge = function (ctx) {
 CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
         cslots = this.parts().filter(part => part instanceof CSlotMorph),
+        top = this.top(),
         x = this.width(),
+        y,
         gradient;
-
-    if (cslots.length) {
-        return; // +++ to do: add complext right edge here
-    }
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
     gradient.addColorStop(0, this.cachedClr);
@@ -5304,10 +5302,22 @@ CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-
     ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(x - shift, this.corner + shift);
+
+    if (cslots.length) {
+        ctx.beginPath();
+        ctx.moveTo(x - shift, this.corner + shift);
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(x - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x - shift, y + slot.height());
+        });
+    } else {
+        ctx.beginPath();
+        ctx.moveTo(x - shift, this.corner + shift);
+    }
     ctx.lineTo(x - shift, this.height() - this.corner * 2);
     ctx.stroke();
 };
