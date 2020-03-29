@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-29';
+modules.blocks = '2020-March-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5044,7 +5044,7 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         bottomCorner = this.height() - this.corner * 2,
         radius = Math.max(this.corner - inset, 0),
         pos = this.position(),
-        cslots = this.parts().filter(part => part instanceof CSlotMorph);
+        cslots = this.cSlots();
 
     // top left:
     ctx.arc(
@@ -5105,6 +5105,22 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         radians(180),
         false
     );
+};
+
+CommandBlockMorph.prototype.cSlots = function () {
+    var result = [];
+    this.parts().forEach(part => {
+        if (part instanceof CSlotMorph) {
+            result.push(part);
+        } else if (part instanceof MultiArgMorph) {
+            part.parts().forEach(slot => {
+                if (slot instanceof CSlotMorph) {
+                    result.push(slot);
+                }
+            });
+        }
+    });
+    return result;
 };
 
 CommandBlockMorph.prototype.drawEdges = function (ctx) {
@@ -5291,7 +5307,7 @@ CommandBlockMorph.prototype.drawLeftEdge = function (ctx) {
 
 CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
-        cslots = this.parts().filter(part => part instanceof CSlotMorph),
+        cslots = this.cSlots(),
         top = this.top(),
         x = this.width(),
         y,
