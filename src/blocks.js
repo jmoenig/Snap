@@ -2015,7 +2015,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         var adjustMultiWidth = 0;
         if (part instanceof CSlotMorph || (part.slotSpec === '%cs')) {
             if (myself.isPredicate) {
-                part.setWidth(
+                part.bounds.setWidth(
                     blockWidth -
                         ico -
                         myself.rounding -
@@ -2030,7 +2030,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         }
         if (part.slotSpec === '%cs') {
             part.inputs().forEach(function (slot) {
-                slot.setWidth(part.right() - slot.left() - adjustMultiWidth);
+                slot.bounds.setWidth(
+                    part.right() - slot.left() - adjustMultiWidth
+                );
             });
         }
     });
