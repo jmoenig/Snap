@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-29';
+modules.byob = '2020-March-30';
 
 // Declarations
 
@@ -1494,9 +1494,6 @@ JaggedBlockMorph.prototype.render = function (ctx) {
     if (!MorphicPreferences.isFlat) {
         this.drawEdges(ctx);
     }
-
-    // erase holes
-    this.eraseHoles(ctx);
 };
 
 JaggedBlockMorph.prototype.drawBackground = function (ctx) {
