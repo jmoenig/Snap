@@ -111,6 +111,7 @@ NetsProcess.prototype.doSocketMessage = function (msgInfo) {
 };
 
 //request block
+NetsProcess.prototype.MESSAGE_REPLY_TIMEOUT = 1500;
 NetsProcess.prototype.doSocketRequest = function (msgInfo) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
         targetRole = arguments[arguments.length-1],
@@ -154,6 +155,7 @@ NetsProcess.prototype.doSocketRequest = function (msgInfo) {
             requestId: requestId,
             content: contents
         });
+        this.messageSentAt = Date.now();
     } else if (this.reply) {
         // request has already been made and we received the reply
         requestId = this.requestId;
@@ -162,8 +164,13 @@ NetsProcess.prototype.doSocketRequest = function (msgInfo) {
         if (this.requestId === requestId ) {
             this.requestId = null;
             this.reply = null;
+            this.messageSentAt = null;
         }
         return reply.content.body;
+    } else if (Date.now() - this.messageSentAt > this.MESSAGE_REPLY_TIMEOUT) {
+        var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        stage.rpcError = 'Timeout Exceeded';
+        return null;
     }
     this.pushContext('doYield');
     this.pushContext();
