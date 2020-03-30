@@ -5852,38 +5852,17 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
 
     ctx.moveTo(inset, h2);
     ctx.lineTo(r, inset);
-    ctx.lineTo(right, inset);
+    ctx.lineTo(right - inset, inset);
 
     if (cslots.length) {
-    // top right:
-        ctx.arc(
-            right - this.corner,
-            this.corner,
-            radius,
-            radians(-90),
-            radians(-0),
-            false
-        );
-
-        // C-Slots
         this.cSlots().forEach(slot => {
             slot.outlinePath(ctx, inset, slot.position().subtract(pos));
         });
-
-        // bottom right:
-        ctx.arc(
-            right - this.corner,
-            h - this.corner,
-            radius,
-            radians(0),
-            radians(90),
-            false
-        );
     } else {
         ctx.lineTo(w - inset, h2);
     }
 
-    ctx.lineTo(right, h - inset);
+    ctx.lineTo(right - inset, h - inset);
     ctx.lineTo(r, h - inset);
 };
 
@@ -6077,6 +6056,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         h2 = Math.floor(h / 2),
         r = this.rounding,
         shift = this.edge / 2,
+        cslots = this.cSlots(),
         gradient;
 
     ctx.lineWidth = this.edge;
@@ -6100,6 +6080,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.closePath();
     ctx.stroke();
 
+/*
     // top right corner
     gradient = ctx.createLinearGradient(
         w - r,
@@ -6115,6 +6096,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.lineTo(w - r, shift);
     ctx.closePath();
     ctx.stroke();
+*/
 
     // normal gradient edges
     // top edge: left corner
@@ -6149,6 +6131,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.closePath();
     ctx.stroke();
 
+/*
     // bottom edge: right corner
     gradient = ctx.createLinearGradient(
         w - r,
@@ -6164,6 +6147,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.lineTo(w - shift, h2);
     ctx.closePath();
     ctx.stroke();
+*/
 
     // bottom edge: straight line
     gradient = ctx.createLinearGradient(
