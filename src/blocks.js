@@ -3965,9 +3965,6 @@ BlockMorph.prototype.render = function (ctx) {
     if (this.hasLocationPin()) {
         this.drawMethodIcon(ctx);
     }
-
-    // erase CommandSlots
-    // this.eraseHoles(ctx); // +++ gotta change this
 };
 
 BlockMorph.prototype.drawMethodIcon = function (ctx) {
@@ -5002,8 +4999,7 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         bottom = this.height() - this.corner,
         bottomCorner = this.height() - this.corner * 2,
         radius = Math.max(this.corner - inset, 0),
-        pos = this.position(),
-        cslots = this.cSlots();
+        pos = this.position();
 
     // top left:
     ctx.arc(
@@ -5033,7 +5029,7 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
     );
 
     // C-Slots
-    cslots.forEach(slot => {
+    this.cSlots().forEach(slot => {
         slot.outlinePath(ctx, inset, slot.position().subtract(pos));
     });
 
@@ -5794,7 +5790,8 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
     var h = this.height(),
         r = Math.min(this.rounding, h / 2),
         radius = Math.max(r - inset, 0),
-        w = this.width();
+        w = this.width(),
+        pos = this.position();
 
     // top left:
     ctx.arc(
@@ -5815,6 +5812,11 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
         radians(-0),
         false
     );
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
 
     // bottom right:
     ctx.arc(
