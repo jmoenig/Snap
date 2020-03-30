@@ -4003,61 +4003,20 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
     ctx.fill();
 };
 
-BlockMorph.prototype.eraseHoles = function (ctx) { // +++ should be obsolete, to be removed
-    var myself = this,
-        isRing = this instanceof RingMorph,
-        shift = this.edge * 0.5,
-        gradient,
-        rightX,
-        holes = [];
-    
-    this.parts().forEach(function (part) {
-        if (part.isHole) {
-            holes.push(part);
+BlockMorph.prototype.cSlots = function () {
+    var result = [];
+    this.parts().forEach(part => {
+        if (part instanceof CSlotMorph) {
+            result.push(part);
         } else if (part instanceof MultiArgMorph) {
-            holes.push.apply(holes, part.inputs().filter(function (inp) {
-                return inp.isHole;
-            }));
+            part.parts().forEach(slot => {
+                if (slot instanceof CSlotMorph) {
+                    result.push(slot);
+                }
+            });
         }
     });
-    if (this.isPredicate && (holes.length > 0)) {
-        rightX = this.width() - this.rounding;
-        ctx.clearRect(
-            rightX,
-            0,
-            this.width(),
-            this.height()
-        );
-
-        // draw a 3D-ish vertical right edge
-        gradient = ctx.createLinearGradient(
-            rightX - this.edge,
-            0,
-            this.width(),
-            0
-        );
-        gradient.addColorStop(0, this.color.toString());
-        gradient.addColorStop(1, this.dark());
-        ctx.lineWidth = this.edge;
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = gradient;
-        ctx.beginPath();
-        ctx.moveTo(rightX - shift, this.edge + shift);
-        ctx.lineTo(rightX - shift, this.height() - this.edge - shift);
-        ctx.stroke();
-    }
-    holes.forEach(function (hole) {
-        var w = hole.width(),
-            h = Math.floor(hole.height()) - 2; // Opera needs this
-        ctx.clearRect(
-            hole.bounds.origin.x - myself.bounds.origin.x + 1,
-            hole.bounds.origin.y - myself.bounds.origin.y + 1,
-            isRing ? w - 2 : w + 1,
-            h
-        );
-    });
-
+    return result;
 };
 
 BlockMorph.prototype.hasLocationPin = function () {
@@ -5105,22 +5064,6 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         radians(180),
         false
     );
-};
-
-CommandBlockMorph.prototype.cSlots = function () {
-    var result = [];
-    this.parts().forEach(part => {
-        if (part instanceof CSlotMorph) {
-            result.push(part);
-        } else if (part instanceof MultiArgMorph) {
-            part.parts().forEach(slot => {
-                if (slot instanceof CSlotMorph) {
-                    result.push(slot);
-                }
-            });
-        }
-    });
-    return result;
 };
 
 CommandBlockMorph.prototype.drawEdges = function (ctx) {
@@ -7374,7 +7317,6 @@ function ArgMorph(type) {
 ArgMorph.prototype.init = function (type) {
     this.type = type || null;
     this.icon = null;
-    this.isHole = false; // +++ review and possibly remove the isHole property, because CSlots and RingSlots can no longer be treated the same. Or can they?
     ArgMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
     this.createIcon();
@@ -7963,7 +7905,6 @@ function RingCommandSlotMorph() {
 
 RingCommandSlotMorph.prototype.init = function () {
     RingCommandSlotMorph.uber.init.call(this);
-    this.isHole = true;
     this.noticesTransparentClick = true;
     this.color = new Color(0, 17, 173);
     this.alpha = RingMorph.prototype.alpha;
@@ -8111,7 +8052,6 @@ function CSlotMorph() {
 
 CSlotMorph.prototype.init = function () {
     CommandSlotMorph.uber.init.call(this);
-    this.isHole = true;
     this.isLambda = false; // see Process.prototype.evaluateInput
     this.isLoop = false; // has a loop arrow symbol
     this.color = new Color(0, 17, 173);
@@ -11941,7 +11881,6 @@ RingReporterSlotMorph.prototype.init = function (isPredicate) {
     RingReporterSlotMorph.uber.init.call(this, isPredicate, true);
     this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
-    this.isHole = true;
 };
 
 // RingReporterSlotMorph accessing:
