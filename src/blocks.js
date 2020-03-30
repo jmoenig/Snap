@@ -5868,6 +5868,9 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         r = Math.min(this.rounding, h / 2),
         w = this.width(),
         shift = this.edge / 2,
+        y,
+        top = this.top(),
+        cslots = this.cSlots(),
         gradient;
 
     ctx.lineWidth = this.edge;
@@ -6014,8 +6017,22 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
     gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClrDark);
     ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(w - shift, r + shift);
+
+    if (cslots.length) {
+        ctx.beginPath();
+        ctx.moveTo(w - shift, r + shift);
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(w - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w - shift, y + slot.height());
+        });
+    } else {
+        ctx.beginPath();
+        ctx.moveTo(w - shift, r + shift);
+    }
+
     ctx.lineTo(w - shift, h - r);
     ctx.stroke();
 };
