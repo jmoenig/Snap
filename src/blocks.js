@@ -5844,13 +5844,46 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
     var w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
-        r = this.rounding;
+        r = this.rounding,
+        right = w - r,
+        radius = Math.max(this.corner - inset, 0),
+        pos = this.position(),
+        cslots = this.cSlots();
 
     ctx.moveTo(inset, h2);
     ctx.lineTo(r, inset);
-    ctx.lineTo(w - r, inset);
-    ctx.lineTo(w - inset, h2);
-    ctx.lineTo(w - r, h - inset);
+    ctx.lineTo(right, inset);
+
+    if (cslots.length) {
+    // top right:
+        ctx.arc(
+            right - this.corner,
+            this.corner,
+            radius,
+            radians(-90),
+            radians(-0),
+            false
+        );
+
+        // C-Slots
+        this.cSlots().forEach(slot => {
+            slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+        });
+
+        // bottom right:
+        ctx.arc(
+            right - this.corner,
+            h - this.corner,
+            radius,
+            radians(0),
+            radians(90),
+            false
+        );
+    } else {
+        ctx.lineTo(w - inset, h2);
+    }
+
+    ctx.lineTo(right, h - inset);
     ctx.lineTo(r, h - inset);
 };
 
