@@ -9870,6 +9870,7 @@ BooleanSlotMorph.prototype.init = function (initialValue) {
     this.isUnevaluated = false;
     this.progress = 0; // for animation state, not persisted
     BooleanSlotMorph.uber.init.call(this);
+    this.fixLayout();
 };
 
 BooleanSlotMorph.prototype.getSpec = function () {
