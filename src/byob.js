@@ -1463,10 +1463,6 @@ JaggedBlockMorph.prototype = new ReporterBlockMorph();
 JaggedBlockMorph.prototype.constructor = JaggedBlockMorph;
 JaggedBlockMorph.uber = ReporterBlockMorph.prototype;
 
-// JaggedBlockMorph preferences settings:
-
-JaggedBlockMorph.prototype.jag = 5;
-
 // JaggedBlockMorph instance creation:
 
 function JaggedBlockMorph(spec) {

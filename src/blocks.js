@@ -248,6 +248,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
     this.edge = scale;
+    this.jag = 5 * scale;
     this.inset = 6 * scale;
     this.hatHeight = 12 * scale;
     this.hatWidth = 70 * scale;
