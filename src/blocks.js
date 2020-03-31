@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-30';
+modules.blocks = '2020-March-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5846,7 +5846,6 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
         h2 = Math.floor(h / 2),
         r = this.rounding,
         right = w - r,
-        radius = Math.max(this.corner - inset, 0),
         pos = this.position(),
         cslots = this.cSlots();
 
