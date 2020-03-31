@@ -2028,6 +2028,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 part.bounds.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;
             }
+            part.fixLoopLayout();
         }
         if (part.slotSpec === '%cs') {
             part.inputs().forEach(function (slot) {
@@ -2037,9 +2038,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             });
         }
     });
-
-    // redraw in order to erase CSlot backgrounds
-    // if (!silently) {this.drawNew(); } // +++ change to rerender() ?
 
     // position next block:
     if (nb) {
@@ -8177,6 +8175,7 @@ CSlotMorph.prototype.fixLayout = function () {
                 + (this.cSlotPadding * 2)
         ); // default
     }
+
     if (this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
     }
@@ -8208,9 +8207,6 @@ CSlotMorph.prototype.loop = function () {
 // CSlotMorph drawing:
 
 CSlotMorph.prototype.render = function (ctx) {
-    // position loop symbol, if any
-    this.fixLoopLayout();
-
     if (MorphicPreferences.isFlat) {return; }
 
     // init
