@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-30';
+modules.byob = '2020-March-31';
 
 // Declarations
 
@@ -1484,51 +1484,48 @@ JaggedBlockMorph.prototype.init = function (spec) {
 
 // JaggedBlockMorph drawing:
 
-JaggedBlockMorph.prototype.render = function (ctx) {
-    this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
-    ctx.fillStyle = this.cachedClr;
-
-    this.drawBackground(ctx);
-    if (!MorphicPreferences.isFlat) {
-        this.drawEdges(ctx);
-    }
-};
-
-JaggedBlockMorph.prototype.drawBackground = function (ctx) {
+JaggedBlockMorph.prototype.outlinePath = function (ctx, inset) {
     var w = this.width(),
         h = this.height(),
         jags = Math.round(h / this.jag),
         delta = h / jags,
-        i,
-        y;
+        pos = this.position(),
+        y = 0,
+        i;
 
-    ctx.fillStyle = this.cachedClr;
-    ctx.beginPath();
+    ctx.moveTo(inset, inset);
+    ctx.lineTo(w - inset, inset);
 
-    ctx.moveTo(0, 0);
-    ctx.lineTo(w, 0);
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+        y += slot.height();
+    });
 
-    y = 0;
+    h = this.height() - y - inset;
+    jags = Math.round(h / this.jag);
+    delta = h / jags;
+
+    // y = 0;
     for (i = 0; i < jags; i += 1) {
         y += delta / 2;
-        ctx.lineTo(w - this.jag / 2, y);
+        ctx.lineTo(w - this.jag / 2 - inset, y);
         y += delta / 2;
-        ctx.lineTo(w, y);
+        ctx.lineTo(w - inset, y);
     }
 
-    ctx.lineTo(0, h);
+    h = this.height() - inset;
+    jags = Math.round(h / this.jag);
+    delta = h / jags;
+
+    ctx.lineTo(inset, h - inset);
     y = h;
     for (i = 0; i < jags; i += 1) {
         y -= delta / 2;
-        ctx.lineTo(this.jag / 2, y);
+        ctx.lineTo(this.jag / 2 + inset, y);
         y -= delta / 2;
-        ctx.lineTo(0, y);
+        ctx.lineTo(inset, y);
     }
-
-    ctx.closePath();
-    ctx.fill();
 };
 
 JaggedBlockMorph.prototype.drawEdges = function (ctx) {
