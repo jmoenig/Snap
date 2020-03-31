@@ -136,7 +136,7 @@
 
 /*global Array, BoxMorph,
 Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
-Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph,
+Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph, ZERO,
 String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
@@ -4211,7 +4211,7 @@ BlockMorph.prototype.forceNormalColoring = function () {
     this.setLabelColor(
         new Color(255, 255, 255),
         clr.darker(this.labelContrast),
-        new Point(-1, -1)
+        MorphicPreferences.isFlat ? ZERO : this.embossing
     );
     this.fixChildrensBlockColor(true);
 };
