@@ -1486,9 +1486,9 @@ JaggedBlockMorph.prototype.init = function (spec) {
 
 JaggedBlockMorph.prototype.outlinePath = function (ctx, inset) {
     var w = this.width(),
-        h = this.height(),
-        jags = Math.round(h / this.jag),
-        delta = h / jags,
+        h,
+        jags,
+        delta,
         pos = this.position(),
         y = 0,
         i;
@@ -1557,15 +1557,17 @@ JaggedBlockMorph.prototype.drawEdges = function (ctx) {
     ctx.lineTo(w - shift, shift);
     ctx.stroke();
 
-    y = 0;
-    for (i = 0; i < jags; i += 1) {
-        ctx.strokeStyle = this.cachedClrDark;
-        ctx.beginPath();
-        ctx.moveTo(w - shift, y);
-        y += delta / 2;
-        ctx.lineTo(w - this.jag / 2 - shift, y);
-        ctx.stroke();
-        y += delta / 2;
+    if (!this.cSlots().length) { // omit right jagged outline for c-slots
+        y = 0;
+        for (i = 0; i < jags; i += 1) {
+            ctx.strokeStyle = this.cachedClrDark;
+            ctx.beginPath();
+            ctx.moveTo(w - shift, y);
+            y += delta / 2;
+            ctx.lineTo(w - this.jag / 2 - shift, y);
+            ctx.stroke();
+            y += delta / 2;
+        }
     }
 
     gradient = ctx.createLinearGradient(
