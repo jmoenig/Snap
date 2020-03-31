@@ -2028,7 +2028,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 part.bounds.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;
             }
-            part.fixLoopLayout();
+            if (part.fixLoopLayout) { // not a multi-arg
+                part.fixLoopLayout();
+            }
         }
         if (part.slotSpec === '%cs') {
             part.inputs().forEach(function (slot) {
