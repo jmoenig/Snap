@@ -9884,6 +9884,10 @@ TemplateSlotMorph.prototype.hasLocationPin = function () {
     return false;
 };
 
+TemplateSlotMorph.prototype.cSlots = function () {
+    return [];
+};
+
 // TemplateSlotMorph single-stepping
 
 TemplateSlotMorph.prototype.flash = function () {
