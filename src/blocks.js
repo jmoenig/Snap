@@ -6111,12 +6111,15 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r, shift);
-    ctx.lineTo(w - r, shift);
-    ctx.closePath();
-    ctx.stroke();
 
     // right edge
-    if (cslots.length) { // ++++
+    if (cslots.length) {
+        // end of top edge
+        ctx.lineTo(w - r - shift, shift);
+        ctx.closePath();
+        ctx.stroke();
+
+        // right vertical edge
         gradient = ctx.createLinearGradient(w - r - this.edge, 0, w - r, 0);
         gradient.addColorStop(0, this.cachedClr);
         gradient.addColorStop(1, this.cachedClrDark);
@@ -6126,21 +6129,24 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         ctx.lineCap = 'round';
         ctx.strokeStyle = gradient;
 
-        ctx.strokeStyle = "red";
-
         ctx.beginPath();
-        ctx.moveTo(w - r, shift);
+        ctx.moveTo(w - r - shift, this.edge + shift);
         cslots.forEach(slot => {
             y = slot.top() - top;
-            ctx.lineTo(w - r, y);
+            ctx.lineTo(w - r - shift, y);
             ctx.stroke();
             ctx.beginPath();
-            ctx.moveTo(w - r, y + slot.height());
+            ctx.moveTo(w - r - shift, y + slot.height());
         });
-        ctx.lineTo(w - r, h - shift);
+        ctx.lineTo(w - r - shift, h - shift);
         ctx.stroke();
     } else {
-        // top right corner
+        // end of top edge
+        ctx.lineTo(w - r, shift);
+        ctx.closePath();
+        ctx.stroke();
+
+        // top diagonal slope right
         gradient = ctx.createLinearGradient(
             w - r,
             0,
@@ -6156,7 +6162,7 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         ctx.closePath();
         ctx.stroke();
 
-        // bottom edge: right corner
+        // bottom diagonal slope right
         gradient = ctx.createLinearGradient(
             w - r,
             0,
