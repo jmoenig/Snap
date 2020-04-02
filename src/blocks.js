@@ -248,6 +248,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
     this.edge = scale;
+    this.flatEdge = 0.25 * scale;
     this.jag = 5 * scale;
     this.inset = 6 * scale;
     this.hatHeight = 12 * scale;
@@ -3947,7 +3948,7 @@ BlockMorph.prototype.render = function (ctx) {
         // draw the inner filled shaped
         ctx.fillStyle = this.cachedClr;
         ctx.beginPath();
-        this.outlinePath(ctx, 0.5);
+        this.outlinePath(ctx, this.flatEdge);
         ctx.closePath();
         ctx.fill();
     } else {
@@ -6261,7 +6262,7 @@ RingMorph.prototype.render = function (ctx) {
         // draw the outline
         ctx.fillStyle = this.cachedClr;
         ctx.beginPath();
-        this.outlinePath(ctx, 0.5);
+        this.outlinePath(ctx, this.flatEdge);
 
         // render the hole:
         slot.outlinePath(ctx, slot.position().subtract(pos));
