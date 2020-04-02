@@ -6235,7 +6235,7 @@ RingMorph.prototype.init = function () {
 
 // RingMorph drawing
 
-RingMorph.prototype.render = function (ctx) { // ++++
+RingMorph.prototype.render = function (ctx) {
     var slot = this.inputs()[0],
         pos = this.position();
 
@@ -8123,7 +8123,7 @@ RingCommandSlotMorph.prototype.outlinePath = function (ctx, offset) {
     // close the path, so we can clip it:
     ctx.lineTo(
         this.corner + edge + ox - this.corner, // this needs to be adjusted
-        this.corner + edge + oy,
+        this.corner + edge + oy
     );
 
 };
@@ -12088,9 +12088,7 @@ RingReporterSlotMorph.prototype.outlinePathOval = function (ctx, offset) {
         oy = offset.y,
         w = this.width(),
         h = this.height(),
-        shift = this.edge / 2,
-        r = Math.min(this.rounding, h / 2),
-        gradient;
+        r = Math.min(this.rounding, h / 2);
 
     // top left:
     ctx.arc(
@@ -12289,9 +12287,7 @@ RingReporterSlotMorph.prototype.outlinePathDiamond = function (ctx, offset) {
         w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
-        r = Math.min(this.rounding, h2),
-        shift = this.edge / 2,
-        gradient;
+        r = Math.min(this.rounding, h2);
 
     ctx.moveTo(ox + this.edge, h2 + oy);
     ctx.lineTo(r + this.edge + ox, this.edge + oy);
