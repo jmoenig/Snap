@@ -4467,14 +4467,16 @@ BlockMorph.prototype.situation = function () {
 
 // BlockMorph sticky comments
 
-BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
+BlockMorph.prototype.prepareToBeGrabbed = function (hand, allAtOnce) {
     var myself = this;
     this.allInputs().forEach(function (input) {
         delete input.bindingID;
     });
-    this.allComments().forEach(function (comment) {
-        comment.startFollowing(myself, hand.world);
-    });
+    if (!allAtOnce) {
+        this.allComments().forEach(function (comment) {
+            comment.startFollowing(myself, hand.world);
+        });
+    }
 };
 
 BlockMorph.prototype.justDropped = function () {
@@ -4914,7 +4916,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
     }
 };
 
-CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
+CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph, allAtOnce) {
     var oldPos = this.position();
 
     nop(handMorph);
@@ -4922,7 +4924,7 @@ CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
         this.parent.revertToDefaultInput(this);
         this.setPosition(oldPos);
     }
-    CommandBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
+    CommandBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph, allAtOnce);
 };
 
 CommandBlockMorph.prototype.isStop = function () {
@@ -4963,7 +4965,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
         scripts.dropRecord.action = 'delete';
     }
 
-    this.prepareToBeGrabbed(); // fix outer ring reporter slot
+    this.prepareToBeGrabbed(this.world().hand, true); // fix outer ring reporter slot and/or sticky comments
 
     if (ide) {
         // also stop all active processes hatted by this block
@@ -5007,7 +5009,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         above = pb;
     } else if (cs && (cs.nestedBlock() === this)) {
         above = cs;
-        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
+        this.prepareToBeGrabbed(this.world().hand, true); // restore ring reporter slot and/or sticky comments
     }
     if (ide) {
         // also stop all active processes hatted by this block
@@ -13003,7 +13005,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {
             this.lastElement();
-            current.prepareToBeGrabbed();
+            current.prepareToBeGrabbed(this.world().hand, true);
             current.destroy();
         }
     } else if (current instanceof CommandBlockMorph) {
