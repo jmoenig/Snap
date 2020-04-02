@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-March-31';
+modules.blocks = '2020-April-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5838,6 +5838,8 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
         radians(180),
         false
     );
+
+    ctx.lineTo(r - radius, r); // close the path so we can clip it for rings
 };
 
 ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
@@ -6229,6 +6231,61 @@ RingMorph.prototype.init = function () {
     this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
     this.setExtent(new Point(200, 80));
+};
+
+// RingMorph drawing
+
+RingMorph.prototype.render = function (ctx) { // ++++
+    var slot = this.inputs()[0],
+        pos = this.position();
+
+    this.cachedClr = this.color.toString();
+    this.cachedClrBright = this.bright();
+    this.cachedClrDark = this.dark();
+
+    if (MorphicPreferences.isFlat) {
+        // draw the outer filled shape
+        // draw the outline
+        ctx.fillStyle = this.cachedClrDark;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+
+        // render the hole:
+        slot.outlinePath(ctx, slot.position().subtract(pos));
+
+        // ctx.closePath();
+        ctx.clip('evenodd');
+        ctx.fillRect(0, 0, this.width(), this.height());
+
+        // draw the inner filled shaped
+        // draw the outline
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0.5);
+
+        // render the hole:
+        slot.outlinePath(ctx, slot.position().subtract(pos));
+
+        // ctx.closePath();
+        ctx.clip('evenodd');
+        ctx.fillRect(0, 0, this.width(), this.height());
+    } else {
+        // draw the flat shape
+        // draw the outline
+        ctx.fillStyle = this.cachedClr;
+        ctx.beginPath();
+        this.outlinePath(ctx, 0);
+
+        // render the hole:
+        slot.outlinePath(ctx, slot.position().subtract(pos));
+
+        // ctx.closePath();
+        ctx.clip('evenodd');
+        ctx.fillRect(0, 0, this.width(), this.height());
+    
+        // add 3D-Effect:
+        this.drawEdges(ctx);
+    }
 };
 
 // RingMorph dragging and dropping
@@ -7984,22 +8041,23 @@ RingCommandSlotMorph.prototype.getSpec = function () {
 // RingCommandSlotMorph drawing:
 
 RingCommandSlotMorph.prototype.render = function (ctx) {
+    if (MorphicPreferences.isFlat) {return; }
+
+    // init
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
     ctx.fillStyle = this.cachedClr;
 
-    // draw the 'flat' shape:
-    this.drawFlat(ctx);
-
-    if (MorphicPreferences.isFlat) {return; }
-
-    // add 3D-Effect:
+    // only add 3D-Effect here, rendering of the flat shape happens at the
+    // encompassing block level
     this.drawEdges(ctx);
 };
 
-RingCommandSlotMorph.prototype.drawFlat = function (ctx) {
-    var isFilled = this.nestedBlock() !== null,
+RingCommandSlotMorph.prototype.outlinePath = function (ctx, offset) {
+    var ox = offset.x,
+        oy = offset.y,
+        isFilled = this.nestedBlock() !== null,
         ins = (isFilled ? this.inset : this.inset / 2),
         dent = (isFilled ? this.dent : this.dent / 2),
         indent = this.corner * 2 + ins,
@@ -8009,16 +8067,10 @@ RingCommandSlotMorph.prototype.drawFlat = function (ctx) {
         rf = (isFilled ? this.rfBorder : 0),
         y = h - this.corner - edge;
 
-    // top half:
-
-    ctx.beginPath();
-    ctx.moveTo(0, h / 2);
-    ctx.lineTo(edge, h / 2);
-
     // top left:
     ctx.arc(
-        this.corner + edge,
-        this.corner + edge,
+        this.corner + edge + ox,
+        this.corner + edge + oy,
         this.corner,
         radians(-180),
         radians(-90),
@@ -8026,44 +8078,32 @@ RingCommandSlotMorph.prototype.drawFlat = function (ctx) {
     );
 
     // dent:
-    ctx.lineTo(this.corner + ins + edge + rf * 2, edge);
-    ctx.lineTo(indent + edge + rf * 2, this.corner + edge);
+    ctx.lineTo(this.corner + ins + edge + rf * 2 + ox, edge + oy);
+    ctx.lineTo(indent + edge + rf * 2 + ox, this.corner + edge + oy);
     ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
-        this.corner + edge
+        indent + edge  + rf * 2 + (dent - rf * 2) + ox,
+        this.corner + edge + oy
     );
     ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
-        edge
+        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner + ox,
+        edge + oy
     );
-    ctx.lineTo(this.width() - this.corner - edge, edge);
+    ctx.lineTo(this.width() - this.corner - edge + ox, edge + oy);
 
     // top right:
     ctx.arc(
-        w - this.corner - edge,
-        this.corner + edge,
+        w - this.corner - edge + ox,
+        this.corner + edge + oy,
         this.corner,
         radians(-90),
         radians(-0),
         false
     );
 
-    ctx.lineTo(w - this.edge, h / 2);
-    ctx.lineTo(w, h / 2);
-    ctx.lineTo(w, 0);
-    ctx.lineTo(0, 0);
-    ctx.closePath();
-    ctx.fill();
-
-    // bottom half:
-    ctx.beginPath();
-    ctx.moveTo(w, h / 2);
-    ctx.lineTo(w - edge, h / 2);
-
     // bottom right:
     ctx.arc(
-        this.width() - this.corner - edge,
-        y,
+        this.width() - this.corner - edge + ox,
+        y + oy,
         this.corner,
         radians(0),
         radians(90),
@@ -8072,20 +8112,19 @@ RingCommandSlotMorph.prototype.drawFlat = function (ctx) {
 
     // bottom left:
     ctx.arc(
-        this.corner + edge,
-        y,
+        this.corner + edge + ox,
+        y + oy,
         this.corner,
         radians(90),
         radians(180),
         false
     );
 
-    ctx.lineTo(edge, h / 2);
-    ctx.lineTo(0, h / 2);
-    ctx.lineTo(0, h);
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fill();
+    // close the path, so we can clip it:
+    ctx.lineTo(
+        this.corner + edge + ox - this.corner, // this needs to be adjusted
+        this.corner + edge + oy,
+    );
 
 };
 
@@ -8246,7 +8285,7 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
 
     // jigsaw shape:
     ctx.lineTo(
-        this.width() - this.corner + ox, // +++++
+        this.width() - this.corner + ox,
         this.corner + oy - inset
     );
     ctx.lineTo(
@@ -12018,24 +12057,45 @@ RingReporterSlotMorph.prototype.fixLayout = function () {
 
 // RingReporterSlotMorph drawing:
 
-RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
-    var h = this.height(),
-        r = Math.min(this.rounding, h / 2),
+RingReporterSlotMorph.prototype.render = function (ctx) {
+    if (MorphicPreferences.isFlat) {return; }
+
+    // init
+    this.cachedClr = this.color.toString();
+    this.cachedClrBright = this.bright();
+    this.cachedClrDark = this.dark();
+    ctx.fillStyle = this.cachedClr;
+
+    // only add 3D-Effect here, rendering of the flat shape happens at the
+    // encompassing block level
+    if (this.isPredicate) {
+        this.drawEdgesDiamond(ctx);
+    } else {
+        this.drawEdgesOval(ctx);
+    }
+};
+
+RingReporterSlotMorph.prototype.outlinePath = function (ctx, offset) {
+    if (this.isPredicate) {
+        this.outlinePathDiamond(ctx, offset);
+    } else {
+        this.outlinePathOval(ctx, offset);
+    }
+};
+
+RingReporterSlotMorph.prototype.outlinePathOval = function (ctx, offset) {
+    var ox = offset.x,
+        oy = offset.y,
         w = this.width(),
+        h = this.height(),
         shift = this.edge / 2,
+        r = Math.min(this.rounding, h / 2),
         gradient;
-
-    // draw the 'flat' shape:
-    ctx.fillStyle = this.cachedClr; //this.color.toString();
-
-    // top half:
-    ctx.beginPath();
-    ctx.moveTo(0, h / 2);
 
     // top left:
     ctx.arc(
-        r,
-        r,
+        r + this.edge + ox,
+        r + this.edge + oy,
         r,
         radians(-180),
         radians(-90),
@@ -12044,28 +12104,18 @@ RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
 
     // top right:
     ctx.arc(
-        w - r,
-        r,
+        w - r - this.edge + ox,
+        r + this.edge + oy,
         r,
         radians(-90),
         radians(-0),
         false
     );
 
-    ctx.lineTo(w, h / 2);
-    ctx.lineTo(w, 0);
-    ctx.lineTo(0, 0);
-    ctx.closePath();
-    ctx.fill();
-
-    // bottom half:
-    ctx.beginPath();
-    ctx.moveTo(w, h / 2);
-
     // bottom right:
     ctx.arc(
-        w - r,
-        h - r,
+        w - r - this.edge + ox,
+        h - r - this.edge + oy,
         r,
         radians(0),
         radians(90),
@@ -12074,21 +12124,25 @@ RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
 
     // bottom left:
     ctx.arc(
-        r,
-        h - r,
+        r + this.edge + ox,
+        h - r - this.edge + oy,
         r,
         radians(90),
         radians(180),
         false
     );
 
-    ctx.lineTo(0, h / 2);
-    ctx.lineTo(0, h);
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fill();
+    // "close" the path
+    ctx.lineTo(this.edge + ox, r + this.edge + oy);
+};
 
-    if (MorphicPreferences.isFlat) {return; }
+RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
+    var h = this.height(),
+        r = Math.min(this.rounding, h / 2),
+        w = this.width(),
+        shift = this.edge / 2,
+        gradient;
+
 
     // add 3D-Effect:
     ctx.lineWidth = this.edge;
@@ -12101,7 +12155,7 @@ RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
     ctx.arc(
         r,
         h - r,
-        r - shift,
+        r - this.edge, // +++ shift,
         radians(90),
         radians(180),
         false
@@ -12114,7 +12168,7 @@ RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
     ctx.arc(
         w - r,
         r,
-        r - shift,
+        r - shift, // this.edge, // +++ shift,
         radians(-90),
         radians(0),
         false
@@ -12229,39 +12283,32 @@ RingReporterSlotMorph.prototype.drawRounded = function (ctx) {
     ctx.stroke();
 };
 
-RingReporterSlotMorph.prototype.drawDiamond = function (ctx) {
-    var w = this.width(),
+RingReporterSlotMorph.prototype.outlinePathDiamond = function (ctx, offset) {
+    var ox = offset.x,
+        oy = offset.y,
+        w = this.width(),
         h = this.height(),
         h2 = Math.floor(h / 2),
         r = Math.min(this.rounding, h2),
         shift = this.edge / 2,
         gradient;
 
-    // draw the 'flat' shape:
-    ctx.fillStyle = this.cachedClr;
-    ctx.beginPath();
+    ctx.moveTo(ox + this.edge, h2 + oy);
+    ctx.lineTo(r + this.edge + ox, this.edge + oy);
+    ctx.lineTo(w - r - this.edge + ox, this.edge + oy);
+    ctx.lineTo(w - this.edge + ox, h2 + oy);
+    ctx.lineTo(w - r - this.edge + ox, h - this.edge + oy);
+    ctx.lineTo(r + this.edge + ox, h - this.edge + oy);
+    ctx.lineTo(ox + this.edge, h2 + oy);
+};
 
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, h2);
-    ctx.lineTo(r, 0);
-    ctx.lineTo(w - r, 0);
-    ctx.lineTo(w, h2);
-    ctx.lineTo(w, 0);
-
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.moveTo(w, h2);
-    ctx.lineTo(w - r, h);
-    ctx.lineTo(r, h);
-    ctx.lineTo(0, h2);
-    ctx.lineTo(0, h);
-    ctx.lineTo(w, h);
-
-    ctx.closePath();
-    ctx.fill();
-
-    if (MorphicPreferences.isFlat) {return; }
+RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
+    var w = this.width(),
+        h = this.height(),
+        h2 = Math.floor(h / 2),
+        r = Math.min(this.rounding, h2),
+        shift = this.edge / 2,
+        gradient;
 
     // add 3D-Effect:
     ctx.lineWidth = this.edge;
