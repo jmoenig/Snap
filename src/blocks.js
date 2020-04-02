@@ -847,14 +847,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%cmdRing':
             part = new RingMorph();
-            // ++++ part.color = SpriteMorph.prototype.blockColor.other;
+            part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyScript';
             part.setSpec('%rc %ringparms');
             part.isDraggable = true;
             break;
         case '%repRing':
             part = new RingMorph();
-            // ++++part.color = SpriteMorph.prototype.blockColor.other;
+            part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyReporter';
             part.setSpec('%rr %ringparms');
             part.isDraggable = true;
@@ -862,7 +862,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%predRing':
             part = new RingMorph(true);
-            // ++++ part.color = SpriteMorph.prototype.blockColor.other;
+            part.color = SpriteMorph.prototype.blockColor.other;
             part.selector = 'reifyPredicate';
             part.setSpec('%rp %ringparms');
             part.isDraggable = true;
@@ -6772,13 +6772,13 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
 
 ScriptsMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
-        ide = null, // ++++ ide = this.parentThatIsA(IDE_Morph),
+        ide = this.parentThatIsA(IDE_Morph),
         shiftClicked = this.world().currentKey === 16,
         blockEditor,
         myself = this,
-        obj = null, // ++++ obj = this.scriptTarget(),
+        obj = this.scriptTarget(),
         hasUndropQueue,
-        stage = null; // ++++ stage = obj.parentThatIsA(StageMorph);
+        stage = obj.parentThatIsA(StageMorph);
 
     function addOption(label, toggle, test, onHint, offHint) {
         var on = '\u2611 ',
@@ -6790,14 +6790,13 @@ ScriptsMorph.prototype.userMenu = function () {
         );
     }
 
-/*
     if (!ide) {
         blockEditor = this.parentThatIsA(BlockEditorMorph);
         if (blockEditor) {
             ide = blockEditor.target.parentThatIsA(IDE_Morph);
         }
     }
-*/
+
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
@@ -7662,7 +7661,7 @@ CommandSlotMorph.prototype.fixLayout = function () {
                 this.top() + this.edge + this.rfBorder
             )
         );
-        this.bounds.setWidth(nb.fullBounds().width() // +++ already changed
+        this.bounds.setWidth(nb.fullBounds().width()
             + (this.edge + this.rfBorder) * 2
             );
         this.bounds.setHeight(nb.fullBounds().height()
@@ -11513,15 +11512,6 @@ FunctionSlotMorph.prototype.init = function (isPredicate) {
     FunctionSlotMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
     this.color = this.rfColor;
-    /* // +++
-    this.setExtent(
-        new Point(
-            (this.fontSize + this.edge * 2) * 2,
-            this.fontSize + this.edge * 2
-        ),
-        silently
-    );
-    */
 };
 
 FunctionSlotMorph.prototype.getSpec = function () {
@@ -12149,12 +12139,12 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
     ctx.lineCap = 'round';
 
     // bottom left corner
-    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.strokeStyle = this.cachedClr;
     ctx.beginPath();
     ctx.arc(
         r,
         h - r,
-        r - this.edge, // +++ shift,
+        r - shift,
         radians(90),
         radians(180),
         false
@@ -12162,12 +12152,12 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
     ctx.stroke();
 
     // top right corner
-    ctx.strokeStyle = this.cachedClr; //gradient;
+    ctx.strokeStyle = this.cachedClr;
     ctx.beginPath();
     ctx.arc(
         w - r,
         r,
-        r - shift, // this.edge, // +++ shift,
+        r - shift,
         radians(-90),
         radians(0),
         false
