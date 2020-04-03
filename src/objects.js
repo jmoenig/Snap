@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-March-25';
+modules.objects = '2020-April-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -3192,13 +3192,12 @@ SpriteMorph.prototype.searchBlocks = function (
     searchPane.color = myself.paletteColor;
     searchPane.contents.color = myself.paletteColor;
     searchPane.addContents(searchBar);
-    searchBar.drawNew();
     searchBar.setWidth(ide.logo.width() - 30);
     searchBar.contrast = 90;
     searchBar.setPosition(
         searchPane.contents.topLeft().add(new Point(10, 10))
     );
-    searchBar.drawNew();
+    searchBar.fixLayout();
 
     searchPane.accept = function () {
         var search;
