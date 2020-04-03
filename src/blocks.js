@@ -11135,11 +11135,16 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
 
 MultiArgMorph.prototype.fixHolesLayout = function () {
     var pos;
+    this.holes = [];
     if (this.slotSpec === '%cs') {
         pos = this.position();
-        this.holes = this.inputs().map(slot => {
-            slot.fixHolesLayout();
-            return slot.holes[0].translateBy(slot.position().subtract(pos));
+        this.inputs().forEach(slot => {
+            if (slot instanceof CSlotMorph) {
+                slot.fixHolesLayout();
+                this.holes.push(
+                    slot.holes[0].translateBy(slot.position().subtract(pos))
+                );
+            }
         });
     }
 };
