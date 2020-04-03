@@ -140,7 +140,7 @@ Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph, ZERO,
 String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
-fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
+fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-02';
+modules.blocks = '2020-April-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1803,6 +1803,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     var nb,
         parts = this.parts(),
         myself = this,
+        pos = this.position(),
         x = 0,
         y,
         lineHeight = 0,
@@ -2012,7 +2013,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     this.bounds.setWidth(blockWidth);
     this.bounds.setHeight(blockHeight);
 
-    // adjust CSlots
+    // adjust CSlots and collect holes
+    this.holes = [];
     parts.forEach(function (part) {
         var adjustMultiWidth = 0;
         if (part instanceof CSlotMorph || (part.slotSpec === '%cs')) {
@@ -2029,17 +2031,24 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 part.bounds.setWidth(blockWidth - myself.edge - ico);
                 adjustMultiWidth = myself.corner + myself.edge;
             }
-            if (part.fixLoopLayout) { // not a multi-arg
+            if (part.fixLoopLayout) {
                 part.fixLoopLayout();
             }
         }
-        if (part.slotSpec === '%cs') {
+        if (part.slotSpec === '%cs') { // a multi-arg
             part.inputs().forEach(function (slot) {
                 slot.bounds.setWidth(
                     part.right() - slot.left() - adjustMultiWidth
                 );
             });
         }
+        part.fixHolesLayout();
+        myself.holes.push.apply(
+            myself.holes,
+            part.holes.map(
+                hole => hole.translateBy(part.position().subtract(pos))
+            )
+        );
     });
 
     // position next block:
@@ -8214,7 +8223,7 @@ CSlotMorph.prototype.fixLayout = function () {
                 + (this.inset * 2)
                 + this.dent
                 + (this.cSlotPadding * 2)
-        ); // default
+        );
     }
 
     if (this.parent && this.parent.fixLayout) {
@@ -8243,6 +8252,17 @@ CSlotMorph.prototype.loop = function () {
         );
     }
     return null;
+};
+
+CSlotMorph.prototype.fixHolesLayout = function () {
+    this.holes = [
+        new Rectangle(
+            this.inset,
+            this.corner,
+            this.width(),
+            this.height() - this.corner
+        )
+    ];
 };
 
 // CSlotMorph drawing:
@@ -11111,6 +11131,17 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         arrows.bounds.corner = rightArrow.bottomRight().copy();
     }
     arrows.rerender();
+};
+
+MultiArgMorph.prototype.fixHolesLayout = function () {
+    var pos;
+    if (this.slotSpec === '%cs') {
+        pos = this.position();
+        this.holes = this.inputs().map(slot => {
+            slot.fixHolesLayout();
+            return slot.holes[0].translateBy(slot.position().subtract(pos));
+        });
+    }
 };
 
 MultiArgMorph.prototype.refresh = function () {

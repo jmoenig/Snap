@@ -40,6 +40,7 @@
      * shouldRerender flag (default: false)
      * fixLayout() determines extent and arranges submorphs, if any, gets called
        from setExtent()
+     * fixHolesLayout
 
      "silent" - functions are no longer needed:
 
@@ -1178,7 +1179,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-March-25';
+var morphicVersion = '2020-April-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3394,6 +3395,13 @@ Morph.prototype.fixLayout = function () {
     return;
 };
 
+Morph.prototype.fixHolesLayout = function () {
+    // implemented by my heirs
+    // determine my extent and arrange my submorphs, if any
+    // default is to do nothing
+    return;
+};
+
 // Morph displaying:
 
 Morph.prototype.renderTexture = function (url, ctx) {
@@ -3457,7 +3465,7 @@ Morph.prototype.drawOn = function (ctx, rect) {
         this.render(ctx);
         if (MorphicPreferences.showHoles) { // debug hole rendering
             ctx.translate(-pos.x, -pos.y);
-            ctx.globalAlpha = 0.5;
+            ctx.globalAlpha = 0.25;
             ctx.fillStyle = 'white';
             this.holes.forEach(hole => {
                 var sect = hole.translateBy(pos).intersect(clipped);
