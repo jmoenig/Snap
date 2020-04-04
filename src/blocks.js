@@ -8634,7 +8634,6 @@ InputSlotMorph.prototype.init = function (
 
     contents.fontSize = this.fontSize;
     contents.isShowingBlanks = true;
-    contents.fixLayout();
 
 	this.selectedBlock = null;
 
