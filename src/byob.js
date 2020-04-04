@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-March-31';
+modules.byob = '2020-April-04';
 
 // Declarations
 
@@ -2026,6 +2026,10 @@ BlockDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh a shallow shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 BlockDialogMorph.prototype.accept = function () {
@@ -2442,6 +2446,10 @@ BlockEditorMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh a shallow shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // PrototypeHatBlockMorph /////////////////////////////////////////////
@@ -3245,6 +3253,10 @@ InputSlotDialogMorph.prototype.fixLayout = function () {
     // set dialog box dimensions:
     this.bounds.setHeight(this.buttons.bottom() - this.top() + this.padding);
     this.bounds.setWidth(this.slots.right() - this.left() + this.padding);
+
+    // refresh a shallow shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 InputSlotDialogMorph.prototype.open = function (
@@ -3871,6 +3883,10 @@ VariableDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh a shallow shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // BlockExportDialogMorph ////////////////////////////////////////////////////
