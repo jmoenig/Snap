@@ -9313,7 +9313,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     contents.isEditable = (!this.isReadOnly);
     if (this.isReadOnly) {
         contents.disableSelecting();
-        contents.color = new Color(254, 254, 254);
+        contents.color = new Color(255, 255, 255);
     } else {
         contents.enableSelecting();
         contents.color = new Color(0, 0, 0);
