@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-March-23';
+modules.gui = '2020-April-04';
 
 // Declarations
 
@@ -547,7 +547,7 @@ IDE_Morph.prototype.openIn = function (world) {
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
-    this.loadNewProject = false;
+        this.loadNewProject = false;
     }
 
     if (this.userLanguage) {
@@ -556,7 +556,7 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         interpretUrlAnchors.call(this);
     }
-
+    world.keyboardFocus = this.stage;
     this.warnAboutIE();
 };
 
