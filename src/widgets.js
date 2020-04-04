@@ -2113,7 +2113,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         function indicate(morph, string) {
             var bubble = new SpeechBubbleMorph(localize(string));
             bubble.isPointingRight = false;
-            bubble.drawNew();
+            bubble.fixLayout(); // +++ was: bubble.drawNew();
             bubble.popUp(
                 world,
                 morph.leftCenter().subtract(new Point(bubble.width() + 2, 0))
@@ -2206,8 +2206,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
                     'E-mail address of parent or guardian:'
                         : 'E-mail address:';
             emlLabel.text = localize(emlLabel.text);
-            emlLabel.drawNew();
-            emlLabel.changed();
+            eml.fixLayout(); // +++ was: emlLabel.drawNew();
+            eml.rerender(); // +++ was: emlLabel.changed();
         }
     };
 
@@ -2276,7 +2276,7 @@ DialogBoxMorph.prototype.popUp = function (world) {
             }
         }
         world.add(this);
-        world.keyboardReceiver = this;
+        world.keyboardFocus = this;
         this.setCenter(world.center());
         this.edit();
     }
@@ -2313,13 +2313,13 @@ DialogBoxMorph.prototype.getInput = function () {
 };
 
 DialogBoxMorph.prototype.justDropped = function (hand) {
-    hand.world.keyboardReceiver = this;
+    hand.world.keyboardFocus = this;
     this.edit();
 };
 
 DialogBoxMorph.prototype.destroy = function () {
     var world = this.world();
-    world.keyboardReceiver = null;
+    world.keyboardFocus = null;
     world.hand.destroyTemporaries();
     DialogBoxMorph.uber.destroy.call(this);
 };
@@ -3339,7 +3339,7 @@ PianoMenuMorph.prototype.select = function(aPianoKeyItem) {
     this.unselectAllItems();
     aPianoKeyItem.mouseEnter();
     this.selection = aPianoKeyItem;
-    this.world.keyboardReceiver = this;
+    this.world.keyboardFocus = this;
     this.hasFocus = true;
 };
 

@@ -1675,7 +1675,7 @@ BlockDialogMorph.prototype.openForChange = function (
     this.scopes.destroy();
     this.scopes = null;
     this.fixLayout();
-    this.drawNew();
+    this.rerender();
     this.popUp(world);
 };
 
