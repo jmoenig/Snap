@@ -1179,7 +1179,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-April-03';
+var morphicVersion = '2020-April-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8282,6 +8282,7 @@ MenuMorph.prototype.leaveSubmenu = function () {
         menu.hasFocus = true;
         this.destroy();
         menu.world.keyboardFocus = menu;
+        menu.world.activeMenu = menu;
     }
 };
 
@@ -8297,6 +8298,7 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardFocus = null;
     }
+    this.world.activeMenu = null;
     MenuMorph.uber.destroy.call(this);
 };
 

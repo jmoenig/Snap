@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-March-16';
+modules.store = '2020-April-04';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1683,7 +1683,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //  watcher.onNextStep = function () {this.currentValue = null;};
     //})
 
-    ide.world().keyboardReceiver = project.stage;
+    ide.world().keyboardFocus = project.stage;
 };
 
 // SnapSerializer XML-representation of objects:
