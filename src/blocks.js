@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-03';
+modules.blocks = '2020-April-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6500,8 +6500,8 @@ ScriptsMorph.prototype.step = function () {
         this.feedbackMorph.destroy();
         this.feedbackMorph.parent = null;
     }
-    if (this.focus && (!world.keyboardReceiver ||
-            world.keyboardReceiver instanceof StageMorph)) {
+    if (this.focus && (!world.keyboardFocus ||
+            world.keyboardFocus instanceof StageMorph)) {
         this.focus.getFocus(world);
     }
     if (hand.children.length === 0) {
@@ -12890,10 +12890,10 @@ ScriptFocusMorph.prototype.init = function (
 
 ScriptFocusMorph.prototype.getFocus = function (world) {
     if (!world) {world = this.world(); }
-    if (world && world.keyboardReceiver !== this) {
+    if (world && world.keyboardFocus !== this) {
         world.stopEditing();
     }
-    world.keyboardReceiver = this;
+    world.keyboardFocus = this;
     this.fixLayout();
     this.editor.updateToolbar();
 };
@@ -13187,7 +13187,7 @@ ScriptFocusMorph.prototype.insertVariableGetter = function () {
 ScriptFocusMorph.prototype.stopEditing = function () {
     this.editor.focus = null;
     this.editor.updateToolbar();
-    this.world().keyboardReceiver = null;
+    this.world().keyboardFocus = null;
     this.destroy();
 };
 
