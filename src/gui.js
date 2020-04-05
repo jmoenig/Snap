@@ -9937,24 +9937,18 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
         'record',
         new SymbolMorph('circleSolid', 10)
     );
-    this.recordButton.drawNew();
-    this.recordButton.fixLayout();
 
     this.stopButton = new PushButtonMorph(
         this,
         'stop',
         new SymbolMorph('rectangleSolid', 10)
     );
-    this.stopButton.drawNew();
-    this.stopButton.fixLayout();
 
     this.playButton = new PushButtonMorph(
         this,
         'play',
         new SymbolMorph('pointRight', 10)
     );
-    this.playButton.drawNew();
-    this.playButton.fixLayout();
 
     this.buildProgressBar();
 
@@ -9999,7 +9993,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     this.fixLayout();
-    this.drawNew();
+    this.rerender();
 };
 
 SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
