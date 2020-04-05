@@ -8842,8 +8842,8 @@ TurtleIconMorph.prototype.userMenu = function () {
         function () {
             myself.object.penPoint = 'tip';
             myself.object.changed();
-            myself.object.drawNew();
-            myself.object.changed();
+            myself.object.fixLayout();
+            myself.object.rerender();
         }
     );
     menu.addItem(
@@ -8853,8 +8853,8 @@ TurtleIconMorph.prototype.userMenu = function () {
         function () {
             myself.object.penPoint = 'middle';
             myself.object.changed();
-            myself.object.drawNew();
-            myself.object.changed();
+            myself.object.fixLayout();
+            myself.object.rerender();
         }
     );
     return menu;
