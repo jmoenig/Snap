@@ -2154,7 +2154,7 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner,
             this.corner
         );
-        world.keyboardReceiver = null;
+        world.keyboardFocus = null;
     }
 };
 
@@ -2824,8 +2824,7 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
                 myself.text = tuple.join('-');
                 myself.fragment.labelString = myself.text;
                 myself.parent.parent.changed();
-                myself.drawNew();
-                myself.changed();
+                myself.fixLayout();
                 myself.parent.parent.fixLayout();
                 myself.parent.parent.changed();
             },
