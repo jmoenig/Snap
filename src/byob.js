@@ -99,7 +99,7 @@
 StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
-StringMorph, nop, newCanvas, radians, BoxMorph, ArrowMorph, PushButtonMorph,
+StringMorph, nop, radians, BoxMorph, ArrowMorph, PushButtonMorph,
 contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
 ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
 SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-04';
+modules.byob = '2020-April-05';
 
 // Declarations
 
@@ -977,7 +977,7 @@ CustomCommandBlockMorph.prototype.placeHolder = function () {
     part = new BlockLabelPlaceHolderMorph();
     part.fontSize = this.fontSize * 1.4;
     part.color = new Color(45, 45, 45);
-    part.drawNew();
+    part.fixLayout();
     return part;
 };
 
@@ -2879,73 +2879,22 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
 
 // BlockLabelPlaceHolderMorph drawing
 
-BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
-    var context, width, x, y, cx, cy;
-
+BlockLabelPlaceHolderMorph.prototype.fixLayout = function () {
     // set my text contents depending on the "plainLabel" flag
     if (this.plainLabel) {
         this.text = this.isHighlighted ? ' + ' : '';
     }
 
-    // initialize my surface property
-    this.image = newCanvas();
-    context = this.image.getContext('2d');
-    context.font = this.font();
-
-    // set my extent
-    width = Math.max(
-        context.measureText(this.text).width
-            + Math.abs(this.shadowOffset.x),
-        1
-    );
+    // determine my extent
+    this.measureCtx.font = this.font();
     this.bounds.corner = this.bounds.origin.add(
         new Point(
-            width,
-            fontHeight(this.fontSize) + Math.abs(this.shadowOffset.y)
+            this.measureCtx.measureText(this.text).width,
+            fontHeight(this.fontSize)
         )
     );
-    this.image.width = width;
-    this.image.height = this.height();
 
-    // draw background, if any
-    if (this.isHighlighted) {
-        cx = Math.floor(width / 2);
-        cy = Math.floor(this.height() / 2);
-        context.fillStyle = this.color.toString();
-        context.beginPath();
-        context.arc(
-            cx,
-            cy * 1.2,
-            Math.min(cx, cy),
-            radians(0),
-            radians(360),
-            false
-        );
-        context.closePath();
-        context.fill();
-    }
-
-    // prepare context for drawing text
-    context.font = this.font();
-    context.textAlign = 'left';
-    context.textBaseline = 'bottom';
-
-    // first draw the shadow, if any
-    if (this.shadowColor) {
-        x = Math.max(this.shadowOffset.x, 0);
-        y = Math.max(this.shadowOffset.y, 0);
-        context.fillStyle = this.shadowColor.toString();
-        context.fillText(this.text, x, fontHeight(this.fontSize) + y);
-    }
-
-    // now draw the actual text
-    x = Math.abs(Math.min(this.shadowOffset.x, 0));
-    y = Math.abs(Math.min(this.shadowOffset.y, 0));
-    context.fillStyle = this.isHighlighted ?
-            'white' : this.color.toString();
-    context.fillText(this.text, x, fontHeight(this.fontSize) + y);
-
-    // notify my parent of layout change
+    // notify my parent of layout change - move to fixLayout()
     if (this.parent) {
         if (this.parent.fixLayout) {
             this.parent.fixLayout();
@@ -2956,6 +2905,37 @@ BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
     }
 };
 
+BlockLabelPlaceHolderMorph.prototype.render = function (ctx) {
+    var cx, cy;
+
+    // draw background, if any
+    if (this.isHighlighted) {
+        cx = this.width() / 2;
+        cy = this.height() / 2;
+        ctx.fillStyle = this.color.toString();
+        ctx.beginPath();
+        ctx.arc(
+            cx,
+            cy * 1.2,
+            Math.min(cx, cy),
+            radians(0),
+            radians(360),
+            false
+        );
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // prepare context for drawing text
+    ctx.font = this.font();
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+
+    // now draw the actual text
+    ctx.fillStyle = this.isHighlighted ? 'white' : this.color.toString();
+    ctx.fillText(this.text, 0, fontHeight(this.fontSize));
+};
+
 // BlockLabelPlaceHolderMorph events:
 
 BlockLabelPlaceHolderMorph.prototype.mouseEnter = function () {
@@ -2963,11 +2943,11 @@ BlockLabelPlaceHolderMorph.prototype.mouseEnter = function () {
     this.isHighlighted = true;
     if (this.plainLabel && hat) {
         hat.changed();
-        this.drawNew();
+        this.fixLayout();
         hat.changed();
     } else {
-        this.drawNew();
-        this.changed();
+        this.fixLayout();
+        this.rerender();
     }
 };
 
@@ -2976,11 +2956,11 @@ BlockLabelPlaceHolderMorph.prototype.mouseLeave = function () {
     this.isHighlighted = false;
     if (this.plainLabel && hat) {
         hat.changed();
-        this.drawNew();
+        this.fixLayout();
         hat.changed();
     } else {
-        this.drawNew();
-        this.changed();
+        this.fixLayout();
+        this.rerender();
     }
 };
 
