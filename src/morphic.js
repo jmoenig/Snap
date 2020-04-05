@@ -1179,7 +1179,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-April-04';
+var morphicVersion = '2020-April-05';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8874,7 +8874,12 @@ StringMorph.prototype.shiftClick = function (pos) {
 };
 
 StringMorph.prototype.mouseClickLeft = function (pos) {
-    var cursor;
+    var cursor,
+        slot,
+        clickedText,
+        startMark,
+        endMark;
+
     if (this.isEditable) {
         if (!this.currentlySelecting) {
             this.edit(); // creates a new cursor
@@ -8885,26 +8890,19 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         }
         this.currentlySelecting = true;
     } else if (this.enableLinks) {
-        var slot = this.slotAt(pos),
-            clickedText,
-            startMark,
-            endMark;
-
+        slot = this.slotAt(pos);
         if (slot === this.text.length) {
             slot -= 1;
         }
-
         startMark = slot;
         while (startMark > 1 && isURLChar(this.text[startMark-1])) {
             startMark -= 1;
         }
-
         endMark = slot;
         while (endMark < this.text.length - 1 &&
                 isURLChar(this.text[endMark + 1])) {
             endMark += 1;
         }
-
         clickedText = this.text.substring(startMark, endMark + 1);
         if (isURL(clickedText)) {
             window.open(clickedText, '_blank');
@@ -11869,14 +11867,16 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     );
 };
 
-WorldMorph.prototype.resetKeyboardHandler = function () {
+WorldMorph.prototype.resetKeyboardHandler = function (keepValue) {
     var pos = getDocumentPositionOf(this.worldCanvas);
 
     function number2px (n) {
         return Math.ceil(n) + 'px';
     }
 
-    this.keyboardHandler.value = '';
+    if (!keepValue) {
+        this.keyboardHandler.value = '';
+    }
     this.keyboardHandler.style.top = number2px(pos.y);
     this.keyboardHandler.style.left = number2px(pos.x);
 };
@@ -11895,7 +11895,7 @@ WorldMorph.prototype.initEventListeners = function () {
         event => {
             event.preventDefault();
             this.keyboardHandler.world = this; // focus the current world
-            this.resetKeyboardHandler();
+            this.resetKeyboardHandler(true); // keep the handler's value
             if (!this.onNextStep) {
                 // horrible kludge to keep Safari from popping up
                 // a overlay when right-clicking out of a focused
