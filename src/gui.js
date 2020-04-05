@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-04';
+modules.gui = '2020-April-05';
 
 // Declarations
 
@@ -9755,6 +9755,7 @@ CamSnapshotDialogMorph.prototype.init = function (
     this.accept = onAccept;
     this.videoElement = null; // an HTML5 video element
     this.videoView = new Morph(); // a morph where we'll copy the video contents
+    this.videoView.isCachingImage = true;
 
     CamSnapshotDialogMorph.uber.init.call(this);
     this.labelString = 'Camera';
@@ -9796,15 +9797,14 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     }
 
     this.videoView.setExtent(stage.dimensions);
-    this.videoView.image = newCanvas(
+    this.videoView.cachedImage = newCanvas(
         stage.dimensions,
         true, // retina, maybe overkill here
-        this.videoView.image
+        this.videoView.cachedImage
     );
 
-    this.videoView.drawOn = function (aCanvas) {
-        var context = aCanvas.getContext('2d'),
-            videoWidth = myself.videoElement.videoWidth,
+    this.videoView.drawOn = function (ctx, rect) {
+        var videoWidth = myself.videoElement.videoWidth,
             videoHeight = myself.videoElement.videoHeight,
             w = stage.dimensions.x,
             h = stage.dimensions.y,
@@ -9812,11 +9812,11 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
         if (!videoWidth) { return; }
 
-        context.save();
+        ctx.save();
 
         // Flip the image so it looks like a mirror
-        context.translate(w, 0);
-        context.scale(-1, 1);
+        ctx.translate(w, 0);
+        ctx.scale(-1, 1);
 
         if (videoWidth / w > videoHeight / h) {
             // preserve height, crop width
@@ -9828,7 +9828,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             clippingHeight = h * (videoWidth / w);
         }
 
-        context.drawImage(
+        ctx.drawImage(
             myself.videoElement,
             0,
             0,
@@ -9840,7 +9840,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             h
             );
 
-        context.restore();
+        ctx.restore();
     };
 
     this.videoView.step = function () {
@@ -9855,13 +9855,13 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     this.fixLayout();
-    this.drawNew();
+    this.rerender();
 };
 
 CamSnapshotDialogMorph.prototype.ok = function () {
     this.accept(
         new Costume(
-            this.videoView.fullImageClassic(),
+            this.videoView.fullImage(),
             this.sprite.newCostumeName('camera')
         ).flipped()
     );
