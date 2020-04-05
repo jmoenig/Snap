@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-04';
+modules.blocks = '2020-April-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8709,6 +8709,9 @@ InputSlotMorph.prototype.setContents = function (data) {
         cnts.text = '';
     } else if (dta.toString) {
         cnts.text = dta.toString();
+    }
+    if (this.isReadOnly) {
+        cnts.shadowOffset = new Point(1, 1); // correct initial dimensions
     }
     cnts.fixLayout();
 
