@@ -8710,7 +8710,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta.toString) {
         cnts.text = dta.toString();
     }
-    if (this.isReadOnly) {
+    if (this.isReadOnly && !MorphicPreferences.isFlat) {
         cnts.shadowOffset = new Point(1, 1); // correct initial dimensions
     }
     cnts.fixLayout();
