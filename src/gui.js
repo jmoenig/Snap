@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-05';
+modules.gui = '2020-April-06';
 
 // Declarations
 
@@ -2243,7 +2243,6 @@ IDE_Morph.prototype.toggleRetina = function () {
     this.world().fillPage();
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     this.stage.clearPenTrails();
-    this.drawNew();
     this.refreshIDE();
 };
 
@@ -3046,7 +3045,8 @@ IDE_Morph.prototype.settingsMenu = function () {
             'toggleRetina',
             isRetinaEnabled(),
             'uncheck for lower resolution,\nsaves computing resources',
-            'check for higher resolution,\nuses more computing resources'
+            'check for higher resolution,\nuses more computing resources',
+            true
         );
     }
     addPreference(
