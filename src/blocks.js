@@ -6959,7 +6959,7 @@ ScriptsMorph.prototype.scriptsPicture = function () {
         var pos = child.fullBounds().origin;
         if (child.isVisible) {
             ctx.drawImage(
-                child.fullImageClassic(),
+                child.fullImage(),
                 pos.x - boundingBox.origin.x,
                 pos.y - boundingBox.origin.y
             );
