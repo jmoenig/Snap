@@ -7378,7 +7378,7 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
         canvas = stage.trailsCanvas;
         costume = new Costume(canvas, data).copy(); // prevent mutation
     } else if (imgSource[0] === "stage image") {
-        canvas = stage.fullImageClassic();
+        canvas = stage.fullImage();
         costume = new Costume(canvas, data);
     }
     this.addCostume(costume);
@@ -8817,7 +8817,7 @@ StageMorph.prototype.userMenu = function () {
         "pic...",
         function () {
             ide.saveCanvasAs(
-                myself.fullImageClassic(),
+                myself.fullImage(),
                 myself.name
             );
         },
