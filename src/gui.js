@@ -4305,7 +4305,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
                 if (listMorph instanceof ListWatcherMorph) {
                     listMorph.expand();
                 }
-                img = addImage(watcher.fullImageClassic(), li);
+                img = addImage(watcher.fullImage(), li);
                 img.attributes.class = 'script';
             });
         }
@@ -4342,7 +4342,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
                             var defImg = addImage(
                                 script instanceof BlockMorph ?
                                         script.scriptPic()
-                                                : script.fullImageClassic(),
+                                                : script.fullImage(),
                                 li
                             );
                             defImg.attributes.class = 'script';
@@ -4500,7 +4500,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
             scripts.forEach(function (script) {
                 var img = addImage(script instanceof BlockMorph ?
                         script.scriptPic()
-                                : script.fullImageClassic());
+                                : script.fullImage());
                 img.attributes.class = 'script';
             });
         }
