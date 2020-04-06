@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2019-06-25',
+        '2020-04-06',
 
     // GUI
     // control bar:
@@ -353,6 +353,8 @@ SnapTranslator.dict.pt = {
         'Hmm…',
     '%img of costume %cst':
         '%img do traje %cst',
+    'new costume %l width %dim height %dim':
+        'um novo traje com %l de largura %dim e altura %dim',
     'stretch %cst x: %n y: %n %':
         'o traje %cst escalado de (x: %n % , y: %n % )',
     'change %eff effect by %n':
@@ -415,6 +417,8 @@ SnapTranslator.dict.pt = {
         'o número de amostras',
     'number of channels':
         'o número de canais',
+    'new sound %l rate %rate Hz':
+        'um novo som com %l e frequência %rate Hz',
     'play note %note for %n beats':
         'toca a nota %note durante %n tempos',
     'set instrument to %inst':
@@ -485,6 +489,10 @@ SnapTranslator.dict.pt = {
         'enche o palco',
     'write %s size %n':
         'escreve %s com tamanho %n',
+    'paste on %spr':
+        'carimba-te em %spr',
+    'pen vectors':
+        'os vectores da caneta',
 
     // controlo:
     'when %greenflag clicked':
@@ -613,6 +621,8 @@ SnapTranslator.dict.pt = {
         'a distância',
     '%asp at %loc' :
         '%asp em %loc',
+    'r-g-b-a':
+        'os valores de R, G, B e Alpha',
     'sprites' :
         'os actores',
     'reset timer':
@@ -697,6 +707,8 @@ SnapTranslator.dict.pt = {
         'altura da pilha',
     'frames':
         'molduras',
+    'log pen vectors':
+        'registo de vectores da caneta',
 
     // operadores:
     '%n mod %n':
@@ -807,6 +819,10 @@ SnapTranslator.dict.pt = {
         'para cada %upvar de %l , repete %cla',
     'item':
         'o item',
+    'value':
+        'o valor',
+    'index':
+        'o índice',
     'add %s to %l':
         'acrescenta %s a %l',
     'delete %ida of %l':
@@ -960,6 +976,8 @@ SnapTranslator.dict.pt = {
         'Recuperar palavra-passe…',
     'Resend Verification Email...':
         'Reenviar Mensagem de Verificação…',
+    'Open in Community Site':
+        'Abrir na Comunidade Snap!',
 
     // menu de preferências
     'Language...':
@@ -1096,6 +1114,13 @@ SnapTranslator.dict.pt = {
         'Ranhuras booleanas ternárias',
     'Inheritance support':
         'Suporte para herança',
+    'Log pen vectors':
+        'Registar vectores da caneta',
+    'uncheck to turn off\nlogging pen vectors':
+        'Desassinalar para desactivar\no registo de vectores da caneta',
+    'check to turn on\nlogging pen vectors':
+        'Assinalar para activar\no registo de vectores da caneta',
+
 
     // entradas
     'with inputs':
@@ -1198,6 +1223,12 @@ SnapTranslator.dict.pt = {
         'fotografia…',
     'open a new window\nwith a picture of the stage':
         'Abrir uma nova janela com\numa fotografia do palco.',
+    'svg...':
+        'exportar SVG…',
+    'export pen trails\nline segments as SVG':
+        'exportar os traços da\ncaneta no formato SVG',
+    'there are currently no\nvectorizable pen trail segments':
+        'de momento não há traços\nda caneta vectorizáveis',
     'turn all pen trails and stamps\ninto a new background for the stage':
         'Transforma todos os traços da caneta e\ncarimbagens num novo cenário do palco.',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
@@ -1737,6 +1768,8 @@ SnapTranslator.dict.pt = {
     // mensagens
     'new...':
         'Nova…',
+    '__shout__go__':
+        'bandeira verde clicada',
 
     // funções matemáticas
     'abs':
@@ -1806,7 +1839,7 @@ SnapTranslator.dict.pt = {
     'any':
         'um item ao acaso',
 
-    // attributes
+    // attributos
     'my':
         'próprios',
     'neighbors':
@@ -1859,6 +1892,14 @@ SnapTranslator.dict.pt = {
         'a largura',
     'height':
         'a altura',
+    'left':
+        'a coordenada x da esquerda',
+    'right':
+        'a coordenada x da direita',
+    'top':
+        'a coordenada y da topo',
+    'bottom':
+        'a coordenada y da base',
 
     // herança
     'inherited':
