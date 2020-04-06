@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-05';
+modules.blocks = '2020-April-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3930,7 +3930,7 @@ BlockMorph.prototype.scriptPic = function () {
         ctx = pic.getContext('2d');
     this.allComments().forEach(function (comment) {
         ctx.drawImage(
-            comment.fullImageClassic(),
+            comment.fullImage(),
             comment.fullBounds().left() - fb.left(),
             comment.top() - fb.top()
         );
