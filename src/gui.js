@@ -4021,11 +4021,10 @@ IDE_Morph.prototype.editProjectNotes = function () {
     frame.fontSize = InputFieldMorph.prototype.fontSize;
     frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.render = InputFieldMorph.prototype.render;
     frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     frame.addContents(text);
-    text.drawNew();
 
     dialog.getInput = function () {
         return text.text;
@@ -4044,11 +4043,9 @@ IDE_Morph.prototype.editProjectNotes = function () {
     dialog.labelString = 'Project Notes';
     dialog.createLabel();
     dialog.addBody(frame);
-    frame.drawNew();
     dialog.addButton('ok', 'OK');
     dialog.addButton('cancel', 'Cancel');
     dialog.fixLayout();
-    dialog.drawNew();
     dialog.popUp(world);
     dialog.setCenter(world.center());
     text.edit();
