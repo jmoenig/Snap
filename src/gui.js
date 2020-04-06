@@ -8218,7 +8218,7 @@ SpriteIconMorph.prototype.userMenu = function () {
             function () {
                 var ide = myself.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
-                    myself.object.fullImageClassic(),
+                    myself.object.fullImage(),
                     this.object.name
                 );
             },
