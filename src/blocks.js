@@ -2262,7 +2262,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
                 IDE_Morph
             ),
         scr = this.fullImage(),
-        bub = aBubble.fullImageClassic(),
+        bub = aBubble.fullImage(),
         taller = Math.max(0, bub.height - scr.height),
         pic = newCanvas(new Point(
             scr.width + bub.width + 2,
@@ -3395,7 +3395,7 @@ BlockMorph.prototype.mapToHeader = function () {
         help,
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImageClassic();
+    pic = block.fullImage();
     if (this.isCustomBlock) {
         help = 'Enter code that corresponds to the block\'s definition. ' +
             'Use the formal parameter\nnames as shown and <body> to ' +
@@ -3433,7 +3433,7 @@ BlockMorph.prototype.mapToCode = function () {
         myself = this,
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImageClassic();
+    pic = block.fullImage();
     new DialogBoxMorph(
         this,
         function (code) {
@@ -12644,7 +12644,7 @@ CommentMorph.prototype.userMenu = function () {
         function () {
             var ide = myself.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
-                myself.fullImageClassic(),
+                myself.fullImage(),
                 (ide.projectName || localize('untitled')) + ' ' +
                     localize('comment pic')
             );
