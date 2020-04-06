@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-03';
+modules.objects = '2020-April-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -11185,7 +11185,7 @@ CellMorph.prototype.drawShadow = function (context, radius, inset) {
 
 // CellMorph editing (inside list watchers):
 
-CellMorph.prototype.layoutChanged = function () {
+CellMorph.prototype.layoutChanged = function () { // ++++ find out what's calling this, should be redundant
     var context,
         fontSize = SyntaxElementMorph.prototype.fontSize,
         listWatcher = this.parentThatIsA(ListWatcherMorph);
