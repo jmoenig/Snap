@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-05';
+modules.byob = '2020-April-07';
 
 // Declarations
 
@@ -609,7 +609,7 @@ CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
     });
 };
 
-CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) {
+CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) { // +++ check silently
     var def = aDefinition || this.definition,
         newSpec = this.isPrototype ?
                 def.spec : def.localizedSpec(),
@@ -633,7 +633,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) {
         } else {
             this.fixBlockColor();
         }
-        this.setSpec(newSpec, silently, def);
+        this.setSpec(newSpec, silently, def); // +++ check silently
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
@@ -675,7 +675,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph &&
                 (!(inp instanceof TemplateSlotMorph))) {
-            myself.silentReplaceInput(inp, old.fullCopy());
+            myself.replaceInput(inp, old.fullCopy());
         } else if (old instanceof InputSlotMorph
                 && inp instanceof InputSlotMorph) {
             if (old.isEmptySlot()) {
@@ -760,14 +760,14 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
             hat.type === 'predicate',
             true
         );
-        hat.silentReplaceInput(this, myself);
+        hat.replaceInput(this, myself);
     } else if (this instanceof CustomReporterBlockMorph) {
         if (hat.type === 'command') {
             myself = new CustomCommandBlockMorph(
                 this.definition,
                 true
             );
-            hat.silentReplaceInput(this, myself);
+            hat.replaceInput(this, myself);
         } else {
             this.isPredicate = (hat.type === 'predicate');
             this.fixLayout();
