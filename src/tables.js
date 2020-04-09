@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-March-18';
+modules.tables = '2020-April-09';
 
 var Table;
 var TableCellMorph;
@@ -274,7 +274,19 @@ TableCellMorph.uber = Morph.prototype;
 
 // TableCellMorph global setting:
 
-TableCellMorph.prototype.listSymbol = new SymbolMorph('list', 30).getImage();
+TableCellMorph.prototype.cachedListSymbol = null;
+
+TableCellMorph.prototype.listSymbol = function () {
+    if (!this.cachedListSymbol || this.cachedListSymbol.height() !==
+            SyntaxElementMorph.prototype.fontSize) {
+        this.cachedListSymbol = new SymbolMorph(
+            'list',
+            SyntaxElementMorph.prototype.fontSize,
+            SpriteMorph.prototype.blockColor.lists
+        );
+    }
+    return this.cachedListSymbol.getImage();
+};
 
 // TableCellMorph instance creation:
 
@@ -394,10 +406,11 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Costume) {
         return dta.thumbnail(new Point(40, 40));
     } else if (dta instanceof Sound) {
-        return new SymbolMorph('notes', 30).getImage();
+        return new SymbolMorph(
+            'notes', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
     } else if (dta instanceof List) {
-        return this.listSymbol;
-        // return new ListWatcherMorph(dta).fullImageClassic();
+        return this.listSymbol();
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }
