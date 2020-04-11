@@ -1079,7 +1079,11 @@ TableMorph.prototype.showListView = function () {
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
         view.changed();
-        view.drawNew(true);
+        view.contentsMorph.destroy();
+        view.contentsMorph = new ListWatcherMorph(this.table);
+        view.contentsMorph.step = view.contents.update;
+        view.contentsMorph.expand(this.extent());
+        view.parent.positionTalkBubble();
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new ListWatcherMorph(this.table);
         view.contents.step = view.contents.update;
@@ -1089,6 +1093,7 @@ TableMorph.prototype.showListView = function () {
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();
+    view.rerender();
 };
 
 // TableMorph updating:

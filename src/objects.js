@@ -9466,9 +9466,8 @@ SpriteBubbleMorph.prototype.init = function (
 
 // SpriteBubbleMorph contents formatting
 
-SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
-    var toggle = false, // +++ former argument governing whether a list is shown as table view or list view
-        contents,
+SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
+    var contents,
         isTable,
         sprite = SpriteMorph.prototype,
         isText,
@@ -9607,15 +9606,14 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 
 // SpriteBubbleMorph layout:
 
-SpriteBubbleMorph.prototype.fixLayout = function () {
-    var sprite = SpriteMorph.prototype,
-        toggle; // ++++ old parameter used to switch from table to list view, to be replaced
+SpriteBubbleMorph.prototype.fixLayout = function (toggle) { // +++ get rid of "toggle"
+    var sprite = SpriteMorph.prototype;
 
-    // rebuild my contents
+    // rebuild my contents - why? +++
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
         this.contentsMorph.destroy();
-        this.contentsMorph = this.dataAsMorph(this.data);
+        this.contentsMorph = this.dataAsMorph(this.data, toggle); // +++ get rid of "toggle"
     }
     this.add(this.contentsMorph);
 

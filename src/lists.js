@@ -950,8 +950,10 @@ ListWatcherMorph.prototype.showTableView = function () {
     );
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
-        view.changed();
-        view.drawNew(true);
+        view.contentsMorph.destroy();
+        view.contentsMorph = new TableFrameMorph(new TableMorph(this.list, 10));
+        view.contentsMorph.expand(this.extent());
+        view.parent.positionTalkBubble();
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new TableFrameMorph(new TableMorph(this.list, 10));
         view.contents.expand(this.extent());
@@ -960,6 +962,7 @@ ListWatcherMorph.prototype.showTableView = function () {
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();
+    view.rerender();
 };
 
 // ListWatcherMorph events:
