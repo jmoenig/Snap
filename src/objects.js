@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-06';
+modules.objects = '2020-April-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -4384,18 +4384,12 @@ SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
 SpriteMorph.prototype.doStamp = function () {
     var stage = this.parent,
         ctx = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped, // +++ should be obsolete
         img = this.getImage();
 
     if (img.width < 1 || (img.height < 1)) {
         // too small to draw
         return;
     }
-    /* +++
-    if (isWarped) { // t+++ his should be obsolete and removable
-        this.endWarp();
-    }
-    */
     ctx.save();
     ctx.scale(1 / stage.scale, 1 / stage.scale);
     ctx.globalAlpha = this.alpha;
@@ -4406,13 +4400,6 @@ SpriteMorph.prototype.doStamp = function () {
     );
     ctx.restore();
     this.changed();
-
-    /* +++
-    if (isWarped) { // +++ this should be obsolete
-        this.startWarp();
-    }
-    */
-    
     stage.cachedPenTrailsMorph = null;
 };
 
@@ -9466,9 +9453,8 @@ SpriteBubbleMorph.prototype.init = function (
 
 // SpriteBubbleMorph contents formatting
 
-SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
+SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     var contents,
-        isTable,
         sprite = SpriteMorph.prototype,
         isText,
         img,
@@ -9528,13 +9514,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
     } else if (data instanceof List) {
-        if (toggle && this.contentsMorph) {
-            isTable = (this.contentsMorph instanceof ListWatcherMorph);
-        } else {
-            isTable = data.isTable();
-        }
-
-        if (isTable) { // (!toggle && data.isTable()) {
+        if (data.isTable()) {
             contents = new TableFrameMorph(new TableMorph(data, 10));
             if (this.stage) {
                 contents.expand(this.stage.extent().translateBy(
@@ -9606,14 +9586,14 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 
 // SpriteBubbleMorph layout:
 
-SpriteBubbleMorph.prototype.fixLayout = function (toggle) { // +++ get rid of "toggle"
+SpriteBubbleMorph.prototype.fixLayout = function () {
     var sprite = SpriteMorph.prototype;
 
-    // rebuild my contents - why? +++
+    // rebuild my contents
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
         this.contentsMorph.destroy();
-        this.contentsMorph = this.dataAsMorph(this.data, toggle); // +++ get rid of "toggle"
+        this.contentsMorph = this.dataAsMorph(this.data);
     }
     this.add(this.contentsMorph);
 
@@ -10842,14 +10822,13 @@ CellMorph.prototype.fixLayout = function (justMe) {
 
 CellMorph.prototype.createContents = function () {
     // re-build my contents
-    var type, toggle, // +++ old parameters, not sure if they're ever used and how
-       txt,
-       img,
-       fontSize = SyntaxElementMorph.prototype.fontSize,
-       isSameList = this.contentsMorph instanceof ListWatcherMorph
-               && (this.contentsMorph.list === this.contents),
-       isSameTable = this.contentsMorph instanceof TableFrameMorph
-               && (this.contentsMorph.tableMorph.table === this.contents);
+    var txt,
+        img,
+        fontSize = SyntaxElementMorph.prototype.fontSize,
+        isSameList = this.contentsMorph instanceof ListWatcherMorph
+            && (this.contentsMorph.list === this.contents),
+        isSameTable = this.contentsMorph instanceof TableFrameMorph
+            && (this.contentsMorph.tableMorph.table === this.contents);
 
     // +++ to do: combine both tests into a single exit condition
 
@@ -10921,7 +10900,7 @@ CellMorph.prototype.createContents = function () {
         } else if (this.contents instanceof Sound) {
             this.contentsMorph = new SymbolMorph('notes', 30);
         } else if (this.contents instanceof List) {
-            if ('table' === type || (!toggle && this.contents.isTable())) {
+            if (this.contents.isTable()) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(
                     this.contents,
                     10
@@ -10973,146 +10952,17 @@ CellMorph.prototype.update = function () {
         return;
     }
     if (this.version !== this.contents.version) {
-        this.rerender(); // +++ ??
+        this.rerender();
         this.version = this.contents.version;
     }
 };
 
-CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
-    var toggle, type, // +++ old parameters, not sure if they're ever used
-        txt,
-        img,
-        fontSize = SyntaxElementMorph.prototype.fontSize,
-        isSameList = this.contentsMorph instanceof ListWatcherMorph
-                && (this.contentsMorph.list === this.contents),
-        isSameTable = this.contentsMorph instanceof TableFrameMorph
-                && (this.contentsMorph.tableMorph.table === this.contents);
+CellMorph.prototype.render = function (ctx) {
+    var fontSize = SyntaxElementMorph.prototype.fontSize;
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
     }
-
-/* // +++
-    // re-build my contents
-    // +++ all of this should definitely be moved to fixLayout() or to update()
-    if (toggle || (this.contentsMorph && !isSameList && !isSameTable)) {
-        this.contentsMorph.destroy();
-        this.version = null;
-    }
-
-    if (toggle || (!isSameList && !isSameTable)) {
-        if (this.contents instanceof Morph) {
-            if (isSnapObject(this.contents)) {
-                img = this.contents.thumbnail(new Point(40, 40));
-                this.contentsMorph = new Morph();
-                this.contentsMorph.silentSetWidth(img.width);
-                this.contentsMorph.silentSetHeight(img.height);
-                this.contentsMorph.image = img;
-                this.version = this.contents.version;
-            } else {
-                this.contentsMorph = this.contents;
-            }
-        } else if (isString(this.contents)) {
-            txt  = this.contents.length > 500 ?
-                    this.contents.slice(0, 500) + '...' : this.contents;
-            this.contentsMorph = new TextMorph(
-                txt,
-                fontSize,
-                null,
-                true,
-                false,
-                'left' // was formerly 'center', reverted b/c of code-mapping
-            );
-            if (this.isEditable) {
-                this.contentsMorph.isEditable = true;
-                this.contentsMorph.enableSelecting();
-            }
-            this.contentsMorph.setColor(new Color(255, 255, 255));
-        } else if (typeof this.contents === 'boolean') {
-            img = SpriteMorph.prototype.booleanMorph.call(
-                null,
-                this.contents
-            ).fullImage();
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(img.width);
-            this.contentsMorph.silentSetHeight(img.height);
-            this.contentsMorph.image = img;
-        } else if (this.contents instanceof HTMLCanvasElement) {
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(this.contents.width);
-            this.contentsMorph.silentSetHeight(this.contents.height);
-            this.contentsMorph.image = this.contents;
-        } else if (this.contents instanceof Context) {
-            img = this.contents.image();
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(img.width);
-            this.contentsMorph.silentSetHeight(img.height);
-            this.contentsMorph.image = img;
-        } else if (this.contents instanceof Costume) {
-            img = this.contents.thumbnail(new Point(40, 40));
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(img.width);
-            this.contentsMorph.silentSetHeight(img.height);
-            this.contentsMorph.image = img;
-        } else if (this.contents instanceof Sound) {
-            this.contentsMorph = new SymbolMorph('notes', 30);
-        } else if (this.contents instanceof List) {
-            if ('table' === type || (!toggle && this.contents.isTable())) {
-                this.contentsMorph = new TableFrameMorph(new TableMorph(
-                    this.contents,
-                    10
-                ));
-                this.contentsMorph.expand(new Point(200, 150));
-            } else {
-                if (this.isCircular()) {
-                    this.contentsMorph = new TextMorph(
-                        '(...)',
-                        fontSize,
-                        null,
-                        false, // bold
-                        true, // italic
-                        'center'
-                    );
-                    this.contentsMorph.setColor(new Color(255, 255, 255));
-                } else {
-                    this.contentsMorph = new ListWatcherMorph(
-                        this.contents,
-                        this
-                    );
-                }
-            }
-            this.contentsMorph.isDraggable = false;
-        } else {
-            this.contentsMorph = new TextMorph(
-                !isNil(this.contents) ? this.contents.toString() : '',
-                fontSize,
-                null,
-                true,
-                false,
-                'center'
-            );
-            if (this.isEditable) {
-                this.contentsMorph.isEditable = true;
-                this.contentsMorph.enableSelecting();
-            }
-            this.contentsMorph.setColor(new Color(255, 255, 255));
-        }
-        this.add(this.contentsMorph);
-    }
-*/
-
-    // adjust my dimensions
-/* //  +++
-    this.bounds.setHeight(this.contentsMorph.height()
-        + this.edge
-        + this.border * 2);
-    this.bounds.setWidth(Math.max(
-        this.contentsMorph.width() + this.edge * 2,
-        (this.contents instanceof Context ||
-            this.contents instanceof List ? 0 :
-                    SyntaxElementMorph.prototype.fontSize * 3.5)
-    ));
-*/
 
     // draw my outline
     if ((this.edge === 0) && (this.border === 0)) {
@@ -11142,13 +10992,6 @@ CellMorph.prototype.render = function (ctx) { // +++ (toggle, type) {
         ctx.shadowColor = this.color.darker(80).toString();
         this.drawShadow(ctx, this.edge, this.border / 2);
     }
-
-    // position my contents
-/* // +++
-    if (toggle || (!isSameList && !isSameTable)) {
-        this.contentsMorph.setCenter(this.center());
-    }
-*/
 };
 
 CellMorph.prototype.drawShadow = function (context, radius, inset) {
