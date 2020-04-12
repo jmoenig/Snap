@@ -985,3 +985,7 @@ ListWatcherMorph.prototype.show = function () {
     ListWatcherMorph.uber.show.call(this);
     this.frame.contents.adjustBounds();
 };
+
+// ListWatcherMorph rendering:
+
+ListWatcherMorph.prototype.render = WatcherMorph.prototype.render;
