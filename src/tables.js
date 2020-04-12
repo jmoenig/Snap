@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-April-11';
+modules.tables = '2020-April-12';
 
 var Table;
 var TableCellMorph;
@@ -1089,7 +1089,11 @@ TableMorph.prototype.showListView = function () {
         view.contents.step = view.contents.update;
         view.contents.expand(this.extent());
     } else { // watcher cell
-        view.drawNew(true);
+        view.changed();
+        view.contentsMorph.destroy();
+        view.contentsMorph = new ListWatcherMorph(this.table);
+        view.add(view.contentsMorph);
+        view.contentsMorph.setPosition(this.position());
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();

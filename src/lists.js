@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-11';
+modules.lists = '2020-April-12';
 
 var List;
 var ListWatcherMorph;
@@ -958,7 +958,11 @@ ListWatcherMorph.prototype.showTableView = function () {
         view.contents = new TableFrameMorph(new TableMorph(this.list, 10));
         view.contents.expand(this.extent());
     } else { // watcher cell
-        view.drawNew(true, 'table');
+        view.changed();
+        view.contentsMorph.destroy();
+        view.contentsMorph = new TableFrameMorph(new TableMorph(this.list, 10));
+        view.add(view.contentsMorph);
+        view.contentsMorph.setPosition(this.position());
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();
