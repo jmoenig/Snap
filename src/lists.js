@@ -985,10 +985,3 @@ ListWatcherMorph.prototype.show = function () {
     ListWatcherMorph.uber.show.call(this);
     this.frame.contents.adjustBounds();
 };
-
-// ListWatcherMorph drawing:
-
-ListWatcherMorph.prototype.drawNew = function () {
-    WatcherMorph.prototype.drawNew.call(this);
-    this.fixLayout();
-};
