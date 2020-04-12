@@ -11792,37 +11792,34 @@ WatcherMorph.prototype.userSetSliderMax = function () {
 
 // WatcherMorph drawing:
 
-WatcherMorph.prototype.drawNew = function () {
-    var context,
-        gradient;
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
+WatcherMorph.prototype.render = function (ctx) {
+    var gradient;
     if (MorphicPreferences.isFlat || (this.edge === 0 && this.border === 0)) {
-        BoxMorph.uber.drawNew.call(this);
+        BoxMorph.uber.render.call(this, ctx);
         return;
     }
-    gradient = context.createLinearGradient(0, 0, 0, this.height());
+    gradient = ctx.createLinearGradient(0, 0, 0, this.height());
     gradient.addColorStop(0, this.color.lighter().toString());
     gradient.addColorStop(1, this.color.darker().toString());
-    context.fillStyle = gradient;
-    context.beginPath();
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
     this.outlinePath(
-        context,
+        ctx,
         Math.max(this.edge - this.border, 0),
         this.border
     );
-    context.closePath();
-    context.fill();
+    ctx.closePath();
+    ctx.fill();
     if (this.border > 0) {
-        gradient = context.createLinearGradient(0, 0, 0, this.height());
+        gradient = ctx.createLinearGradient(0, 0, 0, this.height());
         gradient.addColorStop(0, this.borderColor.lighter().toString());
         gradient.addColorStop(1, this.borderColor.darker().toString());
-        context.lineWidth = this.border;
-        context.strokeStyle = gradient;
-        context.beginPath();
-        this.outlinePath(context, this.edge, this.border / 2);
-        context.closePath();
-        context.stroke();
+        ctx.lineWidth = this.border;
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+        this.outlinePath(ctx, this.edge, this.border / 2);
+        ctx.closePath();
+        ctx.stroke();
     }
 };
 
