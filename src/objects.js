@@ -11026,9 +11026,8 @@ CellMorph.prototype.drawShadow = function (context, radius, inset) {
 
 // CellMorph editing (inside list watchers):
 
-CellMorph.prototype.layoutChanged = function () { // ++++ find out what's calling this, should be redundant
-    var context,
-        fontSize = SyntaxElementMorph.prototype.fontSize,
+CellMorph.prototype.layoutChanged = function () {
+    var fontSize = SyntaxElementMorph.prototype.fontSize,
         listWatcher = this.parentThatIsA(ListWatcherMorph);
 
     if (this.isBig) {
@@ -11036,49 +11035,18 @@ CellMorph.prototype.layoutChanged = function () { // ++++ find out what's callin
     }
 
     // adjust my layout
-    this.silentSetHeight(this.contentsMorph.height()
+    this.bounds.setHeight(this.contentsMorph.height()
         + this.edge
         + this.border * 2);
-    this.silentSetWidth(Math.max(
+    this.bounds.setWidth(Math.max(
         this.contentsMorph.width() + this.edge * 2,
         (this.contents instanceof Context ||
             this.contents instanceof List ? 0 : this.height() * 2)
     ));
 
-
-    // draw my outline
-    this.image = newCanvas(this.extent(), false, this.image);
-    context = this.image.getContext('2d');
-    if ((this.edge === 0) && (this.border === 0)) {
-        BoxMorph.uber.drawNew.call(this);
-        return null;
-    }
-    context.fillStyle = this.color.toString();
-    context.beginPath();
-    this.outlinePath(
-        context,
-        Math.max(this.edge - this.border, 0),
-        this.border
-    );
-    context.closePath();
-    context.fill();
-    if (this.border > 0 && !MorphicPreferences.isFlat) {
-        context.lineWidth = this.border;
-        context.strokeStyle = this.borderColor.toString();
-        context.beginPath();
-        this.outlinePath(context, this.edge, this.border / 2);
-        context.closePath();
-        context.stroke();
-
-        context.shadowOffsetX = this.border;
-        context.shadowOffsetY = this.border;
-        context.shadowBlur = this.border;
-        context.shadowColor = this.color.darker(80).toString();
-        this.drawShadow(context, this.edge, this.border / 2);
-    }
-
     // position my contents
     this.contentsMorph.setCenter(this.center());
+    this.rerender();
 
     if (listWatcher) {
         listWatcher.fixLayout();
