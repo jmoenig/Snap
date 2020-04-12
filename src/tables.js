@@ -1005,14 +1005,10 @@ TableMorph.prototype.resizeCells = function (pos) {
             }
         }
     }
-    if (this.highContrast) {
-        this.drawNew();
-    } else {
-        this.rowLabelWidth = this.rowLabelsWidth();
-        this.columns = this.columnsLayout();
-        this.rows = this.visibleRows();
-        this.buildCells();
-    }
+    this.rowLabelWidth = this.rowLabelsWidth();
+    this.columns = this.columnsLayout();
+    this.rows = this.visibleRows();
+    this.buildCells();
     this.resizeAnchor = pos;
 };
 
@@ -1051,14 +1047,10 @@ TableMorph.prototype.userMenu = function () {
 
 TableMorph.prototype.resetColumns = function () {
     this.colWidths = [];
-    if (this.highContrast) {
-        this.drawNew();
-    } else {
-        this.rowLabelWidth = this.rowLabelsWidth();
-        this.columns = this.columnsLayout();
-        this.rows = this.visibleRows();
-        this.buildCells();
-    }
+    this.rowLabelWidth = this.rowLabelsWidth();
+    this.columns = this.columnsLayout();
+    this.rows = this.visibleRows();
+    this.buildCells();
 };
 
 TableMorph.prototype.openInDialog = function () {
