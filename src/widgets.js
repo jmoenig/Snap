@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-April-04';
+modules.widgets = '2020-April-15';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2940,6 +2940,7 @@ InputFieldMorph.prototype.setContents = function (aStringOrFloat) {
     } else if (aStringOrFloat.toString) {
         cnts.text.text = aStringOrFloat.toString();
     }
+    cnts.text.fixLayout();
     cnts.changed();
     cnts.fixLayout();
     cnts.rerender();
