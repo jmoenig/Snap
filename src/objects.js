@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-12';
+modules.objects = '2020-April-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -9865,6 +9865,7 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
         dialog,
         txt;
 
+    editor.fixLayout();
     action = function () {editor.accept(); };
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
@@ -9886,8 +9887,6 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
     dialog.addBody(txt);
     dialog.addButton('ok', 'Ok');
     dialog.addButton('cancel', 'Cancel');
-    dialog.fixLayout();
-    dialog.drawNew();
     dialog.fixLayout();
     dialog.popUp(aWorld);
 };
@@ -10138,30 +10137,29 @@ CostumeEditorMorph.prototype.accept = function () {
 
 // CostumeEditorMorph displaying
 
-CostumeEditorMorph.prototype.drawNew = function () {
-    var rp, ctx;
+CostumeEditorMorph.prototype.fixLayout = function () {
+    this.bounds.setExtent(this.size);
+};
+
+CostumeEditorMorph.prototype.render = function (ctx) {
+    var rp;
 
     this.margin = this.size.subtract(this.costume.extent()).divideBy(2);
     rp = this.rotationCenter.add(this.margin);
 
-    this.silentSetExtent(this.size);
-
-    this.image = newCanvas(this.extent());
 
     // draw the background
     if (!this.cachedTexture) {
         this.cachedTexture = this.createTexture();
 
     }
-    this.drawCachedTexture();
+    this.renderCachedTexture(ctx);
 
-/*
+    /*
     pattern = ctx.createPattern(this.background, 'repeat');
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, this.size.x, this.size.y);
-*/
-
-    ctx = this.image.getContext('2d');
+    */
 
     // draw the costume
     ctx.drawImage(this.costume.contents, this.margin.x, this.margin.y);
@@ -10229,8 +10227,7 @@ CostumeEditorMorph.prototype.mouseDownLeft = function (pos) {
     this.rotationCenter = pos.subtract(
         this.position().add(this.margin)
     );
-    this.drawNew();
-    this.changed();
+    this.rerender();
 };
 
 CostumeEditorMorph.prototype.mouseMove
