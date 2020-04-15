@@ -2206,8 +2206,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
                     'E-mail address of parent or guardian:'
                         : 'E-mail address:';
             emlLabel.text = localize(emlLabel.text);
-            eml.fixLayout(); // +++ was: emlLabel.drawNew();
-            eml.rerender(); // +++ was: emlLabel.changed();
+            emlLabel.fixLayout();
+            emlLabel.rerender();
         }
     };
 
