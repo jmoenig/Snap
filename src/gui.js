@@ -7711,7 +7711,7 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
@@ -7746,14 +7746,14 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = function (item) {
         if (isNil(item)) {return; }
 
         myself.notesText.text = localize(item.description || '');
-        myself.notesText.drawNew();
+        myself.notesText.rerender();
         myself.notesField.contents.adjustBounds();
 
         if (myself.hasCached(item.fileName)) {
@@ -7803,10 +7803,7 @@ LibraryImportDialogMorph.prototype.clearDetails =
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        thin = this.padding / 2,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        thin = this.padding / 2;
 
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
@@ -7856,9 +7853,6 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
-
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
 };
 
 // Library Cache Utilities.
@@ -7923,10 +7917,11 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
 
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
+            blockContainer.isCachingImage = true;
             blockContainer.setExtent(
                 new Point(blockImage.width, blockImage.height)
             );
-            blockContainer.image = blockImage;
+            blockContainer.cachedImage = blockImage;
             blockContainer.setPosition(new Point(x, y));
             myself.palette.addContents(blockContainer);
 
