@@ -1211,7 +1211,6 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         this.palette.toolBar.padding = 1;
         // this.palette.toolBar.hint = 'Cancel';
         this.palette.toolBar.labelShadowColor = new Color(140, 140, 140);
-        this.palette.toolBar.drawNew();
         this.palette.toolBar.fixLayout();
         this.palette.add(this.palette.toolBar);
 	    */
@@ -1803,8 +1802,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         flag,
         maxPaletteWidth;
 
-    Morph.prototype.trackChanges = false;
-
     if (situation !== 'refreshPalette') {
         // controlBar
         this.controlBar.setPosition(this.logo.topRight());
@@ -1902,9 +1899,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.fixLayout();
         }
     }
-
-    Morph.prototype.trackChanges = true;
-    this.changed();
 };
 
 IDE_Morph.prototype.setProjectName = function (string) {
@@ -3774,7 +3768,9 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         if (isSound) {
             icon = new SoundIconMorph(new Sound(new Audio(), item.name));
         } else {
-            icon = new CostumeIconMorph(new Costume(turtle.image, item.name));
+            icon = new CostumeIconMorph(
+                new Costume(turtle.getImage(), item.name)
+            );
         }
         icon.isDraggable = false;
         icon.userMenu = nop;
@@ -3823,7 +3819,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
-    dialog.drawNew();
 
     handle = new HandleMorph(
         dialog,
@@ -4215,13 +4210,13 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
 
     // collect all script pics
     this.sprites.asArray().forEach(function (sprite) {
-        pics.push(sprite.image);
+        pics.push(sprite.getImage());
         pics.push(sprite.scripts.scriptsPicture());
         sprite.customBlocks.forEach(function (def) {
             pics.push(def.scriptsPicture());
         });
     });
-    pics.push(this.stage.image);
+    pics.push(this.stage.getImage());
     pics.push(this.stage.scripts.scriptsPicture());
     this.stage.customBlocks.forEach(function (def) {
         pics.push(def.scriptsPicture());
@@ -4899,7 +4894,6 @@ IDE_Morph.prototype.saveFileAs = function (
             world
         );
         dialog.fixLayout();
-        dialog.drawNew();
     }
 };
 
@@ -5167,7 +5161,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
-    Morph.prototype.trackChanges = false;
     if (this.isAppMode) {
 		this.wasSingleStepping = Process.prototype.enableSingleStepping;
 		if (this.wasSingleStepping) {
@@ -5221,7 +5214,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         // update undrop controls
         this.currentSprite.scripts.updateToolbar();
     }
-    this.setExtent(this.world().extent()); // resume trackChanges
+    this.setExtent(this.world().extent());
 };
 
 IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
@@ -5477,15 +5470,6 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     sample.add(shield);
 
     action = function (num) {
-    /*
-        var c;
-        blck.setScale(num);
-        blck.drawNew();
-        blck.setSpec(blck.blockSpec);
-        c = blck.inputs()[0];
-        c.setScale(num);
-        c.nestedBlock(scrpt);
-    */
         scrpt.blockSequence().forEach(function (block) {
             block.setScale(num);
             block.setSpec(block.blockSpec);
@@ -8858,7 +8842,6 @@ WardrobeMorph.prototype.updateList = function () {
         y = this.top() + 5,
         padding = 4,
         toolsPadding = 5,
-        oldFlag = Morph.prototype.trackChanges,
         oldPos = this.contents.position(),
         icon,
         txt,
@@ -8866,8 +8849,6 @@ WardrobeMorph.prototype.updateList = function () {
         cambutton;
 
     this.changed();
-    oldFlag = Morph.prototype.trackChanges;
-    Morph.prototype.trackChanges = false;
 
     this.contents.destroy();
     this.contents = new FrameMorph(this);
@@ -8965,7 +8946,6 @@ WardrobeMorph.prototype.updateList = function () {
 
     this.contents.setPosition(oldPos);
     this.adjustScrollBars();
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
 
     this.updateSelection();
@@ -9321,15 +9301,12 @@ JukeboxMorph.prototype.updateList = function () {
         x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
-        oldFlag = Morph.prototype.trackChanges,
         icon,
         txt,
         ide = this.sprite.parentThatIsA(IDE_Morph),
         recordButton;
 
     this.changed();
-    oldFlag = Morph.prototype.trackChanges;
-    Morph.prototype.trackChanges = false;
 
     this.contents.destroy();
     this.contents = new FrameMorph(this);
@@ -9379,9 +9356,7 @@ JukeboxMorph.prototype.updateList = function () {
     });
     this.soundsVersion = this.sprite.sounds.lastChanged;
 
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
-
     this.updateSelection();
 };
 
