@@ -6877,7 +6877,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.notesText.rerender();
             myself.notesField.contents.adjustBounds();
             myself.preview.texture = '';
-            myself.preview.rerender(); // +++
+            myself.preview.rerender();
             // we ask for the thumbnail when selecting a project
             myself.ide.cloud.getThumbnail(
                 null, // username is implicit
@@ -8019,14 +8019,22 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     }
 
     this.thumbnail = new Morph();
-    this.thumbnail.isCachingImage = true; // +++ review thumbnails
+    this.thumbnail.isCachingImage = true;
     this.thumbnail.bounds.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
-        this.thumbnail.cachedImage = this.object.fullThumbnail(this.thumbSize); // +++ recycle canvas
+        this.thumbnail.cachedImage = this.object.fullThumbnail(
+            this.thumbSize,
+            false,
+            this.thumbnail.cachedImage
+        );
         this.add(this.thumbnail);
         this.createRotationButton();
     } else {
-        this.thumbnail.cachedImage = this.object.thumbnail(this.thumbSize);
+        this.thumbnail.cachedImage = this.object.thumbnail(
+            this.thumbSize,
+            false,
+            this.thumbnail.cachedImage
+        );
         this.add(this.thumbnail);
     }
 };
