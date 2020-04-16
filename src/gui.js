@@ -712,9 +712,13 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar = new Morph();
     this.controlBar.color = this.frameColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
-    this.controlBar.mouseClickLeft = function () { // +++ is this needed?
+
+    /*
+    this.controlBar.mouseClickLeft = function () { // is this needed?
         this.world().fillPage();
     };
+    */
+
     this.add(this.controlBar);
 
     //smallStageButton
@@ -1031,8 +1035,8 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.refreshSlider = function () {
         if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
-            slider.fixLayout();  // +++ ??
-            slider.rerender(); // +++ ??
+            slider.fixLayout();
+            slider.rerender();
             slider.show();
         } else {
             slider.hide();
@@ -1365,7 +1369,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     this.rotationStyleButtons = rotationStyleButtons;
 
     thumbnail = new Morph();
-    thumbnail.isCachingImage = true; // +++ review and refactor this to reuse the canvas
+    thumbnail.isCachingImage = true; // +++ to do: review and refactor this to reuse the canvas
     thumbnail.bounds.setExtent(thumbSize);
     thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
     thumbnail.setPosition(
@@ -1377,7 +1381,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     thumbnail.step = function () {
         if (thumbnail.version !== myself.currentSprite.version) {
-            thumbnail.cachedImage = myself.currentSprite.thumbnail(thumbSize); // +++ refactor this to reuse the canvas
+            thumbnail.cachedImage = myself.currentSprite.thumbnail(thumbSize); // +++ to do: refactor this to reuse the canvas
             thumbnail.changed();
             thumbnail.version = myself.currentSprite.version;
         }
@@ -4569,7 +4573,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this
         );
     }
-    this.stopFastTracking(); // +++ ??
+    this.stopFastTracking();
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
@@ -9439,7 +9443,6 @@ StageHandleMorph.prototype.init = function (target) {
     this.color = MorphicPreferences.isFlat ?
             IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
     this.isDraggable = false;
-    // +++ this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
@@ -9584,7 +9587,6 @@ PaletteHandleMorph.prototype.init = function (target) {
     this.color = MorphicPreferences.isFlat ?
             new Color(255, 255, 255) : new Color(190, 190, 190);
     this.isDraggable = false;
-    // +++ this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
