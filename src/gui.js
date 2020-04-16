@@ -6241,7 +6241,6 @@ IDE_Morph.prototype.warnAboutIE = function () {
         dlg.labelString = "Internet Explorer";
         dlg.createLabel();
         dlg.addBody(txt);
-        dlg.drawNew();
         dlg.fixLayout();
         dlg.popUp(this.world());
     }
