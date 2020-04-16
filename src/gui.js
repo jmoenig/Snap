@@ -1369,7 +1369,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     this.rotationStyleButtons = rotationStyleButtons;
 
     thumbnail = new Morph();
-    thumbnail.isCachingImage = true; // +++ to do: review and refactor this to reuse the canvas
+    thumbnail.isCachingImage = true;
     thumbnail.bounds.setExtent(thumbSize);
     thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
     thumbnail.setPosition(
@@ -1381,7 +1381,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     thumbnail.step = function () {
         if (thumbnail.version !== myself.currentSprite.version) {
-            thumbnail.cachedImage = myself.currentSprite.thumbnail(thumbSize); // +++ to do: refactor this to reuse the canvas
+            thumbnail.cachedImage = myself.currentSprite.thumbnail(
+                thumbSize,
+                thumbnail.cachedImage
+            );
             thumbnail.changed();
             thumbnail.version = myself.currentSprite.version;
         }
@@ -8028,7 +8031,6 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     if (this.object instanceof SpriteMorph) { // support nested sprites
         this.thumbnail.cachedImage = this.object.fullThumbnail(
             this.thumbSize,
-            false,
             this.thumbnail.cachedImage
         );
         this.add(this.thumbnail);
@@ -8036,7 +8038,6 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     } else {
         this.thumbnail.cachedImage = this.object.thumbnail(
             this.thumbSize,
-            false,
             this.thumbnail.cachedImage
         );
         this.add(this.thumbnail);

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-15';
+modules.objects = '2020-April-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -4352,7 +4352,7 @@ SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
 
     if (otherSprite instanceof StageMorph) {
         // only check for color collision
-        thatImg = otherSprite.thumbnail(otherSprite.extent(), this, true);
+        thatImg = otherSprite.fancyThumbnail(otherSprite.extent(), this, true);
     }
     if (oRect.width() < 1 || oRect.height() < 1 || !thisImg || !thatImg ||
         !thisImg.width || !thisImg.height || !thatImg.width || !thatImg.height
@@ -6987,9 +6987,10 @@ SpriteMorph.prototype.inheritedMethods = function () {
 
 // SpriteMorph thumbnail
 
-SpriteMorph.prototype.thumbnail = function (extentPoint) {
+SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
+    // a "recycleMe canvas can be passed for re-use
     var src = this.getImage(), // at this time sprites aren't composite morphs
         w = this.width(),
         h = this.height(),
@@ -6999,7 +7000,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         ),
         xOffset = (extentPoint.x - (w * scale)) / 2,
         yOffset = (extentPoint.y - (h * scale)) / 2,
-        trg = newCanvas(extentPoint),
+        trg = newCanvas(extentPoint, false, recycleMe),
         ctx = trg.getContext('2d');
 
     function xOut(style, alpha, width) {
@@ -7032,12 +7033,13 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         xOut('white', 0.8, 6);
         xOut('black', 0.8, 1);
     }
+    ctx.restore();
     return trg;
 };
 
-SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
+SpriteMorph.prototype.fullThumbnail = function (extentPoint, recycleMe) {
     // containing parts and anchor symbols, if any
-    var thumb = this.thumbnail(extentPoint),
+    var thumb = this.thumbnail(extentPoint, recycleMe),
         ctx = thumb.getContext('2d'),
         ext = extentPoint.divideBy(3),
         i = 0;
@@ -8856,24 +8858,31 @@ StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
 // StageMorph thumbnail
 
-StageMorph.prototype.thumbnail = function (
-    extentPoint,
-    excludedSprite,
-    nonRetina
-) {
+StageMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
+    // a "recycleMe canvas can be passed for re-use
+    return this.fancyThumbnail(extentPoint, null, false, recycleMe);
+};
+
+StageMorph.prototype.fancyThumbnail = function (
+    extentPoint,
+    excludedSprite,
+    nonRetina,
+    recycleMe
+) {
     var myself = this,
         src = this.getImage(),
         scale = Math.min(
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        trg = newCanvas(extentPoint, nonRetina),
+        trg = newCanvas(extentPoint, nonRetina, recycleMe),
         ctx = trg.getContext('2d'),
         fb,
         fimg;
 
+    ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
@@ -8912,6 +8921,7 @@ StageMorph.prototype.thumbnail = function (
             }
         }
     });
+    ctx.restore();
     return trg;
 };
 
@@ -9471,7 +9481,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             contents.version = data.version;
             contents.step = function () {
                 if (this.version !== data.version) {
-                    img = data.thumbnail(new Point(40, 40));
+                    img = data.thumbnail(new Point(40, 40), this.cachedImage);
                     this.cachedImage = img;
                     this.version = data.version;
                     this.changed();
@@ -9899,11 +9909,10 @@ Costume.prototype.shrinkToFit = function (extentPoint) {
     }
 };
 
-Costume.prototype.thumbnail = function (extentPoint) {
-/*
-    answer a new Canvas of extentPoint dimensions containing
-    my thumbnail representation keeping the originial aspect ratio
-*/
+Costume.prototype.thumbnail = function (extentPoint, recycleMe) {
+    // answer a new Canvas of extentPoint dimensions containing
+    // my thumbnail representation keeping the originial aspect ratio
+    // a "recycleMe canvas can be passed for re-use
     var src = this.contents, // at this time sprites aren't composite morphs
         scale = Math.min(
             (extentPoint.x / src.width),
@@ -9911,16 +9920,18 @@ Costume.prototype.thumbnail = function (extentPoint) {
         ),
         xOffset = (extentPoint.x - (src.width * scale)) / 2,
         yOffset = (extentPoint.y - (src.height * scale)) / 2,
-        trg = newCanvas(extentPoint, true),
+        trg = newCanvas(extentPoint, true, recycleMe), // non-retina
         ctx = trg.getContext('2d');
 
     if (!src || src.width + src.height === 0) {return trg; }
+    ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
         Math.floor(xOffset / scale),
         Math.floor(yOffset / scale)
     );
+    ctx.restore();
     return trg;
 };
 
