@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-06';
+modules.gui = '2020-April-16';
 
 // Declarations
 
@@ -6372,7 +6372,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.body.add(this.listField);
@@ -6383,16 +6383,14 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
     this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.preview.contrast = InputFieldMorph.prototype.contrast;
-    this.preview.drawNew = function () {
-        InputFieldMorph.prototype.drawNew.call(this);
+    this.preview.render = function (ctx) {
+        InputFieldMorph.prototype.render.call(this, ctx);
         if (this.texture) {
-            this.drawTexture(this.texture);
+            this.renderTexture(this.texture, ctx);
         }
     };
-    this.preview.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(this.cachedTexture, this.edge, this.edge);
-        this.changed();
+    this.preview.renderCachedTexture = function (ctx) {
+        ctx.drawImage(this.cachedTexture, this.edge, this.edge);
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(
@@ -6400,14 +6398,13 @@ ProjectDialogMorph.prototype.buildContents = function () {
     );
 
     this.body.add(this.preview);
-    this.preview.drawNew();
     if (this.task === 'save') {
         thumbnail = this.ide.stage.thumbnail(
             SnapSerializer.prototype.thumbnailSize
         );
         this.preview.texture = null;
         this.preview.cachedTexture = thumbnail;
-        this.preview.drawCachedTexture();
+        this.preview.rerender();
     }
 
     this.notesField = new ScrollFrameMorph();
@@ -6417,7 +6414,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
@@ -6498,16 +6495,6 @@ ProjectDialogMorph.prototype.createButtons = function () {
     this.buttons.add(this.buttons.bottomRow);
     this.add(this.buttons);
 
-    this.buttons.topRow.hide = function () {
-        this.isVisible = false;
-        this.changed();
-    };
-
-    this.buttons.topRow.show = function () {
-        this.isVisible = true;
-        this.changed();
-    };
-
     this.buttons.fixLayout = function () {
         if (this.topRow.children.some(function (any) {
             return any.isVisible;
@@ -6536,7 +6523,6 @@ ProjectDialogMorph.prototype.addButton = function (action, label, topRow) {
     button.outlineGradient = this.buttonOutlineGradient;
     button.padding = this.buttonPadding;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     button.fixLayout();
     if (topRow) {
         this.buttons.topRow.add(button);
@@ -6589,7 +6575,8 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     lbl1.children[0].setCenter(lbl1.center());
     lbl1.children[0].setBottom(lbl1.top() - this.padding / 2);
 
-    l1.image = lbl1.fullImage();
+    l1.isCachingImage = true;
+    l1.cachedImage = lbl1.fullImage();
     l1.bounds = lbl1.fullBounds();
 
     lbl2.add(new SymbolMorph(
@@ -6602,7 +6589,8 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     lbl2.children[0].setCenter(lbl2.center());
     lbl2.children[0].setBottom(lbl2.top() - this.padding / 2);
 
-    l2.image = lbl2.fullImage();
+    l2.isCachingImage = true;
+    l2.cachedImage = lbl2.fullImage();
     l2.bounds = lbl2.fullBounds();
 
     button = new ToggleButtonMorph(
@@ -6626,8 +6614,6 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     button.padding = this.buttonPadding;
     button.contrast = this.buttonContrast;
     button.pressColor = this.titleBarColor.darker(20);
-
-    button.drawNew();
     button.fixLayout();
     button.refresh();
     this.srcBar.add(button);
@@ -6643,7 +6629,6 @@ ProjectDialogMorph.prototype.fixListFieldItemColors = function () {
     this.listField.contents.children[0].children.forEach(function (item) {
         item.pressColor = myself.titleBarColor.darker(20);
         item.color = new Color(0, 0, 0, 0);
-        item.noticesTransparentClick = true;
     });
 };
 
@@ -6754,7 +6739,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     if (this.source === 'local') {
@@ -6774,12 +6759,12 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 
                     myself.notesText.text = xml.childNamed('notes').contents
                         || '';
-                    myself.notesText.drawNew();
+                    myself.notesText.rerender();
                     myself.notesField.contents.adjustBounds();
                     myself.preview.texture =
                         xml.childNamed('thumbnail').contents || null;
                     myself.preview.cachedTexture = null;
-                    myself.preview.drawNew();
+                    myself.preview.rerender();
                 }
             }
             myself.edit();
@@ -6798,12 +6783,12 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             xml = myself.ide.serializer.parse(src);
             myself.notesText.text = xml.childNamed('notes').contents
                 || '';
-            myself.notesText.drawNew();
+            myself.notesText.rerender();
             myself.notesField.contents.adjustBounds();
             myself.preview.texture = xml.childNamed('thumbnail').contents
                 || null;
             myself.preview.cachedTexture = null;
-            myself.preview.drawNew();
+            myself.preview.rerender();
             myself.edit();
         };
     }
@@ -6896,7 +6881,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = function (item) {
@@ -6906,10 +6891,10 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         }
         if (myself.task === 'open') {
             myself.notesText.text = item.notes || '';
-            myself.notesText.drawNew();
+            myself.notesText.rerender();
             myself.notesField.contents.adjustBounds();
             myself.preview.texture = '';
-            myself.preview.drawNew();
+            myself.preview.rerender(); // +++
             // we ask for the thumbnail when selecting a project
             myself.ide.cloud.getThumbnail(
                 null, // username is implicit
@@ -6917,7 +6902,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 function (thumbnail) {
                     myself.preview.texture = thumbnail;
                     myself.preview.cachedTexture = null;
-                    myself.preview.drawNew();
+                    myself.preview.rerender();
                 });
             (new SpeechBubbleMorph(new TextMorph(
                 localize('last changed') + '\n' + item.lastupdated,
@@ -6967,11 +6952,11 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
 
 ProjectDialogMorph.prototype.clearDetails = function () {
     this.notesText.text = '';
-    this.notesText.drawNew();
+    this.notesText.rerender();
     this.notesField.contents.adjustBounds();
     this.preview.texture = null;
     this.preview.cachedTexture = null;
-    this.preview.drawNew();
+    this.preview.rerender();
 };
 
 ProjectDialogMorph.prototype.recoveryDialog = function () {
@@ -7149,10 +7134,9 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
                         entry.label.isBold = true;
-                        entry.label.drawNew();
-                        entry.label.changed();
+                        entry.label.rerender();
                         myself.buttons.fixLayout();
-                        myself.drawNew();
+                        myself.rerender();
                         myself.ide.showMessage('shared.', 2);
 
                         // Set the Shared URL if the project is currently open
@@ -7197,10 +7181,9 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         myself.unpublishButton.hide();
                         entry.label.isBold = false;
                         entry.label.isItalic = false;
-                        entry.label.drawNew();
-                        entry.label.changed();
+                        entry.label.rerender();
                         myself.buttons.fixLayout();
-                        myself.drawNew();
+                        myself.rerender();
                         myself.ide.showMessage('unshared.', 2);
                         if (proj.projectname === ide.projectName) {
                             location.hash = '';
@@ -7237,10 +7220,9 @@ ProjectDialogMorph.prototype.publishProject = function () {
                         myself.publishButton.hide();
                         myself.unpublishButton.show();
                         entry.label.isItalic = true;
-                        entry.label.drawNew();
-                        entry.label.changed();
+                        entry.label.rerender();
                         myself.buttons.fixLayout();
-                        myself.drawNew();
+                        myself.rerender();
                         myself.ide.showMessage('published.', 2);
 
                         // Set the Shared URL if the project is currently open
@@ -7283,10 +7265,9 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
                         entry.label.isItalic = false;
-                        entry.label.drawNew();
-                        entry.label.changed();
+                        entry.label.rerender();
                         myself.buttons.fixLayout();
-                        myself.drawNew();
+                        myself.rerender();
                         myself.ide.showMessage('unpublished.', 2);
                     },
                     myself.ide.cloudError()
@@ -7309,10 +7290,7 @@ ProjectDialogMorph.prototype.edit = function () {
 ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
-        inputField = this.nameField || this.filterField,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        inputField = this.nameField || this.filterField;
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
@@ -7334,7 +7312,6 @@ ProjectDialogMorph.prototype.fixLayout = function () {
             );
         inputField.setLeft(this.srcBar.right() + this.padding * 3);
         inputField.setTop(this.srcBar.top());
-        inputField.drawNew();
 
         this.listField.setLeft(this.srcBar.right() + this.padding);
         this.listField.setWidth(
@@ -7375,9 +7352,6 @@ ProjectDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
-
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
 };
 
 // ProjectRecoveryDialogMorph /////////////////////////////////////////
@@ -9497,7 +9471,7 @@ StageHandleMorph.prototype.init = function (target) {
     this.color = MorphicPreferences.isFlat ?
             IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
     this.isDraggable = false;
-    this.noticesTransparentClick = true;
+    // +++ this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
@@ -9642,7 +9616,7 @@ PaletteHandleMorph.prototype.init = function (target) {
     this.color = MorphicPreferences.isFlat ?
             new Color(255, 255, 255) : new Color(190, 190, 190);
     this.isDraggable = false;
-    this.noticesTransparentClick = true;
+    // +++ this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
