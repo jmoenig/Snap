@@ -7412,16 +7412,14 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
     this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.preview.contrast = InputFieldMorph.prototype.contrast;
-    this.preview.drawNew = function () {
-        InputFieldMorph.prototype.drawNew.call(this);
+    this.preview.render = function (ctx) {
+        InputFieldMorph.prototype.render.call(this, ctx);
         if (this.texture) {
-            this.drawTexture(this.texture);
+            this.renderTexture(this.texture, ctx);
         }
     };
-    this.preview.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(this.cachedTexture, this.edge, this.edge);
-        this.changed();
+    this.preview.renderCachedTexture = function (ctx) {
+        ctx.drawImage(this.cachedTexture, this.edge, this.edge);
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(
@@ -7429,7 +7427,6 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     );
 
     this.body.add(this.preview);
-    this.preview.drawNew();
 
     this.notesField = new ScrollFrameMorph();
     this.notesField.fixLayout = nop;
@@ -7438,7 +7435,7 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
@@ -7470,7 +7467,7 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = function (item) {
@@ -7482,11 +7479,11 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
                 return version.lastupdated === item;
             });
         myself.notesText.text = version.notes || '';
-        myself.notesText.drawNew();
+        myself.notesText.rerender();
         myself.notesField.contents.adjustBounds();
         myself.preview.texture = version.thumbnail;
         myself.preview.cachedTexture = null;
-        myself.preview.drawNew();
+        myself.preview.rerender();
     };
 
     this.ide.cloud.getProjectVersionMetadata(
@@ -7578,10 +7575,7 @@ ProjectRecoveryDialogMorph.prototype.clearDetails =
 
 ProjectRecoveryDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        thin = this.padding / 2,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        thin = this.padding / 2;
 
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
@@ -7628,9 +7622,6 @@ ProjectRecoveryDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
-
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
 };
 
 // LibraryImportDialogMorph ///////////////////////////////////////////
