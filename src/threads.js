@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -53,15 +53,15 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph, Map,
+/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph, ZERO,
 MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
-StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
+StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2019-December-19';
+modules.threads = '2020-April-18';
 
 var ThreadManager;
 var Process;
@@ -4273,7 +4273,7 @@ Process.prototype.reportDistanceTo = function (name) {
             point = thisObj.world().hand.position();
         } else if (this.inputOption(name) === 'center') {
             return new Point(thisObj.xPosition(), thisObj.yPosition())
-                .distanceTo(new Point(0, 0));
+                .distanceTo(ZERO);
         } else if (name instanceof List) {
             return new Point(thisObj.xPosition(), thisObj.yPosition())
                 .distanceTo(new Point(name.at(1), name.at(2)));
@@ -5147,7 +5147,7 @@ Process.prototype.reportPentrailsAsSVG = function () {
         acc.img.src = 'data:image/svg+xml,' + svg.src;
         acc.img.rot = svg.rotationShift;
     } else if (this.context.accumulator.ready) {
-        offset = new Point(0, 0);
+        offset = ZERO;
         rcvr = this.blockReceiver();
         if (rcvr instanceof SpriteMorph) {
             offset = new Point(rcvr.xPosition(), -rcvr.yPosition());
