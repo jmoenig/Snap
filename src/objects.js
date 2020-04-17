@@ -7653,7 +7653,7 @@ StageMorph.prototype.penTrails = function () {
     return this.trailsCanvas;
 };
 
-StageMorph.prototype.penTrailsMorph = function () { // +++ review and refactor
+StageMorph.prototype.penTrailsMorph = function () {
     // for collision detection purposes
     var morph, trails, ctx;
 
@@ -7674,8 +7674,8 @@ StageMorph.prototype.penTrailsMorph = function () { // +++ review and refactor
         trails.height,
         0,
         0,
-        this.getImage().width, // +++ ??
-        this.getImage().height
+        this.width(),
+        this.height()
     );
     this.cachedPenTrailsMorph = morph;
     return morph;
