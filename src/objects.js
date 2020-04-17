@@ -4211,7 +4211,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
     if (!this.color.eq(aColor, true)) { // observeAlpha
-        this.color = aColor.copy(); // +++ why copy?
+        this.color = aColor.copy();
         if (!this.costume) {
             this.rerender();
             this.silentGotoXY(x, y);
@@ -7681,7 +7681,7 @@ StageMorph.prototype.penTrailsMorph = function () { // +++ review and refactor
     return morph;
 };
 
-StageMorph.prototype.projectionLayer = function () { // +++ review and recycle
+StageMorph.prototype.projectionLayer = function () {
     if (!this.projectionCanvas) {
         this.projectionCanvas = newCanvas(this.dimensions, true);
     }
@@ -8992,7 +8992,7 @@ StageMorph.prototype.changeColorComponentHSVA
 
 StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
-        this.color = aColor.copy(); // +++ why copy?
+        this.color = aColor.copy();
         this.rerender();
         this.cachedHSV = this.color.hsv();
     }
@@ -10785,8 +10785,6 @@ CellMorph.prototype.createContents = function () {
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents);
-
-    // +++ to do: combine both tests into a single exit condition
 
     if (this.contentsMorph && !isSameList && !isSameTable) {
         this.contentsMorph.destroy();
