@@ -7711,7 +7711,6 @@ StageMorph.prototype.startVideo = function() {
             this.world
         );
         dialog.fixLayout();
-        dialog.drawNew();
         if (myself.projectionSource) {
             myself.projectionSource.remove();
             myself.projectionSource = null;
