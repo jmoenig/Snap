@@ -11256,8 +11256,6 @@ WatcherMorph.prototype.fixLayout = function () {
     var fontSize = SyntaxElementMorph.prototype.fontSize, isList,
         myself = this;
 
-    // ++++ needs to be decoupled: determining bounds vs. creating submorphs
-
     // create my parts
     if (this.labelMorph === null) {
         this.labelMorph = new StringMorph(
