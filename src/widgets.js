@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-April-15';
+modules.widgets = '2020-April-18';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -161,7 +161,7 @@ PushButtonMorph.prototype.init = function (
     this.environment = environment || null;
     this.labelString = labelString || null;
     this.label = null;
-    this.labelMinExtent = new Point(0, 0);
+    this.labelMinExtent = ZERO;
     this.hint = hint || null;
     this.isDisabled = false;
 
@@ -1724,12 +1724,12 @@ DialogBoxMorph.prototype.promptCode = function (
     text.isEditable = true;
 
     frame.setHeight(size / 4);
-    frame.fixLayout = nop; // +++ ???
+    frame.fixLayout = nop;
     frame.edge = InputFieldMorph.prototype.edge;
     frame.fontSize = InputFieldMorph.prototype.fontSize;
     frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.render = InputFieldMorph.prototype.render; // +++ ?? was: drawNew
+    frame.render = InputFieldMorph.prototype.render;
     frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     frame.addContents(text);
@@ -1750,10 +1750,7 @@ DialogBoxMorph.prototype.promptCode = function (
         bdy.add(remarkText(instructions));
     }
     bdy.fixLayout();
-
     this.addBody(bdy);
-    // +++ frame.drawNew();
-    // +++ bdy.drawNew();
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
@@ -2113,7 +2110,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         function indicate(morph, string) {
             var bubble = new SpeechBubbleMorph(localize(string));
             bubble.isPointingRight = false;
-            bubble.fixLayout(); // +++ was: bubble.drawNew();
+            bubble.fixLayout();
             bubble.popUp(
                 world,
                 morph.leftCenter().subtract(new Point(bubble.width() + 2, 0))
