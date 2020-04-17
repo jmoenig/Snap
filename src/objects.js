@@ -1654,7 +1654,6 @@ SpriteMorph.prototype.init = function (globals) {
     this.paletteCache = {}; // not to be serialized (!)
     this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
-    this.wasWarped = false; // not to be serialized, used for fast-tracking // +++ is this needed anymore?
 
     this.graphicsValues = {
         'color': 0,
