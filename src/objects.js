@@ -11311,7 +11311,7 @@ WatcherMorph.prototype.fixLayout = function () {
         this.sliderMorph.hide();
         this.cellMorph.big();
         this.cellMorph.setPosition(this.position());
-        this.bounds.setExtent(this.cellMorph.extent().subtract(1)); // +++ refactor
+        this.bounds.setExtent(this.cellMorph.extent().subtract(1));
         return;
     }
 
