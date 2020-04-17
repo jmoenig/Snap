@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2019 by Jens Mönig and Brian Harvey
+    Copyright (C) 2020 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -58,11 +58,11 @@
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, isNil, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-12';
+modules.lists = '2020-April-18';
 
 var List;
 var ListWatcherMorph;
@@ -749,7 +749,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
 
         if (label.text !== idx.toString()) {
             label.text = idx.toString();
-            labe.fixLayout();
+            label.fixLayout();
         }
 
         button.action = idx;
