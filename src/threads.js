@@ -4605,11 +4605,10 @@ Process.prototype.doSet = function (attribute, value) {
         if (!contains([0, 1, 2], +value)) {
             return; // maybe throw an error msg
         }
+        rcvr.changed();
         rcvr.rotationStyle = +value;
-        // redraw sprite:
-        rcvr.changed();
-        rcvr.drawNew();
-        rcvr.changed();
+        rcvr.fixLayout();
+        rcvr.rerender();
         // update padlock symbol in the IDE:
         ide = rcvr.parentThatIsA(IDE_Morph);
         if (ide) {
