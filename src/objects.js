@@ -1982,20 +1982,6 @@ SpriteMorph.prototype.render = function (ctx) {
     this.version = Date.now();
 };
 
-/* // +++ should be removed
-SpriteMorph.prototype.endWarp = function () { // +++ is this needed anymore?
-    this.isWarped = false;
-    if (this.wantsRedraw) {
-        var x = this.xPosition(),
-            y = this.yPosition();
-        this.drawNew();
-        this.silentGotoXY(x, y, true); // just me
-        this.wantsRedraw = false;
-    }
-    this.parent.changed();
-};
-*/
-
 SpriteMorph.prototype.rotationCenter = function () {
     return this.position().add(this.rotationOffset);
 };
@@ -3483,19 +3469,12 @@ SpriteMorph.prototype.addCostume = function (costume) {
 SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
     var x = this.xPosition ? this.xPosition() : null,
         y = this.yPosition ? this.yPosition() : null,
-        idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume),
-        isWarped = this.isWarped;
+        idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
-    if (isWarped) {
-        this.endWarp();
-    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
     this.rerender();
-    if (isWarped) {
-        this.startWarp();
-    }
     if (x !== null) {
         this.silentGotoXY(x, y, true); // just me
     }
@@ -4289,10 +4268,6 @@ SpriteMorph.prototype.reportTouchingColor = function (aColor) {
         data, len, i;
 
     if (stage) {
-        if (this.wantsRedraw && this.isWarped) {
-            this.endWarp();
-            this.startWarp();
-        }
         data = this.overlappingPixels(stage);
         if (!data) {return false; }
         len = data[0].length;
@@ -4319,10 +4294,6 @@ SpriteMorph.prototype.reportColorIsTouchingColor = function (
         data, len, i;
 
     if (stage) {
-        if (this.wantsRedraw && this.isWarped) {
-            this.endWarp();
-            this.startWarp();
-        }
         data = this.overlappingPixels(stage);
         if (!data) {return false; }
         len = data[0].length;
@@ -4620,13 +4591,9 @@ SpriteMorph.prototype.setScale = function (percentage, noShadow) {
     // set my (absolute) scale in percent
     var x = this.xPosition(),
         y = this.yPosition(),
-        isWarped = this.isWarped, // +++ should be obsolete, remove
         realScale,
         growth;
 
-    if (isWarped) { // +++ should be obsolete, remove
-        this.endWarp();
-    }
     realScale = (+percentage || 0) / 100;
     growth = realScale / this.nestingScale;
     this.nestingScale = realScale;
@@ -4636,12 +4603,7 @@ SpriteMorph.prototype.setScale = function (percentage, noShadow) {
     this.changed();
     this.fixLayout();
     this.rerender();
-    // +++ this.drawNew();
-    // +++ this.changed();
 
-    if (isWarped) { // should be obsolete, remove
-        this.startWarp();
-    }
     this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
 
@@ -7952,24 +7914,9 @@ StageMorph.prototype.step = function () {
         this.stepGenericConditions();
     }
     if (this.isFastTracked && this.threads.processes.length) {
-        this.children.forEach(function (morph) {
-            if (morph instanceof SpriteMorph) {
-                morph.wasWarped = morph.isWarped;
-                if (!morph.isWarped) {
-                    morph.startWarp();
-                }
-            }
-        });
-        while ((Date.now() - this.lastTime) < 17) { // approx. 60 fps
+        while ((Date.now() - this.lastTime) < 15) { // approx. 67 fps
             this.threads.step();
         }
-        this.children.forEach(function (morph) {
-            if (morph instanceof SpriteMorph) {
-                if (!morph.wasWarped) {
-                    morph.endWarp();
-                }
-            }
-        });
         this.changed();
     } else {
         this.threads.step();
