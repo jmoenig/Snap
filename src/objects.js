@@ -2752,12 +2752,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
         hideNextSpace = false,
         myself = this,
         stage = this.parentThatIsA(StageMorph),
-        oldFlag = Morph.prototype.trackChanges,
         shade = new Color(140, 140, 140),
         searchButton,
         makeButton;
-
-    Morph.prototype.trackChanges = false;
 
     palette.owner = this;
     palette.padding = unit / 2;
@@ -3014,8 +3011,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     palette.scrollX(palette.padding);
     palette.scrollY(palette.padding);
-
-    Morph.prototype.trackChanges = oldFlag;
     return palette;
 };
 
@@ -3154,15 +3149,13 @@ SpriteMorph.prototype.searchBlocks = function (
     }
 
     function show(blocks) {
-        var oldFlag = Morph.prototype.trackChanges,
-            x = searchPane.contents.left() + 5,
+        var x = searchPane.contents.left() + 5,
             y = (searchBar.bottom() + unit);
         blocksList = blocks;
         selection = null;
         if (blocks.length && scriptFocus) {
             selection = blocks[0];
         }
-        Morph.prototype.trackChanges = false;
         searchPane.contents.children = [searchPane.contents.children[0]];
         blocks.forEach(function (block) {
             block.setPosition(new Point(x, y));
@@ -3170,7 +3163,6 @@ SpriteMorph.prototype.searchBlocks = function (
             y += block.height();
             y += unit * 0.3;
         });
-        Morph.prototype.trackChanges = oldFlag;
         showSelection();
         searchPane.changed();
     }
@@ -4478,7 +4470,7 @@ SpriteMorph.prototype.pasteOn = function (target) {
                     sourceCostume.width(),
                     sourceCostume.height()
                 ).multiplyBy(0.5 * this.scale * stageScale);
-            originDist = center.distanceTo(new Point(0, 0));
+            originDist = center.distanceTo(ZERO);
             originAngleRadians = Math.atan2(center.y, center.x);
             spriteCenter = new Point(
                     target.costume.width(),
