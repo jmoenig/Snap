@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-April-12';
+modules.tables = '2020-April-18';
 
 var Table;
 var TableCellMorph;
@@ -304,7 +304,6 @@ TableCellMorph.prototype.init = function (data, extent, isLabel) {
     TableCellMorph.uber.init.call(this, true);
 
     // override inherited properites:
-    this.noticesTransparentClick = true;
     if (extent) {this.bounds.setExtent(extent); }
     this.fixLayout();
 };
@@ -1125,7 +1124,6 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
 
     // override inherited properites:
     this.color = 'transparent';
-    this.noticesTransparentClick = false;
     this.bounds = this.tableMorph.bounds.copy();
     this.add(this.tableMorph);
 
