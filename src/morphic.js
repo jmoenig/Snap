@@ -5291,13 +5291,6 @@ ColorPickerMorph.prototype.init = function (defaultColor) {
     this.setExtent(new Point(80, 80));
 };
 
-/*
-ColorPickerMorph.prototype.drawNew = function () {
-    ColorPickerMorph.uber.drawNew.call(this);
-    this.buildSubmorphs();
-};
-*/
-
 ColorPickerMorph.prototype.fixLayout = function () {
     var cpal, gpal, x, y;
 
