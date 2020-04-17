@@ -10083,7 +10083,6 @@ CostumeEditorMorph.prototype.init = function (costume) {
     this.rotationCenter = this.costume.rotationCenter.copy();
     this.margin = new Point(0, 0);
     CostumeEditorMorph.uber.init.call(this);
-    this.noticesTransparentClick = true;
 };
 
 // CostumeEditorMorph edit ops
