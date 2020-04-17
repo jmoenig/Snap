@@ -58,7 +58,10 @@
      are deprecated
 
      "trackChanges" and other damage-list housekeeping tweaks are no longer
-     needed and no longer supported
+     needed and no longer supported, except for the Pen constructor's isWarped
+     property and its methods, such as startWarp and endWarp.
+     
+     Pen >> wantsRedraw is no longer needed and deprecated
 
      holes:
      Morphs have a list of rectangles representing "untouchable" areas
@@ -4886,7 +4889,6 @@ PenMorph.prototype.init = function () {
     this.heading = 0;
     this.isDown = true;
     this.size = 1;
-    this.wantsRedraw = false;
     this.penPoint = 'tip'; // or 'center"
     this.penBounds = null; // rect around the visible arrow shape
 
@@ -4897,15 +4899,9 @@ PenMorph.prototype.init = function () {
 // PenMorph updating - optimized for warping, i.e atomic recursion
 
 PenMorph.prototype.changed = function () {
-    if (this.isWarped === false) {
-        var w = this.root();
-        if (w instanceof WorldMorph) {
-            w.broken.push(this.visibleBounds().spread());
-        }
-        if (this.parent) {
-            this.parent.childChanged(this);
-        }
-    }
+    if (this.isWarped) {return; }
+    PenMorph.uber.changed.call(this);
+
 };
 
 // PenMorph display:
@@ -4916,13 +4912,6 @@ PenMorph.prototype.render = function (ctx, facing) {
 
     var start, dest, left, right, len,
         direction = facing || this.heading;
-
-/* +++ should be obsolete
-    if (this.isWarped) {
-        this.wantsRedraw = true;
-        return;
-    }
-*/
 
     len = this.width() / 2;
     start = this.center().subtract(this.bounds.origin);
@@ -5080,17 +5069,11 @@ PenMorph.prototype.clear = function () {
 // PenMorph optimization for atomic recursion:
 
 PenMorph.prototype.startWarp = function () {
-    this.wantsRedraw = false; // +++ should be obsolete now
     this.isWarped = true;
 };
 
 PenMorph.prototype.endWarp = function () {
     this.isWarped = false;
-    //+++ should be obsolete now
-    if (this.wantsRedraw) {
-        // +++ this.drawNew();
-        this.wantsRedraw = false;
-    }
     this.parent.changed();
 };
 
