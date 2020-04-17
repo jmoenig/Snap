@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-16';
+modules.objects = '2020-April-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -1708,7 +1708,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     // needs to be copied instead of redrawn, because at
     // this time the clone is not yet onstage and therefore
     // has no access to the stage's scale
-    c.image = copyCanvas(this.image);
+    c.cachedImage = copyCanvas(this.cachedImage);
 
     // un-share individual properties
     c.instances = [];
@@ -1982,6 +1982,7 @@ SpriteMorph.prototype.render = function (ctx) {
     this.version = Date.now();
 };
 
+/* // +++ should be removed
 SpriteMorph.prototype.endWarp = function () { // +++ is this needed anymore?
     this.isWarped = false;
     if (this.wantsRedraw) {
@@ -1993,6 +1994,7 @@ SpriteMorph.prototype.endWarp = function () { // +++ is this needed anymore?
     }
     this.parent.changed();
 };
+*/
 
 SpriteMorph.prototype.rotationCenter = function () {
     return this.position().add(this.rotationOffset);
@@ -10029,7 +10031,7 @@ SVG_Costume.prototype.copy = function () {
 /*
     Flipping is currently inherited from Costume, which rasterizes it.
     Therefore flipped SVG costumes may appear pixelated until we add
-    a method to either truly flip SVGs or change the Sprite's drawNew()
+    a method to either truly flip SVGs or change the Sprite's render()
     method to scale the costume before flipping it.
 
     Stretching, OTOH, is achieved with real scaling and thus produces

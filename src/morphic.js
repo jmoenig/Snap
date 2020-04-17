@@ -36,7 +36,7 @@
      * rerender() to earmark for rerendering
      * image has a getter method: getImage()
      * image has been renamed to cachedImage
-     * cachesImage flag (default: false)
+     * isCachingImage flag (default: false)
      * shouldRerender flag (default: false)
      * fixLayout() determines extent and arranges submorphs, if any, gets called
        from setExtent()
@@ -1179,7 +1179,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-April-05';
+var morphicVersion = '2020-April-17';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
