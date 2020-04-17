@@ -3635,7 +3635,11 @@ Morph.prototype.removeShadow = function () {
 
 Morph.prototype.penTrails = function () {
     // answer my pen trails canvas. default is to answer my image
-    return this.getImage(); // +++ review this
+    // NOTE: clients calling this also want to make sure the
+    // obtained canvas will be around at the next display cycle,
+    // so they might also wish to set the receiver's "isCachingImage"
+    // property to "true".
+    return this.getImage();
 };
 
 // Morph updating:
@@ -5463,7 +5467,6 @@ CursorMorph.prototype.processKeyDown = function (event) {
     }
 
     if (keyName === 'Tab' || keyName === 'U+0009') {
-        // +++ to do: refactor to use a CASE statement here
         if (shift) {
             this.target.backTab(this.target);
         } else {
@@ -5480,13 +5483,13 @@ CursorMorph.prototype.processKeyDown = function (event) {
         if (keyName === 'ArrowDown') {
             dest = this.target.downFrom(this.slot);
             this.textarea.setSelectionRange(dest, dest);
-            // +++ to do: allow holding shift to select
+            // to do: allow holding shift to select
             event.preventDefault();
         }
         if (keyName === 'ArrowUp') {
             dest = this.target.upFrom(this.slot);
             this.textarea.setSelectionRange(dest, dest);
-            // +++ to do: allow holding shift to select
+            // to do: allow holding shift to select
             event.preventDefault();
         }
         this.target.escalateEvent('reactToKeystroke', event);
