@@ -241,13 +241,15 @@ SyntaxElementMorph.uber = Morph.prototype;
         rfColor         - <Color> for reified outlines and slot backgrounds
 */
 
+SyntaxElementMorph.prototype.contrast = 65;
+
 SyntaxElementMorph.prototype.setScale = function (num) {
     var scale = Math.min(Math.max(num, 1), 25);
     this.scale = scale;
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
     this.edge = scale;
-    this.flatEdge = 0.25 * scale;
+    this.flatEdge = scale * 0.5;
     this.jag = 5 * scale;
     this.inset = 6 * scale;
     this.hatHeight = 12 * scale;
@@ -272,7 +274,6 @@ SyntaxElementMorph.prototype.setScale = function (num) {
     this.feedbackMinHeight = 5;
     this.minSnapDistance = 20;
     this.reporterDropFeedbackPadding = 10 * scale;
-    this.contrast = 65;
     this.labelContrast = 25;
     this.activeHighlight = new Color(153, 255, 213);
     this.errorHighlight = new Color(173, 15, 0);

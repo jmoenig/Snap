@@ -145,6 +145,7 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
+    SyntaxElementMorph.prototype.contrast = 65;
     ScriptsMorph.prototype.feedbackColor = new Color(255, 255, 255);
 };
 
@@ -187,6 +188,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
+    SyntaxElementMorph.prototype.contrast = 25;
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
 
