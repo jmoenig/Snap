@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-07';
+modules.byob = '2020-April-20';
 
 // Declarations
 
@@ -633,7 +633,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) { /
         } else {
             this.fixBlockColor();
         }
-        this.setSpec(newSpec, silently, def); // +++ check silently
+        this.setSpec(newSpec, def);
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
