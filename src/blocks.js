@@ -9275,7 +9275,8 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
 InputSlotMorph.prototype.fixLayout = function () {
     var width, height, arrowWidth,
         contents = this.contents(),
-        arrow = this.arrow();
+        arrow = this.arrow(),
+        tp = this.topBlock();
 
     contents.isNumeric = this.isNumeric;
     contents.isEditable = (!this.isReadOnly);
@@ -9344,10 +9345,10 @@ InputSlotMorph.prototype.fixLayout = function () {
         ));
     }
 
-    if (this.parent) {
-        if (this.parent.fixLayout) {
-            this.parent.fixLayout();
-        }
+    if (this.parent && this.parent.fixLayout) {
+        tp.fullChanged();
+        this.parent.fixLayout();
+        tp.fullChanged();
     }
 };
 
