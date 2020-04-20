@@ -6451,7 +6451,6 @@ ScriptsMorph.prototype.init = function () {
 
     ScriptsMorph.uber.init.call(this);
     this.setColor(new Color(70, 70, 70));
-    this.noticesTransparentClick = true;
 
     // initialize "undrop" queue
     this.isAnimating = false;
@@ -8032,7 +8031,6 @@ function RingCommandSlotMorph() {
 
 RingCommandSlotMorph.prototype.init = function () {
     RingCommandSlotMorph.uber.init.call(this);
-    this.noticesTransparentClick = true;
     this.color = new Color(0, 17, 173);
     this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
@@ -10969,8 +10967,6 @@ MultiArgMorph.prototype.init = function (
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
     arrows.alpha = isTransparent === false ? 1 : 0;
-    arrows.noticesTransparentClick = true;
-    this.noticesTransparentclick = true;
 
     // label text:
     if (this.labelText || (this.slotSpec === '%cs')) {
@@ -11427,7 +11423,6 @@ ArgLabelMorph.prototype.init = function (argMorph, labelTxt) {
 
     // ArgLabelMorphs are transparent
     this.alpha = 0;
-    this.noticesTransparentclick = true;
 
     // label text:
     label = this.labelPart(this.labelText);
@@ -12472,7 +12467,6 @@ CommentMorph.prototype.init = function (contents) {
         'down',
         this.fontSize
     );
-    this.arrow.noticesTransparentClick = true;
     this.arrow.mouseClickLeft = function () {myself.toggleExpand(); };
     this.contents = new TextMorph(
         contents || localize('add comment here...'),
