@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-17';
+modules.objects = '2020-April-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -6019,6 +6019,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     watcher.fixLayout();
     watcher.keepWithin(stage);
     stage.add(watcher);
+    watcher.changed();
     return watcher;
 };
 
@@ -6081,6 +6082,7 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
     stage.add(watcher);
     watcher.fixLayout();
     watcher.keepWithin(stage);
+    watcher.changed();
 };
 
 SpriteMorph.prototype.showingWatcher = function (selector) {
