@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-April-04';
+modules.store = '2020-April-20';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -614,7 +614,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         // set watcher's contentsMorph's extent if it is showing a list and
         // its monitor dimensions are given
         if (watcher.currentValue instanceof List &&
-                watcher.cellMorph.contentsMorph) { // ++++ review if needed at all
+                watcher.cellMorph.contentsMorph) {
             extX = model.attributes.extX;
             if (extX) {
                 watcher.cellMorph.contentsMorph.setWidth(+extX);
@@ -752,8 +752,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     this.project = {};
     this.mediaDict = {};
 
-    ide.stage.fixLayout(); // +++
-    ide.stage.rerender(); // +++
+    ide.stage.fixLayout();
+    ide.stage.rerender();
     ide.createCorral();
     ide.fixLayout();
 };
@@ -1291,7 +1291,6 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         inp = this.loadScript(model, object);
         if (inp) {
             if (block.selector === 'reifyReporter') {
-//+++                input.silentReplaceInput(input.children[0], inp);
                 input.replaceInput(input.children[0], inp);
                 input.fixLayout();
             } else {
@@ -1302,7 +1301,6 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     } else if (model.tag === 'autolambda' && model.children[0]) {
         inp = this.loadBlock(model.children[0], true, object);
         if (inp) {
-//            input.silentReplaceInput(input.children[0], inp);
             input.replaceInput(input.children[0], inp);
             input.fixLayout();
         }
