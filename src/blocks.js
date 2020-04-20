@@ -4271,7 +4271,7 @@ BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
         } else if (morph instanceof SyntaxElementMorph) {
             morph.fixBlockColor(myself, isForced);
             if (morph instanceof BooleanSlotMorph) {
-                morph.fixLayout(); // +++ ???
+                morph.fixLayout();
             }
         }
     });
@@ -9412,7 +9412,7 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
         cnts = this.contents();
         this.constant = null;
         cnts.isItalic = false;
-        cnts.rerender(); // +++ also fixLayout()?
+        cnts.rerender();
     }
 };
 
@@ -9420,7 +9420,7 @@ InputSlotMorph.prototype.reactToEdit = function () {
     this.contents().clearSelection();
 };
 
-InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) { // +++ is this ever called?
+InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
     this.onNextStep = function () {
         aStringOrTextMorph.selectAll();
     };
@@ -10175,8 +10175,6 @@ BooleanSlotMorph.prototype.fixLayout = function () {
 // BooleanSlotMorph drawing:
 
 BooleanSlotMorph.prototype.render = function (ctx) {
-    // "progress" is an optional number sliding the knob // +++ update this comment
-    // on a range between 0 and 4
     if (!(this.cachedNormalColor)) { // unless flashing
         this.color = this.parent ?
                 this.parent.color : new Color(200, 200, 200);
@@ -10200,7 +10198,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     // draw the 'flat' shape:
     if (this.cachedNormalColor) { // if flashing
         ctx.fillStyle = this.color.toString();
-    } else if (progress < 0 ) { // 'fade' +++
+    } else if (progress < 0 ) { // 'fade'
         ctx.fillStyle = this.color.darker(25).toString();
     } else {
         switch (this.value) {
@@ -10579,7 +10577,8 @@ ArrowMorph.prototype.init = function (direction, size, padding, color) {
 
     ArrowMorph.uber.init.call(this);
     this.color = color || new Color(0, 0, 0);
-    this.bounds.setExtent(new Point(this.size, this.size)); // +++ refactor
+    this.bounds.setWidth(this.size);
+    this.bounds.setHeight(this.size);
     this.rerender();
 };
 
@@ -10587,7 +10586,8 @@ ArrowMorph.prototype.setSize = function (size) {
     var min = Math.max(size, 1);
     this.size = size;
     this.changed();
-    this.bounds.setExtent(new Point(min, min)); // +++
+    this.bounds.setWidth(min);
+    this.bounds.setHeight(min);
     this.rerender();
 };
 
@@ -10998,7 +10998,7 @@ MultiArgMorph.prototype.init = function (
     // control panel:
     arrows.add(leftArrow);
     arrows.add(rightArrow);
-    arrows.rerender(); // +++
+    arrows.rerender();
     arrows.acceptsDrops = false;
 
     this.add(arrows);
@@ -11087,7 +11087,8 @@ MultiArgMorph.prototype.fixLayout = function () {
             if (!label.shadowColor.eq(shadowColor)) {
                 label.shadowColor = shadowColor;
                 label.shadowOffset = shadowOffset;
-                label.rerender(); // +++
+                label.fixLayout();
+                label.rerender();
             }
         }
 
