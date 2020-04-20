@@ -226,7 +226,6 @@ SyntaxElementMorph.uber = Morph.prototype;
 
     snapping:
 
-        feedbackColor       - <Color> for displaying drop feedbacks
         feedbackMinHeight   - height of white line for command block snaps
         minSnapDistance     - threshold when commands start snapping
         reporterDropFeedbackPadding  - increases reporter drop feedback
@@ -270,7 +269,6 @@ SyntaxElementMorph.prototype.setScale = function (num) {
     this.labelWidth = 450 * scale;
     this.labelWordWrap = true;
     this.dynamicInputLabels = true;
-    this.feedbackColor = new Color(255, 255, 255);
     this.feedbackMinHeight = 5;
     this.minSnapDistance = 20;
     this.reporterDropFeedbackPadding = 10 * scale;
@@ -6404,6 +6402,7 @@ ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
 ScriptsMorph.prototype.enableNestedAutoWrapping = true;
+ScriptsMorph.prototype.feedbackColor = new Color(255, 255, 255);
 
 // ScriptsMorph instance creation:
 
@@ -6412,7 +6411,6 @@ function ScriptsMorph() {
 }
 
 ScriptsMorph.prototype.init = function () {
-    this.feedbackColor = SyntaxElementMorph.prototype.feedbackColor;
     this.feedbackMorph = new BoxMorph();
     this.rejectsHats = false;
 

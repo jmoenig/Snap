@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-16';
+modules.gui = '2020-April-20';
 
 // Declarations
 
@@ -144,6 +144,8 @@ IDE_Morph.prototype.setDefaultDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+
+    ScriptsMorph.prototype.feedbackColor = new Color(255, 255, 255);
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
@@ -156,15 +158,15 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(200, 200, 200);
-    IDE_Morph.prototype.frameColor = new Color(255, 255, 255);
+    IDE_Morph.prototype.backgroundColor = new Color(200, 200, 210);
+    IDE_Morph.prototype.frameColor = new Color(240, 240, 245);
 
-    IDE_Morph.prototype.groupColor = new Color(230, 230, 230);
+    IDE_Morph.prototype.groupColor = new Color(255, 255, 255);
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
     IDE_Morph.prototype.buttonLabelColor = new Color(70, 70, 70);
     IDE_Morph.prototype.tabColors = [
-        IDE_Morph.prototype.groupColor.lighter(60),
-        IDE_Morph.prototype.groupColor.darker(10),
+        IDE_Morph.prototype.frameColor,
+                IDE_Morph.prototype.frameColor.lighter(50),
         IDE_Morph.prototype.groupColor
     ];
     IDE_Morph.prototype.rotationStyleColors = [
@@ -184,6 +186,8 @@ IDE_Morph.prototype.setFlatDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+
+    ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
