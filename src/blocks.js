@@ -686,9 +686,7 @@ SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
     if (grabbedMorph instanceof CommandBlockMorph) {
         affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
         if (affected) {
-            this.startLayout();
             affected.fixLayout();
-            this.endLayout();
         }
     }
     if (topBlock) {
@@ -2287,18 +2285,6 @@ SyntaxElementMorph.prototype.mappedCode = function (definitions) {
         return result.mappedCode(definitions);
     }
     return result;
-};
-
-// SyntaxElementMorph layout update optimization
-
-SyntaxElementMorph.prototype.startLayout = function () {
-    this.topBlock().fullChanged();
-    Morph.prototype.trackChanges = false;
-};
-
-SyntaxElementMorph.prototype.endLayout = function () {
-    Morph.prototype.trackChanges = true;
-    this.topBlock().fullChanged();
 };
 
 // BlockMorph //////////////////////////////////////////////////////////
@@ -4279,9 +4265,7 @@ BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
 
 BlockMorph.prototype.setCategory = function (aString) {
     this.category = aString;
-    this.startLayout();
     this.fixBlockColor();
-    this.endLayout();
 };
 
 BlockMorph.prototype.hasLabels = function () {
@@ -4797,9 +4781,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
     scripts.clearDropInfo();
     scripts.lastDroppedBlock = this;
     if (target === null) {
-        this.startLayout();
         this.fixBlockColor();
-        this.endLayout();
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
         if (hand) {
             scripts.recordDrop(hand.grabOrigin);
@@ -4809,7 +4791,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
 
     scripts.lastDropTarget = target;
 
-    this.startLayout();
     if (target.loc === 'bottom') {
         if (target.type === 'slot') {
             this.removeHighlight();
@@ -4869,7 +4850,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
         );
     }
     this.fixBlockColor();
-    this.endLayout();
     CommandBlockMorph.uber.snap.call(this); // align stuck comments
     if (hand) {
         scripts.recordDrop(hand.grabOrigin);
@@ -5619,9 +5599,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
             this.snapSound.play();
         }
     }
-    this.startLayout();
     this.fixBlockColor();
-    this.endLayout();
     ReporterBlockMorph.uber.snap.call(this);
     if (hand) {
         scripts.recordDrop(hand.grabOrigin);
@@ -7303,15 +7281,11 @@ ScriptsMorph.prototype.sortedElements = function () {
 // ScriptsMorph blocks layout fix
 
 ScriptsMorph.prototype.fixMultiArgs = function () {
-    var oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
     this.forAllChildren(function (morph) {
         if (morph instanceof MultiArgMorph) {
             morph.fixLayout();
         }
     });
-    Morph.prototype.trackChanges = oldFlag;
 };
 
 // ScriptsMorph drag & drop:
@@ -9373,13 +9347,7 @@ InputSlotMorph.prototype.fixLayout = function () {
 
     if (this.parent) {
         if (this.parent.fixLayout) {
-            if (this.world()) {
-                this.startLayout();
-                this.parent.fixLayout();
-                this.endLayout();
-            } else {
-                this.parent.fixLayout();
-            }
+            this.parent.fixLayout();
         }
     }
 };
@@ -11248,7 +11216,6 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         repetition = target.world().currentKey === 16 ? 3 : 1,
         i;
 
-    target.startLayout();
     if (rightArrow.bounds.containsPoint(pos)) {
         for (i = 0; i < repetition; i += 1) {
             if (rightArrow.isVisible) {
@@ -11264,7 +11231,6 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     } else {
         target.escalateEvent('mouseClickLeft', pos);
     }
-    target.endLayout();
 };
 
 // MultiArgMorph menu:
