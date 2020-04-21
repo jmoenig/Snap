@@ -289,8 +289,7 @@ SnapTranslator.dict.he = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'במה נבחרה: ללא תנועה',
 
     'move %n steps':
         'צעדים %n זוז',
@@ -299,13 +298,13 @@ SnapTranslator.dict.he = {
     'turn %counterclockwise %n degrees':
         'מעלות %n %counterclockwise פנה',
     'point in direction %dir':
-        ' %dir الاتجاه نحو إتجه',
+        ' %dir פנה לכיוון',
     'point towards %dst':
-        ' %dst نحو إتجه ',
+        ' %dst פנה לעבר ',
     'go to x: %n y: %n':
-        '%n =س %n =ص للنقطة أذهب',
+        'לך אל  x: %n y: %n',
     'go to %dst':
-        ' %dst الي إذهب',
+        ' %dst לך אל',
     'glide %n secs to x: %n y: %n':
         'ثوان %n خلال %n =س %n =ص النقطة إلي إنزلق',
     'change x by %n':
@@ -319,11 +318,11 @@ SnapTranslator.dict.he = {
     'if on edge, bounce':
         'الحافة عند كنت إذا أرتد',
     'x position':
-        'س الموضع',
+        'מיקום x',
     'y position':
-        'ص الموضع',
+        'מיקום y',
     'direction':
-        'الاتجاه',
+        'כיוון',
 
     // looks:
     'switch to costume %cst':
@@ -355,15 +354,15 @@ SnapTranslator.dict.he = {
     'set size to %n %':
         '% %n  لـ مساوياً الحجم إجعل ',
     'size':
-        'الحجم',
+        'גודל',
     'show':
-        'إظهَر',
+        'הראה',
     'hide':
-        'إختَفي',
+        'הסתר',
     'go to front':
-        'المقدمة الي إنتقل',
+        'העבר לחזית',
     'go back %n layers':
-        'طبقات  %n بمقدار الخلف الي انتقل',
+        'שכבות %n הזז לאחור',
 
     'development mode \ndebugging primitives:':
         'نمط البرمجه \nو تصحيح الاخطاء',
@@ -392,11 +391,11 @@ SnapTranslator.dict.he = {
 
     // pen:
     'clear':
-        'امسح',
+        'נקה',
     'pen down':
-        'القلـم أنـزل',
+        'עט למטנ',
     'pen up':
-        'القلـم إرفـع',
+        'עט למעלה',
     'set pen color to %clr':
         ' %clr لـ مسـاوياً القلم لون إجعل',
     'change pen color by %n':
@@ -977,161 +976,161 @@ SnapTranslator.dict.he = {
  
  // Project Manager
     'Untitled':
-        'بدون عنوان',
+        'ללא שם',
     'Open Project':
-        'فتح مشروع',
+        'פתח פרוייקט',
     '(empty)':
-        '(فارغ)',
+        '(ריק)',
     'Saved!':
-        'تم الحفظ!',
+        'נשמר!',
     'Delete Project':
-        'حذف مشروع',
+        'מחק פרוייקט',
     'Are you sure you want to delete':
-        'هل انت متأكد من رغبتك في الحذف?',
+        'האם אתה בטוח שברצונך למחוק?',
     'rename...':
-        'اعاده تسميه...',
+        'שנה שם...',
 
     // costume editor
     'Costume Editor':
-        'محرر المظاهر',
+        'עורך מותאם אישית',
     'click or drag crosshairs to move the rotation center':
-        'انقر أو اسحب علامة المركز لنقل مركز دوران الكائن',
+        'גרור את הכוונת כדי לקבע את מרגז הסיבוב',
 
     // project notes
     'Project Notes':
-        'ملاحظات المشروع',
+        'הערות לפרוייקט',
 
     // new project
     'New Project':
-        'مشروع جديد',
+        'פרוייקט חדש',
     'Replace the current project with a new one?':
-        'استبدال المشروع الحالي بأخر جديد?',
+        'להחליף את הפרוייקט הזה בחדש?',
 
     // save project
     'Save Project As...':
-        'حفظ المشروع باسم...',
+        'שמור פרוייקט בשם...',
 
     // export blocks
     'Export blocks':
-        'تصدير البلوكات',
+        'ייצא בלוקים',
     'Import blocks':
-        'استيراد البلوكات',
+        'ייבא בלוקים',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'هذا المشروع لا يحتوى علي بلوكات مخصصة ',
+        'בפרוייקט אין בלוקים מותאמים אישית',
     'select':
-        'حدد',
+        'בחר',
     'none':
-        'لا شيء',
+        'שום דבר',
 
     // variable dialog
     'for all sprites':
-        'لجميع الكائنات',
+        'עבור כל הדמויות',
     'for this sprite only':
-        'لهذا الكائن فقط',
+        'עבור דמות זו בלבד',
 
     // block dialog
     'Change block':
-        'تغيير البلوك',
+        'שנה בלוק',
     'Command':
-        'امر',
+        'פקודה',
     'Reporter':
-        'Reporter مُقَرِرات',
+        'Reporter המדווח',
     'Predicate':
-        'Predicate اسنادات تأكيدية',
+        'Predicate לתרגם',
 
     // block editor
     'Block Editor':
-        'محرر البلوكات',
+        'עורך הבלוקים',
     'Apply':
-        'طبق',
+        'החל',
 
     // block deletion dialog
     'Delete Custom Block':
-        'حذف بلوك مخصص',
+        'מחק בלוק מותאם אישית',
     'block deletion dialog text':
-        'هل تريد حقا حذف هذه الكتلة مع جميع النسخ منها',
+        'מלל דיאלוג מניעת מחיקה',
 
     // input dialog
     'Create input name':
-        'إنشاء تسمية لمُدخَل جديد',
+        'צור שם קלט',
     'Edit input name':
-        'تعديل تسمية مُدخَل',
+        'ערוך שם קלט',
     'Edit label fragment':
-        'Edit label fragment',
+        'ערוך את התווית',
     'Title text':
-        'نص العنوان',
+        'מלל כותרת',
     'Input name':
-        'أسم المُدخَل',
+        'הכנס שם',
     'Delete':
-        'حذف',
+        'מחק',
     'Object':
-        'كائن',
+        'אובייקט',
     'Number':
-        'رقم',
+        'מספר',
     'Text':
-        'نص',
+        'טקסט',
     'List':
-        'لائحة',
+        'רשימה',
     'Any type':
-        'اي نوع',
+        'כל סוג',
     'Boolean (T/F)':
-        'منطقي (W/F)',
+        'בולאני (T/F)',
     'Command\n(inline)':
-        'لبنة مستطيلة الشكل',
+        'פקודה\nבאותה השורה',
     'Command\n(C-shape)':
-        'لبنة هلالية الشكل',
+        'פקודה\n (C-shape)',
     'Any\n(unevaluated)':
-        'أي نوع\n(خام لم يُقَيَّم)',
+        'לכל\n(לא ידוע)',
     'Boolean\n(unevaluated)':
-        'منطقي\n(خام لم يُقَيَّم)',
+        'בולאני\n(לא ידוע)',
     'Single input.':
-        'ادخال مفرد.',
+        'ערך יחיד.',
     'Default Value:':
-        'القيمة الافتراضية:',
+        'ערך ברירת מחדל:',
     'Multiple inputs (value is list of inputs)':
-        'متعدد الادخالات (عبارة عن لائحة او مصفوفة من المدخلات)',
+        'קלטים מרובים (הערך הוא רשימה של קלטים)',
     'Upvar - make internal variable visible to caller':
-        'Upvar - اجعل المتغيرات الداخلية مرئية بواسطة المُستَدعي',
+        'Upvar - גרום למשתנה פנימי להיות חשוף לקורא',
 
     // About Snap
     'About Snap':
-        'عن Snap',
+        'אודות Snap',
     'Back...':
-        'للخلف...',
+        'חזרה...',
     'License...':
-        'الترخيص...',
+        'רשיון...',
     'Modules...':
-        'البرمجه...',
+        'רכיבים...',
     'Credits...':
-        'الاشارات...',
+        'תודות...',
     'Translators...':
-        'المترجمون',
+        'מתרגמים...',
     'License':
-        'الترخيص',
+        'רישיון',
     'current module versions:':
         'الاصدار الحالي',
     'Contributors':
-        'المساهمون',
+        'תורמים',
     'Translations':
-        'المترجمون',
+        'תרגומים',
 
     // variable watchers
     'normal':
-        'عادي',
+        'רגיל',
     'large':
-        'كبير',
+        'גדול',
     'slider':
-        'شريط التمرير',
+        'סליידר - סרגל בחירה',
     'slider min...':
-        'ادني حد...',
+        'מינימום סליידר...',
     'slider max...':
-        'اقصي حد...',
+        'מקסימום סליידר...',
     'import...':
-        'استيراد...',
+        'ייבא...',
     'Slider minimum value':
-        'القيمة الصغري لشريط التمرير',
+        'ערך מינימלי של הסליידר',
     'Slider maximum value':
-        'القيمة العظمي لشريط التمرير',
+        'ערך מקסימלי של הסליידר',
 
     // list watchers
     'length: ':
@@ -1154,11 +1153,11 @@ SnapTranslator.dict.he = {
 
     // collision detection
     'mouse-pointer':
-        'مؤشر_الفأرة',
+        'סמן עכבר',
     'edge':
-        'الحافة',
+        'קצה',
     'pen trails':
-        'اثار_القلم',
+        'שבילי עט',
 
     // costumes
     'Turtle':
@@ -1168,15 +1167,15 @@ SnapTranslator.dict.he = {
 
     // graphical effects
     'brightness':
-        'التوهج',
+        'בהירות',
     'ghost':
-        'شبح',
+        'רוח רפאים',
     'negative':
-        'معكوس',
+        'נגטיב',
     'comic':
-        'كوميدي',
+        'קומיקס',
     'confetti':
-        'تحول اللون',
+        'קונפטי',
 
     // keys
     'space':
@@ -1264,15 +1263,15 @@ SnapTranslator.dict.he = {
 
     // messages
     'new...':
-        'جديد...',
+        'חדש...',
 
     // math functions
     'abs':
-        'abs',
+        'ערך מוחלט',
     'floor':
-        'floor',
+        'רצפה',
     'sqrt':
-        'الجذر التربيعي',
+        'שורש ריבועי',
     'sin':
         'sin',
     'cos':
@@ -1292,109 +1291,109 @@ SnapTranslator.dict.he = {
 
     // delimiters
     'letter':
-        'الحروف',
+        'אות',
     'whitespace':
-        'الفراغات_البينية',
+        'רווח',
     'line':
-        'علامات_الأسطر',
+        'שורה',
     'tab':
-        'المسافات_البادئة',
+        'מרווח טאב',
     'cr':
-        'أكتب_ما_تريد',
+        'תחילת שורה',
 
     // data types
     'number':
-        'رقم',
+        'מספר',
     'text':
-        'نص',
+        'טקסט',
     'Boolean':
-        'منطقي',
+        'בולאני',
     'list':
-        'مصفوفة',
+        'רשימה',
     'command':
-        'لبنات_اجرائية',
+        'פקודה',
     'reporter':
-        'لبنات_تقريرية',
+        'מדווח',
     'predicate':
-        'لبنات_تأكيدية',
+        'הצהרה',
 
     // list indices
     'last':
-        'الاخير',
+        'אחרון',
     'any':
-        'أي موضع',
+        'כלשהו',
 		
 		
 		// miscellaneous
 	'find blocks...':
-		'البحث عن لبنة...',
+		'מצא בלוקים...',
 	
 	'Reset Password...':
-		'إعادة تعيين كلمة المرور',
+		'אפס סיסמה',
 	
 	'Codification support':
-		'مساعد التكويد',
+		'תמיכה בקידוד',
 	'uncheck to disable\nblock to text mapping features':
-		'أزل التحديد لألغاء مساعد التكويد',
+		'בטל סימון לביטול מיפוי בין טקסט לבלוק',
 	'check for block\nto text mapping features':
-		'حَدد لتفعيل مساعد التكويد',
+		'סמן למיפוי טקסט לבלוק',
 	'current %dates':
-		'التاريخ الحالي %dates',
-	'year':'سنة',
-	'month':'شهر',
-	'date':'يوم',
-	'hour':'ساعة',
-	'minute':'دقيقة',
-	'second':'ثانية',
+		'הנוכחי %dates',
+	'year':'שנה',
+	'month':'חודש',
+	'date':'תאריך',
+	'hour':'שעה',
+	'minute':'דקה',
+	'second':'שניה',
 	'time in milliseconds':
-		'ملي_ثانية',
+		'זמן במילי שניות',
 	'day of week':
-		'ترتيب_اليوم_في_الاسبوع',
+		'יום בשבוע',
 
 	'JavaScript function ( %mult%s ) { %code }':
-		' ( %mult%s ) { %code } جافاسكربت دالة',
+		' ( %mult%s ) { %code } פונקציית גאווהסקריפט',
 
 
 	// Copy / Paste
 	'Press CTRL+C one more time to effectively copy to clipboard.':
-		'إضغط CTRL+C مرة أخري لتأكيد نسخ محتويات الحافظة.',
+		'לחץ CTRL+C פעם נוספת כדי להעתיק ביעילות.',
 	'Press CTRL+V one more time to effectively paste from clipboard.':
-		'إضغط CTRL+V مرة أخري لتأكيد لصق محتويات الحافظة.',
+        'לחץ CTRL+V פעם נוספת כדי להדביק ביעילות.',
 	'Press CTRL+X one more time to effectively cut to clipboard.':
-		'إضغط CTRL+X مرة أخري لتأكيد لصق محتويات الحافظة.',
+        'לחץ CTRL+X פעם נוספת כדי לגזור ביעילות.',
 
 	// Paint.js
-	'undo':'تراجع',
+	'undo':'בטל',
 	'Paintbrush tool\n(free draw)':
-		'اداة الرسم الحر',
+		'מברשת לצביעה חופשית',
 	'Stroked Rectangle\n(shift: square)':
-		'اداة رسم المستطيل',
+		'מסגרת מלבן (^ריבוע)',
 	'Stroked Ellipse\n(shift: circle)':
-		'اداة رسم الشكل البيضاوى',
+        'מסגרת אליפסה (^עיגול)',
 	'Eraser tool':
-		'اداة الممحاة',
+		'מחק',
 	'Set the rotation center':
-		'ضبط مركز الدوران',
+		'קבע את מרכז הסיבוב',
 	'Line tool\n(shift: vertical/horizontal)':
-		'اداة رسم الخط المستقيم رأسيا أو أفقيا',
+		'ציור קו חופשי (^קו מאוזן/מאונך)',
 	'Filled Rectangle\n(shift: square)':
-		'أداة رسم مستطيل ممتلئ بالون محدد',
+        'מלבן מלא (^ריבוע)',
 	'Filled Ellipse\n(shift: circle)':
-		'أداة رسم شكل بيضاوى ممتلئ بلون محدد',
+        'אליפסה מלאה (^עיגול)',
 	'Fill a region':
-		'أداة الملئ بالون',
+		'דלי צבע',
 	'Pipette tool\n(pick a color anywhere)':
-		'أداة إلتقاط الألوان',
-	'grow':'تكبير',
-	'shrink':'تصغير',
+		'דגימת צבע',
+	'grow':'הגדל',
+	'shrink':'כווץ',
 	'flip \u2194':
-		'إنعكاس \u2194',
+		'הפוך \u2194',
 	'flip \u2195':
-		'إنعكاس \u2195',
+		'הפוך \u2195',
 	'Brush size':
-		'حجم الفرشـاة',
+		'גודל מברשת',
 	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'تأمين نسبة الأرتفاع الي العرض?\n(يمكنك ايضا استخدام مفتاح Shift)'
+		'כדי לשמור על פרופורציות\n אפשר ללחוץ על SHIFT'
 
 
 };
