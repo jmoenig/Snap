@@ -1,12 +1,12 @@
 /*
 
-    lang-ar.js
+    lang-he.js
 
-    Arabic transelation  for SNAP!
+    Hebrew transelation  for SNAP!
 
-    written by Jens MÃ¶nig
+    written by Yossi Cohen
 
-    Copyright (C) 2014 by Jens MÃ¶nig
+    Copyright (C) 2014 by Yossi Cohen
 
     This file is part of Snap!.
 
@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.ar = {
+SnapTranslator.dict.he = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,78 +179,80 @@ SnapTranslator.dict.ar = {
 
     // translations meta information
     'language_name':
-        'العربية', // the name as it should appear in the language menu
+        'עברית', // the name as it should appear in the language menu
     'language_translator':
-        'طارق جلال', // your name for the Translators tab
+        'יוסי כהן', // your name for the Translators tab
     'translator_e-mail':
-        'tarekgalal46@hotmail.com', // optional
+        'cohenyossi81@gmail.com', // optional
     'last_changed':
-        '2016-01-23', // this, too, will appear in the Translators tab
+        '2020-04-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'بدون عنوان',
+        'ללא כותרת',
     'development mode':
-        'وضع التصميم',
+        'מצב פיתוח',
 
     // categories:
     'Motion':
-        'الحركة',
+        'תנועה',
     'Looks':
-        'المظهر',
+        'מראה',
     'Sound':
-        'الصوت',
+        'צליל',
     'Pen':
-        'القلم',
+        'עט',
     'Control':
-        'التحكم',
+        'בקרה',
     'Sensing':
-        'الاستشعار',
+        'חיישנים',
     'Operators':
-        'العمليات',
+        'הפעלה',
     'Variables':
-        'المتغيرات',
+        'משתנים',
     'Lists':
-        'قوائم(مصفوفات)',
+        'רשימות',
     'Other':
-        'لبنات اضافيه',
+        'אחר',
 
     // editor:
     'draggable':
-        'قابل للسحب',
+        'פריטים נגררים',
 
     // tabs:
     'Scripts':
-        'المقاطع البرمجيه',
+        'תסריטים',
     'Costumes':
-        'المظاهر',
+        'תלבושות',
     'Sounds':
-        'الاصوات',
+        'צלילים',
 
     // names:
     'Sprite':
-        'كائن',
+        'דמות',
     'Stage':
-        'المنصة',
+        'במה',
 
     // rotation styles:
     'don\'t rotate':
-        'غير قابل للدوران',
+        'ללא סיבוב',
     'can rotate':
-        'قابل للدوران',
+        'ניתן לסובב',
     'only face left/right':
-        'مواجهة يمين-يسار',
+        'רק פנים ימינה-שמאלה',
 
     // new sprite button:
     'add a new sprite':
-        'اضافة كائن جديد',
+        'הוסף דמות חדשה',
 
     // tab help
     'costumes tab help':
-        'استيراد الصور من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
+        // 'import a picture from another web page or from\n'
+        // + 'a file on your computer by dropping it here\n',
+        'ייבא תמונה מאתר אינטרנט\n' + 'או מהמחשב שלך על ידי גרירתה לכאן',
     'import a sound from your computer\nby dragging it into here':
-        'استيراد الاصوات من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
+        'ייבא צלילים מהמחשב שלך על-ידי גרירתם לכאן',
     
 
     // primitive blocks:
@@ -291,11 +293,11 @@ SnapTranslator.dict.ar = {
             + 'vorhanden',
 
     'move %n steps':
-        'خطوة %n تحرك',
+        'צעדים %n זוז',
     'turn %clockwise %n degrees':
-        'درجة %n %clockwise استدر',
+        'מעלות %n %clockwise פנה',
     'turn %counterclockwise %n degrees':
-        'درجة %n %counterclockwise استدر',
+        'מעלות %n %counterclockwise פנה',
     'point in direction %dir':
         ' %dir الاتجاه نحو إتجه',
     'point towards %dst':
@@ -1133,22 +1135,22 @@ SnapTranslator.dict.ar = {
 
     // list watchers
     'length: ':
-        'الطول: ',
+        'אורך: ',
 
     // coments
     'add comment here...':
-        'اضف تعليق هنا',
+        'הוסף הערה כאן',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) يمين',
+        '(90) ימינה',
     '(-90) left':
-        '(-90) يسار',
+        '(-90) שמאלה',
     '(0) up':
-        '(0) اعلي',
+        '(0) למעלה',
     '(180) down':
-        '(180) اسفل',
+        '(180) למטה',
 
     // collision detection
     'mouse-pointer':
@@ -1160,9 +1162,9 @@ SnapTranslator.dict.ar = {
 
     // costumes
     'Turtle':
-        'السلحف',
+        'צב',
     'Empty':
-        'فارغ',
+        'ריק',
 
     // graphical effects
     'brightness':
@@ -1178,15 +1180,15 @@ SnapTranslator.dict.ar = {
 
     // keys
     'space':
-        'المسافه',
+        'רווח',
     'up arrow':
-        'السهم العلوي',
+        'חץ למעלה',
     'down arrow':
-        'السهم السفلي',
+        'חץ למטה',
     'right arrow':
-        'السهم الايمن',
+        'חץ ימינה',
     'left arrow':
-        'السهم الايسر',
+        'חץ שמאלה',
     'a':
         'a',
     'b':
