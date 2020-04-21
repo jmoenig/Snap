@@ -306,17 +306,17 @@ SnapTranslator.dict.he = {
     'go to %dst':
         ' %dst לך אל',
     'glide %n secs to x: %n y: %n':
-        'ثوان %n خلال %n =س %n =ص النقطة إلي إنزلق',
+        'החלק %n שניות אל x: %n y: %n',
     'change x by %n':
-        ' %n بمقدار س غير',
+        ' %n שנה x ב',
     'set x to %n':
-        '%n تساوي س إجعل',
+        '%n הגדר x ל',
     'change y by %n':
-        ' %n بمقدار ص غير',
+        ' %n שנה y ב',
     'set y to %n':
-        '%n تساوي ص إجعل',
+        '%n הגדר y ל',
     'if on edge, bounce':
-        'الحافة عند كنت إذا أرتد',
+        'אם בקצה, קפוץ',
     'x position':
         'מיקום x',
     'y position':
@@ -326,33 +326,33 @@ SnapTranslator.dict.he = {
 
     // looks:
     'switch to costume %cst':
-        '%cst المظهر إلي إنتقل',
+        '%cst החלף לתלבושת',
     'next costume':
-        'التالي المظهر',
+        'התלבושת הבאה',
     'costume #':
-        'المظهر ( ترتيب / رقم )',
+        'תלבושת מספר',
     'say %s for %n secs':
-        ' %s قـل ثانية %n لمدة',
+        'אמור %s למשך %n שניות ',
     'say %s':
-        '%s قـل',
+        '%s אמור',
     'think %s for %n secs':
-        '%s فكر ثانية %n لمدة',
+        'תחשוב %s למשך %n שניות',
     'think %s':
-        ' %s فكـر',
+        ' %s תחשוב',
     'Hello!':
-        '!مـرحبـا',
+        '!שלום',
     'Hmm...':
-        'هممم...',
+        'המממ...',
     'change %eff effect by %n':
-        ' %eff التأثير قيمـة %n بمقدار غيّر',
+        'שנה %eff אפקט ב %n',
     'set %eff effect to %n':
-        ' %eff التأثير لقيـمة %n المقدار حدد',
+        'קבע %eff אפקט ל %n',
     'clear graphic effects':
-        'الرسومية التأثيرات أحذف',
+        'נקה אפקטים גרפיים',
     'change size by %n':
-        ' %n بمقدار الحجم غيّـر',
+        ' %n שנה גודל ב',
     'set size to %n %':
-        '% %n  لـ مساوياً الحجم إجعل ',
+        '% %n קבע גודל ל',
     'size':
         'גודל',
     'show':
@@ -365,35 +365,35 @@ SnapTranslator.dict.he = {
         'שכבות %n הזז לאחור',
 
     'development mode \ndebugging primitives:':
-        'نمط البرمجه \nو تصحيح الاخطاء',
+        'מצב פיתוח\nמשתני דיבאג',
     'console log %mult%s':
         'console log %mult%s',
     'alert %mult%s':
-        'تنبيه: %mult%s',
+        'התראה %mult%s',
 
     // sound:
     'play sound %snd':
-        '%snd الصـوت شغّـل',
+        '%snd נגן צליל',
     'play sound %snd until done':
-        'أنتهـاءة إنتظر ثم %snd الصـوت شغّـل',
+        'נגן צליל %snd עד לסיומו',
     'stop all sounds':
-        'الأصوات جميع أوقف',
+        'עצור את כל הצלילים',
     'rest for %n beats':
-        'إقـاع وحدة %n لمدة إستـرح',
+        'נוח למשך %n ביטים',
     'play note %n for %n beats':
-        ' %n رقـم النوتـة أعزف ، إيـقاع وحـدة %n بمقدار',
+        'נגן תו %n למשך %n ביטים',
     'change tempo by %n':
-        '%n بمقـدار الصوت شـدّة غيّـر',
+        '%n שנה קצב ביטים ב',
     'set tempo to %n bpm':
-        '%n مسـاوية الصوت شدّة إجعل',
+        'קבע קצב ל %n ביטים בדקה',
     'tempo':
-        'الصوت شدّة مقـدار',
+        'קצב',
 
     // pen:
     'clear':
         'נקה',
     'pen down':
-        'עט למטנ',
+        'עט למטה',
     'pen up':
         'עט למעלה',
     'set pen color to %clr':
@@ -627,352 +627,352 @@ SnapTranslator.dict.he = {
 
     // other
     'Make a block':
-        'إنشاء لبنة مخصصة',
+        'צור בלוק',
 
      // menus
     // snap menu
     'About...':
-        'عن SNAP!...',
+        'אודות SNAP!...',
     'Reference manual':
-        'دليل التشغيل',
+        'מדריך משתמש',
     'Snap! website':
-        'الموقع الرسمي',
+        'אתר רשמי',
     'Download source':
-        'تنزيل البرنامج',
+        'הורדה...',
     'Switch back to user mode':
-        'التبديل الى وضع المستخدم',
+        'חזור למצב משתמש',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'user-friendlyعرض القوائم ',
+        'בטל תכונות מתקדמות',
     'Switch to dev mode':
-        'التبديل الي وضع المطورين',
+        'עבור למצב מפתח',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'user-friendlyعرض القوائم تعطيل ',
+        'הפעל תכונות מתקדמות',
         
      // project menu
     'Project notes...':
-        'ملاحظات عن المشروع...',
+        'הערות לפרוייקט...',
     'New':
-        'جديد',
+        'חדש',
     'Open...':
-        'فتح...',
+        'פתח...',
     'Save':
-        'حفظ',
+        'שמור',
     'Save to disk':
-        'حفظ في المستعرض',
+        'שמור לדיסק',
     'store this project\nin the downloads folder\n(in supporting browsers)':
-        'حفظ المشروع فى مجلد التنزيلات الخاص بالمتصفح المحدد',
+        'הפרוייקט יישמר בתקיית הורדות',
     'Save As...':
-        'حفظ بأسم ...',
+        'שמור בשם...',
     'Import...':
-        'استيراد...',
+        'ייבוא...',
     'file menu import hint':
-        'استيراد مشروع تم تصديره من قبل',
+        'ייבא פרוייק מקובץ',
     'Export project as plain text...':
-        'تصدير المشروع كمستند نصي ...',
+        'ייצא פרוייקט כטקסט בלבד...',
     'Export project...':
-        'تصدير المشروع...',
+        'ייצא פרוייקט...',
     'show project data as XML\nin a new browser window':
-        'عرض المشروع في صيغة XML',
+        'הצג את מידע הפרוייקט\nבחלון חדש (XML)',
     'Export blocks...':
-        'تصدير اللبنات...',
+        'ייצא בלוקים...',
     'show global custom block definitions as XML\nin a new browser window':
-        'عرض جميع اللبنات المخصصة في صيغة XML',
+        'הצג מידע אודות בלוקים מותאמים\nאישית בחלון חדש (XML)',
 		
 	'Unused blocks...':
-          'لبنات غير مستخدمة...',
+          'בלוקים לא בשימוש...',
     'find unused global custom blocks\nand remove their definitions':
-        'إيجاد اللبنات المخصصة الغير مستخدمة لحذفها من المشروع',
+        'מצא בלוקים שאינם בשימוש והסר את הגדרתם',
     'Remove unused blocks':
-        'حذف اللبنات المخصصة الغير مستخدمة',
+        'הסר בלוקים שאינם בשימוש',
     'there are currently no unused\nglobal custom blocks in this project':
-        'لايوجد لبنات مخصصة غير مستخدمة في هذا المشروع',
+        'אין כרגע בלוקים שאינם בשימוש בפרוייקט זה',
     'unused block(s) removed':
-        'تم ازالة اللبنات الغير مستخدمة',
+        'בלוקים שאינם בשימוש הוסרו',
     'Export summary...':
-        'تصدير ملخص المشروع...',
+        'דוח ייצוא...',
     'open a new browser browser window\n with a summary of this project':
-        'عرض ملخص المشروع فى نافذة مستعرض جديدة',
+        'פתח חלון חדש עם סיכום על פרוייקט זה',
     'Contents':
-        'محتويات',
+        'תכולה',
     'Kind of':
-        'نوع من أنواع',
+        'סוג',
     'Part of':
-        'جزء من',
+        'חלק מ',
     'Parts':
-        'أجزاء',
+        'חלקים',
     'Blocks':
-        'بلوكات',
+        'בלוקים',
     'For all Sprites':
-        'لكل الكائنات',
+        'עבור כל הדמויות',
 	'Import tools':
-        'استيراد أدوات',
+        'כליי יבור',
     'load the official library of\npowerful blocks':
-        'تحميل مكتبة اللبنات الرسمية لمزيد من التحكم',
+        'טען את הספריה הרשמית של\n powerful blocks',
     'Libraries...':
-        'المكتبات...',
+        'ספריות...',
     'Import library':
-        'استيراد مكتبة',
+        'ייבא ספריה',
         
     // cloud menu
     'Login...':
-        'تسجيل دخول...',
+        'הכנס...',
     'Signup...':
-        'تسجيل خروج...',
+        'הירשם...',
         
     // settings menu
     'Language...':
-        'تغيير اللغة...',
+        'שפה...',
     'Zoom blocks...':
-        'التحكم فى حجم اللبنات...',
+        'גודל בלוקים...',
     'Stage size...':
-        'مساحة المنصة...',
+        'גודל במה...',
     'Stage width':
-        'عرض المنصة',
+        'רוחב במה',
     'Stage height':
-        'ارتفاع المنصة',
+        'גובה במה',
     'Default':
-        'افتراضى',
+        'ברירת מחדל',
     'Blurred shadows':
-        'ظلال شبه شفافة',
+        'צללים מעומעמים',
     'uncheck to use solid drop\nshadows and highlights':
-        'ازل لاستخدام الظلال المعتمة',
+        'בטל סימון לצל והדגשה רגילים',
     'check to use blurred drop\nshadows and highlights':
-        'حدد لاستخدام الظلال الضبابية',
+        'הוסף סימון לצל והדגשה מעומעמים',
     'Zebra coloring':
-        'تلوين ZEBRA',
+        'צביעת זברה',
     'check to enable alternating\ncolors for nested blocks':
-        'حدد لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة',
+        'הוסף סימון כדי לאפשר צבעים מתחלפים\nעבור בלוקים משורשרים',
     'uncheck to disable alternating\ncolors for nested block':
-        'ازل لعدم لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة ',
+        'בטל סימון כדי לבטל צבעים מתחלפים\nעבור בלוקים משורשרים',
     'Dynamic input labels':
-        'بطاقات الادخال الديناميكية',
+        'תגיות קלט דינאמיות',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ازل لالغاء تفعيل بطاقات الادخال الديناميكية للمدخلات',
+        'בטל סימון כדי לבטל תווית\nדינאמית למשתנים',
     'check to enable dynamic\nlabels for variadic inputs':
-        'حدد لتفعيل بطاقات الادخال الديناميكية للمدخلات',
+        'הוסף סימון כדי לבצע תווית\nדינאמית למשתנים',
     'Prefer empty slot drops':
-        'Prefer empty slot drops',
+        'העדף הפלה לתאים ריקים',
     'settings menu prefer empty slots hint':
-        'settings menu prefer empty slots hint',
+        'תפרית העדפת רמיזה לתאים ריקים',
     'uncheck to allow dropped\nreporters to kick out others':
-        'uncheck to allow dropped\nreporters to kick out others',
+        'בטל סימון לאפשר החלפת הקיימים\nעל ידי החדשים',
     'Long form input dialog':
-        'صندوق حوار تفصيلي لتعريف المدخلات',
+        'פקד קלט ארוך',
     'Plain prototype labels':
-        'تسميات عادية لنماذج البلوكات',
+        'תויות אבטיפוס בסיסיות',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'ازل التحديد لاظهار (+) \n في تسمسة نموذج البلوك',
+        'בטל סימון כדי להציג (+) \n בתוית בלוק אבטיפוס',
     'check to hide (+) symbols\nin block prototype labels':
-        'حدد لأخفاء (+) \n من تسمسة نموذج البلوك',
+        'הוסף סימון כדי להסתיר (+) \n בתוית בלוק אבטיפוס',
     'check to always show slot\ntypes in the input dialog':
-        'حدد حتي تظهر دائما\n تصنيف بيانات الادخال \n في صندوق حوار تعريف المدخلات',
+        'הוסף סימון כדי להציג תמיד\nסוג כניסה בדיאלוג קלט',
     'uncheck to use the input\ndialog in short form':
-        'ازل التحديد لاستخدام صندوق الحوار المبسط لتعريف المدخلات',
+        'בטל סימון כדי להשתמש בדיאלוג קלט מקוצר',
     'Virtual keyboard':
-        'لوحة المفاتيح الافتراضية',
+        'מקלדת וירטואלית',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'حدد لتفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
     'Input sliders':
-        'ألواح الأدخال',
+        'סרגלי קלט',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'أزل لالغاء\nالواح الادخال للحقول',
+        'בטל סימון כדי לבטל סרגלי קלט',
     'check to enable\ninput sliders for\nentry fields':
-        'حدد لتفعيل\nالواح الادخال للحقول',
+        'הוסף סימון כדי לאפשר סרגלי קלט',
     'Clicking sound':
-        'المؤثرات الصوتية',
+        'צלילי לחיצה',
     'uncheck to turn\nblock clicking\nsound off':
-        'أزل لإيقاف\n أصوات النقر على اللبنات',
+        'בטל סימון כדי לכבות צלילי לחיצת בלוקים',
     'check to turn\nblock clicking\nsound on':
-        'حدد لتفعيل\nأصوات النقر على اللبنات',
+        'הוסף סימון כדי להפעיל צלילי לחיצת בלוקים',
     'Animations':
-        'مؤثرات حركية',
+        'הנפשה',
     'uncheck to disable\nIDE animations':
-        'أزل لابطال مؤثرات IDE-\nالحركة',
-    'Turbo mode':
-        'الوضع السريع',
-    'check to prioritize\nscript execution':
-        'حدد  لرفع درجة\n أولوية تنفيذ الاسكربت',
-    'uncheck to run scripts\nat normal speed':
-        'أزل, ليتم تنفيذ\n الاسكربت بالسرعة العادية',
+        'בטל סימון כדי לכבות הנפשת סביבת עבודה',
     'check to enable\nIDE animations':
-        'حدد لتشغيل المؤثرات IDE-\nالحركية',
+        'הוסף סימון כדי להפעיל הנפשת סביבת עבודה',
+    'Turbo mode':
+        'מצב עבודה מהיר',
+    'check to prioritize\nscript execution':
+        'הוסף סימון כדי להפעיל העדפת הפעלת תסריטים',
+    'uncheck to run scripts\nat normal speed':
+        'בטל סימון כדי להפעיל תסריטים במהירות רגילה',
 	'Flat design':
-        'تصميم مُصطَّح بسيط',
+        'עיצוב שטוח',
     'Keyboard Editing':
-        'دعم لوحة المفاتيح',
+        'עריכת מקלדת',
     'Thread safe scripts':
-        'تأمين الاسكربتات',
+        'תסריטים מוגני מיקבול',
     'uncheck to allow\nscript reentrance':
-        'أزل للسماح\n للاسكربت باعادة الدخول',
+        'בטל סימון כדי לאפשר תסריטים ממוקבלים',
     'check to disallow\nscript reentrance':
-        'حدد, لمنع\n الاسكربت من اعادة الدخول',
+        'הוסף סימון כדי למנוע תסריטים ממוקבלים',
     'Prefer smooth animations':
-        'الرسوم المتحركة على نحو سلس',
+        'העדף הנפשה חלקה',
     'uncheck for greater speed\nat variable frame rates':
-        'أزل للحصول علي سرعه اعلي\nمع معدلات تتبابع اطارات متغيره',
+        'בטל סימון כדי להעדיף מהירות גבוהה בקצב שעשוי להשתנות',
     'check for smooth, predictable\nanimations across computers':
-        'حدد للحصول على\nحركة ناعمة',
+        'הוסף סימון להנפשה בקצב קבוע וחזוי מראש',
     'Flat line ends':
-        'نهايات الخطوط',
+        'סוף קו ישר',
     'check for flat ends of lines':
-        'حدد لجعل نهايات الخطوط\n قائمة الزاوية',
+        'הוסף סימון לקימור ישר של קווים',
     'uncheck for round ends of lines':
-        'أزل لجعل نهايات الخطوط \nدائرية',
+        'בטל סימון לגימור מעוגל של קווים',
     'Inheritance support':
-        ' توريث الخصائص بين الكائنات',
+        'תמיכה בהורשה',
 	'uncheck to disable\nsprite inheritance features':
-        'أزل لألغاء تفعيل توريث الخصائص بين الكائنات',
+        'בטל סימון לבטל הורשת\nתכונות מאפייני דמות',
     'check for sprite\ninheritance features':
-        'حدد لتفعيل توريث الخصائص بين الكائنات',
+        'הוסף סימון לאפשר הורשת\nתכונות מאפייני דמות',
 
     // inputs
     'with inputs':
-        'مستخدماً القيم التالية',
+        'עם קלטים',
     'input names:':
-        'مع المدخلات',
+        'שמות קלט:',
     'Input Names:':
-        'أسماء المدخلات',
+        'שמות קלט:',
     'input list:':
-        'قائمة المدخلات',
+        'רשימת קלט:',
 
     // context menus:
     'help':
-        'مساعدة',
+        'עזרה',
 
     // palette:
     'hide primitives':
-        'أخفاء اللبنات',
+        'הסתר בסיסיים',
     'show primitives':
-        'إظهار اللبنات',
+        'הצג בסיסיים',
 
     // blocks:
     'help...':
-        'مساعدة...',
+        'עזרה...',
     'relabel...':
-        'اعادة تسمية...',
+        'תייג מחדש...',
     'duplicate':
-        'مضاعفة',
+        'שכפל',
     'make a copy\nand pick it up':
-        'اصنع نسخة و التقطها',
+        'צור עותק\nוהרם',
     'only duplicate this block':
-        'ضاعف هذا البلوك فقط',
+        'שכפול בלוק זה בלבד',
     'delete':
-        'حذف',
+        'מחק',
     'script pic...':
-        'صورة نقطية للبلوك...',
+        'תסריט תמונה...',
     'open a new window\nwith a picture of this script':
-        'افتح نافذه جديده و اعرض النص البرمجي خلالها',
+        'פתח חלון חדש\nעם תמונה של תסריט זה',
     'ringify':
-        'احاطة',
+        'מיסגור',
     'unringify':
-        'عدم احاطة',
+        'ביטול מיסגור',
 
     // custom blocks:
     'delete block definition...':
-        'حذف تعريف البلوك',
+        'הגדרת מחיקת בלוקים...',
     'edit...':
-        'تحرير...',
+        'ערוך...',
 
     // sprites:
     'edit':
-        'تحرير',
+        'ערוך',
     'move':
-        'تحرك',
+        'הזז',
     'detach from':
-        'افصل عن',
+        'נתק מ...',
     'detach all parts':
-        'افصل كل الاجزاء',
+        'נתק כל החלקים',
     'export...':
-        'تصدير...',
+        'ייצא...',
 
     // stage:
     'show all':
-        'إظهار الكل',
+        'הצג הכל',
     'pic...':
-        'الصورة المصدره...',
+        'תמונה...',
     'open a new window\nwith a picture of the stage':
-        'فتح نافذه جديده مع لقطه من المسرح',
+        'פתח חלון חדש\nעם תמונת הבמה',
 
     // scripting area
     'clean up':
-        'محاذاة اللبنات',
+        'נקה',
     'arrange scripts\nvertically':
-        'محاذا اللبنات عموديا',
+        'סדר תסריטים במאונך',
     'add comment':
-        'اضافة تعليق',
+        'הוסף הערה',
     'undrop':
-        'تراجع عن الافلات',
+        'בטל הפלה',
     'undo the last\nblock drop\nin this pane':
-        'تراجع عن الافلات الاخير للبلوك',
+        'בטל את הפלת\nהבלוק האחרונה',
     'scripts pic...':
-        'تصوير لقطة من الاسكربت...',
+        'תמונת תסריטים...',
     'open a new window\nwith a picture of all scripts':
-        'فتح نافذه جديده\n مع صورة لجميع الاسكربتات',
+        'פתח חלון חדש\nעם תמונה של כל התסריטים',
     'make a block...':
-        'أنشئ لَبِـنَة جديدة...',
+        'צור בלוק...',
 
     // costumes
     'rename':
-        'اعادة تسمية',
+        'שנה שם',
     'export':
-        'تصدير',
+        'ייצא',
     'rename costume':
-        'اعاده تسمية',
+        'שנה שם לתחפושת',
 
     // sounds
     'Play sound':
-        'شغل الصوت',
+        'נגן צליל',
     'Stop sound':
-        'اوقف الصوت',
+        'עצור צליל',
     'Stop':
-        'قف',
+        'עצור',
     'Play':
-        'شغل',
+        'נגן',
     'rename sound':
-        'اعد تسمية الصوت',
+        'שנה שם לצליל',
 
     // dialogs
     // buttons
     'OK':
-        'موافق',
+        'אישור',
     'Ok':
-        'موافق',
+        'אישור',
     'Cancel':
-        'الغاء الامر',
+        'ביטול',
     'Yes':
-        'نعم',
+        'כן',
     'No':
-        'لا',
+        'לא',
 
     // help
     'Help':
-        'مساعده',
+        'עזרה',
 
     // zoom blocks
     'Zoom blocks':
-        'حجم اللبنات',
+        'הקדל בלוקים',
     'build':
-        ' لَبِناتِك إصنع',
+        'בנה',
     'your own':
-        'الخاصة',
+        'משלך',
     'blocks':
-        'بنفسك',
+        'בלוקים',
     'normal (1x)':
-        'عادي (1x)',
+        'רגיל (1x)',
     'demo (1.2x)':
-        'تجريبي (1.2x)',
+        'הדגמה (1.2x)',
     'presentation (1.4x)':
-        'استعراضي (1.4x)',
+        'מצגת (1.4x)',
     'big (2x)':
-        'كبير (2x)',
+        'גדול (2x)',
     'huge (4x)':
-        'ضخم (4x)',
+        'ענק (4x)',
     'giant (8x)':
-        'عملاق (8x)',
+        'ענקי (8x)',
     'monstrous (10x)':
-        'عملاق جدا (10x)',
+        'מפלצתי (10x)',
  
  // Project Manager
     'Untitled':
@@ -1034,9 +1034,9 @@ SnapTranslator.dict.he = {
     'Command':
         'פקודה',
     'Reporter':
-        'Reporter המדווח',
+        'מדווח',
     'Predicate':
-        'Predicate לתרגם',
+        'עבור תנאי',
 
     // block editor
     'Block Editor':
