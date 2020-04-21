@@ -617,3 +617,14 @@ SnapTranslator.dict.sk = {
     'last_changed':
         '2019-12-10'
 };
+
+SnapTranslator.dict.he = {
+    'language_name':
+        'עברית',
+    'language_translator':
+        'יוסי כהן',
+    'translator_e-mail':
+        'cohenyossi81@gmail.com',
+    'last_changed':
+        '2020-04-21'
+};
