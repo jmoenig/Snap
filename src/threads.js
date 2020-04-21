@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-18';
+modules.threads = '2020-April-21';
 
 var ThreadManager;
 var Process;
@@ -559,6 +559,7 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
+Process.prototype.enableHOO = true; // experimental higher-order-operators
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
@@ -1845,6 +1846,41 @@ Process.prototype.doShowTable = function (list) {
 // Process interpolated non-HOF list primitives
 
 Process.prototype.reportNumbers = function (start, end) {
+    // answer a new arrayed list containing an linearly ascending progression
+    // of integers beginning at start to end.
+
+    if (this.enableHOO) {
+        if (start instanceof List) {
+            return new List(
+                start.asArray().map(each => this.reportNumbers(each, end))
+            );
+        }
+        if (end instanceof List) {
+            return new List(
+                end.asArray().map(each => this.reportNumbers(start, each))
+            );
+        }
+    } else {
+        return this.reportLinkedNumbers(start, end);
+    }
+
+    var result = [],
+        i;
+    this.assertType(start, 'number');
+    this.assertType(end, 'number');
+    if (end > start) {
+        for(i = start; i <= end; i += 1) {
+            result.push(i);
+        }
+    } else {
+        for(i = start; i >= end; i -= 1) {
+            result.push(i);
+        }
+    }
+    return new List(result);
+};
+
+Process.prototype.reportLinkedNumbers = function (start, end) {
     // answer a new linked list containing an linearly ascending progression
     // of integers beginning at start to end.
     // this is interpolated so it can handle big ranges of numbers
@@ -3314,32 +3350,118 @@ Process.prototype.reportTypeOf = function (thing) {
 // Process math primtives
 
 Process.prototype.reportSum = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportSum(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportSum(a, each))
+            );
+        }
+    }
     return +a + (+b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportDifference(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportDifference(a, each))
+            );
+        }
+    }
     return +a - +b;
 };
 
 Process.prototype.reportProduct = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportProduct(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportProduct(a, each))
+            );
+        }
+    }
     return +a * +b;
 };
 
 Process.prototype.reportQuotient = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportQuotient(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportQuotient(a, each))
+            );
+        }
+    }
     return +a / +b;
 };
 
 Process.prototype.reportPower = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportPower(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportPower(a, each))
+            );
+        }
+    }
     return Math.pow(+a, +b);
 };
 
 Process.prototype.reportModulus = function (a, b) {
+    if (this.enableHOO) {
+        if (a instanceof List) {
+            return new List(
+                a.asArray().map(each => this.reportModulus(each, b))
+            );
+        }
+        if (b instanceof List) {
+            return new List(
+                b.asArray().map(each => this.reportModulus(a, each))
+            );
+        }
+    }
+
     var x = +a,
         y = +b;
     return ((x % y) + y) % y;
 };
 
 Process.prototype.reportRandom = function (min, max) {
+    if (this.enableHOO) {
+        if (min instanceof List) {
+            return new List(
+                min.asArray().map(each => this.reportRandom(each, max))
+            );
+        }
+        if (max instanceof List) {
+            return new List(
+                max.asArray().map(each => this.reportRandom(min, each))
+            );
+        }
+    }
+
     var floor = +min,
         ceil = +max;
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
@@ -3416,10 +3538,25 @@ Process.prototype.reportBoolean = function (bool) {
 };
 
 Process.prototype.reportRound = function (n) {
+    if (this.enableHOO) {
+        if (n instanceof List) {
+            return new List(
+                n.asArray().map(each => this.reportRound(each))
+            );
+        }
+    }
     return Math.round(+n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
+    if (this.enableHOO) {
+        if (n instanceof List) {
+            return new List(
+                n.asArray().map(each => this.reportMonadic(fname, each))
+            );
+        }
+    }
+
     var x = +n,
         result = 0;
 
@@ -3530,10 +3667,26 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
+    if (this.enableHOO) {
+        if (idx instanceof List) {
+            return new List(
+                idx.asArray().map(each => this.reportLetter(each, string))
+            );
+        }
+        if (string instanceof List) {
+            return new List(
+                string.asArray().map(each => this.reportLetter(idx, each))
+            );
+        }
+    }
+
     var str, i;
+
+    /*
     if (string instanceof List) { // catch a common user error
         return '';
     }
+    */
     str = isNil(string) ? '' : string.toString();
     if (this.inputOption(idx) === 'any') {
         idx = this.reportRandom(1, str.length);
@@ -3554,6 +3707,14 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
+    if (this.enableHOO) {
+        if (string instanceof List) {
+            return new List(
+                string.asArray().map(each => this.reportUnicode(each))
+            );
+        }
+    }
+
     var str = isNil(string) ? '\u0000' : string.toString();
 
     if (str.codePointAt) { // support for Unicode in newer browsers.
@@ -3563,6 +3724,14 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
+    if (this.enableHOO) {
+        if (num instanceof List) {
+            return new List(
+                num.asArray().map(each => this.reportUnicodeAsLetter(each))
+            );
+        }
+    }
+
     var code = +(num || 0);
 
     if (String.fromCodePoint) { // support for Unicode in newer browsers.

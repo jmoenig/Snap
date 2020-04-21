@@ -57,12 +57,12 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
-Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, isNil, localize, isString,
+Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, Process, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-18';
+modules.lists = '2020-April-21';
 
 var List;
 var ListWatcherMorph;
@@ -219,6 +219,14 @@ List.prototype.length = function () {
 };
 
 List.prototype.at = function (index) {
+    if (Process.prototype.enableHOO) {
+        if (index instanceof List) {
+            return new List(
+                index.asArray().map(each => this.at(each))
+            );
+        }
+    }
+
     var value, idx = +index, pair = this;
     while (pair.isLinked) {
         if (idx > 1) {
