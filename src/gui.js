@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-20';
+modules.gui = '2020-April-21';
 
 // Declarations
 
@@ -159,7 +159,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(200, 200, 210);
+    IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
     IDE_Morph.prototype.frameColor = new Color(240, 240, 245);
 
     IDE_Morph.prototype.groupColor = new Color(255, 255, 255);
@@ -9448,7 +9448,7 @@ StageHandleMorph.prototype.init = function (target) {
     this.userState = 'normal'; // or 'highlight'
     HandleMorph.uber.init.call(this);
     this.color = MorphicPreferences.isFlat ?
-            IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
+            IDE_Morph.prototype.backgroundColor : new Color(190, 190, 190);
     this.isDraggable = false;
     this.setExtent(new Point(12, 50));
 };
@@ -9592,7 +9592,7 @@ PaletteHandleMorph.prototype.init = function (target) {
     this.userState = 'normal';
     HandleMorph.uber.init.call(this);
     this.color = MorphicPreferences.isFlat ?
-            new Color(255, 255, 255) : new Color(190, 190, 190);
+            IDE_Morph.prototype.backgroundColor : new Color(190, 190, 190);
     this.isDraggable = false;
     this.setExtent(new Point(12, 50));
 };
