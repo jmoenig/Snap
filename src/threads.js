@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-21';
+modules.threads = '2020-April-22';
 
 var ThreadManager;
 var Process;
@@ -3707,16 +3707,21 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
+    var str;
+
     if (this.enableHOO) {
         if (string instanceof List) {
             return new List(
                 string.asArray().map(each => this.reportUnicode(each))
             );
         }
+        str = isNil(string) ? '\u0000' : string.toString();
+        if (str.length > 1) {
+            return this.reportUnicode(new List(str.split('')));
+        }
+    } else {
+        str = isNil(string) ? '\u0000' : string.toString();
     }
-
-    var str = isNil(string) ? '\u0000' : string.toString();
-
     if (str.codePointAt) { // support for Unicode in newer browsers.
         return str.codePointAt(0) || 0;
     }
