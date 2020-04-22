@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-20';
+modules.blocks = '2020-April-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3208,7 +3208,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
-            block,
+            block.fullImage(),
             function () {
                 myself.setSelector(sel);
             }

@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-20';
+modules.byob = '2020-April-22';
 
 // Declarations
 
@@ -1280,7 +1280,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
-            block,
+            block.fullImage(),
             function () {
                 myself.definition = def;
                 myself.refresh();
