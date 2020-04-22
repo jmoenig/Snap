@@ -3756,6 +3756,23 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
+    if (this.enableHOO) {
+        if (string instanceof List) {
+            return new List(
+                string.asArray().map(
+                    each => this.reportTextSplit(each, delimiter)
+                )
+            );
+        }
+        if (delimiter instanceof List) {
+            return new List(
+                delimiter.asArray().map(
+                    each => this.reportTextSplit(string, each)
+                )
+            );
+        }
+    }
+
     var types = ['text', 'number'],
         strType = this.reportTypeOf(string),
         delType = this.reportTypeOf(this.inputOption(delimiter)),
