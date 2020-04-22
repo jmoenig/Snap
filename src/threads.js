@@ -1864,17 +1864,25 @@ Process.prototype.reportNumbers = function (start, end) {
         return this.reportLinkedNumbers(start, end);
     }
 
-    var result = [],
-        i;
+    var result, len, i,
+        n = start;
+
     this.assertType(start, 'number');
     this.assertType(end, 'number');
+
     if (end > start) {
-        for(i = start; i <= end; i += 1) {
-            result.push(i);
+        len = Math.floor(end - start);
+        result = new Array(len);
+        for(i = 0; i <= len; i += 1) {
+            result[i] = n;
+            n += 1;
         }
     } else {
-        for(i = start; i >= end; i -= 1) {
-            result.push(i);
+        len = Math.floor(start - end);
+        result = new Array(len);
+        for(i = 0; i <= len; i += 1) {
+            result[i] = n;
+            n -= 1;
         }
     }
     return new List(result);
