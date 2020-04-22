@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-21';
+modules.gui = '2020-April-22';
 
 // Declarations
 
@@ -3416,6 +3416,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
+        'Hper-Operations support',
+        function () {
+            Process.prototype.enableHyperOps =
+                !Process.prototype.enableHyperOps;
+        },
+        Process.prototype.enableHyperOps,
+        'uncheck to disable\nusing operators on lists and tables',
+        'check to enable\nusing operators on lists and tables',
+        true
+    );
+    addPreference(
         'Persist linked sublist IDs',
         function () {
             StageMorph.prototype.enableSublistIDs =
@@ -4080,6 +4091,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.enablePenLogging = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
     Process.prototype.enableLiveCoding = false;
+    Process.prototype.enableHyperOps = true;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();

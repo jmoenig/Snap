@@ -437,6 +437,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         model.stage.attributes.lines === 'flat';
     BooleanSlotMorph.prototype.isTernary =
         model.stage.attributes.ternary !== 'false';
+    Process.prototype.enableHyperOps =
+        model.stage.attributes.hyperops !== 'false';
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
     StageMorph.prototype.enableCodeMapping =
@@ -1742,6 +1744,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'pan="@" ' +
             'lines="@" ' +
             'ternary="@" ' +
+            'hyperops="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
             'sublistIDs="@" ' +
@@ -1782,6 +1785,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.pan,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
+        Process.prototype.enableHyperOps === true,
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,
