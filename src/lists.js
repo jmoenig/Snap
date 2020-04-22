@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Process, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-21';
+modules.lists = '2020-April-22';
 
 var List;
 var ListWatcherMorph;
@@ -219,7 +219,7 @@ List.prototype.length = function () {
 };
 
 List.prototype.at = function (index) {
-    if (Process.prototype.enableHOO) {
+    if (Process.prototype.enableHyperOps) {
         if (index instanceof List) {
             return new List(
                 index.asArray().map(each => this.at(each))

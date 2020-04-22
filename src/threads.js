@@ -559,7 +559,7 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
-Process.prototype.enableHOO = true; // experimental higher-order-operators
+Process.prototype.enableHyperOps = true; // experimental hyper operations
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
@@ -1849,7 +1849,7 @@ Process.prototype.reportNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
 
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (start instanceof List) {
             return new List(
                 start.asArray().map(each => this.reportNumbers(each, end))
@@ -3360,7 +3360,7 @@ Process.prototype.reportTypeOf = function (thing) {
 // Process math primtives
 
 Process.prototype.reportSum = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportSum(each, b))
@@ -3376,7 +3376,7 @@ Process.prototype.reportSum = function (a, b) {
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportDifference(each, b))
@@ -3392,7 +3392,7 @@ Process.prototype.reportDifference = function (a, b) {
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportProduct(each, b))
@@ -3408,7 +3408,7 @@ Process.prototype.reportProduct = function (a, b) {
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportQuotient(each, b))
@@ -3424,7 +3424,7 @@ Process.prototype.reportQuotient = function (a, b) {
 };
 
 Process.prototype.reportPower = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportPower(each, b))
@@ -3440,7 +3440,7 @@ Process.prototype.reportPower = function (a, b) {
 };
 
 Process.prototype.reportModulus = function (a, b) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (a instanceof List) {
             return new List(
                 a.asArray().map(each => this.reportModulus(each, b))
@@ -3459,7 +3459,7 @@ Process.prototype.reportModulus = function (a, b) {
 };
 
 Process.prototype.reportRandom = function (min, max) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (min instanceof List) {
             return new List(
                 min.asArray().map(each => this.reportRandom(each, max))
@@ -3548,7 +3548,7 @@ Process.prototype.reportBoolean = function (bool) {
 };
 
 Process.prototype.reportRound = function (n) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (n instanceof List) {
             return new List(
                 n.asArray().map(each => this.reportRound(each))
@@ -3559,7 +3559,7 @@ Process.prototype.reportRound = function (n) {
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (n instanceof List) {
             return new List(
                 n.asArray().map(each => this.reportMonadic(fname, each))
@@ -3677,7 +3677,7 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (idx instanceof List) {
             return new List(
                 idx.asArray().map(each => this.reportLetter(each, string))
@@ -3719,7 +3719,7 @@ Process.prototype.reportStringSize = function (data) {
 Process.prototype.reportUnicode = function (string) {
     var str;
 
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (string instanceof List) {
             return new List(
                 string.asArray().map(each => this.reportUnicode(each))
@@ -3739,7 +3739,7 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (num instanceof List) {
             return new List(
                 num.asArray().map(each => this.reportUnicodeAsLetter(each))
@@ -3756,7 +3756,7 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
-    if (this.enableHOO) {
+    if (this.enableHyperOps) {
         if (string instanceof List) {
             return new List(
                 string.asArray().map(
