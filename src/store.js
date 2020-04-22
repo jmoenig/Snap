@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-April-20';
+modules.store = '2020-April-22';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1290,7 +1290,8 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     if (model.tag === 'script') {
         inp = this.loadScript(model, object);
         if (inp) {
-            if (block.selector === 'reifyReporter') {
+            if (block.selector === 'reifyReporter' ||
+                    block.selector === 'reifyPredicate') {
                 input.replaceInput(input.children[0], inp);
                 input.fixLayout();
             } else {
