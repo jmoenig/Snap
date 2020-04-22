@@ -2567,6 +2567,7 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
     });
     this.blockSpec = spec;
     this.fixLayout();
+    this.rerender();
     this.cachedInputs = null;
 };
 
