@@ -8747,7 +8747,7 @@ InputSlotMorph.prototype.menuFromDict = function (
             if (key[0] === '~') {
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
-                menu.addItem(choices[key], choices[key]);
+                menu.addItem(choices[key].fullImage(), choices[key]);
             } else if (key.indexOf('§_dir') === 0) {
 			    dial = new DialMorph();
     			dial.rootForGrab = function () {return this; };
