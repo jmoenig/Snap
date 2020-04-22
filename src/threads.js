@@ -2074,8 +2074,10 @@ Process.prototype.doWarp = function (body) {
                 stage.fps = 0; // variable frame rate
             }
         }
-        this.pushContext('doYield');
-        this.context.isCustomBlock = isCustomBlock;
+        // this.pushContext('doYield'); // no longer needed in Morphic2
+        if (this.context) {
+            this.context.isCustomBlock = isCustomBlock;
+        }
         if (!this.isAtomic) {
             this.pushContext('doStopWarping');
         }
