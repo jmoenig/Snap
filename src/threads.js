@@ -3366,11 +3366,20 @@ Process.prototype.reportTypeOf = function (thing) {
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
+    var len, i, result;
     if (this.enableHyperOps) {
         if (a instanceof List) {
             if (b instanceof List) {
+                // zip both arguments ignoring out-of-bounds indices
                 a = a.asArray();
                 b = b.asArray();
+                len = Math.min(a.length, b.length);
+                result = new Array(len);
+                for (i = 0; i < len; i += 1) {
+                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
+                }
+                return new List(result);
+            /* // alternative version that only allows same-sized arg-lists
                 if (a.length !== b.length) {
                     throw new Error(
                         localize('expecting same-length lists,\nbut getting ' +
@@ -3380,6 +3389,7 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 return new List(
                     a.map((each, idx) => this.hyperDyadic(baseOp, each, b[idx]))
                 );
+            */
             }
             return new List(
                 a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
