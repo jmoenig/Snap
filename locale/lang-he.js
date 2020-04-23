@@ -326,17 +326,17 @@ SnapTranslator.dict.he = {
 
     // looks:
     'switch to costume %cst':
-        '%cst החלף לתלבושת',
+        '%cst החלף_לתלבושת',
     'next costume':
-        'התלבושת הבאה',
+        'התלבושת_הבאה',
     'costume #':
-        'תלבושת מספר',
+        'תלבושת_מספר',
     'say %s for %n secs':
-        'אמור %s למשך %n שניות ',
+        ' %s שניות_אמור %n למשך ',
     'say %s':
         '%s אמור',
     'think %s for %n secs':
-        'תחשוב %s למשך %n שניות',
+        'למשך %s שניות_תחשוב %n ',
     'think %s':
         ' %s תחשוב',
     'Hello!':
@@ -344,11 +344,11 @@ SnapTranslator.dict.he = {
     'Hmm...':
         'המממ...',
     'change %eff effect by %n':
-        'שנה %eff אפקט ב %n',
+        '%eff שינוי_ב_אפקט %n',
     'set %eff effect to %n':
-        'קבע %eff אפקט ל %n',
+        '%eff קביעת_ערך_אפקט %n',
     'clear graphic effects':
-        'נקה אפקטים גרפיים',
+        'נקה_אפקטים_גרפיים',
     'change size by %n':
         ' %n שנה גודל ב',
     'set size to %n %':
@@ -360,9 +360,9 @@ SnapTranslator.dict.he = {
     'hide':
         'הסתר',
     'go to front':
-        'העבר לחזית',
+        'העבר_לחזית',
     'go back %n layers':
-        'שכבות %n הזז לאחור',
+        'שכבות %n הזז_לאחור',
 
     'development mode \ndebugging primitives:':
         'מצב פיתוח\nמשתני דיבאג',
@@ -489,13 +489,13 @@ SnapTranslator.dict.he = {
     'warp %c':
         'מעטפת %c',
     'when I start as a clone':
-        'כשאני מתחיל בתור כפיל',
+        'כשאני_מתחיל_בתור_שכפול',
     'create a clone of %cln':
-        '%cln צור כפיל של',
+        '%cln צור_שכפול_של',
     'myself':
         'אני',
     'delete this clone':
-        'מחק את הכפיל הזה',
+        'מחק_את_השכפול_הזה',
 
     // sensing:
     'touching %col ?':
@@ -1178,6 +1178,22 @@ SnapTranslator.dict.he = {
         'קומיקס',
     'confetti':
         'קונפטי',
+    'color':
+        'צבע',
+    'hue':
+        'גוון',
+    'fisheye':
+        'עין_הדג',
+    'whirl':
+        'מערבולת',
+    'pixelate':
+        'פיקסלים',
+    'mosaic':
+        'פסיפס',
+    'saturation':
+        'רוויה',
+    'transparency':
+        'שקיפות',
 
     // keys
     'space':
@@ -1395,7 +1411,77 @@ SnapTranslator.dict.he = {
 	'Brush size':
 		'גודל מברשת',
 	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'כדי לשמור על פרופורציות\n אפשר ללחוץ על SHIFT'
+		'כדי לשמור על פרופורציות\n אפשר ללחוץ על SHIFT',
 
+
+    // attributes
+    'my':
+        'מאפיינים',
+    'neighbors':
+        'שכנים',
+    'self':
+        'עצמי',
+    'other sprites':
+        'דמויות_אחרות',
+    'parts':
+        'חלקים',
+    'anchor':
+        'עוגן',
+    'parent':
+        'הורה',
+    'temporary?':
+        'זמני?',
+    'children':
+        'צאצא',
+    'clones':
+        'שיכפולים',
+    'other clones':
+        'שכפול אחר',
+    'dangling?':
+        'מתנדנד?',
+    'draggable?':
+        'ניתן_לגרור?',
+    'rotation style':
+        'סוג סיבוב',
+    'rotation x':
+        'סיבוב x',
+    'rotation y':
+        'סיבוב y',
+    'center x':
+        'מרכז x',
+    'center y':
+        'מרכז y',
+    'name':
+        'שם',
+    'costume':
+        'תלבושת',
+    'stage':
+        'במה',
+    'costumes':
+        'תלבושות',
+    'sounds':
+        'צלילים',
+    'scripts':
+        'תסריטים',
+    'width':
+        'רוחב',
+    'height':
+        'גובה',
+    'left':
+        'שמאל',
+    'right':
+        'ימין',
+    'top':
+        'למעלה',
+    'bottom':
+        'למטה',
+
+    // inheritance
+    'inherited':
+        'נורש',
+    'check to inherit\nfrom':
+        'סמן_לרשת_מ',
+    'uncheck to\ndisinherit':
+        'בטל_סימון_לביטול_הורשה'
 
 };
