@@ -298,29 +298,29 @@ SnapTranslator.dict.he = {
     'turn %counterclockwise %n degrees':
         'מעלות %n %counterclockwise פנה',
     'point in direction %dir':
-        ' %dir פנה לכיוון',
+        ' %dir פנה_לכיוון',
     'point towards %dst':
-        ' %dst פנה לעבר ',
+        ' %dst פנה_לעבר ',
     'go to x: %n y: %n':
-        'לך אל  x: %n y: %n',
+        'לך_אל  x: %n y: %n',
     'go to %dst':
-        ' %dst לך אל',
+        ' %dst לך_אל',
     'glide %n secs to x: %n y: %n':
-        'החלק %n שניות אל x: %n y: %n',
+        'שניות %n גלוש_במשך x: %n y: %n',
     'change x by %n':
-        ' %n שנה x ב',
+        ' %n ב x שנה',
     'set x to %n':
-        '%n הגדר x ל',
+        '%n ל x הגדר',
     'change y by %n':
-        ' %n שנה y ב',
+        ' %n ב y שנה',
     'set y to %n':
-        '%n הגדר y ל',
+        '%n ל y הגדר',
     'if on edge, bounce':
-        'אם בקצה, קפוץ',
+        'אם_בקצה_אז_קפוץ',
     'x position':
-        'מיקום x',
+        ' x מיקום ',
     'y position':
-        'מיקום y',
+        ' y מיקום ',
     'direction':
         'כיוון',
 
@@ -397,233 +397,235 @@ SnapTranslator.dict.he = {
     'pen up':
         'עט למעלה',
     'set pen color to %clr':
-        ' %clr لـ مسـاوياً القلم لون إجعل',
+        ' %clr קבע צבע עט ל',
     'change pen color by %n':
-        ' %n بمقدار القلم لون غيّـر',
+        ' %n שנה צבע עט ב',
     'set pen color to %n':
-        ' %n تسـاوي القلم لـون قيمة إجعـل',
+        ' %n קבע צבע עט ל',
     'change pen shade by %n':
-        '%n بمقدار القلم لون (تعتيم/سطوع) درجة غيّر',
+        '%n שנה גוון עט ב',
     'set pen shade to %n':
-        '%n تساوي القلم لون (تعتيم/سطوع) درجة إجعل',
+        '%n קווע גוון עט ל',
     'change pen size by %n':
-        '%n بمقدار القلم حجـم غيّـر',
+        '%n שנה גודל עט ב',
     'set pen size to %n':
-        ' %n لـ مساوياً (حجم/سُـمك)القلـم إجعل',
+        ' %n קבע גודל עט ל',
     'stamp':
-        'اطبع',
+        'חותמת',
 
     // control:
     'when %greenflag clicked':
-        'الأخضر العـَلم %greenflag نقر عنـد',
+        'כאשר כפתור %greenflag נלחץ',
     'when %keyHat key pressed':
-        '%keyHat مفتـاح ضغط عند',
+        'כאשר כפתור %keyHat נלחץ',
     'when I am %interaction':
-        'الفـأرة مـؤشْـر %interaction لـ أتعرض عندما',
+        'כאשר_אני %interaction',
     'clicked':
-        'نقـر',
+        'הקלקה',
     'pressed':
-        'ضغـط',
+        'לחיצה',
     'dropped':
-        'الإفـلات_من',
+        'הפלה',
     'mouse-entered':
-        'دخـول',
+        'עכבר-נכנס',
     'mouse-departed':
-        'مغـادرة',
+        'עכבר-יוצא',
     'when %b':
-        '%b عندما',
+        '%b כאשר',
     'when I receive %msgHat':
-        '%msgHat رسـالة أستقبال عند',
+        '%msgHat כאשר_אני_מקבל',
     'broadcast %msg':
-        '  %msg بث',
+        'שדר_הודעה %msg',
     'broadcast %msg and wait':
-        'إنتظـر ثم %msg بِـث',
+        'והמתן %msg שדר_הודעה',
     'Message name':
-        'اسم الرسالة',
+        'שם ההודעה',
     'message':
-        'الرسالة',
+        'הודעה',
     'any message':
-        'اي رسالة',
+        'כל הודעה',
     'wait %n secs':
-        ' %n لـ إنتظـر',
+        'שניות %n המתן',
     'wait until %b':
-        '%b الشرط يتحقق حتي إنتظر',
+        '%b המתן_עד_ש',
     'forever %loop':
-        'باستمرار كرر %loop',
+        'לנצח %loop',
     'repeat %n %loop':
-        ' %n كرر %loop',
+        'חזור %n %loop',
     'repeat until %b %loop':
-        '%b حتي كرر %loop',
+        'חזור_עד_ש %b %loop',
     'if %b %c':
-        ' %b اذا %c',
+        'אם %b %c',
     'if %b %c else %c':
-        '%b اذا %c وإلا %c',
+        'אם %b %c אחרת %c',
     'report %s':
-        '%s وَضِّـح',
+        '%s דווח',
     'stop %stopChoices':
-        '%stopChoices اوقف',
+        '%stopChoices עצור',
     'all':
-        'الكل',
+        'לכל',
     'this script':
-        'هذا_المقطع_البرمجي',
+        'התסריט הזה',
     'this block':
-        'هذا_البلوك',
+        'הבלוק הזה',
     'stop %stopOthersChoices':
-        '%stopOthersChoices أوقف',
+        '%stopOthersChoices עצור',
     'all but this script':
-        'كل_المقاطع_البرمجيه_للكائنات_عدا_هذا_المقطع',
+        'הכל מלבד תסריט זה',
     'other scripts in sprite':
-        'كل_المقاطع_البرمجية_للكائن_عدا_هذا_المقطع',
+        'תסריטים אחרים בדמות',
     'pause all %pause':
-        '%pause مـؤقتاً التنفيذ أوقف',
+        '%pause הקפא הכל',
     'run %cmdRing %inputs':
-        'نفّذ %cmdRing  %inputs',
+        'הרץ %cmdRing  %inputs',
     'launch %cmdRing %inputs':
-        'شغّل %cmdRing %inputs',
+        'הפעל %cmdRing %inputs',
     'call %repRing %inputs':
-        'إستدع %repRing  %inputs',
+        'קרא %repRing  %inputs',
     'run %cmdRing w/continuation':
-        'نفّذ %cmdRing (الفاعلية استمرار بقاء مع)',
+        'הרץ %cmdRing מתמשך',
     'call %cmdRing w/continuation':
-        'استدع %cmdRing (الفاعلية استمرار بقاء مع)',
+        'קרא_ל %cmdRing מתמשך',
     'warp %c':
-        'تسريع %c',
+        'מעטפת %c',
     'when I start as a clone':
-        'مطابقة كنسخةٌ أبدأ عندما',
+        'כשאני מתחיל בתור כפיל',
     'create a clone of %cln':
-        '%cln من أستنسـاخاً أنشئ',
+        '%cln צור כפיל של',
     'myself':
-        'نفسي',
+        'אני',
     'delete this clone':
-        'الإستنساخ هذا إحذف',
+        'מחק את הכפיל הזה',
 
     // sensing:
     'touching %col ?':
-        '؟ %col لـ ملامس هـل ',
+        'נוגע %col ?',
     'touching %clr ?':
-        '؟ %clr لـ ملامس هـل',
+        'נוגע %clr ?',
     'color %clr is touching %clr ?':
-        '؟ %clr اللون ملامس %clr اللون هل',
+        '%clr צבע_נוגע_בצבע %clr ?',
     'ask %s and wait':
-        '%s اسأل و انتظر ',
+        '%s שאל_והמתן',
     'what\'s your name?':
-        '؟ إسمك هـو مـا',
+        'מה השם שלך?',
     'answer':
-        'الاجابة',
+        'תשובה',
     'mouse x':
-        'للفأرة س الموضع',
+        'x עכבר',
     'mouse y':
-        'للفأرة ص الموضع',
+        'y עכבר',
     'mouse down?':
-        '؟ مضغوط الايسر الفأرة زر هل',
+        'עכבר למטה?',
     'key %key pressed?':
-        '؟ مضغوط %key  المفتاح هل',
+        'מקש_נלחץ %key ?',
     'distance to %dst':
-        ' %dst إلي المسـافة',
+        ' %dst מרחק_אל',
     'reset timer':
-        'المؤقت تعيين إعـادة',
+        'איפוס טיימר',
     'timer':
-        'المؤقت',
+        'טיימר',
     '%att of %spr':
-        '؟ %att قيمة ما %spr للكائن',
+        '%att של %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        '؟ التوربو وضع في التشغيل هل',
+        'מצב מהיר?',
     'set turbo mode to %b':
-        '%b التوربو وضـع تفعيل ',
+        'קבע_מצב_מהיר_ל %b',
     'filtered for %clr':
-        'خلال هذه الفتره %clr gefiltert',
+        'סינון_עבור %clr',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'גודל מחסנית',
     'frames':
-        'Rahmenz\u00e4hler',
+        'פריימים',
 
     // operators:
     '%n mod %n':
-        '%n للرقم %n علي القسمة باقي',
+        '%n שארית_חלוקה %n',
     'round %n':
-        'صحيح لعدد %n قَرّب',
+        'עגל_למספר_שלם %n',
     '%fun of %n':
-        '%fun قيمة إحسب %n للعدد',
+        '%fun של %n',
     'pick random %n to %n':
-        ' %n و %n بين عشوائي عدد إختر',
+        'בחר_מספר_אקראי_בתחום %n - %n',
     '%b and %b':
-        '%b و %b',
+        '%b וגם %b',
     '%b or %b':
-        '%b أو %b',
+        '%b או %b',
     'not %b':
-        'ليس %b',
+        'לא %b',
     'true':
-        ' صحيح ',
+        ' אמת ',
     'false':
-        ' خـطأً ',
+        ' שקר ',
     'join %words':
-        '%words يلي مـا أَوصـل ',
+        'join %words',
     'split %s by %delim':
-        '%s جـَزَّء ،كفواصل %delim بإستخدام',
+        'split %s by %delim',
     'hello':
-        'مرحبا',
+        'שלום',
     'world':
-        'ايها العالم',
+        'עולם',
     'letter %idx of %s':
         '%idx الحرف أوجد %s العبارة من',
     'length of %s':
-        '%s أحرف عدد',
+        '%s האורך של',
     'unicode of %s':
-        ' %s للحرف يونيكود ترميز قيمة',
+        'unicode of %s',
     'unicode %n as letter':
-        ' %n يونيكود لترميز المقابل الحرف ',
+        'unicode %n as letter',
     'is %s a %typ ?':
-        '%s يوافق %typ النوع',
+        'is %s a %typ ?',
     'is %s identical to %s ?':
-        '؟ %s مع متماثل %s هل',
+        '؟ %s האם_זהים %s',
     'type of %s':
-        'من نوع %s',
+        'הסוג של %s',
 
     // variables:
     'Make a variable':
-        'انشئ متغيرا',
+        'צור משתנה',
     'Variable name':
-        'اسم المتغير',
+        'שם משתנה',
     'Script variable name':
-        'اسم الكائن',
+        'שם משתנה תסריט',
     'Delete a variable':
-        'احذف متغيرا',
+        'מחק משתנה',
     'set %var to %s':
-        '%var للمتغيّر %s القيمة خصص',
+        '%var הכנסת_ערך_ל %s',
     'change %var by %n':
-        ' %var المتغير قيمة %n بمقدار غيّـر',
+        ' %var שנה_ערך_משתנה_ב %n',
     'show variable %var':
-        ' %var المُتَغيّر أظهـِر',
+        ' %var הצג_משתנה',
     'hide variable %var':
-        ' %var المُتَغيّر أخفِ',
+        ' %var הסתר_משתנהِ',
     'script variables %scriptVars':
-        '%scriptVars مَحَلْي مُتَغَيِّر',
+        '%scriptVars משתניי_תסריט',
 
     // lists:
     'list %exp':
-        '%exp المصفوفة',
+        '%exp רשימה',
+    'numbers from %n to %n':
+        'מספרים מערך %n עד ערך %n',
     '%s in front of %l':
-        '%s ادرج %l بداية في',
+        '%s בתחילת_רשימה %l',
     'item %idx of %l':
-        '%idx العنصر أظهـِر %l في',
+        ' %idx בחר_פריט_מתוך %l',
     'all but first of %l':
-        'الأول عـدا الكل أظهـِر %l في',
+        'הכל_מלבד_הראשון %l',
     'length of %l':
-        '%l عناصر عدد',
+        '%l מספר_פריטים ',
     '%l contains %s':
-        '%l محتويات ضمن %s القيمة',
+        '%l נמצא_בתוך %s',
     'thing':
-        'شيئ',
+        'פריט',
     'add %s to %l':
-        '%s القيمة %l في أَدْرِج',
+        'הוסף_את %s ל %l',
     'delete %ida of %l':
-        '%ida العنصر احذف %l من',
+        'מחק_פריט_מספר %ida %l',
     'insert %s at %idx of %l':
-        '%s القيمة %idx بالموضع %l في أَدْرِج',
+        'הוסף_פריט_במיקום %s %idx %l',
     'replace item %idx of %l with %s':
-        ' %idx العنصر بدل %l المصفوفة في %s القيمة ضـع',
+        'החלף_פריט_במיקום %idx %l %s',
 
     // other
     'Make a block':
@@ -1157,7 +1159,7 @@ SnapTranslator.dict.he = {
     'edge':
         'קצה',
     'pen trails':
-        'שבילי עט',
+        'עט סימוני',
 
     // costumes
     'Turtle':
