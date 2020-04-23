@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-22';
+modules.blocks = '2020-April-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2077,7 +2077,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         }
     } else if (this instanceof ReporterBlockMorph) {
         if (this.parent && this.parent.fixLayout) {
-            return this.parent.fixLayout();
+            this.parent.fixLayout();
+            this.parent.changed();
+            return;
         }
     }
 
@@ -2828,7 +2830,6 @@ BlockMorph.prototype.userMenu = function () {
             'compile',
             function () {
                 myself.setSelector(alternatives[myself.selector]);
-                myself.changed();
             },
             'experimental!\nmake this reporter fast and uninterruptable\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
@@ -2854,7 +2855,6 @@ BlockMorph.prototype.userMenu = function () {
             'uncompile',
             function () {
                 myself.setSelector(alternatives[myself.selector]);
-                myself.changed();
             }
         );
     } else if (
