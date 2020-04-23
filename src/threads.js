@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-22';
+modules.threads = '2020-April-23';
 
 var ThreadManager;
 var Process;
@@ -1819,6 +1819,13 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         idx = list.length();
     }
+    if (this.enableHyperOps) {
+        if (index instanceof List) {
+            return new List(
+                index.asArray().map(each => this.reportListItem(each, list))
+            );
+        }
+    }
     return list.at(idx);
 };
 
@@ -1843,27 +1850,23 @@ Process.prototype.doShowTable = function (list) {
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
-// Process interpolated non-HOF list primitives
+// Process non-HOF list primitives
 
 Process.prototype.reportNumbers = function (start, end) {
+    // hyper-dyadic
+    if (this.enableHyperOps) {
+        return this.hyperDyadic(
+            (strt, stp) => this.reportBasicNumbers(strt, stp),
+            start,
+            end
+        );
+    }
+    return this.reportLinkedNumbers(start, end);
+};
+
+Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
-
-    if (this.enableHyperOps) {
-        if (start instanceof List) {
-            return new List(
-                start.asArray().map(each => this.reportNumbers(each, end))
-            );
-        }
-        if (end instanceof List) {
-            return new List(
-                end.asArray().map(each => this.reportNumbers(start, each))
-            );
-        }
-    } else {
-        return this.reportLinkedNumbers(start, end);
-    }
-
     var result, len, i,
         n = start;
 
@@ -1887,6 +1890,8 @@ Process.prototype.reportNumbers = function (start, end) {
     }
     return new List(result);
 };
+
+// Process interpolated non-HOF list primitives
 
 Process.prototype.reportLinkedNumbers = function (start, end) {
     // answer a new linked list containing an linearly ascending progression
@@ -3357,121 +3362,93 @@ Process.prototype.reportTypeOf = function (thing) {
     return 'undefined';
 };
 
-// Process math primtives
+// Process math primtives - hyper-dyadic
 
-Process.prototype.reportSum = function (a, b) {
+Process.prototype.hyperDyadic = function (baseOp, a, b) {
+    // enable dyadic operations to be performed on lists and tables
     if (this.enableHyperOps) {
         if (a instanceof List) {
+            if (b instanceof List) {
+                a = a.asArray();
+                b = b.asArray();
+                if (a.length !== b.length) {
+                    throw new Error(
+                        localize('expecting same-length lists,\nbut getting ' +
+                            'lengths of ' + a.length + ' and ' + b.length)
+                    );
+                }
+                return new List(
+                    a.map((each, idx) => this.hyperDyadic(baseOp, each, b[idx]))
+                );
+            }
             return new List(
-                a.asArray().map(each => this.reportSum(each, b))
+                a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
             );
         }
         if (b instanceof List) {
             return new List(
-                b.asArray().map(each => this.reportSum(a, each))
+                b.asArray().map(each => this.hyperDyadic(baseOp, a, each))
             );
         }
     }
+    return baseOp(a, b);
+};
+
+Process.prototype.reportSum = function (a, b) {
+    return this.hyperDyadic(this.reportBasicSum, a, b);
+};
+
+Process.prototype.reportBasicSum = function (a, b) {
     return +a + (+b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    if (this.enableHyperOps) {
-        if (a instanceof List) {
-            return new List(
-                a.asArray().map(each => this.reportDifference(each, b))
-            );
-        }
-        if (b instanceof List) {
-            return new List(
-                b.asArray().map(each => this.reportDifference(a, each))
-            );
-        }
-    }
+    return this.hyperDyadic(this.reportBasicDifference, a, b);
+};
+
+Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    if (this.enableHyperOps) {
-        if (a instanceof List) {
-            return new List(
-                a.asArray().map(each => this.reportProduct(each, b))
-            );
-        }
-        if (b instanceof List) {
-            return new List(
-                b.asArray().map(each => this.reportProduct(a, each))
-            );
-        }
-    }
+    return this.hyperDyadic(this.reportBasicProduct, a, b);
+};
+
+Process.prototype.reportBasicProduct = function (a, b) {
     return +a * +b;
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    if (this.enableHyperOps) {
-        if (a instanceof List) {
-            return new List(
-                a.asArray().map(each => this.reportQuotient(each, b))
-            );
-        }
-        if (b instanceof List) {
-            return new List(
-                b.asArray().map(each => this.reportQuotient(a, each))
-            );
-        }
-    }
+    return this.hyperDyadic(this.reportBasicQuotient, a, b);
+};
+
+Process.prototype.reportBasicQuotient = function (a, b) {
     return +a / +b;
 };
 
 Process.prototype.reportPower = function (a, b) {
-    if (this.enableHyperOps) {
-        if (a instanceof List) {
-            return new List(
-                a.asArray().map(each => this.reportPower(each, b))
-            );
-        }
-        if (b instanceof List) {
-            return new List(
-                b.asArray().map(each => this.reportPower(a, each))
-            );
-        }
-    }
+    return this.hyperDyadic(this.reportBasicPower, a, b);
+};
+
+Process.prototype.reportBasicPower = function (a, b) {
     return Math.pow(+a, +b);
 };
 
 Process.prototype.reportModulus = function (a, b) {
-    if (this.enableHyperOps) {
-        if (a instanceof List) {
-            return new List(
-                a.asArray().map(each => this.reportModulus(each, b))
-            );
-        }
-        if (b instanceof List) {
-            return new List(
-                b.asArray().map(each => this.reportModulus(a, each))
-            );
-        }
-    }
+    return this.hyperDyadic(this.reportBasicModulus, a, b);
+};
 
+Process.prototype.reportBasicModulus = function (a, b) {
     var x = +a,
         y = +b;
     return ((x % y) + y) % y;
 };
 
-Process.prototype.reportRandom = function (min, max) {
-    if (this.enableHyperOps) {
-        if (min instanceof List) {
-            return new List(
-                min.asArray().map(each => this.reportRandom(each, max))
-            );
-        }
-        if (max instanceof List) {
-            return new List(
-                max.asArray().map(each => this.reportRandom(min, each))
-            );
-        }
-    }
+Process.prototype.reportRandom = function (a, b) {
+    return this.hyperDyadic(this.reportBasicRandom, a, b);
+};
 
+Process.prototype.reportBasicRandom = function (min, max) {
     var floor = +min,
         ceil = +max;
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
@@ -3479,6 +3456,8 @@ Process.prototype.reportRandom = function (min, max) {
     }
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
+
+// Process logic primitives - not hyper-diadic
 
 Process.prototype.reportLessThan = function (a, b) {
     var x = +a,
@@ -3546,6 +3525,8 @@ Process.prototype.isImmutable = function (obj) {
 Process.prototype.reportBoolean = function (bool) {
     return bool;
 };
+
+// Process hyper-monadic primitives
 
 Process.prototype.reportRound = function (n) {
     if (this.enableHyperOps) {
@@ -3629,7 +3610,10 @@ Process.prototype.reportMonadic = function (fname, n) {
     return result;
 };
 
+// Process - non hyper-monadic text primitives
+
 Process.prototype.reportTextFunction = function (fname, string) {
+    // currently in dev mode only, not hyper-monadic
     var x = (isNil(string) ? '' : string).toString(),
         result = '';
 
@@ -3674,29 +3658,19 @@ Process.prototype.reportJoinWords = function (aList) {
     return (aList || '').toString();
 };
 
-// Process string ops
+// Process string ops - hyper-monadic/dyadic
 
 Process.prototype.reportLetter = function (idx, string) {
-    if (this.enableHyperOps) {
-        if (idx instanceof List) {
-            return new List(
-                idx.asArray().map(each => this.reportLetter(each, string))
-            );
-        }
-        if (string instanceof List) {
-            return new List(
-                string.asArray().map(each => this.reportLetter(idx, each))
-            );
-        }
-    }
+    return this.hyperDyadic(
+        (ix, str) => this.reportBasicLetter(ix, str),
+        idx,
+        string
+    );
+};
 
+Process.prototype.reportBasicLetter = function (idx, string) {
     var str, i;
 
-    /*
-    if (string instanceof List) { // catch a common user error
-        return '';
-    }
-    */
     str = isNil(string) ? '' : string.toString();
     if (this.inputOption(idx) === 'any') {
         idx = this.reportRandom(1, str.length);
@@ -3709,10 +3683,16 @@ Process.prototype.reportLetter = function (idx, string) {
 };
 
 Process.prototype.reportStringSize = function (data) {
+    if (this.enableHyperOps) {
+        if (data instanceof List) {
+            return new List(
+                data.asArray().map(each => this.reportStringSize(each))
+            );
+        }
+    }
     if (data instanceof List) { // catch a common user error
         return data.length();
     }
-
     return isNil(data) ? 0 : data.toString().length;
 };
 
@@ -3756,23 +3736,14 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
-    if (this.enableHyperOps) {
-        if (string instanceof List) {
-            return new List(
-                string.asArray().map(
-                    each => this.reportTextSplit(each, delimiter)
-                )
-            );
-        }
-        if (delimiter instanceof List) {
-            return new List(
-                delimiter.asArray().map(
-                    each => this.reportTextSplit(string, each)
-                )
-            );
-        }
-    }
+    return this.hyperDyadic(
+        (str, delim) => this.reportBasicTextSplit(str, delim),
+        string,
+        delimiter
+    );
+};
 
+Process.prototype.reportBasicTextSplit = function (string, delimiter) {
     var types = ['text', 'number'],
         strType = this.reportTypeOf(string),
         delType = this.reportTypeOf(this.inputOption(delimiter)),
@@ -3820,6 +3791,8 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     }
     return new List(str.split(del));
 };
+
+// Process - parsing primitives
 
 Process.prototype.parseCSV = function (text) {
     // try to address the kludge that Excel sometimes uses commas
