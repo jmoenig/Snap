@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-April-17';
+var morphicVersion = '2020-April-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -10980,19 +10980,75 @@ HandMorph.prototype.init = function (aWorld) {
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
+
+    // properties for caching dragged objects:
+    this.cachedFullImage = null;
+    this.cachedFullBounds = null;
 };
+
+// HandMorph dragging optimizations:
 
 HandMorph.prototype.changed = function () {
     var b;
     if (this.world !== null) {
-        b = this.fullBounds();
+        b = this.cachedFullBounds || this.fullBounds();
         if (!b.extent().eq(new Point())) {
             this.world.broken.push(b.spread());
         }
     }
 };
 
+HandMorph.prototype.moveBy = function (delta) {
+    var children = this.children,
+        i = children.length;
+    this.changed();
+    this.bounds = this.bounds.translateBy(delta);
+    if (this.cachedFullBounds) {
+        this.cachedFullBounds = this.cachedFullBounds.translateBy(delta);
+    }
+    this.changed();
+    for (i; i > 0; i -= 1) {
+        children[i - 1].moveBy(delta);
+    }
+};
+
 HandMorph.prototype.fullChanged = HandMorph.prototype.changed;
+
+// HandMorph display:
+
+HandMorph.prototype.fullDrawOn = function (ctx, rect) {
+    if (!this.cachedFullBounds) {
+        HandMorph.uber.fullDrawOn.call(this, ctx, rect);
+        return;
+    }
+
+    var clipped = rect.intersect(this.cachedFullBounds),
+        pos = this.cachedFullBounds.origin,
+        pic, src, w, h, sl, st;
+
+    if (!clipped.extent().gt(ZERO)) {return; }
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    pic = this.cachedFullImage;
+    src = clipped.translateBy(pos.neg());
+    sl = src.left();
+    st = src.top();
+    w = Math.min(src.width(), pic.width - sl);
+    h = Math.min(src.height(), pic.height - st);
+    if (w < 1 || h < 1) {return; }
+    ctx.drawImage(
+        pic,
+        sl,
+        st,
+        w,
+        h,
+        clipped.left(),
+        clipped.top(),
+        w,
+        h
+    );
+    ctx.restore();
+};
 
 // HandMorph navigation:
 
@@ -11039,6 +11095,11 @@ HandMorph.prototype.grab = function (aMorph) {
             aMorph.prepareToBeGrabbed(this);
         }
         this.add(aMorph);
+
+        // cache the dragged object's display resources
+        this.cachedFullImage = aMorph.fullImage();
+        this.cachedFullBounds = aMorph.fullBounds();
+
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
             oldParent.reactToGrabOf(aMorph);
@@ -11055,6 +11116,11 @@ HandMorph.prototype.drop = function () {
         this.changed();
         target.add(morphToDrop);
         morphToDrop.changed();
+
+        // invalidate dragging-cache
+        this.cachedFullImage = null;
+        this.cachedFullBounds = null;
+
         if (!morphToDrop.noDropShadow) {
 	        morphToDrop.removeShadow();
         }
