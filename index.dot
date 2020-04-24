@@ -18,10 +18,13 @@
             var SERVER_URL = "{{= it.baseUrl}}" || window.location.origin,
                 SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, ''),
                 CLIENT_ID = '{{= it.clientId }}',
-                SERVICES_URL = {{= it.servicesUrl? "'" + it.servicesUrl + "'" : "SERVER_URL + '/services'" }};
+                DEFAULT_SERVICES_HOST = {url: SERVER_URL + '/services', categories: []},
+                SERVICES_HOSTS = {{= JSON.stringify(it.servicesHosts) }};
+            {{ var defaultHost = it.servicesHosts.find(host => host.categories.length === 0); if (!defaultHost) { }} SERVICES_HOSTS.push(DEFAULT_SERVICES_HOST); {{ } }}
         </script>
         {{ if (it.isDevMode) { }}
         <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="services.js"></script>
         <script type="text/javascript" src="polyfill.js"></script>
         <script type="text/javascript" src="morphic.js"></script>
         <script type="text/javascript" src="locale.js"></script>

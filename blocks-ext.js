@@ -1,6 +1,6 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
-   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, SnapActions, isNil, SnapCloud
-   ReporterSlotMorph, RingMorph, SyntaxElementMorph, contains, world, utils, SERVICES_URL*/
+   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, localize, SnapCloud, contains,
+   world, utils, Services*/
 // Extensions to the Snap blocks
 
 
@@ -15,7 +15,7 @@ BlockMorph.prototype.showHelp = function() {
         inputs = this.inputs(),
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
-        url = SERVICES_URL + '/' + serviceName,
+        url = Services.getURLForService(serviceName) + '/' + serviceName,
         metadata = JSON.parse(utils.getUrlSync(url)),
         serviceNames;
 
@@ -275,7 +275,7 @@ StructInputSlotMorph.prototype.setDefaultFieldArg = function(index) {
 
 
 InputSlotMorph.prototype.rpcNames = function () {
-    var services = JSON.parse(utils.getUrlSync(SERVICES_URL)),
+    var services = Services.getServicesMetadata(),
         hasAuthoredServices,
         menuDict = {},
         category,
@@ -349,7 +349,7 @@ function RPCInputSlotMorph() {
                 this.methodSignature();
                 var isSupported = !!this.fieldsFor;
                 if (!isSupported) {
-                    var msg = 'Service "' + this.getRPCName() + '" is not available';
+                    var msg = 'Service "' + this.getServiceName() + '" is not available';
                     world.children[0].showMessage && world.children[0].showMessage(msg);
                     this.fieldsFor = {};
                 }
@@ -366,12 +366,12 @@ function RPCInputSlotMorph() {
     );
 }
 
-RPCInputSlotMorph.prototype.getRPCName = function () {
+RPCInputSlotMorph.prototype.getServiceName = function () {
     var fields = this.parent.inputs(),
         field,
         i;
 
-    // assume that the rpc is right before this input
+    // assume that the service is right before this input
     i = fields.indexOf(this);
     field = fields[i-1];
 
@@ -385,22 +385,22 @@ RPCInputSlotMorph.prototype.getRPCName = function () {
 RPCInputSlotMorph.prototype.methodSignature = function () {
     var actionNames,
         block,
-        rpc,
-        url,
+        service,
+        metadata,
         dict = {};
 
-    rpc = this.getRPCName();
-    if (rpc) {
+    service = this.getServiceName();
+    if (service) {
         // stores information on a specific service's rpcs
         try {
-            url = SERVICES_URL + '/' + rpc;
-            this.fieldsFor = JSON.parse(utils.getUrlSync(url)).rpcs;
+            metadata = Services.getServiceMetadata(service);
+            this.fieldsFor = metadata.rpcs;
             actionNames = Object.keys(this.fieldsFor);
             this.isCurrentRPCSupported = true;
         } catch (e) {
             this.isCurrentRPCSupported = false;
             block = this.parentThatIsA(BlockMorph);
-            block.showBubble(localize('Service "' + rpc + '" is not available'));
+            block.showBubble(localize('Service "' + service + '" is not available'));
             actionNames = [];
         }
 

@@ -3,7 +3,7 @@
    StringMorph, Color, TabMorph, InputFieldMorph, MorphicPreferences, MenuMorph,
    TextMorph, NetsBloxSerializer, nop, SnapActions, DialogBoxMorph, hex_sha512,
    SnapUndo, ScrollFrameMorph, SnapUndo, CollaboratorDialogMorph,
-   SnapSerializer, newCanvas, detect, WatcherMorph, SERVICES_URL */
+   SnapSerializer, newCanvas, detect, WatcherMorph, Services */
 // Netsblox IDE (subclass of IDE_Morph)
 
 NetsBloxMorph.prototype = new IDE_Morph();
@@ -17,6 +17,7 @@ function NetsBloxMorph(isAutoFill) {
 NetsBloxMorph.prototype.init = function (isAutoFill) {
     // Create the websocket manager
     this.sockets = new WebSocketManager(this);
+    Services.onInvalidHosts = this.onInvalidHosts.bind(this);
     this.room = null;
 
     // initialize inherited properties:
@@ -28,6 +29,26 @@ NetsBloxMorph.prototype.init = function (isAutoFill) {
     window.addEventListener('ideLoaded', function() {
         if (!(myself.isSupportedBrowser())) myself.showBrowserNotification();
     });
+};
+
+NetsBloxMorph.prototype.onInvalidHosts = function (servicesHosts) {
+    const invalidList = servicesHosts.map(hostInfo => {
+        const name = hostInfo.categories[0];
+        if (name) {
+            return name + ' (' + hostInfo.url + ')';
+        }
+        return hostInfo.url;
+    }).join('\n');
+
+    const msg = 'The following have been registered to provide ' +
+        'additional\nNetsBlox services but are unavailable:\n\n' +
+        invalidList;
+
+    this.inform(
+        'Invalid Services Hosts',
+        msg,
+        this.world()
+    );
 };
 
 NetsBloxMorph.prototype.buildPanes = function () {
@@ -432,36 +453,8 @@ NetsBloxMorph.prototype.projectMenu = function () {
 
 NetsBloxMorph.prototype.serviceURL = function() {
     var path = Array.prototype.slice.call(arguments, 0);
-    return SERVICES_URL + '/' + path.join('/');
-};
-
-NetsBloxMorph.prototype.requestAndroidApp = function(name) {
-    var myself = this,
-        projectXml,
-        req,
-        params,
-        baseURL = ensureFullUrl('/');
-
-    // FIXME: this baseURL stuff could cause problems
-    if (name !== this.projectName) {
-        this.setProjectName(name);
-    }
-
-    projectXml = encodeURIComponent(
-        this.serializer.serialize(this.stage)
-    );
-    // POST request with projectName, xml, username
-    req = new XMLHttpRequest();
-    params = 'projectName=' + name + '&username=' +
-        SnapCloud.username + '&xml=' + projectXml +
-        '&baseURL=' + encodeURIComponent(baseURL);
-
-    req.open('post', baseURL + 'api/mobile/compile', true);
-    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    req.onload = function() {
-        myself.showMessage(req.responseText);
-    };
-    req.send(params);
+    const {url} = Services.defaultHost;
+    return url + '/' + path.join('/');
 };
 
 NetsBloxMorph.prototype.exportRole = NetsBloxMorph.prototype.exportProject;
@@ -880,6 +873,7 @@ NetsBloxMorph.prototype.initializeCloud = function () {
                 pwh,
                 user.choice,
                 function () {
+                    Services.fetchHosts();
                     if (user.choice) {
                         str = SnapCloud.encodeDict(
                             {
@@ -1425,6 +1419,7 @@ NetsBloxMorph.prototype.logout = function () {
     delete localStorage['-snap-user'];
     SnapCloud.logout(
         function () {
+            Services.reset();
             SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
             myself.newProject();
