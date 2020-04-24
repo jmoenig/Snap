@@ -2787,6 +2787,16 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
             ),
         option = this.inputOption(choice);
 
+    function untype(typedArray) {
+        var len = typedArray.length,
+            arr = new Array(len),
+            i;
+        for (i = 0; i < len; i += 1) {
+            arr[i] = typedArray[i];
+        }
+        return arr;
+    }
+
     if (option === 'name') {
         return sound.name;
     }
@@ -2805,11 +2815,11 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
                 if (buf.numberOfChannels > 1) {
                     result = new List();
                     for (i = 0; i < buf.numberOfChannels; i += 1) {
-                        result.add(new List(buf.getChannelData(i)));
+                        result.add(new List(untype(buf.getChannelData(i))));
                     }
                     return result;
                 }
-                return new List(buf.getChannelData(0));
+                return new List(untype(buf.getChannelData(0)));
             } (sound);
         }
         return sound.cachedSamples;
@@ -3487,9 +3497,13 @@ Process.prototype.reportBasicRandom = function (min, max) {
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
 
-// Process logic primitives - not hyper-diadic
+// Process logic primitives - hyper-diadic / monadic where applicable
 
 Process.prototype.reportLessThan = function (a, b) {
+    return this.hyperDyadic(this.reportBasicLessThan, a, b);
+};
+
+Process.prototype.reportBasicLessThan = function (a, b) {
     var x = +a,
         y = +b;
     if (isNaN(x) || isNaN(y)) {
@@ -3500,10 +3514,21 @@ Process.prototype.reportLessThan = function (a, b) {
 };
 
 Process.prototype.reportNot = function (bool) {
+    if (this.enableHyperOps) {
+        if (bool instanceof List) {
+            return new List(
+                bool.asArray().map(each => this.reportNot(each))
+            );
+        }
+    }
     return !bool;
 };
 
 Process.prototype.reportGreaterThan = function (a, b) {
+    return this.hyperDyadic(this.reportBasicGreaterThan, a, b);
+};
+
+Process.prototype.reportBasicGreaterThan = function (a, b) {
     var x = +a,
         y = +b;
     if (isNaN(x) || isNaN(y)) {
