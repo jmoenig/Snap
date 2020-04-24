@@ -1400,7 +1400,10 @@ SnapTranslator.dict.he = {
         'מדווח',
     'predicate':
         'הצהרה',
-
+    'sprite':
+        'דמות',
+    'sound':
+        'צליל',
     // list indices
     'last':
         'אחרון',
