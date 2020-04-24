@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-23';
+modules.lists = '2020-April-24';
 
 var List;
 var ListWatcherMorph;

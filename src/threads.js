@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-23';
+modules.threads = '2020-April-24';
 
 var ThreadManager;
 var Process;
@@ -3368,38 +3368,58 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
     if (this.enableHyperOps) {
-        if (a instanceof List) {
-            if (b instanceof List) {
+        if (this.isMatrix(a)) {
+            if (this.isMatrix(b)) {
                 // zip both arguments ignoring out-of-bounds indices
                 a = a.asArray();
                 b = b.asArray();
                 len = Math.min(a.length, b.length);
                 result = new Array(len);
                 for (i = 0; i < len; i += 1) {
-                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
+                    result[i] = this.hyperZip(baseOp, a[i], b[i]);
                 }
                 return new List(result);
-            /* // alternative version that only allows same-sized arg-lists
-                if (a.length !== b.length) {
-                    throw new Error(
-                        localize('expecting same-length lists,\nbut getting ' +
-                            'lengths of ' + a.length + ' and ' + b.length)
-                    );
-                }
-                return new List(
-                    a.map((each, idx) => this.hyperDyadic(baseOp, each, b[idx]))
-                );
-            */
             }
             return new List(
-                a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
+                a.asArray().map(each => this.hyperZip(baseOp, each, b))
             );
         }
-        if (b instanceof List) {
+        if (this.isMatrix(b)) {
             return new List(
-                b.asArray().map(each => this.hyperDyadic(baseOp, a, each))
+                b.asArray().map(each => this.hyperZip(baseOp, a, each))
             );
         }
+    }
+    return this.hyperZip(baseOp, a, b);
+};
+
+Process.prototype.isMatrix = function (value) {
+    return value instanceof List && value.at(1) instanceof List;
+};
+
+Process.prototype.hyperZip = function (baseOp, a, b) {
+    // enable dyadic operations to be performed on lists and tables
+    var len, i, result;
+    if (a instanceof List) {
+        if (b instanceof List) {
+            // zip both arguments ignoring out-of-bounds indices
+            a = a.asArray();
+            b = b.asArray();
+            len = Math.min(a.length, b.length);
+            result = new Array(len);
+            for (i = 0; i < len; i += 1) {
+                result[i] = this.hyperZip(baseOp, a[i], b[i]);
+            }
+            return new List(result);
+        }
+        return new List(
+            a.asArray().map(each => this.hyperZip(baseOp, each, b))
+        );
+    }
+    if (b instanceof List) {
+        return new List(
+            b.asArray().map(each => this.hyperZip(baseOp, a, each))
+        );
     }
     return baseOp(a, b);
 };
