@@ -336,7 +336,7 @@ SnapTranslator.dict.he = {
     'say %s':
         '%s אמור',
     'think %s for %n secs':
-        'למשך %s שניות_תחשוב %n ',
+        ' %s שניות_תחשוב %n למשך ',
     'think %s':
         ' %s תחשוב',
     'Hello!':
@@ -350,9 +350,9 @@ SnapTranslator.dict.he = {
     'clear graphic effects':
         'נקה_אפקטים_גרפיים',
     'change size by %n':
-        ' %n שנה גודל ב',
+        ' שנוי_גודל %n',
     'set size to %n %':
-        '% %n קבע גודל ל',
+        '% %n קבע_גודל_ל',
     'size':
         'גודל',
     'show':
@@ -363,6 +363,22 @@ SnapTranslator.dict.he = {
         'העבר_לחזית',
     'go back %n layers':
         'שכבות %n הזז_לאחור',
+    '%img of costume %cst':
+        '%img מאפיין_של_תלבושת %cst',
+    'new costume %l width %dim height %dim':
+        'תלבושת_חדשה %l רוחב %dim גובה %dim',
+    'stretch %cst x: %n y: %n %':
+        'מתיחה %cst x: %n y: %n %',
+    '%eff effect':
+        '%eff אפקט',
+    'shown?':
+        'מוצגת?',
+    'go to %layer layer':
+        'לך_אל %layer',
+    'front':
+        'חזית',
+    'back':
+        'רקע',
 
     'development mode \ndebugging primitives:':
         'מצב פיתוח\nמשתני דיבאג',
@@ -371,15 +387,20 @@ SnapTranslator.dict.he = {
     'alert %mult%s':
         'התראה %mult%s',
 
+    'pixels':
+        'פיקסלים',
+    'current':
+        'נוכחי',
+
     // sound:
     'play sound %snd':
-        '%snd נגן צליל',
+        '%snd נגן_צליל',
     'play sound %snd until done':
-        'נגן צליל %snd עד לסיומו',
+        'נגן_צליל_והמתן_לסיום %snd',
     'stop all sounds':
-        'עצור את כל הצלילים',
+        'עצור_את_כל_הצלילים',
     'rest for %n beats':
-        'נוח למשך %n ביטים',
+        'נוח_למשך %n',
     'play note %n for %n beats':
         'נגן תו %n למשך %n ביטים',
     'change tempo by %n':
@@ -388,20 +409,65 @@ SnapTranslator.dict.he = {
         'קבע קצב ל %n ביטים בדקה',
     'tempo':
         'קצב',
+    'play sound %snd at %rate Hz':
+        'נגן_צליל %snd בקצב %rate Hz',
+    '%aa of sound %snd':
+        '%aa של_צליל %snd',
+    'duration':
+        'למשך',
+    'length':
+        'אורך',
+    'number of channels':
+        'מספר ערוצים',
+    'new sound %l rate %rate Hz':
+        'צליל_חדש %l בקצב %rate Hz',
+    'play note %note for %n beats':
+        '%note ביטים_עם_טון %n נגן_תו_למשך',
+    'set instrument to %inst':
+        'קבע_כלי_נגינה %inst',
+    'change volume by %n':
+        'שנה_עוצמת_צליל_ב %n',
+    'set volume to %n %':
+        'קבע_עוצמת_צליל_ל %n %',
+    'change balance by %n':
+        'שנה_איזון_ב %n',
+    'set balance to %n':
+        'קבע_איזון_ל %n',
+    'balance':
+        'איזון',
+    'volume':
+        'עוצמת_צליל',
+    'play frequency %n Hz':
+        'נגן_תדר %n Hz',
+    'stop frequency':
+        'עצור_(ניגון_תדר',
+    'play %n Hz for %n secs':
+        'נגן %n Hz למשך %n שניות',
+
+    // "instruments", i.e. wave forms
+    '(1) sine':
+        '(1) סינוס',
+    '(2) square':
+        '(2) ריבועי',
+    '(3) sawtooth':
+        '(3) שיני_מסור',
+    '(4) triangle':
+        '(4) משולש',
+
 
     // pen:
     'clear':
         'נקה',
     'pen down':
-        'עט למטה',
+        'עט_למטה',
     'pen up':
-        'עט למעלה',
+        'עט_למעלה',
     'set pen color to %clr':
-        ' %clr קבע צבע עט ל',
+        ' %clr קבע_צבע_עט_ל',
     'change pen color by %n':
-        ' %n שנה צבע עט ב',
+        ' %n שנה_צבע_עט_ב',
     'set pen color to %n':
-        ' %n קבע צבע עט ל',
+        ' %n קבע_צבע_עט_ל',
     'change pen shade by %n':
         '%n שנה גוון עט ב',
     'set pen shade to %n':
