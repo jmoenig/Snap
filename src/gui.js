@@ -2414,7 +2414,7 @@ IDE_Morph.prototype.hasLocalStorage = function () {
 
 IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        rnd = Process.prototype.reportRandom;
+        rnd = Process.prototype.reportBasicRandom;
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
