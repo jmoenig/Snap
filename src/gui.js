@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-22';
+modules.gui = '2020-April-24';
 
 // Declarations
 
@@ -3416,7 +3416,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Hper-Operations support',
+        'Hyper blocks support',
         function () {
             Process.prototype.enableHyperOps =
                 !Process.prototype.enableHyperOps;
