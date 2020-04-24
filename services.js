@@ -103,7 +103,7 @@ ServicesRegistry.prototype.getServicesMetadata = function () {
             return services;
         } catch (err) {
             console.error(`Unable to fetch services metadata for ${categories}: ${url}`);
-            return {};
+            return [];
         }
     });
     return services;
