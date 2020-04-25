@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-24';
+modules.threads = '2020-April-25';
 
 var ThreadManager;
 var Process;
@@ -1832,6 +1832,11 @@ Process.prototype.reportListItem = function (index, list) {
 Process.prototype.reportListLength = function (list) {
     this.assertType(list, 'list');
     return list.length();
+};
+
+Process.prototype.reportListIndex = function(element, list) {
+    this.assertType(list, 'list');
+    return list.indexOf(element);
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {

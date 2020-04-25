@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-20';
+modules.objects = '2020-April-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -1281,6 +1281,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'lists',
             spec: 'is %l empty?'
+        },
+        reportListIndex: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'index of %s in %l',
+            defaults: [localize('thing')]
         },
         doAddToList: {
             type: 'command',
@@ -2627,6 +2633,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
+        blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
         blocks.push('-');
@@ -2814,6 +2821,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListItem',
                         'reportCDR',
                         'reportListLength',
+                        'reportListIndex',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8677,6 +8685,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
+        blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
         blocks.push('-');

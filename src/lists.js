@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-24';
+modules.lists = '2020-April-25';
 
 var List;
 var ListWatcherMorph;
@@ -95,7 +95,8 @@ var ListWatcherMorph;
     length()                - number of slots
     at(index)               - element present in specified slot
     contains(element)       - <bool>
-    isEmpty(element)        - <bool>
+    isEmpty()               - <bool>
+    indexOf(element)        - index of element's first occurrence, 0 if none
 
     conversion:
     -----------
@@ -251,6 +252,27 @@ List.prototype.isEmpty = function () {
         return isNil(this.first);
     }
     return !this.contents.length;
+};
+
+List.prototype.indexOf = function (element) {
+    var pair = this,
+        idx = 1,
+        i, len;
+    while (pair.isLinked) {
+        if (snapEquals(pair.first, element)) {
+            return idx;
+        }
+        pair = pair.rest;
+        idx += 1;
+    }
+    // in case I'm arrayed
+    len = pair.contents.length;
+    for (i = 0; i < len; i += 1) {
+        if (snapEquals(pair.contents[i], element)) {
+            return idx + i;
+        }
+    }
+    return 0;
 };
 
 // List table (2D) accessing (for table morph widget):
