@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-April-18';
+modules.tables = '2020-April-26';
 
 var Table;
 var TableCellMorph;
@@ -245,9 +245,7 @@ Table.prototype.addCol = function (array, name) {
 
 Table.prototype.toList = function () {
     return new List(
-        this.contents.map(function (eachRow) {
-            return new List(eachRow);
-        })
+        this.contents.map(eachRow => new List(eachRow))
     );
 };
 
@@ -838,9 +836,9 @@ TableMorph.prototype.rowLabelsWidth = function () {
         0,
         Math.max.apply(
             null,
-            this.table.columnNames().map(function (name) {
-                return name ? ctx.measureText(name).width : 0;
-            })
+            this.table.columnNames().map(
+                name => name ? ctx.measureText(name).width : 0
+            )
         )
     ) || ctx.measureText(this.table.rows().toString()).width +
             (6 * SyntaxElementMorph.prototype.scale);
