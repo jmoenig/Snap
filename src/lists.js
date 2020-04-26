@@ -726,7 +726,6 @@ ListWatcherMorph.prototype.update = function (anyway) {
     if (this.lastUpdated === this.list.lastChanged && !anyway) {
         return null;
     }
-
     this.updateLength(true);
 
     // adjust start index to current list length
@@ -880,6 +879,7 @@ ListWatcherMorph.prototype.startIndexMenu = function () {
 ListWatcherMorph.prototype.setStartIndex = function (index) {
     this.start = index;
     this.list.changed();
+    this.update();
 };
 
 ListWatcherMorph.prototype.fixLayout = function () {
