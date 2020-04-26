@@ -929,7 +929,7 @@ SnapTranslator.dict.he = {
     'Virtual keyboard':
         'מקלדת וירטואלית',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
+        'בטל סימון כדי להסתיר\nמקלדת וירטואלית במכשירים ניידים',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'הוסף סימון כדי להציג\nמקלדת וירטואלית במכשירים ניידים',
     'Input sliders':
