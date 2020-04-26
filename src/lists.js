@@ -242,9 +242,7 @@ List.prototype.contains = function (element) {
         pair = pair.rest;
     }
     // in case I'm arrayed
-    return pair.contents.some(function (any) {
-        return snapEquals(any, element);
-    });
+    return pair.contents.some(any => snapEquals(any, element));
 };
 
 List.prototype.isEmpty = function () {
@@ -455,7 +453,7 @@ List.prototype.asCSV = function () {
             return string;
         }
         cell = ['\"'];
-        string.split('').forEach(function (letter) {
+        string.split('').forEach(letter => {
             cell.push(letter);
             if (letter === '\"') {
                 cell.push(letter);
@@ -465,9 +463,9 @@ List.prototype.asCSV = function () {
         return cell.join('');
     }
 
-    if (items.some(function (any) {return any instanceof List; })) {
+    if (items.some(any => any instanceof List)) {
         // 2-dimensional table
-        items.forEach(function (item) {
+        items.forEach(item => {
             if (item instanceof List) {
                 rows.push(item.itemsArray().map(encodeCell).join(','));
             } else {
@@ -488,14 +486,14 @@ List.prototype.asJSON = function (guessObjects) {
         var items = list.itemsArray(),
             obj = {};
         if (canBeObject(items)) {
-            items.forEach(function (pair) {
+            items.forEach(pair => {
                 var value = pair.length() === 2 ? pair.at(2) : undefined;
                 obj[pair.at(1)] = (value instanceof List ?
                     objectify(value, guessObjects) : value);
             });
             return obj;
         }
-        return items.map(function (element) {
+        return items.map(element => {
             return element instanceof List ?
                 objectify(element, guessObjects) : element;
         });
@@ -506,14 +504,11 @@ List.prototype.asJSON = function (guessObjects) {
         // might be better represented as dictionary/object
         // than as array
         var keys;
-        if (array.every(function (element) {
-            return element instanceof List && (element.length() < 3);
-        })) {
-            keys = array.map(function (each) {return each.at(1); });
-            return keys.every(function (each) {
-                return isString(each) &&
-                    isUniqueIn(each, keys);
-            });
+        if (array.every(
+            element => element instanceof List && (element.length() < 3)
+        )) {
+            keys = array.map(each => each.at(1));
+            return keys.every(each => isString(each) && isUniqueIn(each, keys));
         }
     }
 
@@ -573,7 +568,7 @@ List.prototype.equalTo = function (other) {
 };
 
 List.prototype.canBeCSV = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
             (value instanceof List && value.hasOnlyAtomicData());
@@ -581,7 +576,7 @@ List.prototype.canBeCSV = function () {
 };
 
 List.prototype.canBeJSON = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return !isNaN(+value) ||
             isString(value) ||
             value === true ||
@@ -591,7 +586,7 @@ List.prototype.canBeJSON = function () {
 };
 
 List.prototype.hasOnlyAtomicData = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value);
     });
@@ -712,7 +707,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
 ListWatcherMorph.prototype.update = function (anyway) {
     var i, idx, ceil, morphs, cell, cnts, label, button, max,
         starttime, maxtime = 1000;
-    this.frame.contents.children.forEach(function (m) {
+    this.frame.contents.children.forEach(m => {
         if (m instanceof CellMorph) {
             if (m.contentsMorph instanceof ListWatcherMorph) {
                 m.contentsMorph.update();
