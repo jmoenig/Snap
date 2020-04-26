@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-25';
+modules.lists = '2020-April-26';
 
 var List;
 var ListWatcherMorph;
@@ -863,12 +863,11 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
 ListWatcherMorph.prototype.startIndexMenu = function () {
     var i,
         range,
-        myself = this,
         items = Math.ceil(this.list.length() / this.range),
         menu = new MenuMorph(
-            function (idx) {myself.setStartIndex(idx); },
+            idx => this.setStartIndex(idx),
             null,
-            myself
+            this
         );
     menu.addItem('1...', 1);
     for (i = 1; i < items; i += 1) {
@@ -951,15 +950,12 @@ ListWatcherMorph.prototype.userMenu = function () {
     if (!List.prototype.enableTables) {
         return this.escalateEvent('userMenu');
     }
-    var menu = new MenuMorph(this),
-        myself = this;
+    var menu = new MenuMorph(this);
     menu.addItem('table view...', 'showTableView');
     menu.addLine();
     menu.addItem(
         'open in dialog...',
-        function () {
-            new TableDialogMorph(myself.list).popUp(myself.world());
-        }
+        () => new TableDialogMorph(this.list).popUp(this.world())
     );
     return menu;
 };
