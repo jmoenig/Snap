@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-23';
+modules.blocks = '2020-April-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8765,6 +8765,7 @@ InputSlotMorph.prototype.menuFromDict = function (
                 flag = new SymbolMorph('flag');
                 flag.size = this.fontSize * 1.5;
                 flag.setColor(new Color(0, 200, 0));
+                flag.fixLayout();
                 menu.addItem(flag, ['__shout__go__']);
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
