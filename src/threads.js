@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-25';
+modules.threads = '2020-April-26';
 
 var ThreadManager;
 var Process;
@@ -3285,6 +3285,20 @@ Process.prototype.getLastMessage = function () {
         }
     }
     return '';
+};
+
+Process.prototype.doSend = function (message, target) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    this.doBroadcast(
+        new List(
+            [
+                message,
+                target instanceof List ? target :
+                    target === stage.name ? new List([stage]) :
+                        new List([target])
+            ]
+        )
+    );
 };
 
 // Process type inference

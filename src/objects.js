@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-25';
+modules.objects = '2020-April-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -740,6 +740,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'control',
             spec: 'message'
+        },
+        doSend: {
+            type: 'command',
+            category: 'control',
+            spec: 'send %msg to %spr'
         },
         doWait: {
             type: 'command',
@@ -2363,6 +2368,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('doSend'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
         blocks.push('-');
@@ -8439,6 +8445,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('doSend'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
         blocks.push('-');
