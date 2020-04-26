@@ -604,6 +604,66 @@ SnapTranslator.dict.he = {
         'גודל מחסנית',
     'frames':
         'פריימים',
+    '%rel to %dst':
+        '%rel חשב %dst',
+    'distance':
+        'מרחק',
+    '%asp at %loc' :
+        '%asp של %loc',
+    'r-g-b-a':
+        'R-G-B-A ערכי_צבע',
+    'sprites' :
+        'דמויות',
+    'my %get':
+        'מאפיין %get',
+    'object %self':
+        'אובייקט %self',
+    'turbo mode':
+        'מצב מהיר',
+    'flat line ends':
+        'סיום קו ישר',
+    'is %setting on?':
+        '%setting האם_הגדרה_פעילה',
+    'set %setting to %b':
+        'קבע_הגדרה %setting  %b',
+    'microphone %audio':
+        'מיקרופון %audio',
+    'note':
+        'תו',
+    'frequency':
+        'תדר',
+    'samples':
+        'דגימות',
+    'sample rate':
+        'קצב דגימה',
+    'spectrum':
+        'ספקטרום',
+    'resolution':
+        'רזולוציה',
+    'Microphone resolution...':
+        'רזולוציית_מיקרופון...',
+    'Microphone':
+        'מיקרופון',
+    'low':
+        'נמוך',
+    'high':
+        'גבוה',
+    'max':
+        'מקסימום',
+    'video %vid on %self':
+        'וידאו_על %vid  %self',
+    'motion':
+        'תנועה',
+    'snap':
+        'הצמדה',
+    'set video transparency to %n':
+        'קבע_שקיפות_וידאו_ל %n',
+    'video capture':
+        'לכוד_וידאו',
+    'mirror video':
+        'וידאו_תמונת_ראי',
+    'log pen vectors':
+        'קווים_ישרים_וארוכים',
 
     // operators:
     '%n mod %n':
@@ -625,27 +685,29 @@ SnapTranslator.dict.he = {
     'false':
         ' שקר ',
     'join %words':
-        'join %words',
+        'שרשר_מילים %words',
     'split %s by %delim':
-        'split %s by %delim',
+        'בפרדת_אותיות_לפי_מפריד %s  %delim',
     'hello':
         'שלום',
     'world':
         'עולם',
     'letter %idx of %s':
-        '%idx الحرف أوجد %s العبارة من',
+        'מיקום_אות_במילה %idx  %s',
     'length of %s':
         '%s האורך של',
     'unicode of %s':
-        'unicode of %s',
+        'יוניקוד_של %s',
     'unicode %n as letter':
-        'unicode %n as letter',
+        'המר_יוניקוד_לאות %n ',
     'is %s a %typ ?':
-        'is %s a %typ ?',
+        'האם_משתנה_מסוג %s %typ ?',
     'is %s identical to %s ?':
-        '؟ %s האם_זהים %s',
+        '? %s האם_זהים %s',
     'type of %s':
         'הסוג של %s',
+    'compile %repRing':
+        'קומפייל %repRing',
 
     // variables:
     'Make a variable':
@@ -666,6 +728,8 @@ SnapTranslator.dict.he = {
         ' %var הסתר_משתנהِ',
     'script variables %scriptVars':
         '%scriptVars משתניי_תסריט',
+    'inherit %shd':
+        'הורש %shd',
 
     // lists:
     'list %exp':
@@ -692,6 +756,32 @@ SnapTranslator.dict.he = {
         'הוסף_פריט_במיקום %s %idx %l',
     'replace item %idx of %l with %s':
         'החלף_פריט_במיקום %idx %l %s',
+    'is %l empty?':
+        'האם_ריקה %l ?',
+    'map %repRing over %l':
+        'צור_מיפוי %repRing  %l',
+    'keep items %predRing from %l':
+        'שמור פריטים של %predRing  %l',
+    'find first item %predRing in %l':
+        'מצא_פריט_ראשון %predRing  %l',
+    'combine %l using %repRing':
+        'מזג_רשימה_באמצעות %l mit %repRing',
+    '%blitz map %repRing over %l':
+        '%blitz map %repRing over %l',
+    '%blitz keep items %predRing from %l':
+        '%blitz keep items %predRing from %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz find first item %predRing in %l',
+    '%blitz combine %l using %repRing':
+        '%blitz combine %l using %repRing',
+    'for each %upvar in %l %cla':
+        ' %upvar עבור_כל %l %cla',
+    'item':
+        'פריט',
+    'value':
+        'ערך',
+    'index':
+        'אינדקס',
 
     // other
     'Make a block':
@@ -841,7 +931,7 @@ SnapTranslator.dict.he = {
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'حدد لتفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
+        'הוסף סימון כדי להציג\nמקלדת וירטואלית במכשירים ניידים',
     'Input sliders':
         'סרגלי קלט',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1176,7 +1266,7 @@ SnapTranslator.dict.he = {
     'License':
         'רישיון',
     'current module versions:':
-        'الاصدار الحالي',
+        'גרסה נוכחית',
     'Contributors':
         'תורמים',
     'Translations':
