@@ -67,7 +67,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2020-April-20';
+modules.xml = '2020-April-27';
 
 // Declarations
 
@@ -199,15 +199,13 @@ XML_Element.prototype.childNamed = function (tagName) {
     // answer the first direct child with the specified tagName, or null
     return detect(
         this.children,
-        function (child) {return child.tag === tagName; }
+        child => child.tag === tagName
     );
 };
 
 XML_Element.prototype.childrenNamed = function (tagName) {
     // answer all direct children with the specified tagName
-    return this.children.filter(
-        function (child) {return child.tag === tagName; }
-    );
+    return this.children.filter(child => child.tag === tagName);
 };
 
 XML_Element.prototype.parentNamed = function (tagName) {
@@ -255,7 +253,7 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
     } else {
         result += '>';
         result += this.escape(this.contents);
-        this.children.forEach(function (element) {
+        this.children.forEach(element => {
             if (isFormatted) {
                 result += '\n';
             }
@@ -306,7 +304,7 @@ XML_Element.prototype.escape = function (string, ignoreQuotes) {
 };
 
 XML_Element.prototype.unescape = function (string) {
-    return string.replace(/&(amp|apos|quot|lt|gt|#xD|#126);/g, function(_, name) {
+    return string.replace(/&(amp|apos|quot|lt|gt|#xD|#126);/g, (_, name) => {
         switch (name) {
             case 'amp': return '&';
             case 'apos': return '\'';
