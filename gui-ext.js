@@ -220,8 +220,8 @@ IDE_Morph.prototype.openReplayString = function (str) {
     myself.exitReplayMode();
     return SnapActions.openProject()
         .then(function() {
-            myself.serializer.loadReplayHistory(replay);
-            myself.replayEvents(JSON.parse(JSON.stringify(SnapUndo.allEvents)), false);
+            var allEvents = myself.serializer.loadReplayHistory(replay);
+            myself.replayEvents(allEvents, false);
         });
 };
 
