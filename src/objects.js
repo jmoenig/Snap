@@ -9659,10 +9659,10 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 // Costume instance creation
 
-function Costume(canvas, name, rotationCenter) {
+function Costume(canvas, name, rotationCenter, noFit) {
     this.contents = canvas ? normalizeCanvas(canvas, true)
             : newCanvas(null, true);
-    this.shrinkToFit(this.maxExtent());
+    if (!noFit) {this.shrinkToFit(this.maxExtent()); }
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
     this.version = Date.now(); // for observer optimization
@@ -9851,7 +9851,8 @@ Costume.prototype.stretched = function (w, h) {
     stretched = new Costume(
         canvas,
         this.name,
-        center
+        center,
+        true
     );
     return stretched;
 };
