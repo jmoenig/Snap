@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -196,7 +196,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2019-December-18';
+modules.api = '2020-April-27';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -216,7 +216,7 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
         procs = [];
 
     function wait() {
-        if (procs.some(function (any) {return any.isRunning(); })) {
+        if (procs.some(any => any.isRunning())) {
             return;
         }
         if (callback instanceof Function) {
@@ -231,23 +231,23 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
         throw new Error('message must be a String');
     }
     this.stage.lastMessage = message;
-    rcvrs.forEach(function (sprite) {
-        sprite.allHatBlocksFor(message).forEach(function (block) {
-            procs.push(myself.stage.threads.startProcess(
+    rcvrs.forEach(sprite => {
+        sprite.allHatBlocksFor(message).forEach(block => {
+            procs.push(this.stage.threads.startProcess(
                 block,
                 sprite,
-                myself.stage.isThreadSafe,
+                this.stage.isThreadSafe,
                 false,
                 callback instanceof Function ? wait : null
             ));
         });
     });
-    (this.stage.messageCallbacks[''] || []).forEach(function (callback) {
-        callback(message);
-    });
-    (this.stage.messageCallbacks[message] || []).forEach(function (callback) {
-        callback();
-    });
+    (this.stage.messageCallbacks[''] || []).forEach(
+        callback => callback(message)
+    );
+    (this.stage.messageCallbacks[message] || []).forEach(
+        callback => callback()
+    );
 };
 
 IDE_Morph.prototype.addMessageListenerForAll = function (callback) {
@@ -280,12 +280,10 @@ IDE_Morph.prototype.getMessages = function () {
     // return an array of all broadcast messages in the current project
     var allNames = [],
         dict = new Map();
-    this.sprites.contents.concat(this.stage).forEach(function (sprite) {
+    this.sprites.contents.concat(this.stage).forEach(sprite => {
         allNames = allNames.concat(sprite.allMessageNames());
     });
-    allNames.forEach(function (name) {
-        dict.set(name);
-    });
+    allNames.forEach(name => dict.set(name));
     return Array.from(dict.keys());
 };
 
