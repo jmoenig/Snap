@@ -340,6 +340,8 @@ SnapTranslator.dict.ua = {
         'Хмм...',
     '%img of costume %cst':
         '%img образу %cst',
+    'new costume %l width %dim height %dim':
+        'новий образ %l ширина %dim висота %dim',
     'stretch %cst x: %n y: %n %':
         'розтягнути %cst x: %n y: %n %',
     'change %eff effect by %n':
@@ -402,6 +404,8 @@ SnapTranslator.dict.ua = {
         'частота семплування',
     'samples':
         'семпли',
+    'new sound %l rate %rate Hz':
+        'новий звук %l як %rate Hz',
     'play note %note for %n beats':
         'грати ноту %note %n тактів',
     'change tempo by %n':
@@ -625,7 +629,7 @@ SnapTranslator.dict.ua = {
     'my %get':
         'атрибут %get',
     'object %self':
-        'об`єкт %self',
+        'обʼєкт %self',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -667,7 +671,7 @@ SnapTranslator.dict.ua = {
     'rotation style':
         'стиль обертання',
     'draggable?':
-        'відчутній?',
+        'відчутний?',
     'spectrum':
         'спектр частот',
     'resolution':
@@ -746,7 +750,7 @@ SnapTranslator.dict.ua = {
     'hide variable %var':
         'сховати змінну %var',
     'script variables %scriptVars':
-        'змінні скрипта %scriptVars',
+        'змінні скрипту %scriptVars',
     'inherit %shd':
         'переймати %shd',
 
@@ -825,9 +829,9 @@ SnapTranslator.dict.ua = {
 
     // project menu
     'Project notes...':
-        'Проектні нотатки...',
+        'Проєктні нотатки...',
     'New':
-        'Новий проект',
+        'Новий проєкт',
     'Open...':
         'Відкрити...',
     'Save':
@@ -837,21 +841,21 @@ SnapTranslator.dict.ua = {
     'Import...':
         'Імпортувати...',
     'file menu import hint':
-        'завантажити експортований проект\nабо бібліотеку блоків, маску чи звук',
+        'завантажити експортований проєкт\nабо бібліотеку блоків, маску чи звук',
     'Export project as plain text...':
-        'Експортувати проект як текстовий файл...',
+        'Експортувати проєкт як текстовий файл...',
     'Export project...':
-        'Експортувати проект...',
+        'Експортувати проєкт...',
     'save project data as XML\nto your downloads folder':
-        'зберегти і завантажити проект як XML',
+        'зберегти і завантажити проєкт як XML',
     'Export summary...':
         'Експортована інформація...',
     'open a new browser browser window\n with a summary of this project':
-        'відобразити проектні дані як XML\nв новом вікні браузера',
+        'відобразити проєктні дані як XML\nв новому вікні браузера',
     'Export blocks...':
         'Експортувати блоки...',
     'show global custom block definitions as XML\nin a new browser window':
-        'відобразити визначення глобальних користувацьких блоків як XML\nв новом вікні браузера',
+        'відобразити визначення глобальних користувацьких блоків як XML\nв новому вікні браузера',
     'Unused blocks...':
         'Невикористовувані блоки...',
     'find unused global custom blocks\nand remove their definitions':
@@ -969,9 +973,9 @@ SnapTranslator.dict.ua = {
     'Turbo mode':
         'Режим Турбо',
     'check to prioritize\nscript execution':
-        'увімкніть, для прискорення виконання скрипта',
+        'увімкніть, для прискорення виконання скрипту',
     'uncheck to run scripts\nat normal speed':
-        'вимкніть, для виконанная скрипта\nз нормальною швидкістю',
+        'вимкніть, для виконанная скрипту\nз нормальною швидкістю',
     'Flat design':
         'Плаский дизайн',
     'check for alternative\nGUI design':
@@ -983,7 +987,7 @@ SnapTranslator.dict.ua = {
     'Keyboard Editing':
         'Редагування з клавіатури',
     'check to enable\nkeyboard editing support':
-        'увімкніть, щоб отримати\nможливість програмування з клавіатури (Shift+Клик на блок)',
+        'увімкніть, щоб отримати\nможливість програмування з клавіатури (Shift+Клік на блок)',
     'uncheck to disable\nkeyboard editing support':
         'вимкніть, щоб програмувати\nбез використання',
     'Table support':
@@ -1001,11 +1005,11 @@ SnapTranslator.dict.ua = {
     'Visible stepping':
         'Відображення кроків виконання',
     'check to turn on\n visible stepping (slow)':
-        'увімкніть, для відображення кроків\nвиконання скрипта (повільно)',
+        'увімкніть, для відображення кроків\nвиконання скрипту (повільно)',
     'uncheck to turn off\nvisible stepping':
-        'вимкніть, щоб не відображати\nкроки виконання скрипта',
+        'вимкніть, щоб не відображати\nкроки виконання скрипту',
     'Thread safe scripts':
-        'Захищенність скрипта в багатопоточном режимі',
+        'Захищенність скрипту в багатопоточному режимі',
     'uncheck to allow\nscript reentrance':
         'вимкніть, щоб дозволити\nповторний вхід в скрипт',
     'check to disallow\nscript reentrance':
@@ -1036,6 +1040,12 @@ SnapTranslator.dict.ua = {
         'увімкніть, щоб задіяти\nнаслідування властивостей спрайтів',
      'Error\nexpecting list but getting nothing':
         'Помилка\nне вказано список',
+     'Log pen vectors':
+        'Запис малюнків олівцем у вектор',
+    'uncheck to turn off\nlogging pen vectors':
+        'вимкніть, щоб припинити заппис малюнків олівцем у вектор',
+    'check to turn on\nlogging pen vectors':
+        'увімкніть, щоб записати молюнки олівцем у вектор',
 
     // inputs
     'with inputs':
@@ -1045,7 +1055,7 @@ SnapTranslator.dict.ua = {
     'Input Names:':
         'Імена Вхідних Даних:',
     'input list:':
-        'вводимый список:',
+        'вхідний список:',
 
     // context menus:
     'help':
@@ -1065,9 +1075,9 @@ SnapTranslator.dict.ua = {
     'delete':
         'видалити',
     'script pic...':
-        'зображення скрипта...',
+        'зображення скрипту...',
     'open a new window\nwith a picture of this script':
-        'відкрити зображення скрипта\nу новому вікні',
+        'відкрити зображення скрипту\nу новому вікні',
     'ringify':
         'обвести',
     'unringify':
@@ -1173,11 +1183,13 @@ SnapTranslator.dict.ua = {
     'Table view':
         'Табличний вигляд',
     'Save project':
-        'Збереження проекту',
+        'Збереження проєкту',
     'Export Project As...':
-        'Експортувати проект як...',
+        'Експортувати проєкт як...',
     'Cloud':
         'Хмара',
+    'Computer':
+        'Компʼютер',
     'Browser':
         'Браузер',
     'Examples':
@@ -1209,13 +1221,13 @@ SnapTranslator.dict.ua = {
     'Untitled':
         'Без заголовку',
     'Open Project':
-        'Відкрити Проект',
+        'Відкрити Проєкт',
     '(empty)':
         '(порожньо)',
     'Saved!':
         'Збережено!',
     'Delete Project':
-        'Видалити Проект',
+        'Видалити Проєкт',
     'Are you sure you want to delete':
         'Ви впевнені, що бажаєте видалити?',
     'rename...':
@@ -1229,17 +1241,19 @@ SnapTranslator.dict.ua = {
 
     // project notes
     'Project Notes':
-        'Проектні нотатки',
+        'Проєктні нотатки',
 
     // new project
     'New Project':
-        'Новий Проект',
+        'Новий Проєкт',
     'Replace the current project with a new one?':
-        'Замінити даний проект на новий?',
+        'Замінити даний проєкт на новий?',
 
     // save project
     'Save Project As...':
-        'Зберегти Проект Як...',
+        'Зберегти Проєкт Як...',
+    'Save Project':
+        'Зберегти Проєкт',
 
     // export blocks
     'Export blocks':
@@ -1247,7 +1261,7 @@ SnapTranslator.dict.ua = {
     'Import blocks':
         'Імпортувати блоки',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'У проекта відсутні глобальні\nкористувацькі блоки',
+        'У проєкта відсутні глобальні\nкористувацькі блоки',
     'select':
         'виділити',
     'none':
@@ -1317,7 +1331,7 @@ SnapTranslator.dict.ua = {
     'Any type':
         'Будь-якийтип',
     'Boolean (T/F)':
-        'Бульовий (И/Л)',
+        'Бульовий (Т/Н)',
     'Command\n(inline)':
         'Команда\n(вбудована)',
     'Command\n(C-shape)':
@@ -1351,7 +1365,7 @@ SnapTranslator.dict.ua = {
     'License':
         'Ліцензія',
     'current module versions:':
-        'Komponenten-Versionen',
+        'поточні версії модулів',
     'Contributors':
         'Учасники',
     'Translations':
@@ -1361,7 +1375,7 @@ SnapTranslator.dict.ua = {
 
     // variable watchers
     'normal':
-        'Стандартний',
+        'стандартний',
     'large':
         'збільшений',
     'slider':
@@ -1396,9 +1410,9 @@ SnapTranslator.dict.ua = {
     // drow downs
     // directions
     '(90) right':
-        '(90) направо',
+        '(90) вправо',
     '(-90) left':
-        '(-90) наліво',
+        '(-90) вліво',
     '(0) up':
         '(0) ввгору',
     '(180) down':
@@ -1680,7 +1694,7 @@ SnapTranslator.dict.ua = {
     'Constrain proportions of shapes?\n(you can also hold shift)':
         'Зберігати пропорції фігур (коло, квадрат)?\nможна використати Shift',
     'Paintbrush tool\n(free draw)':
-        'пензлик (довільне малювання)',
+        'Пензлик (довільне малювання)',
     'Stroked Rectangle\n(shift: square)':
         'Прямокутник\n(shift: квадрат)',
     'Stroked Ellipse\n(shift: circle)':
@@ -1706,7 +1720,7 @@ SnapTranslator.dict.ua = {
     'Camera not supported':
         'Камера не підтримується',
     'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Будь ласка перевірте оновлення вашого браузера до останньої версії\nі чи Ваша камера правильно сконфігурована. \n\nдеякі браузерипотребують протокола HTTPS\nдля достума Snap до камери.\n\nСпробуйте змінити "http://" в рядку адреси\nВашого браузера на "https://" і спробуйте ще раз.',
+        'Будь ласка перевірте оновлення вашого браузера до останньої версії\nі чи Ваша камера правильно сконфігурована. \n\nдеякі браузери потребують протокола HTTPS\nдля доступу Snap до камери.\n\nСпробуйте змінити "http://" в рядку адреси\nВашого браузера на "https://" і спробуйте ще раз.',
     'current %dates':
         'зараз %dates',
     'year':
