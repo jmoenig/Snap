@@ -227,6 +227,9 @@ SnapTranslator.dict.he = {
         'תלבושות',
     'Sounds':
         'צלילים',
+    'Backgrounds':
+        'רקעים',
+
 
     // names:
     'Sprite':
@@ -245,6 +248,12 @@ SnapTranslator.dict.he = {
     // new sprite button:
     'add a new sprite':
         'הוסף דמות חדשה',
+    'add a new Turtle sprite':
+        'הוסף דמות צב חדשה',
+    'paint a new sprite':
+        'צייר דמות חדשה',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'השתמש במצלמה לייצר דמות חדשה',
 
     // tab help
     'costumes tab help':
@@ -253,7 +262,8 @@ SnapTranslator.dict.he = {
         'ייבא תמונה מאתר אינטרנט\n' + 'או מהמחשב שלך על ידי גרירתה לכאן',
     'import a sound from your computer\nby dragging it into here':
         'ייבא צלילים מהמחשב שלך על-ידי גרירתם לכאן',
-    
+
+
 
     // primitive blocks:
 
@@ -443,6 +453,8 @@ SnapTranslator.dict.he = {
         'עצור_(ניגון_תדר',
     'play %n Hz for %n secs':
         'נגן %n Hz למשך %n שניות',
+    'Record a new sound':
+        'הקלט צליל חדש',
 
     // "instruments", i.e. wave forms
     '(1) sine':
@@ -469,21 +481,44 @@ SnapTranslator.dict.he = {
     'set pen color to %n':
         ' %n קבע_צבע_עט_ל',
     'change pen shade by %n':
-        '%n שנה גוון עט ב',
+        '%n שנה_גוון_עט_ב',
     'set pen shade to %n':
-        '%n קווע גוון עט ל',
+        '%n קווע_גוון_עט_ל',
     'change pen size by %n':
-        '%n שנה גודל עט ב',
+        '%n שנה_גודל_עט_ב',
     'set pen size to %n':
-        ' %n קבע גודל עט ל',
+        ' %n קבע_גודל_עט_ל',
     'stamp':
         'חותמת',
+    'pen down?':
+        'עט_למטה?',
+    'set background color to %clr':
+        'קבע_צבע_רקע %clr',
+    'change pen %hsva by %n':
+        'שנה_עט_ב %hsva %n',
+    'change background %hsva by %n':
+        'שנה_רקע_ב %hsva %n',
+    'set pen %hsva to %n':
+        'קבע_עט_ל %hsva %n',
+    'set background %hsva to %n':
+        'קבע_רקע_ל %hsva  %n',
+    'pen %pen':
+        'עט %pen',
+    'fill':
+        'מלא',
+    'write %s size %n':
+        'כתוב_בגודל %s %n',
+    'paste on %spr':
+        'הדבק_על %spr',
+    'pen vectors':
+        'סימוני_עט_וקטור',
+
 
     // control:
     'when %greenflag clicked':
-        'כאשר כפתור %greenflag נלחץ',
+        'נלחץ %greenflag כאשר_כפתור',
     'when %keyHat key pressed':
-        'כאשר כפתור %keyHat נלחץ',
+        'נלחץ %keyHat כאשר_כפתור',
     'when I am %interaction':
         'כאשר_אני %interaction',
     'clicked':
@@ -562,6 +597,22 @@ SnapTranslator.dict.he = {
         'אני',
     'delete this clone':
         'מחק_את_השכפול_הזה',
+    'scrolled-down':
+        'נגלל_למטה',
+    'scrolled-up':
+        'נגלל_למעלה',
+    'stopped':
+        'נעצר',
+    'for %upvar = %n to %n %cla':
+        'ספור_במשתנה_בטווח %upvar = %n %n %cla',
+    'if %b then %s else %s':
+        '→אם %b אז %s אחרת %s',
+    'a new clone of %cln':
+        'שכפול_חדש_של %cln',
+    'tell %spr to %cmdRing %inputs':
+        'תודיע_לעצם_אחר_לבצע %spr %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'שאל_עצם_אחר %spr %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -573,7 +624,7 @@ SnapTranslator.dict.he = {
     'ask %s and wait':
         '%s שאל_והמתן',
     'what\'s your name?':
-        'מה השם שלך?',
+        '?מה_השם_שלך',
     'answer':
         'תשובה',
     'mouse x':
@@ -581,7 +632,7 @@ SnapTranslator.dict.he = {
     'mouse y':
         'y עכבר',
     'mouse down?':
-        'עכבר למטה?',
+        'עכבר_למטה?',
     'key %key pressed?':
         'מקש_נלחץ %key ?',
     'distance to %dst':
@@ -687,7 +738,7 @@ SnapTranslator.dict.he = {
     'join %words':
         'שרשר_מילים %words',
     'split %s by %delim':
-        'בפרדת_אותיות_לפי_מפריד %s  %delim',
+        'הפרדת_אותיות_לפי_סימן_מפריד %s  %delim',
     'hello':
         'שלום',
     'world':
@@ -695,7 +746,7 @@ SnapTranslator.dict.he = {
     'letter %idx of %s':
         'מיקום_אות_במילה %idx  %s',
     'length of %s':
-        '%s האורך של',
+        '%s האורך_של',
     'unicode of %s':
         'יוניקוד_של %s',
     'unicode %n as letter':
@@ -735,7 +786,7 @@ SnapTranslator.dict.he = {
     'list %exp':
         '%exp רשימה',
     'numbers from %n to %n':
-        'מספרים מערך %n עד ערך %n',
+        'מערך_מספרים_בטווח %n עד %n',
     '%s in front of %l':
         '%s בתחילת_רשימה %l',
     'item %idx of %l':
@@ -761,19 +812,19 @@ SnapTranslator.dict.he = {
     'map %repRing over %l':
         'צור_מיפוי %repRing  %l',
     'keep items %predRing from %l':
-        'שמור פריטים של %predRing  %l',
+        'שמור_פריטים_של %predRing %l',
     'find first item %predRing in %l':
         'מצא_פריט_ראשון %predRing  %l',
     'combine %l using %repRing':
         'מזג_רשימה_באמצעות %l mit %repRing',
     '%blitz map %repRing over %l':
-        '%blitz map %repRing over %l',
+        '%blitz צור_מיפוי %repRing %l',
     '%blitz keep items %predRing from %l':
-        '%blitz keep items %predRing from %l',
+        '%blitz שמור_פריטים_של %predRing %l',
     '%blitz find first item %predRing in %l':
-        '%blitz find first item %predRing in %l',
+        '%blitz מצא_פריט_ראשון %predRing %l',
     '%blitz combine %l using %repRing':
-        '%blitz combine %l using %repRing',
+        '%blitz מזג_רשימה_באמצעות %l %repRing',
     'for each %upvar in %l %cla':
         ' %upvar עבור_כל %l %cla',
     'item':
@@ -863,19 +914,71 @@ SnapTranslator.dict.he = {
     'For all Sprites':
         'עבור כל הדמויות',
 	'Import tools':
-        'כליי יבור',
+        'כליי יבוא',
     'load the official library of\npowerful blocks':
         'טען את הספריה הרשמית של\n powerful blocks',
     'Libraries...':
         'ספריות...',
+    'save project data as XML\nto your downloads folder':
+        'שמור פרוייקט בתיקיית הורדות כקובץ XML',
+    'Select categories of additional blocks to add to this project.':
+        'בחר קטגוריית בלוקיי הרחבה לפרוייקט זה',
+    'Select a costume from the media library':
+        'בחר תלבושת מספריית המדיה',
+    'Select a sound from the media library':
+        'בחר צליל מבפריית המדיה',
+
+    //Libraries
     'Import library':
         'ייבא ספריה',
+    'Loading':
+        'טוען',
+    'Imported':
+        'מיובא',
+    'Iteration, composition':
+        'איטרציה, קומפוזיציה',
+    'List utilities':
+        'עזריי רשימות',
+    'Variadic reporters':
+        'מדווחי משתנים',
+    'Web services access (https)':
+        'גישה לשירותי רשת מאובטחים',
+    'Multi-branched conditional (switch)':
+        'תנאי מרובה ענפים (סוויצ)',
+    'LEAP Motion controller':
+        'LEAP בקר_תנועה',
+    'Words, sentences':
+        'מילים, משפטים',
+    'Catch errors in a script':
+        'תפוס שגיאות בתסריט',
+    'Set RGB or HSV pen color':
+        'קביעת צבע מתקדמת',
+    'Text to speech':
+        'טקסט לדיבור',
+    'Provide 100 selected colors':
+        '100 צבעים נבחרים',
+    'Infinite precision integers, exact rationals, complex':
+        'מספרים מדוייקים, רציונאלים ומרוכבים',
+    'Provide getters and setters for all GUI-controlled global settings':
+        ' הגדרת מאפייני ממשק ',
+    'Allow multi-line text input to a block':
+        'אפשר קליטת משפטים מרוביי שורות',
+    'create variables in program':
+        'צור משתנים בתוכנית',
         
     // cloud menu
     'Login...':
         'הכנס...',
     'Signup...':
         'הירשם...',
+    'Logout':
+        'התנתק',
+    'Change Password...':
+        'שנה סיסמה...',
+    'Resend Verification Email...':
+        'שלח מחדש מייל ווידוא...',
+    'Open in Community Site':
+        'פתח באתר הקהילתי',
         
     // settings menu
     'Language...':
@@ -938,6 +1041,12 @@ SnapTranslator.dict.he = {
         'בטל סימון כדי לבטל סרגלי קלט',
     'check to enable\ninput sliders for\nentry fields':
         'הוסף סימון כדי לאפשר סרגלי קלט',
+    'Retina display support':
+        'תמיכה במסך רטינה',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'בטל סימון כדי לשפר ביצועים על חשבון רזולוציה איכותית',
+    'check for higher resolution,\nuses more computing resources':
+        'הוסף סימון כדי להעדיף רזולוציה איכותית על חשבון ביצועים',
     'Clicking sound':
         'צלילי לחיצה',
     'uncheck to turn\nblock clicking\nsound off':
@@ -958,6 +1067,10 @@ SnapTranslator.dict.he = {
         'בטל סימון כדי להפעיל תסריטים במהירות רגילה',
 	'Flat design':
         'עיצוב שטוח',
+    'check for alternative\nGUI design':
+        'הוסף סימון למראה אלטרנטיבי - שטוח',
+    'uncheck for default\nGUI design':
+        'בטל סימון למראה רגיל תבליטי',
     'Keyboard Editing':
         'עריכת מקלדת',
     'Thread safe scripts':
@@ -984,6 +1097,28 @@ SnapTranslator.dict.he = {
         'בטל סימון לבטל הורשת\nתכונות מאפייני דמות',
     'check for sprite\ninheritance features':
         'הוסף סימון לאפשר הורשת\nתכונות מאפייני דמות',
+    'Stage size':
+        'גודל הבמה',
+    'check to turn on\n visible stepping (slow)':
+        'הוסף סימון כדי להפעיל המחשת צעדים (איטי)',
+    'uncheck to turn off\nvisible stepping':
+        'בטל סימון כדי לא להמחיש צעדים',
+    'Nested auto-wrapping':
+        'עטיפה אוטומטית',
+    'Table support':
+        'תמיכה בטבלאות',
+    'Table lines':
+        'שורות של טבלאות',
+    'Visible stepping':
+        'המחשת צעדים',
+    'Ternary Boolean slots':
+        'בולאני עם שלושה אפשרויות',
+    'Log pen vectors':
+        'הקלט מיקומי עט',
+    'uncheck to turn off\nlogging pen vectors':
+        'בטל סימון כדי לא לזכור מיקומי עט',
+    'check to turn on\nlogging pen vectors':
+        'הוסף סימון להקליט מיקומי עט',
 
     // inputs
     'with inputs':
@@ -1000,6 +1135,8 @@ SnapTranslator.dict.he = {
         'עזרה',
 
     // palette:
+    'find blocks':
+        'מצא בלוקים',
     'hide primitives':
         'הסתר בסיסיים',
     'show primitives':
@@ -1026,10 +1163,24 @@ SnapTranslator.dict.he = {
         'מיסגור',
     'unringify':
         'ביטול מיסגור',
+    'compile':
+        'בצע קומפילציה',
+    'uncompile':
+        'בטל קומפילציה',
+    'transient':
+        'זמני',
+    'uncheck to save contents\nin the project':
+        'בטל סימון כדי לשמור תוכן בפרוייקט',
+    'check to prevent contents\nfrom being saved':
+        'הוסף סימון כדי לא לשמור תוכן בפרוייקט',
+    'new line':
+        'שורה חדשה',
 
     // custom blocks:
     'delete block definition...':
         'הגדרת מחיקת בלוקים...',
+    'duplicate block definition...':
+        'שכפל הגדרת בלוק...',
     'edit...':
         'ערוך...',
 
@@ -1044,6 +1195,24 @@ SnapTranslator.dict.he = {
         'נתק כל החלקים',
     'export...':
         'ייצא...',
+    'clone':
+        'שכפל',
+    'pivot':
+        'ציר',
+    'edit the costume\'s\nrotation center':
+        'ערוך את מרכז הסיבוב של הדמות',
+    'rotate':
+        'סובב',
+    'stick to':
+        'הצמד_אל',
+    'parent...':
+        'הורה...',
+    'current parent':
+        'ההורה הנוכחי',
+    'release':
+        'שחרר',
+    'make temporary and\nhide in the sprite corral':
+        'הפוך לזמני והסתר תחום דמות',
 
     // stage:
     'show all':
@@ -1052,6 +1221,16 @@ SnapTranslator.dict.he = {
         'תמונה...',
     'open a new window\nwith a picture of the stage':
         'פתח חלון חדש\nעם תמונת הבמה',
+    'svg...':
+        'SVG ייצא_לקובץ...',
+    'export pen trails\nline segments as SVG':
+        'ייצא את עקבות העט לקובץ SVG',
+    'there are currently no\nvectorizable pen trail segments':
+        'אין כרגע עקבות עט הניתנון לוקטוריזציה',
+    'turn all pen trails and stamps\ninto a new background for the stage':
+        'הפוך את סימוני העט והחותמת לרקע חדש לבמה',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'הפוך את סימוני העט והחותמת לתלבושת חדשה עבור הדמות הנוכחית',
 
     // scripting area
     'clean up':
@@ -1070,6 +1249,10 @@ SnapTranslator.dict.he = {
         'פתח חלון חדש\nעם תמונה של כל התסריטים',
     'make a block...':
         'צור בלוק...',
+    'redrop':
+        'נתב מחדש',
+    'use the keyboard\nto enter blocks':
+        'השתמש במקלדת להכנס לבלוקים',
 
     // costumes
     'rename':
@@ -1077,7 +1260,23 @@ SnapTranslator.dict.he = {
     'export':
         'ייצא',
     'rename costume':
-        'שנה שם לתחפושת',
+        'שנה שם לתלבושת',
+    'Turtle':
+        'צב',
+    'Empty':
+        'ריק',
+    'Paint a new costume':
+        'צייר תלבושת חדשה',
+    'Import a new costume from your webcam':
+        'ייבא תלבושת ממצלמה',
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'נא וודא שהדפדפן מעודכן \n' +
+        'ושהמצלמה מתואמת כראוי.\n\n' +
+        'חלק מהדפדפנים יבקשו אישור גישה למצלמה\n' +
+        'בחיבור מאובטח.\n\n' +
+        'נסה להחליף בתחילת הכתובת את  "http://"-ב "https://"',
+    'Camera':
+        'מצלמה',
 
     // sounds
     'Play sound':
@@ -1090,6 +1289,20 @@ SnapTranslator.dict.he = {
         'נגן',
     'rename sound':
         'שנה שם לצליל',
+
+    // lists and tables
+    'list view...':
+        'תצוגת רשימה...',
+    'table view...':
+        'תצוגת טבלה...',
+    'Table view':
+        'הצג טבלא',
+    'open in dialog...':
+        'פתח בחלונית דיאלוג',
+    'reset columns':
+        'אתחל עמודות',
+    'items':
+        'פריטים',
 
     // dialogs
     // buttons
@@ -1147,12 +1360,59 @@ SnapTranslator.dict.he = {
         'האם אתה בטוח שברצונך למחוק?',
     'rename...':
         'שנה שם...',
+    'Open':
+        '\u00d6ffnen',
+    'Examples':
+        'דוגמאות',
+    'Share':
+        'שתף',
+    'Unshare':
+        'בטל שיתוף',
+    'Publish':
+        'פרסם',
+    'Unpublish':
+        'בטל פרסום',
+    'Updating\nproject list...':
+        'מעדכן רשימת פרוייקטים',
+    'Recover':
+        'שחזר',
+    'Today':
+        'היום',
+    'Yesterday':
+        'אתמול',
+
+
 
     // costume editor
     'Costume Editor':
-        'עורך מותאם אישית',
+        'עורך תלבושות',
     'click or drag crosshairs to move the rotation center':
-        'גרור את הכוונת כדי לקבע את מרגז הסיבוב',
+        'גרור את הכוונת כדי לקבע את מרכז הסיבוב',
+    'Vector Paint Editor':
+        'עריכה ווקטורית',
+    'Rectangle\n(shift: square)':
+        'מלבן (^ריבוע)',
+    'Ellipse\n(shift: circle)':
+        'אליפסה (^עיגול)',
+    'Selection tool':
+        'כלי בחירה',
+    'Line tool\n(shift: constrain to 45º)':
+        'קווים ישרים\n(Shift: בזווית 45°)',
+    'Closed brush\n(free draw)':
+        'צורה סגורה \n ציור חופשי',
+    'Paint a shape\n(shift: secondary color)':
+        'צבע צורה \n(Shift: צבע שני)',
+    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+        'דגום צבע\n (Shift: צבע שני)',
+    'Edge color\n(left click)':
+        'צבע חיצוני\n(קליק שמאלי)',
+    'Fill color\n(right click)':
+        'צבע פנימי\n(קליק ימני)',
+    'Paint Editor':
+        'עורך ציור',
+    'Vector':
+        'ווקטור',
+
 
     // project notes
     'Project Notes':
@@ -1167,6 +1427,8 @@ SnapTranslator.dict.he = {
     // save project
     'Save Project As...':
         'שמור פרוייקט בשם...',
+    'Save Project':
+        'שמור פרוייקט',
 
     // export blocks
     'Export blocks':
@@ -1186,6 +1448,14 @@ SnapTranslator.dict.he = {
     'for this sprite only':
         'עבור דמות זו בלבד',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'שנה שם של מדווח זה בלבד',
+    'rename all...':
+        'שנה שם להכל...',
+    'rename all blocks that\naccess this variable':
+        'שנה שם לכל הבלוקים \n  הניגשים למשתנה זה',
+
     // block dialog
     'Change block':
         'שנה בלוק',
@@ -1201,6 +1471,9 @@ SnapTranslator.dict.he = {
         'עורך הבלוקים',
     'Apply':
         'החל',
+    'Method Editor':
+        'עורך השיטות',
+
 
     // block deletion dialog
     'Delete Custom Block':
@@ -1289,6 +1562,10 @@ SnapTranslator.dict.he = {
         'ערך מינימלי של הסליידר',
     'Slider maximum value':
         'ערך מקסימלי של הסליידר',
+    'raw data...':
+        'מידע גולמי...',
+    'import without attempting to\nparse or format data':
+        'ייבא מבלי לעבד את המידע',
 
     // list watchers
     'length: ':
@@ -1297,6 +1574,10 @@ SnapTranslator.dict.he = {
     // coments
     'add comment here...':
         'הוסף הערה כאן',
+    'comment pic...':
+        'הערה לצמונה',
+    'open a new window\nwith a picture of this comment':
+        'פתח תמונה והערה בחלון חדש',
 
     // drow downs
     // directions
@@ -1308,6 +1589,10 @@ SnapTranslator.dict.he = {
         '(0) למעלה',
     '(180) down':
         '(180) למטה',
+    'random':
+        'אקראי',
+    'random position':
+        'מיקום אקראי',
 
     // collision detection
     'mouse-pointer':
@@ -1315,13 +1600,9 @@ SnapTranslator.dict.he = {
     'edge':
         'קצה',
     'pen trails':
-        'עט סימוני',
-
-    // costumes
-    'Turtle':
-        'צב',
-    'Empty':
-        'ריק',
+        'סימוני_עט',
+    'center':
+        'מרכז',
 
     // graphical effects
     'brightness':
@@ -1362,6 +1643,8 @@ SnapTranslator.dict.he = {
         'חץ ימינה',
     'left arrow':
         'חץ שמאלה',
+    'any key':
+        'מקש כלשהו',
     'a':
         'a',
     'b':
@@ -1438,10 +1721,14 @@ SnapTranslator.dict.he = {
     // messages
     'new...':
         'חדש...',
+    '__shout__go__':
+        'לחץ על דגל ירוק',
 
     // math functions
     'abs':
         'ערך מוחלט',
+    'ceiling':
+        'תקרה',
     'floor':
         'רצפה',
     'sqrt':
@@ -1463,9 +1750,15 @@ SnapTranslator.dict.he = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'שלילה',
+
     // delimiters
     'letter':
         'אות',
+    'word':
+        'מילה',
     'whitespace':
         'רווח',
     'line':
@@ -1528,7 +1821,7 @@ SnapTranslator.dict.he = {
 		'יום בשבוע',
 
 	'JavaScript function ( %mult%s ) { %code }':
-		' ( %mult%s ) { %code } פונקציית גאווהסקריפט',
+		' ( %mult%s ) { %code } פונקציית_גאווהסקריפט',
 
 
 	// Copy / Paste
