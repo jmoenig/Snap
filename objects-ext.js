@@ -29,7 +29,7 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.getJSFromRPCDropdown = {  // primitive JSON response
         type: 'reporter',
         category: 'network',
-        spec: 'call %rpcNames / %rpcActions with %s',
+        spec: 'call %serviceNames / %rpcActions with %s',
         defaults: ['PublicRoles'],
         deprecated: true
     };
@@ -37,21 +37,21 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.getJSFromRPCStruct = {
         type: 'reporter',
         category: 'network',
-        spec: 'call %rpcNames / %rpcMethod',
+        spec: 'call %serviceNames / %rpcMethod',
         defaults: ['PublicRoles']
     };
 
     SpriteMorph.prototype.blocks.doRunRPC = {
         type: 'command',
         category: 'network',
-        spec: 'run %rpcNames / %rpcMethod',
+        spec: 'run %serviceNames / %rpcMethod',
         defaults: ['PublicRoles']
     };
 
     SpriteMorph.prototype.blocks.getCostumeFromRPC = {
         type: 'reporter',
         category: 'network',
-        spec: 'costume from %rpcNames / %rpcActions with %s',
+        spec: 'costume from %serviceNames / %rpcActions with %s',
         defaults: ['PublicRoles', ''],
         deprecated: true
     };

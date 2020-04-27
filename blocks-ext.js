@@ -1,12 +1,12 @@
 /* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, localize, SnapCloud, contains,
-   world, utils, Services*/
+   world, Services*/
 // Extensions to the Snap blocks
 
 
 // support for help dialogbox on service blocks
 BlockMorph.prototype._showHelp = BlockMorph.prototype.showHelp;
-BlockMorph.prototype.showHelp = function() {
+BlockMorph.prototype.showHelp = async function() {
     if (!this.isServiceBlock()) return this._showHelp();
     var myself = this,
         help,
@@ -15,14 +15,17 @@ BlockMorph.prototype.showHelp = function() {
         inputs = this.inputs(),
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
-        url = Services.getURLForService(serviceName) + '/' + serviceName,
-        metadata = JSON.parse(utils.getUrlSync(url)),
-        serviceNames;
+        isServiceURL = !!inputs[0].constant,
+        serviceNames,
+        metadata;
 
     // build the help message
     if (serviceName !== '') {
         // service description will go here
         // if a method is selected append rpc specific description
+        metadata = isServiceURL ?
+            await Services.getServiceMetadataFromURL(serviceName) :
+            await Services.getServiceMetadata(serviceName);
         if (methodName !== '') {
             metadata = metadata.rpcs[methodName];
             help = metadata.description;
@@ -40,6 +43,7 @@ BlockMorph.prototype.showHelp = function() {
         }
         if (!help) help = 'Description not available';
     } else {
+        metadata = await Services.getServicesMetadata();
         serviceNames = metadata.slice(0,3).map(function(md) {return md.name;});
         help = 'Get information from different providers, save information and more. \nTo get more help select one of the services: '
             + serviceNames.join(', ') + ' ...';
@@ -273,9 +277,8 @@ StructInputSlotMorph.prototype.setDefaultFieldArg = function(index) {
     return arg;
 };
 
-
-InputSlotMorph.prototype.rpcNames = function () {
-    var services = Services.getServicesMetadata(),
+InputSlotMorph.prototype.serviceNames = async function () {
+    var services = await Services.getServicesMetadata(),
         hasAuthoredServices,
         menuDict = {},
         category,
@@ -299,6 +302,7 @@ InputSlotMorph.prototype.rpcNames = function () {
 
     for (var i = services.length; i--;) {
         name = services[i].name;
+        const url = services[i].url;
         if (services[i].categories.length) {
             for (var j = services[i].categories.length; j--;) {
                 category = services[i].categories[j];
@@ -309,10 +313,10 @@ InputSlotMorph.prototype.rpcNames = function () {
                     }
                     subMenu = subMenu[category[c]];
                 }
-                subMenu[name] = name;
+                subMenu[name] = url ? [url + '/' + name] : name;
             }
         } else {
-            menuDict[name] = name;
+            menuDict[name] = url ? [url + '/' + name] : name;
         }
     }
 
@@ -344,29 +348,35 @@ function RPCInputSlotMorph() {
         null,
         false,
         'methodSignature',
-        function(rpcMethod) {
-            if (!this.fieldsFor || !this.fieldsFor[rpcMethod]) {
-                this.methodSignature();
-                var isSupported = !!this.fieldsFor;
-                if (!isSupported) {
-                    var msg = 'Service "' + this.getServiceName() + '" is not available';
-                    world.children[0].showMessage && world.children[0].showMessage(msg);
-                    this.fieldsFor = {};
-                }
+        function(rpcName) {
+            if (!rpcName) {
+                return [];
             }
-            if (this.fieldsFor[rpcMethod]) {
-                return this.fieldsFor[rpcMethod].args.map(function(arg) {
+
+            if (!this.fieldsFor || !this.fieldsFor[rpcName]) {
+                this.fieldsFor = {};
+                this.methodSignature().then(() => {
+                    var isSupported = !!this.fieldsFor;
+                    if (!isSupported) {
+                        var msg = 'Service "' + this.getServiceName() + '" is not available';
+                        world.children[0].showMessage && world.children[0].showMessage(msg);
+                    }
+                });
+            }
+
+            if (this.fieldsFor[rpcName]) {
+                return this.fieldsFor[rpcName].args.map(function(arg) {
                     return arg.name;
                 });
             } else {  // the requested action is undefined
-                return null;
+                return [];
             }
         },
         true
     );
 }
 
-RPCInputSlotMorph.prototype.getServiceName = function () {
+RPCInputSlotMorph.prototype.getServiceInputSlot = function () {
     var fields = this.parent.inputs(),
         field,
         i;
@@ -375,25 +385,44 @@ RPCInputSlotMorph.prototype.getServiceName = function () {
     i = fields.indexOf(this);
     field = fields[i-1];
 
+    return field;
+};
+
+RPCInputSlotMorph.prototype.getServiceName = function () {
+    const field = this.getServiceInputSlot();
+
     if (field) {
+        if (field.constant) {
+            const [url] = field.evaluate();
+            return url.split('/').pop();
+        }
         return field.evaluate();
     }
     return null;
 };
 
+RPCInputSlotMorph.prototype.getServiceMetadata = async function () {
+    const field = this.getServiceInputSlot();
+    if (field.constant) {
+        const url = field.evaluate();
+        return await Services.getServiceMetadataFromURL(url);
+    }
+    const name = field.evaluate();
+    return await Services.getServiceMetadata(name);
+};
+
 // sets this.fieldsFor and returns the method signature dict
-RPCInputSlotMorph.prototype.methodSignature = function () {
+RPCInputSlotMorph.prototype.methodSignature = async function () {
     var actionNames,
         block,
-        service,
         metadata,
         dict = {};
 
-    service = this.getServiceName();
+    const service = this.getServiceName();
     if (service) {
         // stores information on a specific service's rpcs
         try {
-            metadata = Services.getServiceMetadata(service);
+            metadata = await this.getServiceMetadata();
             this.fieldsFor = metadata.rpcs;
             actionNames = Object.keys(this.fieldsFor);
             this.isCurrentRPCSupported = true;

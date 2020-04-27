@@ -65,40 +65,61 @@ ServicesRegistry.prototype.allHosts = function () {
     return [this.defaultHost].concat(this.auxServicesHosts);
 };
 
-ServicesRegistry.prototype.getURLForService = function (name) {
+// TODO: Probably CAN do a bit of caching here...
+ServicesRegistry.prototype.getServiceURL = async function (name) {
     const missingUrls = [];
-    const {url} = this.auxServicesHosts.find(hostInfo => {
+    const checkingHosts = this.auxServicesHosts.map(async hostInfo => {
         const {url} = hostInfo;
         try {
-            const serviceNames = JSON.parse(utils.getUrlSync(url))
+            const response = await fetch(url);
+            const serviceNames = (await response.json())
                 .map(service => service.name);
             return serviceNames.includes(name);
         } catch (err) {
             missingUrls.push(url);
         }
-    }) || this.defaultHost;
+    });
+    const hostIndex = (await Promise.all(checkingHosts))
+        .findIndex(isCorrectHost => isCorrectHost);
 
     if (missingUrls.length) {
         const msg = `Could not fetch service metadata from "${missingUrls.join(',')}"`;
         console.error(msg);
     }
 
-    return url;
+    const baseUrl = hostIndex > -1 ? this.auxServicesHosts[hostIndex].url :
+        this.defaultHost.url;
+    return baseUrl + '/' + name;
 };
 
-ServicesRegistry.prototype.getServiceMetadata = function (name) {
-    const url = this.getURLForService(name) + '/' + name;
-    return JSON.parse(utils.getUrlSync(url));
+ServicesRegistry.prototype.getServiceMetadataFromURL = async function (url) {
+    const response = await fetch(url);
+    return await response.json();
 };
 
-ServicesRegistry.prototype.getServicesMetadata = function () {
-    var services = this.allHosts().flatMap(hostInfo => {
+ServicesRegistry.prototype.getServiceMetadata = async function (name) {
+    const url = await this.getServiceURL(name);
+    return this.getServiceMetadataFromURL(url);
+};
+
+// Probably can't do much caching here...
+ServicesRegistry.prototype.getServicesMetadata = async function () {
+    var serviceGroups = this.allHosts().map(async hostInfo => {
         const {url, categories} = hostInfo;
         try {
-            const services = JSON.parse(utils.getUrlSync(url));
+            const response = await fetch(url);
+            const services = await response.json();
+            if (hostInfo !== this.defaultHost) {
+                services.forEach(service => service.url = url);
+            }
+
             if (categories.length) {
-                services
-                    .forEach(service => service.categories.unshift(categories));
+                services.forEach(service => {
+                    if (service.categories.length === 0) {
+                        service.categories.push([]);
+                    }
+                    service.categories.map(c => c.unshift(categories));
+                });
             }
             return services;
         } catch (err) {
@@ -106,7 +127,12 @@ ServicesRegistry.prototype.getServicesMetadata = function () {
             return [];
         }
     });
+    const services = (await Promise.all(serviceGroups)).flat();
     return services;
+};
+
+ServicesRegistry.prototype.isRegisteredServiceURL = function (url) {
+    return !!this.allHosts().find(host => url.startsWith(host.url));
 };
 
 /* eslint-disable-next-line no-unused-vars */

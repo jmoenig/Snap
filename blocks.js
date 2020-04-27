@@ -1310,11 +1310,11 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'roleNames'
             );
             break;
-        case '%rpcNames':
+        case '%serviceNames':
             part = new InputSlotMorph(
                 null,
                 false,
-                'rpcNames',
+                'serviceNames',
                 true
             );
             part.isStatic = true;
@@ -7925,12 +7925,19 @@ InputSlotMorph.prototype.arrow = function () {
     );
 };
 
+InputSlotMorph.prototype.getConstantDisplayName = function (constant) {
+    if (this.choices === 'serviceNames') {
+        return constant.split('/').pop();
+    }
+    return constant;
+};
+
 InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
     var cnts = this.contents(),
         dta = aStringOrFloat,
         isConstant = dta instanceof Array;
     if (isConstant) {
-        dta = localize(dta[0]);
+        dta = localize(this.getConstantDisplayName(dta[0]));
         cnts.isItalic = !this.isReadOnly;
     } else { // assume dta is a localizable choice if it's a key in my choices
         cnts.isItalic = false;
@@ -7962,19 +7969,21 @@ InputSlotMorph.prototype.setDropDownValue = function (value) {
     this.updateFieldValue(value);
 };
 
-InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
-    var menu = this.menuFromDict(this.choices);
+InputSlotMorph.prototype.dropDownMenu = async function (enableKeyboard) {
+    var position = this.world().hand.position(),
+        menu = await this.menuFromDict(this.choices);
+
     if (menu.items.length > 0) {
         if (enableKeyboard) {
             menu.popup(this.world(), this.bottomLeft());
             menu.getFocus();
         } else {
-            menu.popUpAtHand(this.world());
+            menu.popup(this.world(), position);
         }
     }
 };
 
-InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
+InputSlotMorph.prototype.menuFromDict = async function (choices, noEmptyOption) {
     var key,
         menu = new MenuMorph(
             this.setDropDownValue,
@@ -7984,9 +7993,9 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
         );
 
     if (choices instanceof Function) {
-        choices = choices.call(this);
+        choices = await choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices]();
+        choices = await this[choices]();
     }
     if (!noEmptyOption) {
         menu.addItem(' ', null);
@@ -8000,7 +8009,7 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
-                menu.addMenu(key, this.menuFromDict(choices[key], true));
+                menu.addMenu(key, await this.menuFromDict(choices[key], true));
             } else {
                 menu.addItem(key, choices[key]);
             }

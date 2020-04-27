@@ -424,9 +424,16 @@ NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
 
 NetsProcess.prototype.getJSFromRPCDropdown = function (service, rpc, params) {
     if (service && rpc) {
+        const isServiceURL = service instanceof Array;
+        const serviceURL = isServiceURL ? service[0] : Services.defaultHost.url + '/' + service;
+        if (!Services.isRegisteredServiceURL(serviceURL)) {
+            const serviceName = serviceURL.split('/').pop();
+            const msg = 'Service "' + serviceName + '" is not available';
+            throw new Error(msg);
+        }
+
         const url = [
-            Services.getURLForService(service),
-            encodeURIComponent(service),
+            serviceURL,
             encodeURIComponent(rpc),
         ].join('/');
         return this.getJSFromRPC(url, params);
