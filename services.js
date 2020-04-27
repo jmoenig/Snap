@@ -65,7 +65,6 @@ ServicesRegistry.prototype.allHosts = function () {
     return [this.defaultHost].concat(this.auxServicesHosts);
 };
 
-// TODO: Probably CAN do a bit of caching here...
 ServicesRegistry.prototype.getServiceURL = async function (name) {
     const missingUrls = [];
     const checkingHosts = this.auxServicesHosts.map(async hostInfo => {
@@ -92,6 +91,10 @@ ServicesRegistry.prototype.getServiceURL = async function (name) {
     return baseUrl + '/' + name;
 };
 
+ServicesRegistry.prototype.getServiceMetadataFromURLSync = function (url) {
+    return JSON.parse(utils.getUrlSync(url));
+};
+
 ServicesRegistry.prototype.getServiceMetadataFromURL = async function (url) {
     const response = await fetch(url);
     return await response.json();
@@ -102,7 +105,6 @@ ServicesRegistry.prototype.getServiceMetadata = async function (name) {
     return this.getServiceMetadataFromURL(url);
 };
 
-// Probably can't do much caching here...
 ServicesRegistry.prototype.getServicesMetadata = async function () {
     var serviceGroups = this.allHosts().map(async hostInfo => {
         const {url, categories} = hostInfo;

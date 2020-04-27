@@ -349,27 +349,20 @@ function RPCInputSlotMorph() {
         false,
         'methodSignature',
         function(rpcName) {
-            if (!rpcName) {
-                return [];
-            }
-
             if (!this.fieldsFor || !this.fieldsFor[rpcName]) {
-                this.fieldsFor = {};
-                this.methodSignature().then(() => {
-                    var isSupported = !!this.fieldsFor;
-                    if (!isSupported) {
-                        var msg = 'Service "' + this.getServiceName() + '" is not available';
-                        world.children[0].showMessage && world.children[0].showMessage(msg);
-                    }
-                });
+                this.methodSignature();
+                var isSupported = !!this.fieldsFor;
+                if (!isSupported) {
+                    this.fieldsFor = {};
+                    var msg = 'Service "' + this.getServiceName() + '" is not available';
+                    world.children[0].showMessage && world.children[0].showMessage(msg);
+                }
             }
 
             if (this.fieldsFor[rpcName]) {
                 return this.fieldsFor[rpcName].args.map(function(arg) {
                     return arg.name;
                 });
-            } else {  // the requested action is undefined
-                return [];
             }
         },
         true
@@ -401,18 +394,16 @@ RPCInputSlotMorph.prototype.getServiceName = function () {
     return null;
 };
 
-RPCInputSlotMorph.prototype.getServiceMetadata = async function () {
+RPCInputSlotMorph.prototype.getServiceMetadata = function () {
     const field = this.getServiceInputSlot();
-    if (field.constant) {
-        const url = field.evaluate();
-        return await Services.getServiceMetadataFromURL(url);
-    }
-    const name = field.evaluate();
-    return await Services.getServiceMetadata(name);
+    const url = field.constant ? field.evaluate()[0] :
+        Services.defaultHost.url + '/' + field.evaluate();
+
+    return Services.getServiceMetadataFromURLSync(url);
 };
 
 // sets this.fieldsFor and returns the method signature dict
-RPCInputSlotMorph.prototype.methodSignature = async function () {
+RPCInputSlotMorph.prototype.methodSignature = function () {
     var actionNames,
         block,
         metadata,
@@ -422,7 +413,7 @@ RPCInputSlotMorph.prototype.methodSignature = async function () {
     if (service) {
         // stores information on a specific service's rpcs
         try {
-            metadata = await this.getServiceMetadata();
+            metadata = this.getServiceMetadata();
             this.fieldsFor = metadata.rpcs;
             actionNames = Object.keys(this.fieldsFor);
             this.isCurrentRPCSupported = true;
