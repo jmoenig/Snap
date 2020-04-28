@@ -2217,16 +2217,12 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
         template = this.target.paletteBlockInstance(def);
 
     if (this.definition.isGlobal) {
-        this.target.allBlockInstances(this.definition).forEach(
-            function (block) {
-                block.refresh();
-            }
+        this.target.allBlockInstances(this.definition).forEach(block =>
+            block.refresh()
         );
     } else {
-        this.target.allDependentInvocationsOf(oldSpec).forEach(
-            function (block) {
-                block.refresh(def);
-            }
+        this.target.allDependentInvocationsOf(oldSpec).forEach(block =>
+            block.refresh(def)
         );
     }
     if (template) {
@@ -2290,7 +2286,7 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
 
     head = prototypeHat || detect(
         this.body.contents.children,
-        function (c) {return c instanceof PrototypeHatBlockMorph; }
+        c => c instanceof PrototypeHatBlockMorph
     );
     topBlock = head.nextBlock();
     if (topBlock === null) {
@@ -2313,7 +2309,7 @@ BlockEditorMorph.prototype.prototypeSpec = function () {
     // answer the spec represented by my (edited) block prototype
     return detect(
         this.body.contents.children,
-        function (c) {return c instanceof PrototypeHatBlockMorph; }
+        c => c instanceof PrototypeHatBlockMorph
     ).parts()[0].specFromFragments();
 };
 
@@ -2321,7 +2317,7 @@ BlockEditorMorph.prototype.prototypeSlots = function () {
     // answer the slot declarations from my (edited) block prototype
     return detect(
         this.body.contents.children,
-        function (c) {return c instanceof PrototypeHatBlockMorph; }
+        c => c instanceof PrototypeHatBlockMorph
     ).parts()[0].declarationsFromFragments();
 };
 
@@ -2329,7 +2325,7 @@ BlockEditorMorph.prototype.variableNames = function () {
     // answer the variable declarations from my prototype hat
     return detect(
         this.body.contents.children,
-        function (c) {return c instanceof PrototypeHatBlockMorph; }
+        c => c instanceof PrototypeHatBlockMorph
     ).variableNames();
 };
 
