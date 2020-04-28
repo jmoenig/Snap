@@ -101,14 +101,14 @@ Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
 StringMorph, nop, radians, BoxMorph, ArrowMorph, PushButtonMorph,
 contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
-ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
+ToggleElementMorph, fontHeight, StageMorph, SyntaxElementMorph,
 SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
 SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable,
 BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-22';
+modules.byob = '2020-April-28';
 
 // Declarations
 
@@ -935,10 +935,8 @@ CustomCommandBlockMorph.prototype.edit = function () {
             }
             def = rcvr.getMethod(this.semanticSpec);
         }
-        Morph.prototype.trackChanges = false;
         editor = new BlockEditorMorph(def, rcvr);
         editor.popUp();
-        Morph.prototype.trackChanges = true;
         editor.changed();
     }
 };
@@ -3209,13 +3207,11 @@ InputSlotDialogMorph.prototype.open = function (
     pic,
     noDeleteButton
 ) {
-    var txt = new InputFieldMorph(defaultString),
-        oldFlag = Morph.prototype.trackChanges;
+    var txt = new InputFieldMorph(defaultString);
 
     if (!this.fragment.type) {
         txt.choices = this.symbolMenu;
     }
-    Morph.prototype.trackChanges = false;
     this.isExpanded = this.isLaunchingExpanded;
     txt.setWidth(250);
     this.labelString = title;
@@ -3233,7 +3229,6 @@ InputSlotDialogMorph.prototype.open = function (
     this.fixLayout();
     this.popUp(world);
     this.add(this.types); // make the types come to front
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
 };
 
@@ -3260,10 +3255,7 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var defLabel, defInput, defSwitch, loopArrow,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+    var defLabel, defInput, defSwitch, loopArrow;
 
     // slot types
     this.addSlotTypeButton('Object', '%obj');
@@ -3387,8 +3379,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     };
     this.slots.loopArrow = loopArrow;
     this.slots.add(loopArrow);
-
-    Morph.prototype.trackChanges = oldFlag;
 };
 
 InputSlotDialogMorph.prototype.setSlotType = function (type) {
@@ -3528,10 +3518,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
         ],
         idx,
         row = -1,
-        col,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        col;
 
     // slot types:
 
@@ -3579,7 +3566,6 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
 
     this.slots.loopArrow.setPosition(this.slots.defaultInputLabel.position());
 
-    Morph.prototype.trackChanges = oldFlag;
     this.slots.changed();
 };
 
