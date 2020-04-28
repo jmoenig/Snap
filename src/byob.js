@@ -1834,17 +1834,15 @@ BlockDialogMorph.prototype.setType = function (blockType) {
 // scope radio buttons
 
 BlockDialogMorph.prototype.createScopeButtons = function () {
-    var myself = this;
-
     this.addScopeButton(
-        function () {myself.setScope('global'); },
+        () => this.setScope('global'),
         "for all sprites",
-        function () {return myself.isGlobal; }
+        () => this.isGlobal
     );
     this.addScopeButton(
-        function () {myself.setScope('local'); },
+        () => this.setScope('local'),
         "for this sprite only",
-        function () {return !myself.isGlobal; }
+        () => !this.isGlobal
     );
 };
 
@@ -1870,9 +1868,7 @@ BlockDialogMorph.prototype.addScopeButton = function (action, label, query) {
 
 BlockDialogMorph.prototype.setScope = function (varType) {
     this.isGlobal = (varType === 'global');
-    this.scopes.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.scopes.children.forEach(c => c.refresh());
     this.edit();
 };
 
@@ -2036,7 +2032,7 @@ function BlockEditorMorph(definition, target) {
 }
 
 BlockEditorMorph.prototype.init = function (definition, target) {
-    var scripts, proto, scriptsFrame, block, comment, myself = this,
+    var scripts, proto, scriptsFrame, block, comment,
         isLive = Process.prototype.enableLiveCoding ||
             Process.prototype.enableSingleStepping;
 
@@ -2049,7 +2045,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     BlockEditorMorph.uber.init.call(
         this,
         target,
-        function () {myself.updateDefinition(); },
+        () => this.updateDefinition(),
         target
     );
 
@@ -2082,19 +2078,19 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts.add(proto);
     proto.fixBlockColor(null, true);
 
-    this.definition.scripts.forEach(function (element) {
+    this.definition.scripts.forEach(element => {
         block = element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
         scripts.add(block);
         if (block instanceof BlockMorph) {
-            block.allComments().forEach(function (comment) {
-                comment.align(block);
-            });
+            block.allComments().forEach(comment =>
+                comment.align(block)
+            );
         }
     });
-    proto.allComments().forEach(function (comment) {
-        comment.align(proto);
-    });
+    proto.allComments().forEach(comment =>
+        comment.align(proto)
+    );
 
     scriptsFrame = new ScrollFrameMorph(scripts);
     scriptsFrame.padding = 10;
@@ -2176,8 +2172,7 @@ BlockEditorMorph.prototype.cancel = function (origin) {
 };
 
 BlockEditorMorph.prototype.close = function () {
-    var doubles, block,
-        myself = this;
+    var doubles, block;
 
     // assert that no scope conflicts exists, i.e. that a global
     // definition doesn't contain any local custom blocks, as they
@@ -2185,9 +2180,7 @@ BlockEditorMorph.prototype.close = function () {
     if (this.definition.isGlobal) {
         block = detect(
             this.body.contents.allChildren(),
-            function (morph) {
-                return morph.isCustomBlock && !morph.isGlobal;
-            }
+            morph => morph.isCustomBlock && !morph.isGlobal
         );
         if (block) {
             block = block.scriptTarget()
@@ -2198,7 +2191,7 @@ BlockEditorMorph.prototype.close = function () {
                 'Local Block(s) in Global Definition',
                 'This global block definition contains one or more\n'
                     + 'local custom blocks which must be removed first.',
-                myself.world(),
+                this.world(),
                 block.fullImage()
             );
             return;
@@ -2215,7 +2208,7 @@ BlockEditorMorph.prototype.close = function () {
             'Same Named Blocks',
             'Another custom block with this name exists.\n'
                 + 'Would you like to replace it?',
-            myself.world(),
+            this.world(),
             block.fullImage()
         );
         return;
