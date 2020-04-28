@@ -7488,8 +7488,7 @@ StageMorph.prototype.setScale = function (number) {
     var delta = number / this.scale,
         pos = this.position(),
         relativePos,
-        bubble,
-        myself = this;
+        bubble;
 
     if (delta === 1) {return; }
     this.cachedPenTrailsMorph = null;
@@ -7497,7 +7496,7 @@ StageMorph.prototype.setScale = function (number) {
     this.setExtent(this.dimensions.multiplyBy(number));
 
     // now move and resize all children - sprites, bubbles, watchers etc..
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         relativePos = morph.position().subtract(pos);
         morph.fixLayout();
         morph.setPosition(
@@ -7512,13 +7511,13 @@ StageMorph.prototype.setScale = function (number) {
                 morph.positionTalkBubble();
             }
         } else if (morph instanceof StagePrompterMorph) {
-            if (myself.scale < 1) {
-                morph.setWidth(myself.width() - 10);
+            if (this.scale < 1) {
+                morph.setWidth(this.width() - 10);
             } else {
-                morph.setWidth(myself.dimensions.x - 20);
+                morph.setWidth(this.dimensions.x - 20);
             }
-            morph.setCenter(myself.center());
-            morph.setBottom(myself.bottom());
+            morph.setCenter(this.center());
+            morph.setBottom(this.bottom());
         }
     });
 };
@@ -7950,13 +7949,12 @@ StageMorph.prototype.updateProjection = function () {
 
 StageMorph.prototype.stepGenericConditions = function (stopAll) {
     var hatCount = 0,
-        myself = this,
         ide;
-    this.children.concat(this).forEach(function (morph) {
+    this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allGenericHatBlocks().forEach(function (block) {
+            morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
-                myself.threads.doWhen(block, morph, stopAll);
+                this.threads.doWhen(block, morph, stopAll);
             });
         }
     });
@@ -7970,13 +7968,10 @@ StageMorph.prototype.stepGenericConditions = function (stopAll) {
 };
 
 StageMorph.prototype.developersMenu = function () {
-    var myself = this,
-        menu = StageMorph.uber.developersMenu.call(this);
+    var menu = StageMorph.uber.developersMenu.call(this);
     menu.addItem(
         "stop",
-        function () {
-            myself.threads.stopAll();
-        },
+        () => this.threads.stopAll(),
         'terminate all running threads'
     );
     return menu;
@@ -8043,8 +8038,7 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
 StageMorph.prototype.fireKeyEvent = function (key) {
     var evt = key.toLowerCase(),
         procs = [],
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
+        ide = this.parentThatIsA(IDE_Morph);
 
     this.keysPressed[evt] = true;
     if (evt === 'ctrl enter' && !ide.isAppMode) {
@@ -8084,10 +8078,10 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'esc' && !ide.isAppMode) {
         return this.fireStopAllEvent();
     }
-    this.children.concat(this).forEach(function (morph) {
+    this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForKey(evt).forEach(function (block) {
-                procs.push(myself.threads.startProcess(
+            morph.allHatBlocksForKey(evt).forEach(block => {
+                procs.push(this.threads.startProcess(
                     block,
                     morph,
                     true // ignore running scripts, was: myself.isThreadSafe
@@ -8111,17 +8105,16 @@ StageMorph.prototype.inspectKeyEvent
 
 StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
+        ide = this.parentThatIsA(IDE_Morph);
 
     this.removeAllClones();
-    this.children.concat(this).forEach(function (morph) {
+    this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__shout__go__').forEach(function (block) {
-                procs.push(myself.threads.startProcess(
+            morph.allHatBlocksFor('__shout__go__').forEach(block => {
+                procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    myself.isThreadSafe
+                    this.isThreadSafe
                 ));
             });
         }
@@ -8133,8 +8126,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 };
 
 StageMorph.prototype.fireStopAllEvent = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
+    var ide = this.parentThatIsA(IDE_Morph);
 
     this.threads.resumeAll(this.stage);
 
@@ -8144,7 +8136,7 @@ StageMorph.prototype.fireStopAllEvent = function () {
     this.keysPressed = {};
     this.threads.stopAll();
     this.stopAllActiveSounds();
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         if (morph.stopTalking) {
             morph.stopTalking();
         }
@@ -8153,9 +8145,9 @@ StageMorph.prototype.fireStopAllEvent = function () {
     if (ide) {
         ide.nextSteps([
             nop,
-            function () {myself.stopAllActiveSounds(); }, // catch forever loops
-            function () {myself.stopProjection(); },
-            function () {ide.controlBar.pauseButton.refresh(); }
+            () => this.stopAllActiveSounds(), // catch forever loops
+            () => this.stopProjection(),
+            () => ide.controlBar.pauseButton.refresh()
         ]);
     }
 };
@@ -8164,7 +8156,7 @@ StageMorph.prototype.runStopScripts = function () {
     // experimental: Allow each sprite to run one last step before termination
     // usage example: Stop a robot or device associated with the sprite
     this.receiveUserInteraction('stopped', true, true);
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         if (morph instanceof SpriteMorph) {
             morph.receiveUserInteraction('stopped', true, true);
         }
@@ -8172,14 +8164,11 @@ StageMorph.prototype.runStopScripts = function () {
 };
 
 StageMorph.prototype.removeAllClones = function () {
-    var myself = this,
-        clones = this.children.filter(
-            function (morph) {
-                return morph instanceof SpriteMorph && morph.isTemporary;
-            }
+    var clones = this.children.filter(
+            morph => morph instanceof SpriteMorph && morph.isTemporary
         );
-    clones.forEach(function (clone) {
-        myself.threads.stopAllForReceiver(clone);
+    clones.forEach(clone => {
+        this.threads.stopAllForReceiver(clone);
         clone.detachFromAnchor();
         clone.corpsify();
         clone.destroy();
@@ -8605,7 +8594,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                         null,
                         myself
                     );
-                    myself.variables.allNames().forEach(function (name) {
+                    myself.variables.allNames().forEach(name => {
                         menu.addItem(
                             name,
                             name,
@@ -8717,8 +8706,7 @@ StageMorph.prototype.clear = function () {
 
 StageMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
-        menu = new MenuMorph(this),
-        myself = this;
+        menu = new MenuMorph(this);
 
     if (ide && ide.isAppMode) {
         // menu.addItem('help', 'nop');
@@ -8728,18 +8716,13 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem("show all", 'showAll');
     menu.addItem(
         "pic...",
-        function () {
-            ide.saveCanvasAs(
-                myself.fullImage(),
-                myself.name
-            );
-        },
+        () => ide.saveCanvasAs(this.fullImage(), this.name),
         'open a new window\nwith a picture of the stage'
     );
     menu.addLine();
     menu.addItem(
         'pen trails',
-        function () {
+        () => {
             var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
             ide.currentSprite.addCostume(costume);
             ide.currentSprite.wearCostume(costume);
@@ -8763,16 +8746,15 @@ StageMorph.prototype.userMenu = function () {
 };
 
 StageMorph.prototype.showAll = function () {
-    var myself = this;
-    this.children.forEach(function (m) {
+    this.children.forEach(m => {
         if (m instanceof SpriteMorph) {
             if (!m.anchor) {
                 m.show();
-                m.keepWithin(myself);
+                m.keepWithin(this);
             }
         } else {
             m.show();
-            m.keepWithin(myself);
+            m.keepWithin(this);
             if (m.fixLayout) {m.fixLayout(); }
         }
     });
@@ -8795,8 +8777,7 @@ StageMorph.prototype.fancyThumbnail = function (
     nonRetina,
     recycleMe
 ) {
-    var myself = this,
-        src = this.getImage(),
+    var src = this.getImage(),
         scale = Math.min(
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
@@ -8832,15 +8813,15 @@ StageMorph.prototype.fancyThumbnail = function (
         );
         ctx.restore();
     }
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         if (morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();
             fimg = morph.fullImage();
             if (fimg.width && fimg.height) {
                 ctx.drawImage(
                     morph.fullImage(),
-                    fb.origin.x - myself.bounds.origin.x,
-                    fb.origin.y - myself.bounds.origin.y
+                    fb.origin.x - this.bounds.origin.x,
+                    fb.origin.y - this.bounds.origin.y
                 );
             }
         }
