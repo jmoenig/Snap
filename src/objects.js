@@ -1864,8 +1864,8 @@ SpriteMorph.prototype.fixLayout = function () {
          pic = isFlipped ? this.costume.flipped() : this.costume;
 
          // determine the rotated costume's bounding box
-         corners = pic.bounds().corners().map(
-            point => point.rotateBy(
+         corners = pic.bounds().corners().map(point =>
+            point.rotateBy(
                 radians(facing - 90),
                 this.costume.center()
             )
@@ -3045,9 +3045,7 @@ SpriteMorph.prototype.blocksMatching = function (
 
     function labelOf(aBlockSpec) {
         var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
-            filtered = words.filter(
-                each => each.indexOf('%') !== 0
-            );
+            filtered = words.filter(each => each.indexOf('%') !== 0);
         return filtered.join(' ');
     }
 
@@ -3632,8 +3630,8 @@ SpriteMorph.prototype.doPlaySound = function (name) {
         aud.play();
         if (stage) {
             stage.activeSounds.push(aud);
-            stage.activeSounds = stage.activeSounds.filter(
-                snd => !snd.ended && !snd.terminated
+            stage.activeSounds = stage.activeSounds.filter(snd =>
+                !snd.ended && !snd.terminated
             );
         }
         return aud;
@@ -3777,8 +3775,8 @@ SpriteMorph.prototype.playFreq = function (hz) {
         note.ended = false;
         if (stage) {
             stage.activeSounds.push(note);
-            stage.activeSounds = stage.activeSounds.filter(
-                snd => !snd.ended && !snd.terminated
+            stage.activeSounds = stage.activeSounds.filter(snd =>
+                !snd.ended && !snd.terminated
             );
         }
         note.fader.gain.setValueCurveAtTime(
@@ -6137,8 +6135,8 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
     var stage, objects, blocks = [], inDefinitions;
     if (definition.isGlobal) {
         stage = this.parentThatIsA(StageMorph);
-        objects = stage.children.filter(
-            morph => morph instanceof SpriteMorph
+        objects = stage.children.filter(morph =>
+            morph instanceof SpriteMorph
         );
         objects.push(stage);
         objects.forEach(
@@ -6386,12 +6384,12 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     });
     if (definition.isGlobal) {
         stage = this.parentThatIsA(StageMorph);
-        stage.globalBlocks = stage.globalBlocks.filter(
-            def => !contains(doubles, def)
+        stage.globalBlocks = stage.globalBlocks.filter(def =>
+            !contains(doubles, def)
         );
     } else {
-        this.customBlocks = this.customBlocks.filter(
-            def => !contains(doubles, def)
+        this.customBlocks = this.customBlocks.filter(def =>
+            !contains(doubles, def)
         );
     }
     ide = this.parentThatIsA(IDE_Morph);
@@ -6405,8 +6403,8 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
 
 SpriteMorph.prototype.chooseExemplar = function () {
     var stage = this.parentThatIsA(StageMorph),
-        other = stage.children.filter(
-            m => m instanceof SpriteMorph &&
+        other = stage.children.filter(m =>
+            m instanceof SpriteMorph &&
                 !m.isTemporary &&
                     (!contains(m.allExemplars(), this))
         ),
@@ -6560,14 +6558,12 @@ SpriteMorph.prototype.updatePropagationCache = function () {
 SpriteMorph.prototype.shadowedAttributes = function () {
     // answer an array of attribute names that can be deleted/shared
     var inherited = this.inheritedAttributes;
-    return this.attributes.filter(
-        each => !contains(inherited, each)
-    );
+    return this.attributes.filter(each => !contains(inherited, each));
 };
 
 SpriteMorph.prototype.shadowAllAttributes = function () {
-    this.attributes.forEach(
-        att => this.shadowAttribute(att)
+    this.attributes.forEach(att =>
+        this.shadowAttribute(att)
     );
 };
 
@@ -6578,8 +6574,8 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
         return;
     }
     ide = this.parentThatIsA(IDE_Morph);
-    this.inheritedAttributes = this.inheritedAttributes.filter(
-        each => each !== aName
+    this.inheritedAttributes = this.inheritedAttributes.filter(each =>
+        each !== aName
     );
     if (aName === 'costumes') {
         wardrobe = new List();
@@ -6805,8 +6801,8 @@ SpriteMorph.prototype.deletableVariableNames = function () {
     var locals = this.variables.names(),
         inherited = this.inheritedVariableNames();
     return locals.concat(
-        this.globalVariables().names().filter(
-            each => !contains(locals, each) && !contains(inherited, each)
+        this.globalVariables().names().filter(each =>
+            !contains(locals, each) && !contains(inherited, each)
         )
     );
 };
@@ -6916,8 +6912,8 @@ SpriteMorph.prototype.shadowAllMethods = function () {
 
 SpriteMorph.prototype.inheritedMethods = function () {
     // private - pre-serialization preparation
-    return this.inheritedBlocks(true).map(
-        def => def.copyAndBindTo(this, true) // header only
+    return this.inheritedBlocks(true).map(def =>
+        def.copyAndBindTo(this, true) // header only
     );
 };
 
@@ -7227,11 +7223,8 @@ SpriteMorph.prototype.highlightImage = function (color, border) {
 };
 
 SpriteMorph.prototype.getHighlight = function () {
-    var highlights;
-    highlights = this.children.slice(0).reverse().filter(
-        function (child) {
-            return child instanceof SpriteHighlightMorph;
-        }
+    var highlights = this.children.slice(0).reverse().filter(child =>
+        child instanceof SpriteHighlightMorph
     );
     if (highlights.length !== 0) {
         return highlights[0];
@@ -7278,11 +7271,9 @@ SpriteMorph.prototype.newCostumeName = function (name, ignoredCostume) {
         stem = (ix < 0) ? name : name.substring(0, ix),
         count = 1,
         newName = stem,
-        all = this.costumes.asArray().filter(
-            function (each) {return each !== ignoredCostume; }
-        ).map(
-            function (each) {return each.name; }
-        );
+        all = this.costumes.asArray().filter(each =>
+            each !== ignoredCostume
+        ).map(each => each.name);
     while (contains(all, newName)) {
         count += 1;
         newName = stem + '(' + count + ')';
@@ -7311,20 +7302,18 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
 // SpriteMorph adding sounds
 
 SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
-   var ix = name.indexOf('('),
-       stem = (ix < 0) ? name : name.substring(0, ix),
-       count = 1,
-       newName = stem,
-       all = this.sounds.asArray().filter(
-           function (each) {return each !== ignoredSound; }
-       ).map(
-           function (each) {return each.name; }
-       );
-   while (contains(all, newName)) {
-       count += 1;
-       newName = stem + '(' + count + ')';
-   }
-   return newName;
+    var ix = name.indexOf('('),
+        stem = (ix < 0) ? name : name.substring(0, ix),
+        count = 1,
+        newName = stem,
+        all = this.sounds.asArray().filter(each =>
+            each !== ignoredSound
+        ).map(each => each.name);
+    while (contains(all, newName)) {
+        count += 1;
+        newName = stem + '(' + count + ')';
+    }
+    return newName;
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
@@ -8161,8 +8150,8 @@ StageMorph.prototype.runStopScripts = function () {
 };
 
 StageMorph.prototype.removeAllClones = function () {
-    var clones = this.children.filter(
-            morph => morph instanceof SpriteMorph && morph.isTemporary
+    var clones = this.children.filter(morph =>
+            morph instanceof SpriteMorph && morph.isTemporary
         );
     clones.forEach(clone => {
         this.threads.stopAllForReceiver(clone);
