@@ -1738,8 +1738,8 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         c.customBlocks = [];
         c.variables = new VariableFrame(null, c);
         c.variables.parentFrame = this.variables;
-        c.inheritedVariableNames().forEach(
-            name => c.shadowVar(name, c.variables.getVar(name))
+        c.inheritedVariableNames().forEach(name =>
+            c.shadowVar(name, c.variables.getVar(name))
         );
         this.addSpecimen(c);
         this.cachedPropagation = false;
@@ -1756,7 +1756,9 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         this.customBlocks.forEach(def => {
             cb = def.copyAndBindTo(c);
             c.customBlocks.push(cb);
-            c.allBlockInstances(def).forEach(block => block.definition = cb);
+            c.allBlockInstances(def).forEach(block =>
+                block.definition = cb
+            );
         });
         arr = [];
         this.costumes.asArray().forEach(costume => {
@@ -1802,9 +1804,7 @@ SpriteMorph.prototype.appearIn = function (ide) {
         ide.sprites.add(this);
     }
     ide.stage.add(this);
-    this.parts.forEach(
-        part => part.appearIn(ide)
-    );
+    this.parts.forEach(part => part.appearIn(ide));
 };
 
 // SpriteMorph versioning
@@ -2565,7 +2565,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                         null,
                         myself
                     );
-                    myself.deletableVariableNames().forEach(name => {
+                    myself.deletableVariableNames().forEach(name =>
                         menu.addItem(
                             name,
                             name,
@@ -2576,8 +2576,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                             null,
                             null,
                             true // verbatim - don't translate
-                        );
-                    });
+                        )
+                    );
                     menu.popUpAtHand(myself.world());
                 },
                 'Delete a variable'
@@ -2726,9 +2726,7 @@ SpriteMorph.prototype.makeBlock = function () {
     );
     if (category !== 'variables') {
         dlg.category = category;
-        dlg.categories.children.forEach(
-            each => each.refresh()
-        );
+        dlg.categories.children.forEach(each => each.refresh());
         dlg.types.children.forEach(each => {
             each.setColor(clr);
             each.refresh();
@@ -2837,17 +2835,20 @@ SpriteMorph.prototype.freshPalette = function (category) {
         function hasHiddenPrimitives() {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
-            return Object.keys(hiddens).some(any => !isNil(defs[any]) &&
-                (defs[any].category === category ||
-                    contains((more[category] || []), any))
+            return Object.keys(hiddens).some(any =>
+                !isNil(defs[any]) &&
+                    (defs[any].category === category ||
+                        contains((more[category] || []), any))
             );
         }
 
         function canHidePrimitives() {
-            return palette.contents.children.some(any => contains(
+            return palette.contents.children.some(any =>
+                contains(
                     Object.keys(SpriteMorph.prototype.blocks),
                     any.selector
-            ));
+                )
+            );
         }
 
         menu.addPair(
@@ -2871,9 +2872,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
-                    (more[category] || []).forEach(sel => {
-                        StageMorph.prototype.hiddenPrimitives[sel] = true;
-                    });
+                    (more[category] || []).forEach(sel =>
+                        StageMorph.prototype.hiddenPrimitives[sel] = true
+                    );
                     ide.flushBlocksCache(category);
                     ide.refreshPalette();
                 }
@@ -2890,8 +2891,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
-                    (more[category] || []).forEach(
-                        sel => delete StageMorph.prototype.hiddenPrimitives[sel]
+                    (more[category] || []).forEach(sel =>
+                        delete StageMorph.prototype.hiddenPrimitives[sel]
                     );
                     ide.flushBlocksCache(category);
                     ide.refreshPalette();
@@ -3079,7 +3080,7 @@ SpriteMorph.prototype.blocksMatching = function (
         }
     });
     // custom blocks
-    [this.customBlocks, stage.globalBlocks].forEach(blocksList => {
+    [this.customBlocks, stage.globalBlocks].forEach(blocksList =>
         blocksList.forEach(definition => {
             if (contains(types, definition.type)) {
                 var spec = definition.localizedSpec().toLowerCase(),
@@ -3088,8 +3089,8 @@ SpriteMorph.prototype.blocksMatching = function (
                     blocks.push([definition.templateInstance(), rel + '2']);
                 }
             }
-        });
-    });
+        })
+    );
     // primitives
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
@@ -3361,8 +3362,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        monads.concat(['true', 'false']).forEach(
-            word => reverseDict[localize(word).toLowerCase()] = word
+        monads.concat(['true', 'false']).forEach(word =>
+            reverseDict[localize(word).toLowerCase()] = word
         );
         key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
         if (contains(monads, key)) { // monadic
@@ -3858,15 +3859,15 @@ SpriteMorph.prototype.userMenu = function () {
 
 SpriteMorph.prototype.anchorsMenu = function (targets) {
     var menu = new MenuMorph(this.attachTo, null, this);
-    targets.forEach(sprite => {
+    targets.forEach(sprite =>
         menu.addItem(
             [
                 sprite.thumbnail(new Point(24, 24)),
                 sprite.name,
             ],
             sprite
-        );
-    });
+        )
+    );
     return menu;
 };
 
@@ -3955,9 +3956,7 @@ SpriteMorph.prototype.newClone = function (immediately) {
 
 SpriteMorph.prototype.clonify = function (stage, immediately) {
     var hats;
-    this.parts.forEach(
-        part => part.clonify(stage)
-    );
+    this.parts.forEach(part => part.clonify(stage));
     stage.cloneCount += 1;
     this.cloneOriginName = this.isTemporary ?
             this.cloneOriginName : this.name;
@@ -3965,7 +3964,7 @@ SpriteMorph.prototype.clonify = function (stage, immediately) {
     this.name = '';
     stage.add(this);
     hats = this.allHatBlocksFor('__clone__init__');
-    hats.forEach(block => {
+    hats.forEach(block =>
         stage.threads.startProcess(
             block,
             this,
@@ -3974,8 +3973,8 @@ SpriteMorph.prototype.clonify = function (stage, immediately) {
             null, // callback
             null, // is clicked
             immediately // without yielding
-        );
-    });
+        )
+    );
     this.endWarp();
 };
 
@@ -3983,8 +3982,8 @@ SpriteMorph.prototype.initClone = function (hats) {
     // used when manually instantiating a sprite in the IDE
     var stage = this.parentThatIsA(StageMorph);
     if (stage) {
-        hats.forEach(
-            block => stage.threads.startProcess(
+        hats.forEach(block =>
+            stage.threads.startProcess(
                 block,
                 this,
                 stage.isThreadSafe
@@ -4032,9 +4031,7 @@ SpriteMorph.prototype.perpetuate = function () {
     stage.cloneCount -= 1;
     ide.corral.addSprite(this);
     ide.sprites.add(this);
-    this.parts.forEach(
-        part => part.perpetuate()
-    );
+    this.parts.forEach(part => part.perpetuate());
 };
 
 SpriteMorph.prototype.perpetuateAndEdit = function () {
@@ -4059,12 +4056,8 @@ SpriteMorph.prototype.release = function () {
     }
 
 	// make sure all parts and instances are also released
-    this.parts.forEach(
-        part => part.release()
-    );
-    this.instances.forEach(
-        inst => inst.release()
-    );
+    this.parts.forEach(part => part.release());
+    this.instances.forEach(inst => inst.release());
     this.isTemporary = true;
     this.name = '';
     this.cloneOriginName = this.exemplar.name;
@@ -4134,9 +4127,7 @@ SpriteMorph.prototype.setVisibility = function (bool, noShadow) {
     }
 
     // progagate to parts
-    this.parts.forEach(
-        part => part.setVisibility(bool)
-    );
+    this.parts.forEach(part => part.setVisibility(bool));
 
     // propagate to children that inherit my visibility
     if (!noShadow) {
@@ -4631,8 +4622,8 @@ SpriteMorph.prototype.changeScale = function (delta) {
 // Spritemorph graphic effects
 
 SpriteMorph.prototype.graphicsChanged = function () {
-    return Object.keys(this.graphicsValues).some(
-        any => this.graphicsValues[any] < 0 ||
+    return Object.keys(this.graphicsValues).some(any =>
+        this.graphicsValues[any] < 0 ||
             this.graphicsValues[any] > 0
     );
 };
@@ -5294,9 +5285,7 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
         this.drawLine(start, this.rotationCenter());
     }
     if (!justMe) {
-        this.parts.forEach(
-            part => part.moveBy(delta)
-        );
+        this.parts.forEach(part => part.moveBy(delta));
         this.instances.forEach(instance => {
             if (instance.cachedPropagation) {
                 var inheritsX = instance.inheritsAttribute('x position'),
@@ -5738,18 +5727,14 @@ SpriteMorph.prototype.allMessageNames = function () {
         if (def.body) {
             all.push(def.body.expression);
         }
-        def.scripts.forEach(
-            scr => all.push(scr)
-        );
+        def.scripts.forEach(scr => all.push(scr));
     });
     if (this.globalBlocks) {
         this.globalBlocks.forEach(def => {
             if (def.body) {
                 all.push(def.body.expression);
             }
-            def.scripts.forEach(
-                scr => all.push(scr)
-            );
+            def.scripts.forEach(scr => all.push(scr));
         });
     }
     all.forEach(script => {
@@ -5854,7 +5839,7 @@ SpriteMorph.prototype.receiveUserInteraction = function (
         hats;
     if (!stage) {return; } // currently dragged
     hats = this.allHatBlocksForInteraction(interaction);
-    hats.forEach(block => {
+    hats.forEach(block =>
         procs.push(stage.threads.startProcess(
             block,
             this,
@@ -5864,8 +5849,8 @@ SpriteMorph.prototype.receiveUserInteraction = function (
             null, // is clicked
             rightAway, // immediately
             interaction === 'stopped' // atomic
-        ));
-    });
+        ))
+    );
     return procs;
 };
 
@@ -6117,17 +6102,14 @@ SpriteMorph.prototype.deleteAllBlockInstances = function (definition) {
             stage.globalBlocks.forEach(def => def.purgeCorpses());
             stage.children.concat(stage).forEach(sprite => {
                 if (sprite.isSnapObject) {
-                    sprite.customBlocks.forEach(
-                        def => def.purgeCorpses()
-                    );
+                    sprite.customBlocks.forEach(def => def.purgeCorpses());
                 }
             });
         }
     } else {
-        this.allSpecimens().concat(this).forEach(sprite => {
-            sprite.customBlocks.forEach(
-                def => def.purgeCorpses());
-        });
+        this.allSpecimens().concat(this).forEach(sprite =>
+            sprite.customBlocks.forEach(def => def.purgeCorpses())
+        );
     }
 };
 
@@ -6139,20 +6121,20 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
             morph instanceof SpriteMorph
         );
         objects.push(stage);
-        objects.forEach(
-            sprite => blocks = blocks.concat(
+        objects.forEach(sprite =>
+            blocks = blocks.concat(
                 sprite.allLocalBlockInstances(definition)
             )
         );
         inDefinitions = [];
         stage.globalBlocks.forEach(def => {
-            def.scripts.forEach(eachScript => {
+            def.scripts.forEach(eachScript =>
                 eachScript.allChildren().forEach(c => {
                     if (c.isCustomBlock && (c.definition === definition)) {
                         inDefinitions.push(c);
                     }
-                });
-            });
+                })
+            );
             if (def.body) {
                 def.body.expression.allChildren().forEach(c => {
                     if (c.isCustomBlock && (c.definition === definition)) {
@@ -6173,8 +6155,8 @@ SpriteMorph.prototype.allIndependentInvocationsOf = function (aSpec) {
         return [];
     }
     blocks = this.allInvocationsOf(aSpec);
-    this.instances.forEach(
-        sprite => sprite.addAllInvocationsOf(aSpec, blocks)
+    this.instances.forEach(sprite =>
+        sprite.addAllInvocationsOf(aSpec, blocks)
     );
     return blocks;
 };
@@ -6182,8 +6164,8 @@ SpriteMorph.prototype.allIndependentInvocationsOf = function (aSpec) {
 SpriteMorph.prototype.allDependentInvocationsOf = function (aSpec) {
     var blocks;
     blocks = this.allInvocationsOf(aSpec);
-    this.instances.forEach(
-        sprite => sprite.addAllInvocationsOf(aSpec, blocks)
+    this.instances.forEach(sprite =>
+        sprite.addAllInvocationsOf(aSpec, blocks)
     );
     return blocks;
 };
@@ -6198,15 +6180,15 @@ SpriteMorph.prototype.allInvocationsOf = function (aSpec) {
 
     inDefinitions = [];
     this.customBlocks.forEach(def => {
-        def.scripts.forEach(eachScript => {
+        def.scripts.forEach(eachScript =>
             eachScript.allChildren().forEach(c => {
                 if (c.isCustomBlock && !c.isGlobal &&
                     (c.blockSpec === aSpec)
                 ) {
                     inDefinitions.push(c);
                 }
-            });
-        });
+            })
+        );
         if (def.body) {
             def.body.expression.allChildren().forEach(c => {
                 if (c.isCustomBlock && !c.isGlobal &&
@@ -6225,11 +6207,11 @@ SpriteMorph.prototype.allInvocationsOf = function (aSpec) {
 
 SpriteMorph.prototype.addAllInvocationsOf = function (aSpec, anArray) {
     if (!this.getLocalMethod(aSpec)) {
-        this.allInvocationsOf(aSpec).forEach(
-            block => anArray.push(block)
+        this.allInvocationsOf(aSpec).forEach(block =>
+            anArray.push(block)
         );
-        this.instances.forEach(
-            sprite => sprite.addAllInvocationsOf(aSpec, anArray)
+        this.instances.forEach(sprite =>
+            sprite.addAllInvocationsOf(aSpec, anArray)
         );
     }
 };
@@ -6376,12 +6358,12 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     var doubles = this.doubleDefinitionsFor(definition),
         stage,
         ide;
-    doubles.forEach(double => {
+    doubles.forEach(double =>
         this.allBlockInstances(double).forEach(block => {
             block.definition = definition;
             block.refresh();
-        });
-    });
+        })
+    );
     if (definition.isGlobal) {
         stage = this.parentThatIsA(StageMorph);
         stage.globalBlocks = stage.globalBlocks.filter(def =>
@@ -6415,7 +6397,7 @@ SpriteMorph.prototype.chooseExemplar = function () {
             ':\n' +
             (this.exemplar ? this.exemplar.name : localize('none'))
     );
-    other.forEach(eachSprite => {
+    other.forEach(eachSprite =>
         menu.addItem(
             eachSprite.name,
             eachSprite,
@@ -6426,8 +6408,8 @@ SpriteMorph.prototype.chooseExemplar = function () {
             null, // doubleClickAction
             null, // shortcut
             true  // verbatim
-        );
-    });
+        )
+    );
     menu.addLine();
     menu.addItem(localize('none'), null);
     menu.popUpAtHand(this.world());
@@ -6510,8 +6492,8 @@ SpriteMorph.prototype.specimens = function () {
 SpriteMorph.prototype.allSpecimens = function () {
     // without myself
     var all = this.instances.slice();
-    this.instances.forEach(
-        child => all.push.apply(all, child.allSpecimens())
+    this.instances.forEach(child =>
+        all.push.apply(all, child.allSpecimens())
     );
     return all;
 };
@@ -6594,9 +6576,7 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
         });
     } else if (aName === 'sounds') {
         jukebox = new List();
-        this.sounds.asArray().forEach(
-            sound => jukebox.add(sound.copy())
-        );
+        this.sounds.asArray().forEach(sound => jukebox.add(sound.copy()));
         this.sounds = jukebox;
         this.instances.forEach(obj => {
             if (obj.inheritsAttribute('sounds')) {
@@ -6753,8 +6733,8 @@ SpriteMorph.prototype.globalVariables = function () {
 };
 
 SpriteMorph.prototype.shadowAllVars = function () {
-    this.inheritedVariableNames().forEach(
-        name => this.shadowVar(name, this.variables.getVar(name))
+    this.inheritedVariableNames().forEach(name =>
+        this.shadowVar(name, this.variables.getVar(name))
     );
 };
 
@@ -6858,19 +6838,19 @@ SpriteMorph.prototype.getLocalMethod = function (spec) {
 
 SpriteMorph.prototype.ownBlocks = function () {
     var dict = {};
-    this.customBlocks.forEach(
-        def => dict[def.blockSpec()] = def
+    this.customBlocks.forEach(def =>
+        dict[def.blockSpec()] = def
     );
     return dict;
 };
 
 SpriteMorph.prototype.allBlocks = function (valuesOnly) {
     var dict = {};
-    this.allExemplars().reverse().forEach(sprite => {
-        sprite.customBlocks.forEach(
-            def => dict[def.blockSpec()] = def
-        );
-    });
+    this.allExemplars().reverse().forEach(sprite =>
+        sprite.customBlocks.forEach(def =>
+            dict[def.blockSpec()] = def
+        )
+    );
     if (valuesOnly) {
         return Object.keys(dict).map(key => dict[key]);
     }
@@ -6882,14 +6862,14 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
         own = Object.keys(this.ownBlocks()),
         others = this.allExemplars().reverse();
     others.pop();
-    others.forEach(sprite => {
+    others.forEach(sprite =>
         sprite.customBlocks.forEach(def => {
             var spec = def.blockSpec();
             if (!contains(own, spec)) {
                 dict[spec] = def;
             }
-        });
-    });
+        })
+    );
     if (valuesOnly) {
         return Object.keys(dict).map(key => dict[key]);
     }
@@ -6898,8 +6878,8 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
 
 SpriteMorph.prototype.shadowAllMethods = function () {
     var ide;
-    this.inheritedMethods().forEach(
-        dup => this.customBlocks.push(dup)
+    this.inheritedMethods().forEach(dup =>
+        this.customBlocks.push(dup)
     );
     if (!this.isTemporary) {
         ide = this.parentThatIsA(IDE_Morph);
@@ -7022,8 +7002,8 @@ SpriteMorph.prototype.attachPart = function (aSprite) {
     this.parts.push(aSprite);
     this.version = v;
     aSprite.anchor = this;
-    this.allParts().forEach(
-        part => part.nestingScale = part.scale
+    this.allParts().forEach(part =>
+        part.nestingScale = part.scale
     );
     aSprite.version = v;
 };
@@ -7060,8 +7040,8 @@ SpriteMorph.prototype.detachFromAnchor = function () {
 SpriteMorph.prototype.allParts = function () {
     // includes myself
     var result = [this];
-    this.parts.forEach(
-        part => result = result.concat(part.allParts())
+    this.parts.forEach(part =>
+        result = result.concat(part.allParts())
     );
     return result;
 };
@@ -7711,8 +7691,8 @@ StageMorph.prototype.getVideoImage = function () {
 
 StageMorph.prototype.stopVideo = function() {
     if (this.projectionSource && this.projectionSource.stream) {
-        this.projectionSource.stream.getTracks().forEach(
-            track => track.stop()
+        this.projectionSource.stream.getTracks().forEach(track =>
+            track.stop()
         );
     }
     this.videoMotion = null;
@@ -7893,9 +7873,7 @@ StageMorph.prototype.step = function () {
     elapsed = current - this.lastWatcherUpdate;
     leftover = (1000 / this.watcherUpdateFrequency) - elapsed;
     if (leftover < 1) {
-        this.watchers().forEach(
-            w => w.update()
-        );
+        this.watchers().forEach(w => w.update());
         this.lastWatcherUpdate = Date.now();
     }
 
@@ -8066,13 +8044,13 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForKey(evt).forEach(block => {
+            morph.allHatBlocksForKey(evt).forEach(block =>
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
                     true // ignore running scripts, was: myself.isThreadSafe
-                ));
-            });
+                ))
+            );
         }
     });
     return procs;
@@ -8096,13 +8074,13 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     this.removeAllClones();
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__shout__go__').forEach(block => {
+            morph.allHatBlocksFor('__shout__go__').forEach(block =>
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
                     this.isThreadSafe
-                ));
-            });
+                ))
+            );
         }
     });
     if (ide) {
@@ -8580,7 +8558,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                         null,
                         myself
                     );
-                    myself.variables.allNames().forEach(name => {
+                    myself.variables.allNames().forEach(name =>
                         menu.addItem(
                             name,
                             name,
@@ -8591,8 +8569,8 @@ StageMorph.prototype.blockTemplates = function (category) {
                             null,
                             null,
                             true // verbatim - don't translate
-                        );
-                    });
+                        )
+                    );
                     menu.popUpAtHand(myself.world());
                 },
                 'Delete a variable'
@@ -9046,9 +9024,7 @@ StageMorph.prototype.doPlaySound
     = SpriteMorph.prototype.doPlaySound;
 
 StageMorph.prototype.stopAllActiveSounds = function () {
-    this.activeSounds.forEach(
-        audio => audio.pause()
-    );
+    this.activeSounds.forEach(audio => audio.pause());
     this.activeSounds = [];
     if (this.microphone.modifier && this.microphone.isReady) {
         this.microphone.stop();
@@ -9056,15 +9032,11 @@ StageMorph.prototype.stopAllActiveSounds = function () {
 };
 
 StageMorph.prototype.pauseAllActiveSounds = function () {
-    this.activeSounds.forEach(
-        audio => audio.pause()
-    );
+    this.activeSounds.forEach(audio => audio.pause());
 };
 
 StageMorph.prototype.resumeAllActiveSounds = function () {
-    this.activeSounds.forEach(
-        audio => audio.play()
-    );
+    this.activeSounds.forEach(audio => audio.play());
 };
 
 StageMorph.prototype.reportSounds
@@ -10418,9 +10390,7 @@ Microphone.prototype.start = function () {
 
 Microphone.prototype.stop = function () {
     this.processor.onaudioprocess = null;
-    this.sourceStream.getTracks().forEach(
-        track => track.stop()
-    );
+    this.sourceStream.getTracks().forEach(track => track.stop());
     this.processor.disconnect();
     this.analyser.disconnect();
     this.processor = null;
@@ -11509,9 +11479,7 @@ WatcherMorph.prototype.userMenu = function () {
             vNames = this.currentValue.outerContext.variables.names();
             if (vNames.length) {
                 menu.addLine();
-                vNames.forEach(
-                    vName => monitor(vName)
-                );
+                vNames.forEach(vName => monitor(vName));
             }
         }
     }
