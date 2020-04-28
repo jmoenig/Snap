@@ -273,7 +273,7 @@ CustomBlockDefinition.prototype.blockSpec = function () {
 CustomBlockDefinition.prototype.helpSpec = function () {
     var ans = [],
         parts = this.parseSpec(this.spec);
-    parts.forEach(function (part) {
+    parts.forEach(part => {
         if (part[0] !== '%') {
             ans.push(part);
         }
@@ -345,7 +345,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
 CustomBlockDefinition.prototype.parseChoices = function (string) {
     var dict = {},
         stack = [dict];
-    string.split('\n').forEach(function (line) {
+    string.split('\n').forEach(line => {
         var pair = line.split('=');
         if (pair[0] === '}') {
             stack.pop();
@@ -376,7 +376,7 @@ CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
 CustomBlockDefinition.prototype.inputNames = function () {
     var vNames = [],
         parts = this.parseSpec(this.spec);
-    parts.forEach(function (part) {
+    parts.forEach(part => {
         if (part[0] === '%' && part.length > 1) {
             vNames.push(part.slice(1));
         }
@@ -437,20 +437,17 @@ CustomBlockDefinition.prototype.localizedSpec = function () {
  	}
 
     if (isNil(loc)) {return sem; }
-    inputs = BlockMorph.prototype.parseSpec(sem).filter(function (str) {
-        return (isInput(str));
-    });
+    inputs = BlockMorph.prototype.parseSpec(sem).filter(str => isInput(str));
 	locParts = BlockMorph.prototype.parseSpec(loc);
 
 	// perform a bunch of sanity checks on the localized spec
-	if (locParts.some(function (str) {return isInput(str); }) ||
- 			(locParts.filter(function (str) {return str === '_'; }).length !==
-            	inputs.length)
+	if (locParts.some(str => isInput(str)) ||
+ 			(locParts.filter(str => str === '_').length !== inputs.length)
     ) {
  		this.cachedTranslation = sem;
     } else {
 		// substitute each input place holder with its semantic spec part
-		locParts = locParts.map(function (str) {
+		locParts = locParts.map(str => {
 			if (str === '_') {
   				i += 1;
   				return inputs[i];
@@ -522,19 +519,19 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
     }
     scripts.add(proto);
     proto.fixBlockColor(null, true);
-    this.scripts.forEach(function (element) {
+    this.scripts.forEach(element => {
         block = element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
         scripts.add(block);
         if (block instanceof BlockMorph) {
-            block.allComments().forEach(function (comment) {
-                comment.align(block);
-            });
+            block.allComments().forEach(comment =>
+                comment.align(block)
+            );
         }
     });
-    proto.allComments().forEach(function (comment) {
-        comment.align(proto);
-    });
+    proto.allComments().forEach(comment =>
+        comment.align(proto)
+    );
     template = proto.parts()[0];
     template.fixLayout();
     template.forceNormalColoring();
@@ -550,9 +547,9 @@ CustomBlockDefinition.prototype.purgeCorpses = function () {
     if (this.body && this.body.expression.isCorpse) {
         this.body = null;
     }
-    this.scripts = this.scripts.filter(function (topBlock) {
-        return !topBlock.isCorpse;
-    });
+    this.scripts = this.scripts.filter(topBlock =>
+        !topBlock.isCorpse
+    );
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
@@ -631,7 +628,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
-        this.inputs().forEach(function (inp, i) {
+        this.inputs().forEach((inp, i) => {
             if (inp instanceof InputSlotMorph) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
             }
@@ -641,7 +638,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
     // find unnamed upvars and label them
     // to their internal definition (default)
     this.cachedInputs = null;
-    this.inputs().forEach(function (inp, idx) {
+    this.inputs().forEach((inp, idx) => {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
             inp.setContents(def.inputNames()[idx]);
         }
@@ -793,7 +790,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
 };
 
 CustomCommandBlockMorph.prototype.refreshPrototypeSlotTypes = function () {
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (part instanceof BlockInputFragmentMorph) {
             part.template().instantiationSpec = part.contents();
             part.setContents(part.fragment.defTemplateSpecFragment());
@@ -807,7 +804,7 @@ CustomCommandBlockMorph.prototype.inputFragmentNames = function () {
     // for the variable name slot drop-down menu (in the block editor)
     var ans = [];
 
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (!part.fragment.isDeleted && (part.fragment.type)) {
             ans.push(part.fragment.labelString);
         }
@@ -819,7 +816,7 @@ CustomCommandBlockMorph.prototype.upvarFragmentNames = function () {
     // for the variable name slot drop-down menu (in the block editor)
     var ans = [];
 
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (!part.fragment.isDeleted && (part.fragment.type === '%upvar')) {
             ans.push(part.fragment.labelString);
         }
@@ -836,7 +833,7 @@ CustomCommandBlockMorph.prototype.specFromFragments = function () {
     // for block prototypes while they are being edited
     var ans = '';
 
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (!part.fragment.isDeleted) {
             ans = ans + part.fragment.defSpecFragment() + ' ';
         }
@@ -848,7 +845,7 @@ CustomCommandBlockMorph.prototype.blockSpecFromFragments = function () {
     // for block instances while their prototype is being edited
     var ans = '';
 
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (!part.fragment.isDeleted) {
             ans = ans + part.fragment.blockSpecFragment() + ' ';
         }
@@ -862,7 +859,7 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
     //     value: [type, default, options, isReadOnly]
     var ans = new Map();
 
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (part instanceof BlockInputFragmentMorph) {
             ans.set(
                 part.fragment.labelString,
@@ -1175,9 +1172,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             }
         }
 
-        this.variables.names().forEach(function (vName) {
-            monitor(vName);
-        });
+        this.variables.names().forEach(vName =>
+            monitor(vName)
+        );
     }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
@@ -1638,10 +1635,10 @@ BlockDialogMorph.prototype.openForChange = function (
     this.category = category;
     this.blockType = type;
 
-    this.categories.children.forEach(function (each) {
-        each.refresh();
-    });
-    this.types.children.forEach(function (each) {
+    this.categories.children.forEach(each =>
+        each.refresh()
+    );
+    this.types.children.forEach(each => {
         each.setColor(clr);
         each.refresh();
     });
@@ -1727,7 +1724,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         row,
         col;
 
-    this.categories.children.forEach(function (button) {
+    this.categories.children.forEach(button => {
         i += 1;
         row = Math.ceil(i / 2);
         col = 2 - (i % 2);
@@ -2303,7 +2300,7 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
     if (topBlock === null) {
         return null;
     }
-    topBlock.allChildren().forEach(function (c) {
+    topBlock.allChildren().forEach(c => {
         if (c instanceof BlockMorph) {c.cachedInputs = null; }
     });
     stackFrame = Process.prototype.reify.call(
@@ -2451,9 +2448,9 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
         vars = this.labelPart('%blockVars');
         this.add(this.labelPart('%br'));
         this.add(vars);
-        definition.variableNames.forEach(function (name) {
-            vars.addInput(name);
-        });
+        definition.variableNames.forEach(name =>
+            vars.addInput(name)
+        );
     }
     proto.refreshPrototypeSlotTypes(); // show slot type indicators
     this.fixLayout();
@@ -3109,12 +3106,8 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.textfield.choices = fragmentType ? null : this.symbolMenu;
     this.textfield.fixLayout();
     this.fragment.type = fragmentType || null;
-    this.types.children.forEach(function (c) {
-        c.refresh();
-    });
-    this.slots.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.types.children.forEach(c => c.refresh());
+    this.slots.children.forEach(c => c.refresh());
     this.edit();
 };
 
@@ -3179,9 +3172,7 @@ InputSlotDialogMorph.prototype.fixLayout = function () {
         this.left() + this.padding,
         this.types.bottom() + this.padding
     ));
-    this.slots.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.slots.children.forEach(c => c.refresh());
 
     // buttons
     this.buttons.fixLayout();
@@ -3382,9 +3373,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
 
 InputSlotDialogMorph.prototype.setSlotType = function (type) {
     this.fragment.setSingleInputType(type);
-    this.slots.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.slots.children.forEach(c => c.refresh());
     this.edit();
 };
 
@@ -3397,9 +3386,7 @@ InputSlotDialogMorph.prototype.setSlotArity = function (arity) {
         this.fragment.setToUpvar();
         // hide other options - under construction
     }
-    this.slots.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.slots.children.forEach(c => c.refresh());
     this.edit();
 };
 
@@ -3738,9 +3725,7 @@ VariableDialogMorph.prototype.addTypeButton
 
 VariableDialogMorph.prototype.setType = function (varType) {
     this.isGlobal = (varType === 'global');
-    this.types.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.types.children.forEach(c => c.refresh());
     this.edit();
 };
 
@@ -3935,7 +3920,7 @@ BlockExportDialogMorph.prototype.userMenu = function () {
 };
 
 BlockExportDialogMorph.prototype.selectAll = function () {
-    this.body.contents.children.forEach(function (checkBox) {
+    this.body.contents.children.forEach(checkBox => {
         if (!checkBox.state) {
             checkBox.trigger();
         }
@@ -3944,7 +3929,7 @@ BlockExportDialogMorph.prototype.selectAll = function () {
 
 BlockExportDialogMorph.prototype.selectNone = function () {
     this.blocks = [];
-    this.body.contents.children.forEach(function (checkBox) {
+    this.body.contents.children.forEach(checkBox => {
         checkBox.refresh();
     });
 };
