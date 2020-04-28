@@ -3573,9 +3573,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
             this.doWearPreviousCostume();
             return;
         }
-        costume = detect(arr, function (cst) {
-            return cst.name === id;
-        });
+        costume = detect(arr, cst => cst.name === id);
         if (costume === null) {
             num = parseFloat(id);
             if (num === 0) {
@@ -3607,7 +3605,7 @@ SpriteMorph.prototype.doPlaySound = function (name) {
             : (typeof name === 'number' ? this.sounds.at(name)
                 : detect(
                     this.sounds.asArray(),
-                    function (s) {return s.name === name.toString(); }
+                    s => s.name === name.toString()
             )),
         ctx = this.audioContext(),
         gain =  this.getGainNode(),
@@ -4076,9 +4074,7 @@ SpriteMorph.prototype.release = function () {
     if (ide.currentSprite === this) {
         ide.currentSprite = detect(
             stage.children,
-            function (morph) {
-                return morph instanceof SpriteMorph && !morph.isTemporary;
-            }
+            morph => morph instanceof SpriteMorph && !morph.isTemporary
         ) || this.stage;
     }
     ide.selectSprite(ide.currentSprite);
@@ -5078,7 +5074,7 @@ SpriteMorph.prototype.bubble = function (data, isThought, isQuestion) {
 SpriteMorph.prototype.talkBubble = function () {
     return detect(
         this.children,
-        function (morph) {return morph instanceof SpeechBubbleMorph; }
+        morph => morph instanceof SpeechBubbleMorph
     );
 };
 
@@ -6282,10 +6278,7 @@ SpriteMorph.prototype.paletteBlockInstance = function (definition) {
     if (!ide) {return null; }
     return detect(
         ide.palette.contents.children,
-        function (block) {
-            return block.isCustomBlock &&
-                (block.definition === definition);
-        }
+        block => block.isCustomBlock && (block.definition === definition)
     );
 };
 
@@ -6298,9 +6291,7 @@ SpriteMorph.prototype.usesBlockInstance = function (
     var inDefinitions,
         inScripts = detect(
             this.scripts.allChildren(),
-            function (c) {
-                return c.isCustomBlock && (c.definition === definition);
-            }
+            c => c.isCustomBlock && (c.definition === definition)
         );
 
     if (inScripts) {return true; }
@@ -11330,11 +11321,9 @@ WatcherMorph.prototype.userMenu = function () {
             function () {
                 var watcher = detect(
                     stage.children,
-                    function (morph) {
-                        return morph instanceof WatcherMorph
-                            && morph.target === varFrame
-                            && morph.getter === vName;
-                    }
+                    (morph) => morph instanceof WatcherMorph
+                        && morph.target === varFrame
+                            && morph.getter === vName
                 ),
                     others;
                 if (watcher !== null) {
@@ -11548,7 +11537,7 @@ WatcherMorph.prototype.importData = function (raw) {
                 // letting the user load the file anyway
                 txtOnlyMsg(
                     aFile.type,
-                    function () {frd.readAsText(aFile); }
+                    () => frd.readAsText(aFile)
                 );
             }
         }
