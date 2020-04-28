@@ -3622,17 +3622,14 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
 };
 
 InputSlotDialogMorph.prototype.editSlotOptions = function () {
-    var myself = this;
     new DialogBoxMorph(
-        myself,
-        function (options) {
-            myself.fragment.options = options.trim();
-        },
-        myself
+        this,
+        options => this.fragment.options = options.trim(),
+        this
     ).promptCode(
         'Input Slot Options',
-        myself.fragment.options,
-        myself.world(),
+        this.fragment.options,
+        this.world(),
         null,
         localize('Enter one option per line.\n' +
             'Optionally use "=" as key/value delimiter ' +
@@ -3739,17 +3736,15 @@ VariableDialogMorph.prototype.init = function (target, action, environment) {
 };
 
 VariableDialogMorph.prototype.createTypeButtons = function () {
-    var myself = this;
-
     this.addTypeButton(
-        function () {myself.setType('global'); },
+        () => this.setType('global'),
         "for all sprites",
-        function () {return myself.isGlobal; }
+        () => this.isGlobal
     );
     this.addTypeButton(
-        function () {myself.setType('local'); },
+        () => this.setType('local'),
         "for this sprite only",
-        function () {return !myself.isGlobal; }
+        () => !this.isGlobal
     );
 };
 
@@ -3845,8 +3840,6 @@ function BlockExportDialogMorph(serializer, blocks) {
 }
 
 BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
-    var myself = this;
-
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
@@ -3856,7 +3849,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
     BlockExportDialogMorph.uber.init.call(
         this,
         null, // target
-        function () {myself.exportBlocks(); },
+        () => this.exportBlocks(),
         null // environment
     );
 
@@ -3870,7 +3863,6 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
 
 BlockExportDialogMorph.prototype.buildContents = function () {
     var palette, x, y, block, checkBox, lastCat,
-        myself = this,
         padding = 4;
 
     // create plaette
@@ -3888,8 +3880,8 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     // populate palette
     x = palette.left() + padding;
     y = palette.top() + padding;
-    SpriteMorph.prototype.categories.forEach(function (category) {
-        myself.blocks.forEach(function (definition) {
+    SpriteMorph.prototype.categories.forEach(category => {
+        this.blocks.forEach(definition => {
             if (definition.category === category) {
                 if (lastCat && (category !== lastCat)) {
                     y += padding;
@@ -3898,22 +3890,17 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                 block = definition.templateInstance();
                 checkBox = new ToggleMorph(
                     'checkbox',
-                    myself,
-                    function () {
-                        var idx = myself.blocks.indexOf(definition);
+                    this,
+                    () => {
+                        var idx = this.blocks.indexOf(definition);
                         if (idx > -1) {
-                            myself.blocks.splice(idx, 1);
+                            this.blocks.splice(idx, 1);
                         } else {
-                            myself.blocks.push(definition);
+                            this.blocks.push(definition);
                         }
                     },
                     null,
-                    function () {
-                        return contains(
-                            myself.blocks,
-                            definition
-                        );
-                    },
+                    () => contains(this.blocks, definition),
                     null,
                     null,
                     block.fullImage()
@@ -3937,7 +3924,6 @@ BlockExportDialogMorph.prototype.buildContents = function () {
 
     this.setExtent(new Point(220, 300));
     this.fixLayout();
-
 };
 
 BlockExportDialogMorph.prototype.popUp = function (wrrld) {
