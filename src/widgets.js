@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-April-26';
+modules.widgets = '2020-April-28';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -481,17 +481,17 @@ PushButtonMorph.prototype.updateLabelColors = function () {
 
 PushButtonMorph.prototype.disable = function () {
     this.isDisabled = true;
-    this.forAllChildren(function (child) {
-        child.alpha = 0.3;
-    });
+    this.forAllChildren(child =>
+        child.alpha = 0.3
+    );
     this.rerender();
 };
 
 PushButtonMorph.prototype.enable = function () {
     this.isDisabled = false;
-    this.forAllChildren(function (child) {
-        child.alpha = 1;
-    });
+    this.forAllChildren(child =>
+        child.alpha = 1
+    );
     this.rerender();
 };
 
@@ -555,7 +555,7 @@ ToggleButtonMorph.prototype.init = function (
 ) {
     // additional properties:
     this.state = false;
-    this.query = query || function () {return true; };
+    this.query = query || (() => true);
     this.minWidth = minWidth || null;
     this.hasPreview = hasPreview || false;
     this.isPicture = isPicture || false;
@@ -1087,7 +1087,7 @@ ToggleMorph.prototype.init = function (
     this.corner = (style === 'checkbox' ?
             0 : fontHeight(this.fontSize) / 2 + this.outline + this.padding);
     this.state = false;
-    this.query = query || function () {return true; };
+    this.query = query || (() => true);
     this.tick = null;
     this.captionString = labelString || null;
     this.labelAlignment = 'right';
@@ -1320,7 +1320,7 @@ ToggleElementMorph.prototype.init = function (
     this.target = target || null;
     this.action = action || null;
     this.element = element;
-    this.query = query || function () {return true; };
+    this.query = query || (() => true);
     this.environment = environment || null;
     this.hint = hint || null;
     this.builder = builder || 'nop';
@@ -1620,7 +1620,7 @@ DialogBoxMorph.prototype.prompt = function (
             sld.color = this.color.lighter(50);
             sld.setHeight(txt.height() * 0.7);
             sld.setWidth(txt.width());
-            sld.action = function (num) {
+            sld.action = num => {
                 if (sliderAction) {
                     sliderAction(num / 100);
                 }
@@ -1830,7 +1830,7 @@ DialogBoxMorph.prototype.promptVector = function (
 
     if (deflt instanceof Point) {
         this.addButton(
-            function () {
+            () => {
                 xInp.setContents(deflt.x.toString());
                 yInp.setContents(deflt.y.toString());
             },
@@ -1908,9 +1908,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     function linkButton(label, url) {
         var btn = new PushButtonMorph(
             myself,
-            function () {
-                window.open(url);
-            },
+            () => window.open(url),
             '  ' + localize(label) + '  '
         );
         btn.fontSize = 10;
@@ -2072,9 +2070,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
         chk = new ToggleMorph(
             'checkbox',
             this,
-            function () {agree = !agree; }, // action,
+            () => agree = !agree, // action,
             checkBoxLabel,
-            function () {return agree; } //query
+            () => agree //query
         );
         chk.edge = this.buttonEdge / 2;
         chk.outline = this.buttonOutline / 2;
@@ -2133,9 +2131,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
         empty = detect(
             checklist,
-            function (inp) {
-                return !inp.getValue();
-            }
+            inp => !inp.getValue()
         );
         if (empty) {
             indicate(empty, 'please fill out\nthis field');
@@ -2507,7 +2503,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
 
 // DialogBoxMorph keyboard events
 
-DialogBoxMorph.prototype.processKeyPress = function () {nop(); };
+DialogBoxMorph.prototype.processKeyPress = nop;
 
 DialogBoxMorph.prototype.processKeyDown = function (event) {
     // this.inspectKeyEvent(event);
@@ -2905,18 +2901,14 @@ InputFieldMorph.prototype.init = function (
 InputFieldMorph.prototype.contents = function () {
     return detect(
         this.children,
-        function (child) {
-            return (child instanceof StringFieldMorph);
-        }
+        child => child instanceof StringFieldMorph
     );
 };
 
 InputFieldMorph.prototype.arrow = function () {
     return detect(
         this.children,
-        function (child) {
-            return (child instanceof ArrowMorph);
-        }
+        child => child instanceof ArrowMorph
     );
 };
 
