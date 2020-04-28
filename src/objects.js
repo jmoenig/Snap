@@ -3386,12 +3386,12 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
+                block.replaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    block.silentReplaceInput(
+                    block.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3399,7 +3399,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    block.silentReplaceInput(
+                    block.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
