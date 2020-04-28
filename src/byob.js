@@ -578,7 +578,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.semanticSpec = '';
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
-    CustomCommandBlockMorph.uber.init.call(this, true); // silently
+    CustomCommandBlockMorph.uber.init.call(this);
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     this.variables = null;
@@ -603,7 +603,7 @@ CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
     });
 };
 
-CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) { // +++ check silently
+CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
     var def = aDefinition || this.definition,
         newSpec = this.isPrototype ?
                 def.spec : def.localizedSpec(),
