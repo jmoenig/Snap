@@ -188,7 +188,7 @@ CustomBlockDefinition.prototype.templateInstance = function () {
 };
 
 CustomBlockDefinition.prototype.prototypeInstance = function () {
-    var block, slot, myself = this;
+    var block, slot;
 
     // make a new block instance and mark it as prototype
     if (this.type === 'command') {
@@ -202,9 +202,9 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
     }
 
     // assign slot declarations to prototype inputs
-    block.parts().forEach(function (part) {
+    block.parts().forEach(part => {
         if (part instanceof BlockInputFragmentMorph) {
-            slot = myself.declarations.get(part.fragment.labelString);
+            slot = this.declarations.get(part.fragment.labelString);
             if (slot) {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
@@ -253,13 +253,12 @@ CustomBlockDefinition.prototype.blockSpec = function () {
  		return this.storedSemanticSpec; // for "wishes"
  	}
 
-    var myself = this,
-        ans = [],
+    var ans = [],
         parts = this.parseSpec(this.spec),
         spec;
-    parts.forEach(function (part) {
+    parts.forEach(part => {
         if (part[0] === '%' && part.length > 1) {
-            spec = myself.typeOf(part.slice(1));
+            spec = this.typeOf(part.slice(1));
         } else if (part === '$nl') {
             spec = '%br';
         } else {
@@ -474,26 +473,22 @@ CustomBlockDefinition.prototype.abstractBlockSpec = function () {
 };
 
 CustomBlockDefinition.prototype.translationsAsText = function () {
-	var myself = this,
- 		txt = '';
-	Object.keys(this.translations).forEach(function (lang) {
- 		txt += (lang + ':' + myself.translations[lang] + '\n');
-    });
+	var txt = '';
+	Object.keys(this.translations).forEach(lang =>
+ 		txt += (lang + ':' + this.translations[lang] + '\n')
+    );
     return txt;
 };
 
 CustomBlockDefinition.prototype.updateTranslations = function (text) {
-	var myself = this,
-    	lines = text.split('\n').filter(function (txt) {
-     	   return txt.length;
-    	});
+	var lines = text.split('\n').filter(txt => txt.length);
 	this.translations = {};
- 	lines.forEach(function (txt) {
+ 	lines.forEach(txt => {
   		var idx = txt.indexOf(':'),
     		key = txt.slice(0, idx).trim(),
       		val = txt.slice(idx + 1).trim();
     	if (idx) {
-     		myself.translations[key] = val;
+     		this.translations[key] = val;
      	}
     });
 };
@@ -595,14 +590,13 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
 };
 
 CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
-    var myself = this;
     this.variables = new VariableFrame();
     if (!this.isGlobal) {
         return;
     }
-    this.definition.variableNames.forEach(function (name) {
+    this.definition.variableNames.forEach(name => {
         var v = oldVars ? oldVars[name] : null;
-        myself.variables.addVar(
+        this.variables.addVar(
             name,
             v instanceof Variable ? v.value : null
         );
@@ -667,15 +661,14 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) { /
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
     var i = 0,
-        old,
-        myself = this;
+        old;
     if (this.isPrototype) {return; }
     this.cachedInputs = null;
-    this.inputs().forEach(function (inp) {
+    this.inputs().forEach(inp => {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph &&
                 (!(inp instanceof TemplateSlotMorph))) {
-            myself.replaceInput(inp, old.fullCopy());
+            this.replaceInput(inp, old.fullCopy());
         } else if (old instanceof InputSlotMorph
                 && inp instanceof InputSlotMorph) {
             if (old.isEmptySlot()) {
@@ -700,12 +693,13 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
 
 CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
     // fill my editable slots with the defaults specified in my definition
-    var inputs = this.inputs(), idx = 0, myself = this;
+    var inputs = this.inputs(),
+        idx = 0;
 
-    inputs.forEach(function (inp) {
+    inputs.forEach(inp => {
         if (inp instanceof InputSlotMorph || inp instanceof BooleanSlotMorph) {
             inp.setContents(
-                (definition || myself.definition).defaultValueOfInputIdx(idx)
+                (definition || this.definition).defaultValueOfInputIdx(idx)
             );
         }
         idx += 1;
@@ -728,7 +722,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     hat = this.parentThatIsA(PrototypeHatBlockMorph);
 
     // remember the edited fragments
-    this.parts().forEach(function (part) {
+    this.parts().forEach(part => {
         if (!part.fragment.isDeleted) {
             // take into consideration that a fragment may spawn others
             // if it isn't an input label consisting of several words
@@ -738,7 +732,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
                 words = myself.definition.parseSpec(
                     part.fragment.labelString
                 );
-                words.forEach(function (word) {
+                words.forEach(word => {
                     newFrag = part.fragment.copy();
                     newFrag.labelString = word;
                     frags.push(newFrag);
@@ -783,7 +777,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     // update the (new) prototype's (new) fragments
     // with the previously edited ones
 
-    myself.parts().forEach(function (part) {
+    myself.parts().forEach(part => {
         if (!(part instanceof BlockLabelPlaceHolderMorph)) {
             if (frags[i]) { // don't delete the default fragment
                 part.fragment = frags[i];
@@ -918,14 +912,14 @@ CustomCommandBlockMorph.prototype.edit = function () {
                     myself.refreshPrototype();
                 }
             },
-            myself
+            this
         ).openForChange(
             'Change block',
             hat.blockCategory,
             hat.type,
-            myself.world(),
+            this.world(),
             block.fullImage(),
-            myself.isInUse()
+            this.isInUse()
         );
     } else {
         // check for local custom block inheritance
@@ -1216,8 +1210,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     var idx, stage, ide, method, block,
-        rcvr = this.scriptTarget(),
-        myself = this;
+        rcvr = this.scriptTarget();
     if (this.isPrototype) {
         return null; // under construction...
     }
@@ -1227,7 +1220,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     block.addShadow();
     new DialogBoxMorph(
         this,
-        function () {
+        () => {
             rcvr.deleteAllBlockInstances(method);
             if (method.isGlobal) {
                 stage = rcvr.parentThatIsA(StageMorph);
@@ -1242,12 +1235,10 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
                     rcvr.customBlocks.splice(idx, 1);
                 }
                 // refresh instances of inherited method, if any
-                method = rcvr.getMethod(myself.blockSpec);
+                method = rcvr.getMethod(this.blockSpec);
                 if (method) {
-                    rcvr.allDependentInvocationsOf(myself.blockSpec).forEach(
-                        function (block) {
-                            block.refresh(method);
-                        }
+                    rcvr.allDependentInvocationsOf(this.blockSpec).forEach(
+                        block => block.refresh(method)
                     );
                 }
             }
@@ -1261,7 +1252,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     ).askYesNo(
         'Delete Custom Block',
         localize('block deletion dialog text'), // long string lookup
-        myself.world(),
+        this.world(),
         block.fullImage()
     );
 };
@@ -1270,20 +1261,17 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
     var menu = new MenuMorph(this),
-        oldInputs = this.inputs().map(
-            function (each) {return each.fullCopy(); }
-        ),
-        myself = this;
-    alternatives.forEach(function (def) {
+        oldInputs = this.inputs().map(each => each.fullCopy());
+    alternatives.forEach(def => {
         var block = def.blockInstance();
         block.restoreInputs(oldInputs);
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block.fullImage(),
-            function () {
-                myself.definition = def;
-                myself.refresh();
+            () => {
+                this.definition = def;
+                this.refresh();
             }
         );
     });
@@ -1298,12 +1286,10 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         stage = rcvr.parentThatIsA(StageMorph),
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         type = this instanceof CommandBlockMorph ? 'command'
-            : (this.isPredicate ? 'predicate' : 'reporter'),
-        myself = this;
-    return allDefs.filter(function (each) {
-        return each !== myself.definition &&
-            each.type === type;
-    });
+            : (this.isPredicate ? 'predicate' : 'reporter');
+    return allDefs.filter(each =>
+        each !== this.definition && each.type === type
+    );
 };
 
 // CustomReporterBlockMorph ////////////////////////////////////////////
@@ -1682,16 +1668,13 @@ BlockDialogMorph.prototype.openForChange = function (
 // category buttons
 
 BlockDialogMorph.prototype.createCategoryButtons = function () {
-    var myself = this;
-
-    SpriteMorph.prototype.categories.forEach(function (cat) {
-        myself.addCategoryButton(cat);
-    });
+    SpriteMorph.prototype.categories.forEach(cat =>
+        this.addCategoryButton(cat)
+    );
 };
 
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
-        myself = this,
         colors = [
             SpriteMorph.prototype.paletteColor,
             SpriteMorph.prototype.paletteColor.darker(50),
@@ -1702,20 +1685,20 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button = new ToggleButtonMorph(
         colors,
         this, // this block dialog box is the target
-        function () {
-            myself.category = category;
-            myself.categories.children.forEach(function (each) {
-                each.refresh();
-            });
-            if (myself.types) {
-                myself.types.children.forEach(function (each) {
-                    each.setColor(colors[2]);
-                });
+        () => {
+            this.category = category;
+            this.categories.children.forEach(each =>
+                each.refresh()
+            );
+            if (this.types) {
+                this.types.children.forEach(each =>
+                    each.setColor(colors[2])
+                );
             }
-            myself.edit();
+            this.edit();
         },
         category[0].toUpperCase().concat(category.slice(1)), // UCase label
-        function () {return myself.category === category; }, // query
+        () => this.category === category, // query
         null, // env
         null, // hint
         labelWidth, // minWidth
@@ -1772,7 +1755,6 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
 
 BlockDialogMorph.prototype.createTypeButtons = function () {
     var block,
-        myself = this,
         clr = SpriteMorph.prototype.blockColor[this.category];
 
 
@@ -1780,27 +1762,27 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
     block.setColor(clr);
     block.setSpec(localize('Command'));
     this.addBlockTypeButton(
-        function () {myself.setType('command'); },
+        () => this.setType('command'),
         block,
-        function () {return myself.blockType === 'command'; }
+        () => this.blockType === 'command'
     );
 
     block = new ReporterBlockMorph();
     block.setColor(clr);
     block.setSpec(localize('Reporter'));
     this.addBlockTypeButton(
-        function () {myself.setType('reporter'); },
+        () => this.setType('reporter'),
         block,
-        function () {return myself.blockType === 'reporter'; }
+        () => this.blockType === 'reporter'
     );
 
     block = new ReporterBlockMorph(true);
     block.setColor(clr);
     block.setSpec(localize('Predicate'));
     this.addBlockTypeButton(
-        function () {myself.setType('predicate'); },
+        () => this.setType('predicate'),
         block,
-        function () {return myself.blockType === 'predicate'; }
+        () => this.blockType === 'predicate'
     );
 };
 
@@ -1845,9 +1827,7 @@ BlockDialogMorph.prototype.addTypeButton = function (action, label, query) {
 
 BlockDialogMorph.prototype.setType = function (blockType) {
     this.blockType = blockType || this.blockType;
-    this.types.children.forEach(function (c) {
-        c.refresh();
-    });
+    this.types.children.forEach(c => c.refresh());
     this.edit();
 };
 
