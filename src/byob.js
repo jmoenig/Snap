@@ -712,7 +712,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     var hat,
         protoSpec,
         frags = [],
-        myself = this,
+        myself = this, // CAUTION: myself changes its value in this method
         words,
         newFrag,
         i = 0;
@@ -893,8 +893,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
 };
 
 CustomCommandBlockMorph.prototype.edit = function () {
-    var myself = this,
-        def = this.definition,
+    var def = this.definition,
         editor, block,
         hat,
         rcvr;
@@ -905,11 +904,11 @@ CustomCommandBlockMorph.prototype.edit = function () {
         hat = this.parentThatIsA(PrototypeHatBlockMorph);
         new BlockDialogMorph(
             null,
-            function (definition) {
+            (definition) => {
                 if (definition) { // temporarily update everything
                     hat.blockCategory = definition.category;
                     hat.type = definition.type;
-                    myself.refreshPrototype();
+                    this.refreshPrototype();
                 }
             },
             this
