@@ -1731,9 +1731,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.imageData = {};
     c.cachedHSV = c.color.hsv();
     arr = [];
-    this.inheritedAttributes.forEach(function (att) {
-        arr.push(att);
-    });
+    this.inheritedAttributes.forEach(att => arr.push(att));
     c.inheritedAttributes = arr;
     if (forClone) {
         c.exemplar = this;
@@ -1745,7 +1743,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         );
         this.addSpecimen(c);
         this.cachedPropagation = false;
-        ['scripts', 'costumes', 'sounds'].forEach(function (att) {
+        ['scripts', 'costumes', 'sounds'].forEach(att => {
             if (!contains(c.inheritedAttributes, att)) {
                 c.inheritedAttributes.push(att);
             }
@@ -1804,9 +1802,9 @@ SpriteMorph.prototype.appearIn = function (ide) {
         ide.sprites.add(this);
     }
     ide.stage.add(this);
-    this.parts.forEach(function (part) {
-        part.appearIn(ide);
-    });
+    this.parts.forEach(
+        part => part.appearIn(ide)
+    );
 };
 
 // SpriteMorph versioning
@@ -1874,7 +1872,7 @@ SpriteMorph.prototype.fixLayout = function () {
          );
          origin = corners[0];
          corner = corners[0];
-         corners.forEach(function (point) {
+         corners.forEach(point => {
              origin = origin.min(point);
              corner = corner.max(point);
          });
@@ -2603,7 +2601,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         varNames = this.allLocalVariableNames(true);
         if (varNames.length > 0) {
-            varNames.forEach(function (name) {
+            varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
                 blocks.push(variableBlock(name, true));
             });
@@ -2728,7 +2726,9 @@ SpriteMorph.prototype.makeBlock = function () {
     );
     if (category !== 'variables') {
         dlg.category = category;
-        dlg.categories.children.forEach(each => each.refresh());
+        dlg.categories.children.forEach(
+            each => each.refresh()
+        );
         dlg.types.children.forEach(each => {
             each.setColor(clr);
             each.refresh();
@@ -2868,12 +2868,12 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 'hide primitives',
                 function () {
                     var defs = SpriteMorph.prototype.blocks;
-                    Object.keys(defs).forEach(function (sel) {
+                    Object.keys(defs).forEach(sel => {
                         if (defs[sel].category === category) {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
-                    (more[category] || []).forEach(function (sel) {
+                    (more[category] || []).forEach(sel => {
                         StageMorph.prototype.hiddenPrimitives[sel] = true;
                     });
                     ide.flushBlocksCache(category);
@@ -2887,14 +2887,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 function () {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
-                    Object.keys(hiddens).forEach(function (sel) {
+                    Object.keys(hiddens).forEach(sel => {
                         if (defs[sel] && (defs[sel].category === category)) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
-                    (more[category] || []).forEach(function (sel) {
-                        delete StageMorph.prototype.hiddenPrimitives[sel];
-                    });
+                    (more[category] || []).forEach(
+                        sel => delete StageMorph.prototype.hiddenPrimitives[sel]
+                    );
                     ide.flushBlocksCache(category);
                     ide.refreshPalette();
                 }
@@ -2913,7 +2913,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
     }
 
-    blocks.forEach(function (block) {
+    blocks.forEach(block => {
         if (block === null) {
             return;
         }
@@ -2940,7 +2940,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 x = block.right() + unit / 2;
                 ry = block.bottom();
             } else {
-                // if (block.fixLayout) {block.fixLayout(); }
                 x = 0;
                 y += block.height();
             }
@@ -2952,7 +2951,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (stage) {
         y += unit * 1.6;
 
-        stage.globalBlocks.forEach(function (definition) {
+        stage.globalBlocks.forEach(definition => {
             var block;
             if (definition.category === category ||
                     (category === 'variables'
@@ -2973,7 +2972,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     // local custom blocks:
 
     y += unit * 1.6;
-    this.customBlocks.forEach(function (definition) {
+    this.customBlocks.forEach(definition => {
         var block;
         if (definition.category === category ||
                 (category === 'variables'
@@ -2994,7 +2993,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     // y += unit * 1.6;
     if (this.exemplar) {
-        this.inheritedBlocks(true).forEach(function (definition) {
+        this.inheritedBlocks(true).forEach(definition => {
             var block;
             if (definition.category === category ||
                     (category === 'variables'
@@ -3366,9 +3365,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        monads.concat(['true', 'false']).forEach(function (word) {
-            reverseDict[localize(word).toLowerCase()] = word;
-        });
+        monads.concat(['true', 'false']).forEach(
+            word => reverseDict[localize(word).toLowerCase()] = word
+        );
         key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
         if (contains(monads, key)) { // monadic
             sel = selectors[key];
