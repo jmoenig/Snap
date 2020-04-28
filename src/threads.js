@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-26';
+modules.threads = '2020-April-28';
 
 var ThreadManager;
 var Process;
@@ -94,8 +94,9 @@ function snapEquals(a, b) {
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
-            [a, b].some(function (any) {return contains(specials, any) ||
-                  (isString(any) && (any.indexOf(' ') > -1)); })) {
+            [a, b].some(any => contains(specials, any) ||
+                  (isString(any) && (any.indexOf(' ') > -1)))
+    ) {
         x = a;
         y = b;
     }
@@ -232,10 +233,10 @@ ThreadManager.prototype.startProcess = function (
     // publishes an upvar, this code makes the upvar accessible
     // to the script attached to the WHEN hat
     if (variables instanceof VariableFrame) {
-        Object.keys(variables.vars).forEach(function (vName) {
+        Object.keys(variables.vars).forEach(vName =>
             newProc.context.outerContext.variables.vars[vName] =
-                variables.vars[vName];
-        });
+                variables.vars[vName]
+        );
     }
 
     // show a highlight around the running stack
@@ -259,7 +260,7 @@ ThreadManager.prototype.startProcess = function (
 
 ThreadManager.prototype.stopAll = function (excpt) {
     // excpt is optional
-    this.processes.forEach(function (proc) {
+    this.processes.forEach(proc => {
         if (proc !== excpt) {
             proc.stop();
         }
@@ -268,7 +269,7 @@ ThreadManager.prototype.stopAll = function (excpt) {
 
 ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     // excpt is optional
-    this.processes.forEach(function (proc) {
+    this.processes.forEach(proc => {
         if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
             if (rcvr.isTemporary) {
@@ -279,9 +280,9 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
 };
 
 ThreadManager.prototype.stopAllForBlock = function (aTopBlock) {
-    this.processesForBlock(aTopBlock, true).forEach(function (proc) {
-        proc.stop();
-    });
+    this.processesForBlock(aTopBlock, true).forEach(proc =>
+        proc.stop()
+    );
 };
 
 ThreadManager.prototype.stopProcess = function (block, receiver) {
@@ -292,23 +293,21 @@ ThreadManager.prototype.stopProcess = function (block, receiver) {
 };
 
 ThreadManager.prototype.pauseAll = function (stage) {
-    this.processes.forEach(function (proc) {
-        proc.pause();
-    });
+    this.processes.forEach(proc => proc.pause());
     if (stage) {
         stage.pauseAllActiveSounds();
     }
 };
 
 ThreadManager.prototype.isPaused = function () {
-    return detect(this.processes, function (proc) {return proc.isPaused; })
-        !== null;
+    return detect(
+        this.processes,
+        proc => proc.isPaused
+    ) !== null;
 };
 
 ThreadManager.prototype.resumeAll = function (stage) {
-    this.processes.forEach(function (proc) {
-        proc.resume();
-    });
+    this.processes.forEach(proc => proc.resume());
     if (stage) {
         stage.resumeAllActiveSounds();
     }
@@ -321,7 +320,7 @@ ThreadManager.prototype.step = function () {
 
     var isInterrupted;
     if (Process.prototype.enableSingleStepping) {
-        this.processes.forEach(function (proc) {
+        this.processes.forEach(proc => {
             if (proc.isInterrupted) {
                 proc.runStep();
                 isInterrupted = true;
@@ -338,7 +337,7 @@ ThreadManager.prototype.step = function () {
         }
     }
 
-    this.processes.forEach(function (proc) {
+    this.processes.forEach(proc => {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             proc.runStep();
         }
@@ -349,16 +348,15 @@ ThreadManager.prototype.step = function () {
 ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [],
-        count,
-        myself = this;
-    this.processes.forEach(function (proc) {
+        count;
+    this.processes.forEach(proc => {
         var result,
             glow;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
                 proc.unflash();
                 // adjust the thread count indicator, if any
-                count = myself.processesForBlock(proc.topBlock).length;
+                count = this.processesForBlock(proc.topBlock).length;
                 if (count) {
                     glow = proc.topBlock.getHighlight() ||
                         proc.topBlock.addHighlight();
@@ -412,19 +410,17 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
     var top = block.topBlock();
     return detect(
         this.processes,
-        function (each) {
-            return each.topBlock === top && (each.receiver === receiver);
-        }
+        each => each.topBlock === top && (each.receiver === receiver)
     );
 };
 
 ThreadManager.prototype.processesForBlock = function (block, only) {
     var top = only ? block : block.topBlock();
-    return this.processes.filter(function (each) {
-            return each.topBlock === top &&
-                each.isRunning() &&
-                !each.isDead;
-    });
+    return this.processes.filter(each =>
+        each.topBlock === top &&
+            each.isRunning() &&
+                !each.isDead
+    );
 };
 
 ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
@@ -481,7 +477,7 @@ ThreadManager.prototype.toggleSingleStepping = function () {
     Process.prototype.enableSingleStepping =
         !Process.prototype.enableSingleStepping;
     if (!Process.prototype.enableSingleStepping) {
-        this.processes.forEach(function (proc) {
+        this.processes.forEach(proc => {
             if (!proc.isPaused) {
                 proc.unflash();
             }
@@ -1043,7 +1039,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
 
         if (!isCustomBlock && !parameterNames.length()) {
             // mark all empty slots with an identifier
-            context.expression.allEmptySlots().forEach(function (slot) {
+            context.expression.allEmptySlots().forEach(slot => {
                 i += 1;
                 if (slot instanceof MultiArgMorph) {
                     slot.bindingID = Symbol.for('arguments');
@@ -1485,9 +1481,9 @@ Process.prototype.evaluateCustomBlock = function () {
 
 Process.prototype.doDeclareVariables = function (varNames) {
     var varFrame = this.context.outerContext.variables;
-    varNames.asArray().forEach(function (name) {
-        varFrame.addVar(name);
-    });
+    varNames.asArray().forEach(name =>
+        varFrame.addVar(name)
+    );
 };
 
 Process.prototype.doSetVar = function (varName, value) {
@@ -1562,11 +1558,9 @@ Process.prototype.doShowVar = function (varName) {
             // first try to find an existing (hidden) watcher
             watcher = detect(
                 stage.children,
-                function (morph) {
-                    return morph instanceof WatcherMorph
-                        && morph.target === target
-                        && morph.getter === name;
-                }
+                morph => morph instanceof WatcherMorph &&
+                    morph.target === target &&
+                        morph.getter === name
             );
             if (watcher !== null) {
                 watcher.show();
@@ -1626,11 +1620,9 @@ Process.prototype.doHideVar = function (varName) {
             target = varFrame.find(name);
             watcher = detect(
                 stage.children,
-                function (morph) {
-                    return morph instanceof WatcherMorph
-                        && morph.target === target
-                        && morph.getter === name;
-                }
+                morph => morph instanceof WatcherMorph &&
+                    morph.target === target &&
+                        morph.getter === name
             );
             if (watcher !== null) {
                 if (watcher.isTemporary()) {
@@ -1648,7 +1640,7 @@ Process.prototype.doRemoveTemporaries = function () {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.watchers().forEach(function (watcher) {
+            stage.watchers().forEach(watcher => {
                 if (watcher.isTemporary()) {
                     watcher.destroy();
                 }
@@ -2012,7 +2004,7 @@ Process.prototype.doStopAll = function () {
             if (stage.projectionSource) {
                 stage.stopProjection();
             }
-            stage.children.forEach(function (morph) {
+            stage.children.forEach(morph => {
                 if (morph.stopTalking) {
                     morph.stopTalking();
                 }
@@ -2308,8 +2300,8 @@ Process.prototype.doFor = function (upvar, start, end, script) {
         this.assertType(end, 'number');
         dta = this.context.accumulator = {
             test : +start < +end ?
-                function () {return vars.getVar(upvar) > +end; }
-                    : function () {return vars.getVar(upvar) < +end; },
+                (() => vars.getVar(upvar) > +end)
+                : (() => vars.getVar(upvar) < +end),
             step : +start < +end ? 1 : -1,
             parms : new List() // empty parameters, reusable to avoid GC
         };
@@ -2725,7 +2717,7 @@ Process.prototype.doPlaySoundUntilDone = function (name) {
 Process.prototype.doStopAllSounds = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     if (stage) {
-        stage.threads.processes.forEach(function (thread) {
+        stage.threads.processes.forEach(thread => {
             if (thread.context) {
                 thread.context.stopMusic();
                 if (thread.context.activeAudio) {
@@ -2745,7 +2737,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
             : (typeof name === 'number' ? this.blockReceiver().sounds.at(name)
                 : detect(
                     this.blockReceiver().sounds.asArray(),
-                    function (s) {return s.name === name.toString(); }
+                    s => s.name === name.toString()
             )
         );
         if (!sound.audioBuffer) {
@@ -2773,7 +2765,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
     }
     source.pause = source.stop;
     source.ended = false;
-    source.onended = function () {this.ended = true; };
+    source.onended = () => source.ended = true;
     source.start();
     rcvr.parentThatIsA(StageMorph).activeSounds.push(source);
     return source;
@@ -2786,7 +2778,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
                 : (soundName instanceof List ? this.encodeSound(soundName)
                     : detect(
                         this.blockReceiver().sounds.asArray(),
-                        function (s) {return s.name === soundName.toString(); }
+                        s => s.name === soundName.toString()
                     )
                 )
             ),
@@ -2843,8 +2835,8 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
 
 Process.prototype.decodeSound = function (sound, callback) {
     // private - callback is optional and invoked with sound as argument
-    var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx,
-        myself = this;
+    var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx;
+
     if (sound.audioBuffer) {
         return (callback || nop)(sound);
     }
@@ -2861,13 +2853,13 @@ Process.prototype.decodeSound = function (sound, callback) {
         sound.isDecoding = true;
         audioCtx.decodeAudioData(
             arrayBuffer,
-            function(buffer) {
+            buffer => {
                 sound.audioBuffer = buffer;
                 sound.isDecoding = false;
             },
-            function (err) {
+            err => {
                 sound.isDecoding = false;
-                myself.handleError(err);
+                this.handleError(err);
             }
         );
     }
@@ -2922,8 +2914,7 @@ Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
     // this method inspired by: https://github.com/Jam3/audiobuffer-to-wav
     // https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file
 
-    var audio, blob, reader,
-        myself = this;
+    var audio, blob, reader;
 
     if (isNil(this.context.accumulator)) {
         this.assertType(samples, 'list'); // check only the first time
@@ -2940,9 +2931,9 @@ Process.prototype.reportNewSoundFromSamples = function (samples, rate) {
             {type: "audio/wav"}
         );
         reader = new FileReader();
-        reader.onload = function () {
+        reader.onload = () => {
             audio.src = reader.result;
-            myself.context.accumulator.audio = audio;
+            this.context.accumulator.audio = audio;
         };
         reader.readAsDataURL(blob);
     }
@@ -3115,7 +3106,7 @@ Process.prototype.doAsk = function (data) {
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
-            function (morph) {return morph instanceof StagePrompterMorph; }
+            morph => morph instanceof StagePrompterMorph
         );
         if (!activePrompter) {
             if (!isStage && !isHiddenSprite) {
@@ -3203,7 +3194,6 @@ Process.prototype.doBroadcast = function (message) {
         msg = this.inputOption(message),
         trg,
         rcvrs,
-        myself = this,
         procs = [];
 
     if (!this.canBroadcast) {
@@ -3224,9 +3214,9 @@ Process.prototype.doBroadcast = function (message) {
             }
         } else if (trg instanceof List) {
             // assume all elements to be sprites or sprite names
-            rcvrs = trg.itemsArray().map(function (each) {
-                return myself.getOtherObject(each, thisObj, stage);
-            });
+            rcvrs = trg.itemsArray().map(each =>
+                this.getOtherObject(each, thisObj, stage)
+            );
         } else {
             return; // abort
         }
@@ -3235,9 +3225,9 @@ Process.prototype.doBroadcast = function (message) {
     }
     if (msg !== '') {
         stage.lastMessage = message; // the actual data structure
-        rcvrs.forEach(function (morph) {
+        rcvrs.forEach(morph => {
             if (isSnapObject(morph)) {
-                morph.allHatBlocksFor(msg).forEach(function (block) {
+                morph.allHatBlocksFor(msg).forEach(block => {
                     procs.push(stage.threads.startProcess(
                         block,
                         morph,
@@ -3246,12 +3236,12 @@ Process.prototype.doBroadcast = function (message) {
                 });
             }
         });
-        (stage.messageCallbacks[''] || []).forEach(function (callback) {
-            callback(msg); // for "any" message, pass it along as argument
-        });
-        (stage.messageCallbacks[msg] || []).forEach(function (callback) {
-            callback(); // for a particular message
-        });
+        (stage.messageCallbacks[''] || []).forEach(callback =>
+            callback(msg) // for "any" message, pass it along as argument
+        );
+        (stage.messageCallbacks[msg] || []).forEach(callback =>
+            callback() // for a particular message
+        );
     }
     return procs;
 };
@@ -3259,15 +3249,12 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
-        this.context.activeSends.forEach(function (proc) {
-        	// optimize for atomic sub-routines
-            proc.runStep();
-        });
+        this.context.activeSends.forEach(proc =>
+            proc.runStep()
+        );
     }
-    this.context.activeSends = this.context.activeSends.filter(
-        function (proc) {
-            return proc.isRunning();
-        }
+    this.context.activeSends = this.context.activeSends.filter(proc =>
+        proc.isRunning()
     );
     if (this.context.activeSends.length === 0) {
         return null;
@@ -3943,8 +3930,8 @@ Process.prototype.rawParseCSV = function (text, delim) {
     }
 
     // convert arrays to Snap! Lists
-    records = new List(records.map(
-        function (row) {return new List(row); })
+    records = new List(
+        records.map(row => new List(row))
     );
 
     // for backwards compatibility return the first row if it is the only one
@@ -4025,17 +4012,15 @@ Process.prototype.getOtherObject = function (name, thisObj, stageObj) {
         // find the corresponding sprite on the stage
         thatObj = detect(
             stage.children,
-            function (morph) {return morph.name === name; }
+            morph => morph.name === name
         );
         if (!thatObj) {
             // check if the sprite in question is currently being
             // dragged around
             thatObj = detect(
                 stage.world().hand.children,
-                function (morph) {
-                    return morph instanceof SpriteMorph
-                        && morph.name === name;
-                }
+                morph => morph instanceof SpriteMorph &&
+                    morph.name === name
             );
         }
     }
@@ -4187,8 +4172,7 @@ Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
 Process.prototype.doPasteOn = function (name, thisObj, stage) {
     // allow for lists of sprites and also check for temparary clones,
     // as in Scratch 2.0,
-    var myself = this,
-        those;
+    var those;
     thisObj = thisObj || this.blockReceiver();
     stage = stage || thisObj.parentThatIsA(StageMorph);
     if (stage.name === name) {
@@ -4202,9 +4186,9 @@ Process.prototype.doPasteOn = function (name, thisObj, stage) {
     } else {
         those = this.getObjectsNamed(name, thisObj, stage); // clones
     }
-    those.forEach(function (each) {
-        myself.doPasteOn(each, thisObj, stage);
-    });
+    those.forEach(each =>
+        this.doPasteOn(each, thisObj, stage)
+    );
 };
 
 // Process temporary cloning (Scratch-style)
@@ -4257,8 +4241,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     // helper function for reportTouchingObject()
     // also check for temparary clones, as in Scratch 2.0,
     // and for any parts (subsprites)
-    var myself = this,
-        those,
+    var those,
         stage,
         box,
         mouse;
@@ -4293,8 +4276,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
             } else {
                 those = this.getObjectsNamed(name, thisObj, stage); // clones
             }
-            if (those.some(function (any) {
-                    return any.isVisible && thisObj.isTouching(any);
+            if (those.some(any => any.isVisible && thisObj.isTouching(any)
                     // check collision with any part, performance issue
                     // commented out for now
                 /*
@@ -4302,15 +4284,13 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
                         return part.isVisible && thisObj.isTouching(part);
                     })
                 */
-                })) {
+                )) {
                 return true;
             }
         }
     }
-    return thisObj.parts.some(
-        function (any) {
-            return myself.objectTouchingObject(any, name);
-        }
+    return thisObj.parts.some(any =>
+        this.objectTouchingObject(any, name)
     );
 };
 
@@ -4487,12 +4467,12 @@ Process.prototype.spritesAtPoint = function (point, stage) {
     // answer a list of sprites, if any, at the given point
     // ordered by their layer, i.e. top-layer is last in the list
     return new List(
-        stage.children.filter(function (morph) {
-            return morph instanceof SpriteMorph &&
+        stage.children.filter(morph =>
+            morph instanceof SpriteMorph &&
                 morph.isVisible &&
-                morph.bounds.containsPoint(point) &&
-                !morph.isTransparentAt(point);
-        })
+                    morph.bounds.containsPoint(point) &&
+                        !morph.isTransparentAt(point)
+        )
     );
 };
 
@@ -4656,14 +4636,13 @@ Process.prototype.reportGet = function (query) {
         case 'other sprites':
             stage = thisObj.parentThatIsA(StageMorph);
             return new List(
-                stage.children.filter(function (each) {
-                    return each instanceof SpriteMorph &&
-                        each !== thisObj;
-                })
+                stage.children.filter(each =>
+                    each instanceof SpriteMorph &&
+                        each !== thisObj
+                )
             );
         case 'parts': // shallow copy to disable side-effects
-            return new List((thisObj.parts || [])
-                .map(function (each) {return each; }));
+            return new List((thisObj.parts || []).map(each => each));
         case 'anchor':
             return thisObj.anchor || '';
         case 'parent':
@@ -4676,11 +4655,11 @@ Process.prototype.reportGet = function (query) {
             stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
             return new List(
-                stage.children.filter(function (each) {
-                    return each.isTemporary &&
+                stage.children.filter(each =>
+                    each.isTemporary &&
                         (each !== thisObj) &&
-                        (each.cloneOriginName === objName);
-                })
+                            (each.cloneOriginName === objName)
+                )
             );
         case 'other clones':
             return thisObj.isTemporary ?
@@ -4692,11 +4671,11 @@ Process.prototype.reportGet = function (query) {
                 thisObj.height()
             ));
             return new List(
-                stage.children.filter(function (each) {
-                    return each instanceof SpriteMorph &&
+                stage.children.filter(each =>
+                    each instanceof SpriteMorph &&
                         (each !== thisObj) &&
-                        each.bounds.intersects(neighborhood);
-                })
+                            each.bounds.intersects(neighborhood)
+                )
             );
         case 'dangling?':
             return !thisObj.rotatesWithAnchor;
@@ -4839,7 +4818,7 @@ Process.prototype.doSet = function (attribute, value) {
         // update padlock symbol in the IDE:
         ide = rcvr.parentThatIsA(IDE_Morph);
         if (ide) {
-            ide.spriteBar.children.forEach(function (each) {
+            ide.spriteBar.children.forEach(each => {
                 if (each.refresh) {
                     each.refresh();
                 }
@@ -4860,7 +4839,7 @@ Process.prototype.doSet = function (attribute, value) {
         // update padlock symbol in the IDE:
         ide = rcvr.parentThatIsA(IDE_Morph);
         if (ide) {
-            ide.spriteBar.children.forEach(function (each) {
+            ide.spriteBar.children.forEach(each => {
                 if (each.refresh) {
                     each.refresh();
                 }
@@ -5323,7 +5302,7 @@ Process.prototype.costumeNamed = function (name) {
     }
     return detect(
         this.blockReceiver().costumes.asArray(),
-        function (c) {return c.name === name.toString(); }
+        c => c.name === name.toString()
     );
 };
 
@@ -5389,9 +5368,7 @@ Process.prototype.reportPentrailsAsSVG = function () {
             ready : false
         };
         acc = this.context.accumulator;
-        acc.img.onload = function () {
-            acc.ready = true;
-        };
+        acc.img.onload = () => acc.ready = true;
         acc.img.src = 'data:image/svg+xml,' + svg.src;
         acc.img.rot = svg.rotationShift;
     } else if (this.context.accumulator.ready) {
@@ -5806,8 +5783,7 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
 
 Process.prototype.reportAtomicSort = function (list, reporter) {
     this.assertType(list, 'list');
-    var myself = this,
-    	func;
+    var func;
 
     // try compiling the reporter into generic JavaScript
     // fall back to the morphic reporter if unsuccessful
@@ -5820,18 +5796,16 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
 
     // iterate over the data in a single frame:
 	return new List(
-  		list.asArray().slice().sort(
-    		function (a, b) {
-      			return invoke(
-                	func,
-                    new List([a, b]),
-                    null,
-                    null,
-                    null,
-                    null,
-                    myself.capture(reporter) // process
-                ) ? -1 : 1;
-            }
+  		list.asArray().slice().sort((a, b) =>
+            invoke(
+                func,
+                new List([a, b]),
+                null,
+                null,
+                null,
+                null,
+                this.capture(reporter) // process
+            ) ? -1 : 1
         )
     );
 };
@@ -5875,9 +5849,9 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
         }
     }
 
-    dict.forEach(function (value, key) {
-        result.push(new List([key, value.length, new List(value)]));
-    });
+    dict.forEach((value, key) =>
+        result.push(new List([key, value.length, new List(value)]))
+    );
     return new List(result);
 };
 
@@ -5970,9 +5944,10 @@ Context.prototype.image = function () {
 
         // replace marked call/cc block with empty slot
         if (this.isContinuation) {
-            cont = detect(block.allInputs(), function (inp) {
-                return inp.bindingID === 1;
-            });
+            cont = detect(
+                block.allInputs(),
+                inp => inp.bindingID === 1
+            );
             if (cont) {
                 block.revertToDefaultInput(cont, true);
             }
@@ -5995,9 +5970,9 @@ Context.prototype.image = function () {
 
     // also show my inputs, unless I'm a continuation
     if (!this.isContinuation) {
-        this.inputs.forEach(function (inp) {
-            ring.parts()[1].addInput(inp);
-        });
+        this.inputs.forEach(inp =>
+            ring.parts()[1].addInput(inp)
+        );
     }
     return ring.fullImage();
 };
@@ -6134,11 +6109,10 @@ VariableFrame.prototype.toString = function () {
 };
 
 VariableFrame.prototype.copy = function () {
-    var frame = new VariableFrame(this.parentFrame),
-        myself = this;
-    this.names().forEach(function (vName) {
-        frame.addVar(vName, myself.getVar(vName));
-    });
+    var frame = new VariableFrame(this.parentFrame);
+    this.names().forEach(vName =>
+        frame.addVar(vName, this.getVar(vName))
+    );
     return frame;
 };
 
@@ -6340,7 +6314,6 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
   		parameters = aContext.inputs,
         parms = [],
         hasEmptySlots = false,
-        myself = this,
         i;
 
 	this.source = aContext;
@@ -6349,7 +6322,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
 	// scan for empty input slots
  	hasEmptySlots = !isNil(detect(
   		block.allChildren(),
-    	function (morph) {return morph.isEmptySlot && morph.isEmptySlot(); }
+    	morph => morph.isEmptySlot && morph.isEmptySlot()
     ));
 
     // translate formal parameters into gensyms
@@ -6365,10 +6338,10 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
             );
         }
         // map explicit formal parameters
-        parameters.forEach(function (pName, idx) {
+        parameters.forEach((pName, idx) => {
         	var pn = 'p' + idx;
             parms.push(pn);
-        	myself.gensyms[pName] = pn;
+        	this.gensyms[pName] = pn;
         });
     } else if (hasEmptySlots) {
     	if (this.implicitParams > 1) {
@@ -6468,10 +6441,9 @@ JSCompiler.prototype.compileExpression = function (block) {
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
-    var body = '',
-        myself = this;
-    commandBlock.blockSequence().forEach(function (block) {
-        body += myself.compileExpression(block);
+    var body = '';
+    commandBlock.blockSequence().forEach(block => {
+        body += this.compileExpression(block);
         body += ';\n';
     });
     return body;
@@ -6483,14 +6455,12 @@ JSCompiler.prototype.compileInfix = function (operator, inputs) {
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
-    var args = '',
-        myself = this;
-
-    array.forEach(function (inp) {
+    var args = '';
+    array.forEach(inp => {
         if (args.length) {
             args += ', ';
         }
-        args += myself.compileInput(inp);
+        args += this.compileInput(inp);
     });
     return args;
 };
