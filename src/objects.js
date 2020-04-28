@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-27';
+modules.objects = '2020-April-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -11436,7 +11436,7 @@ WatcherMorph.prototype.userMenu = function () {
         );
         menu.addItem(
             'raw data...',
-            function () {myself.importData(true); },
+            () => this.importData(true),
             'import without attempting to\nparse or format data'//,
         );
         if (shiftClicked) {
@@ -11444,12 +11444,12 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeCSV()) {
                 menu.addItem(
                     'export as CSV...',
-                    function () {
-                        var ide = myself.parentThatIsA(IDE_Morph);
+                    () => {
+                        var ide = this.parentThatIsA(IDE_Morph);
                         ide.saveFileAs(
-                            myself.currentValue.asCSV(),
+                            this.currentValue.asCSV(),
                             'text/csv;charset=utf-8', // RFC 4180
-                            myself.getter // variable name
+                            this.getter // variable name
                         );
                     },
                     null,
@@ -11460,12 +11460,12 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeJSON()) {
                 menu.addItem(
                     'export as JSON...',
-                    function () {
-                        var ide = myself.parentThatIsA(IDE_Morph);
+                    () => {
+                        var ide = this.parentThatIsA(IDE_Morph);
                         ide.saveFileAs(
-                            myself.currentValue.asJSON(true), // guess objects
+                            this.currentValue.asJSON(true), // guess objects
                             'text/json;charset=utf-8',
-                            myself.getter // variable name
+                            this.getter // variable name
                         );
                     },
                     null,
@@ -11484,12 +11484,12 @@ WatcherMorph.prototype.userMenu = function () {
             }
             menu.addItem(
                 'export...',
-                function () {
-                    var ide = myself.parentThatIsA(IDE_Morph);
+                () => {
+                    var ide = this.parentThatIsA(IDE_Morph);
                     ide.saveFileAs(
-                        myself.currentValue.toString(),
+                        this.currentValue.toString(),
                         'text/plain;charset=utf-8',
-                        myself.getter // variable name
+                        this.getter // variable name
                     );
                 }
             );
@@ -11497,12 +11497,12 @@ WatcherMorph.prototype.userMenu = function () {
                 this.currentValue.canBeCSV()) {
             menu.addItem(
                 'export...',
-                function () {
-                    var ide = myself.parentThatIsA(IDE_Morph);
+                 () => {
+                    var ide = this.parentThatIsA(IDE_Morph);
                     ide.saveFileAs(
-                        myself.currentValue.asCSV(),
+                        this.currentValue.asCSV(),
                         'text/csv;charset=utf-8', // RFC 4180
-                        myself.getter // variable name
+                        this.getter // variable name
                     );
                 }
             );
@@ -11510,12 +11510,12 @@ WatcherMorph.prototype.userMenu = function () {
                 this.currentValue.canBeJSON()) {
             menu.addItem(
                 'export...',
-                function () {
-                    var ide = myself.parentThatIsA(IDE_Morph);
+                 () => {
+                    var ide = this.parentThatIsA(IDE_Morph);
                     ide.saveFileAs(
-                        myself.currentValue.asJSON(true), // guessObjects
+                        this.currentValue.asJSON(true), // guessObjects
                         'text/json;charset=utf-8',
-                        myself.getter // variable name
+                        this.getter // variable name
                     );
                 }
             );
@@ -11523,9 +11523,9 @@ WatcherMorph.prototype.userMenu = function () {
             vNames = this.currentValue.outerContext.variables.names();
             if (vNames.length) {
                 menu.addLine();
-                vNames.forEach(function (vName) {
-                    monitor(vName);
-                });
+                vNames.forEach(
+                    vName => monitor(vName)
+                );
             }
         }
     }
@@ -11748,7 +11748,6 @@ function StagePrompterMorph(question) {
 
 StagePrompterMorph.prototype.init = function (question) {
     // question is optional in case the Stage is asking
-    var myself = this;
 
     // additional properties
     this.isDone = false;
@@ -11767,7 +11766,7 @@ StagePrompterMorph.prototype.init = function (question) {
     this.inputField = new InputFieldMorph();
     this.button = new PushButtonMorph(
         null,
-        function () {myself.accept(); },
+        () => this.accept(),
         '\u2713'
     );
 
