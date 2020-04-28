@@ -2837,19 +2837,17 @@ SpriteMorph.prototype.freshPalette = function (category) {
         function hasHiddenPrimitives() {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
-            return Object.keys(hiddens).some(function (any) {
-                return !isNil(defs[any]) && (defs[any].category === category
-                    || contains((more[category] || []), any));
-            });
+            return Object.keys(hiddens).some(any => !isNil(defs[any]) &&
+                (defs[any].category === category ||
+                    contains((more[category] || []), any))
+            );
         }
 
         function canHidePrimitives() {
-            return palette.contents.children.some(function (any) {
-                return contains(
+            return palette.contents.children.some(any => contains(
                     Object.keys(SpriteMorph.prototype.blocks),
                     any.selector
-                );
-            });
+            ));
         }
 
         menu.addPair(
@@ -3634,9 +3632,9 @@ SpriteMorph.prototype.doPlaySound = function (name) {
         aud.play();
         if (stage) {
             stage.activeSounds.push(aud);
-            stage.activeSounds = stage.activeSounds.filter(function (snd) {
-                return !snd.ended && !snd.terminated;
-            });
+            stage.activeSounds = stage.activeSounds.filter(
+                snd => !snd.ended && !snd.terminated
+            );
         }
         return aud;
     }
@@ -3779,9 +3777,9 @@ SpriteMorph.prototype.playFreq = function (hz) {
         note.ended = false;
         if (stage) {
             stage.activeSounds.push(note);
-            stage.activeSounds = stage.activeSounds.filter(function (snd) {
-                return !snd.ended && !snd.terminated;
-            });
+            stage.activeSounds = stage.activeSounds.filter(
+                snd => !snd.ended && !snd.terminated
+            );
         }
         note.fader.gain.setValueCurveAtTime(
             note.fadeIn,
@@ -3846,10 +3844,9 @@ SpriteMorph.prototype.userMenu = function () {
         );
     } else {
         allParts = this.allParts();
-        anchors = this.parent.children.filter(function (morph) {
-            return morph instanceof SpriteMorph &&
-                !contains(allParts, morph);
-        });
+        anchors = this.parent.children.filter(morph =>
+            morph instanceof SpriteMorph && !contains(allParts, morph)
+        );
         if (anchors.length) {
             menu.addMenu('stick to', this.anchorsMenu(anchors));
         }
@@ -5778,7 +5775,7 @@ SpriteMorph.prototype.allMessageNames = function () {
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     if (typeof message === 'number') {message = message.toString(); }
-    return this.scripts.children.filter(function (morph) {
+    return this.scripts.children.filter(morph => {
         var event;
         if (morph.selector) {
             if (morph.selector === 'receiveMessage') {
@@ -5800,7 +5797,7 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
 };
 
 SpriteMorph.prototype.allHatBlocksForKey = function (key) {
-    return this.scripts.children.filter(function (morph) {
+    return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
                 var evt = morph.inputs()[0].evaluate()[0];
@@ -5812,7 +5809,7 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
 };
 
 SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
-    return this.scripts.children.filter(function (morph) {
+    return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
                 return morph.inputs()[0].evaluate()[0] === interaction;
@@ -5823,7 +5820,7 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
 };
 
 SpriteMorph.prototype.allGenericHatBlocks = function () {
-    return this.scripts.children.filter(function (morph) {
+    return this.scripts.children.filter(morph => {
         if (morph.selector) {
             return morph.selector === 'receiveCondition';
         }
@@ -6197,9 +6194,9 @@ SpriteMorph.prototype.allInvocationsOf = function (aSpec) {
     // only inside the receiver, without the inheritance branches
     var inScripts, inDefinitions, inBlockEditors, blocks;
 
-    inScripts = this.scripts.allChildren().filter(function (c) {
-        return c.isCustomBlock && !c.isGlobal && (c.blockSpec === aSpec);
-    });
+    inScripts = this.scripts.allChildren().filter(c =>
+        c.isCustomBlock && !c.isGlobal && (c.blockSpec === aSpec)
+    );
 
     inDefinitions = [];
     this.customBlocks.forEach(def => {
@@ -6243,9 +6240,9 @@ SpriteMorph.prototype.addAllInvocationsOf = function (aSpec, anArray) {
 SpriteMorph.prototype.allLocalBlockInstances = function (definition) {
     var inScripts, inDefinitions, inBlockEditors, inPalette, result;
 
-    inScripts = this.scripts.allChildren().filter(function (c) {
-        return c.isCustomBlock && (c.definition === definition);
-    });
+    inScripts = this.scripts.allChildren().filter(c =>
+        c.isCustomBlock && (c.definition === definition)
+    );
 
     inDefinitions = [];
     this.customBlocks.forEach(def => {
@@ -6372,9 +6369,9 @@ SpriteMorph.prototype.doubleDefinitionsFor = function (definition) {
     }
     idx = blockList.indexOf(definition);
     if (idx === -1) {return []; }
-    return blockList.filter(function (def, i) {
-        return def.blockSpec() === spec && (i !== idx);
-    });
+    return blockList.filter((def, i) =>
+        def.blockSpec() === spec && (i !== idx)
+    );
 };
 
 SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
@@ -6827,9 +6824,9 @@ SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
- 	data = this.variables.allNames(exceptGlobals).filter(function (each) {
-		return !contains(globalNames, each);
-    });
+ 	data = this.variables.allNames(exceptGlobals).filter(each =>
+		!contains(globalNames, each)
+    );
 	if (sorted) {
  		data.sort(alphabetically);
    }
@@ -6844,9 +6841,9 @@ SpriteMorph.prototype.reachableGlobalVariableNames = function (sorted) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
-	data = this.globalVariables().names().filter(function (each) {
-    	return !contains(locals, each);
-	});
+	data = this.globalVariables().names().filter(each =>
+    	!contains(locals, each)
+	);
     if (sorted) {
     	data.sort(alphabetically);
    }
@@ -6879,7 +6876,7 @@ SpriteMorph.prototype.allBlocks = function (valuesOnly) {
         );
     });
     if (valuesOnly) {
-        return Object.keys(dict).map(function (key) {return dict[key]; });
+        return Object.keys(dict).map(key => dict[key]);
     }
     return dict;
 };
@@ -7093,10 +7090,10 @@ SpriteMorph.prototype.recordLayers = function () {
         var bubble = part.talkBubble();
         if (bubble) {bubble.hide(); }
     });
-    this.layers.sort(function (x, y) {
-        return stage.children.indexOf(x) < stage.children.indexOf(y) ?
-                -1 : 1;
-    });
+    this.layers.sort((x, y) =>
+        stage.children.indexOf(x) < stage.children.indexOf(y) ?
+            -1 : 1
+    );
 };
 
 SpriteMorph.prototype.restoreLayers = function () {
@@ -7789,7 +7786,7 @@ StageMorph.prototype.watchers = function (leftPos) {
     shown or hidden watchers whose left side equals
     the given border (for automatic positioning)
 */
-    return this.children.filter(function (morph) {
+    return this.children.filter(morph => {
         if (morph instanceof WatcherMorph) {
             if (leftPos) {
                 return morph.left() === leftPos;
@@ -9292,7 +9289,7 @@ StageMorph.prototype.ownBlocks
 StageMorph.prototype.allBlocks = function (valuesOnly) {
     var dict = this.ownBlocks();
     if (valuesOnly) {
-        return Object.keys(dict).map(function (key) {return dict[key]; });
+        return Object.keys(dict).map(key => dict[key]);
     }
     return dict;
 };
@@ -9923,7 +9920,7 @@ SVG_Costume.prototype.copy = function () {
     img.src = this.contents.src;
     cpy = new SVG_Costume(img, this.name ? copy(this.name) : null);
     cpy.rotationCenter = this.rotationCenter.copy();
-    cpy.shapes = this.shapes.map(function (shape) { return shape.copy(); });
+    cpy.shapes = this.shapes.map(shape => shape.copy());
     return cpy;
 };
 
@@ -9960,9 +9957,9 @@ SVG_Costume.prototype.parseShapes = function () {
     element.parseString(contents);
 
     if (this.shapes.length === 0 && element.attributes.snap) {
-        this.shapes = element.children.map(function (child) {
-            return window[child.attributes.prototype].fromSVG(child);
-        });
+        this.shapes = element.children.map(child =>
+            window[child.attributes.prototype].fromSVG(child)
+        );
     }
 };
 
