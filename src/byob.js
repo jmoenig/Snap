@@ -4016,8 +4016,6 @@ function BlockImportDialogMorph(blocks, target, name) {
 }
 
 BlockImportDialogMorph.prototype.init = function (blocks, target, name) {
-    var myself = this;
-
     // additional properties:
     this.blocks = blocks.slice(0);
     this.handle = null;
@@ -4026,7 +4024,7 @@ BlockImportDialogMorph.prototype.init = function (blocks, target, name) {
     BlockExportDialogMorph.uber.init.call(
         this,
         target,
-        function () {myself.importBlocks(name); },
+        () => this.importBlocks(name),
         null // environment
     );
 
@@ -4063,7 +4061,7 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
     var ide = this.target.parentThatIsA(IDE_Morph);
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        this.blocks.forEach(function (def) {
+        this.blocks.forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
@@ -4108,8 +4106,6 @@ function BlockRemovalDialogMorph(blocks, target) {
 }
 
 BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
-    var myself = this;
-
     // additional properties:
     this.blocks = blocks.slice(0);
     this.handle = null;
@@ -4118,7 +4114,7 @@ BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
     BlockExportDialogMorph.uber.init.call(
         this,
         target,
-        function () {myself.removeBlocks(); },
+        () => this.removeBlocks(),
         null // environment
     );
 
@@ -4155,7 +4151,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
     var ide = this.target.parentThatIsA(IDE_Morph);
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        this.blocks.forEach(function (def) {
+        this.blocks.forEach(def => {
             var idx = ide.stage.globalBlocks.indexOf(def);
             if (idx !== -1) {
                 ide.stage.globalBlocks.splice(idx, 1);
