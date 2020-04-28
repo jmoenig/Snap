@@ -2248,8 +2248,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     var head, ide,
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
-        element,
-        myself = this;
+        element;
 
     this.definition.receiver = this.target; // only for serialization
     this.definition.spec = this.prototypeSpec();
@@ -2261,7 +2260,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.editorDimensions = this.bounds.copy();
     this.definition.cachedIsRecursive = null; // flush the cache, don't update
 
-    this.body.contents.children.forEach(function (morph) {
+    this.body.contents.children.forEach(morph => {
         if (morph instanceof PrototypeHatBlockMorph) {
             head = morph;
         } else if (morph instanceof BlockMorph ||
@@ -2269,7 +2268,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
             element = morph.fullCopy();
             element.parent = null;
             element.setPosition(morph.position().subtract(pos));
-            myself.definition.scripts.push(element);
+            this.definition.scripts.push(element);
         }
     });
 
@@ -2347,21 +2346,18 @@ BlockEditorMorph.prototype.variableNames = function () {
 // BlockEditorMorph translation
 
 BlockEditorMorph.prototype.editTranslations = function () {
-    var myself = this,
-    	block = this.definition.blockInstance();
+    var block = this.definition.blockInstance();
     block.addShadow(new Point(3, 3));
     new DialogBoxMorph(
-        myself,
-        function (text) {
-            myself.translations = text;
-        },
-        myself
+        this,
+        text => this.translations = text,
+        this
     ).promptCode(
         'Custom Block Translations',
-        myself.translations,
-        myself.world(),
+        this.translations,
+        this.world(),
         block.fullImage(),
-        myself.definition.abstractBlockSpec() +
+        this.definition.abstractBlockSpec() +
             '\n\n' +
             localize('Enter one translation per line. ' +
                 'use colon (":") as lang/spec delimiter\n' +
@@ -2755,7 +2751,6 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
     the user acknowledges and closes the block editor
 */
     var frag = this.fragment.copy(),
-        myself = this,
         isPlaceHolder = this instanceof BlockLabelPlaceHolderMorph,
         isOnlyElement = this.parent.parseSpec(this.parent.blockSpec).length
             < 2;
@@ -2763,7 +2758,7 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
     new InputSlotDialogMorph(
         frag,
         null,
-        function () {myself.updateBlockLabel(frag); },
+        () => this.updateBlockLabel(frag),
         this,
         this.parent.definition.category
     ).open(
@@ -2787,30 +2782,29 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
 
 BlockLabelFragmentMorph.prototype.userMenu = function () {
     // show a menu of built-in special symbols
-    var myself = this,
-        symbolColor = new Color(100, 100, 130),
+    var symbolColor = new Color(100, 100, 130),
         menu = new MenuMorph(
-            function (string) {
-                var tuple = myself.text.split('-');
-                myself.changed();
+            (string) => {
+                var tuple = this.text.split('-');
+                this.changed();
                 tuple[0] = '$' + string;
-                myself.text = tuple.join('-');
-                myself.fragment.labelString = myself.text;
-                myself.parent.parent.changed();
-                myself.fixLayout();
-                myself.parent.parent.fixLayout();
-                myself.parent.parent.changed();
+                this.text = tuple.join('-');
+                this.fragment.labelString = this.text;
+                this.parent.parent.changed();
+                this.fixLayout();
+                this.parent.parent.fixLayout();
+                this.parent.parent.changed();
             },
             null,
             this,
             this.fontSize
         );
-    SymbolMorph.prototype.names.forEach(function (name) {
+    SymbolMorph.prototype.names.forEach(name =>
         menu.addItem(
             [new SymbolMorph(name, menu.fontSize, symbolColor), localize(name)],
             name
-        );
-    });
+        )
+    );
     menu.addLine();
     menu.addItem('\u23CE ' + localize('new line'), 'nl');
     return menu;
