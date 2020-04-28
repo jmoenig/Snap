@@ -462,10 +462,8 @@ CustomBlockDefinition.prototype.localizedSpec = function () {
 CustomBlockDefinition.prototype.abstractBlockSpec = function () {
 	// answer the semantic block spec substituting each input
  	// with an underscore
-    return BlockMorph.prototype.parseSpec(this.blockSpec()).map(
-    	function (str) {
-    		return (str.length > 1 && (str[0]) === '%') ? '_' : str;
-    	}
+    return BlockMorph.prototype.parseSpec(this.blockSpec()).map(str =>
+        (str.length > 1 && (str[0]) === '%') ? '_' : str
     ).join(' ');
 };
 
@@ -986,10 +984,8 @@ CustomCommandBlockMorph.prototype.isInUse = function () {
         rcvr = this.scriptTarget(),
         ide = rcvr.parentThatIsA(IDE_Morph);
     if (def.isGlobal && ide) {
-        return ide.sprites.asArray().concat([ide.stage]).some(
-            function (any, idx) {
-                return any.usesBlockInstance(def, false, idx);
-            }
+        return ide.sprites.asArray().concat([ide.stage]).some((any, idx) =>
+            any.usesBlockInstance(def, false, idx)
         );
     }
     return rcvr.allDependentInvocationsOf(this.blockSpec).length > 0;
