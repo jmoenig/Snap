@@ -3042,24 +3042,23 @@ InputSlotDialogMorph.prototype.init = function (
 InputSlotDialogMorph.prototype.createTypeButtons = function () {
     var block,
         arrow,
-        myself = this,
         clr = SpriteMorph.prototype.blockColor[this.category];
 
 
     block = new JaggedBlockMorph(localize('Title text'));
     block.setColor(clr);
     this.addBlockTypeButton(
-        function () {myself.setType(null); },
+        () => this.setType(null),
         block,
-        function () {return myself.fragment.type === null; }
+        () => this.fragment.type === null
     );
 
     block = new JaggedBlockMorph('%inputName');
     block.setColor(clr);
     this.addBlockTypeButton(
-        function () {myself.setType('%s'); },
+        () => this.setType('%s'),
         block,
-        function () {return myself.fragment.type !== null; }
+        () => this.fragment.type !== null
     );
 
     // add an arrow button for long form/short form toggling
@@ -3073,13 +3072,13 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
     this.types.fixLayout();
 
     // configure arrow button
-    arrow.refresh = function () {
-        if (myself.fragment.type === null) {
-            myself.isExpanded = false;
+    arrow.refresh = () => {
+        if (this.fragment.type === null) {
+            this.isExpanded = false;
             arrow.hide();
         } else {
             arrow.show();
-            if (myself.isExpanded) {
+            if (this.isExpanded) {
                 arrow.direction = 'down';
             } else {
                 arrow.direction = 'right';
@@ -3089,16 +3088,14 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
         }
     };
 
-    arrow.mouseClickLeft = function () {
+    arrow.mouseClickLeft = () => {
         if (arrow.isVisible) {
-            myself.isExpanded = !myself.isExpanded;
-            myself.types.children.forEach(function (c) {
-                c.refresh();
-            });
-            myself.changed();
-            myself.fixLayout();
-            myself.rerender();
-            myself.edit();
+            this.isExpanded = !this.isExpanded;
+            this.types.children.forEach(c => c.refresh());
+            this.changed();
+            this.fixLayout();
+            this.rerender();
+            this.edit();
         }
     };
 
