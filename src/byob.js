@@ -3239,17 +3239,16 @@ InputSlotDialogMorph.prototype.open = function (
 
 InputSlotDialogMorph.prototype.symbolMenu = function () {
     var symbols = [],
-        symbolColor = new Color(100, 100, 130),
-        myself = this;
-    SymbolMorph.prototype.names.forEach(function (symbol) {
+        symbolColor = new Color(100, 100, 130);
+    SymbolMorph.prototype.names.forEach(sym =>
         symbols.push([
             [
-                new SymbolMorph(symbol, myself.fontSize, symbolColor),
-                localize(symbol)
+                new SymbolMorph(sym, this.fontSize, symbolColor),
+                localize(sym)
             ],
-            '$' + symbol
-        ]);
-    });
+            '$' + sym
+        ])
+    );
     symbols.push(['\u23CE ' + localize('new line'), '$nl']);
     return symbols;
 };
@@ -3261,7 +3260,7 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var myself = this, defLabel, defInput, defSwitch, loopArrow,
+    var defLabel, defInput, defSwitch, loopArrow,
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
@@ -3282,32 +3281,32 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
 
     // arity and upvars
     this.slots.radioButtonSingle = this.addSlotArityButton(
-        function () {myself.setSlotArity('single'); },
+        () => this.setSlotArity('single'),
         "Single input.",
-        function () {return myself.fragment.isSingleInput(); }
+        () => this.fragment.isSingleInput()
     );
     this.addSlotArityButton(
-        function () {myself.setSlotArity('multiple'); },
+        () => this.setSlotArity('multiple'),
         "Multiple inputs (value is list of inputs)",
-        function () {return myself.fragment.isMultipleInput(); }
+        () => this.fragment.isMultipleInput()
     );
     this.addSlotArityButton(
-        function () {myself.setSlotArity('upvar'); },
+        () => this.setSlotArity('upvar'),
         "Upvar - make internal variable visible to caller",
-        function () {return myself.fragment.isUpvar(); }
+        () => this.fragment.isUpvar()
     );
 
     // default values
     defLabel = new StringMorph(localize('Default Value:'));
     defLabel.fontSize = this.slots.radioButtonSingle.fontSize;
     defLabel.setColor(new Color(255, 255, 255));
-    defLabel.refresh = function () {
-        if (myself.isExpanded && contains(
+    defLabel.refresh = () => {
+        if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
                     '%mlt', '%code'
                 ],
-                myself.fragment.type
+                this.fragment.type
             )) {
             defLabel.show();
         } else {
@@ -3321,13 +3320,13 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.contents().fontSize = defLabel.fontSize;
     defInput.contrast = 90;
     defInput.setWidth(50);
-    defInput.refresh = function () {
-        if (myself.isExpanded && contains(
+    defInput.refresh = () => {
+        if (this.isExpanded && contains(
             ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
-            myself.fragment.type
+            this.fragment.type
         )) {
             defInput.show();
-            if (myself.fragment.type === '%n') {
+            if (this.fragment.type === '%n') {
                 defInput.setIsNumeric(true);
             } else {
                 defInput.setIsNumeric(false);
@@ -3340,10 +3339,10 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.slots.add(defInput);
 
     defSwitch = new BooleanSlotMorph(this.fragment.defaultValue);
-    defSwitch.refresh = function () {
-        if (myself.isExpanded && contains(
+    defSwitch.refresh = () => {
+        if (this.isExpanded && contains(
             ['%b', '%boolUE'],
-            myself.fragment.type
+            this.fragment.type
         )) {
             defSwitch.show();
         } else {
@@ -3355,31 +3354,31 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
 
     // loop arrow checkbox //
     loopArrow = new ToggleMorph(
-            'checkbox',
-            this, // target
-            function () { // action
-                if (myself.fragment.type === '%ca') {
-                    myself.setType('%cs');
-                } else {
-                    myself.setType('%ca');
-                }
-            },
-            null, // label string
-            function () {return myself.fragment.type === '%ca'; },
-            null, // environment
-            null, // hint
-            new SymbolMorph(
-                'loop',
-                this.fontSize * 0.7,
-                new Color(255, 255, 255)
-            ),
-            null // builder method that constructs the element morph
-        );
-    loopArrow.refresh = function () {
-        ToggleMorph.prototype.refresh.call(this);
-        if (myself.isExpanded && contains(
+        'checkbox',
+        this, // target
+        () => { // action
+            if (this.fragment.type === '%ca') {
+                this.setType('%cs');
+            } else {
+                this.setType('%ca');
+            }
+        },
+        null, // label string
+        () => this.fragment.type === '%ca',
+        null, // environment
+        null, // hint
+        new SymbolMorph(
+            'loop',
+            this.fontSize * 0.7,
+            new Color(255, 255, 255)
+        ),
+        null // builder method that constructs the element morph
+    );
+    loopArrow.refresh = () => {
+        ToggleMorph.prototype.refresh.call(loopArrow);
+        if (this.isExpanded && contains(
                 ['%cs', '%ca'],
-                myself.fragment.type
+                this.fragment.type
             )) {
             loopArrow.show();
         } else {
@@ -3441,18 +3440,17 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     and show. But in the future computers and browsers may be
     faster.
 */
-    var myself = this,
-        action = function () {
-            myself.setSlotType(spec instanceof Array ? spec[0] : spec);
+    var action = () => {
+            this.setSlotType(spec instanceof Array ? spec[0] : spec);
         },
         query,
         element = new JaggedBlockMorph(spec instanceof Array ? spec[0] : spec),
         button;
 
-    query = function () {
+    query = () => {
         return spec instanceof Array ?
-            contains(spec, myself.fragment.singleInputType())
-            : myself.fragment.singleInputType() === spec;
+            contains(spec, this.fragment.singleInputType())
+            : this.fragment.singleInputType() === spec;
     };
     element.setCategory(this.category);
     element.rebuild();
@@ -3586,44 +3584,40 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
 };
 
 InputSlotDialogMorph.prototype.addSlotsMenu = function () {
-    var myself = this;
-
-    this.slots.userMenu = function () {
+    this.slots.userMenu = () => {
         if (contains(
             ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
-            myself.fragment.type)
+            this.fragment.type)
         ) {
-            var menu = new MenuMorph(myself),
+            var menu = new MenuMorph(this),
                 on = '\u2611 ',
                 off = '\u2610 ';
             menu.addItem(
-                (myself.fragment.hasOptions() ? on : off) +
+                (this.fragment.hasOptions() ? on : off) +
                     localize('options') +
                     '...',
                 'editSlotOptions'
             );
             menu.addItem(
-                (myself.fragment.isReadOnly ? on : off) +
+                (this.fragment.isReadOnly ? on : off) +
                     localize('read-only'),
-                function () {myself.fragment.isReadOnly =
-                         !myself.fragment.isReadOnly;
-                         }
+                () => this.fragment.isReadOnly = !this.fragment.isReadOnly
             );
             menu.addLine();
             menu.addMenu(
-                (myself.fragment.hasSpecialMenu() ? on : off) +
+                (this.fragment.hasSpecialMenu() ? on : off) +
                     localize('menu'),
-                myself.specialOptionsMenu()
+                this.specialOptionsMenu()
             );
             menu.addMenu(
-                (contains(['%mlt', '%code'], myself.fragment.type) ?
+                (contains(['%mlt', '%code'], this.fragment.type) ?
                     on : off) +
                 localize('special'),
-                 myself.specialSlotsMenu()
+                this.specialSlotsMenu()
             );
             return menu;
         }
-        return myself.specialSlotsMenu();
+        return this.specialSlotsMenu();
     };
 };
 
