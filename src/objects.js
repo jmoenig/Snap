@@ -8843,8 +8843,7 @@ StageMorph.prototype.exportTrailsLogAsSVG = function () {
 };
 
 StageMorph.prototype.trailsLogAsSVG = function () {
-    var myself = this,
-        bottomLeft = this.trailsLog[0][0],
+    var bottomLeft = this.trailsLog[0][0],
         topRight = bottomLeft,
         maxWidth = this.trailsLog[0][3],
         shift,
@@ -8853,7 +8852,7 @@ StageMorph.prototype.trailsLogAsSVG = function () {
         svg;
 
     // determine bounding box and max line width
-    this.trailsLog.forEach(function (line) {
+    this.trailsLog.forEach(line => {
         bottomLeft = bottomLeft.min(line[0]);
         bottomLeft = bottomLeft.min(line[1]);
         topRight = topRight.max(line[0]);
@@ -8873,9 +8872,9 @@ StageMorph.prototype.trailsLogAsSVG = function () {
     // for debugging the viewBox:
     // svg += '<rect width="100%" height="100%" fill="black"/>'
 
-    this.trailsLog.forEach(function (line) {
-        p1 = myself.normalizePoint(line[0]).translateBy(shift);
-        p2 = myself.normalizePoint(line[1]).translateBy(shift);
+    this.trailsLog.forEach(line => {
+        p1 = this.normalizePoint(line[0]).translateBy(shift);
+        p2 = this.normalizePoint(line[1]).translateBy(shift);
         svg += '<line x1="' + p1.x + '" y1="' + p1.y +
             '" x2="' + p2.x + '" y2="' + p2.y + '" ' +
             'style="stroke:' + line[2].toString() + ';' +
@@ -9744,8 +9743,7 @@ Costume.prototype.stretched = function (w, h) {
 // Costume actions
 
 Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
-    var myself = this,
-        editor = new PaintEditorMorph();
+    var editor = new PaintEditorMorph();
     editor.oncancel = oncancel || nop;
     editor.openIn(
         aWorld,
@@ -9755,17 +9753,17 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
         isnew ?
                 null :
                 this.rotationCenter,
-        function (img, rc) {
-            myself.contents = img;
-            myself.rotationCenter = rc;
-            myself.version = Date.now();
+        (img, rc) => {
+            this.contents = img;
+            this.rotationCenter = rc;
+            this.version = Date.now();
             aWorld.changed();
             if (anIDE) {
                 if (anIDE.currentSprite instanceof SpriteMorph) {
                     // don't shrinkwrap stage costumes
-                    myself.shrinkWrap();
+                    this.shrinkWrap();
                 }
-                anIDE.currentSprite.wearCostume(myself, true); // don't shadow
+                anIDE.currentSprite.wearCostume(this, true); // don't shadow
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
@@ -9781,7 +9779,7 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
         txt;
 
     editor.fixLayout();
-    action = function () {editor.accept(); };
+    action = () => editor.accept();
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
         localize('click or drag crosshairs to move the rotation center'),
@@ -9975,25 +9973,22 @@ SVG_Costume.prototype.edit = function (
     oncancel,
     onsubmit
 ) {
-    var myself = this,
-        editor;
-
-    editor = new VectorPaintEditorMorph();
+    var editor = new VectorPaintEditorMorph();
 
     editor.oncancel = oncancel || nop;
     editor.openIn(
         aWorld,
         isnew ? newCanvas(StageMorph.prototype.dimensions) : this.contents,
-        isnew ? new Point(240, 180) : myself.rotationCenter,
-        function (img, rc, shapes) {
-            myself.contents = img;
-            myself.rotationCenter = rc;
-            myself.shapes = shapes;
-            myself.version = Date.now();
+        isnew ? new Point(240, 180) : this.rotationCenter,
+        (img, rc, shapes) => {
+            this.contents = img;
+            this.rotationCenter = rc;
+            this.shapes = shapes;
+            this.version = Date.now();
             aWorld.changed();
             if (anIDE) {
-                if (isnew) {anIDE.currentSprite.addCostume(myself); }
-                anIDE.currentSprite.wearCostume(myself);
+                if (isnew) {anIDE.currentSprite.addCostume(this); }
+                anIDE.currentSprite.wearCostume(this);
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
@@ -10413,8 +10408,6 @@ Microphone.prototype.setResolution = function (num) {
 // Microphone ops
 
 Microphone.prototype.start = function () {
-    var myself = this;
-
     if (this.isStarted) {return; }
     this.isStarted = true;
     this.isReady = false;
@@ -10432,15 +10425,15 @@ Microphone.prototype.start = function () {
             "optional": []
             },
         }
-    ).then(function (stream) {
-        myself.setupNodes(stream);
-    }).catch(nop);
+    ).then(
+        stream => this.setupNodes(stream)
+    ).catch(nop);
 };
 
 Microphone.prototype.stop = function () {
     this.processor.onaudioprocess = null;
-    this.sourceStream.getTracks().forEach(function (track) {
-        track.stop();}
+    this.sourceStream.getTracks().forEach(
+        track => track.stop()
     );
     this.processor.disconnect();
     this.analyser.disconnect();
