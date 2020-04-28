@@ -5950,7 +5950,7 @@ SpriteMorph.prototype.findVariableWatcher = function (varName) {
         stage.children,
         morph => morph instanceof WatcherMorph &&
             (morph.target === this.variables || morph.target === globals) &&
-            morph.getter === varName
+                morph.getter === varName
     );
 };
 
