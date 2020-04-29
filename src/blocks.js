@@ -4368,11 +4368,12 @@ BlockMorph.prototype.situation = function () {
 // BlockMorph sticky comments
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
+    var wrld = hand ? hand.world : this.world();
     this.allInputs().forEach(input =>
         delete input.bindingID
     );
     this.allComments().forEach(comment =>
-        comment.startFollowing(this, hand.world)
+        comment.startFollowing(this, wrld)
     );
 };
 
@@ -4816,7 +4817,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
 CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
     var oldPos = this.position();
 
-    nop(handMorph);
     if (this.parent instanceof RingReporterSlotMorph) {
         this.parent.revertToDefaultInput(this);
         this.setPosition(oldPos);
