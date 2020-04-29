@@ -6800,18 +6800,18 @@ ScriptsMorph.prototype.cleanUp = function () {
     var target = this.selectForEdit(), // enable copy-on-edit
         origin = target.topLeft(),
         y = target.cleanUpMargin;
-    target.children.sort(function (a, b) {
+    target.children.sort((a, b) =>
         // make sure the prototype hat block always stays on top
-        return a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top();
-    }).forEach(function (child) {
+        a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top()
+    ).forEach(child => {
         if (child instanceof CommentMorph && child.block) {
             return; // skip anchored comments
         }
         child.setPosition(origin.add(new Point(target.cleanUpMargin, y)));
         if (child instanceof BlockMorph) {
-            child.allComments().forEach(function (comment) {
-                comment.align(child, true); // ignore layer
-            });
+            child.allComments().forEach(comment =>
+                comment.align(child, true) // ignore layer
+            );
         }
         y += child.stackHeight() + target.cleanUpSpacing;
     });
@@ -6838,14 +6838,14 @@ ScriptsMorph.prototype.scriptsPicture = function () {
     var boundingBox, pic, ctx;
     if (this.children.length === 0) {return; }
     boundingBox = this.children[0].fullBounds();
-    this.children.forEach(function (child) {
+    this.children.forEach(child => {
         if (child.isVisible) {
             boundingBox = boundingBox.merge(child.fullBounds());
         }
     });
     pic = newCanvas(boundingBox.extent());
     ctx = pic.getContext('2d');
-    this.children.forEach(function (child) {
+    this.children.forEach(child => {
         var pos = child.fullBounds().origin;
         if (child.isVisible) {
             ctx.drawImage(
@@ -6880,7 +6880,6 @@ ScriptsMorph.prototype.addComment = function () {
 // ScriptsMorph undrop / redrop
 
 ScriptsMorph.prototype.undrop = function () {
-    var myself = this;
     if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.lastRecord) {return; }
     if (!this.dropRecord.situation) {
@@ -6892,16 +6891,15 @@ ScriptsMorph.prototype.undrop = function () {
         this.dropRecord.lastOrigin,
         null,
         this.recoverLastDrop(),
-        function () {
-            myself.updateToolbar();
-            myself.isAnimating = false;
+        () => {
+            this.updateToolbar();
+            this.isAnimating = false;
         }
     );
     this.dropRecord = this.dropRecord.lastRecord;
 };
 
 ScriptsMorph.prototype.redrop = function () {
-    var myself = this;
     if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
     this.dropRecord = this.dropRecord.nextRecord;
@@ -6915,9 +6913,9 @@ ScriptsMorph.prototype.redrop = function () {
             this.dropRecord.situation,
             null,
             this.recoverLastDrop(true),
-            function () {
-                myself.updateToolbar();
-                myself.isAnimating = false;
+            () => {
+                this.updateToolbar();
+                this.isAnimating = false;
             }
         );
     }
@@ -6967,13 +6965,12 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
             } else if (rec.lastDropTarget.loc === 'wrap') {
                 var cslot = detect( // could be cached...
                     rec.lastDroppedBlock.inputs(), // ...although these are
-                    function (each) {return each instanceof CSlotMorph; }
+                    each => each instanceof CSlotMorph
                 );
                 if (rec.lastWrapParent instanceof CommandBlockMorph) {
                     if (forRedrop) {
-                        onBeforeDrop = function () {
+                        onBeforeDrop = () =>
                             cslot.nestedBlock(rec.lastDropTarget.element);
-                        };
                     } else {
                         rec.lastWrapParent.nextBlock(
                             rec.lastDropTarget.element
@@ -6981,9 +6978,8 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                     }
                 } else if (rec.lastWrapParent instanceof CommandSlotMorph) {
                     if (forRedrop) {
-                        onBeforeDrop = function () {
+                        onBeforeDrop = () =>
                             cslot.nestedBlock(rec.lastDropTarget.element);
-                        };
                     } else {
                         rec.lastWrapParent.nestedBlock(
                             rec.lastDropTarget.element
@@ -6995,8 +6991,8 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
 
                 // fix zebra coloring.
                 // this could be generalized into the fixBlockColor mechanism
-                rec.lastDropTarget.element.blockSequence().forEach(
-                    function (cmd) {cmd.fixBlockColor(); }
+                rec.lastDropTarget.element.blockSequence().forEach(cmd =>
+                    cmd.fixBlockColor()
                 );
                 cslot.fixLayout();
             }
@@ -7009,14 +7005,14 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
             );
             rec.lastDropTarget.fixBlockColor(null, true);
             if (rec.lastPreservedBlocks) {
-                rec.lastPreservedBlocks.forEach(function (morph) {
-                    morph.destroy();
-                });
+                rec.lastPreservedBlocks.forEach(morph =>
+                    morph.destroy()
+                );
             }
         }
     } else if (dropped instanceof CommentMorph) {
         if (forRedrop && rec.lastDropTarget) {
-            onBeforeDrop = function () {
+            onBeforeDrop = () => {
                 rec.lastDropTarget.element.comment = dropped;
                 dropped.block = rec.lastDropTarget.element;
                 dropped.align();
@@ -7085,7 +7081,6 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
 
 ScriptsMorph.prototype.addToolbar = function () {
     var toolBar = new AlignmentMorph(),
-    	myself = this,
         shade = new Color(140, 140, 140);
 
     toolBar.respectHiddens = true;
@@ -7123,9 +7118,7 @@ ScriptsMorph.prototype.addToolbar = function () {
             new SymbolMorph('keyboard', 12),
             new SymbolMorph('keyboardFilled', 12)
         ],
-		function () { // query
-			return !isNil(myself.focus);
-		}
+		() => !isNil(this.focus) // query
     );
     toolBar.keyboardButton.alpha = 0.2;
     toolBar.keyboardButton.padding = 4;
@@ -7175,7 +7168,7 @@ ScriptsMorph.prototype.updateToolbar = function () {
     }
 	if (detect(
 			sf.toolBar.children,
-            function (each) {return each.isVisible; }
+            each => each.isVisible
     )) {
 	    sf.toolBar.fixLayout();
 	    sf.adjustToolBar();
