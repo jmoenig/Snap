@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-24';
+modules.gui = '2020-April-29';
 
 // Declarations
 
@@ -324,11 +324,11 @@ IDE_Morph.prototype.openIn = function (world) {
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
-    this.cloud.message = function (string) {
+    this.cloud.message = (string) => {
         var m = new MenuMorph(null, string),
             intervalHandle;
         m.popUpCenteredInWorld(world);
-        intervalHandle = setInterval(function () {
+        intervalHandle = setInterval(() => {
             m.destroy();
             clearInterval(intervalHandle);
         }, 2000);
@@ -336,7 +336,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
-    world.reactToDropOf = function (morph) {
+    world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
         		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
@@ -414,10 +414,8 @@ IDE_Morph.prototype.openIn = function (world) {
                 hash = decodeURIComponent(hash);
             }
             if (contains(
-                    ['project', 'blocks', 'sprites', 'snapdata'].map(
-                        function (each) {
-                            return hash.substr(0, 8).indexOf(each);
-                        }
+                    ['project', 'blocks', 'sprites', 'snapdata'].map(each =>
+                        hash.substr(0, 8).indexOf(each)
                     ),
                     1
                 )) {
@@ -462,13 +460,11 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                     var msg;
                     myself.nextSteps([
-                        function () {
-                            msg = myself.showMessage('Opening project...');
-                        },
-                        function () {
+                        () => msg = myself.showMessage('Opening project...'),
+                        () => {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
                             } else if (
@@ -478,7 +474,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             }
                             myself.hasChangedMedia = true;
                         },
-                        function () {
+                        () => {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
@@ -501,13 +497,11 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                     var msg;
                     myself.nextSteps([
-                        function () {
-                            msg = myself.showMessage('Opening project...');
-                        },
-                        function () {
+                        () => msg = myself.showMessage('Opening project...'),
+                        () => {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
                             } else if (
@@ -517,7 +511,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             }
                             myself.hasChangedMedia = true;
                         },
-                        function () {
+                        () => {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
@@ -537,7 +531,7 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                 	myself.saveXMLAs(projectData, dict.ProjectName);
                  	myself.showMessage(
                   	   'Saved project\n' + dict.ProjectName,
@@ -719,26 +713,24 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.color = this.frameColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
 
-    /*
-    this.controlBar.mouseClickLeft = function () { // is this needed?
+    // let users manually enforce re-layout when changing orientation
+    // on mobile devices
+    this.controlBar.mouseClickLeft = function () {
         this.world().fillPage();
     };
-    */
 
     this.add(this.controlBar);
 
     //smallStageButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleStageSize',
         [
             new SymbolMorph('smallStage', 14),
             new SymbolMorph('normalStage', 14)
         ],
-        function () {  // query
-            return myself.isSmallStage;
-        }
+        () => this.isSmallStage // query
     );
 
     button.corner = 12;
@@ -761,15 +753,13 @@ IDE_Morph.prototype.createControlBar = function () {
     //appModeButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleAppMode',
         [
             new SymbolMorph('fullScreen', 14),
             new SymbolMorph('normalScreen', 14)
         ],
-        function () {  // query
-            return myself.isAppMode;
-        }
+        () => this.isAppMode // query
     );
 
     button.corner = 12;
@@ -792,15 +782,13 @@ IDE_Morph.prototype.createControlBar = function () {
     //steppingButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleSingleStepping',
         [
             new SymbolMorph('footprints', 16),
             new SymbolMorph('footprints', 16)
         ],
-        function () {  // query
-            return Process.prototype.enableSingleStepping;
-        }
+        () => Process.prototype.enableSingleStepping // query
     );
 
     button.corner = 12;
@@ -830,12 +818,10 @@ IDE_Morph.prototype.createControlBar = function () {
             new SymbolMorph('octagon', 14),
             new SymbolMorph('square', 14)
         ],
-        function () {  // query
-            return myself.stage ?
-                    myself.stage.enableCustomHatBlocks &&
-                        myself.stage.threads.pauseCustomHatBlocks
-                        : true;
-        }
+        () => this.stage ? // query
+                myself.stage.enableCustomHatBlocks &&
+                    myself.stage.threads.pauseCustomHatBlocks
+            : true
     );
 
     button.corner = 12;
@@ -864,9 +850,7 @@ IDE_Morph.prototype.createControlBar = function () {
             new SymbolMorph('pause', 12),
             new SymbolMorph('pointRight', 14)
         ],
-        function () {  // query
-            return myself.isPaused();
-        }
+        () => this.isPaused() // query
     );
 
     button.corner = 12;
@@ -916,9 +900,9 @@ IDE_Morph.prototype.createControlBar = function () {
         6,
         'horizontal'
     );
-    slider.action = function (num) {
+    slider.action = (num) => {
         Process.prototype.flashTime = (num - 1) / 100;
-        myself.controlBar.refreshResumeSymbol();
+        this.controlBar.refreshResumeSymbol();
     };
     // slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
     slider.color = new Color(153, 255, 213);
@@ -997,8 +981,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
-        [stopButton, pauseButton, startButton].forEach(
-            function (button) {
+        [stopButton, pauseButton, startButton].forEach(button => {
                 button.setCenter(myself.controlBar.center());
                 button.setRight(x);
                 x -= button.width();
@@ -1011,8 +994,7 @@ IDE_Morph.prototype.createControlBar = function () {
             myself.right() - StageMorph.prototype.dimensions.x *
                 (myself.isSmallStage ? myself.stageRatio : 1)
         );
-        [stageSizeButton, appModeButton].forEach(
-            function (button) {
+        [stageSizeButton, appModeButton].forEach(button => {
                 x += padding;
                 button.setCenter(myself.controlBar.center());
                 button.setLeft(x);
