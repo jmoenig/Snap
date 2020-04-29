@@ -5605,10 +5605,8 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
     // private - answer the spec of the slot I'm in, if any
     var parts, idx;
     if (this.parent instanceof BlockMorph) {
-        parts = this.parent.parts().filter(
-            function (part) {
-                return !(part instanceof BlockHighlightMorph);
-            }
+        parts = this.parent.parts().filter(part =>
+            !(part instanceof BlockHighlightMorph)
         );
         idx = parts.indexOf(this);
         if (idx !== -1) {
@@ -6255,9 +6253,9 @@ RingMorph.prototype.embed = function (aBlock, inputNames) {
     // set my inputs, if any
     slot = this.parts()[1];
     if (inputNames) {
-        inputNames.forEach(function (name) {
-            slot.addInput(name);
-        });
+        inputNames.forEach(name =>
+            slot.addInput(name)
+        );
     }
 
     // ensure zebra coloring
@@ -6381,15 +6379,15 @@ ScriptsMorph.prototype.fullCopy = function () {
     if (this.focus) {
         this.focus.stopEditing();
     }
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         if (!morph.block) { // omit anchored comments
             child = morph.fullCopy();
             cpy.add(child);
             child.setPosition(morph.position().subtract(pos));
             if (child instanceof BlockMorph) {
-                child.allComments().forEach(function (comment) {
-                    comment.align(child);
-                });
+                child.allComments().forEach(comment =>
+                    comment.align(child)
+                );
             }
         }
     });
@@ -6547,19 +6545,19 @@ ScriptsMorph.prototype.showCSlotWrapFeedback = function (srcBlock, trgBlock) {
 ScriptsMorph.prototype.closestInput = function (reporter, hand) {
     // passing the hand is optional (when dragging reporters)
     var fb = reporter.fullBoundsNoShadow(),
-        stacks = this.children.filter(function (child) {
-            return (child instanceof BlockMorph) &&
-                (child.fullBounds().intersects(fb));
-        }),
+        stacks = this.children.filter(child =>
+            (child instanceof BlockMorph) &&
+                (child.fullBounds().intersects(fb))
+        ),
         blackList = reporter.allInputs(),
         handPos,
         target,
         all;
 
     all = [];
-    stacks.forEach(function (stack) {
-        all = all.concat(stack.allInputs());
-    });
+    stacks.forEach(stack =>
+        all = all.concat(stack.allInputs())
+    );
     if (all.length === 0) {return null; }
 
     function touchingVariadicArrowsIfAny(inp, point) {
@@ -6577,18 +6575,17 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
             handPos = hand.position();
             target = detect(
                 all,
-                function (input) {
-                    return (input instanceof InputSlotMorph
-                            || (input instanceof ArgMorph
-                                && !(input instanceof CommandSlotMorph)
-                                && !(input instanceof MultiArgMorph))
-                            || (input instanceof RingMorph
-                                && !input.contents())
-                            || input.isEmptySlot())
-                        && !input.isLocked()
-                        && input.bounds.containsPoint(handPos)
-                        && !contains(blackList, input);
-                }
+                input => (input instanceof InputSlotMorph ||
+                        (input instanceof ArgMorph &&
+                            !(input instanceof CommandSlotMorph) &&
+                            !(input instanceof MultiArgMorph)
+                        ) ||
+                        (input instanceof RingMorph && !input.contents()) ||
+                        input.isEmptySlot()
+                    ) &&
+                        !input.isLocked() &&
+                            input.bounds.containsPoint(handPos) &&
+                                !contains(blackList, input)
             );
             if (target) {
                 return target;
@@ -6596,17 +6593,15 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
         }
         target = detect(
             all,
-            function (input) {
-                return (input instanceof InputSlotMorph
-                        || input instanceof ArgMorph
-                        || (input instanceof RingMorph
-                            && !input.contents())
-                        || input.isEmptySlot())
-                    && !input.isLocked()
-                    && input.bounds.intersects(fb)
-                    && !contains(blackList, input)
-                    && touchingVariadicArrowsIfAny(input);
-            }
+            input => (input instanceof InputSlotMorph ||
+                    input instanceof ArgMorph ||
+                    (input instanceof RingMorph && !input.contents()) ||
+                    input.isEmptySlot()
+                ) &&
+                    !input.isLocked() &&
+                        input.bounds.intersects(fb) &&
+                            !contains(blackList, input) &&
+                                touchingVariadicArrowsIfAny(input)
         );
         if (target) {
             return target;
@@ -6617,13 +6612,11 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
         handPos = hand.position();
         target = detect(
             all,
-            function (input) {
-                return (input !== reporter)
-                    && !input.isLocked()
-                    && input.bounds.containsPoint(handPos)
-                    && !(input.parent instanceof PrototypeHatBlockMorph)
-                    && !contains(blackList, input);
-            }
+            input => (input !== reporter) &&
+                !input.isLocked() &&
+                    input.bounds.containsPoint(handPos) &&
+                        !(input.parent instanceof PrototypeHatBlockMorph) &&
+                            !contains(blackList, input)
         );
         if (target) {
             return target;
@@ -6631,32 +6624,29 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
     }
     return detect(
         all,
-        function (input) {
-            return (input !== reporter)
-                && !input.isLocked()
-                && input.fullBounds().intersects(fb)
-                && !(input.parent instanceof PrototypeHatBlockMorph)
-                && !contains(blackList, input);
-        }
+        input => (input !== reporter) &&
+            !input.isLocked() &&
+                input.fullBounds().intersects(fb) &&
+                    !(input.parent instanceof PrototypeHatBlockMorph) &&
+                        !contains(blackList, input)
     );
 };
 
 ScriptsMorph.prototype.closestBlock = function (comment, hand) {
     // passing the hand is optional (when dragging comments)
     var fb = comment.bounds,
-        stacks = this.children.filter(function (child) {
-            return (child instanceof BlockMorph) &&
-                (child.fullBounds().intersects(fb));
-        }),
+        stacks = this.children.filter(child =>
+            (child instanceof BlockMorph) &&
+                (child.fullBounds().intersects(fb))
+        ),
         handPos,
         target,
         all;
 
     all = [];
-    stacks.forEach(function (stack) {
+    stacks.forEach(stack => {
         all = all.concat(stack.allChildren().slice(0).reverse().filter(
-            function (child) {return child instanceof BlockMorph &&
-                !child.isTemplate; }
+            child => child instanceof BlockMorph && !child.isTemplate
         ));
     });
     if (all.length === 0) {return null; }
@@ -6665,11 +6655,9 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
         handPos = hand.position();
         target = detect(
             all,
-            function (block) {
-                return !block.comment
-                    && !block.isPrototype
-                    && block.bounds.containsPoint(handPos);
-            }
+            block => !block.comment &&
+                !block.isPrototype &&
+                    block.bounds.containsPoint(handPos)
         );
         if (target) {
             return target;
@@ -6677,11 +6665,9 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
     }
     return detect(
         all,
-        function (block) {
-            return !block.comment
-                && !block.isPrototype
-                && block.bounds.intersects(fb);
-        }
+        block => !block.comment &&
+            !block.isPrototype &&
+                block.bounds.intersects(fb)
     );
 };
 
