@@ -6735,10 +6735,10 @@ ScriptsMorph.prototype.userMenu = function () {
             if (shiftClicked) {
                 menu.addItem(
                     "clear undrop queue",
-                    function () {
-                        myself.dropRecord = null;
-                        myself.clearDropInfo();
-                        myself.recordDrop();
+                    () => {
+                        this.dropRecord = null;
+                        this.clearDropInfo();
+                        this.recordDrop();
                     },
                     'forget recorded block drops\non this pane',
                     new Color(100, 0, 0)
@@ -6758,41 +6758,37 @@ ScriptsMorph.prototype.userMenu = function () {
     if (ide) {
         menu.addLine();
         if (!blockEditor && obj.exemplar) {
-                addOption(
-                    'inherited',
-                    function () {
-                        obj.toggleInheritanceForAttribute('scripts');
-                    },
-                    obj.inheritsAttribute('scripts'),
-                    'uncheck to\ndisinherit',
-                    localize('check to inherit\nfrom')
-                        + ' ' + obj.exemplar.name
-                );
+            addOption(
+                'inherited',
+                () => obj.toggleInheritanceForAttribute('scripts'),
+                obj.inheritsAttribute('scripts'),
+                'uncheck to\ndisinherit',
+                localize('check to inherit\nfrom')
+                    + ' ' + obj.exemplar.name
+            );
         }
         menu.addItem(
             'make a block...',
-            function () {
-                new BlockDialogMorph(
-                    null,
-                    function (definition) {
-                        if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                stage.globalBlocks.push(definition);
-                            } else {
-                                obj.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, obj).popUp();
+            () => new BlockDialogMorph(
+                null,
+                definition => {
+                    if (definition.spec !== '') {
+                        if (definition.isGlobal) {
+                            stage.globalBlocks.push(definition);
+                        } else {
+                            obj.customBlocks.push(definition);
                         }
-                    },
-                    myself
-                ).prompt(
-                    'Make a block',
-                    null,
-                    myself.world()
-                );
-            }
+                        ide.flushPaletteCache();
+                        ide.refreshPalette();
+                        new BlockEditorMorph(definition, obj).popUp();
+                    }
+                },
+                this
+            ).prompt(
+                'Make a block',
+                null,
+                myself.world()
+            )
         );
     }
     return menu;
