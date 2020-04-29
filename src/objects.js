@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-28';
+modules.objects = '2020-April-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -1967,7 +1967,8 @@ SpriteMorph.prototype.render = function (ctx) {
         ctx.restore();
 
     } else {
-        SpriteMorph.uber.render.call(this, ctx);
+        facing = isFlipped ? -90 : facing;
+        SpriteMorph.uber.render.call(this, ctx, facing);
 
         if (isLoadingCostume) { // retry until costume is done loading
             cst = this.costume;
