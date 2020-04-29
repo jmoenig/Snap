@@ -1367,7 +1367,11 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
 
     // Try to batch children for the inputs if appropriate. This is
     // used with StructInputSlotMorphs
-    if (inputs.length < model.children.length) {
+    const savedInputCount = model.children
+        .filter(input => input.tag !=='comment')
+        .length;
+    const expectedInputCount = inputs.length;
+    if (expectedInputCount < savedInputCount) {
         var struct = detect(inputs, function(input) {
                 return input instanceof StructInputSlotMorph;
             }),
@@ -1379,7 +1383,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
             // Set the contents for the entire batch
             var self = this,
                 batch,
-                batchLength = model.children.length - inputs.length,
+                batchLength = savedInputCount - expectedInputCount,
                 structVals;
 
             inputs.splice(structIndex, 1);
