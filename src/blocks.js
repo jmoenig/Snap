@@ -3205,7 +3205,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
 
     // place surplus blocks on scipts
     if (scripts && surplus.length) {
-        surplus.forEach(function (blk) {
+        surplus.forEach(blk => {
             blk.moveBy(10);
             scripts.add(blk);
         });
@@ -3219,13 +3219,12 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     var i = 0,
         old,
         nb,
-        leftOver = [],
-        myself = this;
+        leftOver = [];
 
-    this.inputs().forEach(function (inp) {
+    this.inputs().forEach(inp => {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph) {
-            myself.replaceInput(inp, old.fullCopy());
+            this.replaceInput(inp, old.fullCopy());
         } else if (old && inp instanceof InputSlotMorph) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
@@ -3313,9 +3312,9 @@ BlockMorph.prototype.showHelp = function () {
             comment = comment.fullCopy();
             comment.contents.parse();
             help = '';
-            comment.contents.lines.forEach(function (line) {
-                help = help + '\n' + line;
-            });
+            comment.contents.lines.forEach(line =>
+                help = help + '\n' + line
+            );
             new DialogBoxMorph().inform(
                 'Help',
                 help.substr(1),
