@@ -9896,15 +9896,15 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     this.progress = 3;
     this.rerender();
     this.nextSteps ([
-        function () {
+        () => {
             this.progress = 2;
             this.rerender();
         },
-        function () {
+        () => {
             this.progress = 1;
             this.rerender();
         },
-        function () {
+        () => {
             this.progress = 0;
             this.rerender();
         },
@@ -9982,9 +9982,7 @@ BooleanSlotMorph.prototype.mapTrueToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
-        function (code) {
-            StageMorph.prototype.codeMappings['true'] = code;
-        },
+        code => StageMorph.prototype.codeMappings['true'] = code,
         this
     ).promptCode(
         'Code mapping - true',
@@ -9997,9 +9995,7 @@ BooleanSlotMorph.prototype.mapFalseToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
-        function (code) {
-            StageMorph.prototype.codeMappings['false'] = code;
-        },
+        code => StageMorph.prototype.codeMappings['false'] = code,
         this
     ).promptCode(
         'Code mapping - false',
