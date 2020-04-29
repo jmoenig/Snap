@@ -2179,10 +2179,8 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     if (
         detect(
             this.world().children,
-            function (morph) {
-                return morph instanceof BlockEditorMorph ||
-                    morph instanceof BlockDialogMorph;
-            }
+            morph => morph instanceof BlockEditorMorph ||
+                morph instanceof BlockDialogMorph
         )
     ) {
         return;
@@ -2401,8 +2399,7 @@ IDE_Morph.prototype.addNewSprite = function () {
 
 IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        cos = new Costume(),
-        myself = this;
+        cos = new Costume();
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
@@ -2414,8 +2411,8 @@ IDE_Morph.prototype.paintNewSprite = function () {
         this.world(),
         this,
         true,
-        function () {myself.removeSprite(sprite); },
-        function () {
+        () => this.removeSprite(sprite),
+        () => {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
         }
@@ -2424,8 +2421,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
 
 IDE_Morph.prototype.newCamSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        camDialog,
-        myself = this;
+        camDialog;
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
@@ -2437,8 +2433,8 @@ IDE_Morph.prototype.newCamSprite = function () {
     camDialog = new CamSnapshotDialogMorph(
         this,
         sprite,
-        function () { myself.removeSprite(sprite); },
-        function (costume) {
+        () => this.removeSprite(sprite),
+        function (costume) { // needs to be "function" to it can access "this"
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
             this.close();
