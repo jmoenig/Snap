@@ -2997,9 +2997,9 @@ BlockMorph.prototype.developersMenu = function () {
     var menu = BlockMorph.uber.developersMenu.call(this);
     menu.addLine();
     menu.addItem("delete block", 'deleteBlock');
-    menu.addItem("spec...", function () {
-
-        new DialogBoxMorph(
+    menu.addItem(
+        "spec...",
+        () => new DialogBoxMorph(
             this,
             this.userSetSpec,
             this
@@ -3007,8 +3007,8 @@ BlockMorph.prototype.developersMenu = function () {
             menu.title + '\nspec',
             this.blockSpec,
             this.world()
-        );
-    });
+        )
+    );
     return menu;
 };
 
@@ -3068,7 +3068,7 @@ BlockMorph.prototype.deleteBlock = function () {
         if (nb) {
             scripts.add(nb);
         }
-        this.inputs().forEach(function (inp) {
+        this.inputs().forEach(inp => {
             if (inp instanceof BlockMorph) {
                 scripts.add(inp);
             }
@@ -3167,24 +3167,21 @@ BlockMorph.prototype.unringify = function () {
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
-    var menu, oldInputs, myself,
+    var menu, oldInputs,
         target = this.selectForEdit(); // copy-on-edit
     if (target !== this) {
         return this.relabel.call(target, alternativeSelectors);
     }
     menu = new MenuMorph(this);
     oldInputs = this.inputs();
-    myself = this;
-    alternativeSelectors.forEach(function (sel) {
+    alternativeSelectors.forEach(sel => {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block.fullImage(),
-            function () {
-                myself.setSelector(sel);
-            }
+            () => this.setSelector(sel)
         );
     });
     menu.popup(this.world(), this.bottomLeft().subtract(new Point(
