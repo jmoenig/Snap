@@ -1174,7 +1174,6 @@ IDE_Morph.prototype.createCategories = function () {
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
-    var myself = this;
 
     if (this.palette) {
         this.palette.destroy();
@@ -1191,9 +1190,9 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         /* commented out for now
         this.palette.toolBar = new PushButtonMorph(
             this,
-            function () {
-                myself.refreshPalette();
-                myself.palette.adjustScrollBars();
+            () => {
+                this.refreshPalette();
+                this.palette.adjustScrollBars();
             },
             new SymbolMorph("magnifierOutline", 16)
         );
@@ -1212,19 +1211,19 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
-    this.palette.reactToDropOf = function (droppedMorph, hand) {
+    this.palette.reactToDropOf = (droppedMorph, hand) => {
         if (droppedMorph instanceof DialogBoxMorph) {
-            myself.world().add(droppedMorph);
+            this.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
-            myself.removeSprite(droppedMorph);
+            this.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
-            myself.removeSprite(droppedMorph.object);
+            this.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            myself.currentSprite.wearCostume(null);
+            this.currentSprite.wearCostume(null);
             droppedMorph.perish();
         } else if (droppedMorph instanceof BlockMorph) {
-            myself.stage.threads.stopAllForBlock(droppedMorph);
+            this.stage.threads.stopAllForBlock(droppedMorph);
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
                 hand.grabOrigin.origin.clearDropInfo();
                 hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
@@ -1236,7 +1235,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         }
     };
 
-    this.palette.contents.reactToDropOf = function (droppedMorph) {
+    this.palette.contents.reactToDropOf = (droppedMorph) => {
         // for "undrop" operation
         if (droppedMorph instanceof BlockMorph) {
             droppedMorph.destroy();
