@@ -3629,9 +3629,9 @@ BlockMorph.prototype.doRefactorBlockParameter = function (
         editor = this.parentThatIsA(BlockEditorMorph),
         scripts = editor.body.contents;
 
-    if (definer.anyChild(function (any) {
-        return (any.blockSpec === newName);
-    })) {
+    if (definer.anyChild(any =>
+            any.blockSpec === newName
+    )) {
         this.varExistsError(editor.target.parentThatIsA(IDE_Morph));
         return;
     }
@@ -3643,9 +3643,9 @@ BlockMorph.prototype.doRefactorBlockParameter = function (
         return;
     }
 
-    scripts.children.forEach(function (script) {
-        script.refactorVarInStack(oldName, newName);
-    });
+    scripts.children.forEach(script =>
+        script.refactorVarInStack(oldName, newName)
+    );
 };
 
 BlockMorph.prototype.doRefactorRingParameter = function (
@@ -3737,12 +3737,12 @@ BlockMorph.prototype.doRefactorSpriteVar = function (
                 newName,
                 false
             );
-            receiver.customBlocks.forEach(function (eachBlock) {
+            receiver.customBlocks.forEach(eachBlock =>
                 eachBlock.body.expression.refactorVarInStack(
                     oldName,
                     newName
-                );
-            });
+                )
+            );
         }
     }
 
@@ -3764,14 +3764,11 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
     if (!isNil(ide.globalVariables.vars[newName])) {
         this.varExistsError(ide);
         return;
-    } else if (
-            detect(
-                stage.children,
-                function (any) {
-                    return any instanceof SpriteMorph &&
-                        any.hasSpriteVariable(newName);
-                })
-            ) {
+    } else if (detect(
+        stage.children,
+        any => any instanceof SpriteMorph &&
+            any.hasSpriteVariable(newName)
+    )) {
         this.varExistsError(ide, 'as a sprite local variable');
         return;
     } else {
@@ -3794,7 +3791,7 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
                 newName,
                 true
             );
-            stage.globalBlocks.forEach(function (eachBlock) {
+            stage.globalBlocks.forEach(eachBlock => {
                 if (eachBlock.body) {
                     eachBlock.body.expression.refactorVarInStack(
                         oldName,
@@ -3802,21 +3799,18 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
                     );
                 }
             });
-            stage.forAllChildren(function (child) {
+            stage.forAllChildren(child => {
                 if (child instanceof SpriteMorph) {
                     child.refactorVariableInstances(
                         oldName,
                         newName,
                         true
                     );
-                    child.customBlocks.forEach(
-                        function (eachBlock) {
-                            eachBlock.body.expression
-                                .refactorVarInStack(
-                                    oldName,
-                                    newName
-                                );
-                        }
+                    child.customBlocks.forEach(eachBlock =>
+                        eachBlock.body.expression.refactorVarInStack(
+                            oldName,
+                            newName
+                        )
                     );
                 }
             });
