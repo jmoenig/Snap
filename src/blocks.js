@@ -3869,13 +3869,13 @@ BlockMorph.prototype.scriptPic = function () {
         fb = this.stackFullBounds(),
         pic = newCanvas(fb.extent()),
         ctx = pic.getContext('2d');
-    this.allComments().forEach(function (comment) {
+    this.allComments().forEach(comment =>
         ctx.drawImage(
             comment.fullImage(),
             comment.fullBounds().left() - fb.left(),
             comment.top() - fb.top()
-        );
-    });
+        )
+    );
     ctx.drawImage(scr, 0, 0);
     return pic;
 };
@@ -4087,10 +4087,8 @@ BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
 
 BlockMorph.prototype.getHighlight = function () {
     var highlights;
-    highlights = this.children.slice(0).reverse().filter(
-        function (child) {
-            return child instanceof BlockHighlightMorph;
-        }
+    highlights = this.children.slice(0).reverse().filter(child =>
+        child instanceof BlockHighlightMorph
     );
     if (highlights.length !== 0) {
         return highlights[0];
@@ -4210,12 +4208,11 @@ BlockMorph.prototype.fixLabelColor = function () {
 };
 
 BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
-    var myself = this;
-    this.children.forEach(function (morph) {
+    this.children.forEach(morph => {
         if (morph instanceof CommandBlockMorph) {
             morph.fixBlockColor(null, isForced);
         } else if (morph instanceof SyntaxElementMorph) {
-            morph.fixBlockColor(myself, isForced);
+            morph.fixBlockColor(this, isForced);
             if (morph instanceof BooleanSlotMorph) {
                 morph.fixLayout();
             }
@@ -4229,9 +4226,7 @@ BlockMorph.prototype.setCategory = function (aString) {
 };
 
 BlockMorph.prototype.hasLabels = function () {
-    return this.children.some(function (any) {
-        return any instanceof StringMorph;
-    });
+    return this.children.some(any => any instanceof StringMorph);
 };
 
 // BlockMorph copying
