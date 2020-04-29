@@ -11908,9 +11908,7 @@ RingReporterSlotMorph.prototype.nestedBlock = function (block) {
     } else {
         return detect(
             this.children,
-            function (child) {
-                return child instanceof BlockMorph;
-            }
+            child => child instanceof BlockMorph
         );
     }
 };
@@ -12300,8 +12298,8 @@ function CommentMorph(contents) {
 }
 
 CommentMorph.prototype.init = function (contents) {
-    var myself = this,
-        scale = SyntaxElementMorph.prototype.scale;
+    var scale = SyntaxElementMorph.prototype.scale;
+
     this.block = null; // optional anchor block
     this.stickyOffset = null; // not to be persisted
     this.isCollapsed = false;
@@ -12317,7 +12315,7 @@ CommentMorph.prototype.init = function (contents) {
         'down',
         this.fontSize
     );
-    this.arrow.mouseClickLeft = function () {myself.toggleExpand(); };
+    this.arrow.mouseClickLeft = () => this.toggleExpand();
     this.contents = new TextMorph(
         contents || localize('add comment here...'),
         this.fontSize
@@ -12394,8 +12392,7 @@ CommentMorph.prototype.layoutChanged = function () {
 
 CommentMorph.prototype.fixLayout = function () {
     var label,
-        tw = this.contents.width() + 2 * this.padding,
-        myself = this;
+        tw = this.contents.width() + 2 * this.padding;
 
     if (this.title) {
         this.title.destroy();
@@ -12412,9 +12409,7 @@ CommentMorph.prototype.fixLayout = function () {
             null, // style (sans-serif)
             true // bold
         );
-        label.rootForGrab = function () {
-            return myself;
-        };
+        label.rootForGrab = () => this;
         this.title.add(label);
         this.title.setHeight(label.height());
         this.title.setWidth(
@@ -12452,16 +12447,15 @@ CommentMorph.prototype.fixLayout = function () {
 // CommentMorph menu:
 
 CommentMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this),
-        myself = this;
+    var menu = new MenuMorph(this);
 
     menu.addItem(
         "duplicate",
-        function () {
-            var dup = myself.fullCopy(),
-                ide = myself.parentThatIsA(IDE_Morph),
-                blockEditor = myself.parentThatIsA(BlockEditorMorph),
-                world = myself.world();
+        () => {
+            var dup = this.fullCopy(),
+                ide = this.parentThatIsA(IDE_Morph),
+                blockEditor = this.parentThatIsA(BlockEditorMorph),
+                world = this.world();
             dup.pickUp(world);
             // register the drop-origin, so the comment can
             // slide back to its former situation if dropped
@@ -12481,10 +12475,10 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem("delete", 'userDestroy');
     menu.addItem(
         "comment pic...",
-        function () {
-            var ide = myself.parentThatIsA(IDE_Morph);
+        () => {
+            var ide = this.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
-                myself.fullImage(),
+                this.fullImage(),
                 (ide.projectName || localize('untitled')) + ' ' +
                     localize('comment pic')
             );
@@ -12575,14 +12569,14 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
         this.setTop(this.block.top() + this.block.corner);
         tp = this.top();
         bottom = this.bottom();
-        affectedBlocks = top.allChildren().filter(function (child) {
-            return child instanceof BlockMorph &&
+        affectedBlocks = top.allChildren().filter(child =>
+            child instanceof BlockMorph &&
                 child.bottom() > tp &&
-                child.top() < bottom;
-        });
+                    child.top() < bottom
+        );
         rightMost = Math.max.apply(
             null,
-            affectedBlocks.map(function (block) {return block.right(); })
+            affectedBlocks.map(block => block.right())
         );
 
         this.setLeft(rightMost + 5);
@@ -12612,7 +12606,7 @@ CommentMorph.prototype.startFollowing = function (topBlock, world) {
     world.add(this);
     this.addShadow();
     this.stickyOffset = this.position().subtract(this.block.position());
-    this.step = function () {
+    this.step = () => {
         if (!this.block) { // kludge - only needed for "redo"
             this.stopFollowing();
             return;
