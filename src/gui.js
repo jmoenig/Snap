@@ -1104,17 +1104,15 @@ IDE_Morph.prototype.createCategories = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            function () {
+            () => {
                 myself.currentCategory = category;
-                myself.categories.children.forEach(function (each) {
-                    each.refresh();
-                });
+                myself.categories.children.forEach(each =>
+                    each.refresh()
+                );
                 myself.refreshPalette(true);
             },
             category[0].toUpperCase().concat(category.slice(1)), // label
-            function () {  // query
-                return myself.currentCategory === category;
-            },
+            () => myself.currentCategory === category, // query
             null, // env
             null, // hint
             labelWidth, // minWidth
@@ -1147,7 +1145,7 @@ IDE_Morph.prototype.createCategories = function () {
             row,
             col;
 
-        myself.categories.children.forEach(function (button) {
+        myself.categories.children.forEach(button => {
             i += 1;
             row = Math.ceil(i / 2);
             col = 2 - (i % 2);
@@ -1164,7 +1162,7 @@ IDE_Morph.prototype.createCategories = function () {
         );
     }
 
-    SpriteMorph.prototype.categories.forEach(function (cat) {
+    SpriteMorph.prototype.categories.forEach(cat => {
         if (!contains(['lists', 'other'], cat)) {
             addCategoryButton(cat);
         }
