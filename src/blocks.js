@@ -7179,20 +7179,20 @@ ScriptsMorph.prototype.updateToolbar = function () {
 
 ScriptsMorph.prototype.sortedElements = function () {
     // return all scripts and unattached comments
-    var scripts = this.children.filter(function (each) {
-        return each instanceof CommentMorph ? !each.block : true;
-    });
-    scripts.sort(function (a, b) {
+    var scripts = this.children.filter(each =>
+        each instanceof CommentMorph ? !each.block : true
+    );
+    scripts.sort((a, b) =>
         // make sure the prototype hat block always stays on top
-        return a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top();
-    });
+        a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top()
+    );
     return scripts;
 };
 
 // ScriptsMorph blocks layout fix
 
 ScriptsMorph.prototype.fixMultiArgs = function () {
-    this.forAllChildren(function (morph) {
+    this.forAllChildren(morph => {
         if (morph instanceof MultiArgMorph) {
             morph.fixLayout();
         }
@@ -7494,9 +7494,7 @@ CommandSlotMorph.prototype.nestedBlock = function (block) {
     } else {
         return detect(
             this.children,
-            function (child) {
-                return child instanceof CommandBlockMorph;
-            }
+            child => child instanceof CommandBlockMorph
         );
     }
 };
@@ -7584,18 +7582,20 @@ CommandSlotMorph.prototype.attach = function () {
     // for context menu demo and testing purposes
     // override inherited version to adjust new owner's layout
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose new parent:'),
-        myself = this;
+        menu = new MenuMorph(this, 'choose new parent:');
 
-    choices.forEach(function (each) {
-        menu.addItem(each.toString().slice(0, 50), function () {
-            each.add(myself);
-            myself.isDraggable = false;
-            if (each.fixLayout) {
-                each.fixLayout();
+    choices.forEach(each =>
+        menu.addItem(
+            each.toString().slice(0, 50),
+            () => {
+                each.add(this);
+                this.isDraggable = false;
+                if (each.fixLayout) {
+                    each.fixLayout();
+                }
             }
-        });
-    });
+        )
+    );
     if (choices.length > 0) {
         menu.popUpAtHand(this.world());
     }
@@ -8062,7 +8062,7 @@ CSlotMorph.prototype.mappedCode = function (definitions) {
         partLines = (part.toString()).split('\n'),
         rx = new RegExp('<#1>', 'g');
 
-    codeLines.forEach(function (codeLine, idx) {
+    codeLines.forEach((codeLine, idx) => {
         var prefix = '',
             indent;
         if (codeLine.trimLeft().indexOf('<#1>') === 0) {
@@ -8124,9 +8124,7 @@ CSlotMorph.prototype.loop = function () {
     if (this.isLoop) {
         return detect(
             this.children,
-            function (child) {
-                return child instanceof SymbolMorph;
-            }
+            child => child instanceof SymbolMorph
         );
     }
     return null;
@@ -8545,18 +8543,14 @@ InputSlotMorph.prototype.getSpec = function () {
 InputSlotMorph.prototype.contents = function () {
     return detect(
         this.children,
-        function (child) {
-            return (child instanceof StringMorph);
-        }
+        child => child instanceof StringMorph
     );
 };
 
 InputSlotMorph.prototype.arrow = function () {
     return detect(
         this.children,
-        function (child) {
-            return (child instanceof ArrowMorph);
-        }
+        child => child instanceof ArrowMorph
     );
 };
 
@@ -8719,35 +8713,32 @@ InputSlotMorph.prototype.messagesMenu = function () {
     var dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
-        myself = this,
         allNames = [];
 
-    stage.children.concat(stage).forEach(function (morph) {
+    stage.children.concat(stage).forEach(morph => {
         if (isSnapObject(morph)) {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
-    allNames.forEach(function (name) {
-        dict[name] = name;
-    });
+    allNames.forEach(name =>
+        dict[name] = name
+    );
     if (this.world().currentKey === 16) { // shift
         dict.__shout__go__ = ['__shout__go__'];
     }
     if (allNames.length > 0) {
         dict['~'] = null;
     }
-    dict['new...'] = function () {
-
+    dict['new...'] = () =>
         new DialogBoxMorph(
-            myself,
-            myself.setContents,
-            myself
+            this,
+            this.setContents,
+            this
         ).prompt(
             'Message name',
             null,
-            myself.world()
+            this.world()
         );
-    };
     return dict;
 };
 
