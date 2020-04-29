@@ -1496,8 +1496,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
 IDE_Morph.prototype.createSpriteEditor = function () {
     // assumes that the logo pane and the stage have already been created
-    var scripts = this.currentSprite.scripts,
-        myself = this;
+    var scripts = this.currentSprite.scripts;
 
     if (this.spriteEditor) {
         this.spriteEditor.destroy();
@@ -1550,11 +1549,11 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
         this.spriteEditor.acceptsDrops = true;
-        this.spriteEditor.reactToDropOf = function (droppedMorph) {
+        this.spriteEditor.reactToDropOf = (droppedMorph) => {
             if (droppedMorph instanceof DialogBoxMorph) {
-                myself.world().add(droppedMorph);
+                this.world().add(droppedMorph);
             } else if (droppedMorph instanceof SpriteMorph) {
-                myself.removeSprite(droppedMorph);
+                this.removeSprite(droppedMorph);
             } else {
                 droppedMorph.destroy();
             }
@@ -1660,7 +1659,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.add(cambutton);
         document.addEventListener(
             'cameraDisabled',
-            function (event) {
+            event => {
                 cambutton.disable();
                 cambutton.hint =
                     CamSnapshotDialogMorph.prototype.notSupportedMessage;
@@ -1692,17 +1691,14 @@ IDE_Morph.prototype.createCorral = function () {
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
 
-    frame.contents.wantsDropOf = function (morph) {
-        return morph instanceof SpriteIconMorph;
-    };
+    frame.contents.wantsDropOf = (morph) => morph instanceof SpriteIconMorph;
 
-    frame.contents.reactToDropOf = function (spriteIcon) {
-        myself.corral.reactToDropOf(spriteIcon);
-    };
+    frame.contents.reactToDropOf = (spriteIcon) =>
+        this.corral.reactToDropOf(spriteIcon);
 
     frame.alpha = 0;
 
-    this.sprites.asArray().forEach(function (morph) {
+    this.sprites.asArray().forEach(morph => {
         if (!morph.isTemporary) {
             frame.contents.add(new SpriteIconMorph(morph));
         }
@@ -1729,7 +1725,7 @@ IDE_Morph.prototype.createCorral = function () {
             max = this.frame.right(),
             start = this.frame.left();
 
-        this.frame.contents.children.forEach(function (icon) {
+        this.frame.contents.children.forEach(icon => {
             var w = icon.width();
 
             if (x + w > max) {
@@ -1749,20 +1745,18 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral.refresh = function () {
         this.stageIcon.refresh();
-        this.frame.contents.children.forEach(function (icon) {
-            icon.refresh();
-        });
+        this.frame.contents.children.forEach(icon =>
+            icon.refresh()
+        );
     };
 
-    this.corral.wantsDropOf = function (morph) {
-        return morph instanceof SpriteIconMorph;
-    };
+    this.corral.wantsDropOf = (morph) => morph instanceof SpriteIconMorph;
 
     this.corral.reactToDropOf = function (spriteIcon) {
         var idx = 1,
             pos = spriteIcon.position();
         spriteIcon.destroy();
-        this.frame.contents.children.forEach(function (icon) {
+        this.frame.contents.children.forEach(icon => {
             if (pos.gt(icon.position()) || pos.y > icon.bottom()) {
                 idx += 1;
             }
