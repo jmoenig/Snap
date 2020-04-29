@@ -4238,7 +4238,7 @@ BlockMorph.prototype.fullCopy = function () {
     if (this.instantiationSpec) {
         ans.setSpec(this.instantiationSpec);
     }
-    ans.allChildren().filter(function (block) {
+    ans.allChildren().filter(block => {
         if (block instanceof SyntaxElementMorph) {
             block.cachedInputs = null;
             if (block.isCustomBlock) {
@@ -4246,7 +4246,7 @@ BlockMorph.prototype.fullCopy = function () {
             }
         }
         return !isNil(block.comment);
-    }).forEach(function (block) {
+    }).forEach(block => {
         var cmnt = block.comment.fullCopy();
         block.comment = cmnt;
         cmnt.block = block;
@@ -4264,11 +4264,11 @@ BlockMorph.prototype.reactToTemplateCopy = function () {
 };
 
 BlockMorph.prototype.hasBlockVars = function () {
-    return this.anyChild(function (any) {
-        return any.isCustomBlock &&
+    return this.anyChild(any =>
+        any.isCustomBlock &&
             any.isGlobal &&
-            any.definition.variableNames.length;
-    });
+                any.definition.variableNames.length
+    );
 };
 
 // BlockMorph events
@@ -4368,28 +4368,27 @@ BlockMorph.prototype.situation = function () {
 // BlockMorph sticky comments
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
-    var myself = this;
-    this.allInputs().forEach(function (input) {
-        delete input.bindingID;
-    });
-    this.allComments().forEach(function (comment) {
-        comment.startFollowing(myself, hand.world);
-    });
+    this.allInputs().forEach(input =>
+        delete input.bindingID
+    );
+    this.allComments().forEach(comment =>
+        comment.startFollowing(this, hand.world)
+    );
 };
 
 BlockMorph.prototype.justDropped = function () {
     this.alpha = 1;
-    this.allComments().forEach(function (comment) {
-        comment.stopFollowing();
-    });
+    this.allComments().forEach(comment =>
+        comment.stopFollowing()
+    );
 };
 
 BlockMorph.prototype.allComments = function () {
-    return this.allChildren().filter(function (block) {
-        return !isNil(block.comment);
-    }).map(function (block) {
-        return block.comment;
-    });
+    return this.allChildren().filter(block =>
+        !isNil(block.comment)
+    ).map(block =>
+        block.comment
+    );
 };
 
 BlockMorph.prototype.destroy = function (justThis) {
@@ -4399,33 +4398,33 @@ BlockMorph.prototype.destroy = function (justThis) {
             this.comment.destroy();
         }
     } else {
-        this.allComments().forEach(function (comment) {
-            comment.destroy();
-        });
+        this.allComments().forEach(comment =>
+            comment.destroy()
+        );
     }
     BlockMorph.uber.destroy.call(this);
 };
 
 BlockMorph.prototype.stackHeight = function () {
     var fb = this.fullBounds(),
-        commentsBottom = Math.max(this.allComments().map(
-            function (comment) {return comment.bottom(); }
+        commentsBottom = Math.max(this.allComments().map(comment =>
+            comment.bottom()
         )) || this.bottom();
     return Math.max(fb.bottom(), commentsBottom) - fb.top();
 };
 
 BlockMorph.prototype.stackFullBounds = function () {
     var fb = this.fullBounds();
-    this.allComments().forEach(function (comment) {
-        fb.mergeWith(comment.bounds);
-    });
+    this.allComments().forEach(comment =>
+        fb.mergeWith(comment.bounds)
+    );
     return fb;
 };
 
 BlockMorph.prototype.stackWidth = function () {
     var fb = this.fullBounds(),
-        commentsRight = Math.max(this.allComments().map(
-            function (comment) {return comment.right(); }
+        commentsRight = Math.max(this.allComments().map(comment =>
+            comment.right()
         )) || this.right();
     return Math.max(fb.right(), commentsRight) - fb.left();
 };
@@ -4435,9 +4434,9 @@ BlockMorph.prototype.snap = function () {
         receiver,
         stage,
         ide;
-    top.allComments().forEach(function (comment) {
-        comment.align(top);
-    });
+    top.allComments().forEach(comment =>
+        comment.align(top)
+    );
     // fix highlights, if any
     if (this.getHighlight() && (this !== top)) {
         this.removeHighlight();
