@@ -2444,20 +2444,19 @@ IDE_Morph.prototype.newCamSprite = function () {
 };
 
 IDE_Morph.prototype.recordNewSound = function () {
-    var soundRecorder,
-        myself = this;
+    var soundRecorder;
 
     soundRecorder = new SoundRecorderDialogMorph(
-        function (audio) {
+        audio => {
             var sound;
             if (audio) {
-                sound = myself.currentSprite.addSound(
+                sound = this.currentSprite.addSound(
                 	audio,
-                    myself.newSoundName('recording')
+                    this.newSoundName('recording')
                 );
-                myself.makeSureRecordingIsMono(sound);
-                myself.spriteBar.tabBar.tabTo('sounds');
-                myself.hasChangedMedia = true;
+                this.makeSureRecordingIsMono(sound);
+                this.spriteBar.tabBar.tabTo('sounds');
+                this.hasChangedMedia = true;
             }
         });
 
@@ -2493,11 +2492,11 @@ IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
         sound.isDecoding = true;
         audioCtx.decodeAudioData(
             arrayBuffer,
-            function(buffer) {
+            buffer => {
                 sound.audioBuffer = buffer;
                 return callback (sound);
             },
-            function (err) {throw err; }
+            err => {throw err; }
         );
     }
 
@@ -2516,7 +2515,7 @@ IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
             {type: "audio/wav"}
         );
         reader = new FileReader();
-        reader.onload = function () {
+        reader.onload = () => {
             audio.src = reader.result;
             sound.audio = audio; // .... aaaand we're done!
             sound.audioBuffer = null;
@@ -2525,7 +2524,6 @@ IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
             // console.log('made mono', sound);
         };
         reader.readAsDataURL(blob);
-
     }
 
     function encodeSound(samples, rate) {
