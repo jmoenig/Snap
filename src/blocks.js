@@ -12828,7 +12828,7 @@ ScriptFocusMorph.prototype.trigger = function () {
             delete this.fps;
             delete this.step;
             this.hide();
-            this.world().onNextStep = function () {
+            this.world().onNextStep = () => {
                 current.contents().edit();
                 current.contents().selectAll();
             };
@@ -12891,13 +12891,12 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
     // insert the block after a short gliding animation
-    var myself = this;
     this.world().add(block);
     block.glideTo(
         this.position(),
         null,
         null,
-        function () {myself.fillInBlock(block); }
+        () => this.fillInBlock(block)
     );
 };
 
@@ -12997,20 +12996,19 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
 ScriptFocusMorph.prototype.insertVariableGetter = function () {
     var types = this.blockTypes(),
         vars,
-        myself = this,
         menu = new MenuMorph();
     if (!types || !contains(types, 'reporter')) {
         return;
     }
     vars = InputSlotMorph.prototype.getVarNamesDict.call(this.element);
-    Object.keys(vars).forEach(function (vName) {
+    Object.keys(vars).forEach(vName => {
         var block = SpriteMorph.prototype.variableBlock(vName);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block,
-            function () {
+            () => {
                 block.removeShadow();
-                myself.insertBlock(block);
+                this.insertBlock(block);
             }
         );
     });
@@ -13230,26 +13228,27 @@ ScriptFocusMorph.prototype.runScript = function () {
 ScriptFocusMorph.prototype.items = function () {
     if (this.element instanceof ScriptsMorph) {return []; }
     var script = this.element.topBlock();
-    return script.allChildren().filter(function (each) {
-        return each instanceof SyntaxElementMorph &&
+    return script.allChildren().filter(each =>
+        each instanceof SyntaxElementMorph &&
             !(each instanceof TemplateSlotMorph) &&
-            (!each.isStatic ||
-                each.choices ||
-                each instanceof BooleanSlotMorph ||
-                each instanceof RingMorph ||
-                each instanceof MultiArgMorph ||
-                each instanceof CommandSlotMorph);
-    });
+                (!each.isStatic ||
+                    each.choices ||
+                    each instanceof BooleanSlotMorph ||
+                    each instanceof RingMorph ||
+                    each instanceof MultiArgMorph ||
+                    each instanceof CommandSlotMorph
+                )
+    );
 };
 
 ScriptFocusMorph.prototype.sortedScripts = function () {
-    var scripts = this.editor.children.filter(function (each) {
-        return each instanceof BlockMorph;
-    });
-    scripts.sort(function (a, b) {
+    var scripts = this.editor.children.filter(each =>
+        each instanceof BlockMorph
+    );
+    scripts.sort((a, b) =>
         // make sure the prototype hat block always stays on top
-        return a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top();
-    });
+        a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top()
+    );
     return scripts;
 };
 
