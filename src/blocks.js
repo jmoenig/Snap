@@ -8746,32 +8746,29 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     var dict = {'any message': ['any message']},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
-        myself = this,
         allNames = [];
 
-    stage.children.concat(stage).forEach(function (morph) {
+    stage.children.concat(stage).forEach(morph => {
         if (isSnapObject(morph)) {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
-    allNames.forEach(function (name) {
+    allNames.forEach(name => {
         if (name !== '__shout__go__') {
             dict[name] = name;
         }
     });
     dict['~'] = null;
-    dict['new...'] = function () {
-
+    dict['new...'] = () =>
         new DialogBoxMorph(
-            myself,
-            myself.setContents,
-            myself
+            this,
+            this.setContents,
+            this
         ).prompt(
             'Message name',
             null,
-            myself.world()
+            this.world()
         );
-    };
     return dict;
 };
 
@@ -8785,7 +8782,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
 
-    stage.children.forEach(function (morph) {
+    stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
@@ -8794,9 +8791,9 @@ InputSlotMorph.prototype.collidablesMenu = function () {
     });
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -8810,7 +8807,7 @@ InputSlotMorph.prototype.locationMenu = function () {
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
 
-    stage.children.forEach(function (morph) {
+    stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
@@ -8819,9 +8816,9 @@ InputSlotMorph.prototype.locationMenu = function () {
     });
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -8839,7 +8836,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
 	dict['mouse-pointer'] = ['mouse-pointer'];
     dict.center = ['center'];
 
-    stage.children.forEach(function (morph) {
+    stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
@@ -8848,9 +8845,9 @@ InputSlotMorph.prototype.distancesMenu = function () {
     });
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -8864,16 +8861,16 @@ InputSlotMorph.prototype.clonablesMenu = function () {
     if (rcvr instanceof SpriteMorph) {
         dict.myself = ['myself'];
     }
-    stage.children.forEach(function (morph) {
+    stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames = allNames.concat(morph.name);
         }
     });
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -8892,16 +8889,16 @@ InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
         dict.myself = ['myself'];
     }
     dict[stage.name] = stage.name;
-    stage.children.forEach(function (morph) {
+    stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames.push(morph.name);
         }
     });
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -8978,9 +8975,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
     } else {
         obj = detect(
             stage.children,
-            function (morph) {
-                return morph.name === objName;
-            }
+            morph => morph.name === objName
         );
     }
     if (!obj) {
@@ -9020,13 +9015,13 @@ InputSlotMorph.prototype.attributesMenu = function () {
     varNames = obj.variables.names();
     if (varNames.length > 0) {
         dict['~'] = null;
-        varNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        varNames.forEach(name =>
+            dict[name] = name
+        );
     }
-    obj.allBlocks(true).forEach(function (def, i) {
-        dict['§_def' + i] = def.blockInstance(true); // include translations
-    });
+    obj.allBlocks(true).forEach((def, i) =>
+        dict['§_def' + i] = def.blockInstance(true) // include translations
+    );
     return dict;
 };
 
@@ -9043,14 +9038,14 @@ InputSlotMorph.prototype.costumesMenu = function () {
     if (block.selector !== 'doSwitchToCostume') {
         dict.current = ['current'];
     }
-    rcvr.costumes.asArray().forEach(function (costume) {
-        allNames = allNames.concat(costume.name);
-    });
+    rcvr.costumes.asArray().forEach(costume =>
+        allNames = allNames.concat(costume.name)
+    );
     if (allNames.length > 0) {
         dict['~'] = null;
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -9060,13 +9055,13 @@ InputSlotMorph.prototype.soundsMenu = function () {
         allNames = [],
         dict = {};
 
-    rcvr.sounds.asArray().forEach(function (sound) {
-        allNames = allNames.concat(sound.name);
-    });
+    rcvr.sounds.asArray().forEach(sound =>
+        allNames = allNames.concat(sound.name)
+    );
     if (allNames.length > 0) {
-        allNames.forEach(function (name) {
-            dict[name] = name;
-        });
+        allNames.forEach(name =>
+            dict[name] = name
+        );
     }
     return dict;
 };
@@ -9085,33 +9080,33 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     	// show own local vars and attributes, because this is likely to be
      	// inside TELL, ASK or OF or when initializing a new clone
         vars = rcvr.variables.names();
-        vars.forEach(function (name) {
-            dict[name] = name;
-        });
+        vars.forEach(name =>
+            dict[name] = name
+        );
         attribs = rcvr.attributes;
         /*
         if (vars.length && attribs.length) {
             dict['~'] = null; // add line
         }
         */
-        attribs.forEach(function (name) {
-            dict[name] = [name];
-        });
+        attribs.forEach(name =>
+            dict[name] = [name]
+        );
     } else if (rcvr && rcvr.exemplar) {
     	// only show shadowed vars and attributes
         vars = rcvr.inheritedVariableNames(true);
-        vars.forEach(function (name) {
-            dict[name] = name;
-        });
+        vars.forEach(name =>
+            dict[name] = name
+        );
         attribs = rcvr.shadowedAttributes();
         /*
         if (vars.length && attribs.length) {
             dict['~'] = null; // add line
         }
         */
-        attribs.forEach(function (name) {
-            dict[name] = [name];
-        });
+        attribs.forEach(name =>
+            dict[name] = [name]
+        );
     }
     return dict;
 };
@@ -9291,9 +9286,7 @@ InputSlotMorph.prototype.reactToEdit = function () {
 };
 
 InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
-    this.onNextStep = function () {
-        aStringOrTextMorph.selectAll();
-    };
+    this.onNextStep = () => aStringOrTextMorph.selectAll();
 };
 
 // InputSlotMorph menu:
@@ -9329,9 +9322,7 @@ InputSlotMorph.prototype.mapStringToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
-        function (code) {
-            StageMorph.prototype.codeMappings.string = code;
-        },
+        code => StageMorph.prototype.codeMappings.string = code,
         this
     ).promptCode(
         'Code mapping - String <#1>',
@@ -9344,9 +9335,7 @@ InputSlotMorph.prototype.mapNumberToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
-        function (code) {
-            StageMorph.prototype.codeMappings.number = code;
-        },
+        code => StageMorph.prototype.codeMappings.number = code,
         this
     ).promptCode(
         'Code mapping - Number <#1>',
