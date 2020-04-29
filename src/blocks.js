@@ -4501,7 +4501,6 @@ CommandBlockMorph.prototype.init = function () {
 
     this.partOfCustomCommand = false;
     this.exitTag = null;
-    // this.cachedNextBlock = null; // don't serialize
 };
 
 // CommandBlockMorph enumerating:
@@ -4529,7 +4528,6 @@ CommandBlockMorph.prototype.nextBlock = function (block) {
         var nb = this.nextBlock(),
             affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
         this.add(block);
-        // this.cachedNextBlock = block;
         if (nb) {
             block.bottomBlock().nextBlock(nb);
         }
@@ -4543,24 +4541,9 @@ CommandBlockMorph.prototype.nextBlock = function (block) {
             affected.fixLayout();
         }
     } else {
-        /* cachedNextBlock - has issues, disabled for now
-        if (!this.cachedNextBlock) {
-            this.cachedNextBlock = detect(
-                this.children,
-                function (child) {
-                    return child instanceof CommandBlockMorph
-                        && !child.isPrototype;
-                }
-            );
-        }
-        return this.cachedNextBlock;
-        */
         return detect(
             this.children,
-            function (child) {
-                return child instanceof CommandBlockMorph
-                    && !child.isPrototype;
-            }
+            child => child instanceof CommandBlockMorph && !child.isPrototype
         );
     }
 };
@@ -4584,7 +4567,7 @@ CommandBlockMorph.prototype.bottomAttachPoint = function () {
 CommandBlockMorph.prototype.wrapAttachPoint = function () {
     var cslot = detect( // could be a method making uses of caching...
         this.inputs(), // ... although these already are cached
-        function (each) {return each instanceof CSlotMorph; }
+        each => each instanceof CSlotMorph
     );
     if (cslot && !cslot.nestedBlock()) {
         return new Point(
@@ -4642,28 +4625,27 @@ CommandBlockMorph.prototype.attachTargets = function () {
 };
 
 CommandBlockMorph.prototype.allAttachTargets = function (newParent) {
-    var myself = this,
-        target = newParent || this.parent,
+    var target = newParent || this.parent,
         answer = [],
         topBlocks;
 
     if (this instanceof HatBlockMorph && newParent.rejectsHats) {
         return answer;
     }
-    topBlocks = target.children.filter(function (child) {
-        return (child !== myself) &&
+    topBlocks = target.children.filter(child =>
+        (child !== this) &&
             child instanceof SyntaxElementMorph &&
-            !child.isTemplate;
-    });
-    topBlocks.forEach(function (block) {
-        block.forAllChildren(function (child) {
+                !child.isTemplate
+    );
+    topBlocks.forEach(block =>
+        block.forAllChildren(child => {
             if (child.attachTargets) {
-                child.attachTargets().forEach(function (at) {
-                    answer.push(at);
-                });
+                child.attachTargets().forEach(at =>
+                    answer.push(at)
+                );
             }
-        });
-    });
+        })
+    );
     return answer;
 };
 
@@ -4705,8 +4687,8 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
             }
         );
     }
-    this.allAttachTargets(target).forEach(function (eachTarget) {
-        ref.forEach(function (eachRef) {
+    this.allAttachTargets(target).forEach(eachTarget =>
+        ref.forEach(eachRef => {
             // match: either both locs are 'wrap' or both are different,
             // none being 'wrap' (can this be expressed any better?)
             if ((eachRef.loc === 'wrap' && (eachTarget.loc === 'wrap')) ||
@@ -4719,8 +4701,8 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
                     answer = eachTarget;
                 }
             }
-        });
-    });
+        })
+    );
     return answer;
 };
 
@@ -4778,7 +4760,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
     } else if (target.loc === 'wrap') {
         cslot = detect( // this should be a method making use of caching
             this.inputs(), // these are already cached, so maybe it's okay
-            function (each) {return each instanceof CSlotMorph; }
+            each => each instanceof CSlotMorph
         );
         // assume the cslot is (still) empty, was checked determining the target
         before = (target.element.parent);
@@ -4800,8 +4782,8 @@ CommandBlockMorph.prototype.snap = function (hand) {
 
         // fix zebra coloring.
         // this could probably be generalized into the fixBlockColor mechanism
-        target.element.blockSequence().forEach(
-            function (cmd) {cmd.fixBlockColor(); }
+        target.element.blockSequence().forEach(cmd =>
+            cmd.fixBlockColor()
         );
     }
     this.fixBlockColor();
