@@ -10545,9 +10545,7 @@ TextSlotMorph.prototype.getSpec = function () {
 TextSlotMorph.prototype.contents = function () {
     return detect(
         this.children,
-        function (child) {
-            return (child instanceof TextMorph);
-        }
+        child => child instanceof TextMorph
     );
 };
 
@@ -11001,7 +10999,7 @@ MultiArgMorph.prototype.fixHolesLayout = function () {
 };
 
 MultiArgMorph.prototype.refresh = function () {
-    this.inputs().forEach(function (input) {
+    this.inputs().forEach(input => {
         input.fixLayout();
         input.rerender();
     });
@@ -11127,8 +11125,7 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
 MultiArgMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         block = this.parentThatIsA(BlockMorph),
-        key = '',
-        myself = this;
+        key = '';
     if (!StageMorph.prototype.enableCodeMapping) {
         return this.parent.userMenu();
     }
@@ -11141,15 +11138,15 @@ MultiArgMorph.prototype.userMenu = function () {
     }
     menu.addItem(
         'code list mapping...',
-        function () {myself.mapCodeList(key); }
+        () => this.mapCodeList(key)
     );
     menu.addItem(
         'code item mapping...',
-        function () {myself.mapCodeItem(key); }
+        () => this.mapCodeItem(key)
     );
     menu.addItem(
         'code delimiter mapping...',
-        function () {myself.mapCodeDelimiter(key); }
+        () => this.mapCodeDelimiter(key)
     );
     return menu;
 };
@@ -11178,9 +11175,7 @@ MultiArgMorph.prototype.mapToCode = function (key, label) {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
-        function (code) {
-            StageMorph.prototype.codeMappings[key] = code;
-        },
+        code => StageMorph.prototype.codeMappings[key] = code,
         this
     ).promptCode(
         'Code mapping - ' + label,
@@ -11211,10 +11206,10 @@ MultiArgMorph.prototype.mappedCode = function (definitions) {
     itemCode = StageMorph.prototype.codeMappings[key + 'item'] || '<#1>';
     delim = StageMorph.prototype.codeMappings[key + 'delim'] || ' ';
 
-    this.inputs().forEach(function (input) {
-        parts.push(itemCode.replace(/<#1>/g, input.mappedCode(definitions)));
-    });
-    parts.forEach(function (part) {
+    this.inputs().forEach(input =>
+        parts.push(itemCode.replace(/<#1>/g, input.mappedCode(definitions)))
+    );
+    parts.forEach(part => {
         if (count) {
             items += delim;
         }
@@ -11232,9 +11227,9 @@ MultiArgMorph.prototype.evaluate = function () {
     // called (and needed) for the variables menu.
 
     var result = [];
-    this.inputs().forEach(function (slot) {
-        result.push(slot.evaluate());
-    });
+    this.inputs().forEach(slot =>
+        result.push(slot.evaluate())
+    );
     return result;
 };
 
@@ -11328,7 +11323,7 @@ ArgLabelMorph.prototype.fixLayout = function () {
 };
 
 ArgLabelMorph.prototype.refresh = function () {
-    this.inputs().forEach(function (input) {
+    this.inputs().forEach(input => {
         input.fixLayout();
         input.rerender();
     });
