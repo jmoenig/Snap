@@ -3340,7 +3340,6 @@ BlockMorph.prototype.mapToHeader = function () {
     var key = this.selector.substr(0, 5) === 'reify' ?
             'reify' : this.selector,
         block = this.codeDefinitionHeader(),
-        myself = this,
         help,
         pic;
     block.addShadow(new Point(3, 3));
@@ -3356,9 +3355,9 @@ BlockMorph.prototype.mapToHeader = function () {
     }
     new DialogBoxMorph(
         this,
-        function (code) {
+        code => {
             if (key === 'evaluateCustomBlock') {
-                myself.definition.codeHeader = code;
+                this.definition.codeHeader = code;
             } else {
                 StageMorph.prototype.codeHeaders[key] = code;
             }
@@ -3379,15 +3378,14 @@ BlockMorph.prototype.mapToCode = function () {
     var key = this.selector.substr(0, 5) === 'reify' ?
             'reify' : this.selector,
         block = this.codeMappingHeader(),
-        myself = this,
         pic;
     block.addShadow(new Point(3, 3));
     pic = block.fullImage();
     new DialogBoxMorph(
         this,
-        function (code) {
+        code => {
             if (key === 'evaluateCustomBlock') {
-                myself.definition.codeMapping = code;
+                this.definition.codeMapping = code;
             } else {
                 StageMorph.prototype.codeMappings[key] = code;
             }
@@ -3461,7 +3459,7 @@ BlockMorph.prototype.mappedCode = function (definitions) {
                 }
                 bodyLines = body.split('\n');
                 headerLines = header.split('\n');
-                headerLines.forEach(function (headerLine, idx) {
+                headerLines.forEach((headerLine, idx) => {
                     var prefix = '',
                         indent;
                     if (headerLine.trimLeft().indexOf('<body') === 0) {
@@ -3486,14 +3484,14 @@ BlockMorph.prototype.mappedCode = function (definitions) {
     }
 
     codeLines = code.split('\n');
-    this.inputs().forEach(function (input) {
-        parts.push(input.mappedCode(defs).toString());
-    });
-    parts.forEach(function (part) {
+    this.inputs().forEach(input =>
+        parts.push(input.mappedCode(defs).toString())
+    );
+    parts.forEach(part => {
         var partLines = part.split('\n'),
             placeHolder = '<#' + count + '>',
             rx = new RegExp(placeHolder, 'g');
-        codeLines.forEach(function (codeLine, idx) {
+        codeLines.forEach((codeLine, idx) => {
             var prefix = '',
                 indent;
             if (codeLine.trimLeft().indexOf(placeHolder) === 0) {
@@ -3514,7 +3512,7 @@ BlockMorph.prototype.mappedCode = function (definitions) {
     }
     if (!definitions) { // top-level, add headers
         headers = [];
-        Object.keys(defs).forEach(function (each) {
+        Object.keys(defs).forEach(each => {
             if (defs[each]) {
                 headers.push(defs[each]);
             }
@@ -3535,7 +3533,7 @@ BlockMorph.prototype.codeDefinitionHeader = function () {
         count = 1;
 
     if (this.isCustomBlock) {return block; }
-    block.inputs().forEach(function (input) {
+    block.inputs().forEach(input => {
         var part = new TemplateSlotMorph('#' + count);
         block.replaceInput(input, part);
         count += 1;
@@ -3556,7 +3554,7 @@ BlockMorph.prototype.codeMappingHeader = function () {
         hat = new HatBlockMorph(),
         count = 1;
 
-    block.inputs().forEach(function (input) {
+    block.inputs().forEach(input => {
         var part = new TemplateSlotMorph('<#' + count + '>');
         block.replaceInput(input, part);
         count += 1;
