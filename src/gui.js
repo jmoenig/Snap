@@ -1308,22 +1308,20 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            function () {
+            () => {
                 if (myself.currentSprite instanceof SpriteMorph) {
                     myself.currentSprite.rotationStyle = rotationStyle;
                     myself.currentSprite.changed();
                     myself.currentSprite.fixLayout();
                     myself.currentSprite.rerender();
                 }
-                rotationStyleButtons.forEach(function (each) {
-                    each.refresh();
-                });
+                rotationStyleButtons.forEach(each =>
+                    each.refresh()
+                );
             },
             symbols[rotationStyle], // label
-            function () {  // query
-                return myself.currentSprite instanceof SpriteMorph
-                    && myself.currentSprite.rotationStyle === rotationStyle;
-            },
+            () => myself.currentSprite instanceof SpriteMorph // query
+                && myself.currentSprite.rotationStyle === rotationStyle,
             null, // environment
             localize(labels[rotationStyle])
         );
@@ -1395,14 +1393,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     padlock = new ToggleMorph(
         'checkbox',
         null,
-        function () {
-            myself.currentSprite.isDraggable =
-                !myself.currentSprite.isDraggable;
-        },
+        () => this.currentSprite.isDraggable =
+            !this.currentSprite.isDraggable,
         localize('draggable'),
-        function () {
-            return myself.currentSprite.isDraggable;
-        }
+        () => this.currentSprite.isDraggable
     );
     padlock.label.isBold = false;
     padlock.label.setColor(this.buttonLabelColor);
@@ -1428,7 +1422,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tabBar.tabTo = function (tabString) {
         var active;
         myself.currentTab = tabString;
-        this.children.forEach(function (each) {
+        this.children.forEach(each => {
             each.refresh();
             if (each.state) {active = each; }
         });
@@ -1440,11 +1434,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('scripts'); },
+        () => tabBar.tabTo('scripts'),
         localize('Scripts'), // label
-        function () {  // query
-            return myself.currentTab === 'scripts';
-        }
+        () => this.currentTab === 'scripts' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1458,13 +1450,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('costumes'); },
+        () => tabBar.tabTo('costumes'),
         localize(this.currentSprite instanceof SpriteMorph ?
             'Costumes' : 'Backgrounds'
         ),
-        function () {  // query
-            return myself.currentTab === 'costumes';
-        }
+        () => this.currentTab === 'costumes' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1478,11 +1468,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('sounds'); },
+        () => tabBar.tabTo('sounds'),
         localize('Sounds'), // label
-        function () {  // query
-            return myself.currentTab === 'sounds';
-        }
+        () => this.currentTab === 'sounds' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1494,9 +1482,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tabBar.add(tab);
 
     tabBar.fixLayout();
-    tabBar.children.forEach(function (each) {
-        each.refresh();
-    });
+    tabBar.children.forEach(each =>
+        each.refresh()
+    );
     this.spriteBar.tabBar = tabBar;
     this.spriteBar.add(this.spriteBar.tabBar);
 
