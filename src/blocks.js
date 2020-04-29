@@ -6678,7 +6678,6 @@ ScriptsMorph.prototype.userMenu = function () {
         ide = this.parentThatIsA(IDE_Morph),
         shiftClicked = this.world().currentKey === 16,
         blockEditor,
-        myself = this,
         obj = this.scriptTarget(),
         hasUndropQueue,
         stage = obj.parentThatIsA(StageMorph);
@@ -6787,7 +6786,7 @@ ScriptsMorph.prototype.userMenu = function () {
             ).prompt(
                 'Make a block',
                 null,
-                myself.world()
+                this.world()
             )
         );
     }
