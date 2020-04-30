@@ -5295,25 +5295,23 @@ IDE_Morph.prototype.microphoneMenu = function () {
 IDE_Morph.prototype.languageMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
-        pos = this.controlBar.settingsButton.bottomLeft(),
-        myself = this;
-    SnapTranslator.languages().forEach(function (lang) {
+        pos = this.controlBar.settingsButton.bottomLeft();
+    SnapTranslator.languages().forEach(lang =>
         menu.addItem(
             (SnapTranslator.language === lang ? '\u2713 ' : '    ') +
                 SnapTranslator.languageName(lang),
-            function () {
-                myself.loadNewProject = false;
-                myself.setLanguage(lang);
+            () => {
+                this.loadNewProject = false;
+                this.setLanguage(lang);
             }
-        );
-    });
+        )
+    );
     menu.popup(world, pos);
 };
 
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
-        src = this.resourceURL('locale', 'lang-' + lang + '.js'),
-        myself = this;
+        src = this.resourceURL('locale', 'lang-' + lang + '.js');
     SnapTranslator.unload();
     if (translation) {
         document.head.removeChild(translation);
@@ -5323,9 +5321,7 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = function () {
-        myself.reflectLanguage(lang, callback, noSave);
-    };
+    translation.onload = () => this.reflectLanguage(lang, callback, noSave);
     document.head.appendChild(translation);
     translation.src = src;
 };
