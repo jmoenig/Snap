@@ -5225,11 +5225,10 @@ IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
 };
 
 IDE_Morph.prototype.createNewProject = function () {
-    var myself = this;
     this.confirm(
         'Replace the current project with a new one?',
         'New Project',
-        function () {myself.newProject(); }
+        () => this.newProject()
     );
 };
 
@@ -5247,14 +5246,15 @@ IDE_Morph.prototype.openProjectsBrowser = function () {
 };
 
 IDE_Morph.prototype.saveProjectsBrowser = function () {
-    var myself = this;
-
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
     if (location.protocol === 'file:') {
-        this.prompt('Export Project As...', function (name) {
-            myself.exportProject(name, false);
-        }, null, 'exportProject');
+        this.prompt(
+            'Export Project As...',
+            name => this.exportProject(name, false),
+            null,
+            'exportProject'
+        );
         return;
     }
 
@@ -5276,17 +5276,15 @@ IDE_Morph.prototype.microphoneMenu = function () {
     if (microphone.isReady) {
         menu.addItem(
             '\u2611 ' + localize('Microphone'),
-            function () {microphone.stop(); }
+            () => microphone.stop()
         );
         menu.addLine();
     }
-    resolutions.forEach(function (res, i) {
+    resolutions.forEach((res, i) => {
         menu.addItem(
             (microphone.resolution === i + 1 ? '\u2713 ' : '    ') +
                 localize(res),
-            function () {
-                microphone.setResolution(i + 1);
-            }
+            () => microphone.setResolution(i + 1)
         );
     });
     menu.popup(world, pos);
