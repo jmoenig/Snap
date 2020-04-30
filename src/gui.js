@@ -2646,15 +2646,15 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
 };
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
-    var idx, myself = this;
-    sprite.parts.slice().forEach(function (part) {
-    	myself.removeSprite(part);
-    });
+    var idx;
+    sprite.parts.slice().forEach(part =>
+    	this.removeSprite(part)
+    );
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
     sprite.corpsify();
     sprite.destroy();
-    this.stage.watchers().forEach(function (watcher) {
+    this.stage.watchers().forEach(watcher => {
         if (watcher.object() === sprite) {
             watcher.destroy();
         }
@@ -2666,35 +2666,29 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.fixLayout();
     this.currentSprite = detect(
         this.stage.children,
-        function (morph) {
-            return morph instanceof SpriteMorph && !morph.isTemporary;
-        }
+        morph => morph instanceof SpriteMorph && !morph.isTemporary
     ) || this.stage;
 
     this.selectSprite(this.currentSprite);
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
-    var lastSound =
-            this.currentSprite.sounds.at(
-                this.currentSprite.sounds.length());
+    var lastSound = this.currentSprite.sounds.at(
+            this.currentSprite.sounds.length()
+        );
 
     return this.newName(
         name || lastSound.name,
-        this.currentSprite.sounds.asArray().map(
-            function (eachSound) {
-                return eachSound.name;
-            }
+        this.currentSprite.sounds.asArray().map(eachSound =>
+            eachSound.name
         )
     );
 };
 
 IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
-    var all = this.sprites.asArray().concat(this.stage).filter(
-            function (each) {return each !== ignoredSprite; }
-        ).map(
-            function (each) {return each.name; }
-        );
+    var all = this.sprites.asArray().concat(this.stage).filter(each =>
+            each !== ignoredSprite
+        ).map(each => each.name);
     return this.newName(name, all);
 };
 
