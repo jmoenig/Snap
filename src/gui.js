@@ -397,8 +397,8 @@ IDE_Morph.prototype.openIn = function (world) {
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
-    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
-    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    this.cloudMsg = getURL('https://snap.berkeley.edu/cloudmsg.txt');
+    motd = getURL('https://snap.berkeley.edu/motd.txt');
     if (motd) {
         this.inform('Snap!', motd);
     }
@@ -2736,7 +2736,7 @@ IDE_Morph.prototype.snapMenu = function () {
     );
     menu.addItem(
         'Snap! website',
-        () => window.open('http://snap.berkeley.edu/', 'SnapWebsite')
+        () => window.open('https://snap.berkeley.edu/', 'SnapWebsite')
     );
     menu.addItem(
         'Download source',
@@ -3817,7 +3817,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
 
-        + 'for more information see http://snap.berkeley.edu\n'
+        + 'for more information see https://snap.berkeley.edu\n'
         + 'and http://scratch.mit.edu';
 
     noticeTxt = localize('License')
@@ -4038,17 +4038,18 @@ IDE_Morph.prototype.newProject = function () {
 };
 
 IDE_Morph.prototype.save = function () {
-    var myself = this;
-
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
     if (location.protocol === 'file:') {
         if (this.projectName) {
-            this.exportProject(myself.projectName, false);
+            this.exportProject(this.projectName, false);
         } else {
-            this.prompt('Export Project As...', function (name) {
-                myself.exportProject(name, false);
-            }, null, 'exportProject');
+            this.prompt(
+                'Export Project As...',
+                name => this.exportProject(name, false),
+                null,
+                'exportProject'
+            );
         }
         return;
     }
@@ -4118,11 +4119,11 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
         found;
 
     function scan() {
-        return globalBlocks.filter(function (def) {
+        return globalBlocks.filter(def => {
             if (contains(unused, def)) {return false; }
-            return targets.every(function (each, trgIdx) {
-                return !(each.usesBlockInstance(def, true, trgIdx, unused));
-            });
+            return targets.every((each, trgIdx) =>
+                !each.usesBlockInstance(def, true, trgIdx, unused)
+            );
         });
     }
 
@@ -4170,28 +4171,28 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         ctx;
 
     // collect all script pics
-    this.sprites.asArray().forEach(function (sprite) {
+    this.sprites.asArray().forEach(sprite => {
         pics.push(sprite.getImage());
         pics.push(sprite.scripts.scriptsPicture());
-        sprite.customBlocks.forEach(function (def) {
-            pics.push(def.scriptsPicture());
-        });
+        sprite.customBlocks.forEach(def =>
+            pics.push(def.scriptsPicture())
+        );
     });
     pics.push(this.stage.getImage());
     pics.push(this.stage.scripts.scriptsPicture());
-    this.stage.customBlocks.forEach(function (def) {
-        pics.push(def.scriptsPicture());
-    });
+    this.stage.customBlocks.forEach(def =>
+        pics.push(def.scriptsPicture())
+    );
 
     // collect global block pics
-    this.stage.globalBlocks.forEach(function (def) {
-        pics.push(def.scriptsPicture());
-    });
+    this.stage.globalBlocks.forEach(def =>
+        pics.push(def.scriptsPicture())
+    );
 
-    pics = pics.filter(function (each) {return !isNil(each); });
+    pics = pics.filter(each => !isNil(each));
 
     // determine dimensions of composite
-    pics.forEach(function (each) {
+    pics.forEach(each => {
         w = Math.max(w, each.width);
         h += (each.height);
         h += padding;
@@ -4201,7 +4202,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     ctx = pic.getContext('2d');
 
     // draw all parts
-    pics.forEach(function (each) {
+    pics.forEach(each => {
         ctx.drawImage(each, 0, y);
         y += padding;
         y += each.height;
@@ -4238,7 +4239,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
             ul;
         if (names.length) {
             add(localize('Variables'), 'h3');
-            names.forEach(function (name) {
+            names.forEach(name => {
                 /*
                 addImage(
                     SpriteMorph.prototype.variableBlock(name).scriptPic()
@@ -4270,10 +4271,10 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     function addBlocks(definitions) {
         if (definitions.length) {
             add(localize('Blocks'), 'h3');
-            SpriteMorph.prototype.categories.forEach(function (category) {
+            SpriteMorph.prototype.categories.forEach(category => {
                 var isFirst = true,
                     ul;
-                definitions.forEach(function (def) {
+                definitions.forEach(def => {
                     var li, blockImg;
                     if (def.category === category) {
                         if (isFirst) {
@@ -4294,7 +4295,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
                             li
                         );
                         blockImg.attributes.class = 'script';
-                        def.sortedElements().forEach(function (script) {
+                        def.sortedElements().forEach(script => {
                             var defImg = addImage(
                                 script instanceof BlockMorph ?
                                         script.scriptPic()
@@ -4371,16 +4372,14 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 
     // project notes
     notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
-    notes.asArray().forEach(
-        function (paragraph) {add(paragraph); }
-    );
+    notes.asArray().forEach(paragraph => add(paragraph));
 
     // table of contents
     add(localize('Contents'), 'h4');
     toc = addNode('ul');
 
     // sprites & stage
-    this.sprites.asArray().concat([stage]).forEach(function (sprite) {
+    this.sprites.asArray().concat([stage]).forEach(sprite => {
         var tocEntry = addNode('li', toc),
             scripts = sprite.scripts.sortedElements(),
             cl = sprite.costumes.length(),
@@ -4419,7 +4418,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
             if (sprite.parts.length) {
                 add(localize('Parts'), 'h3');
                 ol = addNode('ul');
-                sprite.parts.forEach(function (part) {
+                sprite.parts.forEach(part => {
                     var li = addNode('li', ol, part.name);
                     addImage(part.thumbnail(new Point(40, 40)), li, true)
                         .attributes.class = 'toc';
@@ -4431,7 +4430,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         if (cl > 1 || (sprite.getCostumeIdx() !== cl)) {
             add(localize('Costumes'), 'h3');
             ol = addNode('ol');
-            sprite.costumes.asArray().forEach(function (costume) {
+            sprite.costumes.asArray().forEach(costume => {
                 var li = addNode('li', ol, costume.name);
                 addImage(costume.thumbnail(new Point(40, 40)), li, true)
                     .attributes.class = 'toc';
@@ -4442,9 +4441,9 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         if (sprite.sounds.length()) {
             add(localize('Sounds'), 'h3');
             ol = addNode('ol');
-            sprite.sounds.asArray().forEach(function (sound) {
-                add(sound.name, 'li', ol);
-            });
+            sprite.sounds.asArray().forEach(sound =>
+                add(sound.name, 'li', ol)
+            );
         }
 
         // variables
@@ -4453,7 +4452,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         // scripts
         if (scripts.length) {
             add(localize('Scripts'), 'h3');
-            scripts.forEach(function (script) {
+            scripts.forEach(script => {
                 var img = addImage(script instanceof BlockMorph ?
                         script.scriptPic()
                                 : script.fullImage());
@@ -4491,16 +4490,13 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening project...');
-        },
-        function () {
-            myself.rawOpenProjectString(str);
+        () => msg = this.showMessage('Opening project...'),
+        () => {
+            this.rawOpenProjectString(str);
             msg.destroy();
-        },
+        }
     ]);
 };
 
@@ -4535,14 +4531,11 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
     var msg,
-        myself = this,
         size = Math.round(str.length / 1024);
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening project\n' + size + ' KB...');
-        },
-        function () {
-            myself.rawOpenCloudDataString(str);
+        () => msg = this.showMessage('Opening project\n' + size + ' KB...'),
+        () => {
+            this.rawOpenCloudDataString(str);
             msg.destroy();
         }
     ]);
@@ -4589,37 +4582,33 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening blocks...');
-        },
-        function () {
-            myself.rawOpenBlocksString(str, name, silently);
+        () => msg = this.showMessage('Opening blocks...'),
+        () => {
+            this.rawOpenBlocksString(str, name, silently);
             msg.destroy();
-        },
+        }
     ]);
 };
 
 IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     // name is optional (string), so is silently (bool)
-    var blocks,
-        myself = this;
+    var blocks;
     if (Process.prototype.isCatchingErrors) {
         try {
-            blocks = this.serializer.loadBlocks(str, myself.stage);
+            blocks = this.serializer.loadBlocks(str, this.stage);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        blocks = this.serializer.loadBlocks(str, myself.stage);
+        blocks = this.serializer.loadBlocks(str, this.stage);
     }
     if (silently) {
-        blocks.forEach(function (def) {
-            def.receiver = myself.stage;
-            myself.stage.globalBlocks.push(def);
-            myself.stage.replaceDoubleDefinitionsFor(def);
+        blocks.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -4633,14 +4622,11 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening sprite...');
-        },
-        function () {
-            myself.rawOpenSpritesString(str);
+        () => msg = this.showMessage('Opening sprite...'),
+        () => {
+            this.rawOpenSpritesString(str);
             msg.destroy();
         },
     ]);
@@ -4672,16 +4658,13 @@ IDE_Morph.prototype.openMediaString = function (str) {
 };
 
 IDE_Morph.prototype.openScriptString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening script...');
-        },
-        function () {
-            myself.rawOpenScriptString(str);
+        () => msg = this.showMessage('Opening script...'),
+        () => {
+            this.rawOpenScriptString(str);
             msg.destroy();
-        },
+        }
     ]);
 };
 
@@ -4718,16 +4701,13 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening data...');
-        },
-        function () {
-            myself.rawOpenDataString(str, name, type);
+        () => msg = this.showMessage('Opening data...'),
+        () => {
+            this.rawOpenDataString(str, name, type);
             msg.destroy();
-        },
+        }
     ]);
 };
 
@@ -4764,9 +4744,9 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
     this.currentCategory = 'variables';
-    this.categories.children.forEach(function (each) {
-        each.refresh();
-    });
+    this.categories.children.forEach(each =>
+        each.refresh()
+    );
     this.refreshPalette(true);
     if (data instanceof List) {
         dlg = new TableDialogMorph(data);
@@ -5651,9 +5631,9 @@ IDE_Morph.prototype.createCloudAccount = function () {
     ).withKey('cloudsignup').promptCredentials(
         'Sign up',
         'signup',
-        'http://snap.berkeley.edu/tos.html',
+        'https://snap.berkeley.edu/tos.html',
         'Terms of Service...',
-        'http://snap.berkeley.edu/privacy.html',
+        'https://snap.berkeley.edu/privacy.html',
         'Privacy...',
         'I have read and agree\nto the Terms of Service',
         world,
@@ -6004,7 +5984,7 @@ IDE_Morph.prototype.cloudError = function () {
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            // explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt'),
+            // explanation = getURL('https://snap.berkeley.edu/cloudmsg.txt'),
             explanation = null;
         if (myself.shield) {
             myself.shield.destroy();
