@@ -3396,7 +3396,6 @@ IDE_Morph.prototype.settingsMenu = function () {
 
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
-        myself = this,
         world = this.world(),
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
@@ -3422,14 +3421,17 @@ IDE_Morph.prototype.projectMenu = function () {
             localize(
                 'Export project...') + ' ' + localize('(in a new window)'
             ),
-            function () {
-                if (myself.projectName) {
-                    myself.exportProject(myself.projectName, shiftClicked);
+            () => {
+                if (this.projectName) {
+                    this.exportProject(this.projectName, shiftClicked);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        // false - override the shiftClick setting to use XML
-                        myself.exportProject(name, false);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        // false - override the shiftClick setting to use XML:
+                        name => this.exportProject(name, false),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             'show project data as XML\nin a new browser window',
@@ -3439,13 +3441,16 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         shiftClicked ?
                 'Export project as plain text...' : 'Export project...',
-        function () {
-            if (myself.projectName) {
-                myself.exportProject(myself.projectName, shiftClicked);
+        () => {
+            if (this.projectName) {
+                this.exportProject(this.projectName, shiftClicked);
             } else {
-                myself.prompt('Export Project As...', function (name) {
-                    myself.exportProject(name, shiftClicked);
-                }, null, 'exportProject');
+                this.prompt(
+                    'Export Project As...',
+                    name => this.exportProject(name, shiftClicked),
+                    null,
+                    'exportProject'
+                );
             }
         },
         'save project data as XML\nto your downloads folder',
@@ -3455,13 +3460,13 @@ IDE_Morph.prototype.projectMenu = function () {
     if (this.stage.globalBlocks.length) {
         menu.addItem(
             'Export blocks...',
-            function () {myself.exportGlobalBlocks(); },
+            () => this.exportGlobalBlocks(),
             'show global custom block definitions as XML' +
                 '\nin a new browser window'
         );
         menu.addItem(
             'Unused blocks...',
-            function () {myself.removeUnusedBlocks(); },
+            () => this.removeUnusedBlocks(),
             'find unused global custom blocks' +
                 '\nand remove their definitions'
         );
@@ -3469,14 +3474,14 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         'Export summary...',
-        function () {myself.exportProjectSummary(); },
+        () => this.exportProjectSummary(),
         'open a new browser browser window\n with a summary of this project'
     );
 
     if (shiftClicked) {
         menu.addItem(
             'Export summary with drop-shadows...',
-            function () {myself.exportProjectSummary(true); },
+            () => this.exportProjectSummary(true),
             'open a new browser browser window' +
                 '\nwith a summary of this project' +
                 '\nwith drop-shadows on all pictures.' +
@@ -3485,7 +3490,7 @@ IDE_Morph.prototype.projectMenu = function () {
         );
         menu.addItem(
             'Export all scripts as pic...',
-            function () {myself.exportScriptsPicture(); },
+            () => this.exportScriptsPicture(),
             'show a picture of all scripts\nand block definitions',
             new Color(100, 0, 0)
         );
@@ -3494,16 +3499,16 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addLine();
     menu.addItem(
         'Libraries...',
-        function() {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
-                function (txt) {
-                    var libraries = myself.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(myself, libraries).popUp();
+            this.getURL(
+                this.resourceURL('libraries', 'LIBRARIES'),
+                txt => {
+                    var libraries = this.parseResourceFile(txt);
+                    new LibraryImportDialogMorph(this, libraries).popUp();
                 }
             );
         },
@@ -3512,23 +3517,23 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         localize(graphicsName) + '...',
-        function () {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.importMedia(graphicsName);
+            this.importMedia(graphicsName);
         },
         'Select a costume from the media library'
     );
     menu.addItem(
         localize('Sounds') + '...',
-        function () {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.importMedia('Sounds');
+            this.importMedia('Sounds');
         },
         'Select a sound from the media library'
     );
