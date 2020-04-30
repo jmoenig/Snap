@@ -5989,7 +5989,6 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // Note: Synchronous fetching has been deprecated and should be switched
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
-        myself = this,
         rsp;
     if (async) {
         request.responseType = responseType || 'text';
@@ -5999,11 +5998,11 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     try {
         request.open('GET', url, async);
         if (async) {
-            request.onreadystatechange = function () {
+            request.onreadystatechange = () => {
                 if (request.readyState === 4) {
                     if (request[rsp]) {
                         callback.call(
-                            myself,
+                            this,
                             request[rsp]
                         );
                     } else {
@@ -6023,7 +6022,7 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
             throw new Error('unable to retrieve ' + url);
         }
     } catch (err) {
-        myself.showMessage(err.toString());
+        this.showMessage(err.toString());
         if (async) {
             callback.call(this);
         } else {
@@ -6039,10 +6038,13 @@ IDE_Morph.prototype.showMessage = function (message, secs) {
         intervalHandle;
     m.popUpCenteredInWorld(this.world());
     if (secs) {
-        intervalHandle = setInterval(function () {
-            m.destroy();
-            clearInterval(intervalHandle);
-        }, secs * 1000);
+        intervalHandle = setInterval(
+            () => {
+                m.destroy();
+                clearInterval(intervalHandle);
+            },
+            secs * 1000
+        );
     }
     return m;
 };
