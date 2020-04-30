@@ -2944,7 +2944,6 @@ IDE_Morph.prototype.settingsMenu = function () {
     var menu,
         stage = this.stage,
         world = this.world(),
-        myself = this,
         pos = this.controlBar.settingsButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
 
@@ -2997,11 +2996,11 @@ IDE_Morph.prototype.settingsMenu = function () {
     /*
     addPreference(
         'JavaScript',
-        function () {
+        () => {
             Process.prototype.enableJS = !Process.prototype.enableJS;
-            myself.currentSprite.blocksCache.operators = null;
-            myself.currentSprite.paletteCache.operators = null;
-            myself.refreshPalette();
+            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.paletteCache.operators = null;
+            this.refreshPalette();
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
@@ -3051,10 +3050,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Log pen vectors',
-        function () {
-            StageMorph.prototype.enablePenLogging =
-                !StageMorph.prototype.enablePenLogging;
-        },
+        () => StageMorph.prototype.enablePenLogging =
+            !StageMorph.prototype.enablePenLogging,
         StageMorph.prototype.enablePenLogging,
         'uncheck to turn off\nlogging pen vectors',
         'check to turn on\nlogging pen vectors',
@@ -3062,10 +3059,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Ternary Boolean slots',
-        function () {
-        	BooleanSlotMorph.prototype.isTernary =
-        		!BooleanSlotMorph.prototype.isTernary;
-      	},
+        () => BooleanSlotMorph.prototype.isTernary =
+            !BooleanSlotMorph.prototype.isTernary,
         BooleanSlotMorph.prototype.isTernary,
         'uncheck to limit\nBoolean slots to true / false',
         'check to allow\nempty Boolean slots',
@@ -3136,12 +3131,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Clicking sound',
-        function () {
+        () => {
             BlockMorph.prototype.toggleSnapSound();
             if (BlockMorph.prototype.snapSound) {
-                myself.saveSetting('click', true);
+                this.saveSetting('click', true);
             } else {
-                myself.removeSetting('click');
+                this.removeSetting('click');
             }
         },
         BlockMorph.prototype.snapSound,
@@ -3150,15 +3145,15 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Animations',
-        function () {myself.isAnimating = !myself.isAnimating; },
-        myself.isAnimating,
+        () => this.isAnimating = !this.isAnimating,
+        this.isAnimating,
         'uncheck to disable\nIDE animations',
         'check to enable\nIDE animations',
         true
     );
     addPreference(
         'Cache Inputs',
-        function () {
+        () => {
             BlockMorph.prototype.isCachingInputs =
                 !BlockMorph.prototype.isCachingInputs;
         },
@@ -3169,10 +3164,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Rasterize SVGs',
-        function () {
-            MorphicPreferences.rasterizeSVGs =
-                !MorphicPreferences.rasterizeSVGs;
-        },
+        () => MorphicPreferences.rasterizeSVGs =
+            !MorphicPreferences.rasterizeSVGs,
         MorphicPreferences.rasterizeSVGs,
         'uncheck for smooth\nscaling of vector costumes',
         'check to rasterize\nSVGs on import',
@@ -3180,11 +3173,11 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Flat design',
-        function () {
+        () => {
             if (MorphicPreferences.isFlat) {
-                return myself.defaultDesign();
+                return this.defaultDesign();
             }
-            myself.flatDesign();
+            this.flatDesign();
         },
         MorphicPreferences.isFlat,
         'uncheck for default\nGUI design',
@@ -3193,13 +3186,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Nested auto-wrapping',
-        function () {
+        () => {
             ScriptsMorph.prototype.enableNestedAutoWrapping =
                 !ScriptsMorph.prototype.enableNestedAutoWrapping;
             if (ScriptsMorph.prototype.enableNestedAutoWrapping) {
-                myself.removeSetting('autowrapping');
+                this.removeSetting('autowrapping');
             } else {
-                myself.saveSetting('autowrapping', false);
+                this.saveSetting('autowrapping', false);
             }
         },
         ScriptsMorph.prototype.enableNestedAutoWrapping,
@@ -3209,25 +3202,23 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Project URLs',
-        function () {
-            myself.projectsInURLs = !myself.projectsInURLs;
-            if (myself.projectsInURLs) {
-                myself.saveSetting('longurls', true);
+        () => {
+            this.projectsInURLs = !this.projectsInURLs;
+            if (this.projectsInURLs) {
+                this.saveSetting('longurls', true);
             } else {
-                myself.removeSetting('longurls');
+                this.removeSetting('longurls');
             }
         },
-        myself.projectsInURLs,
+        this.projectsInURLs,
         'uncheck to disable\nproject data in URLs',
         'check to enable\nproject data in URLs',
         true
     );
     addPreference(
         'Sprite Nesting',
-        function () {
-            SpriteMorph.prototype.enableNesting =
-                !SpriteMorph.prototype.enableNesting;
-        },
+        () => SpriteMorph.prototype.enableNesting =
+            !SpriteMorph.prototype.enableNesting,
         SpriteMorph.prototype.enableNesting,
         'uncheck to disable\nsprite composition',
         'check to enable\nsprite composition',
@@ -3235,12 +3226,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'First-Class Sprites',
-        function () {
+        () => {
             SpriteMorph.prototype.enableFirstClass =
                 !SpriteMorph.prototype.enableFirstClass;
-            myself.currentSprite.blocksCache.sensing = null;
-            myself.currentSprite.paletteCache.sensing = null;
-            myself.refreshPalette();
+            this.currentSprite.blocksCache.sensing = null;
+            this.currentSprite.paletteCache.sensing = null;
+            this.refreshPalette();
         },
         SpriteMorph.prototype.enableFirstClass,
         'uncheck to disable support\nfor first-class sprites',
@@ -3249,14 +3240,14 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Keyboard Editing',
-        function () {
+        () => {
             ScriptsMorph.prototype.enableKeyboard =
                 !ScriptsMorph.prototype.enableKeyboard;
-            myself.currentSprite.scripts.updateToolbar();
+            this.currentSprite.scripts.updateToolbar();
             if (ScriptsMorph.prototype.enableKeyboard) {
-                myself.removeSetting('keyboard');
+                this.removeSetting('keyboard');
             } else {
-                myself.saveSetting('keyboard', false);
+                this.saveSetting('keyboard', false);
             }
         },
         ScriptsMorph.prototype.enableKeyboard,
@@ -3266,13 +3257,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Table support',
-        function () {
+        () => {
             List.prototype.enableTables =
                 !List.prototype.enableTables;
             if (List.prototype.enableTables) {
-                myself.removeSetting('tables');
+                this.removeSetting('tables');
             } else {
-                myself.saveSetting('tables', false);
+                this.saveSetting('tables', false);
             }
         },
         List.prototype.enableTables,
@@ -3283,13 +3274,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     if (List.prototype.enableTables) {
         addPreference(
             'Table lines',
-            function () {
+            () => {
                 TableMorph.prototype.highContrast =
                     !TableMorph.prototype.highContrast;
                 if (TableMorph.prototype.highContrast) {
-                    myself.saveSetting('tableLines', true);
+                    this.saveSetting('tableLines', true);
                 } else {
-                    myself.removeSetting('tableLines');
+                    this.removeSetting('tableLines');
                 }
             },
             TableMorph.prototype.highContrast,
@@ -3300,10 +3291,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
     addPreference(
         'Live coding support',
-        function () {
-            Process.prototype.enableLiveCoding =
-                !Process.prototype.enableLiveCoding;
-        },
+        () => Process.prototype.enableLiveCoding =
+            !Process.prototype.enableLiveCoding,
         Process.prototype.enableLiveCoding,
         'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
         'EXPERIMENTAL! check to enable\n live custom control structures',
@@ -3311,12 +3300,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'JIT compiler support',
-        function () {
+        () => {
             Process.prototype.enableCompiling =
                 !Process.prototype.enableCompiling;
-            myself.currentSprite.blocksCache.operators = null;
-            myself.currentSprite.paletteCache.operators = null;
-            myself.refreshPalette();
+            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.paletteCache.operators = null;
+            this.refreshPalette();
         },
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
@@ -3326,7 +3315,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
-        function () {stage.isThreadSafe = !stage.isThreadSafe; },
+        () => stage.isThreadSafe = !stage.isThreadSafe,
         this.stage.isThreadSafe,
         'uncheck to allow\nscript reentrance',
         'check to disallow\nscript reentrance'
@@ -3341,22 +3330,20 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Flat line ends',
-        function () {
-            SpriteMorph.prototype.useFlatLineEnds =
-                !SpriteMorph.prototype.useFlatLineEnds;
-        },
+        () => SpriteMorph.prototype.useFlatLineEnds =
+            !SpriteMorph.prototype.useFlatLineEnds,
         SpriteMorph.prototype.useFlatLineEnds,
         'uncheck for round ends of lines',
         'check for flat ends of lines'
     );
     addPreference(
         'Codification support',
-        function () {
+        () => {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
+            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.paletteCache.variables = null;
+            this.refreshPalette();
         },
         StageMorph.prototype.enableCodeMapping,
         'uncheck to disable\nblock to text mapping features',
@@ -3365,12 +3352,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Inheritance support',
-        function () {
+        () => {
             StageMorph.prototype.enableInheritance =
                 !StageMorph.prototype.enableInheritance;
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
+            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.paletteCache.variables = null;
+            this.refreshPalette();
         },
         StageMorph.prototype.enableInheritance,
         'uncheck to disable\nsprite inheritance features',
@@ -3379,10 +3366,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Hyper blocks support',
-        function () {
-            Process.prototype.enableHyperOps =
-                !Process.prototype.enableHyperOps;
-        },
+        () => Process.prototype.enableHyperOps =
+            !Process.prototype.enableHyperOps,
         Process.prototype.enableHyperOps,
         'uncheck to disable\nusing operators on lists and tables',
         'check to enable\nusing operators on lists and tables',
@@ -3390,10 +3375,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Persist linked sublist IDs',
-        function () {
-            StageMorph.prototype.enableSublistIDs =
-                !StageMorph.prototype.enableSublistIDs;
-        },
+        () => StageMorph.prototype.enableSublistIDs =
+            !StageMorph.prototype.enableSublistIDs,
         StageMorph.prototype.enableSublistIDs,
         'uncheck to disable\nsaving linked sublist identities',
         'check to enable\nsaving linked sublist identities',
@@ -3401,10 +3384,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Enable command drops in all rings',
-        function () {
-            RingReporterSlotMorph.prototype.enableCommandDrops =
-                !RingReporterSlotMorph.prototype.enableCommandDrops;
-        },
+        () => RingReporterSlotMorph.prototype.enableCommandDrops =
+            !RingReporterSlotMorph.prototype.enableCommandDrops,
         RingReporterSlotMorph.prototype.enableCommandDrops,
         'uncheck to disable\ndropping commands in reporter rings',
         'check to enable\ndropping commands in all rings',
