@@ -5361,8 +5361,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
 // IDE_Morph blocks scaling
 
 IDE_Morph.prototype.userSetBlocksScale = function () {
-    var myself = this,
-        scrpt,
+    var scrpt,
         blck,
         shield,
         sample,
@@ -5398,8 +5397,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     shield.setPosition(sample.position());
     sample.add(shield);
 
-    action = function (num) {
-        scrpt.blockSequence().forEach(function (block) {
+    action = (num) => {
+        scrpt.blockSequence().forEach(block => {
             block.setScale(num);
             block.setSpec(block.blockSpec);
         });
@@ -5408,9 +5407,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 
     new DialogBoxMorph(
         null,
-        function (num) {
-            myself.setBlocksScale(Math.min(num, 12));
-        }
+        num => this.setBlocksScale(Math.min(num, 12))
     ).withKey('zoomBlocks').prompt(
         'Zoom blocks',
         SyntaxElementMorph.prototype.scale.toString(),
