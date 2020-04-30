@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-29';
+modules.gui = '2020-April-30';
 
 // Declarations
 
@@ -2722,7 +2722,6 @@ IDE_Morph.prototype.userMenu = function () {
 
 IDE_Morph.prototype.snapMenu = function () {
     var menu,
-        myself = this,
         world = this.world();
 
     menu = new MenuMorph(this);
@@ -2730,25 +2729,21 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addLine();
     menu.addItem(
         'Reference manual',
-        function () {
-            var url = myself.resourceURL('help', 'SnapManual.pdf');
+        () => {
+            var url = this.resourceURL('help', 'SnapManual.pdf');
             window.open(url, 'SnapReferenceManual');
         }
     );
     menu.addItem(
         'Snap! website',
-        function () {
-            window.open('http://snap.berkeley.edu/', 'SnapWebsite');
-        }
+        () => window.open('http://snap.berkeley.edu/', 'SnapWebsite')
     );
     menu.addItem(
         'Download source',
-        function () {
-            window.open(
+        () => window.open(
                 'https://github.com/jmoenig/Snap/releases/latest',
                 'SnapSource'
-            );
-        }
+            )
     );
     if (world.isDevMode) {
         menu.addLine();
@@ -2774,7 +2769,6 @@ IDE_Morph.prototype.snapMenu = function () {
 
 IDE_Morph.prototype.cloudMenu = function () {
     var menu,
-        myself = this,
         world = this.world(),
         pos = this.controlBar.cloudButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
@@ -2825,10 +2819,10 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addLine();
         menu.addItem(
             'Open in Community Site',
-            function () {
-                var dict = myself.urlParameters();
+            () => {
+                var dict = this.urlParameters();
                 window.open(
-                    myself.cloud.showProjectPath(
+                    this.cloud.showProjectPath(
                         dict.Username, dict.ProjectName
                     ),
                     '_blank'
@@ -2840,13 +2834,16 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addLine();
         menu.addItem(
             'export project media only...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectMedia(myself.projectName);
+            () => {
+                if (this.projectName) {
+                    this.exportProjectMedia(this.projectName);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectMedia(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectMedia(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2854,13 +2851,16 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'export project without media...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectNoMedia(myself.projectName);
+            () => {
+                if (this.projectName) {
+                    this.exportProjectNoMedia(this.projectName);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectNoMedia(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectNoMedia(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2868,13 +2868,16 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'export project as cloud data...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectAsCloudData(myself.projectName);
+            () => {
+                if (this.projectName) {
+                    this.exportProjectAsCloudData(this.projectName);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectAsCloudData(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectAsCloudData(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2883,41 +2886,52 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addLine();
         menu.addItem(
             'open shared project from cloud...',
-            function () {
-                myself.prompt('Author name…', function (usr) {
-                    myself.prompt('Project name...', function (prj) {
-                        myself.showMessage(
-                            'Fetching project\nfrom the cloud...'
-                        );
-                        myself.cloud.getPublicProject(
-                            prj,
-                            usr.toLowerCase(),
-                            function (projectData) {
-                                var msg;
-                                if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
-                                        'data:text/xml,' + projectData
-                                    );
-                                }
-                                myself.nextSteps([
-                                    function () {
-                                        msg = myself.showMessage(
-                                            'Opening project...'
-                                        );
-                                    },
-                                    function () {
-                                        myself.rawOpenCloudDataString(
-                                            projectData
-                                        );
-                                        msg.destroy();
-                                    },
-                                ]);
-                            },
-                            myself.cloudError()
-                        );
-
-                    }, null, 'project');
-                }, null, 'project');
+            () => {
+                this.prompt(
+                    'Author name…',
+                    usr => {
+                        this.prompt(
+                            'Project name...',
+                            prj => {
+                                this.showMessage(
+                                    'Fetching project\nfrom the cloud...'
+                                );
+                                this.cloud.getPublicProject(
+                                    prj,
+                                    usr.toLowerCase(),
+                                    projectData => {
+                                        var msg;
+                                        if (
+                                            !Process.prototype.isCatchingErrors
+                                        ) {
+                                            window.open(
+                                                'data:text/xml,' + projectData
+                                            );
+                                        }
+                                    this.nextSteps([
+                                        () => {
+                                            msg = this.showMessage(
+                                                'Opening project...'
+                                            );
+                                        },
+                                        () => {
+                                            this.rawOpenCloudDataString(
+                                                projectData
+                                            );
+                                            msg.destroy();
+                                        },
+                                    ]);
+                                },
+                                this.cloudError()
+                            );
+                        },
+                        null,
+                        'project'
+                    );
+                },
+                null,
+                'project'
+                );
             },
             null,
             new Color(100, 0, 0)
