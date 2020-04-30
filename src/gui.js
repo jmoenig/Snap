@@ -3880,7 +3880,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     dlg.inform('About Snap', aboutTxt, world);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
-        function () {
+        () => {
             dlg.body.text = translations;
             dlg.body.fixLayout();
             btn1.show();
@@ -3895,7 +3895,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         'Translators...'
     );
     btn2 = dlg.addButton(
-        function () {
+        () => {
             dlg.body.text = aboutTxt;
             dlg.body.fixLayout();
             btn1.show();
@@ -3911,7 +3911,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     );
     btn2.hide();
     licenseBtn = dlg.addButton(
-        function () {
+        () => {
             dlg.body.text = noticeTxt;
             dlg.body.fixLayout();
             btn1.show();
@@ -3926,7 +3926,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         'License...'
     );
     btn3 = dlg.addButton(
-        function () {
+        () => {
             dlg.body.text = versions;
             dlg.body.fixLayout();
             btn1.show();
@@ -3941,7 +3941,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         'Modules...'
     );
     btn4 = dlg.addButton(
-        function () {
+        () => {
             dlg.body.text = creditsTxt;
             dlg.body.fixLayout();
             btn1.show();
@@ -3963,7 +3963,6 @@ IDE_Morph.prototype.editProjectNotes = function () {
     var dialog = new DialogBoxMorph().withKey('projectNotes'),
         frame = new ScrollFrameMorph(),
         text = new TextMorph(this.projectNotes || ''),
-        myself = this,
         size = 250,
         world = this.world();
 
@@ -3988,19 +3987,13 @@ IDE_Morph.prototype.editProjectNotes = function () {
 
     frame.addContents(text);
 
-    dialog.getInput = function () {
-        return text.text;
-    };
+    dialog.getInput = () => text.text;
 
-    dialog.target = myself;
+    dialog.target = this;
 
-    dialog.action = function (note) {
-        myself.projectNotes = note;
-    };
+    dialog.action = (note) => this.projectNotes = note;
 
-    dialog.justDropped = function () {
-        text.edit();
-    };
+    dialog.justDropped = () => text.edit();
 
     dialog.labelString = 'Project Notes';
     dialog.createLabel();
