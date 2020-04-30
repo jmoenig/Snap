@@ -4874,7 +4874,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     this.isAutoFill = true;
     this.isDraggable = false;
     this.reactToWorldResize(world.bounds.copy());
-    this.siblings().forEach(function (morph) {
+    this.siblings().forEach(morph => {
         if (morph instanceof DialogBoxMorph) {
             world.add(morph); // bring to front
         } else {
@@ -4885,7 +4885,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     this.refreshPalette();
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
-    world.reactToDropOf = function (morph) {
+    world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
         		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
@@ -4896,7 +4896,6 @@ IDE_Morph.prototype.switchToUserMode = function () {
         }
     };
     this.showMessage('entering user mode', 1);
-
 };
 
 IDE_Morph.prototype.switchToDevMode = function () {
@@ -4926,14 +4925,14 @@ IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
         this.stage.blocksCache[category] = null;
-        this.stage.children.forEach(function (m) {
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.blocksCache[category] = null;
             }
         });
     } else {
         this.stage.blocksCache = {};
-        this.stage.children.forEach(function (m) {
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.blocksCache = {};
             }
@@ -4946,14 +4945,14 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
         this.stage.paletteCache[category] = null;
-        this.stage.children.forEach(function (m) {
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache[category] = null;
             }
         });
     } else {
         this.stage.paletteCache = {};
-        this.stage.children.forEach(function (m) {
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache = {};
             }
@@ -4971,20 +4970,20 @@ IDE_Morph.prototype.toggleZebraColoring = function () {
     }
 
     // select all scripts:
-    this.stage.children.concat(this.stage).forEach(function (morph) {
+    this.stage.children.concat(this.stage).forEach(morph => {
         if (isSnapObject(morph)) {
             scripts = scripts.concat(
-                morph.scripts.children.filter(function (morph) {
-                    return morph instanceof BlockMorph;
-                })
+                morph.scripts.children.filter(morph =>
+                    morph instanceof BlockMorph
+                )
             );
         }
     });
 
     // force-update all scripts:
-    scripts.forEach(function (topBlock) {
-        topBlock.fixBlockColor(null, true);
-    });
+    scripts.forEach(topBlock =>
+        topBlock.fixBlockColor(null, true)
+    );
 };
 
 IDE_Morph.prototype.toggleDynamicInputLabels = function () {
@@ -5110,10 +5109,10 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.setColor(this.appModeColor);
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
-        elements.forEach(function (e) {
-            e.hide();
-        });
-        world.children.forEach(function (morph) {
+        elements.forEach(e =>
+            e.hide()
+        );
+        world.children.forEach(morph => {
             if (morph instanceof DialogBoxMorph) {
                 morph.hide();
             }
@@ -5127,26 +5126,26 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
-        elements.forEach(function (e) {
-            e.show();
-        });
+        elements.forEach(e =>
+            e.show()
+        );
         this.stage.setScale(1);
         // show all hidden dialogs
-        world.children.forEach(function (morph) {
+        world.children.forEach(morph => {
             if (morph instanceof DialogBoxMorph) {
                 morph.show();
             }
         });
         // prevent scrollbars from showing when morph appears
-        world.allChildren().filter(function (c) {
-            return c instanceof ScrollFrameMorph;
-        }).forEach(function (s) {
-            s.adjustScrollBars();
-        });
+        world.allChildren().filter(c =>
+            c instanceof ScrollFrameMorph
+        ).forEach(s =>
+            s.adjustScrollBars()
+        );
         // prevent rotation and draggability controls from
         // showing for the stage
         if (this.currentSprite === this.stage) {
-            this.spriteBar.children.forEach(function (child) {
+            this.spriteBar.children.forEach(child => {
                 if (child instanceof PushButtonMorph) {
                     child.hide();
                 }
@@ -5173,17 +5172,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     function zoomTo(targetRatio) {
         myself.isSmallStage = true;
         world.animations.push(new Animation(
-            function (ratio) {
+            ratio => {
                 myself.stageRatio = ratio;
                 myself.setExtent(world.extent());
             },
-            function () {
-                return myself.stageRatio;
-            },
+            () => myself.stageRatio,
             targetRatio - myself.stageRatio,
             msecs,
             null, // easing
-            function () {
+            () => {
                 myself.isSmallStage = (targetRatio !== 1);
                 myself.controlBar.stageSizeButton.refresh();
             }
@@ -5214,18 +5211,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,
-        world = this.world(),
-        myself = this;
+        world = this.world();
 
     world.animations.push(new Animation(
-        function (newWidth) {
-            myself.paletteWidth = newWidth;
-            myself.setExtent(world.extent());
+        newWidth => {
+            this.paletteWidth = newWidth;
+            this.setExtent(world.extent());
         },
-        function () {
-            return myself.paletteWidth;
-        },
-        newWidth - myself.paletteWidth,
+        () => this.paletteWidth,
+        newWidth - this.paletteWidth,
         msecs
     ));
 };
