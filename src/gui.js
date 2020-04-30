@@ -3556,7 +3556,6 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // Note: Synchronous fetching has been deprecated and should be switched
     var url = this.resourceURL(dirname, dirname.toUpperCase()),
         async = callback instanceof Function,
-        myself = this,
         data;
 
     function alphabetically(x, y) {
@@ -3566,8 +3565,8 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     if (async) {
         this.getURL(
             url,
-            function (txt) {
-                var data = myself.parseResourceFile(txt);
+            txt => {
+                var data = this.parseResourceFile(txt);
                 data.sort(alphabetically);
                 callback.call(this, data);
             }
@@ -3587,12 +3586,12 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     var parts,
         items = [];
 
-    text.split('\n').map(function (line) {
-        return line.trim();
-    }).filter(function (line) {
-        return line.length > 0;
-    }).forEach(function (line) {
-        parts = line.split('\t').map(function (str) { return str.trim(); });
+    text.split('\n').map(line =>
+        line.trim()
+    ).filter(line =>
+        line.length > 0
+    ).forEach(line => {
+        parts = line.split('\t').map(str => str.trim());
 
         if (parts.length < 2) {return; }
 
@@ -3608,7 +3607,6 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
 
 IDE_Morph.prototype.importLocalFile = function () {
     var inp = document.createElement('input'),
-        myself = this,
         world = this.world();
 
     if (this.filePicker) {
@@ -3628,9 +3626,9 @@ IDE_Morph.prototype.importLocalFile = function () {
     inp.style.display = "none";
     inp.addEventListener(
         "change",
-        function () {
+        () => {
             document.body.removeChild(inp);
-            myself.filePicker = null;
+            this.filePicker = null;
             world.hand.processDrop(inp.files);
         },
         false
@@ -3643,13 +3641,12 @@ IDE_Morph.prototype.importLocalFile = function () {
 IDE_Morph.prototype.importMedia = function (folderName) {
     // open a dialog box letting the user browse available "built-in"
     // costumes, backgrounds or sounds
-    var myself = this,
-        msg = this.showMessage('Opening ' + folderName + '...');
+    var msg = this.showMessage('Opening ' + folderName + '...');
     this.getMediaList(
         folderName,
-        function (items) {
+        items => {
             msg.destroy();
-            myself.popupMediaImportDialog(folderName, items);
+            this.popupMediaImportDialog(folderName, items);
         }
     );
 
@@ -3728,9 +3725,9 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.buttons.setBottom(this.bottom() - this.padding);
     };
 
-    items.forEach(function (item) {
+    items.forEach(item => {
         // Caution: creating very many thumbnails can take a long time!
-        var url = myself.resourceURL(folderName, item.fileName),
+        var url = this.resourceURL(folderName, item.fileName),
             img = new Image(),
             suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
             isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
@@ -3771,12 +3768,10 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 icon.object = new SVG_Costume(img, item.name);
                 icon.refresh();
             };
-            myself.getURL(
+            this.getURL(
                 url,
-                function (txt) {
-                    img.src = 'data:image/svg+xml;base64,' +
-                         window.btoa(txt);
-                }
+                txt => img.src = 'data:image/svg+xml;base64,' +
+                    window.btoa(txt)
             );
         } else {
             img.onload = function () {
