@@ -6890,8 +6890,7 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
 };
 
 ProjectDialogMorph.prototype.deleteProject = function () {
-    var myself = this,
-        proj,
+    var proj,
         idx,
         name;
 
@@ -6903,21 +6902,19 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                     'Are you sure you want to delete'
                 ) + '\n"' + proj.projectname + '"?',
                 'Delete Project',
-                function () {
-                    myself.ide.cloud.deleteProject(
-                        proj.projectname,
-                        null, // username is implicit
-                        function () {
-                            myself.ide.hasChangedMedia = true;
-                            idx = myself.projectList.indexOf(proj);
-                            myself.projectList.splice(idx, 1);
-                            myself.installCloudProjectList(
-                                myself.projectList
-                            ); // refresh list
-                        },
-                        myself.ide.cloudError()
-                    );
-                }
+                () => this.ide.cloud.deleteProject(
+                    proj.projectname,
+                    null, // username is implicit
+                    () => {
+                        this.ide.hasChangedMedia = true;
+                        idx = this.projectList.indexOf(proj);
+                        this.projectList.splice(idx, 1);
+                        this.installCloudProjectList( // refresh list
+                            this.projectList
+                        );
+                    },
+                    this.ide.cloudError()
+                )
             );
         }
     } else { // 'local, examples'
@@ -6928,9 +6925,9 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                     'Are you sure you want to delete'
                 ) + '\n"' + name + '"?',
                 'Delete Project',
-                function () {
+                () => {
                     delete localStorage['-snap-project-' + name];
-                    myself.setSource(myself.source); // refresh list
+                    this.setSource(this.source); // refresh list
                 }
             );
         }
@@ -6938,8 +6935,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 };
 
 ProjectDialogMorph.prototype.shareProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -6949,22 +6945,22 @@ ProjectDialogMorph.prototype.shareProject = function () {
                 'Are you sure you want to share'
             ) + '\n"' + proj.projectname + '"?',
             'Share Project',
-            function () {
+            () => {
                 ide.showMessage('sharing\nproject...');
                 ide.cloud.shareProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublic = true;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.show();
-                        myself.unpublishButton.hide();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.show();
+                        this.unpublishButton.hide();
                         entry.label.isBold = true;
                         entry.label.rerender();
-                        myself.buttons.fixLayout();
-                        myself.rerender();
-                        myself.ide.showMessage('shared.', 2);
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('shared.', 2);
 
                         // Set the Shared URL if the project is currently open
                         if (proj.projectname === ide.projectName) {
@@ -6976,7 +6972,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             location.hash = 'present:' + projectId;
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -6984,8 +6980,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
 };
 
 ProjectDialogMorph.prototype.unshareProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -6995,28 +6990,28 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                 'Are you sure you want to unshare'
             ) + '\n"' + proj.projectname + '"?',
             'Unshare Project',
-            function () {
+            () => {
                 ide.showMessage('unsharing\nproject...');
                 ide.cloud.unshareProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublic = false;
-                        myself.shareButton.show();
-                        myself.unshareButton.hide();
-                        myself.publishButton.hide();
-                        myself.unpublishButton.hide();
+                        this.shareButton.show();
+                        this.unshareButton.hide();
+                        this.publishButton.hide();
+                        this.unpublishButton.hide();
                         entry.label.isBold = false;
                         entry.label.isItalic = false;
                         entry.label.rerender();
-                        myself.buttons.fixLayout();
-                        myself.rerender();
-                        myself.ide.showMessage('unshared.', 2);
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('unshared.', 2);
                         if (proj.projectname === ide.projectName) {
                             location.hash = '';
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -7024,8 +7019,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
 };
 
 ProjectDialogMorph.prototype.publishProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -7035,22 +7029,22 @@ ProjectDialogMorph.prototype.publishProject = function () {
                 'Are you sure you want to publish'
             ) + '\n"' + proj.projectname + '"?',
             'Publish Project',
-            function () {
+            () => {
                 ide.showMessage('publishing\nproject...');
                 ide.cloud.publishProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublished = true;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.hide();
-                        myself.unpublishButton.show();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.hide();
+                        this.unpublishButton.show();
                         entry.label.isItalic = true;
                         entry.label.rerender();
-                        myself.buttons.fixLayout();
-                        myself.rerender();
-                        myself.ide.showMessage('published.', 2);
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('published.', 2);
 
                         // Set the Shared URL if the project is currently open
                         if (proj.projectname === ide.projectName) {
@@ -7062,7 +7056,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
                             location.hash = 'present:' + projectId;
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -7070,8 +7064,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
 };
 
 ProjectDialogMorph.prototype.unpublishProject = function () {
-    var myself = this,
-        proj = this.listField.selected,
+    var proj = this.listField.selected,
         entry = this.listField.active;
 
     if (proj) {
@@ -7080,24 +7073,24 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                 'Are you sure you want to unpublish'
             ) + '\n"' + proj.projectname + '"?',
             'Unpublish Project',
-            function () {
-                myself.ide.showMessage('unpublishing\nproject...');
-                myself.ide.cloud.unpublishProject(
+            () => {
+                this.ide.showMessage('unpublishing\nproject...');
+                this.ide.cloud.unpublishProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublished = false;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.show();
-                        myself.unpublishButton.hide();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.show();
+                        this.unpublishButton.hide();
                         entry.label.isItalic = false;
                         entry.label.rerender();
-                        myself.buttons.fixLayout();
-                        myself.rerender();
-                        myself.ide.showMessage('unpublished.', 2);
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('unpublished.', 2);
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
