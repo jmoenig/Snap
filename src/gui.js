@@ -5516,12 +5516,10 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
 IDE_Morph.prototype.userSetDragThreshold = function () {
     new DialogBoxMorph(
         this,
-        function (num) {
-            MorphicPreferences.grabThreshold = Math.min(
-                Math.max(+num, 0),
-                200
-            );
-        },
+        num => MorphicPreferences.grabThreshold = Math.min(
+            Math.max(+num, 0),
+            200
+        ),
         this
     ).prompt(
         "Dragging threshold",
@@ -5537,44 +5535,41 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 // IDE_Morph cloud interface
 
 IDE_Morph.prototype.initializeCloud = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.login(
-                user.username.toLowerCase(),
-                user.password,
-                user.choice,
-                function (username, role, response) {
-                    sessionStorage.username = username;
-                    myself.source = 'cloud';
-                    if (!isNil(response.days_left)) {
-                        new DialogBoxMorph().inform(
-                            'Unverified account: ' +
-                            response.days_left +
-                            ' days left',
-                            'You are now logged in, and your account\n' +
-                            'is enabled for three days.\n' +
-                            'Please use the verification link that\n' +
-                            'was sent to your email address when you\n' +
-                            'signed up.\n\n' +
-                            'If you cannot find that email, please\n' +
-                            'check your spam folder. If you still\n' +
-                            'cannot find it, please use the "Resend\n' +
-                            'Verification Email..." option in the cloud\n' +
-                            'menu.\n\n' +
-                            'You have ' + response.days_left + ' days left.',
-                            world,
-                            myself.cloudIcon(null, new Color(0, 180, 0))
-                        );
-                    } else {
-                        myself.showMessage(response.message, 2);
-                    }
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.login(
+            user.username.toLowerCase(),
+            user.password,
+            user.choice,
+            (username, role, response) => {
+                sessionStorage.username = username;
+                this.source = 'cloud';
+                if (!isNil(response.days_left)) {
+                    new DialogBoxMorph().inform(
+                        'Unverified account: ' +
+                        response.days_left +
+                        ' days left',
+                        'You are now logged in, and your account\n' +
+                        'is enabled for three days.\n' +
+                        'Please use the verification link that\n' +
+                        'was sent to your email address when you\n' +
+                        'signed up.\n\n' +
+                        'If you cannot find that email, please\n' +
+                        'check your spam folder. If you still\n' +
+                        'cannot find it, please use the "Resend\n' +
+                        'Verification Email..." option in the cloud\n' +
+                        'menu.\n\n' +
+                        'You have ' + response.days_left + ' days left.',
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                } else {
+                    this.showMessage(response.message, 2);
+                }
+            },
+            this.cloudError()
+        )
     ).withKey('cloudlogin').promptCredentials(
         'Sign in',
         'login',
@@ -5584,35 +5579,29 @@ IDE_Morph.prototype.initializeCloud = function () {
         null,
         'stay signed in on this computer\nuntil logging out',
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.createCloudAccount = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.signup(
-                user.username,
-                user.password,
-                user.passwordRepeat,
-                user.email,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '.\n\nYou can now log in.',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.signup(
+            user.username,
+            user.password,
+            user.passwordRepeat,
+            user.email,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt + '.\n\nYou can now log in.',
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudsignup').promptCredentials(
         'Sign up',
         'signup',
@@ -5622,34 +5611,29 @@ IDE_Morph.prototype.createCloudAccount = function () {
         'Privacy...',
         'I have read and agree\nto the Terms of Service',
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.resetCloudPassword = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.resetPassword(
-                user.username,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '\n\nAn e-mail with a link to\n' +
-                            'reset your password\n' +
-                            'has been sent to the address provided',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.resetPassword(
+            user.username,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt +
+                    '\n\nAn e-mail with a link to\n' +
+                    'reset your password\n' +
+                    'has been sent to the address provided',
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudresetpassword').promptCredentials(
         'Reset password',
         'resetPassword',
@@ -5659,31 +5643,26 @@ IDE_Morph.prototype.resetCloudPassword = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.resendVerification = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.resendVerification(
-                user.username,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt,
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.resendVerification(
+            user.username,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt,
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudresendverification').promptCredentials(
         'Resend verification email',
         'resendVerification',
@@ -5693,27 +5672,23 @@ IDE_Morph.prototype.resendVerification = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.changeCloudPassword = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
+
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.changePassword(
-                user.oldpassword,
-                user.password,
-                user.passwordRepeat,
-                function () {
-                    myself.showMessage('password has been changed.', 2);
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.changePassword(
+            user.oldpassword,
+            user.password,
+            user.passwordRepeat,
+            () => this.showMessage('password has been changed.', 2),
+            this.cloudError()
+        )
     ).withKey('cloudpassword').promptCredentials(
         'Change Password',
         'changePassword',
@@ -5723,21 +5698,20 @@ IDE_Morph.prototype.changeCloudPassword = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.logout = function () {
-    var myself = this;
     this.cloud.logout(
-        function () {
+        () => {
             delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
+            this.showMessage('disconnected.', 2);
         },
-        function () {
+        () => {
             delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
+            this.showMessage('disconnected.', 2);
         }
     );
 };
@@ -5802,7 +5776,7 @@ IDE_Morph.prototype.verifyProject = function (body) {
 };
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var myself = this, projectBody, projectSize;
+    var projectBody, projectSize;
 
     if (name) {
         this.setProjectName(name);
@@ -5818,7 +5792,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     this.cloud.saveProject(
         this.projectName,
         projectBody,
-        function () {myself.showMessage('saved.', 2); },
+        () => this.showMessage('saved.', 2),
         this.cloudError()
     );
 };
