@@ -6125,8 +6125,6 @@ function ProjectDialogMorph(ide, label) {
 }
 
 ProjectDialogMorph.prototype.init = function (ide, task) {
-    var myself = this;
-
     // additional properties:
     this.ide = ide;
     this.task = task || 'open'; // String describing what do do (open, save)
@@ -6172,9 +6170,8 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
         this.source = 'disk';
     } else {
         this.buildContents();
-        this.onNextStep = function () { // yield to show "updating" message
-            myself.setSource(myself.source);
-        };
+        this.onNextStep = () => // yield to show "updating" message
+            this.setSource(this.source);
     }
 };
 
@@ -6397,8 +6394,7 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     label,
     symbol
 ) {
-    var myself = this,
-        lbl1 = new StringMorph(
+    var lbl1 = new StringMorph(
             label,
             10,
             null,
@@ -6453,14 +6449,10 @@ ProjectDialogMorph.prototype.addSourceButton = function (
 
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the ProjectDialog is the target
-        function () { // action
-            myself.setSource(source);
-        },
+        this, // the ProjectDialog is the target
+        () => this.setSource(source), // action
         [l1, l2],
-        function () {  // query
-            return myself.source === source;
-        }
+        () => this.source === source // query
     );
 
     button.corner = this.buttonCorner;
@@ -6482,10 +6474,9 @@ ProjectDialogMorph.prototype.addSourceButton = function (
 ProjectDialogMorph.prototype.fixListFieldItemColors = function () {
     // remember to always fixLayout() afterwards for the changes
     // to take effect
-    var myself = this;
     this.listField.contents.children[0].alpha = 0;
-    this.listField.contents.children[0].children.forEach(function (item) {
-        item.pressColor = myself.titleBarColor.darker(20);
+    this.listField.contents.children[0].children.forEach(item => {
+        item.pressColor = this.titleBarColor.darker(20);
         item.color = new Color(0, 0, 0, 0);
     });
 };
@@ -6496,11 +6487,11 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     var myself = this;
 
     this.filterField = new InputFieldMorph('');
-    this.magnifyingGlass =
-        new SymbolMorph(
-            'magnifyingGlass',
-            this.filterField.height(),
-            this.titleBarColor.darker(50));
+    this.magnifyingGlass = new SymbolMorph(
+        'magnifyingGlass',
+        this.filterField.height(),
+        this.titleBarColor.darker(50)
+    );
 
     this.body.add(this.magnifyingGlass);
     this.body.add(this.filterField);
@@ -6509,10 +6500,9 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
         var text = this.getValue();
 
         myself.listField.elements =
-            myself.projectList.filter(function (aProject) {
+            myself.projectList.filter(aProject => {
                 var name = aProject.projectname || aProject.name,
                     notes = aProject.notes || '';
-
                 return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
                     notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
             });
@@ -6533,29 +6523,28 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 // ProjectDialogMorph ops
 
 ProjectDialogMorph.prototype.setSource = function (source) {
-    var myself = this,
-        msg;
+    var msg;
 
     this.source = source;
-    this.srcBar.children.forEach(function (button) {
-        button.refresh();
-    });
+    this.srcBar.children.forEach(button =>
+        button.refresh()
+    );
 
     switch (this.source) {
     case 'cloud':
-        msg = myself.ide.showMessage('Updating\nproject list...');
+        msg = this.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        myself.ide.cloud.getProjectList(
-            function (response) {
+        this.ide.cloud.getProjectList(
+            response => {
                 // Don't show cloud projects if user has since switched panes.
-                if (myself.source === 'cloud') {
-                    myself.installCloudProjectList(response.projects);
+                if (this.source === 'cloud') {
+                    this.installCloudProjectList(response.projects);
                 }
                 msg.destroy();
             },
-            function (err, lbl) {
+            (err, lbl) => {
                 msg.destroy();
-                myself.ide.cloudError().call(null, err, lbl);
+                this.ide.cloudError().call(null, err, lbl);
             }
         );
         return;
@@ -6581,11 +6570,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
-                function (element) {
-                    return element.name || element;
-                } : null,
+            (element) => {return element.name || element; }
+                : null,
         null,
-        function () {myself.ok(); }
+        () => this.ok()
     );
     if (this.source === 'disk') {
         this.listField.hide();
@@ -6601,53 +6589,46 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     if (this.source === 'local') {
-        this.listField.action = function (item) {
+        this.listField.action = (item) => {
             var src, xml;
-
             if (item === undefined) {return; }
-            if (myself.nameField) {
-                myself.nameField.setContents(item.name || '');
+            if (this.nameField) {
+                this.nameField.setContents(item.name || '');
             }
-            if (myself.task === 'open') {
-
+            if (this.task === 'open') {
                 src = localStorage['-snap-project-' + item.name];
-
                 if (src) {
-                    xml = myself.ide.serializer.parse(src);
-
-                    myself.notesText.text = xml.childNamed('notes').contents
-                        || '';
-                    myself.notesText.rerender();
-                    myself.notesField.contents.adjustBounds();
-                    myself.preview.texture =
+                    xml = this.ide.serializer.parse(src);
+                    this.notesText.text =
+                        xml.childNamed('notes').contents || '';
+                    this.notesText.rerender();
+                    this.notesField.contents.adjustBounds();
+                    this.preview.texture =
                         xml.childNamed('thumbnail').contents || null;
-                    myself.preview.cachedTexture = null;
-                    myself.preview.rerender();
+                    this.preview.cachedTexture = null;
+                    this.preview.rerender();
                 }
             }
-            myself.edit();
+            this.edit();
         };
     } else { // 'examples'; 'cloud' is initialized elsewhere
-        this.listField.action = function (item) {
+        this.listField.action = (item) => {
             var src, xml;
             if (item === undefined) {return; }
-            if (myself.nameField) {
-                myself.nameField.setContents(item.name || '');
+            if (this.nameField) {
+                this.nameField.setContents(item.name || '');
             }
-            src = myself.ide.getURL(
-                myself.ide.resourceURL('Examples', item.fileName)
+            src = this.ide.getURL(
+                this.ide.resourceURL('Examples', item.fileName)
             );
-
-            xml = myself.ide.serializer.parse(src);
-            myself.notesText.text = xml.childNamed('notes').contents
-                || '';
-            myself.notesText.rerender();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = xml.childNamed('thumbnail').contents
-                || null;
-            myself.preview.cachedTexture = null;
-            myself.preview.rerender();
-            myself.edit();
+            xml = this.ide.serializer.parse(src);
+            this.notesText.text = xml.childNamed('notes').contents || '';
+            this.notesText.rerender();
+            this.notesField.contents.adjustBounds();
+            this.preview.texture = xml.childNamed('thumbnail').contents || null;
+            this.preview.cachedTexture = null;
+            this.preview.rerender();
+            this.edit();
         };
     }
     this.body.add(this.listField);
@@ -6676,9 +6657,9 @@ ProjectDialogMorph.prototype.hasLocalProjects = function () {
     // check and report whether old projects still exist in the
     // browser's local storage, which as of v5 has been deprecated,
     // so the user can recover and move them elsewhere
-    return Object.keys(localStorage).some(function (any) {
-        return any.indexOf('-snap-project-') === 0;
-    });
+    return Object.keys(localStorage).some(any =>
+        any.indexOf('-snap-project-') === 0
+    );
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {
@@ -6696,9 +6677,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
             projects.push(dta);
         }
     }
-    projects.sort(function (x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    });
+    projects.sort((x, y) =>
+        x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1
+    );
     return projects;
 };
 
@@ -6707,31 +6688,28 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
-    var myself = this;
     this.projectList = pl[0] ? pl : [];
-    this.projectList.sort(function (x, y) {
-        return x.projectname.toLowerCase() < y.projectname.toLowerCase() ?
-                 -1 : 1;
-    });
+    this.projectList.sort((x, y) =>
+        x.projectname.toLowerCase() < y.projectname.toLowerCase() ? -1 : 1
+    );
 
     this.listField.destroy();
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
-                function (element) {
-                    return element.projectname || element;
-                } : null,
+            (element) => {return element.projectname || element; }
+                : null,
         [ // format: display shared project names bold
             [
                 'bold',
-                function (proj) { return proj.ispublic; }
+                proj => proj.ispublic
             ],
             [
                 'italic',
-                function (proj) { return proj.ispublished; }
+                proj => proj.ispublished
             ]
         ],
-        function () { myself.ok(); }
+        () => this.ok()
     );
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -6742,57 +6720,57 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
+    this.listField.action = (item) => {
         if (item === undefined) {return; }
-        if (myself.nameField) {
-            myself.nameField.setContents(item.projectname || '');
+        if (this.nameField) {
+            this.nameField.setContents(item.projectname || '');
         }
-        if (myself.task === 'open') {
-            myself.notesText.text = item.notes || '';
-            myself.notesText.rerender();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = '';
-            myself.preview.rerender();
+        if (this.task === 'open') {
+            this.notesText.text = item.notes || '';
+            this.notesText.rerender();
+            this.notesField.contents.adjustBounds();
+            this.preview.texture = '';
+            this.preview.rerender();
             // we ask for the thumbnail when selecting a project
-            myself.ide.cloud.getThumbnail(
+            this.ide.cloud.getThumbnail(
                 null, // username is implicit
                 item.projectname,
-                function (thumbnail) {
-                    myself.preview.texture = thumbnail;
-                    myself.preview.cachedTexture = null;
-                    myself.preview.rerender();
+                thumbnail => {
+                    this.preview.texture = thumbnail;
+                    this.preview.cachedTexture = null;
+                    this.preview.rerender();
                 });
-            (new SpeechBubbleMorph(new TextMorph(
+            new SpeechBubbleMorph(new TextMorph(
                 localize('last changed') + '\n' + item.lastupdated,
                 null,
                 null,
                 null,
                 null,
                 'center'
-            ))).popUp(
-                myself.world(),
-                myself.preview.rightCenter().add(new Point(2, 0))
+            )).popUp(
+                this.world(),
+                this.preview.rightCenter().add(new Point(2, 0))
             );
         }
         if (item.ispublic) {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
+            this.shareButton.hide();
+            this.unshareButton.show();
             if (item.ispublished) {
-                myself.publishButton.hide();
-                myself.unpublishButton.show();
+                this.publishButton.hide();
+                this.unpublishButton.show();
             } else {
-                myself.publishButton.show();
-                myself.unpublishButton.hide();
+                this.publishButton.show();
+                this.unpublishButton.hide();
             }
         } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-            myself.publishButton.hide();
-            myself.unpublishButton.hide();
+            this.unshareButton.hide();
+            this.shareButton.show();
+            this.publishButton.hide();
+            this.unpublishButton.hide();
         }
-        myself.buttons.fixLayout();
-        myself.fixLayout();
-        myself.edit();
+        this.buttons.fixLayout();
+        this.fixLayout();
+        this.edit();
     };
     this.body.add(this.listField);
     if (this.task === 'open') {
@@ -6844,67 +6822,58 @@ ProjectDialogMorph.prototype.openProject = function () {
 };
 
 ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
-    var myself = this;
-    myself.ide.nextSteps([
-        function () {
-            myself.ide.showMessage('Fetching project\nfrom the cloud...');
-        },
-        function () {
-            myself.rawOpenCloudProject(project, delta);
-        }
+    this.ide.nextSteps([
+        () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
+        () => this.rawOpenCloudProject(project, delta)
     ]);
 };
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
-    var myself = this;
     this.ide.cloud.getProject(
         proj.projectname,
         delta,
-        function (clouddata) {
-            myself.ide.source = 'cloud';
-            myself.ide.nextSteps([
-                function () {
-                    myself.ide.openCloudDataString(clouddata);
-                }
+        clouddata => {
+            this.ide.source = 'cloud';
+            this.ide.nextSteps([
+                () => this.ide.openCloudDataString(clouddata)
             ]);
 			location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
-                    encodeURIComponent(myself.ide.cloud.username) +
+                    encodeURIComponent(this.ide.cloud.username) +
                     '&ProjectName=' +
                     encodeURIComponent(proj.projectname);
             }
         },
-        myself.ide.cloudError()
+        this.ide.cloudError()
     );
     this.destroy();
 };
 
 ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
-        notes = this.notesText.text,
-        myself = this;
+        notes = this.notesText.text;
 
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
             if (detect(
                     this.projectList,
-                    function (item) {return item.projectname === name; }
+                    item => item.projectname === name
                 )) {
                 this.ide.confirm(
                     localize(
                         'Are you sure you want to replace'
                     ) + '\n"' + name + '"?',
                     'Replace Project',
-                    function () {
-                        myself.ide.setProjectName(name);
-                        myself.saveCloudProject();
+                    () => {
+                        this.ide.setProjectName(name);
+                        this.saveCloudProject();
                     }
                 );
             } else {
                 this.ide.setProjectName(name);
-                myself.saveCloudProject();
+                this.saveCloudProject();
             }
         } else if (this.source === 'disk') {
             this.ide.exportProject(name, false);
