@@ -5884,23 +5884,21 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
 };
 
 IDE_Morph.prototype.cloudAcknowledge = function () {
-    var myself = this;
-    return function (responseText, url) {
+    return (responseText, url) => {
         nop(responseText);
         new DialogBoxMorph().inform(
             'Cloud Connection',
             'Successfully connected to:\n'
                 + 'http://'
                 + url,
-            myself.world(),
-            myself.cloudIcon(null, new Color(0, 180, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(0, 180, 0))
         );
     };
 };
 
 IDE_Morph.prototype.cloudResponse = function () {
-    var myself = this;
-    return function (responseText, url) {
+    return (responseText, url) => {
         var response = responseText;
         if (response.length > 50) {
             response = response.substring(0, 50) + '...';
@@ -5911,54 +5909,34 @@ IDE_Morph.prototype.cloudResponse = function () {
                 + url + ':\n\n'
                 + 'responds:\n'
                 + response,
-            myself.world(),
-            myself.cloudIcon(null, new Color(0, 180, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(0, 180, 0))
         );
     };
 };
 
 IDE_Morph.prototype.cloudError = function () {
-    var myself = this;
-
-    // try finding an eplanation what's going on
-    // has some issues, commented out for now
-    /*
-    function getURL(url) {
-        try {
-            var request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return request.responseText;
-            }
-            return null;
-        } catch (err) {
-            return null;
-        }
-    }
-    */
-
-    return function (responseText, url) {
+    return (responseText, url) => {
         // first, try to find out an explanation for the error
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
             // explanation = getURL('https://snap.berkeley.edu/cloudmsg.txt'),
             explanation = null;
-        if (myself.shield) {
-            myself.shield.destroy();
-            myself.shield = null;
+        if (this.shield) {
+            this.shield.destroy();
+            this.shield = null;
         }
         if (explanation) {
-            myself.showMessage(explanation);
+            this.showMessage(explanation);
             return;
         }
         new DialogBoxMorph().inform(
             'Snap!Cloud',
             (url ? url + '\n' : '')
                 + response,
-            myself.world(),
-            myself.cloudIcon(null, new Color(180, 0, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(180, 0, 0))
         );
     };
 };
@@ -5980,12 +5958,9 @@ IDE_Morph.prototype.cloudIcon = function (height, color) {
 };
 
 IDE_Morph.prototype.setCloudURL = function () {
-    var myself = this;
     new DialogBoxMorph(
         null,
-        function (url) {
-            myself.cloud.url = url;
-        }
+        url => this.cloud.url = url
     ).withKey('cloudURL').prompt(
         'Cloud URL',
         this.cloud.url,
@@ -5997,13 +5972,11 @@ IDE_Morph.prototype.setCloudURL = function () {
 
 IDE_Morph.prototype.urlParameters = function () {
     var parameters = location.hash.slice(location.hash.indexOf(':') + 1);
-
     return this.cloud.parseDict(parameters);
 };
 
 IDE_Morph.prototype.hasCloudProject = function () {
     var params = this.urlParameters();
-
     return params.hasOwnProperty('Username') &&
         params.hasOwnProperty('ProjectName');
 };
