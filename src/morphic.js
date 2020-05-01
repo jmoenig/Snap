@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-April-24';
+var morphicVersion = '2020-May-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11028,7 +11028,7 @@ HandMorph.prototype.fullDrawOn = function (ctx, rect) {
 
     if (!clipped.extent().gt(ZERO)) {return; }
     ctx.save();
-    ctx.globalAlpha = this.alpha;
+    ctx.globalAlpha = this.children[0].alpha;
     pic = this.cachedFullImage;
     src = clipped.translateBy(pos.neg());
     sl = src.left();
