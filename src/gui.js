@@ -7278,8 +7278,6 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
 };
 
 ProjectRecoveryDialogMorph.prototype.buildListField = function () {
-    var myself = this;
-
     this.listField = new ListMorph([]);
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -7290,30 +7288,29 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
     this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
+    this.listField.action = (item) => {
         var version;
         if (item === undefined) { return; }
         version = detect(
-            myself.versions,
-            function (version) {
-                return version.lastupdated === item;
-            });
-        myself.notesText.text = version.notes || '';
-        myself.notesText.rerender();
-        myself.notesField.contents.adjustBounds();
-        myself.preview.texture = version.thumbnail;
-        myself.preview.cachedTexture = null;
-        myself.preview.rerender();
+            this.versions,
+            version => version.lastupdated === item
+        );
+        this.notesText.text = version.notes || '';
+        this.notesText.rerender();
+        this.notesField.contents.adjustBounds();
+        this.preview.texture = version.thumbnail;
+        this.preview.cachedTexture = null;
+        this.preview.rerender();
     };
 
     this.ide.cloud.getProjectVersionMetadata(
         this.projectName,
-        function (versions) {
+        versions => {
             var today = new Date(),
                 yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
-            myself.versions = versions;
-            myself.versions.forEach(function (version) {
+            this.versions = versions;
+            this.versions.forEach(version => {
                 var date = new Date(
                     new Date().getTime() - version.lastupdated * 1000
                 );
@@ -7327,16 +7324,15 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
                     version.lastupdated = date.toLocaleString();
                 }
             });
-            myself.listField.elements =
-                myself.versions.map(function (version) {
-                    return version.lastupdated;
-                });
-            myself.clearDetails();
-            myself.listField.buildListContents();
-            myself.fixListFieldItemColors();
-            myself.listField.adjustScrollBars();
-            myself.listField.scrollY(myself.listField.top());
-            myself.fixLayout();
+            this.listField.elements = this.versions.map(version =>
+                version.lastupdated
+            );
+            this.clearDetails();
+            this.listField.buildListContents();
+            this.fixListFieldItemColors();
+            this.listField.adjustScrollBars();
+            this.listField.scrollY(this.listField.top());
+            this.fixLayout();
         },
         this.ide.cloudError()
     );
@@ -7345,14 +7341,11 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
 };
 
 ProjectRecoveryDialogMorph.prototype.cancel = function () {
-    var myself = this;
     this.browser.show();
     this.browser.listField.select(
         detect(
             this.browser.projectList,
-            function (item) {
-                return item.projectname === myself.projectName;
-            }
+            item => item.projectname === this.projectName
         )
     );
     ProjectRecoveryDialogMorph.uber.cancel.call(this);
@@ -7361,10 +7354,9 @@ ProjectRecoveryDialogMorph.prototype.cancel = function () {
 ProjectRecoveryDialogMorph.prototype.recoverProject = function () {
     var lastupdated = this.listField.selected,
         version = detect(
-        this.versions,
-        function (version) {
-            return version.lastupdated === lastupdated;
-        });
+            this.versions,
+            version => version.lastupdated === lastupdated
+        );
 
     this.browser.openCloudProject(
         {projectname: this.projectName},
