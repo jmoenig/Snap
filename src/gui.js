@@ -7541,15 +7541,13 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
 };
 
 LibraryImportDialogMorph.prototype.installLibrariesList = function () {
-    var myself = this;
-
     if (this.listField) {this.listField.destroy(); }
 
     this.listField = new ListMorph(
         this.librariesData,
-        function (element) {return element.name; },
+        element => element.name,
         null,
-        function () {myself.importLibrary(); }
+        () => this.importLibrary()
     );
 
     this.fixListFieldItemColors();
@@ -7562,28 +7560,24 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
+    this.listField.action = (item) => {
         if (isNil(item)) {return; }
 
-        myself.notesText.text = localize(item.description || '');
-        myself.notesText.rerender();
-        myself.notesField.contents.adjustBounds();
+        this.notesText.text = localize(item.description || '');
+        this.notesText.rerender();
+        this.notesField.contents.adjustBounds();
 
-        if (myself.hasCached(item.fileName)) {
-            myself.displayBlocks(item.fileName);
+        if (this.hasCached(item.fileName)) {
+            this.displayBlocks(item.fileName);
         } else {
-            myself.showMessage(
-                localize('Loading') + '\n' + localize(item.name)
-            );
-            myself.ide.getURL(
-                myself.ide.resourceURL('libraries', item.fileName),
-                function(libraryXML) {
-                    myself.cacheLibrary(
-                        item.fileName,
-                        myself.ide.serializer.loadBlocks(libraryXML)
-                    );
-                    myself.displayBlocks(item.fileName);
-                }
+            this.showMessage(localize('Loading') + '\n' + localize(item.name));
+            this.ide.getURL(
+                this.ide.resourceURL('libraries', item.fileName),
+                libraryXML => this.cacheLibrary(
+                    item.fileName,
+                    this.ide.serializer.loadBlocks(libraryXML)
+                ),
+                this.displayBlocks(item.fileName)
             );
         }
     };
@@ -7689,7 +7683,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 
     if (this.hasCached(selectedLibrary)) {
         blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(function (def) {
+        blocks.forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
@@ -7710,7 +7704,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     var x, y, blockImage, previousCategory, blockContainer,
-        myself = this,
         padding = 4,
         blocksList = this.cachedLibrary(libraryKey);
 
@@ -7720,8 +7713,8 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    SpriteMorph.prototype.categories.forEach(function (category) {
-        blocksList.forEach(function (definition) {
+    SpriteMorph.prototype.categories.forEach(category => {
+        blocksList.forEach(definition => {
             if (definition.category !== category) {return; }
             if (category !== previousCategory) {
                 y += padding;
@@ -7736,7 +7729,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             );
             blockContainer.cachedImage = blockImage;
             blockContainer.setPosition(new Point(x, y));
-            myself.palette.addContents(blockContainer);
+            this.palette.addContents(blockContainer);
 
             y += blockContainer.fullBounds().height() + padding;
         });
