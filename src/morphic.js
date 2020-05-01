@@ -3589,7 +3589,7 @@ Morph.prototype.shadow = function (off, a, color) {
         alpha = a || ((a === 0) ? 0 : 0.2),
         fb = this.fullBounds();
     shadow.setExtent(fb.extent().add(this.shadowBlur * 2));
-    if (useBlurredShadows && !MorphicPreferences.isFlat) {
+    if (useBlurredShadows /*&& !MorphicPreferences.isFlat*/) {
         shadow.cachedImage = this.shadowImageBlurred(offset, color);
         shadow.alpha = alpha;
         shadow.setPosition(fb.origin.add(offset).subtract(this.shadowBlur));
