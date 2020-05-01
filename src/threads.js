@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-April-28';
+modules.threads = '2020-May-01';
 
 var ThreadManager;
 var Process;
@@ -2784,16 +2784,6 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
             ),
         option = this.inputOption(choice);
 
-    function untype(typedArray) {
-        var len = typedArray.length,
-            arr = new Array(len),
-            i;
-        for (i = 0; i < len; i += 1) {
-            arr[i] = typedArray[i];
-        }
-        return arr;
-    }
-
     if (option === 'name') {
         return sound.name;
     }
@@ -2806,7 +2796,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
     switch (option) {
     case 'samples':
         if (!sound.cachedSamples) {
-            sound.cachedSamples = function (sound) {
+            sound.cachedSamples = function (sound, untype) {
                 var buf = sound.audioBuffer,
                     result, i;
                 if (buf.numberOfChannels > 1) {
@@ -2817,7 +2807,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
                     return result;
                 }
                 return new List(untype(buf.getChannelData(0)));
-            } (sound);
+            } (sound, this.untype);
         }
         return sound.cachedSamples;
     case 'sample rate':
@@ -3056,19 +3046,29 @@ Process.prototype.reportAudio = function (choice) {
         case 'note':
             return stage.microphone.note;
         case 'samples':
-            return new List(stage.microphone.signals);
+            return new List(this.untype(stage.microphone.signals));
         case 'sample rate':
             return stage.microphone.audioContext.sampleRate;
         case 'output':
-            return new List(stage.microphone.output);
+            return new List(this.untype(stage.microphone.output));
         case 'spectrum':
-            return new List(stage.microphone.frequencies);
+            return new List(this.untype(stage.microphone.frequencies));
         default:
             return null;
         }
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.untype = function (typedArray) {
+    var len = typedArray.length,
+        arr = new Array(len),
+        i;
+    for (i = 0; i < len; i += 1) {
+        arr[i] = typedArray[i];
+    }
+    return arr;
 };
 
 Process.prototype.setMicrophoneModifier = function (modifier) {
