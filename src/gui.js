@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-April-30';
+modules.gui = '2020-May-01';
 
 // Declarations
 
@@ -9536,12 +9536,11 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                myself.videoElement.srcObject = stream;
-                myself.videoElement.play().catch(noCameraSupport);
-                myself.videoElement.stream = stream;
-            })
-            .catch(noCameraSupport);
+            .then(stream => {
+                this.videoElement.srcObject = stream;
+                this.videoElement.play().catch(noCameraSupport);
+                this.videoElement.stream = stream;
+            }).catch(noCameraSupport);
     }
 
     this.videoView.setExtent(stage.dimensions);
@@ -9677,8 +9676,7 @@ SoundRecorderDialogMorph.prototype.init = function (onAccept) {
 };
 
 SoundRecorderDialogMorph.prototype.buildContents = function () {
-    var myself = this,
-        audioChunks = [];
+    var audioChunks = [];
 
     this.recordButton = new PushButtonMorph(
         this,
@@ -9716,21 +9714,21 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 }
                 
             }
-        ).then(function (stream) {
-            myself.mediaRecorder = new MediaRecorder(stream);
-            myself.mediaRecorder.ondataavailable = function (event) {
+        ).then(stream => {
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.ondataavailable = (event) => {
                 audioChunks.push(event.data);
             };
-            myself.mediaRecorder.onstop = function (event) {
+            this.mediaRecorder.onstop = (event) => {
                 var buffer = new Blob(audioChunks),
                     reader = new window.FileReader();
                 reader.readAsDataURL(buffer);
-                reader.onloadend = function() {
+                reader.onloadend = () => {
                     var base64 = reader.result;
                     base64 = 'data:audio/ogg;base64,' +
                         base64.split(',')[1];
-                    myself.audioElement.src = base64;
-                    myself.audioElement.load();
+                    this.audioElement.src = base64;
+                    this.audioElement.load();
                     audioChunks = [];
                 };
             };
@@ -9827,9 +9825,9 @@ SoundRecorderDialogMorph.prototype.ok = function () {
         } else {
             // For some reason, we need to play the sound
             // at least once to get its duration.
-            myself.buttons.children.forEach(function (button) {
-                button.disable();
-            });
+            myself.buttons.children.forEach(button =>
+                button.disable()
+            );
             this.play();
         }
     };
