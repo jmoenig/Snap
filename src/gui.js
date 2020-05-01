@@ -7776,7 +7776,7 @@ function SpriteIconMorph(aSprite) {
 }
 
 SpriteIconMorph.prototype.init = function (aSprite) {
-    var colors, action, query, hover, myself = this;
+    var colors, action, query, hover;
 
     colors = [
         IDE_Morph.prototype.groupColor,
@@ -7784,26 +7784,26 @@ SpriteIconMorph.prototype.init = function (aSprite) {
         IDE_Morph.prototype.frameColor
     ];
 
-    action = function () {
+    action = () => {
         // make my sprite the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            ide.selectSprite(myself.object);
+            ide.selectSprite(this.object);
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my sprite is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            return ide.currentSprite === myself.object;
+            return ide.currentSprite === this.object;
         }
         return false;
     };
 
-    hover = function () {
+    hover = () => {
         if (!aSprite.exemplar) {return null; }
         return (localize('parent') + ':\n' + aSprite.exemplar.name);
     };
@@ -7887,7 +7887,7 @@ SpriteIconMorph.prototype.createLabel = function () {
 };
 
 SpriteIconMorph.prototype.createRotationButton = function () {
-    var button, myself = this;
+    var button;
 
     if (this.rotationButton) {
         this.rotationButton.destroy();
@@ -7900,17 +7900,12 @@ SpriteIconMorph.prototype.createRotationButton = function () {
     button = new ToggleButtonMorph(
         null, // colors,
         null, // target
-        function () {
-            myself.object.rotatesWithAnchor =
-                !myself.object.rotatesWithAnchor;
-        },
+        () => this.object.rotatesWithAnchor = !this.object.rotatesWithAnchor,
         [
             '\u2192',
             '\u21BB'
         ],
-        function () {  // query
-            return myself.object.rotatesWithAnchor;
-        }
+        () => this.object.rotatesWithAnchor // query
     );
 
     button.corner = 8;
@@ -7981,15 +7976,15 @@ SpriteIconMorph.prototype.fixLayout = function () {
 // SpriteIconMorph menu
 
 SpriteIconMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this),
-        myself = this;
+    var menu = new MenuMorph(this);
+
     if (this.object instanceof StageMorph) {
         menu.addItem(
             'pic...',
-            function () {
-                var ide = myself.parentThatIsA(IDE_Morph);
+            () => {
+                var ide = this.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
-                    myself.object.fullImage(),
+                    this.object.fullImage(),
                     this.object.name
                 );
             },
@@ -7998,7 +7993,7 @@ SpriteIconMorph.prototype.userMenu = function () {
         if (this.object.trailsLog.length) {
             menu.addItem(
                 'svg...',
-                function () {myself.object.exportTrailsLogAsSVG(); },
+                () => this.object.exportTrailsLogAsSVG(),
                 'export pen trails\nline segments as SVG'
             );
         }
@@ -8036,13 +8031,13 @@ SpriteIconMorph.prototype.userMenu = function () {
     if (this.object.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.object.anchor.name,
-            function () {myself.object.detachFromAnchor(); }
+            () => this.object.detachFromAnchor()
         );
     }
     if (this.object.parts.length) {
         menu.addItem(
             'detach all parts',
-            function () {myself.object.detachAllParts(); }
+            () => this.object.detachAllParts()
         );
     }
     menu.addItem("export...", 'exportSprite');
@@ -8159,22 +8154,22 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
 SpriteIconMorph.prototype.copyStack = function (block) {
     var sprite = this.object,
     	dup = block.fullCopy(),
-        y = Math.max(sprite.scripts.children.map(function (stack) {
-            return stack.fullBounds().bottom();
-        }).concat([sprite.scripts.top()]));
+        y = Math.max(
+            sprite.scripts.children.map(stack =>
+                stack.fullBounds().bottom()
+            ).concat([sprite.scripts.top()])
+        );
 
     dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
     sprite.scripts.add(dup);
-    dup.allComments().forEach(function (comment) {
-        comment.align(dup);
-    });
+    dup.allComments().forEach(comment => comment.align(dup));
     sprite.scripts.adjustBounds();
 
     // delete all local custom blocks (methods) that the receiver
     // doesn't understand
-    dup.allChildren().forEach(function (morph) {
+    dup.allChildren().forEach(morph => {
 	    if (morph.isCustomBlock &&
-        		!morph.isGlobal &&
+            !morph.isGlobal &&
         		!sprite.getMethod(morph.blockSpec)
         ) {
             morph.deleteBlock();
