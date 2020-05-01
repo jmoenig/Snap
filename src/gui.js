@@ -8220,7 +8220,7 @@ function CostumeIconMorph(aCostume) {
 }
 
 CostumeIconMorph.prototype.init = function (aCostume) {
-    var colors, action, query, myself = this;
+    var colors, action, query;
 
     colors = [
         IDE_Morph.prototype.groupColor,
@@ -8228,25 +8228,25 @@ CostumeIconMorph.prototype.init = function (aCostume) {
         IDE_Morph.prototype.frameColor
     ];
 
-    action = function () {
+    action = () => {
         // make my costume the current one
-        var ide = myself.parentThatIsA(IDE_Morph),
-            wardrobe = myself.parentThatIsA(WardrobeMorph);
+        var ide = this.parentThatIsA(IDE_Morph),
+            wardrobe = this.parentThatIsA(WardrobeMorph);
 
         if (ide) {
-            ide.currentSprite.wearCostume(myself.object);
+            ide.currentSprite.wearCostume(this.object);
         }
         if (wardrobe) {
             wardrobe.updateSelection();
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my costume is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            return ide.currentSprite.costume === myself.object;
+            return ide.currentSprite.costume === this.object;
         }
         return false;
     };
@@ -8365,7 +8365,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
         ide = this.parentThatIsA(IDE_Morph);
     new DialogBoxMorph(
         null,
-        function (answer) {
+        answer => {
             if (answer && (answer !== costume.name)) {
                 costume.name = wardrobe.sprite.newCostumeName(
                     answer,
@@ -8469,7 +8469,7 @@ function TurtleIconMorph(aSpriteOrStage) {
 }
 
 TurtleIconMorph.prototype.init = function (aSpriteOrStage) {
-    var colors, action, query, myself = this;
+    var colors, action, query;
 
     colors = [
         IDE_Morph.prototype.groupColor,
@@ -8477,10 +8477,10 @@ TurtleIconMorph.prototype.init = function (aSpriteOrStage) {
         IDE_Morph.prototype.frameColor
     ];
 
-    action = function () {
+    action = () => {
         // make my costume the current one
-        var ide = myself.parentThatIsA(IDE_Morph),
-            wardrobe = myself.parentThatIsA(WardrobeMorph);
+        var ide = this.parentThatIsA(IDE_Morph),
+            wardrobe = this.parentThatIsA(WardrobeMorph);
 
         if (ide) {
             ide.currentSprite.wearCostume(null);
@@ -8490,9 +8490,9 @@ TurtleIconMorph.prototype.init = function (aSpriteOrStage) {
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my costume is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
             return ide.currentSprite.costume === null;
@@ -8593,8 +8593,7 @@ TurtleIconMorph.prototype.render
 // TurtleIconMorph user menu
 
 TurtleIconMorph.prototype.userMenu = function () {
-    var myself = this,
-        menu = new MenuMorph(this, 'pen'),
+    var menu = new MenuMorph(this, 'pen'),
         on = '\u25CF',
         off = '\u25CB';
     if (this.object instanceof StageMorph) {
@@ -8602,22 +8601,22 @@ TurtleIconMorph.prototype.userMenu = function () {
     }
     menu.addItem(
         (this.object.penPoint === 'tip' ? on : off) + ' ' + localize('tip'),
-        function () {
-            myself.object.penPoint = 'tip';
-            myself.object.changed();
-            myself.object.fixLayout();
-            myself.object.rerender();
+        () => {
+            this.object.penPoint = 'tip';
+            this.object.changed();
+            this.object.fixLayout();
+            this.object.rerender();
         }
     );
     menu.addItem(
         (this.object.penPoint === 'middle' ? on : off) + ' ' + localize(
             'middle'
         ),
-        function () {
-            myself.object.penPoint = 'middle';
-            myself.object.changed();
-            myself.object.fixLayout();
-            myself.object.rerender();
+        () => {
+            this.object.penPoint = 'middle';
+            this.object.changed();
+            this.object.fixLayout();
+            this.object.rerender();
         }
     );
     return menu;
@@ -8660,8 +8659,7 @@ WardrobeMorph.prototype.init = function (aSprite, sliderColor) {
 // Wardrobe updating
 
 WardrobeMorph.prototype.updateList = function () {
-    var myself = this,
-        x = this.left() + 5,
+    var x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
         toolsPadding = 5,
@@ -8676,14 +8674,14 @@ WardrobeMorph.prototype.updateList = function () {
     this.contents.destroy();
     this.contents = new FrameMorph(this);
     this.contents.acceptsDrops = false;
-    this.contents.reactToDropOf = function (icon) {
-        myself.reactToDropOf(icon);
+    this.contents.reactToDropOf = (icon) => {
+        this.reactToDropOf(icon);
     };
     this.addBack(this.contents);
 
     icon = new TurtleIconMorph(this.sprite);
     icon.setPosition(new Point(x, y));
-    myself.addContents(icon);
+    this.addContents(icon);
     y = icon.bottom() + padding;
 
     paintbutton = new PushButtonMorph(
@@ -8741,7 +8739,7 @@ WardrobeMorph.prototype.updateList = function () {
 
         document.addEventListener(
             'cameraDisabled',
-            function () {
+            () => {
                 cambutton.disable();
                 cambutton.hint =
                     CamSnapshotDialogMorph.prototype.notSupportedMessage;
@@ -8759,10 +8757,10 @@ WardrobeMorph.prototype.updateList = function () {
     this.addContents(txt);
     y = txt.bottom() + padding;
 
-    this.sprite.costumes.asArray().forEach(function (costume) {
+    this.sprite.costumes.asArray().forEach(costume => {
         icon = new CostumeIconMorph(costume);
         icon.setPosition(new Point(x, y));
-        myself.addContents(icon);
+        this.addContents(icon);
         y = icon.bottom() + padding;
     });
     this.costumesVersion = this.sprite.costumes.lastChanged;
@@ -8805,32 +8803,37 @@ WardrobeMorph.prototype.paintNew = function () {
             newCanvas(null, true),
             this.sprite.newCostumeName(localize('Untitled'))
         ),
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
-    cos.edit(this.world(), ide, true, null, function () {
-        myself.sprite.shadowAttribute('costumes');
-        myself.sprite.addCostume(cos);
-        myself.updateList();
-        if (ide) {
-            ide.currentSprite.wearCostume(cos);
+        ide = this.parentThatIsA(IDE_Morph);
+
+    cos.edit(
+        this.world(),
+        ide,
+        true,
+        null,
+        () => {
+            this.sprite.shadowAttribute('costumes');
+            this.sprite.addCostume(cos);
+            this.updateList();
+            if (ide) {
+                ide.currentSprite.wearCostume(cos);
+            }
         }
-    });
+    );
 };
 
 WardrobeMorph.prototype.newFromCam = function () {
     var camDialog,
         ide = this.parentThatIsA(IDE_Morph),
-        myself = this,
         sprite = this.sprite;
 
     camDialog = new CamSnapshotDialogMorph(
         ide,
         sprite,
         nop,
-        function (costume) {
+        costume => {
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
-            myself.updateList();
+            this.updateList();
         });
 
     camDialog.key = 'camera';
@@ -8848,7 +8851,7 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
         costume = icon.object,
         top = icon.top();
     icon.destroy();
-    this.contents.children.forEach(function (item) {
+    this.contents.children.forEach(item => {
         if (item instanceof CostumeIconMorph && item.top() < top - 4) {
             idx += 1;
         }
@@ -8895,13 +8898,9 @@ SoundIconMorph.prototype.init = function (aSound) {
         IDE_Morph.prototype.frameColor
     ];
 
-    action = function () {
-        nop(); // When I am selected (which is never the case for sounds)
-    };
+    action = nop; // When I am selected (which is never the case for sounds)
 
-    query = function () {
-        return false;
-    };
+    query = () => false;
 
     // additional properties:
     this.object = aSound; // mandatory, actually
@@ -8972,15 +8971,16 @@ SoundIconMorph.prototype.createInfo = function () {
 };
 
 SoundIconMorph.prototype.toggleAudioPlaying = function () {
-    var myself = this;
     if (!this.object.previewAudio) {
         //Audio is not playing
         this.button.labelString = 'Stop';
         this.button.hint = 'Stop sound';
         this.object.previewAudio = this.object.play();
-        this.object.previewAudio.addEventListener('ended', function () {
-            myself.audioHasEnded();
-        }, false);
+        this.object.previewAudio.addEventListener(
+            'ended',
+            () => this.audioHasEnded(),
+            false
+        );
     } else {
         //Audio is currently playing
         this.button.labelString = 'Play';
@@ -9027,21 +9027,20 @@ SoundIconMorph.prototype.userMenu = function () {
 
 SoundIconMorph.prototype.renameSound = function () {
     var sound = this.object,
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
+        ide = this.parentThatIsA(IDE_Morph);
     this.disinherit();
-    (new DialogBoxMorph(
+    new DialogBoxMorph(
         null,
-        function (answer) {
+        answer => {
             if (answer && (answer !== sound.name)) {
                 sound.name = answer;
                 sound.version = Date.now();
-                myself.createLabel(); // can be omitted once I'm stepping
-                myself.fixLayout(); // can be omitted once I'm stepping
+                this.createLabel(); // can be omitted once I'm stepping
+                this.fixLayout(); // can be omitted once I'm stepping
                 ide.hasChangedMedia = true;
             }
         }
-    )).prompt(
+    ).prompt(
         'rename sound',
         sound.name,
         this.world()
@@ -9120,8 +9119,7 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
 // Jukebox updating
 
 JukeboxMorph.prototype.updateList = function () {
-    var myself = this,
-        x = this.left() + 5,
+    var x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
         icon,
@@ -9134,9 +9132,7 @@ JukeboxMorph.prototype.updateList = function () {
     this.contents.destroy();
     this.contents = new FrameMorph(this);
     this.contents.acceptsDrops = false;
-    this.contents.reactToDropOf = function (icon) {
-        myself.reactToDropOf(icon);
-    };
+    this.contents.reactToDropOf = (icon) => this.reactToDropOf(icon);
     this.addBack(this.contents);
 
     txt = new TextMorph(localize(
@@ -9171,10 +9167,10 @@ JukeboxMorph.prototype.updateList = function () {
 
     y = recordButton.bottom() + padding;
 
-    this.sprite.sounds.asArray().forEach(function (sound) {
+    this.sprite.sounds.asArray().forEach(sound => {
         icon = new SoundIconMorph(sound);
         icon.setPosition(new Point(x, y));
-        myself.addContents(icon);
+        this.addContents(icon);
         y = icon.bottom() + padding;
     });
     this.soundsVersion = this.sprite.sounds.lastChanged;
@@ -9184,7 +9180,7 @@ JukeboxMorph.prototype.updateList = function () {
 };
 
 JukeboxMorph.prototype.updateSelection = function () {
-    this.contents.children.forEach(function (morph) {
+    this.contents.children.forEach(morph => {
         if (morph.refresh) {morph.refresh(); }
     });
     this.spriteVersion = this.sprite.version;
@@ -9220,7 +9216,7 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
         top = icon.top();
 
     icon.destroy();
-    this.contents.children.forEach(function (item) {
+    this.contents.children.forEach(item => {
         if (item instanceof SoundIconMorph && item.top() < top - 4) {
             idx += 1;
         }
@@ -9334,7 +9330,6 @@ StageHandleMorph.prototype.step = null;
 StageHandleMorph.prototype.mouseDownLeft = function (pos) {
     var world = this.world(),
         offset = this.right() - pos.x,
-        myself = this,
         ide = this.target.parentThatIsA(IDE_Morph);
 
     if (!this.target) {
@@ -9342,12 +9337,13 @@ StageHandleMorph.prototype.mouseDownLeft = function (pos) {
     }
     ide.isSmallStage = true;
     ide.controlBar.stageSizeButton.refresh();
+
     this.step = function () {
         var newPos, newWidth;
         if (world.hand.mouseButton) {
             newPos = world.hand.bounds.origin.x + offset;
-            newWidth = myself.target.right() - newPos;
-            ide.stageRatio = newWidth / myself.target.dimensions.x;
+            newWidth = this.target.right() - newPos;
+            ide.stageRatio = newWidth / this.target.dimensions.x;
             ide.setExtent(world.extent());
 
         } else {
