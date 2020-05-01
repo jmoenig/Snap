@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-April-29';
+modules.blocks = '2020-May-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4269,6 +4269,14 @@ BlockMorph.prototype.hasBlockVars = function () {
             any.isGlobal &&
                 any.definition.variableNames.length
     );
+};
+
+BlockMorph.prototype.pickUp = function (wrrld) {
+    // used when duplicating and grabbing a block via its context menu
+    // position the duplicate's top-left corner at the mouse pointer
+    var world = wrrld || this.world();
+    this.setPosition(world.hand.position().subtract(this.rounding));
+    world.hand.grab(this);
 };
 
 // BlockMorph events
