@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-02';
+modules.gui = '2020-May-03';
 
 // Declarations
 
@@ -170,11 +170,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
         IDE_Morph.prototype.frameColor.lighter(50),
         IDE_Morph.prototype.groupColor
     ];
-    IDE_Morph.prototype.rotationStyleColors = [
-        IDE_Morph.prototype.groupColor,
-        IDE_Morph.prototype.groupColor.darker(10),
-        IDE_Morph.prototype.groupColor.darker(30)
-    ];
+    IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
     IDE_Morph.prototype.scriptsPaneTexture = null;
     IDE_Morph.prototype.padding = 1;
@@ -1107,7 +1103,7 @@ IDE_Morph.prototype.createCategories = function () {
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
-                myself.frameColor.darker(50),
+                myself.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
                 SpriteMorph.prototype.blockColor[category]
             ],
             button;
@@ -1135,6 +1131,9 @@ IDE_Morph.prototype.createCategories = function () {
         button.labelShadowOffset = new Point(-1, -1);
         button.labelShadowColor = colors[1];
         button.labelColor = myself.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = new Color(255, 255, 255);
+        }
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);

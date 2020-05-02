@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-April-28';
+modules.widgets = '2020-May-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -512,6 +512,7 @@ ToggleButtonMorph.uber = PushButtonMorph.prototype;
 // ToggleButton settings
 
 ToggleButtonMorph.prototype.contrast = 30;
+ToggleButtonMorph.prototype.labelPressColor = null;
 
 // ToggleButtonMorph instance creation:
 
@@ -647,12 +648,18 @@ ToggleButtonMorph.prototype.refresh = function () {
     }
     if (this.state) {
         this.userState = 'pressed';
+        if (this.labelPressColor) {
+            this.label.setColor(this.labelPressColor);
+        }
         if (this.trueStateLabel) {
             this.label.hide();
             this.trueStateLabel.show();
         }
     } else {
         this.userState = 'normal';
+        if (this.labelPressColor) {
+            this.label.setColor(this.labelColor);
+        }
         if (this.trueStateLabel) {
             this.label.show();
             this.trueStateLabel.hide();
