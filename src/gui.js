@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-01';
+modules.gui = '2020-May-02';
 
 // Declarations
 
@@ -167,7 +167,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     IDE_Morph.prototype.buttonLabelColor = new Color(70, 70, 70);
     IDE_Morph.prototype.tabColors = [
         IDE_Morph.prototype.frameColor,
-                IDE_Morph.prototype.frameColor.lighter(50),
+        IDE_Morph.prototype.frameColor.lighter(50),
         IDE_Morph.prototype.groupColor
     ];
     IDE_Morph.prototype.rotationStyleColors = [
@@ -698,7 +698,8 @@ IDE_Morph.prototype.createControlBar = function () {
         steppingButton,
         cloudButton,
         x,
-        colors = [
+        colors = MorphicPreferences.isFlat ? this.tabColors
+        : [
             this.groupColor,
             this.frameColor.darker(50),
             this.frameColor.darker(50)
@@ -832,7 +833,11 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(200, 0, 0);
+    button.labelColor = new Color(
+        MorphicPreferences.isFlat ? 128 : 200,
+        0,
+        0
+    );
     button.contrast = this.buttonContrast;
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
@@ -861,7 +866,9 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(255, 220, 0);
+    button.labelColor = MorphicPreferences.isFlat ?
+        new Color(220, 185, 0)
+            : new Color(255, 220, 0);
     button.contrast = this.buttonContrast;
     // button.hint = 'pause/resume\nall scripts';
     button.fixLayout();
@@ -884,7 +891,11 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(0, 200, 0);
+    button.labelColor = new Color(
+        0,
+        MorphicPreferences.isFlat ? 100 : 200,
+        0
+    );
     button.contrast = this.buttonContrast;
     // button.hint = 'start green\nflag scripts';
     button.fixLayout();
@@ -1568,7 +1579,8 @@ IDE_Morph.prototype.createCorralBar = function () {
         newbutton,
         paintbutton,
         cambutton,
-        colors = [
+        colors = MorphicPreferences.isFlat ? this.tabColors
+        : [
             this.groupColor,
             this.frameColor.darker(50),
             this.frameColor.darker(50)
