@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-April-28';
+modules.byob = '2020-May-03';
 
 // Declarations
 
@@ -1666,8 +1666,8 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
         colors = [
-            SpriteMorph.prototype.paletteColor,
-            SpriteMorph.prototype.paletteColor.darker(50),
+            IDE_Morph.prototype.frameColor,
+            IDE_Morph.prototype.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
             SpriteMorph.prototype.blockColor[category]
         ],
         button;
@@ -1700,6 +1700,9 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = new Color(255, 255, 255);
+        }
     button.contrast = this.buttonContrast;
     button.fixLayout();
     button.refresh();
