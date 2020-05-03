@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-03';
+modules.gui = '2020-May-04';
 
 // Declarations
 
@@ -1939,6 +1939,29 @@ IDE_Morph.prototype.setExtent = function (point) {
     // apply
     IDE_Morph.uber.setExtent.call(this, ext);
     this.fixLayout();
+};
+
+// IDE_Morph rendering
+
+IDE_Morph.prototype.render = function (ctx) {
+    var frame;
+    IDE_Morph.uber.render.call(this, ctx);
+    if (this.isAppMode && this.stage) {
+        // draw a subtle outline rectangle around the stage
+        // in presentation mode
+        frame = this.stage.bounds.translateBy(
+            this.position().neg()
+        ).expandBy(2);
+        ctx.strokeStyle = this.backgroundColor.toString();
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(frame.origin.x, frame.origin.y);
+        ctx.lineTo(frame.corner.x, frame.origin.y);
+        ctx.lineTo(frame.corner.x, frame.corner.y);
+        ctx.lineTo(frame.origin.x, frame.corner.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
 };
 
 // IDE_Morph events
