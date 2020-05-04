@@ -1773,7 +1773,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
         return null;
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportRandom(1, list.length() + 1);
+        idx = this.reportBasicRandom(1, list.length() + 1);
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length() + 1;
@@ -1791,7 +1791,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
         return null;
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportRandom(1, list.length());
+        idx = this.reportBasicRandom(1, list.length());
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
@@ -1806,7 +1806,7 @@ Process.prototype.reportListItem = function (index, list) {
         return '';
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportRandom(1, list.length());
+        idx = this.reportBasicRandom(1, list.length());
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
@@ -3794,7 +3794,7 @@ Process.prototype.reportBasicLetter = function (idx, string) {
 
     str = isNil(string) ? '' : string.toString();
     if (this.inputOption(idx) === 'any') {
-        idx = this.reportRandom(1, str.length);
+        idx = this.reportBasicRandom(1, str.length);
     }
     if (this.inputOption(idx) === 'last') {
         idx = str.length;
@@ -4117,7 +4117,7 @@ Process.prototype.setHeading = function (direction) {
 
     if (thisObj) {
         if (this.inputOption(direction) === 'random') {
-            direction = this.reportRandom(1, 36000) / 100;
+            direction = this.reportBasicRandom(1, 36000) / 100;
         }
 		thisObj.setHeading(direction);
     }
@@ -4133,7 +4133,7 @@ Process.prototype.doFaceTowards = function (name) {
         } else if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else if (this.inputOption(name) === 'random position') {
-        	thisObj.setHeading(this.reportRandom(1, 36000) / 100);
+        	thisObj.setHeading(this.reportBasicRandom(1, 36000) / 100);
         } else {
             if (name instanceof List) {
                 thisObj.faceToXY(
@@ -4167,8 +4167,8 @@ Process.prototype.doGotoObject = function (name) {
 	        stage = thisObj.parentThatIsA(StageMorph);
     	    if (stage) {
          		thisObj.setCenter(new Point(
-					this.reportRandom(stage.left(), stage.right()),
-                    this.reportRandom(stage.top(), stage.bottom())
+					this.reportBasicRandom(stage.left(), stage.right()),
+                    this.reportBasicRandom(stage.top(), stage.bottom())
                 ));
          	}
         } else {
