@@ -3119,8 +3119,8 @@ BlockMorph.prototype.ringify = function () {
     top.fullChanged();
     if (this.parent instanceof SyntaxElementMorph) {
         if (this instanceof ReporterBlockMorph) {
-            this.parent.replaceInput(this, ring);
-            ring.embed(this);
+            this.parent.replaceInput(this, ring, true); // don't vanish
+            ring.embed(this, null, true); // don't vanish
         } else if (top) { // command
             if (top instanceof HatBlockMorph) {
                 return;
@@ -6229,7 +6229,7 @@ RingMorph.prototype.rootForGrab = function () {
 
 // RingMorph ops - Note: these assume certain layouts defined elsewhere -
 
-RingMorph.prototype.embed = function (aBlock, inputNames) {
+RingMorph.prototype.embed = function (aBlock, inputNames, noVanish) {
     var slot;
 
     // set my color
@@ -6260,7 +6260,7 @@ RingMorph.prototype.embed = function (aBlock, inputNames) {
         this.setSpec('%rr %ringparms');
         this.selector = 'reifyReporter';
         slot = this.parts()[0];
-        slot.replaceInput(slot.contents(), aBlock);
+        slot.replaceInput(slot.contents(), aBlock, noVanish);
     }
 
     // set my inputs, if any
@@ -11879,9 +11879,13 @@ RingReporterSlotMorph.prototype.getSpec = function () {
     return '%rr';
 };
 
-RingReporterSlotMorph.prototype.replaceInput = function (source, target) {
+RingReporterSlotMorph.prototype.replaceInput = function (
+    source,
+    target,
+    noVanish
+) {
     RingReporterSlotMorph.uber.replaceInput.call(this, source, target);
-    if (this.parent instanceof RingMorph) {
+    if (this.parent instanceof RingMorph && !noVanish) {
         this.parent.vanishForSimilar();
     }
 };
