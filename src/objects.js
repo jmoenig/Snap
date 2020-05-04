@@ -1288,6 +1288,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'is %l empty?'
         },
         reportListIndex: {
+            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'index of %s in %l',
@@ -2641,7 +2642,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
-        blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
         blocks.push('-');
@@ -2668,6 +2668,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportListIndex'));
             blocks.push(block('reportConcatenatedLists'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
@@ -2826,7 +2827,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListItem',
                         'reportCDR',
                         'reportListLength',
-                        'reportListIndex',
+                        // 'reportListIndex',
+                        // 'reportConcatenatedLists',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8612,7 +8614,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCDR'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
-        blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
         blocks.push('-');
@@ -8639,6 +8640,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportListIndex'));
             blocks.push(block('reportConcatenatedLists'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
