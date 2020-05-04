@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-01';
+modules.blocks = '2020-May-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -864,7 +864,11 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new MultiArgMorph('%s', null, 0);
             part.addInput(); // allow for default value setting
             part.addInput(); // allow for default value setting
-            part.isStatic = false;
+            break;
+        case '%lists':
+            part = new MultiArgMorph('%l', null, 0);
+            part.addInput();
+            part.addInput();
             break;
         case '%exp':
             part = new MultiArgMorph('%s', null, 0);
@@ -2383,6 +2387,7 @@ SyntaxElementMorph.prototype.mappedCode = function (definitions) {
     %mult%x      - where %x stands for any of the above single inputs
     %inputs      - for an additional text label 'with inputs'
     %words       - for an expandable list of default 2 (used in JOIN)
+    %lists       - for an expandable list of default 2 lists (CONCAT)
     %exp         - for a static expandable list of minimum 0 (used in LIST)
     %scriptVars  - for an expandable list of variable reporter templates
     %parms       - for an expandable list of formal parameters

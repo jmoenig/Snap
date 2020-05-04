@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-April-29';
+modules.objects = '2020-May-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1318,12 +1318,19 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, null, localize('thing')]
         },
 
-        // numbers - linked
+        // numbers - (arrayed when hyper-blocks is on, otherwise linked)
         reportNumbers: {
             type: 'reporter',
             category: 'lists',
             spec: 'numbers from %n to %n',
             defaults: [1, 10]
+        },
+
+        reportConcatenatedLists: { // only in dev mode - experimental
+            dev: true,
+            type: 'reporter',
+            category: 'lists',
+            spec: 'append %lists'
         },
 
         // HOFs
@@ -2661,6 +2668,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportConcatenatedLists'));
+            blocks.push('-');
             blocks.push(block('doShowTable'));
         }
 
@@ -2678,7 +2687,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
 
         blocks.push(this.makeBlockButton());
-
  	}
     return blocks;
 };
@@ -8630,6 +8638,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportConcatenatedLists'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }

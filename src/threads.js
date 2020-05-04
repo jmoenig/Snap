@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-01';
+modules.threads = '2020-May-04';
 
 var ThreadManager;
 var Process;
@@ -1886,6 +1886,66 @@ Process.prototype.reportBasicNumbers = function (start, end) {
         }
     }
     return new List(result);
+};
+
+Process.prototype.reportConcatenatedLists = function (lists) {
+    var first, result, rows, row, rowIdx, cols, col;
+    this.assertType(lists, 'list');
+    first = lists.at(1);
+    this.assertType(first, 'list');
+    if (first.isLinked) { // link everything
+        return this.concatenateLinkedLists(lists);
+    }
+
+    // in case the first sub-list is arrayed
+
+    // fast version, has the disadvantage that it might
+    // change the structure of the source(s) by calling
+    // asArray().
+    // commented out for now
+    /*
+    elements = lists.asArray().map(sub => {
+        this.assertType(sub, 'list');
+        return sub.asArray();
+    });
+    return new List([].concat(...elements));
+    */
+
+    result = [];
+    rows = lists.length();
+    for (rowIdx = 1; rowIdx <= rows; rowIdx += 1) {
+        row = lists.at(rowIdx);
+        this.assertType(row, 'list');
+        cols = row.length();
+        for (col = 1; col <= cols; col += 1) {
+            result.push(row.at(col));
+        }
+    }
+    return new List(result);
+};
+
+Process.prototype.concatenateLinkedLists = function (lists) {
+    var first;
+    if (lists.isEmpty()) {
+        return new List();
+    }
+    first = lists.at(1);
+    this.assertType(first, 'list');
+    if (lists.length() === 1) {
+        return first;
+    }
+    if (first.isEmpty()) {
+        return this.concatenateLinkedLists(lists.cdr());
+    }
+    return lists.cons(
+        first.at(1),
+        this.concatenateLinkedLists(
+            lists.cons(
+                first.cdr(),
+                lists.cdr()
+            )
+        )
+    );
 };
 
 // Process interpolated non-HOF list primitives
