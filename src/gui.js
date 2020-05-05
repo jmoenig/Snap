@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-04';
+modules.gui = '2020-May-05';
 
 // Declarations
 
@@ -3757,6 +3757,10 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.label.setTop(this.top() + (th - this.label.height()) / 2);
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
+
+        // refresh shadow
+        this.removeShadow();
+        this.addShadow();
     };
 
     items.forEach(item => {
