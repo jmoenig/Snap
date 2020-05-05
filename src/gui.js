@@ -6838,8 +6838,9 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 ProjectDialogMorph.prototype.recoveryDialog = function () {
     var proj = this.listField.selected;
     if (!proj) {return; }
-    new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
+    this.removeShadow();
     this.hide();
+    new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
 };
 
 ProjectDialogMorph.prototype.openProject = function () {
@@ -7278,7 +7279,9 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     this.preview.contrast = InputFieldMorph.prototype.contrast;
     this.preview.render = function (ctx) {
         InputFieldMorph.prototype.render.call(this, ctx);
-        if (this.texture) {
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
             this.renderTexture(this.texture, ctx);
         }
     };
@@ -7478,6 +7481,10 @@ ProjectRecoveryDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // LibraryImportDialogMorph ///////////////////////////////////////////
