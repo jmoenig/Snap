@@ -7611,13 +7611,17 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
             this.showMessage(localize('Loading') + '\n' + localize(item.name));
             this.ide.getURL(
                 this.ide.resourceURL('libraries', item.fileName),
-                libraryXML => this.cacheLibrary(
-                    item.fileName,
-                    this.ide.serializer.loadBlocks(libraryXML)
-                ),
-                this.displayBlocks(item.fileName)
+                libraryXML => {
+                    this.cacheLibrary(
+                        item.fileName,
+                        this.ide.serializer.loadBlocks(libraryXML)
+                    );
+                    this.displayBlocks(item.fileName);
+                }
             );
         }
+
+
     };
 
     this.listField.setWidth(200);
@@ -7762,9 +7766,8 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
             blockContainer.isCachingImage = true;
-            blockContainer.setExtent(
-                new Point(blockImage.width, blockImage.height)
-            );
+            blockContainer.bounds.setWidth(blockImage.width);
+            blockContainer.bounds.setHeight(blockImage.height);
             blockContainer.cachedImage = blockImage;
             blockContainer.setPosition(new Point(x, y));
             this.palette.addContents(blockContainer);
