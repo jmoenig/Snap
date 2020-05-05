@@ -7210,6 +7210,10 @@ ProjectDialogMorph.prototype.fixLayout = function () {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
+
+    // refresh shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // ProjectRecoveryDialogMorph /////////////////////////////////////////
