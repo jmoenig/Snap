@@ -6278,7 +6278,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.preview.contrast = InputFieldMorph.prototype.contrast;
     this.preview.render = function (ctx) {
         InputFieldMorph.prototype.render.call(this, ctx);
-        if (this.texture) {
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
             this.renderTexture(this.texture, ctx);
         }
     };
