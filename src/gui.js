@@ -6008,7 +6008,13 @@ IDE_Morph.prototype.cloudIcon = function (height, color) {
 IDE_Morph.prototype.setCloudURL = function () {
     new DialogBoxMorph(
         null,
-        url => this.cloud.url = url
+        url => {
+            this.cloud.url = url;
+            this.cloud.checkCredentials(
+                () => this.controlBar.cloudButton.refresh(),
+                () => this.controlBar.cloudButton.refresh()
+            );
+        }
     ).withKey('cloudURL').prompt(
         'Cloud URL',
         this.cloud.url,
