@@ -620,7 +620,7 @@ SymbolMorph.prototype.renderSymbolSmallStage = function (ctx, color) {
         w2 = w / 2,
         h2 = h / 2;
 
-    ctx.fillStyle = color.darker(40).toString();
+    ctx.fillStyle = color.darker(50).toString();
     ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = color.toString();
@@ -638,7 +638,7 @@ SymbolMorph.prototype.renderSymbolNormalStage = function (ctx, color) {
     ctx.fillStyle = color.toString();
     ctx.fillRect(0, 0, w, h);
 
-    ctx.fillStyle = color.darker(25).toString();
+    ctx.fillStyle = color.darker(50).toString();
     ctx.fillRect(w2, 0, w2, h2);
 };
 

@@ -739,7 +739,9 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = this.buttonLabelColor;
+    button.labelColor = MorphicPreferences.isFlat ?
+        new Color(255, 255, 255)
+        : this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     // button.hint = 'stage size\nsmall & normal';
     button.fixLayout();
