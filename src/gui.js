@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-05';
+modules.gui = '2020-May-06';
 
 // Declarations
 
@@ -965,11 +965,17 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
-    button = new PushButtonMorph(
-        this,
+    button = new ToggleButtonMorph(
+        null, //colors,
+        this, // the IDE is the target
         'cloudMenu',
-        new SymbolMorph('cloud', 11)
+        [
+            new SymbolMorph('cloudOutline', 11),
+            new SymbolMorph('cloud', 11)
+        ],
+        () => !isNil(this.cloud.username) // query
     );
+
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -982,9 +988,10 @@ IDE_Morph.prototype.createControlBar = function () {
     button.contrast = this.buttonContrast;
     // button.hint = 'cloud operations';
     button.fixLayout();
+    button.refresh();
     cloudButton = button;
     this.controlBar.add(cloudButton);
-    this.controlBar.cloudButton = cloudButton; // for menu positioning
+    this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
@@ -5582,6 +5589,7 @@ IDE_Morph.prototype.initializeCloud = function () {
             user.choice,
             (username, role, response) => {
                 sessionStorage.username = username;
+                this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
                 if (!isNil(response.days_left)) {
                     new DialogBoxMorph().inform(
@@ -5745,10 +5753,12 @@ IDE_Morph.prototype.logout = function () {
     this.cloud.logout(
         () => {
             delete(sessionStorage.username);
+            this.controlBar.cloudButton.refresh();
             this.showMessage('disconnected.', 2);
         },
         () => {
             delete(sessionStorage.username);
+            this.controlBar.cloudButton.refresh();
             this.showMessage('disconnected.', 2);
         }
     );
