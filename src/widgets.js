@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-May-03';
+modules.widgets = '2020-May-06';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -560,6 +560,7 @@ ToggleButtonMorph.prototype.init = function (
     this.minWidth = minWidth || null;
     this.hasPreview = hasPreview || false;
     this.isPicture = isPicture || false;
+    this.hasNeutralBackground = false;
     this.trueStateLabel = null;
 
     // initialize inherited properties:
@@ -587,7 +588,7 @@ ToggleButtonMorph.prototype.init = function (
 
 ToggleButtonMorph.prototype.mouseEnter = function () {
     var contents = this.hint instanceof Function ? this.hint() : this.hint;
-    if (!this.state) {
+    if (!this.state || this.hasNeutralBackground) {
         this.userState = 'highlight';
         this.rerender();
     }
@@ -597,7 +598,7 @@ ToggleButtonMorph.prototype.mouseEnter = function () {
 };
 
 ToggleButtonMorph.prototype.mouseLeave = function () {
-    if (!this.state) {
+    if (!this.state || this.hasNeutralBackground) {
         this.userState = 'normal';
         this.rerender();
     }

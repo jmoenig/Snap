@@ -730,6 +730,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => this.isSmallStage // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -759,6 +760,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => this.isAppMode // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -853,6 +855,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => this.isPaused() // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -975,6 +978,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => !isNil(this.cloud.username) // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
