@@ -10621,6 +10621,11 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
 CellMorph.prototype.big = function () {
     this.isBig = true;
     this.changed();
+    if (this.contentsMorph instanceof TextMorph) {
+        this.contentsMorph.setFontSize(
+            SyntaxElementMorph.prototype.fontSize * 1.5
+        );
+    }
     this.fixLayout(true);
     this.rerender();
 };
@@ -10628,6 +10633,11 @@ CellMorph.prototype.big = function () {
 CellMorph.prototype.normal = function () {
     this.isBig = false;
     this.changed();
+    if (this.contentsMorph instanceof TextMorph) {
+        this.contentsMorph.setFontSize(
+            SyntaxElementMorph.prototype.fontSize
+        );
+    }
     this.fixLayout(true);
     this.rerender();
 };
@@ -10694,6 +10704,10 @@ CellMorph.prototype.createContents = function () {
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents);
+
+    if (this.isBig) {
+        fontSize = fontSize * 1.5;
+    }
 
     if (this.contentsMorph && !isSameList && !isSameTable) {
         this.contentsMorph.destroy();
@@ -10821,12 +10835,6 @@ CellMorph.prototype.update = function () {
 };
 
 CellMorph.prototype.render = function (ctx) {
-    var fontSize = SyntaxElementMorph.prototype.fontSize;
-
-    if (this.isBig) {
-        fontSize = fontSize * 1.5;
-    }
-
     // draw my outline
     if ((this.edge === 0) && (this.border === 0)) {
         BoxMorph.uber.render.call(this, ctx);
@@ -10890,12 +10898,7 @@ CellMorph.prototype.drawShadow = function (context, radius, inset) {
 // CellMorph editing (inside list watchers):
 
 CellMorph.prototype.layoutChanged = function () {
-    var fontSize = SyntaxElementMorph.prototype.fontSize,
-        listWatcher = this.parentThatIsA(ListWatcherMorph);
-
-    if (this.isBig) {
-        fontSize = fontSize * 1.5;
-    }
+    var listWatcher = this.parentThatIsA(ListWatcherMorph);
 
     // adjust my layout
     this.bounds.setHeight(this.contentsMorph.height()
