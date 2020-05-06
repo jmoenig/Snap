@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-May-03';
+modules.byob = '2020-May-06';
 
 // Declarations
 
@@ -2844,7 +2844,10 @@ BlockLabelPlaceHolderMorph.prototype.fixLayout = function () {
     this.measureCtx.font = this.font();
     this.bounds.corner = this.bounds.origin.add(
         new Point(
-            this.measureCtx.measureText(this.text).width,
+            Math.max(
+                this.measureCtx.measureText(this.text).width,
+                SyntaxElementMorph.prototype.scale
+            ),
             fontHeight(this.fontSize)
         )
     );
