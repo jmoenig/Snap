@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-04';
+modules.threads = '2020-May-06';
 
 var ThreadManager;
 var Process;
@@ -3465,8 +3465,9 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 b.asArray().map(each => this.hyperZip(baseOp, a, each))
             );
         }
+        return this.hyperZip(baseOp, a, b);
     }
-    return this.hyperZip(baseOp, a, b);
+    return baseOp(a, b);
 };
 
 Process.prototype.isMatrix = function (value) {
