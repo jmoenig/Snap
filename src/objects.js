@@ -8730,6 +8730,8 @@ StageMorph.prototype.showAll = function () {
 
 StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
+StageMorph.prototype.fullImage = Morph.prototype.fullImage;
+
 // StageMorph thumbnail
 
 StageMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
