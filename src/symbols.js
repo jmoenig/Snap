@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-April-20';
+modules.symbols = '2020-May-06';
 
 var SymbolMorph;
 
@@ -788,10 +788,10 @@ SymbolMorph.prototype.renderSymbolCloudOutline = function (ctx, color) {
 
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r2 + 1, h - r2 - 1, r2, radians(90), radians(259), false);
-    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(165), radians(300), false);
-    ctx.arc(w / 20 * 11, r1 + 1, r1, radians(200), radians(357), false);
-    ctx.arc(w - r3 - 1, h - r3 - 1, r3, radians(269), radians(90), false);
+    ctx.arc(r2 + 1, h - r2 - 1, r2, radians(90), radians(180), false);
+    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(150), radians(300), false);
+    ctx.arc(w / 20 * 11, r1 + 1, r1, radians(210), radians(335), false);
+    ctx.arc(w - r3 - 1, h - r3 - 1, r3, radians(280), radians(90), false);
     ctx.closePath();
     ctx.stroke();
 };
