@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-May-04';
+modules.objects = '2020-May-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2648,7 +2648,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
         blocks.push(block('reportFindFirst'));
+        blocks.push(block('reportListIndex'));
         blocks.push(block('reportCombine'));
+        blocks.push(block('reportConcatenatedLists'));
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
@@ -2667,9 +2669,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportListIndex'));
-            blocks.push(block('reportConcatenatedLists'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
@@ -8620,7 +8619,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMap'));
         blocks.push(block('reportKeep'));
         blocks.push(block('reportFindFirst'));
+        blocks.push(block('reportListIndex'));
         blocks.push(block('reportCombine'));
+        blocks.push(block('reportConcatenatedLists'));
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
@@ -8639,9 +8640,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportListIndex'));
-            blocks.push(block('reportConcatenatedLists'));
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
