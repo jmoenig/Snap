@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-May-06';
+modules.byob = '2020-May-07';
 
 // Declarations
 
@@ -1187,12 +1187,22 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
     var rcvr = this.scriptTarget(),
         ide = this.parentThatIsA(IDE_Morph),
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
-        dup = def.copyAndBindTo(rcvr);
+        dup = def.copyAndBindTo(rcvr),
+        spec = dup.spec,
+        count = 1;
+    
     if (this.isGlobal) {
         ide.stage.globalBlocks.push(dup);
     } else {
         rcvr.customBlocks.push(dup);
     }
+
+    // find a unique spec
+    while (rcvr.doubleDefinitionsFor(dup).length > 0) {
+        count += 1;
+        dup.spec = spec + ' (' + count + ')';
+    }
+
     ide.flushPaletteCache();
     ide.refreshPalette();
     new BlockEditorMorph(dup, rcvr).popUp();
