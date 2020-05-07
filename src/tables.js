@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-April-26';
+modules.tables = '2020-May-07';
 
 var Table;
 var TableCellMorph;
@@ -280,7 +280,7 @@ TableCellMorph.prototype.listSymbol = function () {
         this.cachedListSymbol = new SymbolMorph(
             'list',
             SyntaxElementMorph.prototype.fontSize,
-            SpriteMorph.prototype.blockColor.lists
+            SpriteMorph.prototype.blockColor.lists.darker(50)
         );
     }
     return this.cachedListSymbol.getImage();
