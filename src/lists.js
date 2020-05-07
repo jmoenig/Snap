@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-April-26';
+modules.lists = '2020-May-07';
 
 var List;
 var ListWatcherMorph;
@@ -315,8 +315,18 @@ List.prototype.rows = function () {
 };
 
 List.prototype.cols = function () {
-    var r = (this.at(1));
-    return r instanceof List ? r.length() : 1;
+    // scan the first 10 rows for the maximun width
+    var len = Math.min(10, this.length()),
+        count = 1,
+        r, i;
+
+    for (i = 1; i <= len; i += 1) {
+        r = this.at(i);
+        if (r instanceof List) {
+            count = Math.max(count, r.length());
+        }
+    }
+    return count;
 };
 
 List.prototype.colName = function (col) {
