@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-06';
+modules.gui = '2020-May-08';
 
 // Declarations
 
@@ -3927,11 +3927,40 @@ IDE_Morph.prototype.aboutSnap = function () {
     translations = localize('Translations') + '\n' + SnapTranslator.credits();
 
     dlg = new DialogBoxMorph();
+
+    function txt(textString) {
+        var tm = new TextMorph(
+                textString,
+                dlg.fontSize,
+                dlg.fontStyle,
+                true,
+                false,
+                'center',
+                null,
+                null,
+                MorphicPreferences.isFlat ? null : new Point(1, 1),
+                new Color(255, 255, 255)
+            ),
+            scroller,
+            maxHeight = world.height() - dlg.titleFontSize * 10;
+        if (tm.height() > maxHeight) {
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(tm.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(tm);
+            scroller.color = new Color(0, 0, 0, 0);
+            return scroller;
+        }
+        return tm;
+    }
+
     dlg.inform('About Snap', aboutTxt, world);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
         () => {
-            dlg.body.text = translations;
+            dlg.addBody(txt(translations));
             dlg.body.fixLayout();
             btn1.show();
             btn2.show();
@@ -3946,7 +3975,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     );
     btn2 = dlg.addButton(
         () => {
-            dlg.body.text = aboutTxt;
+            dlg.addBody(txt(aboutTxt));
             dlg.body.fixLayout();
             btn1.show();
             btn2.hide();
@@ -3962,7 +3991,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     btn2.hide();
     licenseBtn = dlg.addButton(
         () => {
-            dlg.body.text = noticeTxt;
+            dlg.addBody(txt(noticeTxt));
             dlg.body.fixLayout();
             btn1.show();
             btn2.show();
@@ -3977,7 +4006,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     );
     btn3 = dlg.addButton(
         () => {
-            dlg.body.text = versions;
+            dlg.addBody(txt(versions));
             dlg.body.fixLayout();
             btn1.show();
             btn2.show();
@@ -3992,7 +4021,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     );
     btn4 = dlg.addButton(
         () => {
-            dlg.body.text = creditsTxt;
+            dlg.addBody(txt(creditsTxt));
             dlg.body.fixLayout();
             btn1.show();
             btn2.show();
@@ -4008,6 +4037,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     translatorsBtn.hide();
     dlg.fixLayout();
 };
+
 
 IDE_Morph.prototype.editProjectNotes = function () {
     var dialog = new DialogBoxMorph().withKey('projectNotes'),
