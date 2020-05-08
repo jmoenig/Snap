@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-04';
+modules.blocks = '2020-May-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10739,6 +10739,7 @@ BlockHighlightMorph.prototype.updateReadout = function () {
         return;
     }
     if (readout) {
+        readout.changed();
         readout.contents = this.threadCount.toString();
         readout.fixLayout();
         readout.rerender();
