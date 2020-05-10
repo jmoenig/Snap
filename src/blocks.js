@@ -6582,7 +6582,11 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
         }
         return true;
     }
-
+    //checking Target to avoid variadic C-shaped slots for reporters
+    function targetChecked(target) {
+        return (target instanceof CSlotMorph && target.parent instanceof MultiArgMorph) ? null : target;
+    }
+            
     if (this.isPreferringEmptySlots) {
         if (hand) {
             handPos = hand.position();
@@ -6601,7 +6605,7 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                                 !contains(blackList, input)
             );
             if (target) {
-                return target;
+                return targetChecked(target);
             }
         }
         target = detect(
@@ -6617,7 +6621,7 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                                 touchingVariadicArrowsIfAny(input)
         );
         if (target) {
-            return target;
+            return targetChecked(target);
         }
     }
 
@@ -6632,10 +6636,10 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                             !contains(blackList, input)
         );
         if (target) {
-            return target;
+            return targetChecked(target);
         }
     }
-    return detect(
+    target = detect(
         all,
         input => (input !== reporter) &&
             !input.isLocked() &&
@@ -6643,6 +6647,7 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                     !(input.parent instanceof PrototypeHatBlockMorph) &&
                         !contains(blackList, input)
     );
+    return targetChecked(target);
 };
 
 ScriptsMorph.prototype.closestBlock = function (comment, hand) {
