@@ -312,7 +312,7 @@ SnapTranslator.dict.ja_HIRA = {
     'change y by %n':
         'yざひょうを %n ずつかえる',
     'set y to %n':
-        'ざひょうを %n にする',
+        'yざひょうを %n にする',
     'if on edge, bounce':
         'もしはしについたら、はねかえる',
     'x position':
