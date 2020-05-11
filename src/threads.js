@@ -3485,17 +3485,17 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 len = Math.min(a.length, b.length);
                 result = new Array(len);
                 for (i = 0; i < len; i += 1) {
-                    result[i] = this.hyperZip(baseOp, a[i], b[i]);
+                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
                 }
                 return new List(result);
             }
             return new List(
-                a.asArray().map(each => this.hyperZip(baseOp, each, b))
+                a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
             );
         }
         if (this.isMatrix(b)) {
             return new List(
-                b.asArray().map(each => this.hyperZip(baseOp, a, each))
+                b.asArray().map(each => this.hyperDyadic(baseOp, a, each))
             );
         }
         return this.hyperZip(baseOp, a, b);
