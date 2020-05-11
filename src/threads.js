@@ -1802,18 +1802,17 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
-    var idx = index,
-        len, i, result;
+    var len, i, result;
     
     this.assertType(list, 'list');
     if (index === '') {
         return '';
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportBasicRandom(1, list.length());
+        return list.at(this.reportBasicRandom(1, list.length()));
     }
     if (this.inputOption(index) === 'last') {
-        idx = list.length();
+        return list.at(list.length());
     }
 
     if (this.enableHyperOps && this.isMatrix(index) && this.isMatrix(list)) {
