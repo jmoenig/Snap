@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-08';
+modules.blocks = '2020-May-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -489,6 +489,9 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpec);
+            if (this.slotSpec === '%cs') {
+                deflt.isStatic = true; // disable dropping reporters
+            }
         } else if (this instanceof ReporterSlotMorph) {
             deflt = this.emptySlot();
         }
@@ -11024,6 +11027,9 @@ MultiArgMorph.prototype.addInput = function (contents) {
     var i, name,
         newPart = this.labelPart(this.slotSpec),
         idx = this.children.length - 1;
+    if (this.slotSpec === '%cs') {
+        newPart.isStatic = true; // disable dropping reporters
+    }
     if (contents) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars' ||
