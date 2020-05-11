@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-06';
+modules.threads = '2020-May-11';
 
 var ThreadManager;
 var Process;
@@ -1799,8 +1799,12 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     list.put(element, idx);
 };
 
+// Process accessing list elements - hyper dyadic
+
 Process.prototype.reportListItem = function (index, list) {
-    var idx = index;
+    var idx = index,
+        len, i, result;
+    
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1811,6 +1815,33 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         idx = list.length();
     }
+
+    if (this.enableHyperOps && this.isMatrix(index) && this.isMatrix(list)) {
+        if (index.length() === 1) {
+            // apply the row of indices to every row in the list
+            index = index.at(1);
+            list = list.asArray();
+            len = list.length;
+            result = new Array(len);
+            for (i = 0; i < len; i += 1) {
+                result[i] = this.reportListItem(index, list[i]);
+            }
+            return new List(result);
+        }
+        // zip both arguments ignoring out-of-bounds indices
+        index = index.asArray();
+        list = list.asArray();
+        len = Math.min(index.length, list.length);
+        result = new Array(len);
+        for (i = 0; i < len; i += 1) {
+            result[i] = this.reportListItem(index[i], list[i]);
+        }
+        return new List(result);
+    }
+    return this.reportBasicListItem(index, list);
+};
+
+Process.prototype.reportBasicListItem = function (index, list) {
     if (this.enableHyperOps) {
         if (index instanceof List) {
             return new List(
@@ -1818,8 +1849,10 @@ Process.prototype.reportListItem = function (index, list) {
             );
         }
     }
-    return list.at(idx);
+    return list.at(index);
 };
+
+// Process - other basic list accessors
 
 Process.prototype.reportListLength = function (list) {
     this.assertType(list, 'list');
