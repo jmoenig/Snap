@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-11';
+modules.threads = '2020-May-12';
 
 var ThreadManager;
 var Process;
@@ -2168,7 +2168,10 @@ Process.prototype.doWarp = function (body) {
                 stage.fps = 0; // variable frame rate
             }
         }
+
         // this.pushContext('doYield'); // no longer needed in Morphic2
+        this.pushContext('popContext'); // instead we do this...
+
         if (this.context) {
             this.context.isCustomBlock = isCustomBlock;
         }
