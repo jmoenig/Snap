@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2019-11-06', // this, too, will appear in the Translators tab
+        '2020-01-30', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2723,7 +2723,23 @@ SnapTranslator.dict.ca = {
         'oposat',
     '__shout__go__':
         'bandera verda premuda',
-    'new costume %l width %dim height %dim':
-        'nou vestit %l amplada %dim alçada %dim'
+    'download script':
+        'descarrega el programa',
+    'pen vectors':
+        'vectors dibuixats',
+    'Log pen vectors':
+        'Enregistra els dibuixos com a vectors',
+    'log pen vectors':
+        'enregistra els dibuixos com a vectors',
+    'uncheck to turn off\nlogging pen vectors':
+        'desmarqueu per aturar l\'enregistrament\ndels dibuixos com a vectors',
+    'check to turn on\nlogging pen vectors':
+        'marqueu per iniciar l\'enregistrament\ndels dibuixos com a vectors',
+    'there are currently no\nvectorizable pen trail segments':
+        'no hi ha cap vector dibuixat enregistrat',
+    'svg...':
+        'exporta vectors com a svg',
+    'export pen trails\nline segments as SVG':
+        'exporta els vectors dibuixats com a fitxer SVG'
 
 };
