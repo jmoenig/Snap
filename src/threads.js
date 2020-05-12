@@ -1814,35 +1814,28 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-
-    if (this.enableHyperOps && this.isMatrix(index) && this.isMatrix(list)) {
-        if (index.length() === 1) {
-            // apply the row of indices to every row in the list
-            index = index.at(1);
-            list = list.asArray();
-            len = list.length;
-            result = new Array(len);
-            for (i = 0; i < len; i += 1) {
-                result[i] = this.reportListItem(index, list[i]);
-            }
-            return new List(result);
-        }
-        // zip both arguments ignoring out-of-bounds indices
-        index = index.asArray();
-        list = list.asArray();
-        len = Math.min(index.length, list.length);
-        result = new Array(len);
-        for (i = 0; i < len; i += 1) {
-            result[i] = this.reportListItem(index[i], list[i]);
-        }
-        return new List(result);
-    }
-    return this.reportBasicListItem(index, list);
-};
-
-Process.prototype.reportBasicListItem = function (index, list) {
     if (this.enableHyperOps) {
+        if (this.isMatrix(index)) {
+            if (index.length() === 1) {
+                // apply the row of indices to every row in the list
+                index = index.at(1);
+                list = list.asArray();
+                len = list.length;
+                result = new Array(len);
+                for (i = 0; i < len; i += 1) {
+                    result[i] = this.reportListItem(index, list[i]);
+                }
+                return new List(result);
+            }
+            return this.reportListItem(
+                index.cdr(),
+                this.reportListItem(index.at(1), list)
+            );
+        }
         if (index instanceof List) {
+            if (index.isEmpty()) {
+                return new List(list.asArray());
+            }
             return new List(
                 index.asArray().map(each => this.reportListItem(each, list))
             );
