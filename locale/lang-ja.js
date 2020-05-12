@@ -312,7 +312,7 @@ SnapTranslator.dict.ja = {
     'change y by %n':
         'y座標を %n ずつ変える',
     'set y to %n':
-        '座標を %n にする',
+        'y座標を %n にする',
     'if on edge, bounce':
         'もし端に着いたら、跳ね返る',
     'x position':
