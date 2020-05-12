@@ -52,6 +52,8 @@
         - fixed initial rendering, so costumes can be re-opened after saving
     2018, June 20 (Jens):
         - select primary color with right-click (in addition to shift-click)
+    2020, April 15 (Jens):
+        - migrated to new Morphic2 architecture
 */
 
 /*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
@@ -59,7 +61,7 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
 localize, PaintCanvasMorph, detect, modules*/
 
-modules.sketch = '2019-October-09';
+modules.sketch = '2020-April-15';
 
 // Declarations
 
@@ -1185,7 +1187,6 @@ VectorPaintEditorMorph.prototype.openIn = function (
                 nop();
         }
         this.propertiesControls.constrain.refresh();
-        this.drawNew();
     };
 };
 
@@ -1201,7 +1202,6 @@ VectorPaintEditorMorph.prototype.buildContents = function() {
 
     this.refreshToolButtons();
     this.fixLayout();
-    this.drawNew();
 };
 
 VectorPaintEditorMorph.prototype.buildToolbox = function () {
@@ -1252,7 +1252,6 @@ VectorPaintEditorMorph.prototype.buildToolbox = function () {
     });
 
     this.toolbox.bounds = this.toolbox.fullBounds().expandBy(inset * 2);
-    this.toolbox.drawNew();
 };
 
 // TODO :'(
@@ -1265,11 +1264,20 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         alignNames = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
-    pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
     pc.primaryColorViewer.color = new Color(0, 0, 0);
+    pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
+
+    pc.primaryColorViewer.render = function (ctx) {
+        myself.renderColorSelection(ctx, myself.paper.settings.primaryColor);
+    };
+
     pc.secondaryColorViewer = new Morph();
-    pc.secondaryColorViewer.setExtent(new Point(85, 15)); // 20 = height secondaryColor box
     pc.secondaryColorViewer.color = new Color(0, 0, 0);
+    pc.secondaryColorViewer.setExtent(new Point(85, 15)); // 20 = height secondaryColor box
+
+    pc.secondaryColorViewer.render = function (ctx) {
+        myself.renderColorSelection(ctx, myself.paper.settings.secondaryColor);
+    };
 
     pc.colorpicker = new PaintColorPickerMorph(
         new Point(180, 100),
@@ -1313,12 +1321,10 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     pc.penSizeField.accept = function (num) {
         var val = parseFloat(pc.penSizeField.getValue());
         pc.penSizeSlider.value = val;
-        pc.penSizeSlider.drawNew();
         pc.penSizeSlider.updateValue();
         this.setContents(val);
         myself.paper.settings.lineWidth = val;
-        this.world().keyboardReceiver = myself;
-        //pc.colorpicker.action(myself.paper.settings.primaryColor);
+        this.world().keyboardFocus = myself;
         myself.selection.forEach(function (shape) {
             shape.setBorderWidth(num);
             shape.drawOn(myself.paper);
@@ -1330,7 +1336,6 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     alpen.add(pc.penSizeField);
     alpen.color = myself.color;
     alpen.fixLayout();
-    pc.penSizeField.drawNew();
 
     pc.constrain = new ToggleMorph(
             "checkbox",
@@ -1362,12 +1367,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
 VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
     var myself = this,
         isSecondary = this.paper.isShiftPressed() ? false : secondary,
-        propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
-        ni = newCanvas(
-            this.propertiesControls[propertyName + 'Viewer'].extent()
-        ),
-        ctx = ni.getContext('2d'),
-        i, j;
+        propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color';
 
     this.paper.settings[(propertyName)] = color;
 
@@ -1379,7 +1379,16 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
         this.updateHistory();
     }
 
-    if (color === 'transparent') {
+    this.propertiesControls[propertyName + 'Viewer'].rerender();
+};
+
+VectorPaintEditorMorph.prototype.renderColorSelection = function (
+    ctx,
+    color = 'transparent'
+) {
+    var i, j;
+
+    if (color === 'transparent' || color.a === 0) {
         for (i = 0; i < 180; i += 5) {
             for (j = 0; j < 15; j += 5) {
                 ctx.fillStyle =
@@ -1393,17 +1402,6 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
         ctx.fillStyle = color.toString();
         ctx.fillRect(0, 0, 180, 15);
     }
-
-    //Brush size
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = Math.min(this.paper.settings.lineWidth, 20);
-    ctx.beginPath();
-    ctx.lineCap = 'round';
-    ctx.moveTo(20, 30);
-    ctx.lineTo(160, 30);
-    ctx.stroke();
-    this.propertiesControls[propertyName + 'Viewer'].image = ni;
-    this.propertiesControls[propertyName + 'Viewer'].changed();
 };
 
 VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
@@ -1652,6 +1650,7 @@ function VectorPaintCanvasMorph (shift) {
 
 VectorPaintCanvasMorph.prototype.init = function (shift) {
     VectorPaintCanvasMorph.uber.init.call(this, shift);
+    this.isCachingImage = true;
     this.pointBuffer = [];
     this.currentTool = 'brush';
     this.settings = {
@@ -1726,22 +1725,27 @@ VectorPaintCanvasMorph.prototype.toolChanged = function (tool) {
 VectorPaintCanvasMorph.prototype.drawNew = function () {
     var myself = this,
         editor = this.parentThatIsA(VectorPaintEditorMorph),
-        canvas = newCanvas(this.extent());
+        canvas = newCanvas(this.extent(), false, this.cachedImage);
 
     this.merge(this.background, canvas);
     this.merge(this.paper, canvas);
 
-    editor.shapes.forEach(function(each) {
-        myself.merge(each.image, canvas);
-    });
+    if (editor) {
+        editor.shapes.forEach(function(each) {
+            myself.merge(each.image, canvas);
+        });
 
-    if (editor.currentShape) {
-        this.merge(editor.currentShape.image, canvas);
+        if (editor.currentShape) {
+            this.merge(editor.currentShape.image, canvas);
+        }
     }
 
-    this.image = canvas;
+    this.cachedImage = canvas;
     this.drawFrame();
 };
+
+VectorPaintCanvasMorph.prototype.render =
+    VectorPaintCanvasMorph.prototype.drawNew;
 
 VectorPaintCanvasMorph.prototype.step = function () {
     if (this.redraw) {
