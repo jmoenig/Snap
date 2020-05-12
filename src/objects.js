@@ -5967,12 +5967,16 @@ SpriteMorph.prototype.findVariableWatcher = function (varName) {
 
 SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         globals = this.globalVariables(),
         watcher,
         others;
         
     if (stage === null) {
         return null;
+    }
+    if (isNil(isGlobal)) {
+        isGlobal = contains(globals.names(), varName);
     }
     watcher = this.findVariableWatcher(varName);
     if (watcher !== null) {
@@ -5983,13 +5987,14 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
             watcher.fixLayout(); // re-hide hidden parts
             watcher.keepWithin(stage);
         }
+        if (isGlobal) {
+            ide.flushBlocksCache('variables');
+            ide.refreshPalette();
+        }
         return;
     }
 
     // if no watcher exists, create a new one
-    if (isNil(isGlobal)) {
-        isGlobal = contains(globals.names(), varName);
-    }
     watcher = new WatcherMorph(
         varName,
         this.blockColor.variables,
@@ -6037,6 +6042,7 @@ SpriteMorph.prototype.deleteVariableWatcher = function (varName) {
 
 SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
     var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         watcher,
         others;
     if (!stage) { return; }
@@ -6048,6 +6054,10 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
             watcher.show();
             watcher.fixLayout(); // re-hide hidden parts
             watcher.keepWithin(stage);
+        }
+        if (watcher.isGlobal(selector)) {
+            ide.flushBlocksCache();
+            ide.refreshPalette();
         }
         return;
     }
@@ -6068,6 +6078,10 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
     watcher.fixLayout();
     watcher.keepWithin(stage);
     watcher.changed();
+    if (watcher.isGlobal(selector)) {
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+    }
 };
 
 SpriteMorph.prototype.showingWatcher = function (selector) {
