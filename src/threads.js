@@ -1834,7 +1834,7 @@ Process.prototype.reportListItem = function (index, list) {
         }
         if (index instanceof List) {
             if (index.isEmpty()) {
-                return new List(list.asArray());
+                return new List(list.asArray().map(each => each));
             }
             return new List(
                 index.asArray().map(each => this.reportListItem(each, list))
