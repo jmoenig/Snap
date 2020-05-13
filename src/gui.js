@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-11';
+modules.gui = '2020-May-13';
 
 // Declarations
 
@@ -284,6 +284,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     function initUser(username) {
         sessionStorage.username = username;
+        myself.controlBar.cloudButton.refresh();
         if (username) {
             myself.source = 'cloud';
             if (!myself.cloud.verified) {
@@ -302,16 +303,6 @@ IDE_Morph.prototype.openIn = function (world) {
                     myself.cloudIcon(null, new Color(0, 180, 0))
                 );
             }
-        }
-    }
-
-    if (location.protocol !== 'file:') {
-        if (!sessionStorage.username) {
-            // check whether login should persist across browser sessions
-            this.cloud.initSession(initUser);
-        } else {
-            // login only persistent during a single browser session
-            this.cloud.checkCredentials(initUser);
         }
     }
 
@@ -553,10 +544,15 @@ IDE_Morph.prototype.openIn = function (world) {
         interpretUrlAnchors.call(this);
     }
 
-    this.cloud.checkCredentials(
-        () => this.controlBar.cloudButton.refresh(),
-        () => this.controlBar.cloudButton.refresh()
-    );
+    if (location.protocol !== 'file:') {
+        if (!sessionStorage.username) {
+            // check whether login should persist across browser sessions
+            this.cloud.initSession(initUser);
+        } else {
+            // login only persistent during a single browser session
+            this.cloud.checkCredentials(initUser);
+        }
+    }
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
