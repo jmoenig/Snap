@@ -2254,7 +2254,9 @@ IDE_Morph.prototype.toggleRetina = function () {
         enableRetinaSupport();
     }
     this.world().fillPage();
-    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    if (!MorphicPreferences.isFlat) {
+        IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    }
     this.stage.clearPenTrails();
     this.refreshIDE();
 };
