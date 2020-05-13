@@ -6794,17 +6794,13 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 };
 
 SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
-    var exceptGlobals = this.globalVariables(),
-    	globalNames = exceptGlobals.names(),
-     	data;
+    var data;
 
     function alphabetically(x, y) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
- 	data = this.variables.allNames(exceptGlobals).filter(each =>
-		!contains(globalNames, each)
-    );
+ 	data = this.variables.names();
 	if (sorted) {
  		data.sort(alphabetically);
    }
