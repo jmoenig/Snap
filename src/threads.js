@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-12';
+modules.threads = '2020-May-13';
 
 var ThreadManager;
 var Process;
@@ -1802,8 +1802,6 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
-    var len, i, result;
-    
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1816,20 +1814,24 @@ Process.prototype.reportListItem = function (index, list) {
     }
     if (this.enableHyperOps) {
         if (this.isMatrix(index)) {
+            len = index.length();
             if (index.length() === 1) {
-                // apply the row of indices to every row in the list
-                index = index.at(1);
-                list = list.asArray();
-                len = list.length;
-                result = new Array(len);
-                for (i = 0; i < len; i += 1) {
-                    result[i] = this.reportListItem(index, list[i]);
-                }
-                return new List(result);
+                // apply column indices to every row in the table
+                return new List(
+                    list.asArray().map(row =>
+                        this.reportListItem(
+                            index.at(1),
+                            row
+                        )
+                    )
+                );
             }
             return this.reportListItem(
                 index.cdr(),
-                this.reportListItem(index.at(1), list)
+                this.reportListItem(
+                    index.at(1),
+                    list
+                )
             );
         }
         if (index instanceof List) {
