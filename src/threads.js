@@ -1814,7 +1814,6 @@ Process.prototype.reportListItem = function (index, list) {
     }
     if (this.enableHyperOps) {
         if (this.isMatrix(index)) {
-            len = index.length();
             if (index.length() === 1) {
                 // apply column indices to every row in the table
                 return new List(
@@ -1844,6 +1843,17 @@ Process.prototype.reportListItem = function (index, list) {
         }
     }
     return list.at(index);
+};
+
+
+Process.prototype.dimensionsOf = function(aList) {
+    var dim = 0,
+        cur = aList;
+    while (cur instanceof List) {
+        dim += 1;
+        cur = cur.at(1);
+    }
+    return dim;
 };
 
 // Process - other basic list accessors
