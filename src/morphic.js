@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-May-05';
+var morphicVersion = '2020-May-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1348,7 +1348,7 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     nonRetina = nonRetina || false;
     ext = (extentPoint ||
             (recycleMe ? new Point(recycleMe.width, recycleMe.height)
-                : new Point(0, 0))).floor();
+                : new Point(0, 0))).ceil();
     if (recycleMe &&
             !recycleMe.dataset.morphicShare &&
             (recycleMe.isRetinaEnabled || false) !== nonRetina &&
@@ -2724,9 +2724,8 @@ Rectangle.prototype.round = function () {
 
 Rectangle.prototype.spread = function () {
     // round me by applying floor() to my origin and ceil() to my corner
-    // and expand by 1,
     // avoids artefacts on retina displays
-    return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
+    return this.origin.floor().corner(this.corner.ceil());
 };
 
 Rectangle.prototype.amountToTranslateWithin = function (aRect) {
