@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-May-01';
+modules.store = '2020-May-13';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1621,6 +1621,9 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     if (!project || !project.stage) {
         return;
     }
+    ide.siblings().forEach(morph =>
+        morph.destroy()
+    );
     ide.projectName = project.name;
     ide.projectNotes = project.notes || '';
     if (ide.globalVariables) {
