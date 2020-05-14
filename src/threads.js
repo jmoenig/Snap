@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-13';
+modules.threads = '2020-May-14';
 
 var ThreadManager;
 var Process;
@@ -1802,6 +1802,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
+    var dim;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1812,39 +1813,70 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-    if (this.enableHyperOps) {
-        if (this.isMatrix(index)) {
-            if (index.length() === 1) {
-                // apply column indices to every row in the table
-                return new List(
-                    list.asArray().map(row =>
-                        this.reportListItem(
-                            index.at(1),
-                            row
-                        )
-                    )
-                );
-            }
-            return this.reportListItem(
-                index.cdr(),
-                this.reportListItem(
-                    index.at(1),
-                    list
-                )
-            );
-        }
-        if (index instanceof List) {
+    dim = this.dimensionsOf(index);
+    if (dim > 0 && this.enableHyperOps) {
+        if (dim === 1) {
             if (index.isEmpty()) {
-                return new List(list.asArray().map(each => each));
+                return new List(list.asArray().map(item => item));
             }
-            return new List(
-                index.asArray().map(each => this.reportListItem(each, list))
-            );
+            return new List(index.asArray().map(idx => list.at(idx)));
         }
+        return this.reportItems(index, list);
     }
     return list.at(index);
 };
 
+Process.prototype.reportItems = function (indices, list) {
+    return makeSelector(
+        this.dimensionsOf(list),
+        indices.cdr(),
+        makeLeafSelector(indices.at(1))
+    )(list);
+
+    function makeSelector(dimension, indices, next) {
+        if (dimension === 1) {
+            return next;
+        }
+        return makeSelector(
+            dimension - 1,
+            indices.cdr(),
+            makeBranch(
+                indices.at(1) || new List(),
+                next
+            )
+        );
+    }
+
+    function makeBranch(indices, next) {
+        return function(data) {
+            if (indices.isEmpty()) {
+                return new List(
+                    data.asArray().map(function (item) {
+                        return next(item);
+                    })
+                );
+            }
+            return new List(
+                indices.asArray().map(function (idx) {
+                    return next(data.at(idx));
+                })
+            );
+        };
+    }
+
+    function makeLeafSelector(indices) {
+        return function (data) {
+            if (indices.isEmpty()) {
+                return new List(data.asArray().map(item => item));
+            }
+            return new List(
+                indices.asArray().map(function (idx) {
+                    return data.at(idx);
+                })
+            );
+        };
+    }
+};
 
 Process.prototype.dimensionsOf = function(aList) {
     var dim = 0,
