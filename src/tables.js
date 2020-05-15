@@ -1049,6 +1049,7 @@ TableMorph.prototype.resetColumns = function () {
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
     this.buildCells();
+    this.changed();
 };
 
 TableMorph.prototype.openInDialog = function () {
