@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-May-07';
+modules.tables = '2020-May-16';
 
 var Table;
 var TableCellMorph;
@@ -1007,6 +1007,7 @@ TableMorph.prototype.resizeCells = function (pos) {
     this.rows = this.visibleRows();
     this.buildCells();
     this.resizeAnchor = pos;
+    this.changed();
 };
 
 TableMorph.prototype.columnAt = function (relativeX) {
