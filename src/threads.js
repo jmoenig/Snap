@@ -3513,14 +3513,10 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 }
                 return new List(result);
             }
-            return new List(
-                a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
-            );
+            return a.map(each => this.hyperDyadic(baseOp, each, b));
         }
         if (this.isMatrix(b)) {
-            return new List(
-                b.asArray().map(each => this.hyperDyadic(baseOp, a, each))
-            );
+            return b.map(each => this.hyperDyadic(baseOp, a, each));
         }
         return this.hyperZip(baseOp, a, b);
     }
@@ -3546,14 +3542,10 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
             }
             return new List(result);
         }
-        return new List(
-            a.asArray().map(each => this.hyperZip(baseOp, each, b))
-        );
+        return a.map(each => this.hyperZip(baseOp, each, b));
     }
     if (b instanceof List) {
-        return new List(
-            b.asArray().map(each => this.hyperZip(baseOp, a, each))
-        );
+        return b.map(each => this.hyperZip(baseOp, a, each));
     }
     return baseOp(a, b);
 };
