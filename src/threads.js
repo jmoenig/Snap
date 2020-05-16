@@ -1860,26 +1860,18 @@ Process.prototype.reportItems = function (indices, list) {
     function makeBranch(indices, next) {
         return function(data) {
             if (indices.isEmpty()) {
-                return new List(
-                    data.asArray().map(item => next(item))
-                );
+                return data.map(item => next(item));
             }
-            return new List(
-                indices.asArray().map(idx => next(data.at(idx)))
-            );
+            return indices.map(idx => next(data.at(idx)));
         };
     }
 
     function makeLeafSelector(indices) {
         return function (data) {
             if (indices.isEmpty()) {
-                return new List(
-                    data.asArray().map(item => item)
-                );
+                return data.map(item => item);
             }
-            return new List(
-                indices.asArray().map(idx => data.at(idx))
-            );
+            return indices.map(idx => data.at(idx));
         };
     }
 };

@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-May-07';
+modules.lists = '2020-May-16';
 
 var List;
 var ListWatcherMorph;
@@ -105,6 +105,10 @@ var ListWatcherMorph;
     asText()                - answer my elements (recursively) concatenated
     asCSV()                 - answer a csv-formatted String of myself
     asJSON()                - answer a json-formatted String of myself
+
+    utility:
+    ---------
+    map(callback)           - answer an arrayed copy applying a JS func to all
 */
 
 // List instance creation:
@@ -202,6 +206,12 @@ List.prototype.clear = function () {
     this.rest = null;
     this.isLinked = false;
     this.changed();
+};
+
+List.prototype.map = function(callback) {
+    return new List(
+        this.asArray().map(callback)
+    );
 };
 
 // List getters (all hybrid):
