@@ -1817,9 +1817,9 @@ Process.prototype.reportListItem = function (index, list) {
     if (dim > 0 && this.enableHyperOps) {
         if (dim === 1) {
             if (index.isEmpty()) {
-                return new List(list.asArray().map(item => item));
+                return list.map(item => item);
             }
-            return new List(index.asArray().map(idx => list.at(idx)));
+            return index.map(idx => list.at(idx));
         }
         return this.reportItems(index, list);
     }
@@ -1965,19 +1965,6 @@ Process.prototype.reportConcatenatedLists = function (lists) {
     }
 
     // in case the first sub-list is arrayed
-
-    // fast version, has the disadvantage that it might
-    // change the structure of the source(s) by calling
-    // asArray().
-    // commented out for now
-    /*
-    elements = lists.asArray().map(sub => {
-        this.assertType(sub, 'list');
-        return sub.asArray();
-    });
-    return new List([].concat(...elements));
-    */
-
     result = [];
     rows = lists.length();
     for (rowIdx = 1; rowIdx <= rows; rowIdx += 1) {
