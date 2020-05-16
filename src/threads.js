@@ -1861,15 +1861,11 @@ Process.prototype.reportItems = function (indices, list) {
         return function(data) {
             if (indices.isEmpty()) {
                 return new List(
-                    data.asArray().map(function (item) {
-                        return next(item);
-                    })
+                    data.asArray().map(item => next(item))
                 );
             }
             return new List(
-                indices.asArray().map(function (idx) {
-                    return next(data.at(idx));
-                })
+                indices.asArray().map(idx => next(data.at(idx)))
             );
         };
     }
@@ -1877,12 +1873,12 @@ Process.prototype.reportItems = function (indices, list) {
     function makeLeafSelector(indices) {
         return function (data) {
             if (indices.isEmpty()) {
-                return new List(data.asArray().map(item => item));
+                return new List(
+                    data.asArray().map(item => item)
+                );
             }
             return new List(
-                indices.asArray().map(function (idx) {
-                    return data.at(idx);
-                })
+                indices.asArray().map(idx => data.at(idx))
             );
         };
     }
