@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-14';
+modules.threads = '2020-May-16';
 
 var ThreadManager;
 var Process;
@@ -1827,6 +1827,16 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportItems = function (indices, list) {
+    // This. This is it. The pinnacle of my programmer's life.
+    // After days of roaming about my house and garden,
+    // of taking showers and rummaging through the fridge,
+    // of strumming the charango and the five ukuleles
+    // sitting next to my laptop on my desk,
+    // and of letting my mind wander far and wide,
+    // to come up with this design, always thinking
+    // "What would Brian do?".
+    // And look, Ma, it's turned out all beautiful! -jens
+
     return makeSelector(
         this.dimensionsOf(list),
         indices.cdr(),
