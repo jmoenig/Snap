@@ -3632,9 +3632,7 @@ Process.prototype.reportBasicLessThan = function (a, b) {
 Process.prototype.reportNot = function (bool) {
     if (this.enableHyperOps) {
         if (bool instanceof List) {
-            return new List(
-                bool.asArray().map(each => this.reportNot(each))
-            );
+            return bool.map(each => this.reportNot(each));
         }
     }
     return !bool;
@@ -3702,9 +3700,7 @@ Process.prototype.reportBoolean = function (bool) {
 Process.prototype.reportRound = function (n) {
     if (this.enableHyperOps) {
         if (n instanceof List) {
-            return new List(
-                n.asArray().map(each => this.reportRound(each))
-            );
+            return n.map(each => this.reportRound(each));
         }
     }
     return Math.round(+n);
@@ -3713,9 +3709,7 @@ Process.prototype.reportRound = function (n) {
 Process.prototype.reportMonadic = function (fname, n) {
     if (this.enableHyperOps) {
         if (n instanceof List) {
-            return new List(
-                n.asArray().map(each => this.reportMonadic(fname, each))
-            );
+            return n.map(each => this.reportMonadic(fname, each));
         }
     }
 
@@ -3856,9 +3850,7 @@ Process.prototype.reportBasicLetter = function (idx, string) {
 Process.prototype.reportStringSize = function (data) {
     if (this.enableHyperOps) {
         if (data instanceof List) {
-            return new List(
-                data.asArray().map(each => this.reportStringSize(each))
-            );
+            return data.map(each => this.reportStringSize(each));
         }
     }
     if (data instanceof List) { // catch a common user error
@@ -3872,9 +3864,7 @@ Process.prototype.reportUnicode = function (string) {
 
     if (this.enableHyperOps) {
         if (string instanceof List) {
-            return new List(
-                string.asArray().map(each => this.reportUnicode(each))
-            );
+            return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
         if (str.length > 1) {
@@ -3892,9 +3882,7 @@ Process.prototype.reportUnicode = function (string) {
 Process.prototype.reportUnicodeAsLetter = function (num) {
     if (this.enableHyperOps) {
         if (num instanceof List) {
-            return new List(
-                num.asArray().map(each => this.reportUnicodeAsLetter(each))
-            );
+            return num.map(each => this.reportUnicodeAsLetter(each));
         }
     }
 
