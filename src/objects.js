@@ -11435,6 +11435,12 @@ WatcherMorph.prototype.userMenu = function () {
                     null,
                     new Color(100, 0, 0)
                 );
+                menu.addItem( // experimental
+                    'blockify...',
+                    () => this.currentValue.blockify().pickUp(this.world()),
+                    null,
+                    new Color(100, 0, 0)
+                );
             }
         }
         if (isString(this.currentValue) || !isNaN(+this.currentValue)) {

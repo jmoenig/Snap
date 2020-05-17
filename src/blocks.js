@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-16';
+modules.blocks = '2020-May-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11060,6 +11060,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     this.children.splice(idx, 0, newPart);
     newPart.fixLayout();
     this.fixLayout();
+    return newPart;
 };
 
 MultiArgMorph.prototype.removeInput = function () {

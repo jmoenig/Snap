@@ -612,6 +612,43 @@ List.prototype.hasOnlyAtomicData = function () {
     });
 };
 
+// List-to-block (experimental)
+
+List.prototype.blockify = function (limit = 100) {
+    var block = SpriteMorph.prototype.blockForSelector('reportNewList'),
+        slots = block.inputs()[0],
+        bool,
+        i, len, value;
+
+    block.isDraggable = true;
+    slots.removeInput();
+    
+    // fill the slots with the data
+    len = Math.min(this.length(), limit);
+    for (i = 0; i < len; i += 1) {
+        value = this.at(i + 1);
+        if (value instanceof List) {
+            slots.replaceInput(
+                slots.addInput(),
+                value.blockify(limit - i)
+            );
+        } else if (typeof value === 'boolean') {
+            bool = SpriteMorph.prototype.blockForSelector('reportBoolean');
+            bool.inputs()[0].setContents(value);
+            bool.isDraggable = true;
+            slots.replaceInput(
+                slots.addInput(),
+                bool
+            );
+        } else {
+            slots.addInput(value);
+        }
+    }
+
+    slots.fixBlockColor(null, true);
+    return block;
+};
+
 // ListWatcherMorph ////////////////////////////////////////////////////
 
 /*
