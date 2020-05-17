@@ -461,6 +461,14 @@ Cloud.prototype.getPublishedProjectList = function (
     		(username ? '/' + encodeURIComponent(username) : '') +
 	        '?ispublished=true';
 
+    if (!username) {
+        // When requesting the global list of published projects, filter out
+        // those with project names that are typical of online courses like
+        // Teals or BJC. When requesting a user's published projects, show them
+        // all.
+        path += '&filtered=true';
+    }
+
     if (withThumbnail) {
         path += '&withthumbnail=true';
     }

@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2019 by Jens Mönig and Brian Harvey
+    Copyright (C) 2020 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -57,12 +57,12 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
-Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize, isString,
+Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2019-December-08';
+modules.lists = '2020-May-17';
 
 var List;
 var ListWatcherMorph;
@@ -95,7 +95,8 @@ var ListWatcherMorph;
     length()                - number of slots
     at(index)               - element present in specified slot
     contains(element)       - <bool>
-    isEmpty(element)        - <bool>
+    isEmpty()               - <bool>
+    indexOf(element)        - index of element's first occurrence, 0 if none
 
     conversion:
     -----------
@@ -104,6 +105,10 @@ var ListWatcherMorph;
     asText()                - answer my elements (recursively) concatenated
     asCSV()                 - answer a csv-formatted String of myself
     asJSON()                - answer a json-formatted String of myself
+
+    utility:
+    ---------
+    map(callback)           - answer an arrayed copy applying a JS func to all
 */
 
 // List instance creation:
@@ -203,6 +208,12 @@ List.prototype.clear = function () {
     this.changed();
 };
 
+List.prototype.map = function(callback) {
+    return new List(
+        this.asArray().map(callback)
+    );
+};
+
 // List getters (all hybrid):
 
 List.prototype.length = function () {
@@ -241,9 +252,7 @@ List.prototype.contains = function (element) {
         pair = pair.rest;
     }
     // in case I'm arrayed
-    return pair.contents.some(function (any) {
-        return snapEquals(any, element);
-    });
+    return pair.contents.some(any => snapEquals(any, element));
 };
 
 List.prototype.isEmpty = function () {
@@ -251,6 +260,27 @@ List.prototype.isEmpty = function () {
         return isNil(this.first);
     }
     return !this.contents.length;
+};
+
+List.prototype.indexOf = function (element) {
+    var pair = this,
+        idx = 1,
+        i, len;
+    while (pair.isLinked) {
+        if (snapEquals(pair.first, element)) {
+            return idx;
+        }
+        pair = pair.rest;
+        idx += 1;
+    }
+    // in case I'm arrayed
+    len = pair.contents.length;
+    for (i = 0; i < len; i += 1) {
+        if (snapEquals(pair.contents[i], element)) {
+            return idx + i;
+        }
+    }
+    return 0;
 };
 
 // List table (2D) accessing (for table morph widget):
@@ -295,8 +325,18 @@ List.prototype.rows = function () {
 };
 
 List.prototype.cols = function () {
-    var r = (this.at(1));
-    return r instanceof List ? r.length() : 1;
+    // scan the first 10 rows for the maximun width
+    var len = Math.min(10, this.length()),
+        count = 1,
+        r, i;
+
+    for (i = 1; i <= len; i += 1) {
+        r = this.at(i);
+        if (r instanceof List) {
+            count = Math.max(count, r.length());
+        }
+    }
+    return count;
 };
 
 List.prototype.colName = function (col) {
@@ -433,7 +473,7 @@ List.prototype.asCSV = function () {
             return string;
         }
         cell = ['\"'];
-        string.split('').forEach(function (letter) {
+        string.split('').forEach(letter => {
             cell.push(letter);
             if (letter === '\"') {
                 cell.push(letter);
@@ -443,9 +483,9 @@ List.prototype.asCSV = function () {
         return cell.join('');
     }
 
-    if (items.some(function (any) {return any instanceof List; })) {
+    if (items.some(any => any instanceof List)) {
         // 2-dimensional table
-        items.forEach(function (item) {
+        items.forEach(item => {
             if (item instanceof List) {
                 rows.push(item.itemsArray().map(encodeCell).join(','));
             } else {
@@ -466,14 +506,14 @@ List.prototype.asJSON = function (guessObjects) {
         var items = list.itemsArray(),
             obj = {};
         if (canBeObject(items)) {
-            items.forEach(function (pair) {
+            items.forEach(pair => {
                 var value = pair.length() === 2 ? pair.at(2) : undefined;
                 obj[pair.at(1)] = (value instanceof List ?
                     objectify(value, guessObjects) : value);
             });
             return obj;
         }
-        return items.map(function (element) {
+        return items.map(element => {
             return element instanceof List ?
                 objectify(element, guessObjects) : element;
         });
@@ -484,14 +524,11 @@ List.prototype.asJSON = function (guessObjects) {
         // might be better represented as dictionary/object
         // than as array
         var keys;
-        if (array.every(function (element) {
-            return element instanceof List && (element.length() < 3);
-        })) {
-            keys = array.map(function (each) {return each.at(1); });
-            return keys.every(function (each) {
-                return isString(each) &&
-                    isUniqueIn(each, keys);
-            });
+        if (array.every(
+            element => element instanceof List && (element.length() < 3)
+        )) {
+            keys = array.map(each => each.at(1));
+            return keys.every(each => isString(each) && isUniqueIn(each, keys));
         }
     }
 
@@ -551,7 +588,7 @@ List.prototype.equalTo = function (other) {
 };
 
 List.prototype.canBeCSV = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
             (value instanceof List && value.hasOnlyAtomicData());
@@ -559,7 +596,7 @@ List.prototype.canBeCSV = function () {
 };
 
 List.prototype.canBeJSON = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return !isNaN(+value) ||
             isString(value) ||
             value === true ||
@@ -569,7 +606,7 @@ List.prototype.canBeJSON = function () {
 };
 
 List.prototype.hasOnlyAtomicData = function () {
-    return this.itemsArray().every(function (value) {
+    return this.itemsArray().every(value => {
         return (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value);
     });
@@ -659,14 +696,13 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         this.plusButton.padding = 0;
         this.plusButton.edge = 0;
         this.plusButton.outlineColor = this.color;
-        this.plusButton.drawNew();
         this.plusButton.fixLayout();
     }
 
     ListWatcherMorph.uber.init.call(
         this,
         SyntaxElementMorph.prototype.rounding,
-        1.000001, // shadow bug in Chrome,
+        1,
         new Color(120, 120, 120)
     );
 
@@ -681,7 +717,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         this.add(this.plusButton);
     }
     this.add(this.handle);
-    this.handle.drawNew();
+    this.handle.fixLayout();
     this.update();
     this.fixLayout();
 };
@@ -691,7 +727,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
 ListWatcherMorph.prototype.update = function (anyway) {
     var i, idx, ceil, morphs, cell, cnts, label, button, max,
         starttime, maxtime = 1000;
-    this.frame.contents.children.forEach(function (m) {
+    this.frame.contents.children.forEach(m => {
         if (m instanceof CellMorph) {
             if (m.contentsMorph instanceof ListWatcherMorph) {
                 m.contentsMorph.update();
@@ -705,7 +741,6 @@ ListWatcherMorph.prototype.update = function (anyway) {
     if (this.lastUpdated === this.list.lastChanged && !anyway) {
         return null;
     }
-
     this.updateLength(true);
 
     // adjust start index to current list length
@@ -741,7 +776,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
 
         if (cell.contents !== cnts) {
             cell.contents = cnts;
-            cell.drawNew();
+            cell.fixLayout();
             if (this.lastCell) {
                 cell.setLeft(this.lastCell.left());
             }
@@ -750,7 +785,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
 
         if (label.text !== idx.toString()) {
             label.text = idx.toString();
-            label.drawNew();
+            label.fixLayout();
         }
 
         button.action = idx;
@@ -804,7 +839,6 @@ ListWatcherMorph.prototype.update = function (anyway) {
             button.edge = 0;
             button.corner = 1;
             button.outlineColor = this.color.darker();
-            button.drawNew();
             button.fixLayout();
 
             this.frame.contents.add(cell);
@@ -836,7 +870,7 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
     } else {
         this.label.color = new Color(0, 0, 0);
     }
-    this.label.drawNew();
+    this.label.fixLayout();
     this.label.setCenter(this.center());
     this.label.setBottom(this.bottom() - 3);
 };
@@ -844,12 +878,11 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
 ListWatcherMorph.prototype.startIndexMenu = function () {
     var i,
         range,
-        myself = this,
         items = Math.ceil(this.list.length() / this.range),
         menu = new MenuMorph(
-            function (idx) {myself.setStartIndex(idx); },
+            idx => this.setStartIndex(idx),
             null,
-            myself
+            this
         );
     menu.addItem('1...', 1);
     for (i = 1; i < items; i += 1) {
@@ -862,19 +895,19 @@ ListWatcherMorph.prototype.startIndexMenu = function () {
 ListWatcherMorph.prototype.setStartIndex = function (index) {
     this.start = index;
     this.list.changed();
+    this.update();
 };
 
 ListWatcherMorph.prototype.fixLayout = function () {
     if (!this.label) {return; }
-    Morph.prototype.trackChanges = false;
     if (this.frame) {
         this.arrangeCells();
-        this.frame.silentSetPosition(this.position().add(3));
+        this.frame.setPosition(this.position().add(3));
         this.frame.bounds.corner = this.bounds.corner.subtract(new Point(
             3,
             17
         ));
-        this.frame.drawNew();
+        this.frame.fixLayout();
         this.frame.contents.adjustBounds();
     }
 
@@ -884,11 +917,11 @@ ListWatcherMorph.prototype.fixLayout = function () {
         this.plusButton.setLeft(this.left() + 3);
         this.plusButton.setBottom(this.bottom() - 3);
     }
-    Morph.prototype.trackChanges = true;
-    this.changed();
 
-    if (this.parent && this.parent.fixLayout) {
+    if (this.parent) {
+        this.parent.changed();
         this.parent.fixLayout();
+        this.parent.rerender();
     }
 };
 
@@ -933,15 +966,12 @@ ListWatcherMorph.prototype.userMenu = function () {
     if (!List.prototype.enableTables) {
         return this.escalateEvent('userMenu');
     }
-    var menu = new MenuMorph(this),
-        myself = this;
+    var menu = new MenuMorph(this);
     menu.addItem('table view...', 'showTableView');
     menu.addLine();
     menu.addItem(
         'open in dialog...',
-        function () {
-            new TableDialogMorph(myself.list).popUp(myself.world());
-        }
+        () => new TableDialogMorph(this.list).popUp(this.world())
     );
     return menu;
 };
@@ -954,17 +984,23 @@ ListWatcherMorph.prototype.showTableView = function () {
     );
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
-        view.changed();
-        view.drawNew(true);
+        view.contentsMorph.destroy();
+        view.contentsMorph = new TableFrameMorph(new TableMorph(this.list, 10));
+        view.contentsMorph.expand(this.extent());
+        view.parent.positionTalkBubble();
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new TableFrameMorph(new TableMorph(this.list, 10));
         view.contents.expand(this.extent());
-        view.drawNew(true);
     } else { // watcher cell
-        view.drawNew(true, 'table');
+        view.changed();
+        view.contentsMorph.destroy();
+        view.contentsMorph = new TableFrameMorph(new TableMorph(this.list, 10));
+        view.add(view.contentsMorph);
+        view.contentsMorph.setPosition(this.position());
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();
+    view.rerender();
 };
 
 // ListWatcherMorph events:
@@ -984,9 +1020,6 @@ ListWatcherMorph.prototype.show = function () {
     this.frame.contents.adjustBounds();
 };
 
-// ListWatcherMorph drawing:
+// ListWatcherMorph rendering:
 
-ListWatcherMorph.prototype.drawNew = function () {
-    WatcherMorph.prototype.drawNew.call(this);
-    this.fixLayout();
-};
+ListWatcherMorph.prototype.render = WatcherMorph.prototype.render;

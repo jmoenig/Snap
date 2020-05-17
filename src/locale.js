@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-January-28';
+modules.locale = '2020-April-27';
 
 // Global stuff
 
@@ -82,26 +82,24 @@ Localizer.prototype.languageName = function (lang) {
 };
 
 Localizer.prototype.credits = function () {
-    var txt = '',
-        myself = this;
-    this.languages().forEach(function (lang) {
+    var txt = '';
+    this.languages().forEach(lang => {
         txt = txt + '\n'
-            + myself.languageName(lang)
+            + this.languageName(lang)
             + ' (' + lang + ') - '
-            + myself.dict[lang].language_translator
-            + ' - ' + myself.dict[lang].last_changed;
+            + this.dict[lang].language_translator
+            + ' - ' + this.dict[lang].last_changed;
     });
     return txt;
 };
 
 Localizer.prototype.unload = function () {
     var dict,
-        keep = ['language_name', 'language_translator', 'last_changed'],
-        myself = this;
-    this.languages().forEach(function (lang) {
+        keep = ['language_name', 'language_translator', 'last_changed'];
+    this.languages().forEach(lang => {
         var key;
         if (lang !== 'en') {
-            dict = myself.dict[lang];
+            dict = this.dict[lang];
             for (key in dict) {
                 if (Object.prototype.hasOwnProperty.call(dict, key)
                         && !contains(keep, key)) {
@@ -219,7 +217,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2019-06-25'
+        '2020-04-06'
 };
 
 SnapTranslator.dict.cs = {
@@ -373,7 +371,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2020-01-03'
+        '2020-01-30'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -616,4 +614,15 @@ SnapTranslator.dict.sk = {
         'peter_lukacovic@outlook.com',
     'last_changed':
         '2019-12-10'
+};
+
+SnapTranslator.dict.he = {
+    'language_name':
+        'עברית',
+    'language_translator':
+        'יוסי כהן',
+    'translator_e-mail':
+        'cohenyossi81@gmail.com',
+    'last_changed':
+        '2020-04-21'
 };
