@@ -614,23 +614,23 @@ List.prototype.hasOnlyAtomicData = function () {
 
 // List-to-block (experimental)
 
-List.prototype.blockify = function (limit = 100) {
+List.prototype.blockify = function (limit = 500, count = [0]) {
     var block = SpriteMorph.prototype.blockForSelector('reportNewList'),
         slots = block.inputs()[0],
+        len = this.length(),
         bool,
-        i, len, value;
+        i, value;
 
     block.isDraggable = true;
     slots.removeInput();
     
     // fill the slots with the data
-    len = Math.min(this.length(), limit);
-    for (i = 0; i < len; i += 1) {
+    for (i = 0; i < len && count[0] < limit; i += 1) {
         value = this.at(i + 1);
         if (value instanceof List) {
             slots.replaceInput(
                 slots.addInput(),
-                value.blockify(limit - i)
+                value.blockify(limit, count)
             );
         } else if (typeof value === 'boolean') {
             bool = SpriteMorph.prototype.blockForSelector('reportBoolean');
@@ -643,6 +643,7 @@ List.prototype.blockify = function (limit = 100) {
         } else {
             slots.addInput(value);
         }
+        count[0] += 1;
     }
 
     slots.fixBlockColor(null, true);
