@@ -11435,12 +11435,6 @@ WatcherMorph.prototype.userMenu = function () {
                     null,
                     new Color(100, 0, 0)
                 );
-                menu.addItem( // experimental
-                    'blockify...',
-                    () => this.currentValue.blockify().pickUp(this.world()),
-                    null,
-                    new Color(100, 0, 0)
-                );
             }
         }
         if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
@@ -11476,6 +11470,19 @@ WatcherMorph.prototype.userMenu = function () {
                     );
                 }
             );
+            if (this.currentValue.canBeJSON()) {
+                menu.addItem( // experimental
+                    'blockify...',
+                    () => {
+                        var world = ide.world();
+                        this.currentValue.blockify().pickUp(world);
+                        world.hand.grabOrigin = {
+                            origin: ide.palette,
+                            position: ide.palette.center()
+                        };
+                    }
+                );
+            }
         } else if (this.currentValue instanceof List &&
                 this.currentValue.canBeJSON()) {
             menu.addItem(
