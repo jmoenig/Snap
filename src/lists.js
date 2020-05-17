@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
 
-modules.lists = '2020-May-16';
+modules.lists = '2020-May-17';
 
 var List;
 var ListWatcherMorph;
@@ -870,6 +870,7 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
     } else {
         this.label.color = new Color(0, 0, 0);
     }
+    this.label.fixLayout();
     this.label.setCenter(this.center());
     this.label.setBottom(this.bottom() - 3);
 };
