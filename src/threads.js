@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-16';
+modules.threads = '2020-May-18';
 
 var ThreadManager;
 var Process;
@@ -1932,20 +1932,22 @@ Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
     var result, len, i,
-        n = start;
+        s = +start,
+        e = +end,
+        n = s;
 
-    this.assertType(start, 'number');
-    this.assertType(end, 'number');
+    this.assertType(s, 'number');
+    this.assertType(e, 'number');
 
-    if (end > start) {
-        len = Math.floor(end - start);
+    if (e > s) {
+        len = Math.floor(e - s);
         result = new Array(len);
         for(i = 0; i <= len; i += 1) {
             result[i] = n;
             n += 1;
         }
     } else {
-        len = Math.floor(start - end);
+        len = Math.floor(s - e);
         result = new Array(len);
         for(i = 0; i <= len; i += 1) {
             result[i] = n;
