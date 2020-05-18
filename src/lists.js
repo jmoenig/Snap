@@ -58,11 +58,11 @@
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
+TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect*/
 
-modules.lists = '2020-May-17';
+modules.lists = '2020-May-18';
 
 var List;
 var ListWatcherMorph;
@@ -1006,6 +1006,20 @@ ListWatcherMorph.prototype.userMenu = function () {
     }
     var menu = new MenuMorph(this);
     menu.addItem('table view...', 'showTableView');
+    if (this.list.canBeJSON()) {
+        menu.addItem(
+            'blockify',
+            () => {
+                var world = this.world(),
+                    ide = detect(world.children, m => m instanceof IDE_Morph);
+                this.list.blockify().pickUp(world);
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
+        );
+    }
     menu.addLine();
     menu.addItem(
         'open in dialog...',

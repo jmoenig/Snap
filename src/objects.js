@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-May-17';
+modules.objects = '2020-May-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -1187,7 +1187,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'split %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "]
         },
-        reportJSFunction: { // experimental
+        reportJSFunction: {
             type: 'reporter',
             category: 'operators',
             spec: 'JavaScript function ( %mult%s ) { %code }'
@@ -11471,8 +11471,8 @@ WatcherMorph.prototype.userMenu = function () {
                 }
             );
             if (this.currentValue.canBeJSON()) {
-                menu.addItem( // experimental
-                    'blockify...',
+                menu.addItem(
+                    'blockify',
                     () => {
                         var world = ide.world();
                         this.currentValue.blockify().pickUp(world);
