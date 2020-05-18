@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-01-28', // this, too, will appear in the Translators tab
+        '2020-05-18', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -525,6 +525,8 @@ SnapTranslator.dict.de = {
         'sende %msg an alle',
     'broadcast %msg and wait':
         'sende %msg an alle und warte',
+    'send %msg to %spr':
+        'sende %msg an %spr',
     'Message name':
         'Nachricht',
     'message':
@@ -799,6 +801,8 @@ SnapTranslator.dict.de = {
         'etwas',
     'is %l empty?':
         'ist %l leer?',
+    'index of %s in %l':
+        'Index von %s in %l',
     'map %repRing over %l':
         'wende %repRing an auf %l',
     'keep items %predRing from %l':
@@ -823,6 +827,8 @@ SnapTranslator.dict.de = {
         'Wert',
     'index':
         'Index',
+    'append %lists':
+        'verbinde %lists',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
