@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-May-18';
+var morphicVersion = '2020-May-19';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11821,6 +11821,7 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     }
     kbd = document.createElement('textarea');
     kbd.setAttribute('id', 'morphic_keyboard');
+    kbd.setAttribute('style', 'caret-color:transparent;');
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.style.position = 'absolute';
