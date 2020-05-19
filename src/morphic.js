@@ -6933,18 +6933,24 @@ SliderMorph.prototype.fixLayout = function () {
         bh = Math.max(bw, Math.round(this.height() * this.ratio()));
         this.button.setExtent(new Point(bw, bh));
         posX = 1;
-        posY = Math.min(
-            Math.round((this.value - this.start) * this.unitSize()),
-            this.height() - this.button.height()
+        posY = Math.max(
+            Math.min(
+                Math.round((this.value - this.start) * this.unitSize()),
+                this.height() - this.button.height()
+            ),
+            0
         );
     } else {
         bh = this.height() - 2;
         bw  = Math.max(bh, Math.round(this.width() * this.ratio()));
         this.button.setExtent(new Point(bw, bh));
         posY = 1;
-        posX = Math.min(
-            Math.round((this.value - this.start) * this.unitSize()),
-            this.width() - this.button.width()
+        posX = Math.max(
+            Math.min(
+                Math.round((this.value - this.start) * this.unitSize()),
+                this.width() - this.button.width()
+            ),
+            0
         );
     }
     this.button.setPosition(
