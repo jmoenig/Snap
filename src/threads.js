@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-18';
+modules.threads = '2020-May-20';
 
 var ThreadManager;
 var Process;
@@ -741,7 +741,15 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector ===  'reportAnd' ||
             selector === 'reportIfElse' ||
             selector === 'doReport') {
-        return this[selector](block);
+        if (this.isCatchingErrors) {
+            try {
+                return this[selector](block);
+            } catch (error) {
+                this.handleError(error, block);
+            }
+        } else {
+            return this[selector](block);
+        }
     }
 
     // first evaluate all inputs, then apply the primitive
@@ -2044,6 +2052,7 @@ Process.prototype.doIf = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
+    this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2059,6 +2068,7 @@ Process.prototype.doIfElse = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
+    this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2087,11 +2097,14 @@ Process.prototype.reportIfElse = function (block) {
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs.pop());
         this.popContext();
-    } else if (inputs[0]) {
-        this.evaluateNextInput(block);
     } else {
-        inputs.push(null);
-        this.evaluateNextInput(block);
+        this.assertType(inputs[0], ['Boolean']);
+        if (inputs[0]) {
+            this.evaluateNextInput(block);
+        } else {
+            inputs.push(null);
+            this.evaluateNextInput(block);
+        }
     }
 };
 
@@ -2345,6 +2358,7 @@ Process.prototype.doRepeat = function (counter, body) {
 };
 
 Process.prototype.doUntil = function (goalCondition, body) {
+    this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -2359,6 +2373,7 @@ Process.prototype.doUntil = function (goalCondition, body) {
 };
 
 Process.prototype.doWaitUntil = function (goalCondition) {
+    this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
