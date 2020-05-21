@@ -1582,6 +1582,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%upvar':
             part = new TemplateSlotMorph('\u2191'); // up-arrow
             break;
+        case '%myMessage':
+            part = new TemplateSlotMorph('\u2709'); // envelope
+            break;
         case '%f':
             part = new FunctionSlotMorph();
             break;
@@ -5644,7 +5647,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
     if (this.parent instanceof BlockInputFragmentMorph) {
         return this.parent.mouseClickLeft();
     }
-    if (this.parent instanceof TemplateSlotMorph) {
+    if (this.parent instanceof TemplateSlotMorph && (this.blockSpec != '\u2709')) {
         if (this.parent.parent && this.parent.parent.parent &&
                 this.parent.parent.parent instanceof RingMorph) {
             label = "Input name";

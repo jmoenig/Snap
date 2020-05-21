@@ -3362,11 +3362,14 @@ Process.prototype.doBroadcast = function (message) {
         rcvrs.forEach(morph => {
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
-                    procs.push(stage.threads.startProcess(
+                    var proc = stage.threads.startProcess(
                         block,
                         morph,
                         stage.isThreadSafe
-                    ));
+                    );
+                    proc.context.outerContext.variables.addVar('\u2709');
+                    proc.context.outerContext.variables.setVar('\u2709', message);
+                    procs.push(proc);
                 });
             }
         });
