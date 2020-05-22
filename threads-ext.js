@@ -448,18 +448,19 @@ NetsProcess.prototype.getJSFromRPCDropdown = function (service, rpc, params) {
 // Process Geo
 NetsProcess.prototype.getLocation = function () {
     var myself = this,
+        hasLocation = this.location !== undefined,
+        hasRequestedLocation = this.locationError === null,
         errorName;
 
-    if (this.location === undefined) {
+    if (!hasLocation && !hasRequestedLocation) {
         this.locationError = null;
         navigator.geolocation.getCurrentPosition(function(location) {
             myself.location = location;
         }, function(err) {
-            // Raise an error...
             myself.locationError = err;
             myself.location = null;
         });
-    } else {
+    } else if (hasLocation) {
         var location = this.location;
         this.location = undefined;
         if (this.locationError || !location) {
