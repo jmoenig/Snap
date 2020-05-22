@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-18';
+modules.gui = '2020-May-22';
 
 // Declarations
 
@@ -3421,7 +3421,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableHyperOps,
         'uncheck to disable\nusing operators on lists and tables',
         'check to enable\nusing operators on lists and tables',
-        true
+        false
     );
     addPreference(
         'Persist linked sublist IDs',
