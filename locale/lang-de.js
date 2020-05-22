@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-05-18', // this, too, will appear in the Translators tab
+        '2020-05-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1120,6 +1120,12 @@ SnapTranslator.dict.de = {
         'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
+    'Hyper blocks support':
+        'Hyper-Blöcke',
+    'uncheck to disable\nusing operators on lists and tables':
+         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
+    'check to enable\nusing operators on lists and tables':
+         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
     'Log pen vectors':
         'Malstiftvektoren aufzeichnen',
     'uncheck to turn off\nlogging pen vectors':
