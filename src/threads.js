@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-22';
+modules.threads = '2020-May-24';
 
 var ThreadManager;
 var Process;
@@ -2107,55 +2107,6 @@ Process.prototype.reportIfElse = function (block) {
         }
     }
 };
-
-/* experimental hyper version, under construction, commented out for now
-
-Process.prototype.reportHyperIfElse = function (block) {
-    var inputs = this.context.inputs;
-
-    if (inputs.length < 1) {
-        this.evaluateNextInput(block);
-    } else if (inputs.length > 1) {
-        if (this.flashContext()) {return; }
-        if (inputs[0] instanceof List) {
-            if (inputs.length < 3) {
-                this.evaluateNextInput(block);
-                return;
-            }
-            this.returnValueToParentContext(
-                this.reportBaseIfElse(inputs[0], inputs[1], inputs[2])
-            );
-            this.popContext();
-            return;
-        }
-        this.returnValueToParentContext(inputs.pop());
-        this.popContext();
-    } else {
-        if (inputs[0] instanceof List) {
-            this.evaluateNextInput(block);
-        } else {
-            this.assertType(inputs[0], ['Boolean']);
-            if (inputs[0]) {
-                this.evaluateNextInput(block);
-            } else {
-                inputs.push(null);
-                this.evaluateNextInput(block);
-            }
-        }
-    }
-};
-
-Process.prototype.reportBaseIfElse = function (conditions, tCase, fCase) {
-    return conditions.map(test => {
-        if (test instanceof List) {
-            return this.reportHyperIfElse(test, tCase, fCase);
-        } else {
-            this.assertType(test, ['Boolean']);
-            return test ? tCase : fCase;
-        }
-    });
-};
-*/
 
 // Process process related primitives
 
