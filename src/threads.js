@@ -3660,6 +3660,7 @@ Process.prototype.reportNot = function (bool) {
             return bool.map(each => this.reportNot(each));
         }
     }
+    this.assertType(bool, 'Boolean');
     return !bool;
 };
 
