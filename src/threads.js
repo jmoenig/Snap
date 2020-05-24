@@ -788,16 +788,24 @@ Process.prototype.reportOr = function (block) {
 
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
-    } else if (inputs[0]) {
-        if (this.flashContext()) {return; }
-        this.returnValueToParentContext(true);
-        this.popContext();
-    } else if (inputs.length < 2) {
-        this.evaluateNextInput(block);
     } else {
-        if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
-        this.popContext();
+        if (inputs.length === 1) {
+            this.assertType(inputs[0], 'Boolean');
+            if (inputs[0]) {
+                if (this.flashContext()) {return; }
+                this.returnValueToParentContext(true);
+                this.popContext();
+                return;
+            }
+        }
+        if (inputs.length < 2) {
+            this.evaluateNextInput(block);
+        } else {
+            this.assertType(inputs[1], 'Boolean');
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(inputs[1] === true);
+            this.popContext();
+        }
     }
 };
 
