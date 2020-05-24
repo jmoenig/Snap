@@ -810,13 +810,17 @@ Process.prototype.reportAnd = function (block) {
 
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
-    } else if (!inputs[0]) {
-        if (this.flashContext()) {return; }
-        this.returnValueToParentContext(false);
-        this.popContext();
-    } else if (inputs.length < 2) {
-        this.evaluateNextInput(block);
+    } else if (inputs.length === 1) {
+        this.assertType(inputs[0], 'Boolean');
+        if (!inputs[0]) {
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(false);
+            this.popContext();
+        } else {
+            this.evaluateNextInput(block);
+        }
     } else {
+        this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
