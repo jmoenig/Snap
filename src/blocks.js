@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-17';
+modules.blocks = '2020-May-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8738,7 +8738,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
-    allNames.forEach(name =>
+    allNames.sort().forEach(name =>
         dict[name] = name
     );
     if (this.world().currentKey === 16) { // shift
@@ -8771,7 +8771,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
-    allNames.forEach(name => {
+    allNames.sort().forEach(name => {
         if (name !== '__shout__go__') {
             dict[name] = name;
         }
