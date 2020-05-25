@@ -9077,7 +9077,7 @@ InputSlotMorph.prototype.soundsMenu = function () {
         allNames = allNames.concat(sound.name)
     );
     if (allNames.length > 0) {
-        allNames.forEach(name =>
+        allNames.sort().forEach(name =>
             dict[name] = name
         );
     }
