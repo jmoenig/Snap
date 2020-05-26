@@ -547,6 +547,13 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
             window.parent.postMessage({id, xml});
             break;
         }
+        case 'get-username':
+        {
+            const {id} = data;
+            const {username} = SnapCloud;
+            window.parent.postMessage({id, username});
+            break;
+        }
         }
     };
 

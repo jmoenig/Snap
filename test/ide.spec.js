@@ -639,6 +639,14 @@ describe('ide', function() {
                 const xml = await api.getProjectXML();
                 expect(!!xml).toBe(true);
             });
+
+            it('should be able to get the username', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                const username = await api.getUsername();
+                expect(username).toBe('test');
+            });
         });
     });
 });

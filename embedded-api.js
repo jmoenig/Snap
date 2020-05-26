@@ -24,6 +24,12 @@
             return data.xml;
         }
 
+        async getUsername() {
+            const reqData = {type: 'get-username'};
+            const data = await this.reqReply(reqData);
+            return data.username;
+        }
+
         async import(name, content) {
             this.call({
                 type: 'import',
