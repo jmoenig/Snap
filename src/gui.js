@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-22';
+modules.gui = '2020-May-26';
 
 // Declarations
 
@@ -9950,7 +9950,7 @@ SoundRecorderDialogMorph.prototype.ok = function () {
 SoundRecorderDialogMorph.prototype.destroy = function () {
     this.stop();
     this.audioElement.remove();
-    if (this.mediaRecorder) {
+    if (this.mediaRecorder && this.mediaRecorder.stream) {
         this.mediaRecorder.stream.getTracks()[0].stop();
     }
     SoundRecorderDialogMorph.uber.destroy.call(this);
