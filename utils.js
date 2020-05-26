@@ -56,3 +56,13 @@ utils.getUrlSync = function(url) {
 };
 
 utils.getUrlSyncCached = utils.memoize(utils.getUrlSync);
+
+utils.defer = function() {
+    const deferred = {};
+    deferred.promise = new Promise((resolve, reject) => {
+        deferred.resolve = resolve;
+        deferred.reject = reject;
+    });
+
+    return deferred;
+};

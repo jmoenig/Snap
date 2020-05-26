@@ -74,6 +74,14 @@ WebSocketManager.MessageHandlers = {
             this.ide.exportRoom(msg.content);
         } else if (msg.action === 'save') {
             this.ide.saveRoomLocal(msg.content);
+        } else if (msg.action === 'fetch') {
+            const deferred = this.ide.projectXMLRequests[msg.id];
+            if (deferred) {
+                deferred.resolve(msg.content);
+                delete this.ide.projectXMLRequests[msg.id];
+            } else {
+                console.error(`Project request callback already resolved: ${msg.id}`);
+            }
         }
     },
 

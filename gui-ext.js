@@ -528,7 +528,7 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         externalVariables = {},
         receiveMessage;
 
-    receiveMessage = function(event) {
+    receiveMessage = async function(event) {
         var data = event.data;
         switch (data.type) {
         case 'import':
@@ -540,6 +540,13 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         case 'delete-variable':
             delete externalVariables[data.key];
             break;
+        case 'export-project':
+        {
+            const {id} = data;
+            const xml = await self.getProjectXML();
+            window.parent.postMessage({id, xml});
+            break;
+        }
         }
     };
 

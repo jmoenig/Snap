@@ -1,4 +1,4 @@
-/*globals driver, expect, */
+/*globals driver, expect, EmbeddedNetsBloxAPI */
 describe('ide', function() {
     let SnapCloud, SnapActions, SnapUndo;
 
@@ -467,27 +467,20 @@ describe('ide', function() {
     describe('embedded', function() {
         describe('load', function() {
             const frame = document.getElementsByTagName('iframe')[0];
-            after(done => {
-                reloadIframe(frame);
-                frame.onload = async () => {
-                    await driver.login('test');
-                    done();
-                };
+            after(async () => {
+                await reloadIframe(frame);
+                await driver.login('test');
             });
 
-            it('should load IDE w/o url anchors', function(done) {
-                reloadIframe(frame);
-                frame.onload = () => {
-                    const {IDE_Morph} = driver.globals();
-                    const ide = frame.contentWindow.world.children.find(morph => {
-                        return morph instanceof IDE_Morph;
-                    });
-                    if (ide) {
-                        done();
-                    } else {
-                        done(new Error('IDE not loaded!'));
-                    }
-                };
+            it('should load IDE w/o url anchors', async function() {
+                await reloadIframe(frame);
+                const {IDE_Morph} = driver.globals();
+                const ide = frame.contentWindow.world.children.find(morph => {
+                    return morph instanceof IDE_Morph;
+                });
+                if (!ide) {
+                    throw new Error('IDE not loaded!');
+                }
             });
 
             it('should load IDE w/ url anchors', done => {
@@ -505,27 +498,26 @@ describe('ide', function() {
                 };
             });
 
-            it('should import variable immediately (no url anchors)', function(done) {
-                reloadIframe(frame);
-                frame.onload = async () => {
-                    const {IDE_Morph} = driver.globals();
-                    const ide = frame.contentWindow.world.children.find(morph => {
-                        return morph instanceof IDE_Morph;
-                    });
+            it('should import variable immediately (no url anchors)', async function() {
+                await reloadIframe(frame);
+                console.log('iframe reloaded');
+                const {IDE_Morph} = driver.globals();
+                const ide = frame.contentWindow.world.children
+                    .find(morph => morph instanceof IDE_Morph);
 
-                    frame.contentWindow.postMessage({
-                        type: 'import',
-                        name: 'abc',
-                        content: '123',
-                        fileType: 'text'
-                    });
+                // TODO: we should wait for it to settle...
+                console.log('about to post message');
+                frame.contentWindow.postMessage({
+                    type: 'import',
+                    name: 'abc',
+                    content: '123',
+                    fileType: 'text'
+                });
 
-                    await driver.expect(
-                        () => ide.stage.globalVariables().allNames().includes('abc'),
-                        'Imported variable not found.'
-                    );
-                    done();
-                };
+                await driver.expect(
+                    () => ide.stage.globalVariables().allNames().includes('abc'),
+                    'Imported variable not found.'
+                );
             });
 
             it('should import CSV data', function(done) {
@@ -582,10 +574,13 @@ describe('ide', function() {
                 }
             }
 
-            function reloadIframe(frame, url=window.origin) {
+            async function reloadIframe(frame, url=window.origin) {
                 driver.disableExitPrompt();
                 driver.setWindow(frame.contentWindow);
                 frame.setAttribute('src', url);
+                return new Promise(resolve => {
+                    frame.onload = resolve;
+                });
             }
         });
 
@@ -623,7 +618,7 @@ describe('ide', function() {
             });
 
             it('should be able to import text', function(done) {
-                const frame = document.getElementsByTagName('iframe')[0];
+                const [frame] = document.getElementsByTagName('iframe');
                 const name = 'hello.xml';
                 const content = 'content';
 
@@ -633,11 +628,16 @@ describe('ide', function() {
                     }
                 };
 
-                frame.contentWindow.postMessage({
-                    type: 'import',
-                    name: name,
-                    content: content,
-                });
+                const api = new EmbeddedNetsBloxAPI(frame);
+                api.import(name, content);
+            });
+
+            it('should be able to export the project', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                const xml = await api.getProjectXML();
+                expect(!!xml).toBe(true);
             });
         });
     });

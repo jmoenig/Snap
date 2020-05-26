@@ -3,7 +3,7 @@
    StringMorph, Color, TabMorph, InputFieldMorph, MorphicPreferences, MenuMorph,
    TextMorph, NetsBloxSerializer, nop, SnapActions, DialogBoxMorph, hex_sha512,
    SnapUndo, ScrollFrameMorph, SnapUndo, CollaboratorDialogMorph,
-   SnapSerializer, newCanvas, detect, WatcherMorph, Services */
+   SnapSerializer, newCanvas, detect, WatcherMorph, Services, utils */
 // Netsblox IDE (subclass of IDE_Morph)
 
 NetsBloxMorph.prototype = new IDE_Morph();
@@ -15,7 +15,7 @@ function NetsBloxMorph(isAutoFill) {
 }
 
 NetsBloxMorph.prototype.init = function (isAutoFill) {
-    // Create the websocket manager
+    this.projectXMLRequests = {};
     this.sockets = new WebSocketManager(this);
     Services.onInvalidHosts = this.onInvalidHosts.bind(this);
     this.room = null;
@@ -630,6 +630,28 @@ NetsBloxMorph.prototype.rawSaveProject = function (name) {
         type: 'export-room',
         action: 'save'
     });
+};
+
+NetsBloxMorph.prototype.getProjectXML = function () {
+    const id = Date.now();
+    const deferred = utils.defer();
+    this.projectXMLRequests[id] = deferred;
+
+    this.sockets.sendMessage({
+        type: 'export-room',
+        action: 'fetch',
+        id: id,
+    });
+
+    setTimeout(() => {
+        const deferred = this.projectXMLRequests[id];
+        if (deferred) {
+            deferred.reject(new Error('Timeout Exceeded'));
+            delete this.projectXMLRequests[id];
+        }
+    }, 5000);
+
+    return deferred.promise;
 };
 
 NetsBloxMorph.prototype.saveRoomLocal = function (str) {
