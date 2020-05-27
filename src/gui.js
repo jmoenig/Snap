@@ -1313,7 +1313,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors = this.tabColors,
         tabBar = new AlignmentMorph('row', -tabCorner * 2),
         tab,
-        symbols = ['\u2192', '\u21BB', '\u2194'],
+        symbols = [
+            new SymbolMorph('arrowRightThin', 10),
+            new SymbolMorph('turnAround', 10),
+            new SymbolMorph('arrowLeftRightThin', 10),
+        ],
         labels = ['don\'t rotate', 'can rotate', 'only face left/right'],
         myself = this;
 
