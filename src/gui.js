@@ -1363,7 +1363,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button.fixLayout();
         button.refresh();
         rotationStyleButtons.push(button);
-        button.setPosition(myself.spriteBar.position().add(3));
+        button.setPosition(myself.spriteBar.position().add(new Point(2, 4)));
         button.setTop(button.top()
             + ((rotationStyleButtons.length - 1) * (button.height() + 2))
             );
@@ -1876,7 +1876,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding - 4
+            this.categories.bottom() - this.spriteBar.top() - padding - 6
         ));
         this.spriteBar.fixLayout();
 
