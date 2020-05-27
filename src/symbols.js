@@ -86,6 +86,7 @@ SymbolMorph.prototype.names = [
     'cloudOutline',
     'turnRight',
     'turnLeft',
+    'turnAround',
     'storage',
     'poster',
     'flash',
@@ -283,6 +284,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'turnLeft':
         this.renderSymbolTurnLeft(ctx, aColor);
+        break;
+    case 'turnAround':
+        this.renderSymbolTurnAround(ctx, aColor);
         break;
     case 'storage':
         this.renderSymbolStorage(ctx, aColor);
@@ -858,6 +862,26 @@ SymbolMorph.prototype.renderSymbolTurnLeft = function (ctx, color) {
     ctx.moveTo(0, r);
     ctx.lineTo(r, 0);
     ctx.lineTo(r, r * 2);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolTurnAround = function (ctx, color) {
+    // draw a right-around-turning arrow
+    var w = this.symbolWidth(),
+        l = Math.max(w / 10, 1),
+        r = w / 2;
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(-45), radians(225), false);
+    ctx.stroke();
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, r * 0.1);
+    ctx.lineTo(r * 0.8, 0);
+    ctx.lineTo(r * 0.7, r * 0.7);
     ctx.closePath();
     ctx.fill();
 };
