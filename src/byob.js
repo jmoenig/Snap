@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-May-17';
+modules.byob = '2020-May-27';
 
 // Declarations
 
@@ -3127,6 +3127,13 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(c => c.refresh());
     this.slots.children.forEach(c => c.refresh());
+    if (isNil(fragmentType)) {
+        this.isExpanded = false;
+        this.types.children.forEach(c => c.refresh());
+        this.changed();
+        this.fixLayout();
+        this.rerender();
+    }
     this.edit();
 };
 
