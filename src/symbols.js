@@ -109,9 +109,11 @@ SymbolMorph.prototype.names = [
     'arrowUp',
     'arrowUpOutline',
     'arrowUpThin',
+    'arrowUpDownThin',
     'arrowLeft',
     'arrowLeftOutline',
     'arrowLeftThin',
+    'arrowLeftRightThin',
     'arrowDown',
     'arrowDownOutline',
     'arrowDownThin',
@@ -351,6 +353,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'arrowUpThin':
         this.renderSymbolArrowUpThin(ctx, aColor);
         break;
+    case 'arrowUpDownThin':
+        this.renderSymbolArrowUpDownThin(ctx, aColor);
+        break;
     case 'arrowLeft':
         this.renderSymbolArrowLeft(ctx, aColor);
         break;
@@ -359,6 +364,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'arrowLeftThin':
         this.renderSymbolArrowLeftThin(ctx, aColor);
+        break;
+    case 'arrowLeftRightThin':
+        this.renderSymbolArrowLeftRightThin(ctx, aColor);
         break;
     case 'arrowDown':
         this.renderSymbolArrowDown(ctx, aColor);
@@ -1379,7 +1387,27 @@ SymbolMorph.prototype.renderSymbolArrowUpThin = function (ctx, color) {
     ctx.lineTo(n, n);
     ctx.moveTo(w / 2, l * 2);
     ctx.lineTo(w / 2, h - l);
-    ctx.closePath();
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolArrowUpDownThin = function (ctx, color) {
+    // draw a thin up-down arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w - n, n);
+    ctx.lineTo(w / 2, l * 2);
+    ctx.lineTo(n, n);
+    ctx.moveTo(w - n, h - n);
+    ctx.lineTo(w / 2, h - l * 2);
+    ctx.lineTo(n, h - n);
+    ctx.moveTo(w / 2, l * 2);
+    ctx.lineTo(w / 2, h - l * 2);
     ctx.stroke();
 };
 
@@ -1440,6 +1468,16 @@ SymbolMorph.prototype.renderSymbolArrowLeftThin = function (ctx, color) {
     ctx.translate(0, w);
     ctx.rotate(radians(-90));
     this.renderSymbolArrowUpThin(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowLeftRightThin = function (ctx, color) {
+    // draw a thin left-right arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.renderSymbolArrowUpDownThin(ctx, color);
     ctx.restore();
 };
 
