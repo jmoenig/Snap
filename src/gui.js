@@ -1966,7 +1966,8 @@ IDE_Morph.prototype.render = function (ctx) {
         frame = this.stage.bounds.translateBy(
             this.position().neg()
         ).expandBy(2);
-        ctx.strokeStyle = this.backgroundColor.toString();
+        ctx.strokeStyle = (MorphicPreferences.isFlat ? this.backgroundColor
+            : this.groupColor).toString();
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(frame.origin.x, frame.origin.y);
