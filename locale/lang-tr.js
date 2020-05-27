@@ -950,7 +950,7 @@ SnapTranslator.dict.tr = {
         'GUI kontrollü tüm global ayarlar için alıcılar ve ayarlayıcılar sağlayın',
     'Allow multi-line text input to a block':
         'Bloklara çok satırlı metin girişi sağla',
-    'create variables in program':
+    'Create variables in program':
         'Betiklerde değişken yarat',
     // cloud menu
     'Login...':

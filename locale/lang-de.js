@@ -966,7 +966,7 @@ SnapTranslator.dict.de = {
         'GUI Elemente programmatisch bearbeiten',
     'Allow multi-line text input to a block':
         'Mehrzeiliger Text als Eingabe für Blöcke',
-    'create variables in program':
+    'Create variables in program':
         'Variablen im Skript erstellen',
 
     // cloud menu

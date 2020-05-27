@@ -2608,7 +2608,7 @@ SnapTranslator.dict.ca = {
         'Anàlisi de la distribució de freqüències',
     'World Map':
         'Mapa del món',
-    'create variables in program':
+    'Create variables in program':
         'Creant variables des del programa',
     'Deal with JSON data':
         'Tractament de dades JSON',
@@ -2662,8 +2662,8 @@ SnapTranslator.dict.ca = {
         '[EXPERIMENTAL] Analitza dades per fer freqüències de distribució',
     '[EXPERIMENTAL] add interactive maps to projects':
         '[EXPERIMENTAL] Afegeix mapes cartogràfics interactius als teus projectes',
-    'declare global or sprite-local variables in a script':
-        'Declara i assigna variables (locals o globals) dins els programes',
+    'Create and manage global/sprite/script variables in a script':
+        'Crea i gestiona variables de tipus global/sprite/script dins els programes',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
         'Converteix les cadenes JSON en llistes utilitzant el bloc "listify". Utilitza els blocs de valors i claus per gestionar aquest tipus de llistes',
     'Run several scripts in parallel and wait until all are done.':

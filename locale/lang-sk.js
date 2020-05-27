@@ -959,8 +959,8 @@ SnapTranslator.dict.sk = {
         'Programov\u00E9 spracovanie GUI elementov',
     'Allow multi-line text input to a block':
         'Povoli\u0165 viac riadkov\u00FD text pre blok',
-    'create variables in program':
-        'vytvori\u0165 premenn\u00E9 v programe',
+    'Create variables in program':
+        'Vytvori\u0165 premenn\u00E9 v programe',
 
     // cloud menu
     'Login...':
