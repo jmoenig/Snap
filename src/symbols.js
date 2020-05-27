@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-May-06';
+modules.symbols = '2020-May-27';
 
 var SymbolMorph;
 
@@ -108,12 +108,16 @@ SymbolMorph.prototype.names = [
     'turnForward',
     'arrowUp',
     'arrowUpOutline',
+    'arrowUpThin',
     'arrowLeft',
     'arrowLeftOutline',
+    'arrowLeftThin',
     'arrowDown',
     'arrowDownOutline',
+    'arrowDownThin',
     'arrowRight',
     'arrowRightOutline',
+    'arrowRightThin',
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
@@ -344,11 +348,17 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'arrowUpOutline':
         this.renderSymbolArrowUpOutline(ctx, aColor);
         break;
+    case 'arrowUpThin':
+        this.renderSymbolArrowUpThin(ctx, aColor);
+        break;
     case 'arrowLeft':
         this.renderSymbolArrowLeft(ctx, aColor);
         break;
     case 'arrowLeftOutline':
         this.renderSymbolArrowLeftOutline(ctx, aColor);
+        break;
+    case 'arrowLeftThin':
+        this.renderSymbolArrowLeftThin(ctx, aColor);
         break;
     case 'arrowDown':
         this.renderSymbolArrowDown(ctx, aColor);
@@ -356,11 +366,17 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'arrowDownOutline':
         this.renderSymbolArrowDownOutline(ctx, aColor);
         break;
+    case 'arrowDownThin':
+        this.renderSymbolArrowDownThin(ctx, aColor);
+        break;
     case 'arrowRight':
         this.renderSymbolArrowRight(ctx, aColor);
         break;
     case 'arrowRightOutline':
         this.renderSymbolArrowRightOutline(ctx, aColor);
+        break;
+    case 'arrowRightThin':
+        this.renderSymbolArrowRightThin(ctx, aColor);
         break;
     case 'robot':
         this.renderSymbolRobot(ctx, aColor);
@@ -1348,6 +1364,25 @@ SymbolMorph.prototype.renderSymbolArrowUpOutline = function (ctx, color) {
     ctx.stroke();
 };
 
+SymbolMorph.prototype.renderSymbolArrowUpThin = function (ctx, color) {
+    // draw a thin up arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w - n, n);
+    ctx.lineTo(w / 2, l * 2);
+    ctx.lineTo(n, n);
+    ctx.moveTo(w / 2, l * 2);
+    ctx.lineTo(w / 2, h - l);
+    ctx.closePath();
+    ctx.stroke();
+};
+
 SymbolMorph.prototype.renderSymbolArrowDown = function (ctx, color) {
     // draw a down arrow
     var w = this.symbolWidth();
@@ -1365,6 +1400,16 @@ SymbolMorph.prototype.renderSymbolArrowDownOutline = function (ctx, color) {
     ctx.translate(w, w);
     ctx.rotate(radians(180));
     this.renderSymbolArrowUpOutline(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowDownThin = function (ctx, color) {
+    // draw a thin down arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(w, w);
+    ctx.rotate(radians(180));
+    this.renderSymbolArrowUpThin(ctx, color);
     ctx.restore();
 };
 
@@ -1388,6 +1433,16 @@ SymbolMorph.prototype.renderSymbolArrowLeftOutline = function (ctx, color) {
     ctx.restore();
 };
 
+SymbolMorph.prototype.renderSymbolArrowLeftThin = function (ctx, color) {
+    // draw a thin left arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.renderSymbolArrowUpThin(ctx, color);
+    ctx.restore();
+};
+
 SymbolMorph.prototype.renderSymbolArrowRight = function (ctx, color) {
     // draw a right arrow
     var w = this.symbolWidth();
@@ -1405,6 +1460,16 @@ SymbolMorph.prototype.renderSymbolArrowRightOutline = function (ctx, color) {
     ctx.translate(w, 0);
     ctx.rotate(radians(90));
     this.renderSymbolArrowUpOutline(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowRightThin = function (ctx, color) {
+    // draw a thin right arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(w, 0);
+    ctx.rotate(radians(90));
+    this.renderSymbolArrowUpThin(ctx, color);
     ctx.restore();
 };
 
