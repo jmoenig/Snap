@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-26';
+modules.gui = '2020-May-27';
 
 // Declarations
 
@@ -110,7 +110,7 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.setDefaultDesign = function () {
     MorphicPreferences.isFlat = false;
-    SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
+    SpriteMorph.prototype.paletteColor = new Color(35, 35, 35);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
@@ -119,22 +119,22 @@ IDE_Morph.prototype.setDefaultDesign = function () {
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
     IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(40, 40, 40);
+    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
-        = SpriteMorph.prototype.paletteColor.lighter(8);
+        = SpriteMorph.prototype.paletteColor.lighter(5);
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
     IDE_Morph.prototype.buttonLabelColor = new Color(255, 255, 255);
     IDE_Morph.prototype.tabColors = [
-        IDE_Morph.prototype.groupColor.darker(40),
-        IDE_Morph.prototype.groupColor.darker(60),
+        IDE_Morph.prototype.groupColor.darker(50),
+        IDE_Morph.prototype.groupColor.darker(25),
         IDE_Morph.prototype.groupColor
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = new Color();
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
-    IDE_Morph.prototype.padding = 5;
+    IDE_Morph.prototype.padding = 1;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
@@ -195,7 +195,7 @@ IDE_Morph.prototype.scriptsTexture = function () {
     for (i = 0; i < 100; i += 4) {
         ctx.fillStyle = this.frameColor.toString();
         ctx.fillRect(i, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.lighter(6).toString();
+        ctx.fillStyle = this.groupColor.lighter(4).toString();
         ctx.fillRect(i + 1, 0, 1, 100);
         ctx.fillRect(i + 3, 0, 1, 100);
         ctx.fillStyle = this.groupColor.toString();
@@ -1359,7 +1359,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button.fixLayout();
         button.refresh();
         rotationStyleButtons.push(button);
-        button.setPosition(myself.spriteBar.position().add(2));
+        button.setPosition(myself.spriteBar.position().add(5));
         button.setTop(button.top()
             + ((rotationStyleButtons.length - 1) * (button.height() + 2))
             );
