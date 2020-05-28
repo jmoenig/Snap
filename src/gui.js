@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-27';
+modules.gui = '2020-May-28';
 
 // Declarations
 
@@ -3000,14 +3000,23 @@ IDE_Morph.prototype.settingsMenu = function () {
         stage = this.stage,
         world = this.world(),
         pos = this.controlBar.settingsButton.bottomLeft(),
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        off = new SymbolMorph(
+            'rectangle',
+            MorphicPreferences.menuFontSize * 0.75
+        );
 
     function addPreference(label, toggle, test, onHint, offHint, hide) {
-        var on = '\u2611 ',
-            off = '\u2610 ';
         if (!hide || shiftClicked) {
             menu.addItem(
-                (test ? on : off) + localize(label),
+                [
+                    (test? on : off),
+                    localize(label)
+                ],
                 toggle,
                 test ? onHint : offHint,
                 hide ? new Color(100, 0, 0) : null
