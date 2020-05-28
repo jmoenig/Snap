@@ -91,8 +91,9 @@ SymbolMorph.prototype.names = [
     'poster',
     'flash',
     'brush',
-    'rectangle',
+    'tick',
     'checkedBox',
+    'rectangle',
     'rectangleSolid',
     'circle',
     'circleSolid',
@@ -301,11 +302,14 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'brush':
         this.renderSymbolBrush(ctx, aColor);
         break;
-    case 'rectangle':
-        this.renderSymbolRectangle(ctx, aColor);
+    case 'tick':
+        this.renderSymbolTick(ctx, aColor);
         break;
     case 'checkedBox':
         this.renderSymbolCheckedBox(ctx, aColor);
+        break;
+    case 'rectangle':
+        this.renderSymbolRectangle(ctx, aColor);
         break;
     case 'rectangleSolid':
         this.renderSymbolRectangleSolid(ctx, aColor);
@@ -1032,6 +1036,28 @@ SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
     ctx.stroke();
 };
 
+SymbolMorph.prototype.renderSymbolTick = function (ctx, color) {
+    // draw a check mark
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(w * 0.2, h * 0.5);
+    ctx.lineTo(w * 0.5, h - l);
+    ctx.lineTo(w - l * 2, l * 2);
+    ctx.lineTo(w * 0.5, h * 0.65);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {
+    // draw a rectangle with a check mark
+    this.renderSymbolRectangle(ctx, color);
+    this.renderSymbolTick(ctx, color);
+};
+
 SymbolMorph.prototype.renderSymbolRectangle = function (ctx, color) {
     // draw a rectangle
     var w = this.symbolWidth(),
@@ -1047,23 +1073,6 @@ SymbolMorph.prototype.renderSymbolRectangle = function (ctx, color) {
     ctx.lineTo(l, h - l);
     ctx.closePath();
     ctx.stroke();
-};
-
-SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {
-    // draw a rectangle with a check mark
-    var w = this.symbolWidth(),
-        h = this.size,
-        l = Math.max(w / 20, 0.5);
-
-    this.renderSymbolRectangle(ctx, color);
-    ctx.fillStyle = color.toString();
-    ctx.beginPath();
-    ctx.moveTo(w * 0.2, h * 0.5);
-    ctx.lineTo(w * 0.5, h - l);
-    ctx.lineTo(w - l * 2, l * 2);
-    ctx.lineTo(w * 0.5, h * 0.65);
-    ctx.closePath();
-    ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolRectangleSolid = function (ctx, color) {
