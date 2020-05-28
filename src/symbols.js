@@ -1067,7 +1067,7 @@ SymbolMorph.prototype.renderSymbolCheckMark = function (ctx, color) {
     ctx.lineTo(w * 0.5, h);
     ctx.lineTo(w * 0.8, h * 0.3);
     ctx.lineTo(w, 0);
-    ctx.lineTo(w * 0.8, h * 0.1);
+    ctx.lineTo(w * 0.8, h * 0.05);
     ctx.lineTo(w * 0.5, h * 0.65);
     ctx.closePath();
     ctx.fill();
