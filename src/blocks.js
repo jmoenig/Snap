@@ -6705,10 +6705,17 @@ ScriptsMorph.prototype.userMenu = function () {
         stage = obj.parentThatIsA(StageMorph);
 
     function addOption(label, toggle, test, onHint, offHint) {
-        var on = '\u2611 ',
-            off = '\u2610 ';
         menu.addItem(
-            (test ? on : off) + localize(label),
+            [
+                test ? new SymbolMorph(
+                    'checkedBox',
+                    MorphicPreferences.menuFontSize * 0.75
+                ) : new SymbolMorph(
+                    'rectangle',
+                    MorphicPreferences.menuFontSize * 0.75
+                ),
+                localize(label)
+            ],
             toggle,
             test ? onHint : offHint
         );
