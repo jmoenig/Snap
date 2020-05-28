@@ -708,7 +708,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed'
+            spec: 'when %keyHat key pressed %myKeyPressed'
         },
         receiveInteraction: {
             type: 'hat',
@@ -8046,13 +8046,17 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForKey(evt).forEach(block =>
-                procs.push(this.threads.startProcess(
-                    block,
-                    morph,
-                    true // ignore running scripts, was: myself.isThreadSafe
-                ))
-            );
+            morph.allHatBlocksForKey(evt).forEach(block => {
+                var proc = this.threads.startProcess(
+                        block,
+                        morph,
+                        true // ignore running scripts, was: myself.isThreadSafe
+                    ),
+                    myKeyPressed = block.inputs()[1].inputs()[0].blockSpec;
+                proc.context.outerContext.variables.addVar(myKeyPressed);
+                proc.context.outerContext.variables.setVar(myKeyPressed, evt);
+                procs.push(proc);
+            });
         }
     });
     return procs;
