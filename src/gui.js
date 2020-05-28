@@ -5369,19 +5369,34 @@ IDE_Morph.prototype.microphoneMenu = function () {
         world = this.world(),
         pos = this.controlBar.settingsButton.bottomLeft(),
         resolutions = ['low', 'normal', 'high', 'max'],
-        microphone = this.stage.microphone;
+        microphone = this.stage.microphone,
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy();
 
+    empty.render = nop;
     if (microphone.isReady) {
         menu.addItem(
-            '\u2611 ' + localize('Microphone'),
+            [
+                on,
+                localize('Microphone')
+            ],
             () => microphone.stop()
         );
         menu.addLine();
     }
     resolutions.forEach((res, i) => {
         menu.addItem(
-            (microphone.resolution === i + 1 ? '\u2713 ' : '    ') +
-                localize(res),
+            [
+                microphone.resolution === i + 1 ? tick : empty,
+                localize(res)
+            ],
             () => microphone.setResolution(i + 1)
         );
     });
