@@ -1058,9 +1058,9 @@ SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {
     this.renderSymbolRectangle(ctx, color);
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.moveTo(l, h * 0.4);
+    ctx.moveTo(w * 0.2, h * 0.5);
     ctx.lineTo(w * 0.5, h - l);
-    ctx.lineTo(w - l, l);
+    ctx.lineTo(w - l * 2, l * 2);
     ctx.lineTo(w * 0.5, h * 0.65);
     ctx.closePath();
     ctx.fill();
