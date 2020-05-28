@@ -5409,7 +5409,7 @@ IDE_Morph.prototype.languageMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         pos = this.controlBar.settingsButton.bottomLeft(),
-        tick = new SymbolMorph('tick', MorphicPreferences.menuFontSize),
+        tick = new SymbolMorph('tick', MorphicPreferences.menuFontSize * 0.75),
         empty = tick.fullCopy();
 
     empty.render = nop;

@@ -91,6 +91,7 @@ SymbolMorph.prototype.names = [
     'poster',
     'flash',
     'brush',
+    'checkMark',
     'tick',
     'checkedBox',
     'rectangle',
@@ -301,6 +302,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'brush':
         this.renderSymbolBrush(ctx, aColor);
+        break;
+    case 'checkMark':
+        this.renderSymbolCheckMark(ctx, aColor);
         break;
     case 'tick':
         this.renderSymbolTick(ctx, aColor);
@@ -1037,7 +1041,7 @@ SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolTick = function (ctx, color) {
-    // draw a check mark
+    // draw a small check mark
     var w = this.symbolWidth(),
         h = this.size,
         l = Math.max(w / 20, 0.5);
@@ -1047,6 +1051,21 @@ SymbolMorph.prototype.renderSymbolTick = function (ctx, color) {
     ctx.moveTo(w * 0.2, h * 0.5);
     ctx.lineTo(w * 0.5, h - l);
     ctx.lineTo(w - l * 2, l * 2);
+    ctx.lineTo(w * 0.5, h * 0.65);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolCheckMark = function (ctx, color) {
+    // draw a large check mark
+    var w = this.symbolWidth(),
+        h = this.size;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.5);
+    ctx.lineTo(w * 0.5, h);
+    ctx.lineTo(w, 0);
     ctx.lineTo(w * 0.5, h * 0.65);
     ctx.closePath();
     ctx.fill();
