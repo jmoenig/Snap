@@ -5393,11 +5393,17 @@ IDE_Morph.prototype.microphoneMenu = function () {
 IDE_Morph.prototype.languageMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
-        pos = this.controlBar.settingsButton.bottomLeft();
+        pos = this.controlBar.settingsButton.bottomLeft(),
+        tick = new SymbolMorph('tick', MorphicPreferences.menuFontSize),
+        empty = tick.fullCopy();
+
+    empty.render = nop;
     SnapTranslator.languages().forEach(lang =>
         menu.addItem(
-            (SnapTranslator.language === lang ? '\u2713 ' : '    ') +
-                SnapTranslator.languageName(lang),
+            [
+                SnapTranslator.language === lang ? tick : empty,
+                SnapTranslator.languageName(lang)
+            ],
             () => {
                 this.loadNewProject = false;
                 this.setLanguage(lang);
