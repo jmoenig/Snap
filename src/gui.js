@@ -5410,7 +5410,7 @@ IDE_Morph.prototype.languageMenu = function () {
         world = this.world(),
         pos = this.controlBar.settingsButton.bottomLeft(),
         tick = new SymbolMorph(
-            'checkMark',
+            'tick',
             MorphicPreferences.menuFontSize * 0.75
         ),
         empty = tick.fullCopy();
