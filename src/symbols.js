@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-May-27';
+modules.symbols = '2020-May-28';
 
 var SymbolMorph;
 
@@ -92,6 +92,7 @@ SymbolMorph.prototype.names = [
     'flash',
     'brush',
     'rectangle',
+    'checkedBox',
     'rectangleSolid',
     'circle',
     'circleSolid',
@@ -302,6 +303,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'rectangle':
         this.renderSymbolRectangle(ctx, aColor);
+        break;
+    case 'checkedBox':
+        this.renderSymbolCheckedBox(ctx, aColor);
         break;
     case 'rectangleSolid':
         this.renderSymbolRectangleSolid(ctx, aColor);
@@ -1043,6 +1047,23 @@ SymbolMorph.prototype.renderSymbolRectangle = function (ctx, color) {
     ctx.lineTo(l, h - l);
     ctx.closePath();
     ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {
+    // draw a rectangle with a check mark
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 20, 0.5);
+
+    this.renderSymbolRectangle(ctx, color);
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(l, h * 0.4);
+    ctx.lineTo(w * 0.5, h - l);
+    ctx.lineTo(w - l, l);
+    ctx.lineTo(w * 0.5, h * 0.65);
+    ctx.closePath();
+    ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolRectangleSolid = function (ctx, color) {
