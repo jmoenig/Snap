@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-May-19';
+var morphicVersion = '2020-May-29';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3755,7 +3755,7 @@ Morph.prototype.overlappedMorphs = function () {
 Morph.prototype.getPixelColor = function (aPoint) {
     var point, context, data;
     point = aPoint.subtract(this.bounds.origin);
-    context = this.cachedImage.getContext('2d');
+    context = this.getImage().getContext('2d');
     data = context.getImageData(point.x, point.y, 1, 1);
     return new Color(
         data.data[0],
