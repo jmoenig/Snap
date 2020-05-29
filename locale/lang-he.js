@@ -963,7 +963,7 @@ SnapTranslator.dict.he = {
         ' הגדרת מאפייני ממשק ',
     'Allow multi-line text input to a block':
         'אפשר קליטת משפטים מרוביי שורות',
-    'create variables in program':
+    'Create variables in program':
         'צור משתנים בתוכנית',
         
     // cloud menu
