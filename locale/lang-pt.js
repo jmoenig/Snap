@@ -2453,7 +2453,7 @@ SnapTranslator.dict.pt = {
     '[EXPERIMENTAL] add interactive maps to projects':
         '[EXPERIMENTAL] Adicionar mapas interactivos a projectos.',
     'Create and manage global/sprite/script variables in a script':
-        'Criar e gerenciar "global/sprite/script" variáveis a partir de um guião.',
+        'Criar e gerir variáveis globais, de objecto e de guião a partir de um guião.',
     'Deal with JSON data':
         'Lidar com dados JSON',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
