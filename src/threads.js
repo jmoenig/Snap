@@ -3367,9 +3367,19 @@ Process.prototype.doBroadcast = function (message) {
                             morph,
                             stage.isThreadSafe
                         ),
-                        myMessage = block.inputs()[1].inputs()[0].blockSpec;
-                    proc.context.outerContext.variables.addVar(myMessage);
-                    proc.context.outerContext.variables.setVar(myMessage, message);
+                        myUpvar = block.inputs().filter(input =>
+                            input.elementSpec == '%myUpvar')[0],
+                        myTemplate,
+                        myMessage;
+                    if (myUpvar) {
+                        myTemplate = myUpvar.inputs().filter(input =>
+                            input.labelString == '\u2191')[0];
+                        if (myTemplate) {
+                            myMessage = myTemplate.inputs()[0].blockSpec;
+                            proc.context.outerContext.variables.addVar(myMessage);
+                            proc.context.outerContext.variables.setVar(myMessage, message);
+                        }
+                    }
                     procs.push(proc);
                 });
             }
@@ -3425,6 +3435,11 @@ Process.prototype.doSend = function (message, target) {
         )
     );
 };
+
+Process.prototype.pressVirtualKey = function (key) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    stage.fireKeyEvent(key[0]);
+}
 
 // Process type inference
 

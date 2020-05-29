@@ -708,7 +708,12 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed %myKeyPressed'
+            spec: 'when %keyHat key pressed %myUpvar'
+        },
+        pressVirtualKey: {
+            type: 'command',
+            category: 'control',
+            spec: 'press virtual key %keyHat'
         },
         receiveInteraction: {
             type: 'hat',
@@ -719,7 +724,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %msgHat %myMessage'
+            spec: 'when I receive %msgHat %myUpvar'
         },
         receiveCondition: {
             type: 'hat',
@@ -2365,6 +2370,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
+        blocks.push(block('pressVirtualKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
         blocks.push(block('receiveMessage'));
@@ -8052,9 +8058,19 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                         morph,
                         true // ignore running scripts, was: myself.isThreadSafe
                     ),
-                    myKeyPressed = block.inputs()[1].inputs()[0].blockSpec;
-                proc.context.outerContext.variables.addVar(myKeyPressed);
-                proc.context.outerContext.variables.setVar(myKeyPressed, evt);
+                    myUpvar = block.inputs().filter(input =>
+                        input.elementSpec == '%myUpvar')[0],
+                    myTemplate,
+                    myKey;
+                if (myUpvar) {
+                    myTemplate = myUpvar.inputs().filter(input =>
+                        input.labelString == '\u2191')[0];
+                    if (myTemplate) {
+                        myKey = myTemplate.inputs()[0].blockSpec;
+                        proc.context.outerContext.variables.addVar(myKey);
+                        proc.context.outerContext.variables.setVar(myKey, evt);
+                    }
+                }
                 procs.push(proc);
             });
         }
@@ -8365,6 +8381,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
+        blocks.push(block('pressVirtualKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
         blocks.push(block('receiveMessage'));
