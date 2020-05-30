@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-27';
+modules.threads = '2020-May-30';
 
 var ThreadManager;
 var Process;
@@ -789,7 +789,7 @@ Process.prototype.reportOr = function (block) {
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
     } else if (inputs.length === 1) {
-        this.assertType(inputs[0], 'Boolean');
+        // this.assertType(inputs[0], 'Boolean');
         if (inputs[0]) {
             if (this.flashContext()) {return; }
             this.returnValueToParentContext(true);
@@ -798,7 +798,7 @@ Process.prototype.reportOr = function (block) {
             this.evaluateNextInput(block);
         }
     } else {
-        this.assertType(inputs[1], 'Boolean');
+        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
@@ -811,7 +811,7 @@ Process.prototype.reportAnd = function (block) {
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
     } else if (inputs.length === 1) {
-        this.assertType(inputs[0], 'Boolean');
+        // this.assertType(inputs[0], 'Boolean');
         if (!inputs[0]) {
             if (this.flashContext()) {return; }
             this.returnValueToParentContext(false);
@@ -820,7 +820,7 @@ Process.prototype.reportAnd = function (block) {
             this.evaluateNextInput(block);
         }
     } else {
-        this.assertType(inputs[1], 'Boolean');
+        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
@@ -2060,7 +2060,7 @@ Process.prototype.doIf = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    this.assertType(args[0], ['Boolean']);
+    // this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2076,7 +2076,7 @@ Process.prototype.doIfElse = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    this.assertType(args[0], ['Boolean']);
+    // this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2106,7 +2106,7 @@ Process.prototype.reportIfElse = function (block) {
         this.returnValueToParentContext(inputs.pop());
         this.popContext();
     } else {
-        this.assertType(inputs[0], ['Boolean']);
+        // this.assertType(inputs[0], ['Boolean']);
         if (inputs[0]) {
             this.evaluateNextInput(block);
         } else {
@@ -2366,7 +2366,7 @@ Process.prototype.doRepeat = function (counter, body) {
 };
 
 Process.prototype.doUntil = function (goalCondition, body) {
-    this.assertType(goalCondition, ['Boolean']);
+    // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -2381,7 +2381,7 @@ Process.prototype.doUntil = function (goalCondition, body) {
 };
 
 Process.prototype.doWaitUntil = function (goalCondition) {
-    this.assertType(goalCondition, ['Boolean']);
+    // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -3660,7 +3660,7 @@ Process.prototype.reportNot = function (bool) {
             return bool.map(each => this.reportNot(each));
         }
     }
-    this.assertType(bool, 'Boolean');
+    // this.assertType(bool, 'Boolean');
     return !bool;
 };
 
