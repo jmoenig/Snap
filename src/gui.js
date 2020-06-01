@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-May-28';
+modules.gui = '2020-June-01';
 
 // Declarations
 
@@ -5487,7 +5487,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         blck,
         shield,
         sample,
-        action;
+        action,
+        dlg;
 
     scrpt = new CommandBlockMorph();
     scrpt.color = SpriteMorph.prototype.blockColor.motion;
@@ -5527,10 +5528,14 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         scrpt.fullChanged();
     };
 
-    new DialogBoxMorph(
+    dlg = new DialogBoxMorph(
         null,
         num => this.setBlocksScale(Math.min(num, 12))
-    ).withKey('zoomBlocks').prompt(
+    ).withKey('zoomBlocks');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
         'Zoom blocks',
         SyntaxElementMorph.prototype.scale.toString(),
         this.world(),
