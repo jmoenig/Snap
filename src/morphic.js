@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-May-29';
+var morphicVersion = '2020-June-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1221,8 +1221,8 @@ var touchScreenSettings = {
     handleSize: 26,
     scrollBarSize: 24,
     mouseScrollAmount: 40,
-    useSliderForInput: true,
-    isTouchDevice: false,
+    useSliderForInput: false,
+    isTouchDevice: true,
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
