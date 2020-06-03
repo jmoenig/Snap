@@ -1,6 +1,6 @@
-/* globals ProjectDialogMorph, ensureFullUrl, localize, nop,
-   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph, DialogBoxMorph,
-   detect, Point
+/* globals ProjectDialogMorph, ensureFullUrl, localize, nop, Point,
+   IDE_Morph, Process, SnapCloud, DialogBoxMorph, SaveOpenDialogMorph,
+   SaveOpenDialogMorphSource, Morph, utils, MenuMorph, SERVER_URL
    */
 
 // adapted from installCloudProjectList
@@ -553,67 +553,225 @@ IDE_Morph.prototype.getMediaListFromURL = function (url, callback) {
     }
 };
 
-// LibraryImportDialogMorph ///////////////////////////////////////////
-// I am preview dialog shown before importing a library.
-// I inherit from a DialogMorph but look similar to 
-// ProjectDialogMorph, and BlockImportDialogMorph
+// LibraryDialogSources ///////////////////////////////////////////
 
-LibraryImportDialogMorph.prototype = new DialogBoxMorph();
-LibraryImportDialogMorph.prototype.constructor = LibraryImportDialogMorph;
-LibraryImportDialogMorph.uber = DialogBoxMorph.prototype;
+LibraryDialogSource.prototype = Object.create(SaveOpenDialogMorphSource.prototype);
+LibraryDialogSource.prototype.constructor = LibraryDialogSource;
+LibraryDialogSource.uber = SaveOpenDialogMorphSource.prototype;
 
-// LibraryImportDialogMorph instance creation:
-
-function LibraryImportDialogMorph(ide, librariesData) {
-    this.init(ide, librariesData);
+function LibraryDialogSource() {
 }
 
-LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
-    // initialize inherited properties:
-    LibraryImportDialogMorph.uber.init.call(
-        this,
-        this, // target
-        null, // function
-        null  // environment
-    );
-
+LibraryDialogSource.prototype.init = function(ide, name, icon, id) {
     this.ide = ide;
-    this.key = 'importLibrary';
-    this.librariesData = librariesData; // [{name: , fileName: , description:}]
+    LibraryDialogSource.uber.init.call(this, name, icon, id);
+};
 
+LibraryDialogSource.prototype.open = async function(library) {
+    this.ide.droppedText(await this.getContent(library));
+};
+
+LibraryDialogSource.prototype.cacheKey = function(item) {
+    return [
+        this.id,
+        item.name,
+    ].join('/');
+};
+
+OfficialLibrarySource.prototype = Object.create(LibraryDialogSource.prototype);
+OfficialLibrarySource.prototype.constructor = OfficialLibrarySource;
+OfficialLibrarySource.uber = LibraryDialogSource.prototype;
+
+function OfficialLibrarySource(ide) {
+    this.init(ide, 'Official', 'netsbloxLogo', 'official');
+}
+
+OfficialLibrarySource.prototype.list = function() {
+    const deferred = utils.defer();
+    this.ide.getURL(
+        this.ide.resourceURL('libraries', 'LIBRARIES'),
+        txt => {
+            const libraries = this.ide.parseResourceFile(txt).map(lib => {
+                lib.notes = lib.description;
+                return lib;
+            });
+            deferred.resolve(libraries);
+        }
+    );
+    return deferred.promise;
+};
+
+OfficialLibrarySource.prototype.getContent = async function(item) {
+    const deferred = utils.defer();
+    this.ide.getURL(
+        this.ide.resourceURL('libraries', item.fileName),
+        function(libraryXML) {
+            deferred.resolve(libraryXML);
+        }
+    );
+    return deferred.promise;
+};
+
+CloudLibrarySource.prototype = Object.create(LibraryDialogSource.prototype);
+CloudLibrarySource.prototype.constructor = CloudLibrarySource;
+CloudLibrarySource.uber = LibraryDialogSource.prototype;
+
+function CloudLibrarySource(ide) {
+    this.init(ide, 'Cloud', 'cloud', 'cloud');
+}
+
+CloudLibrarySource.prototype.list = function() {
+    const deferred = utils.defer();
+    const url = `${SERVER_URL}/api/v2/libraries/user/`;
+    this.ide.getURL(
+        url,
+        libJSON => {
+            const libraries = JSON.parse(libJSON);
+            deferred.resolve(libraries);
+        }
+    );
+    return deferred.promise;
+};
+
+CloudLibrarySource.prototype.save = async function(item) {
+    const {name, blocks, notes} = item;
+    const request = new XMLHttpRequest();
+    const username = SnapCloud.username;
+    request.open('POST', `${SERVER_URL}/api/v2/libraries/user/${username}/${name}`, true);
+    request.withCredentials = true;
+
+    await utils.requestPromise(request, {blocks, notes});  // FIXME: What do errors look like here?
+};
+
+CloudLibrarySource.prototype.getContent = async function(item) {
+    const deferred = utils.defer();
+    const {owner, name} = item;
+    const url = `${SERVER_URL}/api/v2/libraries/user/${owner}/${name}`;
+    this.ide.getURL(
+        url,
+        libXML => {
+            deferred.resolve(libXML);
+        }
+    );
+    return deferred.promise;
+};
+
+CloudLibrarySource.prototype.delete = async function(item) {
+    const {name} = item;
+    const request = new XMLHttpRequest();
+    const username = SnapCloud.username;
+    request.open('DELETE', `${SERVER_URL}/api/v2/libraries/user/${username}/${name}`, true);
+    request.withCredentials = true;
+
+    await utils.requestPromise(request);
+};
+
+//CommunityLibrarySource.prototype = Object.create(LibraryDialogSource.prototype);
+//CommunityLibrarySource.prototype.constructor = CommunityLibrarySource;
+//CommunityLibrarySource.uber = LibraryDialogSource.prototype;
+
+//function CommunityLibrarySource(ide) {
+    //this.init(ide, 'Community', 'cloud', 'community');
+//}
+
+//CommunityLibrarySource.prototype.list = function() {
+    //return [
+        //{name: 'test', notes: 'notes'},
+        //{name: 'Test Project 2', notes: 'notes'},
+        //{name: 'Test Project 3', notes: 'notes'},
+    //];
+//};
+
+// LibraryDialogMorph ///////////////////////////////////////////
+
+LibraryDialogMorph.prototype = new SaveOpenDialogMorph();
+LibraryDialogMorph.prototype.constructor = LibraryDialogMorph;
+LibraryDialogMorph.uber = SaveOpenDialogMorph.prototype;
+
+// LibraryDialogMorph instance creation:
+
+function LibraryDialogMorph(ide, name, xml, notes) {
+    this.init(ide, name, xml, notes);
+}
+
+LibraryDialogMorph.prototype.init = function (ide, name, xml, notes) {
+    const sources = [
+        new OfficialLibrarySource(ide),
+        new CloudLibrarySource(ide),
+        //new CommunityLibrarySource(ide),
+    ];
+    const task = xml ? 'save' : 'open';
+    // initialize inherited properties:
+    this.ide = ide;
+    this.libraryXML = xml;
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
     this.libraryCache = {}; // {fileName: [blocks-array] }
 
-    this.handle = null;
-    this.listField = null;
-    this.palette = null;
-    this.notesText = null;
-    this.notesField = null;
+    LibraryDialogMorph.uber.init.call(
+        this,
+        task,
+        'Library',
+        sources,
+        null,
+        {name, notes}
+    );
 
-    this.labelString = 'Import library';
-    this.createLabel();
-
-    this.buildContents();
+    if (task === 'open') {
+        this.labelString = 'Import Library';
+        this.createLabel();
+    }
 };
 
-LibraryImportDialogMorph.prototype.buildContents = function () {
-    this.addBody(new Morph());
-    this.body.color = this.color;
+LibraryDialogMorph.prototype.saveItem = async function(newItem) {
+    newItem.blocks = this.libraryXML;
+    await this.source.save(newItem);
+};
 
+LibraryDialogMorph.prototype.buildContents = function () {
+    LibraryDialogMorph.uber.buildContents.apply(this, arguments);
+    if (this.task === 'open') {
+        const openButton = this.buttons.children.find(btn => btn.action === 'openItem');
+        openButton.labelString = '  ' + localize('Import') + '  ';
+        openButton.drawNew();
+        openButton.fixLayout();
+    } else {
+        const cacheKey = 'current-library';
+        this.cacheLibrary(
+            cacheKey,
+            this.ide.serializer.loadBlocks(this.libraryXML)
+        );
+        this.displayBlocks(cacheKey);
+        this.fixLayout();
+    }
+};
+
+LibraryDialogMorph.prototype.setPreview = async function (item) {
+    const cacheKey = this.source.cacheKey(item);
+    if (this.hasCached(cacheKey)) {
+        this.displayBlocks(cacheKey);
+    } else {
+        this.showMessage(
+            localize('Loading') + '\n' + localize(item.name)
+        );
+        const libraryXML = await this.source.getContent(item);
+        this.cacheLibrary(
+            cacheKey,
+            this.ide.serializer.loadBlocks(libraryXML)
+        );
+        this.displayBlocks(cacheKey);
+    }
+    this.notesText.text = item.notes || '';
+    this.notesText.drawNew();
+};
+
+LibraryDialogMorph.prototype.initPreview = function () {
     this.initializePalette();
-    this.initializeLibraryDescription();
-    this.installLibrariesList();
-
-    this.addButton('importLibrary', 'Import');
-    this.addButton('cancel', 'Cancel');
-
-    this.setExtent(new Point(460, 455));
-    this.fixLayout();
+    this.preview = this.palette;
 };
 
-LibraryImportDialogMorph.prototype.initializePalette = function () {
+LibraryDialogMorph.prototype.initializePalette = function () {
     // I will display a scrolling list of blocks.
     if (this.palette) {this.palette.destroy(); }
 
@@ -631,7 +789,7 @@ LibraryImportDialogMorph.prototype.initializePalette = function () {
     this.body.add(this.palette);
 };
 
-LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
+LibraryDialogMorph.prototype.initializeLibraryDescription = function () {
     if (this.notesField) {this.notesField.destroy(); }
 
     this.notesField = new ScrollFrameMorph();
@@ -657,132 +815,76 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
     this.body.add(this.notesField);
 };
 
-LibraryImportDialogMorph.prototype.installLibrariesList = function () {
-    var myself = this;
-
-    if (this.listField) {this.listField.destroy(); }
-
-    this.listField = new ListMorph(
-        this.librariesData,
-        function (element) {return element.name; },
-        null,
-        function () {myself.importLibrary(); }
-    );
-
-    this.fixListFieldItemColors();
-
-    this.listField.fixLayout = nop;
-    this.listField.edge = InputFieldMorph.prototype.edge;
-    this.listField.fontSize = InputFieldMorph.prototype.fontSize;
-    this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
-    this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
-    this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
-
-    this.listField.action = function (item) {
-        if (isNil(item)) {return; }
-
-        myself.notesText.text = item.description || '';
-        myself.notesText.drawNew();
-        myself.notesField.contents.adjustBounds();
-
-        if (myself.hasCached(item.fileName)) {
-            myself.displayBlocks(item.fileName);
-        } else {
-            myself.showMessage(
-                localize('Loading') + '\n' + localize(item.name)
-            );
-            myself.ide.getURL(
-                myself.ide.resourceURL('libraries', item.fileName),
-                function(libraryXML) {
-                    myself.cacheLibrary(
-                        item.fileName,
-                        myself.ide.serializer.loadBlocks(libraryXML)
-                    );
-                    myself.displayBlocks(item.fileName);
-                }
-            );
-        }
-    };
-
-    this.listField.setWidth(200);
-    this.body.add(this.listField);
-
-    this.fixLayout();
-};
-
-LibraryImportDialogMorph.prototype.popUp = function () {
-    var world = this.ide.world();
-    if (world) {
-        LibraryImportDialogMorph.uber.popUp.call(this, world);
-        this.handle = new HandleMorph(
-            this,
-            300,
-            300,
-            this.corner,
-            this.corner
-        );
-    }
-};
-
-LibraryImportDialogMorph.prototype.fixListFieldItemColors =
-    ProjectDialogMorph.prototype.fixListFieldItemColors;
-
-LibraryImportDialogMorph.prototype.clearDetails =
-    ProjectDialogMorph.prototype.clearDetails;
-
-LibraryImportDialogMorph.prototype.fixLayout = function () {
-    var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+LibraryDialogMorph.prototype.fixLayout = function () {
+    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
+        inputField = this.nameField || this.filterField,
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
 
+    if (this.buttons && (this.buttons.children.length > 0)) {
+        this.buttons.fixLayout();
+    }
+
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
             this.padding,
-            titleHeight + this.padding
+            th + this.padding
         )));
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
-            this.height()
-                - this.padding * 3 // top, bottom and button padding.
-                - titleHeight
-                - this.buttons.height()
+            this.height() - this.padding * 3 - th - this.buttons.height()
         ));
+        this.srcBar.setPosition(this.body.position());
 
-        this.listField.setExtent(new Point(
-            200,
-            this.body.height()
-        ));
-        this.notesField.setExtent(new Point(
-            this.body.width() - this.listField.width() - thin,
-            100
-        ));
-        this.palette.setExtent(new Point(
-            this.notesField.width(),
-            this.body.height() - this.notesField.height() - thin
-        ));
+        inputField.setWidth(
+            this.body.width() - this.srcBar.width() - this.padding * 6
+        );
+        inputField.setLeft(this.srcBar.right() + this.padding * 3);
+        inputField.setTop(this.srcBar.top());
+        inputField.drawNew();
+
+        this.listField.setLeft(this.srcBar.right() + this.padding);
+        this.listField.setWidth(200);
         this.listField.contents.children[0].adjustWidths();
 
-        this.listField.setPosition(this.body.position());
-        this.palette.setPosition(this.listField.topRight().add(
-            new Point(thin, 0)
+        this.listField.setTop(inputField.bottom() + this.padding);
+        this.listField.setHeight(
+            this.body.height() - inputField.height() - this.padding
+        );
+
+        if (this.magnifiyingGlass) {
+            this.magnifiyingGlass.setTop(inputField.top());
+            this.magnifiyingGlass.setLeft(this.listField.left());
+        }
+
+        this.notesField.setExtent(new Point(
+            this.body.right() - this.listField.right() - thin,
+            100,
         ));
+
+        this.palette.setRight(this.body.right());
+        this.palette.setTop(inputField.bottom() + this.padding);
+        this.palette.setExtent(new Point(
+            this.notesField.width(),
+            this.listField.height() - this.notesField.height() - thin
+        ));
+        
         this.notesField.setPosition(this.palette.bottomLeft().add(
             new Point(0, thin)
         ));
+
+        this.notesField.setTop(this.palette.bottom() + thin);
+        this.notesField.setLeft(this.palette.left());
     }
 
     if (this.label) {
         this.label.setCenter(this.center());
-        this.label.setTop(
-            this.top() + (titleHeight - this.label.height()) / 2
-        );
+        this.label.setTop(this.top() + (th - this.label.height()) / 2);
     }
 
-    if (this.buttons) {
-        this.buttons.fixLayout();
+    if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
@@ -792,35 +894,19 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
 };
     
 // Library Cache Utilities.
-LibraryImportDialogMorph.prototype.hasCached = function (key) {
+LibraryDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
 };
 
-LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
+LibraryDialogMorph.prototype.cacheLibrary = function (key, blocks) {
     this.libraryCache[key] = blocks ;
 };
 
-LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
+LibraryDialogMorph.prototype.cachedLibrary = function (key) {
     return this.libraryCache[key];
 };
 
-LibraryImportDialogMorph.prototype.importLibrary = function () {
-    var ide = this.ide,
-        selectedLibrary = this.listField.selected.fileName,
-        libraryName = this.listField.selected.name;
-
-    ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
-    ide.getURL(
-        ide.resourceURL('libraries', selectedLibrary),
-        function(libraryText) {
-            ide.droppedText(libraryText, libraryName);
-        }
-    );
-
-    this.destroy();
-};
-
-LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
+LibraryDialogMorph.prototype.displayBlocks = function (libraryKey) {
     var x, y, blockImage, previousCategory, blockContainer,
         myself = this,
         padding = 4,
@@ -858,11 +944,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     this.fixLayout();
 };
 
-LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
+LibraryDialogMorph.prototype.showMessage = function (msgText) {
     var msg = new MenuMorph(null, msgText);
-    this.initializePalette();
-    this.fixLayout();
     msg.popUpCenteredInWorld(this.palette.contents);
 };
-
-

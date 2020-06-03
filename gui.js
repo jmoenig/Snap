@@ -52,7 +52,7 @@
     Nathan Dinsmore contributed saving and loading of projects,
     ypr-Snap! project conversion and countless bugfixes
     Ian Reynolds contributed handling and visualization of sounds
-    Michael Ball contributed the LibraryImportDialogMorph and countless
+    Michael Ball contributed to the countless
     utilities to load libraries from relative urls
 
 */
@@ -3359,6 +3359,13 @@ IDE_Morph.prototype.projectMenu = function () {
             'show global custom block definitions as XML' +
                 '\nin a new browser window'
         );
+        if (SnapCloud.username) {
+            menu.addItem(
+                'Save blocks...',
+                'createLibrary',
+                'save custom blocks to the cloud as a library'
+            );
+        }
         menu.addItem(
             'Unused blocks...',
             function () {myself.removeUnusedBlocks(); },
@@ -3407,13 +3414,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Libraries...',
         function() {
-            myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
-                function (txt) {
-                    var libraries = myself.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(myself, libraries).popUp();
-                }
-            );
+            new LibraryDialogMorph(myself).popUp(myself.world());
         },
         'Select categories of additional blocks to add to this project.'
     );
@@ -4037,7 +4038,8 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
         new BlockExportDialogMorph(
             this.serializer,
             this.stage.globalBlocks,
-            this.stage
+            this.stage,
+            (str, name) => this.saveXMLAs(str, name)
         ).popUp(this.world());
     } else {
         this.inform(
@@ -4047,6 +4049,85 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
         );
     }
 };
+
+IDE_Morph.prototype.createLibrary = function () {
+    if (this.stage.globalBlocks.length > 0 || this.stage.deletableMessageNames().length) {
+        const dialog = new BlockExportDialogMorph(
+            this.serializer,
+            this.stage.globalBlocks,
+            this.stage,
+            async (libraryXML, name) => {
+                const notes = await this.promptLibraryNotes();
+                new LibraryDialogMorph(this, name, libraryXML, notes).popUp(this.world());  // FIXME: Remove
+            }
+        );
+        dialog.labelString = 'Save blocks / message types';
+        dialog.createLabel();
+        dialog.fixLayout();
+        dialog.popUp(this.world());
+    } else {
+        this.inform(
+            'Export blocks/msg types',
+            'this project doesn\'t have any\n'
+                + 'custom global blocks or message types yet'
+        );
+    }
+};
+
+IDE_Morph.prototype.promptLibraryNotes = function () {
+    const deferred = utils.defer();
+    var dialog = new DialogBoxMorph().withKey('libraryNotes'),
+        frame = new ScrollFrameMorph(),
+        text = new TextMorph(this.projectNotes || ''),
+        ok = dialog.ok,
+        size = 250,
+        world = this.world();
+
+    frame.padding = 6;
+    frame.setWidth(size);
+    frame.acceptsDrops = false;
+    frame.contents.acceptsDrops = false;
+
+    text.setWidth(size - frame.padding * 2);
+    text.setPosition(frame.topLeft().add(frame.padding));
+    text.enableSelecting();
+    text.isEditable = true;
+
+    frame.setHeight(size);
+    frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    frame.addContents(text);
+    text.drawNew();
+
+    dialog.ok = function () {
+        deferred.resolve(text.text);
+        ok.call(this);
+    };
+
+    dialog.justDropped = function () {
+        text.edit();
+    };
+
+    dialog.labelString = 'Library Notes';
+    dialog.createLabel();
+    dialog.addBody(frame);
+    frame.drawNew();
+    dialog.addButton('ok', 'OK');
+    dialog.addButton('cancel', 'Cancel');
+    dialog.fixLayout();
+    dialog.drawNew();
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    text.edit();
+    return deferred.promise;
+};
+
 
 IDE_Morph.prototype.removeUnusedBlocks = function () {
     var targets = this.sprites.asArray().concat([this.stage]),
@@ -6074,10 +6155,6 @@ SaveOpenDialogMorphSource.prototype.init = function(name, icon, id) {
     this.id = id || name.toLowerCase();
 };
 
-SaveOpenDialogMorphSource.prototype.getContent = function(/*item*/) {
-    // TODO:
-};
-
 SaveOpenDialogMorphSource.prototype.canPublish = function() {
     return this.can('publish');
 };
@@ -6102,6 +6179,14 @@ SaveOpenDialogMorphSource.prototype.save = function(/*item*/) {
     throw new Error(localize('Cannot save projects to the ') + localize(this.name));
 };
 
+SaveOpenDialogMorphSource.prototype.getPreview = function(/*item*/) {
+    throw new Error(localize('Cannot get project preview from the ') + localize(this.name));
+};
+
+SaveOpenDialogMorphSource.prototype.getContent = function(/*item*/) {
+    throw new Error(localize('Cannot get content from the ') + localize(this.name));
+};
+
 // SaveOpenDialogMorph ////////////////////////////////////////////////////
 
 // SaveOpenDialogMorph inherits from DialogBoxMorph:
@@ -6119,7 +6204,7 @@ SaveOpenDialogMorph.prototype.init = function (task, itemName, sources, source, 
     // additional properties:
     this.task = task || 'open'; // String describing what do do (open, save)
     this.sources = sources.filter(source => source.can(this.task));
-    this.source = source || sources[0]; // or 'cloud' or 'examples'
+    this.source = source || this.sources[0]; // or 'cloud' or 'examples'
     this.itemsList = []; // [{name: , thumb: , notes:}]
     this.itemName = itemName;
 
@@ -6229,8 +6314,8 @@ SaveOpenDialogMorph.prototype.buildContents = function (currentData) {
         this.addButton('openItem', 'Open');
         this.action = 'openItem';
     } else { // 'save'
-        this.addButton('saveItem', 'Save');
-        this.action = 'saveItem';
+        this.addButton('trySaveItem', 'Save');
+        this.action = 'trySaveItem';
     }
     this.shareButton = this.addButton('shareItem', 'Share');
     this.unshareButton = this.addButton('unshareItem', 'Unshare');
@@ -6341,7 +6426,11 @@ SaveOpenDialogMorph.prototype.openItem = async function() {
     }
 };
 
-SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
+SaveOpenDialogMorph.prototype.trySaveItem = async function() {
+    const newItem = {
+        name: this.nameField.contents().text.text,
+        notes: this.notesText.text,
+    };
     const myself = this;
     const existingItem = detect(
         this.itemsList,
@@ -6361,10 +6450,11 @@ SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
             'Replace ' + this.itemName,
             async function () {
                 try {
-                    await myself.source.save(newItem);
-                    myself.ide.source = myself.source.id;
-                    myself.destroy();
+                    myself.ide.showMessage(savingMsg);
+                    myself.saveItem(newItem);
                     myself.ide.showMessage(savedMsg, 2);
+                    myself.saveItem(newItem);
+                    myself.destroy();
                 } catch (err) {
                     myself.ide.cloudError().call(null, err.label, err.message);
                 }
@@ -6373,14 +6463,17 @@ SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
     } else {
         try {
             this.ide.showMessage(savingMsg);
-            await this.source.save(newItem);
+            this.saveItem(newItem);
             this.ide.showMessage(savedMsg, 2);
-            this.ide.source = this.source.id;
             this.destroy();
         } catch (err) {
             this.ide.cloudError().call(null, err.label, err.message);
         }
     }
+};
+
+SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
+    await this.source.save(newItem);
 };
 
 SaveOpenDialogMorph.prototype.initPreview = function() {
@@ -6518,7 +6611,7 @@ SaveOpenDialogMorph.prototype.buildFilterField = function () {
             myself.listField.elements.push('(no matches)');
         }
 
-        myself.clearDetails();
+        myself.clearPreview();
         myself.listField.buildListContents();
         myself.fixListFieldItemColors();
         myself.listField.adjustScrollBars();
@@ -6583,31 +6676,11 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
 
     this.listField.action = async function (item) {
         if (item === undefined) {return; }
-        const previewInfo = await myself.source.getPreview(item);
         if (myself.nameField) {
             myself.nameField.setContents(item.name || '');
         }
         if (myself.task === 'open') {
-            myself.notesText.text = previewInfo.notes || '';
-            myself.notesText.drawNew();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = previewInfo.thumbnail || null;
-            myself.preview.cachedTexture = null;
-            myself.preview.drawNew();
-            if (previewInfo.details) {
-                (new SpeechBubbleMorph(new TextMorph(
-                    //localize('last changed') + '\n' + item.Updated,
-                    previewInfo.details,
-                    null,
-                    null,
-                    null,
-                    null,
-                    'center'
-                ))).popUp(
-                    myself.world(),
-                    myself.preview.rightCenter().add(new Point(2, 0))
-                );
-            }
+            await myself.setPreview(item);
         }
 
         if (myself.source.canPublish()) {
@@ -6644,11 +6717,35 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
-        this.clearDetails();
+        this.clearPreview();
     }
 };
 
-SaveOpenDialogMorph.prototype.clearDetails = function () {
+SaveOpenDialogMorph.prototype.setPreview = async function (item) {
+    const previewInfo = await this.source.getPreview(item);
+    this.notesText.text = previewInfo.notes || '';
+    this.notesText.drawNew();
+    this.notesField.contents.adjustBounds();
+    this.preview.texture = previewInfo.thumbnail || null;
+    this.preview.cachedTexture = null;
+    this.preview.drawNew();
+    if (previewInfo.details) {
+        (new SpeechBubbleMorph(new TextMorph(
+            //localize('last changed') + '\n' + item.Updated,
+            previewInfo.details,
+            null,
+            null,
+            null,
+            null,
+            'center'
+        ))).popUp(
+            this.world(),
+            this.preview.rightCenter().add(new Point(2, 0))
+        );
+    }
+};
+
+SaveOpenDialogMorph.prototype.clearPreview = function () {
     this.notesText.text = '';
     this.notesText.drawNew();
     this.notesField.contents.adjustBounds();
@@ -7109,7 +7206,7 @@ ProjectDialogMorph.prototype.initPreview = function () {
     }
 };
 
-ProjectDialogMorph.prototype.saveItem = function () {
+ProjectDialogMorph.prototype.trySaveItem = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text;
 
@@ -7129,7 +7226,12 @@ ProjectDialogMorph.prototype.saveItem = function () {
         notes: notes,
     };
     // TODO: Set the current room name?
-    ProjectDialogMorph.uber.saveItem.call(this, newProjectDetails);
+    ProjectDialogMorph.uber.trySaveItem.call(this, newProjectDetails);
+};
+
+ProjectDialogMorph.prototype.saveItem = function(newItem) {
+    ProjectDialogMorph.uber.saveItem.call(this, newItem);
+    this.ide.source = this.source.id;
 };
 
 ProjectDialogMorph.prototype.saveCloudProject = function (name) {

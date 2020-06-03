@@ -3416,23 +3416,24 @@ BlockExportDialogMorph.prototype.key = 'blockExport';
 
 // BlockExportDialogMorph instance creation:
 
-function BlockExportDialogMorph(serializer, blocks, stage) {
-    this.init(serializer, blocks, stage);
+function BlockExportDialogMorph(serializer, blocks, stage, action) {
+    this.init(serializer, blocks, stage, action);
 }
 
-BlockExportDialogMorph.prototype.init = function (serializer, blocks, stage) {
+BlockExportDialogMorph.prototype.init = function (serializer, blocks, stage, action) {
     var myself = this;
 
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
     this.handle = null;
+        
 
     // initialize inherited properties:
     BlockExportDialogMorph.uber.init.call(
         this,
         stage, // target
-        function () {myself.exportBlocks(); },
+        function () {myself.exportBlocks(action); },
         null // environment
     );
 
@@ -3596,7 +3597,7 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 
 // BlockExportDialogMorph ops
 
-BlockExportDialogMorph.prototype.exportBlocks = function () {
+BlockExportDialogMorph.prototype.exportBlocks = function (callback) {
     var str = this.serializer.serialize(this.blocks),
         ide = this.world().children[0],
         stage = ide.stage,
@@ -3618,7 +3619,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + str
             + msgs
             + '</blocks>';
-        ide.saveXMLAs(
+        callback(
             str,
             projectName + ' ' + localize('blocks')
         );
