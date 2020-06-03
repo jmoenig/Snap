@@ -9792,6 +9792,7 @@ SymbolMorph.prototype.names = [
     'robot',
     'magnifiyingGlass',
     'footprints',
+    'netsbloxLogo',
 ];
 
 // SymbolMorph instance creation:
@@ -9981,6 +9982,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolQueue(canvas, aColor);
     case 'footprints':
         return this.drawSymbolFootprints(canvas, aColor);
+    case 'netsbloxLogo':
+        return this.drawSymbolNetsBloxLogo(canvas, aColor);
     default:
         return canvas;
     }
@@ -11396,6 +11399,63 @@ SymbolMorph.prototype.drawSymbolFootprints = function (canvas, color) {
     return canvas;
 };
 
+SymbolMorph.prototype.drawSymbolNetsBloxLogo = function (canvas, color) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        radius = w/14,
+        innerWidth = w - 2*radius;
+
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 2*radius, radians(180), radians(270));
+
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, radius, 0, radians(360));
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 2*radius, 0, radians(90));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 3*radius, 0, radians(90));
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 2*radius, radians(180), radians(270));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(w/2, h/2, 3*radius, radians(180), radians(270));
+    ctx.stroke();
+
+    function drawLink(x, y, heading, stemLen) {
+        const dx = stemLen * Math.cos(heading);
+        const dy = stemLen * Math.sin(heading);
+        const startX = radius * Math.cos(heading) + x;
+        const startY = radius * Math.sin(heading) + y;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, heading, heading + 2*Math.PI);
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(x + dx, y + dy);
+        ctx.stroke();
+    }
+
+    let heading = -60;
+    let x = radius;
+    let y = h/2;
+    let totalLen = innerWidth/2;
+    const thin = w/48;
+    const stemLen = totalLen - 2 * radius - thin;
+    while (heading < 300) {
+        drawLink(x, y, radians(heading), stemLen);
+        x += totalLen * Math.cos(radians(heading));
+        y += totalLen * Math.sin(radians(heading));
+        heading += 60;
+    }
+
+    return canvas;
+};
 
 // ColorSlotMorph //////////////////////////////////////////////////////
 
