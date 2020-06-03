@@ -683,31 +683,6 @@ NetsBloxMorph.prototype.openProject = function (name) {
     }
 };
 
-NetsBloxMorph.prototype.save = function () {
-    if (this.isPreviousVersion()) {
-        return this.showMessage('Please exit replay mode before saving');
-    }
-
-    if (this.source === 'examples') {
-        this.source = 'local'; // cannot save to examples
-    }
-    // NetsBlox changes - start
-    if (this.room.name) {
-    // NetsBlox changes - end
-        if (this.source === 'local') { // as well as 'examples'
-            // NetsBlox changes - start
-            this.saveProject(this.room.name);
-            // NetsBlox changes - end
-        } else { // 'cloud'
-            // NetsBlox changes - start
-            this.saveProjectToCloud(this.room.name);
-            // NetsBlox changes - end
-        }
-    } else {
-        this.saveProjectsBrowser();
-    }
-};
-
 NetsBloxMorph.prototype.saveACopy = function () {
     var myself = this;
     if (this.isPreviousVersion()) {

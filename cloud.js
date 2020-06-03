@@ -684,3 +684,10 @@ Cloud.prototype.encodeDict = function (dict) {
 Cloud.prototype.message = function (string) {
     alert(string);
 };
+
+class CloudError extends Error {  // TODO: Check browser support
+    constructor(label, message) {
+        super(message);
+        this.label = label;
+    }
+}

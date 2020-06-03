@@ -1,4 +1,4 @@
-/*globals driver, expect */
+/*globals driver, expect, TestUtils */
 describe('save', function() {
     let SnapCloud, ProjectDialogMorph;
     before(() => {
@@ -32,9 +32,9 @@ describe('save', function() {
                     const projectName = `can-reload-${Date.now()}`;
 
                     return driver.setProjectName(projectName)
-                        .then(() => saveProject())
+                        .then(() => TestUtils.saveProject())
                         .then(() => driver.reset())
-                        .then(() => openSavedProject(projectName));
+                        .then(() => TestUtils.openProject(projectName));
                 });
 
                 it('should overwrite on rename', function() {
@@ -42,9 +42,9 @@ describe('save', function() {
                     const newName = `RENAMED-${projectName}`;
 
                     return driver.setProjectName(projectName)
-                        .then(() => saveProject())
+                        .then(() => TestUtils.saveProject())
                         .then(() => driver.setProjectName(newName))
-                        .then(() => openProjectsBrowser())
+                        .then(() => TestUtils.openProjectsBrowser())
                         .then(projectDialog => {
                             let projectList = projectDialog.listField.listContents
                                 .children.map(child => child.labelString);
@@ -73,9 +73,9 @@ describe('save', function() {
                         return driver.reset()
                             .then(() => driver.setProjectName(projectName))
                             .then(() => driver.addBlock('doIfElse'))
-                            .then(() => saveProject())
+                            .then(() => TestUtils.saveProject())
                             .then(() => driver.reset())
-                            .then(() => openSavedProject(projectName))
+                            .then(() => TestUtils.openProject(projectName))
                             .then(() => {
                                 saveAsName = `new${projectName}-saveAs`;
                                 return driver.saveProjectAs(saveAsName);
@@ -90,7 +90,7 @@ describe('save', function() {
                     });
 
                     it('should make a copy on save as', function() {
-                        return openProjectsBrowser()
+                        return TestUtils.openProjectsBrowser()
                             .then(projectDialog => {
                                 // Check that both projects show up in the project list
                                 return driver.waitUntil(() => {
@@ -129,7 +129,7 @@ describe('save', function() {
                         await driver.setProjectName(name);
                         await driver.addBlock('forward');
                         await driver.saveProjectAs(saveAs);
-                        const dialog = await openProjectsBrowser();
+                        const dialog = await TestUtils.openProjectsBrowser();
                         await driver.waitUntil(() => {
                             const cloudSrc = dialog.srcBar.children[0];
                             driver.click(cloudSrc);
@@ -158,11 +158,11 @@ describe('save', function() {
                         const menu = driver.dialogs().pop();
                         menu.ok();
                         await driver.expect(
-                            showingSaveMsg,
+                            TestUtils.showingSaveMsg,
                             `Did not show save message on overwrite`
                         );
-                        const browser = await openProjectsBrowser();
-                        const names = getProjectList(browser);
+                        const browser = await TestUtils.openProjectsBrowser();
+                        const names = TestUtils.getProjectList(browser);
                         expect(names).toContain(existingName);
                         expect(names).toNotContain(originalName);
                     });
@@ -173,7 +173,7 @@ describe('save', function() {
                         await driver.saveProjectAs(existingName, false);
                         const menu = driver.dialog();
                         menu.cancel();
-                        const dialog = driver.dialog();
+                        const [dialog] = driver.dialogs();
                         expect(dialog.task).toBe('save');
                     });
                 });
@@ -202,12 +202,12 @@ describe('save', function() {
                     const dialog = driver.dialog();
                     const saveACopyBtn = dialog.children.find(item => item.action === 'saveACopy');
                     driver.click(saveACopyBtn);
-                    return driver.expect(showingSaveMsg, `Did not see save message after "Save Copy"`)
-                        .then(() => openProjectsBrowser())
+                    return driver.expect(TestUtils.showingSaveMsg, `Did not see save message after "Save Copy"`)
+                        .then(() => TestUtils.openProjectsBrowser())
                         .then(projectDialog => {
                             const copyName = `Copy of ${projectName}`;
                             return driver.expect(
-                                () => getProjectList(projectDialog).includes(copyName),
+                                () => TestUtils.getProjectList(projectDialog).includes(copyName),
                                 `Could not find copied project (${copyName})`
                             );
                         });
@@ -231,101 +231,4 @@ describe('save', function() {
             });
         });
     });
-
-    function showingSaveMsg() {
-        const menu = driver.dialog();
-        const message = menu && menu.title && menu.title.toLowerCase();
-        if (message) {
-            return message.includes('saved') && message.includes('cloud');
-        }
-        return false;
-    }
-
-    function waitUntilProjectsLoaded() {
-        if (driver.dialog().source.includes('cloud')) {
-            return driver.expect(
-                () => {
-                    const isShowingUpdateMsg = driver.dialogs().length === 2;
-                    const projectDialog = driver.dialogs()
-                        .find(d => d instanceof ProjectDialogMorph);
-                    const hasLoadedProjects = projectDialog &&
-                            getProjectList(projectDialog)[0] !== '(empty)';
-                    return isShowingUpdateMsg || hasLoadedProjects;
-                },
-                'Did not see "update project list" message'
-            )
-            .then(() => driver.expect(
-                    () => driver.dialogs().length === 1,
-                    '"update project list" message did not disappear'
-                )
-            );
-        } else {
-            return Promise.resolve();
-        }
-    }
-
-    function saveProject() {
-        // Get the save button
-        const controlBar = driver.ide().controlBar;
-        driver.click(controlBar.projectButton);
-        let menu = driver.dialog();
-        const saveBtn = menu.children.find(child => child.action === 'save');
-
-        driver.click(saveBtn);
-
-        // Wait for the save message
-        return driver.expect(
-            showingSaveMsg,
-            `Did not see save message after "Save"`
-        );
-    }
-
-    function getProjectList(projectDialog) {
-        return projectDialog.listField.listContents.children
-            .map(item => item.labelString);
-    }
-
-    function openProjectsBrowser() {
-        const controlBar = driver.ide().controlBar;
-
-        driver.click(controlBar.projectButton);
-        let menu = driver.dialog();
-        const openBtn = menu.children.find(child => child.action === 'openProjectsBrowser');
-
-        driver.click(openBtn);
-
-        // Open the saved project
-        return waitUntilProjectsLoaded()
-            .then(() => driver.dialog());
-    }
-
-    function openSavedProject(projectName) {
-        // Open the project dialog
-        let projectDialog;
-        return openProjectsBrowser()
-            .then(dialog => {
-                projectDialog = dialog;
-                return driver.expect(
-                    () => getProjectList(projectDialog).includes(projectName),
-                    `Could not find ${projectName} in project list`
-                );
-            })
-            .then(() => {
-                const projectList = projectDialog.listField.listContents.children;
-                const listItem = projectList.find(item => item.labelString === projectName);
-                driver.click(listItem);
-                projectDialog.accept();
-
-                // Check for the if-else block
-                return driver.expect(
-                    () => {
-                        const blockCount = driver.ide().currentSprite.scripts.children.length;
-                        return blockCount > 0;
-                    },
-                    `Did not see blocks after loading saved project`
-                );
-            });
-
-    }
-
 });

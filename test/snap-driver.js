@@ -427,7 +427,7 @@ SnapDriver.prototype.waitUntilProjectsLoaded = async function() {
     const isUpdateTitle = title => title.includes('Updating\nproject');
     const isShowingUpdateMsg = () => this.isShowingDialogTitle(isUpdateTitle);
 
-    if (dialog && dialog.source.includes('cloud')) {
+    if (dialog && dialog.source.id.includes('cloud')) {
         const oldProjectList = dialog.projectList;
         await this.expect(
             () => {

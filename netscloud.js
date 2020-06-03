@@ -200,7 +200,7 @@ NetCloud.prototype.joinActiveProject = function (id, callback, onError) {
     );
 };
 
-NetCloud.prototype.evictCollaborator = function (id) {
+NetCloud.prototype.evictCollaborator = function (id, projectId) {
     var myself = this;
 
     this.reconnect(
@@ -209,7 +209,7 @@ NetCloud.prototype.evictCollaborator = function (id) {
                 'evictCollaborator',
                 nop,
                 nop,
-                [id, myself.projectId]
+                [id, projectId || myself.projectId]
             );
         },
         nop
