@@ -626,7 +626,10 @@ CloudLibrarySource.prototype.list = function() {
     this.ide.getURL(
         url,
         libJSON => {
-            const libraries = JSON.parse(libJSON);
+            const libraries = JSON.parse(libJSON).map(lib => {
+                lib.public = lib.public || lib.needsApproval;
+                return lib;
+            });
             deferred.resolve(libraries);
         }
     );
@@ -640,7 +643,15 @@ CloudLibrarySource.prototype.save = async function(item) {
     request.open('POST', `${SERVER_URL}/api/v2/libraries/user/${username}/${name}`, true);
     request.withCredentials = true;
 
-    await utils.requestPromise(request, {blocks, notes});  // FIXME: What do errors look like here?
+    await utils.requestPromise(request, {blocks, notes});
+    const {needsApproval} = JSON.parse(request.responseText);
+    if (needsApproval) {
+        this.ide.inform(
+            'Approval is required to re-publish the given library.\n\n' +
+            'It will be publicly available again\nfollowing a successful approval!',
+            'Approval Required'
+        );
+    }
 };
 
 CloudLibrarySource.prototype.getContent = async function(item) {
@@ -666,21 +677,57 @@ CloudLibrarySource.prototype.delete = async function(item) {
     await utils.requestPromise(request);
 };
 
-//CommunityLibrarySource.prototype = Object.create(LibraryDialogSource.prototype);
-//CommunityLibrarySource.prototype.constructor = CommunityLibrarySource;
-//CommunityLibrarySource.uber = LibraryDialogSource.prototype;
+CloudLibrarySource.prototype.publish = async function(item, unpublish) {
+    const action = unpublish ? 'unpublish' : 'publish';
+    const username = SnapCloud.username;
+    const {name} = item;
+    const url = `${SERVER_URL}/api/v2/libraries/user/${username}/${name}/${action}`;
+    const request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.withCredentials = true;
 
-//function CommunityLibrarySource(ide) {
-    //this.init(ide, 'Community', 'cloud', 'community');
-//}
+    await utils.requestPromise(request);
+    const {needsApproval} = JSON.parse(request.responseText);
+    if (needsApproval) {
+        this.ide.inform(
+            'Approval is required to publish the given library.\n\n' +
+            'It will be publicly available automatically\nfollowing a successful approval!',
+            'Approval Required'
+        );
+    }
+};
 
-//CommunityLibrarySource.prototype.list = function() {
-    //return [
-        //{name: 'test', notes: 'notes'},
-        //{name: 'Test Project 2', notes: 'notes'},
-        //{name: 'Test Project 3', notes: 'notes'},
-    //];
-//};
+CommunityLibrarySource.prototype = Object.create(LibraryDialogSource.prototype);
+CommunityLibrarySource.prototype.constructor = CommunityLibrarySource;
+CommunityLibrarySource.uber = LibraryDialogSource.prototype;
+
+function CommunityLibrarySource(ide) {
+    this.init(ide, 'Community', 'cloud', 'community');
+}
+
+CommunityLibrarySource.prototype.list = function() {
+    const deferred = utils.defer();
+    const url = `${SERVER_URL}/api/v2/libraries/community/`;
+    this.ide.getURL(
+        url,
+        libJSON => {
+            const libraries = JSON.parse(libJSON);
+            libraries.forEach(lib => {
+                lib.libraryName = lib.name;
+                lib.name = `${lib.name} (author: ${lib.owner})`;
+            });
+
+            deferred.resolve(libraries);
+        }
+    );
+    return deferred.promise;
+};
+
+CommunityLibrarySource.prototype.getContent = function(item) {
+    const {owner} = item;
+    const name = item.libraryName;
+    return CloudLibrarySource.prototype.getContent.call(this, {name, owner});
+};
 
 // LibraryDialogMorph ///////////////////////////////////////////
 
@@ -698,7 +745,7 @@ LibraryDialogMorph.prototype.init = function (ide, name, xml, notes) {
     const sources = [
         new OfficialLibrarySource(ide),
         new CloudLibrarySource(ide),
-        //new CommunityLibrarySource(ide),
+        new CommunityLibrarySource(ide),
     ];
     const task = xml ? 'save' : 'open';
     // initialize inherited properties:
