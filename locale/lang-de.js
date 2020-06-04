@@ -1622,8 +1622,8 @@ SnapTranslator.dict.de = {
         'Anmerkung hier hinzuf\u00fcgen',
     'comment pic...':
         'Kommentarbild',
-    'open a new window\nwith a picture of this comment':
-        'neues Fenster mit dem Bild\ndieses Kommentars öffnen',
+    'save a picture\nof this comment':
+        'ein Bild dieser\nAnmerkung speichern',
 
     // drow downs
     // directions
