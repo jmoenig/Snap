@@ -6775,7 +6775,7 @@ ScriptsMorph.prototype.userMenu = function () {
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',
-        'open a new window\nwith a picture of all scripts'
+        'save a picture\nof all scripts'
     );
     if (ide) {
         menu.addLine();
