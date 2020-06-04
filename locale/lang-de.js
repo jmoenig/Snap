@@ -1175,8 +1175,8 @@ SnapTranslator.dict.de = {
         'L\u00f6schen',
     'script pic...':
         'Skriptbild...',
-    'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+    'save a picture\nof this script':
+        'ein Bild dieses\nSkripts speichern',
     'result pic...':
         'Ergebnisbild...',
     'save a picture of both\nthis script and its result':
