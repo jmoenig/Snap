@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-05-25', // this, too, will appear in the Translators tab
+        '2020-06-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1177,6 +1177,10 @@ SnapTranslator.dict.de = {
         'Skriptbild...',
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+    'result pic...':
+        'Ergebnisbild...',
+    'save a picture of both\nthis script and its result':
+        'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
     'ringify':
         'Umringen',
     'unringify':
