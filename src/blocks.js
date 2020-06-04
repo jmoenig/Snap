@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-May-28';
+modules.blocks = '2020-June-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2617,12 +2617,12 @@ BlockMorph.prototype.userMenu = function () {
         myself = this,
         shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
+        top = this.topBlock(),
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
         alternatives,
         field,
-        rcvr,
-        top;
+        rcvr;
 
     function addOption(label, toggle, test, onHint, offHint) {
         menu.addItem(
@@ -2661,18 +2661,6 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
-    if (shiftClicked) {
-        top = this.topBlock();
-        if (top instanceof ReporterBlockMorph) {
-            menu.addItem(
-                "script pic with result...",
-                () => top.exportResultPic(),
-                'open a new window\n' +
-                    'with a picture of both\nthis script and its result',
-                new Color(100, 0, 0)
-            );
-        }
-    }
     if (this.isTemplate) {
         if (this.parent instanceof SyntaxElementMorph) { // in-line
             if (this.selector === 'reportGetVar') { // script var definition
@@ -2925,13 +2913,21 @@ BlockMorph.prototype.userMenu = function () {
                     IDE_Morph
             );
             ide.saveCanvasAs(
-                this.topBlock().scriptPic(),
+                top.scriptPic(),
                 (ide.projectName || localize('untitled')) + ' ' +
                     localize('script pic')
             );
         },
         'open a new window\nwith a picture of this script'
     );
+    if (top instanceof ReporterBlockMorph) {
+        menu.addItem(
+            "result pic...",
+            () => top.exportResultPic(),
+            'open a new window\n' +
+                'with a picture of both\nthis script and its result'
+        );
+    }
     if (shiftClicked) {
         menu.addItem(
             'download script',
@@ -2975,7 +2971,6 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
-        top = this.topBlock();
         if (this instanceof ReporterBlockMorph ||
                 (!(top instanceof HatBlockMorph))) {
             menu.addItem("ringify", 'ringify');
@@ -2986,7 +2981,7 @@ BlockMorph.prototype.userMenu = function () {
             || (this.parent instanceof CommandSlotMorph)
             || (this instanceof HatBlockMorph)
             || (this instanceof CommandBlockMorph
-                && (this.topBlock() instanceof HatBlockMorph))) {
+                && (top instanceof HatBlockMorph))) {
         return menu;
     }
     menu.addLine();
