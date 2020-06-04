@@ -1267,8 +1267,8 @@ SnapTranslator.dict.de = {
     	'Blöcke per Tastatur\neingeben',
     'scripts pic...':
         'Bild aller Skripte...',
-    'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+    'save a picture\nof all scripts':
+        'ein Bild aller\nSkripte speichern',
     'make a block...':
         'Neuen Block bauen...',
 
