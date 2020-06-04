@@ -12515,7 +12515,7 @@ CommentMorph.prototype.userMenu = function () {
                     localize('comment pic')
             );
         },
-        'open a new window\nwith a picture of this comment'
+        'save a picture\nof this comment'
     );
     return menu;
 };
