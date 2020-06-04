@@ -2924,8 +2924,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "result pic...",
             () => top.exportResultPic(),
-            'open a new window\n' +
-                'with a picture of both\nthis script and its result'
+            'save a picture of both\nthis script and its result'
         );
     }
     if (shiftClicked) {
