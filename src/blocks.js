@@ -2918,7 +2918,7 @@ BlockMorph.prototype.userMenu = function () {
                     localize('script pic')
             );
         },
-        'open a new window\nwith a picture of this script'
+        'save a picture\nof this script'
     );
     if (top instanceof ReporterBlockMorph) {
         menu.addItem(
