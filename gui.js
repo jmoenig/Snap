@@ -7176,18 +7176,20 @@ ProjectDialogMorph.prototype.initPreview = function () {
         }
     };
     this.preview.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        var scale = Math.min(
-                (this.width() / this.cachedTexture.width),
-                (this.height() / this.cachedTexture.height)
-            ),
-            width = scale * this.cachedTexture.width,
-            height = scale * this.cachedTexture.height;
+        if (this.cachedTexture) {
+            var context = this.image.getContext('2d');
+            var scale = Math.min(
+                    (this.width() / this.cachedTexture.width),
+                    (this.height() / this.cachedTexture.height)
+                ),
+                width = scale * this.cachedTexture.width,
+                height = scale * this.cachedTexture.height;
 
-        context.drawImage(this.cachedTexture, this.edge, this.edge,
-            width, height);
+            context.drawImage(this.cachedTexture, this.edge, this.edge,
+                width, height);
 
-        this.changed();
+            this.changed();
+        }
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(  // FIXME: Move this to the projects version?
