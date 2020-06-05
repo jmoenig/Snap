@@ -903,13 +903,12 @@ NetsBloxMorph.prototype.initializeCloud = function () {
 NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
     var myself = this,
         newRoom = project.RoomName,
-        isNewRole = project.NewRole === 'true',
         roleName = project.ProjectName,
         projectId = project.ProjectID;  // src proj name
 
     this.source = 'cloud';
     project.Owner = project.Owner || SnapCloud.username;
-    this.updateUrlQueryString(newRoom, isPublic === 'true');
+    this.updateUrlQueryString(newRoom, isPublic);
 
     var msg = this.showMessage('Opening project...');
     return SnapActions.openProject(project.SourceCode)

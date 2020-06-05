@@ -102,8 +102,7 @@
         await driver.expect(
             () => {
                 const project = dialog.itemsList.find(item => item.name === projectName);
-                const isPublic = project.Public !== 'false';
-                return isPublic;
+                return project.public;
             },
             `Project not set to public`
         );
@@ -139,18 +138,19 @@
             () => TestUtils.getProjectList(dialog).includes(projectName),
             `Could not find ${projectName} in project list`
         );
-        await driver.sleep(50);  // FIXME: bug when deleting (async texture drawing)
         const projectList = dialog.listField.listContents.children;
         const listItem = projectList.find(item => item.labelString === projectName);
         driver.click(listItem);
-        await driver.sleep(50);  // FIXME: bug when deleting (async texture drawing)
-        const shareBtn = dialog.buttons.children.find(btn => btn.action === action);
-        if (!shareBtn.isVisible) {
-            const source = dialog.source.name.toLowerCase();
-            const label = shareBtn.labelString.trim();
-            throw new Error(`${label} button not shown. Is it supported for the ${source}?`);
-        }
-        driver.click(shareBtn);
+        const button = dialog.buttons.children.find(btn => btn.action === action);
+
+        const source = dialog.source.name.toLowerCase();
+        const label = button.labelString.trim();
+        const notShownMsg = `${label} button not shown. Is it supported for the ${source}?`;
+        await driver.expect(
+            () => button.isVisible,
+            notShownMsg
+        );
+        driver.click(button);
 
     }
 

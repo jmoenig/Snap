@@ -6122,13 +6122,28 @@ IDE_Morph.prototype.inform = function (title, message) {
 };
 
 IDE_Morph.prototype.confirm = function (message, title, action) {
+    var isPromisified = !action,
+        deferred;
+
+    if (isPromisified) {
+        deferred = utils.defer();
+        action = deferred.resolve.bind(null, true);
+    }
+
     const dialog = new DialogBoxMorph(null, action);
     dialog.askYesNo(
         title,
         localize(message),
         this.world()
     );
-    return dialog;
+
+    if (isPromisified) {
+        dialog.cancel = () => {
+            deferred.resolve(false);
+            dialog.destroy();
+        };
+        return deferred.promise;
+    }
 };
 
 IDE_Morph.prototype.prompt = function (message, callback, choices, key) {
@@ -6328,94 +6343,84 @@ SaveOpenDialogMorph.prototype.buildContents = function (currentData) {
     this.fixLayout();
 };
 
-SaveOpenDialogMorph.prototype.deleteItem = function() {
+SaveOpenDialogMorph.prototype.deleteItem = async function() {
     const item = this.listField.selected;
     if (item) {
-        this.ide.confirm(
+        const confirmed = await this.ide.confirm(
             localize(
                 'Are you sure you want to delete'
             ) + '\n"' + item.name + '"?',
-            'Delete ' + this.itemName,
-            async () => {
-                await this.source.delete(item);
-                // TODO: There may be a more efficient way to handle this
-                this.setSource(this.source);
-            }
+            'Delete ' + this.itemName
         );
+        if (confirmed) {
+            await this.source.delete(item);
+            // TODO: There may be a more efficient way to handle this
+            this.setSource(this.source);
+            return item;
+        }
     }
 };
 
-SaveOpenDialogMorph.prototype.shareItem = function() {
-    var myself = this,
-        proj = this.listField.selected,
+SaveOpenDialogMorph.prototype.shareItem = async function() {
+    var proj = this.listField.selected,
         entry = this.listField.active;
 
     if (proj) {
-        this.ide.confirm(
+        const confirmed = await this.ide.confirm(
             localize(
                 'Are you sure you want to publish'
             ) + '\n"' + proj.name + '"?',
-            'Share ' + this.itemName,
-            async function () {
-                myself.ide.showMessage(`sharing\n${myself.itemName.toLowerCase()}...`);
-                try {
-                    await myself.source.publish(proj);
-                    proj.public = true;
-                    myself.unshareButton.show();
-                    myself.shareButton.hide();
-                    entry.label.isBold = true;
-                    entry.label.drawNew();
-                    entry.label.changed();
-                    myself.buttons.fixLayout();
-                    myself.drawNew();
-                    myself.ide.showMessage('shared.', 2);
-                    return true;
-                } catch (err){
-                    myself.ide.cloudError().call(null, err.label, err.message);
-                }
-            }
+            'Share ' + this.itemName
         );
-    }
-    return false;
-};
-
-SaveOpenDialogMorph.prototype.unshareItem = function() {
-    const deferred = utils.defer();
-    const item = this.listField.selected;
-    const entry = this.listField.active;
-
-    if (item) {
-        const dialog = this.ide.confirm(
-            localize(
-                'Are you sure you want to unpublish'
-            ) + '\n"' + item.name + '"?',
-            'Unshare ' + this.itemName,
-            async () => {
-                this.ide.showMessage(`unsharing\n${this.itemName.toLowerCase()}...`);
-                await this.source.publish(item, true);
-
-                item.public = false;
-                this.shareButton.show();
-                this.unshareButton.hide();
-                entry.label.isBold = false;
+        if (confirmed) {
+            this.ide.showMessage(`sharing\n${this.itemName.toLowerCase()}...`);
+            try {
+                await this.source.publish(proj);
+                proj.public = true;
+                this.unshareButton.show();
+                this.shareButton.hide();
+                entry.label.isBold = true;
                 entry.label.drawNew();
                 entry.label.changed();
                 this.buttons.fixLayout();
                 this.drawNew();
-
-                this.ide.showMessage('unshared.', 2);
-                deferred.resolve(item);
+                this.ide.showMessage('shared.', 2);
+                return proj;
+            } catch (err){
+                this.ide.cloudError().call(null, err.label, err.message);
             }
-        );
-        dialog.cancel = () => {
-            deferred.resolve();
-            dialog.destroy();
-        };
-    } else {
-        deferred.resolve();
+        }
     }
+};
 
-    return deferred.promise;
+SaveOpenDialogMorph.prototype.unshareItem = async function() {
+    const item = this.listField.selected;
+    const entry = this.listField.active;
+
+    if (item) {
+        const confirmed = await this.ide.confirm(
+            localize(
+                'Are you sure you want to unpublish'
+            ) + '\n"' + item.name + '"?',
+            'Unshare ' + this.itemName
+        );
+        if (confirmed) {
+            this.ide.showMessage(`unsharing\n${this.itemName.toLowerCase()}...`);
+            await this.source.publish(item, true);
+
+            item.public = false;
+            this.shareButton.show();
+            this.unshareButton.hide();
+            entry.label.isBold = false;
+            entry.label.drawNew();
+            entry.label.changed();
+            this.buttons.fixLayout();
+            this.drawNew();
+
+            this.ide.showMessage('unshared.', 2);
+            return item;
+        }
+    }
 };
 
 SaveOpenDialogMorph.prototype.openItem = async function() {
@@ -6431,7 +6436,6 @@ SaveOpenDialogMorph.prototype.trySaveItem = async function() {
         name: this.nameField.contents().text.text,
         notes: this.notesText.text,
     };
-    const myself = this;
     const existingItem = detect(
         this.itemsList,
         function (item) {return item.name === newItem.name; }
@@ -6440,35 +6444,27 @@ SaveOpenDialogMorph.prototype.trySaveItem = async function() {
     const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
         sourceName + '...';
     const savedMsg = localize('Saved to the ') + sourceName + '!';
+    let shouldSave = true;
 
     if (existingItem) {
         this.ide.showMessage(savingMsg);
-        this.ide.confirm(
+        shouldSave = await this.ide.confirm(
             localize(
                 'Are you sure you want to replace'
             ) + '\n"' + newItem.name + '"?',
-            'Replace ' + this.itemName,
-            async function () {
-                try {
-                    myself.ide.showMessage(savingMsg);
-                    myself.saveItem(newItem);
-                    myself.ide.showMessage(savedMsg, 2);
-                    myself.saveItem(newItem);
-                    myself.destroy();
-                } catch (err) {
-                    myself.ide.cloudError().call(null, err.label, err.message);
-                }
-            }
+            'Replace ' + this.itemName
         );
-    } else {
+    }
+    if (shouldSave) {
         try {
             this.ide.showMessage(savingMsg);
-            this.saveItem(newItem);
+            await this.saveItem(newItem);
             this.ide.showMessage(savedMsg, 2);
             this.destroy();
         } catch (err) {
             this.ide.cloudError().call(null, err.label, err.message);
         }
+        return newItem;
     }
 };
 
@@ -6932,7 +6928,7 @@ CloudProjectsSource.prototype.open = async function(proj) {
     SnapCloud.getProject(
         proj.ID,
         async projectInfo => {
-            await this.ide.rawLoadCloudProject(projectInfo);
+            await this.ide.rawLoadCloudProject(projectInfo, proj.public);
             deferred.resolve(projectInfo);
         },
         function(msg, label) {
@@ -6972,13 +6968,17 @@ CloudProjectsSource.prototype.getPreview = function(project) {
 
 CloudProjectsSource.prototype.save = function(newProject) {
     const deferred = utils.defer();
-
+    const isSaveAs = newProject.name !== this.ide.room.name;
     const myself = this;
+
     SnapCloud.saveProject(
         this.ide,
         function (result) {
             if (result.name) {
                 myself.ide.room.silentSetRoomName(result.name);
+            }
+            if (isSaveAs) {
+                myself.ide.updateUrlQueryString();
             }
             deferred.resolve();
         },
@@ -7254,25 +7254,24 @@ ProjectDialogMorph.prototype.saveCloudProject = function (name) {
 };
 
 ProjectDialogMorph.prototype.shareItem = async function () {
-    const shared = await ProjectDialogMorph.uber.shareItem.call(this);
-    if (shared) {
-        const proj = this.listField.selected;
-        // Set the Shared URL if the project is currently open
-        if (proj.name === this.ide.projectName) {
-            var usr = SnapCloud.username,
-                projectId = 'Username=' +
-                    encodeURIComponent(usr.toLowerCase()) +
-                    '&ProjectName=' +
-                    encodeURIComponent(proj.name);
-            location.hash = 'present:' + projectId;
+    const project = await ProjectDialogMorph.uber.shareItem.call(this);
+    if (project) {
+        if (this.isCurrentProject(project)) {
+            this.ide.updateUrlQueryString(project.name, true);
         }
     }
 };
 
+ProjectDialogMorph.prototype.isCurrentProject = function (project) {
+    return project.ID === SnapCloud.projectId;
+};
+
 ProjectDialogMorph.prototype.unshareItem = async function () {
     const project = await ProjectDialogMorph.uber.unshareItem.call(this);
-    if (project && project.name === this.ide.projectName) {
-        location.hash = '';
+    if (project) {
+        if (this.isCurrentProject(project)) {
+            this.ide.updateUrlQueryString();
+        }
     }
 };
 

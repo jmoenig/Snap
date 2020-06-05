@@ -44,23 +44,52 @@ describe('ProjectDialogMorph', function() {
             await TestUtils.deleteProject(name, openDialog);
         });
 
-        it('should be able to publish/unpublish project', async function() {
-            this.timeout(10000);
-            const dialog = await TestUtils.saveProjectsBrowser();
-            TestUtils.setProjectsBrowserSource(dialog, 'cloud');
-            await driver.addBlock('doIfElse');
-            await TestUtils.saveProjectAs(name, dialog);
-            const openDialog = await TestUtils.openProjectsBrowser();
-            TestUtils.setProjectsBrowserSource(openDialog, 'cloud');
-            await driver.expect(
-                () => TestUtils.getProjectList(openDialog).includes(name),
-                'Project not in project browser after save'
-            );
+        describe('publish/unpublish', function() {
+            let openDialog;
+            beforeEach(async () => {
+                const dialog = await TestUtils.saveProjectsBrowser();
+                TestUtils.setProjectsBrowserSource(dialog, 'cloud');
+                await driver.addBlock('doIfElse');
+                await TestUtils.saveProjectAs(name, dialog);
+                openDialog = await TestUtils.openProjectsBrowser();
+                TestUtils.setProjectsBrowserSource(openDialog, 'cloud');
+                await driver.expect(
+                    () => TestUtils.getProjectList(openDialog).includes(name),
+                    'Project not in project browser after save'
+                );
+            });
 
-            await TestUtils.publishProject(name, openDialog);
-            // TODO: Check the URL?
+            it('should be able to publish project', async function() {
+                await TestUtils.publishProject(name, openDialog);
+            });
 
-            await TestUtils.unpublishProject(name);
+            it('should be able to unpublish project', async function() {
+                await TestUtils.publishProject(name, openDialog);
+                await TestUtils.unpublishProject(name);
+            });
+
+            it('should update URL to share link', async function() {
+                await TestUtils.publishProject(name, openDialog);
+                await driver.expect(
+                    () => {
+                        const url = driver.globals().location.href;
+                        return url.includes(`ProjectName=${name}`);
+                    },
+                    'URL not updated to share link'
+                );
+            });
+
+            it('should clear query string on save as', async function() {
+                await TestUtils.publishProject(name, openDialog);
+                await TestUtils.saveProjectAs(name + 'v2');
+                await driver.expect(
+                    () => {
+                        const url = driver.globals().location.href;
+                        return !url.includes(`ProjectName=${name}`);
+                    },
+                    'URL not updated to share link'
+                );
+            });
         });
     });
 
