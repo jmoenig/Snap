@@ -522,6 +522,11 @@ function CloudLibrarySource(ide) {
 }
 
 CloudLibrarySource.prototype.list = function() {
+    const isLoggedIn = !!SnapCloud.username;
+    if (!isLoggedIn) {
+        this.ide.showMessage(localize('You are not logged in'));
+    }
+
     const deferred = utils.defer();
     const url = `${SERVER_URL}/api/v2/libraries/user/`;
     this.ide.getURL(
