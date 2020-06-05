@@ -633,8 +633,6 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
     }
 };
 
-
-
 // IDE_Morph construction
 
 IDE_Morph.prototype.buildPanes = function () {

@@ -47,7 +47,7 @@
             const deferred = defer();
             this._requests[id] = deferred;
             reqData.id = id;
-            this.element.contentWindow.postMessage(reqData);
+            this.call(reqData);
 
             setTimeout(() => {
                 const deferred = this._requests[id];

@@ -11383,7 +11383,7 @@ SymbolMorph.prototype.drawSymbolFootprints = function (canvas, color) {
     ctx.arc(u * 2.25, u * 6.75, u , radians(-40), radians(-170), false);
     ctx.closePath();
     ctx.fill();
-     // right shoe
+    // right shoe
     // tip
     ctx.beginPath();
     ctx.arc(w - r, u * 4.5, r, radians(-180), radians(20), false);

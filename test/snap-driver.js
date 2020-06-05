@@ -398,7 +398,6 @@ SnapDriver.prototype.saveProjectAs = function(name, waitForSave=true) {
             const saveBtn = dialog.buttons.children[0];
             this.click(saveBtn);
             if (waitForSave) {
-                // TODO
                 return this.expect(
                     () => this.isShowingSavedMsg(),
                     `Did not see save message after "Save"`
