@@ -3539,14 +3539,14 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Export summary...',
         () => this.exportProjectSummary(),
-        'open a new browser browser window\n with a summary of this project'
+        'save a summary\nof this project'
     );
 
     if (shiftClicked) {
         menu.addItem(
             'Export summary with drop-shadows...',
             () => this.exportProjectSummary(true),
-            'open a new browser browser window' +
+            'download and save' +
                 '\nwith a summary of this project' +
                 '\nwith drop-shadows on all pictures.' +
                 '\nnot supported by all browsers',

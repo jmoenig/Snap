@@ -907,9 +907,8 @@ SnapTranslator.dict.de = {
         'nicht verwendete Bl\u00f6cke entfernt',
     'Export summary...':
         'Zusammenfassung exportieren...',
-    'open a new browser browser window\n with a summary of this project':
-        'eine Zusammenfassung dieses Projekts\nin einem neuen Browserfenster'
-            + 'anzeigen',
+    'save a summary\nof this project':
+        'eine Zusammenfassung\ndieses Projekts speichern',
     'Contents':
         'Inhalt',
     'Kind of':
