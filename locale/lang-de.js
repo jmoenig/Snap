@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-06-04', // this, too, will appear in the Translators tab
+        '2020-06-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1237,8 +1237,8 @@ SnapTranslator.dict.de = {
         'Alles zeigen',
     'pic...':
         'Bild exportieren...',
-    'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+    'save a picture\nof the stage':
+        'ein Bild der\nBühne speichern',
     'svg...':
         'SVG exportieren...',
     'export pen trails\nline segments as SVG':
