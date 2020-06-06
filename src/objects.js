@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-May-18';
+modules.objects = '2020-June-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -8685,7 +8685,7 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         () => ide.saveCanvasAs(this.fullImage(), this.name),
-        'open a new window\nwith a picture of the stage'
+        'save a picture\nof the stage'
     );
     menu.addLine();
     menu.addItem(

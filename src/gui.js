@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-June-01';
+modules.gui = '2020-June-06';
 
 // Declarations
 
@@ -8144,7 +8144,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                     this.object.name
                 );
             },
-            'open a new window\nwith a picture of the stage'
+            'save a picture\nof the stage'
         );
         if (this.object.trailsLog.length) {
             menu.addItem(
