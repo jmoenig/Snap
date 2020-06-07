@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-30';
+modules.threads = '2020-June-07';
 
 var ThreadManager;
 var Process;
@@ -1976,6 +1976,9 @@ Process.prototype.reportBasicNumbers = function (start, end) {
 Process.prototype.reportConcatenatedLists = function (lists) {
     var first, result, rows, row, rowIdx, cols, col;
     this.assertType(lists, 'list');
+    if (lists.isEmpty()) {
+        return lists;
+    }
     first = lists.at(1);
     this.assertType(first, 'list');
     if (first.isLinked) { // link everything
@@ -1999,7 +2002,7 @@ Process.prototype.reportConcatenatedLists = function (lists) {
 Process.prototype.concatenateLinkedLists = function (lists) {
     var first;
     if (lists.isEmpty()) {
-        return new List();
+        return lists;
     }
     first = lists.at(1);
     this.assertType(first, 'list');
