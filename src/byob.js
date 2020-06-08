@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-May-27';
+modules.byob = '2020-June-08';
 
 // Declarations
 
@@ -2258,6 +2258,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     var head, ide,
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
+        count = 0,
         element;
 
     this.definition.receiver = this.target; // only for serialization
@@ -2297,6 +2298,13 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     }
 
     this.definition.body = this.context(head);
+
+    // make sure the spec is unique
+    while (this.target.doubleDefinitionsFor(this.definition).length > 0) {
+        count += 1;
+        this.definition.spec = this.definition.spec + ' (' + count + ')';
+    }
+
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
