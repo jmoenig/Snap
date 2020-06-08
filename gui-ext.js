@@ -553,9 +553,9 @@ CloudLibrarySource.prototype.save = async function(item) {
     const {needsApproval} = JSON.parse(request.responseText);
     if (needsApproval) {
         this.ide.inform(
+            'Approval Required',
             'Approval is required to re-publish the given library.\n\n' +
             'It will be publicly available again\nfollowing a successful approval!',
-            'Approval Required'
         );
     }
 };
@@ -593,13 +593,15 @@ CloudLibrarySource.prototype.publish = async function(item, unpublish) {
     request.withCredentials = true;
 
     await utils.requestPromise(request);
-    const {needsApproval} = JSON.parse(request.responseText);
-    if (needsApproval) {
-        this.ide.inform(
-            'Approval is required to publish the given library.\n\n' +
-            'It will be publicly available automatically\nfollowing a successful approval!',
-            'Approval Required'
-        );
+    if (!unpublish) {
+        const {needsApproval} = JSON.parse(request.responseText);
+        if (needsApproval) {
+            this.ide.inform(
+                'Approval Required',
+                'Approval is required to publish the given library.\n\n' +
+                'It will be publicly available automatically\nfollowing a successful approval!',
+            );
+        }
     }
 };
 
