@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-06-06', // this, too, will appear in the Translators tab
+        '2020-06-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -893,8 +893,8 @@ SnapTranslator.dict.de = {
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
     'Export blocks...':
         'Bl\u00f6cke exportieren...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+    'save global custom block\ndefinitions as XML':
+        'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
     'Unused blocks...':
           'nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
