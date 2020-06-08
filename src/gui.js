@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-June-06';
+modules.gui = '2020-June-08';
 
 // Declarations
 
@@ -3525,8 +3525,7 @@ IDE_Morph.prototype.projectMenu = function () {
         menu.addItem(
             'Export blocks...',
             () => this.exportGlobalBlocks(),
-            'show global custom block definitions as XML' +
-                '\nin a new browser window'
+            'save global custom block\ndefinitions as XML'
         );
         menu.addItem(
             'Unused blocks...',
