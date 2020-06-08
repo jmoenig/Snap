@@ -1182,7 +1182,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-June-01';
+var morphicVersion = '2020-June-08';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8516,21 +8516,14 @@ StringMorph.prototype.slotPosition = function (slot) {
     // where the cursor should be placed
     var txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text,
-        dest = Math.min(Math.max(slot, 0), txt.length),
-        xOffset,
-        x,
-        y,
-        idx;
+        dest = Math.min(Math.max(slot, 0), txt.length);
 
-    xOffset = 0;
     this.measureCtx.font = this.font();
-    for (idx = 0; idx < dest; idx += 1) {
-        xOffset += this.measureCtx.measureText(txt[idx]).width;
-    }
     this.pos = dest;
-    x = this.left() + xOffset;
-    y = this.top();
-    return new Point(x, y);
+    return new Point(
+        this.left() + this.measureCtx.measureText(txt.slice(0, dest)).width,
+        this.top()
+    );
 };
 
 StringMorph.prototype.slotAt = function (aPoint) {
@@ -9268,26 +9261,18 @@ TextMorph.prototype.slotPosition = function (slot) {
         ctx = this.measureCtx,
         shadowHeight = Math.abs(this.shadowOffset.y),
         xOffset = 0,
-        yOffset,
-        x,
-        y,
-        idx;
+        yOffset;
 
     ctx.font = this.font();
     yOffset = colRow.y * (fontHeight(this.fontSize) + shadowHeight);
-    for (idx = 0; idx < colRow.x; idx += 1) {
-        xOffset += ctx.measureText(this.lines[colRow.y][idx]).width;
-    }
-    x = this.left() + xOffset;
-    y = this.top() + yOffset;
-    return new Point(x, y);
+    xOffset = ctx.measureText(this.lines[colRow.y].slice(0, colRow.x)).width;
+    return new Point(this.left() + xOffset, this.top() + yOffset);
 };
 
 TextMorph.prototype.slotAt = function (aPoint) {
     // answer the slot (index) closest to the given point taking
     // in account how far from the middle of the character it is,
     // so the cursor can be moved accordingly
-
     var charX,
         row = 0,
         col = 0,
