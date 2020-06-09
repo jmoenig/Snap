@@ -498,3 +498,12 @@ SnapDriver.prototype.connect = function() {
     delete this.ide().sockets.onClose;
     this.ide().sockets.onClose();
 };
+
+SnapDriver.prototype.actionsSettled = async function() {
+    const {SnapActions} = this.globals();
+    const pendingActions = SnapActions._attemptedLocalActions
+        .concat(SnapActions._pendingLocalActions)
+        .map(action => action.promise);
+
+    await Promise.allSettled(pendingActions);
+};

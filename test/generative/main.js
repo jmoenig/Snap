@@ -36,7 +36,7 @@ async function runTest(driver, options) {
         if (options.verbose) {
             console.log(action);
         }
-        await waitUntilActionsSettled(SnapActions);
+        await driver.actionsSettled();
 
         // Test that the last action can be undone (and redone)
         if (undoCount < SnapUndo.allEvents.length) {
@@ -56,14 +56,6 @@ async function runTest(driver, options) {
         }
         await driver.sleep(250);
     }
-}
-
-async function waitUntilActionsSettled(SnapActions) {
-    const pendingActions = SnapActions._attemptedLocalActions
-        .concat(SnapActions._pendingLocalActions)
-        .map(action => action.promise);
-
-    await Promise.allSettled(pendingActions);
 }
 
 function isIDELoaded(driver) {
