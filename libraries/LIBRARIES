@@ -8,6 +8,7 @@ bar-charts.xml	Bar charts from tables	Takes a table (typically from a CSV data s
 cases.xml	Multi-branched conditional (switch)	Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!
 leap-library.xml	LEAP Motion controller	Report hand positions from LEAP Motion controller (leapmotion.com).
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
+colors.xml	Crayons, fair hues, color done right	Incorporates the crayon library and the set RGB library.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.
 setrgb.xml	Set RGB or HSV pen color	Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).
 try-catch.xml	Catch errors in a script	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
 multiline.xml	Allow multi-line text input to a block	In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
