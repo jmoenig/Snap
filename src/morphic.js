@@ -26,55 +26,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-    *** UNDER CONSTRUCTIOM ***
-
-     Morphic changes to v1:
-
-     * noticesTransparentClick => !isFreeForm (reversed default)
-     * drawOn() / fullDrawOn() takes context instead of Canvas as first arg
-     * drawNew() is deprecated => render(), also takes context as arg
-     * rerender() to earmark for rerendering
-     * image has a getter method: getImage()
-     * image has been renamed to cachedImage
-     * isCachingImage flag (default: false)
-     * shouldRerender flag (default: false)
-     * fixLayout() determines extent and arranges submorphs, if any, gets called
-       from setExtent()
-     * fixHolesLayout
-
-     "silent" - functions are no longer needed:
-
-     * silentSetExtent => bounds.setExtent()
-     * silentMoveBy
-     * silentSetPosition
-     * silentSetWidth => bounds.setWidth()
-     * silentSetHeight = bounds.setHeight()
-
-     likewise "silent" parameters are no longer needed and supported
-
-     * cachedFullImage
-     * cachedFullBounds
-
-     are deprecated
-
-     "trackChanges" and other damage-list housekeeping tweaks are no longer
-     needed and no longer supported, except for the Pen constructor's isWarped
-     property and its methods, such as startWarp and endWarp.
-     
-     Pen >> wantsRedraw is no longer needed and deprecated
-
-     holes:
-     Morphs have a list of rectangles representing "untouchable" areas
-     
-     * virtualKeyboard property and Morphic preference has been deprecated
-     * fullImageClassic() => is always just fullImage()
-     * keyboardReceiver => keyboardFocus
-
-     * keyboard navigation can be activated for any visible menu by pressing an arbitrary key
-
-    * new "noDropShadow" property for Morphs that already have built-in shadows (Menus, SpeechBubbles)
-    * new "fullShadowSource" flag for Morphs, default is true, turn off (false) to only use the simple image instead of fullImage()
-
     documentation contents
     ----------------------
     I. inheritance hierarchy
@@ -100,6 +51,13 @@
             (h) text editing events
         (4) stepping
         (5) creating new kinds of morphs
+            (a) drawing the shape
+            (b) determining extent and arranging submorphs
+            (c) pixel-perfect pointing events
+            (d) caching the shape
+            (e) holes
+            (f) updating
+            (g) duplicating
         (6) development and user modes
         (7) turtle graphics
         (8) supporting high-resolution "retina" screens
@@ -897,25 +855,156 @@
     --------------------------------
     The real fun begins when you start to create new kinds of morphs
     with customized shapes. Imagine, e.g. jigsaw puzzle pieces or
-    musical notes. For this you have to override the default
+    musical notes.
+
+    When you create your own morphs, you'll want to think about how to
+    graphically render it, how to determine its size and whether it needs
+    to arrange any other parts ("submorphs). There are also ways to specify
+    its collision detection behavior and define "untouchable" regions
+    ("holes").
+
+
+    (a) drawing the shape
+    ---------------------
+    For this you have to override the default
 
         render(ctx)
 
     method.
 
-    This method draws the morph's shape with a 2d graphics context.
+    This method draws the morph's shape using a given 2d graphics context.
+    Note that any coordinates used in the render() method must be relative
+    to the morph's own position, i.e. you don't need to worry about
+    translating the shape yourself.
 
-    explain
-
-        * isCachingImage
-        * isFreeForm = bool
-
-    Use the following template for a start:
+    You can use the following template for a start:
 
         MyMorph.prototype.render = function(ctx) {
-            // use ctx to paint stuff here
+            ctx.fillStyle = this.color.toString();
+            ctx.fillRect(0, 0, this.width(), this.height());
         };
 
+    it renders the morph as a solid rectangle completely filling its
+    area with its current color.
+    
+    Notice how the coordinates for the fillRect() call are relative
+    to the morph's own position: The rendered rectangle's origin is always
+    located at (0, 0) regardless of the morph's actual position in the World.
+
+
+    (b) determining extent and arranging submorphs
+    ----------------------------------------------
+    If your new morph also needs to determine its extent and, e.g. to
+    encompass one or several other morphs, or arrange the layout of its
+    submorphs, make sure to also override the default
+    
+        fixLayout()
+    
+    method.
+    
+    NOTE: If you need to set the morph's extent inside, in order to avoid
+    infinite recursion instead of calling morph.setExtent() - which will
+    in turn call morph.fixLayout() again - directly modify the morph's
+    
+        bounds
+
+    property. Bounds is a rectable on which you can also use the same
+    size-setters, e.g. by calling:
+    
+        this.bounds.setExtent()
+
+
+    (c) pixel-perfect pointing events
+    ---------------------------------
+    In case your new morph needs to support pixel-perfect collision detection
+    with other morphs or pointing devices such as the mouse or a stylus you
+    can set the inherited attribute
+    
+        isFreeForm = bool
+    
+    to "true" (default is "false"). This makes sense the more your morph's
+    visual shape diverges from a rectangle. For example, if you create a
+    circular filled morph the default setting will register mouse-events
+    anywhere within its bounding box, e.g. also in the transparent parts
+    between the bounding box's corners outside of the circle's bounds.
+    Instead you can specify your irregulary shaped morph to only register
+    pointing events (mouse and touch) on solid, non-transparent parts.
+
+    Notice, however, that such pixel-perfect collision detection might
+    strain processing resources, especially if applied liberally.
+
+    In order to mitigate unfavorable processor loads for pixel-perfect
+    collision deteciton of irregularly shaped morphs there are two strategies
+    to consider: Caching the shape and specifying "untouchable" regions.
+
+
+    (d) caching the shape
+    ---------------------
+    In case of pixel-perfect free-form collision detection it makes sense to
+    cache your morph's current shape, so it doesn't have to be re-drawn onto a
+    new Canvas element every time the mouse moves over its bounding box.
+    For this you can set then inherited
+    
+        isCachingImage = bool
+        
+    attribute to "true" instead of the default "false" value. This will
+    significantly speed up collision detection and smoothen animations that
+    continuously perform collision detection. However, it will also consume
+    more memory. Therefore it's best to use this setting with caution.
+    
+    Snap! caches the shapes of sprites but not those of blocks. Instead it
+    manages the insides of C- and E-shaped blocks through the morphic "holes"
+    mechanism.
+
+
+    (e) holes
+    ---------
+    An alternative albeit not as precise and general way for handling
+    irregularly shaped morphs with "untouchable" regions is to specify a set
+    of rectangular areas in which pointing events (mouse or touch) are not
+    registered.
+
+    By default the inherited
+    
+        holes = []
+
+    property is an empty array. You can add one or more morphic Rectangle
+    objects to this list, representing regions, in which occurring events will
+    instead be passed on to the morph underneath.
+    
+    Note that, same with the render() method, the coordinates of these
+    rectangular holes must be specified relative to your morph's position.
+
+    If you specify holes you might find the need to adjust their layout
+    depending on the layout of your morph. To accomplish this you can override
+    the inherited
+    
+        fixHolesLayout()
+
+    method.
+
+
+    (f) updating
+    ------------
+    One way for morphs to become alive is form them to literally "morph" their
+    shape depending on whicher contest you wish them to react to. For example,
+    you might want the user to interactively draw a shape using their fingers
+    on a touch screen device, or you want the user to be able to "pinch" or
+    otherwise distort a shape interactively. In all of these situations you'll
+    want your morph to frequently rerender its shape.
+    
+    You can accomplish this, by calling
+
+        rerender()
+
+    after every change to your morph's appearance that requires rerendering.
+    
+    Such changes are usually only happening when the morph's dimensions or
+    other visual properties - such as its color - changes.
+
+
+    (g) duplicating
+    ---------------
     If your new morph stores or references to other morphs outside of
     the submorph tree in other properties, be sure to also override the
     default
@@ -3378,12 +3467,16 @@ Morph.prototype.fixLayout = function () {
     // implemented by my heirs
     // determine my extent and arrange my submorphs, if any
     // default is to do nothing
+    // NOTE: If you need to set the extent, in order to avoid
+    // infinite recursion instead of calling setExtent() (which will
+    // in turn call fixLayout() again) directly modify the bounds
+    // property, e.g. like this: this.bounds.setExtent()
     return;
 };
 
 Morph.prototype.fixHolesLayout = function () {
     // implemented by my heirs
-    // determine my extent and arrange my submorphs, if any
+    // arrange my untouchable areas, if any
     // default is to do nothing
     return;
 };
