@@ -200,8 +200,7 @@
     III. yet to implement
     ---------------------
     - keyboard support for scroll frames and lists
-    - full keyboard support for menus (partial support exists)
-    - virtual keyboard support for Android and IE
+    - virtual keyboard support for Android
 
 
     IV. open issues
@@ -239,7 +238,7 @@
         * a stepping mechanism (a time-sharing multiplexer for lively
           user interaction ontop of a single OS/browser thread)
         * progressive display updates (only dirty rectangles are
-          redrawn in each display cycle)
+          redrawn at each display cycle)
         * a tree structure
         * a single World per Canvas element (although you can have
           multiple worlds in multiple Canvas elements on the same web
@@ -248,7 +247,7 @@
           events)
         * a single text entry focus per World
 
-    In its current state morphic.js doesn't support Transforms (you
+    In its current state morphic.js doesn't support transforms (you
     cannot rotate Morphs), but with PenMorph there already is a simple
     LOGO-like turtle that you can use to draw onto any Morph it is
     attached to. I'm planning to add special Morphs that support these
@@ -280,11 +279,11 @@
 
     Each World has an - invisible - "Hand" resembling the mouse cursor
     (or the user's finger on touch screens) which handles mouse events,
-    and may also have a keyboardReceiver to handle key events.
+    and may also have a keyboard focus to handle key events.
 
     The basic idea of Morphic is to continuously run display cycles and
     to incrementally update the screen by only redrawing those  World
-    regions    which have been "dirtied" since the last redraw. Before
+    regions which have been "dirtied" since the last redraw. Before
     each shape is processed for redisplay it gets the chance to perform
     a "step" procedure, thus allowing for an illusion of concurrency.
 
@@ -315,7 +314,6 @@
 
                 window.onload = function () {
                     world = new WorldMorph(document.getElementById('world'));
-                    // +++ world.worldCanvas.focus();
                     world.isDevMode = true;
                     loop();
                 };
@@ -328,7 +326,7 @@
         </head>
         <body style="margin: 0;">
             <canvas id="world" tabindex="1" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
@@ -358,7 +356,7 @@
             <title>Morphic!</title>
             <script type="text/javascript" src="morphic.js"></script>
             <script type="text/javascript">
-                var world1, world2;
+                var	world1, world2;
 
                 window.onload = function () {
                     disableRetinaSupport();
@@ -370,7 +368,7 @@
                 };
 
                 function loop() {
-                    requestAnimationFrame(loop);
+            requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -378,9 +376,9 @@
         </head>
         <body>
             <p>first world:</p>
-            <canvas id="world1" tabindex="1" width="600" height="400" />
+            <canvas id="world1" tabindex="1" width="600" height="400"></canvas>
             <p>second world:</p>
-            <canvas id="world2" tabindex="2" width="400" height="600" />
+            <canvas id="world2" tabindex="2" width="400" height="600"></canvas>
         </body>
     </html>
 
@@ -411,7 +409,6 @@
 
                     worldCanvas = document.getElementById('world');
                     world = new WorldMorph(worldCanvas);
-                    // +++ world.worldCanvas.focus();
                     world.isDevMode = false;
                     world.setColor(new Color());
 
@@ -444,7 +441,7 @@
         </head>
         <body bgcolor='black' style="margin: 0;">
             <canvas id="world" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
@@ -499,7 +496,7 @@
     events.
 
     These system events are dispatched within the morphic World by the
-    World's Hand and its keyboardReceiver (usually the active text
+    World's Hand and its keyboardFocus (usually the active text
     cursor).
 
 
@@ -678,12 +675,12 @@
         droppedImage(aCanvas, name)
         droppedSVG(anImage, name)
 
-    events to interested Morphs at the mouse pointer. If you want you Morph
+    events to interested Morphs at the mouse pointer. If you want your Morph
     to e.g. import outside images you can add the droppedImage() and / or the
     droppedSVG() methods to it. The parameter passed to the event handles is
     a new offscreen canvas element representing a copy of the original image
     element which can be directly used, e.g. by assigning it to another
-    Morph's image property. In the case of a dropped SVG it is an image
+    Morph's cachedImage property. In the case of a dropped SVG it is an image
     element (not a canvas), which has to be rasterized onto a canvas before
     it can be used. The benefit of handling SVGs as image elements is that
     rasterization can be deferred until the destination scale is known, taking
@@ -715,16 +712,16 @@
     (e) keyboard events
     -------------------
     The World dispatches the following key events to its active
-    keyboardReceiver:
+    keyboard focus:
 
         keypress
         keydown
         keyup
 
-    Currently the only morph which acts as keyboard receiver is
-    CursorMorph, the basic text editing widget. If you wish to add
-    keyboard support to your morph you need to add event handling
-    methods for
+    Currently the only morphs which acts as keyboard focus are
+    CursorMorph - the basic text editing widget - and MenuMorph elements.
+    If you wish to add keyboard support to your morph you need to add event
+    handling methods for
 
         processKeyPress(event)
         processKeyDown(event)
@@ -732,7 +729,7 @@
 
     and activate them by assigning your morph to the World's
 
-        keyboardReceiver
+        keyboardFocus
 
     property.
 
@@ -851,7 +848,7 @@
 
         reactToSliderEdit(StringOrTextMorph)
 
-    events is dispatched, allowing for "Bret-Victor" style "live coding"
+    events is dispatched, allowing for "Bret-Victor" style "scrubbing"
     applications.
 
     In addition to user-initiated events text elements also emit
@@ -860,8 +857,8 @@
     get a chance to react if something about the embedded text has been
     modified programmatically. These events are:
 
-        layoutChanged() - sent from instances of TextMorph
-        fixLayout() - sent from instances of StringMorph
+        layoutChanged() - sent only from instances of TextMorph
+        fixLayout() - sent from instances of all Morphs, including StringMorphs
 
     they are different so that Morphs which contain both multi-line and
     single-line text elements can hold them apart.
@@ -996,18 +993,18 @@
     the following properties of PenMorph are relevant for turtle
     graphics:
 
-        color        - a Color
+        color       - a Color
         size        - line width of pen trails
-        heading        - degrees
-        isDown        - drawing state
+        heading     - degrees
+        isDown      - drawing state
 
     the following commands can be used to actually draw something:
 
         up()        - lift the pen up, further movements leave no trails
-        down()        - set down, further movements leave trails
-        clear()        - remove all trails from the current parent
-        forward(n)    - move n steps in the current direction (heading)
-        turn(n)        - turn right n degrees
+        down()      - set down, further movements leave trails
+        clear()     - remove all trails from the current parent
+        forward(n)  - move n steps in the current direction (heading)
+        turn(n)     - turn right n degrees
 
     Turtle graphics can best be explored interactively by creating a
     new PenMorph object and by manipulating it with the inspector
@@ -1182,7 +1179,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-June-08';
+var morphicVersion = '2020-June-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
