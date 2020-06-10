@@ -17,7 +17,6 @@ bignumbers.xml	Infinite precision integers, exact rationals, complex	The full Sc
 crayons.xml	Provide 100 selected colors	to use instead of hue for better selection
 speech_module.xml	Text to speech	output text using speech synthesis.
 animation_module.xml	Animation	glide, grow and rotate using easing functions.
-pixel_module.xml	Pixels	manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
 atomic_HOFs_module.xml	"Bigger" Data	[EXPERIMENTAL] crunch large lists very fast
 frequency_distribution_module.xml	Frequency Distribution Analysis	[EXPERIMENTAL] analyze data for frequency distribution
