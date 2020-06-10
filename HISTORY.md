@@ -1,10 +1,41 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 6.0.0 beta:
 * **New Features:**
+    * new Morphic architecture, faster loading, smaller memory footprint, mobile-friendly
+    * hyper-blocks
+    * new "send msg to sprite" primitive in control
+    * new  "index of" primitive in lists
+    * new fast "append" reporter in lists
+    * show login status in the cloud button (outline = logged out, solid = logged in)
+    * custom drop-downs (experimental, uses JS)
+    * blockify lists / tables with atomic values in watchers
+    * extended libraries (APL, thanks, Brian) and programmatic handling of variables (thanks, Joan)
+    * "result pic..." context menu entry for reporters (used to be hidden "script pic with result..." option)
 * **Notable Changes:**
+    * repeated WARPs inside loops have been sped up
+    * duplicated blocks / scripts are grabbed by their top-left corner rather than their center
+    * close all widgets when opening a new project
+    * scan first ten rows of a list to determine the number of columns to show in table views
+    * give duplicated custom block definitions unique names
+    * sort sound and message names in drop-down menus alphabetically
+    * changed result for FIND to empty instead of false if none is found
+    * new flat design
+    * increased contrast in dark mode
+    * toggling Retina support has been hidden, because it no longer works the same
 * **Notable Fixes:**
+    * multi-c slots embedding reporters has been disabled
+    * programmatically changing a clone from "permanent" to "temporary" now works in presentation mode
+    * costumes and sounds of clones are now properly shadowed when modifying them programmatically
 * **Translation Updates:**
+    * New Hebrew translation
+    * Ukranian
+    * Catalan
+    * Portuguese
+    * Japanese
+    * German
 
 ## 5.4.5:
 * **Notable Change:**
