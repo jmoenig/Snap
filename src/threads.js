@@ -1755,19 +1755,10 @@ Process.prototype.reportCDR = function (list) {
 };
 
 Process.prototype.doAddToList = function (element, list) {
-    var rcvr;
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
-        // check whether the list is an attribute that needs to be shadowed
-        rcvr = this.blockReceiver();
-        if (this.reportIsIdentical(list, rcvr.costumes)) {
-            rcvr.shadowAttribute('costumes');
-            list = rcvr.costumes;
-        } else if (this.reportIsIdentical(list, rcvr.sounds)) {
-            rcvr.shadowAttribute('sounds');
-            list = rcvr.sounds;
-        }
+        list = this.shadowListAttribute(list);
     }
     list.add(element);
 };
@@ -1775,6 +1766,9 @@ Process.prototype.doAddToList = function (element, list) {
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
     this.assertType(list, 'list');
+    if (list.type) {
+        list = this.shadowListAttribute(list);
+    }
     if (this.inputOption(index) === 'all') {
         return list.clear();
     }
@@ -1794,6 +1788,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        list = this.shadowListAttribute(list);
     }
     if (index === '') {
         return null;
@@ -1812,6 +1807,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        list = this.shadowListAttribute(list);
     }
     if (index === '') {
         return null;
@@ -1823,6 +1819,20 @@ Process.prototype.doReplaceInList = function (index, list, element) {
         idx = list.length();
     }
     list.put(element, idx);
+};
+
+Process.prototype.shadowListAttribute = function (list) {
+    // private - check whether the list is an attribute that needs to be
+    // shadowed. Use only on typed lists for performance.
+    var rcvr = this.blockReceiver();
+    if (list === rcvr.costumes) {
+        rcvr.shadowAttribute('costumes');
+        list = rcvr.costumes;
+    } else if (list === rcvr.sounds) {
+        rcvr.shadowAttribute('sounds');
+        list = rcvr.sounds;
+    }
+    return list;
 };
 
 // Process accessing list elements - hyper dyadic
