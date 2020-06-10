@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-07';
+modules.threads = '2020-June-10';
 
 var ThreadManager;
 var Process;
@@ -1755,9 +1755,19 @@ Process.prototype.reportCDR = function (list) {
 };
 
 Process.prototype.doAddToList = function (element, list) {
+    var rcvr;
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        // check whether the list is an attribute that needs to be shadowed
+        rcvr = this.blockReceiver();
+        if (this.reportIsIdentical(list, rcvr.costumes)) {
+            rcvr.shadowAttribute('costumes');
+            list = rcvr.costumes;
+        } else if (this.reportIsIdentical(list, rcvr.sounds)) {
+            rcvr.shadowAttribute('sounds');
+            list = rcvr.sounds;
+        }
     }
     list.add(element);
 };
