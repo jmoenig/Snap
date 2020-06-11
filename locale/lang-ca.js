@@ -1164,7 +1164,7 @@ SnapTranslator.dict.ca = {
     // Project Manager
     'Untitled':
         'Sense títol',
-    'Open un Project':
+    'Open Project':
         'Obre projecte',
     '(empty)':
         '(buit)',
