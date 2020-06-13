@@ -1268,7 +1268,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-June-10';
+var morphicVersion = '2020-June-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12473,6 +12473,12 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     if (this.cursor) {
         this.cursor.destroy();
     }
+
+    // some magic we apparently need for Android
+    this.worldCanvas.focus();
+    this.keyboardHandler.focus();
+
+    // create a new cursor
     this.cursor = new CursorMorph(aStringOrTextMorph, this.keyboardHandler);
     this.keyboardFocus = this.cursor;
     aStringOrTextMorph.parent.add(this.cursor);
