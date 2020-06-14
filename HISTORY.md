@@ -29,6 +29,7 @@
     * multi-c slots embedding reporters has been disabled
     * programmatically changing a clone from "permanent" to "temporary" now works in presentation mode
     * costumes and sounds of clones are now properly shadowed when modifying them programmatically
+    * fixed editing cells in multi-page list watchers
 * **Translation Updates:**
     * New Hebrew translation
     * Ukranian
