@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-04';
+modules.blocks = '2020-June-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12412,6 +12412,10 @@ CommentMorph.prototype.toggleExpand = function () {
     this.isCollapsed = !this.isCollapsed;
     this.fixLayout();
     this.align();
+    if (!this.isCollapsed && this.parent) {
+        this.parent.add(this); // come to front
+        this.changed();
+    }
 };
 
 // CommentMorph layout:

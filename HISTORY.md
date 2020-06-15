@@ -24,12 +24,14 @@
     * changed result for FIND to empty instead of false if none is found
     * new flat design
     * increased contrast in dark mode
-    * toggling Retina support has been hidden, because it no longer works the same
+    * toggling Retina support has been hidden (because it no longer works the same)
 * **Notable Fixes:**
     * multi-c slots embedding reporters has been disabled
     * programmatically changing a clone from "permanent" to "temporary" now works in presentation mode
     * costumes and sounds of clones are now properly shadowed when modifying them programmatically
     * fixed editing cells in multi-page list watchers
+    * recursive calls to "broadcast and wait" execute smoothly again
+    * expanding a collapsed comment now brings it to the front
 * **Translation Updates:**
     * New Hebrew translation
     * Ukranian
