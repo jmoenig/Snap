@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-11';
+modules.threads = '2020-June-15';
 
 var ThreadManager;
 var Process;
@@ -3417,9 +3417,11 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
-        this.context.activeSends.forEach(proc =>
-            proc.runStep()
-        );
+        if (this.isRunning()) {
+            this.context.activeSends.forEach(proc =>
+                proc.runStep()
+            );
+        }
     }
     this.context.activeSends = this.context.activeSends.filter(proc =>
         proc.isRunning()
