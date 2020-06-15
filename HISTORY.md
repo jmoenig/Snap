@@ -31,7 +31,7 @@
     * costumes and sounds of clones are now properly shadowed when modifying them programmatically
     * fixed editing cells in multi-page list watchers
     * recursive calls to "broadcast and wait" execute smoothly again
-    * expanding a collapsed comment now brings it to the front
+    * expanding a collapsed comment or clicking on it now brings it to the front
 * **Translation Updates:**
     * New Hebrew translation
     * Ukranian

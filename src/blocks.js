@@ -12412,10 +12412,22 @@ CommentMorph.prototype.toggleExpand = function () {
     this.isCollapsed = !this.isCollapsed;
     this.fixLayout();
     this.align();
-    if (!this.isCollapsed && this.parent) {
-        this.parent.add(this); // come to front
+    if (!this.isCollapsed) {
+        this.comeToFront();
+    }
+};
+
+CommentMorph.prototype.comeToFront = function () {
+    if (this.parent) {
+        this.parent.add(this);
         this.changed();
     }
+};
+
+// CommentMorph events:
+
+CommentMorph.prototype.mouseClickLeft = function () {
+    this.comeToFront();
 };
 
 // CommentMorph layout:
@@ -12424,6 +12436,7 @@ CommentMorph.prototype.layoutChanged = function () {
     // react to a change of the contents area
     this.fixLayout();
     this.align();
+    this.comeToFront();
 };
 
 CommentMorph.prototype.fixLayout = function () {
