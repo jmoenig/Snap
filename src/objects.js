@@ -892,7 +892,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'touching %clr ?'
         },
         reportColorIsTouchingColor: {
-            only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
