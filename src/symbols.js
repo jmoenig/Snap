@@ -527,9 +527,9 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
         r = w / 2,
-        spikes = 7,
+        spikes = 8,
         off = 8,
-        shift = 12,
+        shift = 10,
         angle, i;
 
     ctx.fillStyle = color.toString();
