@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-May-28';
+modules.symbols = '2020-June-17';
 
 var SymbolMorph;
 
@@ -527,21 +527,48 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
         r = w / 2,
-        e = w / 6;
+        spikes = 7,
+        off = 8,
+        shift = 12,
+        angle, i;
 
-    ctx.strokeStyle = color.toString();
-    ctx.lineWidth = w / 7;
+    ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r, e * 1.5, radians(0), radians(360), false);
-    ctx.moveTo(0, r);
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle),
+            radians(i * angle + off)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.7,
+            radians(i * angle - shift + angle * 0.5),
+            radians(i * angle + shift + angle * 0.5)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off),
+            radians((i + 1) * angle)
+        );
+    }
     ctx.lineTo(w, r);
-    ctx.moveTo(r, 0);
-    ctx.lineTo(r, w);
-    ctx.moveTo(e, e);
-    ctx.lineTo(w - e, w - e);
-    ctx.moveTo(w - e, e);
-    ctx.lineTo(e, w - e);
-    ctx.stroke();
+
+    // draw the hole in the middle
+    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
 };
 
 SymbolMorph.prototype.renderSymbolFile = function (ctx, color) {
