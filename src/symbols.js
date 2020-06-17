@@ -137,6 +137,7 @@ SymbolMorph.prototype.names = [
     'keyboard',
     'keyboardFilled',
     'globe',
+    'globeBig',
     'list'
 ];
 
@@ -440,6 +441,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'globe':
         this.renderSymbolGlobe(ctx, aColor);
+        break;
+    case 'globeBig':
+        this.renderSymbolGlobeBig(ctx, aColor);
         break;
     case 'list':
         this.renderSymbolList(ctx, aColor);
@@ -1996,7 +2000,11 @@ SymbolMorph.prototype.renderSymbolKeyboardFilled = function (ctx, color) {
     ctx.fillRect(0, 0, w, h);
 };
 
-SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
+SymbolMorph.prototype.renderSymbolGlobeBig = function (ctx, color) {
+    this.renderSymbolGlobe(ctx, color, true);
+};
+
+SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color, detailed) {
     // draw a stylized globe
     var w = this.symbolWidth(),
         l = Math.max(w / 30, 0.5);
@@ -2008,15 +2016,14 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
 
-    // more detailed version, commmented out
-    /*
-    ctx.moveTo(l * 3, w / 4);
-    ctx.lineTo(w - l * 3, w / 4);
-    ctx.stroke();
-    ctx.moveTo(l * 3, 3 * w / 4);
-    ctx.lineTo(w - l * 3, 3 * w / 4);
-    ctx.stroke();
-    */
+    if (detailed) {
+        ctx.moveTo(l * 3, w * 0.3);
+        ctx.lineTo(w - l * 3, w * 0.3);
+        ctx.stroke();
+        ctx.moveTo(l * 3, w * 0.7);
+        ctx.lineTo(w - l * 3, w * 0.7);
+        ctx.stroke();
+    }
     
     // single line version, looks better when small:
     ctx.beginPath();
