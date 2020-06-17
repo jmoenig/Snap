@@ -538,7 +538,7 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
         spikes = 8,
         off = 8,
         shift = 10,
-        angle, i;
+        angle, turn, i;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
@@ -546,27 +546,28 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     // draw the spiked outline
     ctx.moveTo(w, r);
     angle = 360 / spikes;
+    turn = angle * 0.5;
     for (i = 0; i < spikes; i += 1) {
         ctx.arc(
             r,
             r,
             r,
-            radians(i * angle),
-            radians(i * angle + off)
+            radians(i * angle + turn),
+            radians(i * angle + off + turn)
         );
         ctx.arc(
             r,
             r,
             r * 0.7,
-            radians(i * angle - shift + angle * 0.5),
-            radians(i * angle + shift + angle * 0.5)
+            radians(i * angle - shift + angle * 0.5 + turn),
+            radians(i * angle + shift + angle * 0.5 + turn)
         );
         ctx.arc(
             r,
             r,
             r,
-            radians((i + 1) * angle - off),
-            radians((i + 1) * angle)
+            radians((i + 1) * angle - off + turn),
+            radians((i + 1) * angle + turn)
         );
     }
     ctx.lineTo(w, r);
