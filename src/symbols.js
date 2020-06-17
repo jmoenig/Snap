@@ -1973,12 +1973,12 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
 
     ctx.beginPath();
     ctx.moveTo(w / 2, l / 2);
-    ctx.arcTo(0, w / 2, w / 2, w, w * 0.66);
+    ctx.arcTo(0, w / 2, w / 2, w, w * 0.75);
     ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(w / 2, l / 2);
-    ctx.arcTo(w, w / 2, w / 2, w, w * 0.66);
+    ctx.arcTo(w, w / 2, w / 2, w, w * 0.75);
     ctx.stroke();
 };
 
