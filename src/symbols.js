@@ -1957,11 +1957,11 @@ SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color) {
 
     // more detailed version, commmented out
     /*
-    ctx.moveTo(l, w / 3);
-    ctx.lineTo(w - l, w / 3);
+    ctx.moveTo(l * 3, w / 4);
+    ctx.lineTo(w - l * 3, w / 4);
     ctx.stroke();
-    ctx.moveTo(l, 2 * w / 3);
-    ctx.lineTo(w - l, 2 * w / 3);
+    ctx.moveTo(l * 3, 3 * w / 4);
+    ctx.lineTo(w - l * 3, 3 * w / 4);
     ctx.stroke();
     */
     
