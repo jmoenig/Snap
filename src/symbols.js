@@ -70,6 +70,7 @@ SymbolMorph.prototype.names = [
     'pointRight',
     'stepForward',
     'gears',
+    'gearBig',
     'file',
     'fullScreen',
     'normalScreen',
@@ -238,6 +239,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'gears':
         this.renderSymbolGears(ctx, aColor);
+        break;
+    case 'gearBig':
+        this.renderSymbolGearBig(ctx, aColor);
         break;
     case 'file':
         this.renderSymbolFile(ctx, aColor);
@@ -565,6 +569,55 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
 
     // draw the hole in the middle
     ctx.arc(r, r, r * 0.3, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
+    // draw a large gear
+    var w = this.symbolWidth(),
+        r = w / 2,
+        spikes = 10,
+        off = 7,
+        shift = 8,
+        angle, i;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle),
+            radians(i * angle + off)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.8,
+            radians(i * angle - shift + angle * 0.5),
+            radians(i * angle + shift + angle * 0.5)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off),
+            radians((i + 1) * angle)
+        );
+    }
+    ctx.lineTo(w, r);
+
+    // draw the holes in the middle
+    ctx.arc(r, r, r * 0.6, radians(0), radians(360));
+    ctx.arc(r, r, r * 0.2, radians(0), radians(360));
 
     // fill
     ctx.clip('evenodd');
