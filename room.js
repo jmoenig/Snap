@@ -1833,6 +1833,9 @@ RoomEditorMorph.prototype.addToggleReplay = function() {
     var recordButton = new PushButtonMorph(
         this,
         function() {
+            if (this.isReplayMode()) {
+                myself.exitReplayMode();
+            }
             myself.toggleRecordMode();
             myself.updateControlButtons();
         },
