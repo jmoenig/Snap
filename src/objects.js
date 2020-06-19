@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-June-14';
+modules.objects = '2020-June-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -1581,8 +1581,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doBroadcastAndWait: ['doBroadcast'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
-    doRepeat: ['doUntil'],
-    doUntil: ['doRepeat', 'doIf'],
+    doRepeat: ['doUntil', ['doForever', -1]],
+    doUntil: ['doRepeat', 'doIf', ['doForever', -1]],
+    doForever: [['doUntil', 1], ['doRepeat', 1], ['doFor', 3]],
 
     // sensing:
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
