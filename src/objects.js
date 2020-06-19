@@ -1532,6 +1532,8 @@ SpriteMorph.prototype.blockAlternatives = {
     // motion:
     turn: ['turnLeft'],
     turnLeft: ['turn'],
+    gotoXY: [['doGlide', 1]],
+    doGlide: [['gotoXY', -1]],
     changeXPosition: ['changeYPosition', 'setXPosition', 'setYPosition'],
     setXPosition: ['setYPosition', 'changeXPosition', 'changeYPosition'],
     changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition'],
