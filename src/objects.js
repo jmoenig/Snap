@@ -1581,9 +1581,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doBroadcastAndWait: ['doBroadcast'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
-    doRepeat: ['doUntil', ['doForever', -1]],
-    doUntil: ['doRepeat', 'doIf', ['doForever', -1]],
+    doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2]],
+    doUntil: ['doRepeat', 'doIf', ['doForever', -1], ['doFor', 2]],
     doForever: [['doUntil', 1], ['doRepeat', 1], ['doFor', 3]],
+    doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2]],
 
     // sensing:
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
