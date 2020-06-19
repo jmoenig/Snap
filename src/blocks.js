@@ -3234,7 +3234,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
         slots[0].defaults = this.defaults;
     } else {
         for (i = 0; i < this.defaults.length; i += 1) {
-            if (this.defaults[i] !== null) {
+            if (this.defaults[i] !== null && slots[i].setContents) {
                 slots[i].setContents(this.defaults[i]);
             }
         }
