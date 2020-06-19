@@ -3193,7 +3193,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
             selector = alternative;
             offset = 0;
         }
-        block = SpriteMorph.prototype.blockForSelector(selector);
+        block = SpriteMorph.prototype.blockForSelector(selector, true);
         block.restoreInputs(oldInputs, offset);
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
@@ -3216,13 +3216,29 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     var oldInputs = this.inputs(),
         scripts = this.parentThatIsA(ScriptsMorph),
         surplus,
-        info;
+        info,
+        slots,
+        i;
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
+    this.defaults = info.defaults || [];
     surplus = this.restoreInputs(oldInputs, -inputOffset);
     this.fixLabelColor();
+
+    // restore default values
+    slots = this.inputs();
+    if (slots[0] instanceof MultiArgMorph) {
+        slots[0].setContents(this.defaults);
+        slots[0].defaults = this.defaults;
+    } else {
+        for (i = 0; i < this.defaults.length; i += 1) {
+            if (this.defaults[i] !== null) {
+                slots[i].setContents(this.defaults[i]);
+            }
+        }
+    }
 
     // place surplus blocks on scipts
     if (scripts && surplus.length) {
