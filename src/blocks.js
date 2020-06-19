@@ -3275,7 +3275,11 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     this.inputs().forEach(inp => {
         old = oldInputs[offset];
         if (old instanceof ReporterBlockMorph) {
-            this.replaceInput(inp, old.fullCopy());
+            if (inp instanceof TemplateSlotMorph || inp.isStatic) {
+                leftOver.push(old);
+            } else {
+                this.replaceInput(inp, old.fullCopy());
+            }
         } else if (old && inp instanceof InputSlotMorph) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
