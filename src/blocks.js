@@ -3224,10 +3224,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
     this.defaults = info.defaults || [];
-    surplus = this.restoreInputs(oldInputs, -inputOffset);
-    this.fixLabelColor();
 
-/*
     // restore default values
     slots = this.inputs();
     if (slots[0] instanceof MultiArgMorph) {
@@ -3240,7 +3237,10 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
             }
         }
     }
-*/
+
+    // restore previous inputs
+    surplus = this.restoreInputs(oldInputs, -inputOffset);
+    this.fixLabelColor();
 
     // place surplus blocks on scipts
     if (scripts && surplus.length) {
