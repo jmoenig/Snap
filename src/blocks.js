@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-15';
+modules.blocks = '2020-June-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3173,6 +3173,10 @@ BlockMorph.prototype.unringify = function () {
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
+    // morph one block into another trying to keep the inputs in place
+    // alternative Selector can either be a string representing
+    // a block selector or a 2-item array containing a string and
+    // an integer offset for restoring inputs
     var menu, oldInputs,
         target = this.selectForEdit(); // copy-on-edit
     if (target !== this) {
@@ -3180,14 +3184,22 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     }
     menu = new MenuMorph(this);
     oldInputs = this.inputs();
-    alternativeSelectors.forEach(sel => {
-        var block = SpriteMorph.prototype.blockForSelector(sel);
-        block.restoreInputs(oldInputs);
+    alternativeSelectors.forEach(alternative => {
+        var block, selector, offset;
+        if (alternative instanceof Array) {
+            selector = alternative[0];
+            offset = -alternative[1];
+        } else {
+            selector = alternative;
+            offset = 0;
+        }
+        block = SpriteMorph.prototype.blockForSelector(selector);
+        block.restoreInputs(oldInputs, offset);
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block.fullImage(),
-            () => this.setSelector(sel)
+            () => this.setSelector(selector, -offset)
         );
     });
     menu.popup(this.world(), this.bottomLeft().subtract(new Point(
@@ -3196,8 +3208,11 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     )));
 };
 
-BlockMorph.prototype.setSelector = function (aSelector) {
+
+BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     // private - used only for relabel()
+    // input offset is optional and can be used to shift the inputs
+    // to be restored
     var oldInputs = this.inputs(),
         scripts = this.parentThatIsA(ScriptsMorph),
         surplus,
@@ -3206,7 +3221,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
-    surplus = this.restoreInputs(oldInputs);
+    surplus = this.restoreInputs(oldInputs, -inputOffset);
     this.fixLabelColor();
 
     // place surplus blocks on scipts
@@ -3218,17 +3233,31 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     }
 };
 
-BlockMorph.prototype.restoreInputs = function (oldInputs) {
+BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
     // return an Array of left-over blocks, if any
-    var i = 0,
-        old,
-        nb,
+    // optional offset parameter allows for shifting the range
+    // of inputs to be restored
+    var old, nb, i,
         leftOver = [];
 
-    this.inputs().forEach(inp => {
+    // gather leading surplus blocks
+    for (i = 0; i < offset; i += 1) {
         old = oldInputs[i];
+        if (old instanceof ReporterBlockMorph) {
+            leftOver.push(old);
+        } else if (old instanceof CommandSlotMorph) {
+            nb = old.nestedBlock();
+            if (nb) {
+                leftOver.push(nb);
+            }
+        }
+    }
+
+    // restore matching inputs in their original order
+    this.inputs().forEach(inp => {
+        old = oldInputs[offset];
         if (old instanceof ReporterBlockMorph) {
             this.replaceInput(inp, old.fullCopy());
         } else if (old && inp instanceof InputSlotMorph) {
@@ -3247,12 +3276,12 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
                 inp.nestedBlock(nb.fullCopy());
             }
         }
-        i += 1;
+        offset += 1;
     });
 
-    // gather surplus blocks
-    for (i; i < oldInputs.length; i += 1) {
-        old = oldInputs[i];
+    // gather trailing surplus blocks
+    for (offset; offset < oldInputs.length; offset += 1) {
+        old = oldInputs[offset];
         if (old instanceof ReporterBlockMorph) {
             leftOver.push(old);
         } else if (old instanceof CommandSlotMorph) {
