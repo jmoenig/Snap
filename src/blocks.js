@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-19';
+modules.blocks = '2020-June-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1803,7 +1803,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         maxX = 0,
         blockWidth = this.minWidth,
         blockHeight,
-        affected,
         l = [],
         lines = [],
         space = this.isPrototype ?
@@ -1812,8 +1811,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         	this.methodIconExtent().x + space : 0,
         bottomCorrection,
         hasLoopCSlot = false,
-        hasLoopArrow = false,
-        initialExtent = this.extent();
+        hasLoopArrow = false;
 
     if ((this instanceof MultiArgMorph) && (this.slotSpec !== '%cs')) {
         blockWidth += this.arrows().width();
@@ -2054,35 +2052,12 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     }
 
     // find out if one of my parents needs to be fixed
-    if (this instanceof CommandBlockMorph) {
-        if (this.height() !== initialExtent.y) {
-            affected = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
-            if (affected) {
-                affected.fixLayout();
-            }
-        }
-        if (this.width() !== initialExtent.x) {
-            affected = this.parentThatIsA(
-                ReporterBlockMorph,
-                CommandSlotMorph,
-                RingCommandSlotMorph,
-                ReporterSlotMorph
-            );
-            if (affected) {
-                affected.fixLayout();
-            }
-        }
-        if (affected) {
-            return;
-        }
-    } else if (this instanceof ReporterBlockMorph) {
-        if (this.parent && this.parent.fixLayout) {
-            this.parent.fixLayout();
-            this.parent.changed();
-            return;
-        }
+    if (this instanceof BlockMorph && this.parent && this.parent.fixLayout) {
+        this.parent.fixLayout();
+        this.parent.changed();
+        return;
     }
-
+    
     this.fixHighlight();
 };
 
