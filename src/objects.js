@@ -1590,8 +1590,9 @@ SpriteMorph.prototype.blockAlternatives = {
     setSize: ['changeSize'],
     
     // control:
-    doBroadcast: ['doBroadcastAndWait'],
-    doBroadcastAndWait: ['doBroadcast'],
+    doBroadcast: ['doBroadcastAndWait', 'doSend'],
+    doBroadcastAndWait: ['doBroadcast', 'doSend'],
+    doSend: ['doBroadcast', 'doBroadcastAndWait'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
@@ -1601,6 +1602,8 @@ SpriteMorph.prototype.blockAlternatives = {
         ['doForEach', 2]],
     doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2],
         ['doForEach', -1]],
+    // doRun: ['fork'],
+    // fork: ['doRun'],
 
     // sensing:
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
