@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-June-19';
+modules.objects = '2020-June-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -1530,13 +1530,18 @@ SpriteMorph.prototype.blockAlternatives = {
     //      ersatz can also be a 2-item array: [selector, input-offset]
 
     // motion:
+    forward: ['changeXPosition', 'changeYPosition'],
     turn: ['turnLeft'],
     turnLeft: ['turn'],
+    doFaceTowards:  ['doGotoObject'],
     gotoXY: [['doGlide', 1]],
+    doGotoObject: ['doFaceTowards'],
     doGlide: [['gotoXY', -1]],
-    changeXPosition: ['changeYPosition', 'setXPosition', 'setYPosition'],
+    changeXPosition: ['changeYPosition', 'setXPosition', 'setYPosition',
+        'forward'],
     setXPosition: ['setYPosition', 'changeXPosition', 'changeYPosition'],
-    changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition'],
+    changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition',
+        'forward'],
     setYPosition: ['setXPosition', 'changeYPosition', 'changeXPosition'],
     xPosition: ['yPosition'],
     yPosition: ['xPosition'],
