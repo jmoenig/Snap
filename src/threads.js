@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-15';
+modules.threads = '2020-June-21';
 
 var ThreadManager;
 var Process;
@@ -1841,7 +1841,7 @@ Process.prototype.shadowListAttribute = function (list) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
-    var dim;
+    var rank;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1852,9 +1852,9 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-    dim = this.dimensionsOf(index);
-    if (dim > 0 && this.enableHyperOps) {
-        if (dim === 1) {
+    rank = this.rank(index);
+    if (rank > 0 && this.enableHyperOps) {
+        if (rank === 1) {
             if (index.isEmpty()) {
                 return list.map(item => item);
             }
@@ -1877,17 +1877,17 @@ Process.prototype.reportItems = function (indices, list) {
     // And look, Ma, it's turned out all beautiful! -jens
 
     return makeSelector(
-        this.dimensionsOf(list),
+        this.rank(list),
         indices.cdr(),
         makeLeafSelector(indices.at(1))
     )(list);
 
-    function makeSelector(dimension, indices, next) {
-        if (dimension === 1) {
+    function makeSelector(rank, indices, next) {
+        if (rank === 1) {
             return next;
         }
         return makeSelector(
-            dimension - 1,
+            rank - 1,
             indices.cdr(),
             makeBranch(
                 indices.at(1) || new List(),
@@ -1915,14 +1915,14 @@ Process.prototype.reportItems = function (indices, list) {
     }
 };
 
-Process.prototype.dimensionsOf = function(aList) {
-    var dim = 0,
+Process.prototype.rank = function(aList) {
+    var rank = 0,
         cur = aList;
     while (cur instanceof List) {
-        dim += 1;
+        rank += 1;
         cur = cur.at(1);
     }
-    return dim;
+    return rank;
 };
 
 // Process - other basic list accessors
