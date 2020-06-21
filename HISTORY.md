@@ -38,6 +38,7 @@
     * Ukranian
     * Catalan
     * Portuguese
+    * Chinese
     * Japanese
     * German
 
