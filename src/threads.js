@@ -3552,10 +3552,21 @@ Process.prototype.reportTypeOf = function (thing) {
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
-    var len, i, result;
+    var len, scalar, i, result;
     if (this.enableHyperOps) {
         if (this.isMatrix(a)) {
             if (this.isMatrix(b)) {
+                if (a.length() !== b.length()) {
+                    // test for special cased scalars in single-item lists
+                    scalar = this.scalar(a);
+                    if (!(scalar instanceof Array)) {
+                        return this.hyperDyadic(baseOp, scalar, b);
+                    }
+                    scalar = this.scalar(b);
+                    if (!(scalar instanceof Array)) {
+                        return this.hyperDyadic(baseOp, a, scalar);
+                    }
+                }
                 // zip both arguments ignoring out-of-bounds indices
                 a = a.asArray();
                 b = b.asArray();
@@ -3566,9 +3577,17 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 }
                 return new List(result);
             }
+            scalar = this.scalar(a);
+            if (!(scalar instanceof Array)) {
+                return this.hyperZip(baseOp, scalar, b);
+            }
             return a.map(each => this.hyperDyadic(baseOp, each, b));
         }
         if (this.isMatrix(b)) {
+            scalar = this.scalar(b);
+            if (!(scalar instanceof Array)) {
+                return this.hyperZip(baseOp, a, scalar);
+            }
             return b.map(each => this.hyperDyadic(baseOp, a, each));
         }
         return this.hyperZip(baseOp, a, b);
@@ -3582,9 +3601,20 @@ Process.prototype.isMatrix = function (value) {
 
 Process.prototype.hyperZip = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
-    var len, i, result;
+    var len, scalar, i, result;
     if (a instanceof List) {
         if (b instanceof List) {
+            if (a.length() !== b.length()) {
+                // test for special cased scalars in single-item lists
+                scalar = this.scalar(a);
+                if (!(scalar instanceof Array)) {
+                    return this.hyperZip(baseOp, scalar, b);
+                }
+                scalar = this.scalar(b);
+                if (!(scalar instanceof Array)) {
+                    return this.hyperZip(baseOp, a, scalar);
+                }
+            }
             // zip both arguments ignoring out-of-bounds indices
             a = a.asArray();
             b = b.asArray();
@@ -3601,6 +3631,20 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
         return b.map(each => this.hyperZip(baseOp, a, each));
     }
     return baseOp(a, b);
+};
+
+Process.prototype.scalar = function (value) {
+    // private - answer the value if it is a scalor or
+    // the leaf scalar element of single-nested lists,
+    // return [false] if value neither a scalar nor
+    // a single arbitrarily nested list
+    if (value instanceof List) {
+        if (value.length() === 1) {
+            return this.scalar(value.at(1));
+        }
+        return [false];
+    }
+    return value;
 };
 
 Process.prototype.reportSum = function (a, b) {
