@@ -225,6 +225,8 @@ SnapTranslator.dict.zh_CN = {
         '脚本',
     'Costumes':
         '造型',
+    'Backgrounds':
+        '背景',
     'Sounds':
         '声音',
 
@@ -247,6 +249,10 @@ SnapTranslator.dict.zh_CN = {
         '添加角色',
     'add a new Turtle sprite':
         '添加一个海龟角色',
+    'paint a new sprite':
+        '绘制一个新角色',
+    'take a camera snapshot and\nimport it as a new sprite':
+        '用摄像头拍摄一个新角色',    
 
     // tab help
     'costumes tab help':
@@ -332,8 +338,8 @@ SnapTranslator.dict.zh_CN = {
         '下一个造型',
     'costume #':
         '造型编号',
-    'costume name':
-        '造型名称',
+    'new costume %l width %dim height %dim':
+        '创建造型 %l 宽度 %dim 高度 %dim',
     'say %s for %n secs':
         '说 %s %n 秒',
     'say %s':
@@ -652,6 +658,8 @@ SnapTranslator.dict.zh_CN = {
         '长度',
     'number of channels':
         '通道数',
+    'new sound %l rate %rate Hz':
+        '创建声音 %l 频率 %rate Hz',    
     'sample rate':
         '样本频率',
     'samples':
@@ -679,7 +687,9 @@ SnapTranslator.dict.zh_CN = {
     'play frequency %n Hz':
         '演奏频率 %n 赫兹',
     'stop frequency':
-        '停止演奏频率',        
+        '停止演奏频率', 
+    'play %n Hz for %n secs':
+        '演奏频率 %n 赫兹 %n 秒',
 
     // pen:
     'clear':
@@ -730,7 +740,11 @@ SnapTranslator.dict.zh_CN = {
         '尖端',
     'middle':
         '中间',
-
+    'paste on %spr':
+        '拼贴在 %spr 上',
+    'pen vectors':
+        '画笔矢量',    
+    
     // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
@@ -751,7 +765,9 @@ SnapTranslator.dict.zh_CN = {
     'scrolled-up':
         '向上滚动滚轮',
     'scrolled-down':
-        '向下滚动滚轮',         
+        '向下滚动滚轮',    
+    'stopped':
+        '停止',    
     'when %b':
         '当 %b',
     'when I receive %msgHat':
@@ -760,6 +776,8 @@ SnapTranslator.dict.zh_CN = {
         '广播 %msg',
     'broadcast %msg and wait':
         '广播 %msg 并等待',
+    'send %msg to %spr':
+        '发送消息 %msg 给 %spr',
     'Message name':
         '消息名称',
     'message':
@@ -860,6 +878,8 @@ SnapTranslator.dict.zh_CN = {
         '对象 %self',                
     'distance to %dst':
         '到 %dst 的距离',
+    'distance':
+    	'距离',
     'reset timer':
         '计时器归零',
     'timer':
@@ -906,6 +926,16 @@ SnapTranslator.dict.zh_CN = {
         '于',
     'microphone %audio':
         '麦克风 %audio',   
+    'Microphone resolution...':
+        '麦克风分辨率...',
+    'Microphone':
+        '麦克风',
+    'low':
+        '低',
+    'high':
+        '高',
+    'max':
+        '最大',    
     'note':
         '音符',
     'frequency':
@@ -933,7 +963,11 @@ SnapTranslator.dict.zh_CN = {
     'video capture':
         '视频捕捉',     
     'mirror video':
-        '视频镜像',                                                 
+        '视频镜像',      
+    'frames':
+        '帧',    
+    'log pen vectors':
+        '记录画笔矢量',    
 
     // operators:
     '%n mod %n':
@@ -1383,6 +1417,8 @@ SnapTranslator.dict.zh_CN = {
         '关：浅色表格线',
     'check for higher contrast\ntable views':
         '开：深色表格线',
+    'Visible stepping':
+        '可视化单步运行',    
     'Thread safe scripts':
         '线程安全的脚本',
     'uncheck to allow\nscript reentrance':
