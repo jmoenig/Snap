@@ -560,6 +560,7 @@ Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
+Process.prototype.enableAPLscalars = false; // very experimental
 // Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
@@ -3540,7 +3541,7 @@ Process.prototype.reportTypeOf = function (thing) {
 
 // Process math primtives - hyper-dyadic
 
-Process.prototype.hyperDyadic = function (baseOp, a, b) {
+Process.prototype.hyperDyadicSimple = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
     if (this.enableHyperOps) {
@@ -3566,7 +3567,7 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
-Process.prototype.hyperZip = function (baseOp, a, b) {
+Process.prototype.hyperZipSimple = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
     if (a instanceof List) {
@@ -3589,9 +3590,9 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
-/*
-Process.prototype.hyperDyadic = function (baseOp, a, b) {
+Process.prototype.hyperDyadicAPL = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
+    // treat single-item lists as scalars
     var len, a_info, b_info, i, result;
     if (this.enableHyperOps) {
         a_info = this.examine(a);
@@ -3642,8 +3643,9 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
-Process.prototype.hyperZip = function (baseOp, a, b) {
+Process.prototype.hyperZipAPL = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
+    // treat single-item lists as scalars
     var len, i, result,
         a_info = this.examine(a),
         b_info = this.examine(b);
@@ -3675,7 +3677,9 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
     }
     return baseOp(a, b);
 };
-*/
+
+Process.prototype.hyperDyadic = Process.prototype.hyperDyadicSimple;
+Process.prototype.hyperZip = Process.prototype.hyperZipSimple;
 
 Process.prototype.dimensions = function (data) {
     var dim = [],
