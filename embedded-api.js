@@ -61,7 +61,7 @@
         }
 
         call(msgData) {
-            this.element.contentWindow.postMessage(msgData);
+            this.element.contentWindow.postMessage(msgData, '*');
         }
     }
 

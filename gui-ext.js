@@ -408,14 +408,14 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         {
             const {id} = data;
             const xml = await self.getProjectXML();
-            window.parent.postMessage({id, xml});
+            event.source.postMessage({id, xml}, event.origin);
             break;
         }
         case 'get-username':
         {
             const {id} = data;
             const {username} = SnapCloud;
-            window.parent.postMessage({id, username});
+            event.source.postMessage({id, username}, event.origin);
             break;
         }
         }
