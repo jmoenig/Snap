@@ -3566,10 +3566,6 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
-Process.prototype.isMatrix = function (value) {
-    return value instanceof List && value.at(1) instanceof List;
-};
-
 Process.prototype.hyperZip = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
