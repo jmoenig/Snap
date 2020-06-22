@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-22';
+modules.threads = '2020-June-15';
 
 var ThreadManager;
 var Process;
@@ -1841,7 +1841,7 @@ Process.prototype.shadowListAttribute = function (list) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
-    var rank;
+    var dim;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1852,9 +1852,9 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-    rank = this.rank(index);
-    if (rank > 0 && this.enableHyperOps) {
-        if (rank === 1) {
+    dim = this.dimensionsOf(index);
+    if (dim > 0 && this.enableHyperOps) {
+        if (dim === 1) {
             if (index.isEmpty()) {
                 return list.map(item => item);
             }
@@ -1877,17 +1877,17 @@ Process.prototype.reportItems = function (indices, list) {
     // And look, Ma, it's turned out all beautiful! -jens
 
     return makeSelector(
-        this.rank(list),
+        this.dimensionsOf(list),
         indices.cdr(),
         makeLeafSelector(indices.at(1))
     )(list);
 
-    function makeSelector(rank, indices, next) {
-        if (rank === 1) {
+    function makeSelector(dimension, indices, next) {
+        if (dimension === 1) {
             return next;
         }
         return makeSelector(
-            rank - 1,
+            dimension - 1,
             indices.cdr(),
             makeBranch(
                 indices.at(1) || new List(),
@@ -1913,6 +1913,16 @@ Process.prototype.reportItems = function (indices, list) {
             return indices.map(idx => data.at(idx));
         };
     }
+};
+
+Process.prototype.dimensionsOf = function(aList) {
+    var dim = 0,
+        cur = aList;
+    while (cur instanceof List) {
+        dim += 1;
+        cur = cur.at(1);
+    }
+    return dim;
 };
 
 // Process - other basic list accessors
@@ -3542,30 +3552,10 @@ Process.prototype.reportTypeOf = function (thing) {
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
-    var len, a_info, b_info, i, result;
+    var len, i, result;
     if (this.enableHyperOps) {
-        a_info = this.examine(a);
-        b_info = this.examine(b);
-        if (a_info.isScalar && b_info.isScalar &&
-                (a_info.rank !== b_info.rank)) {
-            // keep the shape of the higher rank
-            return this.hyperZip(
-                baseOp,
-                a_info.rank > b_info.rank ? a : a_info.leaf,
-                b_info.rank > a_info.rank ? b : b_info.leaf
-            );
-        }
-        if (a_info.rank > 1) {
-            if (b_info.rank > 1) {
-                if (a.length() !== b.length()) {
-                    // test for special cased scalars in single-item lists
-                    if (a_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a_info.leaf, b);
-                    }
-                    if (b_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a, b_info.leaf);
-                    }
-                }
+        if (this.isMatrix(a)) {
+            if (this.isMatrix(b)) {
                 // zip both arguments ignoring out-of-bounds indices
                 a = a.asArray();
                 b = b.asArray();
@@ -3576,15 +3566,9 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 }
                 return new List(result);
             }
-            if (a_info.isScalar) {
-                return this.hyperZip(baseOp, a_info.leaf, b);
-            }
             return a.map(each => this.hyperDyadic(baseOp, each, b));
         }
-        if (b_info.rank > 1) {
-            if (b_info.isScalar) {
-                return this.hyperZip(baseOp, a, b_info.leaf);
-            }
+        if (this.isMatrix(b)) {
             return b.map(each => this.hyperDyadic(baseOp, a, each));
         }
         return this.hyperZip(baseOp, a, b);
@@ -3592,22 +3576,15 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
+Process.prototype.isMatrix = function (value) {
+    return value instanceof List && value.at(1) instanceof List;
+};
+
 Process.prototype.hyperZip = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
-    var len, i, result,
-        a_info = this.examine(a),
-        b_info = this.examine(b);
+    var len, i, result;
     if (a instanceof List) {
         if (b instanceof List) {
-            if (a.length() !== b.length()) {
-                // test for special cased scalars in single-item lists
-                if (a_info.isScalar) {
-                    return this.hyperZip(baseOp, a_info.leaf, b);
-                }
-                if (b_info.isScalar) {
-                    return this.hyperZip(baseOp, a, b_info.leaf);
-                }
-            }
             // zip both arguments ignoring out-of-bounds indices
             a = a.asArray();
             b = b.asArray();
@@ -3625,56 +3602,6 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
     }
     return baseOp(a, b);
 };
-
-Process.prototype.dimensions = function (data) {
-    var dim = [],
-        cur = data;
-    while (cur instanceof List) {
-        dim.push(cur.length());
-        cur = cur.at(1);
-    }
-    return dim;
-};
-
-Process.prototype.isMatrix = function (data) {
-    return this.rank(data) > 1;
-};
-
-Process.prototype.rank = function(data) {
-    return this.dimensions(data).length;
-};
-
-Process.prototype.isScalar = function (data) {
-    return this.dimensions.every(n => n === 1);
-};
-
-Process.prototype.leaf = function (data) {
-    var cur = data;
-    while (cur instanceof List) {
-        cur = cur.at(1);
-    }
-    return cur;
-};
-
-Process.prototype.examine = function (data) {
-    var cur = data,
-        meta = {
-            rank: 0,
-            isScalar: true,
-            leaf: null
-        };
-    while (cur instanceof List) {
-        meta.rank += 1;
-        if (cur.length() !== 1) {
-            meta.isScalar = false;
-        }
-        cur = cur.at(1);
-    }
-    meta.leaf = cur;
-    return meta;
-};
-
-// Process math primtives - arithmetic
 
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
