@@ -3542,6 +3542,60 @@ Process.prototype.reportTypeOf = function (thing) {
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
+    var len, i, result;
+    if (this.enableHyperOps) {
+        if (this.isMatrix(a)) {
+            if (this.isMatrix(b)) {
+                // zip both arguments ignoring out-of-bounds indices
+                a = a.asArray();
+                b = b.asArray();
+                len = Math.min(a.length, b.length);
+                result = new Array(len);
+                for (i = 0; i < len; i += 1) {
+                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
+                }
+                return new List(result);
+            }
+            return a.map(each => this.hyperDyadic(baseOp, each, b));
+        }
+        if (this.isMatrix(b)) {
+            return b.map(each => this.hyperDyadic(baseOp, a, each));
+        }
+        return this.hyperZip(baseOp, a, b);
+    }
+    return baseOp(a, b);
+};
+
+Process.prototype.isMatrix = function (value) {
+    return value instanceof List && value.at(1) instanceof List;
+};
+
+Process.prototype.hyperZip = function (baseOp, a, b) {
+    // enable dyadic operations to be performed on lists and tables
+    var len, i, result;
+    if (a instanceof List) {
+        if (b instanceof List) {
+            // zip both arguments ignoring out-of-bounds indices
+            a = a.asArray();
+            b = b.asArray();
+            len = Math.min(a.length, b.length);
+            result = new Array(len);
+            for (i = 0; i < len; i += 1) {
+                result[i] = this.hyperZip(baseOp, a[i], b[i]);
+            }
+            return new List(result);
+        }
+        return a.map(each => this.hyperZip(baseOp, each, b));
+    }
+    if (b instanceof List) {
+        return b.map(each => this.hyperZip(baseOp, a, each));
+    }
+    return baseOp(a, b);
+};
+
+/*
+Process.prototype.hyperDyadic = function (baseOp, a, b) {
+    // enable dyadic operations to be performed on lists and tables
     var len, a_info, b_info, i, result;
     if (this.enableHyperOps) {
         a_info = this.examine(a);
@@ -3625,6 +3679,7 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
     }
     return baseOp(a, b);
 };
+*/
 
 Process.prototype.dimensions = function (data) {
     var dim = [],
@@ -3637,11 +3692,17 @@ Process.prototype.dimensions = function (data) {
 };
 
 Process.prototype.isMatrix = function (data) {
-    return this.rank(data) > 1;
+    return data instanceof List && data.at(1) instanceof List;
 };
 
 Process.prototype.rank = function(data) {
-    return this.dimensions(data).length;
+    var rank = 0,
+        cur = data;
+    while (cur instanceof List) {
+        rank += 1;
+        cur = cur.at(1);
+    }
+    return rank;
 };
 
 Process.prototype.isScalar = function (data) {
