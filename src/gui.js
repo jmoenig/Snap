@@ -3456,8 +3456,9 @@ IDE_Morph.prototype.settingsMenu = function () {
                 }
             },
             Process.prototype.enableAPLscalars,
-            'uncheck to disable treating (nested)\nsingle-itemlists as scalars',
-            'check to treat (nested)\nsingle-itemlists as scalars',
+            'uncheck to disable treating (nested)\n' +
+                'single-item lists as scalars',
+            'check to treat (nested)\nsingle-item lists as scalars',
             true
         );
     }
