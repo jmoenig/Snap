@@ -3551,8 +3551,8 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
             // keep the shape of the higher rank
             return this.hyperZip(
                 baseOp,
-                a_info.rank > b_info.rank ? a : a_info.leaf,
-                b_info.rank > a_info.rank ? b : b_info.leaf
+                a_info.rank > b_info.rank ? a : a_info.scalar,
+                b_info.rank > a_info.rank ? b : b_info.scalar
             );
         }
         if (a_info.rank > 1) {
@@ -3560,10 +3560,10 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 if (a.length() !== b.length()) {
                     // test for special cased scalars in single-item lists
                     if (a_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a_info.leaf, b);
+                        return this.hyperDyadic(baseOp, a_info.scalar, b);
                     }
                     if (b_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a, b_info.leaf);
+                        return this.hyperDyadic(baseOp, a, b_info.scalar);
                     }
                 }
                 // zip both arguments ignoring out-of-bounds indices
@@ -3577,13 +3577,13 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 return new List(result);
             }
             if (a_info.isScalar) {
-                return this.hyperZip(baseOp, a_info.leaf, b);
+                return this.hyperZip(baseOp, a_info.scalar, b);
             }
             return a.map(each => this.hyperDyadic(baseOp, each, b));
         }
         if (b_info.rank > 1) {
             if (b_info.isScalar) {
-                return this.hyperZip(baseOp, a, b_info.leaf);
+                return this.hyperZip(baseOp, a, b_info.scalar);
             }
             return b.map(each => this.hyperDyadic(baseOp, a, each));
         }
@@ -3602,10 +3602,10 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
             if (a.length() !== b.length()) {
                 // test for special cased scalars in single-item lists
                 if (a_info.isScalar) {
-                    return this.hyperZip(baseOp, a_info.leaf, b);
+                    return this.hyperZip(baseOp, a_info.scalar, b);
                 }
                 if (b_info.isScalar) {
-                    return this.hyperZip(baseOp, a, b_info.leaf);
+                    return this.hyperZip(baseOp, a, b_info.scalar);
                 }
             }
             // zip both arguments ignoring out-of-bounds indices
@@ -3648,7 +3648,7 @@ Process.prototype.isScalar = function (data) {
     return this.dimensions.every(n => n === 1);
 };
 
-Process.prototype.leaf = function (data) {
+Process.prototype.scalar = function (data) {
     var cur = data;
     while (cur instanceof List) {
         cur = cur.at(1);
@@ -3661,7 +3661,7 @@ Process.prototype.examine = function (data) {
         meta = {
             rank: 0,
             isScalar: true,
-            leaf: null
+            scalar: null
         };
     while (cur instanceof List) {
         meta.rank += 1;
@@ -3670,7 +3670,7 @@ Process.prototype.examine = function (data) {
         }
         cur = cur.at(1);
     }
-    meta.leaf = cur;
+    meta.scalar = cur;
     return meta;
 };
 
