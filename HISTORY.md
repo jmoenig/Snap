@@ -17,6 +17,7 @@
     * more block relabelling options, e.g. for loops
     * prefix keys in custom drop-down menus with '§_' to only show them if the shift-key is pressed
     * experimental APL-style scalars  for hyper blocks
+    * new "id" option in the monadic function reporter primitive (hyperizable to support deep copies of nested lists)
 * **Notable Changes:**
     * repeated WARPs inside loops have been sped up
     * duplicated blocks / scripts are grabbed by their top-left corner rather than their center
