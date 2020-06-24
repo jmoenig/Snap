@@ -1431,7 +1431,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'flat line ends' : ['flat line ends'],
                     'log pen vectors' : ['log pen vectors'],
                     'video capture' : ['video capture'],
-                    'mirror video' : ['mirror video']
+                    'mirror video' : ['mirror video'],
+                    '§_APL scalars' : ['APL scalars']
                 },
                 true
             );

@@ -2297,6 +2297,9 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     case 'mirror video':
         stage.mirrorVideo = bool;
         break;
+    case 'APL scalars':
+        this.toggleAPLscalars();
+        break;
     }
 };
 
@@ -2318,6 +2321,8 @@ Process.prototype.reportGlobalFlag = function (name) {
                 .data[3] > 0;
     case 'mirror video':
         return stage.mirrorVideo;
+    case 'APL scalars':
+        return Process.prototype.enableAPLscalars;
     default:
         return '';
     }
