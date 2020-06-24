@@ -1326,6 +1326,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'e^' : ['e^'],
                     '10^' : ['10^'],
                     '2^' : ['2^'],
+                    id: ['id']
                 },
                 true
             );

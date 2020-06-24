@@ -3984,6 +3984,8 @@ Process.prototype.reportMonadic = function (fname, n) {
     case '2^':
         result = Math.pow(2, x);
         break;
+    case 'id':
+        return n;
     default:
         nop();
     }
