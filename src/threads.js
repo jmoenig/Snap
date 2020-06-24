@@ -560,7 +560,6 @@ Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
-Process.prototype.enableAPLscalars = false; // very experimental
 // Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
@@ -2297,9 +2296,6 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     case 'mirror video':
         stage.mirrorVideo = bool;
         break;
-    case 'APL scalars':
-        this.toggleAPLscalars(bool);
-        break;
     }
 };
 
@@ -2321,8 +2317,6 @@ Process.prototype.reportGlobalFlag = function (name) {
                 .data[3] > 0;
     case 'mirror video':
         return stage.mirrorVideo;
-    case 'APL scalars':
-        return Process.prototype.enableAPLscalars;
     default:
         return '';
     }
@@ -3546,7 +3540,7 @@ Process.prototype.reportTypeOf = function (thing) {
 
 // Process math primtives - hyper-dyadic
 
-Process.prototype.hyperDyadicSimple = function (baseOp, a, b) {
+Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
     if (this.enableHyperOps) {
@@ -3572,7 +3566,7 @@ Process.prototype.hyperDyadicSimple = function (baseOp, a, b) {
     return baseOp(a, b);
 };
 
-Process.prototype.hyperZipSimple = function (baseOp, a, b) {
+Process.prototype.hyperZip = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
     if (a instanceof List) {
@@ -3594,97 +3588,6 @@ Process.prototype.hyperZipSimple = function (baseOp, a, b) {
     }
     return baseOp(a, b);
 };
-
-Process.prototype.hyperDyadicAPL = function (baseOp, a, b) {
-    // enable dyadic operations to be performed on lists and tables
-    // treat single-item lists as scalars
-    var len, a_info, b_info, i, result;
-    if (this.enableHyperOps) {
-        a_info = this.examine(a);
-        b_info = this.examine(b);
-        if (a_info.isScalar && b_info.isScalar &&
-                (a_info.rank !== b_info.rank)) {
-            // keep the shape of the higher rank
-            return this.hyperZip(
-                baseOp,
-                a_info.rank > b_info.rank ? a : a_info.scalar,
-                b_info.rank > a_info.rank ? b : b_info.scalar
-            );
-        }
-        if (a_info.rank > 1) {
-            if (b_info.rank > 1) {
-                if (a.length() !== b.length()) {
-                    // test for special cased scalars in single-item lists
-                    if (a_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a_info.scalar, b);
-                    }
-                    if (b_info.isScalar) {
-                        return this.hyperDyadic(baseOp, a, b_info.scalar);
-                    }
-                }
-                // zip both arguments ignoring out-of-bounds indices
-                a = a.asArray();
-                b = b.asArray();
-                len = Math.min(a.length, b.length);
-                result = new Array(len);
-                for (i = 0; i < len; i += 1) {
-                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
-                }
-                return new List(result);
-            }
-            if (a_info.isScalar) {
-                return this.hyperZip(baseOp, a_info.scalar, b);
-            }
-            return a.map(each => this.hyperDyadic(baseOp, each, b));
-        }
-        if (b_info.rank > 1) {
-            if (b_info.isScalar) {
-                return this.hyperZip(baseOp, a, b_info.scalar);
-            }
-            return b.map(each => this.hyperDyadic(baseOp, a, each));
-        }
-        return this.hyperZip(baseOp, a, b);
-    }
-    return baseOp(a, b);
-};
-
-Process.prototype.hyperZipAPL = function (baseOp, a, b) {
-    // enable dyadic operations to be performed on lists and tables
-    // treat single-item lists as scalars
-    var len, i, result,
-        a_info = this.examine(a),
-        b_info = this.examine(b);
-    if (a instanceof List) {
-        if (b instanceof List) {
-            if (a.length() !== b.length()) {
-                // test for special cased scalars in single-item lists
-                if (a_info.isScalar) {
-                    return this.hyperZip(baseOp, a_info.scalar, b);
-                }
-                if (b_info.isScalar) {
-                    return this.hyperZip(baseOp, a, b_info.scalar);
-                }
-            }
-            // zip both arguments ignoring out-of-bounds indices
-            a = a.asArray();
-            b = b.asArray();
-            len = Math.min(a.length, b.length);
-            result = new Array(len);
-            for (i = 0; i < len; i += 1) {
-                result[i] = this.hyperZip(baseOp, a[i], b[i]);
-            }
-            return new List(result);
-        }
-        return a.map(each => this.hyperZip(baseOp, each, b));
-    }
-    if (b instanceof List) {
-        return b.map(each => this.hyperZip(baseOp, a, each));
-    }
-    return baseOp(a, b);
-};
-
-Process.prototype.hyperDyadic = Process.prototype.hyperDyadicSimple;
-Process.prototype.hyperZip = Process.prototype.hyperZipSimple;
 
 Process.prototype.dimensions = function (data) {
     var dim = [],
@@ -3708,58 +3611,6 @@ Process.prototype.rank = function(data) {
         cur = cur.at(1);
     }
     return rank;
-};
-
-Process.prototype.isScalar = function (data) {
-    return this.dimensions.every(n => n === 1);
-};
-
-Process.prototype.scalar = function (data) {
-    var cur = data;
-    while (cur instanceof List) {
-        cur = cur.at(1);
-    }
-    return cur;
-};
-
-Process.prototype.examine = function (data) {
-    var cur = data,
-        meta = {
-            rank: 0,
-            isScalar: true,
-            scalar: null
-        };
-    while (cur instanceof List) {
-        meta.rank += 1;
-        if (cur.length() !== 1) {
-            meta.isScalar = false;
-        }
-        cur = cur.at(1);
-    }
-    meta.scalar = cur;
-    return meta;
-};
-
-Process.prototype.toggleAPLscalars = function (flag) {
-/*
-    very experimental. I don't like it and mark this feature for
-    removal. treating (even deep) single-item lists as scalars
-    must be a misfeature in APL introduced for convenience or to
-    work around some obvious design flaw. -jens
-*/
-    if (!isNil(flag)) {
-        Process.prototype.enableAPLscalars = !!flag; // coerce to bool
-    } else {
-        Process.prototype.enableAPLscalars =
-            !Process.prototype.enableAPLscalars;
-    }
-    if (Process.prototype.enableAPLscalars) {
-        Process.prototype.hyperDyadic = Process.prototype.hyperDyadicAPL;
-        Process.prototype.hyperZip = Process.prototype.hyperZipAPL;
-    } else {
-        Process.prototype.hyperDyadic = Process.prototype.hyperDyadicSimple;
-        Process.prototype.hyperZip = Process.prototype.hyperZipSimple;
-    }
 };
 
 // Process math primtives - arithmetic
