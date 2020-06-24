@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-22';
+modules.threads = '2020-June-24';
 
 var ThreadManager;
 var Process;
@@ -3733,6 +3733,23 @@ Process.prototype.examine = function (data) {
     }
     meta.scalar = cur;
     return meta;
+};
+
+Process.prototype.toggleAPLscalars = function () {
+/*
+    very experimental. I don't like it and mark this feature for
+    removal. treating (even deep) single-item lists as scalars
+    must be a misfeature in APL introduced for convenience or to
+    work around some obvious design flaw. -jens
+*/
+    Process.prototype.enableAPLscalars = !Process.prototype.enableAPLscalars;
+    if (Process.prototype.enableAPLscalars) {
+        Process.prototype.hyperDyadic = Process.prototype.hyperDyadicAPL;
+        Process.prototype.hyperZip = Process.prototype.hyperZipAPL;
+    } else {
+        Process.prototype.hyperDyadic = Process.prototype.hyperDyadicSimple;
+        Process.prototype.hyperZip = Process.prototype.hyperZipSimple;
+    }
 };
 
 // Process math primtives - arithmetic

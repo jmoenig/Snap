@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-June-22';
+modules.gui = '2020-June-24';
 
 // Declarations
 
@@ -3440,21 +3440,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     if (Process.prototype.enableHyperOps) {
         addPreference(
             'APL-style scalars',
-            () => {
-                Process.prototype.enableAPLscalars =
-                    !Process.prototype.enableAPLscalars;
-                if (Process.prototype.enableAPLscalars) {
-                    Process.prototype.hyperDyadic =
-                        Process.prototype.hyperDyadicAPL;
-                    Process.prototype.hyperZip =
-                        Process.prototype.hyperZipAPL;
-                } else {
-                    Process.prototype.hyperDyadic =
-                        Process.prototype.hyperDyadicSimple;
-                    Process.prototype.hyperZip =
-                        Process.prototype.hyperZipSimple;
-                }
-            },
+            () => Process.prototype.toggleAPLscalars(),
             Process.prototype.enableAPLscalars,
             'uncheck to disable treating (nested)\n' +
                 'single-item lists as scalars',
