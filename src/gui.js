@@ -4136,6 +4136,7 @@ IDE_Morph.prototype.newProject = function () {
     SpriteMorph.prototype.useFlatLineEnds = false;
     Process.prototype.enableLiveCoding = false;
     Process.prototype.enableHyperOps = true;
+    Process.prototype.toggleAPLscalars(false);
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();
@@ -4619,6 +4620,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableSublistIDs = false;
     StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
+    Process.prototype.toggleAPLscalars(false);
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(
@@ -4659,6 +4661,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableSublistIDs = false;
     StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
+    Process.prototype.toggleAPLscalars(false);
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
