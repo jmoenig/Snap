@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-20';
+modules.blocks = '2020-June-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8717,6 +8717,25 @@ InputSlotMorph.prototype.menuFromDict = function (
        			menu.addLine();
 			    menu.items.push(dial);
             	menu.addLine();
+            } else if (key.indexOf('§_') === 0) {
+                // prefixing a key with '§_' only makes the menu item
+                // appear when the user holds down the shift-key
+                // use with care because mobile devices might only
+                // have a "soft" keyboard that isn't always there
+                if (this.world().currentKey === 16) { // shift
+                    menu.addItem(
+                        key.slice(2),
+                        choices[key],
+                        null, // hint
+                        null, // color
+                        null, // bold
+                        true, // italic
+                        null, // doubleClickAction
+                        null, // shortcut
+                        !(choices[key] instanceof Array) &&
+                            typeof choices[key] !== 'function' // verbatim?
+                    );
+                }
             } else if (key === '__shout__go__') {
                 // show the green flag symbol
                 flag = new SymbolMorph('flag');
