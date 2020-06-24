@@ -2298,7 +2298,7 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
         stage.mirrorVideo = bool;
         break;
     case 'APL scalars':
-        this.toggleAPLscalars();
+        this.toggleAPLscalars(bool);
         break;
     }
 };
@@ -3740,14 +3740,19 @@ Process.prototype.examine = function (data) {
     return meta;
 };
 
-Process.prototype.toggleAPLscalars = function () {
+Process.prototype.toggleAPLscalars = function (flag) {
 /*
     very experimental. I don't like it and mark this feature for
     removal. treating (even deep) single-item lists as scalars
     must be a misfeature in APL introduced for convenience or to
     work around some obvious design flaw. -jens
 */
-    Process.prototype.enableAPLscalars = !Process.prototype.enableAPLscalars;
+    if (!isNil(flag)) {
+        Process.prototype.enableAPLscalars = !!flag; // coerce to bool
+    } else {
+        Process.prototype.enableAPLscalars =
+            !Process.prototype.enableAPLscalars;
+    }
     if (Process.prototype.enableAPLscalars) {
         Process.prototype.hyperDyadic = Process.prototype.hyperDyadicAPL;
         Process.prototype.hyperZip = Process.prototype.hyperZipAPL;
