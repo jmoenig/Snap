@@ -180,11 +180,11 @@ SnapTranslator.dict.bn = {
     'language_name':
         'বাংলা', // the name as it should appear in the language menu
     'language_translator':
-        'Dr. Mokter Hossain', // your name for the Translators tab
+        'Dr. Mokter Hossain, Radman Siddiki', // your name for the Translators tab
     'translator_e-mail':
-        'mokter@gmail.com', // optional
+        'mokter@gmail.com, radman.siddiki@gmail.com', // optional
     'last_changed':
-        '2020-06-25', // this, too, will appear in the Translators tab
+        '2020-06-26', // this, too, will appear in the Translators tab
 
 
     // GUI
