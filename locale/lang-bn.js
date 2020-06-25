@@ -529,7 +529,7 @@ SnapTranslator.dict.bn = {
 
     // operators:
     '%n mod %n':
-        '%n ভাগ  %n এর অবশিষ্ট',
+        '%n ভাগ %n এর অবশিষ্ট',
     'round %n':
         '%n এর নিকটতম পূর্ণসংখ্যা',
     '%fun of %n':
@@ -570,7 +570,7 @@ SnapTranslator.dict.bn = {
 
     // variables:
     'Make a variable':
-        'একটি চলক তৈরী কর',
+        'একটি চলক তৈরি কর',
     'Variable name':
         'চলকের নাম',
     'Delete a variable':
@@ -636,7 +636,7 @@ SnapTranslator.dict.bn = {
     'Project notes...':
         'প্রকল্প সম্পর্কিত মন্তব্য...',
     'New':
-        'নতুন প্রকল্প তৈরী কর',
+        'নতুন প্রকল্প তৈরি কর',
     'Open...':
         'সংরক্ষিত প্রকল্প খোল...',
     'Save':
@@ -656,7 +656,7 @@ SnapTranslator.dict.bn = {
     'Export blocks...':
         'ব্লকসমূহ ডাউনলোড কর...',
     'show global custom block definitions as XML\nin a new browser window':
-        'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
+        'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XML ফাইল হিসেবে প্রদর্শন কর',
     'Import tools':
         'যন্ত্রপাতি ইম্পোর্ট কর',
      'Libraries...':
