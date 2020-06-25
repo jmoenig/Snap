@@ -316,11 +316,11 @@ SnapTranslator.dict.bn = {
     'set y to %n':
         'y নির্ধারণ কর  %n',
     'if on edge, bounce':
-        'প্রান্ত স্পর্শ করলে উল্টো ফিরে আস',
+        'প্রান্ত স্পর্শ করলে উল্টে ফিরে আস',
     'x position':
-        'এর  x অবস্থান',
+        'এর x অবস্থান',
     'y position':
-        'এর  y অবস্থান',
+        'এর y অবস্থান',
     'direction':
         'এর গতিপথ',
 
@@ -332,9 +332,9 @@ SnapTranslator.dict.bn = {
     'costume #':
         'এর পরিচ্ছদ #',
     'say %s for %n secs':
-        'বল  %s %n সেকেন্ড পর্যন্ত',
+        'বল %s %n সেকেন্ড পর্যন্ত',
     'say %s':
-        'বল  %s',
+        'বল %s',
     'think %s for %n secs':
         'ভাব  %s %n সেকেন্ড পর্যন্ত',
     'think %s':
