@@ -222,7 +222,7 @@ SnapTranslator.dict.bn = {
 
     // tabs:
     'Scripts':
-        'প্রোগ্রাম স্ক্রিপ্ট',
+        'স্ক্রিপ্টগুলো',
     'Costumes':
         'পরিচ্ছদ',
     'Sounds':
@@ -553,7 +553,7 @@ SnapTranslator.dict.bn = {
     'world':
         'পৃথিবী',
     'letter %idx of %s':
-        '%idx -তম বর্ণ    %s এর',
+        '%idx -তম বর্ণ %s এর',
     'length of %s':
         '%s এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
@@ -570,7 +570,7 @@ SnapTranslator.dict.bn = {
 
     // variables:
     'Make a variable':
-        'একটি   চলক তৈরী কর',
+        'একটি চলক তৈরী কর',
     'Variable name':
         'চলকের নাম',
     'Delete a variable':
@@ -599,11 +599,11 @@ SnapTranslator.dict.bn = {
     '%l contains %s':
     	'%l তালিকা  %s উপাদানটি ধারণ করে',
     'thing':
-    	'বিষয়',
+    	'জিনিস',
     'add %s to %l':
     	'%s কে  %l তে সংযুক্ত কর',
     'delete %ida of %l':
-    	'%ida কে  %l থেকে মুছে ফেল',
+    	'%ida কে %l থেকে মুছে ফেল',
     'insert %s at %idx of %l':
      	'%s কে  %idx স্থানে  %l তালিকায় সন্নিবেশিত কর',
      'replace item %idx of %l with %s':
@@ -611,7 +611,7 @@ SnapTranslator.dict.bn = {
 
     // other
     'Make a block':
-        'একটি ব্লক তৈরী কর',
+        'একটি ব্লক তৈরি কর',
 
     // menus
     // snap menu
@@ -646,15 +646,15 @@ SnapTranslator.dict.bn = {
     'Import...':
         'প্রকল্প ইম্পোর্ট কর...',
     'file menu import hint':
-        'XMLফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
+        'XML ফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
     'Export project as plain text...':
-        'প্রকল্পটি প্লেইন টেক্সট হিসাবে এক্সপোর্ট কর ...',
+        'প্রকল্পটি প্লেইন টেক্সট হিসাবে ডাউনলোড কর ...',
     'Export project...':
-        'প্রকল্পটি এক্সপোর্ট কর...',
+        'প্রকল্পটি ডাউনলোড কর...',
     'show project data as XML\nin a new browser window':
         'প্রকল্প উপাত্ত একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
     'Export blocks...':
-        'ব্লকসমূহ এক্সপোর্ট কর...',
+        'ব্লকসমূহ ডাউনলোড কর...',
     'show global custom block definitions as XML\nin a new browser window':
         'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
     'Import tools':
