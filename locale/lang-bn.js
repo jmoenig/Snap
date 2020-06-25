@@ -236,9 +236,9 @@ SnapTranslator.dict.bn = {
 
     // rotation styles:
     'don\'t rotate':
-        'ঘোরতে পারে না',
+        'ঘুরতে পারে না',
     'can rotate':
-        'ঘোরতে পারে',
+        'ঘুরতে পারে',
     'only face left/right':
         'একমাত্র  ডানে/বামে মুখ',
 
@@ -298,13 +298,13 @@ SnapTranslator.dict.bn = {
     'turn %counterclockwise %n degrees':
         'বামদিকে %counterclockwise %n ডিগ্রীকোণে ঘোর',
     'point in direction %dir':
-        'দিক নির্ধারণ কর  %dir',
+        'দিকে মুখ কর  %dir',
     'point towards %dst':
         'প্রতি নির্দেশ কর  %dst',
     'go to x: %n y: %n':
         'x: %n y: %n অবস্থানে যাও',
     'go to %dst':
-        '%dst দুরত্বে যাও',
+        '%dst যাও',
     'glide %n secs to x: %n y: %n':
         'গড়িয়ে চল x: %n y: %n অবস্থানে  %n সেকেন্ড  ',
     'change x by %n':
