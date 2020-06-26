@@ -626,7 +626,7 @@ SnapTranslator.dict.bn = {
     'Switch back to user mode':
         'ইউজার মোডে ফিরে যাও',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'দীর্ঘ-মরফিক প্রসঙ্গ তালিকা এবংপরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও',
+        'গভীর-মরফিক প্রসঙ্গ তালিকা এবং পরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও',
     'Switch to dev mode':
         'ডেভেলপার মোডে ফিরে যাও',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
@@ -642,7 +642,7 @@ SnapTranslator.dict.bn = {
     'Save':
         'প্রকল্পটি সংরক্ষণ কর',
     'Save As...':
-        'প্রকল্পটির নামান্তর কর...',
+        'নামসহ প্রকল্পটি সংরক্ষণ করুন...',
     'Import...':
         'প্রকল্প ইম্পোর্ট কর...',
     'file menu import hint':
@@ -660,9 +660,9 @@ SnapTranslator.dict.bn = {
     'Import tools':
         'যন্ত্রপাতি ইম্পোর্ট কর',
      'Libraries...':
-        'লাইব্রেরি লোড কর',
+        'ব্লক লাইব্রেরি লোড কর...',
      'Costumes...':
-        'পরিচ্ছদ লোড কর',
+        'পরিচ্ছদ লোড কর...',
      'Sounds...':
         'শব্দের ফাইল লোড কর',
     'load the official library of\npowerful blocks':
