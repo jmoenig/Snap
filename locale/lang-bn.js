@@ -415,11 +415,11 @@ SnapTranslator.dict.bn = {
         
     // control:
     'when %greenflag clicked':
-        'যখন  %greenflag ক্লিক কর',
+        'যখন %greenflag ক্লিক করা হবে',
     'when %keyHat key pressed':
-        'যখন   %keyHat ক্লিক কর',
+        'যখন %keyHat ক্লিক করা হবে',
     'when I am clicked':
-        'যখন আমাকে ক্লিক কর',
+        'যখন আমাকে ক্লিক করা হবে',
     'when I receive %msgHat':
         'যখন আমি গ্রহণ করি  %msgHat',
     'broadcast %msg':
