@@ -184,7 +184,7 @@ SnapTranslator.dict.bn = {
     'translator_e-mail':
         'mokter@gmail.com', // optional
     'last_changed':
-        '2014-07-02', // this, too, will appear in the Translators tab
+        '2020-06-25', // this, too, will appear in the Translators tab
 
 
     // GUI
@@ -196,23 +196,23 @@ SnapTranslator.dict.bn = {
 
     // categories:
     'Motion':
-        'গতি (Motion)',
+        'গতি',
     'Looks':
-        'সৌন্দর্য (Looks)',
+        'সৌন্দর্য',
     'Sound':
-        'শব্দ (Sound)',
+        'শব্দ',
     'Pen':
-        'লেখনী (Pen)',
+        'লেখনী',
     'Control':
-        'নিয়ন্ত্রণ (Control)',
+        'নিয়ন্ত্রণ',
     'Sensing':
-        'অনুভূতি (Sensing)',
+        'অনুভূতি',
     'Operators':
-        'চালক (Operators)',
+        'চালক',
     'Variables':
-        'চলক (Variables)',
+        'চলক',
     'Lists':
-        'তালিকা (Lists)',
+        'তালিকা',
     'Other':
         'অন্যান্য',
 
@@ -222,11 +222,11 @@ SnapTranslator.dict.bn = {
 
     // tabs:
     'Scripts':
-        'প্রোগ্রাম স্ক্রিপ্ট (Scripts)',
+        'প্রোগ্রাম স্ক্রিপ্ট',
     'Costumes':
-        'পরিচ্ছদ (Costumes)',
+        'পরিচ্ছদ',
     'Sounds':
-        'শব্দমালা (Sounds)',
+        'শব্দমালা',
 
     // names:
     'Sprite':
