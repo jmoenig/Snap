@@ -502,7 +502,7 @@ SnapTranslator.dict.bn = {
     'mouse y':
         'মাউস y',
     'mouse down?':
-        'মাউস বোতাম চাপা কিনা?',
+        'মাউস নিচে গিয়েছে?',
     'key %key pressed?':
         'কোন কী %key চাপা কিনা?',
     'distance to %dst':
