@@ -516,7 +516,7 @@ SnapTranslator.dict.bn = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'টার্বো মোড কিনা?',
+        'টার্বো মোড চালু কিনা?',
      'set turbo mode to %b':
         'টার্বো মোডকে  %b নির্ধারণ কর',
 
@@ -547,7 +547,7 @@ SnapTranslator.dict.bn = {
     'false':
         'মিথ্যা',
     'join %words':
-        'সংযুক্ত কর  %words',
+        'সংযুক্ত কর %words',
     'hello':
         'হ্যালো',
     'world':
