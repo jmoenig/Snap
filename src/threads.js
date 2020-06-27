@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-25';
+modules.threads = '2020-June-27';
 
 var ThreadManager;
 var Process;
@@ -1112,7 +1112,9 @@ Process.prototype.evaluate = function (
     args,
     isCommand
 ) {
-    if (!context) {return null; }
+    if (!context) {
+        return this.returnValueToParentContext(null);
+    }
     if (context instanceof Function) {
         // if (!this.enableJS) {
         //     throw new Error('JavaScript is not enabled');
