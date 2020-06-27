@@ -440,9 +440,9 @@ SnapTranslator.dict.bn = {
         'পুল',
         
     'wait %n secs':
-        'অপেক্ষা কর   %n সেকেণড',
+        'অপেক্ষা কর %n সেকেন্ড',
     'wait until %b':
-        'অপেক্ষা কর  %b যতক্ষণ না',
+        'অপেক্ষা কর %b যতক্ষণ না পর্যন্ত',
     'forever %loop':
         'অনন্তকাল কর %loop',
     'repeat %n %loop':
