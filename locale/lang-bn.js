@@ -1147,18 +1147,18 @@ SnapTranslator.dict.bn = {
         'নতুন বার্তা লিখ...',
 
     // math functions
-    'পরমমান':
-        'abs',
+    'abs':
+        'পরমমান',
     'sqrt':
         'বর্গমূল',
     'sin':
-        'sin',
+        'সাইন্',
     'cos':
-        'cos',
+        'কোসাইন্',
     'tan':
         'tan',
     'asin':
-        'asin',
+        'আসীন',
     'acos':
         'acos',
     'atan':
