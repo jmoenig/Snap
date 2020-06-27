@@ -1174,7 +1174,7 @@ SnapTranslator.dict.bn = {
     'text':
         'বর্ণ',
     'Boolean':
-        'বুলিয়ান',
+        'বুলিয়েন',
     'list':
         'তালিকা',
     'command':
