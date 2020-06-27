@@ -454,7 +454,7 @@ SnapTranslator.dict.bn = {
     'if %b %c else %c':
         'যদি হয়  %b %c অন্যথায়  %c',
     'report %s':
-        'প্রতিবেদন %s',
+        'প্রতিবেদন কর %s',
     'stop block':
         'ব্লক বন্ধ কর',
     'stop script':
