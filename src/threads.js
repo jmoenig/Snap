@@ -70,6 +70,19 @@ var Variable;
 var VariableFrame;
 var JSCompiler;
 
+const NONNUMBERS = [true, false, ''];
+
+(function () {
+    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
+    // collecting edge-cases that somebody complained about
+    // on Github. Folks, take it easy and keep it fun, okay?
+    // Shit like this is patently ugly and slows Snap down. Tnx!
+    for (var i = 9; i <= 13; i += 1) {
+        NONNUMBERS.push(String.fromCharCode(i));
+    }
+    NONNUMBERS.push(String.fromCharCode(160));
+})();
+
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
         if (a instanceof List && (b instanceof List)) {
@@ -79,22 +92,11 @@ function snapEquals(a, b) {
     }
 
     var x = +a,
-        y = +b,
-        i,
-        specials = [true, false, ''];
-
-    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
-    // collecting edge-cases that somebody complained about
-    // on Github. Folks, take it easy and keep it fun, okay?
-    // Shit like this is patently ugly and slows Snap down. Tnx!
-    for (i = 9; i <= 13; i += 1) {
-        specials.push(String.fromCharCode(i));
-    }
-    specials.push(String.fromCharCode(160));
+        y = +b;
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
-            [a, b].some(any => contains(specials, any) ||
+            [a, b].some(any => contains(NONNUMBERS, any) ||
                   (isString(any) && (any.indexOf(' ') > -1)))
     ) {
         x = a;
