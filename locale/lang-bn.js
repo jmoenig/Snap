@@ -756,7 +756,7 @@ SnapTranslator.dict.bn = {
     'Flat line ends':
         'ফ্লাট লাইনের সমাপ্তি',
     'Codification support':
-        'সারসংগ্রহ সমর্থন',   
+        'অন্যান্য প্রোগ্রামিং ভাষার কোড দেখাও',   
         
     // inputs
     'with inputs':
