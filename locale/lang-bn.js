@@ -421,11 +421,11 @@ SnapTranslator.dict.bn = {
     'when I am clicked':
         'যখন আমাকে ক্লিক করা হবে',
     'when I receive %msgHat':
-        'যখন আমি গ্রহণ করি  %msgHat',
+        'যখন আমি পাবো বার্তা %msgHat',
     'broadcast %msg':
         'বার্তা সম্প্রচার কর  %msg',
     'broadcast %msg and wait':
-        'বার্তা সম্প্রচার করে   %msg অপেক্ষা কর',
+        'বার্তাে %msg সম্প্রচার কর অপেক্ষা কর',
     'Message name':
         'বার্তা লিখ',
     'message':
