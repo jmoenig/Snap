@@ -35,6 +35,7 @@
     * fixed editing cells in multi-page list watchers
     * recursive calls to "broadcast and wait" execute smoothly again
     * expanding a collapsed comment or clicking on it now brings it to the front
+    * long project titles no longer overlap other buttons in the control bar
 * **Translation Updates:**
     * New Hebrew translation
     * Ukranian

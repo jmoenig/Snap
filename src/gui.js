@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-June-24';
+modules.gui = '2020-June-28';
 
 // Declarations
 
@@ -1076,7 +1076,8 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.updateLabel = function () {
         var suffix = myself.world().isDevMode ?
-                ' - ' + localize('development mode') : '';
+                ' - ' + localize('development mode') : '',
+            txt;
 
         if (this.label) {
             this.label.destroy();
@@ -1084,8 +1085,7 @@ IDE_Morph.prototype.createControlBar = function () {
         if (myself.isAppMode) {
             return;
         }
-
-        this.label = new StringMorph(
+        txt = new StringMorph(
             (myself.projectName || localize('untitled')) + suffix,
             14,
             'sans-serif',
@@ -1095,11 +1095,22 @@ IDE_Morph.prototype.createControlBar = function () {
             MorphicPreferences.isFlat ? null : new Point(2, 1),
             myself.frameColor.darker(myself.buttonContrast)
         );
-        this.label.color = myself.buttonLabelColor;
-        this.label.fixLayout();
-        this.add(this.label);
+        txt.color = myself.buttonLabelColor;
+
+        this.label = new FrameMorph();
+        this.label.acceptsDrops = false;
+        this.label.alpha = 0;
+        txt.setPosition(this.label.position());
+        this.label.add(txt);
+        this.label.setExtent(
+            new Point(
+                steppingButton.left() - settingsButton.right() - padding * 2,
+                txt.height()
+            )
+        );
         this.label.setCenter(this.center());
         this.label.setLeft(this.settingsButton.right() + padding);
+        this.add(this.label);
     };
 };
 
