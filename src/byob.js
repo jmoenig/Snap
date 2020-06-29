@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-June-08';
+modules.byob = '2020-June-29';
 
 // Declarations
 
@@ -2241,12 +2241,12 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
         template = this.target.paletteBlockInstance(def);
 
     if (this.definition.isGlobal) {
-        this.target.allBlockInstances(this.definition).forEach(block =>
-            block.refresh()
+        this.target.allBlockInstances(this.definition).reverse().forEach(
+            block => block.refresh()
         );
     } else {
-        this.target.allDependentInvocationsOf(oldSpec).forEach(block =>
-            block.refresh(def)
+        this.target.allDependentInvocationsOf(oldSpec).reverse().forEach(
+            block => block.refresh(def)
         );
     }
     if (template) {
