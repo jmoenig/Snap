@@ -1268,7 +1268,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-June-13';
+var morphicVersion = '2020-June-30';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12063,7 +12063,7 @@ WorldMorph.prototype.initEventListeners = function () {
     canvas.addEventListener(
         "touchmove",
         event => this.hand.processTouchMove(event),
-        false
+        {passive: true}
     );
 
     canvas.addEventListener(
