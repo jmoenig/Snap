@@ -1160,7 +1160,7 @@ SnapTranslator.dict.bn = {
     'asin':
         'আসীন',
     'acos':
-        'acos',
+        'একোস,
     'atan':
         'atan',
     'ln':
