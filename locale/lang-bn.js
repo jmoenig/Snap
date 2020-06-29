@@ -230,7 +230,7 @@ SnapTranslator.dict.bn = {
 
     // names:
     'Sprite':
-        'স্পাইট',
+        'স্প্রাইট',
     'Stage':
         'দৃশ্যস্থল',
 
@@ -240,11 +240,11 @@ SnapTranslator.dict.bn = {
     'can rotate':
         'ঘুরতে পারে',
     'only face left/right':
-        'একমাত্র  ডানে/বামে মুখ',
+        'একমাত্র ডানে/বামে মুখ',
 
     // new sprite button:
     'add a new sprite':
-        'একটি নতুন স্পাইট যোগ কর',
+        'একটি নতুন স্প্রাইট যোগ কর',
 
     // tab help
     'costumes tab help':
@@ -917,9 +917,9 @@ SnapTranslator.dict.bn = {
 
     // variable dialog
     'for all sprites':
-        'সব স্পাইটের জন্য',
+        'সব স্প্রাইট জন্য',
     'for this sprite only':
-        'শুধুমাত্র এই স্পাইটের জন্য',
+        'শুধুমাত্র এই স্প্রাইট জন্য',
 
     // block dialog
     'Change block':
