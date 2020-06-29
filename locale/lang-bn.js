@@ -585,23 +585,29 @@ SnapTranslator.dict.bn = {
         '%var চলকটি গোপন কর',
     'script variables %scriptVars':
         'স্ক্রিপ্ট চলকসমূহ  %scriptVars',
-
+    // lists:
     'list %exp':
     	'তালিকা %exp',
+    'numbers from %n to %n':
+	'সংখ্যা %n থেকে %n',
     '%s in front of %l':
-    	'%s %l তালিকার সামনে',
+    	'%s %l তালিকাটির সামনে',
     'item %idx of %l':
-    	'%idx উপাদানটি  %l তালিকার',
+    	'%idx উপাদানটি %l তালিকার',
     'all but first of %l':
-    	'%l তালিকার সব কিন্তু প্রথমটি বাদে',
+    	'%l তালিকাটির সব কিন্তু প্রথমটি বাদে',
     'length of %l':
-     	'%l তালিকার দৈর্ঘ্য',
+     	'%l তালিকাটির দৈর্ঘ্য',
     '%l contains %s':
-    	'%l তালিকা  %s উপাদানটি ধারণ করে',
+    	'%l তালিকা %s উপাদানটি ধারণ করে',
     'thing':
     	'জিনিস',
+    'is %l empty?':
+        'তালিকা %l কি খালি?',
+    'index of %s in %l':
+        'জিনিস %s কততম %l তালিকায়',
     'add %s to %l':
-    	'%s কে  %l তে সংযুক্ত কর',
+    	'%s কে %l তে ঢুকাও',
     'delete %ida of %l':
     	'%ida কে %l থেকে মুছে ফেল',
     'insert %s at %idx of %l':
