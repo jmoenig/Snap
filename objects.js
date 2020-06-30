@@ -9295,6 +9295,18 @@ WatcherMorph.prototype.userMenu = function () {
                 });
             }
         }
+        menu.addItem(
+            'hide...',
+            function () {
+                const ide = myself.parentThatIsA(IDE_Morph);
+                const varName = myself.getter;
+                if (myself.isTemporary()) {
+                    myself.destroy();
+                } else {
+                    ide.stage.toggleVariableWatcher(varName);
+                }
+            }
+        );
     }
     return menu;
 };
