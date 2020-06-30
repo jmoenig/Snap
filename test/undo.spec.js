@@ -134,7 +134,51 @@ describe('undo', function() {
             expect(command.inputs()[0]).toBe(firstInput, msg);
 
             msg = 'Block not removed on undo';
-            expect(SnapActions._blocks[input.id]).toBe(undefined, );
+            expect(SnapActions._blocks[input.id]).toBe(undefined, msg);
+        });
+    });
+
+    describe('replace cslot input', function() {
+        const customBlockDef = `<blocks>
+            <block-definition collabId="item_0" s="test cslot %&apos;cs&apos;" type="command" category="other">
+                <header></header><code></code><inputs><input type="%cs"></input></inputs>
+            </block-definition>
+            </blocks>`;
+
+        beforeEach(async () => {
+            await driver.reset();
+            await driver.ide().droppedText(customBlockDef);
+            driver.selectCategory('custom');
+            const [/*makeBlockBtn*/, block] = driver.palette().contents.children;
+            const scriptsCenter = driver.ide().currentSprite.scripts.center();
+            await driver.dragAndDrop(block, scriptsCenter);
+            await driver.actionsSettled();
+        });
+
+        it('should revert (new) input to cslot on undo', async function() {
+            const [block] = Object.values(SnapActions._blocks);
+            driver.selectCategory('motion');
+            const turn = await driver.addBlock('turn', new Point(300, 300));
+            const cslotPos = block.center().add(new Point(block.width()/2, 0));
+
+            await driver.dragAndDrop(turn, cslotPos);
+            await driver.actionsSettled();
+
+            driver.selectCategory('motion');
+            const input = driver.palette().contents.children
+                .find(block => block.selector === 'yPosition');
+            await driver.dragAndDrop(
+                input,
+                cslotPos.add(new Point(-block.width(), 0))
+            );
+            await driver.actionsSettled();
+            assert.equal(block.inputs()[0].selector, 'yPosition');
+            const undoId = driver.ide().currentSprite.scripts.undoOwnerId();
+            await SnapUndo.undo(undoId);
+            await driver.actionsSettled();
+            const nestedBlock = block.inputs()[0].nestedBlock();
+            assert(nestedBlock, 'Turn block not returned to cslot');
+            assert.equal(nestedBlock.selector, 'turn');
         });
     });
 
