@@ -1463,6 +1463,7 @@ Process.prototype.doShowVar = function (varName) {
             if (watcher !== null) {
                 watcher.show();
                 watcher.fixLayout(); // re-hide hidden parts
+                stage.refreshVariableWatcher(varName);
                 return;
             }
             // if no watcher exists, create a new one
@@ -1488,6 +1489,7 @@ Process.prototype.doShowVar = function (varName) {
             }
             stage.add(watcher);
             watcher.fixLayout();
+            stage.refreshVariableWatcher(varName);
         }
     }
 };
@@ -1527,6 +1529,7 @@ Process.prototype.doHideVar = function (varName) {
                 } else {
                     watcher.hide();
                 }
+                stage.refreshVariableWatcher(varName);
             }
         }
     }
