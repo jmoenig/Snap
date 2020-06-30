@@ -474,7 +474,7 @@ SnapTranslator.dict.bn = {
     'call %cmdRing w/continuation':
         'আহ্বান কর  %cmdRing ধারাবাহিকতার সঙ্গে',
     'warp %c':
-        'একত্রিত কর  %c',
+        'বিরতি ছাড়াই %c',
     'when I start as a clone':
         'যখন আমি একটি ক্লোন হিসেবে শুরু করি',
     'create a clone of %cln':
