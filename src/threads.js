@@ -58,10 +58,10 @@ MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
-isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
+isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-27';
+modules.threads = '2020-July-01';
 
 var ThreadManager;
 var Process;
@@ -4571,7 +4571,7 @@ Process.prototype.colorAtSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = stage.children.length; i > 0; i -= 1) {
         child = stage.children[i - 1];
         if ((child !== sprite) &&
@@ -4585,7 +4585,7 @@ Process.prototype.colorAtSprite = function (sprite) {
     if (stage.bounds.containsPoint(point)) {
         return stage.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.colorBelowSprite = function (sprite) {
@@ -4601,7 +4601,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = 0; i < stage.children.length; i += 1) {
         if (!found) {
             child = stage.children[i];
@@ -4618,7 +4618,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
     if (below.bounds.containsPoint(point)) {
         return below.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.spritesAtPoint = function (point, stage) {
