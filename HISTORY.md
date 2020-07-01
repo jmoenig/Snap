@@ -36,6 +36,7 @@
     * recursive calls to "broadcast and wait" execute smoothly again
     * expanding a collapsed comment or clicking on it now brings it to the front
     * long project titles no longer overlap other buttons in the control bar
+    * "empty" continuations referring to the end of a script no longer throw an error.
 * **Translation Updates:**
     * New Hebrew translation
     * Ukranian

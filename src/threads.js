@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-01';
+modules.threads = '2020-July-02';
 
 var ThreadManager;
 var Process;
@@ -1362,7 +1362,7 @@ Process.prototype.doStopCustomBlock = function () {
 Process.prototype.doCallCC = function (aContext, isReporter) {
     this.evaluate(
         aContext,
-        new List([this.context.continuation()]),
+        new List([this.context.continuation(isReporter)]),
         !isReporter
     );
 };
@@ -6139,14 +6139,17 @@ Context.prototype.image = function () {
 
 // Context continuations:
 
-Context.prototype.continuation = function () {
+Context.prototype.continuation = function (isReporter) {
     var cont;
     if (this.expression instanceof Array) {
         cont = this;
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        cont = new Context(null, 'expectReport');
+        cont = new Context(
+            null,
+            isReporter ? 'expectReport' : 'popContext'
+        );
         cont.isContinuation = true;
         return cont;
     }
