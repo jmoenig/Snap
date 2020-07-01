@@ -37,11 +37,11 @@
 
 */
 
-/*global modules, Morph, Point, radians, Color, ZERO*/
+/*global modules, Morph, Point, radians, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-June-17';
+modules.symbols = '2020-July-01';
 
 var SymbolMorph;
 
@@ -161,7 +161,7 @@ SymbolMorph.prototype.init = function (
     this.shadowOffset = shadowOffset || ZERO;
     this.shadowColor = shadowColor || null;
     SymbolMorph.uber.init.call(this);
-    this.color = color || new Color(0, 0, 0);
+    this.color = color || BLACK;
     this.fixLayout();
     this.rerender();
 };
