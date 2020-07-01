@@ -80,12 +80,12 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO,
-StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
+StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, BLACK, WHITE,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-May-06';
+modules.widgets = '2020-July-01';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -112,8 +112,8 @@ PushButtonMorph.uber = TriggerMorph.prototype;
 
 PushButtonMorph.prototype.fontSize = 10;
 PushButtonMorph.prototype.fontStyle = 'sans-serif';
-PushButtonMorph.prototype.labelColor = new Color(0, 0, 0);
-PushButtonMorph.prototype.labelShadowColor = new Color(255, 255, 255);
+PushButtonMorph.prototype.labelColor = BLACK;
+PushButtonMorph.prototype.labelShadowColor = WHITE;
 PushButtonMorph.prototype.labelShadowOffset = new Point(1, 1);
 
 PushButtonMorph.prototype.color = new Color(220, 220, 220);
@@ -820,8 +820,7 @@ ToggleButtonMorph.prototype.previewPath = function (ctx, radius, inset) {
 };
 
 ToggleButtonMorph.prototype.createLabel = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D,
-        none = new Point();
+    var shading = !MorphicPreferences.isFlat || this.is3D;
 
     if (this.label !== null) {
         this.label.destroy();
@@ -835,14 +834,14 @@ ToggleButtonMorph.prototype.createLabel = function () {
             this.trueStateLabel = this.labelString[1].fullCopy();
             if (!this.isPicture) {
                 this.label.shadowOffset = shading ?
-                        this.labelShadowOffset : none;
+                        this.labelShadowOffset : ZERO;
                 this.label.shadowColor = this.labelShadowColor;
                 this.label.color = this.labelColor;
                 this.label.fixLayout();
                 this.label.rerender();
 
                 this.trueStateLabel.shadowOffset = shading ?
-                        this.labelShadowOffset : none;
+                        this.labelShadowOffset : ZERO;
                 this.trueStateLabel.shadowColor = this.labelShadowColor;
                 this.trueStateLabel.color = this.labelColor;
                 this.trueStateLabel.fixLayout();
@@ -880,7 +879,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
             this.label = this.labelString.fullCopy();
             if (!this.isPicture) {
                 this.label.shadowOffset = shading ?
-                        this.labelShadowOffset : none;
+                        this.labelShadowOffset : ZERO;
                 this.label.shadowColor = this.labelShadowColor;
                 this.label.color = this.labelColor;
                 this.label.fixLayout();
@@ -896,7 +895,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 true,
                 false,
                 false,
-                shading ? this.labelShadowOffset : none,
+                shading ? this.labelShadowOffset : ZERO,
                 this.labelShadowColor,
                 this.labelColor
             );
@@ -1464,7 +1463,7 @@ DialogBoxMorph.prototype.titleFontSize = 14;
 DialogBoxMorph.prototype.fontStyle = 'sans-serif';
 
 DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
-DialogBoxMorph.prototype.titleTextColor = new Color(255, 255, 255);
+DialogBoxMorph.prototype.titleTextColor = WHITE;
 DialogBoxMorph.prototype.titleBarColor
     = PushButtonMorph.prototype.pressColor;
 
@@ -1536,7 +1535,7 @@ DialogBoxMorph.prototype.inform = function (
         null,
         null,
         MorphicPreferences.isFlat ? null : new Point(1, 1),
-        new Color(255, 255, 255)
+        WHITE
     );
 
     if (!this.key) {
@@ -1571,7 +1570,7 @@ DialogBoxMorph.prototype.askYesNo = function (
         null,
         null,
         MorphicPreferences.isFlat ? null : new Point(1, 1),
-        new Color(255, 255, 255)
+        WHITE
     );
 
     if (!this.key) {
@@ -1715,7 +1714,7 @@ DialogBoxMorph.prototype.promptCode = function (
             null, // width
             null, // font name
             MorphicPreferences.isFlat ? null : new Point(1, 1),
-            new Color(255, 255, 255) // shadowColor
+            WHITE // shadowColor
         );
     }
 
@@ -1796,7 +1795,7 @@ DialogBoxMorph.prototype.promptVector = function (
             null, // width
             null, // font name
             MorphicPreferences.isFlat ? null : new Point(1, 1),
-            new Color(255, 255, 255) // shadowColor
+            WHITE // shadowColor
         );
     }
 
@@ -1909,7 +1908,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             null, // width
             null, // font name
             MorphicPreferences.isFlat ? null : new Point(1, 1),
-            new Color(255, 255, 255) // shadowColor
+            WHITE // shadowColor
         );
     }
 
@@ -2897,7 +2896,7 @@ InputFieldMorph.prototype.init = function (
     this.isNumeric = isNumeric || false;
 
     InputFieldMorph.uber.init.call(this);
-    this.color = new Color(255, 255, 255);
+    this.color = WHITE;
     this.add(contents);
     this.add(arrow);
     contents.isDraggable = false;
@@ -3092,7 +3091,7 @@ InputFieldMorph.prototype.render = function (ctx) {
     var borderColor;
 
     if (this.parent) {
-        if (this.parent.color.eq(new Color(255, 255, 255))) {
+        if (this.parent.color.eq(WHITE)) {
             this.color = this.parent.color.darker(this.contrast * 0.1);
         } else {
             this.color = this.parent.color.lighter(this.contrast * 0.75);
@@ -3276,9 +3275,9 @@ PianoMenuMorph.prototype.createItems = function () {
         this.edge = MorphicPreferences.isFlat ? 0 : 5;
         this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
-    this.color = new Color(255, 255, 255);
+    this.color = WHITE;
     this.borderColor = new Color(60, 60, 60);
-    this.bounds.setExtent(new Point(0, 0));
+    this.bounds.setExtent(ZERO);
 
     x = this.left() + 1;
     y = this.top() + (this.fontSize * 1.5) + 2;
@@ -3287,12 +3286,12 @@ PianoMenuMorph.prototype.createItems = function () {
         blackkey = tuple[0][1] !== " ";
         key = new BoxMorph(1, 1);
         if (blackkey) {
-            keycolor = new Color(0, 0, 0);
+            keycolor = BLACK;
             keywidth = this.fontSize; // 9;
             keyheight = this.fontSize * 2.5;
             keyposition = new Point(x + 2 - (this.fontSize * 2), y);
         } else {
-            keycolor = new Color(255, 255, 255);
+            keycolor = WHITE;
             keywidth = this.fontSize * 1.5;
             keyheight = this.fontSize * 4;
             keyposition = new Point(x + 1, y);
