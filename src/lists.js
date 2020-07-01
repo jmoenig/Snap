@@ -60,9 +60,10 @@
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect*/
+TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
+ZERO, WHITE*/
 
-modules.lists = '2020-May-18';
+modules.lists = '2020-July-01';
 
 var List;
 var ListWatcherMorph;
@@ -693,8 +694,8 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         false,
         false,
         false,
-        MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
-        new Color(255, 255, 255)
+        MorphicPreferences.isFlat ? ZERO : new Point(1, 1),
+        WHITE
     );
     this.label.mouseClickLeft = function () {myself.startIndexMenu(); };
 
@@ -858,8 +859,8 @@ ListWatcherMorph.prototype.update = function (anyway) {
                 false,
                 false,
                 false,
-                MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
-                new Color(255, 255, 255)
+                MorphicPreferences.isFlat ? ZERO : new Point(1, 1),
+                WHITE
             );
             cell = new CellMorph(
                 this.list.at(idx),
