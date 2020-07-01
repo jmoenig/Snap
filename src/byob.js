@@ -96,7 +96,7 @@
 */
 
 /*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map,
-StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
+StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph, WHITE,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
 StringMorph, nop, radians, BoxMorph, ArrowMorph, PushButtonMorph,
@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-June-29';
+modules.byob = '2020-July-01';
 
 // Declarations
 
@@ -958,7 +958,7 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
-        part.color = new Color(255, 255, 255);
+        part.color = WHITE;
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
         part.shadowOffset = this.embossing;
@@ -1722,7 +1722,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.labelShadowColor = colors[1];
     button.labelColor = IDE_Morph.prototype.buttonLabelColor;
         if (MorphicPreferences.isFlat) {
-            button.labelPressColor = new Color(255, 255, 255);
+            button.labelPressColor = WHITE;
         }
     button.contrast = this.buttonContrast;
     button.fixLayout();
@@ -3315,7 +3315,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // default values
     defLabel = new StringMorph(localize('Default Value:'));
     defLabel.fontSize = this.slots.radioButtonSingle.fontSize;
-    defLabel.setColor(new Color(255, 255, 255));
+    defLabel.setColor(WHITE);
     defLabel.refresh = () => {
         if (this.isExpanded && contains(
                 [
@@ -3386,7 +3386,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         new SymbolMorph(
             'loop',
             this.fontSize * 0.7,
-            new Color(255, 255, 255)
+            WHITE
         ),
         null // builder method that constructs the element morph
     );
@@ -3481,7 +3481,7 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     button.outlineGradient = this.buttonOutlineGradient;
     button.fixLayout();
     button.label.isBold = false;
-    button.label.setColor(new Color(255, 255, 255));
+    button.label.setColor(WHITE);
     this.slots.add(button);
     return button;
 };
@@ -3507,7 +3507,7 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
 
     button.fixLayout();
     // button.label.isBold = false;
-    button.label.setColor(new Color(255, 255, 255));
+    button.label.setColor(WHITE);
     this.slots.add(button);
     return button;
 };
