@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-24';
+modules.blocks = '2020-July-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2056,7 +2056,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     if (this instanceof BlockMorph && this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
         this.parent.changed();
-        return;
+        if (this.parent instanceof SyntaxElementMorph) {
+            return;
+        }
     }
     
     this.fixHighlight();
