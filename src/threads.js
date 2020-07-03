@@ -58,10 +58,10 @@ MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
-isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
+isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-June-25';
+modules.threads = '2020-July-02';
 
 var ThreadManager;
 var Process;
@@ -69,6 +69,19 @@ var Context;
 var Variable;
 var VariableFrame;
 var JSCompiler;
+
+const NONNUMBERS = [true, false, ''];
+
+(function () {
+    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
+    // collecting edge-cases that somebody complained about
+    // on Github. Folks, take it easy and keep it fun, okay?
+    // Shit like this is patently ugly and slows Snap down. Tnx!
+    for (var i = 9; i <= 13; i += 1) {
+        NONNUMBERS.push(String.fromCharCode(i));
+    }
+    NONNUMBERS.push(String.fromCharCode(160));
+})();
 
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
@@ -79,22 +92,11 @@ function snapEquals(a, b) {
     }
 
     var x = +a,
-        y = +b,
-        i,
-        specials = [true, false, ''];
-
-    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
-    // collecting edge-cases that somebody complained about
-    // on Github. Folks, take it easy and keep it fun, okay?
-    // Shit like this is patently ugly and slows Snap down. Tnx!
-    for (i = 9; i <= 13; i += 1) {
-        specials.push(String.fromCharCode(i));
-    }
-    specials.push(String.fromCharCode(160));
+        y = +b;
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
-            [a, b].some(any => contains(specials, any) ||
+            [a, b].some(any => contains(NONNUMBERS, any) ||
                   (isString(any) && (any.indexOf(' ') > -1)))
     ) {
         x = a;
@@ -1112,7 +1114,9 @@ Process.prototype.evaluate = function (
     args,
     isCommand
 ) {
-    if (!context) {return null; }
+    if (!context) {
+        return this.returnValueToParentContext(null);
+    }
     if (context instanceof Function) {
         // if (!this.enableJS) {
         //     throw new Error('JavaScript is not enabled');
@@ -1358,7 +1362,7 @@ Process.prototype.doStopCustomBlock = function () {
 Process.prototype.doCallCC = function (aContext, isReporter) {
     this.evaluate(
         aContext,
-        new List([this.context.continuation()]),
+        new List([this.context.continuation(isReporter)]),
         !isReporter
     );
 };
@@ -4567,7 +4571,7 @@ Process.prototype.colorAtSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = stage.children.length; i > 0; i -= 1) {
         child = stage.children[i - 1];
         if ((child !== sprite) &&
@@ -4581,7 +4585,7 @@ Process.prototype.colorAtSprite = function (sprite) {
     if (stage.bounds.containsPoint(point)) {
         return stage.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.colorBelowSprite = function (sprite) {
@@ -4597,7 +4601,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = 0; i < stage.children.length; i += 1) {
         if (!found) {
             child = stage.children[i];
@@ -4614,7 +4618,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
     if (below.bounds.containsPoint(point)) {
         return below.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.spritesAtPoint = function (point, stage) {
@@ -6135,14 +6139,17 @@ Context.prototype.image = function () {
 
 // Context continuations:
 
-Context.prototype.continuation = function () {
+Context.prototype.continuation = function (isReporter) {
     var cont;
     if (this.expression instanceof Array) {
         cont = this;
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        cont = new Context(null, 'expectReport');
+        cont = new Context(
+            null,
+            isReporter ? 'expectReport' : 'popContext'
+        );
         cont.isContinuation = true;
         return cont;
     }

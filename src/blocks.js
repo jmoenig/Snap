@@ -141,14 +141,14 @@ String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
-DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
+DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-June-24';
+modules.blocks = '2020-July-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -878,7 +878,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%br':
             part = new Morph();
-            part.setExtent(new Point(0, 0));
+            part.setExtent(ZERO);
             part.isBlockLabelBreak = true;
             part.getSpec = () => '%br';
             break;
@@ -1567,10 +1567,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%loopArrow':
             part = new SymbolMorph('loop');
             part.size = this.fontSize * 0.7;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%clr':
@@ -1625,40 +1625,40 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%turtle':
             part = new SymbolMorph('turtle');
             part.size = this.fontSize * 1.2;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%turtleOutline':
             part = new SymbolMorph('turtleOutline');
             part.size = this.fontSize;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%clockwise':
             part = new SymbolMorph('turnRight');
             part.size = this.fontSize * 1.5;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%counterclockwise':
             part = new SymbolMorph('turnLeft');
             part.size = this.fontSize * 1.5;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%greenflag':
@@ -1668,7 +1668,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%stop':
@@ -1678,7 +1678,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%pause':
@@ -1688,26 +1688,26 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%blitz':
             part = new SymbolMorph('flash');
             part.size = this.fontSize;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
         case '%list':
             part = new SymbolMorph('list');
             part.size = this.fontSize;
-            part.color = new Color(255, 255, 255);
+            part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
+                    ZERO : this.embossing;
             part.fixLayout();
             break;
 
@@ -1765,7 +1765,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.isProtectedLabel = tokens.length > 2; // zebra colors
         part.shadowColor = this.color.darker(this.labelContrast);
         part.shadowOffset = MorphicPreferences.isFlat ?
-                new Point() : this.embossing;
+                ZERO : this.embossing;
         part.fixLayout();
     } else {
         part = new StringMorph(
@@ -1776,9 +1776,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             false, // italic
             false, // isNumeric
             MorphicPreferences.isFlat ?
-                    new Point() : this.embossing, // shadowOffset
+                    ZERO : this.embossing, // shadowOffset
             this.color.darker(this.labelContrast), // shadowColor
-            new Color(255, 255, 255), // color
+            WHITE, // color
             this.labelFontName // fontName
         );
     }
@@ -2056,7 +2056,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     if (this instanceof BlockMorph && this.parent && this.parent.fixLayout) {
         this.parent.fixLayout();
         this.parent.changed();
-        return;
+        if (this.parent instanceof SyntaxElementMorph) {
+            return;
+        }
     }
     
     this.fixHighlight();
@@ -4191,7 +4193,7 @@ BlockMorph.prototype.forceNormalColoring = function () {
     var clr = SpriteMorph.prototype.blockColor[this.category];
     this.setColor(clr);
     this.setLabelColor(
-        new Color(255, 255, 255),
+        WHITE,
         clr.darker(this.labelContrast),
         MorphicPreferences.isFlat ? ZERO : this.embossing
     );
@@ -4225,13 +4227,13 @@ BlockMorph.prototype.fixLabelColor = function () {
         var clr = SpriteMorph.prototype.blockColor[this.category];
         if (this.color.eq(clr)) {
             this.setLabelColor(
-                new Color(255, 255, 255),
+                WHITE,
                 clr.darker(this.labelContrast),
                 MorphicPreferences.isFlat ? null : this.embossing
             );
         } else {
             this.setLabelColor(
-                new Color(0, 0, 0),
+                BLACK,
                 clr.lighter(this.zebraContrast)
                     .lighter(this.labelContrast * 2),
                 MorphicPreferences.isFlat ? null : this.embossing.neg()
@@ -6379,7 +6381,7 @@ ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
 ScriptsMorph.prototype.enableNestedAutoWrapping = true;
-ScriptsMorph.prototype.feedbackColor = new Color(255, 255, 255);
+ScriptsMorph.prototype.feedbackColor = WHITE;
 
 // ScriptsMorph instance creation:
 
@@ -8575,7 +8577,7 @@ InputSlotMorph.prototype.init = function (
     this.constant = null;
 
     InputSlotMorph.uber.init.call(this, null, true);
-    this.color = new Color(255, 255, 255);
+    this.color = WHITE;
     this.add(contents);
     this.add(arrow);
     contents.isEditable = true;
@@ -9233,9 +9235,9 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
     if (this.parent instanceof BlockMorph) {
         this.parent.fixLabelColor();
         if (!readonly) {
-            cnts.shadowOffset = new Point();
+            cnts.shadowOffset = ZERO;
             cnts.shadowColor = null;
-            cnts.setColor(new Color(0, 0, 0));
+            cnts.setColor(BLACK);
         }
     }
     this.fixLayout();
@@ -9253,10 +9255,10 @@ InputSlotMorph.prototype.fixLayout = function () {
     contents.isEditable = (!this.isReadOnly);
     if (this.isReadOnly) {
         contents.disableSelecting();
-        contents.color = new Color(255, 255, 255);
+        contents.color = WHITE;
     } else {
         contents.enableSelecting();
-        contents.color = new Color(0, 0, 0);
+        contents.color = BLACK;
     }
 
     if (this.choices) {
@@ -10503,7 +10505,7 @@ ArrowMorph.prototype.init = function (direction, size, padding, color) {
     this.padding = padding || 0;
 
     ArrowMorph.uber.init.call(this);
-    this.color = color || new Color(0, 0, 0);
+    this.color = color || BLACK;
     this.bounds.setWidth(this.size);
     this.bounds.setHeight(this.size);
     this.rerender();
@@ -10595,7 +10597,7 @@ TextSlotMorph.prototype.init = function (
     this.constant = null;
 
     InputSlotMorph.uber.init.call(this, null, null, null, null, true); // sil.
-    this.color = new Color(255, 255, 255);
+    this.color = WHITE;
     this.add(contents);
     this.add(arrow);
     contents.isEditable = true;
@@ -11373,7 +11375,7 @@ ArgLabelMorph.prototype.fixLayout = function () {
 
     if (this.parent) {
         this.color = this.parent.color;
-        shadowOffset = label.shadowOffset || new Point();
+        shadowOffset = label.shadowOffset || ZERO;
 
         // determine the shadow color for zebra coloring:
         if (shadowOffset.x < 0) {

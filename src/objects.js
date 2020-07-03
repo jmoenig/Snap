@@ -74,7 +74,7 @@ ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,  nop,
 TextMorph, contains, degrees, detect, newCanvas, radians, Array, CursorMorph,
-Date, FrameMorph, Math, MenuMorph, Morph, invoke, MorphicPreferences,
+Date, FrameMorph, Math, MenuMorph, Morph, invoke, MorphicPreferences, WHITE,
 Object, PenMorph, Point, Rectangle, ScrollFrameMorph, SliderMorph, String,
 StringMorph, TextMorph, contains, copy, degrees, detect, document, isNaN,
 isString, newCanvas, nop, parseFloat, radians, window, modules, IDE_Morph,
@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-June-20';
+modules.objects = '2020-July-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -172,7 +172,7 @@ SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
-SpriteMorph.prototype.bubbleColor = new Color(255, 255, 255);
+SpriteMorph.prototype.bubbleColor = WHITE;
 SpriteMorph.prototype.bubbleFontSize = 14;
 SpriteMorph.prototype.bubbleFontIsBold = true;
 SpriteMorph.prototype.bubbleCorner = 10;
@@ -3175,8 +3175,7 @@ SpriteMorph.prototype.searchBlocks = function (
         if (focus) {focus.destroy(); }
         if (!selection || !scriptFocus) {return; }
         focus = selection.outline(
-            MorphicPreferences.isFlat ? new Color(150, 200, 255)
-                    : new Color(255, 255, 255),
+            MorphicPreferences.isFlat ? new Color(150, 200, 255) : WHITE,
             2
         );
         searchPane.contents.add(focus);
@@ -7192,7 +7191,7 @@ SpriteMorph.prototype.highlight = function (color, border) {
     highlight.cachedImage = this.highlightImage(color, border);
     ctx = highlight.cachedImage.getContext('2d');
     ctx.drawImage(
-        this.highlightImage(new Color(255, 255, 255), 4),
+        this.highlightImage(WHITE, 4),
         border - 4,
         border - 4
     );
@@ -7202,7 +7201,7 @@ SpriteMorph.prototype.highlight = function (color, border) {
         border - 2
     );
     ctx.drawImage(
-        this.highlightImage(new Color(255, 255, 255), 1),
+        this.highlightImage(WHITE, 1),
         border - 1,
         border - 1
     );
@@ -9792,7 +9791,7 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
         null,
         null,
         new Point(1, 1),
-        new Color(255, 255, 255)
+        WHITE
     );
 
     dialog.labelString = 'Costume Editor';
@@ -10035,7 +10034,7 @@ function CostumeEditorMorph(costume) {
 CostumeEditorMorph.prototype.init = function (costume) {
     this.costume = costume || new Costume();
     this.rotationCenter = this.costume.rotationCenter.copy();
-    this.margin = new Point(0, 0);
+    this.margin = ZERO;
     CostumeEditorMorph.uber.init.call(this);
 };
 
@@ -10646,8 +10645,8 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
     CellMorph.uber.init.call(
         this,
         SyntaxElementMorph.prototype.corner,
-        1.000001, // shadow bug in Chrome,
-        new Color(255, 255, 255)
+        1,
+        WHITE
     );
     this.color = color || new Color(255, 140, 0);
     this.isBig = false;
@@ -10781,7 +10780,7 @@ CellMorph.prototype.createContents = function () {
                 this.contentsMorph.isEditable = true;
                 this.contentsMorph.enableSelecting();
             }
-            this.contentsMorph.setColor(new Color(255, 255, 255));
+            this.contentsMorph.setColor(WHITE);
         } else if (typeof this.contents === 'boolean') {
             img = SpriteMorph.prototype.booleanMorph.call(
                 null,
@@ -10832,7 +10831,7 @@ CellMorph.prototype.createContents = function () {
                         true, // italic
                         'center'
                     );
-                    this.contentsMorph.setColor(new Color(255, 255, 255));
+                    this.contentsMorph.setColor(WHITE);
                 } else {
                     this.contentsMorph = new ListWatcherMorph(
                         this.contents,
@@ -10854,7 +10853,7 @@ CellMorph.prototype.createContents = function () {
                 this.contentsMorph.isEditable = true;
                 this.contentsMorph.enableSelecting();
             }
-            this.contentsMorph.setColor(new Color(255, 255, 255));
+            this.contentsMorph.setColor(WHITE);
         }
         this.add(this.contentsMorph);
     }
@@ -10965,7 +10964,7 @@ CellMorph.prototype.reactToEdit = function (textMorph) {
         if (listWatcher) {
             listWatcher.list.put(
                 textMorph.text,
-                this.idx + listWatcher.start - 1
+                this.idx
             );
         }
     }
@@ -11222,7 +11221,7 @@ WatcherMorph.prototype.fixLayout = function () {
             false,
             false,
             MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
-            new Color(255, 255, 255)
+            WHITE
         );
         this.add(this.labelMorph);
     }
@@ -11793,7 +11792,7 @@ StagePrompterMorph.prototype.init = function (question) {
     );
 
     // override inherited behavior
-    this.color = new Color(255, 255, 255);
+    this.color = WHITE;
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);

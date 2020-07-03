@@ -590,11 +590,11 @@ SnapTranslator.dict.ja = {
     'add %s to %l':
         '%s を %l に追加する',
     'delete %ida of %l':
-        '%ida を %l から削除する',
+        '%ida 番目を %l から削除する',
     'insert %s at %idx of %l':
-        '%s を %idx 番目に挿入する %l',
+        '%s を %idx 番目になるように %l に挿入する ',
     'replace item %idx of %l with %s':
-        '%idx 番目 %l を %s で置き換える',
+        '%idx 番目の %l の要素を %s で置き換える',
 
     // other
     'Make a block':
