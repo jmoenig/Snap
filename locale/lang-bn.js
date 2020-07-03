@@ -225,6 +225,8 @@ SnapTranslator.dict.bn = {
         'স্ক্রিপ্টগুলো',
     'Costumes':
         'পরিচ্ছদ',
+    'Backgrounds':
+        'ব্যাকগ্রাউন্ড',
     'Sounds':
         'শব্দমালা',
 
@@ -245,6 +247,10 @@ SnapTranslator.dict.bn = {
     // new sprite button:
     'add a new sprite':
         'একটি নতুন স্প্রাইট যোগ কর',
+    'paint a new sprite':
+        'একটি পোশাক আঁক',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'একটি ক্যামেরা স্ক্রিনশট নেও\n এবং এটি নতুন পোশাক হিসেবে আমদানি কর',
 
     // tab help
     'costumes tab help':
