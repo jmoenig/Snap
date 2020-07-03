@@ -332,7 +332,7 @@ SnapTranslator.dict.bn = {
 	
     // looks:
     'switch to costume %cst':
-        'পরিচ্ছদ বদল  কর  %cst',
+        'পরিচ্ছদ বদল কর %cst',
     'next costume':
         'পরবর্তী পরিচ্ছদ',
     'costume #':
@@ -526,7 +526,7 @@ SnapTranslator.dict.bn = {
     'turbo mode?':
         'টার্বো মোড চালু কিনা?',
      'set turbo mode to %b':
-        'টার্বো মোডকে  %b নির্ধারণ কর',
+        'টার্বো মোডকে %b নির্ধারণ কর',
 
     'filtered for %clr':
         'ফিল্টার করা  হয়েছে  %clr এর জন্য',
@@ -547,7 +547,7 @@ SnapTranslator.dict.bn = {
     '%b and %b':
         '%b এবং %b',
     '%b or %b':
-        '%b অথবা  %b',
+        '%b অথবা %b',
     'not %b':
         'না %b',
     'true':
@@ -561,7 +561,7 @@ SnapTranslator.dict.bn = {
     'world':
         'পৃথিবী',
     'letter %idx of %s':
-        '%idx -তম বর্ণ %s এর',
+        '%idx-তম বর্ণ %s এর',
     'length of %s':
         '%s এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
@@ -569,9 +569,9 @@ SnapTranslator.dict.bn = {
     'unicode %n as letter':
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
-        '%s এই  প্রকারের কিনা %typ ?',
+        '%s এই প্রকারের কিনা %typ ?',
     'is %s identical to %s ?':
-        '%s এর সমতুল্য  %s কিনা?',
+        '%s এর সমতুল্য %s কিনা?',
 
     'type of %s':
         '%s এর প্রকারে',
@@ -586,7 +586,7 @@ SnapTranslator.dict.bn = {
     'set %var to %s':
         '%var চলকটি মান %s নির্ধারণ কর',
     'change %var by %n':
-        '%var চলকটি মান  %n দ্বারা পরিবর্তন কর',
+        '%var চলকটি মান %n দ্বারা পরিবর্তন কর',
     'show variable %var':
         '%var চলকটি প্রদর্শন কর',
     'hide variable %var':
@@ -963,15 +963,15 @@ SnapTranslator.dict.bn = {
     'Edit input name':
         'ইনপুট নাম সম্পাদনা কর',
     'Edit label fragment':
-        'লেবেল টুকরা সম্পাদনা কর',
+        'লেবেল টুকরা পরিবর্তন কর',
     'Title text':
-        'শিরোনাম পাঠ্য',
+        'শিরোনামের লেখা',
     'Input name':
         'ইনপুট নাম',
     'Delete':
         'মুছে ফেল',
     'Object':
-        'লক্ষ্যবস্তু',
+        'বস্তু',
     'Number':
         'সংখ্যা',
     'Text':
