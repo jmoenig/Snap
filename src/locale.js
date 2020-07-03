@@ -30,12 +30,7 @@
 
         lang-de.js
 
-    or to the separate file
-
-        translating Snap.txt
-
-    (same contents) if you would like to contribute.
-
+    if you would like to contribute.
 */
 
 // Global settings /////////////////////////////////////////////////////
