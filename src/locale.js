@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-June-26';
+modules.locale = '2020-July-03';
 
 // Global stuff
 
@@ -184,7 +184,7 @@ SnapTranslator.dict.ja = {
     'translator_e-mail':
         'abee@squeakland.jp',
     'last_changed':
-        '2018-10-23'
+        '2020-07-03'
 };
 
 SnapTranslator.dict.ja_HIRA = {
@@ -235,11 +235,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华',
+        '五百刀/邓江华/曹儒林',
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2019-08-06'
+        '2020-07-03'
 };
 
 SnapTranslator.dict.eo = {
