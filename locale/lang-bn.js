@@ -383,20 +383,28 @@ SnapTranslator.dict.bn = {
     'play sound %snd':
         'শব্দ বাজাও  %snd',
     'play sound %snd until done':
-        '%snd শব্দ বাজাও যতক্ষণ না',
+        '%snd শব্দ বাজাও এটি শেষ না হওয়া পর্যন্ত',
     'stop all sounds':
         'সকল শব্দ বন্ধ কর',
     'rest for %n beats':
-        'নীরব থাক %n স্বরকম্প পর্যন্ত',
+        'নীরব থাক %n কম্পন পর্যন্ত',
+    'play sound %snd at %rate Hz':
+        'শব্দ %snd রেট %rate-এ বাজাও',
     'play note %n for %n beats':
-        'মন্তব্য %n বাজাও  %n স্বরকম্প',
+        'নোট %n বাজাও %n কম্পন পর্যন্ত',
+     '%aa of sound %snd':
+        'শব্দের %aa %snd',
+     'duration':
+        'ব্যাপ্তিকাল'
+     'length':
+        'দৈর্ঘ্য',
     'change tempo by %n':
-        'শব্দের কম্পনমাত্রা %n পরিবর্তন কর',
+        'শব্দের কম্পনমাত্রা %n দ্বারা পরিবর্তন কর',
     'set tempo to %n bpm':
-        'শব্দের কম্পনমাত্রা %n নির্ধারণ কর',
+        'শব্দের কম্পনমাত্রা %n করে ফেল',
     'tempo':
         'শব্দের কম্পনমাত্রা',
-
+	
     // pen:
     'clear':
         'পরিচ্ছদ পরিষ্কার কর',
