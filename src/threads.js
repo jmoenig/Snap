@@ -58,10 +58,10 @@ MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
-isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, Color,
+isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-May-13';
+modules.threads = '2020-July-02';
 
 var ThreadManager;
 var Process;
@@ -69,6 +69,19 @@ var Context;
 var Variable;
 var VariableFrame;
 var JSCompiler;
+
+const NONNUMBERS = [true, false, ''];
+
+(function () {
+    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
+    // collecting edge-cases that somebody complained about
+    // on Github. Folks, take it easy and keep it fun, okay?
+    // Shit like this is patently ugly and slows Snap down. Tnx!
+    for (var i = 9; i <= 13; i += 1) {
+        NONNUMBERS.push(String.fromCharCode(i));
+    }
+    NONNUMBERS.push(String.fromCharCode(160));
+})();
 
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
@@ -79,22 +92,11 @@ function snapEquals(a, b) {
     }
 
     var x = +a,
-        y = +b,
-        i,
-        specials = [true, false, ''];
-
-    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
-    // collecting edge-cases that somebody complained about
-    // on Github. Folks, take it easy and keep it fun, okay?
-    // Shit like this is patently ugly and slows Snap down. Tnx!
-    for (i = 9; i <= 13; i += 1) {
-        specials.push(String.fromCharCode(i));
-    }
-    specials.push(String.fromCharCode(160));
+        y = +b;
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
-            [a, b].some(any => contains(specials, any) ||
+            [a, b].some(any => contains(NONNUMBERS, any) ||
                   (isString(any) && (any.indexOf(' ') > -1)))
     ) {
         x = a;
@@ -741,7 +743,15 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector ===  'reportAnd' ||
             selector === 'reportIfElse' ||
             selector === 'doReport') {
-        return this[selector](block);
+        if (this.isCatchingErrors) {
+            try {
+                return this[selector](block);
+            } catch (error) {
+                this.handleError(error, block);
+            }
+        } else {
+            return this[selector](block);
+        }
     }
 
     // first evaluate all inputs, then apply the primitive
@@ -780,13 +790,17 @@ Process.prototype.reportOr = function (block) {
 
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
-    } else if (inputs[0]) {
-        if (this.flashContext()) {return; }
-        this.returnValueToParentContext(true);
-        this.popContext();
-    } else if (inputs.length < 2) {
-        this.evaluateNextInput(block);
+    } else if (inputs.length === 1) {
+        // this.assertType(inputs[0], 'Boolean');
+        if (inputs[0]) {
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(true);
+            this.popContext();
+        } else {
+            this.evaluateNextInput(block);
+        }
     } else {
+        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
@@ -798,13 +812,17 @@ Process.prototype.reportAnd = function (block) {
 
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
-    } else if (!inputs[0]) {
-        if (this.flashContext()) {return; }
-        this.returnValueToParentContext(false);
-        this.popContext();
-    } else if (inputs.length < 2) {
-        this.evaluateNextInput(block);
+    } else if (inputs.length === 1) {
+        // this.assertType(inputs[0], 'Boolean');
+        if (!inputs[0]) {
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(false);
+            this.popContext();
+        } else {
+            this.evaluateNextInput(block);
+        }
     } else {
+        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
@@ -1096,7 +1114,9 @@ Process.prototype.evaluate = function (
     args,
     isCommand
 ) {
-    if (!context) {return null; }
+    if (!context) {
+        return this.returnValueToParentContext(null);
+    }
     if (context instanceof Function) {
         // if (!this.enableJS) {
         //     throw new Error('JavaScript is not enabled');
@@ -1342,7 +1362,7 @@ Process.prototype.doStopCustomBlock = function () {
 Process.prototype.doCallCC = function (aContext, isReporter) {
     this.evaluate(
         aContext,
-        new List([this.context.continuation()]),
+        new List([this.context.continuation(isReporter)]),
         !isReporter
     );
 };
@@ -1742,6 +1762,7 @@ Process.prototype.doAddToList = function (element, list) {
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        list = this.shadowListAttribute(list);
     }
     list.add(element);
 };
@@ -1749,6 +1770,9 @@ Process.prototype.doAddToList = function (element, list) {
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
     this.assertType(list, 'list');
+    if (list.type) {
+        list = this.shadowListAttribute(list);
+    }
     if (this.inputOption(index) === 'all') {
         return list.clear();
     }
@@ -1768,6 +1792,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        list = this.shadowListAttribute(list);
     }
     if (index === '') {
         return null;
@@ -1786,6 +1811,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
+        list = this.shadowListAttribute(list);
     }
     if (index === '') {
         return null;
@@ -1799,9 +1825,27 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     list.put(element, idx);
 };
 
+Process.prototype.shadowListAttribute = function (list) {
+    // private - check whether the list is an attribute that needs to be
+    // shadowed. Use only on typed lists for performance.
+    var rcvr;
+    if (list.type === 'costume' || list.type === 'sound') {
+        rcvr = this.blockReceiver();
+        if (list === rcvr.costumes) {
+            rcvr.shadowAttribute('costumes');
+            list = rcvr.costumes;
+        } else if (list === rcvr.sounds) {
+            rcvr.shadowAttribute('sounds');
+            list = rcvr.sounds;
+        }
+    }
+    return list;
+};
+
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
+    var rank;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1812,38 +1856,67 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-    if (this.enableHyperOps) {
-        if (this.isMatrix(index)) {
-            len = index.length();
-            if (index.length() === 1) {
-                // apply column indices to every row in the table
-                return new List(
-                    list.asArray().map(row =>
-                        this.reportListItem(
-                            index.at(1),
-                            row
-                        )
-                    )
-                );
-            }
-            return this.reportListItem(
-                index.cdr(),
-                this.reportListItem(
-                    index.at(1),
-                    list
-                )
-            );
-        }
-        if (index instanceof List) {
+    rank = this.rank(index);
+    if (rank > 0 && this.enableHyperOps) {
+        if (rank === 1) {
             if (index.isEmpty()) {
-                return new List(list.asArray().map(each => each));
+                return list.map(item => item);
             }
-            return new List(
-                index.asArray().map(each => this.reportListItem(each, list))
-            );
+            return index.map(idx => list.at(idx));
         }
+        return this.reportItems(index, list);
     }
     return list.at(index);
+};
+
+Process.prototype.reportItems = function (indices, list) {
+    // This. This is it. The pinnacle of my programmer's life.
+    // After days of roaming about my house and garden,
+    // of taking showers and rummaging through the fridge,
+    // of strumming the charango and the five ukuleles
+    // sitting next to my laptop on my desk,
+    // and of letting my mind wander far and wide,
+    // to come up with this design, always thinking
+    // "What would Brian do?".
+    // And look, Ma, it's turned out all beautiful! -jens
+
+    return makeSelector(
+        this.rank(list),
+        indices.cdr(),
+        makeLeafSelector(indices.at(1))
+    )(list);
+
+    function makeSelector(rank, indices, next) {
+        if (rank === 1) {
+            return next;
+        }
+        return makeSelector(
+            rank - 1,
+            indices.cdr(),
+            makeBranch(
+                indices.at(1) || new List(),
+                next
+            )
+        );
+    }
+
+    function makeBranch(indices, next) {
+        return function(data) {
+            if (indices.isEmpty()) {
+                return data.map(item => next(item));
+            }
+            return indices.map(idx => next(data.at(idx)));
+        };
+    }
+
+    function makeLeafSelector(indices) {
+        return function (data) {
+            if (indices.isEmpty()) {
+                return data.map(item => item);
+            }
+            return indices.map(idx => data.at(idx));
+        };
+    }
 };
 
 // Process - other basic list accessors
@@ -1892,20 +1965,22 @@ Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
     var result, len, i,
-        n = start;
+        s = +start,
+        e = +end,
+        n = s;
 
-    this.assertType(start, 'number');
-    this.assertType(end, 'number');
+    this.assertType(s, 'number');
+    this.assertType(e, 'number');
 
-    if (end > start) {
-        len = Math.floor(end - start);
+    if (e > s) {
+        len = Math.floor(e - s);
         result = new Array(len);
         for(i = 0; i <= len; i += 1) {
             result[i] = n;
             n += 1;
         }
     } else {
-        len = Math.floor(start - end);
+        len = Math.floor(s - e);
         result = new Array(len);
         for(i = 0; i <= len; i += 1) {
             result[i] = n;
@@ -1918,6 +1993,9 @@ Process.prototype.reportBasicNumbers = function (start, end) {
 Process.prototype.reportConcatenatedLists = function (lists) {
     var first, result, rows, row, rowIdx, cols, col;
     this.assertType(lists, 'list');
+    if (lists.isEmpty()) {
+        return lists;
+    }
     first = lists.at(1);
     this.assertType(first, 'list');
     if (first.isLinked) { // link everything
@@ -1925,19 +2003,6 @@ Process.prototype.reportConcatenatedLists = function (lists) {
     }
 
     // in case the first sub-list is arrayed
-
-    // fast version, has the disadvantage that it might
-    // change the structure of the source(s) by calling
-    // asArray().
-    // commented out for now
-    /*
-    elements = lists.asArray().map(sub => {
-        this.assertType(sub, 'list');
-        return sub.asArray();
-    });
-    return new List([].concat(...elements));
-    */
-
     result = [];
     rows = lists.length();
     for (rowIdx = 1; rowIdx <= rows; rowIdx += 1) {
@@ -1954,7 +2019,7 @@ Process.prototype.reportConcatenatedLists = function (lists) {
 Process.prototype.concatenateLinkedLists = function (lists) {
     var first;
     if (lists.isEmpty()) {
-        return new List();
+        return lists;
     }
     first = lists.at(1);
     this.assertType(first, 'list');
@@ -2015,6 +2080,7 @@ Process.prototype.doIf = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
+    // this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2030,6 +2096,7 @@ Process.prototype.doIfElse = function () {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
+    // this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (args[0]) {
         if (args[1]) {
@@ -2058,11 +2125,14 @@ Process.prototype.reportIfElse = function (block) {
         if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs.pop());
         this.popContext();
-    } else if (inputs[0]) {
-        this.evaluateNextInput(block);
     } else {
-        inputs.push(null);
-        this.evaluateNextInput(block);
+        // this.assertType(inputs[0], ['Boolean']);
+        if (inputs[0]) {
+            this.evaluateNextInput(block);
+        } else {
+            inputs.push(null);
+            this.evaluateNextInput(block);
+        }
     }
 };
 
@@ -2316,6 +2386,7 @@ Process.prototype.doRepeat = function (counter, body) {
 };
 
 Process.prototype.doUntil = function (goalCondition, body) {
+    // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -2330,6 +2401,7 @@ Process.prototype.doUntil = function (goalCondition, body) {
 };
 
 Process.prototype.doWaitUntil = function (goalCondition) {
+    // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -2605,7 +2677,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
                 this.context.accumulator.source.cdr();
         }
         if (this.context.accumulator.remaining === 0) {
-            this.returnValueToParentContext(false);
+            this.returnValueToParentContext('');
             return;
         }
         index = this.context.accumulator.idx;
@@ -2626,7 +2698,7 @@ Process.prototype.reportFindFirst = function (predicate, list) {
             }
         }
         if (this.context.accumulator.idx === list.length()) {
-            this.returnValueToParentContext(false);
+            this.returnValueToParentContext('');
             return;
         }
         this.context.accumulator.idx += 1;
@@ -3339,9 +3411,11 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
-        this.context.activeSends.forEach(proc =>
-            proc.runStep()
-        );
+        if (this.isRunning()) {
+            this.context.activeSends.forEach(proc =>
+                proc.runStep()
+            );
+        }
     }
     this.context.activeSends = this.context.activeSends.filter(proc =>
         proc.isRunning()
@@ -3486,22 +3560,14 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
                 }
                 return new List(result);
             }
-            return new List(
-                a.asArray().map(each => this.hyperDyadic(baseOp, each, b))
-            );
+            return a.map(each => this.hyperDyadic(baseOp, each, b));
         }
         if (this.isMatrix(b)) {
-            return new List(
-                b.asArray().map(each => this.hyperDyadic(baseOp, a, each))
-            );
+            return b.map(each => this.hyperDyadic(baseOp, a, each));
         }
         return this.hyperZip(baseOp, a, b);
     }
     return baseOp(a, b);
-};
-
-Process.prototype.isMatrix = function (value) {
-    return value instanceof List && value.at(1) instanceof List;
 };
 
 Process.prototype.hyperZip = function (baseOp, a, b) {
@@ -3519,17 +3585,29 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
             }
             return new List(result);
         }
-        return new List(
-            a.asArray().map(each => this.hyperZip(baseOp, each, b))
-        );
+        return a.map(each => this.hyperZip(baseOp, each, b));
     }
     if (b instanceof List) {
-        return new List(
-            b.asArray().map(each => this.hyperZip(baseOp, a, each))
-        );
+        return b.map(each => this.hyperZip(baseOp, a, each));
     }
     return baseOp(a, b);
 };
+
+Process.prototype.isMatrix = function (data) {
+    return data instanceof List && data.at(1) instanceof List;
+};
+
+Process.prototype.rank = function(data) {
+    var rank = 0,
+        cur = data;
+    while (cur instanceof List) {
+        rank += 1;
+        cur = cur.at(1);
+    }
+    return rank;
+};
+
+// Process math primtives - arithmetic
 
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
@@ -3613,11 +3691,10 @@ Process.prototype.reportBasicLessThan = function (a, b) {
 Process.prototype.reportNot = function (bool) {
     if (this.enableHyperOps) {
         if (bool instanceof List) {
-            return new List(
-                bool.asArray().map(each => this.reportNot(each))
-            );
+            return bool.map(each => this.reportNot(each));
         }
     }
+    // this.assertType(bool, 'Boolean');
     return !bool;
 };
 
@@ -3683,9 +3760,7 @@ Process.prototype.reportBoolean = function (bool) {
 Process.prototype.reportRound = function (n) {
     if (this.enableHyperOps) {
         if (n instanceof List) {
-            return new List(
-                n.asArray().map(each => this.reportRound(each))
-            );
+            return n.map(each => this.reportRound(each));
         }
     }
     return Math.round(+n);
@@ -3694,9 +3769,7 @@ Process.prototype.reportRound = function (n) {
 Process.prototype.reportMonadic = function (fname, n) {
     if (this.enableHyperOps) {
         if (n instanceof List) {
-            return new List(
-                n.asArray().map(each => this.reportMonadic(fname, each))
-            );
+            return n.map(each => this.reportMonadic(fname, each));
         }
     }
 
@@ -3756,6 +3829,8 @@ Process.prototype.reportMonadic = function (fname, n) {
     case '2^':
         result = Math.pow(2, x);
         break;
+    case 'id':
+        return n;
     default:
         nop();
     }
@@ -3837,9 +3912,7 @@ Process.prototype.reportBasicLetter = function (idx, string) {
 Process.prototype.reportStringSize = function (data) {
     if (this.enableHyperOps) {
         if (data instanceof List) {
-            return new List(
-                data.asArray().map(each => this.reportStringSize(each))
-            );
+            return data.map(each => this.reportStringSize(each));
         }
     }
     if (data instanceof List) { // catch a common user error
@@ -3853,9 +3926,7 @@ Process.prototype.reportUnicode = function (string) {
 
     if (this.enableHyperOps) {
         if (string instanceof List) {
-            return new List(
-                string.asArray().map(each => this.reportUnicode(each))
-            );
+            return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
         if (str.length > 1) {
@@ -3873,9 +3944,7 @@ Process.prototype.reportUnicode = function (string) {
 Process.prototype.reportUnicodeAsLetter = function (num) {
     if (this.enableHyperOps) {
         if (num instanceof List) {
-            return new List(
-                num.asArray().map(each => this.reportUnicodeAsLetter(each))
-            );
+            return num.map(each => this.reportUnicodeAsLetter(each));
         }
     }
 
@@ -4502,7 +4571,7 @@ Process.prototype.colorAtSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = stage.children.length; i > 0; i -= 1) {
         child = stage.children[i - 1];
         if ((child !== sprite) &&
@@ -4516,7 +4585,7 @@ Process.prototype.colorAtSprite = function (sprite) {
     if (stage.bounds.containsPoint(point)) {
         return stage.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.colorBelowSprite = function (sprite) {
@@ -4532,7 +4601,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
         child,
         i;
 
-    if (!stage) {return new Color(); }
+    if (!stage) {return BLACK; }
     for (i = 0; i < stage.children.length; i += 1) {
         if (!found) {
             child = stage.children[i];
@@ -4549,7 +4618,7 @@ Process.prototype.colorBelowSprite = function (sprite) {
     if (below.bounds.containsPoint(point)) {
         return below.getPixelColor(point);
     }
-    return new Color();
+    return BLACK;
 };
 
 Process.prototype.spritesAtPoint = function (point, stage) {
@@ -6070,14 +6139,17 @@ Context.prototype.image = function () {
 
 // Context continuations:
 
-Context.prototype.continuation = function () {
+Context.prototype.continuation = function (isReporter) {
     var cont;
     if (this.expression instanceof Array) {
         cont = this;
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        cont = new Context(null, 'expectReport');
+        cont = new Context(
+            null,
+            isReporter ? 'expectReport' : 'popContext'
+        );
         cont.isContinuation = true;
         return cont;
     }

@@ -58,11 +58,12 @@
 
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
-CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains*/
+TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
+ZERO, WHITE*/
 
-modules.lists = '2020-May-07';
+modules.lists = '2020-July-01';
 
 var List;
 var ListWatcherMorph;
@@ -105,6 +106,10 @@ var ListWatcherMorph;
     asText()                - answer my elements (recursively) concatenated
     asCSV()                 - answer a csv-formatted String of myself
     asJSON()                - answer a json-formatted String of myself
+
+    utility:
+    ---------
+    map(callback)           - answer an arrayed copy applying a JS func to all
 */
 
 // List instance creation:
@@ -202,6 +207,12 @@ List.prototype.clear = function () {
     this.rest = null;
     this.isLinked = false;
     this.changed();
+};
+
+List.prototype.map = function(callback) {
+    return new List(
+        this.asArray().map(callback)
+    );
 };
 
 // List getters (all hybrid):
@@ -602,6 +613,44 @@ List.prototype.hasOnlyAtomicData = function () {
     });
 };
 
+// List-to-block (experimental)
+
+List.prototype.blockify = function (limit = 500, count = [0]) {
+    var block = SpriteMorph.prototype.blockForSelector('reportNewList'),
+        slots = block.inputs()[0],
+        len = this.length(),
+        bool,
+        i, value;
+
+    block.isDraggable = true;
+    slots.removeInput();
+    
+    // fill the slots with the data
+    for (i = 0; i < len && count[0] < limit; i += 1) {
+        value = this.at(i + 1);
+        if (value instanceof List) {
+            slots.replaceInput(
+                slots.addInput(),
+                value.blockify(limit, count)
+            );
+        } else if (typeof value === 'boolean') {
+            bool = SpriteMorph.prototype.blockForSelector('reportBoolean');
+            bool.inputs()[0].setContents(value);
+            bool.isDraggable = true;
+            slots.replaceInput(
+                slots.addInput(),
+                bool
+            );
+        } else {
+            slots.addInput(value);
+        }
+        count[0] += 1;
+    }
+
+    slots.fixBlockColor(null, true);
+    return block;
+};
+
 // ListWatcherMorph ////////////////////////////////////////////////////
 
 /*
@@ -645,8 +694,8 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         false,
         false,
         false,
-        MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
-        new Color(255, 255, 255)
+        MorphicPreferences.isFlat ? ZERO : new Point(1, 1),
+        WHITE
     );
     this.label.mouseClickLeft = function () {myself.startIndexMenu(); };
 
@@ -810,8 +859,8 @@ ListWatcherMorph.prototype.update = function (anyway) {
                 false,
                 false,
                 false,
-                MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
-                new Color(255, 255, 255)
+                MorphicPreferences.isFlat ? ZERO : new Point(1, 1),
+                WHITE
             );
             cell = new CellMorph(
                 this.list.at(idx),
@@ -860,6 +909,7 @@ ListWatcherMorph.prototype.updateLength = function (notDone) {
     } else {
         this.label.color = new Color(0, 0, 0);
     }
+    this.label.fixLayout();
     this.label.setCenter(this.center());
     this.label.setBottom(this.bottom() - 3);
 };
@@ -957,6 +1007,20 @@ ListWatcherMorph.prototype.userMenu = function () {
     }
     var menu = new MenuMorph(this);
     menu.addItem('table view...', 'showTableView');
+    if (this.list.canBeJSON()) {
+        menu.addItem(
+            'blockify',
+            () => {
+                var world = this.world(),
+                    ide = detect(world.children, m => m instanceof IDE_Morph);
+                this.list.blockify().pickUp(world);
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
+        );
+    }
     menu.addLine();
     menu.addItem(
         'open in dialog...',

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-01-28', // this, too, will appear in the Translators tab
+        '2020-06-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -525,6 +525,8 @@ SnapTranslator.dict.de = {
         'sende %msg an alle',
     'broadcast %msg and wait':
         'sende %msg an alle und warte',
+    'send %msg to %spr':
+        'sende %msg an %spr',
     'Message name':
         'Nachricht',
     'message':
@@ -799,6 +801,8 @@ SnapTranslator.dict.de = {
         'etwas',
     'is %l empty?':
         'ist %l leer?',
+    'index of %s in %l':
+        'Index von %s in %l',
     'map %repRing over %l':
         'wende %repRing an auf %l',
     'keep items %predRing from %l':
@@ -823,6 +827,8 @@ SnapTranslator.dict.de = {
         'Wert',
     'index':
         'Index',
+    'append %lists':
+        'verbinde %lists',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
@@ -887,8 +893,8 @@ SnapTranslator.dict.de = {
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
     'Export blocks...':
         'Bl\u00f6cke exportieren...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+    'save global custom block\ndefinitions as XML':
+        'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
     'Unused blocks...':
           'nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
@@ -901,9 +907,8 @@ SnapTranslator.dict.de = {
         'nicht verwendete Bl\u00f6cke entfernt',
     'Export summary...':
         'Zusammenfassung exportieren...',
-    'open a new browser browser window\n with a summary of this project':
-        'eine Zusammenfassung dieses Projekts\nin einem neuen Browserfenster'
-            + 'anzeigen',
+    'save a summary\nof this project':
+        'eine Zusammenfassung\ndieses Projekts speichern',
     'Contents':
         'Inhalt',
     'Kind of':
@@ -960,7 +965,7 @@ SnapTranslator.dict.de = {
         'GUI Elemente programmatisch bearbeiten',
     'Allow multi-line text input to a block':
         'Mehrzeiliger Text als Eingabe für Blöcke',
-    'create variables in program':
+    'Create variables in program':
         'Variablen im Skript erstellen',
 
     // cloud menu
@@ -1114,6 +1119,12 @@ SnapTranslator.dict.de = {
         'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
+    'Hyper blocks support':
+        'Hyper-Blöcke',
+    'uncheck to disable\nusing operators on lists and tables':
+         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
+    'check to enable\nusing operators on lists and tables':
+         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
     'Log pen vectors':
         'Malstiftvektoren aufzeichnen',
     'uncheck to turn off\nlogging pen vectors':
@@ -1163,8 +1174,12 @@ SnapTranslator.dict.de = {
         'L\u00f6schen',
     'script pic...':
         'Skriptbild...',
-    'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+    'save a picture\nof this script':
+        'ein Bild dieses\nSkripts speichern',
+    'result pic...':
+        'Ergebnisbild...',
+    'save a picture of both\nthis script and its result':
+        'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
     'ringify':
         'Umringen',
     'unringify':
@@ -1221,8 +1236,8 @@ SnapTranslator.dict.de = {
         'Alles zeigen',
     'pic...':
         'Bild exportieren...',
-    'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+    'save a picture\nof the stage':
+        'ein Bild der\nBühne speichern',
     'svg...':
         'SVG exportieren...',
     'export pen trails\nline segments as SVG':
@@ -1251,8 +1266,8 @@ SnapTranslator.dict.de = {
     	'Blöcke per Tastatur\neingeben',
     'scripts pic...':
         'Bild aller Skripte...',
-    'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+    'save a picture\nof all scripts':
+        'ein Bild aller\nSkripte speichern',
     'make a block...':
         'Neuen Block bauen...',
 
@@ -1285,6 +1300,8 @@ SnapTranslator.dict.de = {
         'Tabelle',
     'open in dialog...':
         'in neuem Fenster \u00f6ffnen',
+    'blockify':
+        'als Block',
     'reset columns':
         'Spaltenbreiten zur\u00fccksetzen',
     'items':
@@ -1604,8 +1621,8 @@ SnapTranslator.dict.de = {
         'Anmerkung hier hinzuf\u00fcgen',
     'comment pic...':
         'Kommentarbild',
-    'open a new window\nwith a picture of this comment':
-        'neues Fenster mit dem Bild\ndieses Kommentars öffnen',
+    'save a picture\nof this comment':
+        'ein Bild dieser\nAnmerkung speichern',
 
     // drow downs
     // directions

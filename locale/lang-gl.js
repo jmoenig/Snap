@@ -2577,7 +2577,7 @@ SnapTranslator.dict.gl = {
         'Analise da distribución de frecuencias',
     'World Map':
         'Mapa do mundo',
-    'create variables in program':
+    'Create variables in program':
         'Creando variábeis dende o programa',
     'Deal with JSON data':
         'Tratar con datos JSON',
@@ -2629,8 +2629,8 @@ SnapTranslator.dict.gl = {
         '[EXPERIMENTAL] Procesar listas grandes de forma moi rápida.',
     '[EXPERIMENTAL] analyze data for frequency distribution':
         '[EXPERIMENTAL] Analizar datos para obter a súa distribución de frecuencias.',
-    'declare global or sprite-local variables in a script':
-        'Declarar variábeis globais ou de obxecto a partires dun programa.',
+    'Create and manage global/sprite/script variables in a script':
+        'Crear e xestionar "global/sprite/script" variábeis a partires dun programa.',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
         'Transforma as cadeas JSON en listas co bloque «listify» (listar), e após recupera datos delas usando o valor do bloque de chaves.',
     'Run several scripts in parallel and wait until all are done.':

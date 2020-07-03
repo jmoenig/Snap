@@ -69,7 +69,8 @@
     Jan 22 - floodfill alpha tweak (Bernat)
     Mar 19 - vector paint editor (Bernat)
 
-    2020 Apr 14 - partial Morphic2 migration (Jens)
+    2020 Apr 14 - Morphic2 migration (Jens)
+    2020 May 17 - Pipette alpha fix (Joan)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
@@ -80,7 +81,7 @@ StageMorph, isNil, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2020-April-14';
+modules.paint = '2020-May-17';
 
 // Declarations
 
@@ -511,7 +512,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
             // needed for retina-display support
             return;
         }
-        color.a = 255;
+        color.a = 1;
         myself.propertiesControls.colorpicker.action(color);
     };
 

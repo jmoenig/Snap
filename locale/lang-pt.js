@@ -960,7 +960,7 @@ SnapTranslator.dict.pt = {
         'Repórteres para obter e comandos para alterar todas as configurações globais',
     'Allow multi-line text input to a block':
         'Permitir texto com múltiplas linhas como entrada',
-    'create variables in program':
+    'Create variables in program':
         'Criar variáveis não locais (globais ou de objecto) num guião',
 
     // menu da nuvem
@@ -2452,8 +2452,8 @@ SnapTranslator.dict.pt = {
         'Mapa do mundo',
     '[EXPERIMENTAL] add interactive maps to projects':
         '[EXPERIMENTAL] Adicionar mapas interactivos a projectos.',
-    'declare global or sprite-local variables in a script':
-        'Criar variáveis globais ou de objecto a partir de um guião.',
+    'Create and manage global/sprite/script variables in a script':
+        'Criar e gerir variáveis globais, de objecto e de guião a partir de um guião.',
     'Deal with JSON data':
         'Lidar com dados JSON',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':

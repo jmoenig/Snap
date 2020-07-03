@@ -483,6 +483,8 @@ SnapTranslator.dict.ca = {
         'Envia a tots %msg',
     'broadcast %msg and wait':
         'Envia a tots %msg i espera',
+    'send %msg to %spr':
+        'envia %msg a %spr',
     'Message name':
         'Nom del missatge',
     'message':
@@ -708,6 +710,8 @@ SnapTranslator.dict.ca = {
         'cosa',
     'is %l empty?':
         '%l buida?',
+    'index of %s in %l':
+        'índex de %s a %l',
     'map %repRing over %l':
         'mapeja %repRing sobre %l',
     'keep items %predRing from %l':
@@ -732,6 +736,8 @@ SnapTranslator.dict.ca = {
         'per cada %upvar de %l %cla',
     'item':
         'element',
+    'append %lists':
+        'annexa %lists',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
@@ -794,8 +800,8 @@ SnapTranslator.dict.ca = {
         'mostra tot el projecte en format XML\nen una altra finestra del navegador',
     'Export blocks...':
         'Exporta els blocs...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'exporta els blocs personalitzats que triis\nen un arxiu en format XML',
+    'save global custom block\ndefinitions as XML':
+        'desa els blocs personalitzats globals\nen format XML',
     'Unused blocks...':
         'Blocs no utilitzats...',
     'find unused global custom blocks\nand remove their definitions':
@@ -808,8 +814,8 @@ SnapTranslator.dict.ca = {
         'bloc(s) personalitzats no utilitzats esborrats',
     'Export summary...':
         'Exporta el resum...',
-    'open a new browser browser window\n with a summary of this project':
-        'Obre una finestra del navegador\namb un resum d\'aquest projecte',
+    'save a summary\nof this project':
+        'Desa un resum\nd\'aquest projecte',
 
     'Contents':
         'Continguts',
@@ -999,8 +1005,8 @@ SnapTranslator.dict.ca = {
         'esborra\'m',
     'script pic...':
         'mostra la meva imatge...',
-    'open a new window\nwith a picture of this script':
-        'obre una nova finestra\namb una imatge d\'aquest programa',
+    'save a picture\nof this script':
+        'desa una imatge d\'aquest programa',
     'ringify':
         'encapsula\'m',
     'unringify':
@@ -1063,8 +1069,8 @@ SnapTranslator.dict.ca = {
         'mostra\'ls tots',
     'pic...':
         'exporta com a imatge...',
-    'open a new window\nwith a picture of the stage':
-        'obre una nova finestra\namb una foto de l\'escenari',
+    'save a picture\nof the stage':
+        'desa una imatge\nde l\'escenari',
 
     // scripting area
     'clean up':
@@ -1083,8 +1089,8 @@ SnapTranslator.dict.ca = {
     	'utilitza el teclat\nper escriure els blocs',
     'scripts pic...':
         'exporta com a imatge...',
-    'open a new window\nwith a picture of all scripts':
-        'obre una nova finestra\namb la imatge d\'aquests programes',
+    'save a picture\nof all scripts':
+        'desa una imatge de tots els blocs de programes',
     'make a block...':
         'crea un bloc...',
 
@@ -1164,8 +1170,8 @@ SnapTranslator.dict.ca = {
     // Project Manager
     'Untitled':
         'Sense títol',
-    'Open un Project':
-        'Obre projecte',
+    'Open Project':
+        'Obre un projecte',
     '(empty)':
         '(buit)',
     'Saved!':
@@ -1831,8 +1837,8 @@ SnapTranslator.dict.ca = {
         'marqueu per transformar els\nSVG a mapa de bits en importar',
     'comment pic...':
         'imatge del comentari…',
-    'open a new window\nwith a picture of this comment':
-        'obre una finestra\namb una imatge del comentari',
+    'save a picture\nof this comment':
+        'desa una imatge\ndel comentari',
     'undo':
         'desfés',
 //Paint editors
@@ -2084,8 +2090,6 @@ SnapTranslator.dict.ca = {
         'Substitueix el Projecte',
     'Are you sure you want to replace':
         'Esteu segur que voleu substituir el projecte original',
-    'Open Project':
-        'Obre el Projecte',
     'password has been changed.':
         's\'ha canviat la contrasenya.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
@@ -2094,8 +2098,10 @@ SnapTranslator.dict.ca = {
         'Desa el Projecte',
     'script pic with result...':
         'imatge del programa i del resultat…',
-    'open a new window\nwith a picture of both\nthis script and its result':
-        'obre una finestra\n amb el programa i el resultat',
+    'result pic...':
+        'imatge del resultat...',
+    'save a picture of both\nthis script and its result':
+        'desa una imatge\ndels blocs amb el resultat',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript function ( %mult%s ) { %code }',
     'Select categories of additional blocks to add to this project.':
@@ -2150,8 +2156,8 @@ SnapTranslator.dict.ca = {
         'URL…',
     'Export summary with drop-shadows...':
         'Exporta el resum amb les imatges ombrejades…',
-    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
-        'Obre una finestra del navegador\namb un resum del projecte i\namb totes les imatges ombrejades.\n No tots els navegadors suporten aquesta funcionalitat',
+    'download and save\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
+        'Desa i descarrega\nun resum del projecte\namb totes les imatges ombrejades.\n No tots els navegadors suporten aquesta funcionalitat',
     'specify the distance the hand has to move\nbefore it picks up an object':
         'especifica a què distància\ns\'han d\'arrossegar els blocs\nper a que es moguin',
     'block variables...':
@@ -2608,7 +2614,7 @@ SnapTranslator.dict.ca = {
         'Anàlisi de la distribució de freqüències',
     'World Map':
         'Mapa del món',
-    'create variables in program':
+    'Create variables in program':
         'Creant variables des del programa',
     'Deal with JSON data':
         'Tractament de dades JSON',
@@ -2662,8 +2668,8 @@ SnapTranslator.dict.ca = {
         '[EXPERIMENTAL] Analitza dades per fer freqüències de distribució',
     '[EXPERIMENTAL] add interactive maps to projects':
         '[EXPERIMENTAL] Afegeix mapes cartogràfics interactius als teus projectes',
-    'declare global or sprite-local variables in a script':
-        'Declara i assigna variables (locals o globals) dins els programes',
+    'Create and manage global/sprite/script variables in a script':
+        'Crea i gestiona variables de tipus global/sprite/script dins els programes',
     'Turn JSON strings into lists with the listify block, then retrieve data out of them by using the value at key block.':
         'Converteix les cadenes JSON en llistes utilitzant el bloc "listify". Utilitza els blocs de valors i claus per gestionar aquest tipus de llistes',
     'Run several scripts in parallel and wait until all are done.':
@@ -2740,6 +2746,14 @@ SnapTranslator.dict.ca = {
     'svg...':
         'exporta vectors com a svg',
     'export pen trails\nline segments as SVG':
-        'exporta els vectors dibuixats com a fitxer SVG'
+        'exporta els vectors dibuixats com a fitxer SVG',
+    'blockify':
+        'en forma de blocs',
+    'Hyper blocks support':
+        'Suport a hiperblocs',
+    'uncheck to disable\nusing operators on lists and tables':
+         'desmarqueu per deshabilitar\nla utilització dels operadors\nsobre llistes i taules',
+    'check to enable\nusing operators on lists and tables':
+         'marqueu per habilitar\nla utilització dels operadors\nsobre llistes i taules'
 
 };

@@ -64,13 +64,13 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, Point, Morph, fontHeight, SliderMorph, isString,
+/*global modules, Point, Morph, fontHeight, SliderMorph, isString, detect,
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph,
-SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List,
+SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, List, IDE_Morph,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2020-May-07';
+modules.tables = '2020-May-18';
 
 var Table;
 var TableCellMorph;
@@ -1007,6 +1007,7 @@ TableMorph.prototype.resizeCells = function (pos) {
     this.rows = this.visibleRows();
     this.buildCells();
     this.resizeAnchor = pos;
+    this.changed();
 };
 
 TableMorph.prototype.columnAt = function (relativeX) {
@@ -1029,6 +1030,23 @@ TableMorph.prototype.userMenu = function () {
             menu.addItem('reset columns', 'resetColumns');
             menu.addLine();
         }
+        if (this.table instanceof List && this.table.canBeJSON()) {
+            menu.addItem(
+                'blockify',
+                () => {
+                    var world = this.world(),
+                        ide = detect(
+                            world.children,
+                            m => m instanceof IDE_Morph
+                        );
+                    this.table.blockify().pickUp(world);
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+            );
+        }
         menu.addItem('open in another dialog...', 'openInDialog');
         return menu;
     }
@@ -1037,6 +1055,20 @@ TableMorph.prototype.userMenu = function () {
         menu.addItem('reset columns', 'resetColumns');
     }
     menu.addItem('list view...', 'showListView');
+    if (this.table instanceof List && this.table.canBeJSON()) {
+        menu.addItem(
+            'blockify',
+            () => {
+                var world = this.world(),
+                    ide = detect(world.children, m => m instanceof IDE_Morph);
+                this.table.blockify().pickUp(world);
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
+        );
+    }
     menu.addLine();
     menu.addItem('open in dialog...', 'openInDialog');
     return menu;
@@ -1048,6 +1080,7 @@ TableMorph.prototype.resetColumns = function () {
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
     this.buildCells();
+    this.changed();
 };
 
 TableMorph.prototype.openInDialog = function () {

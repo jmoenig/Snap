@@ -96,7 +96,7 @@
 */
 
 /*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map,
-StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
+StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph, WHITE,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
 StringMorph, nop, radians, BoxMorph, ArrowMorph, PushButtonMorph,
@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-May-07';
+modules.byob = '2020-July-01';
 
 // Declarations
 
@@ -344,7 +344,18 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
 
 CustomBlockDefinition.prototype.parseChoices = function (string) {
     var dict = {},
-        stack = [dict];
+        stack = [dict],
+        params, body;
+    if (string.match(/^function\s*\(.*\)\s*{.*\n/)) {
+        // It's a JS function definition.
+        // Let's extract its params and body, and return a Function out of them.
+        // if (!this.enableJS) {
+        //     throw new Error('JavaScript is not enabled');
+        // }
+        params = string.match(/^function\s*\((.*)\)/)[1].split(',');
+        body = string.split('\n').slice(1,-1).join('\n');
+        return Function.apply(null, params.concat([body]));
+    }
     string.split('\n').forEach(line => {
         var pair = line.split('=');
         if (pair[0] === '}') {
@@ -947,7 +958,7 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
-        part.color = new Color(255, 255, 255);
+        part.color = WHITE;
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
         part.shadowOffset = this.embossing;
@@ -1711,7 +1722,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.labelShadowColor = colors[1];
     button.labelColor = IDE_Morph.prototype.buttonLabelColor;
         if (MorphicPreferences.isFlat) {
-            button.labelPressColor = new Color(255, 255, 255);
+            button.labelPressColor = WHITE;
         }
     button.contrast = this.buttonContrast;
     button.fixLayout();
@@ -2230,12 +2241,12 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
         template = this.target.paletteBlockInstance(def);
 
     if (this.definition.isGlobal) {
-        this.target.allBlockInstances(this.definition).forEach(block =>
-            block.refresh()
+        this.target.allBlockInstances(this.definition).reverse().forEach(
+            block => block.refresh()
         );
     } else {
-        this.target.allDependentInvocationsOf(oldSpec).forEach(block =>
-            block.refresh(def)
+        this.target.allDependentInvocationsOf(oldSpec).reverse().forEach(
+            block => block.refresh(def)
         );
     }
     if (template) {
@@ -2247,6 +2258,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     var head, ide,
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
+        count = 0,
         element;
 
     this.definition.receiver = this.target; // only for serialization
@@ -2286,6 +2298,13 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     }
 
     this.definition.body = this.context(head);
+
+    // make sure the spec is unique
+    while (this.target.doubleDefinitionsFor(this.definition).length > 0) {
+        count += 1;
+        this.definition.spec = this.definition.spec + ' (' + count + ')';
+    }
+
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
@@ -3116,6 +3135,13 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(c => c.refresh());
     this.slots.children.forEach(c => c.refresh());
+    if (isNil(fragmentType)) {
+        this.isExpanded = false;
+        this.types.children.forEach(c => c.refresh());
+        this.changed();
+        this.fixLayout();
+        this.rerender();
+    }
     this.edit();
 };
 
@@ -3289,7 +3315,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // default values
     defLabel = new StringMorph(localize('Default Value:'));
     defLabel.fontSize = this.slots.radioButtonSingle.fontSize;
-    defLabel.setColor(new Color(255, 255, 255));
+    defLabel.setColor(WHITE);
     defLabel.refresh = () => {
         if (this.isExpanded && contains(
                 [
@@ -3360,7 +3386,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         new SymbolMorph(
             'loop',
             this.fontSize * 0.7,
-            new Color(255, 255, 255)
+            WHITE
         ),
         null // builder method that constructs the element morph
     );
@@ -3455,7 +3481,7 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     button.outlineGradient = this.buttonOutlineGradient;
     button.fixLayout();
     button.label.isBold = false;
-    button.label.setColor(new Color(255, 255, 255));
+    button.label.setColor(WHITE);
     this.slots.add(button);
     return button;
 };
@@ -3481,7 +3507,7 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
 
     button.fixLayout();
     // button.label.isBold = false;
-    button.label.setColor(new Color(255, 255, 255));
+    button.label.setColor(WHITE);
     this.slots.add(button);
     return button;
 };

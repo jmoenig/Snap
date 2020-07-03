@@ -7,9 +7,9 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2010-2020 by Jens Mönig
 
-    this documentation last changed: October 22, 2019
+    This documentation last changed: June 9, 2020
 
     This file is part of Snap!.
 
@@ -52,12 +52,18 @@
             (h) text editing events
         (4) stepping
         (5) creating new kinds of morphs
+            (a) drawing the shape
+            (b) determining extent and arranging submorphs
+            (c) pixel-perfect pointing events
+            (d) caching the shape
+            (e) holes
+            (f) updating
+            (g) duplicating
         (6) development and user modes
         (7) turtle graphics
-        (8) damage list housekeeping
-        (9) supporting high-resolution "retina" screens
-        (10 animations
-        (11) minifying morphic.js
+        (8) supporting high-resolution "retina" screens
+        (9 animations
+        (10) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -153,8 +159,7 @@
     III. yet to implement
     ---------------------
     - keyboard support for scroll frames and lists
-    - full keyboard support for menus (partial support exists)
-    - virtual keyboard support for Android and IE
+    - virtual keyboard support for Android
 
 
     IV. open issues
@@ -192,7 +197,7 @@
         * a stepping mechanism (a time-sharing multiplexer for lively
           user interaction ontop of a single OS/browser thread)
         * progressive display updates (only dirty rectangles are
-          redrawn in each display cycle)
+          redrawn at each display cycle)
         * a tree structure
         * a single World per Canvas element (although you can have
           multiple worlds in multiple Canvas elements on the same web
@@ -201,7 +206,7 @@
           events)
         * a single text entry focus per World
 
-    In its current state morphic.js doesn't support Transforms (you
+    In its current state morphic.js doesn't support transforms (you
     cannot rotate Morphs), but with PenMorph there already is a simple
     LOGO-like turtle that you can use to draw onto any Morph it is
     attached to. I'm planning to add special Morphs that support these
@@ -233,11 +238,11 @@
 
     Each World has an - invisible - "Hand" resembling the mouse cursor
     (or the user's finger on touch screens) which handles mouse events,
-    and may also have a keyboardReceiver to handle key events.
+    and may also have a keyboard focus to handle key events.
 
     The basic idea of Morphic is to continuously run display cycles and
     to incrementally update the screen by only redrawing those  World
-    regions    which have been "dirtied" since the last redraw. Before
+    regions which have been "dirtied" since the last redraw. Before
     each shape is processed for redisplay it gets the chance to perform
     a "step" procedure, thus allowing for an illusion of concurrency.
 
@@ -268,7 +273,6 @@
 
                 window.onload = function () {
                     world = new WorldMorph(document.getElementById('world'));
-                    world.worldCanvas.focus();
                     world.isDevMode = true;
                     loop();
                 };
@@ -281,7 +285,7 @@
         </head>
         <body style="margin: 0;">
             <canvas id="world" tabindex="1" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
@@ -311,7 +315,7 @@
             <title>Morphic!</title>
             <script type="text/javascript" src="morphic.js"></script>
             <script type="text/javascript">
-                var world1, world2;
+                var	world1, world2;
 
                 window.onload = function () {
                     disableRetinaSupport();
@@ -323,7 +327,7 @@
                 };
 
                 function loop() {
-                    requestAnimationFrame(loop);
+            requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -331,9 +335,9 @@
         </head>
         <body>
             <p>first world:</p>
-            <canvas id="world1" tabindex="1" width="600" height="400" />
+            <canvas id="world1" tabindex="1" width="600" height="400"></canvas>
             <p>second world:</p>
-            <canvas id="world2" tabindex="2" width="400" height="600" />
+            <canvas id="world2" tabindex="2" width="400" height="600"></canvas>
         </body>
     </html>
 
@@ -364,7 +368,6 @@
 
                     worldCanvas = document.getElementById('world');
                     world = new WorldMorph(worldCanvas);
-                    world.worldCanvas.focus();
                     world.isDevMode = false;
                     world.setColor(new Color());
 
@@ -397,7 +400,7 @@
         </head>
         <body bgcolor='black' style="margin: 0;">
             <canvas id="world" width="800" height="600"
-                style="position: absolute;" />
+                style="position: absolute;"></canvas>
         </body>
     </html>
 
@@ -452,7 +455,7 @@
     events.
 
     These system events are dispatched within the morphic World by the
-    World's Hand and its keyboardReceiver (usually the active text
+    World's Hand and its keyboardFocus (usually the active text
     cursor).
 
 
@@ -631,12 +634,12 @@
         droppedImage(aCanvas, name)
         droppedSVG(anImage, name)
 
-    events to interested Morphs at the mouse pointer. If you want you Morph
+    events to interested Morphs at the mouse pointer. If you want your Morph
     to e.g. import outside images you can add the droppedImage() and / or the
     droppedSVG() methods to it. The parameter passed to the event handles is
     a new offscreen canvas element representing a copy of the original image
     element which can be directly used, e.g. by assigning it to another
-    Morph's image property. In the case of a dropped SVG it is an image
+    Morph's cachedImage property. In the case of a dropped SVG it is an image
     element (not a canvas), which has to be rasterized onto a canvas before
     it can be used. The benefit of handling SVGs as image elements is that
     rasterization can be deferred until the destination scale is known, taking
@@ -668,16 +671,16 @@
     (e) keyboard events
     -------------------
     The World dispatches the following key events to its active
-    keyboardReceiver:
+    keyboard focus:
 
         keypress
         keydown
         keyup
 
-    Currently the only morph which acts as keyboard receiver is
-    CursorMorph, the basic text editing widget. If you wish to add
-    keyboard support to your morph you need to add event handling
-    methods for
+    Currently the only morphs which acts as keyboard focus are
+    CursorMorph - the basic text editing widget - and MenuMorph elements.
+    If you wish to add keyboard support to your morph you need to add event
+    handling methods for
 
         processKeyPress(event)
         processKeyDown(event)
@@ -685,7 +688,7 @@
 
     and activate them by assigning your morph to the World's
 
-        keyboardReceiver
+        keyboardFocus
 
     property.
 
@@ -730,8 +733,7 @@
         MyMorph.prototype.reactToWorldResize = function (rect) {
             this.changed();
             this.bounds = rect.insetBy(10);
-            this.drawNew();
-            this.changed();
+            this.rerender();
         };
 
 
@@ -805,17 +807,17 @@
 
         reactToSliderEdit(StringOrTextMorph)
 
-    events is dispatched, allowing for "Bret-Victor" style "live coding"
+    events is dispatched, allowing for "Bret-Victor" style "scrubbing"
     applications.
 
     In addition to user-initiated events text elements also emit
-    change notifications to their direct parents whenever their drawNew()
-    method is invoked. That way complex Morphs containing text elements
+    change notifications to their direct parents whenever their contents
+    changes. That way complex Morphs containing text elements
     get a chance to react if something about the embedded text has been
     modified programmatically. These events are:
 
-        layoutChanged() - sent from instances of TextMorph
-        fixLayout() - sent from instances of StringMorph
+        layoutChanged() - sent only from instances of TextMorph
+        fixLayout() - sent from instances of all Morphs, including StringMorphs
 
     they are different so that Morphs which contain both multi-line and
     single-line text elements can hold them apart.
@@ -854,28 +856,156 @@
     --------------------------------
     The real fun begins when you start to create new kinds of morphs
     with customized shapes. Imagine, e.g. jigsaw puzzle pieces or
-    musical notes. For this you have to override the default
+    musical notes.
 
-        drawNew()
+    When you create your own morphs, you'll want to think about how to
+    graphically render it, how to determine its size and whether it needs
+    to arrange any other parts ("submorphs). There are also ways to specify
+    its collision detection behavior and define "untouchable" regions
+    ("holes").
+
+
+    (a) drawing the shape
+    ---------------------
+    For this you have to override the default
+
+        render(ctx)
 
     method.
 
-    This method creates a new offscreen Canvas and stores it in
-    the morph's
+    This method draws the morph's shape using a given 2d graphics context.
+    Note that any coordinates used in the render() method must be relative
+    to the morph's own position, i.e. you don't need to worry about
+    translating the shape yourself.
 
-        image
+    You can use the following template for a start:
 
-    property.
-
-    Use the following template for a start:
-
-        MyMorph.prototype.drawNew = function() {
-            var context;
-            this.image = newCanvas(this.extent());
-            context = this.image.getContext('2d');
-            // use context to paint stuff here
+        MyMorph.prototype.render = function(ctx) {
+            ctx.fillStyle = this.color.toString();
+            ctx.fillRect(0, 0, this.width(), this.height());
         };
 
+    it renders the morph as a solid rectangle completely filling its
+    area with its current color.
+    
+    Notice how the coordinates for the fillRect() call are relative
+    to the morph's own position: The rendered rectangle's origin is always
+    located at (0, 0) regardless of the morph's actual position in the World.
+
+
+    (b) determining extent and arranging submorphs
+    ----------------------------------------------
+    If your new morph also needs to determine its extent and, e.g. to
+    encompass one or several other morphs, or arrange the layout of its
+    submorphs, make sure to also override the default
+    
+        fixLayout()
+    
+    method.
+    
+    NOTE: If you need to set the morph's extent inside, in order to avoid
+    infinite recursion instead of calling morph.setExtent() - which will
+    in turn call morph.fixLayout() again - directly modify the morph's
+    
+        bounds
+
+    property. Bounds is a rectable on which you can also use the same
+    size-setters, e.g. by calling:
+    
+        this.bounds.setExtent()
+
+
+    (c) pixel-perfect pointing events
+    ---------------------------------
+    In case your new morph needs to support pixel-perfect collision detection
+    with other morphs or pointing devices such as the mouse or a stylus you
+    can set the inherited attribute
+    
+        isFreeForm = bool
+    
+    to "true" (default is "false"). This makes sense the more your morph's
+    visual shape diverges from a rectangle. For example, if you create a
+    circular filled morph the default setting will register mouse-events
+    anywhere within its bounding box, e.g. also in the transparent parts
+    between the bounding box's corners outside of the circle's bounds.
+    Instead you can specify your irregulary shaped morph to only register
+    pointing events (mouse and touch) on solid, non-transparent parts.
+
+    Notice, however, that such pixel-perfect collision detection might
+    strain processing resources, especially if applied liberally.
+
+    In order to mitigate unfavorable processor loads for pixel-perfect
+    collision deteciton of irregularly shaped morphs there are two strategies
+    to consider: Caching the shape and specifying "untouchable" regions.
+
+
+    (d) caching the shape
+    ---------------------
+    In case of pixel-perfect free-form collision detection it makes sense to
+    cache your morph's current shape, so it doesn't have to be re-drawn onto a
+    new Canvas element every time the mouse moves over its bounding box.
+    For this you can set then inherited
+    
+        isCachingImage = bool
+        
+    attribute to "true" instead of the default "false" value. This will
+    significantly speed up collision detection and smoothen animations that
+    continuously perform collision detection. However, it will also consume
+    more memory. Therefore it's best to use this setting with caution.
+    
+    Snap! caches the shapes of sprites but not those of blocks. Instead it
+    manages the insides of C- and E-shaped blocks through the morphic "holes"
+    mechanism.
+
+
+    (e) holes
+    ---------
+    An alternative albeit not as precise and general way for handling
+    irregularly shaped morphs with "untouchable" regions is to specify a set
+    of rectangular areas in which pointing events (mouse or touch) are not
+    registered.
+
+    By default the inherited
+    
+        holes = []
+
+    property is an empty array. You can add one or more morphic Rectangle
+    objects to this list, representing regions, in which occurring events will
+    instead be passed on to the morph underneath.
+    
+    Note that, same with the render() method, the coordinates of these
+    rectangular holes must be specified relative to your morph's position.
+
+    If you specify holes you might find the need to adjust their layout
+    depending on the layout of your morph. To accomplish this you can override
+    the inherited
+    
+        fixHolesLayout()
+
+    method.
+
+
+    (f) updating
+    ------------
+    One way for morphs to become alive is form them to literally "morph" their
+    shape depending on whicher contest you wish them to react to. For example,
+    you might want the user to interactively draw a shape using their fingers
+    on a touch screen device, or you want the user to be able to "pinch" or
+    otherwise distort a shape interactively. In all of these situations you'll
+    want your morph to frequently rerender its shape.
+    
+    You can accomplish this, by calling
+
+        rerender()
+
+    after every change to your morph's appearance that requires rerendering.
+    
+    Such changes are usually only happening when the morph's dimensions or
+    other visual properties - such as its color - changes.
+
+
+    (g) duplicating
+    ---------------
     If your new morph stores or references to other morphs outside of
     the submorph tree in other properties, be sure to also override the
     default
@@ -941,7 +1071,7 @@
     which you can use to draw onto its parent Morph. By default every
     Morph in the system (including the World) is able to act as turtle
     canvas and can display pen trails. Pen trails will be lost whenever
-    the trails morph (the pen's parent) performs a "drawNew()"
+    the trails morph (the pen's parent) performs a "render()"
     operation. If you want to create your own pen trails canvas, you
     may wish to modify its
 
@@ -953,18 +1083,18 @@
     the following properties of PenMorph are relevant for turtle
     graphics:
 
-        color        - a Color
+        color       - a Color
         size        - line width of pen trails
-        heading        - degrees
-        isDown        - drawing state
+        heading     - degrees
+        isDown      - drawing state
 
     the following commands can be used to actually draw something:
 
         up()        - lift the pen up, further movements leave no trails
-        down()        - set down, further movements leave trails
-        clear()        - remove all trails from the current parent
-        forward(n)    - move n steps in the current direction (heading)
-        turn(n)        - turn right n degrees
+        down()      - set down, further movements leave trails
+        clear()     - remove all trails from the current parent
+        forward(n)  - move n steps in the current direction (heading)
+        turn(n)     - turn right n degrees
 
     Turtle graphics can best be explored interactively by creating a
     new PenMorph object and by manipulating it with the inspector
@@ -990,47 +1120,7 @@
     segment and instead redraws the outcome in a single pass.
 
 
-    (8) damage list housekeeping
-    ----------------------------
-    Morphic's progressive display update comes at the cost of having to
-    cycle through a list of "broken rectangles" every display cycle. If
-    this list gets very long working this damage list can lead to a
-    seemingly dramatic slow-down of the Morphic system. Typically this
-    occurs when updating the layout of complex Morphs with very many
-    submorphs, e.g. when resizing an inspector window.
-
-    An effective strategy to cope with this is to use the inherited
-
-        trackChanges
-
-    property of the Morph prototype for damage list housekeeping.
-
-    The trackChanges property of the Morph prototype is a Boolean switch
-    that determines whether the World's damage list ('broken' rectangles)
-    tracks changes. By default the switch is always on. If set to false
-    changes are not stored. This can be very useful for housekeeping of
-    the damage list in situations where a large number of (sub-) morphs
-    are changed more or less at once. Instead of keeping track of every
-    single submorph's changes tremendous performance improvements can be
-    achieved by setting the trackChanges flag to false before propagating
-    the layout changes, setting it to true again and then storing the full
-    bounds of the surrounding morph. As an example refer to the
-
-        moveBy()
-
-    method of HandMorph, and to the
-
-        fixLayout()
-
-    method of InspectorMorph, or the
-
-        startLayout()
-        endLayout()
-
-    methods of SyntaxElementMorph in the Snap application.
-
-
-    (9) supporting high-resolution "retina" screens
+    (8) supporting high-resolution "retina" screens
     -----------------------------------------------
     By default retina support gets installed when Morphic.js loads. There
     are two global functions that let you test for retina availability:
@@ -1076,7 +1166,7 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (10) animations
+    (9) animations
     ---------------
     Animations handle gradual transitions between one state and another over a
     period of time. Transition effects can be specified using easing functions.
@@ -1106,7 +1196,7 @@
     are implemented.
 
 
-    (11) minifying morphic.js
+    (10) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have

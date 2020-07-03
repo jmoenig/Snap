@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-October-09';
+modules.cloud = '2020-May-17';
 
 // Global stuff
 
@@ -460,6 +460,14 @@ Cloud.prototype.getPublishedProjectList = function (
     var path = '/projects' +
     		(username ? '/' + encodeURIComponent(username) : '') +
 	        '?ispublished=true';
+
+    if (!username) {
+        // When requesting the global list of published projects, filter out
+        // those with project names that are typical of online courses like
+        // Teals or BJC. When requesting a user's published projects, show them
+        // all.
+        path += '&filtered=true';
+    }
 
     if (withThumbnail) {
         path += '&withthumbnail=true';
