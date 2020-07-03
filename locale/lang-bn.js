@@ -182,7 +182,7 @@ SnapTranslator.dict.bn = {
     'language_translator':
         'Dr. Mokter Hossain, Radman Siddiki', // your name for the Translators tab
     'translator_e-mail':
-        'mokter@gmail.com, radman.siddiki@gmail.com', // optional
+        'mokter@gmail.com, radman.siddiki@outlook.com', // optional
     'last_changed':
         '2020-07-04', // this, too, will appear in the Translators tab
 
