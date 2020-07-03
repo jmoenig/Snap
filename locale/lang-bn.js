@@ -4,9 +4,9 @@
 
    	বাংলা (Bangla) translation for SNAP!
 
-    written by Dr. Mokter Hossain
+    written by Dr. Mokter Hossain and Radman Siddiki
 
-    Copyright (C) 2014 by Dr. Mokter Hossain
+    Copyright (C) 2014-2020 by Dr. Mokter Hossain, 2020 by Radman Siddiki
 
     This file is part of Snap!.
 
