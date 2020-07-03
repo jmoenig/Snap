@@ -294,7 +294,7 @@ SnapTranslator.dict.bn = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'স্টেজ নির্বাচিত হয়েছে:\n কোন গতিশীল প্রিমিটিভ নেই\n'
+        'স্টেজ নির্বাচিত হয়েছে:\n কোন গতিশীল প্রিমিটিভ ব্লক নেই\n'
             + 'disponibles',
 
     'move %n steps':
@@ -320,7 +320,7 @@ SnapTranslator.dict.bn = {
     'change y by %n':
         'y পরিবর্তন কর %n দ্বারা',
     'set y to %n':
-        'y নির্ধারণ কর  %n',
+        'y নির্ধারণ কর %n',
     'if on edge, bounce':
         'প্রান্ত স্পর্শ করলে উল্টে ফিরে আস',
     'x position':
@@ -329,22 +329,24 @@ SnapTranslator.dict.bn = {
         'এর y অবস্থান',
     'direction':
         'এর গতিপথ',
-
+	
     // looks:
     'switch to costume %cst':
         'পরিচ্ছদ বদল  কর  %cst',
     'next costume':
         'পরবর্তী পরিচ্ছদ',
     'costume #':
-        'এর পরিচ্ছদ #',
+        'পরিচ্ছদ #',
+    'new costume %l width %dim height %dim':
+        'নতুন পোশাক %l প্রস্থ %dim উচ্চতা %dim',
     'say %s for %n secs':
         'বল %s %n সেকেন্ড পর্যন্ত',
     'say %s':
         'বল %s',
     'think %s for %n secs':
-        'ভাব  %s %n সেকেন্ড পর্যন্ত',
+        'ভাব %s %n সেকেন্ড পর্যন্ত',
     'think %s':
-        'ভাব  %s',
+        'ভাব %s',
     'Hello!':
         'হ্যালো!',
     'Hmm...':
