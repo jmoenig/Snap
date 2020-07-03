@@ -184,7 +184,7 @@ SnapTranslator.dict.bn = {
     'translator_e-mail':
         'mokter@gmail.com, radman.siddiki@gmail.com', // optional
     'last_changed':
-        '2020-06-26', // this, too, will appear in the Translators tab
+        '2020-07-04', // this, too, will appear in the Translators tab
 
 
     // GUI
@@ -441,9 +441,11 @@ SnapTranslator.dict.bn = {
     'broadcast %msg':
         'বার্তা সম্প্রচার কর  %msg',
     'broadcast %msg and wait':
-        'বার্তাে %msg সম্প্রচার কর অপেক্ষা কর',
+        'বার্তা %msg সম্প্রচার কর অপেক্ষা কর',
+    'send %msg to %spr':
+        'বার্তা %msg সম্প্রচার কর %spr',
     'Message name':
-        'বার্তা লিখ',
+        'নতুন বার্তা তৈরি কর',
     'message':
         'বার্তা',
     'any message':
@@ -506,7 +508,7 @@ SnapTranslator.dict.bn = {
     'touching %clr ?':
         'স্পর্শ রঙ  %clr কিনা?',
     'color %clr is touching %clr ?':
-        '%clr রঙ  %clr রঙ গামী কিনা?',
+        '%clr রঙ %clr রঙ গামী কিনা?',
     'ask %s and wait':
         '%s জিজ্ঞাসা করে অপেক্ষা কর',
     'what\'s your name?':
@@ -692,9 +694,9 @@ SnapTranslator.dict.bn = {
 
     // cloud menu
     'Login...':
-        'ক্লাউড লগ ইন...',
+        'লগ ইন...',
     'Signup...':
-        'ক্লাউড সাইন আপ...',
+        'সাইন আপ...',
     'Reset Password...':
         'পাসওয়ার্ড পরিবর্তন কর...',
             
@@ -1011,7 +1013,7 @@ SnapTranslator.dict.bn = {
     'About Snap':
         'Snap! সম্পর্কিত তথ্য',
     'Back...':
-        'প্রত্যাবর্তন কর...',
+        'ফিরে যাও...',
     'License...':
         'লাইসেন্স...',
     'Modules...':
@@ -1019,7 +1021,7 @@ SnapTranslator.dict.bn = {
     'Credits...':
         'স্বীকৃতি...',
     'Translators...':
-        'ভাষান্তরিকবৃন্দ',
+        'অনুবাদক...',
     'License':
         'লাইসেন্স',
     'current module versions:':
@@ -1051,7 +1053,7 @@ SnapTranslator.dict.bn = {
 
     // coments
     'add comment here...':
-        'এখানে মন্তব্য যোগ কর',
+        'এখানে মন্তব্য যোগ কর...',
 
     // drow downs
     // directions
@@ -1074,11 +1076,11 @@ SnapTranslator.dict.bn = {
 
     // costumes
     'Turtle':
-        'কচ্ছপ',
+        'টার্টল পোশাক',
 
     // graphical effects
     'ghost':
-        'উপচ্ছায়া',
+        'ভূত',
 
     // keys
     'space':
@@ -1204,7 +1206,7 @@ SnapTranslator.dict.bn = {
     'reporter':
         'রিপোর্টার',
     'predicate':
-        'সূত্রের বিধেয়',
+        'প্রেডিক্যাট',
 
     // list indices
     'last':
