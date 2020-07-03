@@ -695,7 +695,7 @@ SnapTranslator.dict.bn = {
     'Language...':
         'ভাষা পরিবর্তন কর...',
     'Zoom blocks...':
-        'ব্লকসমূহ জুম্ কর...',
+        'ব্লকসমূহ জুম কর...',
     'Stage size...':
         'দৃশ্যস্থলের আকার পরিবর্তন কর...',
     'Blurred shadows':
