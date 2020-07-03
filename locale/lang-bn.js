@@ -336,7 +336,7 @@ SnapTranslator.dict.bn = {
     'next costume':
         'পরবর্তী পরিচ্ছদ',
     'costume #':
-        'পরিচ্ছদ #',
+        'পরিচ্ছদ সংখ্যা',
     'new costume %l width %dim height %dim':
         'নতুন পোশাক %l প্রস্থ %dim উচ্চতা %dim',
     'say %s for %n secs':
@@ -688,7 +688,7 @@ SnapTranslator.dict.bn = {
      'Sounds...':
         'শব্দের ফাইল লোড কর',
     'load the official library of\npowerful blocks':
-        'শক্তিশালী ব্লকের অফিসিয়াল লাইব্রেরি লোড কর',
+        'শক্তিশালী ব্লকের অফিসিয়াল \nলাইব্রেরি লোড কর',
 
     // cloud menu
     'Login...':
