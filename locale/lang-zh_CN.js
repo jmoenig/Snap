@@ -1,165 +1,106 @@
 /*
-
     lang-zh_CN.js
-
     Simplified Chinese translation for SNAP!
-
     written by 五百刀/邓江华/孟锡峰
-
     Copyright (C) 2016 by Jens Mönig
-
     This file is part of Snap!.
-
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation, either version 3 of
     the License, or (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
     Note to Translators:
     --------------------
     At this stage of development, Snap! can be translated to any LTR language
     maintaining the current order of inputs (formal parameters in blocks).
-
     Translating Snap! is easy:
-
-
     1. Download
-
     Download the sources and extract them into a local folder on your
     computer:
-
         <http://snap.berkeley.edu/snapsource/snap.zip>
-
     Use the German translation file (named 'lang-de.js') as template for your
     own translations. Start with editing the original file, because that way
     you will be able to immediately check the results in your browsers while
     you're working on your translation (keep the local copy of snap.html open
     in your web browser, and refresh it as you progress with your
     translation).
-
-
     2. Edit
-
     Edit the translation file with a regular text editor, or with your
     favorite JavaScript editor.
-
     In the first non-commented line (the one right below this
     note) replace "de" with the two-letter ISO 639-1 code for your language,
     e.g.
-
         fr - French => SnapTranslator.dict.fr = {
         it - Italian => SnapTranslator.dict.it = {
         pl - Polish => SnapTranslator.dict.pl = {
         pt - Portuguese => SnapTranslator.dict.pt = {
         es - Spanish => SnapTranslator.dict.es = {
         el - Greek => => SnapTranslator.dict.el = {
-
     etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
     3. Translate
-
     Then work through the dictionary, replacing the German strings against
     your translations. The dictionary is a straight-forward JavaScript ad-hoc
     object, for review purposes it should be formatted as follows:
-
         {
             'English string':
                 'Translation string',
             'last key':
         }       'last value'
-
     and you only edit the indented value strings. Note that each key-value
     pair needs to be delimited by a comma, but that there shouldn't be a comma
     after the last pair (again, just overwrite the template file and you'll be
     fine).
-
     If something doesn't work, or if you're unsure about the formalities you
     should check your file with
-
         <http://JSLint.com>
-
     This will inform you about any missed commas etc.
-
-
     4. Accented characters
-
     Depending on which text editor and which file encoding you use you can
     directly enter special characters (e.g. Umlaut, accented characters) on
     your keyboard. However, I've noticed that some browsers may not display
     special characters correctly, even if other browsers do. So it's best to
     check your results in several browsers. If you want to be on the safe
     side, it's even better to escape these characters using Unicode.
-
         see: <http://0xcc.net/jsescape/>
-
-
     5. Block specs:
-
     At this time your translation of block specs will only work
     correctly, if the order of formal parameters and their types
     are unchanged. Placeholders for inputs (formal parameters) are
     indicated by a preceding % prefix and followed by a type
     abbreviation.
-
     For example:
-
         'say %s for %n secs'
-
     can currently not be changed into
-
         'say %n secs long %s'
-
     and still work as intended.
-
     Similarly
-
         'point towards %dst'
-
     cannot be changed into
-
         'point towards %cst'
-
     without breaking its functionality.
-
-
     6. Submit
-
     When you're done, rename the edited file by replacing the "de" part of the
     filename with the two-letter ISO 639-1 code for your language, e.g.
-
         fr - French => lang-fr.js
         it - Italian => lang-it.js
         pl - Polish => lang-pl.js
         pt - Portuguese => lang-pt.js
         es - Spanish => lang-es.js
         el - Greek => => lang-el.js
-
     and send it to me for inclusion in the official Snap! distribution.
     Once your translation has been included, Your name will the shown in the
     "Translators" tab in the "About Snap!" dialog box, and you will be able to
     directly launch a translated version of Snap! in your browser by appending
-
         lang:xx
-
     to the URL, xx representing your translations two-letter code.
-
-
     7. Known issues
-
     In some browsers accents or ornaments located in typographic ascenders
     above the cap height are currently (partially) cut-off.
-
     Enjoy!
     -Jens
 */
@@ -170,7 +111,6 @@ SnapTranslator.dict.zh_CN = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
-
     Ä, ä   \u00c4, \u00e4
     Ö, ö   \u00d6, \u00f6
     Ü, ü   \u00dc, \u00fc
@@ -181,11 +121,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华',
+        '五百刀/邓江华/曹儒林',
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2019-08-06',
+        '2020-05-13',
 
     // GUI
     // control bar:
@@ -271,25 +211,15 @@ SnapTranslator.dict.zh_CN = {
         are unchanged. Placeholders for inputs (formal parameters) are
         indicated by a preceding % prefix and followed by a type
         abbreviation.
-
         For example:
-
             'say %s for %n secs'
-
         can currently not be changed into
-
             'say %n secs long %s'
-
         and still work as intended.
-
         Similarly
-
             'point towards %dst'
-
         cannot be changed into
-
             'point towards %cst'
-
         without breaking its functionality.
     */
 
@@ -451,7 +381,7 @@ SnapTranslator.dict.zh_CN = {
     'inspect...':
         '查看…',
     'open a window\non all properties':
-        '打开查看器窗口\n显示所有属性',
+        '打开新的窗口\n显示所有属性',
     'open a new window\nwith a picture of this morph': // pick up
         '打开新窗口\n展示这个morph的图片',
     'lock':
@@ -515,7 +445,7 @@ SnapTranslator.dict.zh_CN = {
     'set the corner\'s\nradius':
         '设置圆角半径',
     'alpha\nvalue:':
-        'alpha通道值：',
+        '透明度：',
     'color:':
         '颜色：',
 
@@ -631,7 +561,7 @@ SnapTranslator.dict.zh_CN = {
     'color picker':
         '颜色选择器',
     'sensor demo':
-        '探测器演示',
+        '传感器演示',
     'animation demo':
         '动画演示',
     'pen':
@@ -744,8 +674,8 @@ SnapTranslator.dict.zh_CN = {
         '拼贴在 %spr 上',
     'pen vectors':
         '画笔矢量',    
-    
-    // control:
+
+  // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
     'when %keyHat key pressed':
@@ -891,9 +821,9 @@ SnapTranslator.dict.zh_CN = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        '启动了加速？',
+        '启动了加速模式？',
     'set turbo mode to %b':
-        '设置加速开关为 %b',
+        '设置加速模式为 %b',
 
     'filtered for %clr':
         '用 %clr 过滤造型',
@@ -917,7 +847,7 @@ SnapTranslator.dict.zh_CN = {
     'second':
         '秒钟',
     'time in milliseconds':
-        '时间戳',
+        '毫秒',
     'day of week':
         '星期几',
     'to':
@@ -957,7 +887,7 @@ SnapTranslator.dict.zh_CN = {
     'set %setting to %b':
         '设置 %setting 为 %b',        
     'turbo mode':
-        '超级模式',
+        '加速模式',
     'flat line ends':
         '平头线条',
     'video capture':
@@ -1005,9 +935,9 @@ SnapTranslator.dict.zh_CN = {
     'unicode %n as letter':
         'Unicode码为 %n 的字符',
     'is %s a %typ ?':
-        '%s 的类型是 %typ ？',
+        '%s 的类型是 %typ 吗？',
     'is %s identical to %s ?':
-        '%s 与 %s 相同？',
+        '%s 与 %s 是相同的？',
 
     'type of %s':
         '%s 的类型',
@@ -1063,7 +993,7 @@ SnapTranslator.dict.zh_CN = {
     'is %l empty?':
         '%l 为空?',
     'map %repRing over %l':
-        '映射 %repRing 数据来源 %l', 
+        '映射 %repRing ，来源 %l', 
     'keep items %predRing from %l':
         '保留满足条件 %predRing 的数据,来源 %l',  
     'find first item %predRing in %l':
@@ -1073,7 +1003,7 @@ SnapTranslator.dict.zh_CN = {
     'for each %upvar in %l %cla':
         '逐个执行 %upvar 来自 %l %cla',
     'item':
-        '项目',                                      
+        '项',                                      
 
     // other
     'Make a block':
@@ -1090,7 +1020,7 @@ SnapTranslator.dict.zh_CN = {
     'Download source':
         '下载源代码',
     'Camera support':
-        '摄像头支持',
+        '支持摄像头支持',
     'Switch back to user mode':
         '回到用户模式',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
@@ -1098,7 +1028,7 @@ SnapTranslator.dict.zh_CN = {
     'Switch to dev mode':
         '切换到开发者模式',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '启用Morphic快捷菜单和查看器\n用户界面不友好',
+        '启用Morphic快捷菜单和查看器\n对用户不友好',
 
     // project menu
     'Project notes...':
@@ -1151,13 +1081,13 @@ SnapTranslator.dict.zh_CN = {
     'unused block(s) removed':
         '删掉了没用到的积木',
     'Export summary...':
-        '导出项目总结…',
+        '以HTML格式导出项目',
     'open a new browser browser window\n with a summary of this project':
-        '打开新窗口，展示这个项目的总结',
+        '打开新窗口，展示这个项目',
     'Export summary with drop-shadows...':
-        '导出项目总结（带阴影）…',
+        '以HTML格式导出项目（带阴影）…',
     'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
-        '打开新窗口，使用带有阴影的图形\n展示这个项目的总结\n（只有部分浏览器可以）',
+        '打开新窗口，使用带有阴影的图形\n展示这个项目\n（只有部分浏览器可以）',
 
     'Contents':
         '内容',
@@ -1208,9 +1138,9 @@ SnapTranslator.dict.zh_CN = {
     'Export all scripts as pic...':
         '把所有脚本导出为图片…',
     'show a picture of all scripts\nand block definitions':
-        '把所有脚本和积木设计图展示成一张图片',
+        '把所有脚本展示成一张图片',
     'url...':
-        'URL…',
+        '网址…',
     'Service:':
         '服务：',
     'Reset Password':
@@ -1324,143 +1254,143 @@ SnapTranslator.dict.zh_CN = {
     'Blurred shadows':
         '半透明阴影',
     'uncheck to use solid drop\nshadows and highlights':
-        '关：使用不透明的阴影和加亮',
+        '使用不透明的阴影和加亮',
     'check to use blurred drop\nshadows and highlights':
-        '关：使用透明的阴影和加亮',
+        '使用透明的阴影和加亮',
     'Zebra coloring':
         '积木颜色相间',
     'check to enable alternating\ncolors for nested blocks':
-        '开：使用深浅相间的颜色\n显示嵌套的同类积木',
+        '使用深浅相间的颜色\n显示嵌套的同类积木',
     'uncheck to disable alternating\ncolors for nested block':
-        '关：使用同样的颜色\n显示嵌套的同类积木',
+        '使用同样的颜色\n显示嵌套的同类积木',
     'Dynamic input labels':
         '动态输入标记',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        '关：可变输入项不使用动态标记',
+        '可变输入项不使用动态标记',
     'check to enable dynamic\nlabels for variadic inputs':
-        '开：可变输入项使用动态标记',
+        '可变输入项使用动态标记',
     'Prefer empty slot drops':
         '只放空白项',
     'settings menu prefer empty slots hint':
-        '开：“报告积木”优先\n放在没有积木的输入项上',
+        '“报告积木”优先\n放在没有积木的输入项上',
     'uncheck to allow dropped\nreporters to kick out others':
-        '关：“报告积木”可以\n踢走输入项上已有的积木',
+        '“报告积木”可以\n替换输入项上已有的积木',
     'Long form input dialog':
         '输入类型说明',
     'check to always show slot\ntypes in the input dialog':
-        '开：在输入项对话框里显示类型说明',
+        '在输入项对话框里显示类型说明',
     'uncheck to use the input\ndialog in short form':
-        '关：显示简洁的输入项对话框',
+        '显示简洁的输入项对话框',
     'Plain prototype labels':
         '简洁的设计图',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        '关：在积木设计图上显示(+)号',
+        '在积木设计图上显示(+)号',
     'check to hide (+) symbols\nin block prototype labels':
-        '开：不在积木设计图上显示(+)号',
+        '不在积木设计图上显示(+)号',
     'Virtual keyboard':
         '虚拟键盘',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        '关：不使用移动设备的虚拟键盘',
+        '不使用移动设备的虚拟键盘',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        '开：使用移动设备的虚拟键盘',
+        '使用移动设备的虚拟键盘',
     'Input sliders':
         '使用游标',
     'uncheck to disable\ninput sliders for\nentry fields':
-        '关：不使用游标修改输入字段',
+        '不使用游标修改输入字段',
     'check to enable\ninput sliders for\nentry fields':
-        '开：使用游标修改输入字段',
+        '使用游标修改输入字段',
     'Execute on slider change':
         '游标改变时运行脚本',
     'uncheck to supress\nrunning scripts\nwhen moving the slider':
-        '关：滑动游标时暂停运行脚本',
+        '滑动游标时暂停运行脚本',
     'check to run\nthe edited script\nwhen moving the slider':
-        '开：滑动游标时运行改变的脚本',
+        '滑动游标时运行改变的脚本',
     'Clicking sound':
         '点击音效',
     'uncheck to turn\nblock clicking\nsound off':
-        '关：点击积木时不发出声音',
+        '点击积木时不发出声音',
     'check to turn\nblock clicking\nsound on':
-        '开：点击积木发出声音',
+        '点击积木发出声音',
     'Animations':
         '动画',
     'uncheck to disable\nIDE animations':
-        '关：不显示编辑器动画效果',
+        '不显示编辑器动画效果',
     'Turbo mode':
         '加速模式',
     'check to prioritize\nscript execution':
-        '开：加速脚本运行',
+        '加速脚本运行',
     'uncheck to run scripts\nat normal speed':
-        '关：正常速度运行脚本',
+        '正常速度运行脚本',
     'check to enable\nIDE animations':
-        '开：显示编辑器动画效果',
+        '显示编辑器动画效果',
     'Flat design':
         '扁平外观',
     'check for alternative\nGUI design':
-        '开：使用扁平风格的用户界面',
+        '使用扁平风格的用户界面',
     'uncheck for default\nGUI design':
-        '关：使用默认的用户界面',
+        '使用默认的用户界面',
     'Keyboard Editing':
         '键盘编辑',
     'uncheck to disable\nkeyboard editing support':
-        '关：不使用键盘编辑',
+        '不使用键盘编辑',
     'check to enable\nkeyboard editing support':
-        '开：使用键盘编辑',
+        '使用键盘编辑',
     'Table support':
         '使用表格功能',
     'uncheck to disable\nmulti-column list views':
-        '关：不使用多栏(如2维)列表',
+        '不使用多栏(如2维)列表',
     'check for multi-column\nlist view support':
-        '开：使用多栏(如2维)列表',
+        '使用多栏(如2维)列表',
     'Table lines':
         '表格线',
     'uncheck for less contrast\nmulti-column list views':
-        '关：浅色表格线',
+        '浅色表格线',
     'check for higher contrast\ntable views':
-        '开：深色表格线',
+        '深色表格线',
     'Visible stepping':
         '可视化单步运行',    
     'Thread safe scripts':
         '线程安全的脚本',
     'uncheck to allow\nscript reentrance':
-        '关：允许脚本重入',
+        '允许脚本重入',
     'check to disallow\nscript reentrance':
-        '开：不允许脚本重入',
+        '不允许脚本重入',
     'Prefer smooth animations':
         '动画尽可能平滑',
     'uncheck for greater speed\nat variable frame rates':
-        '关：改变帧率保证播放速度\n(牺牲平滑程度)',
+        '改变帧率保证播放速度\n(牺牲平滑程度)',
     'check for smooth, predictable\nanimations across computers':
-        '开：平滑地显示动画\n(牺牲播放速度)',
+        '平滑地显示动画\n(牺牲播放速度)',
     'Flat line ends':
         '平头线条',
     'check for flat ends of lines':
-        '开：线条的端点是平的',
+        '线条的端点是平的',
     'uncheck for round ends of lines':
-        '关：线条的端点是圆的',
+        '线条的端点是圆的',
     'Codification support':
-        '可转换成代码',
+        '转换成代码',
     'uncheck to disable\nblock to text mapping features':
-        '不选：关闭积木转文字的功能',
+        '关闭积木转文字的功能',
     'check for block\nto text mapping features':
-        '开：打开积木转文字的功能',
+        '打开积木转文字的功能',
     'Inheritance support':
-        '母子角色(继承)',
+        '支持继承',
     'uncheck to disable\nsprite inheritance features':
-        '关：角色不可以继承',
+        '角色不可以继承',
     'check for sprite\ninheritance features':
-        '开：角色可以继承',
+        '角色可以继承',
     'Sprite Nesting':
         '角色组合',
     'check to enable\nsprite composition':
-        '开：允许角色组合',
+        '允许角色组合',
     'uncheck to disable\nsprite composition':
-        '关：不允许角色组合',
+        '不允许角色组合',
     'First-Class Sprites':
         '高等角色',
     'uncheck to disable support\nfor first-class sprites':
-        '关：不使用高等角色',
+        '不使用高等角色',
     'check to enable support\n for first-class sprite':
-        '开：使用高等角色',
+        '使用高等角色',
     'Dragging threshold...':
         '拖放最小距离…',
     'specify the distance the hand has to move\nbefore it picks up an object':
@@ -1468,27 +1398,27 @@ SnapTranslator.dict.zh_CN = {
     'Cache Inputs':
         '缓存输入数据',
     'uncheck to stop caching\ninputs (for debugging the evaluator)':
-        '关：不缓存输入数据\n（以便调试求值过程）',
+        '不缓存输入数据\n（以便调试求值过程）',
     'check to cache inputs\nboosts recursion':
-        '开：缓存输入数据\n递归速度更快',
+        '缓存输入数据\n递归速度更快',
     'Project URLs':
         '项目网址',
     'check to enable\nproject data in URLs':
-        '开：网址携带项目数据',
+        '网址携带项目数据',
     'uncheck to disable\nproject data in URLs':
-        '关：网址不携带项目数据',
+        '网址不携带项目数据',
     'Rasterize SVGs':
         'SVG点阵化',
     'uncheck for smooth\nscaling of vector costumes':
-        '关：矢量造型平滑缩放',
+        '矢量造型平滑缩放',
     'check to rasterize\nSVGs on import':
-        '开：导入SVG时把它点阵化',
+        '导入SVG时把它点阵化',
     'Persist linked sublist IDs':
         '保存子列表ID',
     'uncheck to disable\nsaving linked sublist identities':
-        '关：不保存子列表的ID',
+        '不保存子列表的ID',
     'check to enable\nsaving linked sublist identities':
-        '开：保存子列表的ID',
+        '保存子列表的ID',
     // inputs
     'with inputs':
         '输入项',
@@ -1579,7 +1509,7 @@ SnapTranslator.dict.zh_CN = {
     'parent...':
         '母角色…',
     'current parent':
-        '母角色',
+        '目前的母角色',
 
     // blocks:
     'help...':
@@ -1609,9 +1539,9 @@ SnapTranslator.dict.zh_CN = {
     'transient':
         '不记录',
     'uncheck to save contents\nin the project':
-        '关：把变量内容保存在项目里',
+        '把变量内容保存在项目里',
     'check to prevent contents\nfrom being saved':
-        '开：不保存变量内容',
+        '不保存变量内容',
     'find blocks...':
         '找积木…',
 
@@ -1631,7 +1561,7 @@ SnapTranslator.dict.zh_CN = {
     'detach from':
         '脱离',
     'detach all parts':
-        '拆除所有组件',
+        '所有组件脱离',
     'export...':
         '导出…',
     'paint a new sprite':
@@ -1746,7 +1676,7 @@ SnapTranslator.dict.zh_CN = {
     'giant (8x)':
         '巨大 (8x)',
     'monstrous (10x)':
-        '无敌 (10x)',
+        '最大 (10x)',
 
     // Project Manager
     'Untitled':
@@ -1754,7 +1684,7 @@ SnapTranslator.dict.zh_CN = {
     'Open Project':
         '打开项目',
     '(empty)':
-        '(空的)',
+        '(空)',
     'Saved!':
         '已保存！',
     'Delete Project':
@@ -1836,7 +1766,7 @@ SnapTranslator.dict.zh_CN = {
     'Import blocks':
         '导入积木',
     'this project doesn\'t have any\ncustom global blocks yet':
-        '这个项目没有包含全局性的自制',
+        '这个项目没有包含全局性的自制积木',
     'select':
         '选择',
     'none':
@@ -1856,7 +1786,7 @@ SnapTranslator.dict.zh_CN = {
     'Reporter':
         '报告',
     'Predicate':
-        '判断',
+        '谓语',
 
     // block editor
     'Block Editor':
@@ -1966,7 +1896,7 @@ SnapTranslator.dict.zh_CN = {
     'length: ':
         '长度：',
 
-    // coments
+    // comments
     'add comment here...':
         '在这里添加说明…',
     'comment pic...':
@@ -2131,19 +2061,19 @@ SnapTranslator.dict.zh_CN = {
     'sqrt':
         '平方根',
     'sin':
-        'sin',
+        '正弦',
     'cos':
-        'cos',
+        '余弦',
     'tan':
-        'tan',
+        '正切',
     'asin':
-        'asin',
+        '反正弦',
     'acos':
-        'acos',
+        '反余弦',
     'atan':
-        'atan',
+        '反正切',
     'ln':
-        'ln',
+        '自然对数',
     'e^':
         'e^',
 
@@ -2153,7 +2083,7 @@ SnapTranslator.dict.zh_CN = {
     'letter':
         '字母',
     'whitespace':
-        '空白',
+        '空符',
     'line':
         '行',
     'tab':
@@ -2239,7 +2169,7 @@ SnapTranslator.dict.zh_CN = {
     'Stroked Rectangle\n(shift: square)':
         '矩形框\n(shift: 正方形)',
     'Stroked Ellipse\n(shift: circle)':
-        '椭圆圈\n(shift: 圆圈)',
+        '椭圆\n(shift: 圆)',
     'Eraser tool':
         '橡皮',
     'Set the rotation center':
@@ -2249,7 +2179,7 @@ SnapTranslator.dict.zh_CN = {
     'Filled Rectangle\n(shift: square)':
         '实心矩形\n(shift: 正方形)',
     'Filled Ellipse\n(shift: circle)':
-        '实心椭圆形\n(shift: 圆形)',
+        '实心椭圆\n(shift: 圆)',
     'Fill a region':
         '涂满一个区域',
     'Pipette tool\n(pick a color anywhere)':
