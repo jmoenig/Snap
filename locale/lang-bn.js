@@ -436,12 +436,14 @@ SnapTranslator.dict.bn = {
         'যখন %keyHat ক্লিক করা হবে',
     'when I am clicked':
         'যখন আমাকে ক্লিক করা হবে',
+    'when %b':
+        'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat':
-        'যখন আমি পাবো বার্তা %msgHat',
+        'যখন আমি পাব বার্তা %msgHat',
     'broadcast %msg':
-        'বার্তা সম্প্রচার কর  %msg',
+        'বার্তা %msg সম্প্রচার কর',
     'broadcast %msg and wait':
-        'বার্তা %msg সম্প্রচার কর অপেক্ষা কর',
+        'বার্তা %msg সম্প্রচার করে অপেক্ষা কর',
     'send %msg to %spr':
         'বার্তা %msg সম্প্রচার কর %spr',
     'Message name':
@@ -455,8 +457,7 @@ SnapTranslator.dict.bn = {
     'push':
         'পুশ',
     'pull':
-        'পুল',
-        
+        'পুল',   
     'wait %n secs':
         'অপেক্ষা কর %n সেকেন্ড',
     'wait until %b':
@@ -468,9 +469,9 @@ SnapTranslator.dict.bn = {
     'repeat until %b %loop':
         'পুনরায় কর যতক্ষণ না  %b %loop',
     'if %b %c':
-        'যদি হয়  %b %c',
+        'যদি হয় %b %c',
     'if %b %c else %c':
-        'যদি হয়  %b %c অন্যথায়  %c',
+        'যদি হয় %b %c অন্যথায় %c',
     'report %s':
         'প্রতিবেদন কর %s',
     'stop block':
