@@ -248,7 +248,7 @@ SnapTranslator.dict.bn = {
     'add a new sprite':
         'একটি নতুন স্প্রাইট যোগ কর',
     'paint a new sprite':
-        'একটি পোশাক আঁক',
+        'একটি স্প্রাইট আঁক',
     'take a camera snapshot and\nimport it as a new sprite':
         'একটি ক্যামেরা স্ক্রিনশট নেও\n এবং এটি নতুন পোশাক হিসেবে আমদানি কর',
 
