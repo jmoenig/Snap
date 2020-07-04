@@ -453,11 +453,7 @@ SnapTranslator.dict.bn = {
     'any message':
         'যে কোন বার্তা',
     'initialize':
-        'আরম্ভ কর',
-    'push':
-        'পুশ',
-    'pull':
-        'পুল',   
+        'আরম্ভ কর', 
     'wait %n secs':
         'অপেক্ষা কর %n সেকেন্ড',
     'wait until %b':
