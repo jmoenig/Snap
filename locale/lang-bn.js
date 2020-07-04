@@ -965,13 +965,13 @@ SnapTranslator.dict.bn = {
     'Delete Custom Block':
         'কাস্টম ব্লক মুছে দাও',
     'block deletion dialog text':
-        'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার জন্য নিশ্চিত?',
+        'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার ব্যাপারে নিশ্চিত?',
 
     // input dialog
     'Create input name':
         'ইনপুট নাম তৈরি কর',
     'Edit input name':
-        'ইনপুট নাম সম্পাদনা কর',
+        'ইনপুট নাম পরিবর্তন কর',
     'Edit label fragment':
         'লেবেল টুকরা পরিবর্তন কর',
     'Title text':
