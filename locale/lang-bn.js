@@ -389,7 +389,7 @@ SnapTranslator.dict.bn = {
     'rest for %n beats':
         'নীরব থাক %n কম্পন পর্যন্ত',
     'play sound %snd at %rate Hz':
-        'শব্দ %snd রেট %rate-এ বাজাও',
+        'শব্দ %snd রেট %rate -এ বাজাও',
     'play note %n for %n beats':
         'নোট %n বাজাও %n কম্পন পর্যন্ত',
      '%aa of sound %snd':
@@ -568,7 +568,7 @@ SnapTranslator.dict.bn = {
     'world':
         'পৃথিবী',
     'letter %idx of %s':
-        '%idx-তম বর্ণ %s এর',
+        '%idx -তম বর্ণ %s এর',
     'length of %s':
         '%s এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
