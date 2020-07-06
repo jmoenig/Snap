@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-July-03';
+modules.locale = '2020-July-04';
 
 // Global stuff
 
@@ -422,11 +422,11 @@ SnapTranslator.dict.bn = {
     'language_name':
         'বাংলা',
     'language_translator':
-        'Dr. Mokter Hossain',
+        'Dr. Mokter Hossain, Radman Siddiki',
     'translator_e-mail':
-        'mokter@gmail.com',
+        'mokter@gmail.com, radman.siddiki@outlook.com',
     'last_changed':
-        '2020-06-25'
+        '2020-07-04'
 };
 
 SnapTranslator.dict.kn = {

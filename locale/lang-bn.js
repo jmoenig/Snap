@@ -4,9 +4,9 @@
 
    	বাংলা (Bangla) translation for SNAP!
 
-    written by Dr. Mokter Hossain
+    written by Dr. Mokter Hossain and Radman Siddiki
 
-    Copyright (C) 2014 by Dr. Mokter Hossain
+    Copyright (C) 2014-2020 by Dr. Mokter Hossain, 2020 by Radman Siddiki
 
     This file is part of Snap!.
 
@@ -180,11 +180,11 @@ SnapTranslator.dict.bn = {
     'language_name':
         'বাংলা', // the name as it should appear in the language menu
     'language_translator':
-        'Dr. Mokter Hossain', // your name for the Translators tab
+        'Dr. Mokter Hossain, Radman Siddiki', // your name for the Translators tab
     'translator_e-mail':
-        'mokter@gmail.com', // optional
+        'mokter@gmail.com, radman.siddiki@outlook.com', // optional
     'last_changed':
-        '2020-06-25', // this, too, will appear in the Translators tab
+        '2020-07-04', // this, too, will appear in the Translators tab
 
 
     // GUI
@@ -222,29 +222,35 @@ SnapTranslator.dict.bn = {
 
     // tabs:
     'Scripts':
-        'প্রোগ্রাম স্ক্রিপ্ট',
+        'স্ক্রিপ্টগুলো',
     'Costumes':
         'পরিচ্ছদ',
+    'Backgrounds':
+        'ব্যাকগ্রাউন্ড',
     'Sounds':
         'শব্দমালা',
 
     // names:
     'Sprite':
-        'স্পাইট',
+        'স্প্রাইট',
     'Stage':
         'দৃশ্যস্থল',
 
     // rotation styles:
     'don\'t rotate':
-        'ঘোরতে পারে না',
+        'ঘুরতে পারে না',
     'can rotate':
-        'ঘোরতে পারে',
+        'ঘুরতে পারে',
     'only face left/right':
-        'একমাত্র  ডানে/বামে মুখ',
+        'একমাত্র ডানে/বামে মুখ',
 
     // new sprite button:
     'add a new sprite':
-        'একটি নতুন স্পাইট যোগ কর',
+        'একটি নতুন স্প্রাইট যোগ কর',
+    'paint a new sprite':
+        'একটি স্প্রাইট আঁক',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'একটি ক্যামেরা স্ক্রিনশট নেও\n এবং এটি নতুন পোশাক হিসেবে আমদানি কর',
 
     // tab help
     'costumes tab help':
@@ -288,7 +294,7 @@ SnapTranslator.dict.bn = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'স্টেজ নির্বাচিত হয়েছে:\n কোন গতিশীল প্রিমিটিভ নেই\n'
+        'স্টেজ নির্বাচিত হয়েছে:\n কোন গতিশীল প্রিমিটিভ ব্লক নেই\n'
             + 'disponibles',
 
     'move %n steps':
@@ -298,13 +304,13 @@ SnapTranslator.dict.bn = {
     'turn %counterclockwise %n degrees':
         'বামদিকে %counterclockwise %n ডিগ্রীকোণে ঘোর',
     'point in direction %dir':
-        'দিক নির্ধারণ কর  %dir',
+        'দিকে মুখ কর  %dir',
     'point towards %dst':
         'প্রতি নির্দেশ কর  %dst',
     'go to x: %n y: %n':
         'x: %n y: %n অবস্থানে যাও',
     'go to %dst':
-        '%dst দুরত্বে যাও',
+        '%dst যাও',
     'glide %n secs to x: %n y: %n':
         'গড়িয়ে চল x: %n y: %n অবস্থানে  %n সেকেন্ড  ',
     'change x by %n':
@@ -314,45 +320,47 @@ SnapTranslator.dict.bn = {
     'change y by %n':
         'y পরিবর্তন কর %n দ্বারা',
     'set y to %n':
-        'y নির্ধারণ কর  %n',
+        'y নির্ধারণ কর %n',
     'if on edge, bounce':
-        'প্রান্ত স্পর্শ করলে উল্টো ফিরে আস',
+        'প্রান্ত স্পর্শ করলে উল্টে ফিরে আস',
     'x position':
-        'এর  x অবস্থান',
+        'এর x অবস্থান',
     'y position':
-        'এর  y অবস্থান',
+        'এর y অবস্থান',
     'direction':
         'এর গতিপথ',
-
+	
     // looks:
     'switch to costume %cst':
-        'পরিচ্ছদ বদল  কর  %cst',
+        'পরিচ্ছদ বদল কর %cst',
     'next costume':
         'পরবর্তী পরিচ্ছদ',
     'costume #':
-        'এর পরিচ্ছদ #',
+        'পরিচ্ছদ সংখ্যা',
+    'new costume %l width %dim height %dim':
+        'নতুন পোশাক %l প্রস্থ %dim উচ্চতা %dim',
     'say %s for %n secs':
-        'বল  %s %n সেকেন্ড পর্যন্ত',
+        'বল %s %n সেকেন্ড পর্যন্ত',
     'say %s':
-        'বল  %s',
+        'বল %s',
     'think %s for %n secs':
-        'ভাব  %s %n সেকেন্ড পর্যন্ত',
+        'ভাব %s %n সেকেন্ড পর্যন্ত',
     'think %s':
-        'ভাব  %s',
+        'ভাব %s',
     'Hello!':
         'হ্যালো!',
     'Hmm...':
         'হুম ...',
     'change %eff effect by %n':
-        'প্রভাব   %eff পরিবর্তন করো  %n দ্বারা ',
+        'বিশেষ প্রভাব %eff পরিবর্তন কর %n দ্বারা',
     'set %eff effect to %n':
-        'প্রভাব  %eff %n গুণ নির্ধারণ কর',
+        'বিশেষ প্রভাব %eff %n গুণ নির্ধারণ কর',
     'clear graphic effects':
         'চিত্রলেখ প্রভাব পরিষ্কার কর',
     'change size by %n':
-        'আকার    %n গুণ পরিবর্তন কর',
+        'আকার %n গুণ পরিবর্তন কর',
     'set size to %n %':
-        'আকার   %n % নির্ধারণ কর',
+        'আকার %n % নির্ধারণ কর',
     'size':
         'এর আকার',
     'show':
@@ -375,20 +383,28 @@ SnapTranslator.dict.bn = {
     'play sound %snd':
         'শব্দ বাজাও  %snd',
     'play sound %snd until done':
-        '%snd শব্দ বাজাও যতক্ষণ না',
+        '%snd শব্দ বাজাও এটি শেষ না হওয়া পর্যন্ত',
     'stop all sounds':
         'সকল শব্দ বন্ধ কর',
     'rest for %n beats':
-        'নীরব থাক %n স্বরকম্প পর্যন্ত',
+        'নীরব থাক %n কম্পন পর্যন্ত',
+    'play sound %snd at %rate Hz':
+        'শব্দ %snd রেট %rate-এ বাজাও',
     'play note %n for %n beats':
-        'মন্তব্য %n বাজাও  %n স্বরকম্প',
+        'নোট %n বাজাও %n কম্পন পর্যন্ত',
+     '%aa of sound %snd':
+        'শব্দের %aa %snd',
+     'duration':
+        'ব্যাপ্তিকাল'
+     'length':
+        'দৈর্ঘ্য',
     'change tempo by %n':
-        'শব্দের কম্পনমাত্রা %n পরিবর্তন কর',
+        'শব্দের কম্পনমাত্রা %n দ্বারা পরিবর্তন কর',
     'set tempo to %n bpm':
-        'শব্দের কম্পনমাত্রা %n নির্ধারণ কর',
+        'শব্দের কম্পনমাত্রা %n করে ফেল',
     'tempo':
         'শব্দের কম্পনমাত্রা',
-
+	
     // pen:
     'clear':
         'পরিচ্ছদ পরিষ্কার কর',
@@ -415,34 +431,33 @@ SnapTranslator.dict.bn = {
         
     // control:
     'when %greenflag clicked':
-        'যখন  %greenflag ক্লিক কর',
+        'যখন %greenflag ক্লিক করা হবে',
     'when %keyHat key pressed':
-        'যখন   %keyHat ক্লিক কর',
+        'যখন %keyHat ক্লিক করা হবে',
     'when I am clicked':
-        'যখন আমাকে ক্লিক কর',
+        'যখন আমাকে ক্লিক করা হবে',
+    'when %b':
+        'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat':
-        'যখন আমি গ্রহণ করি  %msgHat',
+        'যখন আমি পাব বার্তা %msgHat',
     'broadcast %msg':
-        'বার্তা সম্প্রচার কর  %msg',
+        'বার্তা %msg সম্প্রচার কর',
     'broadcast %msg and wait':
-        'বার্তা সম্প্রচার করে   %msg অপেক্ষা কর',
+        'বার্তা %msg সম্প্রচার করে অপেক্ষা কর',
+    'send %msg to %spr':
+        'বার্তা %msg সম্প্রচার কর %spr',
     'Message name':
-        'বার্তা লিখ',
+        'নতুন বার্তা তৈরি কর',
     'message':
         'বার্তা',
     'any message':
         'যে কোন বার্তা',
     'initialize':
-        'আরম্ভ কর',
-    'push':
-        'পুশ',
-    'pull':
-        'পুল',
-        
+        'আরম্ভ কর', 
     'wait %n secs':
-        'অপেক্ষা কর   %n সেকেণড',
+        'অপেক্ষা কর %n সেকেন্ড',
     'wait until %b':
-        'অপেক্ষা কর  %b যতক্ষণ না',
+        'অপেক্ষা কর %b যতক্ষণ না পর্যন্ত',
     'forever %loop':
         'অনন্তকাল কর %loop',
     'repeat %n %loop':
@@ -450,11 +465,11 @@ SnapTranslator.dict.bn = {
     'repeat until %b %loop':
         'পুনরায় কর যতক্ষণ না  %b %loop',
     'if %b %c':
-        'যদি হয়  %b %c',
+        'যদি হয় %b %c',
     'if %b %c else %c':
-        'যদি হয়  %b %c অন্যথায়  %c',
+        'যদি হয় %b %c অন্যথায় %c',
     'report %s':
-        'প্রতিবেদন %s',
+        'প্রতিবেদন কর %s',
     'stop block':
         'ব্লক বন্ধ কর',
     'stop script':
@@ -474,7 +489,7 @@ SnapTranslator.dict.bn = {
     'call %cmdRing w/continuation':
         'আহ্বান কর  %cmdRing ধারাবাহিকতার সঙ্গে',
     'warp %c':
-        'একত্রিত কর  %c',
+        'বিরতি ছাড়াই %c',
     'when I start as a clone':
         'যখন আমি একটি ক্লোন হিসেবে শুরু করি',
     'create a clone of %cln':
@@ -490,7 +505,7 @@ SnapTranslator.dict.bn = {
     'touching %clr ?':
         'স্পর্শ রঙ  %clr কিনা?',
     'color %clr is touching %clr ?':
-        '%clr রঙ  %clr রঙ গামী কিনা?',
+        '%clr রঙ %clr রঙ গামী কিনা?',
     'ask %s and wait':
         '%s জিজ্ঞাসা করে অপেক্ষা কর',
     'what\'s your name?':
@@ -502,7 +517,7 @@ SnapTranslator.dict.bn = {
     'mouse y':
         'মাউস y',
     'mouse down?':
-        'মাউস বোতাম চাপা কিনা?',
+        'মাউস নিচে গিয়েছে?',
     'key %key pressed?':
         'কোন কী %key চাপা কিনা?',
     'distance to %dst':
@@ -516,9 +531,9 @@ SnapTranslator.dict.bn = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'টার্বো মোড কিনা?',
+        'টার্বো মোড চালু কিনা?',
      'set turbo mode to %b':
-        'টার্বো মোডকে  %b নির্ধারণ কর',
+        'টার্বো মোডকে %b নির্ধারণ কর',
 
     'filtered for %clr':
         'ফিল্টার করা  হয়েছে  %clr এর জন্য',
@@ -529,7 +544,7 @@ SnapTranslator.dict.bn = {
 
     // operators:
     '%n mod %n':
-        '%n ভাগ  %n এর অবশিষ্ট',
+        '%n ভাগ %n এর অবশিষ্ট',
     'round %n':
         '%n এর নিকটতম পূর্ণসংখ্যা',
     '%fun of %n':
@@ -539,7 +554,7 @@ SnapTranslator.dict.bn = {
     '%b and %b':
         '%b এবং %b',
     '%b or %b':
-        '%b অথবা  %b',
+        '%b অথবা %b',
     'not %b':
         'না %b',
     'true':
@@ -547,13 +562,13 @@ SnapTranslator.dict.bn = {
     'false':
         'মিথ্যা',
     'join %words':
-        'সংযুক্ত কর  %words',
+        'সংযুক্ত কর %words',
     'hello':
         'হ্যালো',
     'world':
         'পৃথিবী',
     'letter %idx of %s':
-        '%idx -তম বর্ণ    %s এর',
+        '%idx-তম বর্ণ %s এর',
     'length of %s':
         '%s এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
@@ -561,16 +576,16 @@ SnapTranslator.dict.bn = {
     'unicode %n as letter':
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
-        '%s এই  প্রকারের কিনা %typ ?',
+        '%s এই প্রকারের কিনা %typ ?',
     'is %s identical to %s ?':
-        '%s এর সমতুল্য  %s কিনা?',
+        '%s এর সমতুল্য %s কিনা?',
 
     'type of %s':
         '%s এর প্রকারে',
 
     // variables:
     'Make a variable':
-        'একটি   চলক তৈরী কর',
+        'একটি চলক তৈরি কর',
     'Variable name':
         'চলকের নাম',
     'Delete a variable':
@@ -578,32 +593,38 @@ SnapTranslator.dict.bn = {
     'set %var to %s':
         '%var চলকটি মান %s নির্ধারণ কর',
     'change %var by %n':
-        '%var চলকটি মান  %n দ্বারা পরিবর্তন কর',
+        '%var চলকটি মান %n দ্বারা পরিবর্তন কর',
     'show variable %var':
         '%var চলকটি প্রদর্শন কর',
     'hide variable %var':
         '%var চলকটি গোপন কর',
     'script variables %scriptVars':
         'স্ক্রিপ্ট চলকসমূহ  %scriptVars',
-
+    // lists:
     'list %exp':
     	'তালিকা %exp',
+    'numbers from %n to %n':
+	'সংখ্যা %n থেকে %n',
     '%s in front of %l':
-    	'%s %l তালিকার সামনে',
+    	'%s %l তালিকাটির সামনে',
     'item %idx of %l':
-    	'%idx উপাদানটি  %l তালিকার',
+    	'%idx উপাদানটি %l তালিকার',
     'all but first of %l':
-    	'%l তালিকার সব কিন্তু প্রথমটি বাদে',
+    	'%l তালিকাটির সব কিন্তু প্রথমটি বাদে',
     'length of %l':
-     	'%l তালিকার দৈর্ঘ্য',
+     	'%l তালিকাটির দৈর্ঘ্য',
     '%l contains %s':
-    	'%l তালিকা  %s উপাদানটি ধারণ করে',
+    	'%l তালিকা %s উপাদানটি ধারণ করে',
     'thing':
-    	'বিষয়',
+    	'জিনিস',
+    'is %l empty?':
+        'তালিকা %l কি খালি?',
+    'index of %s in %l':
+        'জিনিস %s কততম %l তালিকায়',
     'add %s to %l':
-    	'%s কে  %l তে সংযুক্ত কর',
+    	'%s কে %l তে ঢুকাও',
     'delete %ida of %l':
-    	'%ida কে  %l থেকে মুছে ফেল',
+    	'%ida কে %l থেকে মুছে ফেল',
     'insert %s at %idx of %l':
      	'%s কে  %idx স্থানে  %l তালিকায় সন্নিবেশিত কর',
      'replace item %idx of %l with %s':
@@ -611,7 +632,7 @@ SnapTranslator.dict.bn = {
 
     // other
     'Make a block':
-        'একটি ব্লক তৈরী কর',
+        'একটি ব্লক তৈরি কর',
 
     // menus
     // snap menu
@@ -626,7 +647,7 @@ SnapTranslator.dict.bn = {
     'Switch back to user mode':
         'ইউজার মোডে ফিরে যাও',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'দীর্ঘ-মরফিক প্রসঙ্গ তালিকা এবংপরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও',
+        'গভীর-মরফিক প্রসঙ্গ তালিকা এবং পরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও',
     'Switch to dev mode':
         'ডেভেলপার মোডে ফিরে যাও',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
@@ -636,43 +657,43 @@ SnapTranslator.dict.bn = {
     'Project notes...':
         'প্রকল্প সম্পর্কিত মন্তব্য...',
     'New':
-        'নতুন প্রকল্প তৈরী কর',
+        'নতুন প্রকল্প তৈরি কর',
     'Open...':
         'সংরক্ষিত প্রকল্প খোল...',
     'Save':
         'প্রকল্পটি সংরক্ষণ কর',
     'Save As...':
-        'প্রকল্পটির নামান্তর কর...',
+        'নামসহ প্রকল্পটি সংরক্ষণ করুন...',
     'Import...':
         'প্রকল্প ইম্পোর্ট কর...',
     'file menu import hint':
-        'XMLফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
+        'XML ফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
     'Export project as plain text...':
-        'প্রকল্পটি প্লেইন টেক্সট হিসাবে এক্সপোর্ট কর ...',
+        'প্রকল্পটি প্লেইন টেক্সট হিসাবে ডাউনলোড কর ...',
     'Export project...':
-        'প্রকল্পটি এক্সপোর্ট কর...',
+        'প্রকল্পটি ডাউনলোড কর...',
     'show project data as XML\nin a new browser window':
         'প্রকল্প উপাত্ত একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
     'Export blocks...':
-        'ব্লকসমূহ এক্সপোর্ট কর...',
+        'ব্লকসমূহ ডাউনলোড কর...',
     'show global custom block definitions as XML\nin a new browser window':
-        'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
+        'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XML ফাইল হিসেবে প্রদর্শন কর',
     'Import tools':
         'যন্ত্রপাতি ইম্পোর্ট কর',
      'Libraries...':
-        'লাইব্রেরি লোড কর',
+        'ব্লক লাইব্রেরি লোড কর...',
      'Costumes...':
-        'পরিচ্ছদ লোড কর',
+        'পরিচ্ছদ লোড কর...',
      'Sounds...':
         'শব্দের ফাইল লোড কর',
     'load the official library of\npowerful blocks':
-        'শক্তিশালী ব্লকের অফিসিয়াল লাইব্রেরি লোড কর',
+        'শক্তিশালী ব্লকের অফিসিয়াল \nলাইব্রেরি লোড কর',
 
     // cloud menu
     'Login...':
-        'ক্লাউড লগ ইন...',
+        'লগ ইন...',
     'Signup...':
-        'ক্লাউড সাইন আপ...',
+        'সাইন আপ...',
     'Reset Password...':
         'পাসওয়ার্ড পরিবর্তন কর...',
             
@@ -681,7 +702,7 @@ SnapTranslator.dict.bn = {
     'Language...':
         'ভাষা পরিবর্তন কর...',
     'Zoom blocks...':
-        'ব্লকসমূহ জুম্ কর...',
+        'ব্লকসমূহ জুম কর...',
     'Stage size...':
         'দৃশ্যস্থলের আকার পরিবর্তন কর...',
     'Blurred shadows':
@@ -756,7 +777,7 @@ SnapTranslator.dict.bn = {
     'Flat line ends':
         'ফ্লাট লাইনের সমাপ্তি',
     'Codification support':
-        'সারসংগ্রহ সমর্থন',   
+        'অন্যান্য প্রোগ্রামিং ভাষার কোড দেখাও',   
         
     // inputs
     'with inputs':
@@ -917,9 +938,9 @@ SnapTranslator.dict.bn = {
 
     // variable dialog
     'for all sprites':
-        'সব স্পাইটের জন্য',
+        'সব স্প্রাইট জন্য',
     'for this sprite only':
-        'শুধুমাত্র এই স্পাইটের জন্য',
+        'শুধুমাত্র এই স্প্রাইট জন্য',
 
     // block dialog
     'Change block':
@@ -941,23 +962,23 @@ SnapTranslator.dict.bn = {
     'Delete Custom Block':
         'কাস্টম ব্লক মুছে দাও',
     'block deletion dialog text':
-        'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার জন্য নিশ্চিত?',
+        'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার ব্যাপারে নিশ্চিত?',
 
     // input dialog
     'Create input name':
         'ইনপুট নাম তৈরি কর',
     'Edit input name':
-        'ইনপুট নাম সম্পাদনা কর',
+        'ইনপুট নাম পরিবর্তন কর',
     'Edit label fragment':
-        'লেবেল টুকরা সম্পাদনা কর',
+        'লেবেল টুকরা পরিবর্তন কর',
     'Title text':
-        'শিরোনাম পাঠ্য',
+        'শিরোনামের লেখা',
     'Input name':
         'ইনপুট নাম',
     'Delete':
         'মুছে ফেল',
     'Object':
-        'লক্ষ্যবস্তু',
+        'বস্তু',
     'Number':
         'সংখ্যা',
     'Text':
@@ -989,7 +1010,7 @@ SnapTranslator.dict.bn = {
     'About Snap':
         'Snap! সম্পর্কিত তথ্য',
     'Back...':
-        'প্রত্যাবর্তন কর...',
+        'ফিরে যাও...',
     'License...':
         'লাইসেন্স...',
     'Modules...':
@@ -997,7 +1018,7 @@ SnapTranslator.dict.bn = {
     'Credits...':
         'স্বীকৃতি...',
     'Translators...':
-        'ভাষান্তরিকবৃন্দ',
+        'অনুবাদক...',
     'License':
         'লাইসেন্স',
     'current module versions:':
@@ -1029,7 +1050,7 @@ SnapTranslator.dict.bn = {
 
     // coments
     'add comment here...':
-        'এখানে মন্তব্য যোগ কর',
+        'এখানে মন্তব্য যোগ কর...',
 
     // drow downs
     // directions
@@ -1052,11 +1073,11 @@ SnapTranslator.dict.bn = {
 
     // costumes
     'Turtle':
-        'কচ্ছপ',
+        'টার্টল পোশাক',
 
     // graphical effects
     'ghost':
-        'উপচ্ছায়া',
+        'ভূত',
 
     // keys
     'space':
@@ -1124,43 +1145,43 @@ SnapTranslator.dict.bn = {
     '0':
         '0',
     '1':
-        '1',
+        '১',
     '2':
-        '2',
+        '২',
     '3':
-        '3',
+        '৩',
     '4':
-        '4',
+        '৪',
     '5':
-        '5',
+        '৫',
     '6':
-        '6',
+        '৬',
     '7':
-        '7',
+        '৭',
     '8':
-        '8',
+        '৮',
     '9':
-        '9',
+        '৯',
 
     // messages
     'new...':
         'নতুন বার্তা লিখ...',
 
     // math functions
-    'পরমমান':
-        'abs',
+    'abs':
+        'পরমমান',
     'sqrt':
         'বর্গমূল',
     'sin':
-        'sin',
+        'সাইন্',
     'cos':
-        'cos',
+        'কোসাইন্',
     'tan':
         'tan',
     'asin':
-        'asin',
+        'আসীন',
     'acos':
-        'acos',
+        'একোস,
     'atan':
         'atan',
     'ln':
@@ -1174,7 +1195,7 @@ SnapTranslator.dict.bn = {
     'text':
         'বর্ণ',
     'Boolean':
-        'বুলিয়ান',
+        'বুলিয়েন',
     'list':
         'তালিকা',
     'command':
@@ -1182,7 +1203,7 @@ SnapTranslator.dict.bn = {
     'reporter':
         'রিপোর্টার',
     'predicate':
-        'সূত্রের বিধেয়',
+        'প্রেডিক্যাট',
 
     // list indices
     'last':
