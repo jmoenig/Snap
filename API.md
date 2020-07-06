@@ -1,6 +1,6 @@
-## The Snap! API
+# The Snap! API
 
-Jens Mönig, Dec. 18, 2019
+Jens Mönig, July. 06, 2020
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -24,11 +24,41 @@ Currently the API consists of the following methods:
 * IDE_Morph.prototype.getVar()
 * IDE_Morph.prototype.setVar()
 
+#### Create and Modify Lists
+
+* IDE_Morph.prototype.newList()
+
+## Interacting with the IDE
+
 Getting hold of an ide can usually be achieved by
 evaluating:
 
-     var ide = world.children[0];
+    var ide = world.children[0];
 
+The model case in mind is embedding Snap! in an iframe:
+
+```
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snap! iFrame</title>
+    </head>
+    <body>
+        <iframe id="inlineFrameExample"
+            title="Inline Frame Example"
+            width="1024"
+            height="720"
+            src="snap.html">
+        </iframe>
+    </body>
+</html>
+```
+
+In such a set up the ide can be accessed through the ```contentWindow``` property, e.g.
+
+    var ide = document.getElementsByTagName("iframe")[0].contentWindow.world.children[0];
+
+## Referencing the IDE
 
 ### IDE_Morph.prototype.broadcast()
 The broadcast() method triggers all scripts whose hat block listens to the specified message. An optional callback can be added to be run after all triggered scripts have terminated.
@@ -114,3 +144,16 @@ The setVar() methods assigns a value to the a global variable specified by name.
 
 #### return value
 undefined
+
+### IDE_Morph.prototype.newList()
+The newList() methods returns a new Snap! list. Optionally a source array containing the list elements can be specified.
+
+#### syntax
+    ide.newList([array]);
+
+#### return value
+a new Snap! List
+
+## Manipulating Lists
+
+Snap! lists can be accessed and manipulated through a set of methods described in the file `lists.js`
