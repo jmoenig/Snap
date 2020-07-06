@@ -395,7 +395,7 @@ SnapTranslator.dict.bn = {
      '%aa of sound %snd':
         'শব্দের %aa %snd',
      'duration':
-        'ব্যাপ্তিকাল'
+        'ব্যাপ্তিকাল',
      'length':
         'দৈর্ঘ্য',
     'change tempo by %n':
@@ -1181,7 +1181,7 @@ SnapTranslator.dict.bn = {
     'asin':
         'আসীন',
     'acos':
-        'একোস,
+        'একোস',
     'atan':
         'atan',
     'ln':
