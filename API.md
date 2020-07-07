@@ -28,7 +28,7 @@ Currently the API consists of the following methods:
 
 * IDE_Morph.prototype.newList()
 
-## Interacting with the IDE
+## Referencing the IDE
 
 Getting hold of an ide can usually be achieved by
 evaluating:
@@ -58,7 +58,7 @@ In such a set up the ide can be accessed through the ```contentWindow``` propert
 
     var ide = document.getElementsByTagName("iframe")[0].contentWindow.world.children[0];
 
-## Referencing the IDE
+## Interacting with the IDE
 
 ### IDE_Morph.prototype.broadcast()
 The broadcast() method triggers all scripts whose hat block listens to the specified message. An optional callback can be added to be run after all triggered scripts have terminated.
