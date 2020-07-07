@@ -1684,7 +1684,7 @@ SnapTranslator.dict.de = {
     'saturation':
         'Sättigung',
     'brightness':
-        'Helligeit',
+        'Helligkeit',
     'transparency':
         'Transparenz',
     'ghost':
