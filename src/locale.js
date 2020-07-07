@@ -30,9 +30,13 @@
 
         lang-de.js
 
-    or to the separate file
+    or to the section titled
 
-        translating Snap.txt
+        Translating Snap!
+
+    in the file
+
+        Contributing.md
 
     (same contents) if you would like to contribute.
 
@@ -42,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-July-04';
+modules.locale = '2020-July-07';
 
 // Global stuff
 
