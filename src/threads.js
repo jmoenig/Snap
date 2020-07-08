@@ -1610,6 +1610,7 @@ Process.prototype.doShowVar = function (varName) {
             }
             stage.add(watcher);
             watcher.fixLayout();
+            watcher.rerender();
         }
     }
 };
