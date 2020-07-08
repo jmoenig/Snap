@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-02';
+modules.threads = '2020-July-08';
 
 var ThreadManager;
 var Process;
@@ -608,7 +608,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
 // Process accessing
 
 Process.prototype.isRunning = function () {
-    return (this.context !== null) && (!this.readyToTerminate);
+    return !this.readyToTerminate && (this.context || this.isPaused);
 };
 
 // Process entry points
@@ -1553,7 +1553,7 @@ Process.prototype.reportGetVar = function () {
 };
 
 Process.prototype.doShowVar = function (varName) {
-    var varFrame = this.context.variables,
+    var varFrame = (this.context || this.homeContext).variables,
         stage,
         watcher,
         target,
