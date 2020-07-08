@@ -2,7 +2,7 @@
 
 ## in development:
 
-## 6.0.0 beta:
+## 6.0.0:
 * **New Features:**
     * new Morphic architecture, faster loading, smaller memory footprint, mobile-friendly
     * hyper-blocks
