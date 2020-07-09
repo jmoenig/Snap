@@ -6,7 +6,8 @@
 * new dev version
 * threads: fixed FOR EACH for hybrid lists, thanks, Brian!
 * threads: fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
-* locale: added English translation for 'length of %s' to 'length of text %s' to avoid confusion among both blocks 
+* locale: added English translation for 'length of %s' to 'length of text %s' to avoid confusion among both blocks
+* updated German translation for  'length of %s'
 
 
 ## 6.0.0:
