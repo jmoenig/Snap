@@ -5,6 +5,7 @@
 ### 2020-07-09
 * new dev version
 * threads: fixed FOR EACH for hybrid lists, thanks, Brian!
+* threads: fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it. 
 
 
 ## 6.0.0:

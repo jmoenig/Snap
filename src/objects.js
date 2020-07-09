@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-July-01';
+modules.objects = '2020-July-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -7889,8 +7889,8 @@ StageMorph.prototype.step = function () {
         this.stepGenericConditions();
     }
     if (this.isFastTracked && this.threads.processes.length) {
-        while ((Date.now() - this.lastTime) < 15) { // approx. 67 fps
-            this.threads.step();
+        while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
+            this.threads.step(); // approx. 67 fps
         }
         this.changed();
     } else {
