@@ -2440,7 +2440,7 @@ Process.prototype.doForEach = function (upvar, list, script) {
             this.context.accumulator.source.cdr();
     } else { // arrayed
         this.context.accumulator.idx += 1;
-        next = list.at(this.context.accumulator.idx);
+        next = this.context.accumulator.source.at(this.context.accumulator.idx);
     }
     this.pushContext('doYield');
     this.pushContext();
