@@ -2,6 +2,11 @@
 
 ## in development:
 
+### 2020-07-09
+* new dev version
+* threads: fixed FOR EACH for hybrid lists, thanks, Brian!
+
+
 ## 6.0.0:
 * **New Features:**
     * new Morphic architecture, faster loading, smaller memory footprint, mobile-friendly
