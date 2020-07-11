@@ -1,6 +1,6 @@
 # Migrating to Morphic2 and Snap!6
 
-Jens Mönig, July 10, 2020
+Jens Mönig, July 11, 2020
 
 This document gives a very brief overview of the Morphic changes from v1 to v2 without explaining the architectural changes. It is meant to help you move your existing Morphic application, such as a fork of the Snap! programming environment, to the new Morphic kernel quickly and successfully.
 
@@ -51,7 +51,7 @@ Search your code for these words and replace them according to the instructions.
 
 * **drawNew**
     - rename method definitions to `render`, notice that the first argument needs to be the 2D context, therefore remove the part in the code that makes a new canvas and queries its context.
-    - factor out the parts of the code that determine and set the extent and move them into a - possibly new - method named `fixLayout()`
+    - factor out the parts of the code that determine and set the extent and add or arrange submorphs and move them into a - possibly new - method named `fixLayout()`
     - rename function calls to `drawNew()` to `fixLayout()` and/or `rerender()`, check whether the call is at all needed as it might be redundant in the new system
 * **wantsRedraw** => replace with `rerender()` 
 * **noticesTransparentClick** => replace with `!isFreeForm`, use with caution, as free forms should also cache their image for performance reason, which in turn strains memory usage 
