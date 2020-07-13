@@ -732,6 +732,7 @@ PaintCanvasMorph.prototype.centermerge = function (a, b) {
 
 PaintCanvasMorph.prototype.clearCanvas = function () {
     this.buildContents();
+    this.drawNew();
     this.changed();
 };
 
