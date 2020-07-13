@@ -1268,7 +1268,7 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         alpen = new AlignmentMorph("row", this.padding),
         alignColor = new AlignmentMorph("row", this.padding),
         alignNames = new AlignmentMorph("row", this.padding),
-        brushControl = new AlignmentMorph("column");
+        brushControl = new AlignmentMorph("column", 3);
         
     brushControl.alignment = "left";
 
@@ -1373,9 +1373,9 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         new StringMorph(localize("Brush size") + ":", 10, null, true)
     );
     brushControl.add(alpen);
+    brushControl.add(pc.constrain);
     brushControl.fixLayout();
     c.add(brushControl);
-    c.add(pc.constrain);
 };
 
 VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
