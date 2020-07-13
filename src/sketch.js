@@ -59,9 +59,9 @@
 /*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
 PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
 TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
-localize, PaintCanvasMorph, detect, modules*/
+localize, PaintCanvasMorph, StringMorph, detect, modules*/
 
-modules.sketch = '2020-April-15';
+modules.sketch = '2020-July-13';
 
 // Declarations
 
@@ -1261,7 +1261,10 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
         alignColor = new AlignmentMorph("row", this.padding),
-        alignNames = new AlignmentMorph("row", this.padding);
+        alignNames = new AlignmentMorph("row", this.padding),
+        brushControl = new AlignmentMorph("column");
+        
+    brushControl.alignment = "left";
 
     pc.primaryColorViewer = new Morph();
     pc.primaryColorViewer.color = new Color(0, 0, 0);
@@ -1345,22 +1348,27 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             function () { return myself.shift; }
             );
 
+    pc.constrain.label.isBold = false;
     alignColor.add(pc.secondaryColorViewer);
     alignColor.add(pc.primaryColorViewer);
     alignColor.fixLayout();
 
     alignNames.add(new TextMorph(localize('Edge color\n(left click)'),
-				 null, null, null, null,
+				 10, null, null, null,
 				 'center', 85));
     alignNames.add(new TextMorph(localize('Fill color\n(right click)'),
-				 null, null, null, null,
+				 10, null, null, null,
 				 'center', 85));
     alignNames.fixLayout();
     c.add(pc.colorpicker);
 	c.add(alignNames);
     c.add(alignColor);
-    c.add(new TextMorph(localize('Brush size')));
-    c.add(alpen);
+    brushControl.add(
+        new StringMorph(localize("Brush size") + ":", 10, null, true)
+    );
+    brushControl.add(alpen);
+    brushControl.fixLayout();
+    c.add(brushControl);
     c.add(pc.constrain);
 };
 
