@@ -1,4 +1,4 @@
-/*
+ /*
     paint.js
 
     a paint editor for Snap!
@@ -71,17 +71,18 @@
 
     2020 Apr 14 - Morphic2 migration (Jens)
     2020 May 17 - Pipette alpha fix (Joan)
+    2020 July 13 - modified scale buttons (Jadga)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
-Color, SymbolMorph, newCanvas, Morph, TextMorph, Costume, SpriteMorph, nop,
+Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph, nop,
 localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
 BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
 StageMorph, isNil, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2020-May-17';
+modules.paint = '2020-July-13';
 
 // Declarations
 
@@ -127,7 +128,7 @@ PaintEditorMorph.prototype.buildContents = function () {
 
     this.addBody(new AlignmentMorph('row', this.padding));
     this.controls = new AlignmentMorph('column', this.padding / 2);
-    this.controls.alignment = 'left';
+    this.controls.alignment = 'center';
 
     this.edits = new AlignmentMorph('row', this.padding / 2);
     this.buildEdits();
@@ -258,20 +259,24 @@ PaintEditorMorph.prototype.buildEdits = function () {
 PaintEditorMorph.prototype.buildScaleBox = function () {
     var paper = this.paper;
     this.scaleBox.add(this.pushButton(
-        "grow",
-        function () {paper.scale(0.05, 0.05); }
+        new SymbolMorph('grow', 18),
+        function () {paper.scale(0.05, 0.05); },
+        'grow'
     ));
     this.scaleBox.add(this.pushButton(
-        "shrink",
-        function () {paper.scale(-0.05, -0.05); }
+        new SymbolMorph('shrink', 18),
+        function () {paper.scale(-0.05, -0.05); },
+        'shrink'
     ));
     this.scaleBox.add(this.pushButton(
-        "flip ↔",
-        function () {paper.scale(-2, 0); }
+        new SymbolMorph('flipHorizontal', 18),
+        function () {paper.scale(-2, 0); },
+        'flip horizontal'
     ));
     this.scaleBox.add(this.pushButton(
-        "flip ↕",
-        function () {paper.scale(0, -2); }
+        new SymbolMorph('flipVertical', 18),
+        function () {paper.scale(0, -2); },
+        'flip vertical'
     ));
     this.scaleBox.fixLayout();
 };
@@ -366,7 +371,10 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
     var c = this.controls,
         myself = this,
         pc = this.propertiesControls,
-        alpen = new AlignmentMorph("row", this.padding);
+        alpen = new AlignmentMorph("row", this.padding),
+        brushControl = new AlignmentMorph("column");
+        
+    brushControl.alignment = "left";
 
     pc.primaryColorViewer = new Morph();
     pc.primaryColorViewer.isCachingImage = true;
@@ -399,7 +407,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         ctx.stroke();
     };
 
-    pc.primaryColorViewer.setExtent(new Point(180, 50));
+    pc.primaryColorViewer.setExtent(new Point(180, 40));
     pc.primaryColorViewer.color = new Color(0, 0, 0);
 
     pc.colorpicker = new PaintColorPickerMorph(
@@ -450,12 +458,17 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         "Constrain proportions of shapes?\n(you can also hold shift)",
         function () {return myself.shift; }
     );
+    pc.constrain.label.isBold = false;
 
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
-    c.add(new TextMorph(localize("Brush size")));
-    c.add(alpen);
+    brushControl.add(
+        new StringMorph(localize("Brush size") + ":", 10, null, true)
+    );
+    brushControl.add(alpen);
+    brushControl.fixLayout();
+    c.add(brushControl);
     c.add(pc.constrain);
 };
 
