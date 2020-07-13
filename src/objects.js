@@ -9973,7 +9973,8 @@ SVG_Costume.prototype.edit = function (
     oncancel,
     onsubmit
 ) {
-    var editor = new VectorPaintEditorMorph();
+    var editor = new VectorPaintEditorMorph(),
+        myself = this;
 
     editor.oncancel = oncancel || nop;
     editor.openIn(
@@ -9981,14 +9982,14 @@ SVG_Costume.prototype.edit = function (
         isnew ? newCanvas(StageMorph.prototype.dimensions) : this.contents,
         isnew ? new Point(240, 180) : this.rotationCenter,
         (img, rc, shapes) => {
-            this.contents = img;
-            this.rotationCenter = rc;
-            this.shapes = shapes;
-            this.version = Date.now();
+            myself.contents = img;
+            myself.rotationCenter = rc;
+            myself.shapes = shapes;
+            myself.version = Date.now();
             aWorld.changed();
             if (anIDE) {
-                if (isnew) {anIDE.currentSprite.addCostume(this); }
-                anIDE.currentSprite.wearCostume(this);
+                if (isnew) {anIDE.currentSprite.addCostume(myself); }
+                anIDE.currentSprite.wearCostume(myself);
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();

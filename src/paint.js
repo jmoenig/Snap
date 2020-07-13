@@ -242,10 +242,9 @@ PaintEditorMorph.prototype.buildEdits = function () {
                     'This will erase your current drawing.\n' +
                     'Are you sure you want to continue?',
                     'Switch to vector editor?',
-                    function () {
-                        myself.switchToVector();
-                    },
-                    nop
+                    () => {
+                        setTimeout(() => {myself.switchToVector()});
+                    }
                 );
             } else {
                 myself.switchToVector();
@@ -288,21 +287,21 @@ PaintEditorMorph.prototype.openIn = function (
     callback,
     anIDE
 ) {
+    var myself = this;
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
     this.callback = callback || nop;
     this.ide = anIDE;
 
     this.processKeyUp = function () {
-        this.shift = false;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = false;
+        myself.propertiesControls.constrain.refresh();
     };
 
     this.processKeyDown = function () {
-        this.shift = this.world().currentKey === 16;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = myself.world().currentKey === 16;
+        myself.propertiesControls.constrain.refresh();
     };
-
     //merge oldim:
     if (this.oldim) {
         this.paper.automaticCrosshairs = isNil(oldrc);
@@ -354,16 +353,12 @@ PaintEditorMorph.prototype.cancel = function () {
 };
 
 PaintEditorMorph.prototype.switchToVector = function () {
-    var myself = this;
+
     this.object = new SVG_Costume(new Image(), '', new Point(0,0));
     this.object.edit(
         this.world(),
         this.ide,
-        true,
-        this.oncancel,
-        function() {
-            myself.ide.currentSprite.changed();
-        }
+        true
     );
 };
 

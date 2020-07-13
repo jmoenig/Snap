@@ -984,10 +984,9 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
                         'them back into vector drawings.\n' +
                         'Are you sure you want to continue?',
                         'Convert to bitmap?',
-                        function () {
-                            myself.convertToBitmap();
-                        },
-                        nop
+                        () => {
+                            setTimeout(() => {myself.convertToBitmap()});
+                        }
                     );
                 } else {
                     myself.convertToBitmap();
@@ -1000,7 +999,8 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
 };
 
 VectorPaintEditorMorph.prototype.convertToBitmap = function () {
-    var canvas = newCanvas(StageMorph.prototype.dimensions);
+    var canvas = newCanvas(StageMorph.prototype.dimensions),
+        myself = this;
 
     this.object = new Costume();
 
@@ -1014,10 +1014,16 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
         this.world(),
         this.ide,
         false,
-        this.oncancel
+        null,
+        () => {
+            myself.ide.currentSprite.shadowAttribute('costumes');
+            myself.ide.currentSprite.addCostume(myself.object);
+            myself.ide.spriteEditor.updateList();
+            if (myself.ide) {
+                myself.ide.currentSprite.wearCostume(myself.object);
+            }
+        }
     );
-
-    this.destroy();
 };
 
 VectorPaintEditorMorph.prototype.buildScaleBox = function () {
@@ -1047,7 +1053,7 @@ VectorPaintEditorMorph.prototype.openIn = function (
     var myself = this,
         isEmpty = isNil(shapes) || shapes.length === 0;
 
-    VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback);
+    VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback, anIDE);
     this.ide = anIDE;
     this.paper.drawNew();
     this.paper.changed();
@@ -1076,67 +1082,67 @@ VectorPaintEditorMorph.prototype.openIn = function (
     this.updateHistory();
 
     this.processKeyUp = function () {
-        this.shift = false;
-        this.ctrl = false;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = false;
+        myself.ctrl = false;
+        myself.propertiesControls.constrain.refresh();
     };
 
     this.processKeyDown = function (event) {
-        var myself = this,
-            pos;
 
-        this.shift = event.shiftKey;
-        this.ctrl = event.ctrlKey;
+        var pos;
 
-        switch (this.world().currentKey) {
+        myself.shift = myself.world().currentKey === 16;
+        myself.ctrl = event.ctrlKey;
+
+        switch (myself.world().currentKey) {
             /* Del and backspace keys */
             case 46:
             case 8:
-                this.sortSelection();
-                this.selection.slice().reverse().forEach(function (shape) {
+                myself.sortSelection();
+                myself.selection.slice().reverse().forEach(function (shape) {
                     myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 });
-                this.clearSelection();
-                this.updateHistory();
+                myself.clearSelection();
+                myself.updateHistory();
             break;
             /* Enter key */
             case 13:
-                if (this.currentShape && this.currentShape.isPolygon) {
-                    this.currentShape.close();
-                    this.currentShape.drawOn(this.paper);
-                    this.shapes.push(this.currentShape);
-                    this.currentShape = null;
-                    this.updateHistory();
+                if (myself.currentShape && myself.currentShape.isPolygon) {
+                    myself.currentShape.close();
+                    myself.currentShape.drawOn(myself.paper);
+                    myself.shapes.push(myself.currentShape);
+                    myself.currentShape = null;
+                    myself.updateHistory();
                 }
             break;
             /* Page Up key */
             case 33:
-                this.changeSelectionLayer('up');
+                myself.changeSelectionLayer('up');
             break;
             /* Page Down key */
             case 34:
-                this.changeSelectionLayer('down');
+                myself.changeSelectionLayer('down');
             break;
             /* End key */
             case 35:
-                this.changeSelectionLayer('bottom');
+                myself.changeSelectionLayer('bottom');
             break;
 
             /* Home key */
             case 36:
-                this.changeSelectionLayer('top');
+                myself.changeSelectionLayer('top');
             break;
             case 90:
             /* Ctrl + Z */
-                if (this.ctrl) {
-                    this.undo();
+                if (myself.ctrl) {
+                    myself.undo();
                 }
             break;
             case 67:
             /* Ctrl + C */
-                if (this.ctrl && this.selection.length) {
-                    this.clipboard =
-                        this.selection.map(function (each) {
+                if (myself.ctrl && myself.selection.length) {
+                    myself.clipboard =
+                        myself.selection.map(function (each) {
                             return each.copy();
                         }
                     );
@@ -1144,49 +1150,49 @@ VectorPaintEditorMorph.prototype.openIn = function (
             break;
             case 86:
             /* Ctrl + V */
-                pos = this.world().hand.position();
-                if (this.ctrl && this.paper.bounds.containsPoint(pos)) {
-                    this.paper.pasteAt(pos);
-                    this.updateHistory();
+                pos = myself.world().hand.position();
+                if (myself.ctrl && myself.paper.bounds.containsPoint(pos)) {
+                    myself.paper.pasteAt(pos);
+                    myself.updateHistory();
                 }
             break;
             case 65:
             /* Ctrl + A */
-                if (this.ctrl) {
-                    this.paper.currentTool = 'selection';
-                    this.paper.toolChanged('selection');
-                    this.refreshToolButtons();
-                    this.paper.selectShapes(this.shapes);
+                if (myself.ctrl) {
+                    myself.paper.currentTool = 'selection';
+                    myself.paper.toolChanged('selection');
+                    myself.refreshToolButtons();
+                    myself.paper.selectShapes(myself.shapes);
                 }
             break;
             case 27:
             /* Escape key */
-                this.clearSelection();
+                myself.clearSelection();
             break;
             case 37:
             /* Left arrow */
-                this.moveSelectionBy(new Point(-1, 0));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(-1, 0));
+                myself.updateHistory();
             break;
             case 38:
             /* Up arrow	*/
-                this.moveSelectionBy(new Point(0, -1));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(0, -1));
+                myself.updateHistory();
             break;
             case 39:
             /* Right arrow */
-                this.moveSelectionBy(new Point(1, 0));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(1, 0));
+                myself.updateHistory();
             break;
             case 40:
             /* Down arrow */
-                this.moveSelectionBy(new Point(0, 1));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(0, 1));
+                myself.updateHistory();
             break;
             default:
                 nop();
         }
-        this.propertiesControls.constrain.refresh();
+        myself.propertiesControls.constrain.refresh();
     };
 };
 
