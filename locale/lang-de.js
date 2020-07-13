@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-06-08', // this, too, will appear in the Translators tab
+        '2020-07-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -742,7 +742,7 @@ SnapTranslator.dict.de = {
     'letter %idx of %s':
         'Zeichen %idx von %s',
     'length of %s':
-        'L\u00e4nge von %s',
+        'L\u00e4nge von Text %s',
     'unicode of %s':
         'Unicode Wert von %s',
     'unicode %n as letter':

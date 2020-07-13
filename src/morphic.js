@@ -1268,7 +1268,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-01';
+var morphicVersion = '2020-July-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11931,13 +11931,18 @@ WorldMorph.prototype.initKeyboardHandler = function () {
                     kbd.world.keyboardFocus.processKeyDown) {
                 kbd.world.keyboardFocus.processKeyDown(event);
             }
-            // supress tab override and make sure tab gets
+            // suppress tab override and make sure tab gets
             // received by all browsers
             if (event.keyCode === 9) {
                 if (kbd.world.keyboardFocus &&
                         kbd.world.keyboardFocus.processKeyPress) {
                     kbd.world.keyboardFocus.processKeyPress(event);
                 }
+                event.preventDefault();
+            }
+            // suppress cmd-d/f/i/p/s override
+            if ((event.ctrlKey || event.metaKey) &&
+                    'dfips'.includes(event.key)) {
                 event.preventDefault();
             }
         },

@@ -2,7 +2,19 @@
 
 ## in development:
 
-## 6.0.0 beta:
+### 2020-07-10
+* morphic: prevent the browser from hijacking cmd-d/f/i/p/s key events
+* added migration guide for Morphic2/Snap!6
+* updated Eisenbergification library, thanks, Brian!
+
+### 2020-07-09
+* new dev version
+* threads: fixed FOR EACH for hybrid lists, thanks, Brian!
+* threads: fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
+* locale: added English translation for 'length of %s' to 'length of text %s' to avoid confusion among both blocks
+* updated German translation for  'length of %s'
+
+## 6.0.0:
 * **New Features:**
     * new Morphic architecture, faster loading, smaller memory footprint, mobile-friendly
     * hyper-blocks
