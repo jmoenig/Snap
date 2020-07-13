@@ -367,7 +367,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         myself = this,
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
-        brushControl = new AlignmentMorph("column");
+        brushControl = new AlignmentMorph("column", 3);
         
     brushControl.alignment = "left";
 
@@ -462,9 +462,9 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         new StringMorph(localize("Brush size") + ":", 10, null, true)
     );
     brushControl.add(alpen);
+    brushControl.add(pc.constrain);
     brushControl.fixLayout();
     c.add(brushControl);
-    c.add(pc.constrain);
 };
 
 PaintEditorMorph.prototype.toolButton = function (icon, hint) {
