@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-13
+* paint, symbols: new iconic buttons for grow, shrink and flip actions, thanks, Jadga!
+
 ### 2020-07-10
 * morphic: prevent the browser from hijacking cmd-d/f/i/p/s key events
 * added migration guide for Morphic2/Snap!6

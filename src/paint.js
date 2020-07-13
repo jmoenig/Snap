@@ -1,4 +1,4 @@
- /*
+/*
     paint.js
 
     a paint editor for Snap!
