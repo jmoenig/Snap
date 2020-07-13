@@ -1584,7 +1584,6 @@ DialogBoxMorph.prototype.askYesNo = function (
     this.addButton('ok', 'Yes');
     this.addButton('cancel', 'No');
     this.fixLayout();
-    this.fixLayout();
     this.popUp(world);
 };
 
