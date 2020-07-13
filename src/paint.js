@@ -243,7 +243,7 @@ PaintEditorMorph.prototype.buildEdits = function () {
                     'Are you sure you want to continue?',
                     'Switch to vector editor?',
                     () => {
-                        setTimeout(() => {myself.switchToVector()});
+                        setTimeout(() => {myself.switchToVector(); });
                     }
                 );
             } else {

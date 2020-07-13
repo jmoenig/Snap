@@ -985,7 +985,7 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
                         'Are you sure you want to continue?',
                         'Convert to bitmap?',
                         () => {
-                            setTimeout(() => {myself.convertToBitmap()});
+                            setTimeout(() => {myself.convertToBitmap(); });
                         }
                     );
                 } else {
