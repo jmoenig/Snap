@@ -980,9 +980,99 @@ SnapTranslator.dict.de = {
     'Reset Password...':
         'Passwort zurücksetzen...',
     'Resend Verification Email...':
-        'Bestätigungsmail nochmal senden...',
+        'Bestätigungsmail erneut senden...',
     'Open in Community Site':
         'Projektseite anzeigen',
+        
+    // cloud menu dialogues
+    'Sign up':
+        'Registrierung',
+    'Sign in':
+        'Anmeldung',
+    'Change Password':
+        'Passwort ändern',
+    'Account created.':
+        'Konto eingerichtet.',
+    'An e-mail with your password\nhas been sent to the address provided':
+        'Eine E-Mail mit deinem Passwort\n wurde an die angegebene Adresse geschickt',
+    'now connected.':
+        'Verbunden.',
+    'disconnected.':
+        'Getrennt.',
+    'Reset password':
+        'Passwort zurücksetzen',
+    'User name:':
+        'Benutzername:',
+    'Password:':
+        'Passwort:',
+    'Repeat Password:':
+        'Passwort wiederholen:',
+    'Old password:':
+        'Aktuelles Passwort',
+    'New password:':
+        'Neues Passwort',
+    'Repeat new password:':
+        'Neues Passwort wiederholen',
+    'Birth date:':
+        'Geburtsmonat:',
+    'January':
+        'Januar',
+    'February':
+        'Februar',
+    'March':
+        'März',
+    'April':
+        'April',
+    'May':
+        'Mai',
+    'June':
+        'Juni',
+    'July':
+        'Juli',
+    'August':
+        'August',
+    'September':
+        'September',
+    'October':
+        'Oktober',
+    'November':
+        'November',
+    'December':
+        'Dezember',
+    'year:':
+        'Jahr:',
+    'or before':
+        ' oder früher',
+    'E-mail address:':
+        'E-Mail-Adresse:',
+    'E-mail address of parent or guardian:':
+        'E-Mail-Adresse Erziehungsberechtigte*r:',
+    'Terms of Service...':
+        'Nutzungsbedingungen...',
+    'Privacy...':
+        'Datenschutz...',
+    'I have read and agree\nto the Terms of Service':
+        'Ich habe die Nutzungsbedingungen\ngelesen und stimme ihnen zu',
+    'stay signed in on this computer\nuntil logging out':
+        'eingeloggt bleiben, bis\ndu dich selbst ausloggst',
+    'please fill out\nthis field':
+        'Bitte fülle dieses Feld aus',
+    'User name must be four\ncharacters or longer':
+        'Benutzernamen müssen vier\noder mehr Zeichen haben',
+    'please provide a valid\nemail address':
+        'Bitte gib eine gültige\nE-Mail-Adresse ein',
+    'password must be six\ncharacters or longer':
+        'Dein Passwort muss mindestens\nsechs Zeichen haben',
+    'passwords do\nnot match':
+        'Passwörter stimmen nicht überein',
+    'please agree to\nthe TOS':
+        'Bitte stimme den\nNutzungsbedingungen zu',
+    'Examples':
+        'Beispiele',
+    'You are not logged in':
+        'Du bist nicht eingeloggt',
+    'Resend verification email':
+        'Bestätigungsmail erneut senden',
 
     // settings menu
     'Language...':
@@ -1116,7 +1206,7 @@ SnapTranslator.dict.de = {
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
     'Ternary Boolean slots':
-        'Ternäre Bool\'sche Inputs',
+        'Ternäre boolesche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
     'Hyper blocks support':
@@ -1419,10 +1509,14 @@ SnapTranslator.dict.de = {
         'Pinselstärke',
     'Constrain proportions of shapes?\n(you can also hold shift)':
         'Proportionen festlegen\n(auch über Shift-Taste)',
-    //'grow':
-    //    'größer',
-    //'shrink':
-    //    'kleiner',
+    'grow':
+       'vergrößern',
+    'shrink':
+        'verkleinern',
+    'flip horizontal':
+        'horizontal spiegeln',
+    'flip vertical':
+        'vertikal spiegeln',
     //'flip ↔':
     //    'drehen ↔',
     //'flip ↕':
@@ -1442,8 +1536,10 @@ SnapTranslator.dict.de = {
         'geschlossene, gefüllte Form\n(freies Zeichnen)',
     'Paint a shape\n(shift: secondary color)':
         'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
+    //'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+    //    'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
+    'Pipette tool\n(pick a color from anywhere\nshift: fill color)':
+        'Pipette (klicke irgendwo auf die gewünschte Farbe,\num sie aufzunehmen (Shift: Füllfarbe)',
     'Edge color\n(left click)':
         'Randfarbe\n(Linksklick)',
     'Fill color\n(right click)':
@@ -1518,6 +1614,16 @@ SnapTranslator.dict.de = {
         'Methodeneditor',
     'Apply':
         'Anwenden',
+        
+    //block header menu
+    'Enter one translation per line. ':
+        '',
+    'use colon (":") as lang/spec delimiter\n':
+        '',
+    'and underscore ("_") as placeholder for an input, ':
+        '',
+    'e.g.:\n\nen:say _ for _ secs':
+        '',
 
     // block deletion dialog
     'Delete Custom Block':
@@ -1550,7 +1656,7 @@ SnapTranslator.dict.de = {
     'Any type':
         'Beliebig',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'Boolesch (W/F)',
     'Command\n(inline)':
         'Befehl',
     'Command\n(C-shape)':
@@ -1558,7 +1664,7 @@ SnapTranslator.dict.de = {
     'Any\n(unevaluated)':
         'Beliebig\n(zitiert)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'Boolesch\n(zitiert)',
     'Single input.':
         'Einzeleingabe.',
     'Default Value:':
@@ -1567,6 +1673,39 @@ SnapTranslator.dict.de = {
         'Mehrere Eingaben (als Liste)',
     'Upvar - make internal variable visible to caller':
         'Interne Variable au\u00dfen sichtbar machen',
+    'options':
+        'Optionen',
+    'read-only':
+        'nur lesen',
+    'Input Slot Options':
+        'Optionen für Eingabefeld',
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42':
+        'Gib eine Option pro Zeile an.\n'
+           + '"=" kann als Trennzeichen zwischen Schlüssel und Wert,\n'
+           + '{} für Untermenüs verwendet werden, z.B. Antwort=42',
+    'menu':
+        'Menü',
+    '(none)':
+        '(kein Menü)',
+    'messages':
+        'Nachrichten',
+    'objects':
+        'Objekte',
+    'variables':
+        'Variablen',
+    'piano keyboard':
+        'Klavier-Tastatur',
+    '360° dial':
+        '360° Einstellrad',
+    //'special':
+    //    '',
+    'multi-line':
+        'mehrzeilig',
+    'code':
+        'Code',
+    
+    
+
 
     // About Snap
     'About Snap':
