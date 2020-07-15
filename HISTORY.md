@@ -4,6 +4,7 @@
 
 ### 2020-07-15
 * morphic: made keyboard handler (more) invisible, thanks, Bernat!
+* gui: made remaining synchronous http requests asynch (url: #open, #run)
 
 ### 2020-07-13
 * paint, symbols: new iconic buttons for grow, shrink and flip actions, thanks, Jadga!

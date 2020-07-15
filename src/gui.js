@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-09';
+modules.gui = '2020-July-15';
 
 // Declarations
 
@@ -336,21 +336,6 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.reactToWorldResize(world.bounds);
 
-    function getURL(url) {
-        try {
-            var request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return request.responseText;
-            }
-            throw new Error('unable to retrieve ' + url);
-        } catch (err) {
-            myself.showMessage('unable to retrieve project');
-            return '';
-        }
-    }
-
     function applyFlags(dict) {
         if (dict.embedMode) {
             myself.setEmbedMode();
@@ -415,7 +400,37 @@ IDE_Morph.prototype.openIn = function (world) {
                     hash = hash.slice(0, idx);
                     applyFlags(dict);
                 }
-                this.droppedText(getURL(hash));
+                this.shield = new Morph();
+                this.shield.alpha = 0;
+                this.shield.setExtent(this.parent.extent());
+                this.parent.add(this.shield);
+                this.showMessage('Fetching project...');
+
+                this.getURL(
+                    hash,
+                    projectData => {
+                        var msg;
+                        this.nextSteps([
+                            () => msg = this.showMessage('Opening project...'),
+                            () => {
+                                if (projectData.indexOf('<snapdata') === 0) {
+                                    this.rawOpenCloudDataString(projectData);
+                                } else if (
+                                    projectData.indexOf('<project') === 0
+                                ) {
+                                    this.rawOpenProjectString(projectData);
+                                }
+                                this.hasChangedMedia = true;
+                            },
+                            () => {
+                                this.shield.destroy();
+                                this.shield = null;
+                                msg.destroy();
+                                this.toggleAppMode(false);
+                            }
+                        ]);
+                    }
+                );
             }
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
@@ -429,10 +444,45 @@ IDE_Morph.prototype.openIn = function (world) {
             }
             if (hash.substr(0, 8) === '<project>') {
                 this.rawOpenProjectString(hash);
+                applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
             } else {
-                this.rawOpenProjectString(getURL(hash));
+                this.shield = new Morph();
+                this.shield.alpha = 0;
+                this.shield.setExtent(this.parent.extent());
+                this.parent.add(this.shield);
+                this.showMessage('Fetching project...');
+
+                this.getURL(
+                    hash,
+                    projectData => {
+                        var msg;
+                        this.nextSteps([
+                            () => msg = this.showMessage('Opening project...'),
+                            () => {
+                                if (projectData.indexOf('<snapdata') === 0) {
+                                    this.rawOpenCloudDataString(projectData);
+                                } else if (
+                                    projectData.indexOf('<project') === 0
+                                ) {
+                                    this.rawOpenProjectString(projectData);
+                                }
+                                this.hasChangedMedia = true;
+                            },
+                            () => {
+                                this.shield.destroy();
+                                this.shield = null;
+                                msg.destroy();
+                                // this.toggleAppMode(true);
+                                applyFlags(
+                                    this.cloud.parseDict(
+                                        location.hash.substr(5)
+                                    )
+                                );
+                            }
+                        ]);
+                    }
+                );
             }
-            applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -6152,6 +6202,7 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                             request[rsp]
                         );
                     } else {
+                        this.showMessage('unable to retrieve ' + url);
                         throw new Error('unable to retrieve ' + url);
                     }
                 }
