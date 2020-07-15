@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-02';
+modules.blocks = '2020-July-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -284,6 +284,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
 
 SyntaxElementMorph.prototype.setScale(1);
 SyntaxElementMorph.prototype.isCachingInputs = false;
+SyntaxElementMorph.prototype.alpha = 1;
 
 // SyntaxElementMorph instance creation:
 
@@ -302,6 +303,7 @@ SyntaxElementMorph.prototype.init = function () {
 
     this.defaults = [];
     this.cachedInputs = null;
+    delete this.alpha;
 };
 
 // SyntaxElementMorph accessing:
@@ -4421,7 +4423,7 @@ BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
 };
 
 BlockMorph.prototype.justDropped = function () {
-    this.alpha = 1;
+    delete this.alpha;
     this.allComments().forEach(comment =>
         comment.stopFollowing()
     );
@@ -5595,7 +5597,7 @@ ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
         this.setPosition(oldPos);
     }
     ReporterBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
-    this.alpha = 0.85;
+    this.alpha = Math.min(this.alpha, 0.85);
     this.cachedSlotSpec = null;
 };
 
@@ -6188,7 +6190,6 @@ function RingMorph() {
 RingMorph.prototype.init = function () {
     RingMorph.uber.init.call(this);
     this.category = 'other';
-    this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
     this.setExtent(new Point(200, 80));
 };
@@ -7968,7 +7969,6 @@ function RingCommandSlotMorph() {
 RingCommandSlotMorph.prototype.init = function () {
     RingCommandSlotMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
-    this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
 };
 
@@ -11933,7 +11933,6 @@ function RingReporterSlotMorph(isPredicate) {
 
 RingReporterSlotMorph.prototype.init = function (isPredicate) {
     RingReporterSlotMorph.uber.init.call(this, isPredicate, true);
-    this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
 };
 

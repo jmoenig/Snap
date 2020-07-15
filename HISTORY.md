@@ -6,6 +6,7 @@
 * morphic: made keyboard handler (more) invisible, thanks, Bernat!
 * gui: made remaining synchronous http requests asynch (url: #open, #run)
 * morphic, gui: switch to scripts tab when dragging a block into the editor pane
+* blocks: refactored transparency handling for syntax elements
 
 ### 2020-07-13
 * paint, symbols: new iconic buttons for grow, shrink and flip actions, thanks, Jadga!
