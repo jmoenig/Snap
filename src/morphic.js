@@ -1268,7 +1268,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-10';
+var morphicVersion = '2020-July-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11909,11 +11909,13 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd = document.createElement('textarea');
     kbd.setAttribute('id', 'morphic_keyboard');
     kbd.setAttribute('style', 'caret-color:transparent;');
+    kbd.style.position = 'absolute';
+    kbd.style.overflow = "hidden";
+    kbd.style.border = 'none';
+    kbd.style.resize = 'none';
+    kbd.wrap = "off";
     kbd.world = this;
     kbd.style.zIndex = -1;
-    kbd.style.position = 'absolute';
-    kbd.wrap = "off";
-    kbd.style.overflow = "hidden";
     kbd.autofocus = true;
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;

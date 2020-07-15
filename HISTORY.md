@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-15
+* morphic: made keyboard handler (more) invisible, thanks, Bernat!
+
 ### 2020-07-13
 * paint, symbols: new iconic buttons for grow, shrink and flip actions, thanks, Jadga!
 * sketch: tweaked layout to match the paint editor's
