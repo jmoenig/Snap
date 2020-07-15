@@ -1624,6 +1624,12 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
+
+        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
+            if (morph instanceof BlockMorph) {
+                this.spriteBar.tabBar.tabTo('scripts');
+            }
+        }
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1634,6 +1640,12 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
+
+        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
+            if (morph instanceof BlockMorph) {
+                this.spriteBar.tabBar.tabTo('scripts');
+            }
+        }
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
