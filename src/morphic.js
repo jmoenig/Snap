@@ -1276,7 +1276,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-15';
+var morphicVersion = '2020-July-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4166,7 +4166,8 @@ Morph.prototype.prompt = function (
     width,
     floorNum,
     ceilingNum,
-    isRounded
+    isRounded,
+    action = nop
 ) {
     var menu, entryField, slider, isNumeric;
     if (ceilingNum) {
@@ -4210,6 +4211,7 @@ Morph.prototype.prompt = function (
                 entryField.text.fixLayout();
                 entryField.text.changed();
                 entryField.text.edit();
+                action(Math.round(num));
             };
         } else {
             slider.action = (num) => {
@@ -4217,6 +4219,7 @@ Morph.prototype.prompt = function (
                 entryField.text.text = num.toString();
                 entryField.text.fixLayout();
                 entryField.text.changed();
+                action(num);
             };
         }
         menu.items.push(slider);
@@ -4224,7 +4227,13 @@ Morph.prototype.prompt = function (
 
     menu.addLine(2);
     menu.addItem('Ok', () => entryField.string());
-    menu.addItem('Cancel', () => null);
+    menu.addItem(
+        'Cancel',
+        () => {
+            action(defaultContents);
+            return null;
+        }
+    );
     menu.isDraggable = true;
     menu.popUpAtHand(this.world());
     entryField.text.edit();
@@ -4444,12 +4453,12 @@ Morph.prototype.setAlphaScaled = function (alpha) {
     var newAlpha, unscaled;
     if (typeof alpha === 'number') {
         unscaled = alpha / 100;
-        this.alpha = Math.min(Math.max(unscaled, 0.1), 1);
+        this.alpha = Math.min(Math.max(unscaled, 0), 1);
     } else {
         newAlpha = parseFloat(alpha);
         if (!isNaN(newAlpha)) {
             unscaled = newAlpha / 100;
-            this.alpha = Math.min(Math.max(unscaled, 0.1), 1);
+            this.alpha = Math.min(Math.max(unscaled, 0), 1);
         }
     }
     this.changed();
@@ -6971,9 +6980,9 @@ SliderMorph.uber = CircleBoxMorph.prototype;
 
 function SliderMorph(start, stop, value, size, orientation, color) {
     this.init(
-        start || 1,
+        start || 0,
         stop || 100,
-        value || 50,
+        value || 0,
         size || 10,
         orientation || 'vertical',
         color

@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-15';
+modules.gui = '2020-July-16';
 
 // Declarations
 
@@ -1629,7 +1629,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
             if (morph instanceof BlockMorph) {
                 this.spriteBar.tabBar.tabTo('scripts');
             }
-        }
+        };
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1645,7 +1645,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
             if (morph instanceof BlockMorph) {
                 this.spriteBar.tabBar.tabTo('scripts');
             }
-        }
+        };
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
@@ -3124,6 +3124,32 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
+        /*
+        menu.addItem(
+            "Block alpha...",
+            () => {
+                world.prompt(
+                    'Block alpha',
+                    alpha => {
+                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
+                        this.rerender();
+                    },
+                    this,
+                    (SyntaxElementMorph.prototype.alpha * 100).toString(),
+                    null,
+                    0,
+                    100,
+                    true,
+                    alpha => {
+                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
+                        this.rerender();
+                    },
+                );
+            },
+            'set the blocks\'\nalpha value',
+            new Color(100, 0, 0)
+        );
+        */
     }
     menu.addItem(
         'Microphone resolution...',
