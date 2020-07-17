@@ -435,7 +435,9 @@ SnapTranslator.dict.bn = {
     'when %keyHat key pressed':
         'যখন %keyHat ক্লিক করা হবে',
     'when I am %interaction':
-        'যখন আমাকে %interaction করা হবে',
+        'যখন আমাকে %interaction',
+    'clicked':
+	'ক্লিক করা হবে',
     'when %b':
         'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat':
