@@ -471,6 +471,8 @@
         mouseLeave
         mouseEnterDragging
         mouseLeaveDragging
+        mouseEnterBounds
+        mouseLeaveBounds
         mouseMove
         mouseScroll
 
@@ -1276,13 +1278,14 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-16';
+var morphicVersion = '2020-July-17';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
 const ZERO = new Point();
 const BLACK = new Color();
 const WHITE = new Color(255, 255, 255);
+const CLEAR = new Color(0, 0, 0, 0);
 
 Object.freeze(ZERO);
 Object.freeze(BLACK);
@@ -2301,6 +2304,14 @@ Color.prototype.inverted = function () {
         255 - this.r,
         255 - this.g,
         255 - this.b
+    );
+};
+
+Color.prototype.solid = function () {
+    return new Color(
+        this.r,
+        this.g,
+        this.b
     );
 };
 
@@ -8507,6 +8518,16 @@ StringMorph.prototype.font = function () {
         this.fontStyle;
 };
 
+StringMorph.prototype.getRenderColor = function () {
+    // answer the rendering color, can be overridden for my children
+    return this.color;
+};
+
+StringMorph.prototype.getShadowRenderColor = function () {
+    // answer the shadow rendering color, can be overridden for my children
+    return this.shadowColor;
+};
+
 StringMorph.prototype.fixLayout = function (justMe) {
     // determine my extent depending on my current settings
     var width,
@@ -8537,6 +8558,7 @@ StringMorph.prototype.fixLayout = function (justMe) {
 StringMorph.prototype.render = function (ctx) {
     var start, stop, i, p, c, x, y,
         shadowOffset = this.shadowOffset || ZERO,
+        shadowColor = this.getShadowRenderColor(),
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
@@ -8546,17 +8568,17 @@ StringMorph.prototype.render = function (ctx) {
     ctx.textBaseline = 'bottom';
 
     // first draw the shadow, if any
-    if (this.shadowColor) {
+    if (shadowColor) {
         x = Math.max(shadowOffset.x, 0);
         y = Math.max(shadowOffset.y, 0);
-        ctx.fillStyle = this.shadowColor.toString();
+        ctx.fillStyle = shadowColor.toString();
         ctx.fillText(txt, x, fontHeight(this.fontSize) + y);
     }
 
     // now draw the actual text
     x = Math.abs(Math.min(shadowOffset.x, 0));
     y = Math.abs(Math.min(shadowOffset.y, 0));
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
 
     if (this.isShowingBlanks) {
         this.renderWithBlanks(
@@ -8615,7 +8637,7 @@ StringMorph.prototype.renderWithBlanks = function (ctx, startX, y) {
         }
         isFirst = false;
         if (word !== '') {
-            ctx.fillStyle = this.color.toString();
+            ctx.fillStyle = this.getRenderColor().toString();
             ctx.fillText(word, x, y);
             x += ctx.measureText(word).width;
         }
@@ -9268,6 +9290,7 @@ TextMorph.prototype.fixLayout = function () {
 TextMorph.prototype.render = function (ctx) {
     var shadowWidth = Math.abs(this.shadowOffset.x),
         shadowHeight = Math.abs(this.shadowOffset.y),
+        shadowColor = this.getShadowRenderColor(),
         i, line, width, offx, offy, x, y, start, stop, p, c;
 
     // prepare context for drawing text
@@ -9282,10 +9305,10 @@ TextMorph.prototype.render = function (ctx) {
     }
 
     // draw the shadow, if any
-    if (this.shadowColor) {
+    if (shadowColor) {
         offx = Math.max(this.shadowOffset.x, 0);
         offy = Math.max(this.shadowOffset.y, 0);
-        ctx.fillStyle = this.shadowColor.toString();
+        ctx.fillStyle = shadowColor.toString();
 
         for (i = 0; i < this.lines.length; i = i + 1) {
             line = this.lines[i];
@@ -9306,7 +9329,7 @@ TextMorph.prototype.render = function (ctx) {
     // now draw the actual text
     offx = Math.abs(Math.min(this.shadowOffset.x, 0));
     offy = Math.abs(Math.min(this.shadowOffset.y, 0));
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
 
     for (i = 0; i < this.lines.length; i = i + 1) {
         line = this.lines[i];
@@ -9335,6 +9358,11 @@ TextMorph.prototype.render = function (ctx) {
         ctx.fillText(c, p.x, p.y + fontHeight(this.fontSize));
     }
 };
+
+TextMorph.prototype.getRenderColor = StringMorph.prototype.getRenderColor;
+
+TextMorph.prototype.getShadowRenderColor =
+    StringMorph.prototype.getShadowRenderColor;
 
 TextMorph.prototype.setExtent = function (aPoint) {
     this.maxWidth = Math.max(aPoint.x, 0);
@@ -11066,6 +11094,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.world = aWorld;
     this.mouseButton = null;
     this.mouseOverList = [];
+    this.mouseOverBounds = [];
     this.morphToGrab = null;
     this.grabPosition = null;
     this.grabOrigin = null;
@@ -11240,6 +11269,8 @@ HandMorph.prototype.drop = function () {
         mouseLeave
         mouseEnterDragging
         mouseLeaveDragging
+        mouseEnterBounds
+        mouseLeaveBounds
         mouseMove
         mouseScroll
 */
@@ -11385,6 +11416,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     var pos,
         posInDocument = getDocumentPositionOf(this.world.worldCanvas),
         mouseOverNew,
+        mouseOverBoundsNew,
         morph,
         topMorph;
 
@@ -11396,7 +11428,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     this.setPosition(pos);
 
     // determine the new mouse-over-list:
-    // mouseOverNew = this.allMorphsAtPointer();
+    mouseOverBoundsNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
 
     if (!this.children.length && this.mouseButton) {
@@ -11433,6 +11465,21 @@ HandMorph.prototype.processMouseMove = function (event) {
             this.setPosition(pos);
         }
     }
+
+    this.mouseOverBounds.forEach(old => {
+        if (!contains(mouseOverBoundsNew, old)) {
+            if (old.mouseLeaveBounds) {
+                old.mouseLeaveBounds();
+            }
+        }
+    });
+    mouseOverBoundsNew.forEach(newMorph => {
+        if (!contains(this.mouseOverBounds, newMorph)) {
+            if (newMorph.mouseEnterBounds) {
+                newMorph.mouseEnterBounds();
+            }
+        }
+    });
 
     this.mouseOverList.forEach(old => {
         if (!contains(mouseOverNew, old)) {
@@ -11471,6 +11518,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     });
     this.mouseOverList = mouseOverNew;
+    this.mouseOverBounds = mouseOverBoundsNew;
 };
 
 HandMorph.prototype.processMouseScroll = function (event) {

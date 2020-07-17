@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-17
+* morphic, blocks: blocks-fadeout (under construction)
+
 ### 2020-07-15
 * morphic: made keyboard handler (more) invisible, thanks, Bernat!
 * gui: made remaining synchronous http requests asynch (url: #open, #run)

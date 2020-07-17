@@ -65,6 +65,9 @@
         BoxMorph*
             CommentMorph
             ScriptFocusMorph
+        StringMorph*
+            BlockLabelMorph
+            InputSlotStringMorph
 
     * from morphic.js
 
@@ -75,6 +78,7 @@
     defined. Use this list to locate code in this document:
 
         SyntaxElementMorph
+        BlockLabelMorph
         BlockMorph
         CommandBlockMorph
         HatBlockMorph
@@ -86,6 +90,7 @@
         RingCommandSlotMorph
         CSlotMorph
         InputSlotMorph
+        InputSlotStringMorph
         BooleanSlotMorph
         ArrowMorph
         TextSlotMorph
@@ -142,16 +147,17 @@ document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
-Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
+Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil, CLEAR,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-15';
+modules.blocks = '2020-July-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
+var BlockLabelMorph;
 var CommandBlockMorph;
 var ReporterBlockMorph;
 var ScriptsMorph;
@@ -159,6 +165,7 @@ var ArgMorph;
 var CommandSlotMorph;
 var CSlotMorph;
 var InputSlotMorph;
+var InputSlotStringMorph;
 var BooleanSlotMorph;
 var ArrowMorph;
 var ColorSlotMorph;
@@ -1770,7 +1777,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 ZERO : this.embossing;
         part.fixLayout();
     } else {
-        part = new StringMorph(
+        part = new BlockLabelMorph(
             spec, // text
             this.fontSize, // fontSize
             this.labelFontStyle, // fontStyle
@@ -1783,6 +1790,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             WHITE, // color
             this.labelFontName // fontName
         );
+
     }
     return part;
 };
@@ -2266,6 +2274,58 @@ SyntaxElementMorph.prototype.mappedCode = function (definitions) {
         return result.mappedCode(definitions);
     }
     return result;
+};
+
+// BlockLabelMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of single-line text written on a block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// BlockLabelMorph inherits from StringMorph:
+
+BlockLabelMorph.prototype = new StringMorph();
+BlockLabelMorph.prototype.constructor = BlockLabelMorph;
+BlockLabelMorph.uber = StringMorph.prototype;
+
+function BlockLabelMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    isNumeric,
+    shadowOffset,
+    shadowColor,
+    color,
+    fontName
+) {
+    this.init(
+        text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        isNumeric,
+        shadowOffset,
+        shadowColor,
+        color,
+        fontName
+    );
+}
+
+BlockLabelMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat) {
+        return this.parent.alpha > 0.4 ? this.color
+            : (this.parent.alpha > 0.1 ? BLACK
+                : this.parent.color.solid());
+    }
+    return this.parent.alpha > 0.1 ? this.color : this.parent.color.solid();
+};
+
+BlockLabelMorph.prototype.getShadowRenderColor = function () {
+    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
 };
 
 // BlockMorph //////////////////////////////////////////////////////////
@@ -4368,6 +4428,20 @@ BlockMorph.prototype.activeProcess = function () {
     return null;
 };
 
+BlockMorph.prototype.mouseEnterBounds = function () {
+    if (this.alpha < 1) {
+        this.alpha = Math.min(this.alpha + 0.2, 1);
+        this.rerender();
+    }
+};
+
+BlockMorph.prototype.mouseLeaveBounds = function () {
+    if (SyntaxElementMorph.prototype.alpha < 1) {
+        delete this.alpha;
+        this.rerender();
+    }
+};
+
 // BlockMorph dragging and dropping
 
 BlockMorph.prototype.rootForGrab = function () {
@@ -6437,6 +6511,15 @@ ScriptsMorph.prototype.fullCopy = function () {
     });
     cpy.adjustBounds();
     return cpy;
+};
+
+// ScriptsMorph rendering:
+
+ScriptsMorph.prototype.renderCachedTexture = function (ctx) {
+    // support blocks-to-text slider
+    if (SyntaxElementMorph.prototype.alpha > 0.8) {
+        ScriptsMorph.uber.renderCachedTexture.call(this, ctx);
+    }
 };
 
 // ScriptsMorph stepping:
@@ -8556,7 +8639,7 @@ InputSlotMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
-    var contents = new StringMorph(''),
+    var contents = new InputSlotStringMorph(''),
         arrow = new ArrowMorph(
             'down',
             0,
@@ -9752,6 +9835,62 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
         false
     );
     ctx.stroke();
+};
+
+// InputSlotStringMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of single-line text inside an input slot block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// InputSlotStringMorph inherits from StringMorph:
+
+InputSlotStringMorph.prototype = new StringMorph();
+InputSlotStringMorph.prototype.constructor = InputSlotStringMorph;
+InputSlotStringMorph.uber = StringMorph.prototype;
+
+function InputSlotStringMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    isNumeric,
+    shadowOffset,
+    shadowColor,
+    color,
+    fontName
+) {
+    this.init(
+        text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        isNumeric,
+        shadowOffset,
+        shadowColor,
+        color,
+        fontName
+    );
+}
+
+InputSlotStringMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat) {
+        if (this.isEditable) {
+            return this.color;
+        }
+        return this.parent.alpha > 0.4 ? this.color : BLACK;
+    }
+    if (this.isEditable) {
+        return this.parent.alpha > 0.3 ? this.color : WHITE;
+    }
+    return this.color;
+};
+
+InputSlotStringMorph.prototype.getShadowRenderColor = function () {
+    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
 };
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
