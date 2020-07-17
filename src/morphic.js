@@ -11179,7 +11179,10 @@ HandMorph.prototype.morphAtPointer = function () {
 
 HandMorph.prototype.allMorphsAtPointer = function () {
     return this.world.allChildren().filter(m => m.isVisible &&
-        m.visibleBounds().containsPoint(this.bounds.origin));
+        m.visibleBounds().containsPoint(this.bounds.origin) &&
+        !m.holes.some(any =>
+            any.translateBy(m.position()).containsPoint(this.bounds.origin))
+        );
 };
 
 // HandMorph dragging and dropping:
