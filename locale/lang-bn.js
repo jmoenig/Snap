@@ -434,8 +434,8 @@ SnapTranslator.dict.bn = {
         'যখন %greenflag ক্লিক করা হবে',
     'when %keyHat key pressed':
         'যখন %keyHat ক্লিক করা হবে',
-    'when I am clicked':
-        'যখন আমাকে ক্লিক করা হবে',
+    'when I am %interaction':
+        'যখন আমাকে %interaction করা হবে',
     'when %b':
         'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat':
@@ -465,9 +465,9 @@ SnapTranslator.dict.bn = {
     'repeat until %b %loop':
         'পুনরায় কর যতক্ষণ না  %b %loop',
     'if %b %c':
-        'যদি হয় %b %c',
+        'যদি শর্তটি সত্য হয় %b %c',
     'if %b %c else %c':
-        'যদি হয় %b %c অন্যথায় %c',
+        'যদি শর্তটি সত্য হয় %b %c অন্যথায় %c',
     'report %s':
         'প্রতিবেদন কর %s',
     'stop block':
