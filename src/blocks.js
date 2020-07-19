@@ -2321,10 +2321,12 @@ function BlockLabelMorph(
 BlockLabelMorph.prototype.getRenderColor = function () {
     if (MorphicPreferences.isFlat) {
         return this.parent.alpha > 0.4 ? this.color
-            : (this.parent.alpha > 0.1 ? BLACK
+            : (this.parent.alpha > 0.2 ? BLACK
                 : this.parent.color.solid());
     }
-    return this.parent.alpha > 0.1 ? this.color : this.parent.color.solid();
+    return this.parent.alpha > 0.4 ? this.color
+        : (this.parent.alpha > 0.2 ? WHITE
+            : this.parent.color.solid());
 };
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
@@ -9888,10 +9890,7 @@ InputSlotStringMorph.prototype.getRenderColor = function () {
         }
         return this.parent.alpha > 0.4 ? this.color : BLACK;
     }
-    if (this.isEditable) {
-        return this.parent.alpha > 0.3 ? this.color : WHITE;
-    }
-    return this.color;
+    return this.parent.alpha > 0.3 ? this.color : WHITE;
 };
 
 InputSlotStringMorph.prototype.getShadowRenderColor = function () {
