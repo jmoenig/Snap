@@ -6520,6 +6520,23 @@ ScriptsMorph.prototype.fullCopy = function () {
 
 // ScriptsMorph rendering:
 
+ScriptsMorph.prototype.render = function (aContext) {
+    aContext.fillStyle = this.getRenderColor().toString();
+    aContext.fillRect(0, 0, this.width(), this.height());
+    if (this.cachedTexture) {
+        this.renderCachedTexture(aContext);
+    } else if (this.texture) {
+        this.renderTexture(this.texture, aContext);
+    }
+};
+
+ScriptsMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat) {
+        return this.color;
+    }
+    return this.color.mixed(SyntaxElementMorph.prototype.alpha, BLACK);
+};
+
 ScriptsMorph.prototype.renderCachedTexture = function (ctx) {
     // support blocks-to-text slider
     if (SyntaxElementMorph.prototype.alpha > 0.8) {
