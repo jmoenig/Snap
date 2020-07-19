@@ -153,7 +153,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-17';
+modules.blocks = '2020-July-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8643,7 +8643,9 @@ InputSlotMorph.prototype.init = function (
         arrow = new ArrowMorph(
             'down',
             0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
+            Math.max(Math.floor(this.fontSize / 6), 1),
+            BLACK,
+            true
         );
 
     contents.fontSize = this.fontSize;
@@ -10634,14 +10636,15 @@ ArrowMorph.uber = Morph.prototype;
 
 // ArrowMorph instance creation:
 
-function ArrowMorph(direction, size, padding, color) {
-    this.init(direction, size, padding, color);
+function ArrowMorph(direction, size, padding, color, isBlockLabel) {
+    this.init(direction, size, padding, color, isBlockLabel);
 }
 
-ArrowMorph.prototype.init = function (direction, size, padding, color) {
+ArrowMorph.prototype.init = function (direction, size, padding, color, isLbl) {
     this.direction = direction || 'down';
     this.size = size || ((size === 0) ? 0 : 50);
     this.padding = padding || 0;
+    this.isBlockLabel = isLbl || false;
 
     ArrowMorph.uber.init.call(this);
     this.color = color || BLACK;
@@ -10669,7 +10672,7 @@ ArrowMorph.prototype.render = function (ctx) {
         w = this.width(),
         w2 = Math.floor(w / 2);
 
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
     ctx.beginPath();
     if (this.direction === 'down') {
         ctx.moveTo(pad, h2);
@@ -10690,6 +10693,16 @@ ArrowMorph.prototype.render = function (ctx) {
     }
     ctx.closePath();
     ctx.fill();
+};
+
+ArrowMorph.prototype.getRenderColor = function () {
+    if (this.isBlockLabel) {
+        if (MorphicPreferences.isFlat) {
+            return this.color;
+        }
+        return this.parent.alpha > 0.5 ? this.color : WHITE;
+    }
+    return this.color;
 };
 
 // TextSlotMorph //////////////////////////////////////////////////////
@@ -10721,7 +10734,9 @@ TextSlotMorph.prototype.init = function (
         arrow = new ArrowMorph(
             'down',
             0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
+            Math.max(Math.floor(this.fontSize / 6), 1),
+            BLACK,
+            true
         );
 
     contents.fontSize = this.fontSize;
@@ -11049,7 +11064,8 @@ MultiArgMorph.prototype.init = function (
         'left',
         this.fontSize,
         Math.max(Math.floor(this.fontSize / 6), 1),
-        arrowColor
+        arrowColor,
+        true
     );
 
     // right arrow:
@@ -11057,7 +11073,8 @@ MultiArgMorph.prototype.init = function (
         'right',
         this.fontSize,
         Math.max(Math.floor(this.fontSize / 6), 1),
-        arrowColor
+        arrowColor,
+        true
     );
 
     // control panel:

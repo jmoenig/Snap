@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-17';
+modules.gui = '2020-July-19';
 
 // Declarations
 
@@ -3142,7 +3142,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                     true,
                     alpha => {
                         SyntaxElementMorph.prototype.setAlphaScaled(alpha);
-                        this.rerender();
+                        this.changed();
                     }
                 );
             },

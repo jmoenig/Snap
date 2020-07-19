@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-19
+* blocks: blocks-fade-out support for label arrows (under construction)
+
 ### 2020-07-17
 * morphic, blocks: blocks-fadeout (under construction)
 
