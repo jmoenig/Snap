@@ -6534,7 +6534,10 @@ ScriptsMorph.prototype.getRenderColor = function () {
     if (MorphicPreferences.isFlat) {
         return this.color;
     }
-    return this.color.mixed(SyntaxElementMorph.prototype.alpha, BLACK);
+    return this.color.lighter(5).mixed(
+        SyntaxElementMorph.prototype.alpha,
+        BLACK
+    );
 };
 
 ScriptsMorph.prototype.renderCachedTexture = function (ctx) {
