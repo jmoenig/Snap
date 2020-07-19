@@ -68,6 +68,7 @@
         StringMorph*
             BlockLabelMorph
             InputSlotStringMorph
+            InputSlotTextMorph
 
     * from morphic.js
 
@@ -91,6 +92,7 @@
         CSlotMorph
         InputSlotMorph
         InputSlotStringMorph
+        InputSlotTextMorph
         BooleanSlotMorph
         ArrowMorph
         TextSlotMorph
@@ -166,6 +168,7 @@ var CommandSlotMorph;
 var CSlotMorph;
 var InputSlotMorph;
 var InputSlotStringMorph;
+var InputSlotTextMorph;
 var BooleanSlotMorph;
 var ArrowMorph;
 var ColorSlotMorph;
@@ -9895,6 +9898,49 @@ InputSlotStringMorph.prototype.getShadowRenderColor = function () {
     return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
 };
 
+// InputSlotTextMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of multi-line text inside an input slot block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// InputSlotTextMorph inherits from TextMorph:
+
+InputSlotTextMorph.prototype = new TextMorph();
+InputSlotTextMorph.prototype.constructor = InputSlotTextMorph;
+InputSlotTextMorph.uber = StringMorph.prototype;
+
+function InputSlotTextMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    alignment,
+    width,
+    fontName,
+    shadowOffset,
+    shadowColor
+) {
+    this.init(text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        alignment,
+        width,
+        fontName,
+        shadowOffset,
+        shadowColor);
+}
+
+InputSlotTextMorph.prototype.getRenderColor =
+    InputSlotStringMorph.prototype.getRenderColor;
+
+InputSlotTextMorph.prototype.getShadowRenderColor =
+    InputSlotStringMorph.prototype.getShadowRenderColor;
+
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
 /*
@@ -10700,7 +10746,7 @@ ArrowMorph.prototype.getRenderColor = function () {
         if (MorphicPreferences.isFlat) {
             return this.color;
         }
-        return this.parent.alpha > 0.5 ? this.color : WHITE;
+        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
     }
     return this.color;
 };
@@ -10724,13 +10770,13 @@ function TextSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
     this.init(text, isNumeric, choiceDict, isReadOnly);
 }
 
-TextSlotMorph.prototype.init = function (
+TextSlotMorph.prototype.init = function ( // +++
     text,
     isNumeric,
     choiceDict,
     isReadOnly
 ) {
-    var contents = new TextMorph(''),
+    var contents = new InputSlotTextMorph(''),
         arrow = new ArrowMorph(
             'down',
             0,

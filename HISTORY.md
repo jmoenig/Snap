@@ -4,6 +4,7 @@
 
 ### 2020-07-19
 * blocks: blocks-fade-out support for label arrows (under construction)
+* blocks: blocks-fade-out support for multi-line inputs (under construction)
 
 ### 2020-07-17
 * morphic, blocks: blocks-fadeout (under construction)
