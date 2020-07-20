@@ -6590,7 +6590,7 @@ ScriptsMorph.prototype.getRenderColor = function () {
         return this.color;
     }
     return this.color.lighter(5).mixed(
-        SyntaxElementMorph.prototype.alpha,
+        Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
         BLACK
     );
 };
