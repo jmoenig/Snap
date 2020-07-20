@@ -155,7 +155,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-19';
+modules.blocks = '2020-July-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7491,6 +7491,9 @@ ArgMorph.prototype.init = function (type) {
     ArgMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
     this.createIcon();
+    if (type === 'list') {
+        this.alpha = 1;
+    }
 };
 
 // ArgMorph preferences settings:
@@ -10133,6 +10136,7 @@ BooleanSlotMorph.prototype.init = function (initialValue) {
     this.isUnevaluated = false;
     this.progress = 0; // for animation state, not persisted
     BooleanSlotMorph.uber.init.call(this);
+    this.alpha = 1;
     this.fixLayout();
 };
 
