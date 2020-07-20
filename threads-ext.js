@@ -393,7 +393,7 @@ function listToArray(list) {
             element = listToArray(element);
         } else if (isObject(element)) {
             SnapActions.serializer.flush();
-            element = SnapActions.serializer.store(element);
+            element = SnapActions.serializer.getPortableXML(element);
         }
         combinedArray.push(element);
     }
