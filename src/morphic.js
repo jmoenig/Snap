@@ -1278,7 +1278,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-17';
+var morphicVersion = '2020-July-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11279,8 +11279,16 @@ HandMorph.prototype.drop = function () {
 */
 
 HandMorph.prototype.processMouseDown = function (event) {
-    var morph, actualClick;
+    var morph, actualClick,
+        posInDocument = getDocumentPositionOf(this.world.worldCanvas);
 
+    // update my position, in case I've just been initialized
+    this.setPosition(new Point(
+        event.pageX - posInDocument.x,
+        event.pageY - posInDocument.y
+    ));
+
+    // process the actual event
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
