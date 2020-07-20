@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-20
+* objects: fixed a list-watcher direct-editing offset bug
+
 ### 2020-07-19
 * blocks: blocks-fade-out support for label arrows (under construction)
 * blocks: blocks-fade-out support for multi-line inputs (under construction)

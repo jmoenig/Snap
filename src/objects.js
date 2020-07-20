@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-July-13';
+modules.objects = '2020-July-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -10965,7 +10965,7 @@ CellMorph.prototype.reactToEdit = function (textMorph) {
         if (listWatcher) {
             listWatcher.list.put(
                 textMorph.text,
-                this.idx
+                this.idx + listWatcher.start - 1
             );
         }
     }
