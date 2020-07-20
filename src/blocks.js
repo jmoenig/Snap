@@ -69,6 +69,8 @@
             BlockLabelMorph
             InputSlotStringMorph
             InputSlotTextMorph
+        SymbolMorph*
+            BlockSymbolMorph
 
     * from morphic.js
 
@@ -80,6 +82,7 @@
 
         SyntaxElementMorph
         BlockLabelMorph
+        BlockSymbolMorph
         BlockMorph
         CommandBlockMorph
         HatBlockMorph
@@ -160,6 +163,7 @@ modules.blocks = '2020-July-20';
 var SyntaxElementMorph;
 var BlockMorph;
 var BlockLabelMorph;
+var BlockSymbolMorph;
 var CommandBlockMorph;
 var ReporterBlockMorph;
 var ScriptsMorph;
@@ -1577,12 +1581,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.add(this.labelPart('%loopArrow'));
             break;
         case '%loopArrow':
-            part = new SymbolMorph('loop');
+            part = new BlockSymbolMorph('loop');
             part.size = this.fontSize * 0.7;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     ZERO : this.embossing;
+            part.isFading = true;
             part.fixLayout();
             break;
         case '%clr':
@@ -1635,7 +1640,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     // symbols:
 
         case '%turtle':
-            part = new SymbolMorph('turtle');
+            part = new BlockSymbolMorph('turtle');
             part.size = this.fontSize * 1.2;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
@@ -1644,7 +1649,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%turtleOutline':
-            part = new SymbolMorph('turtleOutline');
+            part = new BlockSymbolMorph('turtleOutline');
             part.size = this.fontSize;
             part.color = WHITE;
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1654,7 +1659,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%clockwise':
-            part = new SymbolMorph('turnRight');
+            part = new BlockSymbolMorph('turnRight');
             part.size = this.fontSize * 1.5;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1664,7 +1669,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%counterclockwise':
-            part = new SymbolMorph('turnLeft');
+            part = new BlockSymbolMorph('turnLeft');
             part.size = this.fontSize * 1.5;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1674,7 +1679,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%greenflag':
-            part = new SymbolMorph('flag');
+            part = new BlockSymbolMorph('flag');
             part.size = this.fontSize * 1.5;
             part.color = new Color(0, 200, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1684,7 +1689,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%stop':
-            part = new SymbolMorph('octagon');
+            part = new BlockSymbolMorph('octagon');
             part.size = this.fontSize * 1.5;
             part.color = new Color(200, 0, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1694,7 +1699,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%pause':
-            part = new SymbolMorph('pause');
+            part = new BlockSymbolMorph('pause');
             part.size = this.fontSize;
             part.color = new Color(255, 220, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1704,7 +1709,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%blitz':
-            part = new SymbolMorph('flash');
+            part = new BlockSymbolMorph('flash');
             part.size = this.fontSize;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1714,7 +1719,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%list':
-            part = new SymbolMorph('list');
+            part = new BlockSymbolMorph('list');
             part.size = this.fontSize;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
@@ -1766,7 +1771,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fontStyle = this.labelFontStyle;
             part.fontSize = this.fontSize * (+tokens[1] || 1);
         } else {
-            part = new SymbolMorph(tokens[0]);
+            part = new BlockSymbolMorph(tokens[0]);
             part.size = this.fontSize * (+tokens[1] || 1.2);
         }
         part.color = new Color(
@@ -2330,6 +2335,56 @@ BlockLabelMorph.prototype.getRenderColor = function () {
 };
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
+    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
+};
+
+// BlockSymbolMorph //////////////////////////////////////////////////////////
+
+/*
+    I am a pictogram written on a block. I serve as a
+    container for sharing typographic attributes among my instances.
+    NOTE: I have an additional attribute ".isFading" that governs
+    my behavior when fading out the blocks I'm embedded in
+*/
+
+// BlockSymbolMorph inherits from SymbolMorph:
+
+BlockSymbolMorph.prototype = new SymbolMorph();
+BlockSymbolMorph.prototype.constructor = BlockSymbolMorph;
+BlockSymbolMorph.uber = SymbolMorph.prototype;
+
+function BlockSymbolMorph(name, size, color, shadowOffset, shadowColor) {
+    this.init(name, size, color, shadowOffset, shadowColor);
+}
+
+BlockSymbolMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat) {
+        if (this.isFading) {
+            return this.color.mixed(this.parent.alpha, WHITE);
+        }
+        if (this.color.eq(WHITE)) {
+            return this.parent.alpha > 0.4 ? this.color
+                : (this.parent.alpha > 0.2 ? BLACK
+                    : this.parent.color.solid());
+        }
+        return this.color;
+    }
+    if (this.isFading) {
+        return this.color.mixed(this.parent.alpha, BLACK);
+    }
+    if (this.color.eq(BLACK)) {
+        return this.parent.alpha > 0.4 ? this.color
+            : (this.parent.alpha > 0.2 ? WHITE
+                : this.parent.color.solid());
+    }
+    if (this.color.eq(WHITE)) {
+        return this.parent.alpha > 0.2 ? WHITE
+                : this.parent.color.solid();
+    }
+    return this.color;
+};
+
+BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
 };
 
@@ -10793,7 +10848,7 @@ function TextSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
     this.init(text, isNumeric, choiceDict, isReadOnly);
 }
 
-TextSlotMorph.prototype.init = function ( // +++
+TextSlotMorph.prototype.init = function (
     text,
     isNumeric,
     choiceDict,
