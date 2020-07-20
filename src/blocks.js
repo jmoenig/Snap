@@ -10935,6 +10935,7 @@ function ColorSlotMorph(clr) {
 
 ColorSlotMorph.prototype.init = function (clr) {
     ColorSlotMorph.uber.init.call(this);
+    this.alpha = 1;
     this.setColor(clr || new Color(145, 26, 68));
 };
 
