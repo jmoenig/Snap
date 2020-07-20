@@ -7,6 +7,7 @@
 * morphic: update the Hand's position on mouse-down - avoid triggering at the origin point
 * symbols: added hooks for dynamic coloring
 * blocks: added blocks-fading support for symbols (under construction)
+* morphic: tweaked transparency of grabbed morphs
 
 ### 2020-07-19
 * blocks: blocks-fade-out support for label arrows (under construction)

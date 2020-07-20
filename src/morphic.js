@@ -11149,7 +11149,7 @@ HandMorph.prototype.fullDrawOn = function (ctx, rect) {
 
     if (!clipped.extent().gt(ZERO)) {return; }
     ctx.save();
-    ctx.globalAlpha = this.children[0].alpha;
+    ctx.globalAlpha = this.alpha;
     pic = this.cachedFullImage;
     src = clipped.translateBy(pos.neg());
     sl = src.left();
@@ -11233,6 +11233,7 @@ HandMorph.prototype.grab = function (aMorph) {
 
 HandMorph.prototype.drop = function () {
     var target, morphToDrop;
+    this.alpha = 1;
     if (this.children.length !== 0) {
         morphToDrop = this.children[0];
         target = this.dropTargetFor(morphToDrop);
