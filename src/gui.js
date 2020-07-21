@@ -5675,17 +5675,25 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
 // IDE_Morph blocks fading
 
 IDE_Morph.prototype.userFadeBlocks = function () {
-    var dlg = new DialogBoxMorph(
+    var dlg,
+        initial = 100 - (SyntaxElementMorph.prototype.alpha * 100);
+
+    dlg = new DialogBoxMorph(
         null,
         num => this.setBlockTransparency(num)
     ).withKey('fadeBlocks');
-
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
     }
+
+    dlg.cancel = () => {
+        this.setBlockTransparency(initial);
+        dlg.destroy();
+    };
+
     dlg.prompt(
         'Fade blocks',
-        (100 - (SyntaxElementMorph.prototype.alpha * 100)).toString(),
+        initial.toString(),
         this.world(),
         null, // pic
         {
