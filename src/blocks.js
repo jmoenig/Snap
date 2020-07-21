@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-20';
+modules.blocks = '2020-July-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -783,6 +783,13 @@ SyntaxElementMorph.prototype.unflash = function () {
         this.cachedNormalColor = null;
         this.setColor(clr);
     }
+};
+
+SyntaxElementMorph.prototype.doWithAlpha = function (alpha, callback) {
+    var current = this.alpha;
+    SyntaxElementMorph.prototype.alpha = alpha;
+    callback();
+    SyntaxElementMorph.prototype.alpha = current;
 };
 
 // SyntaxElementMorph zebra coloring
@@ -4198,7 +4205,7 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
 BlockMorph.prototype.highlightImage = function (color, border) {
     var fb, img, hi, ctx, out;
     fb = this.fullBounds().extent();
-    img = this.fullImage();
+    this.doWithAlpha(1, () => img = this.fullImage());
 
     hi = newCanvas(fb.add(border * 2));
     ctx = hi.getContext('2d');
@@ -4228,7 +4235,7 @@ BlockMorph.prototype.highlightImage = function (color, border) {
 BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
     var fb, img, hi, ctx;
     fb = this.fullBounds().extent();
-    img = this.fullImage();
+    this.doWithAlpha(1, () => img = this.fullImage());
 
     hi = newCanvas(fb.add(blur * 2));
     ctx = hi.getContext('2d');

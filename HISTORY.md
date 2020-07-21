@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-21
+* blocks: tweaked block highlights for fade-out
+
 ### 2020-07-20
 * objects: fixed a list-watcher direct-editing offset bug
 * morphic: update the Hand's position on mouse-down - avoid triggering at the origin point
