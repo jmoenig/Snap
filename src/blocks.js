@@ -2377,7 +2377,10 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
         return this.color;
     }
     if (this.isFading) {
-        return this.color.mixed(this.parent.alpha, BLACK);
+        return this.color.mixed(
+            this.parent.alpha,
+            SpriteMorph.prototype.paletteColor
+        );
     }
     if (this.color.eq(BLACK)) {
         return this.parent.alpha > 0.4 ? this.color
@@ -6596,9 +6599,9 @@ ScriptsMorph.prototype.getRenderColor = function () {
     if (MorphicPreferences.isFlat) {
         return this.color;
     }
-    return this.color.lighter(12.5).mixed(
+    return this.color.lighter(5).mixed(
         Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
-        BLACK
+        SpriteMorph.prototype.paletteColor
     );
 };
 

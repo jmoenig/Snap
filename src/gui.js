@@ -1538,9 +1538,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
         if (MorphicPreferences.isFlat) {
             return this.pressColor;
         }
-        return this.pressColor.lighter(12.5).mixed(
+        return this.pressColor.lighter(5).mixed(
             Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
-            BLACK
+            SpriteMorph.prototype.paletteColor
         );
     };
 
