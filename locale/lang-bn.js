@@ -585,7 +585,7 @@ SnapTranslator.dict.bn = {
     'false':
         'মিথ্যা',
     'join %words':
-        'সংযুক্ত কর %words',
+        'যুক্ত কর %words',
     'hello':
         'হ্যালো',
     'world':
@@ -593,9 +593,9 @@ SnapTranslator.dict.bn = {
     'letter %idx of %s':
         '%idx -তম বর্ণ %s এর',
     'length of %s':
-        '%s এর বর্ণদৈর্ঘ্য ',
+        '%s -এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
-        '%s বর্ণের ইউনিকোড',
+        '%s -এর ইউনিকোড',
     'unicode %n as letter':
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
@@ -604,7 +604,7 @@ SnapTranslator.dict.bn = {
         '%s এর সমতুল্য %s কিনা?',
 
     'type of %s':
-        '%s এর প্রকারে',
+        '%s -এর প্রকার',
 
     // variables:
     'Make a variable':
