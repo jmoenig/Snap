@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-19';
+modules.gui = '2020-July-21';
 
 // Declarations
 
@@ -1533,6 +1533,17 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
+
+    tab.getPressRenderColor = function () {
+        if (MorphicPreferences.isFlat) {
+            return this.pressColor;
+        }
+        return this.pressColor.lighter(12.5).mixed(
+            Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
+            BLACK
+        );
+    };
+
     tab.fixLayout();
     tabBar.add(tab);
 

@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-July-13';
+modules.widgets = '2020-July-21';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -728,7 +728,7 @@ ToggleButtonMorph.prototype.render = function (ctx) {
         // note: don't invert the 3D-ish edges for 'pressed' state, because
         // it will stay that way, and should not look inverted (or should it?)
         this.drawOutline(ctx);
-        this.drawBackground(ctx, this.pressColor);
+        this.drawBackground(ctx, this.getPressRenderColor());
         this.drawEdges(
             ctx,
             this.pressColor,
@@ -746,6 +746,11 @@ ToggleButtonMorph.prototype.render = function (ctx) {
             this.color.darker(this.contrast)
         );
     }
+};
+
+ToggleButtonMorph.prototype.getPressRenderColor = function () {
+    // can be overridden by my children
+    return this.pressColor;
 };
 
 ToggleButtonMorph.prototype.drawEdges = function (
