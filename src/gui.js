@@ -5678,14 +5678,14 @@ IDE_Morph.prototype.userFadeBlocks = function () {
     var dlg = new DialogBoxMorph(
         null,
         num => this.setBlockTransparency(num)
-    ).withKey('zoomBlocks');
+    ).withKey('fadeBlocks');
 
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
     }
     dlg.prompt(
         'Fade blocks',
-        100 - (SyntaxElementMorph.prototype.alpha * 100).toString(),
+        (100 - (SyntaxElementMorph.prototype.alpha * 100)).toString(),
         this.world(),
         null, // pic
         {
