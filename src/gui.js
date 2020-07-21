@@ -3127,6 +3127,12 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
+/*
+    menu.addItem(
+        'Fade blocks...',
+        'userFadeBlocks'
+    );
+*/
     menu.addItem(
         'Stage size...',
         'userSetStageSize'
@@ -3139,32 +3145,6 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
-        /*
-        menu.addItem(
-            "Block alpha...",
-            () => {
-                world.prompt(
-                    'Block alpha',
-                    alpha => {
-                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
-                        this.rerender();
-                    },
-                    this,
-                    (SyntaxElementMorph.prototype.alpha * 100).toString(),
-                    null,
-                    0,
-                    100,
-                    true,
-                    alpha => {
-                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
-                        this.changed();
-                    }
-                );
-            },
-            'set the blocks\'\nalpha value',
-            new Color(100, 0, 0)
-        );
-        */
     }
     menu.addItem(
         'Microphone resolution...',
@@ -5690,6 +5670,45 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
+};
+
+// IDE_Morph blocks fading
+
+IDE_Morph.prototype.userFadeBlocks = function () {
+    var dlg = new DialogBoxMorph(
+        null,
+        num => this.setBlockTransparency(num)
+    ).withKey('zoomBlocks');
+
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
+        'Fade blocks',
+        100 - (SyntaxElementMorph.prototype.alpha * 100).toString(),
+        this.world(),
+        null, // pic
+        {
+            'full-blocks (0)' : 0,
+            'reduced (39)' : 39,
+            'semi (49)' : 49,
+            'glassy (79' : 79,
+            'elegant (90)' : 90,
+            'subtle (90)' : 95,
+            'text-only (100)' : 100
+        },
+        false, // read only?
+        true, // numeric
+        0, // slider min
+        100, // slider max
+        num => this.setBlockTransparency(num), // slider action
+        0 // decimals
+    );
+};
+
+IDE_Morph.prototype.setBlockTransparency = function (num) {
+    SyntaxElementMorph.prototype.setAlphaScaled(100 - num);
+    this.changed();
 };
 
 // IDE_Morph stage size manipulation
