@@ -6596,7 +6596,8 @@ ScriptsMorph.prototype.render = function (aContext) {
 };
 
 ScriptsMorph.prototype.getRenderColor = function () {
-    if (MorphicPreferences.isFlat) {
+    if (MorphicPreferences.isFlat ||
+            SyntaxElementMorph.prototype.alpha > 0.85) {
         return this.color;
     }
     return this.color.mixed(

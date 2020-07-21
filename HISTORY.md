@@ -5,6 +5,7 @@
 ### 2020-07-21
 * blocks: tweaked block highlights for fade-out
 * widgets, gui: tweaked scripts tab for fade-out
+* blocks, gui: tweaked default mode colors to slightly darker
 
 ### 2020-07-20
 * objects: fixed a list-watcher direct-editing offset bug

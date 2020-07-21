@@ -110,7 +110,7 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.setDefaultDesign = function () {
     MorphicPreferences.isFlat = false;
-    SpriteMorph.prototype.paletteColor = new Color(35, 35, 35);
+    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
@@ -195,10 +195,10 @@ IDE_Morph.prototype.scriptsTexture = function () {
     for (i = 0; i < 100; i += 4) {
         ctx.fillStyle = this.frameColor.toString();
         ctx.fillRect(i, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.lighter(4).toString();
+        ctx.fillStyle = this.groupColor.lighter(2).toString();
         ctx.fillRect(i + 1, 0, 1, 100);
         ctx.fillRect(i + 3, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.toString();
+        ctx.fillStyle = this.groupColor.darker(2).toString();
         ctx.fillRect(i + 2, 0, 1, 100);
     }
     return pic;
@@ -1173,6 +1173,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
+    this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -1535,7 +1536,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelColor = this.buttonLabelColor;
 
     tab.getPressRenderColor = function () {
-        if (MorphicPreferences.isFlat) {
+        if (MorphicPreferences.isFlat ||
+                SyntaxElementMorph.prototype.alpha > 0.85) {
             return this.pressColor;
         }
         return this.pressColor.mixed(
@@ -1794,16 +1796,7 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral = new Morph();
     this.corral.color = this.groupColor;
-
-    this.corral.getRenderColor = function () {
-        if (MorphicPreferences.isFlat) {
-            return this.color;
-        }
-        return this.color.mixed(
-            Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
-            SpriteMorph.prototype.paletteColor
-        );
-    };
+    this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
     this.add(this.corral);
 
