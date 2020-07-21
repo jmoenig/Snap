@@ -3124,7 +3124,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
-        /*
+//        /*
         menu.addItem(
             "Block alpha...",
             () => {
@@ -3149,7 +3149,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             'set the blocks\'\nalpha value',
             new Color(100, 0, 0)
         );
-        */
+//        */
     }
     menu.addItem(
         'Microphone resolution...',

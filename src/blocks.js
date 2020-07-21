@@ -786,7 +786,7 @@ SyntaxElementMorph.prototype.unflash = function () {
 };
 
 SyntaxElementMorph.prototype.doWithAlpha = function (alpha, callback) {
-    var current = this.alpha;
+    var current = SyntaxElementMorph.prototype.alpha;
     SyntaxElementMorph.prototype.alpha = alpha;
     callback();
     SyntaxElementMorph.prototype.alpha = current;
