@@ -1538,7 +1538,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         if (MorphicPreferences.isFlat) {
             return this.pressColor;
         }
-        return this.pressColor.lighter(5).mixed(
+        return this.pressColor.mixed(
             Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
             SpriteMorph.prototype.paletteColor
         );
@@ -1794,6 +1794,17 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral = new Morph();
     this.corral.color = this.groupColor;
+
+    this.corral.getRenderColor = function () {
+        if (MorphicPreferences.isFlat) {
+            return this.color;
+        }
+        return this.color.mixed(
+            Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
+            SpriteMorph.prototype.paletteColor
+        );
+    };
+
     this.add(this.corral);
 
     this.corral.stageIcon = new SpriteIconMorph(this.stage);

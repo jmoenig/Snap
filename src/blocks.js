@@ -6599,7 +6599,7 @@ ScriptsMorph.prototype.getRenderColor = function () {
     if (MorphicPreferences.isFlat) {
         return this.color;
     }
-    return this.color.lighter(5).mixed(
+    return this.color.mixed(
         Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
         SpriteMorph.prototype.paletteColor
     );

@@ -1278,7 +1278,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-20';
+var morphicVersion = '2020-July-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3478,13 +3478,18 @@ Morph.prototype.getImage = function () {
 };
 
 Morph.prototype.render = function (aContext) {
-    aContext.fillStyle = this.color.toString();
+    aContext.fillStyle = this.getRenderColor().toString();
     aContext.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
         this.renderCachedTexture(aContext);
     } else if (this.texture) {
         this.renderTexture(this.texture, aContext);
     }
+};
+
+Morph.prototype.getRenderColor = function () {
+    // can be overriden by my heirs or instances
+    return this.color;
 };
 
 Morph.prototype.fixLayout = function () {
@@ -8518,11 +8523,6 @@ StringMorph.prototype.font = function () {
         this.fontStyle;
 };
 
-StringMorph.prototype.getRenderColor = function () {
-    // answer the rendering color, can be overridden for my children
-    return this.color;
-};
-
 StringMorph.prototype.getShadowRenderColor = function () {
     // answer the shadow rendering color, can be overridden for my children
     return this.shadowColor;
@@ -9358,8 +9358,6 @@ TextMorph.prototype.render = function (ctx) {
         ctx.fillText(c, p.x, p.y + fontHeight(this.fontSize));
     }
 };
-
-TextMorph.prototype.getRenderColor = StringMorph.prototype.getRenderColor;
 
 TextMorph.prototype.getShadowRenderColor =
     StringMorph.prototype.getShadowRenderColor;

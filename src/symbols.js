@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-July-20';
+modules.symbols = '2020-July-21';
 
 var SymbolMorph;
 
@@ -195,11 +195,6 @@ SymbolMorph.prototype.setLabelColor = function (
 };
 
 // SymbolMorph dynamic coloring:
-
-SymbolMorph.prototype.getRenderColor = function () {
-    // answer the rendering color, can be overridden for my children
-    return this.color;
-};
 
 SymbolMorph.prototype.getShadowRenderColor = function () {
     // answer the shadow rendering color, can be overridden for my children
