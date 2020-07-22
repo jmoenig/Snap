@@ -2,6 +2,31 @@
 
 ## in development:
 
+### 2020-07-22
+* morphic, blocks, gui: tweaked block-fading mouse-over
+* blocks, threads: tweaked context visualizations to be alpha-independent
+* gui: save block-transparency in  settings 
+* morphic: fixed input slider target update rendering
+
+### 2020-07-21
+* blocks: tweaked block highlights for fade-out
+* widgets, gui: tweaked scripts tab for fade-out
+* blocks, gui: tweaked default mode colors to slightly darker
+
+### 2020-07-20
+* objects: fixed a list-watcher direct-editing offset bug
+* morphic: update the Hand's position on mouse-down - avoid triggering at the origin point
+* symbols: added hooks for dynamic coloring
+* blocks: added blocks-fading support for symbols (under construction)
+* morphic: tweaked transparency of grabbed morphs
+
+### 2020-07-19
+* blocks: blocks-fade-out support for label arrows (under construction)
+* blocks: blocks-fade-out support for multi-line inputs (under construction)
+
+### 2020-07-17
+* morphic, blocks: blocks-fadeout (under construction)
+
 ### 2020-07-15
 * morphic: made keyboard handler (more) invisible, thanks, Bernat!
 * gui: made remaining synchronous http requests asynch (url: #open, #run)

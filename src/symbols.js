@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-July-13';
+modules.symbols = '2020-July-21';
 
 var SymbolMorph;
 
@@ -194,6 +194,13 @@ SymbolMorph.prototype.setLabelColor = function (
     this.setColor(textColor);
 };
 
+// SymbolMorph dynamic coloring:
+
+SymbolMorph.prototype.getShadowRenderColor = function () {
+    // answer the shadow rendering color, can be overridden for my children
+    return this.shadowColor;
+};
+
 // SymbolMorph layout:
 
 SymbolMorph.prototype.setExtent = function (aPoint) {
@@ -221,12 +228,12 @@ SymbolMorph.prototype.render = function (ctx) {
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);
-        this.renderShape(ctx, this.shadowColor);
+        this.renderShape(ctx, this.getShadowRenderColor());
         ctx.restore();
     }
     ctx.save();
     ctx.translate(x, y);
-    this.renderShape(ctx, this.color);
+    this.renderShape(ctx, this.getRenderColor());
     ctx.restore();
 };
 

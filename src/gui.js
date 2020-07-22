@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-16';
+modules.gui = '2020-July-22';
 
 // Declarations
 
@@ -110,7 +110,7 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.setDefaultDesign = function () {
     MorphicPreferences.isFlat = false;
-    SpriteMorph.prototype.paletteColor = new Color(35, 35, 35);
+    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
@@ -195,10 +195,10 @@ IDE_Morph.prototype.scriptsTexture = function () {
     for (i = 0; i < 100; i += 4) {
         ctx.fillStyle = this.frameColor.toString();
         ctx.fillRect(i, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.lighter(4).toString();
+        ctx.fillStyle = this.groupColor.lighter(2).toString();
         ctx.fillRect(i + 1, 0, 1, 100);
         ctx.fillRect(i + 3, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.toString();
+        ctx.fillStyle = this.groupColor.darker(2).toString();
         ctx.fillRect(i + 2, 0, 1, 100);
     }
     return pic;
@@ -1173,6 +1173,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
+    this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -1533,6 +1534,18 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
+
+    tab.getPressRenderColor = function () {
+        if (MorphicPreferences.isFlat ||
+                SyntaxElementMorph.prototype.alpha > 0.85) {
+            return this.pressColor;
+        }
+        return this.pressColor.mixed(
+            Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
+            SpriteMorph.prototype.paletteColor
+        );
+    };
+
     tab.fixLayout();
     tabBar.add(tab);
 
@@ -1783,6 +1796,8 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral = new Morph();
     this.corral.color = this.groupColor;
+    this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+
     this.add(this.corral);
 
     this.corral.stageIcon = new SpriteIconMorph(this.stage);
@@ -2380,6 +2395,7 @@ IDE_Morph.prototype.refreshIDE = function () {
 IDE_Morph.prototype.applySavedSettings = function () {
     var design = this.getSetting('design'),
         zoom = this.getSetting('zoom'),
+        fade = this.getSetting('fade'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
@@ -2402,6 +2418,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
         SpriteMorph.prototype.initBlocks();
+    }
+
+    // blocks fade
+    if (!isNil(fade)) {
+        this.setBlockTransparency(+fade);
     }
 
     // language
@@ -3112,6 +3133,12 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
+/*
+    menu.addItem(
+        'Fade blocks...',
+        'userFadeBlocks'
+    );
+*/
     menu.addItem(
         'Stage size...',
         'userSetStageSize'
@@ -3124,32 +3151,6 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
-        /*
-        menu.addItem(
-            "Block alpha...",
-            () => {
-                world.prompt(
-                    'Block alpha',
-                    alpha => {
-                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
-                        this.rerender();
-                    },
-                    this,
-                    (SyntaxElementMorph.prototype.alpha * 100).toString(),
-                    null,
-                    0,
-                    100,
-                    true,
-                    alpha => {
-                        SyntaxElementMorph.prototype.setAlphaScaled(alpha);
-                        this.rerender();
-                    },
-                );
-            },
-            'set the blocks\'\nalpha value',
-            new Color(100, 0, 0)
-        );
-        */
     }
     menu.addItem(
         'Microphone resolution...',
@@ -5607,7 +5608,9 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     sample = new FrameMorph();
     sample.acceptsDrops = false;
     sample.color = IDE_Morph.prototype.groupColor;
-    sample.cachedTexture = this.scriptsPaneTexture;
+    if (SyntaxElementMorph.prototype.alpha > 0.8) {
+        sample.cachedTexture = this.scriptsPaneTexture;
+    }
     sample.setExtent(new Point(250, 180));
     scrpt.setPosition(sample.position().add(10));
     sample.add(scrpt);
@@ -5675,6 +5678,63 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
+};
+
+// IDE_Morph blocks fading
+
+IDE_Morph.prototype.userFadeBlocks = function () {
+    var dlg,
+        initial = 100 - (SyntaxElementMorph.prototype.alpha * 100);
+
+    dlg = new DialogBoxMorph(
+        null,
+        num => this.setBlockTransparency(num, true) // and save setting
+    ).withKey('fadeBlocks');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+
+    dlg.cancel = () => {
+        this.setBlockTransparency(initial);
+        dlg.destroy();
+    };
+
+    dlg.prompt(
+        'Fade blocks',
+        initial.toString(),
+        this.world(),
+        null, // pic
+        {
+            'block-solid (0)' : 0,
+            'reduced (39)' : 39,
+            'medium (49)' : 49,
+            'light (59)' : 59,
+            'semi (69)' : 69,
+            'glassy (79)' : 79,
+            'shimmering (80' : 80,
+            'elegant (90)' : 90,
+            'subtle (95)' : 95,
+            'text-only (100)' : 100
+        },
+        false, // read only?
+        true, // numeric
+        0, // slider min
+        100, // slider max
+        num => this.setBlockTransparency(num), // slider action
+        0 // decimals
+    );
+};
+
+IDE_Morph.prototype.setBlockTransparency = function (num, save) {
+    SyntaxElementMorph.prototype.setAlphaScaled(100 - num);
+    this.changed();
+    if (save) {
+        if (num === 0) {
+            this.removeSetting('fade');
+        } else {
+            this.saveSetting('fade', num);
+        }
+    }
 };
 
 // IDE_Morph stage size manipulation

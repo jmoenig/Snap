@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-July-13';
+modules.widgets = '2020-July-21';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -728,7 +728,7 @@ ToggleButtonMorph.prototype.render = function (ctx) {
         // note: don't invert the 3D-ish edges for 'pressed' state, because
         // it will stay that way, and should not look inverted (or should it?)
         this.drawOutline(ctx);
-        this.drawBackground(ctx, this.pressColor);
+        this.drawBackground(ctx, this.getPressRenderColor());
         this.drawEdges(
             ctx,
             this.pressColor,
@@ -746,6 +746,11 @@ ToggleButtonMorph.prototype.render = function (ctx) {
             this.color.darker(this.contrast)
         );
     }
+};
+
+ToggleButtonMorph.prototype.getPressRenderColor = function () {
+    // can be overridden by my children
+    return this.pressColor;
 };
 
 ToggleButtonMorph.prototype.drawEdges = function (
@@ -1597,10 +1602,12 @@ DialogBoxMorph.prototype.prompt = function (
     isNumeric, // optional
     sliderMin, // optional for numeric sliders
     sliderMax, // optional for numeric sliders
-    sliderAction // optional single-arg function for numeric slider
+    sliderAction, // optional single-arg function for numeric slider
+    decimals = 2 // optional number of decimal digits
 ) {
     var sld,
         head,
+        precision = Math.pow(10, decimals),
         txt = new InputFieldMorph(
             defaultString,
             isNumeric || false, // numeric?
@@ -1616,10 +1623,10 @@ DialogBoxMorph.prototype.prompt = function (
         }
         if (!isNil(sliderMin) && !isNil(sliderMax)) {
             sld = new SliderMorph(
-                sliderMin * 100,
-                sliderMax * 100,
-                parseFloat(defaultString) * 100,
-                (sliderMax - sliderMin) / 10 * 100,
+                sliderMin * precision,
+                sliderMax * precision,
+                parseFloat(defaultString) * precision,
+                (sliderMax - sliderMin) / 10 * precision, // knob size
                 'horizontal'
             );
             sld.alpha = 1;
@@ -1628,9 +1635,9 @@ DialogBoxMorph.prototype.prompt = function (
             sld.setWidth(txt.width());
             sld.action = num => {
                 if (sliderAction) {
-                    sliderAction(num / 100);
+                    sliderAction(num / precision);
                 }
-                txt.setContents(num / 100);
+                txt.setContents(num / precision);
                 txt.edit();
             };
             if (!head) {
@@ -1649,7 +1656,7 @@ DialogBoxMorph.prototype.prompt = function (
 
     this.reactToChoice = function (inp) {
         if (sld) {
-            sld.value = inp * 100;
+            sld.value = inp * precision;
             sld.fixLayout();
             sld.rerender();
         }
@@ -1662,7 +1669,7 @@ DialogBoxMorph.prototype.prompt = function (
         var inp = txt.getValue();
         if (sld) {
             inp = Math.max(inp, sliderMin);
-            sld.value = inp * 100;
+            sld.value = inp * precision;
             sld.fixLayout();
             sld.rerender();
         }
