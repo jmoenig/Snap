@@ -12617,6 +12617,7 @@ WorldMorph.prototype.slide = function (aStringOrTextMorph) {
     slider.action = (num) => {
         aStringOrTextMorph.changed();
         aStringOrTextMorph.text = Math.round(num).toString();
+        aStringOrTextMorph.fixLayout();
         aStringOrTextMorph.rerender();
         aStringOrTextMorph.escalateEvent(
             'reactToSliderEdit',

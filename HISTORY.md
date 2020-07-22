@@ -6,6 +6,7 @@
 * morphic, blocks, gui: tweaked block-fading mouse-over
 * blocks, threads: tweaked context visualizations to be alpha-independent
 * gui: save block-transparency in  settings 
+* morphic: fixed input slider target update rendering
 
 ### 2020-07-21
 * blocks: tweaked block highlights for fade-out
