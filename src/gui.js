@@ -2395,6 +2395,7 @@ IDE_Morph.prototype.refreshIDE = function () {
 IDE_Morph.prototype.applySavedSettings = function () {
     var design = this.getSetting('design'),
         zoom = this.getSetting('zoom'),
+        fade = this.getSetting('fade'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
@@ -2417,6 +2418,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
         SpriteMorph.prototype.initBlocks();
+    }
+
+    // blocks fade
+    if (!isNil(fade)) {
+        this.setBlockTransparency(+fade);
     }
 
     // language
@@ -5680,7 +5686,7 @@ IDE_Morph.prototype.userFadeBlocks = function () {
 
     dlg = new DialogBoxMorph(
         null,
-        num => this.setBlockTransparency(num)
+        num => this.setBlockTransparency(num, true) // and save setting
     ).withKey('fadeBlocks');
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
@@ -5717,9 +5723,16 @@ IDE_Morph.prototype.userFadeBlocks = function () {
     );
 };
 
-IDE_Morph.prototype.setBlockTransparency = function (num) {
+IDE_Morph.prototype.setBlockTransparency = function (num, save) {
     SyntaxElementMorph.prototype.setAlphaScaled(100 - num);
     this.changed();
+    if (save) {
+        if (num === 0) {
+            this.removeSetting('fade');
+        } else {
+            this.saveSetting('fade', num);
+        }
+    }
 };
 
 // IDE_Morph stage size manipulation
