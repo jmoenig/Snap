@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-21';
+modules.blocks = '2020-July-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4498,14 +4498,14 @@ BlockMorph.prototype.activeProcess = function () {
     return null;
 };
 
-BlockMorph.prototype.mouseEnterBounds = function () {
-    if (this.alpha < 1) {
+BlockMorph.prototype.mouseEnterBounds = function (dragged) {
+    if (!dragged && this.alpha < 1) {
         this.alpha = Math.min(this.alpha + 0.2, 1);
         this.rerender();
     }
 };
 
-BlockMorph.prototype.mouseLeaveBounds = function () {
+BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
     if (SyntaxElementMorph.prototype.alpha < 1) {
         delete this.alpha;
         this.rerender();

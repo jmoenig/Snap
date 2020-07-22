@@ -495,6 +495,8 @@
 
         mouseEnterDragging(morph)
         mouseLeaveDragging(morph)
+        mouseEnterBounds(morph)
+        mouseLeaveBounds(morph)
 
     event methods have as optional parameter the morph currently dragged by
     the Hand, if any.
@@ -1278,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-21';
+var morphicVersion = '2020-July-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11438,8 +11440,12 @@ HandMorph.prototype.processMouseMove = function (event) {
     this.setPosition(pos);
 
     // determine the new mouse-over-list:
-    mouseOverBoundsNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
+    mouseOverBoundsNew = mouseOverNew.filter(m => m.isVisible &&
+        m.visibleBounds().containsPoint(this.bounds.origin) &&
+            !m.holes.some(any =>
+                any.translateBy(m.position()).containsPoint(this.bounds.origin))
+    );
 
     if (!this.children.length && this.mouseButton) {
         topMorph = this.morphAtPointer();
@@ -11479,14 +11485,14 @@ HandMorph.prototype.processMouseMove = function (event) {
     this.mouseOverBounds.forEach(old => {
         if (!contains(mouseOverBoundsNew, old)) {
             if (old.mouseLeaveBounds) {
-                old.mouseLeaveBounds();
+                old.mouseLeaveBounds(this.children[0]);
             }
         }
     });
     mouseOverBoundsNew.forEach(newMorph => {
         if (!contains(this.mouseOverBounds, newMorph)) {
             if (newMorph.mouseEnterBounds) {
-                newMorph.mouseEnterBounds();
+                newMorph.mouseEnterBounds(this.children[0]);
             }
         }
     });

@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-22
+* morphic, blocks, gui: tweaked block-fading mouse-over
+
 ### 2020-07-21
 * blocks: tweaked block highlights for fade-out
 * widgets, gui: tweaked scripts tab for fade-out
