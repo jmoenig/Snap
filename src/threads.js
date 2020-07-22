@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-09';
+modules.threads = '2020-July-22';
 
 var ThreadManager;
 var Process;
@@ -6114,15 +6114,15 @@ Context.prototype.image = function () {
             }
         }
         ring.embed(block, this.inputs);
-        return ring.fullImage();
+        return ring.doWithAlpha(1, () => ring.fullImage());
     }
     if (this.expression instanceof Array) {
         block = this.expression[this.pc].fullCopy();
         if (block instanceof RingMorph && !block.contents()) { // empty ring
-            return block.fullImage();
+            return block.doWithAlpha(1, () => block.fullImage());
         }
         ring.embed(block, this.isContinuation ? [] : this.inputs);
-        return ring.fullImage();
+        return ring.doWithAlpha(1, () => ring.fullImage());
     }
 
     // otherwise show an empty ring
@@ -6135,7 +6135,7 @@ Context.prototype.image = function () {
             ring.parts()[1].addInput(inp)
         );
     }
-    return ring.fullImage();
+    return ring.doWithAlpha(1, () => ring.fullImage());
 };
 
 // Context continuations:

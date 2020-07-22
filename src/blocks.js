@@ -786,10 +786,12 @@ SyntaxElementMorph.prototype.unflash = function () {
 };
 
 SyntaxElementMorph.prototype.doWithAlpha = function (alpha, callback) {
-    var current = SyntaxElementMorph.prototype.alpha;
+    var current = SyntaxElementMorph.prototype.alpha,
+        result;
     SyntaxElementMorph.prototype.alpha = alpha;
-    callback();
+    result = callback();
     SyntaxElementMorph.prototype.alpha = current;
+    return result;
 };
 
 // SyntaxElementMorph zebra coloring
@@ -2329,20 +2331,22 @@ function BlockLabelMorph(
         fontName
     );
 }
-
 BlockLabelMorph.prototype.getRenderColor = function () {
+    var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
-        return this.parent.alpha > 0.4 ? this.color
-            : (this.parent.alpha > 0.2 ? BLACK
-                : this.parent.color.solid());
+        return block.alpha > 0.4 ? this.color
+            : (block.alpha > 0.2 ? BLACK
+                : block.color.solid());
     }
-    return this.parent.alpha > 0.4 ? this.color
-        : (this.parent.alpha > 0.2 ? WHITE
-            : this.parent.color.solid());
+    return block.alpha > 0.4 ? this.color
+        : (block.alpha > 0.2 ? WHITE
+            : block.color.solid());
 };
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
+    return this.parentThatIsA(BlockMorph).alpha > 0.6 ?
+        this.shadowColor
+            : CLEAR;
 };
 
 // BlockSymbolMorph //////////////////////////////////////////////////////////
