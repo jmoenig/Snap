@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-22';
+var morphicVersion = '2020-July-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11284,10 +11284,12 @@ HandMorph.prototype.processMouseDown = function (event) {
         posInDocument = getDocumentPositionOf(this.world.worldCanvas);
 
     // update my position, in case I've just been initialized
-    this.setPosition(new Point(
-        event.pageX - posInDocument.x,
-        event.pageY - posInDocument.y
-    ));
+    if (event.pageX) {
+        this.setPosition(new Point(
+            event.pageX - posInDocument.x,
+            event.pageY - posInDocument.y
+        ));
+    }
 
     // process the actual event
     this.destroyTemporaries();

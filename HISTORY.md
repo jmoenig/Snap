@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-23
+* morphic: fixed mouseDown events for touch devices
+
 ### 2020-07-22
 * morphic, blocks, gui: tweaked block-fading mouse-over
 * blocks, threads: tweaked context visualizations to be alpha-independent
