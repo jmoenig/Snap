@@ -70,6 +70,16 @@ describe('undo', function() {
                 `Block not restored to ${initialPosition} (${block.position()})`
             );
         });
+
+        it('should restore pos after undo deletion', async function() {
+            driver.dragAndDrop(block, driver.palette().center());
+            await driver.actionsSettled();
+            const undoId = driver.ide().currentSprite.scripts.undoOwnerId();
+            await SnapUndo.undo(undoId);
+            block = SnapActions.getBlockFromId(block.id);
+            const msg = `Block not restored to ${initialPosition} (${block.position()})`;
+            assert(initialPosition.eq(block.position()), msg);
+        });
     });
 
     describe('replace inputs', function() {

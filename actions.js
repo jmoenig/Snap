@@ -1374,10 +1374,9 @@ ActionManager.prototype.onSetBlocksPositions = function(ids, positions) {
 };
 
 ActionManager.prototype.getLastGrabPosition = function() {
-    var hand = this.ide().root().hand,
-        origin = hand.grabOrigin && hand.grabOrigin.origin;
+    var hand = this.ide().root().hand;
 
-    return origin && hand.grabOrigin.position.add(origin.position());
+    return hand.grabOrigin.position;
 };
 
 ActionManager.prototype.getStandardPosition = function(block, position) {
