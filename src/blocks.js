@@ -2334,16 +2334,16 @@ function BlockLabelMorph(
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
-        return block.alpha > 0.4 ? this.color
-            : block.color.solid().darker(Math.max(block.alpha * 250, 0.1));
+        return block.alpha > 0.5 ? this.color
+            : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
     }
-    return block.alpha > 0.4 ? this.color
-        : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
+    return block.alpha > 0.5 ? this.color
+        : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
 
 };
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
-    return this.parentThatIsA(BlockMorph).alpha > 0.6 ?
+    return this.parentThatIsA(BlockMorph).alpha > 0.5 ?
         this.shadowColor
             : CLEAR;
 };
@@ -2374,8 +2374,12 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             return this.color.mixed(block.alpha, WHITE);
         }
         if (this.color.eq(WHITE)) {
-            return block.alpha > 0.4 ? this.color
-                : block.color.solid().darker(Math.max(block.alpha * 250, 0.1));
+            return this.parent.alpha > 0.5 ? this.color
+                : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
+        }
+        if (this.color.eq(BLACK)) {
+            return this.parent.alpha > 0.5 ? this.color
+                : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
         }
         return this.color;
     }
@@ -2386,18 +2390,18 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
         );
     }
     if (this.color.eq(BLACK)) {
-        return block.alpha > 0.4 ? this.color
-            : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
+        return block.alpha > 0.5 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     if (this.color.eq(WHITE)) {
-        return block.alpha > 0.4 ? this.color
-            : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
+        return this.parent.alpha > 0.5 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     return this.color;
 };
 
 BlockSymbolMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
+    return this.parent.alpha > 0.5 ? this.shadowColor : CLEAR;
 };
 
 // BlockMorph //////////////////////////////////////////////////////////
@@ -9981,11 +9985,11 @@ InputSlotStringMorph.prototype.getRenderColor = function () {
         }
         return this.parent.alpha > 0.4 ? this.color : BLACK;
     }
-    return this.parent.alpha > 0.3 ? this.color : WHITE;
+    return this.parent.alpha > 0.4 ? this.color : WHITE;
 };
 
 InputSlotStringMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.6 ? this.shadowColor : CLEAR;
+    return this.parent.alpha > 0.4 ? this.shadowColor : CLEAR;
 };
 
 // InputSlotTextMorph ///////////////////////////////////////////////
