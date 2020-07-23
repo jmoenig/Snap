@@ -4,7 +4,8 @@
 
 ### 2020-07-23
 * morphic: fixed mouseDown events for touch devices
-* morphic, gui: added separators to list morphs, '~' for the libraries dialog 
+* morphic, gui: added separators to list morphs, '~' for the libraries dialog
+* blocks: tweaked block-fading coloring 
 
 ### 2020-07-22
 * morphic, blocks, gui: tweaked block-fading mouse-over

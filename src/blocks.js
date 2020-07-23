@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-22';
+modules.blocks = '2020-July-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2335,12 +2335,11 @@ BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
         return block.alpha > 0.4 ? this.color
-            : (block.alpha > 0.2 ? BLACK
-                : block.color.solid());
+            : block.color.solid().darker(Math.max(block.alpha * 250, 0.1));
     }
     return block.alpha > 0.4 ? this.color
-        : (block.alpha > 0.2 ? WHITE
-            : block.color.solid());
+        : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
+
 };
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
@@ -2369,31 +2368,30 @@ function BlockSymbolMorph(name, size, color, shadowOffset, shadowColor) {
 }
 
 BlockSymbolMorph.prototype.getRenderColor = function () {
+    var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
         if (this.isFading) {
-            return this.color.mixed(this.parent.alpha, WHITE);
+            return this.color.mixed(block.alpha, WHITE);
         }
         if (this.color.eq(WHITE)) {
-            return this.parent.alpha > 0.4 ? this.color
-                : (this.parent.alpha > 0.2 ? BLACK
-                    : this.parent.color.solid());
+            return block.alpha > 0.4 ? this.color
+                : block.color.solid().darker(Math.max(block.alpha * 250, 0.1));
         }
         return this.color;
     }
     if (this.isFading) {
         return this.color.mixed(
-            this.parent.alpha,
+            block.alpha,
             SpriteMorph.prototype.paletteColor
         );
     }
     if (this.color.eq(BLACK)) {
-        return this.parent.alpha > 0.4 ? this.color
-            : (this.parent.alpha > 0.2 ? WHITE
-                : this.parent.color.solid());
+        return block.alpha > 0.4 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
     }
     if (this.color.eq(WHITE)) {
-        return this.parent.alpha > 0.2 ? WHITE
-                : this.parent.color.solid();
+        return block.alpha > 0.4 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 250, 0.1));
     }
     return this.color;
 };
