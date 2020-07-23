@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-22';
+modules.gui = '2020-July-23';
 
 // Declarations
 
@@ -7855,7 +7855,8 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         this.librariesData,
         element => element.name,
         null,
-        () => this.importLibrary()
+        () => this.importLibrary(),
+        '~' // separator
     );
 
     this.fixListFieldItemColors();

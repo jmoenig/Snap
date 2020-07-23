@@ -10745,7 +10745,7 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format, doubleClickAction) {
+function ListMorph(elements, labelGetter, format, onDoubleClick, separator) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -10778,7 +10778,8 @@ function ListMorph(elements, labelGetter, format, doubleClickAction) {
             return element.toString();
         },
         format || [],
-        doubleClickAction // optional callback
+        onDoubleClick, // optional callback
+        separator // string indicating a horizontal line between items
     );
 }
 
@@ -10786,7 +10787,8 @@ ListMorph.prototype.init = function (
     elements,
     labelGetter,
     format,
-    doubleClickAction
+    onDoubleClick,
+    separator
 ) {
     ListMorph.uber.init.call(this);
 
@@ -10801,7 +10803,8 @@ ListMorph.prototype.init = function (
     this.selected = null; // actual element currently selected
     this.active = null; // menu item representing the selected element
     this.action = null;
-    this.doubleClickAction = doubleClickAction || null;
+    this.doubleClickAction = onDoubleClick || null;
+    this.separator = separator || '';
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -10821,7 +10824,8 @@ ListMorph.prototype.buildListContents = function () {
     this.elements.forEach(element => {
         var color = null,
             bold = false,
-            italic = false;
+            italic = false,
+            label;
 
         this.format.forEach(pair => {
             if (pair[1].call(null, element)) {
@@ -10834,15 +10838,21 @@ ListMorph.prototype.buildListContents = function () {
                 }
             }
         });
-        this.listContents.addItem(
-            this.labelGetter(element), // label string
-            element, // action
-            null, // hint
-            color,
-            bold,
-            italic,
-            this.doubleClickAction
-        );
+
+        label = this.labelGetter(element);
+        if (label === this.separator) {
+            this.listContents.addLine();
+        } else {
+            this.listContents.addItem(
+                label, // label string
+                element, // action
+                null, // hint
+                color,
+                bold,
+                italic,
+                this.doubleClickAction
+            );
+        }
     });
     this.listContents.isListContents = true;
     this.listContents.createItems();
