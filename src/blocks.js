@@ -9983,13 +9983,13 @@ InputSlotStringMorph.prototype.getRenderColor = function () {
         if (this.isEditable) {
             return this.color;
         }
-        return this.parent.alpha > 0.4 ? this.color : BLACK;
+        return this.parent.alpha > 0.5 ? this.color : BLACK;
     }
-    return this.parent.alpha > 0.4 ? this.color : WHITE;
+    return this.parent.alpha > 0.25 ? this.color : WHITE;
 };
 
 InputSlotStringMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.4 ? this.shadowColor : CLEAR;
+    return this.parent.alpha > 0.25 ? this.shadowColor : CLEAR;
 };
 
 // InputSlotTextMorph ///////////////////////////////////////////////
