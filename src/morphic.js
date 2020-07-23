@@ -10834,15 +10834,19 @@ ListMorph.prototype.buildListContents = function () {
                 }
             }
         });
-        this.listContents.addItem(
-            this.labelGetter(element), // label string
-            element, // action
-            null, // hint
-            color,
-            bold,
-            italic,
-            this.doubleClickAction
-        );
+		if (this.labelGetter(element) == "~") {
+			this.listContents.addLine(2);
+		} else {
+	        this.listContents.addItem(
+    	        this.labelGetter(element), // label string
+        	    element, // action
+            	null, // hint
+	            color,
+    	        bold,
+        	    italic,
+            	this.doubleClickAction
+	        );
+		};
     });
     this.listContents.isListContents = true;
     this.listContents.createItems();

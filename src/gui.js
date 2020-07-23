@@ -7870,6 +7870,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
 
     this.listField.action = (item) => {
         if (isNil(item)) {return; }
+	if (item.fileName == "") {alert("foo"); return;}
 
         this.notesText.text = localize(item.description || '');
         this.notesText.rerender();
