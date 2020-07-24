@@ -8885,10 +8885,14 @@ InputSlotMorph.prototype.menuFromDict = function (
             this.fontSize
         );
 
-	function update (num) {
+	function update(num) {
     	myself.setContents(num);
         myself.reactToSliderEdit();
  	}
+
+    function getImg(block) {
+        return () => block.fullImage();
+    }
 
     if (choices instanceof Function) {
         choices = choices.call(this);
@@ -8907,7 +8911,7 @@ InputSlotMorph.prototype.menuFromDict = function (
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
                 menu.addItem(
-                    this.doWithAlpha(1, () => choices[key].fullImage()),
+                    this.doWithAlpha(1, getImg(choices[key])),
                     choices[key]
                 );
             } else if (key.indexOf('§_dir') === 0) {
