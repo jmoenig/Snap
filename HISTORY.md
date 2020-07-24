@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-24
+* gui: cleaned up block-fading pre-sets
+
 ### 2020-07-23
 * morphic: fixed mouseDown events for touch devices
 * morphic, gui: added separators to list morphs, '~' for the libraries dialog

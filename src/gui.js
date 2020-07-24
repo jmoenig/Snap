@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-23';
+modules.gui = '2020-July-24';
 
 // Declarations
 
@@ -5706,11 +5706,8 @@ IDE_Morph.prototype.userFadeBlocks = function () {
         null, // pic
         {
             'block-solid (0)' : 0,
-            'reduced (39)' : 39,
-            'medium (49)' : 49,
-            'light (59)' : 59,
-            'semi (69)' : 69,
-            'glassy (79)' : 79,
+            'medium (50)' : 50,
+            'light (70)' : 70,
             'shimmering (80' : 80,
             'elegant (90)' : 90,
             'subtle (95)' : 95,
