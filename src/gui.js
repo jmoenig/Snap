@@ -5708,7 +5708,7 @@ IDE_Morph.prototype.userFadeBlocks = function () {
             'block-solid (0)' : 0,
             'medium (50)' : 50,
             'light (70)' : 70,
-            'shimmering (80' : 80,
+            'shimmering (80)' : 80,
             'elegant (90)' : 90,
             'subtle (95)' : 95,
             'text-only (100)' : 100
