@@ -1964,7 +1964,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding - 6
+            this.categories.bottom() - this.spriteBar.top() - padding - 8
         ));
         this.spriteBar.fixLayout();
 
