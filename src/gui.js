@@ -1173,7 +1173,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
-    this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+    // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -1592,7 +1592,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     this.spriteBar.fixLayout = function () {
         this.tabBar.setLeft(this.left());
-        this.tabBar.setBottom(this.bottom());
+        this.tabBar.setBottom(this.bottom() + myself.padding);
     };
 };
 
@@ -1970,7 +1970,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
         // spriteEditor
         if (this.spriteEditor.isVisible) {
-            this.spriteEditor.setPosition(this.spriteBar.bottomLeft());
+            this.spriteEditor.setPosition(new Point(
+                this.spriteBar.left(),
+                this.spriteBar.bottom() + padding
+            ));
             this.spriteEditor.setExtent(new Point(
                 this.spriteBar.width(),
                 this.bottom() - this.spriteEditor.top()
@@ -8421,9 +8424,12 @@ SpriteIconMorph.prototype.render = function (ctx) {
         );
         break;
     default:
-        this.drawBackground(ctx, this.color);
+        this.drawBackground(ctx, this.getRenderColor());
     }
 };
+
+SpriteIconMorph.prototype.getRenderColor =
+    ScriptsMorph.prototype.getRenderColor;
 
 // SpriteIconMorph drag & drop
 
