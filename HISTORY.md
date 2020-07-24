@@ -7,6 +7,7 @@
 * updated German translation
 * gui: tweaked IDE colors for block-fading
 * blocks, threads, byob, widgets: tweaked block representations in widgets for fading
+* blocks, byob: tweaked more block representations in widgets for fading
 
 ### 2020-07-23
 * morphic: fixed mouseDown events for touch devices

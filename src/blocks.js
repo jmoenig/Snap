@@ -2768,7 +2768,7 @@ BlockMorph.prototype.userMenu = function () {
             "Variable name",
             myself.blockSpec,
             world,
-            blck.fullImage(), // pic
+            blck.doWithAlpha(1, () => blck.fullImage()), // pic
             InputSlotMorph.prototype.getVarNamesDict.call(myself)
         );
     }
@@ -3314,7 +3314,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
-            block.fullImage(),
+            block.doWithAlpha(1, () => block.fullImage()),
             () => this.setSelector(selector, -offset)
         );
     });
@@ -3521,7 +3521,7 @@ BlockMorph.prototype.mapToHeader = function () {
         help,
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImage();
+    pic = block.doWithAlpha(1, () => block.fullImage());
     if (this.isCustomBlock) {
         help = 'Enter code that corresponds to the block\'s definition. ' +
             'Use the formal parameter\nnames as shown and <body> to ' +
@@ -3558,7 +3558,7 @@ BlockMorph.prototype.mapToCode = function () {
         block = this.codeMappingHeader(),
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImage();
+    pic = block.doWithAlpha(1, () => block.fullImage());
     new DialogBoxMorph(
         this,
         code => {
@@ -3763,7 +3763,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
         'Variable name',
         oldName,
         this.world(),
-        cpy.fullImage(), // pic
+        cpy.doWithAlpha(1, () => cpy.fullImage()), // pic
         InputSlotMorph.prototype.getVarNamesDict.call(this)
     );
 
@@ -8906,7 +8906,10 @@ InputSlotMorph.prototype.menuFromDict = function (
             if (key[0] === '~') {
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
-                menu.addItem(choices[key].fullImage(), choices[key]);
+                menu.addItem(
+                    this.doWithAlpha(1, () => choices[key].fullImage()),
+                    choices[key]
+                );
             } else if (key.indexOf('§_dir') === 0) {
 			    dial = new DialMorph();
     			dial.rootForGrab = function () {return this; };
@@ -9753,7 +9756,7 @@ InputSlotMorph.prototype.render = function (ctx) {
 	// draw my "wish" block, if any
 	if (this.selectedBlock) {
  		ctx.drawImage(
-        	this.selectedBlock.fullImage(),
+        	this.doWithAlpha(1, () => this.selectedBlock.fullImage()),
             this.edge + this.typeInPadding,
             this.edge
         );
