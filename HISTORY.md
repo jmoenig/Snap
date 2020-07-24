@@ -5,7 +5,8 @@
 ### 2020-07-24
 * gui: cleaned up block-fading pre-sets
 * updated German translation
-* tweaked IDE colors for block-fading
+* gui: tweaked IDE colors for block-fading
+* blocks, threads, byob, widgets: tweaked block representations in widgets for fading
 
 ### 2020-07-23
 * morphic: fixed mouseDown events for touch devices

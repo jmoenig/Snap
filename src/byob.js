@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-July-01';
+modules.byob = '2020-July-24';
 
 // Declarations
 
@@ -1228,7 +1228,6 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);
     block = method.blockInstance();
-    block.addShadow();
     new DialogBoxMorph(
         this,
         () => {
@@ -1264,7 +1263,13 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
         'Delete Custom Block',
         localize('block deletion dialog text'), // long string lookup
         this.world(),
-        block.fullImage()
+        block.doWithAlpha(
+            1,
+            () => {
+                block.addShadow();
+                return block.fullImage();
+            }
+        )
     );
 };
 

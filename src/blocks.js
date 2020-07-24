@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-23';
+modules.blocks = '2020-July-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3481,7 +3481,6 @@ BlockMorph.prototype.showHelp = function () {
         if (comment) {
             block = def.blockInstance();
             block.refreshDefaults(def);
-            block.addShadow();
             comment = comment.fullCopy();
             comment.contents.parse();
             help = '';
@@ -3492,7 +3491,13 @@ BlockMorph.prototype.showHelp = function () {
                 'Help',
                 help.substr(1),
                 myself.world(),
-                block.fullImage()
+                block.doWithAlpha(
+                    1,
+                    () => {
+                        block.addShadow();
+                        return block.fullImage();
+                    }
+                )
             );
             return;
         }
@@ -4051,6 +4056,14 @@ BlockMorph.prototype.scriptPic = function () {
     );
     ctx.drawImage(scr, 0, 0);
     return pic;
+};
+
+BlockMorph.prototype.clearAlpha = function () {
+    this.forAllChildren(m => {
+        if (m instanceof BlockMorph) {
+            delete m.alpha;
+        }
+    });
 };
 
 // BlockMorph drawing

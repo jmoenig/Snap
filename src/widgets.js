@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-July-21';
+modules.widgets = '2020-July-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1351,7 +1351,15 @@ ToggleElementMorph.prototype.init = function (
 // ToggleElementMorph drawing:
 
 ToggleElementMorph.prototype.render = function (ctx) {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+    var shading = !MorphicPreferences.isFlat || this.is3D,
+        shadow = () => {
+            if (shading) {
+                this.element.addShadow(
+                    this.shadowOffset,
+                    this.userState === 'normal' ? 0 : this.shadowAlpha
+                );
+            }
+        };
 
     this.color = this.element.color;
     this.element.removeShadow();
@@ -1366,13 +1374,22 @@ ToggleElementMorph.prototype.render = function (ctx) {
             this.element[this.builder](this.contrast);
         }
     }
-    if (shading) {
-        this.element.addShadow(
-            this.shadowOffset,
-            this.userState === 'normal' ? 0 : this.shadowAlpha
+    if (this.element.doWithAlpha) {
+        ctx.drawImage(
+            this.element.doWithAlpha(
+                1,
+                () => {
+                    shadow();
+                    return this.element.fullImage();
+                }
+            ),
+            0,
+            0
         );
+    } else {
+        shadow();
+        ctx.drawImage(this.element.fullImage(), 0, 0);
     }
-    ctx.drawImage(this.element.fullImage(), 0, 0);
 
     // reset element
     this.element.removeShadow();
