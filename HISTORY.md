@@ -4,6 +4,7 @@
 
 ### 2020-07-26
 * objects: fixed sprite speech balloon display for sounds
+* cleaned up, grouped and annotated libraries, thanks, Brian!
 
 ### 2020-07-24
 * gui: cleaned up block-fading pre-sets
