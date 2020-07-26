@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-26
+* objects: fixed sprite speech balloon display for sounds
+
 ### 2020-07-24
 * gui: cleaned up block-fading pre-sets
 * updated German translation

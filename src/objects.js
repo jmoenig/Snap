@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-July-20';
+modules.objects = '2020-July-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -9476,7 +9476,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         // scale contents image
         scaledImg = newCanvas(contents.extent().multiplyBy(this.scale));
         scaledImg.getContext('2d').drawImage(
-            contents.cachedImage,
+            contents.getImage(),
             0,
             0,
             scaledImg.width,
