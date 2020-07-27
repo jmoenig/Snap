@@ -2,10 +2,40 @@
 
 ## in development:
 
+## 6.1.0 - dev - :
+* **New Features:**
+    * fade blocks
+* **Notable Changes:**
+    * changed label of green "length of" reporter to "length of text"
+    * new iconic buttons for grow, shrink and flip actions in the paint editor, thanks, Jadga!
+    * UI: automatically switch to scripts tab when dragging a block into the editor pane
+    * slightly darker default (non-flat) IDE colors, more cotrast
+    * enabled grouping the libraries dialog, thanks, Brian!
+    * cleaned up, grouped and annotated libraries, thanks, Brian!
+    * updated "About Snap!" dialog box
+* **Notable Fixes:**
+    * fixed FOR EACH for hybrid lists, thanks, Brian!
+    * fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
+    * fixed keyboard shortcuts for saving projects (ctrl + s), finding blocks (ctrl + f) etc..
+    * fixed shift-key constrain mode and "clear" in paint and vector editors, thanks, Joan!
+    * made remaining synchronous http requests asynch (url: #open, #run)
+    * update the Hand's position on mouse-down - avoid triggering at the origin point if clicking before the mouse has been moved
+    * fixed a list-watcher direct-editing index offset bug
+    * fixed input slider target update rendering
+    * fixed sprite speech balloon display for sounds
+    * library browser: import selected library on pressing enter
+    * fixed binding contexts to other receivers (variable scope for ASK / TELL)
+    * fixed numeric input fields in dialog boxes
+* **Documentation Updates:**
+    * added migration guide for Morphic2/Snap!6
+* **Translation Updates:**
+    * German
+
 ### 2020-07-27
 * threads: fixed binding contexts to other receivers (variable scope for ASK / TELL)
 * gui: updated "About Snap!" dialog box
 * gui: library browser: import selected library on pressing enter
+* widgets: fixed numeric input fields in dialog boxes
 
 ### 2020-07-26
 * objects: fixed sprite speech balloon display for sounds
@@ -69,7 +99,7 @@
 * threads: fixed FOR EACH for hybrid lists, thanks, Brian!
 * threads: fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
 * locale: added English translation for 'length of %s' to 'length of text %s' to avoid confusion among both blocks
-* updated German translation for  'length of %s'
+* updated German translation for 'length of %s'
 
 ## 6.0.0:
 * **New Features:**

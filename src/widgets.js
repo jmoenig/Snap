@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2020-July-24';
+modules.widgets = '2020-July-27';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2900,7 +2900,11 @@ InputFieldMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
-    var contents = new StringFieldMorph(text || ''),
+    var contents = new StringFieldMorph(
+            text || '',
+            null, null, null, null, null,
+            isNumeric || false
+        ),
         arrow = new ArrowMorph(
             'down',
             0,
@@ -2916,7 +2920,6 @@ InputFieldMorph.prototype.init = function (
     contents.fixLayout();
 
     this.oldContentsExtent = contents.extent();
-    this.isNumeric = isNumeric || false;
 
     InputFieldMorph.uber.init.call(this);
     this.color = WHITE;
