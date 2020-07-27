@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-24';
+modules.blocks = '2020-July-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6004,7 +6004,7 @@ ReporterBlockMorph.prototype.drawEdges = function (ctx) {
 ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
     // add 3D-Effect
     var h = this.height(),
-        r = Math.min(this.rounding, h / 2),
+        r = Math.max(Math.min(this.rounding, h / 2), this.edge),
         w = this.width(),
         shift = this.edge / 2,
         y,
@@ -9732,7 +9732,7 @@ InputSlotMorph.prototype.render = function (ctx) {
             this.drawRectBorder(ctx);
         }
     } else {
-        r = (this.height() - (this.edge * 2)) / 2;
+        r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
         ctx.beginPath();
         ctx.arc(
             r + this.edge,
@@ -9846,7 +9846,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
 
 InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     var shift = this.edge * 0.5,
-        r = (this.height() - (this.edge * 2)) / 2,
+        r = Math.max((this.height() - (this.edge * 2)) / 2, 0),
         start,
         end,
         gradient;
@@ -9900,7 +9900,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     ctx.lineTo(this.width() - r - this.edge, this.height() - shift);
     ctx.stroke();
 
-    r = this.height() / 2;
+    r = Math.max(this.height() / 2, this.edge);
 
     ctx.shadowOffsetX = shift;
     ctx.shadowOffsetY = shift;

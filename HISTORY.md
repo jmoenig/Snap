@@ -26,6 +26,8 @@
     * library browser: import selected library on pressing enter
     * fixed binding contexts to other receivers (variable scope for ASK / TELL)
     * fixed numeric input fields in dialog boxes
+    * fixed reacting to keyboard input in dialog boxes
+    * fixed zoom blocks type-in dialog
 * **Documentation Updates:**
     * added migration guide for Morphic2/Snap!6
 * **Translation Updates:**
@@ -36,6 +38,8 @@
 * gui: updated "About Snap!" dialog box
 * gui: library browser: import selected library on pressing enter
 * widgets: fixed numeric input fields in dialog boxes
+* widgets: fixed reacting to keyboard input in dialog boxes
+* blocks: fixed zoom blocks type-in dialog
 
 ### 2020-07-26
 * objects: fixed sprite speech balloon display for sounds

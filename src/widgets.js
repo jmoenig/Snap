@@ -1682,7 +1682,7 @@ DialogBoxMorph.prototype.prompt = function (
         }
     };
 
-    txt.reactToKeystroke = function () {
+    txt.reactToInput = function () {
         var inp = txt.getValue();
         if (sld) {
             inp = Math.max(inp, sliderMin);
