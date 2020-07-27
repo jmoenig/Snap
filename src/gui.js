@@ -7766,6 +7766,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
 
     this.ide = ide;
     this.key = 'importLibrary';
+    this.action = 'importLibrary';
     this.librariesData = librariesData; // [{name: , fileName: , description:}]
 
     // I contain a cached version of the libaries I have displayed,
@@ -7793,7 +7794,7 @@ LibraryImportDialogMorph.prototype.buildContents = function () {
     this.initializeLibraryDescription();
     this.installLibrariesList();
 
-    this.addButton('importLibrary', 'Import');
+    this.addButton('ok', 'Import');
     this.addButton('cancel', 'Cancel');
 
     this.setExtent(new Point(460, 455));
@@ -7989,6 +7990,8 @@ LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
 };
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
+    if (!this.listField.selected) {return; }
+
     var blocks,
         ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
@@ -8011,8 +8014,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             }
         );
     }
-
-    this.destroy();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
