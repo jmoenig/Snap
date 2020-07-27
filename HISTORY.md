@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-07-27
+* threads: fixed binding contexts to other receivers (variable scope for ASK / TELL)
+
 ### 2020-07-26
 * objects: fixed sprite speech balloon display for sounds
 * cleaned up, grouped and annotated libraries, thanks, Brian!
