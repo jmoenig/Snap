@@ -4,6 +4,7 @@
 
 ### 2020-07-27
 * threads: fixed binding contexts to other receivers (variable scope for ASK / TELL)
+* gui: updated "About Snap!" dialog box
 
 ### 2020-07-26
 * objects: fixed sprite speech balloon display for sounds
