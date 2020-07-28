@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-27';
+modules.blocks = '2020-July-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4165,6 +4165,9 @@ BlockMorph.prototype.addHighlight = function (oldHighlight) {
         highlight;
 
     if (isHidden) {this.show(); }
+    if (SyntaxElementMorph.prototype.alpha < 1) {
+        this.clearAlpha();
+    }
     highlight = this.highlight(
         oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,

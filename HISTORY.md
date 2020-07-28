@@ -33,6 +33,9 @@
 * **Translation Updates:**
     * German
 
+### 2020-07-28
+* blocks: tweaked stack-highlight for (partially) faded blocks
+
 ### 2020-07-27
 * threads: fixed binding contexts to other receivers (variable scope for ASK / TELL)
 * gui: updated "About Snap!" dialog box
