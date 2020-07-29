@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-28';
+modules.blocks = '2020-July-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4217,13 +4217,16 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
-                blur : border;
+                blur : border,
+        offset = new Point(edge, edge);
+
     highlight.bounds.setExtent(fb.extent().add(edge * 2));
+    highlight.holes = [fb.translateBy(this.position().neg().add(offset))];
     highlight.color = color;
     highlight.cachedImage = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
-    highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
+    highlight.setPosition(fb.origin.subtract(offset));
     return highlight;
 };
 
