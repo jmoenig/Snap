@@ -28,14 +28,14 @@
     * fixed numeric input fields in dialog boxes
     * fixed reacting to keyboard input in dialog boxes
     * fixed zoom blocks type-in dialog
-    * added "hole" to stack-highlights to enable clicking inside open areas
+    * made stack-highlights un-touchable
 * **Documentation Updates:**
     * added migration guide for Morphic2/Snap!6
 * **Translation Updates:**
     * German
 
 ### 2020-07-29
-* blocks: added "hole" to stack-highlights to enable clicking inside open areas
+* blocks: made stack-highlights un-touchable
 
 ### 2020-07-28
 * blocks: tweaked stack-highlight for (partially) faded blocks

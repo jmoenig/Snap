@@ -4217,16 +4217,14 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
-                blur : border,
-        offset = new Point(edge, edge);
-
+                blur : border;
     highlight.bounds.setExtent(fb.extent().add(edge * 2));
-    highlight.holes = [fb.translateBy(this.position().neg().add(offset))];
+    highlight.holes = [highlight.bounds]; // make the highlight untouchable
     highlight.color = color;
     highlight.cachedImage = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
-    highlight.setPosition(fb.origin.subtract(offset));
+    highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
     return highlight;
 };
 
