@@ -2,7 +2,7 @@
 
 ## in development:
 
-## 6.1.0 - dev - :
+## 6.1.0:
 * **New Features:**
     * fade blocks
 * **Notable Changes:**
@@ -36,6 +36,7 @@
 
 ### 2020-07-30
 * gui: updated Jadga as contributor in credits
+* prepared release
 
 ### 2020-07-29
 * blocks: made stack-highlights un-touchable

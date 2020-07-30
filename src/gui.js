@@ -3136,12 +3136,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
-/*
     menu.addItem(
         'Fade blocks...',
         'userFadeBlocks'
     );
-*/
     menu.addItem(
         'Stage size...',
         'userSetStageSize'
@@ -3973,7 +3971,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 6.1.0 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 6.1.0\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2020 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
