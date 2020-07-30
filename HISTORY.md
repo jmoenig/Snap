@@ -5,6 +5,8 @@
 ## 6.1.0:
 * **New Features:**
     * fade blocks
+* **Documentation Updates:**
+    * added migration guide for Morphic2/Snap!6
 * **Notable Changes:**
     * changed label of green "length of" reporter to "length of text"
     * new iconic buttons for grow, shrink and flip actions in the paint editor, thanks, Jadga!
@@ -29,8 +31,6 @@
     * fixed reacting to keyboard input in dialog boxes
     * fixed zoom blocks type-in dialog
     * made stack-highlights un-touchable
-* **Documentation Updates:**
-    * added migration guide for Morphic2/Snap!6
 * **Translation Updates:**
     * German
 
