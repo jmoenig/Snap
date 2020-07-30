@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-July-27';
+modules.gui = '2020-July-30';
 
 // Declarations
 
@@ -4023,6 +4023,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
+        + '\nJadga Hügle: Icons and countless other contributions'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'

@@ -34,6 +34,9 @@
 * **Translation Updates:**
     * German
 
+### 2020-07-30
+* gui: updated Jadga as contributor in credits
+
 ### 2020-07-29
 * blocks: made stack-highlights un-touchable
 
