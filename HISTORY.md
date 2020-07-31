@@ -2,6 +2,12 @@
 
 ## in development:
 
+## 6.1.1:
+* rolled back scope binding change
+
+### 2020-07-31
+* rolled back scope binding change
+
 ## 6.1.0:
 * **New Features:**
     * fade blocks

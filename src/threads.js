@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-27';
+modules.threads = '2020-July-31';
 
 var ThreadManager;
 var Process;
@@ -5037,7 +5037,19 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.variables = copy(result.outerContext.variables);
         result.outerContext.receiver = otherObj;
-        result.outerContext.variables.parentFrame = otherObj.variables;
+
+        // under investigation
+        // the following code should be replaced by
+        // result.outerContext.variables.parentFrame = otherObj.variables;
+        
+        if (result.outerContext.variables.parentFrame) {
+            result.outerContext.variables.parentFrame =
+                copy(result.outerContext.variables.parentFrame);
+            result.outerContext.variables.parentFrame.parentFrame =
+                otherObj.variables;
+        } else {
+            result.outerContext.variables.parentFrame = otherObj.variables;
+        }
     }
     return result;
 };
