@@ -2668,8 +2668,16 @@ Context.prototype.toPortableXML = function (serializer) {
 
             variables.vars = copy(this.outerContext.variables.vars);
             varNames.forEach(function(name) {
-                vf = myself.outerContext.variables.silentFind(name) ||
-                    myself.receiver.variables.silentFind(name);
+                var framesToSearch = [myself.outerContext.variables];
+                if (myself.receiver) {
+                    framesToSearch.push(myself.receiver.variables);
+                }
+
+                vf = framesToSearch.reduce(
+                    (vf, potential) => vf || potential.silentFind(name),
+                    null
+                );
+
                 if (vf) {
                     variables.vars[name] = vf.vars[name];
                 }
