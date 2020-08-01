@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-31';
+modules.threads = '2020-August-01';
 
 var ThreadManager;
 var Process;
@@ -5031,22 +5031,20 @@ Process.prototype.doSet = function (attribute, value) {
 Process.prototype.reportContextFor = function (context, otherObj) {
     // Private - return a copy of the context
     // and bind it to another receiver
-    var result = copy(context);
+    var result = copy(context),
+        receiverVars,
+        rootVars;
+
     result.receiver = otherObj;
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.variables = copy(result.outerContext.variables);
         result.outerContext.receiver = otherObj;
-
-        // under investigation
-        // the following code should be replaced by
-        // result.outerContext.variables.parentFrame = otherObj.variables;
-        
         if (result.outerContext.variables.parentFrame) {
-            result.outerContext.variables.parentFrame =
-                copy(result.outerContext.variables.parentFrame);
-            result.outerContext.variables.parentFrame.parentFrame =
-                otherObj.variables;
+            rootVars = result.outerContext.variables.parentFrame;
+            receiverVars = copy(otherObj.variables);
+            receiverVars.parentFrame = rootVars;
+            result.outerContext.variables.parentFrame = receiverVars;
         } else {
             result.outerContext.variables.parentFrame = otherObj.variables;
         }

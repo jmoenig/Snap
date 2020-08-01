@@ -2,6 +2,12 @@
 
 ## in development:
 
+## 6.1.2:
+* fixed variable scope for ASK/TELL
+
+### 2020-08-01
+* threads: fixed variable scope for ASK/TELL
+
 ## 6.1.1:
 * rolled back scope binding change
 
