@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2020-01-30', // this, too, will appear in the Translators tab
+        '2020-08-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -652,7 +652,7 @@ SnapTranslator.dict.ca = {
     'letter %idx of %s':
         'lletra %idx de %s',
     'length of %s':
-        'longitud de %s',
+        'longitud del text %s',
     'unicode of %s':
         'valor Unicode de %s',
     'unicode %n as letter':
@@ -845,6 +845,8 @@ SnapTranslator.dict.ca = {
         'Llengua...',
     'Zoom blocks...':
         'Mida dels blocs...',
+    'Fade blocks...':
+        'Esvaeix els blocs...',
     'Stage size...':
         'Mida de l\'escenari...',
     'Stage size':
@@ -1166,6 +1168,24 @@ SnapTranslator.dict.ca = {
         'gegant (8x)',
     'monstrous (10x)':
         'monstruós (10x)',
+
+    // fade blocks
+    'Fade blocks':
+        'Esvaïment dels blocs',
+    'block-solid (0)':
+        'normal (0)',
+    'medium (50)':
+        'mitjà (50)',
+    'light (70)':
+        'clar (70)',
+    'shimmering (80)':
+        'brillant (80)',
+    'elegant (90)':
+        'elegant (90)',
+    'subtle (95)':
+        'subtil (95)',
+    'text-only (100)':
+        'només text (100)',
 
     // Project Manager
     'Untitled':
@@ -1795,6 +1815,8 @@ SnapTranslator.dict.ca = {
         's\'han d\'acceptar\les condicions d\'ús.',
     'Examples':
         'Exemples',
+    'Computer':
+        'Ordinador',
     'You are not logged in':
         'No esteu validats',
     'Updating\nproject list...':
@@ -2530,6 +2552,8 @@ SnapTranslator.dict.ca = {
         'faci scroll avall',
     'Resend Verification Email...':
         'Torna a enviar l\'email de verificació...',
+    'Open in Community Site':
+        'Obre en el Web Social',
     'Resend verification email':
         'Reenviament del mail',
     'User name:':
