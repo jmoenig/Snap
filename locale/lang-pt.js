@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2020-04-06',
+        '2020-08-03',
 
     // GUI
     // control bar:
@@ -525,6 +525,8 @@ SnapTranslator.dict.pt = {
         'difunde a mensagem %msg',
     'broadcast %msg and wait':
         'difunde a mensagem %msg e espera',
+    'send %msg to %spr':
+        'envia a mensagem %msg a %spr',
     'Message name':
         'Qual o nome da mensagem?',
     'message':
@@ -799,6 +801,8 @@ SnapTranslator.dict.pt = {
         'um valor',
     'is %l empty?':
         '%l está vazia',
+    'index of %s in %l':
+        'o índice de %s em %l',
     'map %repRing over %l':
         'a aplicação de %repRing aos itens de %l',
     'keep items %predRing from %l':
@@ -823,6 +827,8 @@ SnapTranslator.dict.pt = {
         'o valor',
     'index':
         'o índice',
+    'append %lists':
+        'a concatenação de %lists',
     'add %s to %l':
         'acrescenta %s a %l',
     'delete %ida of %l':
@@ -901,9 +907,8 @@ SnapTranslator.dict.pt = {
         'blocos não usados removidos',
     'Export summary...':
         'Exportar resumo…',
-    'open a new browser browser window\n with a summary of this project':
-        'Abrir uma nova janela no navegador\ncontendo um resumo deste projecto',
-
+    'save a summary\nof this project':
+        'Guardar um resumo\ndeste projecto',
     'Contents':
         'Índice',
     'Kind of':
@@ -984,6 +989,8 @@ SnapTranslator.dict.pt = {
         'Língua…',
     'Zoom blocks...':
         'Ampliação dos blocos…',
+    'Fade blocks...':
+        'Desvanecimento de blocos…',
     'Stage size...':
         'Tamanho do palco…',
     'Stage size':
@@ -1114,6 +1121,12 @@ SnapTranslator.dict.pt = {
         'Ranhuras booleanas ternárias',
     'Inheritance support':
         'Suporte para herança',
+    'Hyper blocks support':
+        'Suporte para hiperblocos',
+    'uncheck to disable\nusing operators on lists and tables':
+         'Desassinalar para desactivar a utilização\nde operadores em listas e tabelas.',
+    'check to enable\nusing operators on lists and tables':
+         'Assinalar para activar a utilização\nde operadores em listas e tabelas.',
     'Log pen vectors':
         'Registar vectores da caneta',
     'uncheck to turn off\nlogging pen vectors':
@@ -1163,8 +1176,12 @@ SnapTranslator.dict.pt = {
         'remover',
     'script pic...':
         'fotografia do guião…',
-    'open a new window\nwith a picture of this script':
-        'Abrir uma nova janela com\numa fotografia deste guião.',
+    'save a picture\nof this script':
+        'guardar uma fotografia\ndeste guião',
+    'result pic...':
+        'fotografia do resultado…',
+    'save a picture of both\nthis script and its result':
+        'Guardar uma fotografia deste\nguião e do seu resultado.',
     'ringify':
         'adicionar anel',
     'unringify':
@@ -1285,6 +1302,8 @@ SnapTranslator.dict.pt = {
         'Vista de tabela',
     'open in dialog...':
         'abrir em caixa de diálogo…',
+    'blockify':
+        'como bloco',
     'reset columns':
         'reiniciar colunas',
     'items':
@@ -1330,6 +1349,24 @@ SnapTranslator.dict.pt = {
         'gigante (8x)',
     'monstrous (10x)':
         'monstruosa (10x)',
+
+    // desvanecimento de blocos
+    'Fade blocks':
+        'Desvanecimento de blocos',
+    'block-solid (0)':
+        'normal (0)',
+    'medium (50)':
+        'médio (50)',
+    'light (70)':
+        'leve (70)',
+    'cintilante (80)':
+        'schimmernd (80)',
+    'elegant (90)':
+        'elegante (90)',
+    'subtle (95)':
+        'subtil (95)',
+    'text-only (100)':
+        'apenas texto (100)',
 
     // Gestor de Projectos
      'Untitled':
@@ -2602,4 +2639,23 @@ SnapTranslator.dict.pt = {
         'o módulo',
     'angle':
         'o argumento',
+
+    'script pic':
+        'fotografia de guião',
+
+    'Enable command drops in all rings':
+        'Activar encaixe de comandos em todos os anéis',
+    'uncheck to disable\ndropping commands in reporter rings':
+        'Desassinalar para desactivar\no encaixe de comandos em anéis de reporter',
+    'check to enable\ndropping commands in all rings':
+        'Assinalar para activar\no encaixe de comandos em anéis de reporter',
+    'JIT compiler support':
+        'Suportar compilação JIT',
+    'EXPERIMENTAL! uncheck to disable live\nsupport for compiling':
+        'EXPERIMENTAL! Desassinalar para desactivar\no suporte da compilação dinâmica.',
+    'EXPERIMENTAL! check to enable\nsupport for compiling':
+        'EXPERIMENTAL! Assinalar para activar\no suporte da compilação dinâmica.',
+
+    'download script':
+        'descarregar guião',
 };
