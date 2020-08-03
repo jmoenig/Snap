@@ -65,6 +65,12 @@
         BoxMorph*
             CommentMorph
             ScriptFocusMorph
+        StringMorph*
+            BlockLabelMorph
+            InputSlotStringMorph
+            InputSlotTextMorph
+        SymbolMorph*
+            BlockSymbolMorph
 
     * from morphic.js
 
@@ -75,6 +81,8 @@
     defined. Use this list to locate code in this document:
 
         SyntaxElementMorph
+        BlockLabelMorph
+        BlockSymbolMorph
         BlockMorph
         CommandBlockMorph
         HatBlockMorph
@@ -86,6 +94,8 @@
         RingCommandSlotMorph
         CSlotMorph
         InputSlotMorph
+        InputSlotStringMorph
+        InputSlotTextMorph
         BooleanSlotMorph
         ArrowMorph
         TextSlotMorph
@@ -142,16 +152,18 @@ document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
-Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
+Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil, CLEAR,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-15';
+modules.blocks = '2020-July-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
+var BlockLabelMorph;
+var BlockSymbolMorph;
 var CommandBlockMorph;
 var ReporterBlockMorph;
 var ScriptsMorph;
@@ -159,6 +171,8 @@ var ArgMorph;
 var CommandSlotMorph;
 var CSlotMorph;
 var InputSlotMorph;
+var InputSlotStringMorph;
+var InputSlotTextMorph;
 var BooleanSlotMorph;
 var ArrowMorph;
 var ColorSlotMorph;
@@ -769,6 +783,15 @@ SyntaxElementMorph.prototype.unflash = function () {
         this.cachedNormalColor = null;
         this.setColor(clr);
     }
+};
+
+SyntaxElementMorph.prototype.doWithAlpha = function (alpha, callback) {
+    var current = SyntaxElementMorph.prototype.alpha,
+        result;
+    SyntaxElementMorph.prototype.alpha = alpha;
+    result = callback();
+    SyntaxElementMorph.prototype.alpha = current;
+    return result;
 };
 
 // SyntaxElementMorph zebra coloring
@@ -1567,12 +1590,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.add(this.labelPart('%loopArrow'));
             break;
         case '%loopArrow':
-            part = new SymbolMorph('loop');
+            part = new BlockSymbolMorph('loop');
             part.size = this.fontSize * 0.7;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
                     ZERO : this.embossing;
+            part.isFading = true;
             part.fixLayout();
             break;
         case '%clr':
@@ -1625,7 +1649,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     // symbols:
 
         case '%turtle':
-            part = new SymbolMorph('turtle');
+            part = new BlockSymbolMorph('turtle');
             part.size = this.fontSize * 1.2;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
@@ -1634,7 +1658,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%turtleOutline':
-            part = new SymbolMorph('turtleOutline');
+            part = new BlockSymbolMorph('turtleOutline');
             part.size = this.fontSize;
             part.color = WHITE;
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1644,7 +1668,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%clockwise':
-            part = new SymbolMorph('turnRight');
+            part = new BlockSymbolMorph('turnRight');
             part.size = this.fontSize * 1.5;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1654,7 +1678,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%counterclockwise':
-            part = new SymbolMorph('turnLeft');
+            part = new BlockSymbolMorph('turnLeft');
             part.size = this.fontSize * 1.5;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1664,7 +1688,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%greenflag':
-            part = new SymbolMorph('flag');
+            part = new BlockSymbolMorph('flag');
             part.size = this.fontSize * 1.5;
             part.color = new Color(0, 200, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1674,7 +1698,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%stop':
-            part = new SymbolMorph('octagon');
+            part = new BlockSymbolMorph('octagon');
             part.size = this.fontSize * 1.5;
             part.color = new Color(200, 0, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1684,7 +1708,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%pause':
-            part = new SymbolMorph('pause');
+            part = new BlockSymbolMorph('pause');
             part.size = this.fontSize;
             part.color = new Color(255, 220, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
@@ -1694,7 +1718,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%blitz':
-            part = new SymbolMorph('flash');
+            part = new BlockSymbolMorph('flash');
             part.size = this.fontSize;
             part.color = WHITE;
             part.isProtectedLabel = false; // zebra colors
@@ -1704,7 +1728,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fixLayout();
             break;
         case '%list':
-            part = new SymbolMorph('list');
+            part = new BlockSymbolMorph('list');
             part.size = this.fontSize;
             part.color = WHITE;
             part.shadowColor = this.color.darker(this.labelContrast);
@@ -1756,7 +1780,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fontStyle = this.labelFontStyle;
             part.fontSize = this.fontSize * (+tokens[1] || 1);
         } else {
-            part = new SymbolMorph(tokens[0]);
+            part = new BlockSymbolMorph(tokens[0]);
             part.size = this.fontSize * (+tokens[1] || 1.2);
         }
         part.color = new Color(
@@ -1770,7 +1794,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 ZERO : this.embossing;
         part.fixLayout();
     } else {
-        part = new StringMorph(
+        part = new BlockLabelMorph(
             spec, // text
             this.fontSize, // fontSize
             this.labelFontStyle, // fontStyle
@@ -1783,6 +1807,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             WHITE, // color
             this.labelFontName // fontName
         );
+
     }
     return part;
 };
@@ -2268,6 +2293,117 @@ SyntaxElementMorph.prototype.mappedCode = function (definitions) {
     return result;
 };
 
+// BlockLabelMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of single-line text written on a block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// BlockLabelMorph inherits from StringMorph:
+
+BlockLabelMorph.prototype = new StringMorph();
+BlockLabelMorph.prototype.constructor = BlockLabelMorph;
+BlockLabelMorph.uber = StringMorph.prototype;
+
+function BlockLabelMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    isNumeric,
+    shadowOffset,
+    shadowColor,
+    color,
+    fontName
+) {
+    this.init(
+        text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        isNumeric,
+        shadowOffset,
+        shadowColor,
+        color,
+        fontName
+    );
+}
+BlockLabelMorph.prototype.getRenderColor = function () {
+    var block = this.parentThatIsA(BlockMorph);
+    if (MorphicPreferences.isFlat) {
+        return block.alpha > 0.5 ? this.color
+            : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
+    }
+    return block.alpha > 0.5 ? this.color
+        : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
+
+};
+
+BlockLabelMorph.prototype.getShadowRenderColor = function () {
+    return this.parentThatIsA(BlockMorph).alpha > 0.5 ?
+        this.shadowColor
+            : CLEAR;
+};
+
+// BlockSymbolMorph //////////////////////////////////////////////////////////
+
+/*
+    I am a pictogram written on a block. I serve as a
+    container for sharing typographic attributes among my instances.
+    NOTE: I have an additional attribute ".isFading" that governs
+    my behavior when fading out the blocks I'm embedded in
+*/
+
+// BlockSymbolMorph inherits from SymbolMorph:
+
+BlockSymbolMorph.prototype = new SymbolMorph();
+BlockSymbolMorph.prototype.constructor = BlockSymbolMorph;
+BlockSymbolMorph.uber = SymbolMorph.prototype;
+
+function BlockSymbolMorph(name, size, color, shadowOffset, shadowColor) {
+    this.init(name, size, color, shadowOffset, shadowColor);
+}
+
+BlockSymbolMorph.prototype.getRenderColor = function () {
+    var block = this.parentThatIsA(BlockMorph);
+    if (MorphicPreferences.isFlat) {
+        if (this.isFading) {
+            return this.color.mixed(block.alpha, WHITE);
+        }
+        if (this.color.eq(WHITE)) {
+            return this.parent.alpha > 0.5 ? this.color
+                : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
+        }
+        if (this.color.eq(BLACK)) {
+            return this.parent.alpha > 0.5 ? this.color
+                : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
+        }
+        return this.color;
+    }
+    if (this.isFading) {
+        return this.color.mixed(
+            block.alpha,
+            SpriteMorph.prototype.paletteColor
+        );
+    }
+    if (this.color.eq(BLACK)) {
+        return block.alpha > 0.5 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
+    }
+    if (this.color.eq(WHITE)) {
+        return this.parent.alpha > 0.5 ? this.color
+            : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
+    }
+    return this.color;
+};
+
+BlockSymbolMorph.prototype.getShadowRenderColor = function () {
+    return this.parent.alpha > 0.5 ? this.shadowColor : CLEAR;
+};
+
 // BlockMorph //////////////////////////////////////////////////////////
 
 /*
@@ -2632,7 +2768,7 @@ BlockMorph.prototype.userMenu = function () {
             "Variable name",
             myself.blockSpec,
             world,
-            blck.fullImage(), // pic
+            blck.doWithAlpha(1, () => blck.fullImage()), // pic
             InputSlotMorph.prototype.getVarNamesDict.call(myself)
         );
     }
@@ -3178,7 +3314,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
-            block.fullImage(),
+            block.doWithAlpha(1, () => block.fullImage()),
             () => this.setSelector(selector, -offset)
         );
     });
@@ -3345,7 +3481,6 @@ BlockMorph.prototype.showHelp = function () {
         if (comment) {
             block = def.blockInstance();
             block.refreshDefaults(def);
-            block.addShadow();
             comment = comment.fullCopy();
             comment.contents.parse();
             help = '';
@@ -3356,7 +3491,13 @@ BlockMorph.prototype.showHelp = function () {
                 'Help',
                 help.substr(1),
                 myself.world(),
-                block.fullImage()
+                block.doWithAlpha(
+                    1,
+                    () => {
+                        block.addShadow();
+                        return block.fullImage();
+                    }
+                )
             );
             return;
         }
@@ -3380,7 +3521,7 @@ BlockMorph.prototype.mapToHeader = function () {
         help,
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImage();
+    pic = block.doWithAlpha(1, () => block.fullImage());
     if (this.isCustomBlock) {
         help = 'Enter code that corresponds to the block\'s definition. ' +
             'Use the formal parameter\nnames as shown and <body> to ' +
@@ -3417,7 +3558,7 @@ BlockMorph.prototype.mapToCode = function () {
         block = this.codeMappingHeader(),
         pic;
     block.addShadow(new Point(3, 3));
-    pic = block.fullImage();
+    pic = block.doWithAlpha(1, () => block.fullImage());
     new DialogBoxMorph(
         this,
         code => {
@@ -3622,7 +3763,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
         'Variable name',
         oldName,
         this.world(),
-        cpy.fullImage(), // pic
+        cpy.doWithAlpha(1, () => cpy.fullImage()), // pic
         InputSlotMorph.prototype.getVarNamesDict.call(this)
     );
 
@@ -3917,6 +4058,14 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
+BlockMorph.prototype.clearAlpha = function () {
+    this.forAllChildren(m => {
+        if (m instanceof BlockMorph) {
+            delete m.alpha;
+        }
+    });
+};
+
 // BlockMorph drawing
 
 BlockMorph.prototype.render = function (ctx) {
@@ -4016,6 +4165,9 @@ BlockMorph.prototype.addHighlight = function (oldHighlight) {
         highlight;
 
     if (isHidden) {this.show(); }
+    if (SyntaxElementMorph.prototype.alpha < 1) {
+        this.clearAlpha();
+    }
     highlight = this.highlight(
         oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,
@@ -4067,6 +4219,7 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
                 blur : border;
     highlight.bounds.setExtent(fb.extent().add(edge * 2));
+    highlight.holes = [highlight.bounds]; // make the highlight untouchable
     highlight.color = color;
     highlight.cachedImage = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
@@ -4078,7 +4231,7 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
 BlockMorph.prototype.highlightImage = function (color, border) {
     var fb, img, hi, ctx, out;
     fb = this.fullBounds().extent();
-    img = this.fullImage();
+    this.doWithAlpha(1, () => img = this.fullImage());
 
     hi = newCanvas(fb.add(border * 2));
     ctx = hi.getContext('2d');
@@ -4108,7 +4261,7 @@ BlockMorph.prototype.highlightImage = function (color, border) {
 BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
     var fb, img, hi, ctx;
     fb = this.fullBounds().extent();
-    img = this.fullImage();
+    this.doWithAlpha(1, () => img = this.fullImage());
 
     hi = newCanvas(fb.add(blur * 2));
     ctx = hi.getContext('2d');
@@ -4366,6 +4519,20 @@ BlockMorph.prototype.activeProcess = function () {
         }
     }
     return null;
+};
+
+BlockMorph.prototype.mouseEnterBounds = function (dragged) {
+    if (!dragged && this.alpha < 1) {
+        this.alpha = Math.min(this.alpha + 0.2, 1);
+        this.rerender();
+    }
+};
+
+BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
+    if (SyntaxElementMorph.prototype.alpha < 1) {
+        delete this.alpha;
+        this.rerender();
+    }
 };
 
 // BlockMorph dragging and dropping
@@ -5597,7 +5764,7 @@ ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
         this.setPosition(oldPos);
     }
     ReporterBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
-    this.alpha = Math.min(this.alpha, 0.85);
+    handMorph.alpha = this.alpha < 1 ? 1 : 0.85;
     this.cachedSlotSpec = null;
 };
 
@@ -5841,7 +6008,7 @@ ReporterBlockMorph.prototype.drawEdges = function (ctx) {
 ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
     // add 3D-Effect
     var h = this.height(),
-        r = Math.min(this.rounding, h / 2),
+        r = Math.max(Math.min(this.rounding, h / 2), this.edge),
         w = this.width(),
         shift = this.edge / 2,
         y,
@@ -6437,6 +6604,36 @@ ScriptsMorph.prototype.fullCopy = function () {
     });
     cpy.adjustBounds();
     return cpy;
+};
+
+// ScriptsMorph rendering:
+
+ScriptsMorph.prototype.render = function (aContext) {
+    aContext.fillStyle = this.getRenderColor().toString();
+    aContext.fillRect(0, 0, this.width(), this.height());
+    if (this.cachedTexture) {
+        this.renderCachedTexture(aContext);
+    } else if (this.texture) {
+        this.renderTexture(this.texture, aContext);
+    }
+};
+
+ScriptsMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat ||
+            SyntaxElementMorph.prototype.alpha > 0.85) {
+        return this.color;
+    }
+    return this.color.mixed(
+        Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
+        SpriteMorph.prototype.paletteColor
+    );
+};
+
+ScriptsMorph.prototype.renderCachedTexture = function (ctx) {
+    // support blocks-to-text slider
+    if (SyntaxElementMorph.prototype.alpha > 0.8) {
+        ScriptsMorph.uber.renderCachedTexture.call(this, ctx);
+    }
 };
 
 // ScriptsMorph stepping:
@@ -7383,6 +7580,9 @@ ArgMorph.prototype.init = function (type) {
     ArgMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
     this.createIcon();
+    if (type === 'list') {
+        this.alpha = 1;
+    }
 };
 
 // ArgMorph preferences settings:
@@ -8556,11 +8756,13 @@ InputSlotMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
-    var contents = new StringMorph(''),
+    var contents = new InputSlotStringMorph(''),
         arrow = new ArrowMorph(
             'down',
             0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
+            Math.max(Math.floor(this.fontSize / 6), 1),
+            BLACK,
+            true
         );
 
     contents.fontSize = this.fontSize;
@@ -8687,10 +8889,14 @@ InputSlotMorph.prototype.menuFromDict = function (
             this.fontSize
         );
 
-	function update (num) {
+	function update(num) {
     	myself.setContents(num);
         myself.reactToSliderEdit();
  	}
+
+    function getImg(block) {
+        return () => block.fullImage();
+    }
 
     if (choices instanceof Function) {
         choices = choices.call(this);
@@ -8708,7 +8914,10 @@ InputSlotMorph.prototype.menuFromDict = function (
             if (key[0] === '~') {
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
-                menu.addItem(choices[key].fullImage(), choices[key]);
+                menu.addItem(
+                    this.doWithAlpha(1, getImg(choices[key])),
+                    choices[key]
+                );
             } else if (key.indexOf('§_dir') === 0) {
 			    dial = new DialMorph();
     			dial.rootForGrab = function () {return this; };
@@ -9527,7 +9736,7 @@ InputSlotMorph.prototype.render = function (ctx) {
             this.drawRectBorder(ctx);
         }
     } else {
-        r = (this.height() - (this.edge * 2)) / 2;
+        r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
         ctx.beginPath();
         ctx.arc(
             r + this.edge,
@@ -9555,7 +9764,7 @@ InputSlotMorph.prototype.render = function (ctx) {
 	// draw my "wish" block, if any
 	if (this.selectedBlock) {
  		ctx.drawImage(
-        	this.selectedBlock.fullImage(),
+        	this.doWithAlpha(1, () => this.selectedBlock.fullImage()),
             this.edge + this.typeInPadding,
             this.edge
         );
@@ -9641,7 +9850,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
 
 InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     var shift = this.edge * 0.5,
-        r = (this.height() - (this.edge * 2)) / 2,
+        r = Math.max((this.height() - (this.edge * 2)) / 2, 0),
         start,
         end,
         gradient;
@@ -9695,7 +9904,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     ctx.lineTo(this.width() - r - this.edge, this.height() - shift);
     ctx.stroke();
 
-    r = this.height() / 2;
+    r = Math.max(this.height() / 2, this.edge);
 
     ctx.shadowOffsetX = shift;
     ctx.shadowOffsetY = shift;
@@ -9753,6 +9962,102 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     );
     ctx.stroke();
 };
+
+// InputSlotStringMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of single-line text inside an input slot block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// InputSlotStringMorph inherits from StringMorph:
+
+InputSlotStringMorph.prototype = new StringMorph();
+InputSlotStringMorph.prototype.constructor = InputSlotStringMorph;
+InputSlotStringMorph.uber = StringMorph.prototype;
+
+function InputSlotStringMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    isNumeric,
+    shadowOffset,
+    shadowColor,
+    color,
+    fontName
+) {
+    this.init(
+        text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        isNumeric,
+        shadowOffset,
+        shadowColor,
+        color,
+        fontName
+    );
+}
+
+InputSlotStringMorph.prototype.getRenderColor = function () {
+    if (MorphicPreferences.isFlat) {
+        if (this.isEditable) {
+            return this.color;
+        }
+        return this.parent.alpha > 0.5 ? this.color : BLACK;
+    }
+    return this.parent.alpha > 0.25 ? this.color : WHITE;
+};
+
+InputSlotStringMorph.prototype.getShadowRenderColor = function () {
+    return this.parent.alpha > 0.25 ? this.shadowColor : CLEAR;
+};
+
+// InputSlotTextMorph ///////////////////////////////////////////////
+
+/*
+    I am a piece of multi-line text inside an input slot block. I serve as a
+    container for sharing typographic attributes among my instances
+*/
+
+// InputSlotTextMorph inherits from TextMorph:
+
+InputSlotTextMorph.prototype = new TextMorph();
+InputSlotTextMorph.prototype.constructor = InputSlotTextMorph;
+InputSlotTextMorph.uber = StringMorph.prototype;
+
+function InputSlotTextMorph(
+    text,
+    fontSize,
+    fontStyle,
+    bold,
+    italic,
+    alignment,
+    width,
+    fontName,
+    shadowOffset,
+    shadowColor
+) {
+    this.init(text,
+        fontSize,
+        fontStyle,
+        bold,
+        italic,
+        alignment,
+        width,
+        fontName,
+        shadowOffset,
+        shadowColor);
+}
+
+InputSlotTextMorph.prototype.getRenderColor =
+    InputSlotStringMorph.prototype.getRenderColor;
+
+InputSlotTextMorph.prototype.getShadowRenderColor =
+    InputSlotStringMorph.prototype.getShadowRenderColor;
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
@@ -9927,6 +10232,7 @@ BooleanSlotMorph.prototype.init = function (initialValue) {
     this.isUnevaluated = false;
     this.progress = 0; // for animation state, not persisted
     BooleanSlotMorph.uber.init.call(this);
+    this.alpha = 1;
     this.fixLayout();
 };
 
@@ -10495,14 +10801,15 @@ ArrowMorph.uber = Morph.prototype;
 
 // ArrowMorph instance creation:
 
-function ArrowMorph(direction, size, padding, color) {
-    this.init(direction, size, padding, color);
+function ArrowMorph(direction, size, padding, color, isBlockLabel) {
+    this.init(direction, size, padding, color, isBlockLabel);
 }
 
-ArrowMorph.prototype.init = function (direction, size, padding, color) {
+ArrowMorph.prototype.init = function (direction, size, padding, color, isLbl) {
     this.direction = direction || 'down';
     this.size = size || ((size === 0) ? 0 : 50);
     this.padding = padding || 0;
+    this.isBlockLabel = isLbl || false;
 
     ArrowMorph.uber.init.call(this);
     this.color = color || BLACK;
@@ -10530,7 +10837,7 @@ ArrowMorph.prototype.render = function (ctx) {
         w = this.width(),
         w2 = Math.floor(w / 2);
 
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
     ctx.beginPath();
     if (this.direction === 'down') {
         ctx.moveTo(pad, h2);
@@ -10551,6 +10858,16 @@ ArrowMorph.prototype.render = function (ctx) {
     }
     ctx.closePath();
     ctx.fill();
+};
+
+ArrowMorph.prototype.getRenderColor = function () {
+    if (this.isBlockLabel) {
+        if (MorphicPreferences.isFlat) {
+            return this.color;
+        }
+        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
+    }
+    return this.color;
 };
 
 // TextSlotMorph //////////////////////////////////////////////////////
@@ -10578,11 +10895,13 @@ TextSlotMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
-    var contents = new TextMorph(''),
+    var contents = new InputSlotTextMorph(''),
         arrow = new ArrowMorph(
             'down',
             0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
+            Math.max(Math.floor(this.fontSize / 6), 1),
+            BLACK,
+            true
         );
 
     contents.fontSize = this.fontSize;
@@ -10657,6 +10976,7 @@ function ColorSlotMorph(clr) {
 
 ColorSlotMorph.prototype.init = function (clr) {
     ColorSlotMorph.uber.init.call(this);
+    this.alpha = 1;
     this.setColor(clr || new Color(145, 26, 68));
 };
 
@@ -10910,7 +11230,8 @@ MultiArgMorph.prototype.init = function (
         'left',
         this.fontSize,
         Math.max(Math.floor(this.fontSize / 6), 1),
-        arrowColor
+        arrowColor,
+        true
     );
 
     // right arrow:
@@ -10918,7 +11239,8 @@ MultiArgMorph.prototype.init = function (
         'right',
         this.fontSize,
         Math.max(Math.floor(this.fontSize / 6), 1),
-        arrowColor
+        arrowColor,
+        true
     );
 
     // control panel:

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-July-09';
+modules.threads = '2020-August-01';
 
 var ThreadManager;
 var Process;
@@ -5031,17 +5031,20 @@ Process.prototype.doSet = function (attribute, value) {
 Process.prototype.reportContextFor = function (context, otherObj) {
     // Private - return a copy of the context
     // and bind it to another receiver
-    var result = copy(context);
+    var result = copy(context),
+        receiverVars,
+        rootVars;
+
     result.receiver = otherObj;
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.variables = copy(result.outerContext.variables);
         result.outerContext.receiver = otherObj;
         if (result.outerContext.variables.parentFrame) {
-            result.outerContext.variables.parentFrame =
-                copy(result.outerContext.variables.parentFrame);
-            result.outerContext.variables.parentFrame.parentFrame =
-                otherObj.variables;
+            rootVars = result.outerContext.variables.parentFrame;
+            receiverVars = copy(otherObj.variables);
+            receiverVars.parentFrame = rootVars;
+            result.outerContext.variables.parentFrame = receiverVars;
         } else {
             result.outerContext.variables.parentFrame = otherObj.variables;
         }
@@ -6114,15 +6117,21 @@ Context.prototype.image = function () {
             }
         }
         ring.embed(block, this.inputs);
-        return ring.fullImage();
+        return ring.doWithAlpha(
+            1,
+            () => {
+                ring.clearAlpha();
+                return ring.fullImage();
+            }
+        );
     }
     if (this.expression instanceof Array) {
         block = this.expression[this.pc].fullCopy();
         if (block instanceof RingMorph && !block.contents()) { // empty ring
-            return block.fullImage();
+            return block.doWithAlpha(1, () => block.fullImage());
         }
         ring.embed(block, this.isContinuation ? [] : this.inputs);
-        return ring.fullImage();
+        return ring.doWithAlpha(1, () => ring.fullImage());
     }
 
     // otherwise show an empty ring
@@ -6135,7 +6144,7 @@ Context.prototype.image = function () {
             ring.parts()[1].addInput(inp)
         );
     }
-    return ring.fullImage();
+    return ring.doWithAlpha(1, () => ring.fullImage());
 };
 
 // Context continuations:

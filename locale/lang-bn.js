@@ -428,14 +428,37 @@ SnapTranslator.dict.bn = {
         'লেখনীর আকার নির্ধারণ কর %n',
     'stamp':
         'সীলমোহর',
+     // "instruments", i.e. wave forms
+    '(1) sine':
+        '(1) জ্যা',
+    '(2) square':
+        '(2) বর্গ',
+    '(4) triangle':
+        '(4) ত্রিভুজ',
         
     // control:
     'when %greenflag clicked':
         'যখন %greenflag ক্লিক করা হবে',
     'when %keyHat key pressed':
         'যখন %keyHat ক্লিক করা হবে',
-    'when I am clicked':
-        'যখন আমাকে ক্লিক করা হবে',
+    'when I am %interaction':
+        'যখন আমাকে %interaction',
+    'clicked':
+	'ক্লিক করা হবে',
+    'pressed':
+	'চাপা হবে',
+    'dropped':
+        'ফেলা হবে',
+    'mouse-entered':
+        'মাউস চাপা হবে',
+    'mouse-departed':
+        'মাউস উঠানো হবে',
+    'scrolled-down':
+    	'নিচে স্ক্রল করা হবে',
+    'scrolled-up':
+        'উপরে স্ক্রল করা হবে',
+    'stopped':
+        'থামানো হবে',
     'when %b':
         'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat':
@@ -465,9 +488,9 @@ SnapTranslator.dict.bn = {
     'repeat until %b %loop':
         'পুনরায় কর যতক্ষণ না  %b %loop',
     'if %b %c':
-        'যদি হয় %b %c',
+        'যদি শর্তটি সত্য হয় %b %c',
     'if %b %c else %c':
-        'যদি হয় %b %c অন্যথায় %c',
+        'যদি শর্তটি সত্য হয় %b %c অন্যথায় %c',
     'report %s':
         'প্রতিবেদন কর %s',
     'stop block':
@@ -562,7 +585,7 @@ SnapTranslator.dict.bn = {
     'false':
         'মিথ্যা',
     'join %words':
-        'সংযুক্ত কর %words',
+        'যুক্ত কর %words',
     'hello':
         'হ্যালো',
     'world':
@@ -570,9 +593,9 @@ SnapTranslator.dict.bn = {
     'letter %idx of %s':
         '%idx -তম বর্ণ %s এর',
     'length of %s':
-        '%s এর বর্ণদৈর্ঘ্য ',
+        '%s -এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
-        '%s বর্ণের ইউনিকোড',
+        '%s -এর ইউনিকোড',
     'unicode %n as letter':
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
@@ -581,7 +604,7 @@ SnapTranslator.dict.bn = {
         '%s এর সমতুল্য %s কিনা?',
 
     'type of %s':
-        '%s এর প্রকারে',
+        '%s -এর প্রকার',
 
     // variables:
     'Make a variable':

@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-July-01';
+modules.byob = '2020-July-24';
 
 // Declarations
 
@@ -923,7 +923,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
             hat.blockCategory,
             hat.type,
             this.world(),
-            block.fullImage(),
+            block.doWithAlpha(1, () => block.fullImage()),
             this.isInUse()
         );
     } else {
@@ -1228,7 +1228,6 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);
     block = method.blockInstance();
-    block.addShadow();
     new DialogBoxMorph(
         this,
         () => {
@@ -1264,7 +1263,13 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
         'Delete Custom Block',
         localize('block deletion dialog text'), // long string lookup
         this.world(),
-        block.fullImage()
+        block.doWithAlpha(
+            1,
+            () => {
+                block.addShadow();
+                return block.fullImage();
+            }
+        )
     );
 };
 
@@ -1279,7 +1284,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
-            block.fullImage(),
+            block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.definition = def;
                 this.refresh();
@@ -2206,7 +2211,7 @@ BlockEditorMorph.prototype.close = function () {
                 'This global block definition contains one or more\n'
                     + 'local custom blocks which must be removed first.',
                 this.world(),
-                block.fullImage()
+                block.doWithAlpha(1, () => block.fullImage())
             );
             return;
         }
@@ -2223,7 +2228,7 @@ BlockEditorMorph.prototype.close = function () {
             'Another custom block with this name exists.\n'
                 + 'Would you like to replace it?',
             this.world(),
-            block.fullImage()
+            block.doWithAlpha(1, () => block.fullImage())
         );
         return;
     }
@@ -2374,7 +2379,7 @@ BlockEditorMorph.prototype.editTranslations = function () {
         'Custom Block Translations',
         this.translations,
         this.world(),
-        block.fullImage(),
+        block.doWithAlpha(1, () => block.fullImage()),
         this.definition.abstractBlockSpec() +
             '\n\n' +
             localize('Enter one translation per line. ' +
@@ -3472,7 +3477,7 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
         query,
         null,
         null,
-        element.fullImage(), // delete the "fullImage()" part for interactive
+        element.doWithAlpha(1, () => element.fullImage()),
         'rebuild'
     );
     button.edge = this.buttonEdge / 2;

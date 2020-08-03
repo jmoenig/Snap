@@ -2,6 +2,109 @@
 
 ## in development:
 
+## 6.1.2:
+* fixed variable scope for ASK/TELL
+
+### 2020-08-01
+* threads: fixed variable scope for ASK/TELL
+
+## 6.1.1:
+* rolled back scope binding change
+
+### 2020-07-31
+* rolled back scope binding change
+
+## 6.1.0:
+* **New Features:**
+    * fade blocks
+* **Documentation Updates:**
+    * added migration guide for Morphic2/Snap!6
+* **Notable Changes:**
+    * changed label of green "length of" reporter to "length of text"
+    * new iconic buttons for grow, shrink and flip actions in the paint editor, thanks, Jadga!
+    * UI: automatically switch to scripts tab when dragging a block into the editor pane
+    * slightly darker default (non-flat) IDE colors, more cotrast
+    * enabled grouping the libraries dialog, thanks, Brian!
+    * cleaned up, grouped and annotated libraries, thanks, Brian!
+    * updated "About Snap!" dialog box
+* **Notable Fixes:**
+    * fixed FOR EACH for hybrid lists, thanks, Brian!
+    * fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
+    * fixed keyboard shortcuts for saving projects (ctrl + s), finding blocks (ctrl + f) etc..
+    * fixed shift-key constrain mode and "clear" in paint and vector editors, thanks, Joan!
+    * made remaining synchronous http requests asynch (url: #open, #run)
+    * update the Hand's position on mouse-down - avoid triggering at the origin point if clicking before the mouse has been moved
+    * fixed a list-watcher direct-editing index offset bug
+    * fixed input slider target update rendering
+    * fixed sprite speech balloon display for sounds
+    * library browser: import selected library on pressing enter
+    * fixed binding contexts to other receivers (variable scope for ASK / TELL)
+    * fixed numeric input fields in dialog boxes
+    * fixed reacting to keyboard input in dialog boxes
+    * fixed zoom blocks type-in dialog
+    * made stack-highlights un-touchable
+* **Translation Updates:**
+    * German
+
+### 2020-07-30
+* gui: updated Jadga as contributor in credits
+* prepared release
+
+### 2020-07-29
+* blocks: made stack-highlights un-touchable
+
+### 2020-07-28
+* blocks: tweaked stack-highlight for (partially) faded blocks
+
+### 2020-07-27
+* threads: fixed binding contexts to other receivers (variable scope for ASK / TELL)
+* gui: updated "About Snap!" dialog box
+* gui: library browser: import selected library on pressing enter
+* widgets: fixed numeric input fields in dialog boxes
+* widgets: fixed reacting to keyboard input in dialog boxes
+* blocks: fixed zoom blocks type-in dialog
+
+### 2020-07-26
+* objects: fixed sprite speech balloon display for sounds
+* cleaned up, grouped and annotated libraries, thanks, Brian!
+
+### 2020-07-24
+* gui: cleaned up block-fading pre-sets
+* updated German translation
+* gui: tweaked IDE colors for block-fading
+* blocks, threads, byob, widgets: tweaked block representations in widgets for fading
+* blocks, byob: tweaked more block representations in widgets for fading
+
+### 2020-07-23
+* morphic: fixed mouseDown events for touch devices
+* morphic, gui: added separators to list morphs, '~' for the libraries dialog
+* blocks: tweaked block-fading coloring 
+
+### 2020-07-22
+* morphic, blocks, gui: tweaked block-fading mouse-over
+* blocks, threads: tweaked context visualizations to be alpha-independent
+* gui: save block-transparency in  settings 
+* morphic: fixed input slider target update rendering
+
+### 2020-07-21
+* blocks: tweaked block highlights for fade-out
+* widgets, gui: tweaked scripts tab for fade-out
+* blocks, gui: tweaked default mode colors to slightly darker
+
+### 2020-07-20
+* objects: fixed a list-watcher direct-editing offset bug
+* morphic: update the Hand's position on mouse-down - avoid triggering at the origin point
+* symbols: added hooks for dynamic coloring
+* blocks: added blocks-fading support for symbols (under construction)
+* morphic: tweaked transparency of grabbed morphs
+
+### 2020-07-19
+* blocks: blocks-fade-out support for label arrows (under construction)
+* blocks: blocks-fade-out support for multi-line inputs (under construction)
+
+### 2020-07-17
+* morphic, blocks: blocks-fadeout (under construction)
+
 ### 2020-07-15
 * morphic: made keyboard handler (more) invisible, thanks, Bernat!
 * gui: made remaining synchronous http requests asynch (url: #open, #run)
@@ -23,7 +126,7 @@
 * threads: fixed FOR EACH for hybrid lists, thanks, Brian!
 * threads: fixed script execution behavior when turning turbo mode off programmatically, thanks, Jadga, for reporting it.
 * locale: added English translation for 'length of %s' to 'length of text %s' to avoid confusion among both blocks
-* updated German translation for  'length of %s'
+* updated German translation for 'length of %s'
 
 ## 6.0.0:
 * **New Features:**
