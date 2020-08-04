@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-08-04
+* new dev version
+
 ## 6.1.2:
 * fixed variable scope for ASK/TELL
 
