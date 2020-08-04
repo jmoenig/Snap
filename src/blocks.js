@@ -4043,7 +4043,7 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
 
 BlockMorph.prototype.scriptPic = function () {
     // answer a canvas image that also includes comments
-    var scr = this.fullScriptImage(),
+    var scr = this.fullImage(),
         fb = this.stackFullBounds(),
         pic = newCanvas(fb.extent()),
         ctx = pic.getContext('2d');
@@ -4059,24 +4059,29 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
-BlockMorph.prototype.fullScriptImage = function () {
+BlockMorph.prototype.fullImage = function () {
     // answer a canvas image meant for (semi-) transparent blocks
     // that lets the background shine through
-    var scr = this.fullImage(),
-        solid,
-        pic,
-        ctx;
+    var src, solid, pic, ctx;
 
-    if (this.alpha === 1) {return scr; }
-    solid = this.doWithAlpha(1, () => this.fullImage());
+    if (this.alpha === 1) {
+        return BlockMorph.uber.fullImage.call(this);
+    }
+    this.forAllChildren(m => {
+        if (m instanceof BlockMorph) {
+            m.mouseLeaveBounds();
+        }
+    });
+    src = BlockMorph.uber.fullImage.call(this);
+    solid = this.doWithAlpha(1, () => BlockMorph.uber.fullImage.call(this));
     pic = newCanvas(this.fullBounds().extent());
     ctx = pic.getContext('2d');
-    ctx.fillStyle = this.parent.getRenderColor().toString();
+    ctx.fillStyle = ScriptsMorph.prototype.getRenderColor().toString();
     ctx.fillRect(0, 0, pic.width, pic.height);
     ctx.globalCompositeOperation = 'destination-in';
     ctx.drawImage(solid, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(scr, 0, 0);
+    ctx.drawImage(src, 0, 0);
     return pic;
 };
 
