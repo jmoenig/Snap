@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-July-29';
+modules.blocks = '2020-August-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4043,6 +4043,10 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
 
 BlockMorph.prototype.scriptPic = function () {
     // answer a canvas image that also includes comments
+    if (this.alpha < 1) {
+        return this.scriptPicOnBackground();
+    }
+
     var scr = this.fullImage(),
         fb = this.stackFullBounds(),
         pic = newCanvas(fb.extent()),
@@ -4055,6 +4059,36 @@ BlockMorph.prototype.scriptPic = function () {
         )
     );
     ctx.drawImage(scr, 0, 0);
+    return pic;
+};
+
+BlockMorph.prototype.scriptPicOnBackground = function () {
+    // answer a canvas image that also includes comments
+    // note: this version is meant for (semi-) transparent blocks
+    // and lets the background shine through
+    var scr = this.fullImage(),
+        solid = this.doWithAlpha(1, () => this.fullImage()),
+        bg = newCanvas(this.fullBounds().extent()),
+        bgCtx = bg.getContext('2d'),
+        fb = this.stackFullBounds(),
+        pic = newCanvas(fb.extent()),
+        ctx = pic.getContext('2d');
+
+    bgCtx.fillColor = this.parent.getRenderColor().toString();
+    bgCtx.fillRect(0, 0, bg.width, bg.height);
+    bgCtx.globalCompositeOperation = 'destination-in';
+    bgCtx.drawImage(solid, 0, 0);
+    bgCtx.globalCompositeOperation = 'source-over';
+    bgCtx.drawImage(scr, 0, 0);
+
+    this.allComments().forEach(comment =>
+        ctx.drawImage(
+            comment.fullImage(),
+            comment.fullBounds().left() - fb.left(),
+            comment.top() - fb.top()
+        )
+    );
+    ctx.drawImage(bg, 0, 0);
     return pic;
 };
 

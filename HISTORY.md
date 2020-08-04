@@ -4,6 +4,7 @@
 
 ### 2020-08-04
 * new dev version
+* blocks: include background color when exporting (semi-) transparent script pics 
 
 ## 6.1.2:
 * fixed variable scope for ASK/TELL
