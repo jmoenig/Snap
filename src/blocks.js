@@ -4043,14 +4043,11 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
 
 BlockMorph.prototype.scriptPic = function () {
     // answer a canvas image that also includes comments
-    if (this.alpha < 1) {
-        return this.scriptPicOnBackground();
-    }
-
-    var scr = this.fullImage(),
+    var scr = this.fullScriptImage(),
         fb = this.stackFullBounds(),
         pic = newCanvas(fb.extent()),
         ctx = pic.getContext('2d');
+
     this.allComments().forEach(comment =>
         ctx.drawImage(
             comment.fullImage(),
@@ -4062,33 +4059,24 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
-BlockMorph.prototype.scriptPicOnBackground = function () {
-    // answer a canvas image that also includes comments
-    // note: this version is meant for (semi-) transparent blocks
-    // and lets the background shine through
+BlockMorph.prototype.fullScriptImage = function () {
+    // answer a canvas image meant for (semi-) transparent blocks
+    // that lets the background shine through
     var scr = this.fullImage(),
-        solid = this.doWithAlpha(1, () => this.fullImage()),
-        bg = newCanvas(this.fullBounds().extent()),
-        bgCtx = bg.getContext('2d'),
-        fb = this.stackFullBounds(),
-        pic = newCanvas(fb.extent()),
-        ctx = pic.getContext('2d');
+        solid,
+        pic,
+        ctx;
 
-    bgCtx.fillColor = this.parent.getRenderColor().toString();
-    bgCtx.fillRect(0, 0, bg.width, bg.height);
-    bgCtx.globalCompositeOperation = 'destination-in';
-    bgCtx.drawImage(solid, 0, 0);
-    bgCtx.globalCompositeOperation = 'source-over';
-    bgCtx.drawImage(scr, 0, 0);
-
-    this.allComments().forEach(comment =>
-        ctx.drawImage(
-            comment.fullImage(),
-            comment.fullBounds().left() - fb.left(),
-            comment.top() - fb.top()
-        )
-    );
-    ctx.drawImage(bg, 0, 0);
+    if (this.alpha === 1) {return scr; }
+    solid = this.doWithAlpha(1, () => this.fullImage());
+    pic = newCanvas(this.fullBounds().extent());
+    ctx = pic.getContext('2d');
+    ctx.fillStyle = this.parent.getRenderColor().toString();
+    ctx.fillRect(0, 0, pic.width, pic.height);
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.drawImage(solid, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(scr, 0, 0);
     return pic;
 };
 
