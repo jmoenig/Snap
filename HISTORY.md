@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-08-05
+* threads: experimental hyperized reporter-if, commented out for now
+
 ### 2020-08-04
 * new dev version
 * blocks: include background color when exporting (semi-) transparent script pics 
