@@ -8,6 +8,8 @@
 * added viewport, thanks, Radman!
 * Catalan translation update, thanks, Joan!
 * Portuguese translation update, thanks, Manuel!
+* added blocks to Strings library, thanks, Brian!
+* fixed "green flag" symbol size for community website, thanks, Bernat!
 
 ### 2020-08-04
 * new dev version
