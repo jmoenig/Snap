@@ -2,6 +2,18 @@
 
 ## in development:
 
+## 6.1.3:
+* **Notable Changes:**
+    * exporting pictures of (semi-) faded blocks now includes the cropped solid background color
+    * "to lowercase" reporter now also in Strings library, thanks, Brian!
+* **Notable Fixes:**
+    * fixed restoring ringed inputs when relabelling and compiling HOFs
+    * added viewport, thanks, Radman!
+    * fixed "green flag" symbol size for community website, thanks, Bernat!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+    * Portuguese, thanks, Manuel!
+
 ### 2020-08-05
 * threads: experimental hyperized reporter-if, commented out for now
 * blocks: fixed restoring ringed inputs when relabelling and compiling HOFs
