@@ -1923,7 +1923,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                         this.width(), this.height())) / 5;
             flag.setWidth(flag.size);
             flag.setHeight(flag.size);
-            this.embedPlayButton.size = flag.size * 1.6;
+            this.embedPlayButton.size = flag.size * 2;
             this.embedPlayButton.setWidth(this.embedPlayButton.size);
             this.embedPlayButton.setHeight(this.embedPlayButton.size);
             if (this.embedOverlay) {
