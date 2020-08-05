@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-August-04';
+modules.blocks = '2020-August-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3392,7 +3392,12 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     // restore matching inputs in their original order
     this.inputs().forEach(inp => {
         old = oldInputs[offset];
-        if (old instanceof ReporterBlockMorph) {
+        if (old instanceof RingMorph) {
+            if (old.contents()) {
+                this.replaceInput(inp, old.fullCopy());
+            }
+            // otherwise ignore the empty ring
+        } else if (old instanceof ReporterBlockMorph) {
             if (inp instanceof TemplateSlotMorph || inp.isStatic) {
                 leftOver.push(old);
             } else {

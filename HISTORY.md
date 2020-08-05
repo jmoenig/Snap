@@ -4,6 +4,7 @@
 
 ### 2020-08-05
 * threads: experimental hyperized reporter-if, commented out for now
+* blocks: fixed restoring ringed inputs when relabelling and compiling HOFs
 
 ### 2020-08-04
 * new dev version
