@@ -2,6 +2,9 @@
 
 ## in development:
 
+## 6.1.4:
+* fixed "green flag" symbol size for embedded proects (for real ^^)=
+
 ## 6.1.3:
 * **Notable Changes:**
     * exporting pictures of (semi-) faded blocks now includes the cropped solid background color
