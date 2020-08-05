@@ -6,6 +6,8 @@
 * threads: experimental hyperized reporter-if, commented out for now
 * blocks: fixed restoring ringed inputs when relabelling and compiling HOFs
 * added viewport, thanks, Radman!
+* Catalan translation update, thanks, Joan!
+* Portuguese translation update, thanks, Manuel!
 
 ### 2020-08-04
 * new dev version
