@@ -3092,6 +3092,17 @@ BlockMorph.prototype.userMenu = function () {
         }
         return menu;
     }
+    if (contains(
+        ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage'],
+        this.selector
+    )) {
+        menu.addLine();
+        menu.addItem(
+            (this.selector === 'receiveMessage' ?
+                "show senders" : "show receivers"),
+            'showMessageUsers'
+        );
+    }
     if (this.parent instanceof ReporterSlotMorph
             || (this.parent instanceof CommandSlotMorph)
             || (this instanceof HatBlockMorph)
@@ -3113,6 +3124,26 @@ BlockMorph.prototype.userMenu = function () {
         );
     }
     return menu;
+};
+
+BlockMorph.prototype.showMessageUsers = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        corral = ide.corral,
+        getter = (this.selector === 'receiveMessage') ?
+            'allSendersOf' : 'allHatBlocksFor';
+        message = this.inputs()[0].evaluate();
+
+    if (message !== '') {
+        corral.frame.contents.children.concat(corral.stageIcon).forEach(
+            icon => {
+                if (icon.object &&
+                    (icon.object[getter](message).length > 0)
+                ) {
+                    icon.flash();
+                }
+            }
+        );
+    }
 };
 
 BlockMorph.prototype.developersMenu = function () {

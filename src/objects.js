@@ -5788,6 +5788,24 @@ SpriteMorph.prototype.allMessageNames = function () {
     return msgs;
 };
 
+SpriteMorph.prototype.allSendersOf = function (message) {
+    if (typeof message === 'number') {message = message.toString(); }
+    return this.scripts.children.filter(morph => {
+        var event;
+        if (morph.selector) {
+            if (
+                contains(['doBroadcast', 'doBroadcastAndWait'], morph.selector)
+            ) {
+                event = morph.inputs()[0].evaluate();
+                return event === message
+                    || (message instanceof Array
+                        && message[0] === 'any message')
+            }
+        }
+        return false;
+    });
+};
+
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     if (typeof message === 'number') {message = message.toString(); }
     return this.scripts.children.filter(morph => {
@@ -9172,6 +9190,9 @@ StageMorph.prototype.yBottom = function () {
 
 StageMorph.prototype.allMessageNames
     = SpriteMorph.prototype.allMessageNames;
+
+StageMorph.prototype.allSendersOf
+    = SpriteMorph.prototype.allSendersOf;
 
 StageMorph.prototype.allHatBlocksFor
     = SpriteMorph.prototype.allHatBlocksFor;
