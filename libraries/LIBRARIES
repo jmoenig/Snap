@@ -12,11 +12,12 @@ variadic-reporters.xml	Variadic reporters	Versions of +, x, AND, and OR that tak
 ~	~
 maps_module.xml	World Map	Add interactive maps to projects
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
-speech_module.xml	Text to speech	output text using speech synthesis.
-animation_module.xml	Animation	glide, grow and rotate using easing functions.
-pixel_module.xml	Pixels	manipulate costumes pixel-wise.
-audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
+speech_module.xml	Text to Speech	Output text using speech synthesis.
+animation_module.xml	Animation	Glide, grow and rotate using easing functions.
+pixel_module.xml	Pixels	Manipulate costumes pixel-wise.
+audioComp_module.xml	Audio Comp	Analyze, manipulate and generate sound samples.
 frequency_distribution_module.xml	Frequency Distribution Analysis	Analyze data for frequency distribution
+localstorage_module.xml	Data Base	Persistent key-value storage across Snap! sessions in the same browser
 ~	~
 ~	~
 ~	~

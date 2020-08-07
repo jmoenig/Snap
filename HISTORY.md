@@ -4,6 +4,7 @@
 
 ### 2020-08-07
 * new dev version
+* added new localstorage library
 
 ## 6.1.4:
 * fixed "green flag" symbol size for embedded proects (for real ^^)=
