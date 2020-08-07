@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-July-26';
+modules.objects = '2020-August-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -5804,7 +5804,7 @@ SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
             return ((morph.selector !== 'doSend') ||
                     (receiverName === eventReceiver)) &&
                 ((event === message) ||
-                 (message instanceof Array && message[0] === 'any message'))
+                 (message instanceof Array && message[0] === 'any message'));
         }
         return false;
     });

@@ -5,6 +5,7 @@
 ### 2020-08-07
 * new dev version
 * added new localstorage library
+* show message senders / receivers from the blocks context menu, thanks, Bernat!
 
 ## 6.1.4:
 * fixed "green flag" symbol size for embedded proects (for real ^^)=
