@@ -8505,7 +8505,8 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 // SpriteIconMorph flashing
 
 SpriteIconMorph.prototype.flash = function () {
-    var previousOutlineColor = this.outlineColor.copy(),
+    var world = this.world(),
+        previousOutlineColor = this.outlineColor,
         previousOutline = this.outline,
         previousState = this.userState;
 
