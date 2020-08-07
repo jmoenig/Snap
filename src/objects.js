@@ -5788,8 +5788,30 @@ SpriteMorph.prototype.allMessageNames = function () {
     return msgs;
 };
 
-SpriteMorph.prototype.allHatBlocksFor = function (message) {
+SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
     if (typeof message === 'number') {message = message.toString(); }
+    return this.scripts.children.filter(morph => {
+        var event, eventReceiver;
+        if ((morph.selector) &&
+                contains(
+                    ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
+                    morph.selector)
+           ) {
+            event = morph.inputs()[0].evaluate();
+            if (morph.selector === 'doSend') {
+                eventReceiver = morph.inputs()[1].evaluate();
+            }
+            return ((morph.selector !== 'doSend') ||
+                    (receiverName === eventReceiver)) &&
+                ((event === message) ||
+                 (message instanceof Array && message[0] === 'any message'))
+        }
+        return false;
+    });
+};
+
+SpriteMorph.prototype.allHatBlocksFor = function (message) {
+    if (typeof message === 'number') { message = message.toString(); }
     return this.scripts.children.filter(morph => {
         var event;
         if (morph.selector) {
@@ -9172,6 +9194,9 @@ StageMorph.prototype.yBottom = function () {
 
 StageMorph.prototype.allMessageNames
     = SpriteMorph.prototype.allMessageNames;
+
+StageMorph.prototype.allSendersOf
+    = SpriteMorph.prototype.allSendersOf;
 
 StageMorph.prototype.allHatBlocksFor
     = SpriteMorph.prototype.allHatBlocksFor;

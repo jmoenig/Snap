@@ -8502,6 +8502,36 @@ SpriteIconMorph.prototype.copySound = function (sound) {
     this.object.addSound(dup.audio, dup.name);
 };
 
+// SpriteIconMorph flashing
+
+SpriteIconMorph.prototype.flash = function () {
+    var world = this.world(),
+        previousOutlineColor = this.outlineColor,
+        previousOutline = this.outline,
+        previousState = this.userState;
+
+    this.outlineColor = SpriteMorph.prototype.highlightColor;
+    this.outline = 2;
+    this.userState = 'pressed';
+
+    this.rerender();
+
+    world.animations.push(new Animation(
+        nop,
+        nop,
+        0,
+        800,
+        nop,
+        () => {
+            this.outlineColor = previousOutlineColor;
+            this.outline = previousOutline;
+            this.userState = previousState;
+            this.rerender();
+        }
+    ));
+};
+
+
 // CostumeIconMorph ////////////////////////////////////////////////////
 
 /*

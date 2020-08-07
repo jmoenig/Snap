@@ -3092,6 +3092,18 @@ BlockMorph.prototype.userMenu = function () {
         }
         return menu;
     }
+    if (contains(
+        ['doBroadcast', 'doSend', 'doBroadcastAndWait', 'receiveMessage',
+            'receiveOnClone', 'receiveGo'],
+        this.selector
+    )) {
+        menu.addLine();
+        menu.addItem(
+            (this.selector.indexOf('receive') === 0 ?
+                "show senders" : "show receivers"),
+            'showMessageUsers'
+        );
+    }
     if (this.parent instanceof ReporterSlotMorph
             || (this.parent instanceof CommandSlotMorph)
             || (this instanceof HatBlockMorph)
@@ -3113,6 +3125,42 @@ BlockMorph.prototype.userMenu = function () {
         );
     }
     return menu;
+};
+
+BlockMorph.prototype.showMessageUsers = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        corral = ide.corral,
+        getter = (this.selector.indexOf('receive') === 0) ?
+            'allSendersOf' : 'allHatBlocksFor',
+        inputs = this.inputs(),
+        message, receiverName;
+
+    if (this.selector === 'receiveGo') {
+        message = '__shout__go__';
+    } else if (this.selector === 'receiveOnClone') {
+        message = '__clone__init__';
+    } else if (inputs[0] instanceof InputSlotMorph) {
+        message = inputs[0].evaluate();
+    }
+
+    if (((this.selector === 'doSend') && inputs[1] instanceof InputSlotMorph)) {
+        receiverName = this.inputs()[1].evaluate();
+    } else if (this.selector.indexOf('receive') === 0) {
+        receiverName = this.scriptTarget().name;
+    }
+
+    if (message !== '') {
+        corral.frame.contents.children.concat(corral.stageIcon).forEach(
+            icon => {
+                if (icon.object &&
+                    ((this.selector !== 'doSend' || receiverName === icon.object.name) &&
+                    (icon.object[getter](message, receiverName).length > 0))
+                ) {
+                    icon.flash();
+                }
+            }
+        );
+    }
 };
 
 BlockMorph.prototype.developersMenu = function () {
