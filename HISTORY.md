@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-08-07
+* new dev version
+
 ## 6.1.4:
 * fixed "green flag" symbol size for embedded proects (for real ^^)=
 
