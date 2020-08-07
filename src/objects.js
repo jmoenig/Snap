@@ -5790,7 +5790,7 @@ SpriteMorph.prototype.allMessageNames = function () {
 
 SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
     if (typeof message === 'number') {message = message.toString(); }
-    return this.scripts.children.filter(morph => {
+    return this.scripts.allChildren().filter(morph => {
         var event, eventReceiver;
         if ((morph.selector) &&
                 contains(
