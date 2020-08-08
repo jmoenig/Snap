@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-August-07';
+modules.blocks = '2020-August-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3100,7 +3100,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addLine();
         menu.addItem(
             (this.selector.indexOf('receive') === 0 ?
-                "show senders" : "show receivers"),
+                "senders..." : "receivers..."),
             'showMessageUsers'
         );
     }

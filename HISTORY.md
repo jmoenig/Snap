@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * show message senders and receivers from the blocks context menu, thanks, Bernat!
+    * new "Database" library operating on localstore, thanks, Jadga!
+
+### 2020-08-08
+* blocks: changed "show senders/receivers" menu entry to "senders.../receivers..."
 
 ### 2020-08-07
 * new dev version
