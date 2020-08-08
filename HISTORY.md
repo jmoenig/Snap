@@ -7,6 +7,7 @@
 
 ### 2020-08-08
 * blocks: changed "show senders/receivers" menu entry to "senders.../receivers..."
+* gui: tweaked SpriteIconMorph>>flash() for flat design mode
 
 ### 2020-08-07
 * new dev version

@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-August-07';
+modules.gui = '2020-August-08';
 
 // Declarations
 
@@ -8506,14 +8506,19 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 
 SpriteIconMorph.prototype.flash = function () {
     var world = this.world(),
-        previousOutlineColor = this.outlineColor,
+        isFlat = MorphicPreferences.isFlat,
+        highlight = SpriteMorph.prototype.highlightColor,
+        previousColor = isFlat ? this.pressColor : this.outlineColor,
         previousOutline = this.outline,
         previousState = this.userState;
 
-    this.outlineColor = SpriteMorph.prototype.highlightColor;
-    this.outline = 2;
+    if (isFlat) {
+        this.pressColor = highlight;
+    } else {
+        this.outlineColor = highlight;
+        this.outline = 2;
+    }
     this.userState = 'pressed';
-
     this.rerender();
 
     world.animations.push(new Animation(
@@ -8523,14 +8528,17 @@ SpriteIconMorph.prototype.flash = function () {
         800,
         nop,
         () => {
-            this.outlineColor = previousOutlineColor;
-            this.outline = previousOutline;
+            if (isFlat) {
+                this.pressColor = previousColor;
+            } else {
+                this.outlineColor = previousColor;
+                this.outline = previousOutline;
+            }
             this.userState = previousState;
             this.rerender();
         }
     ));
 };
-
 
 // CostumeIconMorph ////////////////////////////////////////////////////
 
