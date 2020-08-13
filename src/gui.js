@@ -5827,12 +5827,12 @@ IDE_Morph.prototype.initializeCloud = function () {
                 this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
                 if (!isNil(response.days_left)) {
+                    var duration = response.days_left + ' day' +
+                        (response.days_left > 1 ? 's' : '');
                     new DialogBoxMorph().inform(
-                        'Unverified account: ' +
-                        response.days_left +
-                        ' days left',
+                        'Unverified account: ' + duration + ' left' +
                         'You are now logged in, and your account\n' +
-                        'is enabled for three days.\n' +
+                        'is enabled for ' + duration + '.\n' +
                         'Please use the verification link that\n' +
                         'was sent to your email address when you\n' +
                         'signed up.\n\n' +
@@ -5841,7 +5841,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                         'cannot find it, please use the "Resend\n' +
                         'Verification Email..." option in the cloud\n' +
                         'menu.\n\n' +
-                        'You have ' + response.days_left + ' days left.',
+                        'You have ' + duration + ' left.',
                         world,
                         this.cloudIcon(null, new Color(0, 180, 0))
                     );
