@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-August-08';
+modules.blocks = '2020-August-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2731,6 +2731,7 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        hasLine = false,
         shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
         top = this.topBlock(),
@@ -3097,6 +3098,7 @@ BlockMorph.prototype.userMenu = function () {
             'receiveOnClone', 'receiveGo'],
         this.selector
     )) {
+        hasLine = true;
         menu.addLine();
         menu.addItem(
             (this.selector.indexOf('receive') === 0 ?
@@ -3111,7 +3113,7 @@ BlockMorph.prototype.userMenu = function () {
                 && (top instanceof HatBlockMorph))) {
         return menu;
     }
-    menu.addLine();
+    if (!hasLine) {menu.addLine(); }
     menu.addItem("ringify", 'ringify');
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();

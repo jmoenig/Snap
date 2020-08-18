@@ -5,6 +5,9 @@
     * show message senders and receivers from the blocks context menu, thanks, Bernat!
     * new "Database" library operating on localstore, thanks, Jadga!
 
+### 2020-08-18
+* blocks: tweaked menu separator line above "senders.../receivers..." to only show once
+
 ### 2020-08-08
 * blocks: changed "show senders/receivers" menu entry to "senders.../receivers..."
 * gui: tweaked SpriteIconMorph>>flash() for flat design mode
