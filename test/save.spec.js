@@ -1,9 +1,8 @@
 /*globals driver, expect, TestUtils */
 describe('save', function() {
-    let SnapCloud, ProjectDialogMorph;
+    let SnapCloud;
     before(() => {
         SnapCloud = driver.globals().SnapCloud;
-        ProjectDialogMorph = driver.globals().ProjectDialogMorph;
     });
     this.timeout(15000);
 
@@ -27,38 +26,34 @@ describe('save', function() {
                         .then(() => driver.selectCategory('control'));
                 });
 
-                it('should be able to save and reload the project', function() {
-                    // Get the project name
+                it('should be able to save and reload the project', async function() {
                     const projectName = `can-reload-${Date.now()}`;
 
-                    return driver.setProjectName(projectName)
-                        .then(() => TestUtils.saveProject())
-                        .then(() => driver.reset())
-                        .then(() => TestUtils.openProject(projectName));
+                    await driver.setProjectName(projectName);
+                    await TestUtils.saveProject();
+                    await driver.reset();
+                    await TestUtils.openProject(projectName);
                 });
 
-                it('should overwrite on rename', function() {
+                it('should overwrite on rename', async function() {
                     const projectName = `rename-test-${Date.now()}`;
                     const newName = `RENAMED-${projectName}`;
 
-                    return driver.setProjectName(projectName)
-                        .then(() => TestUtils.saveProject())
-                        .then(() => driver.setProjectName(newName))
-                        .then(() => TestUtils.openProjectsBrowser())
-                        .then(projectDialog => {
-                            let projectList = projectDialog.listField.listContents
+                    await driver.setProjectName(projectName);
+                    await TestUtils.saveProject();
+                    await driver.setProjectName(newName);
+                    const projectDialog = await TestUtils.openProjectsBrowser();
+                    let projectList = projectDialog.listField.listContents
+                        .children.map(child => child.labelString);
+                    await driver.expect(
+                        () => {
+                            projectList = projectDialog.listField.listContents
                                 .children.map(child => child.labelString);
-                            return driver
-                                .expect(
-                                    () => {
-                                        projectList = projectDialog.listField.listContents
-                                            .children.map(child => child.labelString);
-                                        return projectList.includes(newName);
-                                    },
-                                    `Could not find ${newName} in project list`
-                                )
-                                .then(() => expect(projectList.includes(projectName)).toBe(false));
-                        });
+                            return projectList.includes(newName);
+                        },
+                        `Could not find ${newName} in project list`
+                    );
+                    expect(projectList.includes(projectName)).toBe(false);
                 });
             });
 

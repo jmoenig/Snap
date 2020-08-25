@@ -62,13 +62,16 @@ describe('undo', function() {
             const bottomBlock = await driver.addBlock('doSayFor', new Point(300, 300));
             const [topTarget] = bottomBlock.attachTargets();
             await SnapActions.moveBlock(block, topTarget);
-            await SnapActions.setBlockPosition(block, new Point(400, 400));
+            await driver.actionsSettled();
+            const initialPosition = block.position();
+
+            driver.dragAndDrop(block, new Point(400, 400));
+            await driver.actionsSettled();
             const undoId = driver.ide().currentSprite.scripts.undoOwnerId();
             await SnapUndo.undo(undoId);
-            await driver.expect(
-                () => initialPosition.eq(block.position()),
-                `Block not restored to ${initialPosition} (${block.position()})`
-            );
+            await driver.actionsSettled();
+            const msg = `Block not restored to ${initialPosition} (${block.position()})`;
+            assert(initialPosition.eq(block.position()), msg);
         });
 
         it('should restore pos after undo deletion', async function() {
@@ -165,6 +168,7 @@ describe('undo', function() {
             await driver.actionsSettled();
         });
 
+        // failing
         it('should revert (new) input to cslot on undo', async function() {
             const [block] = Object.values(SnapActions._blocks);
             driver.selectCategory('motion');
@@ -200,6 +204,7 @@ describe('undo', function() {
             await selectServiceAndRPC(block, 'CloudVariables', 'setVariable');
         });
 
+        // failing
         it('should clear RPC field on service field change', async function() {
             await selectService(block, 'PublicRoles');
             const [rpcName] = block.inputs()[1].evaluate();
@@ -218,6 +223,7 @@ describe('undo', function() {
             assert.equal(rpcName, 'setVariable');
         });
 
+        // failing
         it('should restore inputs on undo RPC field change', async function() {
             await driver.expect(
                 () => block.inputs().length > 2,

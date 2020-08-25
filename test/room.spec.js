@@ -1,6 +1,40 @@
-/*global driver, expect */
+/*global driver, expect, assert */
 describe('room', function() {
     this.timeout(10000);
+    describe('isValidName', function() {
+        it('should reject names including @', function() {
+            const {RoomMorph} = driver.globals();
+            assert(!RoomMorph.isValidName('hello@world'));
+        });
+
+        it('should reject names including .', function() {
+            const {RoomMorph} = driver.globals();
+            assert(!RoomMorph.isValidName('hello.world'));
+        });
+
+        it('should accept alphanumeric names', function() {
+            const {RoomMorph} = driver.globals();
+            assert(RoomMorph.isValidName('helloworld'));
+        });
+    });
+
+    describe('isEmptyName', function() {
+        it('should return false for names with characters', function() {
+            const {RoomMorph} = driver.globals();
+            assert(!RoomMorph.isEmptyName(' helloworld'));
+        });
+
+        it('should return true if only whitespace', function() {
+            const {RoomMorph} = driver.globals();
+            assert(RoomMorph.isEmptyName(' \t'));
+        });
+
+        it('should return true if empty', function() {
+            const {RoomMorph} = driver.globals();
+            assert(RoomMorph.isEmptyName(''));
+        });
+    });
+
     describe('new', function() {
         const name = 'newRoleName';
         let initialRoleName = '';

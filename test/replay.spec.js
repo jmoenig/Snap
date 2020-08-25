@@ -1,13 +1,13 @@
 /*global driver */
 describe('replay', function() {
     this.timeout(4000);
-    const newProjectWithActions = function() {
-        const SnapActions = driver.globals().SnapActions;
-        return driver.reset()
-            // Add a couple blocks, change the stage size, etc
-            .then(() => driver.addBlock('forward'))
-            .then(() => SnapActions.setStageSize(500, 500))
-            .then(() => driver.addBlock('bubble'));
+    const newProjectWithActions = async function() {
+        const {SnapActions} = driver.globals();
+        await driver.reset();
+        // Add a couple blocks, change the stage size, etc
+        await driver.addBlock('forward');
+        await SnapActions.setStageSize(500, 500);
+        await driver.addBlock('bubble');
     };
 
     describe('undo/redo', function() {
@@ -44,18 +44,18 @@ describe('replay', function() {
                 .then(() => driver.ide().replayEvents());  // enter replay mode
         });
 
-        it('should still undo after current user actions during replay', function() {
+        it('should still undo after current user actions during replay', async function() {
             const replayer = driver.ide().replayControls;
             replayer.jumpToEnd();
 
             driver.click(driver.ide().controlBar.startButton);
 
-            return driver.sleep(25)
-                .then(() => replayer.jumpToBeginning())
-                .then(() => driver.expect(
-                    () => driver.ide().currentSprite.scripts.children.length === 0,
-                    'blocks were not undone!'
-                ));
+            await driver.sleep(25);
+            await replayer.jumpToBeginning();
+            await driver.expect(
+                () => driver.ide().currentSprite.scripts.children.length === 0,
+                'blocks were not undone!'
+            );
         });
     });
 

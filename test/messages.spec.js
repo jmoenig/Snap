@@ -57,6 +57,7 @@ describe('messages', function() {
 
             driver.selectTab('scripts');
             const hatBlock = await driver.addBlock('receiveSocketMessage');
+            const {sockets} = driver.globals().world.children[0];
 
             // set the msg type to message
             const msgField = hatBlock.inputs()[0];
@@ -80,12 +81,14 @@ describe('messages', function() {
                 sendMessage();
             }
 
-            await driver.expect(() => {
-                return hatBlock._msgQueue() !== undefined;
-            }, `message queue didn't show up`, {maxWait: 4000});
+            const queue = await driver.expect(
+                () => sockets.getMessageQueue(hatBlock),
+                `message queue didn't show up`,
+                {maxWait: 4000}
+            );
 
             hatBlock.updateReadout();
-            expect(hatBlock._msgQueue().length).toBeLessThan(11);
+            expect(queue.contents.length).toBeLessThan(11);
             expect(hatBlock.msgCount).toBeLessThan(11);
             expect(hatBlock.msgCount).toBeMoreThan(8);
         });

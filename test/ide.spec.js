@@ -350,49 +350,11 @@ describe('ide', function() {
 
         describe('getURL', () => {
             it('should support relative addresses', () => {
-                let response = driver.ide().getURL('lang-ca.js');
+                let response = driver.ide().getURL('locale/lang-ca.js');
                 expect(response.startsWith('/*')).toBe(true);
             });
         });
 
-    });
-
-    describe('tools', function() {
-        beforeEach(() => driver.reset());
-
-        it('should be able to run the label block', function() {
-            this.timeout(10000);
-            // Import the tools
-            var ide = driver.ide();
-
-            // Click the project menu
-            driver.click(ide.controlBar.projectButton);
-            var dialog = driver.dialog();
-            var importBtn = dialog.children.find(child => child.labelString === 'Import tools');
-
-            driver.click(importBtn);
-            expect(importBtn).toNotBe(undefined);
-
-            return driver.waitUntil(() => driver.dialog())
-                .then(() => {  // run the label block
-                    driver.selectCategory('Custom');
-                    var labelBlock = driver.palette().children[0].children
-                        .find(item => item.blockSpec === 'label %txt of size %n');
-
-                    if (!labelBlock) throw new Error(`Could not find label block!`);
-
-                    driver.click(labelBlock);
-
-                    // Wait for some sort of result
-                    var sprite = driver.ide().sprites.at(1);
-                    var startX = sprite.xPosition();
-                    return driver.waitUntil(
-                        () => driver.dialog() || sprite.xPosition() !== startX
-                    ).then(() => {
-                        if (driver.dialog()) throw new Error('label block failed to execute');
-                    });
-                });
-        });
     });
 
     function getFirstDiffChar (str1, str2) {

@@ -23,47 +23,51 @@
             {{ var defaultHost = it.servicesHosts.find(host => host.categories.length === 0); if (!defaultHost) { }} SERVICES_HOSTS.push(DEFAULT_SERVICES_HOST); {{ } }}
         </script>
         {{ if (it.isDevMode) { }}
-        <script type="text/javascript" src="utils.js"></script>
-        <script type="text/javascript" src="services.js"></script>
-        <script type="text/javascript" src="polyfill.js"></script>
-        <script type="text/javascript" src="morphic.js"></script>
-        <script type="text/javascript" src="locale.js"></script>
-        <script type="text/javascript" src="video.js"></script>
-        <script type="text/javascript" src="widgets.js"></script>
-        <script type="text/javascript" src="blocks.js"></script>
-        <script type="text/javascript" src="blocks-ext.js"></script>
-        <script type="text/javascript" src="threads.js"></script>
-        <script type="text/javascript" src="objects.js"></script>
-        <script type="text/javascript" src="gui.js"></script>
-        <script type="text/javascript" src="paint.js"></script>
-        <script type="text/javascript" src="lists.js"></script>
-        <script type="text/javascript" src="byob.js"></script>
-        <script type="text/javascript" src="tables.js"></script>
-        <script type="text/javascript" src="xml.js"></script>
-        <script type="text/javascript" src="store.js"></script>
-        <script type="text/javascript" src="cloud.js"></script>
-        <script type="text/javascript" src="sha512.js"></script>
-        <script type="text/javascript" src="actions.js"></script>
-        <script type="text/javascript" src="undo.js"></script>
-        <script type="text/javascript" src="FileSaver.min.js"></script>
-        <script type="text/javascript" src="message-inputs.js"></script>
-        <script type="text/javascript" src="message-listeners.js"></script>
+        <script type="text/javascript" src="src/logo.js"></script>
+        <script type="text/javascript" src="src/utils.js"></script>
+        <script type="text/javascript" src="src/polyfill.js"></script>
+        <script type="text/javascript" src="src/services.js"></script>
+        <script type="text/javascript" src="src/morphic.js"></script>
+        <script type="text/javascript" src="src/symbols.js"></script>
+        <script type="text/javascript" src="src/widgets.js"></script>
+        <script type="text/javascript" src="src/locale.js"></script>
+        <script type="text/javascript" src="src/blocks.js"></script>
+        <script type="text/javascript" src="src/blocks-ext.js"></script>
+        <script type="text/javascript" src="src/threads.js"></script>
+        <script type="text/javascript" src="src/objects.js"></script>
+        <script type="text/javascript" src="src/paint.js"></script>
+        <script type="text/javascript" src="src/cloud.js"></script>
+        <script type="text/javascript" src="src/netscloud.js"></script>
+        <script type="text/javascript" src="src/gui.js"></script>
+        <script type="text/javascript" src="src/paint.js"></script>
+        <script type="text/javascript" src="src/video.js"></script>
+        <script type="text/javascript" src="src/sketch.js"></script>
+        <script type="text/javascript" src="src/lists.js"></script>
+        <script type="text/javascript" src="src/byob.js"></script>
+        <script type="text/javascript" src="src/tables.js"></script>
+        <script type="text/javascript" src="src/xml.js"></script>
+        <script type="text/javascript" src="src/store.js"></script>
+        <script type="text/javascript" src="src/sha512.js"></script>
+        <script type="text/javascript" src="src/actions.js"></script>
+        <script type="text/javascript" src="src/undo.js"></script>
+        <script type="text/javascript" src="src/FileSaver.min.js"></script>
+        <script type="text/javascript" src="src/message-inputs.js"></script>
+        <script type="text/javascript" src="src/message-listeners.js"></script>
 
-        <script type="text/javascript" src="widgets-ext.js"></script>
-        <script type="text/javascript" src="objects-ext.js"></script>
-        <script type="text/javascript" src="gui-ext.js"></script>
-        <script type="text/javascript" src="netscloud.js"></script>
-        <script type="text/javascript" src="threads-ext.js"></script>
+        <script type="text/javascript" src="src/widgets-ext.js"></script>
+        <script type="text/javascript" src="src/objects-ext.js"></script>
+        <script type="text/javascript" src="src/gui-ext.js"></script>
+        <script type="text/javascript" src="src/threads-ext.js"></script>
 
         <!-- Additional Components-->
-        <script type="text/javascript" src="websockets.js"></script>
-        <script type="text/javascript" src="messages.js"></script>
-        <script type="text/javascript" src="room.js"></script>
-        <script type="text/javascript" src="netsblox.js"></script>
+        <script type="text/javascript" src="src/websockets.js"></script>
+        <script type="text/javascript" src="src/messages.js"></script>
+        <script type="text/javascript" src="src/room.js"></script>
+        <script type="text/javascript" src="src/netsblox.js"></script>
 
         <!-- Snap overrides -->
-        <script type="text/javascript" src="store-ext.js"></script>
-        <script type="text/javascript" src="actions-ext.js"></script>
+        <script type="text/javascript" src="src/store-ext.js"></script>
+        <script type="text/javascript" src="src/actions-ext.js"></script>
         {{ } else { }}
         <script type="text/javascript" src="dist/app.min.js?v=1.18.0"></script>
         {{ } }}
@@ -74,7 +78,7 @@
         SnapCloud.password = true;
         {{ } }}
         </script>
-        <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="src/main.js"></script>
     </head>
     <body style="margin: 0;">
         <canvas id="world" tabindex="1" style="position: absolute;" ></canvas>

@@ -98,17 +98,25 @@ SnapDriver.prototype.selectSprite = function(name) {
 };
 
 SnapDriver.prototype.keys = function(text) {
-    let world = this.world();
-    let keyboard = world.keyboardReceiver;
+    const world = this.world();
 
     text.split('').forEach(letter => {
-        const event = {
-            keyCode: letter.charCodeAt(0)
+        const eventInfo = {
+            key: letter,
+            keyCode: letter.charCodeAt(0),
+            shiftKey: letter !== letter.toLowerCase(),
         };
-        world.currentKey = event.keyCode;
-        keyboard.processKeyPress(event);
-        world.currentKey = null;
+
+        let event = new KeyboardEvent('keydown', eventInfo);
+        world.keyboardHandler.dispatchEvent(event);
+        event = new KeyboardEvent('keypress', eventInfo);
+        world.keyboardHandler.dispatchEvent(event);
+        event = new KeyboardEvent('keyup', eventInfo);
+        world.keyboardHandler.dispatchEvent(event);
     });
+    world.keyboardHandler.value = text;
+    let event = new InputEvent('input');
+    world.keyboardHandler.dispatchEvent(event);
 };
 
 // Add block by spec
@@ -121,9 +129,7 @@ SnapDriver.prototype.addBlock = function(spec, position) {
     var sprite = this.ide().currentSprite;
 
     position = position || new Point(400, 400);
-    let action = SnapActions.addBlock(block, sprite.scripts, position);
-    return action;
-    //return SnapActions.addBlock(block, sprite.scripts, position);
+    return SnapActions.addBlock(block, sprite, position);
 };
 
 // morphic interactions
@@ -297,10 +303,10 @@ SnapDriver.prototype.login = async function(name, password='password') {
     this.click(loginBtn);
 
     // enter login credentials
-    console.log(`logging in as ${name}`);
-    this.keys(name);
-    this.keys('\t');
-    this.keys(password);
+    const [form] = this.dialog().body.children;
+    const [, userField, , passwordField] = form.children;
+    userField.setContents(name);
+    passwordField.setContents(password);
     this.dialog().ok();
     await this.expect(
         () => !!this.isShowingDialogTitle(title => title.includes('connected')),
