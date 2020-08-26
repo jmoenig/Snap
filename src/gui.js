@@ -7381,7 +7381,7 @@ SaveOpenDialogMorph.prototype.buildFilterField = function () {
         var text = this.getValue();
 
         myself.listField.elements =
-            myself.projectList.filter(aProject => {
+            myself.itemsList.filter(aProject => {
                 const name = aProject.name;
                 const notes = aProject.notes || '';
                 return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
