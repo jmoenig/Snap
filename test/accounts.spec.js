@@ -6,6 +6,7 @@ describe.skip('accounts', function() {
             'brian',
             hex_sha512('some-test-password'),
             false,
+            null,
             () => done(),
             nop
         );

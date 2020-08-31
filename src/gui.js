@@ -6348,6 +6348,7 @@ IDE_Morph.prototype.initializeCloudWithSnap = function () {
             user.username.toLowerCase(),
             user.password,
             user.choice,
+            'Snap!',
             () => {
                 //sessionStorage.username = username;
                 this.controlBar.cloudButton.refresh();
@@ -6362,7 +6363,6 @@ IDE_Morph.prototype.initializeCloudWithSnap = function () {
                 this.showMessage(msg, 2);
             },
             this.cloudError(),
-            'Snap!'
         )
     ).withKey('cloudlogin').promptCredentials(
         'Sign in with Snap!',
@@ -6386,6 +6386,7 @@ IDE_Morph.prototype.initializeCloud = function () {
             user.username,
             user.password,
             user.choice,
+            null,
             () => {
                 const {username} = this.cloud;
                 sessionStorage.username = username;
@@ -6772,7 +6773,7 @@ IDE_Morph.prototype.cloudError = function () {
             return;
         }
         new DialogBoxMorph().inform(
-            'Snap!Cloud',
+            'NetsBlox Cloud',
             (url ? url + '\n' : '')
                 + response,
             this.world(),

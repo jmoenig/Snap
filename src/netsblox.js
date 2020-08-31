@@ -867,19 +867,19 @@ NetsBloxMorph.prototype.rawOpenBlocksMsgTypeString = function (aString) {
 };
 
 NetsBloxMorph.prototype.initializeCloud = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
+        user => {
             var pwh = hex_sha512(user.password),
                 str;
-            SnapCloud.login(
+            this.cloud.login(
                 user.username,
                 pwh,
                 user.choice,
-                function () {
+                null,
+                () => {
                     Services.fetchHosts();
                     if (user.choice) {
                         str = SnapCloud.encodeDict(
@@ -890,10 +890,10 @@ NetsBloxMorph.prototype.initializeCloud = function () {
                         );
                         localStorage['-snap-user'] = str;
                     }
-                    myself.source = 'cloud';
-                    myself.showMessage('now connected.', 2);
+                    this.source = 'cloud';
+                    this.showMessage('now connected.', 2);
                 },
-                myself.cloudError()
+                this.cloudError()
             );
         }
     ).withKey('cloudlogin').promptCredentials(
@@ -905,8 +905,8 @@ NetsBloxMorph.prototype.initializeCloud = function () {
         null,
         'stay signed in on this computer\nuntil logging out',
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
