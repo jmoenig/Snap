@@ -4,6 +4,11 @@
 * **New Features:**
     * show message senders and receivers from the blocks context menu, thanks, Bernat!
     * new "Database" library operating on localstore, thanks, Jadga!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+### 2020-08-31
+* Catalan translation update, thanks, Joan!
 
 ### 2020-08-18
 * blocks: tweaked menu separator line above "senders.../receivers..." to only show once
