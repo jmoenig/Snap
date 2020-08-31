@@ -1340,19 +1340,20 @@ NetsBloxMorph.prototype.collabResponse = function (invite, response) {
 };
 
 NetsBloxMorph.prototype.logout = function () {
-    var myself = this;
     delete localStorage['-snap-user'];
     SnapCloud.logout(
-        function () {
+        () => {
             Services.reset();
             SnapCloud.clear();
-            myself.showMessage('disconnected.', 2);
-            myself.newProject();
+            this.controlBar.cloudButton.refresh();
+            this.showMessage('disconnected.', 2);
+            this.newProject();
         },
-        function () {
+        () => {
             SnapCloud.clear();
-            myself.showMessage('disconnected.', 2);
-            myself.newProject();
+            this.controlBar.cloudButton.refresh();
+            this.showMessage('disconnected.', 2);
+            this.newProject();
         }
     );
 };

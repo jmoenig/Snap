@@ -1111,14 +1111,19 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
-    button = new PushButtonMorph(
-        this,
+    button = new ToggleButtonMorph(
+        null, //colors,
+        this, // the IDE is the target
         () => {
             var menu = this.cloudMenu(),
                 pos = this.controlBar.cloudButton.bottomLeft();
             menu.popup(this.world(), pos);
         },
-        new SymbolMorph('cloud', 11)
+        [
+            new SymbolMorph('cloudOutline', 11),
+            new SymbolMorph('cloud', 11)
+        ],
+        () => !isNil(this.cloud.username) // query
     );
 
     button.hasNeutralBackground = true;
@@ -6339,32 +6344,13 @@ IDE_Morph.prototype.initializeCloud = function () {
             user.username.toLowerCase(),
             user.password,
             user.choice,
-            (username, role, response) => {
+            () => {
+                const {username} = this.cloud;
                 sessionStorage.username = username;
                 this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
-                if (!isNil(response.days_left)) {
-                    new DialogBoxMorph().inform(
-                        'Unverified account: ' +
-                        response.days_left +
-                        ' days left',
-                        'You are now logged in, and your account\n' +
-                        'is enabled for three days.\n' +
-                        'Please use the verification link that\n' +
-                        'was sent to your email address when you\n' +
-                        'signed up.\n\n' +
-                        'If you cannot find that email, please\n' +
-                        'check your spam folder. If you still\n' +
-                        'cannot find it, please use the "Resend\n' +
-                        'Verification Email..." option in the cloud\n' +
-                        'menu.\n\n' +
-                        'You have ' + response.days_left + ' days left.',
-                        world,
-                        this.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                } else {
-                    this.showMessage(response.message, 2);
-                }
+                let msg = localize('Logged in as ') + username;
+                this.showMessage(msg, 2);
             },
             this.cloudError()
         )
