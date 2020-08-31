@@ -1,4 +1,4 @@
-/* global localize, SERVER_URL, nop, Cloud, CLIENT_ID */
+/* global localize, SERVER_URL, nop, Cloud, CLIENT_ID, utils*/
 NetCloud.prototype = new Cloud();
 
 function NetCloud(clientId, url) {
@@ -13,7 +13,8 @@ NetCloud.prototype.login = function (
     password,
     remember,
     callBack,
-    errorCall
+    errorCall,
+    strategy
 ) {
     // both callBack and errorCall are two-argument functions
     var request = new XMLHttpRequest(),
@@ -23,17 +24,21 @@ NetCloud.prototype.login = function (
             __u: username,
             remember: remember,
             clientId: SnapCloud.clientId
-        }),
-        myself = this;
+        });
 
     this.setRoute(username);
     try {
+        let url = (this.hasProtocol() ? '' : 'http://') +
+            this.url +
+            '?SESSIONGLUE=' +
+            this.route;
+
+        if (strategy) {
+            url += `&strategy=${strategy}`;
+        }
         request.open(
             'POST',
-            (this.hasProtocol() ? '' : 'http://') +
-                this.url +
-                '?SESSIONGLUE=' +
-                this.route,
+            url,
             true
         );
         request.setRequestHeader(
@@ -43,14 +48,15 @@ NetCloud.prototype.login = function (
         // glue this session to a route:
         request.setRequestHeader('SESSIONGLUE', this.route);
         request.withCredentials = true;
-        request.onreadystatechange = function () {
+        request.onreadystatechange = async () => {
             if (request.readyState === 4) {
                 if (request.status === 200) {
-                    myself.api = JSON.parse(request.responseText);
-                    if (myself.api.logout) {
-                        myself.username = username;
-                        myself.password = password;
-                        callBack.call(null, myself.api, 'NetsBlox Cloud');
+                    this.api = JSON.parse(request.responseText);
+                    if (this.api.logout) {
+                        const user = await this.getUserData();
+                        this.username = user.username;
+                        this.credentials = {username, password, strategy};
+                        callBack.call(null, this.api, 'NetsBlox Cloud');
                     } else {
                         errorCall.call(
                             null,
@@ -67,7 +73,7 @@ NetCloud.prototype.login = function (
                 } else {
                     errorCall.call(
                         null,
-                        myself.url,
+                        this.url,
                         localize('could not connect to:')
                     );
                 }
@@ -76,6 +82,28 @@ NetCloud.prototype.login = function (
         request.send(usr);
     } catch (err) {
         errorCall.call(this, err.toString(), 'NetsBlox Cloud');
+    }
+};
+
+NetCloud.prototype.getUserData = async function() {
+    const url = (this.hasProtocol() ? '' : 'http://') +
+        this.url;
+    const request = new XMLHttpRequest();
+    request.open(
+        'GET',
+        url,
+        true
+    );
+    request.setRequestHeader(
+        'Content-Type',
+        'application/json; charset=utf-8'
+    );
+    request.withCredentials = true;
+    try {
+        await utils.requestPromise(request);
+        return JSON.parse(request.responseText);
+    } catch (err) {
+        console.warn('Unable to fetch user data:', err);
     }
 };
 
@@ -442,7 +470,7 @@ NetCloud.prototype.callService = function (
 NetCloud.prototype.reconnect = function (callback, errorCall) {
     var myself = this;
 
-    if (!(this.username && this.password)) {
+    if (!this.username) {
         this.message('You are not logged in');
         return;
     }
@@ -764,6 +792,14 @@ NetCloud.prototype.getEntireProject = function(projectId, callback, errorCall) {
         },
         errorCall
     );
+};
+
+NetCloud.prototype.linkAccount = async function(username, password, type) {
+    await this.request(`/api/linkAccount/${type}`, {username, password});
+};
+
+NetCloud.prototype.unlinkAccount = async function(account) {
+    await this.request('/api/unlinkAccount', account);
 };
 
 var SnapCloud = new NetCloud(CLIENT_ID, SERVER_URL + '/api/');

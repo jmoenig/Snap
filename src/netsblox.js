@@ -87,8 +87,25 @@ NetsBloxMorph.prototype.clearProject = function () {
     //SnapUndo.reset();
 };
 
-NetsBloxMorph.prototype.cloudMenu = function () {
+NetsBloxMorph.prototype.cloudMenu = async function () {
     var menu = NetsBloxMorph.uber.cloudMenu.call(this);
+
+    const isLoggedIn = this.cloud.username;
+    if (isLoggedIn) {
+        const userData = await this.cloud.getUserData();
+        const linkedAccounts = userData && userData.linkedAccounts;
+        if (linkedAccounts.length === 0) {
+            menu.addItem(
+                'Link to Snap! account...',
+                'linkAccount'
+            );
+        } else {
+            menu.addItem(
+                localize('Unlink Snap! account...'),
+                () => this.unlinkAccount(userData.linkedAccounts[0]),
+            );
+        }
+    }
 
     if (this.cloud.username && this.room.isOwner()) {
         menu.addLine();
@@ -1524,4 +1541,53 @@ NetsBloxMorph.prototype.showUpdateNotification = function () {
 
 NetsBloxMorph.prototype.showBrowserNotification = function () {
     this.simpleNotification('It seems you\'re using an unsupported browser. \n Use an up-to-date Chrome browser for the best experience.');
+};
+
+NetsBloxMorph.prototype.linkAccount = function () {
+    new DialogBoxMorph(
+        null,
+        async user => {
+            try {
+                await this.cloud.linkAccount(
+                    user.username.toLowerCase(),
+                    user.password,
+                    'Snap!'
+                );
+                this.showMessage(localize('Linked account!'), 2);
+            } catch (err) {
+                this.showMessage(
+                    localize('Unable to link account:') + ' ' + err.message,
+                    2
+                );
+            }
+        }
+    ).withKey('cloudlogin').promptCredentials(
+        'Sign in with Snap!',
+        'login',
+        null,
+        null,
+        null,
+        null,
+        'stay signed in on this computer\nuntil logging out',
+        this.world(),
+        this.cloudIcon(),
+        this.cloudMsg
+    );
+};
+
+NetsBloxMorph.prototype.unlinkAccount = async function (account) {
+    const {username} = account;
+    const confirmed = await this.confirm(
+        localize('Are you sure you would like to unlink ') + username + '?',
+        localize('Unlink Account?')
+    );
+
+    if (confirmed) {
+        try {
+            await this.cloud.unlinkAccount(account);
+            this.showMessage(localize('Unlinked ') + username, 2);
+        } catch (req) {
+            this.showMessage(localize('Unable to unlink account: ') + req.responseText, 2);
+        }
+    }
 };

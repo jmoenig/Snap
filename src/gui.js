@@ -1114,8 +1114,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button = new ToggleButtonMorph(
         null, //colors,
         this, // the IDE is the target
-        () => {
-            var menu = this.cloudMenu(),
+        async () => {
+            var menu = await this.cloudMenu(),
                 pos = this.controlBar.cloudButton.bottomLeft();
             menu.popup(this.world(), pos);
         },
@@ -3155,6 +3155,10 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'Login...',
             'initializeCloud'
+        );
+        menu.addItem(
+            'Login with Snap!...',
+            'initializeCloudWithSnap'
         );
         menu.addItem(
             'Signup...',
@@ -6336,12 +6340,50 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 
 // IDE_Morph cloud interface
 
-IDE_Morph.prototype.initializeCloud = function () {
+IDE_Morph.prototype.initializeCloudWithSnap = function () {
     var world = this.world();
     new DialogBoxMorph(
         null,
         user => this.cloud.login(
             user.username.toLowerCase(),
+            user.password,
+            user.choice,
+            () => {
+                //sessionStorage.username = username;
+                this.controlBar.cloudButton.refresh();
+                this.source = 'cloud';
+
+                const {username, strategy} = this.cloud;
+                let msg = localize('Logged in as ') + username;
+                if (strategy) {
+                    msg += ` (using ${strategy})`;
+                }
+
+                this.showMessage(msg, 2);
+            },
+            this.cloudError(),
+            'Snap!'
+        )
+    ).withKey('cloudlogin').promptCredentials(
+        'Sign in with Snap!',
+        'login',
+        null,
+        null,
+        null,
+        null,
+        'stay signed in on this computer\nuntil logging out',
+        world,
+        this.cloudIcon(),
+        this.cloudMsg
+    );
+};
+
+IDE_Morph.prototype.initializeCloud = function () {
+    var world = this.world();
+    new DialogBoxMorph(
+        null,
+        user => this.cloud.login(
+            user.username,
             user.password,
             user.choice,
             () => {
