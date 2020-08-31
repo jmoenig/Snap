@@ -27,7 +27,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, hex_sha512, nop, localize, CLIENT_ID, SERVER_URL*/
+/*global modules, hex_sha512, nop, localize, CLIENT_ID, SERVER_URL, utils*/
 
 modules.cloud = '2015-December-15';
 
@@ -190,10 +190,8 @@ Cloud.prototype.login = function (
     password,
     remember,
     strategy,
-    callBack,
-    errorCall,
 ) {
-    // both callBack and errorCall are two-argument functions
+    const deferred = utils.defer();
     var request = new XMLHttpRequest(),
         usr = JSON.stringify({
             projectId: this.projectId,
@@ -233,33 +231,28 @@ Cloud.prototype.login = function (
                         const user = await this.getUserData();
                         this.username = user.username;
                         this.credentials = {username, password, strategy};
-                        callBack.call(null, this.api, 'NetsBlox Cloud');
+                        return deferred.resolve(user);
                     } else {
-                        errorCall.call(
-                            null,
-                            request.responseText,
-                            'connection failed'
+                        return deferred.reject(
+                            new Error(request.responseText)
                         );
                     }
                 } else if (request.status === 403) {
-                    errorCall.call(
-                        null,
-                        '',
-                        localize(request.responseText || 'wrong username or password')
+                    return deferred.reject(
+                        new Error(localize(request.responseText || 'wrong username or password'))
                     );
                 } else {
-                    errorCall.call(
-                        null,
-                        this.url,
-                        localize('could not connect to:')
+                    return deferred.reject(
+                        new Error(localize('could not connect to cloud.'))
                     );
                 }
             }
         };
         request.send(usr);
     } catch (err) {
-        errorCall.call(this, err.toString(), 'NetsBlox Cloud');
+        deferred.reject(err);
     }
+    return deferred.promise;
 };
 
 Cloud.prototype.getProjectList = function (callBack, errorCall) {

@@ -871,30 +871,29 @@ NetsBloxMorph.prototype.initializeCloud = function () {
 
     new DialogBoxMorph(
         null,
-        user => {
-            var pwh = hex_sha512(user.password),
-                str;
-            this.cloud.login(
-                user.username,
-                pwh,
-                user.choice,
-                null,
-                () => {
-                    Services.fetchHosts();
-                    if (user.choice) {
-                        str = SnapCloud.encodeDict(
-                            {
-                                username: user.username,
-                                password: pwh
-                            }
-                        );
-                        localStorage['-snap-user'] = str;
-                    }
-                    this.source = 'cloud';
-                    this.showMessage('now connected.', 2);
-                },
-                this.cloudError()
-            );
+        async user => {
+            var pwh = hex_sha512(user.password);
+            try {
+                await this.cloud.login(
+                    user.username,
+                    pwh,
+                    user.choice
+                );
+                Services.fetchHosts();
+                if (user.choice) {
+                    const str = SnapCloud.encodeDict(
+                        {
+                            username: user.username,
+                            password: pwh
+                        }
+                    );
+                    localStorage['-snap-user'] = str;
+                }
+                this.source = 'cloud';
+                this.showMessage('now connected.', 2);
+            } catch (err) {
+                this.cloudError()(err.message);
+            }
         }
     ).withKey('cloudlogin').promptCredentials(
         'Sign in',

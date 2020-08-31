@@ -6344,12 +6344,14 @@ IDE_Morph.prototype.initializeCloudWithSnap = function () {
     var world = this.world();
     new DialogBoxMorph(
         null,
-        user => this.cloud.login(
-            user.username.toLowerCase(),
-            user.password,
-            user.choice,
-            'Snap!',
-            () => {
+        async user => {
+            try {
+                await this.cloud.login(
+                    user.username.toLowerCase(),
+                    user.password,
+                    user.choice,
+                    'Snap!'
+                );
                 //sessionStorage.username = username;
                 this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
@@ -6361,9 +6363,10 @@ IDE_Morph.prototype.initializeCloudWithSnap = function () {
                 }
 
                 this.showMessage(msg, 2);
-            },
-            this.cloudError(),
-        )
+            } catch (err) {
+                this.cloudError(err.message);
+            }
+        }
     ).withKey('cloudlogin').promptCredentials(
         'Sign in with Snap!',
         'login',
@@ -6382,21 +6385,23 @@ IDE_Morph.prototype.initializeCloud = function () {
     var world = this.world();
     new DialogBoxMorph(
         null,
-        user => this.cloud.login(
-            user.username,
-            user.password,
-            user.choice,
-            null,
-            () => {
+        async user => {
+            try {
+                await this.cloud.login(
+                    user.username,
+                    user.password,
+                    user.choice,
+                );
                 const {username} = this.cloud;
                 sessionStorage.username = username;
                 this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
                 let msg = localize('Logged in as ') + username;
                 this.showMessage(msg, 2);
-            },
-            this.cloudError()
-        )
+            } catch (err) {
+                this.cloudError(err.message);
+            }
+        }
     ).withKey('cloudlogin').promptCredentials(
         'Sign in',
         'login',
