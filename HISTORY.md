@@ -14,6 +14,7 @@
 * gui, blocks: fixed a bunch of typos and UI strings, thanks, Brian Broll!
 * colors library update, thanks, Brian H.! 
 * German translation update
+* objects: also scan custom blocks for message sends
 
 ### 2020-08-31
 * Catalan translation update, thanks, Joan!

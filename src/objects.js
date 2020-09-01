@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-August-07';
+modules.objects = '2020-September-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -5753,23 +5753,8 @@ SpriteMorph.prototype.yBottom = function () {
 // SpriteMorph message broadcasting
 
 SpriteMorph.prototype.allMessageNames = function () {
-    var msgs = [],
-        all = this.scripts.children.slice();
-    this.customBlocks.forEach(def => {
-        if (def.body) {
-            all.push(def.body.expression);
-        }
-        def.scripts.forEach(scr => all.push(scr));
-    });
-    if (this.globalBlocks) {
-        this.globalBlocks.forEach(def => {
-            if (def.body) {
-                all.push(def.body.expression);
-            }
-            def.scripts.forEach(scr => all.push(scr));
-        });
-    }
-    all.forEach(script => {
+    var msgs = [];
+    this.allScripts().forEach(script => {
         script.allChildren().forEach(morph => {
             var txt;
             if (morph instanceof InputSlotMorph && morph.choices && contains(
@@ -5789,25 +5774,30 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
-    if (typeof message === 'number') {message = message.toString(); }
-    return this.scripts.allChildren().filter(morph => {
-        var event, eventReceiver;
-        if ((morph.selector) &&
-                contains(
-                    ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
-                    morph.selector)
-           ) {
-            event = morph.inputs()[0].evaluate();
-            if (morph.selector === 'doSend') {
-                eventReceiver = morph.inputs()[1].evaluate();
+    if (typeof message === 'number') {
+        message = message.toString();
+    }
+    return this.allScripts().filter(script =>
+        script.allChildren().some(morph => {
+            var event, eventReceiver;
+            if ((morph.selector) &&
+                    contains(
+                        ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
+                        morph.selector)
+            ) {
+                event = morph.inputs()[0].evaluate();
+                if (morph.selector === 'doSend') {
+                    eventReceiver = morph.inputs()[1].evaluate();
+                }
+                return ((morph.selector !== 'doSend') ||
+                        (receiverName === eventReceiver)) &&
+                    ((event === message) ||
+                        (message instanceof Array &&
+                            message[0] === 'any message'));
             }
-            return ((morph.selector !== 'doSend') ||
-                    (receiverName === eventReceiver)) &&
-                ((event === message) ||
-                 (message instanceof Array && message[0] === 'any message'));
-        }
-        return false;
-    });
+            return false;
+        })
+    );
 };
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
@@ -5863,6 +5853,25 @@ SpriteMorph.prototype.allGenericHatBlocks = function () {
         }
         return false;
     });
+};
+
+SpriteMorph.prototype.allScripts = function () {
+    var all = this.scripts.children.slice();
+    this.customBlocks.forEach(def => {
+        if (def.body) {
+            all.push(def.body.expression);
+        }
+        def.scripts.forEach(scr => all.push(scr));
+    });
+    if (this.globalBlocks) {
+        this.globalBlocks.forEach(def => {
+            if (def.body) {
+                all.push(def.body.expression);
+            }
+            def.scripts.forEach(scr => all.push(scr));
+        });
+    }
+    return all;
 };
 
 // SpriteMorph events
@@ -9209,6 +9218,9 @@ StageMorph.prototype.allHatBlocksForInteraction
 
 StageMorph.prototype.allGenericHatBlocks
     = SpriteMorph.prototype.allGenericHatBlocks;
+
+StageMorph.prototype.allScripts
+    = SpriteMorph.prototype.allScripts;
 
 // StageMorph events
 
