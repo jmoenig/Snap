@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-August-08';
+modules.gui = '2020-September-01';
 
 // Declarations
 

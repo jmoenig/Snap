@@ -6,6 +6,12 @@
     * new "Database" library operating on localstore, thanks, Jadga!
 * **Translation Updates:**
     * Catalan, thanks, Joan!
+    * Norwegian, thanks, Olav!
+
+### 2020-09-01
+* Norwegian translation update, thanks, Olav
+* gui, blocks: fixed a bunch of typos and UI strings, thanks, Brian Broll!
+* colors library update, thanks, Brian H.! 
 
 ### 2020-08-31
 * Catalan translation update, thanks, Joan!
