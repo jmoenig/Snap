@@ -1461,49 +1461,48 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportBoolean',
             inputs: [false]
         },
-        //TODO: enable blocks we care about
-        //reportCostumes: {
-            //selector: 'reportGet',
-            //inputs: [['costumes']]
-        //},
-        //reportSounds: {
-            //selector: 'reportGet',
-            //inputs: [['sounds']]
-        //},
-        //doMapStringCode: {
-            //selector: 'doMapValueCode',
-            //inputs: [['String'], '<#1>'],
-            //offset: 1
-        //},
-        //reportDistanceTo: {
-            //selector: 'reportRelationTo',
-             //inputs: [['distance']],
-            //offset: 1
-        //},
-        //comeToFront: {
-            //selector: 'goToLayer',
-            //inputs: [['front']]
-        //},
-        //setHue: {
-            //selector: 'setPenHSVA',
-            //inputs: [['hue']],
-            //offset: 1
-        //},
-        //setBrightness: {
-            //selector: 'setPenHSVA',
-            //inputs: [['brightness']],
-            //offset: 1
-        //},
-        //changeHue: {
-            //selector: 'changePenHSVA',
-            //inputs: [['hue']],
-            //offset: 1
-        //},
-        //changeBrightness: {
-            //selector: 'changePenHSVA',
-            //inputs: [['brightness']],
-            //offset: 1
-        //},
+        reportCostumes: {
+            selector: 'reportGet',
+            inputs: [['costumes']]
+        },
+        reportSounds: {
+            selector: 'reportGet',
+            inputs: [['sounds']]
+        },
+        doMapStringCode: {
+            selector: 'doMapValueCode',
+            inputs: [['String'], '<#1>'],
+            offset: 1
+        },
+        reportDistanceTo: {
+            selector: 'reportRelationTo',
+            inputs: [['distance']],
+            offset: 1
+        },
+        comeToFront: {
+            selector: 'goToLayer',
+            inputs: [['front']]
+        },
+        setHue: {
+            selector: 'setPenHSVA',
+            inputs: [['hue']],
+            offset: 1
+        },
+        setBrightness: {
+            selector: 'setPenHSVA',
+            inputs: [['brightness']],
+            offset: 1
+        },
+        changeHue: {
+            selector: 'changePenHSVA',
+            inputs: [['hue']],
+            offset: 1
+        },
+        changeBrightness: {
+            selector: 'changePenHSVA',
+            inputs: [['brightness']],
+            offset: 1
+        },
         reportIsFastTracking: {
             selector: 'reportGlobalFlag',
             inputs: [['turbo mode']],
