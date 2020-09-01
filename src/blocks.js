@@ -7627,7 +7627,7 @@ ScriptsMorph.prototype.scriptTarget = function () {
     if (editor) {
         return editor.target;
     }
-    throw new Error('script target bannot be found for orphaned scripts');
+    throw new Error('script target cannot be found for orphaned scripts');
 };
 
 
