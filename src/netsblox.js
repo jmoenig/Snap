@@ -93,7 +93,7 @@ NetsBloxMorph.prototype.cloudMenu = async function () {
     const isLoggedIn = this.cloud.username;
     if (isLoggedIn) {
         const userData = await this.cloud.getUserData();
-        const linkedAccounts = userData && userData.linkedAccounts;
+        const linkedAccounts = userData ? userData.linkedAccounts : [];
         if (linkedAccounts.length === 0) {
             menu.addItem(
                 'Link to Snap! account...',
