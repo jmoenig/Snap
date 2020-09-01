@@ -2787,9 +2787,8 @@ IDE_Morph.prototype.newCamSprite = function () {
             sprite.wearCostume(costume);
 
             camDialog.close();
-            SnapActions.addSprite(sprite).then(() => {
-                this.selectSprite(sprite);
-            });
+            SnapActions.addSprite(sprite)
+                .then(sprite => this.selectSprite(sprite));
         });
 
     camDialog.popUp(this.world());
