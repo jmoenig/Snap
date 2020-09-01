@@ -29,7 +29,7 @@
 
 /*global modules, hex_sha512, nop, localize, CLIENT_ID, SERVER_URL, utils*/
 
-modules.cloud = '2015-December-15';
+modules.cloud = '2020-September-1';
 
 // Global stuff
 
@@ -47,7 +47,7 @@ function Cloud(clientId, url) {
     this.session = null;
     this.limo = null;
     this.route = null;
-    this.api = {};
+    this.api = null;
 }
 
 Cloud.prototype.clear = function () {
@@ -56,7 +56,7 @@ Cloud.prototype.clear = function () {
     this.session = null;
     this.limo = null;
     this.route = null;
-    this.api = {};
+    this.api = null;
 };
 
 Cloud.prototype.hasProtocol = function () {
