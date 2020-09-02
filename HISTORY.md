@@ -4,10 +4,14 @@
 * **New Features:**
     * show message senders and receivers from the blocks context menu, thanks, Bernat!
     * new "Database" library operating on localstore, thanks, Jadga!
+    * hyperized "distance/direction to _" reporter primitive
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-02
+* threads: hyperized "distance/direction to _" reporter primitive
 
 ### 2020-09-01
 * Norwegian translation update, thanks, Olav
