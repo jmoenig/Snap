@@ -98,13 +98,12 @@
 /*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map,
 StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph, WHITE,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
-AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
-StringMorph, nop, radians, BoxMorph, ArrowMorph, PushButtonMorph,
-contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
-ToggleElementMorph, fontHeight, StageMorph, SyntaxElementMorph,
-SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
-SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable,
-BooleanSlotMorph, XML_Serializer, SnapTranslator*/
+AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph, StringMorph,
+nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
+ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph, fontHeight,
+StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph,
+MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
+WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -1036,7 +1035,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
         rcvr = this.scriptTarget(),
         myself = this,
-        shiftClicked = this.world().currentKey === 16,
+        // shiftClicked = this.world().currentKey === 16,
         menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
@@ -1133,11 +1132,6 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
-        /*
-        if (shiftClicked) {
-            menu.addItem("export definition...", 'exportBlockDefinition');
-        }
-        */
         if (this.isTemplate) { // inside the palette
             if (this.isGlobal) {
                 menu.addItem(
@@ -1192,6 +1186,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 "duplicate block definition...",
                 'duplicateBlockDefinition'
             );
+            if (this.isGlobal) {
+                menu.addItem(
+                    "export block definition...",
+                    'exportBlockDefinition',
+                    'including dependencies'
+                );
+            }
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal ||
@@ -1211,34 +1212,16 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             monitor(vName)
         );
     }
-    if (shiftClicked && this.isGlobal) {
-        var dependencies = this.definition.collectDependencies();
-        if (dependencies.length) {
-            menu.addItem(
-                "dependencies...",
-                () => this.exportDependencies(dependencies),
-                'EXPERIMENTAL!\nExport custom blocks this block relies on',
-                new Color(100, 0, 0)
-            );
-        }
-    }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
 };
 
-CustomCommandBlockMorph.prototype.exportDependencies = function (definitions) {
+CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     new BlockExportDialogMorph(
         ide.serializer,
-        definitions
+        [this.definition].concat(this.definition.collectDependencies())
     ).popUp(this.world());
-};
-
-CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var xml = new SnapSerializer().serialize(this.definition),
-        ide = this.parentThatIsA(IDE_Morph);
-
-    ide.saveXMLAs(xml, this.spec);
 };
 
 CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
@@ -1471,8 +1454,8 @@ CustomReporterBlockMorph.prototype.duplicateBlockDefinition
 CustomReporterBlockMorph.prototype.deleteBlockDefinition
     = CustomCommandBlockMorph.prototype.deleteBlockDefinition;
 
-CustomReporterBlockMorph.prototype.exportDependencies
-    = CustomCommandBlockMorph.prototype.exportDependencies;
+CustomReporterBlockMorph.prototype.exportBlockDefinition
+    = CustomCommandBlockMorph.prototype.exportBlockDefinition;
 
 // CustomReporterBlockMorph events:
 
