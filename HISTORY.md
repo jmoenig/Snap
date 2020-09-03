@@ -2,10 +2,10 @@
 
 ## in development:
 * **New Features:**
-    * show message senders and receivers from the blocks context menu, thanks, Bernat!
-    * new "Database" library operating on localstore, thanks, Jadga!
-    * hyperized "distance/direction to _" reporter primitive
+    * show message senders and receivers from the blocks context menu
     * "export block definition" including dependencies
+    * hyperized "distance/direction to _" reporter primitive
+    * new "Database" library operating on localstore
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
