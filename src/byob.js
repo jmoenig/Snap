@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-July-24';
+modules.byob = '2020-September-03';
 
 // Declarations
 
@@ -561,6 +561,34 @@ CustomBlockDefinition.prototype.purgeCorpses = function () {
     );
 };
 
+// CustomBlockDefinition dependencies
+
+CustomBlockDefinition.prototype.collectDependencies = function (
+    excluding = [],
+    result = []
+) {
+    if (!this.isGlobal) {
+        throw new Error('collecting dependencies is only supported\n' +
+            'for global custom blocks');
+    }
+    excluding.push(this);
+    this.scripts.concat(
+        this.body ? [this.body.expression] : []
+    ).forEach(script => {
+        script.forAllChildren(morph => {
+            if (morph.isCustomBlock &&
+                morph.isGlobal &&
+                !contains(excluding, morph.definition) &&
+                !contains(result, morph.definition)
+            ) {
+                result.push(morph.definition);
+                morph.definition.collectDependencies(excluding, result);
+            }
+        });
+    });
+    return result;
+};
+
 // CustomCommandBlockMorph /////////////////////////////////////////////
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:
@@ -1008,7 +1036,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
         rcvr = this.scriptTarget(),
         myself = this,
-        // shiftClicked = this.world().currentKey === 16,
+        shiftClicked = this.world().currentKey === 16,
         menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
@@ -1183,8 +1211,27 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             monitor(vName)
         );
     }
+    if (shiftClicked && this.isGlobal) {
+        var dependencies = this.definition.collectDependencies();
+        if (dependencies.length) {
+            menu.addItem(
+                "dependencies...",
+                () => this.exportDependencies(dependencies),
+                'EXPERIMENTAL!\nExport custom blocks this block relies on',
+                new Color(100, 0, 0)
+            );
+        }
+    }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
+};
+
+CustomCommandBlockMorph.prototype.exportDependencies = function (definitions) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    new BlockExportDialogMorph(
+        ide.serializer,
+        definitions
+    ).popUp(this.world());
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
@@ -1423,6 +1470,9 @@ CustomReporterBlockMorph.prototype.duplicateBlockDefinition
 
 CustomReporterBlockMorph.prototype.deleteBlockDefinition
     = CustomCommandBlockMorph.prototype.deleteBlockDefinition;
+
+CustomReporterBlockMorph.prototype.exportDependencies
+    = CustomCommandBlockMorph.prototype.exportDependencies;
 
 // CustomReporterBlockMorph events:
 

@@ -5,10 +5,14 @@
     * show message senders and receivers from the blocks context menu, thanks, Bernat!
     * new "Database" library operating on localstore, thanks, Jadga!
     * hyperized "distance/direction to _" reporter primitive
+    * experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-03
+* byob: experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)
 
 ### 2020-09-02
 * threads: hyperized "distance/direction to _" reporter primitive
