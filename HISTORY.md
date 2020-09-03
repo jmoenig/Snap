@@ -14,6 +14,7 @@
 ### 2020-09-03
 * byob: experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)
 * byob: new feature: "export block definition" including dependencies
+* blocks, byob, objects: find message sends in global custom blocks dependencies
 
 ### 2020-09-02
 * threads: hyperized "distance/direction to _" reporter primitive

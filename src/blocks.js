@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-September-01';
+modules.blocks = '2020-September-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3135,7 +3135,7 @@ BlockMorph.prototype.showMessageUsers = function () {
         getter = (this.selector.indexOf('receive') === 0) ?
             'allSendersOf' : 'allHatBlocksFor',
         inputs = this.inputs(),
-        message, receiverName;
+        message, receiverName, knownSenders;
 
     if (this.selector === 'receiveGo') {
         message = '__shout__go__';
@@ -3152,11 +3152,19 @@ BlockMorph.prototype.showMessageUsers = function () {
     }
 
     if (message !== '') {
+        if (getter === 'allSendersOf') {
+            knownSenders = ide.stage.globalBlocksSending(message, receiverName);
+        }
         corral.frame.contents.children.concat(corral.stageIcon).forEach(
             icon => {
                 if (icon.object &&
-                    ((this.selector !== 'doSend' || receiverName === icon.object.name) &&
-                    (icon.object[getter](message, receiverName).length > 0))
+                    ((this.selector !== 'doSend' ||
+                        receiverName === icon.object.name) &&
+                    (icon.object[getter](
+                        message,
+                        receiverName,
+                        knownSenders
+                    ).length > 0))
                 ) {
                     icon.flash();
                 }

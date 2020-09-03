@@ -588,6 +588,35 @@ CustomBlockDefinition.prototype.collectDependencies = function (
     return result;
 };
 
+CustomBlockDefinition.prototype.isSending = function (message, receiverName) {
+    if (typeof message === 'number') {
+        message = message.toString();
+    }
+    return this.scripts.concat(
+        this.body ? [this.body.expression] : []
+    ).some(script =>
+        script.allChildren().some(morph => {
+            var event, eventReceiver;
+            if ((morph.selector) &&
+                    contains(
+                        ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
+                        morph.selector)
+            ) {
+                event = morph.inputs()[0].evaluate();
+                if (morph.selector === 'doSend') {
+                    eventReceiver = morph.inputs()[1].evaluate();
+                }
+                return ((morph.selector !== 'doSend') ||
+                        (receiverName === eventReceiver)) &&
+                    ((event === message) ||
+                        (message instanceof Array &&
+                            message[0] === 'any message'));
+            }
+            return false;
+        })
+    );
+};
+
 // CustomCommandBlockMorph /////////////////////////////////////////////
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:

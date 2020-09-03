@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-September-01';
+modules.objects = '2020-September-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -5773,13 +5773,19 @@ SpriteMorph.prototype.allMessageNames = function () {
     return msgs;
 };
 
-SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
+SpriteMorph.prototype.allSendersOf = function (message, receiverName, known) {
     if (typeof message === 'number') {
         message = message.toString();
     }
     return this.allScripts().filter(script =>
         script.allChildren().some(morph => {
             var event, eventReceiver;
+            if (morph.isCustomBlock &&
+                    morph.isGlobal &&
+                        contains(known, morph.definition)
+            ) {
+                return true;
+            }
             if ((morph.selector) &&
                     contains(
                         ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
@@ -9352,6 +9358,21 @@ StageMorph.prototype.reportPenTrailsAsCostume = function () {
         this.trailsCanvas,
         this.newCostumeName(localize('Background'))
     );
+};
+
+// StageMorph scanning global custom blocks for message sends
+
+StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
+    // "transitive hull"
+    var all = this.globalBlocks.filter(
+            def =>def.isSending(message, receiverName)
+        );
+    this.globalBlocks.forEach(def => {
+        if (def.collectDependencies().some(dep => contains(all, dep))) {
+            all.push(def);
+        }
+    });
+    return all;
 };
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
