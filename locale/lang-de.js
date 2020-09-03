@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-09-01', // this, too, will appear in the Translators tab
+        '2020-09-03', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1204,6 +1204,10 @@ SnapTranslator.dict.de = {
         'Blockdefinition l\u00f6schen...',
     'duplicate block definition...':
         'Blockdefinition duplizieren...',
+    'export block definition...':
+        'Blockdefinition exportieren...',
+    'including dependencies':
+        'mit allen verwendeten Blöcken',
     'edit...':
         'Bearbeiten...',
 
