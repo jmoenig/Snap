@@ -6,6 +6,8 @@
     * "export block definition" including dependencies
     * hyperized "distance/direction to _" reporter primitive
     * new "Database" library operating on localstore
+* **Notable Fixes:**
+    * changing the type of a custom block from reporter to command in the block editor changes the prototype instead of adding another one
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
@@ -13,7 +15,8 @@
 
 ### 2020-09-04
 * byob, blocks, objects: refactored scanning for message senders
-* blocks: support scanning for message receivers from inside a block editor 
+* blocks: support scanning for message receivers from inside a block editor
+* blocks: fixed changing the type of a custom block from reporter to command in the block editor
 
 ### 2020-09-03
 * byob: experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)
@@ -46,7 +49,7 @@
 * show message senders / receivers from the blocks context menu, thanks, Bernat!
 
 ## 6.1.4:
-* fixed "green flag" symbol size for embedded proects (for real ^^)=
+* fixed "green flag" symbol size for embedded proects (for real ^^)
 
 ## 6.1.3:
 * **Notable Changes:**
