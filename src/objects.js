@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-September-03';
+modules.objects = '2020-September-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -5774,35 +5774,8 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allSendersOf = function (message, receiverName, known) {
-    if (typeof message === 'number') {
-        message = message.toString();
-    }
     return this.allScripts().filter(script =>
-        script.allChildren().some(morph => {
-            var event, eventReceiver;
-            if (morph.isCustomBlock &&
-                    morph.isGlobal &&
-                        contains(known, morph.definition)
-            ) {
-                return true;
-            }
-            if ((morph.selector) &&
-                    contains(
-                        ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
-                        morph.selector)
-            ) {
-                event = morph.inputs()[0].evaluate();
-                if (morph.selector === 'doSend') {
-                    eventReceiver = morph.inputs()[1].evaluate();
-                }
-                return ((morph.selector !== 'doSend') ||
-                        (receiverName === eventReceiver)) &&
-                    ((event === message) ||
-                        (message instanceof Array &&
-                            message[0] === 'any message'));
-            }
-            return false;
-        })
+        script.isSending(message, receiverName, known)
     );
 };
 

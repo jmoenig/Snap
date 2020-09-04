@@ -11,6 +11,9 @@
     * Norwegian, thanks, Olav!
     * German
 
+### 2020-09-04
+* byob, blocks, objects: refactored scanning for message senders 
+
 ### 2020-09-03
 * byob: experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)
 * byob: new feature: "export block definition" including dependencies

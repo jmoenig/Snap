@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-September-03';
+modules.blocks = '2020-September-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3171,6 +3171,37 @@ BlockMorph.prototype.showMessageUsers = function () {
             }
         );
     }
+};
+
+BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
+    if (typeof message === 'number') {
+        message = message.toString();
+    }
+    return this.allChildren().some(morph => {
+        var event, eventReceiver;
+        if (morph.isCustomBlock &&
+                morph.isGlobal &&
+                    contains(known, morph.definition)
+        ) {
+            return true;
+        }
+        if ((morph.selector) &&
+                contains(
+                    ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
+                    morph.selector)
+        ) {
+            event = morph.inputs()[0].evaluate();
+            if (morph.selector === 'doSend') {
+                eventReceiver = morph.inputs()[1].evaluate();
+            }
+            return ((morph.selector !== 'doSend') ||
+                    (receiverName === eventReceiver)) &&
+                ((event === message) ||
+                    (message instanceof Array &&
+                        message[0] === 'any message'));
+        }
+        return false;
+    });
 };
 
 BlockMorph.prototype.developersMenu = function () {

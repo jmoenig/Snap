@@ -107,7 +107,7 @@ WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-September-03';
+modules.byob = '2020-September-04';
 
 // Declarations
 
@@ -589,32 +589,9 @@ CustomBlockDefinition.prototype.collectDependencies = function (
 };
 
 CustomBlockDefinition.prototype.isSending = function (message, receiverName) {
-    if (typeof message === 'number') {
-        message = message.toString();
-    }
     return this.scripts.concat(
         this.body ? [this.body.expression] : []
-    ).some(script =>
-        script.allChildren().some(morph => {
-            var event, eventReceiver;
-            if ((morph.selector) &&
-                    contains(
-                        ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
-                        morph.selector)
-            ) {
-                event = morph.inputs()[0].evaluate();
-                if (morph.selector === 'doSend') {
-                    eventReceiver = morph.inputs()[1].evaluate();
-                }
-                return ((morph.selector !== 'doSend') ||
-                        (receiverName === eventReceiver)) &&
-                    ((event === message) ||
-                        (message instanceof Array &&
-                            message[0] === 'any message'));
-            }
-            return false;
-        })
-    );
+    ).some(script => script.isSending(message, receiverName));
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
