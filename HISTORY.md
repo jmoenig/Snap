@@ -12,7 +12,8 @@
     * German
 
 ### 2020-09-04
-* byob, blocks, objects: refactored scanning for message senders 
+* byob, blocks, objects: refactored scanning for message senders
+* blocks: support scanning for message receivers from inside a block editor 
 
 ### 2020-09-03
 * byob: experimental: Inspect & export dependencies for global custom blocks (shift-right-click for context menu)

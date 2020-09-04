@@ -3130,7 +3130,9 @@ BlockMorph.prototype.userMenu = function () {
 };
 
 BlockMorph.prototype.showMessageUsers = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            this.parentThatIsA(BlockEditorMorph)
+                .target.parentThatIsA(IDE_Morph),
         corral = ide.corral,
         getter = (this.selector.indexOf('receive') === 0) ?
             'allSendersOf' : 'allHatBlocksFor',
