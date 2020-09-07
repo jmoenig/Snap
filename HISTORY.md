@@ -8,10 +8,14 @@
     * new "Database" library operating on localstore
 * **Notable Fixes:**
     * changing the type of a custom block from reporter to command in the block editor changes the prototype instead of adding another one
+    * deleting project notes in the "save" dialog now also deletes them in the saved project
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-07
+* gui: deleting project notes in the "save" dialog now also deletes them in the saved project
 
 ### 2020-09-04
 * byob, blocks, objects: refactored scanning for message senders

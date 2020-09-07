@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-September-01';
+modules.gui = '2020-September-07';
 
 // Declarations
 
@@ -7145,7 +7145,9 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text;
 
-    this.ide.projectNotes = notes || this.ide.projectNotes;
+    if (this.ide.projectNotes !== notes) {
+        this.ide.projectNotes = notes;
+    }
     if (name) {
         if (this.source === 'cloud') {
             if (detect(
