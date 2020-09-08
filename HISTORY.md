@@ -6,6 +6,8 @@
     * "export block definition" including dependencies
     * hyperized "distance/direction to _" reporter primitive
     * new "Database" library operating on localstore
+* **Notable Changes:**
+    * swapped version number and "Build Your Own Blocks" in page title
 * **Notable Fixes:**
     * changing the type of a custom block from reporter to command in the block editor changes the prototype instead of adding another one
     * deleting project notes in the "save" dialog now also deletes them in the saved project
@@ -13,6 +15,9 @@
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-08
+* swapped version number and "Build Your Own Blocks" in page title
 
 ### 2020-09-07
 * gui: deleting project notes in the "save" dialog now also deletes them in the saved project
