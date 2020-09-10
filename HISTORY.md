@@ -16,6 +16,9 @@
     * Norwegian, thanks, Olav!
     * German
 
+### 2020-09-10
+* added input type assertions to Database library
+
 ### 2020-09-08
 * swapped version number and "Build Your Own Blocks" in page title
 
