@@ -1,4 +1,4 @@
-/*globals driver, expect, EmbeddedNetsBloxAPI */
+/*globals driver, expect, assert, EmbeddedNetsBloxAPI */
 describe('ide', function() {
     let SnapCloud, SnapActions, SnapUndo;
 
@@ -8,6 +8,37 @@ describe('ide', function() {
         SnapActions = driver.globals().SnapActions;
         SnapUndo = driver.globals().SnapUndo;
         return driver.reset();
+    });
+
+    describe('about', function() {
+        it('should show about message', function() {
+            const len = driver.dialogs().length;
+            const ide = driver.ide();
+            ide.snapMenu();
+            const about = driver.dialog().children[1];
+            driver.click(about);
+            assert.equal(driver.dialogs().length, len + 1);
+        });
+    });
+
+    describe('notifications', function() {
+        afterEach(() => driver.dialogs().forEach(d => d.destroy()));
+
+        it('should show notification', function() {
+            const ide = driver.ide();
+            const len = driver.dialogs().length;
+            ide.simpleNotification('hello!');
+            assert.equal(driver.dialogs().length, len + 1);
+            driver.click(driver.dialog());
+        });
+
+        it('should not close on click if sticky', function() {
+            const ide = driver.ide();
+            const len = driver.dialogs().length;
+            ide.simpleNotification('hello!', true);
+            driver.click(driver.dialog());
+            assert.equal(driver.dialogs().length, len + 1);
+        });
     });
 
     describe('menus', function() {

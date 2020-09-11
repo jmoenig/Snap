@@ -950,11 +950,10 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExamp
 // Bug reporting assistance
 NetsBloxMorph.prototype.aboutNetsBlox = function () {
     var dlg,
-        version = NetsBloxSerializer.prototype.app.split(',')[0],
         aboutTxt,
         world = this.world();
 
-    version = NetsBloxSerializer.prototype.app
+    const version = NetsBloxSerializer.prototype.app
         .split(',')[0] // NetsBlox <version>
         .replace(/NetsBlox /, '');
 
@@ -972,8 +971,6 @@ NetsBloxMorph.prototype.aboutNetsBlox = function () {
 
     dlg = new DialogBoxMorph();
     dlg.inform('About NetsBlox', aboutTxt, world);
-    dlg.fixLayout();
-    dlg.drawNew();
 };
 
 NetsBloxMorph.prototype.reportBug = function () {
@@ -1002,11 +999,11 @@ NetsBloxMorph.prototype.reportBug = function () {
     frame.fontSize = InputFieldMorph.prototype.fontSize;
     frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.render = InputFieldMorph.prototype.render;
     frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     frame.addContents(text);
-    text.drawNew();
+    text.rerender();
 
     dialog.ok = function () {
         myself.submitBugReport(text.text);
@@ -1020,11 +1017,9 @@ NetsBloxMorph.prototype.reportBug = function () {
     dialog.labelString = localize('What went wrong?');
     dialog.createLabel();
     dialog.addBody(frame);
-    frame.drawNew();
     dialog.addButton('ok', 'OK');
     dialog.addButton('cancel', 'Cancel');
     dialog.fixLayout();
-    dialog.drawNew();
     dialog.popUp(world);
     dialog.setCenter(world.center());
     text.edit();
@@ -1420,16 +1415,13 @@ NetsBloxMorph.prototype.simpleNotification = function (msg, sticky) {
     var notification = new MenuMorph(null, msgText);
     var world = this.world();
 
-    notification.drawNew();
+    notification.fixLayout();
+    notification.mouseClickLeft = sticky ? nop : notification.destroy;
 
     var point = this.spriteBar.center()
         .subtract(new Point(notification.width()/2, notification.height()/2));
-    notification.setPosition(point);
-    notification.addShadow(new Point(2, 2), 80);
 
-    world.add(notification);
-    notification.mouseClickLeft = sticky ? nop : notification.destroy;
-    notification.drawNew();
+    notification.popup(world, point);
 };
 
 // searches the existing sprites and custom blocks for the desired block.
