@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-23';
+var morphicVersion = '2020-September-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -10850,7 +10850,9 @@ ListMorph.prototype.buildListContents = function () {
                 color,
                 bold,
                 italic,
-                this.doubleClickAction
+                this.doubleClickAction,
+                null, // shortcut
+                true // verbatim - don't translate
             );
         }
     });

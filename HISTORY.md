@@ -11,10 +11,14 @@
 * **Notable Fixes:**
     * changing the type of a custom block from reporter to command in the block editor changes the prototype instead of adding another one
     * deleting project notes in the "save" dialog now also deletes them in the saved project
+    * items in list-boxes such as the project list are no longer auto-translated
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-12
+* morphic: don't auto-translate ListMorph items
 
 ### 2020-09-10
 * added input type assertions to Database library
