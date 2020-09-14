@@ -121,9 +121,7 @@ SnapDriver.prototype.keys = function(text) {
 
 // Add block by spec
 SnapDriver.prototype.addBlock = function(spec, position) {
-    const SpriteMorph = this.globals().SpriteMorph;
-    const Point = this.globals().Point;
-    const SnapActions = this.globals().SnapActions;
+    const {SpriteMorph, Point, SnapActions} = this.globals();
     var block = typeof spec === 'string' ?
         SpriteMorph.prototype.blockForSelector(spec, true) : spec;
     var sprite = this.ide().currentSprite;
@@ -179,7 +177,6 @@ SnapDriver.prototype.mouseUp = function(position) {
 SnapDriver.prototype.dragAndDrop = function(srcMorph, position, start = null) {
     const {MorphicPreferences, Point} = this.globals();
 
-    // Drag from the upper left corner if not told otherwise
     if(start == null)
     {
         start = srcMorph.topLeft().add(new Point(2, srcMorph.height() / 2));
@@ -507,4 +504,12 @@ SnapDriver.prototype.actionsSettled = async function() {
         .map(action => action.promise);
 
     await Promise.allSettled(pendingActions);
+};
+
+SnapDriver.prototype.moveBlock = function(block, target, pos) {
+    const {hand} = this.world();
+    const {SnapActions} = this.globals();
+
+    hand.grabOrigin = block.situation();
+    return SnapActions.moveBlock(block, target, pos);
 };

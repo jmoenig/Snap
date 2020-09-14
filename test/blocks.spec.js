@@ -255,6 +255,60 @@ describe('blocks', function() {
             await driver.actionsSettled();
             assert(!hatBlock.nextBlock(), 'Block not undone');
         });
+
+        it('should be able to undo block move btwn editors', async () => {
+            var sprite = driver.ide().currentSprite,
+                spec = 'sprite block %s',
+                definition = new CustomBlockDefinition(spec, sprite);
+
+            // Get the sprite
+            definition.category = 'motion';
+            await SnapActions.addCustomBlock(definition, sprite);
+
+            // Create block
+            driver.selectCategory('motion');
+            let forwardBlock = driver.palette().contents.children
+                .find(item => item.selector === 'forward');
+            const scriptsCenter = sprite.scripts.center();
+            driver.dragAndDrop(forwardBlock, scriptsCenter);
+            await driver.actionsSettled();
+            forwardBlock = Object.values(SnapActions._blocks)[0];
+
+            // Edit the custom block
+            driver.selectCategory('custom');
+            const block = driver.palette().contents.children
+                .find(item => item instanceof CustomCommandBlockMorph);
+            driver.rightClick(block);
+            let editBtn = driver.dialog().children.find(item => item.action === 'edit');
+            driver.click(editBtn);
+
+            // add block to the prototype hat morph
+            // drop it on the prototype hat block
+            let editor = driver.dialog();
+            let scripts = editor.body.contents;
+            let hatBlock = scripts.children[0];
+            let hatMorphBottom = hatBlock.bottomAttachPoint()
+                .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
+                .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
+
+            const initialPos = forwardBlock.position().copy();
+            driver.dragAndDrop(forwardBlock, hatMorphBottom);
+            await driver.expect(
+                () => hatBlock.nextBlock(),
+                'block not connected'
+            );
+            const [undoBtn] = driver.ide().spriteEditor.toolBar.children;
+            assert.equal(undoBtn.isDisabled, false, 'Undo button is disabled');
+            driver.click(undoBtn);
+            await driver.actionsSettled();
+            const blockCount = sprite.scripts.children.length;
+            assert.equal(blockCount, 1, 'Block not restored to sprite');
+            editor.destroy();
+            assert(
+                initialPos.eq(forwardBlock.position()),
+                `Expected ${forwardBlock.position()} to equal ${initialPos}`
+            );
+        });
     });
 
     describe('moveBlock', function() {

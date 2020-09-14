@@ -737,10 +737,11 @@ ActionManager.isWeakTarget = function(target) {
     return target.loc === 'top' || target.loc === 'wrap';
 };
 
-ActionManager.prototype._getBlockState = function(id) {
+ActionManager.prototype._getBlockState = function(id, grabbed = true) {
     var target = this._targetOf[id],
         isNewBlock = !this._blocks[id],
-        position,
+        currentBlockPos = this.getStandardPosition(this.getBlockFromId(id)),
+        position = grabbed ? this.getLastGrabPosition() || currentBlockPos : currentBlockPos,
         state;
 
     // Use the last connection unless the last connection was to the
@@ -750,8 +751,6 @@ ActionManager.prototype._getBlockState = function(id) {
     } else if (target && !ActionManager.isWeakTarget(target)) {
         state = [target];
     } else {
-        position = this.getLastGrabPosition() ||
-            this.getStandardPosition(this.getBlockFromId(id));
         state = [position.x, position.y];
     }
 
@@ -977,7 +976,7 @@ ActionManager.prototype._moveBlock = function(block, target, position) {
         ];
 
     } else if (target.loc === 'top' || target.loc === 'wrap') {
-        targetState = this._getBlockState(target.element.id);
+        targetState = this._getBlockState(target.element.id, false);
     }
 
     // Check if "splicing" (ie, target connection is occupied on cmd block)
@@ -2287,10 +2286,7 @@ ActionManager.prototype._onDeleteCustomBlock = function(id, ownerId) {
             rcvr.customBlocks.splice(idx, 1);
         }
 
-        console.assert('get blockspec!');
-        debugger;
-        // FIXME: How can I get the blockSpec?
-        method = rcvr.getMethod(this.blockSpec);
+        const method = rcvr.getMethod(this.blockSpec);
         if (method) {
             rcvr.allDependentInvocationsOf(this.blockSpec).forEach(
                 block => block.refresh(method)
