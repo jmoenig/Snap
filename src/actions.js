@@ -2524,12 +2524,12 @@ ActionManager.prototype.onRemoveCostume = function(id) {
         editor = this.ide().spriteEditor,
         idx = sprite.costumes.asArray().indexOf(costume);
 
-    sprite.costumes.remove(idx + 1);
 
     // Check for the wardrobe
     if (editor instanceof WardrobeMorph) {
-        const off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2;
-        editor.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
+        editor.removeCostumeAt(idx + 1);
+    } else {
+        sprite.costumes.remove(idx + 1);
     }
 
     if (sprite.costume === costume) {
