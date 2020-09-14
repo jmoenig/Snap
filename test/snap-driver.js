@@ -463,34 +463,28 @@ SnapDriver.prototype.openProjectsBrowser = function() {
         .then(() => this.dialog());
 };
 
-SnapDriver.prototype.openProject = function(name, waitForComplete=true) {
+SnapDriver.prototype.openProject = async function(name, waitForComplete=true) {
     // Open the project dialog
-    let projectDialog;
-    return this.openProjectsBrowser()
-        .then(dialog => {
-            projectDialog = dialog;
-            return this.expect(
-                () => this.getProjectList(projectDialog).includes(name),
-                `Could not find ${name} in project list`
-            );
-        })
-        .then(() => {
-            const projectList = projectDialog.listField.listContents.children;
-            const listItem = projectList.find(item => item.labelString === name);
-            this.click(listItem);
-            projectDialog.accept();
+    const projectDialog = await this.openProjectsBrowser();
+    await this.expect(
+        () => this.getProjectList(projectDialog).includes(name),
+        `Could not find ${name} in project list`
+    );
+    const projectList = projectDialog.listField.listContents.children;
+    const listItem = projectList.find(item => item.labelString === name);
+    this.click(listItem);
+    projectDialog.accept();
 
-            // Check for the if-else block
-            if (waitForComplete) {
-                return this.expect(
-                    () => {
-                        const blockCount = this.ide().currentSprite.scripts.children.length;
-                        return blockCount > 0;
-                    },
-                    `Did not see blocks after loading saved project`
-                );
-            }
-        });
+    // Check for the if-else block
+    if (waitForComplete) {
+        return this.expect(
+            () => {
+                const blockCount = this.ide().currentSprite.scripts.children.length;
+                return blockCount > 0;
+            },
+            `Did not see blocks after loading saved project`
+        );
+    }
 };
 
 SnapDriver.prototype.disconnect = function() {

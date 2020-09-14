@@ -106,42 +106,20 @@ describe('ide', function() {
             driver.ide().saveSetting('language', 'en');
         });
 
-        it('should not change replay length on lang change', function(done) {
-            SnapActions.addVariable('testVar', true)
-                .then(() => {
-                    var len = SnapUndo.allEvents.length;
-                    var err;
-
-                    driver.ide().setLanguage('en');
-                    setTimeout(function() {  // give the project time to load
-                        try {
-                            expect(SnapUndo.allEvents.length).toBe(len);
-                        } catch(e) {
-                            err = e;
-                        } finally {
-                            done(err);
-                        }
-                    }, 200);
-                });
+        it('should not change replay length on lang change', async function() {
+            await SnapActions.addVariable('testVar', true);
+            const len = SnapUndo.allEvents.length;
+            driver.ide().setLanguage('en');
+            await driver.sleep(200);
+            assert.equal(SnapUndo.allEvents.length, len);
         });
 
-        it('should not change replay length on ide refresh', function(done) {
-            SnapActions.addVariable('testVar', true)
-                .then(() => {
-                    var len = SnapUndo.allEvents.length;
-                    var err;
-
-                    driver.ide().refreshIDE();
-                    setTimeout(function() {  // give the project time to load
-                        try {
-                            expect(SnapUndo.allEvents.length).toBe(len);
-                        } catch(e) {
-                            err = e;
-                        } finally {
-                            done(err);
-                        }
-                    }, 200);
-                });
+        it('should not change replay length on ide refresh', async function() {
+            await SnapActions.addVariable('testVar', true);
+            const len = SnapUndo.allEvents.length;
+            driver.ide().refreshIDE();
+            await driver.sleep(200);
+            assert.equal(SnapUndo.allEvents.length, len);
         });
 
         it('should not change replay length on toggle dynamic input labels', function(done) {

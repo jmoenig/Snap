@@ -1,3 +1,4 @@
+/*globals SnapActions*/
 function UndoManager() {
     this.reset();
 }
@@ -44,7 +45,7 @@ UndoManager.prototype.record = function(event) {
         if (!event.replayType) {
             if (undoCount !== 0) {
                 var currentIndex = eventHistory.length - undoCount - 1;
-                var forgotten = this.eventHistory[ownerId].splice(currentIndex + 1, undoCount);
+                this.eventHistory[ownerId].splice(currentIndex + 1, undoCount);
                 this.undoCount[ownerId] = 0;  // forget any available redos
             }
             eventHistory.push(event);
@@ -57,7 +58,7 @@ UndoManager.prototype.record = function(event) {
     }
 };
 
-UndoManager.prototype.allQueueIds = function(owner) {
+UndoManager.prototype.allQueueIds = function() {
     return Object.keys(this.eventHistory);
 };
 
@@ -250,7 +251,7 @@ UndoManager.Invert.deleteVariable = function() {
     return 'addVariable';
 };
 
-    //// Custom blocks
+// Custom blocks
 UndoManager.Invert.addCustomBlock = function(args) {
     var def = SnapActions.serializer.loadCustomBlock(SnapActions.serializer.parse(args[1]));
     return {
@@ -314,7 +315,7 @@ UndoManager.Invert.deleteBlockLabel = function(args) {
     };
 };
 
-    //// Block manipulation
+// Block manipulation
 UndoManager.Invert.addBlock = function(args) {
     // args are [block, ownerId, x, y, ids]
     var ids = args.pop();
@@ -469,11 +470,11 @@ UndoManager.Invert.removeListInput = function() {
 };
 
 UndoManager.Invert.ringify = function() {
-    return 'unringify'
+    return 'unringify';
 };
 
 UndoManager.Invert.unringify = function() {
-    return 'ringify'
+    return 'ringify';
 };
 
 UndoManager.Invert.addCostume = function(args) {
