@@ -1567,7 +1567,7 @@ ActionManager.prototype._getCustomBlockEditor = function(id, block) {
             editor = new BlockEditorMorph(blockDef, owner);
             editor.popUp(true);  // need to guarantee the correct pos
             editor.setInitialDimensions(true);
-            editor.cancel();
+            editor.destroy();
         }
     }
 

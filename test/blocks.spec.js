@@ -64,6 +64,21 @@ describe('blocks', function() {
             assert.notEqual(block.selector, 'errorObsolete');
         });
 
+        it('should change custom block type', async function() {
+            const sprite = driver.ide().currentSprite;
+            const spec = 'global block %s';
+            let definition = new CustomBlockDefinition(spec);
+
+            // Get the sprite
+            definition.isGlobal = true;
+            definition.category = 'motion';
+            definition = await SnapActions.addCustomBlock(definition, sprite);
+            await SnapActions.setCustomBlockType(definition, definition.category, 'reporter');
+            const block = driver.palette().contents.children[1];
+
+            assert.equal(block.definition.type, 'reporter');
+        });
+
         it('should delete custom block', async function() {
             var sprite = driver.ide().currentSprite,
                 spec = 'global block %s',
@@ -356,6 +371,67 @@ describe('blocks', function() {
                 initialPos.eq(forwardBlock.position()),
                 `Expected ${forwardBlock.position()} to equal ${initialPos}`
             );
+        });
+
+        it('should be able to change type from dialog', async () => {
+            var sprite = driver.ide().currentSprite,
+                spec = 'sprite block %s',
+                definition = new CustomBlockDefinition(spec, sprite);
+
+            definition.category = 'motion';
+            await SnapActions.addCustomBlock(definition, sprite);
+
+            driver.selectCategory('custom');
+            let block = driver.palette().contents.children[1];
+            driver.rightClick(block);
+            let editBtn = driver.dialog().children.find(item => item.action === 'edit');
+            driver.click(editBtn);
+
+            let editor = driver.dialog();
+            let scripts = editor.body.contents;
+            let hatBlock = scripts.children[0];
+            driver.click(hatBlock);
+
+            const reporterToggle = driver.dialog().types.children[1];
+            driver.click(reporterToggle);
+            const [okBtn] = driver.dialog().buttons.children;
+            driver.click(okBtn);
+            await driver.actionsSettled();
+
+            block = driver.palette().contents.children[1];
+
+            assert.equal(block.definition.type, 'reporter');
+        });
+
+        it('should duplicate/delete custom block definitions', async () => {
+            var sprite = driver.ide().currentSprite,
+                spec = 'sprite block %s',
+                definition = new CustomBlockDefinition(spec, sprite);
+
+            definition.category = 'motion';
+            await SnapActions.addCustomBlock(definition, sprite);
+
+            driver.selectCategory('custom');
+            let block = driver.palette().contents.children[1];
+            driver.rightClick(block);
+            const dupBtn = driver.dialog().children
+                .find(item => item.action === 'duplicateBlockDefinition');
+            driver.click(dupBtn);
+            await driver.actionsSettled();
+            driver.dialog().destroy();
+
+            const newBlock = driver.palette().contents.children[2];
+            const newBlockSpec = newBlock.definition.spec;
+            driver.rightClick(newBlock);
+            const delBtn = driver.dialog().children
+                .find(item => item.action === 'deleteBlockDefinition');
+            driver.click(delBtn);
+            const confirmBtn = driver.dialog().buttons.children[0];
+            driver.click(confirmBtn);
+            await driver.actionsSettled();
+
+            block = driver.palette().contents.children[1];
+            assert.notEqual(newBlockSpec, block.definition.spec);
         });
     });
 

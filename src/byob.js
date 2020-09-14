@@ -912,7 +912,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
             null,
             (definition) => {
                 if (definition) { // temporarily update everything
-                    SnapActions.setCustomBlockType(myself.definition, definition.category, definition.type);
+                    SnapActions.setCustomBlockType(this.definition, definition.category, definition.type);
                 }
             },
             this
@@ -1192,29 +1192,14 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     ide.saveXMLAs(xml, this.spec);
 };
 
-CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
+CustomCommandBlockMorph.prototype.duplicateBlockDefinition = async function () {
     var rcvr = this.scriptTarget(),
-        ide = this.parentThatIsA(IDE_Morph),
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
-        dup = def.copyAndBindTo(rcvr),
-        spec = dup.spec,
-        count = 1;
+        dup = def.copyAndBindTo(rcvr);
     
-    if (this.isGlobal) {
-        ide.stage.globalBlocks.push(dup);
-    } else {
-        rcvr.customBlocks.push(dup);
-    }
-
-    // find a unique spec
-    while (rcvr.doubleDefinitionsFor(dup).length > 0) {
-        count += 1;
-        dup.spec = spec + ' (' + count + ')';
-    }
-
-    ide.flushPaletteCache();
-    ide.refreshPalette();
-    new BlockEditorMorph(dup, rcvr).popUp();
+    const newDefinition = await SnapActions.addCustomBlock(dup, rcvr);
+    new BlockEditorMorph(newDefinition, rcvr).popUp();
+    return newDefinition;
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -2257,7 +2242,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     var head, ide,
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
-        count = 0,
+        count = 1,
         element;
 
     this.definition.receiver = this.target; // only for serialization
