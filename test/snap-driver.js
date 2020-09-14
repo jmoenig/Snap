@@ -280,7 +280,10 @@ SnapDriver.prototype.login = async function(name, password='password') {
     const btn = this.ide().controlBar.cloudButton;
     this.click(btn);
 
-    let dropdown = this.dialog();
+    let dropdown = await this.expect(
+        () => this.dialog(),
+        new Error('Cloud menu never appeared'),
+    );
     const logoutBtn = dropdown.children.find(item => item.action === 'logout');
     const isLoggedIn = !!logoutBtn;
 
@@ -295,7 +298,10 @@ SnapDriver.prototype.login = async function(name, password='password') {
     this.click(btn);
 
     // click the login button
-    dropdown = this.dialog();
+    dropdown = await this.expect(
+        () => this.dialog(),
+        new Error('Cloud menu never appeared'),
+    );
     const loginBtn = dropdown.children.find(item => item.action === 'initializeCloud');
     this.click(loginBtn);
 
