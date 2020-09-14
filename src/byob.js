@@ -1218,17 +1218,16 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
-    var idx, stage, ide, method, block,
-        rcvr = this.scriptTarget();
+    var rcvr = this.scriptTarget();
     if (this.isPrototype) {
         return null; // under construction...
     }
-    method = this.isGlobal? this.definition
-            : rcvr.getLocalMethod(this.blockSpec);
-    block = method.blockInstance();
+    const method = this.isGlobal? this.definition
+        : rcvr.getLocalMethod(this.blockSpec);
+    const block = method.blockInstance();
     new DialogBoxMorph(
         this,
-        () => SnapActions.deleteCustomBlock(myself.definition),
+        () => SnapActions.deleteCustomBlock(this.definition),
         this
     ).askYesNo(
         'Delete Custom Block',

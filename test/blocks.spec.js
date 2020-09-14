@@ -64,6 +64,54 @@ describe('blocks', function() {
             assert.notEqual(block.selector, 'errorObsolete');
         });
 
+        it('should delete custom block', async function() {
+            var sprite = driver.ide().currentSprite,
+                spec = 'global block %s',
+                definition = new CustomBlockDefinition(spec);
+
+            // Get the sprite
+            definition.isGlobal = true;
+            definition.category = 'motion';
+            definition = await SnapActions.addCustomBlock(definition, sprite);
+            const block = driver.palette().contents.children
+                .find(item => item instanceof CustomCommandBlockMorph);
+            driver.rightClick(block);
+            const deleteBtn = driver.dialog().children
+                .find(c => (c.labelString || '').includes('delete'));
+            driver.click(deleteBtn);
+            const confirmDialog = driver.dialog();
+            const yepBtn = confirmDialog.buttons.children[0];
+            driver.click(yepBtn);
+            await driver.actionsSettled();
+            const customBlocks = driver.palette().contents.children
+                .filter(item => item instanceof CustomCommandBlockMorph);
+            assert.equal(customBlocks.length, 0);
+        });
+
+        it('should delete (sprite) custom block', async function() {
+            // Create a custom block definition
+            var sprite = driver.ide().currentSprite,
+                spec = 'sprite block %s',
+                definition = new CustomBlockDefinition(spec, sprite);
+
+            // Get the sprite
+            definition.category = 'motion';
+            definition = await SnapActions.addCustomBlock(definition, sprite);
+            const block = driver.palette().contents.children
+                .find(item => item instanceof CustomCommandBlockMorph);
+            driver.rightClick(block);
+            const deleteBtn = driver.dialog().children
+                .find(c => (c.labelString || '').includes('delete'));
+            driver.click(deleteBtn);
+            const confirmDialog = driver.dialog();
+            const yepBtn = confirmDialog.buttons.children[0];
+            driver.click(yepBtn);
+            await driver.actionsSettled();
+            const customBlocks = driver.palette().contents.children
+                .filter(item => item instanceof CustomCommandBlockMorph);
+            assert.equal(customBlocks.length, 0);
+        });
+
         it('should create (sprite) custom block', async function() {
             // Create a custom block definition
             var sprite = driver.ide().currentSprite,

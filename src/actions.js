@@ -2283,14 +2283,12 @@ ActionManager.prototype._onDeleteCustomBlock = function(id, ownerId) {
     } else {
         idx = rcvr.customBlocks.indexOf(definition);
         if (idx !== -1) {
-            rcvr.customBlocks.splice(idx, 1);
-        }
-
-        const method = rcvr.getMethod(this.blockSpec);
-        if (method) {
-            rcvr.allDependentInvocationsOf(this.blockSpec).forEach(
-                block => block.refresh(method)
+            const customBlock = rcvr.customBlocks[idx];
+            const blockSpec = customBlock.blockSpec();
+            rcvr.allDependentInvocationsOf(blockSpec).forEach(
+                block => block.refresh(customBlock)
             );
+            rcvr.customBlocks.splice(idx, 1);
         }
     }
 
