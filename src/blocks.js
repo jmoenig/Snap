@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-September-04';
+modules.blocks = '2020-September-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7373,10 +7373,17 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
         }
     } else if (dropped instanceof ReporterBlockMorph) {
         if (rec.lastDropTarget) {
-            rec.lastDropTarget.replaceInput(
-                rec.lastDroppedBlock,
-                rec.lastReplacedInput
-            );
+            if (forRedrop) {
+                rec.lastDropTarget.replaceInput(
+                    rec.lastReplacedInput,
+                    rec.lastDroppedBlock
+                );
+            } else {
+                rec.lastDropTarget.replaceInput(
+                    rec.lastDroppedBlock,
+                    rec.lastReplacedInput
+                );
+            }
             rec.lastDropTarget.fixBlockColor(null, true);
             if (rec.lastPreservedBlocks) {
                 rec.lastPreservedBlocks.forEach(morph =>
