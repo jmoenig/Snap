@@ -7570,13 +7570,10 @@ ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
 };
 
 ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
-    var target,
-        connId;
-
     if (droppedMorph instanceof BlockMorph ||
             droppedMorph instanceof CommentMorph) {
 
-        target = droppedMorph.snapTarget(hand);
+        const target = droppedMorph.snapTarget(hand);
         if (target) {  // moveBlock
             this.moveBlock(droppedMorph, target, hand);
         } else if (!droppedMorph.id) {  // addBlock
@@ -7593,15 +7590,12 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
         position = origin && hand.grabOrigin.position.add(origin.position()),
         isMovingBtwnEditors = origin !== this && origin instanceof ScriptsMorph;
 
-
     if (isMovingBtwnEditors) {  // moving between open editors
-        // Revert the block back to the origin in case this fails
-        var originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position()),
-            dup = block.fullCopy();
+        const dup = block.fullCopy();
 
         if (SnapActions.isCollaborating()) {
             // only revert if collaborating - ow, this can't fail!
-            block.setPosition(originPosition);
+            block.setPosition(position);
         }
 
         // copy the blocks and add them to the new editor
@@ -7610,6 +7604,7 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
         return SnapActions.moveBlock(dup, target, position)
             // if that succeeds, remove them from the current editor
             .then(function() {
+                block.setPosition(position);
                 return SnapActions.removeBlock(block);
             });
     } else {  // basic moveBlock

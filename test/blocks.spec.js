@@ -332,8 +332,8 @@ describe('blocks', function() {
             driver.selectCategory('motion');
             let forwardBlock = driver.palette().contents.children
                 .find(item => item.selector === 'forward');
-            const scriptsCenter = sprite.scripts.center();
-            driver.dragAndDrop(forwardBlock, scriptsCenter);
+            const scriptPos = sprite.scripts.topLeft().add(100);
+            driver.dragAndDrop(forwardBlock, scriptPos);
             await driver.actionsSettled();
             forwardBlock = Object.values(SnapActions._blocks)[0];
 
@@ -360,6 +360,8 @@ describe('blocks', function() {
                 () => hatBlock.nextBlock(),
                 'block not connected'
             );
+            await driver.actionsSettled();
+
             const [undoBtn] = driver.ide().spriteEditor.toolBar.children;
             assert.equal(undoBtn.isDisabled, false, 'Undo button is disabled');
             driver.click(undoBtn);
