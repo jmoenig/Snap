@@ -2302,7 +2302,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     var head, ide,
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
-        count = 0,
+        count = 1,
         element;
 
     this.definition.receiver = this.target; // only for serialization
