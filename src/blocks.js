@@ -7406,7 +7406,8 @@ ScriptsMorph.prototype.addComment = function () {
 
 ScriptsMorph.prototype.undoOwnerId = function () {
     try {
-        const target = this.scriptTarget();
+        const editor = this.parentThatIsA(BlockEditorMorph);
+        const target = editor ? editor.definition : this.scriptTarget();
         return target.id + '/' + this.undoCategory;
     } catch (err) {
         return null;
