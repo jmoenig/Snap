@@ -20,6 +20,7 @@
 
 ### 2020-09-14
 * blocks: fixed "redrop" (redo)
+* byob: consolidated custon block definition update counter, thanks, Brian B.!
 
 ### 2020-09-12
 * morphic: don't auto-translate ListMorph items
