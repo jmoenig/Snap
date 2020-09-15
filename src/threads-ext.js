@@ -421,6 +421,7 @@ Process.prototype.getLocation = function () {
     } else if (hasLocation) {
         var location = this.location;
         this.location = undefined;
+        this.locationError = undefined;
         if (this.locationError || !location) {
             this.locationError = this.locationError || new Error('Could not determine location');
             // Error 'name' is not always provided for PositionErrors. Try to get
