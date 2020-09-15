@@ -929,9 +929,9 @@ CustomCommandBlockMorph.prototype.edit = function () {
         rcvr = this.scriptTarget();
         if (!this.isGlobal) {
             if (contains(
-                    Object.keys(rcvr.inheritedBlocks()),
-                    this.blockSpec
-                )
+                Object.keys(rcvr.inheritedBlocks()),
+                this.blockSpec
+            )
             ) {
                 this.duplicateBlockDefinition();
                 return;

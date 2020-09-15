@@ -226,17 +226,10 @@ Cloud.prototype.login = function (
         request.onreadystatechange = async () => {
             if (request.readyState === 4) {
                 if (request.status === 200) {
-                    this.api = JSON.parse(request.responseText);
-                    if (this.api.logout) {
-                        const user = await this.getUserData();
-                        this.username = user.username;
-                        this.credentials = {username, password, strategy};
-                        return deferred.resolve(user);
-                    } else {
-                        return deferred.reject(
-                            new Error(request.responseText)
-                        );
-                    }
+                    const user = await this.getUserData();
+                    this.username = user.username;
+                    this.credentials = {username, password, strategy};
+                    return deferred.resolve(user);
                 } else if (request.status === 403) {
                     return deferred.reject(
                         new Error(localize(request.responseText || 'wrong username or password'))
@@ -309,14 +302,6 @@ Cloud.prototype.changePassword = function (
             );
         },
         errorCall
-    );
-};
-
-Cloud.prototype.disconnect = function () {
-    this.callService(
-        'logout',
-        nop,
-        nop
     );
 };
 
@@ -838,17 +823,18 @@ Cloud.prototype.callService = function (
 };
 
 Cloud.prototype.reconnect = function (callback, errorCall) {
-    var myself = this;
-
     if (!this.username) {
         this.message('You are not logged in');
         return;
     }
 
     // need to set 'api' from setClientState
-    return myself.setClientState()
-        .then(callback)
-        .catch(errorCall);
+    let promise = this.setClientState();
+    if (callback && errorCall) {
+        promise = promise.then(callback)
+            .catch(errorCall);
+    }
+    return promise;
 };
 
 Cloud.prototype.disconnect = nop;

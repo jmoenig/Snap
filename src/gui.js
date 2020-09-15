@@ -5163,8 +5163,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
 
     this.exitReplayMode();
     this.nextSteps([
@@ -7977,15 +7976,14 @@ function CloudProjectsSource(ide) {
 CloudProjectsSource.prototype.publish = function(proj, unpublish = false) {
     const serviceName = unpublish ? 'unpublishProject' : 'publishProject';
     const myself = this;
+    const cloud = this.ide.cloud;
 
-    SnapCloud.reconnect(
-        function () {
-            SnapCloud.callService(
+    cloud.reconnect(
+        () => {
+            cloud.callService(
                 serviceName,
-                function () {
-                    SnapCloud.disconnect();
-                },
-                myself.ide.cloudError(),
+                () => cloud.disconnect(),
+                this.ide.cloudError(),
                 [proj.name]
             );
 
@@ -7999,7 +7997,7 @@ CloudProjectsSource.prototype.publish = function(proj, unpublish = false) {
                 location.hash = 'present:' + projectId;
             }
         },
-        myself.ide.cloudError()
+        this.ide.cloudError()
     );
 };
 

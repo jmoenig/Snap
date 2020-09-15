@@ -1,5 +1,5 @@
 /* global SnapSerializer, MessageType, MessageFrame, HintInputSlotMorph,
-   InputSlotMorph, Context, StageMorph, SnapActions
+   InputSlotMorph
    */
 NetsBloxSerializer.prototype = new SnapSerializer();
 NetsBloxSerializer.prototype.constructor = NetsBloxSerializer;
