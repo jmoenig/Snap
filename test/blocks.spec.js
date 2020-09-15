@@ -375,6 +375,49 @@ describe('blocks', function() {
             );
         });
 
+        it('should add disconnected block to block editor', async () => {
+            const {BlockEditorMorph} = driver.globals();
+            const sprite = driver.ide().currentSprite;
+            const spec = 'sprite block %s';
+            const definition = new CustomBlockDefinition(spec, sprite);
+
+            // Get the sprite
+            definition.category = 'motion';
+            await SnapActions.addCustomBlock(definition, sprite);
+
+            // Create block
+            driver.selectCategory('motion');
+            let positionBlock = driver.palette().contents.children
+                .find(item => item.selector === 'xPosition');
+            const scriptPos = sprite.scripts.topLeft().add(100);
+            driver.dragAndDrop(positionBlock, scriptPos);
+            await driver.actionsSettled();
+            positionBlock = Object.values(SnapActions._blocks)[0];
+
+            // Edit the custom block
+            driver.selectCategory('custom');
+            const block = driver.palette().contents.children
+                .find(item => item instanceof CustomCommandBlockMorph);
+            driver.rightClick(block);
+            let editBtn = driver.dialog().children.find(item => item.action === 'edit');
+            driver.click(editBtn);
+
+            const editor = driver.dialog();
+            const scripts = editor.body.contents;
+            driver.dragAndDrop(positionBlock, scripts.center());
+            await driver.expect(
+                () => {
+                    const block = Object.values(SnapActions._blocks)[0];
+                    return block.parentThatIsA(BlockEditorMorph);
+                },
+                'Expected position block to be in block editor'
+            );
+            await driver.expect(
+                () => Object.values(SnapActions._blocks).length === 1,
+                'Expected original to be deleted'
+            );
+        });
+
         it('should be able to change type from dialog', async () => {
             var sprite = driver.ide().currentSprite,
                 spec = 'sprite block %s',

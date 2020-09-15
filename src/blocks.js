@@ -7636,7 +7636,9 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
             // copy the blocks and add them to the new editor
             const dup = block.fullCopy();
 
-            return SnapActions.addBlock(dup, this.scriptTarget(), position)
+            const target = this.parentThatIsA(BlockEditorMorph) ||
+                this.scriptTarget();
+            return SnapActions.addBlock(dup, target, position)
                 // if that succeeds, remove them from the current editor
                 .then(function() {
                     return SnapActions.removeBlock(block);
