@@ -480,6 +480,25 @@ describe('blocks', function() {
         });
     });
 
+    describe('across sprites', function() {
+        beforeEach(() => driver.reset());
+
+        it('should add new block on sprite icon drop', async function() {
+            const {BlockMorph} = driver.globals();
+            const block = driver.palette().contents.children
+                .find(c => c instanceof BlockMorph);
+            const [spriteIcon] = driver.ide().corral.frame.contents.children;
+            driver.dragAndDrop(block, spriteIcon.center(), block.center());
+            await driver.actionsSettled();
+            const sprite = driver.ide().currentSprite;
+            assert.equal(
+                sprite.scripts.children.length,
+                1,
+                'Created multiple blocks in sprite'
+            );
+        });
+    });
+
     describe('moveBlock', function() {
         before(() => driver.reset());
 

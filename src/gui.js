@@ -8757,9 +8757,9 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-SpriteIconMorph.prototype.copyStack = function (block) {
+SpriteIconMorph.prototype.copyStack = async function (block) {
     var sprite = this.object,
-        dup = block.fullCopy(),
+        dup = block.id ? block.fullCopy() : block,
         // FIXME: This positioning can be problematic...
         y = Math.max(
             sprite.scripts.children.map(stack =>
@@ -8768,10 +8768,7 @@ SpriteIconMorph.prototype.copyStack = function (block) {
         ),
         position = new Point(this.object.scripts.left() + 20, y + 20);
 
-    dup.setPosition(position);
-    sprite.scripts.add(dup);
     dup.allComments().forEach(comment => comment.align(dup));
-    sprite.scripts.adjustBounds();
 
     // delete all local custom blocks (methods) that the receiver
     // doesn't understand
@@ -8785,7 +8782,8 @@ SpriteIconMorph.prototype.copyStack = function (block) {
     });
 
     dup.id = null;
-    SnapActions.addBlock(dup, sprite, position);
+    await SnapActions.addBlock(dup, sprite, position);
+    sprite.scripts.adjustBounds();
 };
 
 SpriteIconMorph.prototype.copyCostume = function (costume) {
