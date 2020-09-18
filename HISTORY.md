@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 6.2.0:
 * **New Features:**
     * show message senders and receivers from the blocks context menu
     * "export block definition" including dependencies
@@ -21,6 +23,7 @@
 
 ### 2020-09-18
 * objects: Fixed costume thumbnail for asynch loading, thanks, Bernat!
+* prepared release
 
 ### 2020-09-14
 * blocks: fixed "redrop" (redo)
