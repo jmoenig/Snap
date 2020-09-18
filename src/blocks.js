@@ -13849,7 +13849,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 
 ScriptFocusMorph.prototype.insertBlock =
 ScriptFocusMorph.prototype.fillInBlock = function (block) {
-    var pb, stage, ide, rcvr;
+    var pb, stage, ide, rcvr, position, isAtEnd, action;
     block.isTemplate = false;
     block.isDraggable = true;
 
@@ -13929,9 +13929,9 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
         }
     }
 
-    action.then(function(block) {
+    action.then(block => {
         if (isAtEnd) {
-            myself.atEnd = true;
+            this.atEnd = true;
         }
         // register generic hat blocks
         if (block.selector === 'receiveCondition') {
@@ -13948,14 +13948,14 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
                 }
             }
         }
-        myself.element = block;
-        myself.fixLayout();
+        this.element = block;
+        this.fixLayout();
 
         // experimental: if the inserted block has inputs, go to the first one
         if (block.inputs && block.inputs().length) {
-            myself.element = block;
-            myself.atEnd = false;
-            myself.nextElement();
+            this.element = block;
+            this.atEnd = false;
+            this.nextElement();
         }
     });
 };
