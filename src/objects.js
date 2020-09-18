@@ -9848,16 +9848,19 @@ Costume.prototype.thumbnail = function (extentPoint, recycleMe) {
     // my thumbnail representation keeping the originial aspect ratio
     // a "recycleMe canvas can be passed for re-use
     var src = this.contents, // at this time sprites aren't composite morphs
-        scale = Math.min(
-            (extentPoint.x / src.width),
-            (extentPoint.y / src.height)
-        ),
-        xOffset = (extentPoint.x - (src.width * scale)) / 2,
-        yOffset = (extentPoint.y - (src.height * scale)) / 2,
+        scale, xOffset, yOffset,
         trg = newCanvas(extentPoint, true, recycleMe), // non-retina
         ctx = trg.getContext('2d');
 
     if (!src || src.width + src.height === 0) {return trg; }
+
+    scale = Math.min(
+        (extentPoint.x / src.width),
+        (extentPoint.y / src.height)
+    );
+    xOffset = (extentPoint.x - (src.width * scale)) / 2;
+    yOffset = (extentPoint.y - (src.height * scale)) / 2;
+
     ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
