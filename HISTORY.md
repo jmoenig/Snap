@@ -13,10 +13,14 @@
     * deleting project notes in the "save" dialog now also deletes them in the saved project
     * items in list-boxes such as the project list are no longer auto-translated
     * fixed a redo issue
+    * fixed a rare race condition when loading projects
 * **Translation Updates:**
     * Catalan, thanks, Joan!
     * Norwegian, thanks, Olav!
     * German
+
+### 2020-09-18
+* objects: Fixed costume thumbnail for asynch loading, thanks, Bernat!
 
 ### 2020-09-14
 * blocks: fixed "redrop" (redo)
