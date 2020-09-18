@@ -7614,7 +7614,9 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
 };
 
 ScriptsMorph.prototype.addBlock = function (block) {
-    SnapActions.addBlock(block, this.scriptTarget(), block.position());
+    const target = this.parentThatIsA(BlockEditorMorph) ||
+        this.scriptTarget();
+    SnapActions.addBlock(block, target, block.position());
     block.destroy();
 };
 
