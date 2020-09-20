@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-09-20
+* new dev version
+
 ## 6.2.0:
 * **New Features:**
     * show message senders and receivers from the blocks context menu
