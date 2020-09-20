@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed translatability of certain drop-downs such as "point in direction _"
+
 ### 2020-09-20
 * new dev version
+* blocks: fixed translatability of certain drop-downs such as "point in direction _"
 
 ## 6.2.0:
 * **New Features:**
