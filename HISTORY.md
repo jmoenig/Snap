@@ -11,7 +11,7 @@
     * fixed translatability of certain drop-downs such as "point in direction _"
 * **Translation Updates:**
     * Turkish, thanks, Turgut!
-    * Italien, thanks, Stefano!
+    * Italian, thanks, Stefano!
 
 ### 2020-09-21
 * reference manual update to v6.2, thanks, Brian!
