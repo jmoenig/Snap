@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.2.1
 * **New Features:**
     * added "get value from key" reporter to database library, thanks, Brian! 
 * **Notable Changes:**
