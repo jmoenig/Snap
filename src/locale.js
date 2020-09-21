@@ -179,7 +179,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2016-05-10'
+        '2020-09-18'
 };
 
 SnapTranslator.dict.ja = {

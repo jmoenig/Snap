@@ -181,11 +181,11 @@ SnapTranslator.dict.it = {
     'language_name':
         'Italiano', // the name as it should appear in the language menu
     'language_translator':
-        'Stefano Federici, Alberto Firpo, Massimo Ghisalberti', // your name for the Translators tab
+        'Stefano Federici, Alice Andrea Deiana, Alberto Firpo, Massimo Ghisalberti', // your name for the Translators tab
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com', // optional
     'last_changed':
-        '2016-10-31', // this, too, will appear in the Translators tab
+        '2020-09-18', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -245,6 +245,13 @@ SnapTranslator.dict.it = {
     // new sprite button:
     'add a new sprite':
         'aggiungi un nuovo sprite',
+    'add a new Turtle sprite':
+        'aggiungi una nuova Tartaruga',
+    'paint a new sprite':
+        'disegna un nuovo sprite',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'scatta una foto\ne usala come un nuovo sprite',
+
 
     // tab help
     'costumes tab help':
@@ -341,12 +348,20 @@ SnapTranslator.dict.it = {
         'Ciao!',
     'Hmm...':
         'Hmm...',
+    '%img of costume %cst':
+        '%img del costume %cst',
+    'new costume %l width %dim height %dim':
+        'nuovo costume %l larghezza %dim altezza %dim',
+    'stretch %cst x: %n y: %n %':
+        'allunga %cst del %n % in orizzontale e del %n % in verticale',
     'change %eff effect by %n':
         'cambia effetto %eff di %n',
     'set %eff effect to %n':
         'porta effetto %eff a %n',
     'clear graphic effects':
         'rimuovi effetti grafici',
+    '%eff effect':
+        'effetto %eff',
     'change size by %n':
         'cambia dimensione di %n',
     'set size to %n %':
@@ -357,6 +372,14 @@ SnapTranslator.dict.it = {
         'mostra',
     'hide':
         'nascondi',
+    'shown?':
+        'visibile',
+    'go to %layer layer':
+        'vai in %layer piano',
+    'front':
+        'primo',
+    'back':
+        'secondo',
     'go to front':
         'vai in primo piano',
     'go back %n layers':
@@ -369,6 +392,9 @@ SnapTranslator.dict.it = {
     'alert %mult%s':
         'avviso: %mult%s',
 
+    'current':
+        'attuale',
+
     // sound:
     'play sound %snd':
         'produci suono %snd',
@@ -378,14 +404,42 @@ SnapTranslator.dict.it = {
         'arresta tutti i suoni',
     'rest for %n beats':
         'fai una pausa di %n battute',
-    'play note %n for %n beats':
-        'suona nota %n per %n battute',
+    'play sound %snd at %rate Hz':
+        'riproduci suono %snd a %rate Hz',
+    '%aa of sound %snd':
+        '%aa del suono %snd',
+    'duration':
+        'durata',
+    'length':
+        'lunghezza',
+    'number of channels':
+        'numero di canali',
+    'new sound %l rate %rate Hz':
+        'nuovo suono %l frequenza %rate Hz',
+    'play note %note for %n beats':
+        'riproduci nota %note per %n battute',
+    'set instrument to %inst':
+        'passa a strumento %inst',
     'change tempo by %n':
         'cambia tempo di %n',
     'set tempo to %n bpm':
         'porta tempo a %n bpm',
     'tempo':
         'tempo',
+    'change volume by %n':
+        'cambia volume di %n',
+    'set volume to %n %':
+        'porta volume a %n %',
+    'change balance by %n':
+        'cambia bilanciamento di %n',
+    'set balance to %n':
+        'porta bilanciamento a %n',
+    'balance':
+        'bilanciamento',
+    'play frequency %n Hz':
+        'riproduci frequenza %n Hz',
+    'stop frequency':
+        'interrompi riproduzione frequenza',
 
     // pen:
     'clear':
@@ -394,8 +448,16 @@ SnapTranslator.dict.it = {
         'penna gi\u00F9',
     'pen up':
         'penna su',
+    'pen down?':
+        'penna giù',
     'set pen color to %clr':
         'usa penna di colore %clr',
+    'change pen %hsva by %n':
+        'cambia %hsva della penna di %n',
+    'set pen %hsva to %n':
+        'porta %hsva della penna a %n',
+    'pen %pen':
+        '%pen della penna',
     'change pen color by %n':
         'cambia colore penna di %n',
     'set pen color to %n':
@@ -412,6 +474,10 @@ SnapTranslator.dict.it = {
         'timbra',
     'fill':
         'riempi',
+    'write %s size %n':
+        'scrivi %s di dimensione %n',
+    'paste on %spr':
+        'timbra su %spr',
 
     // control:
     'when %b':
@@ -429,9 +495,15 @@ SnapTranslator.dict.it = {
     'dropped':
         'lasciato',
     'mouse-entered':
-        'il mouse entra',
+        'a contatto con il mouse',
     'mouse-departed':
-        'il mouse esce',
+        'non a contatto con il mouse',
+    'scrolled-down':
+    	'scrollato verso il basso',
+    'scrolled-up':
+        'scrollato verso l\u0027alto',
+    'stopped':
+        'fermo',
     'when I am clicked':
         'quando vengo cliccato',
     'when I receive %msgHat':
@@ -440,6 +512,8 @@ SnapTranslator.dict.it = {
         'invia a tutti %msg',
     'broadcast %msg and wait':
         'invia a tutti %msg e attendi',
+    'send %msg to %spr':
+        'invia %msg a %spr',
     'Message name':
         'Nome messaggio',
     'message':
@@ -456,10 +530,14 @@ SnapTranslator.dict.it = {
         'ripeti %n volte %loop',
     'repeat until %b %loop':
         'ripeti fino a quando %b %loop',
+    'for %upvar = %n to %n %cla':
+        'per %upvar = %n a %n %cla',
     'if %b %c':
         'se %b %c',
     'if %b %c else %c':
         'se %b %c altrimenti %c',
+    'if %b then %s else %s':
+        'se %b allora %s altrimenti %s',
     'report %s':
         'risultato %s',
     'stop block':
@@ -467,14 +545,14 @@ SnapTranslator.dict.it = {
 	  'stop %stopOthersChoices':
 		  'ferma %stopOthersChoices',
 	  'stop %stopChoices':
-		  'ferma %stopChoices',        
-        
+		  'ferma %stopChoices',
+
     'all':
         'tutti',
     'this script':
         'questo script',
     'this block':
-        'questo Blocco',
+        'questo blocco',
     'stop script':
         'ferma lo script',
     'stop all %stop':
@@ -501,10 +579,17 @@ SnapTranslator.dict.it = {
         'quando vengo clonato',
     'create a clone of %cln':
         'crea un clone di %cln',
+    'a new clone of %cln':
+        'un nuovo clone di %cln',
     'myself':
         'me stesso',
     'delete this clone':
         'elimina questo clone',
+    'tell %spr to %cmdRing %inputs':
+        'chiedi a %spr di eseguire %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'chiedi a %spr il valore di %repRing %inputs',
+
 
     // sensing:
     'touching %col ?':
@@ -527,8 +612,16 @@ SnapTranslator.dict.it = {
         'tasto del mouse premuto',
     'key %key pressed?':
         'tasto %key premuto',
-    'distance to %dst':
-        'distanza da %dst',
+    '%rel to %dst':
+        '%rel da %dst',
+    'distance':
+    	'distanza',
+    '%asp at %loc' :
+        'valore di %asp alla posizione %loc',
+    'r-g-b-a':
+        'RGBA',
+    'sprites' :
+        'elenco sprite',
     'reset timer':
         'azzera cronometro',
     'timer':
@@ -537,16 +630,26 @@ SnapTranslator.dict.it = {
         '%att di %spr',
     'my %get':
         'attributo %get',
+    'object %self':
+        'oggetto %self',
     'http:// %s':
         'leggi pagina web http:// %s',
     'turbo mode?':
         'modalit\u00E0 turbo attiva',
     'set turbo mode to %b':
         'porta modalit\u00E0 turbo a %b',
-        
+    'turbo mode':
+        'modalit\u00E0 turbo',
+    'flat line ends':
+        'terminazione piatta delle linee',
+    'is %setting on?':
+        '%setting attivo',
+    'set %setting to %b':
+        'porta %setting a %b',
+
     'current %dates':
         '%dates attuale',
-        
+
   	'year':
           'anno',
     'month':
@@ -563,13 +666,50 @@ SnapTranslator.dict.it = {
 	    'ora in millisecondi',
     'day of week':
 	    'giorno della settimana',
-
+    'microphone %audio':
+        '%audio del microfono',
+    'note':
+        'nota',
+    'frequency':
+        'frequenza',
+    'samples':
+        'campioni',
+    'sample rate':
+        'frequenza di campionamento',
+    'spectrum':
+        'spettro',
+    'resolution':
+        'risoluzione',
+    'Microphone resolution...':
+        'Risoluzione microfono...',
+    'Microphone':
+        'microfono',
+    'low':
+        'basso',
+    'high':
+        'alto',
+    'max':
+        'max',
+    'video %vid on %self':
+        '%vid del  video su %self',
+    'snap':
+        'porzione',
+    'motion':
+        'movimento',
+    'video capture':
+        'cattura video',
+    'mirror video':
+        'video riflesso',
+    'set video transparency to %n':
+        'porta trasparenza del video a %n',
     'filtered for %clr':
         'selezionati per colore %clr',
     'stack size':
         'dimensione stack',
     'frames':
         'frame',
+    'log pen vectors':
+        'log vettori della penna',
 
     // operators:
     '%n mod %n':
@@ -593,7 +733,7 @@ SnapTranslator.dict.it = {
     'join %words':
         'unione di %words',
    'split %s by %delim':
-        'separa %s di %delim',
+        'separa %s ad ogni %delim',
     'hello':
         'ciao',
     'world':
@@ -605,13 +745,15 @@ SnapTranslator.dict.it = {
     'unicode of %s':
         'codice unicode di %s',
     'unicode %n as letter':
-        'lettera del codice unicode %n',
+        'lettera con codice unicode %n',
     'is %s a %typ ?':
         '%s \u00E8 di tipo %typ',
     'is %s identical to %s ?':
-        '%s \u00E8 identico a %s ?',
+        '%s \u00E8 identico a %s ',
     'type of %s':
         'tipo di %s',
+    'sound':
+        'suono',
     'JavaScript function ( %mult%s ) { %code }':
         'funzione JavaScript ( %mult%s ) { %code }',
 
@@ -635,10 +777,15 @@ SnapTranslator.dict.it = {
         'nascondi variabile %var',
     'script variables %scriptVars':
         'variabili dello script: %scriptVars',
+    'inherit %shd':
+        'eredita %shd',
+
 
     // lists:
     'list %exp':
         'lista %exp',
+    'numbers from %n to %n':
+        'numeri da %n a %n',
     '%s in front of %l':
         '%s davanti a %l',
     'item %idx of %l':
@@ -651,6 +798,28 @@ SnapTranslator.dict.it = {
         '%l contiene %s',
     'thing':
         'cosa',
+    'is %l empty?':
+        '%l \u00E8 vuota',
+    'index of %s in %l':
+        'posizione di %s in %l',
+    'map %repRing over %l':
+        'applica %repRing su %l',
+    'keep items %predRing from %l':
+        'seleziona elementi %predRing in %l',
+    'combine %l using %repRing':
+        'combina elementi di %l usando %repRing',
+    'find first item %predRing in %l':
+        'trova il primo elemento  %predRing di %l',
+    'for each %upvar in %l %cla':
+        'per ogni %upvar di %l %cla',
+    'item':
+        'elemento',
+    'value':
+        'Wert',
+    'index':
+        'posizione',
+    'append %lists':
+        'unisci %lists',
     'add %s to %l':
         'aggiungi %s a %l',
     'delete %ida of %l':
@@ -735,7 +904,9 @@ SnapTranslator.dict.it = {
         'Lingua...',
     'Zoom blocks...':
         'Zoom dei blocchi...',
-   'Stage size...':
+    'Fade blocks...':
+        'Trasparenza dei blocchi...',
+    'Stage size...':
         'Dimensione pannello...',
     'Stage size':
         'Dimensione pannello',
@@ -773,13 +944,13 @@ SnapTranslator.dict.it = {
         'disabilitare per permettere agli slot di espellere\ni reporter inclusi al loro interno',
     'Long form input dialog':
         'Usa finestra degli input estesa',
-   'Plain prototype labels':
+    'Plain prototype labels':
         'Etichetta prototipo base',
     'uncheck to always show (+) symbols\nin block prototype labels':
         'disabilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
     'check to hide (+) symbols\nin block prototype labels':
         'abilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
- 
+
     'check to always show slot\ntypes in the input dialog':
         'abilitare per mostrare sempre i tipi degli slot\nnella finestra di creazione degli input',
     'uncheck to use the input\ndialog in short form':
@@ -791,11 +962,11 @@ SnapTranslator.dict.it = {
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'abilitare per usare il supporto della\ntastiera virtuale con i dispositivi mobili',
     'Input sliders':
-        'Usa slider per gli input',
+        'Usa cursore per gli input',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'disabilitare per non visualizzare gli slider\n per inserire valori numerici',
+        'disabilitare per non visualizzare i cursori\n per inserire valori numerici',
     'check to enable\ninput sliders for\nentry fields':
-        'abilitare per visualizzare gli slider\n per inserire valori numerici',
+        'abilitare per visualizzare i cursori\n per inserire valori numerici',
     'Clicking sound':
         'Click di aggancio dei blocchi',
     'uncheck to turn\nblock clicking\nsound off':
@@ -831,17 +1002,17 @@ SnapTranslator.dict.it = {
     'check for smooth, predictable\nanimations across computers':
         'abilitare per avere animazioni\nfluide su tutti i computer',
     'Flat line ends':
-        'fine linea piana',
+        'Estremit� delle linee squadrata',
     'check for flat ends of lines':
-        'abilitare per fine linea netti',
+        'abilitare per estremit� delle linee squadrate',
     'uncheck for round ends of lines':
-        'disabilitare per fine linea arrotondati',
+        'disabilitare per estremit� delle linee arrotondate',
     'Inheritance support':
         'Supporto ereditarietà degli sprite',
     'check for sprite\ninheritance features':
-        'attivare per\n la ereditarietà degli sprite',   
-     'uncheck to disable\nsprite inheritance features':   
-        'disattivare per rimuovere\n la ereditarietà degli sprite',  
+        'attivare per\n la ereditarietà degli sprite',
+     'uncheck to disable\nsprite inheritance features':
+        'disattivare per rimuovere\n la ereditarietà degli sprite',
     'Codification support':
         'Supporto per il codice nei blocchi',
     'check for block\nto text mapping features':
@@ -851,9 +1022,11 @@ SnapTranslator.dict.it = {
     'Flat design':
         'Aspetto piatto interfaccia',
     'check for alternative\nGUI design':
-        'attivare per una interfaccia alternativa',  
+        'attivare per una interfaccia alternativa',
     'uncheck for default\nGUI design':
-        'disattivare per la interfaccia normale',       
+        'disattivare per la interfaccia normale',
+    'Nested auto-wrapping':
+        'Automatisches Umklammern',
     'Keyboard Editing':
         'Modifica della tastiera',
     'check to enable\nkeyboard editing support':
@@ -878,7 +1051,21 @@ SnapTranslator.dict.it = {
         'attivare per un maggior contrasto',
     'uncheck for less contrast\nmulti-column list views':
         'disattivare per un minor contrasto',
-        
+    'Ternary Boolean slots':
+        'Argomenti Booleani Ternari',
+    'Hyper blocks support':
+        'Supporto Iperblocchi',
+    'uncheck to disable\nusing operators on lists and tables':
+         'disattiva per non usare\ngli operatori su liste e tabelle',
+    'check to enable\nusing operators on lists and tables':
+         'attiva per usare gli operatori\nsu liste e tabelle',
+    'Log pen vectors':
+        'Log dei vettori della penna',
+    'uncheck to turn off\nlogging pen vectors':
+        'disattiva per non loggare\ni vettori della penna',
+    'check to turn on\nlogging pen vectors':
+        'attiva per loggare\ni vettori della penna',
+
     // inputs
     'with inputs':
         'con argomenti',
@@ -895,6 +1082,8 @@ SnapTranslator.dict.it = {
         'aiuto',
 
     // palette:
+    'find blocks':
+        'trova blocchi',
     'hide primitives':
         'nascondi primitive',
     'show primitives':
@@ -928,11 +1117,21 @@ SnapTranslator.dict.it = {
     'edit...':
         'modifica...',
 
-    // sprites:
+    // sprites
     'edit':
         'modifica',
+    'clone':
+        'clona',
     'move':
         'muovi',
+    'pivot':
+        'Angelpunkt',
+    'edit the costume\'s\nrotation center':
+        'cambia il centro di rotazione\ndel costume',
+    'rotate':
+    	'ruota',
+    'stick to':
+        'attacca a',
     'detach from':
         'stacca da',
     'detach all parts':
@@ -945,8 +1144,18 @@ SnapTranslator.dict.it = {
         'mostra tutti gli sprite',
     'pic...':
         'salva immagine dello Stage...',
-    'open a new window\nwith a picture of the stage':
-        'apre una nuova finestra con un\u0027immagine dello Stage',
+    'save a picture\nof the stage':
+        'salva immagine\ndello Stage',
+    'svg...':
+        'esporta come SVG...',
+    'export pen trails\nline segments as SVG':
+        'esporta i tratti\ndella penna come SVG',
+    'there are currently no\nvectorizable pen trail segments':
+        'al momento non sono presenti\ntratti della penna vettoriali',
+    'turn all pen trails and stamps\ninto a new background for the stage':
+        'crea un nuovo sfondo\nusando tratti della penna e timbri',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'crea un nuovo costume\nper lo sprite selezionato\nusando i tratti della penna e i timbri',
 
     // scripting area
     'clean up':
@@ -956,14 +1165,19 @@ SnapTranslator.dict.it = {
     'add comment':
         'aggiungi un commento',
     'undrop':
-        'annulla cancellazione',
+        'annulla inserimento',
     'undo the last\nblock drop\nin this pane':
-        'annulla ultima cancellazione\ndi blocco\n in questo pannello',
+        'annulla ultimo inserimento\ndi un blocco\n in questo pannello',
+    'redrop':
+        'ripristina ultimo inserimento\ndi un blocco\n in questo pannello',
+    'use the keyboard\nto enter blocks':
+    	'usa la tastiera\nper inserire blocchi',
     'scripts pic...':
         'immagine script...',
     'open a new window\nwith a picture of all scripts':
         'apri una nuova finestra\ncon immagine dello script',
-
+    'save a picture\nof all scripts':
+        'salva immagine\ndi tutti gli script',
     'make a block...':
         'crea un blocco...',
 
@@ -1027,6 +1241,24 @@ SnapTranslator.dict.it = {
         'giganti (8x)',
     'monstrous (10x)':
         'grandissimi (10x)',
+
+    // fade blocks
+    'Fade blocks':
+        'Trasparenza blocchi',
+    'block-solid (0)':
+        'nessuna (0)',
+    'medium (50)':
+        'media (50)',
+    'light (70)':
+        'leggera (70)',
+    'shimmering (80)':
+        'accentuata (80)',
+    'elegant (90)':
+        'elevata(90)',
+    'subtle (95)':
+        'molto elevata (95)',
+    'text-only (100)':
+        'solo testo (100)',
 
     // Project Manager
     'Untitled':
@@ -1211,6 +1443,10 @@ SnapTranslator.dict.it = {
         '(0) su',
     '(180) down':
         '(180) gi\u00F9',
+    'random':
+    	'casuale',
+     'random position':
+     	'posizione casuale',
 
     // collision detection
     'mouse-pointer':
@@ -1219,16 +1455,47 @@ SnapTranslator.dict.it = {
         'bordo',
     'pen trails':
         'tratti della penna',
+    'center':
+        'centro dello Stage',
 
     // costumes
     'Turtle':
         'Tartaruga',
+    'Paint a new costume':
+        'Disegna un nuovo costume',
+    'Import a new costume from your webcam':
+        'Scatta una foto con la webcam',
+	'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Assicurati che il tuo browser sia aggiornato\ne che la webcam sia correttamente configurata. \n\nAlcuni browser richiedono di accedere a Snap!\via HTTPS"',
+    'Camera':
+        'Webcam',
     'Empty':
         'Vuoto',
 
+    // sounds
+    'Record a new sound':
+        'Registra un suono',
+
+
     // graphical effects
+    'color':
+        'colore',
+    'hue':
+        'tonalit\u00E0',
+    'fisheye':
+        'fisheye',
+    'whirl':
+        'mulinello',
+    'pixelate':
+        'pixel',
+    'mosaic':
+        'mosaico',
+    'saturation':
+        'saturazione',
     'brightness':
-        'Luminosita',
+        'luminosit\u00E0',
+    'transparency':
+        'trasparenza',
     'ghost':
         'fantasma',
     'negative':
@@ -1236,7 +1503,7 @@ SnapTranslator.dict.it = {
     'comic':
         'comic',
     'confetti':
-        'confetti',
+        'coriandoli',
 
 
     // keys
@@ -1250,6 +1517,8 @@ SnapTranslator.dict.it = {
         'freccia destra',
     'left arrow':
         'freccia sinistra',
+    'any key':
+        'qualsiasi tasto',
     'a':
         'a',
     'b':
@@ -1330,6 +1599,10 @@ SnapTranslator.dict.it = {
     // math functions
     'abs':
         'abs',
+    'ceiling':
+        'intero superiore',
+    'floor':
+        'intero superiore',
     'sqrt':
         'sqrt',
     'sin':
@@ -1382,10 +1655,12 @@ SnapTranslator.dict.it = {
         'ultimo',
     'any':
         'qualunque',
-        
+
     // attributes
+    'my':
+        'attributo',
     'neighbors':
-        'vicinato',
+        'vicini',
     'self':
         'me stesso',
     'other sprites':
@@ -1393,9 +1668,11 @@ SnapTranslator.dict.it = {
     'parts':
         'parti',
     'anchor':
-        'ancora',
+        'ancoraggio',
     'parent':
         'genitore',
+    'temporary?':
+        'temporaneo',
     'children':
         'figli',
     'clones':
@@ -1403,20 +1680,44 @@ SnapTranslator.dict.it = {
     'other clones':
         'altri cloni',
     'dangling?':
-        'pendente?',
+        'appeso',
+    'draggable?':
+        'trascinabile',
+    'rotation style':
+        'stile di rotazione',
     'rotation x':
-        'rotazione x',
+        'x del centro di rotazione',
     'rotation y':
-        'rotazione y',
+        'y del centro di rotazione',
     'center x':
-        'centro x',
+        'x del centro',
     'center y':
-        'centro y',
+        'y del centro',
     'name':
         'nome',
     'stage':
-        'stage',    
-    
+        'stage',
+    'costumes':
+        'costumi',
+    'sounds':
+        'suoni',
+    'width':
+        'larghezza',
+    'height':
+        'altezza',
+    'left':
+        'estremo sinistro',
+    'right':
+        'estremo destro',
+    'top':
+        'estremo superiore',
+    'bottom':
+        'estremo inferiore',
+
+    // inheritance
+    'inherited':
+        'ereditato',
+
     // Paint.js
     'Paint editor':
         'Editor grafico',
