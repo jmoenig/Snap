@@ -8,10 +8,13 @@
     * updated reference manual for v6.2, thanks, Brian!
 * **Notable Fixes:**
     * fixed translatability of certain drop-downs such as "point in direction _"
+* **Translation Updates:**
+    * Turkish, thanks, Turgut!
 
 ### 2020-09-21
 * reference manual update to v6.2, thanks, Brian!
 * added single record query to data library, thanks, Brian
+* Turkish translation update, thanks ,Turgut!
 
 ### 2020-09-20
 * new dev version

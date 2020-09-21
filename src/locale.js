@@ -46,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-September-03';
+modules.locale = '2020-September-21';
 
 // Global stuff
 
@@ -483,11 +483,11 @@ SnapTranslator.dict.tr = {
     'language_name':
         'Türkçe',
     'language_translator':
-        'Hakan Atas - www.3drobolab.com, Turgut Güneysu',
+        'Turgut Güneysu, Hakan Atas',
     'translator_e-mail':
-        'hakanatas@gmail.com, tguneysu@msn.com, mustafaipekbayrak@gmail.com',
+        'tguneysu@msn.com', // hakanatas@gmail.com, mustafaipekbayrak@gmail.com',
     'last_changed':
-        '2019-01-22'
+        '2020-09-20'
 };
 
 SnapTranslator.dict.hu = {
