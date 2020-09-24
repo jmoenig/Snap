@@ -3024,6 +3024,35 @@ BlockMorph.prototype.userMenu = function () {
         "delete",
         'userDestroy'
     );
+    if (isNil(this.comment)) {
+        menu.addItem(
+            "add comment",
+            () => {
+                var comment = new CommentMorph();
+                this.comment = comment;
+                comment.block = this;
+                comment.layoutChanged();
+
+                // Simulate drag/drop for better undo/redo behavior
+                var scripts = this.parentThatIsA(ScriptsMorph),
+                    ide = this.parentThatIsA(IDE_Morph),
+                    blockEditor = this.parentThatIsA(BlockEditorMorph);
+                if (!ide && blockEditor) {
+                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
+                }
+                if (ide) {
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+                scripts.clearDropInfo();
+                scripts.lastDropTarget = { element: this };
+                scripts.lastDroppedBlock = comment;
+                scripts.recordDrop(world.hand.grabOrigin);
+            }
+        );
+    }
     menu.addItem(
         "script pic...",
         () => {
