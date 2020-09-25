@@ -5,11 +5,13 @@
 * **New Features:**
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
+    * new "48 kHz" option in the "sampling rate" dropdown 
 
 ### 2020-09-25
 * new dev version
 * updated "frequency distribution analysis" library: New "lines" option for plotting
 * blocks: new "add comment" option in the block context menu, thanks, Rob Fidler!
+* blocks: added "48 kHz" option to the "sampling rate" dropdown 
 
 ## 6.2.1
 * **New Features:**

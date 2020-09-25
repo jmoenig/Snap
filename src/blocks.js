@@ -1023,6 +1023,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 {
                     '22.05 kHz' : 22050,
                     '44.1 kHz' : 44100,
+                    '48 kHz' : 48000,
                     '88.2 kHz' : 88200,
                     '96 kHz' : 96000
                 }
