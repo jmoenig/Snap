@@ -1,4 +1,4 @@
-/* globals driver, expect */
+/* globals driver, expect, assert */
 describe('collaboration', function() {
     this.timeout(7500);
 
@@ -10,41 +10,57 @@ describe('collaboration', function() {
     });
 
     describe('same user', function() {
-        let blockId = null;
-        before(async function() {
-            await driver.user2.openProject(projectName, false);
-            await driver.user2.waitForDialogBox();
-            const dialog = driver.user2.dialog();
-            const joinBtn = dialog.buttons.children[0];
-            driver.user2.click(joinBtn);
-            await driver.user2.waitUntil(() => driver.user2.ide().room.name === projectName);
-            const block = await driver.user1.addBlock('show');
-            expect(block).toBeTruthy();
-            blockId = block.id;
+        describe('no unsaved edits', function() {
+            let blockId = null;
+            before(async function() {
+                await driver.user2.sleep(250);  // FIXME: this is lazy...
+                await driver.user2.openProject(projectName, false);
+                const block = await driver.user1.addBlock('show');
+                expect(block).toBeTruthy();
+                blockId = block.id;
+            });
+
+            it('should add (show) block across clients', function() {
+                return driver.user2.expect(
+                    () => {
+                        const sprite = driver.user2.ide().currentSprite;
+                        const blocks = sprite.scripts.children;
+                        return blocks.map(block => block.id).includes(blockId);
+                    },
+                    `Block ${blockId} did not appear for user2`
+                );
+            });
+
+            it('should use other clientId in last action', function() {
+                const clientId = driver.user1.globals().SnapCloud.clientId;
+                const clientId2 = driver.user2.globals().SnapCloud.clientId;
+                const action = driver.user2.globals().SnapUndo.allEvents.slice().pop();
+                expect(action.user).toNotBe(clientId2);
+                expect(action.user).toBe(clientId);
+            });
         });
 
-        it('should add (show) block across clients', function() {
-            return driver.user2.expect(
-                () => {
-                    const sprite = driver.user2.ide().currentSprite;
-                    const blocks = sprite.scripts.children;
-                    return blocks.map(block => block.id).includes(blockId);
-                },
-                `Block ${blockId} did not appear for user2`
-            );
-        });
-
-        it('should use other clientId in last action', function() {
-            const clientId = driver.user1.globals().SnapCloud.clientId;
-            const clientId2 = driver.user2.globals().SnapCloud.clientId;
-            const action = driver.user2.globals().SnapUndo.allEvents.slice().pop();
-            expect(action.user).toNotBe(clientId2);
-            expect(action.user).toBe(clientId);
+        describe('unsaved edits', function() {
+            it('should make edits while collaborator opens project', async () => {
+                await driver.user2.sleep(250);  // FIXME: this is lazy...
+                await driver.user1.addBlock('turn');
+                const addForward = driver.user1.addBlock('forward');
+                const openProject = driver.user2.openProject(projectName, false);
+                await addForward.then(() => driver.user1.addBlock('show'));
+                await openProject;
+                await driver.user1.expect(() =>
+                    driver.user1.globals().SnapActions.lastSeen === driver.user2.globals().SnapActions.lastSeen
+                );
+                assert.equal(
+                    Object.keys(driver.user1.globals().SnapActions).length,
+                    Object.keys(driver.user2.globals().SnapActions).length,
+                );
+            });
         });
     });
 
     describe('shared project', function() {
-        const user2 = 'akos';
+        const user2 = 'test2';
         let oldProjectId;
         let oldRoleId;
         before(async () => {

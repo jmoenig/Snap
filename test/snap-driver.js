@@ -340,12 +340,15 @@ SnapDriver.prototype.inviteCollaborator = async function(username) {
     const controlBar = this.ide().controlBar;
     this.click(controlBar.cloudButton);
 
-    const dropdown = this.dialog();
+    const dropdown = await this.expect(
+        () => !this.dialog().title && this.dialog(),
+        new Error('Cloud menu never appeared'),
+    );
     const collabs = dropdown.children.find(item => item.action === 'manageCollaborators');
     this.click(collabs);
 
     await this.expect(
-        () => this.dialog(),
+        () => !this.dialog().title,
         `Collaborator dialog did not appear`
     );
 

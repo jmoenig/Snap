@@ -2641,7 +2641,7 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
     this.completeAction(null, blocks);
 };
 
-ActionManager.prototype.onOpenProject = function(str) {
+ActionManager.prototype.onOpenProject = async function(str) {
     var myself = this,
         project = null,
         event = this.currentEvent,
@@ -2688,7 +2688,8 @@ ActionManager.prototype.onOpenProject = function(str) {
         var roomName = this.ide().room.name,
             roleName = this.ide().projectName;
 
-        SnapCloud.setClientState(roomName, roleName, this.lastSeen);
+        await SnapCloud.setClientState(roomName, roleName, this.lastSeen);
+        this.requestMissingActions();
     }
 };
 
