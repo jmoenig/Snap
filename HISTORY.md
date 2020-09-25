@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-09-25
+* new dev version
+
 ## 6.2.1
 * **New Features:**
     * added "get value from key" reporter to database library, thanks, Brian! 
