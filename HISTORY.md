@@ -4,10 +4,12 @@
 
 * **New Features:**
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
+    * new "add comment" option in the block context menu, thanks, Rob Fidler!
 
 ### 2020-09-25
 * new dev version
 * updated "frequency distribution analysis" library: New "lines" option for plotting
+* blocks: new "add comment" option in the block context menu, thanks, Rob Fidler!
 
 ## 6.2.1
 * **New Features:**
