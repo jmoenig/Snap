@@ -7,6 +7,9 @@
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
     * new "48 kHz" option in the "sampling rate" dropdown 
 
+### 2020-09-28
+* tweaked "frequency distribution analysis" library to plot lines in any color or style
+ 
 ### 2020-09-25
 * new dev version
 * updated "frequency distribution analysis" library: New "lines" option for plotting
