@@ -596,6 +596,25 @@ describe('blocks', function() {
     describe('rpc', function() {
         beforeEach(() => driver.reset());
 
+        it('should show help when RPC inputs exist', async function() {
+            const block = await driver.addBlock('getJSFromRPCStruct');
+            const [serviceField, rpcField] = block.inputs();
+            await SnapActions.setField(serviceField, 'Dev');
+            await SnapActions.setField(rpcField, 'echo');
+            const [/*serviceField*/, /*rpcField*/, input] = block.inputs();
+            const messageBlock = driver.palette().contents.children.find(
+                block => block.selector === 'getLastMessage'
+            );
+            driver.dragAndDrop(messageBlock, input.center());
+
+            await block.showHelp();
+            const dialog = driver.dialog();
+            assert(
+                dialog && dialog.key.includes('Help'),
+                'Help dialog did not appear'
+            );
+        });
+
         it('should populate method with `setField`', async function() {
             // create rpc block
             const block = await driver.addBlock('getJSFromRPCStruct');
