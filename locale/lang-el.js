@@ -374,6 +374,8 @@ SnapTranslator.dict.el = {
         'κρύψου',
     'go to front':
         'πήγαινε μπροστά',
+    'go to %layer layer':
+        'πήγαινε %layer',
     'front':
         'μπροστά',
     'back':
