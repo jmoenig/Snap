@@ -403,7 +403,7 @@ SnapTranslator.dict.el = {
     'rest for %n beats':
         'κάνε παύση για %n ρυθμούς',
     'play sound %snd at %rate Hz':
-        'παίξε τον ήχο %snd στην %rate Hz',
+        'παίξε τον ήχο %snd στα %rate Hz',
     '%aa of sound %snd':
         '%aa του ήχου %snd',
     'duration':
