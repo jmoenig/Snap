@@ -360,6 +360,8 @@ SnapTranslator.dict.el = {
         'θέσε το εφέ %eff να είναι %n',
     'clear graphic effects':
         'καθάρισε τα γραφικά εφέ',
+    '%eff effect':
+        '%eff εφέ',
     'change size by %n':
         'άλλαξε το μέγεθος κατά %n',
     'set size to %n %':
@@ -372,6 +374,10 @@ SnapTranslator.dict.el = {
         'κρύψου',
     'go to front':
         'πήγαινε μπροστά',
+    'front':
+        'μπροστά',
+    'back':
+        'πίσω',
     'go back %n layers':
         'πήγαινε πίσω %n στρώματα',
 
@@ -382,6 +388,11 @@ SnapTranslator.dict.el = {
     'alert %mult%s':
         'Ειδοποίηση: %mult%s',
 
+    'pixels':
+        'πίξελ',
+    'current':
+        'τρέχον',
+
     // sound:
     'play sound %snd':
         'παίξε τον ήχο %snd',
@@ -391,6 +402,18 @@ SnapTranslator.dict.el = {
         'σταμάτα όλους τους ήχους',
     'rest for %n beats':
         'κάνε παύση για %n ρυθμούς',
+    'play sound %snd at %rate Hz':
+        'παίξε τον ήχο %snd στην %rate Hz',
+    '%aa of sound %snd':
+        '%aa του ήχου %snd',
+    'duration':
+        'διάρκεια',
+    'length':
+        'μήκος',
+    'number of channels':
+        'αριθμός καναλιών',
+    'new sound %l rate %rate Hz':
+        'νέος ήχος %l ταχύτητα %rate Hz',
     'play note %note for %n beats':
          'παίξε την νότα %note για %n ρυθμούς',
     'set instrument to %inst':
@@ -401,6 +424,20 @@ SnapTranslator.dict.el = {
         'θέσε την ταχύτητα του ρυθμού να είναι %n ρυθμούς το δευτ.',
     'tempo':
         'ταχύτητα του ρυθμού',
+    'set volume to %n %':
+        'θέσε την ένατση να είναι %n %',
+    'change balance by %n':
+        'άλλαξε την ισορροπία κατά %n',
+    'set balance to %n':
+        'θέσε την ισορροπία να είναι %n',
+    'balance':
+        'ισορροπία',
+    'play frequency %n Hz':
+        'παίξε συχνότητα %n Hz',
+    'stop frequency':
+        'σταμάτα την συχνότητα',
+    'play %n Hz for %n secs':
+        'παίξε %n Hz για %n δευτ.',
 
     // pen:
     'clear':
@@ -411,8 +448,12 @@ SnapTranslator.dict.el = {
         'στυλό πάνω',
     'set pen color to %clr':
         'θέσε το χρώμα του στυλού να είναι %clr',
+    'set background color to %clr':
+        'θέσε το χρώμα του υπόβαθρου να έιναι %clr',
     'change pen %hsva by %n':
          'άλλαξε %hsva του στυλού κατά %n',
+    'change background %hsva by %n':
+        'άλλαξε υπόβαθρο %hsva κατά %n',
     'hue':
         'απόχρωση',
     'saturation':
@@ -427,6 +468,10 @@ SnapTranslator.dict.el = {
         'άλλαξε την σκιά του στυλού κατά %n',
     'set pen shade to %n':
         'θέσε την σκιά του στυλού να είναι %n',
+    'set background %hsva to %n':
+        'θέσε υπόβαθρο %hsva να είναι %n',
+    'pen %pen':
+        'πένα %pen',
     'change pen size by %n':
         'άλλαξε το μέγεθος του στυλού κατά %n',
     'set pen size to %n':
@@ -435,6 +480,10 @@ SnapTranslator.dict.el = {
         'σφραγίδα',
     'fill':
          'γέμισμα',
+    'write %s size %n':
+        'γράψε %s μέγεθος %n',
+    'paste on %spr':
+        'επικόλληση στο %spr',
 
     // control:
     'when %greenflag clicked':
@@ -460,9 +509,9 @@ SnapTranslator.dict.el = {
     'stopped':
         'σταματημένο',
     'when %b':
-        'Όταν %b',
+        'όταν %b',
     'when I receive %msgHat':
-        'Όταν δεχτώ %msgHat',
+        'όταν δεχτώ %msgHat',
     'broadcast %msg':
         'στείλε το %msg',
     'broadcast %msg and wait':
@@ -487,6 +536,8 @@ SnapTranslator.dict.el = {
         'αν %b %c',
     'if %b %c else %c':
         'αν %b %c αλλιώς %c',
+    'if %b then %s else %s':
+        'αν %b τότε %s αλλιώς %s',
     'report %s':
         'δήλωσε %s',
     'stop %stopChoices':
@@ -499,7 +550,7 @@ SnapTranslator.dict.el = {
         'αυτό το μπλοκ',
     'stop %stopOthersChoices':
         'σταμάτα %stopOthersChoices',
-    'all but this scrip':
+    'all but this script':
         'τα πάντα εκτός από αυτό το σενάριο',
     'other scripts in sprite':
         'τα υπόλοιπα σενάρια της φιγούρας',
@@ -593,12 +644,30 @@ SnapTranslator.dict.el = {
         'δευτερόλεπτα',
     'time in milliseconds':
         'χρόνος σε χιλιοστά του δευτερολέπτου', 
+    'volume':
+        'έναση',
     'filtered for %clr':
         'φίλτραρε για %clr',
     'stack size':
         'μέγεθος στοίβας',
     'frames':
         'κάδρα',
+    'Microphone resolution...':
+        'Ανάλυση μικροφώνου...',
+    'Microphone':
+        'Μικρόφωνο',
+    'low':
+        'χαμηλό',
+    'high':
+        'υψηλό',
+    'max':
+        'μέγιστο',
+    'video %vid on %self':
+        'βίντεο %vid στον %self',
+    'motion':
+        'κίνηση',
+    'set video transparency to %n':
+        'θέσε την διαφάνια βίντεο να είναι %n',
 
     // operators:
     '%n mod %n':
@@ -685,6 +754,12 @@ SnapTranslator.dict.el = {
         '%l περιέχει το %s',
     'thing':
         'πράγμα',
+    'is %l empty?':
+        'είναι το %l κενό?',
+    'keep items %predRing from %l':
+        'κρατήσε αντικείμενα %predRing από το %l',
+    'combine %l using %repRing':
+        'συνδύασε το %l χρησιμοποιόντας %repRing',
     'add %s to %l':
         'πρόσθεσε το %s στο %l',
     'delete %ida of %l':
@@ -762,12 +837,33 @@ SnapTranslator.dict.el = {
         'Σύνδεση...',
     'Signup...':
         'Εγγραφή...',
+    'Change Password...':
+        'Αλλαγή Συνθηματικού...',
+    'Reset Password...':
+        'Επαναφορά Συνθηματικού...',
+    'Resend Verification Email...':
+        'Επαναποστολή Email Επιβεβαίωσης...',
+    'Open in Community Site':
+        'Άνοιγμα στην Ιστοσελίδα Κοινότητας',
+
 
     // settings menu
     'Language...':
         'Γλώσσα...',
     'Zoom blocks...':
         'Μεγέθυνση των μπλοκ…',
+    'Fade blocks...':
+        'Ξεθώριασμα μπλοκ...',
+    'Stage size...':
+        'Μέγεθος σκηνής...',
+    'Stage size':
+        'Μέγεθος σκηνής',
+    'Stage width':
+        'Πλάτος σκηνής',
+    'Stage height':
+        'Ύψος σκηνής',
+    'Default':
+        'Προεπιλογή',
     'Blurred shadows':
         'Θολές σκιές',
     'uncheck to use solid drop\nshadows and highlights':
@@ -826,6 +922,10 @@ SnapTranslator.dict.el = {
         'ενεργοποιήστε για να βάλετε σε\nπροτεραιότητα την εκτέλεση του κώδικα',
     'uncheck to run scripts\nat normal speed':
         'απενεργοποιήστε για να εκτελέσετε τον κώδικα\nμε κανονική ταχύτητα',
+    'check for alternative\nGUI design':
+        'ενεργοποιήστε για εναλακτική\nσχεδίαση GUI',
+    'uncheck for default\nGUI design':
+        'απενεργοποιήστε για προεπιλεγμένη\nσχεδίαση GUI',
     'check to enable\nIDE animations':
         'ενεργοποιήστε για να εχετε\nIDE animations',
     'Thread safe scripts':
@@ -840,6 +940,11 @@ SnapTranslator.dict.el = {
         'απενεργοποιήστε για να έχετε μεγαλύτερη ταχύτητα\nστσ μεταβλητά frame-rates',
     'check for smooth, predictable\nanimations across computers':
         'ενεργοποιήστε για ομαλά, προβλέψημα\nanimations στους υπολογιστές',
+    'Table support':
+        'Υποστήριξη πίνακα',
+    'Table lines':
+        'Γραμμές πίνακα',
+
 
     // inputs
     'with inputs':
@@ -856,6 +961,8 @@ SnapTranslator.dict.el = {
         'Βοήθεια',
 
     // palette:
+    'find blocks':
+        'εύρεση μπλοκ',
     'hide primitives':
         'Απόκρυψη αρχέτυπων',
     'show primitives':
@@ -876,16 +983,26 @@ SnapTranslator.dict.el = {
         'διαγραφή',
     'script pic...':
         'εικόνα του κώδικα...',
+    'save a picture\nof this script':
+        'αποθήκευση εικόνας\nαυτού του κώδικα',
+    'result pic...':
+        'εικόνα του αποτελεσμάτος...',
     'open a new window\nwith a picture of this script':
         'άνοιγμα νέου παραθύρου\nμε την εικόνα αυτού του κώδικα',
     'ringify':
         'εισαγωγή σε δαχτυλίδι',
     'unringify':
         'εξαγωγή από το δαχτυλίδι',
+    'new line':
+        'νέα γραμμή',
 
     // custom blocks:
     'delete block definition...':
         'διαγραφή του προσαρμοσμένου μπλοκ',
+    'duplicate block definition...':
+        'διπλασιασμός του προσαρμοσμένου μπλοκ',
+    'export block definition...':
+        'εξαγωγή του προσαρμοσμένου μπλοκ',
     'edit...':
         'επεξεργασία...',
 
@@ -945,6 +1062,22 @@ SnapTranslator.dict.el = {
     'rename sound':
         'μετονόμαση ήχου',
 
+    // lists and tables
+    'list view...':
+        'προβολή λίστας...',
+    'table view...':
+        'προβολή πίνακα...',
+    'Table view':
+        'Προβολή πίνακα',
+    'open in dialog...':
+        'άνοιγμα σε παράθηρο διαλόγου...',
+    'blockify':
+        'ως εντολή',
+    'reset columns':
+        'επαναφορά στήλων',
+    'items':
+        'αντικείμενα',
+
     // dialogs
     // buttons
     'OK':
@@ -986,6 +1119,24 @@ SnapTranslator.dict.el = {
     'monstrous (10x)':
         'τεράστιο (10x)',
 
+    // fade blocks
+    'Fade blocks':
+        'Ξεθώριασμα μπλοκ',
+    'block-solid (0)':
+        'συμπαγές-εντολή (0)',
+    'medium (50)':
+        'μέτριο (50)',
+    'light (70)':
+        'απαλό (70)',
+    'shimmering (80)':
+        'λαμπερό (80)',
+    'elegant (90)':
+        'κομψό (90)',
+    'subtle (95)':
+        'διακριτικό (95)',
+    'text-only (100)':
+        'κείμενο μόνο (100)',
+
     // Project Manager
     'Untitled':
         'Χωρίς Τίτλο',
@@ -1001,6 +1152,25 @@ SnapTranslator.dict.el = {
         'Είστε σίγουροι ότι θέλετε να γίνει διαγραφή?',
     'rename...':
         'μετονόμαση...',
+    'Examples':
+        'Παραδείγματα',
+    'Share':
+        'Κοινοποίηση',
+    'Unshare':
+        'Κατάργηση κοινοποίησης',
+    'Publish':
+        'Δημοσίευση',
+    'Κατάργηση δημοσίευσης':
+        '',
+    'Updating\nproject list...':
+        'Ενημέρωση\nλίστας έργων...',
+    'Recover':
+        'Αποκατάσταση',
+    'Today':
+        'Σήμερα',
+    'Yesterday':
+        'Χτές',
+
 
     // costume editor
     'Costume Editor':
@@ -1049,7 +1219,7 @@ SnapTranslator.dict.el = {
     'Vector Paint Editor':
         'Επεξεργαστής Διανυσματικών γραφικών',
     'Rectangle\n(shift: square)':
-        'Ορθογώνιο\n(Shift: Quadrat)',
+        'Ορθογώνιο\n(Shift: τετράγωνο)',
     'Ellipse\n(shift: circle)':
         'Έλλειψη\n(Shift: κύκλος)',
     'Selection tool':
@@ -1087,7 +1257,9 @@ SnapTranslator.dict.el = {
     // save project
     'Save Project As...':
         'Αποθήκευση Εργασίας Ως...',
-
+    'Save Project':
+        'Αποθήκευση Εργασίας',
+        
     // export blocks
     'Export blocks':
         'Εξαγωγή των μπλοκ',
@@ -1108,6 +1280,15 @@ SnapTranslator.dict.el = {
     'for this sprite only':
         'μόνο για αυτό το sprite',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'μετονομασία μόνο\nαυτής της ρεπόρτερ',
+    'rename all...':
+        'μετονομασία όλων...',
+    'rename all blocks that\naccess this variable':
+        'μετονομασιά όλων των μπλοκ,\nπου έχουν πρόσβαση σε αυτήν την μεταβλητή',
+
+
     // block dialog
     'Change block':
         'Αλλαγή του μπλοκ',
@@ -1121,6 +1302,8 @@ SnapTranslator.dict.el = {
     // block editor
     'Block Editor':
         'Επεξεργαστής του μπλοκ',
+    'Method Editor':
+        'Επεξεργαστής Μεθόδου',
     'Apply':
         'Εφαρμογή',
 
@@ -1220,6 +1403,8 @@ SnapTranslator.dict.el = {
     // coments
     'add comment here...':
         'πρόσθεσε κάποιο σχόλιο εδώ...',
+    'save a picture\nof this comment':
+        'αππθήκευση εικόνας\nαυτού του σχόλιου',
 
     // drow downs
     // directions
@@ -1239,16 +1424,30 @@ SnapTranslator.dict.el = {
         'άκρη',
     'pen trails':
         'ίχνοι στυλού',
+    'center':
+        'κέντρο',
 
     // costumes
     'Turtle':
         'Χελώνα',
     'Empty':
         'Άδειο',
+    'Camera':
+        'Κάμερα',
+
+    // sounds
+    'Record a new sound':
+        'Ηχογράφιση νέου ήχου',
 
     // graphical effects
     'ghost':
         'φάντασμα',
+    'color':
+        'χρώμα',
+    'fisheye':
+        'μάτι ψαριού',
+    'negative':
+        'αρνητικό',
 
     // keys
     'space':
@@ -1261,6 +1460,8 @@ SnapTranslator.dict.el = {
         'δεξί βέλος',
     'left arrow':
         'αριστερό βέλος',
+    'any key':
+        'οποιοδήποτε πλήκτρο',
     'a':
         'α',
     'b':
@@ -1362,13 +1563,29 @@ SnapTranslator.dict.el = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'όχι',
+
+    // delimiters
+    'letter':
+        'γράμμα',
+    'word':
+        'λέξη',
+    'whitespace':
+        'διάστημα',
+    'line':
+        'γραμμή',
+    'tab':
+        'tab',
+
     // data types
     'number':
         'νούμερο',
     'text':
         'κείμενο',
     'Boolean':
-        'Boole',
+        'Boolean',
     'list':
         'λίστα',
     'command':
@@ -1377,10 +1594,75 @@ SnapTranslator.dict.el = {
         'αναφορέας',
     'predicate':
         'κατηγορούμενο',
+    'sprite':
+        'φιγούρα',
 
     // list indices
     'last':
         'τελευταίο',
     'any':
-        'οποιοδήποτε'
+        'οποιοδήποτε',
+        
+    // attributes
+    'my':
+        'δικό μου',
+    'neighbors':
+        'κοντινοί',
+    'self':
+        'εαυτός μου',
+    'other sprites':
+        'άλλες φυγούρες',
+    'parts':
+        'μέρη',
+    'anchor':
+        'άγκυρα',
+    'parent':
+        'γονέας',
+    'temporary?':
+        'προσωρινό?',
+    'children':
+        'παιδιά',
+    'clones':
+        'κλώνοι',
+    'other clones':
+        'άλλοι κλώνοι',
+    'dangling?':
+        'κουνιέμαι?',
+    'draggable?':
+        'συρόμενο?',
+    'rotation style':
+        'στυλ περιστροφής',
+    'rotation x':
+        'περιστροφή x',
+    'rotation y':
+        'περιστροφή y',
+    'center x':
+        'κέντρο x',
+    'center y':
+        'κέντρο y',
+    'name':
+        'όνομα',
+    'costume':
+        'κοστούμι',
+    'stage':
+        'σκηνή',
+    'costumes':
+        'κοστούμια',
+    'sounds':
+        'ήχοι',
+    'scripts':
+        'σενάρια',
+    'width':
+        'πλάτος',
+    'height':
+        'ύψος',
+    'left':
+        'αριστερά',
+    'right':
+        'δεξιά',
+    'top':
+        'επάνω',
+    'bottom':
+        'κάτω'
+
 };
