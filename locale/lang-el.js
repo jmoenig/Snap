@@ -424,6 +424,8 @@ SnapTranslator.dict.el = {
         'θέσε την ταχύτητα του ρυθμού να είναι %n ρυθμούς το δευτ.',
     'tempo':
         'ταχύτητα του ρυθμού',
+    'change volume by %n':
+        'άλλαξε την ένταση κατά %n',
     'set volume to %n %':
         'θέσε την ένατση να είναι %n %',
     'change balance by %n':
