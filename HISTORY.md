@@ -8,9 +8,12 @@
     * new "48 kHz" option in the "sampling rate" dropdown 
 * **Notable Changes:**
     * specifying alpha values are now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
+* **Notable Fixes:**
+    * "append" block now shows up when searching  for it
 
 ### 2020-10-04
 * threads: made alpha values optional for generating costume pixels, none = solid
+* objects: fixed #2694 - removed "dev" flag from "append" primitive - made sure it shows up in block-search
 
 ### 2020-09-28
 * tweaked "frequency distribution analysis" library to plot lines in any color or style

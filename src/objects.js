@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-September-18';
+modules.objects = '2020-October-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1328,7 +1328,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         reportConcatenatedLists: { // only in dev mode - experimental
-            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
