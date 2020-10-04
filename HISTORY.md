@@ -2,10 +2,15 @@
 
 ## in development:
 
-* **New Features:**
+* **New Minor Features:**
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
     * new "48 kHz" option in the "sampling rate" dropdown 
+* **Notable Changes:**
+    * specifying alpha values are now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
+
+### 2020-10-04
+* threads: made alpha values optional for generating costume pixels, none = solid
 
 ### 2020-09-28
 * tweaked "frequency distribution analysis" library to plot lines in any color or style

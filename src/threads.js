@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-September-02';
+modules.threads = '2020-October-04';
 
 var ThreadManager;
 var Process;
@@ -5560,9 +5560,10 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     dta = ctx.createImageData(width, height);
     for (i = 0; i < src.length; i += 1) {
         px = src[i].asArray();
-        for (k = 0; k < 4; k += 1) {
+        for (k = 0; k < 3; k += 1) {
             dta.data[(i * 4) + k] = px[k];
         }
+        dta.data[i * 4 + 3] = (px[3] === undefined ? 255 : px[3]);
     }
     ctx.putImageData(dta, 0, 0);
     return new Costume(
