@@ -6,6 +6,7 @@
     * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
     * attribute selection in the SET block are now prefixed with "my"
+    * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "48 kHz" option in the "sampling rate" dropdown 
 * **Notable Fixes:**
@@ -18,6 +19,7 @@
 * Greek translation updata, thanks, HM100!
 * blocks, threads: prefixed attribute selection in the SET block with "my" 
 * German translation update
+* objects: assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
 
 ### 2020-10-04
 * threads: made alpha values optional for generating costume pixels, none = solid

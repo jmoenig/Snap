@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
 
-modules.objects = '2020-October-04';
+modules.objects = '2020-October-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3564,13 +3564,14 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
-    var w, h;
+    var w = 0, h = 0;
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (this.costume) {
             // recycle dimensions of current costume
             w = this.costume.width();
             h = this.costume.height();
-        } else {
+        }
+        if (w * h !== id.length()) {
             // assume stage's dimensions
             w = StageMorph.prototype.dimensions.x;
             h = StageMorph.prototype.dimensions.y;
