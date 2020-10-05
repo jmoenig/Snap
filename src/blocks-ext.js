@@ -437,7 +437,7 @@ function HintInputSlotMorph(text, hint, isNumeric) {
     // If the StringMorph gets clicked on when empty, the hint text
     // should be "ghostly"
     this.contents().mouseClickLeft = function() {
-        if (self.empty) {
+        if (self.isEmptySlot()) {
             this.text = '';
         }
         StringMorph.prototype.mouseClickLeft.apply(this, arguments);
@@ -445,7 +445,7 @@ function HintInputSlotMorph(text, hint, isNumeric) {
 }
 
 HintInputSlotMorph.prototype.evaluate = function() {
-    if (this.empty) {  // ignore grey text
+    if (this.isEmptySlot()) {  // ignore grey text
         return this.isNumeric ? 0 : '';
     }
     return InputSlotMorph.prototype.evaluate.call(this);
@@ -458,7 +458,7 @@ HintInputSlotMorph.prototype.setContents = function(value) {
     // If empty, set to the hint text
     InputSlotMorph.prototype.setContents.apply(this, arguments);
     this.empty = value === '';
-    if (this.empty) {  // Set the contents to the hint text
+    if (this.isEmptySlot()) {  // Set the contents to the hint text
         // Set the text to the hint text
         contents.text = this.hintText;
         color = new Color(100, 100, 100);
@@ -475,6 +475,10 @@ HintInputSlotMorph.prototype.changed = function() {
         this.empty = txtMorph.text === this.hintText;
     }
     return InputSlotMorph.prototype.changed.call(this);
+};
+
+HintInputSlotMorph.prototype.isEmptySlot = function() {
+    return this.empty;
 };
 
 var addStructReplaceSupport = function(fn) {

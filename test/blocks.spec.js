@@ -596,6 +596,27 @@ describe('blocks', function() {
     describe('rpc', function() {
         beforeEach(() => driver.reset());
 
+        it('should detect empty hint input slot', async function() {
+            const mapBlock = await driver.addBlock('reportMap');
+            const [ring, listInput] = mapBlock.inputs();
+            const [ringInput] = ring.inputs()[0].inputs();
+            const block = await driver.moveBlock('getJSFromRPCStruct', ringInput);
+            const [serviceField, rpcField] = block.inputs();
+            await SnapActions.setField(serviceField, 'Dev');
+            await SnapActions.setField(rpcField, 'echo');
+            await driver.moveBlock('reportNumbers', listInput);
+            driver.click(mapBlock);
+            const bubble = await driver.expect(
+                () => driver.dialog(),
+                'Speech bubble with result did not appear'
+            );
+            const result = bubble.contents.list;
+            assert.equal(
+                result.at(1),
+                1
+            );
+        });
+
         it('should show help when RPC inputs exist', async function() {
             const block = await driver.addBlock('getJSFromRPCStruct');
             const [serviceField, rpcField] = block.inputs();

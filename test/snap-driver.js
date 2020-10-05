@@ -509,9 +509,11 @@ SnapDriver.prototype.actionsSettled = async function() {
     await Promise.allSettled(pendingActions);
 };
 
-SnapDriver.prototype.moveBlock = function(block, target, pos) {
+SnapDriver.prototype.moveBlock = function(spec, target, pos) {
     const {hand} = this.world();
-    const {SnapActions} = this.globals();
+    const {SnapActions, SpriteMorph} = this.globals();
+    const block = typeof spec === 'string' ?
+        SpriteMorph.prototype.blockForSelector(spec, true) : spec;
 
     hand.grabOrigin = block.situation();
     return SnapActions.moveBlock(block, target, pos);
