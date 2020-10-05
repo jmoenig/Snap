@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-October-04';
+modules.threads = '2020-October-05';
 
 var ThreadManager;
 var Process;
@@ -4984,6 +4984,7 @@ Process.prototype.doSet = function (attribute, value) {
     }
     switch (name) {
     case 'anchor':
+    case 'my anchor':
         this.assertType(rcvr, 'sprite');
         if (value instanceof SpriteMorph) {
             // avoid circularity here, because the GUI already checks for
@@ -4999,11 +5000,13 @@ Process.prototype.doSet = function (attribute, value) {
         }
         break;
     case 'parent':
+    case 'my parent':
         this.assertType(rcvr, 'sprite');
         value = value instanceof SpriteMorph ? value : null;
         rcvr.setExemplar(value, true); // throw an error in case of circularity
         break;
     case 'temporary?':
+    case 'my temporary?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
         if (value) {
@@ -5013,6 +5016,7 @@ Process.prototype.doSet = function (attribute, value) {
         }
         break;
     case 'name':
+    case 'my name':
         this.assertType(rcvr, ['sprite', 'stage']);
         this.assertType(value, ['text', 'number']);
         ide = rcvr.parentThatIsA(IDE_Morph);
@@ -5026,12 +5030,14 @@ Process.prototype.doSet = function (attribute, value) {
         }
         break;
     case 'dangling?':
+    case 'my dangling?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
         rcvr.rotatesWithAnchor = !value;
         rcvr.version = Date.now();
         break;
     case 'draggable?':
+    case 'my draggable?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
         rcvr.isDraggable = value;
@@ -5047,6 +5053,7 @@ Process.prototype.doSet = function (attribute, value) {
         rcvr.version = Date.now();
         break;
     case 'rotation style':
+    case 'my rotation style':
         this.assertType(rcvr, 'sprite');
         this.assertType(+value, 'number');
         if (!contains([0, 1, 2], +value)) {
@@ -5068,11 +5075,13 @@ Process.prototype.doSet = function (attribute, value) {
         rcvr.version = Date.now();
         break;
     case 'rotation x':
+    case 'my rotation x':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'number');
         rcvr.setRotationX(value);
         break;
     case 'rotation y':
+    case 'my rotation y':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'number');
         rcvr.setRotationY(value);

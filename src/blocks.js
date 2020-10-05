@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-September-25';
+modules.blocks = '2020-October-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -595,15 +595,15 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
             // add settable object attributes
             dict['~'] = null;
             dict.my = [{// wrap the submenu into a 1-item array to translate it
-                'anchor' : ['anchor'],
-                'parent' : ['parent'],
-                'name' : ['name'],
-                'temporary?' : ['temporary?'],
-                'dangling?' : ['dangling?'],
-                'draggable?' : ['draggable?'],
-                'rotation style' : ['rotation style'],
-                'rotation x' : ['rotation x'],
-                'rotation y' : ['rotation y']
+                'anchor' : ['my anchor'],
+                'parent' : ['my parent'],
+                'name' : ['my name'],
+                'temporary?' : ['my temporary?'],
+                'dangling?' : ['my dangling?'],
+                'draggable?' : ['my draggable?'],
+                'rotation style' : ['my rotation style'],
+                'rotation x' : ['my rotation x'],
+                'rotation y' : ['my rotation y']
             }];
             if (this.world().currentKey === 16) { // shift
                 dict.my[0]['~'] = null; // don't forget we're inside an array...

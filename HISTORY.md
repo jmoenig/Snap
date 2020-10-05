@@ -4,8 +4,9 @@
 
 * **Notable Changes:**
     * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
-    * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
+    * attribute selection in the SET block are now prefixed with "my"
+    * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "48 kHz" option in the "sampling rate" dropdown 
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
@@ -14,6 +15,7 @@
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
+* blocks, threads: prefixed attribute selection in the SET block with "my" 
 
 ### 2020-10-04
 * threads: made alpha values optional for generating costume pixels, none = solid
