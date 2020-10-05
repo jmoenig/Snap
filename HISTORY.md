@@ -12,10 +12,12 @@
     * "append" block now shows up when searching  for it
 * **Translation Updates:**
     * Greek, thanks, HM100!
+    * German
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
 * blocks, threads: prefixed attribute selection in the SET block with "my" 
+* German translation update
 
 ### 2020-10-04
 * threads: made alpha values optional for generating costume pixels, none = solid
