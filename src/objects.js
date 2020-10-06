@@ -69,22 +69,22 @@
 // Global stuff ////////////////////////////////////////////////////////
 
 /*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph, ZERO,
-DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph,
+DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph, nop,
 ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
-Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,  nop,
+ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph, XML_Element,
 TextMorph, contains, degrees, detect, newCanvas, radians, Array, CursorMorph,
 Date, FrameMorph, Math, MenuMorph, Morph, invoke, MorphicPreferences, WHITE,
-Object, PenMorph, Point, Rectangle, ScrollFrameMorph, SliderMorph, String,
-StringMorph, TextMorph, contains, copy, degrees, detect, document, isNaN,
+Object, PenMorph, Point, Rectangle, ScrollFrameMorph, SliderMorph, VideoMotion,
+StringMorph, TextMorph, contains, copy, degrees, detect, document, isNaN, Point,
 isString, newCanvas, nop, parseFloat, radians, window, modules, IDE_Morph,
-VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, VideoMotion,
-SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph,
+VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, HandleMorph,
+SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-HandleMorph, AlignmentMorph, Process, XML_Element, WorldMap, copyCanvas*/
+AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-05';
+modules.objects = '2020-October-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -10930,11 +10930,13 @@ CellMorph.prototype.render = function (ctx) {
         ctx.closePath();
         ctx.stroke();
 
-        ctx.shadowOffsetX = this.border;
-        ctx.shadowOffsetY = this.border;
-        ctx.shadowBlur = this.border;
-        ctx.shadowColor = this.color.darker(80).toString();
-        this.drawShadow(ctx, this.edge, this.border / 2);
+        if (useBlurredShadows) {
+            ctx.shadowOffsetX = this.border;
+            ctx.shadowOffsetY = this.border;
+            ctx.shadowBlur = this.border;
+            ctx.shadowColor = this.color.darker(80).toString();
+            this.drawShadow(ctx, this.edge, this.border / 2);
+        }
     }
 };
 

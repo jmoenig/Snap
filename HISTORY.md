@@ -19,6 +19,7 @@
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
 * widgets: honor (hidden) blurred shadows setting for input widgets
+* objects: honor (hidden) blurred shadows setting for watcher cell widgets
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
