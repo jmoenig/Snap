@@ -83,9 +83,9 @@
 StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, BLACK, WHITE,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph, MenuItemMorph, Note*/
+ScrollFrameMorph, MenuItemMorph, Note, useBlurredShadows*/
 
-modules.widgets = '2020-July-27';
+modules.widgets = '2020-October-06';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3154,9 +3154,11 @@ InputFieldMorph.prototype.drawRectBorder = function (ctx) {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge * 4;
-    ctx.shadowColor = this.cachedClrDark;
+    if (useBlurredShadows) {
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge * 4;
+        ctx.shadowColor = this.cachedClrDark;
+    }
 
     gradient = ctx.createLinearGradient(
         0,
