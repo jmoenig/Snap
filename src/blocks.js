@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-05';
+modules.blocks = '2020-October-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8184,9 +8184,11 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
     ctx.lineTo(this.width() - shift, edge + this.corner);
     ctx.stroke();
 
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.rfColor.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.rfColor.darker(80).toString();
+    }
 
     // left vertical side
     gradient = ctx.createLinearGradient(
@@ -9943,9 +9945,11 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     gradient = ctx.createLinearGradient(
         0,
@@ -10027,10 +10031,12 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
     end = this.width() - r - this.edge;
     if (end > start) {
 
-        ctx.shadowOffsetX = shift;
-        ctx.shadowOffsetY = shift;
-        ctx.shadowBlur = this.edge;
-        ctx.shadowColor = this.color.darker(80).toString();
+        if (useBlurredShadows) {
+            ctx.shadowOffsetX = shift;
+            ctx.shadowOffsetY = shift;
+            ctx.shadowBlur = this.edge;
+            ctx.shadowColor = this.color.darker(80).toString();
+        }
 
         gradient = ctx.createLinearGradient(
             0,
@@ -10069,10 +10075,12 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
 
     r = Math.max(this.height() / 2, this.edge);
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     // top edge: left corner
     gradient = ctx.createRadialGradient(
@@ -10652,9 +10660,11 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowBlur = shift;
-    ctx.shadowColor = 'black';
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowBlur = shift;
+        ctx.shadowColor = 'black';
+    }
 
     // top edge: left corner
     gradient = ctx.createLinearGradient(
@@ -10673,9 +10683,11 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.stroke();
 
     // top edge: straight line
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+    }
 
     gradient = ctx.createLinearGradient(
         0,
@@ -10750,7 +10762,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
             x = this.width() - (this.height() / 2) - text.x;
         }
         ctx.save();
-        if (!MorphicPreferences.isFlat) {
+        if (!MorphicPreferences.isFlat && useBlurredShadows) {
             ctx.shadowOffsetX = -shift;
             ctx.shadowOffsetY = -shift;
             ctx.shadowBlur = shift;
@@ -10771,7 +10783,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
 
     // "tick:"
     x = r + (this.edge * 2) + shift;
-    if (!MorphicPreferences.isFlat) {
+    if (!MorphicPreferences.isFlat && useBlurredShadows) {
         ctx.shadowOffsetX = -shift;
         ctx.shadowOffsetY = -shift;
         ctx.shadowBlur = shift;
@@ -10789,7 +10801,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
 
     // "cross:"
     x = w - y - (this.edge * 2);
-    if (!MorphicPreferences.isFlat) {
+    if (!MorphicPreferences.isFlat && useBlurredShadows) {
         ctx.shadowOffsetX = -shift;
         ctx.shadowOffsetY = -shift;
         ctx.shadowBlur = shift;
@@ -10825,7 +10837,7 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     switch (this.value) {
     case false:
         x = r + slideStep;
-        if (!MorphicPreferences.isFlat) {
+        if (!MorphicPreferences.isFlat && useBlurredShadows) {
             ctx.shadowOffsetX = shift;
             ctx.shadowOffsetY = 0;
             ctx.shadowBlur = shift;
@@ -10846,7 +10858,7 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     default:
         if (!progress) {return; }
         x = r;
-        if (!MorphicPreferences.isFlat) {
+        if (!MorphicPreferences.isFlat && useBlurredShadows) {
             ctx.shadowOffsetX = shift;
             ctx.shadowOffsetY = 0;
             ctx.shadowBlur = shift;
@@ -12071,10 +12083,12 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
 
     // normal gradient edges
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     // top edge: straight line
     gradient = ctx.createLinearGradient(
@@ -12225,10 +12239,12 @@ FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
     // normal gradient edges
     // top edge: left corner
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     gradient = ctx.createLinearGradient(
         0,
@@ -12607,10 +12623,12 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
 
     // normal gradient edges
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     // top edge: straight line
     gradient = ctx.createLinearGradient(
@@ -12761,10 +12779,12 @@ RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
     // normal gradient edges
     // top edge: left corner
 
-    ctx.shadowOffsetX = shift;
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge;
-    ctx.shadowColor = this.color.darker(80).toString();
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
 
     gradient = ctx.createLinearGradient(
         0,

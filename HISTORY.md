@@ -11,9 +11,13 @@
     * new "48 kHz" option in the "sampling rate" dropdown 
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
+    * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
 * **Translation Updates:**
     * Greek, thanks, HM100!
     * German
+
+### 2020-10-06
+* blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
