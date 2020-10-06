@@ -10889,6 +10889,10 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     ctx.arc(x, y, r - (outline / 2), radians(0), radians(360));
     ctx.stroke();
 
+    if (r < outline + this.edge) {
+        return;
+    }
+
     // top-left:
     gradient = ctx.createRadialGradient(
         x,

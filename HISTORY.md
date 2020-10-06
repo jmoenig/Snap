@@ -23,6 +23,7 @@
 * objects: honor (hidden) blurred shadows setting for watcher cell widgets
 * tables: honor (hidden) blurred shadows setting for pictograms in tables
 * gui: made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
+* blocks: fixed a zoom blocks glitch
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
