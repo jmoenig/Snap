@@ -107,7 +107,7 @@ WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-September-14';
+modules.byob = '2020-October-06';
 
 // Declarations
 
@@ -3431,7 +3431,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
             'loop',
             this.fontSize * 0.7,
             WHITE
-        ),
+        ).getImage(),
         null // builder method that constructs the element morph
     );
     loopArrow.refresh = () => {
