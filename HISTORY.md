@@ -9,6 +9,7 @@
     * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "48 kHz" option in the "sampling rate" dropdown 
+    * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
     * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
@@ -21,6 +22,7 @@
 * widgets: honor (hidden) blurred shadows setting for input widgets
 * objects: honor (hidden) blurred shadows setting for watcher cell widgets
 * tables: honor (hidden) blurred shadows setting for pictograms in tables
+* gui: made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!

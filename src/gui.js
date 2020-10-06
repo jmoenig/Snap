@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-September-25';
+modules.gui = '2020-October-06';
 
 // Declarations
 
@@ -2405,7 +2405,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         keyboard = this.getSetting('keyboard'),
         tables = this.getSetting('tables'),
         tableLines = this.getSetting('tableLines'),
-        autoWrapping = this.getSetting('autowrapping');
+        autoWrapping = this.getSetting('autowrapping'),
+        solidshadow = this.getSetting('solidshadow');
 
     // design
     if (design === 'flat') {
@@ -2481,6 +2482,12 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // plain prototype labels
     if (plainprototype) {
         BlockLabelPlaceHolderMorph.prototype.plainLabel = true;
+    }
+
+    // solid shadow
+    if (solidshadow) {
+        window.useBlurredShadows = false;
+        this.rerender();
     }
 };
 
@@ -5201,6 +5208,12 @@ IDE_Morph.prototype.toggleDynamicInputLabels = function () {
 
 IDE_Morph.prototype.toggleBlurredShadows = function () {
     window.useBlurredShadows = !useBlurredShadows;
+    this.rerender();
+    if (window.useBlurredShadows) {
+        this.removeSetting('solidshadow');
+    } else {
+        this.saveSetting('solidshadow', false);
+    }
 };
 
 IDE_Morph.prototype.toggleLongFormInputDialog = function () {
