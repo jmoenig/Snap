@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-06';
+modules.blocks = '2020-October-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -388,6 +388,9 @@ SyntaxElementMorph.prototype.allEmptySlots = function () {
     // to empty input slots
     var empty = [];
     if (!(this instanceof RingMorph) &&
+            // disregard custom C-slots, because they should be treated as
+            // rings. Commented out for now...
+            // !(this instanceof CSlotMorph && !this.isStatic) &&
             (this.selector !== 'reportJSFunction')) {
         this.children.forEach(morph => {
             if (morph.isEmptySlot && morph.isEmptySlot()) {

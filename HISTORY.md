@@ -21,6 +21,7 @@
 ### 2020-10-07
 * byob: added "settings" button to input slot dialog
 * symbols: added "gearPartial" icon
+* blocks: fixed an empty-slot detection issue (reported in the forums), but left it commented out for now, until researching the consequences ;-)
 
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
