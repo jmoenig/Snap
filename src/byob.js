@@ -3452,7 +3452,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     settingsButton = new PushButtonMorph(
         this.slots,
         () => this.slots.userMenu().popUpAtHand(this.world()),
-        new SymbolMorph('gears', this.fontSize * 1.2)
+        new SymbolMorph('gearPartial', this.fontSize * 1.5)
     );
     settingsButton.padding = 0;
     settingsButton.fixLayout();
