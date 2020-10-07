@@ -24,6 +24,7 @@
 * symbols: added "gearPartial" icon
 * blocks: fixed an empty-slot detection issue (reported in the forums), but left it commented out for now, until researching the consequences ;-)
 * blocks: increased area / sensitivity for collapsing variadic input slots 
+* blocks: tweaked expanding variadic inputs
 
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
