@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-July-21';
+modules.symbols = '2020-October-07';
 
 var SymbolMorph;
 
@@ -70,6 +70,7 @@ SymbolMorph.prototype.names = [
     'pointRight',
     'stepForward',
     'gears',
+    'gearPartial',
     'gearBig',
     'file',
     'fullScreen',
@@ -254,6 +255,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'gearBig':
         this.renderSymbolGearBig(ctx, aColor);
+        break;
+    case 'gearPartial':
+        this.renderSymbolGearPartial(ctx, aColor);
         break;
     case 'file':
         this.renderSymbolFile(ctx, aColor);
@@ -646,6 +650,55 @@ SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
     // draw the holes in the middle
     ctx.arc(r, r, r * 0.6, radians(0), radians(360));
     ctx.arc(r, r, r * 0.2, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
+    // draw gears
+    var w = this.symbolWidth(),
+        r = w * 0.75,
+        spikes = 8,
+        off = 8,
+        shift = 10,
+        angle, turn, i;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    turn = angle * 0.5;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle + turn),
+            radians(i * angle + off + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.7,
+            radians(i * angle - shift + angle * 0.5 + turn),
+            radians(i * angle + shift + angle * 0.5 + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off + turn),
+            radians((i + 1) * angle + turn)
+        );
+    }
+    ctx.lineTo(w, r);
+
+    // draw the hole in the middle
+    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
 
     // fill
     ctx.clip('evenodd');
