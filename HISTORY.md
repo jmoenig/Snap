@@ -6,6 +6,7 @@
     * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
     * attribute selection in the SET block are now prefixed with "my"
+    * new "settings" button in the input slot dialog
     * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "48 kHz" option in the "sampling rate" dropdown 
@@ -16,6 +17,9 @@
 * **Translation Updates:**
     * Greek, thanks, HM100!
     * German
+
+### 2020-10-07
+* byob: added "settings" button to input slot dialog
 
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
