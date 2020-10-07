@@ -11689,7 +11689,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.addInput();
             }
         }
-    } else if (leftArrow.bounds.containsPoint(pos)) {
+    } else if (
+        leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
+    ) {
         for (i = 0; i < repetition; i += 1) {
             if (leftArrow.isVisible) {
                 target.removeInput();
