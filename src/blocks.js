@@ -11683,13 +11683,15 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         repetition = target.world().currentKey === 16 ? 3 : 1,
         i;
 
-    if (rightArrow.bounds.containsPoint(pos)) {
+    // if (rightArrow.bounds.containsPoint(pos)) {
+    if (pos.x > rightArrow.left()) {
         for (i = 0; i < repetition; i += 1) {
             if (rightArrow.isVisible) {
                 target.addInput();
             }
         }
-    } else if (leftArrow.bounds.containsPoint(pos)) {
+    // } else if (leftArrow.bounds.containsPoint(pos)) {
+    } else if (pos.x > leftArrow.left() - this.fontSize / 3) {
         for (i = 0; i < repetition; i += 1) {
             if (leftArrow.isVisible) {
                 target.removeInput();

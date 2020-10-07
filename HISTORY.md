@@ -11,6 +11,7 @@
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
     * new "48 kHz" option in the "sampling rate" dropdown 
     * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
+    * increased area / sensitivity for collapsing variadic input slots 
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
     * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
@@ -22,6 +23,7 @@
 * byob: added "settings" button to input slot dialog
 * symbols: added "gearPartial" icon
 * blocks: fixed an empty-slot detection issue (reported in the forums), but left it commented out for now, until researching the consequences ;-)
+* blocks: increased area / sensitivity for collapsing variadic input slots 
 
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off
