@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-October-05';
+modules.threads = '2020-October-08';
 
 var ThreadManager;
 var Process;
@@ -375,7 +375,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                 }
             }
             if (proc.topBlock instanceof ReporterBlockMorph ||
-                    proc.isShowingResult) {
+                    proc.isShowingResult || proc.exportResult) {
                 result = proc.homeContext.inputs[0];
                 if (proc.onComplete instanceof Function) {
                     proc.onComplete(result);

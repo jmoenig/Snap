@@ -12,12 +12,16 @@
     * new "48 kHz" option in the "sampling rate" dropdown 
     * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
     * increased area / sensitivity for collapsing variadic input slots 
+    * enabled "result pic" for command scripts containing a "report" block
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
     * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
 * **Translation Updates:**
     * Greek, thanks, HM100!
     * German
+
+### 2020-10-08
+* blocks: enabled "result pic" for command scripts containing a "report" block
 
 ### 2020-10-07
 * byob: added "settings" button to input slot dialog
@@ -26,7 +30,7 @@
 * blocks: increased area / sensitivity for collapsing variadic input slots 
 * blocks: tweaked expanding variadic inputs
 * blocks: reverted sensitivity tweaks for variadic inputs
-* blocks: reintroduced a different approach for making it easier to collapse variadic inputs
+* blocks, threads: reintroduced a different approach for making it easier to collapse variadic inputs
 
 ### 2020-10-06
 * blocks: disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off

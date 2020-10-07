@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-07';
+modules.blocks = '2020-October-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3072,7 +3072,8 @@ BlockMorph.prototype.userMenu = function () {
         },
         'save a picture\nof this script'
     );
-    if (top instanceof ReporterBlockMorph) {
+    if (top instanceof ReporterBlockMorph ||
+            top.allChildren().some((any) => any.selector === 'doReport')) { // +++
         menu.addItem(
             "result pic...",
             () => top.exportResultPic(),
@@ -3634,6 +3635,22 @@ BlockMorph.prototype.showHelp = function () {
         }
     }
     pic.src = ide.resourceURL('help', spec + '.png');
+};
+
+// BlockMorph exporting picture with result bubble
+
+BlockMorph.prototype.exportResultPic = function () {
+    var top = this.topBlock(),
+        receiver = top.scriptTarget(),
+        stage;
+    if (top !== this) {return; }
+    if (receiver) {
+        stage = receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.stopProcess(top);
+            stage.threads.startProcess(top, receiver, false, true);
+        }
+    }
 };
 
 // BlockMorph code mapping
@@ -6021,22 +6038,6 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         );
     } else {
         ReporterBlockMorph.uber.mouseClickLeft.call(this, pos);
-    }
-};
-
-// ReporterBlock exporting picture with result bubble
-
-ReporterBlockMorph.prototype.exportResultPic = function () {
-    var top = this.topBlock(),
-        receiver = top.scriptTarget(),
-        stage;
-    if (top !== this) {return; }
-    if (receiver) {
-        stage = receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            stage.threads.stopProcess(top);
-            stage.threads.startProcess(top, receiver, false, true);
-        }
     }
 };
 
