@@ -2,17 +2,19 @@
 
 ## in development:
 
-* **Notable Changes:**
-    * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
+## 6.2.2
+* **New Features:**
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
-    * attribute selection in the SET block are now prefixed with "my"
     * new "settings" button in the input slot dialog
-    * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
     * added "bar / lines" option for plotting charts in the "frequency distribution analysis" library
-    * new "48 kHz" option in the "sampling rate" dropdown 
-    * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
-    * increased area / sensitivity for collapsing variadic input slots 
     * enabled "result pic" for command scripts containing a "report" block
+* **Notable Changes:**
+    * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
+    * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
+    * attribute selection in the SET block are now prefixed with "my"
+    * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
+    * new "48 kHz" option in the "sampling rate" dropdown 
+    * increased area / sensitivity for collapsing variadic input slots, esp. on mobile devices
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
     * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
@@ -22,6 +24,7 @@
 
 ### 2020-10-08
 * blocks: enabled "result pic" for command scripts containing a "report" block
+* prepared release
 
 ### 2020-10-07
 * byob: added "settings" button to input slot dialog
