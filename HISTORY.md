@@ -2,6 +2,12 @@
 
 ## in development:
 
+* **Documentation Updates:**
+    * Reference manual update
+
+### 2020-10-09
+* new dev version
+
 ## 6.2.3
 * **Notable Fixes:**
     * disabled "result pic" option for custom block definitions
