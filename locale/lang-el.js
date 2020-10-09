@@ -429,7 +429,7 @@ SnapTranslator.dict.el = {
     'change volume by %n':
         'άλλαξε την ένταση κατά %n',
     'set volume to %n %':
-        'θέσε την ένατση να είναι %n %',
+        'θέσε την ένταση να είναι %n %',
     'change balance by %n':
         'άλλαξε την ισορροπία κατά %n',
     'set balance to %n':
@@ -450,6 +450,8 @@ SnapTranslator.dict.el = {
         'στυλό κάτω',
     'pen up':
         'στυλό πάνω',
+    'pen down?':
+        'στυλό κάτω;',
     'set pen color to %clr':
         'θέσε το χρώμα του στυλού να είναι %clr',
     'set background color to %clr':
@@ -1450,6 +1452,12 @@ SnapTranslator.dict.el = {
         'χρώμα',
     'fisheye':
         'μάτι ψαριού',
+    'whirl':
+        'στρέβλωση',
+    'pixelate':
+        'εικονοστοιχειοποίηση',
+    'mosaic':
+        'μωσαϊκό',
     'negative':
         'αρνητικό',
 
