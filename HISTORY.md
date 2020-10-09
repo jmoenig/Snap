@@ -2,10 +2,17 @@
 
 ## in development:
 
+## 6.2.3
+* **Notable Fixes:**
+    * disabled "result pic" option for custom block definitions
+* **Translation Updates:**
+    * Greek, thanks, HM100!
+
 ### 2020-10-09
 * new dev version
 * Greek translation update, thanks, HM100!
 * blocks: disabled "result pic" option for custom block definitions
+* prepared patch
 
 ## 6.2.2
 * **New Features:**
