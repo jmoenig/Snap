@@ -4,9 +4,13 @@
 
 * **Documentation Updates:**
     * Reference manual update
+* **Notable Fixes:**
+    * fixed showing message senders if there are comments in scripts
+
 
 ### 2020-10-09
 * new dev version
+* objects: fixed showing message senders if there are comments in scripts
 
 ## 6.2.3
 * **Notable Fixes:**

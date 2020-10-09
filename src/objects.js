@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-06';
+modules.objects = '2020-October-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -5775,7 +5775,7 @@ SpriteMorph.prototype.allMessageNames = function () {
 
 SpriteMorph.prototype.allSendersOf = function (message, receiverName, known) {
     return this.allScripts().filter(script =>
-        script.isSending(message, receiverName, known)
+        script.isSending && script.isSending(message, receiverName, known)
     );
 };
 
