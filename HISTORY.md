@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.2.4
 * **Documentation Updates:**
     * Reference manual update
 * **Notable Fixes:**
@@ -9,11 +10,11 @@
 * **Translation Updates:**
     * Russian, thanks, Pavel!
 
-
 ### 2020-10-09
 * new dev version
 * objects: fixed showing message senders if there are comments in scripts
 * Russian translation update, thanks, Pavel!
+* prepared patch
 
 ## 6.2.3
 * **Notable Fixes:**
