@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-10-09
+* new dev version
+
 ## 6.2.2
 * **New Features:**
     * new "add comment" option in the block context menu, thanks, Rob Fidler!
