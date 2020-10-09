@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-08';
+modules.blocks = '2020-October-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3073,7 +3073,9 @@ BlockMorph.prototype.userMenu = function () {
         'save a picture\nof this script'
     );
     if (top instanceof ReporterBlockMorph ||
-            top.allChildren().some((any) => any.selector === 'doReport')) { // +++
+        (!(top instanceof PrototypeHatBlockMorph) &&
+            top.allChildren().some((any) => any.selector === 'doReport'))
+    ) {
         menu.addItem(
             "result pic...",
             () => top.exportResultPic(),
