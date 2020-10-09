@@ -4,6 +4,7 @@
 
 ### 2020-10-09
 * new dev version
+* Greek translation update, thanks, HM100!
 
 ## 6.2.2
 * **New Features:**

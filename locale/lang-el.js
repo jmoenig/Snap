@@ -181,11 +181,11 @@ SnapTranslator.dict.el = {
     'language_name':
         'Ελληνικά', // the name as it should appear in the language menu
     'language_translator':
-        'Ino Samaras , Alexandros Prekates, HM100' ,// your name for the Translators tab
+        'Ino Samaras, Alexandros Prekates, HM100' ,// your name for the Translators tab
     'translator_e-mail':
-        'ino.samaras@berkeley.edu , aprekates@sch.gr' , // optional
+        'ino.samaras@berkeley.edu, aprekates@sch.gr' , // optional
     'last_changed':
-        '2020-10-05', // this, too, will appear in the Translators tab
+        '2020-10-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
