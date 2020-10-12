@@ -409,16 +409,21 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         {
             const {id} = data;
             const xml = await self.getProjectXML();
-            event.source.postMessage({id, xml}, event.origin);
+            const type = 'reply';
+            event.source.postMessage({id, type, xml}, event.origin);
             break;
         }
         case 'get-username':
         {
             const {id} = data;
             const {username} = SnapCloud;
-            event.source.postMessage({id, username}, event.origin);
+            const type = 'reply';
+            event.source.postMessage({id, type, username}, event.origin);
             break;
         }
+        case 'emit-actions':
+            SnapActions.listeners.push([event.source, event.origin]);
+            break;
         }
     };
 

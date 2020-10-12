@@ -618,6 +618,18 @@ describe('ide', function() {
                 const username = await api.getUsername();
                 expect(username).toBe('test');
             });
+
+            it('should be able to subscribe to actions', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                const getFirstAction = new Promise(resolve =>
+                    api.addActionListener(resolve)
+                );
+                await driver.addBlock('forward');
+                const action = await getFirstAction;
+                expect(action.type).toBe('addBlock');
+            });
         });
     });
 });

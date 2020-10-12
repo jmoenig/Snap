@@ -20,6 +20,7 @@ function ActionManager() {
     this.isLeader = false;
     this._pendingLocalActions = [];
     this._attemptedLocalActions = [];
+    this.listeners = [];
     this.initialize();
 }
 
@@ -3035,7 +3036,7 @@ ActionManager.prototype.__clearTarget = function(id) {
     delete this._targetOf[id];
 };
 
-ActionManager.prototype.afterActionApplied = function(/*msg*/) {
+ActionManager.prototype.afterActionApplied = function(action) {
     // Update the undo buttons of the focused window
     var ide = this.ide(),
         active = ide.activeEditor;
@@ -3044,6 +3045,13 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
     // a custom block)
 
     active.onSetActive();
+    this.listeners.forEach(pair => {
+        const [source, origin] = pair;;
+        source.postMessage({
+            type: 'action',
+            data: action
+        }, origin);
+    });
 };
 
 ActionManager.prototype.onMessage = function(msg) {

@@ -4,14 +4,22 @@
         constructor(element) {
             this.element = element;
             this._requests = {};
+            this.listeners = {};
+            this.listeners.action = [];
 
             const receiveMessage = event => {
                 const data = event.data;
-                const {id} = data;
-                const request = this._requests[id];
-                if (request) {
-                    request.resolve(data);
-                    delete this._requests[id];
+                const {type} = data;
+                if (type === 'reply') {
+                    const {id} = data;
+                    const request = this._requests[id];
+                    if (request) {
+                        request.resolve(data);
+                        delete this._requests[id];
+                    }
+                } else {
+                    const handlers = this.listeners[type];
+                    handlers.forEach(fn => fn(data.data));
                 }
             };
 
@@ -28,6 +36,13 @@
             const reqData = {type: 'get-username'};
             const data = await this.reqReply(reqData);
             return data.username;
+        }
+
+        async addActionListener(fn) {
+            this.listeners.action.push(fn);
+            this.call({
+                type: 'emit-actions',
+            });
         }
 
         async import(name, content) {
