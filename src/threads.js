@@ -566,7 +566,7 @@ Process.prototype.flashTime = 0; // experimental
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
-    this.receiver = receiver || topBlock ? topBlock.scriptTarget() : null;
+    this.receiver = receiver || (topBlock ? topBlock.scriptTarget() : null);
     this.instrument = this.receiver ? this.receiver.instrument : null;
     this.readyToYield = false;
     this.readyToTerminate = false;

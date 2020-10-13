@@ -690,4 +690,52 @@ describe('blocks', function() {
             expect(b.evaluate()).toBe('second', 'Expected second input to be "second"');
         });
     });
+
+    describe('hat block execution', function() {
+        beforeEach(() => driver.reset());
+
+        it('should move block owner', async () => {
+            const hatBlock = await driver.addBlock('receiveGo');
+            await driver.selectCategory('motion');
+
+            const forwardBlock = driver.palette().contents.children
+                .find(item => item.selector === 'forward');
+
+            const dropPosition = hatBlock.bottomAttachPoint()
+                .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
+                .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
+
+            driver.dragAndDrop(forwardBlock, dropPosition);
+            const firstSprite = driver.ide().sprites.at(1);
+            await driver.actionsSettled();
+            await driver.ide().addNewSprite();
+            driver.click(driver.ide().controlBar.startButton);
+            await driver.expect(
+                () => firstSprite.xPosition() !== 0,
+                'Original sprite did not move',
+                {maxWait: 100}
+            );
+        });
+
+        it('should execute "when" blocks', async () => {
+            const hatBlock = await driver.addBlock('receiveCondition');
+            await driver.selectCategory('motion');
+
+            const forwardBlock = driver.palette().contents.children
+                .find(item => item.selector === 'forward');
+
+            const dropPosition = hatBlock.bottomAttachPoint()
+                .add(new Point(forwardBlock.width()/2, forwardBlock.height()/2))
+                .subtract(forwardBlock.topAttachPoint().subtract(forwardBlock.topLeft()));
+
+            driver.dragAndDrop(forwardBlock, dropPosition);
+            const firstSprite = driver.ide().sprites.at(1);
+            await driver.actionsSettled();
+            driver.click(hatBlock.inputs()[0]);
+            await driver.expect(
+                () => firstSprite.xPosition() !== 0,
+                'Original sprite did not move'
+            );
+        });
+    });
 });
