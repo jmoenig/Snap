@@ -13242,7 +13242,7 @@ CommentMorph.prototype.reactToEdit = function (value) {
 
     if (text !== this.lastValue) {
         this.contents.text = this.lastValue;
-        this.contents.drawNew();
+        this.contents.rerender();
         this.contents.changed();
         this.layoutChanged();
 
