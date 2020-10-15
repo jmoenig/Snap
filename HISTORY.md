@@ -4,6 +4,7 @@
 
 ### 2020-10-15
 * new dev version
+* Russian translation update, thanks, Pavel!
 
 ## 6.2.4
 * **Documentation Updates:**
