@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-10-15
+* new dev version
+
 ## 6.2.4
 * **Documentation Updates:**
     * Reference manual update
