@@ -93,11 +93,13 @@ SnapActions.onMessage = function(msg) {
 };
 
 SnapActions.requestMissingActions = function(silent) {
-    var socket = this.ide().sockets;
-    if (!socket.inActionRequest) {
-        socket.inActionRequest = true;
-        return socket.sendJSON({
+    const {sockets, cloud} = this.ide();
+    if (!sockets.inActionRequest) {
+        sockets.inActionRequest = true;
+        return sockets.sendJSON({
             type: 'request-actions',
+            projectId: cloud.projectId,
+            roleId: cloud.roleId,
             actionId: this.lastSeen,
             silent: silent,
         });
