@@ -345,7 +345,7 @@ IDE_Morph.prototype.openIn = function (world) {
         } else {
             myself.toggleAppMode(true);
         }
-        if (!dict.noRun) {
+        if (!dict.noRun) { // +++
             myself.runScripts();
         }
         if (dict.hideControls) {

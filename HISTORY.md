@@ -1,6 +1,15 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * added "pie chart" option to PLOT command in the frequency distribution analysis library
+    * added getProjectXML() method to the API
+* **Documentation Updates:**
+    * API update
+* **Notable Fixes:**
+    * fixed a translation bug for zero-value menu selection entries
+* **Translation Updates:**
+    * Russian, thanks, Pavel!
 
 ### 2020-10-20
 * added "pie chart" option to PLOT command in the frequency distribution analysis library
