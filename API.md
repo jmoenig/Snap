@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, July 07, 2020
+Jens Mönig, October 20, 2020
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -27,6 +27,10 @@ Currently the API consists of the following methods:
 #### Create and Modify Lists
 
 * IDE_Morph.prototype.newList()
+
+#### Access the Serialized Project
+
+* IDE_Morph.prototype.getProjectXML()
 
 ## Referencing the IDE
 
@@ -113,7 +117,7 @@ The getMessage() method returns a new Array that contains all the message string
     ide.getMessages();
 
 #### return value
-an Array of strings, or an empty Array
+an Array of Strings, or an empty Array
 
 
 ### IDE_Morph.prototype.getVarNames()
@@ -123,7 +127,7 @@ The getVarNames() method returns a new Array that contains all the global variab
     ide.getVarNames();
 
 ### return value
-an Array of strings, or an empty Array
+an Array of Strings, or an empty Array
 
 
 ### IDE_Morph.prototype.getVar()
@@ -145,6 +149,7 @@ The setVar() methods assigns a value to the a global variable specified by name.
 #### return value
 undefined
 
+
 ### IDE_Morph.prototype.newList()
 The newList() methods returns a new Snap! list. Optionally a source array containing the list elements can be specified.
 
@@ -153,6 +158,16 @@ The newList() methods returns a new Snap! list. Optionally a source array contai
 
 #### return value
 a new Snap! List
+
+
+### IDE_Morph.prototype.getProjectXML()
+the getProjectXML() method returns a string in XML format representing the serialized project currently loaded into the IDE.
+
+#### syntax
+    ide.getProjectXML();
+
+#### return value
+an XML String
 
 ## Manipulating Lists
 

@@ -7,6 +7,7 @@
 * morphic: enabled zero values for menu selection entries
 * blocks: fixed translation bug for zero-value menu selection entries
 * Russian translation update, thanks, Pavel!
+* api: added getProjectXML() method
 
 ### 2020-10-15
 * new dev version

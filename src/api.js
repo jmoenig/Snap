@@ -58,6 +58,10 @@
 
             - IDE_Morph.prototype.newList()
 
+        Access the Serialized Project
+
+            - IDE_Morph.prototype.getProjectXML()
+
     Getting hold of an ide can usually be achieved by
     evaluating:
 
@@ -200,7 +204,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-July-06';
+modules.api = '2020-October-20';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -312,4 +316,8 @@ IDE_Morph.prototype.newList = function (array) {
     // return a new Snap list the shape of the given array, if any
     // nested array will not be automatically converted to nested lists
     return new List(array);
+};
+
+IDE_Morph.prototype.getProjectXML = function () {
+    return this.serializer.serialize(this.stage);
 };
