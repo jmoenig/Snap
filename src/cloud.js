@@ -50,6 +50,12 @@ Cloud.prototype.init = function () {
     this.apiBasePath = '/api/v1';
     this.url = this.determineCloudDomain() + this.apiBasePath;
     this.username = null;
+    this.disabled = false;
+};
+
+Cloud.prototype.disable = function () {
+    this.disabled = true;
+    this.username = null;
 };
 
 // Projects larger than this are rejected.
@@ -162,6 +168,8 @@ Cloud.prototype.request = function (
     errorMsg,
     wantsRawResponse,
     body) {
+
+    if (this.disabled) { return; }
 
     var request = new XMLHttpRequest(),
         myself = this,
