@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-10-20
+* added "pie chart" option to PLOT command in the frequency distribution analysis library
+
 ### 2020-10-15
 * new dev version
 * Russian translation update, thanks, Pavel!
