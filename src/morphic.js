@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-September-12';
+var morphicVersion = '2020-October-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -7961,7 +7961,7 @@ MenuMorph.prototype.addItem = function (
     */
     this.items.push([
         verbatim ? labelString || 'close' : localize(labelString || 'close'),
-        action || nop,
+        action === 0 ? 0 : action || nop,
         hint,
         color,
         bold || false,
@@ -9724,7 +9724,7 @@ TriggerMorph.prototype.init = function (
 ) {
     // additional properties:
     this.target = target || null;
-    this.action = action || null;
+    this.action = action === 0 ? 0 : action|| null;
     this.doubleClickAction = doubleClickAction || null;
     this.environment = environment || null;
     this.labelString = labelString || ' ';
