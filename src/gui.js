@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-October-15';
+modules.gui = '2020-October-20';
 
 // Declarations
 
@@ -345,7 +345,7 @@ IDE_Morph.prototype.openIn = function (world) {
         } else {
             myself.toggleAppMode(true);
         }
-        if (!dict.noRun) { // +++
+        if (!dict.noRun) {
             myself.runScripts();
         }
         if (dict.hideControls) {
