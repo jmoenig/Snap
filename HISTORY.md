@@ -6,6 +6,7 @@
 * added "pie chart" option to PLOT command in the frequency distribution analysis library
 * morphic: enabled zero values for menu selection entries
 * blocks: fixed translation bug for zero-value menu selection entries
+* Russian translation update, thanks, Pavel!
 
 ### 2020-10-15
 * new dev version
