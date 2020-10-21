@@ -337,6 +337,9 @@ IDE_Morph.prototype.openIn = function (world) {
     this.reactToWorldResize(world.bounds);
 
     function applyFlags(dict) {
+        if (dict.noCloud) {
+            myself.cloud.disable();
+        }
         if (dict.embedMode) {
             myself.setEmbedMode();
         }
@@ -1100,11 +1103,16 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
-        cloudButton.setCenter(myself.controlBar.center());
-        cloudButton.setRight(settingsButton.left() - padding);
-
         projectButton.setCenter(myself.controlBar.center());
-        projectButton.setRight(cloudButton.left() - padding);
+
+        if (myself.cloud.disabled) {
+            cloudButton.hide();
+            projectButton.setRight(settingsButton.left() - padding);
+        } else {
+            cloudButton.setCenter(myself.controlBar.center());
+            cloudButton.setRight(settingsButton.left() - padding);
+            projectButton.setRight(cloudButton.left() - padding);
+        }
 
         this.refreshSlider();
         this.updateLabel();
@@ -4276,6 +4284,9 @@ IDE_Morph.prototype.save = function () {
         // cannot save to examples, deprecated localStorage
         this.source = null;
     }
+
+    if (this.cloud.disabled) { this.source = 'disk'; }
+
     if (this.projectName) {
         if (this.source === 'disk') {
             this.exportProject(this.projectName);
@@ -6519,7 +6530,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.srcBar.add(notification);
     }
 
-    this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    if (!this.ide.cloud.disabled) {
+        this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    }
 
     if (this.task === 'open') {
         this.buildFilterField();
