@@ -376,7 +376,10 @@ IDE_Morph.prototype.openIn = function (world) {
                 new Animation(nop, nop, 0, 200, nop, autoRun)
             );
         } else {
-            myself.runScripts();
+            // wait a few more frames for the sprites to wear their costumes
+            myself.world().animations.push(
+                new Animation(nop, nop, 0, 200, nop, () => myself.runScripts())
+            );
         }
     }
 
