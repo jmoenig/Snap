@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-July-08';
+modules.store = '2020-October-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1582,8 +1582,9 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         return v;
     case 'sound':
         audio = new Audio();
-        audio.src = model.attributes.sound;
         v = new Sound(audio, model.attributes.name);
+        audio.oncanplaythrough = () => v.loaded = true;
+        audio.src = model.attributes.sound;
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
                 'mediaID'

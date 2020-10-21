@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-09';
+modules.objects = '2020-October-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -10192,6 +10192,9 @@ function Sound(audio, name) {
     // internal for decoding, don't persist
     this.audioBuffer = null; // for decoding ops
     this.isDecoding = false;
+
+    // internal for deserializing, don't persist
+    this.loaded = null; // for de-serialization only
 }
 
 Sound.prototype.play = function () {

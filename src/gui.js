@@ -368,7 +368,7 @@ IDE_Morph.prototype.openIn = function (world) {
     
     function autoRun () {
         // wait until all costumes are loaded
-        if (isLoadingCostumes()) {
+        if (isLoadingAssets()) {
             myself.world().animations.push(
                 new Animation(nop, nop, 0, 200, nop, autoRun)
             );
@@ -377,9 +377,10 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
-    function isLoadingCostumes() {
+    function isLoadingAssets() {
         myself.sprites.asArray().concat([myself.stage]).some(any =>
-            any.costumes.asArray().some(each => each.loaded !== true)
+            any.costumes.asArray().every(each => each.loaded === true) &&
+            any.sounds.asArray().every(each => each.loaded === true)
         );
     }
 

@@ -8,12 +8,13 @@
     * API update
 * **Notable Fixes:**
     * fixed a translation bug for zero-value menu selection entries
-    * wait until all costumes have loaded before auto-triggering the green-flag event
+    * wait until all assets have loaded before auto-triggering the green-flag event
 * **Translation Updates:**
     * Russian, thanks, Pavel!
 
 ### 2020-10-21
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 
+* gui, objects, store: wait until all sounds have loaded before auto-triggering the green-flag event 
 
 ### 2020-10-20
 * added "pie chart" option to PLOT command in the frequency distribution analysis library
