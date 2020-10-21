@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-20';
+modules.blocks = '2020-October-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3023,6 +3023,15 @@ BlockMorph.prototype.userMenu = function () {
             },
             'only duplicate this block'
         );
+
+        if (shiftClicked) {
+            menu.addItem(
+                'extract',
+                'userExtractJustThis',
+                'EXPERIMENTAL!\nonly grab this block',
+                new Color(100, 0, 0)
+            );
+        }
     }
     menu.addItem(
         "delete",
@@ -5301,6 +5310,57 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
     if (parent) {
         parent.reactToGrabOf(this); // fix highlight
     }
+};
+
+CommandBlockMorph.prototype.userExtractJustThis = function () {
+    // extract just this one block, reattach next block to the previous one,
+    // has issue for REDO after UNDO: Next blocks follow
+    // unused for now
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        situation = this.situation(),
+        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
+        pb,
+        nb = this.nextBlock(),
+        above,
+        parent = this.parentThatIsA(SyntaxElementMorph),
+        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
+
+    this.topBlock().fullChanged();
+    if (this.parent) {
+        pb = this.parent.parentThatIsA(CommandBlockMorph);
+    }
+    if (pb && (pb.nextBlock() === this)) {
+        above = pb;
+    } else if (cs && (cs.nestedBlock() === this)) {
+        above = cs;
+        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
+    }
+    if (ide) {
+        // also stop all active processes hatted by this block
+        ide.removeBlock(this, true); // just this block
+    } else {
+        this.destroy(true); // just this block
+    }
+    if (nb) {
+        if (above instanceof CommandSlotMorph ||
+            above instanceof RingReporterSlotMorph
+        ) {
+            above.nestedBlock(nb);
+        } else if (above instanceof CommandBlockMorph) {
+            above.nextBlock(nb);
+        } else {
+            scripts.add(nb);
+        }
+    } else if (cslot) {
+        cslot.fixLayout();
+    }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
+    }
+
+    this.pickUp(scripts.world());
+    this.parent.grabOrigin = situation;
 };
 
 // CommandBlockMorph drawing:

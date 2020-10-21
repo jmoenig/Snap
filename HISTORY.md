@@ -5,6 +5,7 @@
     * added "pie chart" option to PLOT command in the frequency distribution analysis library
     * added getProjectXML() method to the API
     * new noCloud flag that disables cloud access, thanks, Bernat
+    * experimental (hidden) "extract" single command block context menu option
 * **Documentation Updates:**
     * API update
 * **Notable Fixes:**
@@ -17,6 +18,7 @@
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 
 * gui, objects, store: wait until all sounds have loaded before auto-triggering the green-flag event
 * gui, cloud: added noCloud flag that disables cloud access, thanks, Bernat!
+* blocks: new experimental (hidden) "extract" single command block context menu option
 
 ### 2020-10-20
 * added "pie chart" option to PLOT command in the frequency distribution analysis library
