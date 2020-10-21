@@ -379,8 +379,8 @@ IDE_Morph.prototype.openIn = function (world) {
 
     function isLoadingAssets() {
         myself.sprites.asArray().concat([myself.stage]).some(any =>
-            any.costumes.asArray().every(each => each.loaded === true) &&
-            any.sounds.asArray().every(each => each.loaded === true)
+            any.costumes.asArray().some(each => each.loaded !== true) ||
+            any.sounds.asArray().some(each => each.loaded !== true)
         );
     }
 
