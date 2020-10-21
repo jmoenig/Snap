@@ -4285,7 +4285,7 @@ IDE_Morph.prototype.save = function () {
         this.source = null;
     }
 
-    if (this.cloud.disabled) { this.source = 'disk'; }
+    if (this.cloud.disabled) {this.source = 'disk'; }
 
     if (this.projectName) {
         if (this.source === 'disk') {
