@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-October-20';
+modules.gui = '2020-October-21';
 
 // Declarations
 
@@ -346,7 +346,7 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.toggleAppMode(true);
         }
         if (!dict.noRun) {
-            myself.runScripts();
+            autoRun();
         }
         if (dict.hideControls) {
             myself.controlBar.hide();
@@ -364,6 +364,23 @@ IDE_Morph.prototype.openIn = function (world) {
         if (!myself.isEmbedMode) {
             world.worldCanvas.focus();
         }
+    }
+    
+    function autoRun () {
+        // wait until all costumes are loaded
+        if (isLoadingCostumes()) {
+            myself.world().animations.push(
+                new Animation(nop, nop, 0, 200, nop, autoRun)
+            );
+        } else {
+            myself.runScripts();
+        }
+    }
+
+    function isLoadingCostumes() {
+        myself.sprites.asArray().concat([myself.stage]).some(any =>
+            any.costumes.asArray().some(each => each.loaded !== true)
+        );
     }
 
     // dynamic notifications from non-source text files
