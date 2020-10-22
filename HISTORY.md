@@ -17,6 +17,7 @@
 ### 2020-10-22
 * blocks: fixed UNDO/REDO for "extracted" (single) command blocks
 * blocks: refactored userExtractJustThis
+* blocks: refactored userDestroyJustThis
 
 ### 2020-10-21
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 

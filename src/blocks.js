@@ -5265,13 +5265,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
 CommandBlockMorph.prototype.userDestroyJustThis = function () {
     // delete just this one block, reattach next block to the previous one,
     var scripts = this.parentThatIsA(ScriptsMorph),
-        ide = this.parentThatIsA(IDE_Morph),
-        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
-        pb,
-        nb = this.nextBlock(),
-        above,
-        parent = this.parentThatIsA(SyntaxElementMorph),
-        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
+        nb = this.nextBlock();
 
     // for undrop / redrop
     if (scripts) {
@@ -5282,38 +5276,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         scripts.dropRecord.action = 'delete';
     }
 
-    this.topBlock().fullChanged();
-    if (this.parent) {
-        pb = this.parent.parentThatIsA(CommandBlockMorph);
-    }
-    if (pb && (pb.nextBlock() === this)) {
-        above = pb;
-    } else if (cs && (cs.nestedBlock() === this)) {
-        above = cs;
-        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
-    }
-    if (ide) {
-        // also stop all active processes hatted by this block
-        ide.removeBlock(this, true); // just this block
-    } else {
-        this.destroy(true); // just this block
-    }
-    if (nb) {
-        if (above instanceof CommandSlotMorph ||
-            above instanceof RingReporterSlotMorph
-        ) {
-            above.nestedBlock(nb);
-        } else if (above instanceof CommandBlockMorph) {
-            above.nextBlock(nb);
-        } else {
-            scripts.add(nb);
-        }
-    } else if (cslot) {
-        cslot.fixLayout();
-    }
-    if (parent) {
-        parent.reactToGrabOf(this); // fix highlight
-    }
+    this.extract();
 };
 
 CommandBlockMorph.prototype.userExtractJustThis = function () {
