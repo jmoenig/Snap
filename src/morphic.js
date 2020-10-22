@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-October-20';
+var morphicVersion = '2020-October-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11224,11 +11224,11 @@ HandMorph.prototype.grab = function (aMorph) {
     if (this.children.length === 0) {
         this.world.stopEditing();
         this.grabOrigin = aMorph.situation();
-        if (!aMorph.noDropShadow) {
-            aMorph.addShadow();
-        }
         if (aMorph.prepareToBeGrabbed) {
             aMorph.prepareToBeGrabbed(this);
+        }
+        if (!aMorph.noDropShadow) {
+            aMorph.addShadow();
         }
         this.add(aMorph);
 

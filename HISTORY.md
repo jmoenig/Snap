@@ -19,6 +19,7 @@
 * blocks: refactored userExtractJustThis
 * blocks: refactored userDestroyJustThis
 * blocks: un-hid "extract" menu-option
+* morphic: create drop-shadows just in time
 
 ### 2020-10-21
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 
