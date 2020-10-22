@@ -3023,15 +3023,11 @@ BlockMorph.prototype.userMenu = function () {
             },
             'only duplicate this block'
         );
-
-        if (shiftClicked) {
-            menu.addItem(
-                'extract',
-                'userExtractJustThis',
-                'EXPERIMENTAL!\nonly grab this block',
-                new Color(100, 0, 0)
-            );
-        }
+        menu.addItem(
+            'extract',
+            'userExtractJustThis',
+            'only grab this block'
+        );
     }
     menu.addItem(
         "delete",
