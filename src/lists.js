@@ -628,7 +628,7 @@ List.prototype.blockify = function (limit = 500, count = [0]) {
     // fill the slots with the data
     for (i = 0; i < len && count[0] < limit; i += 1) {
         value = this.at(i + 1);
-        if (value instanceof List) {
+        if (value.blockify) {
             slots.replaceInput(
                 slots.addInput(),
                 value.blockify(limit, count)

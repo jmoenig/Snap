@@ -6148,7 +6148,7 @@ Context.prototype.toString = function () {
     return 'Context >> ' + expr + ' ' + this.variables;
 };
 
-Context.prototype.image = function () {
+Context.prototype.blockify = function () {
     var ring = new RingMorph(),
         block,
         cont;
@@ -6167,21 +6167,15 @@ Context.prototype.image = function () {
             }
         }
         ring.embed(block, this.inputs);
-        return ring.doWithAlpha(
-            1,
-            () => {
-                ring.clearAlpha();
-                return ring.fullImage();
-            }
-        );
+        return ring;
     }
     if (this.expression instanceof Array) {
         block = this.expression[this.pc].fullCopy();
         if (block instanceof RingMorph && !block.contents()) { // empty ring
-            return block.doWithAlpha(1, () => block.fullImage());
+            return block;
         }
         ring.embed(block, this.isContinuation ? [] : this.inputs);
-        return ring.doWithAlpha(1, () => ring.fullImage());
+        return ring;
     }
 
     // otherwise show an empty ring
@@ -6194,6 +6188,12 @@ Context.prototype.image = function () {
             ring.parts()[1].addInput(inp)
         );
     }
+
+    return ring;
+};
+
+Context.prototype.image = function () {
+    const ring = this.blockify();
     return ring.doWithAlpha(1, () => ring.fullImage());
 };
 
