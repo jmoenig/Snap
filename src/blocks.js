@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-21';
+modules.blocks = '2020-October-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4751,6 +4751,10 @@ BlockMorph.prototype.reactToDropOf = function (droppedMorph) {
 BlockMorph.prototype.situation = function () {
     // answer a dictionary specifying where I am right now, so
     // I can slide back to it if I'm dropped somewhere else
+    // NOTE: We can also add more key-value pairs to the situation
+    // dictionary to support non-standard modes of user-interaction,
+    // such as extracting single commands from within a stack
+    // see recordDrop() and userExtractJustThis()
     if (!(this.parent instanceof TemplateSlotMorph)) {
         var scripts = this.parentThatIsA(ScriptsMorph);
         if (scripts) {
@@ -5326,6 +5330,7 @@ CommandBlockMorph.prototype.userExtractJustThis = function () {
         parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
 
+    situation.action = "extract"; // record how this block was retrieved
     this.topBlock().fullChanged();
     if (this.parent) {
         pb = this.parent.parentThatIsA(CommandBlockMorph);
@@ -5361,6 +5366,51 @@ CommandBlockMorph.prototype.userExtractJustThis = function () {
 
     this.pickUp(scripts.world());
     this.parent.grabOrigin = situation;
+};
+
+CommandBlockMorph.prototype.extract = function () {
+    // extract just this one block, reattach next block to the previous one,
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
+        pb,
+        nb = this.nextBlock(),
+        above,
+        parent = this.parentThatIsA(SyntaxElementMorph),
+        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
+
+    this.topBlock().fullChanged();
+    if (this.parent) {
+        pb = this.parent.parentThatIsA(CommandBlockMorph);
+    }
+    if (pb && (pb.nextBlock() === this)) {
+        above = pb;
+    } else if (cs && (cs.nestedBlock() === this)) {
+        above = cs;
+        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
+    }
+    if (ide) {
+        // also stop all active processes hatted by this block
+        ide.removeBlock(this, true); // just this block
+    } else {
+        this.destroy(true); // just this block
+    }
+    if (nb) {
+        if (above instanceof CommandSlotMorph ||
+            above instanceof RingReporterSlotMorph
+        ) {
+            above.nestedBlock(nb);
+        } else if (above instanceof CommandBlockMorph) {
+            above.nextBlock(nb);
+        } else {
+            scripts.add(nb);
+        }
+    } else if (cslot) {
+        cslot.fixLayout();
+    }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
+    }
 };
 
 // CommandBlockMorph drawing:
@@ -7379,6 +7429,9 @@ ScriptsMorph.prototype.redrop = function () {
         this.updateToolbar();
     } else {
         this.isAnimating = true;
+        if (this.dropRecord.action === 'extract') {
+            this.dropRecord.lastDroppedBlock.extract();
+        }
         this.dropRecord.lastDroppedBlock.slideBackTo(
             this.dropRecord.situation,
             null,
@@ -7544,7 +7597,10 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         lastNextBlock: this.lastNextBlock,
         lastWrapParent: this.lastWrapParent,
         lastOrigin: lastGrabOrigin,
-        action: null,
+
+        // for special gestures, e.g. deleting or extracting single commands:
+        action: lastGrabOrigin ? lastGrabOrigin.action || null : null,
+
         situation: null,
         lastRecord: this.dropRecord,
         nextRecord: null
