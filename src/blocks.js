@@ -5318,58 +5318,16 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
 
 CommandBlockMorph.prototype.userExtractJustThis = function () {
     // extract just this one block, reattach next block to the previous one,
-    // has issue for REDO after UNDO: Next blocks follow
-    // unused for now
-    var scripts = this.parentThatIsA(ScriptsMorph),
-        ide = this.parentThatIsA(IDE_Morph),
-        situation = this.situation(),
-        cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
-        pb,
-        nb = this.nextBlock(),
-        above,
-        parent = this.parentThatIsA(SyntaxElementMorph),
-        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
-
+    var situation = this.situation();
     situation.action = "extract"; // record how this block was retrieved
-    this.topBlock().fullChanged();
-    if (this.parent) {
-        pb = this.parent.parentThatIsA(CommandBlockMorph);
-    }
-    if (pb && (pb.nextBlock() === this)) {
-        above = pb;
-    } else if (cs && (cs.nestedBlock() === this)) {
-        above = cs;
-        this.prepareToBeGrabbed(); // restore ring reporter slot, if any
-    }
-    if (ide) {
-        // also stop all active processes hatted by this block
-        ide.removeBlock(this, true); // just this block
-    } else {
-        this.destroy(true); // just this block
-    }
-    if (nb) {
-        if (above instanceof CommandSlotMorph ||
-            above instanceof RingReporterSlotMorph
-        ) {
-            above.nestedBlock(nb);
-        } else if (above instanceof CommandBlockMorph) {
-            above.nextBlock(nb);
-        } else {
-            scripts.add(nb);
-        }
-    } else if (cslot) {
-        cslot.fixLayout();
-    }
-    if (parent) {
-        parent.reactToGrabOf(this); // fix highlight
-    }
-
-    this.pickUp(scripts.world());
+    this.extract();
+    this.pickUp(situation.origin.world());
     this.parent.grabOrigin = situation;
 };
 
 CommandBlockMorph.prototype.extract = function () {
-    // extract just this one block, reattach next block to the previous one,
+    // private: extract just this one block
+    // reattach next block to the previous one,
     var scripts = this.parentThatIsA(ScriptsMorph),
         ide = this.parentThatIsA(IDE_Morph),
         cs = this.parentThatIsA(CommandSlotMorph, RingReporterSlotMorph),
