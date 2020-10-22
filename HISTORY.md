@@ -2,10 +2,11 @@
 
 ## in development:
 * **New Features:**
+    * new gesture: holding the shift-key when dragging extracts a single command from a stack of blocks
+    * new "extract" single command block context menu option
     * added "pie chart" option to PLOT command in the frequency distribution analysis library
     * added getProjectXML() method to the API
     * new noCloud flag that disables cloud access, thanks, Bernat
-    * new "extract" single command block context menu option
 * **Documentation Updates:**
     * API update
 * **Notable Fixes:**
@@ -20,6 +21,7 @@
 * blocks: refactored userDestroyJustThis
 * blocks: un-hid "extract" menu-option
 * morphic: create drop-shadows just in time
+* blocks: holding the shift-key when dragging extracts a single command from a stack of blocks
 
 ### 2020-10-21
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 

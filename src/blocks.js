@@ -5195,6 +5195,14 @@ CommandBlockMorph.prototype.snap = function (hand) {
 };
 
 CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
+    // check whether the shift-key is held down and if I can be "extracted"
+    if (handMorph && handMorph.world.currentKey === 16 && this.nextBlock()) {
+        this.extract(); // NOTE: no infinite recursion, because extract()
+                        // doesn't call this again with a hand
+        handMorph.grabOrigin.action = 'extract'; // ???
+        return;
+    }
+
     var oldPos = this.position();
 
     if (this.parent instanceof RingReporterSlotMorph) {
