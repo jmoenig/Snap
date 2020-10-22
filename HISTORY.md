@@ -14,6 +14,7 @@
     * wait until all assets have loaded before auto-triggering the green-flag event
 * **Translation Updates:**
     * Russian, thanks, Pavel!
+    * German
 
 ### 2020-10-22
 * blocks: fixed UNDO/REDO for "extracted" (single) command blocks
@@ -22,6 +23,7 @@
 * blocks: un-hid "extract" menu-option
 * morphic: create drop-shadows just in time
 * blocks: holding the shift-key when dragging extracts a single command from a stack of blocks
+* German translation update for new string "extract" 
 
 ### 2020-10-21
 * gui: wait until all costumes have loaded before auto-triggering the green-flag event 

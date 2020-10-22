@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-10-05', // this, too, will appear in the Translators tab
+        '2020-10-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1172,6 +1172,10 @@ SnapTranslator.dict.de = {
         'eine Kopie aufnehmen',
     'only duplicate this block':
         'nur diesen Block duplizieren',
+    'extract':
+        'herausziehen',
+    'only grab this block':
+        'nur diesen Block bewegen',
     'delete':
         'L\u00f6schen',
     'senders...':
