@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-21';
+modules.objects = '2020-October-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -422,21 +422,21 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
+
+        // Looks - Debugging primitives for development mode
         doScreenshot: {
+            dev: true,
             type: 'command',
             category: 'looks',
             spec: 'save %imgsource as costume named %s',
             defaults: [['pen trails'], localize('screenshot')]
         },
-
-        // Looks - Debugging primitives for development mode
         reportCostumes: {
             dev: true,
             type: 'reporter',
             category: 'looks',
             spec: 'wardrobe'
         },
-
         alert: {
             dev: true,
             type: 'command',

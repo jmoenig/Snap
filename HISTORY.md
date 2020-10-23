@@ -12,12 +12,14 @@
 * **Notable Fixes:**
     * fixed a translation bug for zero-value menu selection entries
     * wait until all assets have loaded before auto-triggering the green-flag event
+    * don't show some development-only blocks as search results
 * **Translation Updates:**
     * Russian, thanks, Pavel!
     * German
 
 ### 2020-10-23
 * pushed dev version to v6.3.0 because of new features
+* objects: don't show some development-only blocks as search results
 
 ### 2020-10-22
 * blocks: fixed UNDO/REDO for "extracted" (single) command blocks
