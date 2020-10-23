@@ -1033,27 +1033,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(1);
             break;
-        case '%month':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'January' : ['January'],
-                    'February' : ['February'],
-                    'March' : ['March'],
-                    'April' : ['April'],
-                    'May' : ['May'],
-                    'June' : ['June'],
-                    'July' : ['July'],
-                    'August' : ['August'],
-                    'September' : ['September'],
-                    'October' : ['October'],
-                    'November' : ['November'],
-                    'December' : ['December']
-                },
-                true // read-only
-            );
-            break;
         case '%interaction':
             part = new InputSlotMorph(
                 null, // text
@@ -14109,9 +14088,6 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 
     cb = new CommandBlockMorph();
     cb.setSpec('bool %b ?');
-
-    cm = new CommandBlockMorph();
-    cm.setSpec('month %month');
 
     cd = new CommandBlockMorph();
     cd.setSpec('direction %dir degrees');

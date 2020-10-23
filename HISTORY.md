@@ -21,6 +21,7 @@
 * pushed dev version to v6.3.0 because of new features
 * objects: don't show some development-only blocks as search results
 * blocks: fixed a multi-line-text spec typo 
+* blocks: removed unused %month slot
 
 ### 2020-10-22
 * blocks: fixed UNDO/REDO for "extracted" (single) command blocks
