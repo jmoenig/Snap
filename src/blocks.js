@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-22';
+modules.blocks = '2020-October-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11156,7 +11156,7 @@ TextSlotMorph.prototype.init = function (
 
 TextSlotMorph.prototype.getSpec = function () {
     if (this.isNumeric) {
-        return '%mln';
+        return '%mlt';
     }
     return '%mlt'; // default
 };
