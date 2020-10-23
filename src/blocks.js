@@ -1491,18 +1491,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             // part.isStatic = true;
             break;
-        case '%lst':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    list1 : 'list1',
-                    list2 : 'list2',
-                    list3 : 'list3'
-                },
-                true
-            );
-            break;
         case '%codeKind':
             part = new InputSlotMorph(
                 null,
@@ -2458,7 +2446,6 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %typ    - chameleon colored rectangular drop-down for data types
     %var    - chameleon colored rectangular drop-down for variable names
     %shd    - Chameleon colored rectuangular drop-down for shadowed var names
-    %lst    - chameleon colored rectangular drop-down for list names
     %b      - chameleon colored hexagonal slot (for predicates)
     %bool   - chameleon colored hexagonal slot (for predicates), static
     %l      - list icon
