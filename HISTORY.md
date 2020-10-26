@@ -17,6 +17,9 @@
     * Russian, thanks, Pavel!
     * German
 
+### 2020-10-26
+* objects: added test for the existence of generic WHEN hat blocks
+
 ### 2020-10-23
 * pushed dev version to v6.3.0 because of new features
 * objects: don't show some development-only blocks as search results

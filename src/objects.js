@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-23';
+modules.objects = '2020-October-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -5825,6 +5825,12 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
     });
 };
 
+SpriteMorph.prototype.hasGenericHatBlocks = function () {
+    return this.scripts.children.some(morph =>
+        morph.selector === 'receiveCondition'
+    );
+};
+
 SpriteMorph.prototype.allGenericHatBlocks = function () {
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
@@ -9194,6 +9200,9 @@ StageMorph.prototype.allHatBlocksForKey
 
 StageMorph.prototype.allHatBlocksForInteraction
     = SpriteMorph.prototype.allHatBlocksForInteraction;
+
+StageMorph.prototype.hasGenericHatBlocks
+    = SpriteMorph.prototype.hasGenericHatBlocks;
 
 StageMorph.prototype.allGenericHatBlocks
     = SpriteMorph.prototype.allGenericHatBlocks;
