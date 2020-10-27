@@ -137,8 +137,7 @@ describe('undo', function() {
             expect(startPos.eq(input.position())).toBe(true, msg);
         });
 
-        // failing
-        it('should revert (existing) input on undo (attached)', async function() {
+        it('should revert (existing) input on undo (attached) [FAILING]', async function() {
             const input = await driver.addBlock('yPosition', new Point(500, 500));
             const oldCommand = await driver.addBlock('turn', new Point(600, 500));
             await driver.dragAndDrop(input, oldCommand.inputs()[0].position());
@@ -195,8 +194,7 @@ describe('undo', function() {
             await driver.actionsSettled();
         });
 
-        // failing
-        it('should revert (new) input to cslot on undo', async function() {
+        it('should revert (new) input to cslot on undo [FAILING]', async function() {
             const [block] = Object.values(SnapActions._blocks);
             driver.selectCategory('motion');
             const turn = await driver.addBlock('turn', new Point(300, 300));
@@ -231,8 +229,7 @@ describe('undo', function() {
             await selectServiceAndRPC(block, 'CloudVariables', 'setVariable');
         });
 
-        // failing
-        it('should clear RPC field on service field change', async function() {
+        it('should clear RPC field on service field change [FAILING]', async function() {
             await selectService(block, 'PublicRoles');
             const [rpcName] = block.inputs()[1].evaluate();
             assert.notEqual(rpcName, 'setVariable');
@@ -250,8 +247,7 @@ describe('undo', function() {
             assert.equal(rpcName, 'setVariable');
         });
 
-        // failing
-        it('should restore inputs on undo RPC field change', async function() {
+        it('should restore inputs on undo RPC field change [FAILING]', async function() {
             await driver.expect(
                 () => block.inputs().length > 2,
                 'RPC method signature not loaded'
