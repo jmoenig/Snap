@@ -124,10 +124,11 @@ SnapActions.onReceiveAction = function(msg) {
 };
 
 SnapActions.completeAction = function(error) {
+    const result = ActionManager.prototype.completeAction.apply(this, arguments);
     if (error) {
         this.ide().submitBugReport(null, error);
     }
-    return ActionManager.prototype.completeAction.apply(this, arguments);
+    return result;
 };
 
 SnapActions.submitIfAllowed = function(event) {

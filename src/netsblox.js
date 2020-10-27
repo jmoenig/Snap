@@ -1044,7 +1044,11 @@ NetsBloxMorph.prototype.submitBugReport = function (desc, error) {
     report.clientUuid = this.sockets.uuid;
 
     // Add screenshot
-    report.screenshot = canvas.toDataURL('image/png');
+    try {
+        report.screenshot = canvas.toDataURL('image/png');
+    } catch (err) {
+        console.warn(`Unable to capture screenshot for bug report`, err);
+    }
 
     // Add project state
     report.project = this.serializer.serialize(this.stage);
