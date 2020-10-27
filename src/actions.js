@@ -1992,6 +1992,12 @@ ActionManager.prototype.__updateBlockDefinitions = function(block) {
     var editor = block.parentThatIsA(BlockEditorMorph);
     if (editor) {
         editor.updateDefinition();
+        const scripts = editor.body.contents;
+        scripts.children.forEach(block => {
+            const scriptRoot = block instanceof PrototypeHatBlockMorph ?
+                block.nextBlock() : block;
+            this.traverse(scriptRoot, block => this._blocks[block.id] = block);
+        });
     }
 };
 
