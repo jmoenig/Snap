@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-October-21';
+modules.store = '2020-October-27';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -709,6 +709,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         this.loadObject(sprite, model);
         sprite.fixLayout();
+        sprite.pauseGenericHatBlocks();
     });
 
     // restore inheritance and nesting associations
@@ -1650,6 +1651,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
         ide.hasChangedMedia = true;
     }
     project.stage.fixLayout();
+    project.stage.pauseGenericHatBlocks();
     ide.createCorral();
     ide.selectSprite(sprite);
     ide.fixLayout();

@@ -7,6 +7,8 @@
     * added "pie chart" option to PLOT command in the frequency distribution analysis library
     * added getProjectXML() method to the API
     * new noCloud flag that disables cloud access, thanks, Bernat
+* **Notable Changes:**
+    * security: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun
 * **Documentation Updates:**
     * API update
 * **Notable Fixes:**
@@ -16,6 +18,9 @@
 * **Translation Updates:**
     * Russian, thanks, Pavel!
     * German
+
+### 2020-10-27
+* gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun 
 
 ### 2020-10-26
 * objects: added test for the existence of generic WHEN hat blocks

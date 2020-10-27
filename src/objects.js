@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-October-26';
+modules.objects = '2020-October-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -6438,6 +6438,18 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     }
 };
 
+// SpriteMorph controlling generic WHEN hats
+
+SpriteMorph.prototype.pauseGenericHatBlocks = function () {
+    var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph);
+    if (this.hasGenericHatBlocks()) {
+        stage.enableCustomHatBlocks = true;
+        stage.threads.pauseCustomHatBlocks = true;
+        ide.controlBar.stopButton.refresh();
+    }
+};
+
 // SpriteMorph inheritance - general
 
 SpriteMorph.prototype.chooseExemplar = function () {
@@ -8212,6 +8224,18 @@ StageMorph.prototype.editScripts = function () {
         scripts.focus.moveBy(new Point(50, 50));
     }
     scripts.focus.fixLayout();
+};
+
+// StageMorph controlling generic WHEN hats
+
+StageMorph.prototype.pauseGenericHatBlocks = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (this.hasGenericHatBlocks() ||
+            ide.sprites.asArray().some(any => any.hasGenericHatBlocks())) {
+        this.enableCustomHatBlocks = true;
+        this.threads.pauseCustomHatBlocks = true;
+        ide.controlBar.stopButton.refresh();
+    }
 };
 
 // StageMorph block templates

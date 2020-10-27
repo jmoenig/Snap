@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-October-23';
+modules.gui = '2020-October-27';
 
 // Declarations
 
@@ -2316,6 +2316,10 @@ IDE_Morph.prototype.stopFastTracking = function () {
 };
 
 IDE_Morph.prototype.runScripts = function () {
+    if (this.stage.threads.pauseCustomHatBlocks) {
+        this.stage.threads.pauseCustomHatBlocks = false;
+        this.controlBar.stopButton.refresh();
+    }
     this.stage.fireGreenFlagEvent();
 };
 
