@@ -20,7 +20,8 @@
     * German
 
 ### 2020-10-27
-* gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun 
+* gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun
+* morphic: prevent unclosable menus, thanks, Brian B.! 
 
 ### 2020-10-26
 * objects: added test for the existence of generic WHEN hat blocks

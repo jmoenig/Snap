@@ -1271,7 +1271,7 @@
     Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
     Ken Kahn contributed to Chinese keboard entry and Android support.
-    Brian Broll contributed clickable URLs in text elements.
+    Brian Broll contributed clickable URLs in text elements and many bugfixes.
 
     - Jens Mönig
 */
@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-October-22';
+var morphicVersion = '2020-October-27';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8400,7 +8400,8 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardFocus = null;
     }
-    if (!this.isListContents) {
+    const isActiveMenu = this.world.activeMenu === this;
+    if (!this.isListContents && isActiveMenu) {
         this.world.activeMenu = null;
     }
     MenuMorph.uber.destroy.call(this);
