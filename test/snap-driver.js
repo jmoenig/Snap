@@ -506,7 +506,7 @@ SnapDriver.prototype.actionsSettled = async function() {
         .concat(SnapActions._pendingLocalActions)
         .map(action => action.promise);
 
-    await Promise.allSettled(pendingActions);
+    return await Promise.allSettled(pendingActions);
 };
 
 SnapDriver.prototype.moveBlock = function(spec, target, pos) {
