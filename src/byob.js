@@ -3934,10 +3934,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                 }
             },
             null,
-            function() {
-                return this.msgs.includes(msg);
-            },
-            null,
+            () => this.msgs.includes(msg),
             null,
             null,
             msg.fullImage()
