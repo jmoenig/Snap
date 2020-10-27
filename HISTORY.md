@@ -13,7 +13,7 @@
     * API update
 * **Notable Fixes:**
     * fixed a translation bug for zero-value menu selection entries
-    * wait until all assets have loaded before auto-triggering the green-flag event
+    * wait until all assets have loaded before auto-triggering the green-flag event, not on - sigh - Safari
     * don't show some development-only blocks as search results
 * **Translation Updates:**
     * Russian, thanks, Pavel!
