@@ -8305,6 +8305,7 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 
 MenuMorph.prototype.closeRootMenu = function () {
     if (this.parent instanceof MenuMorph) {
+        this.destroy();
         this.parent.closeRootMenu();
     } else {
         this.destroy();
@@ -8313,10 +8314,13 @@ MenuMorph.prototype.closeRootMenu = function () {
 
 MenuMorph.prototype.closeSubmenu = function () {
     if (this.submenu) {
+        const isSubmenuActive = this.world.activeMenu === this.submenu;
         this.submenu.destroy();
         this.submenu = null;
         this.unselectAllItems();
-        this.world.activeMenu = this;
+        if (isSubmenuActive) {
+            this.world.activeMenu = this;
+        }
     }
 };
 
@@ -8436,13 +8440,16 @@ MenuMorph.prototype.enterSubmenu = function () {
 };
 
 MenuMorph.prototype.leaveSubmenu = function () {
+    const isActiveMenu = this.world.activeMenu === this;
     var menu = this.parent;
     if (this.parent instanceof MenuMorph) {
         menu.submenu = null;
         menu.hasFocus = true;
         this.destroy();
-        menu.world.keyboardFocus = menu;
-        menu.world.activeMenu = menu;
+        if (isActiveMenu) {
+            menu.world.keyboardFocus = menu;
+            menu.world.activeMenu = menu;
+        }
     }
 };
 
