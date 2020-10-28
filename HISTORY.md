@@ -22,7 +22,8 @@
 
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism
-* gui: fixed "rename costume" dialog title to distinguish between costumes and backgrounds 
+* gui: fixed "rename costume" dialog title to distinguish between costumes and backgrounds
+* German translation update for "rename background" 
 
 ### 2020-10-27
 * gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #present:&noRun

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-10-22', // this, too, will appear in the Translators tab
+        '2020-10-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1292,6 +1292,8 @@ SnapTranslator.dict.de = {
         'Exportieren',
     'rename costume':
         'Kost\u00fcm umbenennen',
+    'rename background':
+        'Hintergrund umbenennen',
 
     // sounds
     'Play sound':
