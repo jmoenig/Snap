@@ -197,7 +197,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2019-06-25', // this, too, will appear in the Translators tab
+        '2020-10-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -942,11 +942,13 @@ SnapTranslator.dict.fr = {
 
     // scripting area
     'clean up':
-        'effacer',
+        'arranger',
     'arrange scripts\nvertically':
         'arrange scripts\nvertically',
     'add comment':
         'ajouter un commentaire',
+    'undrop':
+        'retour arrière',
     'make a block...':
         'cr\u00E9er un nouveau bloc...',
 

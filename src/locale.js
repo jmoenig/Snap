@@ -267,7 +267,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2019-06-25'
+        '2020-10-28'
 };
 
 SnapTranslator.dict.si = {
