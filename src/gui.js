@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-October-27';
+modules.gui = '2020-October-28';
 
 // Declarations
 
@@ -370,21 +370,19 @@ IDE_Morph.prototype.openIn = function (world) {
     }
     
     function autoRun () {
-        // wait until all costumes are loaded
+        // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
             myself.world().animations.push(
                 new Animation(nop, nop, 0, 200, nop, autoRun)
             );
         } else {
-            // wait a few more frames for the sprites to wear their costumes
-            myself.world().animations.push(
-                new Animation(nop, nop, 0, 200, nop, () => myself.runScripts())
-            );
+            myself.runScripts();
         }
     }
 
     function isLoadingAssets() {
-        myself.sprites.asArray().concat([myself.stage]).some(any =>
+        return myself.sprites.asArray().concat([myself.stage]).some(any =>
+            (any.costume ? any.costume.loaded !== true : false) ||
             any.costumes.asArray().some(each => each.loaded !== true) ||
             any.sounds.asArray().some(each => each.loaded !== true)
         );

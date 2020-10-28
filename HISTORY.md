@@ -8,19 +8,22 @@
     * added getProjectXML() method to the API
     * new noCloud flag that disables cloud access, thanks, Bernat
 * **Notable Changes:**
-    * security: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun
+    * security: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #present:&noRun
 * **Documentation Updates:**
     * API update
 * **Notable Fixes:**
     * fixed a translation bug for zero-value menu selection entries
-    * wait until all assets have loaded before auto-triggering the green-flag event, not on - sigh - Safari
+    * wait until all assets have loaded before auto-triggering the green-flag event
     * don't show some development-only blocks as search results
 * **Translation Updates:**
     * Russian, thanks, Pavel!
     * German
 
+### 2020-10-28
+* gui: tweaked wait-until-assets-are-loaded mechanism
+
 ### 2020-10-27
-* gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #run:&noRun
+* gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #present:&noRun
 * morphic: prevent unclosable menus, thanks, Brian B.! 
 
 ### 2020-10-26
