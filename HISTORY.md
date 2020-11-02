@@ -26,6 +26,7 @@
 * objects: tweaked drop-shadows for sprites
 * blocks: tweaked drop-shadows for comments
 * objects, threads: added new CUT FROM command to the pen category
+* updated German translation with new "cut from %spr" entry
 
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism

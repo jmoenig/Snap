@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-10-28', // this, too, will appear in the Translators tab
+        '2020-11-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -491,6 +491,8 @@ SnapTranslator.dict.de = {
         'schreibe %s Größe %n',
     'paste on %spr':
         'drucke auf %spr',
+    'cut from %spr':
+        'schneide aus %spr',
     'pen vectors':
         'Vektor-Malspuren',
 
