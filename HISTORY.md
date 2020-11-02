@@ -27,6 +27,7 @@
 * blocks: tweaked drop-shadows for comments
 * objects, threads: added new CUT FROM command to the pen category
 * updated German translation with new "cut from %spr" entry
+* morphic: reverted "unclosable menu prevention", because it broke the search box in the project dialog
 
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism

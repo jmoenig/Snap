@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-October-27';
+var morphicVersion = '2020-November-02';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -8400,8 +8400,7 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardFocus = null;
     }
-    const isActiveMenu = this.world.activeMenu === this;
-    if (!this.isListContents && isActiveMenu) {
+    if (!this.isListContents) {
         this.world.activeMenu = null;
     }
     MenuMorph.uber.destroy.call(this);
