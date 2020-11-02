@@ -21,6 +21,9 @@
     * German
     * French
 
+### 2020-11-02
+* objects: tweaked drop-shadows for sprites
+
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism
 * gui: fixed "rename costume" dialog title to distinguish between costumes and backgrounds
