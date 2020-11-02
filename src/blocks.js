@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-October-23';
+modules.blocks = '2020-November-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13141,9 +13141,6 @@ CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     if (this.anchor) {
         this.anchor.destroy();
         this.anchor = null;
-        // fix shadow, because it was added earlier
-        this.removeShadow();
-        this.addShadow();
     }
 };
 

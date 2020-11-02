@@ -23,6 +23,7 @@
 
 ### 2020-11-02
 * objects: tweaked drop-shadows for sprites
+* blocks: tweaked drop-shadows for comments
 
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism
