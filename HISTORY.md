@@ -4,6 +4,7 @@
 * **New Features:**
     * new gesture: holding the shift-key when dragging extracts a single command from a stack of blocks
     * new "extract" single command block context menu option
+    * new CUT FROM command in the pen category
     * added "pie chart" option to PLOT command in the frequency distribution analysis library
     * added getProjectXML() method to the API
     * new noCloud flag that disables cloud access, thanks, Bernat
@@ -24,6 +25,7 @@
 ### 2020-11-02
 * objects: tweaked drop-shadows for sprites
 * blocks: tweaked drop-shadows for comments
+* objects, threads: added new CUT FROM command to the pen category
 
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism

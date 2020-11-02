@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-October-08';
+modules.threads = '2020-November-02';
 
 var ThreadManager;
 var Process;
@@ -4374,9 +4374,17 @@ Process.prototype.changePenHSVA = Process.prototype.changeHSVA;
 Process.prototype.setBackgroundHSVA = Process.prototype.setHSVA;
 Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
 
-// Process pasting primitives
+// Process cutting & pasting primitives
 
-Process.prototype.doPasteOn = function (name, thisObj, stage) {
+Process.prototype.doPasteOn = function (name) {
+    this.blitOn(name, 'source-atop');
+};
+
+Process.prototype.doCutFrom = function (name) {
+    this.blitOn(name, 'destination-out');
+};
+
+Process.prototype.blitOn = function (name, mask, thisObj, stage) {
     // allow for lists of sprites and also check for temparary clones,
     // as in Scratch 2.0,
     var those;
@@ -4386,7 +4394,7 @@ Process.prototype.doPasteOn = function (name, thisObj, stage) {
         name = stage;
     }
     if (isSnapObject(name)) {
-        return thisObj.pasteOn(name);
+        return thisObj.blitOn(name, mask);
     }
     if (name instanceof List) { // assume all elements to be sprites
         those = name.itemsArray();
@@ -4394,7 +4402,7 @@ Process.prototype.doPasteOn = function (name, thisObj, stage) {
         those = this.getObjectsNamed(name, thisObj, stage); // clones
     }
     those.forEach(each =>
-        this.doPasteOn(each, thisObj, stage)
+        this.blitOn(each, mask, thisObj, stage)
     );
 };
 
