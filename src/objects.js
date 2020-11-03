@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-02';
+modules.objects = '2020-November-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -1582,14 +1582,13 @@ SpriteMorph.prototype.blockAlternatives = {
     clear: ['down', 'up', 'doStamp'],
     down: ['up', 'clear', 'doStamp'],
     up: ['down', 'clear', 'doStamp'],
+    doPasteOn: ['doCutFrom'],
+    doCutFrom: ['doPasteOn'],
     doStamp: ['clear', 'down', 'up'],
-
     setPenHSVA: ['changePenHSVA'],
     changePenHSVA: ['setPenHSVA'],
-
     setBackgroundHSVA: ['changeBackgroundHSVA'],
     changeBackgroundHSVA: ['setBackgroundHSVA'],
-
     changeSize: ['setSize'],
     setSize: ['changeSize'],
     

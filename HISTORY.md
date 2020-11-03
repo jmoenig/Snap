@@ -24,6 +24,7 @@
 
 ### 2020-11-03
 * Russian translation update, thanks, Pavel!
+* objects: added "relabel" feature for the new "cut from" / "paste on" primitives
 
 ### 2020-11-02
 * objects: tweaked drop-shadows for sprites
