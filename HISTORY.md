@@ -20,7 +20,10 @@
 * **Translation Updates:**
     * Russian, thanks, Pavel!
     * German
-    * French
+    * French, thanks, Jeremy!
+
+### 2020-11-03
+* Russian translation update, thanks, Pavel!
 
 ### 2020-11-02
 * objects: tweaked drop-shadows for sprites

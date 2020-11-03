@@ -185,7 +185,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru, pbsite@mail.ru', // optional
     'last_changed':
-        '2020-10-17', // this, too, will appear in the Translators tab
+        '2020-11-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -490,7 +490,9 @@ SnapTranslator.dict.ru = {
     'write %s size %n':
         'написать %s шрифтом размера %n',
     'paste on %spr':
-        'отпечаток на %spr',
+        'отпечатать на %spr',
+    'cut from %spr':
+        'вырезать из %spr',
     'pen vectors':
         'линии пера (вект.)',
 
@@ -1172,6 +1174,10 @@ SnapTranslator.dict.ru = {
         'скопировать\nи запомнить',
     'only duplicate this block':
         'продублировать только данный блок',
+    'extract':
+        'извлечь',
+    'only grab this block':
+        'захватить только этот блок',
     'delete':
         'удалить',
     'senders...':
@@ -1286,8 +1292,10 @@ SnapTranslator.dict.ru = {
         'переименовать',
     'export':
         'экспорт',
-    'rename background':
+    'rename costume':
         'Переименовать костюм',
+    'rename background':
+        'Переименовать фон',
 
     // sounds
     'Play sound':
