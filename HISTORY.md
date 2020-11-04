@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 6.3.0
 * **New Features:**
     * new gesture: holding the shift-key when dragging extracts a single command from a stack of blocks
     * new "extract" single command block context menu option
@@ -21,6 +23,9 @@
     * Russian, thanks, Pavel!
     * German
     * French, thanks, Jeremy!
+
+### 2020-11-04
+* prepared minor release
 
 ### 2020-11-03
 * Russian translation update, thanks, Pavel!
