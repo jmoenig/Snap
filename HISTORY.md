@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-05
+* new dev version
+
 ## 6.3.0
 * **New Features:**
     * new gesture: holding the shift-key when dragging extracts a single command from a stack of blocks
