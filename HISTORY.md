@@ -2,9 +2,14 @@
 
 ## in development:
 
+## 6.3.1
+* **Notable Fixes:**
+    * fixed PASTE and CUT for the stage
+
 ### 2020-11-05
 * new dev version
 * objects: fixed #2709
+* prepared patch
 
 ## 6.3.0
 * **New Features:**
