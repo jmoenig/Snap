@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-03';
+modules.objects = '2020-November-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -9010,7 +9010,7 @@ StageMorph.prototype.getPenAttribute
 
 // StageMorph printing on another sprite:
 
-StageMorph.prototype.pasteOn = SpriteMorph.prototype.pasteOn;
+StageMorph.prototype.blitOn = SpriteMorph.prototype.blitOn;
 
 // StageMorph pseudo-inherited behavior
 

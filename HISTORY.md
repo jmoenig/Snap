@@ -4,6 +4,7 @@
 
 ### 2020-11-05
 * new dev version
+* objects: fixed #2709
 
 ## 6.3.0
 * **New Features:**
