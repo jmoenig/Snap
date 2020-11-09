@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-09
+* new dev version
+
 ## 6.3.1
 * **Notable Fixes:**
     * fixed PASTE and CUT for the stage
