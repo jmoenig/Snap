@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-05';
+modules.objects = '2020-November-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -9689,8 +9689,8 @@ Costume.prototype.canvasBoundingBox = function (pic) {
     }
 
     function getLeft() {
-        for (col = 0; col <= w; col += 1) {
-            for (row = 0; row <= h; row += 1) {
+        for (col = 0; col < w; col += 1) {
+            for (row = 0; row < h; row += 1) {
                 if (getAlpha(col, row)) {
                     return col;
                 }
@@ -9700,8 +9700,8 @@ Costume.prototype.canvasBoundingBox = function (pic) {
     }
 
     function getTop() {
-        for (row = 0; row <= h; row += 1) {
-            for (col = 0; col <= w; col += 1) {
+        for (row = 0; row < h; row += 1) {
+            for (col = 0; col < w; col += 1) {
                 if (getAlpha(col, row)) {
                     return row;
                 }
@@ -9711,8 +9711,8 @@ Costume.prototype.canvasBoundingBox = function (pic) {
     }
 
     function getRight() {
-        for (col = w; col >= 0; col -= 1) {
-            for (row = h; row >= 0; row -= 1) {
+        for (col = w - 1; col >= 0; col -= 1) {
+            for (row = h - 1; row >= 0; row -= 1) {
                 if (getAlpha(col, row)) {
                     return Math.min(col + 1, w);
                 }
@@ -9722,8 +9722,8 @@ Costume.prototype.canvasBoundingBox = function (pic) {
     }
 
     function getBottom() {
-        for (row = h; row >= 0; row -= 1) {
-            for (col = w; col >= 0; col -= 1) {
+        for (row = h - 1; row >= 0; row -= 1) {
+            for (col = w - 1; col >= 0; col -= 1) {
                 if (getAlpha(col, row)) {
                     return Math.min(row + 1, h);
                 }

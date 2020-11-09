@@ -2,8 +2,13 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed a costume-shrinkWrap edgecase bug, thanks, Brian, for reporting it!
+
+
 ### 2020-11-09
 * new dev version
+* objects: fixed #2712 - a costume-shrinkWrap edgecase bug, thanks, Brian, for reporting it!
 
 ## 6.3.1
 * **Notable Fixes:**
