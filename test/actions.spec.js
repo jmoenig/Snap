@@ -99,11 +99,12 @@ describe('actions', function() {
 
     describe('bug reporting', function() {
         it('should report bugs if completeAction is called with error', function(done) {
-            var ide = driver.ide();
+            const ide = driver.ide();
             ide.submitBugReport = () => {
                 delete ide.submitBugReport;
                 done();
             };
+            SnapActions.currentEvent = {};
             SnapActions.completeAction('testError');
         });
     });

@@ -2160,7 +2160,7 @@ ActionManager.prototype.onAddVariable = function(name, ownerId) {
 
     owner.addVariable(name, isGlobal);
     if (!owner.showingVariableWatcher(name, isGlobal)) {
-        owner.toggleVariableWatcher(name, isGlobal);
+        owner.toggleVariableWatcher(name, isGlobal, true);
     }
 
     var ide = owner.parentThatIsA(IDE_Morph);
