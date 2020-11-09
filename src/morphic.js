@@ -8465,8 +8465,7 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardFocus = null;
     }
-    const isActiveMenu = this.world.activeMenu === this;
-    if (!this.isListContents && isActiveMenu) {
+    if (!this.isListContents && this.world.activeMenu === this) {
         this.world.activeMenu = null;
     }
     MenuMorph.uber.destroy.call(this);
