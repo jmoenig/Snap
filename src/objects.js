@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-09';
+modules.objects = '2020-November-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -215,7 +215,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point towards %dst'
+            spec: 'point towards %dst',
+            defaults: [['mouse-pointer']]
         },
         gotoXY: {
             only: SpriteMorph,
@@ -228,7 +229,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to %dst'
+            spec: 'go to %dst',
+            defaults: [['random position']]
         },
         doGlide: {
             only: SpriteMorph,
