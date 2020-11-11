@@ -6,9 +6,11 @@
     * added meaningful defaults to blocks in the palette that didn't already have them
 * **Notable Fixes:**
     * fixed a costume-shrinkWrap edgecase bug, thanks, Brian, for reporting it!
+    * fixed dynamic costume-inheritance for PASTE and CUT
 
 ### 2020-11-11
 * objects: added meaningful defaults to blocks in the palette that didn't already have them
+* threads: fixed dynamic costume-inheritance for PASTE and CUT
 
 ### 2020-11-09
 * new dev version

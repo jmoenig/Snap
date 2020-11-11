@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-November-02';
+modules.threads = '2020-November-11';
 
 var ThreadManager;
 var Process;
@@ -4401,9 +4401,12 @@ Process.prototype.blitOn = function (name, mask, thisObj, stage) {
     } else {
         those = this.getObjectsNamed(name, thisObj, stage); // clones
     }
-    those.forEach(each =>
-        this.blitOn(each, mask, thisObj, stage)
-    );
+    those.forEach(each => {
+        // only draw on same-named clones that don't dynamically the costume
+        if (!each.inheritsAttribute('costume #')) {
+            this.blitOn(each, mask, thisObj, stage);
+        }
+    });
 };
 
 // Process temporary cloning (Scratch-style)
