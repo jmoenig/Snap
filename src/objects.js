@@ -312,7 +312,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: '%img of costume %cst',
-            defaults: [['width']]
+            defaults: [['width'], [['current']]]
         },
         reportNewCostume: {
             type: 'reporter',
@@ -323,7 +323,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
-            defaults: ['', 100, 50]
+            defaults: [[['current']], 100, 50]
         },
         doSayFor: {
             only: SpriteMorph,
