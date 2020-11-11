@@ -891,7 +891,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'touching %col ?'
+            spec: 'touching %col ?',
+            defaults: [['mouse-pointer']]
         },
         reportTouchingColor: {
             only: SpriteMorph,
@@ -909,7 +910,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: '%asp at %loc',
-            defaults: [['hue']]
+            defaults: [['hue'], ['mouse-pointer']]
         },
         reportStackSize: {
             dev: true,
@@ -971,7 +972,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: '%rel to %dst',
-            defaults: [['distance']]
+            defaults: [['distance'], ['mouse-pointer']]
         },
         doResetTimer: {
             type: 'command',
