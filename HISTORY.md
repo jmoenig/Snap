@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.3.2
 * **Notable Changes:**
     * added meaningful defaults to blocks in the palette that didn't already have them
 * **Notable Fixes:**
@@ -11,6 +12,7 @@
 
 ### 2020-11-12
 * morphic: fixed being unable to place the cursor at the end of a multi-line text
+* prepared patch
 
 ### 2020-11-11
 * objects: added meaningful defaults to blocks in the palette that didn't already have them
