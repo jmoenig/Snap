@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-November-02';
+var morphicVersion = '2020-November-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -9438,7 +9438,7 @@ TextMorph.prototype.slotAt = function (aPoint) {
         charX = 0;
     }
     columnLength = this.lines[row - 1].length;
-    while (col < columnLength - 2 && aPoint.x - this.left() > charX) {
+    while (col < columnLength - 1 && aPoint.x - this.left() > charX) {
         charX += ctx.measureText(this.lines[row - 1][col]).width;
         col += 1;
     }

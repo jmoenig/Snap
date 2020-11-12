@@ -7,6 +7,10 @@
 * **Notable Fixes:**
     * fixed a costume-shrinkWrap edgecase bug, thanks, Brian, for reporting it!
     * fixed dynamic costume-inheritance for PASTE and CUT
+    * fixed being unable to place the cursor at the end of a multi-line text
+
+### 2020-11-12
+* morphic: fixed being unable to place the cursor at the end of a multi-line text
 
 ### 2020-11-11
 * objects: added meaningful defaults to blocks in the palette that didn't already have them
