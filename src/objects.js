@@ -9879,8 +9879,27 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
 // Costume thumbnail
 
 Costume.prototype.shrinkToFit = function (extentPoint) {
+    var scale,
+        fittedExtentPoint,
+        fittedCanvas,
+        ctx;
     if (extentPoint.x < this.width() || (extentPoint.y < this.height())) {
-        this.contents = this.thumbnail(extentPoint);
+        scale = Math.min(
+            (extentPoint.x / this.width()),
+            (extentPoint.y / this.height())
+        );
+        fittedExtentPoint = new Point(this.width() * scale, this.height() * scale);
+        fittedCanvas = newCanvas(fittedExtentPoint, true);
+        ctx = fittedCanvas.getContext('2d');
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.drawImage(
+            this.contents,
+            0,
+            0
+        );
+        ctx.restore();
+        this.contents = fittedCanvas;
     }
 };
 
