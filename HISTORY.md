@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * added type assertion for numerical value in CHANGE VARIABLE BY NUM block, thanks, Eckart, for the suggestion
 * **Notable Fixes:**
     * fixed a costume fitting issue, thanks, Joan!
     * fixed keyboard formula input for "power of", "neg", "lg" and "id"
@@ -12,6 +14,7 @@
 * objects: fixed keyboard formula input for "power of"
 * objects: fixed keyboard formula input for "neg"
 * objects: fixed keyboard formula input for "lg" and "id"
+* threads: added type assertion for numerical value in CHANGE VARIABLE BY NUM block
 
 ## 6.3.2
 * **Notable Changes:**
