@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-15
+* new dev version
+
 ## 6.3.2
 * **Notable Changes:**
     * added meaningful defaults to blocks in the palette that didn't already have them
