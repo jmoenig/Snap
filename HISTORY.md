@@ -4,12 +4,13 @@
 
 * **Notable Fixes:**
     * fixed a costume fitting issue, thanks, Joan!
-    * fixed keyboard formula input for "power of"
+    * fixed keyboard formula input for "power of" and "neg"
 
 ### 2020-11-15
 * new dev version
 * objects: fixed costume fitting, thanks, Joan!
 * objects: fixed keyboard formula input for "power of"
+* objects: fixed keyboard formula input for "neg"
 
 ## 6.3.2
 * **Notable Changes:**

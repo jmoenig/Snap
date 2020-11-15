@@ -3398,11 +3398,12 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             round: 'reportRound',
             not: 'reportNot'
         };
-        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
-            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+        monads = ['abs', 'neg', 'ceiling', 'floor', 'sqrt', 'sin', 'cos',
+            'tan', 'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
         alias = {
             ceil: 'ceiling',
-            '!' : 'not'
+            '!' : 'not',
+            '-' : 'neg'
         };
         monads.concat(['true', 'false']).forEach(word =>
             reverseDict[localize(word).toLowerCase()] = word
