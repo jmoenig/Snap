@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed a costume fitting issue, thanks, Joan!
+
 ### 2020-11-15
 * new dev version
+* objects: fixed costume fitting, thanks, Joan!
 
 ## 6.3.2
 * **Notable Changes:**
