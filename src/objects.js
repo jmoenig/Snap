@@ -9879,48 +9879,36 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
 // Costume thumbnail
 
 Costume.prototype.shrinkToFit = function (extentPoint) {
-    var scale,
-        fittedExtentPoint,
-        fittedCanvas,
-        ctx;
     if (extentPoint.x < this.width() || (extentPoint.y < this.height())) {
-        scale = Math.min(
-            (extentPoint.x / this.width()),
-            (extentPoint.y / this.height())
-        );
-        fittedExtentPoint = new Point(this.width() * scale, this.height() * scale);
-        fittedCanvas = newCanvas(fittedExtentPoint, true);
-        ctx = fittedCanvas.getContext('2d');
-        ctx.save();
-        ctx.scale(scale, scale);
-        ctx.drawImage(
-            this.contents,
-            0,
-            0
-        );
-        ctx.restore();
-        this.contents = fittedCanvas;
+        this.contents = this.thumbnail(extentPoint, null, true);
     }
 };
 
-Costume.prototype.thumbnail = function (extentPoint, recycleMe) {
+Costume.prototype.thumbnail = function (extentPoint, recycleMe, noPadding) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
     // a "recycleMe canvas can be passed for re-use
+    // if "noPadding" is "true" the resulting thumbnail fits inside the
+    // given extentPoint without padding it, i.e. one of the dimensions
+    // is likely to be lesser than that of the extentPoint
     var src = this.contents, // at this time sprites aren't composite morphs
-        scale, xOffset, yOffset,
-        trg = newCanvas(extentPoint, true, recycleMe), // non-retina
-        ctx = trg.getContext('2d');
+        scale = Math.min(
+            (extentPoint.x / src.width),
+            (extentPoint.y / src.height)
+        ),
+        xOffset = noPadding ? 0 : (extentPoint.x - (src.width * scale)) / 2,
+        yOffset = noPadding ? 0 : (extentPoint.y - (src.height * scale)) / 2,
+        trg, ctx;
 
     if (!src || src.width + src.height === 0) {return trg; }
 
-    scale = Math.min(
-        (extentPoint.x / src.width),
-        (extentPoint.y / src.height)
+    trg = newCanvas(
+        noPadding ? new Point(this.width() * scale, this.height() * scale)
+            : extentPoint,
+        true, // non-retina
+        recycleMe
     );
-    xOffset = (extentPoint.x - (src.width * scale)) / 2;
-    yOffset = (extentPoint.y - (src.height * scale)) / 2;
-
+    ctx = trg.getContext('2d');
     ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
