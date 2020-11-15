@@ -3399,7 +3399,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             not: 'reportNot'
         };
         monads = ['abs', 'neg', 'ceiling', 'floor', 'sqrt', 'sin', 'cos',
-            'tan', 'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+            'tan', 'asin', 'acos', 'atan', 'ln', 'log', 'lg', 'id', 'round',
+            'not'];
         alias = {
             ceil: 'ceiling',
             '!' : 'not',
