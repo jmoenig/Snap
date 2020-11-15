@@ -3346,6 +3346,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             case '*':
             case '/':
             case '%':
+            case '^':
             case '=':
             case '<':
             case '>':
