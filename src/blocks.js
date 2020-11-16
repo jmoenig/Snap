@@ -1582,6 +1582,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%upvar':
             part = new TemplateSlotMorph('\u2191'); // up-arrow
             break;
+        case '%myUpvar':
+            part = new MultiArgMorph('%upvar', null, 0, spec);
+            break;
         case '%f':
             part = new FunctionSlotMorph();
             break;
@@ -11547,6 +11550,10 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow = arrows.children[1],
         inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
+
+    rightArrow.setPosition(leftArrow.topCenter());
+    arrows.bounds.corner = rightArrow.bottomRight().copy();
+
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
@@ -11556,18 +11563,20 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             arrows.position().subtract(new Point(dim.x, 0))
         );
         arrows.setExtent(dim);
-    } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
-        rightArrow.hide();
-        arrows.setExtent(dim);
     } else {
+        leftArrow.show();
         if (label) {
             label.show();
         }
-        leftArrow.show();
-        rightArrow.show();
-        rightArrow.setPosition(leftArrow.topCenter());
-        arrows.bounds.corner = rightArrow.bottomRight().copy();
     }
+    if ((this.is3ArgRingInHOF() && inpCount > 2) ||
+        (this.elementSpec == '%myUpvar' && inpCount > 0)) { // hide right arrow
+        rightArrow.hide();
+        arrows.setExtent(dim);
+    } else {
+        rightArrow.show();
+    }
+
     arrows.rerender();
 };
 
@@ -11625,6 +11634,14 @@ MultiArgMorph.prototype.addInput = function (contents) {
         } else {
             newPart.setContents('#' + idx);
         }
+    } else if (this.elementSpec === '%myUpvar' &&
+                idx < 2 &&
+                this.myUpvarParentSelector()) {
+        if (this.myUpvarParentSelector() === 'receiveMessage') {
+            newPart.setContents('\u2709'); // envelope
+        } else if (this.myUpvarParentSelector() === 'receiveKey') {
+            newPart.setContents('\u2328'); // keyboard
+        }
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
@@ -11672,6 +11689,13 @@ MultiArgMorph.prototype.is3ArgRingInHOF = function () {
                     block.selector
                 );
         }
+    }
+    return false;
+};
+
+MultiArgMorph.prototype.myUpvarParentSelector = function () {
+    if (this.parent && this.parent.selector) {
+             return this.parent.selector;
     }
     return false;
 };
