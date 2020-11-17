@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.3.3
 * **Notable Changes:**
     * added type assertion for numerical value in CHANGE VARIABLE BY NUM block, thanks, Eckart, for the suggestion
 * **Notable Fixes:**
@@ -15,6 +16,7 @@
 * blocks, objects: refactored and unified default values for block templates
 * Spanish translation update, thanks, Joan!
 * gui, objects: fixed #2715 - reposition sprite after "editRotationPointOnly"
+* prepared patch
 
 ### 2020-11-15
 * new dev version
