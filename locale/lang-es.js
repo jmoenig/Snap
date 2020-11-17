@@ -185,7 +185,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
-        '2019-06-25', // this, too, will appear in the Translators tab
+        '2020-11-17', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1081,7 +1081,7 @@ SnapTranslator.dict.es = {
     '%l contains %s':
         '\u00BF %l contiene %s ?',
     'is %l empty?':
-        '%l vacía?',
+        '¿%l vacía?',
     'map %repRing over %l':
         'mapear %repRing sobre %l',
     'keep items %predRing from %l':
@@ -2703,4 +2703,160 @@ SnapTranslator.dict.es = {
         'pero se ha encontrado',
     '(temporary)':
         '(temporal)',
+    'random':
+        'aleatorio',
+    'random position':
+        'cualquier posición',
+    'center':
+        'centro',
+    'width':
+        'ancho',
+    'height':
+        'alto',
+    '%img of costume %cst':
+        '%img del disfraz %cst',
+    'stretch %cst x: %n y: %n %':
+        'estira %cst a x: %n y: %n %',
+    'current':
+        'actual',
+    'new costume %l width %dim height %dim':
+        'nuevo disfraz %l con ancho %dim y alto %dim',
+    '%eff effect':
+        'efecto %eff',
+    'shown?':
+        '¿visible?',
+    'go to %layer layer':
+        'enviar a la capa %layer',
+    'back':
+        'trasera',
+    'front':
+        'delantera',
+    'play sound %snd at %rate Hz':
+        'reproducir sonido %snd a %rate Hz',
+    '%aa of sound %snd':
+        '%aa del sonido %snd',
+    'duration':
+        'duración',
+    'length':
+        'longitud',
+    'number of channels':
+        'número de canales',
+    'sample rate':
+        'frecuencia de muestreo',
+    'samples':
+        'muestras',
+    'new sound %l rate %rate Hz':
+        'nuevo sonido %l a %rate Hz',
+    'change volume by %n':
+        'cambiar volumen en %n',
+    'set volume to %n %':
+        'fijar volumen a %n %',
+    'change balance by %n':
+        'cambiar balance en %n',
+    'set balance to %n':
+        'fijar balance a %n',
+    'balance':
+        'balance',
+    'volume':
+        'volumen',
+    'play frequency %n Hz':
+        'reproducir frecuencia %n Hz',
+    'stop frequency':
+        'parar la freqüència',
+    'pen down?':
+        '¿lápiz bajado?',
+    'hue':
+        'tonalidad',
+    'change pen %hsva by %n':
+        'cambiar %hsva del lápiz en %n',
+    'set pen %hsva to %n':
+        'fixar %hsva de %hsva a %n',
+    'write %s size %n':
+        'escribir %s con tamaño %n',
+    'paste on %spr':
+        'estampa sobre %spr',
+    'cut from %':
+        'copia desde',
+    'cut from %spr':
+        'recorta desde %spr',
+    'send %msg to %spr':
+        'enviar %msg a %spr',
+    'stopped':
+        'paren',
+    'sprites':
+        'objetos',
+    'top':
+        'superior',
+    'bottom':
+        'inferior',
+    'left':
+        'izquierda',
+    'right':
+        'derecha',
+    'draggable?':
+        '¿arrastrable?',
+    'rotation style':
+        'estilo de rotación',
+//mico
+    'microphone %audio':
+        '%audio del micro',
+    'volume':
+        'volumen',
+    'note':
+        'nota',
+    'pitch':
+        'tono',
+    'signals':
+        'señales',
+    'frequencies':
+        'frecuencias',
+    'bins':
+        'resolución',
+    'Microphone resolution...':
+        'Resolución del micro...',
+    'low':
+        'baja',
+    'normal':
+        'normal',
+    'high':
+        'alta',
+    'max':
+        'máxima',
+//
+    'video %vid on %self':
+        '%vid del vídeo en %self',
+    'motion':
+        'movimiento',
+    'snap':
+        'instantánea',
+    'set video transparency to %n':
+        'fijar la transparencia del vídeo a %n',
+    'video capture':
+        'captura de vídeo',
+    'mirror video':
+        'espejo sobre el vídeo',
+    'is %setting on?':
+        '¿parámetro %setting activo?',
+    'set %setting to %b':
+        'fijar el parámetro %setting a %b',
+    'turbo mode':
+        'modo turbo',
+    'flat line ends':
+        'punta de lápiz plana',
+    'index of %s in %l':
+        'índice de %s en %l',
+    'find first item %predRing in %l':
+        'primer elemento donde %predRing en %l',
+    'value':
+        'valor',
+    'index':
+        'índice',
+    'append %lists':
+        'anexar %lists',
+    'pen vectors':
+        'vectores dibujados',
+    'Log pen vectors':
+        'Registrar los dibujos como vectores',
+    'log pen vectors':
+        'registrar los dibujos como vectores'
 };
