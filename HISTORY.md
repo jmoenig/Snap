@@ -7,12 +7,14 @@
 * **Notable Fixes:**
     * fixed a costume fitting issue, thanks, Joan!
     * fixed keyboard formula input for "power of", "neg", "lg" and "id"
+    * fixed repositioning sprite after "editRotationPointOnly"
 * **Translation Updates:**
     * Spanish, thanks, Joan!
 
 ### 2020-11-1/
 * blocks, objects: refactored and unified default values for block templates
 * Spanish translation update, thanks, Joan!
+* gui, objects: fixed #2715 - reposition sprite after "editRotationPointOnly"
 
 ### 2020-11-15
 * new dev version

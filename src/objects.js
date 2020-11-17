@@ -9854,14 +9854,17 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     );
 };
 
-Costume.prototype.editRotationPointOnly = function (aWorld) {
+Costume.prototype.editRotationPointOnly = function (aWorld, anIDE) {
     var editor = new CostumeEditorMorph(this),
         action,
         dialog,
         txt;
 
     editor.fixLayout();
-    action = () => editor.accept();
+    action = () => {
+        editor.accept();
+        anIDE.currentSprite.wearCostume(this, true); // don't shadow
+    };
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
         localize('click or drag crosshairs to move the rotation center'),

@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-November-15';
+modules.gui = '2020-November-17';
 
 // Declarations
 
@@ -8756,7 +8756,7 @@ CostumeIconMorph.prototype.editCostume = function () {
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    this.object.editRotationPointOnly(this.world());
+    this.object.editRotationPointOnly(this.world(), ide);
     ide.hasChangedMedia = true;
 };
 
