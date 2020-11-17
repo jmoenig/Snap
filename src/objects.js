@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-15';
+modules.objects = '2020-November-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -209,7 +209,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point in direction %dir'
+            spec: 'point in direction %dir',
+            defaults: [90]
         },
         doFaceTowards: {
             only: SpriteMorph,
@@ -357,18 +358,19 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'change %eff effect by %n',
-            defaults: [null, 25]
+            defaults: [['ghost'], 25]
         },
         setEffect: {
             type: 'command',
             category: 'looks',
             spec: 'set %eff effect to %n',
-            defaults: [null, 0]
+            defaults: [['ghost'], 0]
         },
         getEffect: {
             type: 'reporter',
             category: 'looks',
-            spec: '%eff effect'
+            spec: '%eff effect',
+            defaults: [['ghost']]
         },
         clearEffects: {
             type: 'command',
@@ -715,7 +717,8 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed'
+            spec: 'when %keyHat key pressed',
+            defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
@@ -804,7 +807,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doStopThis: {
             type: 'command',
             category: 'control',
-            spec: 'stop %stopChoices'
+            spec: 'stop %stopChoices',
+            defaults: [['all']]
         },
         doRun: {
             type: 'command',
@@ -965,7 +969,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'key %key pressed?'
+            spec: 'key %key pressed?',
+            defaults: [['space']]
         },
         reportRelationTo: {
             only: SpriteMorph,
@@ -1023,7 +1028,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportDate: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'current %dates'
+            spec: 'current %dates',
+            defaults: [['date']]
         },
         reportGet: {
             type: 'reporter',
@@ -1088,7 +1094,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: '%fun of %n',
-            defaults: [null, 10]
+            defaults: [['sqrt'], 10]
         },
         reportPower: {
             type: 'reporter',
@@ -1183,7 +1189,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: 'is %s a %typ ?',
-            defaults: [5]
+            defaults: [5, ['number']]
         },
         reportIsIdentical: {
             type: 'predicate',
@@ -1213,7 +1219,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: '%txtfun of %s',
-            defaults: [null, "Abelson & Sussman"]
+            defaults: [['encode URI'], "Abelson & Sussman"]
         },
         reportCompiled: { // experimental
             type: 'reporter',
@@ -1406,7 +1412,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doMapCodeOrHeader: {
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to %codeKind %code'
+            spec: 'map %cmdRing to %codeKind %code',
+            defaults: [null, ['code']]
         },
         doMapValueCode: {
             type: 'command',

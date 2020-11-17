@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-November-02';
+modules.blocks = '2020-November-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -840,7 +840,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['pen trails']);
             break;
         case '%inputs':
             part = new MultiArgMorph('%s', 'with inputs');
@@ -960,7 +959,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'random' : ['random']
                 }
             );
-            part.setContents(90);
             break;
         case '%note':
             part = new InputSlotMorph(
@@ -981,7 +979,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     '(4) triangle' : 4
                 }
             );
-            part.setContents(1);
             break;
         case '%audio':
             part = new InputSlotMorph(
@@ -1031,7 +1028,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     '96 kHz' : 96000
                 }
             );
-            part.setContents(1);
             break;
         case '%interaction':
             part = new InputSlotMorph(
@@ -1067,7 +1063,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true // read-only
             );
-            part.setContents(['date']);
             break;
         case '%delim':
             part = new InputSlotMorph(
@@ -1100,7 +1095,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     all : ['all']
                 }
             );
-            part.setContents(1);
             break;
         case '%idx':
             part = new InputSlotMorph(
@@ -1112,7 +1106,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     any : ['any']
                 }
             );
-            part.setContents(1);
             break;
         case '%dim':
             part = new InputSlotMorph(
@@ -1122,7 +1115,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     current : ['current']
                 }
             );
-            // part.setContents( ['current']);
             break;
         case '%rel':
             part = new InputSlotMorph(
@@ -1220,7 +1212,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['ghost']);
             break;
         case '%snd':
             part = new InputSlotMorph(
@@ -1282,7 +1273,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['space']);
             break;
         case '%keyHat':
             part = this.labelPart('%key');
@@ -1340,7 +1330,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['sqrt']);
             break;
         case '%layer':
             part = new InputSlotMorph(
@@ -1352,7 +1341,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['front']);
             break;
         case '%hsva':
             part = new InputSlotMorph(
@@ -1366,7 +1354,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['hue']);
             break;
         case '%pen':
             part = new InputSlotMorph(
@@ -1381,7 +1368,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['hue']);
             break;
         case '%asp': // aspect
             part = new InputSlotMorph(
@@ -1398,7 +1384,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['hue']);
             break;
         case '%txtfun':
             part = new InputSlotMorph(
@@ -1415,7 +1400,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['encode URI']);
             break;
         case '%stopChoices':
             part = new InputSlotMorph(
@@ -1430,7 +1414,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['all']);
             part.isStatic = true;
             break;
         case '%setting':
@@ -1446,7 +1429,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['turbo mode']);
             part.isStatic = true;
             break;
         case '%typ':
@@ -1456,7 +1438,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'typesMenu',
                 true
             );
-            part.setContents(['number']);
             break;
         case '%mapValue':
             part = new InputSlotMorph(
@@ -1470,7 +1451,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['String']);
             part.isStatic = true;
             break;
         case '%var':
@@ -1501,7 +1481,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
-            part.setContents(['code']);
             break;
         case '%l':
             part = new ArgMorph('list');
@@ -1722,7 +1701,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true // read-only
             );
-            part.setContents(['motion']);
             break;
         case '%on':
             part = new InputSlotMorph(

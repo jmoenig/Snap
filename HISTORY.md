@@ -8,6 +8,9 @@
     * fixed a costume fitting issue, thanks, Joan!
     * fixed keyboard formula input for "power of", "neg", "lg" and "id"
 
+### 2020-11-1/
+* blocks, objects: refactored and unified default values for block templates
+
 ### 2020-11-15
 * new dev version
 * objects: fixed costume fitting, thanks, Joan!
