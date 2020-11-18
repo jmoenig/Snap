@@ -213,6 +213,18 @@ modules.api = '2020-October-20';
     global variables
 */
 
+window.onmessage = function (event) {
+    // make the API accessible from outside an iframe
+    var ide = world.children[0];
+    window.top.postMessage(
+        {
+            selector: event.data.selector,
+            response: ide[event.data.selector].apply(ide, event.data.params)
+        },
+        '*'
+    );
+};
+
 IDE_Morph.prototype.broadcast = function(message, callback) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,

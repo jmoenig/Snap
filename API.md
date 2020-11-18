@@ -62,6 +62,34 @@ In such a set up the ide can be accessed through the ```contentWindow``` propert
 
     var ide = document.getElementsByTagName("iframe")[0].contentWindow.world.children[0];
 
+### Cross-domain iframes
+
+If the iframe and the container do not share domains, you won't be able to reach the world
+and, thus, the API. For that particular case, you should use the `postMessage` mechanism,
+as follows:
+
+    document.querySelector('iframe').postMessage(
+        { selector: <API selector>, params: <param array> },
+        '*'
+    );
+
+For instance, to get the value of a variable named "foo", you would do:
+
+    document.querySelector('iframe').postMessage(
+        { selector: 'getVar', params: [ 'foo' ] },
+        '*'
+    );
+
+The way to capture the return values of these messages from the page containing the iframe
+is to define an `onmessage` listener:
+
+    winndow.addEventListener('message',function(e) {
+        console.log('the response to', e.data.selector, 'is', e.data.response);
+    },false);
+
+Note that `e.data.selector` carries the original selector back, so you can tie it to the
+request, while `e.data.response` carries the return value of the API method call.
+
 ## Interacting with the IDE
 
 ### IDE_Morph.prototype.broadcast()
