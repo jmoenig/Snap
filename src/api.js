@@ -200,11 +200,11 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List*/
+/*global modules, IDE_Morph, isString, Map, List, world*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-October-20';
+modules.api = '2020-November-18';
 
 // IDE_Morph external communication API - experimental
 /*

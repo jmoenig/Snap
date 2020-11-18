@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, October 20, 2020
+Jens Mönig, Bernat Romagosa, November 18, 2020
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 

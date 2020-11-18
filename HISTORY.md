@@ -2,6 +2,10 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * added "postMessage" mechanism to the api for communicating with Snap! inside an iFrame, thanks, Bernat!
+* **Documentation Updates:**
+    * API update for "postMessage", thanks, Bernat!
 * **Notable Fixes:**
     * fixed updating cells showing sprites or costumes inside list watchers
     * fixed a project loading bug (for watchers showing costumes)
