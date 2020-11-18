@@ -9909,11 +9909,11 @@ Costume.prototype.thumbnail = function (extentPoint, recycleMe, noPadding) {
             (extentPoint.x / src.width),
             (extentPoint.y / src.height)
         ),
-        xOffset = noPadding ? 0 : (extentPoint.x - (src.width * scale)) / 2,
-        yOffset = noPadding ? 0 : (extentPoint.y - (src.height * scale)) / 2,
+        xOffset = noPadding ? 0
+            : Math.floor((extentPoint.x - (src.width * scale)) / 2),
+        yOffset = noPadding ? 0
+            : Math.floor((extentPoint.y - (src.height * scale)) / 2),
         trg, ctx;
-
-    if (!src || src.width + src.height === 0) {return trg; }
 
     trg = newCanvas(
         noPadding ? new Point(this.width() * scale, this.height() * scale)
@@ -9921,6 +9921,7 @@ Costume.prototype.thumbnail = function (extentPoint, recycleMe, noPadding) {
         true, // non-retina
         recycleMe
     );
+    if (!src || src.width + src.height === 0) {return trg; }
     ctx = trg.getContext('2d');
     ctx.save();
     ctx.scale(scale, scale);

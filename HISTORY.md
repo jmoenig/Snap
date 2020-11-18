@@ -4,10 +4,12 @@
 
 * **Notable Fixes:**
     * fixed updating cells showing sprites or costumes inside list watchers
+    * fixed a project loading bug (for watchers showing costumes)
 
 ### 2020-11-18
 * new dev version
 * objects: fixed updating cells showing sprites or costumes inside list watchers
+* objects: fixed a project loading bug (for watchers showing costumes)
 
 ## 6.3.3
 * **Notable Changes:**
