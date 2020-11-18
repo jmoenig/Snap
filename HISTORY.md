@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-18
+* new dev version
+
 ## 6.3.3
 * **Notable Changes:**
     * added type assertion for numerical value in CHANGE VARIABLE BY NUM block, thanks, Eckart, for the suggestion
