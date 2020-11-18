@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-17';
+modules.objects = '2020-November-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -10966,6 +10966,7 @@ CellMorph.prototype.update = function () {
         return;
     }
     if (this.version !== this.contents.version) {
+        this.fixLayout();
         this.rerender();
         this.version = this.contents.version;
     }
