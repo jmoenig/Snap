@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed stretching SVG costumes with fixed aspect ratios in Firefox
+
 ### 2020-11-19
 * new dev version
+* objects: rasterize SVGs internally before stretching them, so it all works on Firefox
 
 ## 6.3.5
 * **Notable Fixes:**

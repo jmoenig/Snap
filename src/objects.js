@@ -9813,7 +9813,9 @@ Costume.prototype.stretched = function (w, h) {
 
     ctx.translate(Math.abs(Math.min(w, 0)), Math.abs(Math.min(h, 0)));
     ctx.scale(xRatio, yRatio);
-    ctx.drawImage(this.contents, 0, 0);
+    // first rasterize in case it's an SVG and in case it's on Firefox
+    // because Firefox prevents stretching of SVGs with locked aspect ratios
+    ctx.drawImage(this.rasterized().contents, 0, 0);
     stretched = new Costume(
         canvas,
         this.name,
