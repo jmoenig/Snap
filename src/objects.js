@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-18';
+modules.objects = '2020-November-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -8940,7 +8940,8 @@ StageMorph.prototype.trailsLogAsSVG = function () {
         p2 = this.normalizePoint(line[1]).translateBy(shift);
         svg += '<line x1="' + p1.x + '" y1="' + p1.y +
             '" x2="' + p2.x + '" y2="' + p2.y + '" ' +
-            'style="stroke:' + line[2].toString() + ';' +
+            'style="stroke:' + line[2].toRGBstring() + ';' +
+            'stroke-opacity:' + line[2].a + ';' +
             'stroke-width:' + line[3] +
             ';stroke-linecap:' + line[4] +
             '" />';

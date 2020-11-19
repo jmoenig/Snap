@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * support exported SVGs to be edited by Inkscape (sigh)
+
 ### 2020-11-19
 * new dev version
+* objects: tweaked exported SVG's color alpha part as stroke-opacity so Inkscape can handle them, sigh.
 
 ## 6.3.4
 * **Notable Changes:**
