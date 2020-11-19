@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-19
+* new dev version
+
 ## 6.3.4
 * **Notable Changes:**
     * added "postMessage" mechanism to the api for communicating with Snap! inside an iFrame, thanks, Bernat!
