@@ -133,6 +133,9 @@ SpriteMorph.prototype.initBlocks = function () {
         spec: 'username'
     };
 
+    if (NetsBloxExtensions) {
+        NetsBloxExtensions.initBlocks();
+    }
 };
 SpriteMorph.prototype.initBlocks();
 

@@ -152,6 +152,7 @@ SymbolMorph.prototype.names = [
     'jumpForward',
     'jumpBackward',
     'stepBackward',
+    'puzzlePiece',
 ];
 
 // SymbolMorph instance creation:
@@ -501,6 +502,10 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'stepBackward':
         this.renderSymbolStepBackward(ctx, aColor);
         break;
+    case 'puzzlePiece':
+        this.renderSymbolPuzzlePiece(ctx, aColor);
+        break;
+
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
@@ -2483,6 +2488,30 @@ SymbolMorph.prototype.renderSymbolStepBackward = function (ctx, color) {
     );
 };
 
+SymbolMorph.prototype.renderSymbolPuzzlePiece = function (ctx, color) {
+    const width = this.symbolWidth();
+    const height = this.size;
+    const cornerRadius = width/8;
+    const slotRadius = Math.min(width, height) / 6;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    const rHSVertical = width-slotRadius;
+    const topSlotX = (width - slotRadius)/2;
+    const sideSlotY = (height - slotRadius)/2 + slotRadius;
+
+    ctx.arc(cornerRadius, cornerRadius + slotRadius, cornerRadius, Math.PI, 3/2*Math.PI);
+    ctx.arc(topSlotX, slotRadius, slotRadius, Math.PI, 0);
+    ctx.arc(rHSVertical-cornerRadius, slotRadius+cornerRadius, cornerRadius, 3/2*Math.PI, 0);
+    ctx.arc(rHSVertical, sideSlotY, slotRadius, 3/2*Math.PI, 1/2*Math.PI);
+    ctx.arc(rHSVertical-cornerRadius, height-cornerRadius, cornerRadius, 0, 1/2*Math.PI);
+    ctx.arc(topSlotX, height, slotRadius, 0, Math.PI, true);
+    ctx.arc(cornerRadius, height-cornerRadius, cornerRadius, 1/2*Math.PI, Math.PI);
+    ctx.arc(0, sideSlotY, slotRadius, 1/2*Math.PI, 3*Math.PI/2, true);
+
+    ctx.closePath();
+    ctx.fill();
+};
 
 /*
 // register examples with the World demo menu

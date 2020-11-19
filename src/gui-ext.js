@@ -431,6 +431,35 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
     window.addEventListener('message', receiveMessage, false);
 };
 
+IDE_Morph.prototype.extensionsMenu = function() {
+    const dict = {};
+
+    this.extensions.registry
+        .filter(ext => ext.getMenu())
+        .forEach(ext => {
+            const name = ext.name || ext.constructor.name;
+            dict[name] = ext.getMenu();
+        });
+
+    const menuFromDict = dict => {
+        const menu = new MenuMorph(this);
+        Object.entries(dict).forEach(entry => {
+            const [label, contents] = entry;
+            if (typeof contents === 'object') {
+                const submenu = menuFromDict(contents);
+                menu.addMenu(label, submenu);
+            } else if (label === '~') {
+                menu.addLine();
+            } else {
+                menu.addItem(label, contents);
+            }
+        });
+        return menu;
+    };
+
+    return menuFromDict(dict);
+};
+
 // LibraryDialogSources ///////////////////////////////////////////
 
 LibraryDialogSource.prototype = Object.create(SaveOpenDialogMorphSource.prototype);
