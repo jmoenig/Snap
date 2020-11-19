@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-19
+* new dev version
+
 ## 6.3.5
 * **Notable Fixes:**
     * support exported SVGs to be edited in Inkscape
