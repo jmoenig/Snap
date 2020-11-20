@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * changed determining "neighbors" from rectangular to circular perimeter
 * **Notable Fixes:**
     * fixed stretching SVG costumes with fixed aspect ratios in Firefox
     * only report neighbors that are visible
@@ -13,6 +15,7 @@
 * threads: only report neighbors that are visible, thanks Frederic, for reporting this bug!
 * Italian translation update, thanks, Stefano!
 * Spanish translation update, thanks, Joan!
+* threads, objects: changed determining "neighbors" from rectangular to circular perimeter
 
 ### 2020-11-19
 * new dev version

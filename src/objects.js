@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-19';
+modules.objects = '2020-November-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -4385,6 +4385,47 @@ SpriteMorph.prototype.overlappingPixels = function (otherSprite) {
             oRect.height()
         ).data
     ];
+};
+
+// SpriteMorph neighbor detection
+
+SpriteMorph.prototype.neighbors = function (aStage) {
+    var stage = aStage || this.parentThatIsA(StageMorph),
+        myPerimeter = this.perimeter(stage);
+    return new List(
+        stage.children.filter(each => {
+            var eachPerimeter,
+                distance;
+            if (each instanceof SpriteMorph &&
+                each.isVisible &&
+                (each !== this)
+            ) {
+                eachPerimeter = each.perimeter(stage);
+                distance = myPerimeter.center.distanceTo(eachPerimeter.center);
+                return (distance - myPerimeter.radius - eachPerimeter.radius)
+                    < 0;
+            }
+            return false;
+        })
+    );
+};
+
+SpriteMorph.prototype.perimeter = function (aStage) {
+    var stage = aStage || this.parentThatIsA(StageMorph),
+        stageScale = this instanceof StageMorph ? 1 : stage.scale,
+        radius;
+    if (this.costume) {
+        radius = Math.max(
+            this.costume.width(),
+            this.costume.height()
+        ) * this.scale * stageScale;
+    } else {
+        radius = Math.max(this.width(), this.height());
+    }
+    return {
+        center: this.center(), // geometric center rather than position
+        radius: radius * 1.5
+    };
 };
 
 // SpriteMorph pen ops
@@ -9044,16 +9085,16 @@ StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 
+// StageMorph neighbor detection
+
+StageMorph.prototype.neighbors = SpriteMorph.prototype.neighbors;
+StageMorph.prototype.perimeter = SpriteMorph.prototype.perimeter;
+
 // StageMorph block rendering
 
-StageMorph.prototype.doScreenshot
-    = SpriteMorph.prototype.doScreenshot;
-
-StageMorph.prototype.newCostumeName
-    = SpriteMorph.prototype.newCostumeName;
-
-StageMorph.prototype.blockForSelector
-    = SpriteMorph.prototype.blockForSelector;
+StageMorph.prototype.doScreenshot = SpriteMorph.prototype.doScreenshot;
+StageMorph.prototype.newCostumeName = SpriteMorph.prototype.newCostumeName;
+StageMorph.prototype.blockForSelector = SpriteMorph.prototype.blockForSelector;
 
 // StageMorph variable watchers (for palette checkbox toggling)
 

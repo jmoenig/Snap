@@ -4856,7 +4856,6 @@ Process.prototype.reportGet = function (query) {
     // answer a reference to a first-class member
     // or a list of first-class members
     var thisObj = this.blockReceiver(),
-        neighborhood,
         stage,
         objName;
 
@@ -4896,6 +4895,9 @@ Process.prototype.reportGet = function (query) {
             return thisObj.isTemporary ?
                     this.reportGet(['clones']) : new List();
         case 'neighbors':
+            // old rectangular, bounding-box-based algorithm
+            // deprecated in favor of a circular perimeter based newer one
+            /*
             stage = thisObj.parentThatIsA(StageMorph);
             neighborhood = thisObj.bounds.expandBy(new Point(
                 thisObj.width(),
@@ -4909,6 +4911,8 @@ Process.prototype.reportGet = function (query) {
                         each.bounds.intersects(neighborhood)
                 )
             );
+            */
+            return thisObj.neighbors();
         case 'dangling?':
             return !thisObj.rotatesWithAnchor;
         case 'draggable?':
