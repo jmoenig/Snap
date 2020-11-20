@@ -9285,7 +9285,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
     dict['new...'] = () =>
         new DialogBoxMorph(
             this,
-            this.setContents,
+            this.updateFieldValue,
             this
         ).prompt(
             'Message name',
@@ -9315,7 +9315,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     dict['new...'] = () =>
         new DialogBoxMorph(
             this,
-            this.setContents,
+            this.updateFieldValue,
             this
         ).prompt(
             'Message name',
