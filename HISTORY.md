@@ -16,6 +16,7 @@
 * Italian translation update, thanks, Stefano!
 * Spanish translation update, thanks, Joan!
 * threads, objects: changed determining "neighbors" from rectangular to circular perimeter
+* prepared patch
 
 ### 2020-11-19
 * new dev version

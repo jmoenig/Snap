@@ -4424,7 +4424,7 @@ SpriteMorph.prototype.perimeter = function (aStage) {
     }
     return {
         center: this.center(), // geometric center rather than position
-        radius: radius * 1.5
+        radius: radius
     };
 };
 
