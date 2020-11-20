@@ -5,6 +5,7 @@
 * **Notable Changes:**
     * changed determining "neighbors" from rectangular to circular perimeter
 * **Notable Fixes:**
+    * fixed a loading bug for projects with watchers on SVG costumes
     * fixed stretching SVG costumes with fixed aspect ratios in Firefox
     * only report neighbors that are visible
 * **Translation Updates:**
@@ -16,6 +17,7 @@
 * Italian translation update, thanks, Stefano!
 * Spanish translation update, thanks, Joan!
 * threads, objects: changed determining "neighbors" from rectangular to circular perimeter
+* objects: fixed a loading bug for projects with watchers on SVG costumes
 * prepared patch
 
 ### 2020-11-19

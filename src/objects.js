@@ -9948,15 +9948,17 @@ Costume.prototype.thumbnail = function (extentPoint, recycleMe, noPadding) {
     // if "noPadding" is "true" the resulting thumbnail fits inside the
     // given extentPoint without padding it, i.e. one of the dimensions
     // is likely to be lesser than that of the extentPoint
-    var src = this.contents, // at this time sprites aren't composite morphs
+    var src = this.contents,
+        w = src ? src.width : 1, // could be an asynchronously loading SVG
+        h = src ? src.height : 1, // could be an asynchronously loading SVG
         scale = Math.min(
-            (extentPoint.x / src.width),
-            (extentPoint.y / src.height)
+            (extentPoint.x / w),
+            (extentPoint.y / h)
         ),
         xOffset = noPadding ? 0
-            : Math.floor((extentPoint.x - (src.width * scale)) / 2),
+            : Math.floor((extentPoint.x - (w * scale)) / 2),
         yOffset = noPadding ? 0
-            : Math.floor((extentPoint.y - (src.height * scale)) / 2),
+            : Math.floor((extentPoint.y - (h * scale)) / 2),
         trg, ctx;
 
     trg = newCanvas(
