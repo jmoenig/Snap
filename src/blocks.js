@@ -4026,7 +4026,7 @@ BlockMorph.prototype.doRefactorBlockParameter = function (
         scripts = editor.body.contents;
 
     if (definer.anyChild(any =>
-            any.blockSpec === newName
+        any.blockSpec === newName
     )) {
         this.varExistsError(editor.target.parentThatIsA(IDE_Morph));
         return;
@@ -6145,6 +6145,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         return this.parent.mouseClickLeft();
     }
     if (this.parent instanceof TemplateSlotMorph) {
+        const block = this.parent.parent.parent;
         if (this.parent.parent && this.parent.parent.parent &&
                 this.parent.parent.parent instanceof RingMorph) {
             label = "Input name";
@@ -6156,7 +6157,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         new DialogBoxMorph(
             this,
             function(spec) {
-                if (this.id) {
+                if (block.id) {
                     SnapActions.setBlockSpec(this, spec);
                 } else {
                     this.userSetSpec(spec);
