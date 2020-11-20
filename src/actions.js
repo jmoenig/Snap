@@ -1668,7 +1668,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             targetBlock;
 
         if (block.parent) {
-            if (target.loc === 'bottom') {
+            if (target.loc === 'bottom' || target.loc === 'wrap') {
                 this.disconnectBlock(block, scripts);
             } else if (target.loc === 'top' && !(block.parent instanceof ScriptsMorph)) {
                 this.disconnectBlock(block, scripts);

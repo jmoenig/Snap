@@ -534,7 +534,7 @@ describe('blocks', function() {
     });
 
     describe('moveBlock', function() {
-        before(() => driver.reset());
+        beforeEach(() => driver.reset());
 
         it('should not create infinite loop on undo', function() {
             // Create three blocks (1, 2, 3)
@@ -590,6 +590,35 @@ describe('blocks', function() {
             const msg = 'Blocks should be in correct order after undo';
             expect(topBlock.nextBlock()).toBe(middleBlock, msg);
             expect(middleBlock.nextBlock()).toBe(bottomBlock, msg);
+        });
+
+        it('should disconnect when moving cBlock to wrap', async () => {
+            const {ScriptsMorph,copy} = driver.globals();
+            const point = new Point(300, 300);
+            const topBlock = await driver.addBlock('forward', point);
+            const cBlock = await driver.addBlock('doIf', point);
+            const otherBlock = await driver.addBlock('turn', point.add(50));
+
+            const topBlockTarget = {
+                element: topBlock,
+                point: topBlock.bottomAttachPoint(),
+                loc: 'bottom'
+            };
+            await SnapActions.moveBlock(cBlock, copy(topBlockTarget));
+
+            const otherBlockPos = otherBlock.position();
+            const scripts = cBlock.parentThatIsA(ScriptsMorph);
+            const target = cBlock.allAttachTargets(scripts)
+                .find(tgt => tgt.element.id === otherBlock.id && tgt.loc === 'wrap');
+            await SnapActions.moveBlock(cBlock, copy(target));
+            assert(
+                !topBlock.nextBlock(),
+                'Top block should no longer have next block'
+            );
+            assert(
+                otherBlockPos.subtract(otherBlock.position()).r() < 5,
+                'Wrapped block position changed'
+            );
         });
     });
 
