@@ -7,11 +7,12 @@
     * only report neighbors that are visible
 * **Translation Updates:**
     * Italian, thanks, Stefano!
-
+    * Spanish, thanks, Joan!
 
 ### 2020-11-20
 * threads: only report neighbors that are visible, thanks Frederic, for reporting this bug!
 * Italian translation update, thanks, Stefano!
+* Spanish translation update, thanks, Joan!
 
 ### 2020-11-19
 * new dev version
