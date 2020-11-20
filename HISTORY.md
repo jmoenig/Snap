@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.3.6
 * **Notable Changes:**
     * changed determining "neighbors" from rectangular to circular perimeter
 * **Notable Fixes:**
