@@ -4552,6 +4552,12 @@ Process.prototype.reportAspect = function (aspect, location) {
     // below themselves, not their own color and not colors in sprites above
     // their own layer.
 
+    if (this.enableHyperOps) {
+        if (location instanceof List && !this.isCoordinate(location)) {
+            return location.map(each => this.reportAspect(aspect, each));
+        }
+    }
+
     var choice = this.inputOption(aspect),
         target = this.inputOption(location),
         options = ['hue', 'saturation', 'brightness', 'transparency'],

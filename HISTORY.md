@@ -6,6 +6,7 @@
     * added "loadProjectXML" method to the api
     * hyperized "atrribute OF sprite" reporter primitive in the sensing category
     * show the common attributes for sprites in the OF-dropdown by default
+    * hyperized "color/sprite AT location" reporter primitive
 * **Documentation Updates:**
     * API update for "loadProjectXML"
 
@@ -15,6 +16,7 @@
 * updated api documentation
 * threads: hyperized "atrribute OF sprite" reporter primitive
 * blocks: show the common attributes for sprites in the OF-dropdown by default
+* threads: hyperized "color/sprite AT location" reporter primitive
 
 ## 6.3.6
 * **Notable Changes:**
