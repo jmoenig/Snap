@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * added "loadProjectXML" method to the api
+
 ### 2020-11-21
 * new dev version
+* api: new loadProjectXML() method
 
 ## 6.3.6
 * **Notable Changes:**

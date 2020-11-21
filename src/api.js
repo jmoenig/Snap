@@ -61,6 +61,7 @@
         Access the Serialized Project
 
             - IDE_Morph.prototype.getProjectXML()
+            - IDE_Morph.prototype.loadProjectXML(projectXML)
 
     Getting hold of an ide can usually be achieved by
     evaluating:
@@ -204,7 +205,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-November-18';
+modules.api = '2020-November-21';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -332,4 +333,12 @@ IDE_Morph.prototype.newList = function (array) {
 
 IDE_Morph.prototype.getProjectXML = function () {
     return this.serializer.serialize(this.stage);
+};
+
+IDE_Morph.prototype.loadProjectXML = function (projectXML) {
+    // load the project encoded as xml-String, no questions asked
+    // terminate animations and scheduled ops
+    this.onNextStep = null;
+    this.world().animations = [];
+    this.openProjectString(projectXML);
 };
