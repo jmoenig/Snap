@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-21
+* new dev version
+
 ## 6.3.6
 * **Notable Changes:**
     * changed determining "neighbors" from rectangular to circular perimeter
