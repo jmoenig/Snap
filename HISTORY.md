@@ -4,6 +4,7 @@
 
 * **Notable Changes:**
     * added "loadProjectXML" method to the api
+    * hyperized "atrribute OF sprite" reporter primitive in the sensing category
 * **Documentation Updates:**
     * API update for "loadProjectXML"
 
@@ -11,6 +12,7 @@
 * new dev version
 * api: new loadProjectXML() method
 * updated api documentation
+* threads: hyperized "atrribute OF sprite" reporter primitive
 
 ## 6.3.6
 * **Notable Changes:**

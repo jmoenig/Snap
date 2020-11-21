@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-November-20';
+modules.threads = '2020-November-21';
 
 var ThreadManager;
 var Process;
@@ -4777,6 +4777,19 @@ Process.prototype.reportDirectionTo = function (name) {
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
+    // hyper-dyadic
+    // note: specifying strings in the left input only accesses
+    // sprite-local variables. Attributes such as "width", "direction" etc.
+    // can only be queried via the dropdown menu and are, therefore, not
+    // reachable as dyadic inputs
+    return this.hyperDyadic(
+        (att, obj) => this.reportBasicAttributeOf(att, obj),
+        attribute,
+        name
+    );
+};
+
+Process.prototype.reportBasicAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
         thatObj,
         stage;
