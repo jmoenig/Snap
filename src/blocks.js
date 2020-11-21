@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-November-17';
+modules.blocks = '2020-November-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9417,10 +9417,20 @@ InputSlotMorph.prototype.attributesMenu = function () {
             morph => morph.name === objName
         );
     }
-    if (!obj) {
-        return dict;
-    }
-    if (obj instanceof SpriteMorph) {
+    if (obj instanceof StageMorph) {
+        dict = {
+            'costume #' : ['costume #'],
+            'costume name' : ['costume name'],
+            'volume' : ['volume'],
+            'balance' : ['balance'],
+            'width': ['width'],
+            'height': ['height'],
+            'left' : ['left'],
+            'right' : ['right'],
+            'top' : ['top'],
+            'bottom' : ['bottom']
+        };
+    } else { // assume a sprite
         dict = {
             'x position' : ['x position'],
             'y position' : ['y position'],
@@ -9437,30 +9447,19 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'volume' : ['volume'],
             'balance' : ['balance']
         };
-    } else { // the stage
-        dict = {
-            'costume #' : ['costume #'],
-            'costume name' : ['costume name'],
-            'volume' : ['volume'],
-            'balance' : ['balance'],
-            'width': ['width'],
-            'height': ['height'],
-            'left' : ['left'],
-            'right' : ['right'],
-            'top' : ['top'],
-            'bottom' : ['bottom']
-        };
     }
-    varNames = obj.variables.names();
-    if (varNames.length > 0) {
-        dict['~'] = null;
-        varNames.forEach(name =>
-            dict[name] = name
+    if (obj) {
+        varNames = obj.variables.names();
+        if (varNames.length > 0) {
+            dict['~'] = null;
+            varNames.forEach(name =>
+                dict[name] = name
+            );
+        }
+        obj.allBlocks(true).forEach((def, i) =>
+            dict['§_def' + i] = def.blockInstance(true) // include translations
         );
     }
-    obj.allBlocks(true).forEach((def, i) =>
-        dict['§_def' + i] = def.blockInstance(true) // include translations
-    );
     return dict;
 };
 
