@@ -7,6 +7,7 @@
     * hyperized "atrribute OF sprite" reporter primitive in the sensing category
     * show the common attributes for sprites in the OF-dropdown by default
     * hyperized "color/sprite AT location" reporter primitive
+    * hyperized "VIDEO _ ON _" reporter primitive
 * **Documentation Updates:**
     * API update for "loadProjectXML"
 
@@ -17,6 +18,7 @@
 * threads: hyperized "atrribute OF sprite" reporter primitive
 * blocks: show the common attributes for sprites in the OF-dropdown by default
 * threads: hyperized "color/sprite AT location" reporter primitive
+* threads: hyperized "VIDEO _ ON _" reporter primitive
 
 ## 6.3.6
 * **Notable Changes:**

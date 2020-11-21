@@ -5272,6 +5272,15 @@ Process.prototype.doSetVideoTransparency = function(factor) {
 };
 
 Process.prototype.reportVideo = function(attribute, name) {
+    // hyper-dyadic
+    return this.hyperDyadic(
+        (att, obj) => this.reportBasicVideo(att, obj),
+        attribute,
+        name
+    );
+};
+
+Process.prototype.reportBasicVideo = function(attribute, name) {
     var thisObj = this.blockReceiver(),
         stage = thisObj.parentThatIsA(StageMorph),
         thatObj = this.getOtherObject(name, thisObj, stage);
