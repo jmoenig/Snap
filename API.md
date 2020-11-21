@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, November 18, 2020
+Jens Mönig, Bernat Romagosa, November 21, 2020
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -31,6 +31,7 @@ Currently the API consists of the following methods:
 #### Access the Serialized Project
 
 * IDE_Morph.prototype.getProjectXML()
+* IDE_Morph.prototype.loadProjectXML()
 
 ## Referencing the IDE
 
@@ -196,6 +197,21 @@ the getProjectXML() method returns a string in XML format representing the seria
 
 #### return value
 an XML String
+
+
+### IDE_Morph.prototype.loadProjectXML()
+the loadProjectXML() method replaces the current project of the IDE with another serialized one encoded in a string in XML format. Note that no user acknowledgement is required, all unsaved edits to the prior project are lost.
+
+#### syntax
+    ide.loadProjectXML(projectData);
+
+#### parameters
+* projectData
+    * XML string representing a serialized project
+    
+#### return value
+unefined
+
 
 ## Manipulating Lists
 
