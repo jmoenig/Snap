@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-November-21';
+modules.threads = '2020-November-22';
 
 var ThreadManager;
 var Process;
@@ -5273,6 +5273,17 @@ Process.prototype.doSetVideoTransparency = function(factor) {
 
 Process.prototype.reportVideo = function(attribute, name) {
     // hyper-dyadic
+    var stage = this.blockReceiver().parentThatIsA(StageMorph);
+    if (!stage.projectionSource || !stage.projectionSource.stream) {
+        // wait until video is turned on
+        if (!this.context.accumulator) {
+            this.context.accumulator = true; // started video
+            stage.startVideo();
+        }
+        this.pushContext('doYield');
+        this.pushContext();
+        return;
+    }
     return this.hyperDyadic(
         (att, obj) => this.reportBasicVideo(att, obj),
         attribute,
@@ -5284,18 +5295,6 @@ Process.prototype.reportBasicVideo = function(attribute, name) {
     var thisObj = this.blockReceiver(),
         stage = thisObj.parentThatIsA(StageMorph),
         thatObj = this.getOtherObject(name, thisObj, stage);
-
-    if (!stage.projectionSource || !stage.projectionSource.stream) {
-        // wait until video is turned on
-        if (!this.context.accumulator) {
-            this.context.accumulator = true; // started video
-            stage.startVideo();
-        }
-        this.pushContext('doYield');
-        this.pushContext();
-        return;
-    }
-
     switch (this.inputOption(attribute)) {
     case 'motion':
         if (thatObj instanceof SpriteMorph) {

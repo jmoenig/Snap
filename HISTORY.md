@@ -15,6 +15,7 @@
 
 ### 2020-11-22
 * objects: fixed display of inherited sprite-local variables
+* threads: make sure video capture is turned on before accessing it programmatically 
 
 ### 2020-11-21
 * new dev version
