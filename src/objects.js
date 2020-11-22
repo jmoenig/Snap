@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-20';
+modules.objects = '2020-November-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -6919,13 +6919,17 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 };
 
 SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
-    var data;
+    var exceptGlobals = this.globalVariables(),
+        globalNames = exceptGlobals.names(),
+        data;
 
     function alphabetically(x, y) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
- 	data = this.variables.names();
+ 	data = this.variables.allNames(exceptGlobals).filter(each =>
+		!contains(globalNames, each)
+    );
 	if (sorted) {
  		data.sort(alphabetically);
    }

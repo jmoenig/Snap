@@ -10,6 +10,11 @@
     * hyperized "VIDEO _ ON _" reporter primitive
 * **Documentation Updates:**
     * API update for "loadProjectXML"
+* **Notable Fixes:**
+    * fixed display of inherited sprite-local variables
+
+### 2020-11-22
+* objects: fixed display of inherited sprite-local variables
 
 ### 2020-11-21
 * new dev version
