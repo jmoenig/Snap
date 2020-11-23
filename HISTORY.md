@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.3.7
 * **Notable Changes:**
     * added "loadProjectXML" method to the api
     * hyperized "atrribute OF sprite" reporter primitive in the sensing category
@@ -12,6 +13,12 @@
     * API update for "loadProjectXML"
 * **Notable Fixes:**
     * fixed display of inherited sprite-local variables
+* **Translation Updates:**
+    * Greek, thanks, HM100!
+
+### 2020-11-23
+* Greek translation update, thanks, HM100!
+* prepared patch
 
 ### 2020-11-22
 * objects: fixed display of inherited sprite-local variables
