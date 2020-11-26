@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-26
+* blocks, objects: refactored input slot specs
+
 ### 2020-11-23
 * new dev version
 

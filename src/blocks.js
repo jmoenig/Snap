@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-November-21';
+modules.blocks = '2020-November-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -299,6 +299,698 @@ SyntaxElementMorph.prototype.setScale = function (num) {
 SyntaxElementMorph.prototype.setScale(1);
 SyntaxElementMorph.prototype.isCachingInputs = false;
 SyntaxElementMorph.prototype.alpha = 1;
+
+// SyntaxElementMorph label part specs:
+
+SyntaxElementMorph.prototype.labelParts = {
+    /*
+        Input slots
+
+        type: 'input'
+        tags: 'numeric read-only unevaluated landscape static'
+        menu: dictionary or selector
+    */
+    '%s': {
+        type: 'input'
+    },
+    '%n': {
+        type: 'input',
+        tags: 'numeric'
+    },
+    '%txt': {
+        type: 'input',
+        tags: 'landscape'
+    },
+    '%anyUE': {
+        type: 'input',
+        tags: 'unevaluated'
+    },
+    '%dir': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            '§_dir': null,
+            '(90) right' : 90,
+            '(-90) left' : -90,
+            '(0) up' : 0,
+            '(180) down' : 180,
+            'random' : ['random']
+        }
+    },
+    '%note': {
+        type: 'input',
+        tags: 'numeric',
+        menu: 'pianoKeyboardMenu'
+    },
+    '%inst': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            '(1) sine' : 1,
+            '(2) square' : 2,
+            '(3) sawtooth' : 3,
+            '(4) triangle' : 4
+        }
+    },
+    '%audio': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'audioMenu'
+    },
+    '%aa': { // audio attributes
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'name' : ['name'],
+            'duration' : ['duration'],
+            'length' : ['length'],
+            'number of channels' : ['number of channels'],
+            'sample rate' : ['sample rate'],
+            'samples' : ['samples']
+        }
+    },
+    '%img': { // image attributes
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'name' : ['name'],
+            'width' : ['width'],
+            'height' : ['height'],
+            'pixels' : ['pixels']
+        }
+    },
+    '%imgsource': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'pen trails': ['pen trails'],
+            'stage image': ['stage image']
+        }
+    },
+    '%rate': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            '22.05 kHz' : 22050,
+            '44.1 kHz' : 44100,
+            '48 kHz' : 48000,
+            '88.2 kHz' : 88200,
+            '96 kHz' : 96000
+        }
+    },
+    '%interaction': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'clicked' : ['clicked'],
+            'pressed' : ['pressed'],
+            'dropped' : ['dropped'],
+            'mouse-entered' : ['mouse-entered'],
+            'mouse-departed' : ['mouse-departed'],
+            'scrolled-up' : ['scrolled-up'],
+            'scrolled-down' : ['scrolled-down'],
+            'stopped' : ['stopped'] // experimental
+        }
+    },
+    '%dates': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'year' : ['year'],
+            'month' : ['month'],
+            'date' : ['date'],
+            'day of week' : ['day of week'],
+            'hour' : ['hour'],
+            'minute' : ['minute'],
+            'second' : ['second'],
+            'time in milliseconds' : ['time in milliseconds']
+        }
+    },
+    '%delim': {
+        type: 'input',
+        menu: {
+            'letter' : ['letter'],
+            'word' : ['word'],
+            'line' : ['line'],
+            'tab' : ['tab'],
+            'cr' : ['cr'],
+            'csv' : ['csv'],
+            'json' : ['json']
+            /*
+            'csv records' : ['csv records'],
+            'csv fields' : ['csv fields']
+            */
+        }
+    },
+    '%ida': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            '1' : 1,
+            last : ['last'],
+            '~' : null,
+            all : ['all']
+        }
+    },
+    '%idx': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            '1' : 1,
+            last : ['last'],
+            any : ['any']
+        }
+    },
+    '%dim': {
+        type: 'input',
+        tags: 'numeric',
+        menu: {
+            current : ['current']
+        }
+    },
+    '%rel': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'distance' : ['distance'],
+            'direction' : ['direction']
+        }
+    },
+    '%loc': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'locationMenu'
+    },
+    '%spr': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'objectsMenu'
+    },
+    '%self': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'objectsMenuWithSelf'
+    },
+    '%col': { // collision detection
+        type: 'input',
+        tags: 'read-only',
+        menu: 'collidablesMenu'
+    },
+    '%dst': { // distance measuring
+        type: 'input',
+        tags: 'read-only',
+        menu: 'distancesMenu'
+    },
+    '%cln': { // clones
+        type: 'input',
+        tags: 'read-only',
+        menu: 'clonablesMenu'
+    },
+    '%get': { // sprites, parts, specimen, clones
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'gettablesMenu'
+    },
+    '%cst': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'costumesMenu'
+    },
+    '%eff': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            color: ['color'],
+            saturation: ['saturation'],
+            brightness : ['brightness'],
+            ghost: ['ghost'],
+            fisheye: ['fisheye'],
+            whirl: ['whirl'],
+            pixelate: ['pixelate'],
+            mosaic: ['mosaic'],
+            negative : ['negative']
+            // duplicate: ['duplicate'],
+            // comic: ['comic'],
+            // confetti: ['confetti']
+        }
+    },
+    '%snd': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'soundsMenu'
+    },
+    '%key': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'keysMenu'
+    },
+    '%keyHat': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'keysMenu'
+    },
+    '%msg': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'messagesMenu'
+    },
+    '%msgHat': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'messagesReceivedMenu'
+    },
+    '%att': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'attributesMenu'
+    },
+    '%fun': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            abs : ['abs'],
+            // '\u2212' : ['\u2212'], // minus-sign
+            neg : ['neg'],
+            ceiling : ['ceiling'],
+            floor : ['floor'],
+            sqrt : ['sqrt'],
+            sin : ['sin'],
+            cos : ['cos'],
+            tan : ['tan'],
+            asin : ['asin'],
+            acos : ['acos'],
+            atan : ['atan'],
+            ln : ['ln'],
+            log : ['log'],
+            lg : ['lg'],
+            'e^' : ['e^'],
+            '10^' : ['10^'],
+            '2^' : ['2^'],
+            id: ['id']
+        }
+    },
+    '%layer': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            front : ['front'],
+            back : ['back']
+        }
+    },
+    '%hsva': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            hue : ['hue'],
+            saturation : ['saturation'],
+            brightness : ['brightness'],
+            transparency : ['transparency']
+        }
+    },
+    '%pen': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            size : ['size'],
+            hue : ['hue'],
+            saturation : ['saturation'],
+            brightness : ['brightness'],
+            transparency : ['transparency']
+        }
+    },
+    '%asp': { // aspect
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            hue : ['hue'],
+            saturation : ['saturation'],
+            brightness : ['brightness'],
+            transparency : ['transparency'],
+            'r-g-b-a' : ['r-g-b-a'],
+            '~' : null,
+            sprites : ['sprites'],
+        }
+    },
+    '%txtfun': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'encode URI' : ['encode URI'],
+            'decode URI' : ['decode URI'],
+            'encode URI component' : ['encode URI component'],
+            'decode URI component' : ['decode URI component'],
+            'XML escape' : ['XML escape'],
+            'XML unescape' : ['XML unescape'],
+            'hex sha512 hash' : ['hex sha512 hash']
+        }
+    },
+    '%stopChoices': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'all' : ['all'],
+            'this script' : ['this script'],
+            'this block' : ['this block'],
+            'all but this script' : ['all but this script'],
+            'other scripts in sprite' : ['other scripts in sprite']
+        }
+    },
+    '%setting': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'turbo mode' : ['turbo mode'],
+            'flat line ends' : ['flat line ends'],
+            'log pen vectors' : ['log pen vectors'],
+            'video capture' : ['video capture'],
+            'mirror video' : ['mirror video']
+        }
+    },
+    '%typ': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'typesMenu'
+    },
+    '%mapValue': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            String : ['String'],
+            Number : ['Number'],
+            'true' : ['true'],
+            'false' : ['false']
+        }
+    },
+    '%var': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'getVarNamesDict'
+    },
+    '%shd': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'shadowedVariablesMenu'
+    },
+
+    // code mapping (experimental)
+
+    '%codeKind': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            code : ['code'],
+            header : ['header']
+        }
+    },
+    '%codeListPart': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'list' : ['list'],
+            'item' : ['item'],
+            'delimiter' : ['delimiter']
+        }
+    },
+    '%codeListKind': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'collection' : ['collection'],
+            'variables' : ['variables'],
+            'parameters' : ['parameters']
+        }
+    },
+
+    // video
+
+    '%vid': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'snap': ['snap'],
+            'motion': ['motion'],
+            'direction': ['direction']
+        }
+    },
+
+    /*
+        type: 'text entry'
+        tags: 'monospace'
+    */
+    '%mlt': {
+        type: 'text entry',
+    },
+    '%code': {
+        type: 'text entry',
+        tags: 'monospace'
+    },
+
+    /*
+        type: 'boolean'
+        tags: 'unevaluated static'
+    */
+    '%b': {
+        type: 'boolean'
+    },
+    '%boolUE': {
+        type: 'boolean',
+        tags: 'unevaluated'
+    },
+    '%bool': {
+        type: 'boolean',
+        tags: 'static'
+    },
+
+    /*
+        type: 'slot'
+        kind: 'object', ''
+    */
+    '%obj': {
+        type: 'slot',
+        kind: 'object'
+    },
+    '%l': {
+        type: 'slot',
+        kind: 'list'
+    },
+
+    /*
+        type: 'symbol'
+        name: string
+        color: a color, default is WHITE
+        scale: float (factor of fontSize) default is 1
+        tags: 'static fading protected' (protected = no zebra coloring)
+    */
+    '%turtle': {
+        type: 'symbol',
+        name: 'turtle',
+        scale: 1.2
+    },
+    '%turtleOutline': {
+        type: 'symbol',
+        name: 'turtleOutline',
+        tags: 'protected'
+    },
+    '%clockwise': {
+        type: 'symbol',
+        name: 'turnRight',
+        scale: 1.5
+    },
+    '%counterclockwise': {
+        type: 'symbol',
+        name: 'turnLeft',
+        scale: 1.5
+    },
+    '%greenflag': {
+        type: 'symbol',
+        name: 'flag',
+        color: new Color(0, 200, 0),
+        scale: 1.5,
+        tags: 'protected'
+    },
+    '%blitz': {
+        type: 'symbol',
+        name: 'flash'
+    },
+    '%list': {
+        type: 'symbol',
+        name: 'list'
+    },
+    '%pause': {
+        type: 'symbol',
+        name: 'pause',
+        color: new Color(255, 220, 0),
+        tags: 'protected'
+    },
+    '%loopArrow': {
+        type: 'symbol',
+        name: 'loop',
+        scale: 0.7,
+        tags: 'fading'
+    },
+
+    /*
+        type: 'c'
+        tags: 'loop static lambda'
+        spec: a spec string
+    */
+    '%c': {
+        type: 'c',
+        tags: 'static'
+    },
+    '%cs': {
+        type: 'c',
+    },
+    '%ca': {
+        type: 'c',
+        tags: 'loop'
+    },
+    '%cl': {
+        type: 'c',
+        tags: 'static lambda'
+    },
+    '%cla': {
+        type: 'c',
+        tags: 'static lambda loop'
+    },
+    '%loop': {
+        type: 'c',
+        tags: 'static loop'
+    },
+
+    /*
+        type: 'command slot' // currently unused, retained for compatibility
+    */
+    '%cmd': {
+        type: 'command slot'
+    },
+
+    /*
+        type: 'ring'
+        tags: 'static'
+        selector: 'reifyScript', 'reifyReporter', 'reifyPredicate'
+        spec: a spec string
+    */
+    '%cmdRing': {
+        type: 'ring',
+        selector: 'reifyScript',
+        spec: '%rc %ringparms'
+    },
+    '%repRing': {
+        type: 'ring',
+        tags: 'static',
+        selector: 'reifyReporter',
+        spec: '%rr %ringparms'
+    },
+    '%predRing': {
+        type: 'ring',
+        tags: 'static',
+        selector: 'reifyPredicate',
+        spec: '%rp %ringparms'
+    },
+
+    /*
+        type: 'ring slot'
+        tags: 'static',
+        kind: 'command', 'reporter', 'predicate'
+        
+    */
+    '%rc': {
+        type: 'ring slot',
+        tags: 'static',
+        kind: 'command'
+    },
+    '%rr': {
+        type: 'ring slot',
+        tags: 'static',
+        kind: 'reporter'
+    },
+    '%rp': {
+        type: 'ring slot',
+        tags: 'static',
+        kind: 'predicate'
+    },
+
+    /*
+        type: 'template'
+        label: string
+    */
+    '%t': {
+        type: 'template',
+        label: 'a'
+    },
+    '%upvar': {
+        type: 'template',
+        label: '\u2191' // up-arrow
+    },
+
+    // other single types
+    '%clr': {
+        type: 'color',
+        tags: 'static'
+    },
+    '%br': {
+        type: 'break'
+    },
+    '%inputName': {
+        type: 'variable',
+    },
+
+    // specialized variadic inputs
+    /*
+        type: 'multi'
+        slots: a slot spec string
+        label: (optional)
+        tags: 'widget' // doesn't count as "empty" slot implicit parameter
+        min: (optional) number of minimum inputs) or zero
+        defaults: (optional) number of visible slots to begin with or zero
+    */
+    '%inputs': {
+        type: 'multi',
+        slots: '%s',
+        label: 'with inputs',
+        tags: 'widget'
+    },
+    '%scriptVars': {
+        type: 'multi',
+        slots: '%t',
+        tags: 'widget',
+        min: 1
+    },
+    '%blockVars': {
+        type: 'multi',
+        slots: '%t',
+        label: 'block variables',
+        tags: 'widget'
+    },
+    '%parms': {
+        type: 'multi',
+        slots: '%t',
+        label: 'Input Names:',
+        tags: 'widget'
+    },
+    '%ringparms': {
+        type: 'multi',
+        slots: '%t',
+        label: 'input names:'
+    },
+    '%words': {
+        type: 'multi',
+        slots: '%s',
+        defaults: 2
+    },
+    '%lists': {
+        type: 'multi',
+        slots: '%l',
+        defaults: 2
+    },
+    '%exp': {
+        type: 'multi',
+        slots: '%s',
+        defaults: 1,
+        tags: 'static widget'
+    }
+};
 
 // SyntaxElementMorph instance creation:
 
@@ -815,7 +1507,7 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 // SyntaxElementMorph label parts:
 
 SyntaxElementMorph.prototype.labelPart = function (spec) {
-    var part, tokens;
+    var part, info, tokens, cnts, i;
     if (spec[0] === '%' &&
             spec.length > 1 &&
             (this.selector !== 'reportGetVar' ||
@@ -829,891 +1521,166 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         }
 
         // single-arg and specialized multi-arg slots:
-        switch (spec) {
-        case '%imgsource':
-            part = new InputSlotMorph(
-                null, // text
-                false, // non-numeric
-                {
-                    'pen trails': ['pen trails'],
-                    'stage image': ['stage image']
-                },
-                true
-            );
+
+        // look up the spec
+        info = this.labelParts[spec];
+        if (!info) {
+            throw new Error('label part spec not found: "' + spec + '"');
+        }
+
+        // create the morph
+        switch (info.type) {
+        case 'input':
+            part = new InputSlotMorph(null, null, info.menu);
             break;
-        case '%inputs':
-            part = new MultiArgMorph('%s', 'with inputs');
-            part.isStatic = false;
-            part.canBeEmpty = false;
+        case 'text entry':
+            part = new TextSlotMorph();
             break;
-        case '%scriptVars':
-            part = new MultiArgMorph('%t', null, 1, spec);
-            part.canBeEmpty = false;
+        case 'slot':
+            part = new ArgMorph(info.kind);
             break;
-        case '%blockVars':
-            part = new MultiArgMorph('%t', 'block variables', 0, spec);
-            part.canBeEmpty = false;
+        case 'boolean':
+            part = new BooleanSlotMorph();
             break;
-        case '%parms':
-            part = new MultiArgMorph('%t', 'Input Names:', 0, spec);
-            part.canBeEmpty = false;
+        case 'symbol':
+            part = new BlockSymbolMorph(info.name);
+            part.size = this.fontSize * (info.scale || 1);
+            part.color = info.color || WHITE;
+            part.shadowColor = this.color.darker(this.labelContrast);
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    ZERO : this.embossing;
+            part.fixLayout();
             break;
-        case '%ringparms':
-            part = new MultiArgMorph(
-                '%t',
-                'input names:',
-                0,
-                spec
-            );
+        case 'c':
+            part = new CSlotMorph();
             break;
-        case '%cmdRing':
+        case 'command slot':
+            part = new CommandSlotMorph();
+            break;
+        case 'ring':
             part = new RingMorph();
             part.color = SpriteMorph.prototype.blockColor.other;
-            part.selector = 'reifyScript';
-            part.setSpec('%rc %ringparms');
+            part.selector = info.selector;
+            part.setSpec(info.spec);
             part.isDraggable = true;
             break;
-        case '%repRing':
-            part = new RingMorph();
-            part.color = SpriteMorph.prototype.blockColor.other;
-            part.selector = 'reifyReporter';
-            part.setSpec('%rr %ringparms');
-            part.isDraggable = true;
-            part.isStatic = true;
+        case 'ring slot':
+            switch (info.kind) {
+            case 'command':
+                part = new RingCommandSlotMorph();
+                break;
+            case 'reporter':
+                part = new RingReporterSlotMorph();
+                break;
+            case 'predicate':
+                part = new RingReporterSlotMorph(true);
+                break;
+            default:
+                throw new Error('unknown ring kind: "' + info.kind + '"');
+            }
             break;
-        case '%predRing':
-            part = new RingMorph(true);
-            part.color = SpriteMorph.prototype.blockColor.other;
-            part.selector = 'reifyPredicate';
-            part.setSpec('%rp %ringparms');
-            part.isDraggable = true;
-            part.isStatic = true;
+        case 'template':
+            part = new TemplateSlotMorph(info.label);
             break;
-        case '%words':
-            part = new MultiArgMorph('%s', null, 0);
-            part.addInput(); // allow for default value setting
-            part.addInput(); // allow for default value setting
+        case 'color':
+            part = new ColorSlotMorph();
             break;
-        case '%lists':
-            part = new MultiArgMorph('%l', null, 0);
-            part.addInput();
-            part.addInput();
-            break;
-        case '%exp':
-            part = new MultiArgMorph('%s', null, 0);
-            part.addInput();
-            part.isStatic = true;
-            part.canBeEmpty = false;
-            break;
-        case '%br':
+        case 'break':
             part = new Morph();
             part.setExtent(ZERO);
             part.isBlockLabelBreak = true;
             part.getSpec = () => '%br';
             break;
-        case '%inputName':
+        case 'variable':
+            part = new TemplateSlotMorph(info.label);
             part = new ReporterBlockMorph();
             part.category = 'variables';
             part.color = SpriteMorph.prototype.blockColor.variables;
             part.setSpec(localize('Input name'));
             break;
-        case '%s':
-            part = new InputSlotMorph();
-            break;
-        case '%anyUE':
-            part = new InputSlotMorph();
-            part.isUnevaluated = true;
-            break;
-        case '%txt':
-            part = new InputSlotMorph(); // supports whitespace dots
-            // part = new TextSlotMorph(); // multi-line, no whitespace dots
-            part.minWidth = part.height() * 1.7; // "landscape"
-            part.fixLayout();
-            break;
-        case '%mlt':
-            part = new TextSlotMorph();
-            part.fixLayout();
-            break;
-        case '%code':
-            part = new TextSlotMorph();
-            part.contents().fontName = 'monospace';
-            part.contents().fontStyle = 'monospace';
-            part.fixLayout();
-            break;
-        case '%obj':
-            part = new ArgMorph('object');
-            break;
-        case '%n':
-            part = new InputSlotMorph(null, true);
-            break;
-        case '%dir':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                	'§_dir': null,
-                    '(90) right' : 90,
-                    '(-90) left' : -90,
-                    '(0) up' : 0,
-                    '(180) down' : 180,
-                    'random' : ['random']
-                }
+        case 'multi':
+            part = new MultiArgMorph(
+                info.slots,
+                info.label,
+                info.min || 0,
+                spec
             );
-            break;
-        case '%note':
-            part = new InputSlotMorph(
-                null, // test
-                true, // numeric
-                'pianoKeyboardMenu',
-                false // read-only
-            );
-            break;
-        case '%inst':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    '(1) sine' : 1,
-                    '(2) square' : 2,
-                    '(3) sawtooth' : 3,
-                    '(4) triangle' : 4
-                }
-            );
-            break;
-        case '%audio':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                'audioMenu',
-                true // read-only
-            );
-            break;
-        case '%aa': // audio attributes
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'name' : ['name'],
-                    'duration' : ['duration'],
-                    'length' : ['length'],
-                    'number of channels' : ['number of channels'],
-                    'sample rate' : ['sample rate'],
-                    'samples' : ['samples']
-                },
-                true // read-only
-            );
-            break;
-        case '%img': // image attributes
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'name' : ['name'],
-                    'width' : ['width'],
-                    'height' : ['height'],
-                    'pixels' : ['pixels']
-                },
-                true // read-only
-            );
-            break;
-        case '%rate':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    '22.05 kHz' : 22050,
-                    '44.1 kHz' : 44100,
-                    '48 kHz' : 48000,
-                    '88.2 kHz' : 88200,
-                    '96 kHz' : 96000
-                }
-            );
-            break;
-        case '%interaction':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'clicked' : ['clicked'],
-                    'pressed' : ['pressed'],
-                    'dropped' : ['dropped'],
-                    'mouse-entered' : ['mouse-entered'],
-                    'mouse-departed' : ['mouse-departed'],
-                    'scrolled-up' : ['scrolled-up'],
-                    'scrolled-down' : ['scrolled-down'],
-                    'stopped' : ['stopped'] // experimental
-                },
-                true // read-only
-            );
-            part.isStatic = true;
-            break;
-        case '%dates':
-            part = new InputSlotMorph(
-                null, // text
-                false, // non-numeric
-                {
-                    'year' : ['year'],
-                    'month' : ['month'],
-                    'date' : ['date'],
-                    'day of week' : ['day of week'],
-                    'hour' : ['hour'],
-                    'minute' : ['minute'],
-                    'second' : ['second'],
-                    'time in milliseconds' : ['time in milliseconds']
-                },
-                true // read-only
-            );
-            break;
-        case '%delim':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'letter' : ['letter'],
-                    'word' : ['word'],
-                    'line' : ['line'],
-                    'tab' : ['tab'],
-                    'cr' : ['cr'],
-                    'csv' : ['csv'],
-                    'json' : ['json']
-                    /*
-                    'csv records' : ['csv records'],
-                    'csv fields' : ['csv fields']
-                    */
-                },
-                false // read-only
-            );
-            break;
-        case '%ida':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    '1' : 1,
-                    last : ['last'],
-                    '~' : null,
-                    all : ['all']
-                }
-            );
-            break;
-        case '%idx':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    '1' : 1,
-                    last : ['last'],
-                    any : ['any']
-                }
-            );
-            break;
-        case '%dim':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    current : ['current']
-                }
-            );
-            break;
-        case '%rel':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'distance' : ['distance'],
-                    'direction' : ['direction']
-                },
-                true // read-only
-            );
-            break;
-        case '%loc': // location
-            part = new InputSlotMorph(
-                null,
-                false,
-                'locationMenu',
-                true
-            );
-            break;
-        case '%spr':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'objectsMenu',
-                true
-            );
-            break;
-        case '%self':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'objectsMenuWithSelf',
-                true
-            );
-            break;
-        case '%col': // collision detection
-            part = new InputSlotMorph(
-                null,
-                false,
-                'collidablesMenu',
-                true
-            );
-            break;
-        case '%dst': // distance measuring
-            part = new InputSlotMorph(
-                null,
-                false,
-                'distancesMenu',
-                true
-            );
-            break;
-        case '%cln': // clones
-            part = new InputSlotMorph(
-                null,
-                false,
-                'clonablesMenu',
-                true
-            );
-            break;
-        case '%get': // sprites, parts, speciment, clones
-            part = new InputSlotMorph(
-                null,
-                false,
-                'gettablesMenu',
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%cst':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'costumesMenu',
-                true
-            );
-            break;
-        case '%eff':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    color: ['color'],
-                    saturation: ['saturation'],
-                    brightness : ['brightness'],
-                    ghost: ['ghost'],
-                    fisheye: ['fisheye'],
-                    whirl: ['whirl'],
-                    pixelate: ['pixelate'],
-                    mosaic: ['mosaic'],
-                    negative : ['negative']
-                    // duplicate: ['duplicate'],
-                    // comic: ['comic'],
-                    // confetti: ['confetti']
-                },
-                true
-            );
-            break;
-        case '%snd':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'soundsMenu',
-                true
-            );
-            break;
-        case '%key':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    'any key' : ['any key'],
-                    'up arrow': ['up arrow'],
-                    'down arrow': ['down arrow'],
-                    'right arrow': ['right arrow'],
-                    'left arrow': ['left arrow'],
-                    space : ['space'],
-                    '+' : ['+'],
-                    '-' : ['-'],
-                    a : ['a'],
-                    b : ['b'],
-                    c : ['c'],
-                    d : ['d'],
-                    e : ['e'],
-                    f : ['f'],
-                    g : ['g'],
-                    h : ['h'],
-                    i : ['i'],
-                    j : ['j'],
-                    k : ['k'],
-                    l : ['l'],
-                    m : ['m'],
-                    n : ['n'],
-                    o : ['o'],
-                    p : ['p'],
-                    q : ['q'],
-                    r : ['r'],
-                    s : ['s'],
-                    t : ['t'],
-                    u : ['u'],
-                    v : ['v'],
-                    w : ['w'],
-                    x : ['x'],
-                    y : ['y'],
-                    z : ['z'],
-                    '0' : ['0'],
-                    '1' : ['1'],
-                    '2' : ['2'],
-                    '3' : ['3'],
-                    '4' : ['4'],
-                    '5' : ['5'],
-                    '6' : ['6'],
-                    '7' : ['7'],
-                    '8' : ['8'],
-                    '9' : ['9']
-                },
-                true
-            );
-            break;
-        case '%keyHat':
-            part = this.labelPart('%key');
-            part.isStatic = true;
-            break;
-        case '%msg':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'messagesMenu',
-                true
-            );
-            break;
-        case '%msgHat':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'messagesReceivedMenu',
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%att':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'attributesMenu',
-                true
-            );
-            break;
-        case '%fun':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    abs : ['abs'],
-                    // '\u2212' : ['\u2212'], // minus-sign
-                    neg : ['neg'],
-                    ceiling : ['ceiling'],
-                    floor : ['floor'],
-                    sqrt : ['sqrt'],
-                    sin : ['sin'],
-                    cos : ['cos'],
-                    tan : ['tan'],
-                    asin : ['asin'],
-                    acos : ['acos'],
-                    atan : ['atan'],
-                    ln : ['ln'],
-                    log : ['log'],
-                    lg : ['lg'],
-                    'e^' : ['e^'],
-                    '10^' : ['10^'],
-                    '2^' : ['2^'],
-                    id: ['id']
-                },
-                true
-            );
-            break;
-        case '%layer':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    front : ['front'],
-                    back : ['back']
-                },
-                true
-            );
-            break;
-        case '%hsva':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    hue : ['hue'],
-                    saturation : ['saturation'],
-                    brightness : ['brightness'],
-                    transparency : ['transparency']
-                },
-                true
-            );
-            break;
-        case '%pen':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    size : ['size'],
-                    hue : ['hue'],
-                    saturation : ['saturation'],
-                    brightness : ['brightness'],
-                    transparency : ['transparency']
-                },
-                true
-            );
-            break;
-        case '%asp': // aspect
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    hue : ['hue'],
-                    saturation : ['saturation'],
-                    brightness : ['brightness'],
-                    transparency : ['transparency'],
-                    'r-g-b-a' : ['r-g-b-a'],
-                    '~' : null,
-                    sprites : ['sprites'],
-                },
-                true
-            );
-            break;
-        case '%txtfun':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    'encode URI' : ['encode URI'],
-                    'decode URI' : ['decode URI'],
-                    'encode URI component' : ['encode URI component'],
-                    'decode URI component' : ['decode URI component'],
-                    'XML escape' : ['XML escape'],
-                    'XML unescape' : ['XML unescape'],
-                    'hex sha512 hash' : ['hex sha512 hash']
-                },
-                true
-            );
-            break;
-        case '%stopChoices':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    'all' : ['all'],
-                    'this script' : ['this script'],
-                    'this block' : ['this block'],
-                    'all but this script' : ['all but this script'],
-                    'other scripts in sprite' : ['other scripts in sprite']
-                },
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%setting':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    'turbo mode' : ['turbo mode'],
-                    'flat line ends' : ['flat line ends'],
-                    'log pen vectors' : ['log pen vectors'],
-                    'video capture' : ['video capture'],
-                    'mirror video' : ['mirror video']
-                },
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%typ':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'typesMenu',
-                true
-            );
-            break;
-        case '%mapValue':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    String : ['String'],
-                    Number : ['Number'],
-                    'true' : ['true'],
-                    'false' : ['false']
-                },
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%var':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'getVarNamesDict',
-                true
-            );
-            part.isStatic = true;
-            break;
-        case '%shd':
-            part = new InputSlotMorph(
-                null,
-                false,
-                'shadowedVariablesMenu',
-                true
-            );
-            // part.isStatic = true;
-            break;
-        case '%codeKind':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    code : ['code'],
-                    header : ['header']
-                },
-                true
-            );
-            break;
-        case '%l':
-            part = new ArgMorph('list');
-            break;
-        case '%b':
-            part = new BooleanSlotMorph();
-            break;
-        case '%boolUE':
-            part = new BooleanSlotMorph();
-            part.isUnevaluated = true;
-            break;
-        case '%bool':
-            part = new BooleanSlotMorph(true);
-            part.isStatic = true;
-            break;
-        case '%cmd':
-            part = new CommandSlotMorph();
-            break;
-        case '%rc':
-            part = new RingCommandSlotMorph();
-            part.isStatic = true;
-            break;
-        case '%rr':
-            part = new RingReporterSlotMorph();
-            part.isStatic = true;
-            break;
-        case '%rp':
-            part = new RingReporterSlotMorph(true);
-            part.isStatic = true;
-            break;
-        case '%c':
-            part = new CSlotMorph();
-            part.isStatic = true;
-            break;
-        case '%cs':
-            part = new CSlotMorph(); // non-static
-            break;
-        case '%ca':
-            part = new CSlotMorph(); // non-static
-            part.isLoop = true; // has a loop symbol
-            part.add(this.labelPart('%loopArrow'));
-            break;
-        case '%cl':
-            part = new CSlotMorph();
-            part.isStatic = true; // rejects reporter drops
-            part.isLambda = true; // auto-reifies nested script
-            break;
-        case '%cla':
-            part = new CSlotMorph();
-            part.isStatic = true; // rejects reporter drops
-            part.isLambda = true; // auto-reifies nested script
-            part.isLoop = true; // has a loop symbol
-            part.add(this.labelPart('%loopArrow'));
-            break;
-        case '%loop':
-            part = new CSlotMorph();
-            part.isStatic = true;
-            part.isLoop = true; // has a loop symbol
-            part.add(this.labelPart('%loopArrow'));
-            break;
-        case '%loopArrow':
-            part = new BlockSymbolMorph('loop');
-            part.size = this.fontSize * 0.7;
-            part.color = WHITE;
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.isFading = true;
-            part.fixLayout();
-            break;
-        case '%clr':
-            part = new ColorSlotMorph();
-            part.isStatic = true;
-            break;
-        case '%t':
-            part = new TemplateSlotMorph('a');
-            break;
-        case '%upvar':
-            part = new TemplateSlotMorph('\u2191'); // up-arrow
-            break;
-        case '%f':
-            part = new FunctionSlotMorph();
-            break;
-        case '%r':
-            part = new ReporterSlotMorph();
-            break;
-        case '%p':
-            part = new ReporterSlotMorph(true);
-            break;
-
-    // code mapping (experimental)
-
-        case '%codeListPart':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'list' : ['list'],
-                    'item' : ['item'],
-                    'delimiter' : ['delimiter']
-                },
-                true // read-only
-            );
-            break;
-        case '%codeListKind':
-            part = new InputSlotMorph(
-                null, // text
-                false, // numeric?
-                {
-                    'collection' : ['collection'],
-                    'variables' : ['variables'],
-                    'parameters' : ['parameters']
-                },
-                true // read-only
-            );
-            break;
-
-    // symbols:
-
-        case '%turtle':
-            part = new BlockSymbolMorph('turtle');
-            part.size = this.fontSize * 1.2;
-            part.color = WHITE;
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%turtleOutline':
-            part = new BlockSymbolMorph('turtleOutline');
-            part.size = this.fontSize;
-            part.color = WHITE;
-            part.isProtectedLabel = true; // doesn't participate in zebraing
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%clockwise':
-            part = new BlockSymbolMorph('turnRight');
-            part.size = this.fontSize * 1.5;
-            part.color = WHITE;
-            part.isProtectedLabel = false; // zebra colors
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%counterclockwise':
-            part = new BlockSymbolMorph('turnLeft');
-            part.size = this.fontSize * 1.5;
-            part.color = WHITE;
-            part.isProtectedLabel = false; // zebra colors
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%greenflag':
-            part = new BlockSymbolMorph('flag');
-            part.size = this.fontSize * 1.5;
-            part.color = new Color(0, 200, 0);
-            part.isProtectedLabel = true; // doesn't participate in zebraing
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%stop':
-            part = new BlockSymbolMorph('octagon');
-            part.size = this.fontSize * 1.5;
-            part.color = new Color(200, 0, 0);
-            part.isProtectedLabel = true; // doesn't participate in zebraing
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%pause':
-            part = new BlockSymbolMorph('pause');
-            part.size = this.fontSize;
-            part.color = new Color(255, 220, 0);
-            part.isProtectedLabel = true; // doesn't participate in zebraing
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%blitz':
-            part = new BlockSymbolMorph('flash');
-            part.size = this.fontSize;
-            part.color = WHITE;
-            part.isProtectedLabel = false; // zebra colors
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-        case '%list':
-            part = new BlockSymbolMorph('list');
-            part.size = this.fontSize;
-            part.color = WHITE;
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    ZERO : this.embossing;
-            part.fixLayout();
-            break;
-
-        // Video motion
-
-        case '%vid':
-            part = new InputSlotMorph(
-                null,
-                false, {
-                    'snap': ['snap'],
-                    'motion': ['motion'],
-                    'direction': ['direction']
-                },
-                true // read-only
-            );
-            break;
-        case '%on':
-            part = new InputSlotMorph(
-                null,
-                false, {
-                    'this sprite': ['this sprite'],
-                    'stage': ['stage']
-                },
-                true // read-only
-            );
+            for (i = 0; i < info.defaults || 0; i += 1) {
+                part.addInput();
+            }
             break;
         default:
-            nop();
+            throw new Error('unknown label part type: "' + info.type + '"');
+        }
+
+        // apply the tags
+        // ---------------
+        // input: numeric, read-only, unevaluated, landscape, static
+        // text entry: monospace
+        // boolean: unevaluated, static
+        // symbol: static, fading, protected
+        // c: loop, static, lambda
+        // command slot: (none)
+        // ring: static
+        // ring slot: static
+        // template: (none)
+        // color: static
+        // break: (none)
+        // variable: (none)
+        // multi: widget
+
+        if (info.tags) {
+            info.tags.split(' ').forEach(tag => {
+                if (tag) {
+                    switch (tag) {
+                    case 'numeric':
+                        part.isNumeric = true;
+                        break;
+                    case 'read-only':
+                        part.isReadOnly = true;
+                        if (!MorphicPreferences.isFlat) {
+                            // addjust initial dimensions
+                            cnts = part.contents();
+                            cnts.shadowOffset = new Point(1, 1);
+                            cnts.fixLayout();
+                        }
+                        break;
+                    case 'unevaluated':
+                        part.isUnevaluated = true;
+                        break;
+                    case 'static':
+                        part.isStatic = true;
+                        break;
+                    case 'landscape':
+                        part.minWidth = part.height() * 1.7;
+                        break;
+                    case 'monospace':
+                        part.contents().fontName = 'monospace';
+                        part.contents().fontStyle = 'monospace';
+                        break;
+                    case 'fading':
+                        part.isFading = true;
+                        break;
+                    case 'protected':
+                        part.isProtectedLabel = true;
+                        break;
+                    case 'loop':
+                        part.isLoop = true;
+                        part.add(this.labelPart('%loopArrow'));
+                        break;
+                    case 'lambda':
+                        part.isLambda = true;
+                        break;
+                    case 'widget':
+                        part.canBeEmpty = false;
+                        break;
+                    default:
+                        throw new Error(
+                            'unknown label part tag: "' + tag + '"'
+                        );
+                    }
+                }
+            });
         }
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
@@ -9146,6 +9113,55 @@ InputSlotMorph.prototype.menuFromDict = function (
         }
     }
     return menu;
+};
+
+InputSlotMorph.prototype.keysMenu = function () {
+    return {
+        'any key' : ['any key'],
+        'up arrow': ['up arrow'],
+        'down arrow': ['down arrow'],
+        'right arrow': ['right arrow'],
+        'left arrow': ['left arrow'],
+        space : ['space'],
+        '+' : ['+'],
+        '-' : ['-'],
+        a : ['a'],
+        b : ['b'],
+        c : ['c'],
+        d : ['d'],
+        e : ['e'],
+        f : ['f'],
+        g : ['g'],
+        h : ['h'],
+        i : ['i'],
+        j : ['j'],
+        k : ['k'],
+        l : ['l'],
+        m : ['m'],
+        n : ['n'],
+        o : ['o'],
+        p : ['p'],
+        q : ['q'],
+        r : ['r'],
+        s : ['s'],
+        t : ['t'],
+        u : ['u'],
+        v : ['v'],
+        w : ['w'],
+        x : ['x'],
+        y : ['y'],
+        z : ['z'],
+        '0' : ['0'],
+        '1' : ['1'],
+        '2' : ['2'],
+        '3' : ['3'],
+        '4' : ['4'],
+        '5' : ['5'],
+        '6' : ['6'],
+        '7' : ['7'],
+        '8' : ['8'],
+        '9' : ['9']
+    };
 };
 
 InputSlotMorph.prototype.messagesMenu = function () {

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-22';
+modules.objects = '2020-November-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -1146,6 +1146,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: '%bool',
+            defaults: [true],
             alias: 'true boolean'
         },
         reportFalse: { // special case for keyboard entry and search
