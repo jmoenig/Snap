@@ -9115,6 +9115,11 @@ InputSlotMorph.prototype.menuFromDict = function (
     return menu;
 };
 
+// InputSlotMorph special drop-down menus:
+// Note each function returning a drop-down menu
+// must accept a Boolean parameter enabling its
+// access for searching
+
 InputSlotMorph.prototype.keysMenu = function () {
     return {
         'any key' : ['any key'],
@@ -9164,7 +9169,9 @@ InputSlotMorph.prototype.keysMenu = function () {
     };
 };
 
-InputSlotMorph.prototype.messagesMenu = function () {
+InputSlotMorph.prototype.messagesMenu = function (searching) {
+    if (searching) {return {}; }
+
     var dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
@@ -9197,11 +9204,17 @@ InputSlotMorph.prototype.messagesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.messagesReceivedMenu = function () {
+InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
     var dict = {'any message': ['any message']},
-        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        allNames = [];
+        rcvr,
+        stage,
+        allNames;
+
+    if (searching) {return dict; }
+
+    rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
+    allNames = [];
 
     stage.children.concat(stage).forEach(morph => {
         if (isSnapObject(morph)) {
@@ -9227,15 +9240,21 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.collidablesMenu = function () {
+InputSlotMorph.prototype.collidablesMenu = function (searching) {
     var dict = {
             'mouse-pointer' : ['mouse-pointer'],
             edge : ['edge'],
             'pen trails' : ['pen trails']
         },
-        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        allNames = [];
+        rcvr,
+        stage,
+        allNames;
+
+    if (searching) {return dict; }
+
+    rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
+    allNames = [];
 
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
@@ -9253,14 +9272,20 @@ InputSlotMorph.prototype.collidablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.locationMenu = function () {
+InputSlotMorph.prototype.locationMenu = function (searching) {
     var dict = {
             'mouse-pointer' : ['mouse-pointer'],
             'myself' : ['myself']
         },
-        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
+        rcvr,
+        stage,
         allNames = [];
+
+    if (searching) {return dict; }
+
+    rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
+    allNames = [];
 
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
@@ -9278,7 +9303,14 @@ InputSlotMorph.prototype.locationMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.distancesMenu = function () {
+InputSlotMorph.prototype.distancesMenu = function (searching) {
+    if (searching) {
+        return {
+            'mouse-pointer': ['mouse-pointer'],
+            center: ['center']
+        };
+    }
+
 	var block = this.parentThatIsA(BlockMorph),
         dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
@@ -9307,7 +9339,9 @@ InputSlotMorph.prototype.distancesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.clonablesMenu = function () {
+InputSlotMorph.prototype.clonablesMenu = function (searching) {
+    if (searching) {return {}; }
+
     var dict = {},
         rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
@@ -9330,11 +9364,14 @@ InputSlotMorph.prototype.clonablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.objectsMenuWithSelf = function () {
-    return this.objectsMenu(true);
+InputSlotMorph.prototype.objectsMenuWithSelf = function (searching) {
+    if (searching) {return {}; }
+    return this.objectsMenu(false, true);
 };
 
-InputSlotMorph.prototype.objectsMenu = function (includeMyself) {
+InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
+    if (searching) {return {}; }
+
     var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         dict = {},
@@ -9416,14 +9453,37 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.attributesMenu = function () {
-    var block = this.parentThatIsA(BlockMorph),
-        objName = block.inputs()[1].evaluate(),
-        rcvr = block.scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
+InputSlotMorph.prototype.attributesMenu = function (searching) {
+    var dict = {
+            'x position' : ['x position'],
+            'y position' : ['y position'],
+            'direction' : ['direction'],
+            'costume #' : ['costume #'],
+            'costume name' : ['costume name'],
+            'size' : ['size'],
+            'width': ['width'],
+            'height': ['height'],
+            'left' : ['left'],
+            'right' : ['right'],
+            'top' : ['top'],
+            'bottom' : ['bottom'],
+            'volume' : ['volume'],
+            'balance' : ['balance']
+        },
+        block,
+        objName,
+        rcvr,
+        stage,
         obj,
-        dict = {},
-        varNames = [];
+        varNames;
+
+    if (searching) {return dict; }
+
+    block = this.parentThatIsA(BlockMorph);
+    objName = block.inputs()[1].evaluate();
+    rcvr = block.scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
+    varNames = [];
 
     if (objName === stage.name) {
         obj = stage;
@@ -9446,23 +9506,6 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'top' : ['top'],
             'bottom' : ['bottom']
         };
-    } else { // assume a sprite
-        dict = {
-            'x position' : ['x position'],
-            'y position' : ['y position'],
-            'direction' : ['direction'],
-            'costume #' : ['costume #'],
-            'costume name' : ['costume name'],
-            'size' : ['size'],
-            'width': ['width'],
-            'height': ['height'],
-            'left' : ['left'],
-            'right' : ['right'],
-            'top' : ['top'],
-            'bottom' : ['bottom'],
-            'volume' : ['volume'],
-            'balance' : ['balance']
-        };
     }
     if (obj) {
         varNames = obj.variables.names();
@@ -9479,7 +9522,9 @@ InputSlotMorph.prototype.attributesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.costumesMenu = function () {
+InputSlotMorph.prototype.costumesMenu = function (searching) {
+    if (searching) {return {}; }
+
     var block = this.parentThatIsA(BlockMorph),
         rcvr = block.scriptTarget(),
         dict,
@@ -9504,7 +9549,9 @@ InputSlotMorph.prototype.costumesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.soundsMenu = function () {
+InputSlotMorph.prototype.soundsMenu = function (searching) {
+    if (searching) {return {}; }
+
     var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         allNames = [],
         dict = {};
@@ -9520,7 +9567,9 @@ InputSlotMorph.prototype.soundsMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.shadowedVariablesMenu = function () {
+InputSlotMorph.prototype.shadowedVariablesMenu = function (searching) {
+    if (searching) {return {}; }
+
     var block = this.parentThatIsA(BlockMorph),
         vars,
         attribs,
@@ -9565,7 +9614,9 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.pianoKeyboardMenu = function () {
+InputSlotMorph.prototype.pianoKeyboardMenu = function (searching) {
+    if (searching) {return {}; }
+
     var menu, block, instrument;
     block = this.parentThatIsA(BlockMorph);
     if (block) {
@@ -9584,11 +9635,12 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function () {
     menu.selectKey(+this.evaluate());
 };
 
-InputSlotMorph.prototype.directionDialMenu = function () {
+InputSlotMorph.prototype.directionDialMenu = function (searching) {
+    if (searching) {return {}; }
     return {'§_dir': null};
 };
 
-InputSlotMorph.prototype.audioMenu = function () {
+InputSlotMorph.prototype.audioMenu = function (searching) {
     var dict = {
         'volume' : ['volume'],
         'note' : ['note'],
@@ -9598,6 +9650,8 @@ InputSlotMorph.prototype.audioMenu = function () {
         'spectrum' : ['spectrum'],
         'resolution' : ['resolution']
     };
+    if (searching) {return {}; }
+
     if (this.world().currentKey === 16) { // shift
         dict['~'] = null;
         dict.modifier = ['modifier'];

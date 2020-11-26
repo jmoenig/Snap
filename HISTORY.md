@@ -4,6 +4,7 @@
 
 ### 2020-11-26
 * blocks, objects: refactored input slot specs
+* blocks: refactored special input slot dop-down menus for search
 
 ### 2020-11-23
 * new dev version
