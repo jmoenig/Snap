@@ -3155,7 +3155,10 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksList.forEach(definition => {
             if (contains(types, definition.type)) {
                 var spec = definition.localizedSpec(),
-                    rel = relevance(labelOf(spec), search);
+                    rel = relevance(labelOf(
+                        spec) + ' ' + definition.menuSearchWords(),
+                        search
+                    );
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
                 }

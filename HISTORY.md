@@ -3,10 +3,11 @@
 ## in development:
 
 * **Notable Changes:**
-    * searching for blocks and keyboard entry now includes thre contents of primitives' dropdown menus
+    * searching for blocks and keyboard entry now includes the contents of dropdown menus
 
 ### 2020-11-27
 * objects: extended block-search to include dropdown choices in primitives
+* byob, objects: extended block-search to include dropdown choices in custom blocks
 
 ### 2020-11-26
 * blocks, objects: refactored input slot specs
