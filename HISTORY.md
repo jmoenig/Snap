@@ -2,6 +2,9 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * searching for blocks and keyboard entry now includes thre contents of primitives' dropdown menus
+
 ### 2020-11-27
 * objects: extended block-search to include dropdown choices in primitives
 
