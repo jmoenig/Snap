@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-11-27
+* objects: extended block-search to include dropdown choices in primitives
+
 ### 2020-11-26
 * blocks, objects: refactored input slot specs
 * blocks: refactored special input slot dop-down menus for search

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-26';
+modules.objects = '2020-November-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -3096,8 +3096,29 @@ SpriteMorph.prototype.blocksMatching = function (
 
     function labelOf(aBlockSpec) {
         var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
-            filtered = words.filter(each => each.indexOf('%') !== 0);
-        return filtered.join(' ');
+            filtered = words.filter(each =>
+                each.indexOf('%') !== 0 || each.length === 1
+            ),
+            slots = words.filter(each =>
+                each.length > 1 && each.indexOf('%') === 0
+            ).map(spec => menuOf(spec));
+        return filtered.join(' ') + ' ' + slots.join(' ');
+    }
+
+    function menuOf(aSlotSpec) {
+        var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
+            menu = info.menu;
+        if (!menu) {return ''; }
+        if (isString(menu)) {
+            menu = InputSlotMorph.prototype[menu](true);
+        }
+        return Object.values(menu).map(entry => {
+            if (isNil(entry)) {return ''; }
+            if (entry instanceof Array) {
+                return localize(entry[0]);
+            }
+            return entry.toString();
+        }).join(' ');
     }
 
     function fillDigits(anInt, totalDigits, fillChar) {
@@ -3107,7 +3128,7 @@ SpriteMorph.prototype.blocksMatching = function (
     }
 
     function relevance(aBlockLabel, aSearchString) {
-        var lbl = ' ' + aBlockLabel,
+        var lbl = ' ' + aBlockLabel.toLowerCase(),
             idx = lbl.indexOf(aSearchString),
             atWord;
         if (idx === -1) {return -1; }
@@ -3124,7 +3145,7 @@ SpriteMorph.prototype.blocksMatching = function (
 
     // variable getters
     varNames.forEach(vName => {
-        var rel = relevance(labelOf(vName.toLowerCase()), search);
+        var rel = relevance(vName, search);
         if (rel !== -1) {
             blocks.push([this.variableBlock(vName), rel + '1']);
         }
@@ -3133,7 +3154,7 @@ SpriteMorph.prototype.blocksMatching = function (
     [this.customBlocks, stage.globalBlocks].forEach(blocksList =>
         blocksList.forEach(definition => {
             if (contains(types, definition.type)) {
-                var spec = definition.localizedSpec().toLowerCase(),
+                var spec = definition.localizedSpec(),
                     rel = relevance(labelOf(spec), search);
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
@@ -3147,7 +3168,7 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.alias || block.spec).toLowerCase(),
+                spec = localize(block.alias || block.spec),
                 rel = relevance(labelOf(spec), search);
             if (
                 (rel !== -1) &&
@@ -9086,6 +9107,7 @@ StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
 StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
 StageMorph.prototype.reporterize = SpriteMorph.prototype.reporterize;
+StageMorph.prototype.variableBlock = SpriteMorph.prototype.variableBlock;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
