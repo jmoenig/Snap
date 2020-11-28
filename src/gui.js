@@ -2139,7 +2139,39 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
-    var costume = new SVG_Costume(anImage, name.split('.')[0]);
+    var myself,
+        viewBox, w, h,
+        svgNormalized,
+        headerLenght = anImage.src.search('base64') + 7, // usually 26 from "data:image/svg+xml;base64,"
+        svgStrEncoded = anImage.src.substring(headerLenght),
+        svgObj = new DOMParser().parseFromString(atob(svgStrEncoded), "image/svg+xml").firstElementChild;
+    name = name.split('.')[0];
+
+    // check svg content and size it if necessary before loading
+
+    if (svgObj.attributes.getNamedItem("viewBox")) { // viewBox attribute is mandatory
+        // width and height are required
+        if (!svgObj.attributes.getNamedItem("width") ||
+                !svgObj.attributes.getNamedItem("height")) {
+            viewBox = svgObj.attributes.getNamedItem('viewBox').value;
+            w = Math.ceil(viewBox.split(' ')[2]);
+            h = Math.ceil(viewBox.split(' ')[3]);
+            svgNormalized = new Image(w, h);
+            svgObj.setAttribute('width', w);
+            svgObj.setAttribute('height', h);
+            svgNormalized.src = 'data:image/svg+xml;base64,' +
+                btoa(new XMLSerializer().serializeToString(svgObj));
+            myself = this;
+            svgNormalized.onload = function () { myself.loadSVG(svgNormalized, name); }
+        } else {
+            this.loadSVG(anImage, name);
+        }
+    }
+};
+
+IDE_Morph.prototype.loadSVG = function (anImage, name) {
+    var costume = new SVG_Costume(anImage, name);
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
