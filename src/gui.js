@@ -2145,27 +2145,34 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
         headerLenght = anImage.src.search('base64') + 7, // usually 26 from "data:image/svg+xml;base64,"
         svgStrEncoded = anImage.src.substring(headerLenght),
         svgObj = new DOMParser().parseFromString(atob(svgStrEncoded), "image/svg+xml").firstElementChild;
+
     name = name.split('.')[0];
 
-    // check svg content and size it if necessary before loading
+    // check svg 'width' and 'height' attributes and set them if needed
 
-    if (svgObj.attributes.getNamedItem("viewBox")) { // viewBox attribute is mandatory
-        // width and height are required
-        if (!svgObj.attributes.getNamedItem("width") ||
-                !svgObj.attributes.getNamedItem("height")) {
+    if (svgObj.attributes.getNamedItem("width") &&
+            svgObj.attributes.getNamedItem("height")) {
+        this.loadSVG(anImage, name);
+    } else {
+        // setting HTMLImageElement default values
+        w = '300';
+        h = '150';
+        // changing default values if viewBox attribute is set
+        if (svgObj.attributes.getNamedItem("viewBox")) {
             viewBox = svgObj.attributes.getNamedItem('viewBox').value;
-            w = Math.ceil(viewBox.split(' ')[2]);
-            h = Math.ceil(viewBox.split(' ')[3]);
-            svgNormalized = new Image(w, h);
-            svgObj.setAttribute('width', w);
-            svgObj.setAttribute('height', h);
-            svgNormalized.src = 'data:image/svg+xml;base64,' +
-                btoa(new XMLSerializer().serializeToString(svgObj));
-            myself = this;
-            svgNormalized.onload = function () { myself.loadSVG(svgNormalized, name); }
-        } else {
-            this.loadSVG(anImage, name);
-        }
+            viewBox = viewBox.split(/[ ,]/).filter(item => item);
+            if (viewBox.length == 4) {
+                w = Math.ceil(viewBox[2]);
+                h = Math.ceil(viewBox[3]);
+            }
+         }
+         svgNormalized = new Image(w, h);
+         svgObj.setAttribute('width', w);
+         svgObj.setAttribute('height', h);
+         svgNormalized.src = 'data:image/svg+xml;base64,' +
+             btoa(new XMLSerializer().serializeToString(svgObj));
+         myself = this;
+         svgNormalized.onload = function () { myself.loadSVG(svgNormalized, name); }
     }
 };
 
