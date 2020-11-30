@@ -9,6 +9,7 @@
 
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks
+* update libraries
 
 ### 2020-11-27
 * objects: extended block-search to include dropdown choices in primitives
