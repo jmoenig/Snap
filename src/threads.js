@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-November-22';
+modules.threads = '2020-November-30';
 
 var ThreadManager;
 var Process;
@@ -161,7 +161,7 @@ function invoke(
     } else if (action instanceof Function) {
         return action.apply(
             receiver,
-            contextArgs.asArray().concat(callerProcess)
+            contextArgs.itemsArray().concat(callerProcess)
         );
     } else {
         throw new Error('expecting a block or ring but getting ' + action);
@@ -1074,7 +1074,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
                 : [this.context.expression.fullCopy()];
     }
 
-    context.inputs = parameterNames.asArray();
+    context.inputs = parameterNames.itemsArray();
     context.receiver
         = this.context ? this.context.receiver : this.receiver;
     context.origin = context.receiver; // for serialization
@@ -1101,7 +1101,7 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 Process.prototype.reportJSFunction = function (parmNames, body) {
     return Function.apply(
         null,
-        parmNames.asArray().concat([body])
+        parmNames.itemsArray().concat([body])
     );
 };
 
@@ -1123,7 +1123,7 @@ Process.prototype.evaluate = function (
         // }
         return context.apply(
             this.blockReceiver(),
-            args.asArray().concat([this])
+            args.itemsArray().concat([this])
         );
     }
     if (context.isContinuation) {
@@ -1138,7 +1138,7 @@ Process.prototype.evaluate = function (
         exit,
         runnable,
         expr,
-        parms = args.asArray(),
+        parms = args.itemsArray(),
         i,
         value;
 
@@ -1266,7 +1266,7 @@ Process.prototype.initializeFor = function (context, args) {
             context.expression,
             outer
             ),
-        parms = args.asArray(),
+        parms = args.itemsArray(),
         i,
         value;
 
@@ -1372,7 +1372,7 @@ Process.prototype.reportCallCC = function (aContext) {
 };
 
 Process.prototype.runContinuation = function (aContext, args) {
-    var parms = args.asArray();
+    var parms = args.itemsArray();
 
     // determine whether the continuations is to show the result
     // in a value-balloon becuse the user has directly clicked on a reporter
@@ -1402,7 +1402,7 @@ Process.prototype.evaluateCustomBlock = function () {
         context = method.body,
         declarations = method.declarations,
         args = new List(this.context.inputs),
-        parms = args.asArray(),
+        parms = args.itemsArray(),
         runnable,
         exit,
         i,
@@ -1501,7 +1501,7 @@ Process.prototype.evaluateCustomBlock = function () {
 
 Process.prototype.doDeclareVariables = function (varNames) {
     var varFrame = this.context.outerContext.variables;
-    varNames.asArray().forEach(name =>
+    varNames.itemsArray().forEach(name =>
         varFrame.addVar(name)
     );
 };
@@ -3088,14 +3088,14 @@ Process.prototype.encodeSound = function (samples, rate) {
     }
     if (channels === 1) {
         arrayBuffer.copyToChannel(
-            Float32Array.from(samples.asArray()),
+            Float32Array.from(samples.itemsArray()),
             0,
             0
         );
     } else {
         for (i = 0; i < channels; i += 1) {
             arrayBuffer.copyToChannel(
-                Float32Array.from(samples.at(i + 1).asArray()),
+                Float32Array.from(samples.at(i + 1).itemsArray()),
                 i,
                 0
             );
@@ -3598,8 +3598,8 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
         if (this.isMatrix(a)) {
             if (this.isMatrix(b)) {
                 // zip both arguments ignoring out-of-bounds indices
-                a = a.asArray();
-                b = b.asArray();
+                a = a.itemsArray()();
+                b = b.itemsArray();
                 len = Math.min(a.length, b.length);
                 result = new Array(len);
                 for (i = 0; i < len; i += 1) {
@@ -3623,8 +3623,8 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
     if (a instanceof List) {
         if (b instanceof List) {
             // zip both arguments ignoring out-of-bounds indices
-            a = a.asArray();
-            b = b.asArray();
+            a = a.itemsArray();
+            b = b.itemsArray();
             len = Math.min(a.length, b.length);
             result = new Array(len);
             for (i = 0; i < len; i += 1) {
@@ -4182,7 +4182,7 @@ Process.prototype.alert = function (data) {
     if (this.homeContext.receiver) {
         world = this.homeContext.receiver.world();
         if (world.isDevMode) {
-            alert('Snap! ' + data.asArray());
+            alert('Snap! ' + data.itemsArray());
         }
     }
 };
@@ -4193,7 +4193,7 @@ Process.prototype.log = function (data) {
     if (this.homeContext.receiver) {
         world = this.homeContext.receiver.world();
         if (world.isDevMode) {
-            console.log('Snap! ' + data.asArray());
+            console.log('Snap! ' + data.itemsArray());
         }
     }
 };
@@ -5608,10 +5608,10 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
 
     canvas = newCanvas(new Point(width, height), true);
     ctx = canvas.getContext('2d');
-    src = pixels.asArray();
+    src = pixels.itemsArray();
     dta = ctx.createImageData(width, height);
     for (i = 0; i < src.length; i += 1) {
-        px = src[i].asArray();
+        px = src[i].itemsArray();
         for (k = 0; k < 3; k += 1) {
             dta.data[(i * 4) + k] = px[k];
         }
@@ -5858,7 +5858,7 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
 
     this.assertType(list, 'list');
 	var result = [],
-    	src = list.asArray(),
+    	src = list.itemsArray(),
     	len = src.length,
         formalParameterCount = reporter.inputs.length,
         parms,
@@ -5909,7 +5909,7 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
 
     this.assertType(list, 'list');
     var result = [],
-        src = list.asArray(),
+        src = list.itemsArray(),
         len = src.length,
         formalParameterCount = reporter.inputs.length,
         parms,
@@ -5960,7 +5960,7 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     // #3 - optional | source list
 
     this.assertType(list, 'list');
-    var src = list.asArray(),
+    var src = list.itemsArray(),
         len = src.length,
         formalParameterCount = reporter.inputs.length,
         parms,
@@ -6013,7 +6013,7 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
 
     this.assertType(list, 'list');
     var result = '',
-        src = list.asArray(),
+        src = list.itemsArray(),
         len = src.length,
         formalParameterCount = reporter.inputs.length,
         parms,
@@ -6072,7 +6072,7 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
 
     // iterate over the data in a single frame:
 	return new List(
-  		list.asArray().slice().sort((a, b) =>
+  		list.itemsArray().slice().sort((a, b) =>
             invoke(
                 func,
                 new List([a, b]),
@@ -6091,7 +6091,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     var result = [],
         dict = new Map(),
         groupKey,
-        src = list.asArray(),
+        src = list.itemsArray(),
         len = src.length,
         func,
         i;

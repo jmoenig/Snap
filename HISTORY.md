@@ -4,6 +4,11 @@
 
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
+* **Notable Fixes:**
+    * keep internal linked-list organization intact for hyperblocks
+
+### 2020-11-30
+* threads: keep internal linked-list organization intact for hyperblocks
 
 ### 2020-11-27
 * objects: extended block-search to include dropdown choices in primitives
