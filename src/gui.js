@@ -2142,9 +2142,12 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     var myself,
         viewBox, w, h,
         svgNormalized,
-        headerLenght = anImage.src.search('base64') + 7, // usually 26 from "data:image/svg+xml;base64,"
+        headerLenght = anImage.src.search('base64') + 7,
+            // usually 26 from "data:image/svg+xml;base64,"
         svgStrEncoded = anImage.src.substring(headerLenght),
-        svgObj = new DOMParser().parseFromString(atob(svgStrEncoded), "image/svg+xml").firstElementChild;
+        svgObj = new DOMParser().parseFromString(
+            atob(svgStrEncoded), "image/svg+xml"
+        ).firstElementChild;
 
     name = name.split('.')[0];
 
@@ -2165,14 +2168,16 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
                 w = Math.ceil(viewBox[2]);
                 h = Math.ceil(viewBox[3]);
             }
-         }
-         svgNormalized = new Image(w, h);
-         svgObj.setAttribute('width', w);
-         svgObj.setAttribute('height', h);
-         svgNormalized.src = 'data:image/svg+xml;base64,' +
-             btoa(new XMLSerializer().serializeToString(svgObj));
-         myself = this;
-         svgNormalized.onload = function () { myself.loadSVG(svgNormalized, name); }
+        }
+        svgNormalized = new Image(w, h);
+        svgObj.setAttribute('width', w);
+        svgObj.setAttribute('height', h);
+        svgNormalized.src = 'data:image/svg+xml;base64,' +
+            btoa(new XMLSerializer().serializeToString(svgObj));
+        myself = this;
+        svgNormalized.onload = function () {
+            myself.loadSVG(svgNormalized, name);
+        };
     }
 };
 

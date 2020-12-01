@@ -11,6 +11,7 @@
     * changed VIDEOP _ ON _ reporter primitive to be hyper-monadic (second slot)
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
+    * improved SVG loading in Firefox, thanks, Joan!
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
