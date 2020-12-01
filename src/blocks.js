@@ -359,7 +359,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%aa': { // audio attributes
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'name' : ['name'],
             'duration' : ['duration'],
