@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-November-27';
+modules.objects = '2020-December-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -1106,6 +1106,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n mod %n'
         },
+        reportMin: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n min %n'
+        },
+        reportMax: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n max %n'
+        },
         reportRandom: {
             type: 'reporter',
             category: 'operators',
@@ -1629,17 +1639,21 @@ SpriteMorph.prototype.blockAlternatives = {
 
     // operators:
     reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus'],
+        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
     reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus'],
+        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
     reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus'],
+        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
     reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus'],
+        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
     reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus'],
+        'reportQuotient', 'reportModulus', 'reportMin', 'reportMax'],
     reportModulus: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportPower'],
+        'reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
+    reportMin: ['reportSum', 'reportDifference', 'reportProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportMax'],
+    reportMax: ['reportSum', 'reportDifference', 'reportProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportMin'],
     reportLessThan: ['reportEquals', 'reportGreaterThan'],
     reportEquals: ['reportLessThan', 'reportGreaterThan'],
     reportGreaterThan: ['reportEquals', 'reportLessThan'],

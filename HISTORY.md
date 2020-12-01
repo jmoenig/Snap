@@ -7,6 +7,9 @@
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
 
+### 2020-12-01
+* threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
+
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks
 * update libraries
