@@ -371,7 +371,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%img': { // image attributes
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'name' : ['name'],
             'width' : ['width'],
@@ -518,7 +518,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%eff': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             color: ['color'],
             saturation: ['saturation'],
@@ -591,7 +591,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%layer': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             front : ['front'],
             back : ['back']
