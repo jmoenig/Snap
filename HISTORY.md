@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **New Features:**
+    * hyperdyadic MIN and MAX primitives reachable via "relabel"
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
 * **Notable Fixes:**
