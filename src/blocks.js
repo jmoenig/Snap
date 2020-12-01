@@ -599,7 +599,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%hsva': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             hue : ['hue'],
             saturation : ['saturation'],
@@ -609,7 +609,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%pen': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             size : ['size'],
             hue : ['hue'],
@@ -620,7 +620,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%asp': { // aspect
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             hue : ['hue'],
             saturation : ['saturation'],
@@ -633,7 +633,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%txtfun': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'encode URI' : ['encode URI'],
             'decode URI' : ['decode URI'],
