@@ -5306,8 +5306,11 @@ Process.prototype.doSetVideoTransparency = function(factor) {
 };
 
 Process.prototype.reportVideo = function(attribute, name) {
-    // hyper-dyadic
-    var stage = this.blockReceiver().parentThatIsA(StageMorph);
+    // hyper-monadic
+    var thisObj = this.blockReceiver(),
+        stage = thisObj.parentThatIsA(StageMorph),
+        thatObj;
+
     if (!stage.projectionSource || !stage.projectionSource.stream) {
         // wait until video is turned on
         if (!this.context.accumulator) {
@@ -5318,17 +5321,13 @@ Process.prototype.reportVideo = function(attribute, name) {
         this.pushContext();
         return;
     }
-    return this.hyperDyadic(
-        (att, obj) => this.reportBasicVideo(att, obj),
-        attribute,
-        name
-    );
-};
 
-Process.prototype.reportBasicVideo = function(attribute, name) {
-    var thisObj = this.blockReceiver(),
-        stage = thisObj.parentThatIsA(StageMorph),
-        thatObj = this.getOtherObject(name, thisObj, stage);
+    if (this.enableHyperOps) {
+        if (name instanceof List) {
+            return name.map(each => this.reportVideo(attribute, each));
+        }
+    }
+    thatObj = this.getOtherObject(name, thisObj, stage);
     switch (this.inputOption(attribute)) {
     case 'motion':
         if (thatObj instanceof SpriteMorph) {
