@@ -7,12 +7,14 @@
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
+    * disabled dropping reporters into certain dropdowns (monadic functions, types)
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
 * threads, objects: added hyperdyadic less/greaterThanOrEquals prims 
+* blocks: made monadic functions and data types menus static
 
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks

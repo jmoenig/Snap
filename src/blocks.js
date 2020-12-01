@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-November-26';
+modules.blocks = '2020-December-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -566,7 +566,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%fun': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             abs : ['abs'],
             // '\u2212' : ['\u2212'], // minus-sign
@@ -668,7 +668,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%typ': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: 'typesMenu'
     },
     '%mapValue': {
