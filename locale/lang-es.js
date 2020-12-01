@@ -801,6 +801,8 @@ SnapTranslator.dict.es = {
         '\u00BFtecla %key pulsada?',
     '%rel to %dst':
         '%rel a %dst',
+    '%asp at %loc' :
+        '%asp en %loc',
     'reset timer':
         'reiniciar cron\u00F3metro',
     'timer':
@@ -1083,7 +1085,7 @@ SnapTranslator.dict.es = {
     '%l contains %s':
         '\u00BF %l contiene %s ?',
     'is %l empty?':
-        '¿%l vacía?',
+        '¿ %l vacía?',
     'map %repRing over %l':
         'mapear %repRing sobre %l',
     'keep items %predRing from %l':
@@ -1456,6 +1458,8 @@ SnapTranslator.dict.es = {
         'Idioma...',
     'Zoom blocks...':
         'Tama\u00F1o de bloque...',
+    'Fade blocks...':
+        'Disipar los bloques...',
     'Stage size...':
         'Tama\u00F1o del escenario...',
 
@@ -2866,5 +2870,9 @@ SnapTranslator.dict.es = {
     'Log pen vectors':
         'Registrar los dibujos como vectores',
     'log pen vectors':
-        'registrar los dibujos como vectores'
+        'registrar los dibujos como vectores',
+    'blockify':
+        'en forma de bloques',
+    'Hyper blocks support':
+        'Suporte a hiperbloques'
 };
