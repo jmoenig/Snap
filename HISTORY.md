@@ -24,6 +24,7 @@
 * blocks: made pen attributes menus static
 * blocks: made sensing attributes menus largely static
 * threads: changed reportVideo() to be hyper-monadic
+* lists: made sure map() doesn't mutate internal list linked-ness
 
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks

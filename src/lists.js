@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2020-July-01';
+modules.lists = '2020-December-01';
 
 var List;
 var ListWatcherMorph;
@@ -211,7 +211,7 @@ List.prototype.clear = function () {
 
 List.prototype.map = function(callback) {
     return new List(
-        this.asArray().map(callback)
+        this.itemsArray().map(callback)
     );
 };
 
