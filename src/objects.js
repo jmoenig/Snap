@@ -1670,6 +1670,10 @@ SpriteMorph.prototype.blockAlternatives = {
         'reportGreaterThan', 'reportGreaterThanOrEquals'],
     reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
         'reportLessThan', 'reportLessThanOrEquals'],
+    reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
+        'reportGreaterThan', 'reportGreaterThanOrEquals'],
+    reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
+        'reportLessThan', 'reportLessThanOrEquals'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
 
