@@ -7,7 +7,7 @@
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
-    * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes)
+    * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
 
@@ -18,6 +18,7 @@
 * blocks: made costume attribute, graphic effects and layers menus static
 * blocks: made audio attributes menu static
 * blocks: made pen attributes menus static
+* blocks: made sensing attributes menus largely static
 
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks

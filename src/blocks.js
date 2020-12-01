@@ -354,7 +354,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%audio': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: 'audioMenu'
     },
     '%aa': { // audio attributes
@@ -414,7 +414,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%dates': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'year' : ['year'],
             'month' : ['month'],
@@ -470,7 +470,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%rel': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'distance' : ['distance'],
             'direction' : ['direction']
@@ -541,7 +541,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%key': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: 'keysMenu'
     },
     '%keyHat': {
@@ -725,7 +725,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     '%vid': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'snap': ['snap'],
             'motion': ['motion'],
