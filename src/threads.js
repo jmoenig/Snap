@@ -3743,6 +3743,14 @@ Process.prototype.reportLessThan = function (a, b) {
     return this.hyperDyadic(this.reportBasicLessThan, a, b);
 };
 
+Process.prototype.reportLessThanOrEquals = function (a, b) {
+    return this.hyperDyadic(
+        (a, b) => !this.reportBasicGreaterThan(a, b),
+        a,
+        b
+    );
+};
+
 Process.prototype.reportBasicLessThan = function (a, b) {
     var x = +a,
         y = +b;
@@ -3753,18 +3761,16 @@ Process.prototype.reportBasicLessThan = function (a, b) {
     return x < y;
 };
 
-Process.prototype.reportNot = function (bool) {
-    if (this.enableHyperOps) {
-        if (bool instanceof List) {
-            return bool.map(each => this.reportNot(each));
-        }
-    }
-    // this.assertType(bool, 'Boolean');
-    return !bool;
-};
-
 Process.prototype.reportGreaterThan = function (a, b) {
     return this.hyperDyadic(this.reportBasicGreaterThan, a, b);
+};
+
+Process.prototype.reportGreaterThanOrEquals = function (a, b) {
+    return this.hyperDyadic(
+        (a, b) => !this.reportBasicLessThan(a, b),
+        a,
+        b
+    );
 };
 
 Process.prototype.reportBasicGreaterThan = function (a, b) {
@@ -3779,6 +3785,16 @@ Process.prototype.reportBasicGreaterThan = function (a, b) {
 
 Process.prototype.reportEquals = function (a, b) {
     return snapEquals(a, b);
+};
+
+Process.prototype.reportNot = function (bool) {
+    if (this.enableHyperOps) {
+        if (bool instanceof List) {
+            return bool.map(each => this.reportNot(each));
+        }
+    }
+    // this.assertType(bool, 'Boolean');
+    return !bool;
 };
 
 Process.prototype.reportIsIdentical = function (a, b) {

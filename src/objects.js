@@ -1122,20 +1122,30 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'pick random %n to %n',
             defaults: [1, 10]
         },
-        reportLessThan: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s < %s'
-        },
         reportEquals: {
             type: 'predicate',
             category: 'operators',
             spec: '%s = %s'
         },
+        reportLessThan: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s < %s'
+        },
+        reportLessThanOrEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2264 %s'
+        },
         reportGreaterThan: {
             type: 'predicate',
             category: 'operators',
             spec: '%s > %s'
+        },
+        reportGreaterThanOrEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2265 %s'
         },
         reportAnd: {
             type: 'predicate',
@@ -1654,9 +1664,12 @@ SpriteMorph.prototype.blockAlternatives = {
         'reportQuotient', 'reportPower', 'reportModulus', 'reportMax'],
     reportMax: ['reportSum', 'reportDifference', 'reportProduct',
         'reportQuotient', 'reportPower', 'reportModulus', 'reportMin'],
-    reportLessThan: ['reportEquals', 'reportGreaterThan'],
-    reportEquals: ['reportLessThan', 'reportGreaterThan'],
-    reportGreaterThan: ['reportEquals', 'reportLessThan'],
+    reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
+        'reportGreaterThan', 'reportGreaterThanOrEquals'],
+    reportEquals: ['reportLessThan', 'reportLessThanOrEquals',
+        'reportGreaterThan', 'reportGreaterThanOrEquals'],
+    reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
+        'reportLessThan', 'reportLessThanOrEquals'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
 

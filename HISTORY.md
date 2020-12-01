@@ -4,6 +4,7 @@
 
 * **New Features:**
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
+    * hyperdyadic less / great than or equals primitives reachable via "relabel"
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
 * **Notable Fixes:**
@@ -11,6 +12,7 @@
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
+* threads, objects: added hyperdyadic less/greaterThanOrEquals prims 
 
 ### 2020-11-30
 * threads: keep internal linked-list organization intact for hyperblocks
