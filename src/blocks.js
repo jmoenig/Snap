@@ -13374,7 +13374,7 @@ CommentMorph.prototype.userMenu = function () {
                 ide = this.parentThatIsA(IDE_Morph),
                 blockEditor = this.parentThatIsA(BlockEditorMorph),
                 world = this.world();
-            copy.id = null;
+            dup.id = null;
             dup.pickUp(world);
             // register the drop-origin, so the comment can
             // slide back to its former situation if dropped
