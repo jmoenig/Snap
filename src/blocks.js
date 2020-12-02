@@ -1682,6 +1682,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     }
                 }
             });
+            part.fixLayout();
         }
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
