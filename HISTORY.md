@@ -22,6 +22,7 @@
 * threads, blocks: added SIGN function to monadic dropdown
 * Catalan translation update, thanks, Joan!
 * Morphic: prevent browser override for ctrl+o gesture
+* objects, threads: refactored mouseX / mouseY to use generic coordinate conversion
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"

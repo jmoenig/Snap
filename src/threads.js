@@ -5193,30 +5193,22 @@ Process.prototype.reportContextFor = function (context, otherObj) {
 };
 
 Process.prototype.reportMouseX = function () {
-    var stage, world;
+    var world;
     if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            world = stage.world();
-            if (world) {
-                return (world.hand.position().x - stage.center().x)
-                    / stage.scale;
-            }
+        world = this.homeContext.receiver.world();
+        if (world) {
+            return this.homeContext.receiver.snapPoint(world.hand.position()).x;
         }
     }
     return 0;
 };
 
 Process.prototype.reportMouseY = function () {
-    var stage, world;
+    var world;
     if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            world = stage.world();
-            if (world) {
-                return (stage.center().y - world.hand.position().y)
-                    / stage.scale;
-            }
+        world = this.homeContext.receiver.world();
+        if (world) {
+            return this.homeContext.receiver.snapPoint(world.hand.position()).y;
         }
     }
     return 0;

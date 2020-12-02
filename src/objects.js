@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-01';
+modules.objects = '2020-December-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -9302,6 +9302,11 @@ StageMorph.prototype.getLastAnswer
 
 StageMorph.prototype.reportThreadCount
     = SpriteMorph.prototype.reportThreadCount;
+
+// StageMorph coordinate conversion
+
+StageMorph.prototype.snapPoint
+    = SpriteMorph.prototype.snapPoint;
 
 // StageMorph dimension getters
 
