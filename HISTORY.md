@@ -13,6 +13,7 @@
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
     * improved SVG loading in Firefox, thanks, Joan!
+    * prevent browser override for ctrl+o gesture
 * **Translation Updates:**
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
@@ -20,6 +21,7 @@
 ### 2020-12-02
 * threads, blocks: added SIGN function to monadic dropdown
 * Catalan translation update, thanks, Joan!
+* Morphic: prevent browser override for ctrl+o gesture
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
