@@ -15,9 +15,11 @@
     * improved SVG loading in Firefox, thanks, Joan!
 * **Translation Updates:**
     * Spanish, thanks, Joan!
+    * Catalan, thanks, Joan!
 
 ### 2020-12-02
 * threads, blocks: added SIGN function to monadic dropdown
+* Catalan translation update, thanks, Joan!
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
