@@ -5,6 +5,7 @@
 * **New Features:**
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
+    * new SIGN function in arithmetic dropdown
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
     * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
@@ -14,6 +15,9 @@
     * improved SVG loading in Firefox, thanks, Joan!
 * **Translation Updates:**
     * Spanish, thanks, Joan!
+
+### 2020-12-02
+* threads, blocks: added SIGN function to monadic dropdown
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"

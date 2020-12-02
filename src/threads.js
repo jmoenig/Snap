@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-01';
+modules.threads = '2020-December-02';
 
 var ThreadManager;
 var Process;
@@ -3864,6 +3864,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     // case '\u2212': // minus-sign
     case 'neg':
         result = n * -1;
+        break;
+    case 'sign':
+        result = Math.sign(x);
         break;
     case 'ceiling':
         result = Math.ceil(x);
