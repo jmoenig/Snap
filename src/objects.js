@@ -979,6 +979,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rel to %dst',
             defaults: [['distance'], ['mouse-pointer']]
         },
+        reportDistanceFacing: { // +++ experimental, under construction
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'distance facing %dst',
+            defaults: [['mouse-pointer']]
+        },
         doResetTimer: {
             type: 'command',
             category: 'sensing',

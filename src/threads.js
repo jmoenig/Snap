@@ -4790,6 +4790,127 @@ Process.prototype.reportDistanceTo = function (name) {
     return 0;
 };
 
+Process.prototype.reportDistanceFacing = function (name) {
+    // +++ experimental - under construction
+    var thisObj = this.blockReceiver(),
+        thatObj,
+        stage,
+        rc,
+        targetBounds,
+        intersections = [],
+        dir,
+        theta,
+        a, b, x, y,
+        top, bottom, left, right,
+        point;
+
+    if (thisObj) {
+        rc = thisObj.rotationCenter();
+        point = rc;
+        if (this.inputOption(name) === 'mouse-pointer') {
+            point = thisObj.world().hand.position();
+        } else if (this.inputOption(name) === 'center') {
+            return new Point(thisObj.xPosition(), thisObj.yPosition())
+                .distanceTo(ZERO);
+        } else if (name instanceof List) {
+            return new Point(thisObj.xPosition(), thisObj.yPosition())
+                .distanceTo(new Point(name.at(1), name.at(2)));
+        }
+        stage = thisObj.parentThatIsA(StageMorph);
+        thatObj = this.getOtherObject(name, thisObj, stage);
+        if (thatObj) {
+            // determine intersections with the target's bounding box
+            dir = thisObj.heading;
+            targetBounds = thatObj.bounds;
+            top = targetBounds.top();
+            bottom = targetBounds.bottom();
+            left = targetBounds.left();
+            right = targetBounds.right();
+
+            // horizontal bounds
+            theta = radians(dir);
+
+            // top
+            b = rc.y - top;
+            a = b * Math.tan(theta);
+            x = rc.x + a;
+            if (
+                (x === rc.x &&
+                    ((dir === 180 && rc.y < top) ||
+                    dir === 0 && rc.y > top)
+                ) ||
+                (x > rc.x && dir > 0 && dir < 180) ||
+                (x < rc.x && dir > 180 && dir < 360)
+            ) {
+                if (x >= left && x <= right) {
+                    intersections.push(new Point(x, top));
+                }
+            }
+
+            // bottom
+            b = rc.y - bottom;
+            a = b * Math.tan(theta);
+            x = rc.x + a;
+            if (
+                (x === rc.x &&
+                    ((dir === 180 && rc.y < bottom) ||
+                    dir === 0 && rc.y > bottom)
+                ) ||
+                (x > rc.x && dir > 0 && dir < 180) ||
+                (x < rc.x && dir > 180 && dir < 360)
+            ) {
+                if (x >= left && x <= right) {
+                    intersections.push(new Point(x, bottom));
+                }
+            }
+
+            // vertical bounds
+            theta = radians(360 - dir - 90);
+
+            // left
+            b = rc.x - left;
+            a = b * Math.tan(theta);
+            y = rc.y + a;
+            if (
+                (y === rc.y &&
+                    ((dir === 90 && rc.x < left) ||
+                    dir === 270 && rc.x > left)
+                ) ||
+                (y > rc.y && dir > 90 && dir < 270) ||
+                (y < rc.y && (dir > 270 || dir < 90))
+            ) {
+                if (y >= top && y <= bottom) {
+                    intersections.push(new Point(left, y));
+                }
+            }
+
+            // right
+            b = rc.x - right;
+            a = b * Math.tan(theta);
+            y = rc.y + a;
+            if (
+                (y === rc.y &&
+                    ((dir === 90 && rc.x < right) ||
+                    dir === 270 && rc.x > right)
+                ) ||
+                (y > rc.y && dir >= 90 && dir < 270) ||
+                (y < rc.y && (dir > 270 || dir <= 90))
+            ) {
+                if (y >= top && y <= bottom) {
+                    intersections.push(new Point(right, y));
+                }
+            }
+
+            // point = thatObj.rotationCenter();
+        }
+        // return rc.distanceTo(point) / stage.scale;
+    }
+    // return 0;
+    return new List(intersections)
+        .map(point => thisObj.snapPoint(point))
+        .map(point => new List([point.x, point.y]));
+};
+
 Process.prototype.reportDirectionTo = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj;
