@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-02';
+modules.objects = '2020-December-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -979,12 +979,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rel to %dst',
             defaults: [['distance'], ['mouse-pointer']]
         },
-        reportDistanceFacing: { // +++ experimental, under construction
+        reportDistanceFacing: { // experimental, under construction
             only: SpriteMorph,
             type: 'reporter',
             category: 'sensing',
-            spec: 'distance facing %dst',
-            defaults: [['mouse-pointer']]
+            spec: 'distance facing %cln',
+            defaults: [['myself']]
         },
         doResetTimer: {
             type: 'command',
@@ -2547,6 +2547,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportThreadCount'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+            blocks.push('-');
+            blocks.push(block('reportDistanceFacing'));
         }
 
 	/////////////////////////////////

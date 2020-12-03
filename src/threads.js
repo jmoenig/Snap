@@ -4791,7 +4791,14 @@ Process.prototype.reportDistanceTo = function (name) {
 };
 
 Process.prototype.reportDistanceFacing = function (name) {
-    // +++ experimental - under construction
+    // raycasting edge detection, highly experimental - under construction
+
+    if (this.enableHyperOps) {
+        if (name instanceof List) {
+            return name.map(each => this.reportDistanceFacing(each));
+        }
+    }
+
     var thisObj = this.blockReceiver(),
         thatObj,
         stage,
@@ -4802,8 +4809,9 @@ Process.prototype.reportDistanceFacing = function (name) {
         a, b, x, y,
         top, bottom, left, right,
         hSect, vSect,
-        point,
-        temp;
+        point, hit,
+        temp,
+        canvas, width, imageData;
 
     hSect = (yLevel) => {
         var theta = radians(dir);
@@ -4843,64 +4851,123 @@ Process.prototype.reportDistanceFacing = function (name) {
         }
     };
 
-    if (thisObj) {
-        rc = thisObj.rotationCenter();
-        point = rc;
-        if (this.inputOption(name) === 'mouse-pointer') {
-            point = thisObj.world().hand.position();
-        } else if (this.inputOption(name) === 'center') {
-            return new Point(thisObj.xPosition(), thisObj.yPosition())
-                .distanceTo(ZERO);
-        } else if (name instanceof List) {
-            return new Point(thisObj.xPosition(), thisObj.yPosition())
-                .distanceTo(new Point(name.at(1), name.at(2)));
+    if (!thisObj) {return -1; }
+    rc = thisObj.rotationCenter();
+    point = rc;
+    stage = thisObj.parentThatIsA(StageMorph);
+    thatObj = this.getOtherObject(name, thisObj, stage);
+    if (!thatObj) {return -1; }
+
+    // determine intersections with the target's bounding box
+    dir = thisObj.heading;
+    targetBounds = thatObj.bounds;
+    top = targetBounds.top();
+    bottom = targetBounds.bottom();
+    left = targetBounds.left();
+    right = targetBounds.right();
+
+    // test if already inside the target
+    if (targetBounds.containsPoint(rc)) {
+        intersections.push(rc);
+        hSect(top);
+        hSect(bottom);
+        vSect(left);
+        vSect(right);
+        if (intersections.length < 2) {
+            return -1;
         }
-        stage = thisObj.parentThatIsA(StageMorph);
-        thatObj = this.getOtherObject(name, thisObj, stage);
-        if (thatObj) {
-            // determine intersections with the target's bounding box
-            dir = thisObj.heading;
-            targetBounds = thatObj.bounds;
-            top = targetBounds.top();
-            bottom = targetBounds.bottom();
-            left = targetBounds.left();
-            right = targetBounds.right();
-
-            // test if already inside the target
-            if (targetBounds.containsPoint(rc)) {
-                intersections.push(rc);
-                hSect(top);
-                hSect(bottom);
-                vSect(left);
-                vSect(right);
-            } else {
-                hSect(top);
-                hSect(bottom);
-                vSect(left);
-                vSect(right);
-
-                // sort
-                if (intersections.length > 1) {
-                    if (Math.sign(rc.x - intersections[0].x) !==
-                        Math.sign(intersections[0].x - intersections[1].x) ||
-                        Math.sign(rc.y - intersections[0].y) !==
-                        Math.sign(intersections[0].y - intersections[1].y)
-                    ) {
-                        temp = intersections[0];
-                        intersections[0] = intersections[1];
-                        intersections[1] = temp;
-                    }
-                }
+    } else {
+        hSect(top);
+        hSect(bottom);
+        vSect(left);
+        vSect(right);
+        if (intersections.length < 2) {
+            return -1;
+        }
+        // sort
+        if (dir !== 90) {
+            if (Math.sign(rc.x - intersections[0].x) !==
+                Math.sign(intersections[0].x - intersections[1].x) ||
+                Math.sign(rc.y - intersections[0].y) !==
+                Math.sign(intersections[0].y - intersections[1].y)
+            ) {
+                temp = intersections[0];
+                intersections[0] = intersections[1];
+                intersections[1] = temp;
             }
-
-            // point = thatObj.rotationCenter();
         }
-        // return rc.distanceTo(point) / stage.scale;
     }
-    // return 0;
+
+    // for debugging:
+    /*
     return new List(intersections)
         .map(point => thisObj.snapPoint(point))
         .map(point => new List([point.x, point.y]));
+    */
+
+    // convert intersections to local bitmap coordinates of the target
+    intersections = intersections.map(point =>
+        point.subtract(targetBounds.origin).floor()
+    );
+
+    // get image data
+    canvas = thatObj.getImage();
+    width = canvas.width;
+    imageData = canvas.getContext('2d').getImageData(
+        0,
+        0,
+        width,
+        canvas.height
+    ).data;
+
+    // scan the ray along the coordinates of a Bresenham line
+    // for the first opaque pixel
+    function alphaAt(imageData, width, x, y) {
+        var idx = (y * width * 4) + x * 4;
+        return imageData[idx + 3];
+    }
+
+    function isOpaque(x, y) {
+        return alphaAt(imageData, width, x, y) > 0;
+    }
+
+    function scan(testFunc, x0, y0, x1, y1) {
+        // Bresenham's algorithm
+        var dx = Math.abs(x1 - x0),
+            sx = x0 < x1 ? 1 : -1,
+            dy = -Math.abs(y1 - y0),
+            sy = y0 < y1 ? 1 : -1,
+            err = dx + dy,
+            e2;
+
+        while (true) {
+            if (testFunc(x0, y0)) {
+                return new Point(x0, y0);
+            }
+            if (x0 === x1 && y0 === y1) {
+                return -1; // not found
+            }
+            e2 = 2 * err;
+            if (e2 > dy) {
+                err += dy;
+                x0 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+
+    hit = scan(
+        isOpaque,
+        intersections[0].x,
+        intersections[0].y,
+        intersections[1].x,
+        intersections[1].y
+    );
+    if (hit === -1) {return hit; }
+    return rc.distanceTo(hit.add(targetBounds.origin)) / stage.scale;
 };
 
 Process.prototype.reportDirectionTo = function (name) {
