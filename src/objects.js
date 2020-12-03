@@ -2104,10 +2104,17 @@ SpriteMorph.prototype.getImageData = function () {
         ).data;
         this.imageData = {
             version : this.version,
-            pixels : new Uint32Array(imageData.buffer.slice(0))
+            pixels : new Uint32Array(imageData.buffer.slice(0)),
+            full : imageData // +++ get rid of this
         };
     }
     return this.imageData.pixels;
+};
+
+SpriteMorph.prototype.getFullImageData = function () {
+    // temporary hack for raycasting. // +++
+    this.getImageData();
+    return this.imageData.full;
 };
 
 SpriteMorph.prototype.projectionSnap = function() {

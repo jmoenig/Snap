@@ -4907,11 +4907,18 @@ Process.prototype.reportDistanceFacing = function (name) {
     */
 
     // convert intersections to local bitmap coordinates of the target
+/*
     intersections = intersections.map(point =>
         point.subtract(targetBounds.origin).floor()
     );
+*/
+
+    intersections = intersections.map(point =>
+        point.subtract(targetBounds.origin).floorDivideBy(stage.scale) // +++
+    );
 
     // get image data
+/*
     canvas = thatObj.getImage();
     if (canvas.isRetinaEnabled) { // for the "turtle" costume
         canvas = normalizeCanvas(canvas, true); // copy it
@@ -4923,6 +4930,10 @@ Process.prototype.reportDistanceFacing = function (name) {
         width,
         canvas.height
     ).data;
+*/
+
+    width = Math.floor(targetBounds.width() / stage.scale); // +++
+    imageData = thatObj.getFullImageData(); // +++
 
     // scan the ray along the coordinates of a Bresenham line
     // for the first opaque pixel
@@ -4946,7 +4957,7 @@ Process.prototype.reportDistanceFacing = function (name) {
 
         while (true) {
             if (testFunc(x0, y0)) {
-                return new Point(x0, y0);
+                return new Point(x0 * stage.scale, y0 * stage.scale); // +++
             }
             if (x0 === x1 && y0 === y1) {
                 return -1; // not found
