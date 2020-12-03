@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-02';
+modules.threads = '2020-December-03';
 
 var ThreadManager;
 var Process;
@@ -4799,10 +4799,49 @@ Process.prototype.reportDistanceFacing = function (name) {
         targetBounds,
         intersections = [],
         dir,
-        theta,
         a, b, x, y,
         top, bottom, left, right,
-        point;
+        hSect, vSect,
+        point,
+        temp;
+
+    hSect = (yLevel) => {
+        var theta = radians(dir);
+        b = rc.y - yLevel;
+        a = b * Math.tan(theta);
+        x = rc.x + a;
+        if (
+            (x === rc.x &&
+                ((dir === 180 && rc.y < yLevel) ||
+                dir === 0 && rc.y > yLevel)
+            ) ||
+            (x > rc.x && dir >= 0 && dir < 180) ||
+            (x < rc.x && dir >= 180 && dir < 360)
+        ) {
+            if (x >= left && x <= right) {
+                intersections.push(new Point(x, yLevel));
+            }
+        }
+    };
+
+    vSect = (xLevel) => {
+        var theta = radians(360 - dir - 90);
+        b = rc.x - xLevel;
+        a = b * Math.tan(theta);
+        y = rc.y + a;
+        if (
+            (y === rc.y &&
+                ((dir === 90 && rc.x < xLevel) ||
+                dir === 270 && rc.x > xLevel)
+            ) ||
+            (y > rc.y && dir >= 90 && dir < 270) ||
+            (y < rc.y && (dir >= 270 || dir < 90))
+        ) {
+            if (y >= top && y <= bottom) {
+                intersections.push(new Point(xLevel, y));
+            }
+        }
+    };
 
     if (thisObj) {
         rc = thisObj.rotationCenter();
@@ -4827,77 +4866,30 @@ Process.prototype.reportDistanceFacing = function (name) {
             left = targetBounds.left();
             right = targetBounds.right();
 
-            // horizontal bounds
-            theta = radians(dir);
+            // test if already inside the target
+            if (targetBounds.containsPoint(rc)) {
+                intersections.push(rc);
+                hSect(top);
+                hSect(bottom);
+                vSect(left);
+                vSect(right);
+            } else {
+                hSect(top);
+                hSect(bottom);
+                vSect(left);
+                vSect(right);
 
-            // top
-            b = rc.y - top;
-            a = b * Math.tan(theta);
-            x = rc.x + a;
-            if (
-                (x === rc.x &&
-                    ((dir === 180 && rc.y < top) ||
-                    dir === 0 && rc.y > top)
-                ) ||
-                (x > rc.x && dir > 0 && dir < 180) ||
-                (x < rc.x && dir > 180 && dir < 360)
-            ) {
-                if (x >= left && x <= right) {
-                    intersections.push(new Point(x, top));
-                }
-            }
-
-            // bottom
-            b = rc.y - bottom;
-            a = b * Math.tan(theta);
-            x = rc.x + a;
-            if (
-                (x === rc.x &&
-                    ((dir === 180 && rc.y < bottom) ||
-                    dir === 0 && rc.y > bottom)
-                ) ||
-                (x > rc.x && dir > 0 && dir < 180) ||
-                (x < rc.x && dir > 180 && dir < 360)
-            ) {
-                if (x >= left && x <= right) {
-                    intersections.push(new Point(x, bottom));
-                }
-            }
-
-            // vertical bounds
-            theta = radians(360 - dir - 90);
-
-            // left
-            b = rc.x - left;
-            a = b * Math.tan(theta);
-            y = rc.y + a;
-            if (
-                (y === rc.y &&
-                    ((dir === 90 && rc.x < left) ||
-                    dir === 270 && rc.x > left)
-                ) ||
-                (y > rc.y && dir > 90 && dir < 270) ||
-                (y < rc.y && (dir > 270 || dir < 90))
-            ) {
-                if (y >= top && y <= bottom) {
-                    intersections.push(new Point(left, y));
-                }
-            }
-
-            // right
-            b = rc.x - right;
-            a = b * Math.tan(theta);
-            y = rc.y + a;
-            if (
-                (y === rc.y &&
-                    ((dir === 90 && rc.x < right) ||
-                    dir === 270 && rc.x > right)
-                ) ||
-                (y > rc.y && dir >= 90 && dir < 270) ||
-                (y < rc.y && (dir > 270 || dir <= 90))
-            ) {
-                if (y >= top && y <= bottom) {
-                    intersections.push(new Point(right, y));
+                // sort
+                if (intersections.length > 1) {
+                    if (Math.sign(rc.x - intersections[0].x) !==
+                        Math.sign(intersections[0].x - intersections[1].x) ||
+                        Math.sign(rc.y - intersections[0].y) !==
+                        Math.sign(intersections[0].y - intersections[1].y)
+                    ) {
+                        temp = intersections[0];
+                        intersections[0] = intersections[1];
+                        intersections[1] = temp;
+                    }
                 }
             }
 

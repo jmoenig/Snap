@@ -18,6 +18,9 @@
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
 
+### 2020-12-03
+* threads: raycasting edge detection, under construction
+
 ### 2020-12-02
 * threads, blocks: added SIGN function to monadic dropdown
 * Catalan translation update, thanks, Joan!
