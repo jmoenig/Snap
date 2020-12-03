@@ -4933,13 +4933,13 @@ Process.prototype.reportDistanceFacing = function (name) {
 */
 
     width = Math.floor(targetBounds.width() / stage.scale); // +++
-    imageData = thatObj.getFullImageData(); // +++
+    imageData = thatObj.getImageData(); // +++
 
     // scan the ray along the coordinates of a Bresenham line
     // for the first opaque pixel
     function alphaAt(imageData, width, x, y) {
-        var idx = (y * width * 4) + x * 4;
-        return imageData[idx + 3];
+        var idx = y * width + x;
+        return imageData[idx] && 0x000000FF; // alpha
     }
 
     function isOpaque(x, y) {
