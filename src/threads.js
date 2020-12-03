@@ -59,7 +59,8 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
-TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
+normalizeCanvas*/
 
 modules.threads = '2020-December-03';
 
@@ -4912,6 +4913,9 @@ Process.prototype.reportDistanceFacing = function (name) {
 
     // get image data
     canvas = thatObj.getImage();
+    if (canvas.isRetinaEnabled) { // for the "turtle" costume
+        canvas = normalizeCanvas(canvas, true); // copy it
+    }
     width = canvas.width;
     imageData = canvas.getContext('2d').getImageData(
         0,
