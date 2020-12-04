@@ -4748,6 +4748,9 @@ Process.prototype.reportRelationTo = function (relation, name) {
  	if (rel === 'distance') {
   		return this.reportDistanceTo(name);
   	}
+    if (rel === 'ray length') {
+    	return this.reportRayLengthTo(name);
+    }
     if (rel === 'direction') {
     	return this.reportDirectionTo(name);
     }
@@ -4790,15 +4793,10 @@ Process.prototype.reportDistanceTo = function (name) {
     return 0;
 };
 
-Process.prototype.reportDistanceFacing = function (name) {
-    // raycasting edge detection, highly experimental - under construction
-
-    if (this.enableHyperOps) {
-        if (name instanceof List) {
-            return name.map(each => this.reportDistanceFacing(each));
-        }
-    }
-
+Process.prototype.reportRayLengthTo = function (name) {
+    // raycasting edge detection - answer the distance between the asking
+    // sprite's rotation center to the target sprite's outer edge (the first
+    // opaque pixel) in the asking sprite's current direction
     var thisObj = this.blockReceiver(),
         thatObj,
         stage,
@@ -4856,7 +4854,7 @@ Process.prototype.reportDistanceFacing = function (name) {
     point = rc;
     stage = thisObj.parentThatIsA(StageMorph);
     thatObj = this.getOtherObject(name, thisObj, stage);
-    if (!thatObj) {return -1; }
+    if (!(thatObj instanceof SpriteMorph)) {return -1; }
 
     // determine intersections with the target's bounding box
     dir = thisObj.heading;

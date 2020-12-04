@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * raycasting: new "ray length" option in the "relation TO object" primitive
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
     * new SIGN function in arithmetic dropdown
@@ -20,6 +21,7 @@
 
 ### 2020-12-04
 * threads: refactored raycasting
+* integrated raycasting into "relation TO object" primitive
 
 ### 2020-12-03
 * threads: raycasting edge detection, under construction
