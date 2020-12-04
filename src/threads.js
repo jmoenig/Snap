@@ -59,10 +59,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
-TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-normalizeCanvas*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-03';
+modules.threads = '2020-December-04';
 
 var ThreadManager;
 var Process;
@@ -4812,7 +4811,7 @@ Process.prototype.reportDistanceFacing = function (name) {
         hSect, vSect,
         point, hit,
         temp,
-        canvas, width, imageData;
+        width, imageData;
 
     hSect = (yLevel) => {
         var theta = radians(dir);
@@ -4907,33 +4906,13 @@ Process.prototype.reportDistanceFacing = function (name) {
     */
 
     // convert intersections to local bitmap coordinates of the target
-/*
     intersections = intersections.map(point =>
-        point.subtract(targetBounds.origin).floor()
-    );
-*/
-
-    intersections = intersections.map(point =>
-        point.subtract(targetBounds.origin).floorDivideBy(stage.scale) // +++
+        point.subtract(targetBounds.origin).floorDivideBy(stage.scale)
     );
 
     // get image data
-/*
-    canvas = thatObj.getImage();
-    if (canvas.isRetinaEnabled) { // for the "turtle" costume
-        canvas = normalizeCanvas(canvas, true); // copy it
-    }
-    width = canvas.width;
-    imageData = canvas.getContext('2d').getImageData(
-        0,
-        0,
-        width,
-        canvas.height
-    ).data;
-*/
-
-    width = Math.floor(targetBounds.width() / stage.scale); // +++
-    imageData = thatObj.getImageData(); // +++
+    width = Math.floor(targetBounds.width() / stage.scale);
+    imageData = thatObj.getImageData();
 
     // scan the ray along the coordinates of a Bresenham line
     // for the first opaque pixel
@@ -4957,7 +4936,7 @@ Process.prototype.reportDistanceFacing = function (name) {
 
         while (true) {
             if (testFunc(x0, y0)) {
-                return new Point(x0 * stage.scale, y0 * stage.scale); // +++
+                return new Point(x0 * stage.scale, y0 * stage.scale);
             }
             if (x0 === x1 && y0 === y1) {
                 return -1; // not found

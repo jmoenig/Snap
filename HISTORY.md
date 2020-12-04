@@ -18,6 +18,9 @@
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
 
+### 2020-12-04
+* threads: refactored raycasting
+
 ### 2020-12-03
 * threads: raycasting edge detection, under construction
 
