@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-11-02', // this, too, will appear in the Translators tab
+        '2020-12-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -623,6 +623,8 @@ SnapTranslator.dict.de = {
         '%rel zu %dst',
     'distance':
     	'Entfernung',
+    'ray length':
+        'Strahlenlänge',
     '%asp at %loc' :
         '%asp bei %loc',
     'r-g-b-a':

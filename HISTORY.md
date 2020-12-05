@@ -18,9 +18,11 @@
 * **Translation Updates:**
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
+    * German
 
 ### 2020-12-05
-* objects: alternative collision detection method using the video-cache, commented out for reference.  
+* objects: alternative collision detection method using the video-cache, commented out for reference.
+* German translation update for "ray length"  
 
 ### 2020-12-04
 * threads: refactored raycasting
