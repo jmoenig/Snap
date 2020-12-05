@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-04';
+modules.objects = '2020-December-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -4353,6 +4353,56 @@ SpriteMorph.prototype.goBack = function (layers) {
 };
 
 // SpriteMorph collision detection
+
+// attempted optimized collision detection using video buffer
+// turns out it's actually slower to partially enumerate 2 sets of pixels
+// than to create a new masked canvas.
+// commented out and kept for reference
+
+/*
+SpriteMorph.prototype.isTouching = function (other) {
+    var stage = this.parentThatIsA(StageMorph),
+        inter, off, src, trg, sw, tw, x, y;
+
+    function isOpaque(imageData, width, x, y) {
+        return (imageData[y * width + x] && 0x000000FF) > 0; // alpha
+    }
+
+    if (!(other instanceof SpriteMorph)) {
+        return SpriteMorph.uber.isTouching.call(this, other);
+    }
+
+    // determine the intersection of both bounding boxes
+    // unscaled and translated to local coordinates
+
+    inter = this.bounds.intersect(other.bounds).translateBy(
+        this.position().neg()
+    ).scaleBy(1 / stage.scale); // .floor(); ?
+
+    if (inter.width() < 1 || inter.height() < 1) {
+        return false;
+    }
+
+    off = this.position().subtract(
+        other.position()
+    ).scaleBy(1 / stage.scale).floor();
+
+    src = this.getImageData();
+    sw = Math.floor(this.width() / stage.scale);
+    trg = other.getImageData();
+    tw = Math.floor(other.width() / stage.scale);
+
+    for (y = inter.origin.y; y <= inter.corner.y; y += 1) {
+        for (x = inter.origin.x; x <= inter.corner.x; x += 1) {
+            if (isOpaque(src, sw, x, y) &&
+                    isOpaque(trg, tw, x + off.x, y + off.y)) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+*/
 
 SpriteMorph.prototype.reportTouchingColor = function (aColor) {
     var stage = this.parentThatIsA(StageMorph),

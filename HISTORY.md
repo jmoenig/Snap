@@ -19,6 +19,9 @@
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
 
+### 2020-12-05
+* objects: alternative collision detection method using the video-cache, commented out for reference.  
+
 ### 2020-12-04
 * threads: refactored raycasting
 * integrated raycasting into "relation TO object" primitive
