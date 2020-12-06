@@ -181,7 +181,7 @@ SnapTranslator.dict.ta = {
     'language_name':
         'Tamil', // the name as it should appear in the language menu
     'language_translator':
-        'vinayakumar R', // your name for the Translators tab
+        'vinayakumar R/Barthdry', // your name for the Translators tab
     'translator_e-mail':
         'vnkmr7620@gmail.com', // optional
     'last_changed':
@@ -214,15 +214,15 @@ SnapTranslator.dict.ta = {
     'Lists':
         'பட்டியல்',
     'Other':
-        'Andere',
+        'மற்றவை',
 
     // editor:
     'draggable':
-        'greifbar',
+        'இழுக்கக்கூடியது',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'கையெழுத்துப்படிவம்',
     'Costumes':
         'உடைகள்',
     'Sounds':
@@ -230,9 +230,9 @@ SnapTranslator.dict.ta = {
 
     // names:
     'Sprite':
-        'Objekt',
+        'ஸ்ப்ரைட்',
     'Stage':
-        'மேட',
+        'பின்னணி',
 
     // rotation styles:
     'don\'t rotate':
@@ -1261,9 +1261,9 @@ SnapTranslator.dict.ta = {
 
     // data types
     'number':
-        'Zahl',
+        'எண்',
     'text':
-        'Text',
+        'உரை',
     'Boolean':
         'Boole',
     'list':
