@@ -2140,44 +2140,71 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     var myself,
-        viewBox, w, h,
+        viewBox,
+        w = 300, h = 150, // setting HTMLImageElement default values
+        scale = 1,
         svgNormalized,
         headerLenght = anImage.src.search('base64') + 7,
             // usually 26 from "data:image/svg+xml;base64,"
         svgStrEncoded = anImage.src.substring(headerLenght),
         svgObj = new DOMParser().parseFromString(
             atob(svgStrEncoded), "image/svg+xml"
-        ).firstElementChild;
+        ).firstElementChild,
+        normalizing = false;
 
     name = name.split('.')[0];
 
-    // check svg 'width' and 'height' attributes and set them if needed
-
+    // checking for svg 'width' and 'height' attributes
     if (svgObj.attributes.getNamedItem("width") &&
             svgObj.attributes.getNamedItem("height")) {
-        this.loadSVG(anImage, name);
+        w = parseFloat(svgObj.attributes.getNamedItem("width").value);
+        h = parseFloat(svgObj.attributes.getNamedItem("height").value);
     } else {
-        // setting HTMLImageElement default values
-        w = '300';
-        h = '150';
-        // changing default values if viewBox attribute is set
-        if (svgObj.attributes.getNamedItem("viewBox")) {
-            viewBox = svgObj.attributes.getNamedItem('viewBox').value;
-            viewBox = viewBox.split(/[ ,]/).filter(item => item);
-            if (viewBox.length == 4) {
-                w = Math.ceil(viewBox[2]);
-                h = Math.ceil(viewBox[3]);
+        normalizing = true;
+    }
+
+    // checking for svg 'viewBox' attribute
+    if (svgObj.attributes.getNamedItem("viewBox")) {
+        viewBox = svgObj.attributes.getNamedItem('viewBox').value;
+        viewBox = viewBox.split(/[ ,]/).filter(item => item);
+        if (viewBox.length == 4) {
+            if (normalizing) {
+                w = parseFloat(viewBox[2]);
+                h = parseFloat(viewBox[3]);
             }
         }
+    } else {
+        svgObj.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        normalizing = true;
+    }
+
+    // checking if the costume is bigger than the stage and, if so, fit it
+    if (StageMorph.prototype.dimensions.x < w ||
+            StageMorph.prototype.dimensions.y < h) {
+        scale = Math.min(
+            (StageMorph.prototype.dimensions.x / w),
+            (StageMorph.prototype.dimensions.y / h)
+        );
+        normalizing = true;
+        w = w * scale;
+        h = h * scale;
+    }
+
+    // loading image, normalized if it needed
+    // all the images are:
+        // sized, with 'width' and 'height' attributes
+        // fitted to stage dimensions
+        // and with their 'viewBox' attribute 
+    if (normalizing) {
         svgNormalized = new Image(w, h);
         svgObj.setAttribute('width', w);
         svgObj.setAttribute('height', h);
         svgNormalized.src = 'data:image/svg+xml;base64,' +
             btoa(new XMLSerializer().serializeToString(svgObj));
         myself = this;
-        svgNormalized.onload = function () {
-            myself.loadSVG(svgNormalized, name);
-        };
+        svgNormalized.onload = () => { myself.loadSVG(svgNormalized, name); }
+    } else {
+        this.loadSVG(anImage, name);
     }
 };
 
