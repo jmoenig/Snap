@@ -6100,6 +6100,71 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
 	return new List(result);
 };
 
+// Multimap takes a list of lists and gives the indexth item of each list
+// to the reporter.  If formal parameters, a single list of all the indexth
+// items are bound to the "value" parameter; if not, the individual items are
+// distributed among the empty slots.
+
+Process.prototype.reportAtomicMultimap = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
+    this.assertType(list, 'list');
+	var result = [],
+    	src = list.itemsArray().map(onelist => onelist.itemsArray()),
+    	len = src[1].length,
+    	width = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
+     	func,
+    	i;
+
+	// try compiling the reporter into generic JavaScript
+ 	// fall back to the morphic reporter if unsuccessful
+    try {
+        if (formalParameterCount > 0) {
+	    	func = this.reportCompiled(reporter, 1); // val is list of items
+		} else {
+	    	func = this.reportCompiled(reporter, width); // variadicish
+		}
+    } catch (err) {
+        console.log(err.message);
+     	func = reporter;
+    }
+
+	// iterate over the data in a single frame:
+ 	// to do: Insert some kind of user escape mechanism
+
+	for (i = 0; i < len; i += 1) {
+        if (formalParameterCount > 0) {
+	        parms = [new List(src.map(onearg => onearg[i]))];
+		} else {
+			parms = src.map(onearg => onearg[i]);
+		}
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
+  		result.push(
+        	invoke(
+            	func,
+                new List(parms),
+                null,
+                null,
+                null,
+                null,
+                this.capture(reporter) // process
+            )
+        );
+	}
+	return new List(result);
+};
+
 Process.prototype.reportAtomicKeep = function (reporter, list) {
     // if the reporter uses formal parameters instead of implicit empty slots
     // there are two additional optional parameters:

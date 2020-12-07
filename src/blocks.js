@@ -2839,6 +2839,7 @@ BlockMorph.prototype.userMenu = function () {
     ) {
         alternatives = {
             reportMap : 'reportAtomicMap',
+			reportMap : 'reportAtomicMultimap',
             reportKeep : 'reportAtomicKeep',
             reportFindFirst: 'reportAtomicFindFirst',
             reportCombine : 'reportAtomicCombine'
@@ -2853,6 +2854,7 @@ BlockMorph.prototype.userMenu = function () {
         contains(
             [
                 'reportAtomicMap',
+				'reportAtomicMultimap',				
                 'reportAtomicKeep',
                 'reportAtomicFindFirst',
                 'reportAtomicCombine'
@@ -2862,6 +2864,7 @@ BlockMorph.prototype.userMenu = function () {
     ) {
         alternatives = {
             reportAtomicMap : 'reportMap',
+			reportAtomicMultimap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
             reportAtomicFindFirst: 'reportFindFirst',
             reportAtomicCombine : 'reportCombine'
@@ -11714,6 +11717,7 @@ MultiArgMorph.prototype.is3ArgRingInHOF = function () {
                     [
                         'reportMap',
                         'reportAtomicMap',
+						'reportAtomicMultimap',
                         'reportKeep',
                         'reportAtomicKeep',
                         'reportFindFirst',
