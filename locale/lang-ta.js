@@ -185,14 +185,14 @@ SnapTranslator.dict.ta = {
     'translator_e-mail':
         'vnkmr7620@gmail.com', // optional
     'last_changed':
-        '2015-02-20', // this, too, will appear in the Translators tab
+        '2020-07-12', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'பெயர் இல்லாதது',
     'development mode':
-        'Hackermodus',
+        'டெவோலோப்மென்ட் பயன்முறை',
 
     // categories:
     'Motion':
@@ -218,11 +218,11 @@ SnapTranslator.dict.ta = {
 
     // editor:
     'draggable':
-        'greifbar',
+        'இழுக்கக்கூடியது',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'லிபி',
     'Costumes':
         'உடைகள்',
     'Sounds':
@@ -230,7 +230,7 @@ SnapTranslator.dict.ta = {
 
     // names:
     'Sprite':
-        'Objekt',
+        'ஸ்ப்ரைட்',
     'Stage':
         'மேட',
 
@@ -240,7 +240,7 @@ SnapTranslator.dict.ta = {
     'can rotate':
         'சுழற்ற முடியும்',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'வலது மற்றும் இடது முகம் மட்டுமே',
 
     // new sprite button:
     'add a new sprite':
@@ -293,9 +293,9 @@ SnapTranslator.dict.ta = {
     'move %n steps':
         '%n அடிகள் நகரவும்',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        'drehe %clockwise %n அளவு',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        'drehe %counterclockwise %n அளவு',
     'point in direction %dir':
         '%dir திசையை சுட்டிக்கட்டவும்',
     'point towards %dst':
@@ -315,7 +315,7 @@ SnapTranslator.dict.ta = {
     'set y to %n':
         'y %n ஆக்கவும்',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'விளிம்பில் பவுன்ஸ்',
     'x position':
         'x இடம்',
     'y position':
@@ -418,7 +418,7 @@ SnapTranslator.dict.ta = {
     'when %keyHat key pressed':
         '%keyHat கீ அழுத்தும்பொழுது',
     'when I am clicked':
-        'Wenn ich angeklickt werde',
+        'நான் சொடுக்கும் போது',
     'when I receive %msgHat':
         '%msgHat பெறுகையில்',
     'broadcast %msg':
@@ -426,11 +426,11 @@ SnapTranslator.dict.ta = {
     'broadcast %msg and wait':
         '%msg செலித்தி காத்திருக்கவும்',
     'Message name':
-        'Nachricht',
+        'செய்தி பெயர்',
     'message':
-        'Nachricht',
+        'செய்தி',
     'any message':
-        'eine beliebige Nachricht',
+        'எந்த செய்தியும்',
     'wait %n secs':
         '%n விநாடிகள் காத்திருக்கவும்',
     'wait until %b':
@@ -446,23 +446,23 @@ SnapTranslator.dict.ta = {
     'if %b %c else %c':
         '%b என்றால் அல்லது %c',
     'report %s':
-        'berichte %s',
+        'அறிக்கை %s',
     'stop %stopChoices':
         'நிருத்து %stopChoices',
     'all':
-        'alles',
+        'அனைத்தும்',
     'this script':
         'இந்த ச்கிரிப்ட்ட',
     'this block':
-        'diesen Block',
+        'இது Block',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        'நிறுத்து %stopOthersChoices',
     'all but this script':
-        'alles au\u00dfer diesem Skript',
+        'அனைத்தும் ஆனால் இந்த ஸ்கிரிப்ட்',
     'other scripts in sprite':
         'andere Skripte in diesem Objekt',
     'pause all %pause':
-        'pausiere alles %pause',
+        'அனைத்தையும் இடைநிறுத்துங்கள் %pause',
     'run %cmdRing %inputs':
         'f\u00fchre %cmdRing aus %inputs',
     'launch %cmdRing %inputs':
@@ -474,15 +474,15 @@ SnapTranslator.dict.ta = {
     'call %cmdRing w/continuation':
         'rufe %cmdRing mit Continuation auf',
     'warp %c':
-        'Warp %c',
+        'போரிடு %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'நான் குளோனைத் தொடங்கும்போது',
     'create a clone of %cln':
-        'klone %cln',
+        'குளோன் %cln',
     'myself':
         'mich',
     'delete this clone':
-        'entferne diesen Klon',
+        'குளோனை நீக்கு',
 
     // sensing:
     'touching %col ?':
@@ -516,7 +516,7 @@ SnapTranslator.dict.ta = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbomodus?',
+        'turbo mode?',
     'set turbo mode to %b':
         'setze Turbomodus auf %b',
 
@@ -617,30 +617,30 @@ SnapTranslator.dict.ta = {
 
     // other
     'Make a block':
-        'Neuer Block',
+        'ஒரு தொகுதி செய்யுங்கள்',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'பற்றி . . . ',
     'Reference manual':
         'Handbuch lesen',
     'Snap! website':
-        'Snap! Webseite',
+        'Snap! website',
     'Download source':
-        'Quellcode runterladen',
+        'மூலத்தைப் பதிவிறக்குங்கள்',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'பயனர் பயன்முறைக்கு மாறவும்',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'verl\u00e4sst Morphic',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'தேவ் பயன்முறைக்கு மாறவும்',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'திட்ட குறிப்பு ...',
     'New':
         'புதிய புதிய பின்னணி',
     'Open...':
@@ -656,9 +656,9 @@ SnapTranslator.dict.ta = {
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'Export project as plain text',
     'Export project...':
-        'Projekt exportieren...',
+        'ஏற்றுமதி திட்டம்...',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
     'Export blocks...':
@@ -676,9 +676,9 @@ SnapTranslator.dict.ta = {
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'உள்நுழைய...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'பதிவுபெறுதல்...',
 
     // settings menu
     'Language...':
@@ -694,7 +694,7 @@ SnapTranslator.dict.ta = {
     'Stage height':
         'B\u00fchnenh\u00f6he',
     'Default':
-        'Normal',
+        'Default',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
@@ -822,15 +822,15 @@ SnapTranslator.dict.ta = {
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
     'ringify':
-        'Umringen',
+        'Ringify',
     'unringify':
-        'Entringen',
+        'Unringify',
 
     // custom blocks:
     'delete block definition...':
         'Blockdefinition l\u00f6schen',
     'edit...':
-        'Bearbeiten...',
+        'தொகு...',
 
     // sprites:
     'edit':
@@ -1137,15 +1137,15 @@ SnapTranslator.dict.ta = {
 
     // keys
     'space':
-        'இடைவெள',
+        'space',
     'up arrow':
-        'மேல் அம்புக்குற',
+        'up arrow',
     'down arrow':
-        'Pfeil nach unten',
+        'down arrow',
     'right arrow':
-        'வலது அம்புக்குற',
+        'right  arrow',
     'left arrow':
-        'Pfeil nach links',
+        'left arrow',
     'a':
         'a',
     'b':
@@ -1221,15 +1221,15 @@ SnapTranslator.dict.ta = {
 
     // messages
     'new...':
-        'Neu...',
+        'புதியது...',
 
     // math functions
     'abs':
-        'Betrag',
+        'abs',
     'floor':
-        'Abgerundet',
+        'floor',
     'sqrt':
-        'Wurzel',
+        'sqrt',
     'sin':
         'sin',
     'cos':
@@ -1249,35 +1249,35 @@ SnapTranslator.dict.ta = {
 
     // delimiters
     'letter':
-        'Buchstabe',
+        'letter',
     'whitespace':
-        'Leerraum',
+        'whitespace',
     'line':
-        'Zeilenvorschub',
+        'line',
     'tab':
-        'Tabulator',
+        'tab',
     'cr':
         'Wagenr\u00fccklauf',
 
     // data types
     'number':
-        'Zahl',
+        'number',
     'text':
-        'Text',
+        'text',
     'Boolean':
-        'Boole',
+        'Boolean',
     'list':
-        'Liste',
+        'list',
     'command':
-        'Befehlsblock',
+        'command',
     'reporter':
-        'Funktionsblock',
+        'reporter',
     'predicate':
-        'Pr\u00e4dikat',
+        'predicate',
 
     // list indices
     'last':
-        'letztes',
+        'last',
     'any':
-        'beliebiges'
+        'any'
 };
