@@ -1381,6 +1381,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%blitz map %repRing over %l'
         },
+        reportAtomicMultimap: {
+            dev: true, // not shown in palette, only accessible via relabelling
+            type: 'reporter',
+            category: 'lists',
+            spec: '%blitz map %repRing over %lists'
+        },
         reportKeep: {
             type: 'reporter',
             category: 'lists',
