@@ -1381,12 +1381,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%blitz map %repRing over %l'
         },
-        reportAtomicMultimap: {
-            dev: true, // not shown in palette, only accessible via relabelling
-            type: 'reporter',
-            category: 'lists',
-            spec: '%blitz multimap %repRing over %lists'
-        },
         reportKeep: {
             type: 'reporter',
             category: 'lists',
@@ -1694,12 +1688,7 @@ SpriteMorph.prototype.blockAlternatives = {
     reportKeep: ['reportFindFirst', 'reportMap'],
     reportFindFirst: ['reportKeep', 'reportMap'],
     doForEach: [['doFor', 1], ['doForever', -2], ['doRepeat', -1],
-        ['doUntil', -1]],
-
-    // lists - special hidden HOFs
-    reportAtomicMap: ['reportAtomicMultimap'],
-    reportAtomicMultimap: ['reportAtomicMap']
-
+        ['doUntil', -1]]
 };
 
 // SpriteMorph instance creation
