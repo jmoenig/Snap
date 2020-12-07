@@ -6113,6 +6113,9 @@ Process.prototype.reportAtomicMultimap = function (reporter, list) {
     // #3 - optional | source list
 
     this.assertType(list, 'list');
+
+	if (list.itemsArray().length == 1) return this.reportAtomicMap(reporter, list.at(1));
+
 	var result = [],
     	src = list.itemsArray().map(onelist => onelist.itemsArray()),
     	len = src[1].length,
