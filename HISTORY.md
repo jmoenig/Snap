@@ -20,6 +20,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2020-12-07
+* GUI: improved SVG loading, thanks, Joan!
+
 ### 2020-12-05
 * objects: alternative collision detection method using the video-cache, commented out for reference.
 * German translation update for "ray length"  

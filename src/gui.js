@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-December-01';
+modules.gui = '2020-December-07';
 
 // Declarations
 
@@ -2202,7 +2202,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
         svgNormalized.src = 'data:image/svg+xml;base64,' +
             btoa(new XMLSerializer().serializeToString(svgObj));
         myself = this;
-        svgNormalized.onload = () => { myself.loadSVG(svgNormalized, name); }
+        svgNormalized.onload = () => myself.loadSVG(svgNormalized, name);
     } else {
         this.loadSVG(anImage, name);
     }
