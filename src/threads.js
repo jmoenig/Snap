@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-04';
+modules.threads = '2020-December-07';
 
 var ThreadManager;
 var Process;
@@ -6113,11 +6113,15 @@ Process.prototype.reportAtomicMultimap = function (reporter, list) {
     // #3 - optional | source list
 
     this.assertType(list, 'list');
+    if (list.itemsArray().length == 1) {
+        return this.reportAtomicMap(reporter, list.at(1));
+    }
 	var result = [],
     	src = list.itemsArray().map(onelist => onelist.itemsArray()),
     	len = src[1].length,
     	width = src.length,
         formalParameterCount = reporter.inputs.length,
+        column = (list, index) => list.map(row => row[index]),
         parms,
      	func,
     	i;
@@ -6140,9 +6144,9 @@ Process.prototype.reportAtomicMultimap = function (reporter, list) {
 
 	for (i = 0; i < len; i += 1) {
         if (formalParameterCount > 0) {
-	        parms = [new List(src.map(onearg => onearg[i]))];
+	        parms = [new List(column(src, i))];
 		} else {
-			parms = src.map(onearg => onearg[i]);
+			parms = column(src, i);
 		}
         if (formalParameterCount > 1) {
             parms.push(i + 1);

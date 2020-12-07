@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-05';
+modules.objects = '2020-December-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -1385,7 +1385,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz map %repRing over %lists'
+            spec: '%blitz multimap %repRing over %lists'
         },
         reportKeep: {
             type: 'reporter',
@@ -1694,7 +1694,12 @@ SpriteMorph.prototype.blockAlternatives = {
     reportKeep: ['reportFindFirst', 'reportMap'],
     reportFindFirst: ['reportKeep', 'reportMap'],
     doForEach: [['doFor', 1], ['doForever', -2], ['doRepeat', -1],
-        ['doUntil', -1]]
+        ['doUntil', -1]],
+
+    // lists - special hidden HOFs
+    reportAtomicMap: ['reportAtomicMultimap'],
+    reportAtomicMultimap: ['reportAtomicMap']
+
 };
 
 // SpriteMorph instance creation

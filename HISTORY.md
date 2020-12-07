@@ -7,6 +7,7 @@
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
     * new SIGN function in arithmetic dropdown
+    * new experimental compiled Multimap, thanks, Brian
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
     * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
@@ -22,6 +23,7 @@
 
 ### 2020-12-07
 * GUI: improved SVG loading, thanks, Joan!
+* threads, objects, blocks: compiled multimap, thanks, Brian
 
 ### 2020-12-05
 * objects: alternative collision detection method using the video-cache, commented out for reference.
