@@ -10,7 +10,7 @@
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
     * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
-    * changed VIDEOP _ ON _ reporter primitive to be hyper-monadic (second slot)
+    * changed VIDEO _ ON _ reporter primitive to be hyper-monadic (second slot)
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
     * improved SVG loading in Firefox, thanks, Joan!
