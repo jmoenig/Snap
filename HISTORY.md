@@ -12,6 +12,7 @@
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
     * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
     * changed VIDEO _ ON _ reporter primitive to be hyper-monadic (second slot)
+    * hyperized OBJECT reporter primitive in sensing 
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
     * improved SVG loading in Firefox, thanks, Joan!
@@ -25,6 +26,7 @@
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
 * threads, objects: added hyperdyadic ATAN2 primitive reachable via "relabel"
+* threads: hyperized OBJECT reporter primitive in sensing 
 
 ### 2020-12-07
 * GUI: improved SVG loading, thanks, Joan!

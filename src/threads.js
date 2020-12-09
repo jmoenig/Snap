@@ -5199,6 +5199,13 @@ Process.prototype.reportGet = function (query) {
 };
 
 Process.prototype.reportObject = function (name) {
+    // hyper-monadic
+    if (this.enableHyperOps) {
+        if (name instanceof List) {
+            return name.map(each => this.reportObject(each));
+        }
+    }
+
     var thisObj = this.blockReceiver(),
         thatObj,
         stage;
