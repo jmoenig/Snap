@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-07';
+modules.objects = '2020-December-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1106,6 +1106,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n mod %n'
         },
+        reportAtan2: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'atan2 %n ÷ %n'
+        },
         reportMin: {
             type: 'reporter',
             category: 'operators',
@@ -1649,21 +1654,28 @@ SpriteMorph.prototype.blockAlternatives = {
 
     // operators:
     reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
+        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
+        'reportMax'],
     reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
+        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
+        'reportMax'],
     reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
+        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
+        'reportMax'],
     reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus', 'reportMin', 'reportMax'],
+        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
+        'reportMax'],
     reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus', 'reportMin', 'reportMax'],
-    reportModulus: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportMin: ['reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportMax'],
-    reportMax: ['reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportMin'],
+        'reportQuotient', 'reportModulus', 'reportAtan2', 'reportMin',
+        'reportMax'],
+    reportModulus: ['reportAtan2', 'reportDifference', 'reportProduct',
+        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
+    reportAtan2: ['reportModulus', 'reportDifference', 'reportProduct',
+        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
+    reportMin: ['reportMax', 'reportSum', 'reportDifference', 'reportProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
+    reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
         'reportGreaterThan', 'reportGreaterThanOrEquals'],
     reportEquals: ['reportLessThan', 'reportLessThanOrEquals',

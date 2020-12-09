@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-07';
+modules.threads = '2020-December-09';
 
 var ThreadManager;
 var Process;
@@ -3719,6 +3719,14 @@ Process.prototype.reportBasicModulus = function (a, b) {
     var x = +a,
         y = +b;
     return ((x % y) + y) % y;
+};
+
+Process.prototype.reportAtan2 = function (a, b) {
+    return this.hyperDyadic(this.reportBasicAtan2, a, b);
+};
+
+Process.prototype.reportBasicAtan2 = function (a, b) {
+    return degrees(Math.atan2(+a, +b));
 };
 
 Process.prototype.reportMin = function (a, b) {

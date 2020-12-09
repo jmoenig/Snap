@@ -6,6 +6,7 @@
     * raycasting: new "ray length" option in the "relation TO object" primitive
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
+    * hyperdyadic ATAN2 primitive reachable via "relabel"
     * new SIGN function in arithmetic dropdown
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
@@ -23,6 +24,7 @@
 
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
+* threads, objects: added hyperdyadic ATAN2 primitive reachable via "relabel"
 
 ### 2020-12-07
 * GUI: improved SVG loading, thanks, Joan!
