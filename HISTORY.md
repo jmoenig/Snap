@@ -18,7 +18,11 @@
 * **Translation Updates:**
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
+    * Tamil, thanks, Barthdry!
     * German
+
+### 2020-12-09
+* Tamil translation update, thanks, Barthdry!
 
 ### 2020-12-07
 * GUI: improved SVG loading, thanks, Joan!

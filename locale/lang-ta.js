@@ -181,11 +181,11 @@ SnapTranslator.dict.ta = {
     'language_name':
         'Tamil', // the name as it should appear in the language menu
     'language_translator':
-        'vinayakumar R', // your name for the Translators tab
+        'vinayakumar R, Barthdry', // your name for the Translators tab
     'translator_e-mail':
         'vnkmr7620@gmail.com', // optional
     'last_changed':
-        '2020-07-12', // this, too, will appear in the Translators tab
+        '2020-12-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

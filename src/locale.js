@@ -46,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-December-05';
+modules.locale = '2020-December-09';
 
 // Global stuff
 
@@ -461,11 +461,11 @@ SnapTranslator.dict.ta = {
     'language_name':
         'Tamil',
     'language_translator':
-        'vinayakumar R',
+        'vinayakumar R, Barthdry',
     'translator_e-mail':
         'vnkmr7620@gmail.com',
     'last_changed':
-        '2015-02-20'
+        '2020-12-09'
 };
 
 SnapTranslator.dict.te = {
