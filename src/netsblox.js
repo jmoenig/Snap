@@ -934,14 +934,22 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
 };
 
 NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExample) {
-    var url = location.pathname;
+    const querystring = location.href
+        .replace(/^.*\?/, '')
+        .replace('#' + location.hash, '');
+    const dict = this.cloud.parseDict(querystring);
+
+    let url = location.pathname + '?';
 
     room = room || this.room.name;
     if (isExample) {
-        url += '?action=example&ProjectName=' + encodeURIComponent(room);
+        url += 'action=example&ProjectName=' + encodeURIComponent(room) + '&';
     } else if (isPublic) {
-        url += '?action=present&Username=' + encodeURIComponent(SnapCloud.username) +
-            '&ProjectName=' + encodeURIComponent(room);
+        url += 'action=present&Username=' + encodeURIComponent(SnapCloud.username) +
+            '&ProjectName=' + encodeURIComponent(room) + '&';
+    }
+    if (dict.extensions) {
+        url += 'extensions=' + dict.extensions;
     }
 
     window.history.pushState(room, room, url);

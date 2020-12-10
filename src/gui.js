@@ -673,23 +673,27 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
         ]);
 
     } else if (loc.hash.substr(0, 7) === '#signup' || dict.action === 'signup') {
-            this.createCloudAccount();
+        this.createCloudAccount();
     } else {
         myself.newProject();
     }
 
-    //if (location.protocol !== 'file:') {
-        //if (!sessionStorage.username) {
-            //// check whether login should persist across browser sessions
-            //this.cloud.initSession(initUser);
-        //} else {
-            //// login only persistent during a single browser session
-            //this.cloud.checkCredentials(initUser);
-        //}
-    //}
-
-    world.keyboardFocus = this.stage;
+    this.world().keyboardFocus = this.stage;
     this.warnAboutIE();
+
+    if (dict.extensions) {
+        try {
+            const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
+            extensionUrls.forEach(url => this.loadExtension(url));
+        } catch (err) {
+            this.inform(
+                'Unable to load extensions',
+                'The following error occurred while trying to load extensions:\n\n' +
+                err.message + '\n\n' +
+                'Perhaps the URL is malformed?'
+            );
+        }
+    }
 };
 
 // IDE_Morph construction
@@ -3832,15 +3836,27 @@ IDE_Morph.prototype.settingsMenu = function () {
     return menu;
 };
 
-IDE_Morph.prototype.loadExtension = function (name, url) {
-    if (this.extensions.isLoaded(name)) {
-        this.showMessage(`Extension "${name}" is already loaded`, 2);
-    } else {
+IDE_Morph.prototype.loadExtension = async function (url) {
+    if (await this.isTrustedExtension(url)) {
         const node = document.createElement('script');
         node.setAttribute('src', url);
         node.setAttribute('type', 'text/javascript');
         document.body.appendChild(node);
     }
+};
+
+IDE_Morph.prototype.isTrustedExtension = async function (url) {
+    const isAutoTrusted = url.startsWith('/') || url.startsWith(window.location.origin);
+    if (isAutoTrusted) {
+        return true;
+    }
+
+    const title = 'Install Third-Party Extension?';
+    const message = 'An untrusted third-party extension was encountered and\nrequires approval to load:\n\n' +
+        url + '\n\nIf the above URL is not recognized or trusted, installation is not \nrecommended as ' +
+        'third-party extensions could be malicious.' +
+        '\n\nWould you like to install this extension?';
+    return await this.confirm(message, title);
 };
 
 IDE_Morph.prototype.projectMenu = function () {
