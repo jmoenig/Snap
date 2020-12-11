@@ -23,6 +23,9 @@
     * Tamil, thanks, Barthdry!
     * German
 
+### 2020-12-11
+* blocks: fixed special drop-downs for keyboard entry
+
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
 * threads, objects: added hyperdyadic ATAN2 primitive reachable via "relabel"

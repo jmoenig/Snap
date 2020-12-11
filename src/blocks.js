@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-December-07';
+modules.blocks = '2020-December-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9026,7 +9026,7 @@ InputSlotMorph.prototype.menuFromDict = function (
     if (choices instanceof Function) {
         choices = choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices](enableKeyboard);
+        choices = this[choices]();
         if (!choices) { // menu has already happened
             return;
         }
