@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-October-27';
+modules.store = '2020-December-11';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -747,6 +747,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     ide.stage.rerender();
     ide.createCorral();
     ide.fixLayout();
+    ide.toggleAppMode(ide.isAppMode);
 };
 
 SnapSerializer.prototype.loadMedia = function (xmlString) {

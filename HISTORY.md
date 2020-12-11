@@ -17,6 +17,7 @@
     * keep internal linked-list organization intact for hyperblocks
     * improved SVG loading in Firefox, thanks, Joan!
     * prevent browser override for ctrl+o gesture
+    * fixed layout issue when importing a sprite in presentation mode
 * **Translation Updates:**
     * Spanish, thanks, Joan!
     * Catalan, thanks, Joan!
@@ -25,6 +26,7 @@
 
 ### 2020-12-11
 * blocks: fixed special drop-downs for keyboard entry
+* store: fixed layout issue when importing a sprite in presentation mode
 
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
