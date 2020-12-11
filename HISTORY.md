@@ -2,8 +2,9 @@
 
 ## in development:
 
+## 6.4.0
 * **New Features:**
-    * raycasting: new "ray length" option in the "relation TO object" primitive
+    * ray casting: new "ray length" option in the "relation TO object" primitive
     * hyperdyadic MIN and MAX primitives reachable via "relabel"
     * hyperdyadic less / great than or equals primitives reachable via "relabel"
     * hyperdyadic ATAN2 primitive reachable via "relabel"
@@ -27,6 +28,7 @@
 ### 2020-12-11
 * blocks: fixed special drop-downs for keyboard entry
 * store: fixed layout issue when importing a sprite in presentation mode
+* prepared minor release
 
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
