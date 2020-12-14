@@ -2,13 +2,17 @@
 
 ## in development:
 
+## 6.4.1
 * **Documentation Updates:**
     * new Manual for v6.4, thanks, Brian!
+* **Notable Fixes:**
+    * fixed zebra coloring for imported scripts
 
 ### 2020-12-14
 * new dev version
 * new Manual for v6.4, thanks, Brian!
-* fixed zebra coloring for imported scripts
+* gui fixed zebra coloring for imported scripts
+* prepared patch
 
 ## 6.4.0
 * **New Features:**
