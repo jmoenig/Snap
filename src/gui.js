@@ -4991,6 +4991,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     }
     script.setPosition(this.world().hand.position());
     scripts.add(script);
+    script.fixBlockColor(null, true); // force zebra coloring
     scripts.adjustBounds();
     scripts.lastDroppedBlock = script;
     scripts.recordDrop(

@@ -8,6 +8,7 @@
 ### 2020-12-14
 * new dev version
 * new Manual for v6.4, thanks, Brian!
+* fixed zebra coloring for imported scripts
 
 ## 6.4.0
 * **New Features:**
