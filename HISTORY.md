@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-12-14
+* new dev version
+
 ## 6.4.0
 * **New Features:**
     * ray casting: new "ray length" option in the "relation TO object" primitive
@@ -11,7 +14,7 @@
     * new SIGN function in arithmetic dropdown
 * **Notable Changes:**
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
-    * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributees, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
+    * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributes, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
     * changed VIDEO _ ON _ reporter primitive to be hyper-monadic (second slot)
     * hyperized OBJECT reporter primitive in sensing 
 * **Notable Fixes:**
