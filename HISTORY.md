@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed keyboard formula entry for subtraction
+
 ### 2020-12-14
 * new dev version
+* fixed keyboard formula entry for subtraction
 
 ## 6.4.1
 * **Documentation Updates:**

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-09';
+modules.objects = '2020-December-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -3478,8 +3478,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             'not'];
         alias = {
             ceil: 'ceiling',
-            '!' : 'not',
-            '-' : 'neg'
+            '!' : 'not'
         };
         monads.concat(['true', 'false']).forEach(word =>
             reverseDict[localize(word).toLowerCase()] = word
