@@ -2,12 +2,15 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * re-enabled reporter drops in "key _ pressed?" input slot
 * **Notable Fixes:**
     * fixed keyboard formula entry for subtraction
 
 ### 2020-12-14
 * new dev version
-* fixed keyboard formula entry for subtraction
+* objects: fixed keyboard formula entry for subtraction
+* blocks: re-enabled reporter drops in "key _ pressed?" input slot
 
 ## 6.4.1
 * **Documentation Updates:**
