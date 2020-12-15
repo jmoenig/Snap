@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2020-12-14
+* new dev version
+
 ## 6.4.1
 * **Documentation Updates:**
     * new Manual for v6.4, thanks, Brian!
