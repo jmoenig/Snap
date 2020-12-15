@@ -75,9 +75,12 @@ SnapActions.send = function(event) {
         this.lastSent = event.id;
     }
     // Netsblox addition: start
+    const {projectId, roleId} = this.ide().cloud;
     socket.send(JSON.stringify({
         type: 'user-action',
-        action: event
+        projectId,
+        roleId,
+        action: event,
     }));
     // Netsblox addition: end
 };

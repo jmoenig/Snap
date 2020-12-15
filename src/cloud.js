@@ -1156,6 +1156,11 @@ Cloud.prototype.unlinkAccount = async function(account) {
     await this.request('/api/unlinkAccount', account);
 };
 
+Cloud.prototype.exportProject = async function(projectId=this.projectId) {
+    const response = await fetch(`/api/v2/projects/${projectId}/latest`);
+    return await response.text();
+};
+
 // Cloud: user messages (to be overridden)
 
 Cloud.prototype.message = function (string) {

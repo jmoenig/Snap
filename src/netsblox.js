@@ -15,7 +15,6 @@ function NetsBloxMorph(isAutoFill) {
 }
 
 NetsBloxMorph.prototype.init = function (isAutoFill) {
-    this.projectXMLRequests = {};
     this.sockets = new WebSocketManager(this);
     Services.onInvalidHosts = this.onInvalidHosts.bind(this);
     this.room = null;
@@ -481,11 +480,9 @@ NetsBloxMorph.prototype.exportProject = function () {
     }
 };
 
-NetsBloxMorph.prototype.exportMultiRoleXml = function () {
-    this.sockets.sendMessage({
-        type: 'export-room',
-        action: 'export'
-    });
+NetsBloxMorph.prototype.exportMultiRoleXml = async function () {
+    const xml = await this.cloud.exportProject();
+    this.exportRoom(xml);
 };
 
 NetsBloxMorph.prototype.getSnapXml = function() {
@@ -628,7 +625,7 @@ NetsBloxMorph.prototype.openCloudDataString = function (model, parsed) {
 };
 
 // Serialize a project and save to the browser.
-NetsBloxMorph.prototype.rawSaveProject = function (name) {
+NetsBloxMorph.prototype.rawSaveProject = async function (name) {
     this.showMessage('Saving', 3);
 
     if (name) {
@@ -636,32 +633,12 @@ NetsBloxMorph.prototype.rawSaveProject = function (name) {
     }
 
     // Trigger server export of all roles
-    this.sockets.sendMessage({
-        type: 'export-room',
-        action: 'save'
-    });
+    const xml = await this.cloud.exportProject();
+    this.saveRoomLocal(xml);
 };
 
-NetsBloxMorph.prototype.getProjectXML = function () {
-    const id = Date.now();
-    const deferred = utils.defer();
-    this.projectXMLRequests[id] = deferred;
-
-    this.sockets.sendMessage({
-        type: 'export-room',
-        action: 'fetch',
-        id: id,
-    });
-
-    setTimeout(() => {
-        const deferred = this.projectXMLRequests[id];
-        if (deferred) {
-            deferred.reject(new Error('Timeout Exceeded'));
-            delete this.projectXMLRequests[id];
-        }
-    }, 5000);
-
-    return deferred.promise;
+NetsBloxMorph.prototype.getProjectXML = async function () {
+    return await this.cloud.exportProject();
 };
 
 NetsBloxMorph.prototype.saveRoomLocal = function (str) {

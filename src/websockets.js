@@ -69,22 +69,6 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
-    'export-room': function(msg) {
-        if (msg.action === 'export') {
-            this.ide.exportRoom(msg.content);
-        } else if (msg.action === 'save') {
-            this.ide.saveRoomLocal(msg.content);
-        } else if (msg.action === 'fetch') {
-            const deferred = this.ide.projectXMLRequests[msg.id];
-            if (deferred) {
-                deferred.resolve(msg.content);
-                delete this.ide.projectXMLRequests[msg.id];
-            } else {
-                console.error(`Project request callback already resolved: ${msg.id}`);
-            }
-        }
-    },
-
     // Update on the current roles at the given room
     'room-roles': function(msg) {
         this.ide.room.onRoomStateUpdate(msg);
