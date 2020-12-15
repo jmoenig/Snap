@@ -84,7 +84,7 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported,
 BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK,
-SnapUndo, ReplayControls*/
+SnapUndo, ReplayControls, Services, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -6452,15 +6452,17 @@ IDE_Morph.prototype.initializeCloud = function () {
         null,
         async user => {
             try {
+                const pwh = hex_sha512(user.password);
                 await this.cloud.login(
                     user.username,
-                    user.password,
+                    pwh,
                     user.choice,
                 );
                 const {username} = this.cloud;
                 sessionStorage.username = username;
                 this.controlBar.cloudButton.refresh();
                 this.source = 'cloud';
+                Services.fetchHosts();
                 let msg = localize('Logged in as ') + username;
                 this.showMessage(msg, 2);
             } catch (err) {

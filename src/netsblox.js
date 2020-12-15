@@ -866,49 +866,6 @@ NetsBloxMorph.prototype.rawOpenBlocksMsgTypeString = function (aString) {
     this.rawOpenBlocksString(blocksStr, '', true);
 };
 
-NetsBloxMorph.prototype.initializeCloud = function () {
-    var world = this.world();
-
-    new DialogBoxMorph(
-        null,
-        async user => {
-            var pwh = hex_sha512(user.password);
-            try {
-                await this.cloud.login(
-                    user.username,
-                    pwh,
-                    user.choice
-                );
-                Services.fetchHosts();
-                if (user.choice) {
-                    const str = SnapCloud.encodeDict(
-                        {
-                            username: user.username,
-                            password: pwh
-                        }
-                    );
-                    localStorage['-snap-user'] = str;
-                }
-                this.source = 'cloud';
-                this.showMessage('now connected.', 2);
-            } catch (err) {
-                this.cloudError()(err.message);
-            }
-        }
-    ).withKey('cloudlogin').promptCredentials(
-        'Sign in',
-        'login',
-        null,
-        null,
-        null,
-        null,
-        'stay signed in on this computer\nuntil logging out',
-        world,
-        this.cloudIcon(),
-        this.cloudMsg
-    );
-};
-
 NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
     var myself = this,
         newRoom = project.RoomName,
