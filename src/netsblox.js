@@ -569,17 +569,15 @@ NetsBloxMorph.prototype.exportRoom = function (str) {
 };
 
 // Open the room
-NetsBloxMorph.prototype.openRoomString = function (str) {
-    var room = this.serializer.parse(str),
-        roles = {},
-        role;
+NetsBloxMorph.prototype.openRoomString = async function (str) {
+    const room = this.serializer.parse(str);
 
     if (room.children.length === 0) {
         this.showMessage('Malformed project - No roles found.');
         return;
     }
 
-    roles = room.children.map(function(role) {
+    const roles = room.children.map(function(role) {
         var srcCode = role.children[0] || '';
         var media = role.children[1] || '';
 
@@ -589,29 +587,16 @@ NetsBloxMorph.prototype.openRoomString = function (str) {
             Media: media.toString()
         };
     });
-    role = room.children[0].attributes.name;
+    const roleName = room.children[0].attributes.name;
 
-    var msg = this.showMessage('Opening project...');
-    var myself = this,
-        name = room.attributes.name;
-
-    return SnapCloud.importProject(name, role, roles)
-        .then(function(state) {
-            myself.room.onRoomStateUpdate(state);
-            // load the given project
-            role = room.children[0];
-            var projectXml = [
-                '<snapdata>',
-                role.childNamed('project').toString(),
-                role.childNamed('media').toString(),
-                '</snapdata>'
-            ].join('');
-            return SnapActions.openProject(projectXml)
-                .then(function () {
-                    msg.destroy();
-                    myself.sockets.updateRoomInfo();
-                });
-        });
+    const msg = this.showMessage('Opening project...');
+    const {name} = room.attributes;
+    const state = await SnapCloud.importProject(name, roleName, roles);
+    this.room.onRoomStateUpdate(state);
+    const [role] = room.children;
+    await this.openRoleString(role, true);
+    msg.destroy();
+    this.sockets.updateRoomInfo();
 };
 
 NetsBloxMorph.prototype.openCloudDataString = function (model, parsed) {
@@ -773,12 +758,14 @@ NetsBloxMorph.prototype.saveProjectToCloud = function (name) {
 
 // RPC import support (both custom blocks and message types)
 NetsBloxMorph.prototype.droppedText = function (aString, name) {
-    if (aString.indexOf('<rpc') === 0) {
+    if (aString.startsWith('<rpc')) {
         return this.openBlocksMsgTypeString(aString);
-    } else if (aString.indexOf('<room') === 0) {
+    } else if (aString.startsWith('<room')) {
         location.hash = '';
         return this.openRoomString(aString);
-    } else if (aString.indexOf('<project') === 0) {
+    } else if (aString.startsWith('<role')) {
+        return this.openRoleString(aString);
+    } else if (aString.startsWith('<project')) {
         this.exitReplayMode();
         var myself = this,
             msg = this.showMessage('Opening role...'),

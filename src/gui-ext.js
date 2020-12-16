@@ -460,6 +460,31 @@ IDE_Morph.prototype.extensionsMenu = function() {
     return menuFromDict(dict);
 };
 
+IDE_Morph.prototype.requestProjectReload = async function (reason) {
+    const message = reason + '\n\nWould you like to reload the current role?';
+    const confirmed = await this.confirm(message, localize('Project Reload Required'));
+    if (confirmed) {
+        const xml = await this.cloud.exportRole();
+        const msg = this.showMessage(localize('Opening project...'));
+        await this.openRoleString(xml);
+        msg.destroy();
+    }
+};
+
+IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
+    if (!parsed) {
+        role = this.serializer.parse(role);
+    }
+
+    var projectXml = [
+        '<snapdata>',
+        role.childNamed('project').toString(),
+        role.childNamed('media').toString(),
+        '</snapdata>'
+    ].join('');
+    return SnapActions.openProject(projectXml);
+};
+
 // LibraryDialogSources ///////////////////////////////////////////
 
 LibraryDialogSource.prototype = Object.create(SaveOpenDialogMorphSource.prototype);
