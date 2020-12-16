@@ -7,6 +7,9 @@
 * **Notable Fixes:**
     * fixed keyboard formula entry for subtraction
 
+### 2020-12-16
+* threads, objects: added dev debugging hook for counting yields
+
 ### 2020-12-14
 * new dev version
 * objects: fixed keyboard formula entry for subtraction

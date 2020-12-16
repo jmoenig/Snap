@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-09';
+modules.threads = '2020-December-16';
 
 var ThreadManager;
 var Process;
@@ -584,6 +584,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isPaused = false;
     this.pauseOffset = null;
     this.frameCount = 0;
+    this.yieldCount = 0;
     this.exportResult = false;
     this.onComplete = onComplete || null;
     this.procedureCount = 0;
@@ -642,6 +643,7 @@ Process.prototype.runStep = function (deadline) {
         this.evaluateContext();
     }
 
+    this.yieldCount += 1;
     this.lastYield = Date.now();
     this.isFirstStep = false;
 
@@ -5923,6 +5925,10 @@ Process.prototype.reportStackSize = function () {
 
 Process.prototype.reportFrameCount = function () {
     return this.frameCount;
+};
+
+Process.prototype.reportYieldCount = function () {
+    return this.yieldCount;
 };
 
 // Process single-stepping

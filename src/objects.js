@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-15';
+modules.objects = '2020-December-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -927,6 +927,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'frames'
+        },
+        reportYieldCount: {
+            dev: true,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'yields'
         },
         reportThreadCount: {
             dev: true,
@@ -2552,6 +2558,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportThreadCount'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+            blocks.push(block('reportYieldCount'));
         }
 
 	/////////////////////////////////
@@ -8714,6 +8721,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportThreadCount'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+            blocks.push(block('reportYieldCount'));
         }
 
     /////////////////////////////////
