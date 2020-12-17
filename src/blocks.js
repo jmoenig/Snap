@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-December-15';
+modules.blocks = '2020-December-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11402,6 +11402,10 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
+// MultiArgMorph preferences settings:
+
+// MultiArgMorph.prototype.isCachingInputs = true; // commented out for now
+
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -11520,6 +11524,7 @@ MultiArgMorph.prototype.setContents = function (anArray) {
             inputs[i].setContents(anArray[i]);
         }
     }
+    this.cachedInputs = null;
 };
 
 // MultiArgMorph hiding and showing:
@@ -11680,6 +11685,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     this.children.splice(idx, 0, newPart);
     newPart.fixLayout();
     this.fixLayout();
+    this.cachedInputs = null;
     return newPart;
 };
 
@@ -11697,6 +11703,7 @@ MultiArgMorph.prototype.removeInput = function () {
         }
     }
     this.fixLayout();
+    this.cachedInputs = null;
 };
 
 MultiArgMorph.prototype.is3ArgRingInHOF = function () {
