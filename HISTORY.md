@@ -9,6 +9,7 @@
 
 ### 2020-12-17
 * blocks: added hook for caching variadic inputs
+* blocks: refactored blockSequence() non-recursively
 
 ### 2020-12-16
 * threads, objects: added dev debugging hook for counting yields

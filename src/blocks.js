@@ -4818,12 +4818,13 @@ CommandBlockMorph.prototype.init = function () {
 // CommandBlockMorph enumerating:
 
 CommandBlockMorph.prototype.blockSequence = function () {
-    var nb = this.nextBlock(),
-        result = [this];
-    if (nb) {
-        result = result.concat(nb.blockSequence());
+    var sequence = [this],
+        nb = this.nextBlock();
+    while (nb) {
+        sequence.push(nb);
+        nb = nb.nextBlock();
     }
-    return result;
+    return sequence;
 };
 
 CommandBlockMorph.prototype.bottomBlock = function () {
