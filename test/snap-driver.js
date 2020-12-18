@@ -312,7 +312,7 @@ SnapDriver.prototype.login = async function(name, password='password') {
     passwordField.setContents(password);
     this.dialog().ok();
     await this.expect(
-        () => !!this.isShowingDialogTitle(title => title.includes('connected')),
+        () => !!this.isShowingDialogTitle(title => title.includes('Logged in')),
         `Did not see connected message`
     );
 };
