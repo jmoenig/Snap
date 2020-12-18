@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-16';
+modules.threads = '2020-December-18';
 
 var ThreadManager;
 var Process;
@@ -583,7 +583,9 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.httpRequest = null;
     this.isPaused = false;
     this.pauseOffset = null;
+    this.currentTime = Date.now();
     this.frameCount = 0;
+    this.stepFrameCount = 0;
     this.yieldCount = 0;
     this.exportResult = false;
     this.onComplete = onComplete || null;
@@ -626,13 +628,13 @@ Process.prototype.runStep = function (deadline) {
 
     while (!this.readyToYield && !this.isInterrupted
             && this.context
-            && (Date.now() - this.lastYield < this.timeout)
+            && (this.currentTime - this.lastYield < this.timeout)
     ) {
         // also allow pausing inside atomic steps - for PAUSE block primitive:
         if (this.isPaused) {
             return this.pauseStep();
         }
-        if (deadline && (Date.now() > deadline)) {
+        if (deadline && (this.currentTime > deadline)) {
             if (this.isAtomic &&
                     this.homeContext.receiver &&
                     this.homeContext.receiver.endWarp) {
@@ -643,6 +645,7 @@ Process.prototype.runStep = function (deadline) {
         this.evaluateContext();
     }
 
+    this.stepFrameCount = 0;
     this.yieldCount += 1;
     this.lastYield = Date.now();
     this.isFirstStep = false;
@@ -708,7 +711,14 @@ Process.prototype.pauseStep = function () {
 
 Process.prototype.evaluateContext = function () {
     var exp = this.context.expression;
+
     this.frameCount += 1;
+    this.stepFrameCount += 1;
+    if (this.stepFrameCount > 100) {
+        this.currentTime = Date.now();
+        this.stepFrameCount = 0;
+    }
+
     if (this.context.tag === 'exit') {
         this.expectReport();
     }
@@ -1158,7 +1168,7 @@ Process.prototype.evaluate = function (
 
     if (context.expression instanceof ReporterBlockMorph) {
         // auto-"warp" nested reporters
-        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
+        this.readyToYield = (this.currentTime - this.lastYield > this.timeout);
     }
 
     // assign arguments to parameters
@@ -1478,7 +1488,7 @@ Process.prototype.evaluateCustomBlock = function () {
             runnable.parentContext = exit;
         }
         // auto-"warp" nested reporters
-        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
+        this.readyToYield = (this.currentTime - this.lastYield > this.timeout);
     } else {
         // tag all "stop this block" blocks with the current
         // procedureCount as exitTag, and mark all "report" blocks
