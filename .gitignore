@@ -1,5 +1,5 @@
 .DS_Store
 *.swp
 .tern-port
-dist/
+dist/app.js
 .server
