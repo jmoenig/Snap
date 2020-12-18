@@ -3610,7 +3610,7 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
         if (this.isMatrix(a)) {
             if (this.isMatrix(b)) {
                 // zip both arguments ignoring out-of-bounds indices
-                a = a.itemsArray()();
+                a = a.itemsArray();
                 b = b.itemsArray();
                 len = Math.min(a.length, b.length);
                 result = new Array(len);

@@ -6,10 +6,12 @@
     * 25 % speed-up for reporters, WARP and TURBO
     * re-enabled reporter drops in "key _ pressed?" input slot
 * **Notable Fixes:**
+    * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
 
 ### 2020-12-18
 * threads: optimized scheduler, reduced system calls to Date.now(), 25 % speed-up for reporters, WARP and TURBO
+* threads: fixed a typo in hyperDyadic()
 
 ### 2020-12-17
 * blocks: added hook for caching variadic inputs
