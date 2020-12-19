@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-18';
+modules.threads = '2020-December-19';
 
 var ThreadManager;
 var Process;
@@ -583,10 +583,10 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.httpRequest = null;
     this.isPaused = false;
     this.pauseOffset = null;
-    this.currentTime = Date.now();
-    this.frameCount = 0;
-    this.stepFrameCount = 0;
-    this.yieldCount = 0;
+    this.currentTime = Date.now(); // keeping track of time between yields
+    this.frameCount = 0; // only used for profiling and debugging
+    this.stepFrameCount = 0; // keeping track of when to keep time
+    this.yieldCount = 0; // only used for profiling and debugging
     this.exportResult = false;
     this.onComplete = onComplete || null;
     this.procedureCount = 0;
@@ -626,6 +626,13 @@ Process.prototype.runStep = function (deadline) {
     this.readyToYield = false;
     this.isInterrupted = false;
 
+    // repeatedly evaluate the next context (stack frame) until
+    // it's time to yield. In case of WARP or infinite recursive
+    // reporters (or long HOFs) emergency-yield every 500 ms.
+    // Since looking up the current time at every stack frame puts
+    // an amazing strain on performance, only check the system time
+    // every n (=100) contexts.
+    // This is happens over at evaluateContext().
     while (!this.readyToYield && !this.isInterrupted
             && this.context
             && (this.currentTime - this.lastYield < this.timeout)
@@ -712,6 +719,14 @@ Process.prototype.pauseStep = function () {
 Process.prototype.evaluateContext = function () {
     var exp = this.context.expression;
 
+    // keep track of overall frames for profiling purposes.
+    // also keep track of frames inside the current atomic step.
+    // In order to let Snap! behave similarly on a wide range of
+    // differently performant hardware decide when to yield inside
+    // a WARPed script or an infinitely recursive reporter
+    // by how much time has elapsed since the last yield, but since
+    // looking up the system time is surprisingly costly only look it
+    // up every 100 frames.
     this.frameCount += 1;
     this.stepFrameCount += 1;
     if (this.stepFrameCount > 100) {

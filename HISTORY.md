@@ -9,6 +9,9 @@
     * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
 
+### 2020-12-19
+* added code-documentation for the WARP/timestamp optimization
+
 ### 2020-12-18
 * threads: optimized scheduler, reduced system calls to Date.now(), 25 % speed-up for reporters, WARP and TURBO
 * threads: fixed a typo in hyperDyadic()
