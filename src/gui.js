@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-December-15';
+modules.gui = '2020-December-19';
 
 // Declarations
 
@@ -2248,8 +2248,15 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
 
     // check for Snap specific files, projects, libraries, sprites, scripts
     if (aString.indexOf('<project') === 0) {
-        location.hash = '';
-        return this.openProjectString(aString);
+        this.backup(
+            () => {
+                location.hash = '';
+                this.openProjectString(aString);
+            },
+            'Replace the current project with a new one?',
+            'New Project'
+        );
+        return;
     }
     if (aString.indexOf('<snapdata') === 0) {
         location.hash = '';
@@ -2625,6 +2632,67 @@ IDE_Morph.prototype.hasLocalStorage = function () {
 	} catch (err) {
     	return false;
 	}
+};
+
+// IDE_Morph project backup
+
+IDE_Morph.prototype.backup = function (callback, question, title) {
+    // save the current project for the currently logged in user
+    // to localstorage, then perform the given callback, e.g.
+    // load a new project. If the backup fails, e.g. because localstorage
+    // isn't available or the storage quota exceeded, let the user
+    // abort the action or choose to go ahead with it
+    var username = this.cloud.username;
+    try {
+        if (username) {
+            localStorage['-snap-bakuser-'] = username;
+        } else {
+            delete localStorage['-snap-bakuser-'];
+        }
+        localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
+        if (callback) {
+            callback();
+        }
+    } catch (err) {
+        nop(err);
+        if (question) {
+            this.confirm(question, title, callback);
+        } else if (callback) {
+            callback();
+        }
+    }
+};
+
+IDE_Morph.prototype.availableBackup = function () {
+    // return the name of the project that can be restored in double
+    // quotes for the currently logged in user.
+    // Otherwise return null
+    var username = this.cloud.username,
+        bak, ix;
+    if (this.hasLocalStorage()) {
+        if (localStorage['-snap-bakuser-'] == username) { // null == undefined
+            bak = localStorage['-snap-backup-'];
+            ix = bak.indexOf('"', 15);
+            if (ix > 15) {
+                return bak.slice(15, ix);
+            }
+        }
+    }
+    return null;
+};
+
+IDE_Morph.prototype.restore = function () {
+    // load the backed up project for the currently logged im user
+    // and backup the current one, in case they want to switch back to it
+    var username = this.cloud.username,
+        bak;
+    if (this.hasLocalStorage()) {
+        if (localStorage['-snap-bakuser-'] == username) { // null == undefined
+            bak = localStorage['-snap-backup-'];
+            this.backup();
+            this.openProjectString(bak);
+        }
+    }
 };
 
 // IDE_Morph sprite list access
@@ -3672,6 +3740,7 @@ IDE_Morph.prototype.projectMenu = function () {
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
                 'Costumes' : 'Backgrounds',
+        backup = this.availableBackup(),
         shiftClicked = (world.currentKey === 16);
 
     menu = new MenuMorph(this);
@@ -3681,6 +3750,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
+    if (backup) {
+        menu.addItem('Restore backup', 'restore', backup);
+    }
     menu.addLine();
     menu.addItem(
         'Import...',
@@ -5537,10 +5609,10 @@ IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
 };
 
 IDE_Morph.prototype.createNewProject = function () {
-    this.confirm(
+    this.backup(
+        () => this.newProject(),
         'Replace the current project with a new one?',
-        'New Project',
-        () => this.newProject()
+        'New Project'
     );
 };
 

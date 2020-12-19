@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **New Features:**
+    * automatic backup to localstore, option to restore last backed up project in the file menu
 * **Notable Changes:**
     * 25 % speed-up for reporters, WARP and TURBO
     * re-enabled reporter drops in "key _ pressed?" input slot
@@ -10,7 +12,8 @@
     * fixed keyboard formula entry for subtraction
 
 ### 2020-12-19
-* added code-documentation for the WARP/timestamp optimization
+* threads: added code-documentation for the WARP/timestamp optimization
+* gui: new auto-backup to localstore feature 
 
 ### 2020-12-18
 * threads: optimized scheduler, reduced system calls to Date.now(), 25 % speed-up for reporters, WARP and TURBO
