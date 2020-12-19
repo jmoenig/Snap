@@ -7296,11 +7296,20 @@ ProjectDialogMorph.prototype.openProject = function () {
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
-        this.ide.openProjectString(src);
+        this.ide.backup(
+            () => this.ide.openProjectString(src),
+            'Replace the current project with a new one?',
+            'New Project'
+        );
         this.destroy();
+
     } else { // 'local'
         this.ide.source = null;
-        this.ide.openProject(proj.name);
+        this.ide.backup(
+            () => this.ide.openProject(proj.name),
+            'Replace the current project with a new one?',
+            'New Project'
+        );
         this.destroy();
     }
 };
