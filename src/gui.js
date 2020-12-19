@@ -2672,9 +2672,11 @@ IDE_Morph.prototype.availableBackup = function () {
     if (this.hasLocalStorage()) {
         if (localStorage['-snap-bakuser-'] == username) { // null == undefined
             bak = localStorage['-snap-backup-'];
-            ix = bak.indexOf('"', 15);
-            if (ix > 15) {
-                return bak.slice(15, ix);
+            if (bak) {
+                ix = bak.indexOf('"', 15);
+                if (ix > 15) {
+                    return bak.slice(15, ix);
+                }
             }
         }
     }
