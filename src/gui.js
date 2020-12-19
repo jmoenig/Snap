@@ -7317,10 +7317,16 @@ ProjectDialogMorph.prototype.openProject = function () {
 };
 
 ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
-    this.ide.nextSteps([
-        () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
-        () => this.rawOpenCloudProject(project, delta)
-    ]);
+    this.ide.backup(
+        () => {
+            this.ide.nextSteps([
+                () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
+                () => this.rawOpenCloudProject(project, delta)
+            ]);
+        },
+        'Replace the current project with a new one?',
+        'New Project'
+    );
 };
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
