@@ -2711,7 +2711,10 @@ IDE_Morph.prototype.restore = function () {
         if (localStorage['-snap-bakuser-'] == username) { // null == undefined
             bak = localStorage['-snap-backup-'];
             if (bak) {
-                this.backup(() =>  this.openProjectString(bak));
+                this.backup(() => {
+                    this.openProjectString(bak);
+                    this.hasUnsavedEdits = true;
+                });
             }
         }
     }
