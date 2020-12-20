@@ -2259,9 +2259,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
             () => {
                 location.hash = '';
                 this.openProjectString(aString);
-            },
-            'Replace the current project with a new one?',
-            'New Project'
+            }
         );
         return;
     }
@@ -2646,12 +2644,25 @@ IDE_Morph.prototype.hasLocalStorage = function () {
 
 // IDE_Morph project backup
 
-IDE_Morph.prototype.backup = function (callback, question, title) {
-    // save the current project for the currently logged in user
+IDE_Morph.prototype.backup = function (callback) {
+    // in case of unsaved changes let the user confirm whether to
+    // abort the operation or go ahead with it.
+    // Save the current project for the currently logged in user
     // to localstorage, then perform the given callback, e.g.
-    // load a new project. If the backup fails, e.g. because localstorage
-    // isn't available or the storage quota exceeded, let the user
-    // abort the action or choose to go ahead with it
+    // load a new project.
+    if (this.hasUnsavedEdits) {
+        this.confirm(
+            'Replace the current project with a new one?',
+            'Unsaved Changes!',
+            () => this.backupAndDo(callback)
+        );
+    } else {
+        callback();
+    }
+};
+
+IDE_Morph.prototype.backupAndDo = function (callback) {
+    // private
     var username = this.cloud.username;
     try {
         if (username) {
@@ -2660,17 +2671,15 @@ IDE_Morph.prototype.backup = function (callback, question, title) {
             delete localStorage['-snap-bakuser-'];
         }
         localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
-        if (callback) {
-            callback();
-        }
     } catch (err) {
         nop(err);
-        if (question) {
-            this.confirm(question, title, callback);
-        } else if (callback) {
-            callback();
-        }
     }
+    callback();
+};
+
+IDE_Morph.prototype.clearBackup = function () {
+    delete localStorage['-snap-bakuser-'];
+    delete localStorage['-snap-backup-'];
 };
 
 IDE_Morph.prototype.availableBackup = function () {
@@ -2701,8 +2710,9 @@ IDE_Morph.prototype.restore = function () {
     if (this.hasLocalStorage()) {
         if (localStorage['-snap-bakuser-'] == username) { // null == undefined
             bak = localStorage['-snap-backup-'];
-            this.backup();
-            this.openProjectString(bak);
+            if (bak) {
+                this.backup(() =>  this.openProjectString(bak));
+            }
         }
     }
 };
@@ -3768,7 +3778,24 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
     if (backup) {
-        menu.addItem('Restore backup', 'restore', backup);
+        if (!this.hasUnsavedEdits) {
+            menu.addItem('Restore unsaved changes', 'restore', backup);
+        } else if (shiftClicked) {
+            menu.addItem(
+                'Restore unsaved changes',
+                'restore',
+                backup,
+                new Color(100, 0, 0)
+            );
+        }
+        if (shiftClicked) {
+            menu.addItem(
+                'Clear backup',
+                'clearBackup',
+                backup,
+                new Color(100, 0, 0)
+            );
+        }
     }
     menu.addLine();
     menu.addItem(
@@ -5630,11 +5657,7 @@ IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
 };
 
 IDE_Morph.prototype.createNewProject = function () {
-    this.backup(
-        () => this.newProject(),
-        'Replace the current project with a new one?',
-        'New Project'
-    );
+    this.backup(() => this.newProject());
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {
@@ -7320,20 +7343,12 @@ ProjectDialogMorph.prototype.openProject = function () {
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
-        this.ide.backup(
-            () => this.ide.openProjectString(src),
-            'Replace the current project with a new one?',
-            'New Project'
-        );
+        this.ide.backup(() => this.ide.openProjectString(src));
         this.destroy();
 
     } else { // 'local'
         this.ide.source = null;
-        this.ide.backup(
-            () => this.ide.openProject(proj.name),
-            'Replace the current project with a new one?',
-            'New Project'
-        );
+        this.ide.backup(() => this.ide.openProject(proj.name));
         this.destroy();
     }
 };
@@ -7345,9 +7360,7 @@ ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
                 () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
                 () => this.rawOpenCloudProject(project, delta)
             ]);
-        },
-        'Replace the current project with a new one?',
-        'New Project'
+        }
     );
 };
 
