@@ -2712,8 +2712,10 @@ IDE_Morph.prototype.restore = function () {
             bak = localStorage['-snap-backup-'];
             if (bak) {
                 this.backup(() => {
-                    this.openProjectString(bak);
-                    this.hasUnsavedEdits = true;
+                    this.openProjectString(
+                        bak,
+                        () => this.hasUnsavedEdits = true
+                    );
                 });
             }
         }
@@ -4915,13 +4917,14 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     );
 };
 
-IDE_Morph.prototype.openProjectString = function (str) {
+IDE_Morph.prototype.openProjectString = function (str, callback) {
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
             this.rawOpenProjectString(str);
             msg.destroy();
+            if (callback) {callback(); }
         }
     ]);
 };
