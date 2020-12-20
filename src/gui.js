@@ -2671,10 +2671,15 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
             delete localStorage['-snap-bakuser-'];
         }
         localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
+        callback();
     } catch (err) {
         nop(err);
+        this.confirm(
+            'Backup failed.\nThis cannot be undone, proceed anyway?',
+            'Unsaved Changes!',
+            callback
+        );
     }
-    callback();
 };
 
 IDE_Morph.prototype.clearBackup = function () {
