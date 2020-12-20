@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-December-19';
+modules.gui = '2020-December-20';
 
 // Declarations
 
@@ -259,7 +259,11 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
+
+    // incrementally saving projects to the cloud is currently unused
     this.hasChangedMedia = false;
+                                    
+    this.hasUnsavedEdits = false; // keeping track of when to internally backup
 
     this.isAnimating = true;
     this.paletteWidth = 200; // initially same as logo width
@@ -1885,6 +1889,7 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.addSprite = function (sprite) {
         this.frame.contents.add(new SpriteIconMorph(sprite));
         this.fixLayout();
+        this.hasUnsavedEdits = true;
     };
 
     this.corral.refresh = function () {
@@ -2136,6 +2141,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
     this.hasChangedMedia = true;
+    this.hasUnsavedEdits = true;
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
@@ -2239,6 +2245,7 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
     	this.spriteBar.tabBar.tabTo('sounds');
     	this.hasChangedMedia = true;
+        this.hasUnsavedEdits = true;
     }
 };
 
@@ -2262,6 +2269,9 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
         location.hash = '';
         return this.openCloudDataString(aString);
     }
+
+    this.hasUnsavedEdits = true;
+
     if (aString.indexOf('<blocks') === 0) {
         return this.openBlocksString(aString, lbl, true);
     }
@@ -2744,6 +2754,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
         () => {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
+            this.hasUnsavedEdits = true;
         }
     );
 };
@@ -2786,6 +2797,7 @@ IDE_Morph.prototype.recordNewSound = function () {
                 this.makeSureRecordingIsMono(sound);
                 this.spriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
+                this.hasUnsavedEdits = true;
             }
         });
 
@@ -2957,6 +2969,7 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
     duplicate.keepWithin(this.stage);
     duplicate.isDown = sprite.isDown;
     this.selectSprite(duplicate);
+    this.hasUnsavedEdits = true;
 };
 
 IDE_Morph.prototype.instantiateSprite = function (sprite) {
@@ -2972,6 +2985,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
     }
     instance.isDown = sprite.isDown;
     this.selectSprite(instance);
+    this.hasUnsavedEdits = true;
 };
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
@@ -2999,6 +3013,7 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     ) || this.stage;
 
     this.selectSprite(this.currentSprite);
+    this.hasUnsavedEdits = true;
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
@@ -4411,6 +4426,7 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
+    this.hasUnsavedEdits = false;
 };
 
 IDE_Morph.prototype.save = function () {
@@ -4464,6 +4480,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
+            this.hasUnsavedEdits = false;
             this.showMessage('Exported!', 1);
         } catch (err) {
             if (Process.prototype.isCatchingErrors) {
@@ -4906,6 +4923,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         );
     }
     this.stopFastTracking();
+    this.hasUnsavedEdits = false;
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
@@ -4958,6 +4976,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         );
     }
     this.stopFastTracking();
+    this.hasUnsavedEdits = false;
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
@@ -6266,7 +6285,10 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     this.cloud.saveProject(
         this.projectName,
         projectBody,
-        () => this.showMessage('saved.', 2),
+        () => {
+            this.hasUnsavedEdits = false;
+            this.showMessage('saved.', 2);
+        },
         this.cloudError()
     );
 };
@@ -8919,6 +8941,7 @@ CostumeIconMorph.prototype.editRotationPointOnly = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     this.object.editRotationPointOnly(this.world(), ide);
     ide.hasChangedMedia = true;
+    ide.hasUnsavedEdits = true;
 };
 
 CostumeIconMorph.prototype.renameCostume = function () {
@@ -8936,6 +8959,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
                 );
                 costume.version = Date.now();
                 ide.hasChangedMedia = true;
+                ide.hasUnsavedEdits = true;
             }
         }
     ).prompt(
@@ -9379,6 +9403,7 @@ WardrobeMorph.prototype.paintNew = function () {
             this.updateList();
             if (ide) {
                 ide.currentSprite.wearCostume(cos);
+                ide.hasUnsavedEdits = true;
             }
         }
     );
@@ -9397,6 +9422,7 @@ WardrobeMorph.prototype.newFromCam = function () {
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
             this.updateList();
+            ide.hasUnsavedEdits = true;
         });
 
     camDialog.key = 'camera';
@@ -9601,6 +9627,7 @@ SoundIconMorph.prototype.renameSound = function () {
                 this.createLabel(); // can be omitted once I'm stepping
                 this.fixLayout(); // can be omitted once I'm stepping
                 ide.hasChangedMedia = true;
+                ide.hasUnsavedEdits = true;
             }
         }
     ).prompt(

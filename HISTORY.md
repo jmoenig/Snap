@@ -11,6 +11,9 @@
     * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
 
+### 2020-12-20
+* gui, blocks, objects: keep track of unsaved edits
+
 ### 2020-12-19
 * threads: added code-documentation for the WARP/timestamp optimization
 * gui: new auto-backup to localstore feature 

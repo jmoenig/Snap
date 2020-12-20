@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-December-17';
+modules.blocks = '2020-December-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7429,27 +7429,40 @@ ScriptsMorph.prototype.clearDropInfo = function () {
 
 ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     // support for "undrop" / "redrop"
-     var record = {
-        lastDroppedBlock: this.lastDroppedBlock,
-        lastReplacedInput: this.lastReplacedInput,
-        lastDropTarget: this.lastDropTarget,
-        lastPreservedBlocks: this.lastPreservedBlocks,
-        lastNextBlock: this.lastNextBlock,
-        lastWrapParent: this.lastWrapParent,
-        lastOrigin: lastGrabOrigin,
+    var ide, blockEditor,
+        record = {
+            lastDroppedBlock: this.lastDroppedBlock,
+            lastReplacedInput: this.lastReplacedInput,
+            lastDropTarget: this.lastDropTarget,
+            lastPreservedBlocks: this.lastPreservedBlocks,
+            lastNextBlock: this.lastNextBlock,
+            lastWrapParent: this.lastWrapParent,
+            lastOrigin: lastGrabOrigin,
 
         // for special gestures, e.g. deleting or extracting single commands:
-        action: lastGrabOrigin ? lastGrabOrigin.action || null : null,
+            action: lastGrabOrigin ? lastGrabOrigin.action || null : null,
 
-        situation: null,
-        lastRecord: this.dropRecord,
-        nextRecord: null
-    };
+            situation: null,
+            lastRecord: this.dropRecord,
+            nextRecord: null
+        };
     if (this.dropRecord) {
         this.dropRecord.nextRecord = record;
     }
     this.dropRecord = record;
     this.updateToolbar();
+
+    // notify the IDE of an unsaved user edit
+    ide = this.parentThatIsA(IDE_Morph);
+    if (!ide) {
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+        if (blockEditor) {
+            ide = blockEditor.target.parentThatIsA(IDE_Morph);
+        }
+    }
+    if (ide) {
+        ide.hasUnsavedEdits = true;
+    }
 };
 
 ScriptsMorph.prototype.addToolbar = function () {

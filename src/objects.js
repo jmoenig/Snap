@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-16';
+modules.objects = '2020-December-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -3308,6 +3308,9 @@ SpriteMorph.prototype.searchBlocks = function (
             searchBar.cancel();
             if (selection) {
                 scriptFocus.insertBlock(selection);
+            }
+            if (ide) {
+                ide.hasUnsavedEdits = true;
             }
         } else {
             search = searchBar.getValue();
