@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2020-December-20';
+modules.gui = '2020-December-21';
 
 // Declarations
 
@@ -3784,10 +3784,10 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('Save As...', 'saveProjectsBrowser');
     if (backup) {
         if (!this.hasUnsavedEdits) {
-            menu.addItem('Restore unsaved changes', 'restore', backup);
+            menu.addItem('Restore unsaved project', 'restore', backup);
         } else if (shiftClicked) {
             menu.addItem(
-                'Restore unsaved changes',
+                'Restore unsaved project',
                 'restore',
                 backup,
                 new Color(100, 0, 0)

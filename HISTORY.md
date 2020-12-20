@@ -11,6 +11,9 @@
     * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
 
+### 2020-12-21
+* gui: tweaked backup / restore
+
 ### 2020-12-20
 * gui, blocks, objects: keep track of unsaved edits
 
