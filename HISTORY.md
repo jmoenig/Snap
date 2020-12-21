@@ -14,12 +14,14 @@
     * fixed keyboard formula entry for subtraction
 * **Documentation Updates:**
     * new Manual for v6.5, thanks, Brian!
+    * added unsavedChanges() method and documentation to the Snap! API
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
 
 ### 2020-12-22
 * threads: up to 40x speed-up for "new costume from list" reporter primitive 
+* api: added unsavedChanges() method and documentation 
 
 ### 2020-12-21
 * gui: tweaked backup / restore

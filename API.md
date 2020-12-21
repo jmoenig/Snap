@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, November 21, 2020
+Jens Mönig, Bernat Romagosa, December 22, 2020
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -32,6 +32,7 @@ Currently the API consists of the following methods:
 
 * IDE_Morph.prototype.getProjectXML()
 * IDE_Morph.prototype.loadProjectXML()
+* IDE_Morph.prototype.unsavedChanges()
 
 ## Referencing the IDE
 
@@ -211,6 +212,16 @@ the loadProjectXML() method replaces the current project of the IDE with another
     
 #### return value
 unefined
+
+
+### IDE_Morph.prototype.unsavedChanges()
+the unsavedChanges() method return a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
+
+#### syntax
+    ide.unsavedChanges();
+    
+#### return value
+a Boolean
 
 
 ## Manipulating Lists

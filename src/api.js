@@ -62,6 +62,7 @@
 
             - IDE_Morph.prototype.getProjectXML()
             - IDE_Morph.prototype.loadProjectXML(projectXML)
+            - IDE_Morph.prototype.unsavedChanges()
 
     Getting hold of an ide can usually be achieved by
     evaluating:
@@ -205,7 +206,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-November-21';
+modules.api = '2020-December-22';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -341,4 +342,8 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
     this.onNextStep = null;
     this.world().animations = [];
     this.openProjectString(projectXML);
+};
+
+IDE_Morph.prototype.unsavedChange = function () {
+    return this.hasUnsavedEdits;
 };
