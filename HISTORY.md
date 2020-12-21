@@ -16,6 +16,7 @@
     * new Manual for v6.5, thanks, Brian!
 * **Translation Updates:**
     * German
+    * Catalan, thanks, Joan!
 
 ### 2020-12-22
 * threads: up to 40x speed-up for "new costume from list" reporter primitive 
