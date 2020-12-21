@@ -10,9 +10,12 @@
 * **Notable Fixes:**
     * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
+* **Documentation Updates:**
+    * new Manual for v6.5, thanks, Brian!
 
 ### 2020-12-21
 * gui: tweaked backup / restore
+* new Manual for v6.5, thanks, Brian!
 
 ### 2020-12-20
 * gui, blocks, objects: keep track of unsaved edits
