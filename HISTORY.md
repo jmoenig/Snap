@@ -7,6 +7,7 @@
     * automatic backup of unsaved changes to localstore, option to restore in the file menu until the first change in the new project
 * **Notable Changes:**
     * 25% speed-up for reporters, WARP and TURBO
+    * up to 40x speed-up for "new costume from list" reporter primitive 
     * re-enabled reporter drops in "key _ pressed?" input slot
 * **Notable Fixes:**
     * fixed a bug in hyperblocks
@@ -15,6 +16,9 @@
     * new Manual for v6.5, thanks, Brian!
 * **Translation Updates:**
     * German
+
+### 2020-12-22
+* threads: up to 40x speed-up for "new costume from list" reporter primitive 
 
 ### 2020-12-21
 * gui: tweaked backup / restore
