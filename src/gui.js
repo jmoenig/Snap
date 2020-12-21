@@ -2665,12 +2665,13 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
     // private
     var username = this.cloud.username;
     try {
+        localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
+        delete localStorage['-snap-bakflag-'];
         if (username) {
             localStorage['-snap-bakuser-'] = username;
         } else {
             delete localStorage['-snap-bakuser-'];
         }
-        localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
         callback();
     } catch (err) {
         nop(err);
@@ -2683,11 +2684,12 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
 };
 
 IDE_Morph.prototype.clearBackup = function () {
+    delete localStorage['-snap-bakflag-'];
     delete localStorage['-snap-bakuser-'];
     delete localStorage['-snap-backup-'];
 };
 
-IDE_Morph.prototype.availableBackup = function () {
+IDE_Morph.prototype.availableBackup = function (anyway) {
     // return the name of the project that can be restored in double
     // quotes for the currently logged in user.
     // Otherwise return null
@@ -2695,6 +2697,12 @@ IDE_Morph.prototype.availableBackup = function () {
         bak, ix;
     if (this.hasLocalStorage()) {
         if (localStorage['-snap-bakuser-'] == username) { // null == undefined
+            if (this.hasUnsavedEdits || localStorage['-snap-bakflag-']) {
+                localStorage['-snap-bakflag-'] = 'expired';
+                if (!anyway) {
+                    return null;
+                }
+            }
             bak = localStorage['-snap-backup-'];
             if (bak) {
                 ix = bak.indexOf('"', 15);
@@ -3777,8 +3785,8 @@ IDE_Morph.prototype.projectMenu = function () {
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
                 'Costumes' : 'Backgrounds',
-        backup = this.availableBackup(),
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        backup = this.availableBackup(shiftClicked);
 
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
@@ -3788,16 +3796,12 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
     if (backup) {
-        if (!this.hasUnsavedEdits) {
-            menu.addItem('Restore unsaved project', 'restore', backup);
-        } else if (shiftClicked) {
-            menu.addItem(
-                'Restore unsaved project',
-                'restore',
-                backup,
-                new Color(100, 0, 0)
-            );
-        }
+        menu.addItem(
+            'Restore unsaved project',
+            'restore',
+            backup,
+            shiftClicked ? new Color(100, 0, 0) : null
+        );
         if (shiftClicked) {
             menu.addItem(
                 'Clear backup',
