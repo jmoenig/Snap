@@ -46,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2020-December-09';
+modules.locale = '2020-December-21';
 
 // Global stuff
 
@@ -168,7 +168,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2020-12-05'
+        '2020-12-21'
 };
 
 SnapTranslator.dict.it = {

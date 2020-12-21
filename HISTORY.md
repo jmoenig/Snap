@@ -3,19 +3,23 @@
 ## in development:
 
 * **New Features:**
-    * automatic backup to localstore, option to restore last backed up project in the file menu
+    * warning about "unsaved changes" when opening or creating a new project
+    * automatic backup of unsaved changes to localstore, option to restore in the file menu until the first change in the new project
 * **Notable Changes:**
-    * 25 % speed-up for reporters, WARP and TURBO
+    * 25% speed-up for reporters, WARP and TURBO
     * re-enabled reporter drops in "key _ pressed?" input slot
 * **Notable Fixes:**
     * fixed a bug in hyperblocks
     * fixed keyboard formula entry for subtraction
 * **Documentation Updates:**
     * new Manual for v6.5, thanks, Brian!
+* **Translation Updates:**
+    * German
 
 ### 2020-12-21
 * gui: tweaked backup / restore
 * new Manual for v6.5, thanks, Brian!
+* German translation update
 
 ### 2020-12-20
 * gui, blocks, objects: keep track of unsaved edits

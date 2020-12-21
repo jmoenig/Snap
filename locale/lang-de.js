@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-12-05', // this, too, will appear in the Translators tab
+        '2020-12-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1503,8 +1503,12 @@ SnapTranslator.dict.de = {
     // new project
     'New Project':
         'Neues Projekt',
+    'Unsaved Changes!':
+        'Ungespeicherte Änderungen!',
     'Replace the current project with a new one?':
         'Das aktuelle Projekt durch ein neues ersetzen?',
+    'Backup failed.\nThis cannot be undone, proceed anyway?':
+        'Backup nicht möglich.\nTrotzdem fortfahren?',
 
     // save project
     'Save Project As...':
