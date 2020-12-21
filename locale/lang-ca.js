@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2020-12-01', // this, too, will appear in the Translators tab
+        '2020-12-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -788,6 +788,14 @@ SnapTranslator.dict.ca = {
             + '(en navegadors que ho suportin)',
     'Save As...':
         'Anomena i desa...',
+    'Restore unsaved project':
+        'Recupera el projecte no desat',
+    'Clear backup':
+        'Esborra la còpia de seguretat',
+    'Backup failed.\nThis cannot be undone, proceed anyway?':
+        'La còpia de seguretat ha fallat.\nNo es podran desfer els canvis, voleu continuar?',
+    'Unsaved Changes!':
+        'Hi ha canvis sense desar!',
     'Import...':
         'Importa...',
     'file menu import hint':
@@ -2619,6 +2627,8 @@ SnapTranslator.dict.ca = {
         '%rel a %dst',
     'distance':
         'distància',
+    'ray length':
+        'distància de xoc',
     'costume':
         'vestit',
     'sound':
