@@ -107,7 +107,7 @@ WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-November-27';
+modules.byob = '2020-December-22';
 
 // Declarations
 
@@ -1278,6 +1278,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
     ide.flushPaletteCache();
     ide.refreshPalette();
+    ide.recordUnsavedChanges();
     new BlockEditorMorph(dup, rcvr).popUp();
 };
 
@@ -1318,6 +1319,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
             if (ide) {
                 ide.flushPaletteCache();
                 ide.refreshPalette();
+                ide.recordUnsavedChanges();
             }
         },
         this

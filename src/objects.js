@@ -2819,6 +2819,7 @@ SpriteMorph.prototype.makeBlock = function () {
                 }
                 ide.flushPaletteCache();
                 ide.refreshPalette();
+                ide.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
             }
         },
