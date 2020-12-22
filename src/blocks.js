@@ -9001,7 +9001,12 @@ InputSlotMorph.prototype.setContents = function (data) {
 
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
     // enable copy-on-edit for inherited scripts
+    var block = this.parentThatIsA(BlockMorph),
+        ide = this.parentThatIsA(IDE_Morph);
     this.selectForEdit().setContents(aStringOrFloat);
+    if (ide && !block.isTemplate) {
+        ide.recordUnsavedChanges();
+    }
 };
 
 // InputSlotMorph drop-down menu:
@@ -9814,7 +9819,12 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        ide = this.parentThatIsA(IDE_Morph);
     this.contents().clearSelection();
+    if (ide && !block.isTemplate) {
+        ide.recordUnsavedChanges();
+    }
 };
 
 InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
