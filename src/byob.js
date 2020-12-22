@@ -1352,6 +1352,9 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
             () => {
                 this.definition = def;
                 this.refresh();
+                this.scriptTarget().parentThatIsA(
+                    IDE_Morph
+                ).recordUnsavedChanges();
             }
         );
     });

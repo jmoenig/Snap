@@ -3363,7 +3363,12 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block.doWithAlpha(1, () => block.fullImage()),
-            () => this.setSelector(selector, -offset)
+            () => {
+                this.setSelector(selector, -offset);
+                this.scriptTarget().parentThatIsA(
+                    IDE_Morph
+                ).recordUnsavedChanges();
+            }
         );
     });
     menu.popup(this.world(), this.bottomLeft().subtract(new Point(
