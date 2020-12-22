@@ -1436,6 +1436,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
                     myself.currentSprite.changed();
                     myself.currentSprite.fixLayout();
                     myself.currentSprite.rerender();
+                    myself.recordUnsavedChanges();
                 }
                 rotationStyleButtons.forEach(each =>
                     each.refresh()
@@ -1508,6 +1509,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             myself.newSpriteName(newName, myself.currentSprite)
         );
         nameField.setContents(myself.currentSprite.name);
+        myself.recordUnsavedChanges();
     };
     this.spriteBar.reactToEdit = nameField.accept;
 
@@ -1515,8 +1517,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     padlock = new ToggleMorph(
         'checkbox',
         null,
-        () => this.currentSprite.isDraggable =
-            !this.currentSprite.isDraggable,
+        () => {
+            this.currentSprite.isDraggable = !this.currentSprite.isDraggable;
+            this.recordUnsavedChanges();
+        },
         localize('draggable'),
         () => this.currentSprite.isDraggable
     );
