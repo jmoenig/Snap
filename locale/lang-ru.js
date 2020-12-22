@@ -185,7 +185,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru, pbsite@mail.ru', // optional
     'last_changed':
-        '2020-11-02', // this, too, will appear in the Translators tab
+        '2020-12-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -623,6 +623,8 @@ SnapTranslator.dict.ru = {
         '%rel до %dst',
     'distance':
     	'расстояние',
+    'ray length':
+        'длина луча',
     '%asp at %loc':
         'получить %asp в точке %loc',
     'r-g-b-a':
@@ -1501,8 +1503,12 @@ SnapTranslator.dict.ru = {
     // new project
     'New Project':
         'Новый Проект',
+    'Unsaved Changes!':
+        'Несохранённые изменения!',
     'Replace the current project with a new one?':
         'Заменить данный проект на новый?',
+    'Backup failed.\nThis cannot be undone, proceed anyway?':
+        'Создание резервной копии не удалось.\nЭто не может быть отменено. Продолжить?',
 
     // save project
     'Save Project As...':

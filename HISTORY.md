@@ -19,11 +19,13 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+    * Russian, thanks, Pavel!
 
 ### 2020-12-22
 * threads: up to 40x speed-up for "new costume from list" reporter primitive 
 * api: added unsavedChanges() method and documentation
 * blocks, gui: visual indication of unsaved changes in the IDE's project label
+* Russian translation update, thanks, Pavel!
 
 ### 2020-12-21
 * gui: tweaked backup / restore
