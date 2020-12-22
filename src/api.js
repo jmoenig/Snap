@@ -344,6 +344,6 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
     this.openProjectString(projectXML);
 };
 
-IDE_Morph.prototype.unsavedChange = function () {
+IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits;
 };
