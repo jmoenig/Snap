@@ -2281,6 +2281,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 myself.toggleVariableWatcher(pair[0], pair[1]);
                 ide.flushBlocksCache('variables'); // b/c of inheritance
                 ide.refreshPalette();
+                ide.recordUnsavedChanges();
             }
         }
     }
@@ -8490,14 +8491,17 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     function addVar(pair) {
         if (pair) {
+            var ide;
             if (myself.isVariableNameInUse(pair[0])) {
                 myself.inform('that name is already in use');
             } else {
+                ide = myself.parentThatIsA(IDE_Morph);
                 myself.addVariable(pair[0], pair[1]);
                 myself.toggleVariableWatcher(pair[0], pair[1]);
                 myself.blocksCache[cat] = null;
                 myself.paletteCache[cat] = null;
-                myself.parentThatIsA(IDE_Morph).refreshPalette();
+                ide.refreshPalette();
+                ide.recordUnsavedChanges();
             }
         }
     }
