@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.5.0
 * **New Features:**
     * warning about "unsaved changes" when opening or creating a new project
     * visual indication of unsaved changes in the IDE's project label
@@ -26,6 +27,7 @@
 * api: added unsavedChanges() method and documentation
 * blocks, gui: visual indication of unsaved changes in the IDE's project label
 * Russian translation update, thanks, Pavel!
+* prepared release
 
 ### 2020-12-21
 * gui: tweaked backup / restore
