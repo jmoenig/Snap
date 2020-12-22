@@ -9033,6 +9033,8 @@ InputSlotMorph.prototype.menuFromDict = function (
 {
     var key, dial, flag,
     	myself = this,
+        block = this.parentThatIsA(BlockMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(
             this.userSetContents,
             null,
@@ -9043,6 +9045,9 @@ InputSlotMorph.prototype.menuFromDict = function (
 	function update(num) {
     	myself.setContents(num);
         myself.reactToSliderEdit();
+        if (ide && !block.isTemplate) {
+            ide.recordUnsavedChanges();
+        }
  	}
 
     function getImg(block) {
