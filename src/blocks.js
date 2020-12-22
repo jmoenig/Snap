@@ -10528,15 +10528,21 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull) {
 
 BooleanSlotMorph.prototype.toggleValue = function () {
     var target = this.selectForEdit(),
+        block = this.parentThatIsA(BlockMorph),
         ide;
     if (target !== this) {
         return this.toggleValue.call(target);
     }
     ide = this.parentThatIsA(IDE_Morph);
     this.value = this.nextValue();
-    if (ide && !ide.isAnimating) {
-        this.rerender();
-        return;
+    if (ide) {
+        if (!block.isTemplate) {
+            ide.recordUnsavedChanges();
+        }
+        if (!ide.isAnimating) {
+            this.rerender();
+            return;
+        }
     }
     this.progress = 3;
     this.rerender();
