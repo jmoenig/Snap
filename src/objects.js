@@ -3574,6 +3574,7 @@ SpriteMorph.prototype.deleteVariable = function (varName) {
     if (ide) {
         ide.flushBlocksCache('variables'); // b/c the var could be global
         ide.refreshPalette();
+        ide.recordUnsavedChanges();
     }
 };
 
