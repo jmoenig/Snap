@@ -3301,6 +3301,7 @@ BlockMorph.prototype.ringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
+    this.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
 };
 
 BlockMorph.prototype.unringify = function () {
@@ -3334,6 +3335,7 @@ BlockMorph.prototype.unringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
+    this.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
