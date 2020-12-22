@@ -8672,7 +8672,11 @@ SpriteIconMorph.prototype.chooseExemplar = function () {
 };
 
 SpriteIconMorph.prototype.releaseSprite = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
     this.object.release();
+    if (ide) {
+        ide.recordUnsavedChanges();
+    }
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {

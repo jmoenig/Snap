@@ -4169,6 +4169,7 @@ SpriteMorph.prototype.perpetuateAndEdit = function () {
     if (ide) {
         this.perpetuate();
         ide.selectSprite(this);
+        ide.recordUnsavedChanges();
     }
 };
 
