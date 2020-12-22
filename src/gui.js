@@ -4449,7 +4449,10 @@ IDE_Morph.prototype.editProjectNotes = function () {
 
     dialog.target = this;
 
-    dialog.action = (note) => this.projectNotes = note;
+    dialog.action = (note) => {
+        this.projectNotes = note;
+        this.recordUnsavedChanges();
+    };
 
     dialog.justDropped = () => text.edit();
 
