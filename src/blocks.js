@@ -11768,6 +11768,7 @@ MultiArgMorph.prototype.is3ArgRingInHOF = function () {
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
+    var ide = this.parentThatIsA(IDE_Morph);
     if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
@@ -11786,6 +11787,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.addInput();
             }
         }
+        if (ide) {
+            ide.recordUnsavedChanges();
+        }
     } else if (
         leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
     ) {
@@ -11793,6 +11797,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             if (leftArrow.isVisible) {
                 target.removeInput();
             }
+        }
+        if (ide) {
+            ide.recordUnsavedChanges();
         }
     } else {
         target.escalateEvent('mouseClickLeft', pos);
