@@ -4,6 +4,7 @@
 
 * **New Features:**
     * warning about "unsaved changes" when opening or creating a new project
+    * visual indication of unsaved changes in the IDE's project label
     * automatic backup of unsaved changes to localstore, option to restore in the file menu until the first change in the new project
 * **Notable Changes:**
     * 25% speed-up for reporters, WARP and TURBO
@@ -21,7 +22,8 @@
 
 ### 2020-12-22
 * threads: up to 40x speed-up for "new costume from list" reporter primitive 
-* api: added unsavedChanges() method and documentation 
+* api: added unsavedChanges() method and documentation
+* blocks, gui: visual indication of unsaved changes in the IDE's project label
 
 ### 2020-12-21
 * gui: tweaked backup / restore

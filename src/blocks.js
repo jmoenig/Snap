@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-December-20';
+modules.blocks = '2020-December-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7461,7 +7461,7 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         }
     }
     if (ide) {
-        ide.hasUnsavedEdits = true;
+        ide.recordUnsavedChanges();
     }
 };
 
