@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-01-04
+* new dev version
+
 ## 6.5.0
 * **New Features:**
     * warning about "unsaved changes" when opening or creating a new project
