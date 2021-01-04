@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * 10% speed-up for reporters, WARP and TURBO
+
 ### 2021-01-04
 * new dev version
+* threads: optimized frame stepper, reduced frames for input evaluation, 10 % speed-up for reporters, WARP and TURBO
 
 ## 6.5.0
 * **New Features:**

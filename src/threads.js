@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2020-December-22';
+modules.threads = '2021-January-04';
 
 var ThreadManager;
 var Process;
@@ -786,7 +786,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     inputs = this.context.inputs;
 
     if (argCount > inputs.length) {
-        this.evaluateNextInput(block);
+        // this.evaluateNextInput(block);
+        this.evaluateNextInputSet(block); // frame-optimized version
     } else {
         if (this.flashContext()) {return; } // yield to flash the block
         if (this[selector]) {
@@ -910,7 +911,8 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
         this.popContext();
     } else {
         if (argCount > inputs.length) {
-            this.evaluateNextInput(multiSlot);
+            // this.evaluateNextInput(multiSlot);
+            this.evaluateNextInputSet(multiSlot); // frame-optimized version
         } else {
             this.returnValueToParentContext(new List(inputs));
             this.popContext();
@@ -1030,6 +1032,63 @@ Process.prototype.evaluateNextInput = function (element) {
         }
     } else {
         this.pushContext(exp, outer);
+    }
+};
+
+Process.prototype.evaluateNextInputSet = function (element) {
+    // Optimization to use instead of evaluateNextInput(), bums out a few
+    // frames and function calls to save a some milliseconds.
+    // the idea behind this optimization is to keep evaluating the inputs
+    // while we know for sure that we aren't boing to yield anyway
+    var args = element.inputs(),
+        sel = this.context.expression.selector,
+        outer = this.context.outerContext, // for tail call elimination
+        exp, ans;
+
+    while (args.length > this.context.inputs.length) {
+        exp = args[this.context.inputs.length];
+        if (exp.isUnevaluated) {
+            if (exp.isUnevaluated === true || exp.isUnevaluated()) {
+                if (sel === 'reify' || sel === 'reportScript') {
+                    this.context.addInput(exp);
+                } else {
+                    this.context.addInput(this.reify(exp, new List()));
+                }
+            } else {
+                this.pushContext(exp, outer);
+                break;
+            }
+        } else {
+            if (exp instanceof MultiArgMorph || exp instanceof ArgLabelMorph ||
+                    exp instanceof BlockMorph) {
+                 this.pushContext(exp, outer);
+                 break;
+            } else { // asuming an ArgMorph
+                if (this.flashContext()) {return; } // yield to flash
+                if (exp.bindingID) {
+                    if (this.isCatchingErrors) {
+                        try {
+                            ans = this.context.variables.getVar(exp.bindingID);
+                        } catch (error) {
+                            this.handleError(error, exp);
+                        }
+                    } else {
+                        ans = this.context.variables.getVar(exp.bindingID);
+                    }
+                } else {
+                    ans = exp.evaluate();
+                    if (ans) {
+                        if (exp.constructor === CommandSlotMorph ||
+                                exp.constructor === ReporterSlotMorph ||
+                                (exp instanceof CSlotMorph &&
+                                    (!exp.isStatic || exp.isLambda))) {
+                            ans = this.reify(ans, new List());
+                        }
+                    }
+                }
+                this.context.addInput(ans);
+            }
+        }
     }
 };
 
