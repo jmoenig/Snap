@@ -4,6 +4,11 @@
 
 * **Notable Changes:**
     * 10% speed-up for reporters, WARP and TURBO
+* **Notable Fixes:**
+    * fixed a bug when changing a Boolean input slot with a default value to numerical type 
+
+### 2021-01-05
+* widgets: fixed a conversion bug when retrieving a numerical value from an input field
 
 ### 2021-01-04
 * new dev version

@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note, useBlurredShadows*/
 
-modules.widgets = '2020-October-06';
+modules.widgets = '2021-January-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3100,7 +3100,7 @@ InputFieldMorph.prototype.getValue = function () {
     var num,
         contents = this.contents();
     if (this.isNumeric) {
-        num = parseFloat(contents.text);
+        num = parseFloat(contents.text.text);
         if (!isNaN(num)) {
             return num;
         }
