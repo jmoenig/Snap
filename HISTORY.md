@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **New Features:**
+    * experimental (non-hyperized) "not equals" primitive reachable via "relabel"
 * **Notable Changes:**
     * 10% speed-up for reporters, WARP and TURBO
 * **Notable Fixes:**
@@ -9,6 +11,7 @@
 
 ### 2021-01-05
 * widgets: fixed a conversion bug when retrieving a numerical value from an input field
+* objects, threads: experimental (non-hyperized) "not equals" primitive reachable via "relabel"
 
 ### 2021-01-04
 * new dev version

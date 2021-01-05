@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-January-04';
+modules.threads = '2021-January-05';
 
 var ThreadManager;
 var Process;
@@ -3879,6 +3879,10 @@ Process.prototype.reportBasicGreaterThan = function (a, b) {
 
 Process.prototype.reportEquals = function (a, b) {
     return snapEquals(a, b);
+};
+
+Process.prototype.reportNotEquals = function (a, b) {
+    return !snapEquals(a, b);
 };
 
 Process.prototype.reportNot = function (bool) {

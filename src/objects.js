@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2020-December-22';
+modules.objects = '2021-January-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -1138,6 +1138,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%s = %s'
         },
+        reportNotEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2260 %s'
+        },
         reportLessThan: {
             type: 'predicate',
             category: 'operators',
@@ -1683,15 +1688,19 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
         'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportGreaterThan', 'reportGreaterThanOrEquals'],
-    reportEquals: ['reportLessThan', 'reportLessThanOrEquals',
-        'reportGreaterThan', 'reportGreaterThanOrEquals'],
+        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
+    reportEquals: ['reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
+    reportNotEquals: ['reportEquals', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
-        'reportLessThan', 'reportLessThanOrEquals'],
+        'reportNotEquals', 'reportLessThan', 'reportLessThanOrEquals'],
     reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
-        'reportGreaterThan', 'reportGreaterThanOrEquals'],
+        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
     reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
-        'reportLessThan', 'reportLessThanOrEquals'],
+        'reportNotEquals', 'reportLessThan', 'reportLessThanOrEquals'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
 
