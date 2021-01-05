@@ -8,10 +8,13 @@
     * 10% speed-up for reporters, WARP and TURBO
 * **Notable Fixes:**
     * fixed a bug when changing a Boolean input slot with a default value to numerical type 
+* **Translation Updates:**
+    * Dutch, thanks, Joek!
 
 ### 2021-01-05
 * widgets: fixed a conversion bug when retrieving a numerical value from an input field
 * objects, threads: experimental (non-hyperized) "not equals" primitive reachable via "relabel"
+* Dutch translation update, thanks, Joek!
 
 ### 2021-01-04
 * new dev version
