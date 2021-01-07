@@ -9,8 +9,13 @@
     * updated list utilities library, thanks, Brian!
 * **Notable Fixes:**
     * fixed a bug when changing a Boolean input slot with a default value to numerical type 
+* **Documentation Updates:**
+    * updated "contentWindows" part of the Snap! API, thanks, Bernat
 * **Translation Updates:**
     * Dutch, thanks, Joek!
+
+### 2021-01-07
+* updated Snap! API documentation, thanks, Bernat!
 
 ### 2021-01-05
 * widgets: fixed a conversion bug when retrieving a numerical value from an input field
