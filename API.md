@@ -70,14 +70,14 @@ If the iframe and the container do not share domains, you won't be able to reach
 and, thus, the API. For that particular case, you should use the `postMessage` mechanism,
 as follows:
 
-    document.querySelector('iframe').postMessage(
+    document.querySelector('iframe').contentWindow.postMessage(
         { selector: <API selector>, params: <param array> },
         '*'
     );
 
 For instance, to get the value of a variable named "foo", you would do:
 
-    document.querySelector('iframe').postMessage(
+    document.querySelector('iframe').contentWindow.postMessage(
         { selector: 'getVar', params: [ 'foo' ] },
         '*'
     );
