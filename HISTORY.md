@@ -10,9 +10,13 @@
 * **Notable Fixes:**
     * fixed a bug when changing a Boolean input slot with a default value to numerical type 
 * **Documentation Updates:**
+    * Snap! Manual sources and compiling documentation, thanks, Brian!
     * updated "contentWindows" part of the Snap! API, thanks, Bernat
 * **Translation Updates:**
     * Dutch, thanks, Joek!
+
+### 2021-01-08
+* updated Snap! Manual and manual compiling documentation, thanks, Brian!
 
 ### 2021-01-07
 * updated Snap! API documentation, thanks, Bernat!
