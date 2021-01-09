@@ -181,11 +181,11 @@ SnapTranslator.dict.ru = {
     'language_name':
         'Русский', // the name as it should appear in the language menu
     'language_translator':
-        'Svetlana Ptashnaya, Проскурнёв Артём, Pavel Belousov', // your name for the Translators tab
+        'Svetlana Ptashnaya, Artem Proskurnev, Pavel Belousov', // your name for the Translators tab
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru, pbsite@mail.ru', // optional
     'last_changed':
-        '2020-12-22', // this, too, will appear in the Translators tab
+        '2021-01-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -372,9 +372,9 @@ SnapTranslator.dict.ru = {
     'size':
         'размер',
     'show':
-        'показаться',
+        'отобразить',
     'hide':
-        'спрятаться',
+        'скрыть',
     'shown?':
         'видим?',
     'go to %layer layer':
