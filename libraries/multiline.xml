@@ -1,1 +1,0 @@
-<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1"><block-definition s="multiline %&apos;text&apos;" type="reporter" category="operators"><header></header><code></code><inputs><input type="%code"></input></inputs><script><block s="doReport"><block var="text"/></block></script></block-definition></blocks>

@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Snap! Build Your Own Blocks</title>
-		<link rel="shortcut icon" href="favicon.ico">
-		<script type="text/javascript" src="morphic.js"></script>
-		<script type="text/javascript" src="widgets.js"></script>
-		<script type="text/javascript" src="blocks.js"></script>
-		<script type="text/javascript" src="threads.js"></script>
-		<script type="text/javascript" src="objects.js"></script>
-		<script type="text/javascript" src="gui.js"></script>
-		<script type="text/javascript" src="paint.js"></script>
-		<script type="text/javascript" src="lists.js"></script>
-		<script type="text/javascript" src="byob.js"></script>
-		<script type="text/javascript" src="tables.js"></script>
-		<script type="text/javascript" src="symbols.js"></script>
-		<script type="text/javascript" src="xml.js"></script>
-		<script type="text/javascript" src="store.js"></script>
-		<script type="text/javascript" src="locale.js"></script>
-		<script type="text/javascript" src="cloud.js"></script>
-		<script type="text/javascript" src="sha512.js"></script>
-		<script type="text/javascript" src="FileSaver.min.js"></script>
-		<script type="text/javascript">
-			var world;
-			window.onload = function () {
-				world = new WorldMorph(document.getElementById('world'));
-                world.worldCanvas.focus();
-				new IDE_Morph().openIn(world);
-        loop();
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Snap! 6.5.1 - dev - Build Your Own Blocks</title>
+        <link rel="icon" href="src/favicon.ico">
+        <script src="src/morphic.js?version=2020-12-02"></script>
+        <script src="src/symbols.js?version=2020-10-07"></script>
+        <script src="src/widgets.js?version=2021-01-05"></script>
+        <script src="src/blocks.js?version=2020-12-22"></script>
+        <script src="src/threads.js?version=2021-01-05"></script>
+        <script src="src/objects.js?version=2021-01-05"></script>
+        <script src="src/gui.js?version=2021-01-04"></script>
+        <script src="src/paint.js?version=2020-05-17"></script>
+        <script src="src/lists.js?version=2020-12-01"></script>
+        <script src="src/byob.js?version=2020-12-22"></script>
+        <script src="src/tables.js?version=2020-10-06"></script>
+        <script src="src/sketch.js?version=2020-07-13"></script>
+        <script src="src/video.js?version=2019-06-27"></script>
+        <script src="src/maps.js?version=2020-03-25"></script>
+        <script src="src/xml.js?version=2020-04-27"></script>
+        <script src="src/store.js?version=2020-12-11"></script>
+        <script src="src/locale.js?version=2021-01-05"></script>
+        <script src="src/cloud.js?version=2020-10-21"></script>
+        <script src="src/api.js?version=2020-12-22"></script>
+        <script src="src/sha512.js?version=2019-06-27"></script>
+        <script src="src/FileSaver.min.js?version=2019-06-27"></script>
+        <script>
+            var world;
+            window.onload = function () {
+                world = new WorldMorph(document.getElementById('world'));
+                new IDE_Morph().openIn(world);
+                loop();
 			};
-			function loop() {
-        requestAnimationFrame(loop);
-				world.doOneCycle();
-			}
-		</script>
-	</head>
-	<body style="margin: 0;">
-		<canvas id="world" tabindex="1" style="position: absolute;" />
-	</body>
+            function loop() {
+                requestAnimationFrame(loop);
+                world.doOneCycle();
+            }
+        </script>
+    </head>
+    <body style="margin: 0;">
+        <canvas id="world" tabindex="1" style="position: absolute;"></canvas>
+    </body>
 </html>
