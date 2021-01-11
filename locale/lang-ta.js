@@ -1075,62 +1075,62 @@ SnapTranslator.dict.ta = {
     'large':
         'பெரியது',
     'slider':
-        'slider',
+        'ஸ்லைடர்',
     'slider min...':
-        'Minimalwert...',
+        'குறைந்தபட்ச ஸ்லைடு...',
     'slider max...':
-        'Maximalwert...',
+        'அதிகபட்ச ஸ்லைடு...',
     'import...':
-        'Importieren...',
+        'இறக்குமதி...',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'குறைந்தபட்ச ஸ்லைடு',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'அதிகபட்ச ஸ்லைடு',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'நீளம்: ',
 
-    // coments
+    // comments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'add comment here',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) right',
     '(-90) left':
-        '(-90) links',
+        '(-90) left',
     '(0) up':
-        '(0) oben',
+        '(0) up',
     '(180) down':
-        '(180) unten',
+        '(180) down',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'mouse-pointer',
     'edge':
-        'Kante',
+        'edge',
     'pen trails':
-        'Malspuren',
+        'pen trails',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'Turtle',
     'Empty':
-        'Leer',
+        'Empty',
 
     // graphical effects
     'brightness':
-        'Helligeit',
+        'brightness',
     'ghost':
-        'Durchsichtigkeit',
+        'ghost',
     'negative':
-        'Farbumkehr',
+        'negative',
     'comic':
-        'Moire',
+        'comic',
     'confetti':
-        'Farbverschiebung',
+        'confetti',
 
     // keys
     'space':
@@ -1254,7 +1254,7 @@ SnapTranslator.dict.ta = {
     'tab':
         'tab',
     'cr':
-        'Wagenr\u00fccklauf',
+        'cr',
 
     // data types
     'number':
@@ -1278,3 +1278,6 @@ SnapTranslator.dict.ta = {
     'any':
         'any'
 };
+/* Tamil Language locale is completed upto 85% by 
+Revision 1 and 2:- vinayakumar 40
+ Revision 3 to 5 :- barthdry   45 */
