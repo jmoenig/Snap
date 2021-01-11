@@ -819,9 +819,9 @@ SnapTranslator.dict.ta = {
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
     'ringify':
-        'Ringify',
+        'வளையமாக ஆக்குங்கள்',
     'unringify':
-        'Unringify',
+        'வளையத்திலிருந்து உடைக்க',
 
     // custom blocks:
     'delete block definition...':
@@ -835,17 +835,17 @@ SnapTranslator.dict.ta = {
     'move':
         'நகர்த்து',
     'detach from':
-        'Abtrennen von',
+        'இருந்து பிரிக்கவும்',
     'detach all parts':
-        'Alle Teile abtrennen',
+        'எல்லாம் பிரிக்கவும்',
     'export...':
-        'Exportieren...',
+        'ஏற்றுமதி...',
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'அனைத்தையும் காட்டு',
     'pic...':
-        'Bild exportieren...',
+        'ஏற்றுமதி மேடை...',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
@@ -853,9 +853,9 @@ SnapTranslator.dict.ta = {
     'clean up':
         'சுத்தம் செய்',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'arrange scripts\nvertically',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'add comment',
     'undrop':
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
@@ -869,30 +869,30 @@ SnapTranslator.dict.ta = {
 
     // costumes
     'rename':
-        'Umbenennen',
+        'மறுபெயரிடு',
     'export':
-        'Exportieren',
+        'ஏற்றுமதி',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'ஆடை மறுபெயரிடு',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'ஒலியைத் தொடங்குங்கள்',
     'Stop sound':
-        'Klang\nanhalten',
+        'ஒலியை நிறுத்துங்கள்',
     'Stop':
-        'நிறுத்த',
+        'நிறுத்து',
     'Play':
-        'Los',
+        'தொடங்கு',
     'rename sound':
-        'Klang umbenennen',
+        'ஒலி மறுபெயரிடு',
 
     // dialogs
     // buttons
     'OK':
-        'சர',
+        'சரி',
     'Ok':
-        'சர',
+        'சரி',
     'Cancel':
         'கென்செல்',
     'Yes':
@@ -908,110 +908,110 @@ SnapTranslator.dict.ta = {
     'Zoom blocks':
         'Bl\u00f6cke vergr\u00f6\u00dfern',
     'build':
-        'baue',
+        'கட்ட',
     'your own':
-        'eigene',
+        'உங்கள் சொந்தமானது',
     'blocks':
-        'Bl\u00f6cke',
+        'தொகுதி',
     'normal (1x)':
         'normal (1x)',
     'demo (1.2x)':
         'Demo (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'presentation (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'big (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'huge (4x)',
     'giant (8x)':
-        'gigantisch (8x)',
+        'giant (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'Ultra Giant (10x)',
 
     // Project Manager
     'Untitled':
-        'Unbenannt',
+        'பெயரிடப்படாதது',
     'Open Project':
-        'Project \u00f6ffnen',
+        'திறந்த வேலை',
     '(empty)':
-        '(leer)',
+        'காலியாக',
     'Saved!':
-        'Gesichert!',
+        'Saved!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'Delete Project',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'Are you sure you want to delete',
     'rename...':
-        'Umbenennen...',
+        'மறுபெயரிடு...',
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'ஆடை ஆசிரியர்',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'சுழற்சி மையத்தை நகர்த்த குறுக்கு நாற்காலிகள் கிளிக் செய்யவும் அல்லது இழுக்கவும்',
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'வேலை குறிப்புகள்',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'புதிய திட்டம்',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'தற்போதைய திட்டத்தை புதியதாக மாற்றவா?',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'திட்டத்தை சேமிக்கவும்...',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'Export blocks',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'Import blocks',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'this project doesn\'t have any\ncustom global blocks yet',
     'select':
-        'ausw\u00e4hlen',
+        'தேர்ந்தெடுக்கவும்',
     'none':
-        'nichts',
+        'எதுவும் இல்லை',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'எல்லா உருவங்களுக்கும்',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'இந்த உருவங்களுக்கு',
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'தொகுதி மாற்ற',
     'Command':
-        'Befehl',
+        'Command:',
     'Reporter':
-        'Funktion',
+        'Reporter',
     'Predicate':
-        'Pr\u00e4dikat',
+        'Predicate',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'Block Editor',
     'Apply':
-        'Anwenden',
+        'விண்ணப்பிக்கவும்',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'Delete Custom Block',
     'block deletion dialog text':
         'Soll dieser Block mit allen seinen Exemplare\n' +
             'wirklich gel\u00f6scht werden?',
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'Create input name',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'Edit input name',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'Edit label fragment',
     'Title text':
         'Beschriftung',
     'Input name':
@@ -1047,35 +1047,35 @@ SnapTranslator.dict.ta = {
     'Upvar - make internal variable visible to caller':
         'Interne Variable au\u00dfen sichtbar machen',
 
-    // About Snap
+    // About Snap and contributors 
     'About Snap':
-        '\u00dcber Snap',
+        'ஸ்னாப் பற்றி',
     'Back...':
-        'Zur\u00fcck...',
+        'பின்புறம்..',
     'License...':
-        'Lizenz...',
+        'License...',
     'Modules...':
-        'Komponenten...',
+        'Modules...',
     'Credits...':
-        'Mitwirkende...',
+        'Credits...',
     'Translators...':
-        '\u00dcbersetzer',
+        'Translators',
     'License':
-        'Lizenz',
+        'License',
     'current module versions:':
-        'Komponenten-Versionen',
+        'current module versions',
     'Contributors':
-        'Mitwirkende',
+        'Contributors',
     'Translations':
-        '\u00dcbersetzungen',
+        'Translations',
 
     // variable watchers
     'normal':
-        'normal',
+        'இயல்பான',
     'large':
-        'gro\u00df',
+        'பெரியது',
     'slider':
-        'Regler',
+        'slider',
     'slider min...':
         'Minimalwert...',
     'slider max...':
