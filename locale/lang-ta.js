@@ -244,14 +244,14 @@ SnapTranslator.dict.ta = {
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'புதிய மனிதனைச் சேர்க்கவும்',
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'மற்றொரு வலைப்பக்கத்திலிருந்து படத்தை எடுக்கவும்\n'
+            + 'அல்லது கணினியிலிருந்து இங்கே கைவிடுவதன் மூலம்',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'இங்கே இழுப்பதன் மூலம் கணினியிலிருந்து ஒரு ஒலியை இறக்குமதி செய்க',
 
     // primitive blocks:
 
@@ -287,15 +287,14 @@ SnapTranslator.dict.ta = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'நிலை தேர்ந்தெடுக்கப்பட்டது. மோஷன் பிளாக்ஸ் இல்லை',
 
     'move %n steps':
         '%n அடிகள் நகரவும்',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n அளவு',
+        'திரும்பவும் %clockwise %n அளவு',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n அளவு',
+        'திரும்பவும் %counterclockwise %n அளவு',
     'point in direction %dir':
         '%dir திசையை சுட்டிக்கட்டவும்',
     'point towards %dst':
@@ -460,7 +459,7 @@ SnapTranslator.dict.ta = {
     'all but this script':
         'அனைத்தும் ஆனால் இந்த ஸ்கிரிப்ட்',
     'other scripts in sprite':
-        'andere Skripte in diesem Objekt',
+        'ஸ்பிரிட்டில் பிற ஸ்கிரிப்ட்கள்',
     'pause all %pause':
         'அனைத்தையும் இடைநிறுத்துங்கள் %pause',
     'run %cmdRing %inputs':
@@ -480,7 +479,7 @@ SnapTranslator.dict.ta = {
     'create a clone of %cln':
         'குளோன் %cln',
     'myself':
-        'mich',
+        'நானே',
     'delete this clone':
         'குளோனை நீக்கு',
 
@@ -502,7 +501,7 @@ SnapTranslator.dict.ta = {
     'mouse y':
         'மவுஸ் y',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'சுட்டி கீழே?',
     'key %key pressed?':
         '%key கீ அழுத்தி இருக்கிரதா',
     'distance to %dst':
@@ -535,7 +534,7 @@ SnapTranslator.dict.ta = {
     '%fun of %n':
         '%fun ன் %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'இளஞ்சிவப்பு சீரற்ற %n to %n',
     '%b and %b':
         '%b மற்றும் %b',
     '%b or %b':
@@ -559,16 +558,16 @@ SnapTranslator.dict.ta = {
     'length of %s':
         '%s ன் நீளம்',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'யூனிகோட் %s',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'யூனிகோட் %n கடிதமாக',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        'இது %s ஒரு %typ ?',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        'இது %s ஒத்த %s ?',
 
     'type of %s':
-        'Typ von %s',
+        'வகை %s',
 
     // variables:
     'Make a variable':
@@ -585,15 +584,15 @@ SnapTranslator.dict.ta = {
     'change %var by %n':
         '%var %n அளவு மாற்றவும்',
     'show variable %var':
-        '%var வேரியபிலை காண்பி',
+        '%var மாறி காண்பி',
     'hide variable %var':
-        '%var வேரியபிலை மறைக்கவும்',
+        '%var மாறி மறைக்கவும்',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'ஸ்கிரிப்ட் மாறி %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'பட்டியல் %exp',
     '%s in front of %l':
         '%s am Anfang von %l',
     'item %idx of %l':
@@ -650,19 +649,19 @@ SnapTranslator.dict.ta = {
     'Save As...':
         'எனச் சேம...',
     'Import...':
-        'Importieren...',
+        'இறக்குமதி...',
     'file menu import hint':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
     'Export project as plain text...':
-        'Export project as plain text',
+        'திட்டத்தை எளிய உரையாக ஏற்றுமதி செய்க',
     'Export project...':
         'ஏற்றுமதி திட்டம்...',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'Export Blocks...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
     'Import tools':
@@ -670,9 +669,9 @@ SnapTranslator.dict.ta = {
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
     'Libraries...':
-        'Module...',
+        'நூலகங்கள்...',
     'Import library':
-        'Modul laden',
+        'நூலகங்கள் நூலகங்கள்',
 
     // cloud menu
     'Login...':
@@ -684,15 +683,15 @@ SnapTranslator.dict.ta = {
     'Language...':
         'மொழ...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'Zoom blocks...',
     'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
+        'Stage size...',
     'Stage size':
-        'B\u00fchnengr\u00f6\u00dfe',
+        'Stage size',
     'Stage width':
-        'B\u00fchnenbreite',
+        'Stage width',
     'Stage height':
-        'B\u00fchnenh\u00f6he',
+        'Stage height',
     'Default':
         'Default',
     'Blurred shadows':
@@ -722,87 +721,85 @@ SnapTranslator.dict.ta = {
         'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
             + 'zu erm\u00f6glichen',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'Long form input dialog',
     'Plain prototype labels':
-        'Einfache Prototyp-Beschriftung',
+        'Plain prototype labels',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+        'uncheck to always show (+) symbols\nin block prototype labels',
     'check to hide (+) symbols\nin block prototype labels':
-        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
+        'check to hide (+) symbols\nin block prototype labels',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'check to always show slot\ntypes in the input dialog',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'uncheck to use the input\ndialog in short form',
     'Virtual keyboard':
-        'Virtuelle Tastatur',
+        'Virtual keyboard',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
+        'uncheck to disable\nvirtual keyboard support\nfor mobile devices',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
+        'check to enable\nvirtual keyboard support\nfor mobile devices',
     'Input sliders':
-        'Eingabeschieber',
+        'Input Slider',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'uncheck to disable\ninput sliders for\nentry fields',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'check to enable\ninput sliders for\nentry fields',
     'Clicking sound':
-        'Akustisches Klicken',
+        'Clicking sound',
     'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
+        'uncheck to turn\nblock clicking\nsound off',
     'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'check to turn\nblock clicking\nsound on',
     'Animations':
-        'Animationen',
+        'Animations',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'uncheck to disable\nIDE animations',
     'Turbo mode':
-        'Turbomodus',
+        'Turbo mode',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'check to prioritize\nscript execution',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'uncheck to run scripts\nat normal speed',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
+        'check to enable\nIDE animations',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'Thread safe scripts',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'uncheck to allow\nscript reentrance',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'check to disallow\nscript reentrance',
     'Prefer smooth animations':
-        'Fixe Framerate',
+        'Prefer smooth animations',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'uncheck for greater speed\nat variable frame rates',
     'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+        'check for smooth, predictable\nanimations across computers',
     'Flat line ends':
-        'Flache Pinselstriche',
+        'Flat line ends',
     'check for flat ends of lines':
-        'einschalten f\u00fcr flache\nPinselstrichenden',
+        'check for flat ends of lines',
     'uncheck for round ends of lines':
-        'auschalten f\u00fcr runde\nPinselstrichenden',
+        'uncheck for round ends of lines',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'உள்ளீட்டுடன்',
     'input names:':
-        'Eingaben:',
+        'உள்ளீட்டு பெயர்கள்:',
     'Input Names:':
-        'Eingaben:',
+        'உள்ளீட்டு பெயர்கள்:',
     'input list:':
-        'Eingabeliste:',
+        'உள்ளீட்டு பட்டியல்:',
 
     // context menus:
     'help':
-        'Hilfe',
+        'உதவி',
 
     // palette:
     'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
+        'hide primitive',
     'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+        'show primitive',
 
     // blocks:
     'help...':
