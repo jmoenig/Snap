@@ -1,10 +1,10 @@
 /*
 
-    lang-de.js
+    lang-ta.js
 
-    German translation for SNAP!
+    Tamil translation for SNAP!
 
-    written by Jens Mönig
+    written by Barthdry and One More
 
     Copyright (C) 2014 by Jens Mönig
 
@@ -214,7 +214,7 @@ SnapTranslator.dict.ta = {
     'Lists':
         'பட்டியல்',
     'Other':
-        'Andere',
+        'மற்றொன்று',
 
     // editor:
     'draggable':
