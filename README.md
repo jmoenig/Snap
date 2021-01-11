@@ -9,7 +9,7 @@ inspired by Scratch
 written by Jens Mönig and Brian Harvey
 jens@moenig.org, bh@cs.berkeley.edu
 
-Copyright (C) 2008-2020 by Jens Mönig and Brian Harvey
+Copyright (C) 2008-2021 by Jens Mönig and Brian Harvey
 
 Snap! is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

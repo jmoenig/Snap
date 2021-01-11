@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.5.1
 * **New Features:**
     * experimental (non-hyperized) "not equals" primitive reachable via "relabel"
 * **Notable Changes:**
@@ -14,6 +15,9 @@
     * updated "contentWindows" part of the Snap! API, thanks, Bernat
 * **Translation Updates:**
     * Dutch, thanks, Joek!
+
+### 2021-01-11
+* prepared patch
 
 ### 2021-01-08
 * updated Snap! Manual and manual compiling documentation, thanks, Brian!
