@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-01-21
+* new dev version
+
 ## 6.5.1
 * **New Features:**
     * experimental (non-hyperized) "not equals" primitive reachable via "relabel"
