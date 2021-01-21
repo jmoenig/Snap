@@ -336,19 +336,33 @@ SnapDriver.prototype.logout = async function() {
     }
 };
 
+SnapDriver.prototype.invite = async function(username, roleName) {
+    const {room} = this.ide();
+    const roles = room.getRoles();
+    if (!roleName) {
+        roleName = roles[0].name;
+    }
+    const role = roles.find(role => role.name === roleName);
+    if (!role) {
+        throw new Error(`Role not found: ${roleName}`);
+    }
+    room.inviteGuest(username, role.id);
+};
+
 SnapDriver.prototype.inviteCollaborator = async function(username) {
     const controlBar = this.ide().controlBar;
     this.click(controlBar.cloudButton);
 
-    const dropdown = await this.expect(
-        () => !this.dialog().title && this.dialog(),
+    await this.expect(
+        () => this.dialog() && !this.dialog().title,
         new Error('Cloud menu never appeared'),
     );
+    const dropdown = this.dialog();
     const collabs = dropdown.children.find(item => item.action === 'manageCollaborators');
     this.click(collabs);
 
     await this.expect(
-        () => !this.dialog().title,
+        () => this.dialog() && !this.dialog().title,
         `Collaborator dialog did not appear`
     );
 
