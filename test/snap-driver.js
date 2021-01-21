@@ -38,15 +38,18 @@ SnapDriver.prototype.dialog = function() {
 };
 
 // Controlling the IDE
-SnapDriver.prototype.reset = function() {
-    var world = this.world();
-
+SnapDriver.prototype.reset = async function() {
     // Close all open dialogs
-    var dialogs = world.children.slice(1);
+    const oldVersion = this.ide().room.version;
+    const dialogs = this.world().children.slice(1);
     dialogs.forEach(dialog => dialog.destroy());
 
     this.ide().exitReplayMode();
-    return this.ide().newProject();
+    await this.ide().newProject();
+    await this.expect(
+        () => this.ide().room.version !== oldVersion,
+        'No room state received'
+    );
 };
 
 SnapDriver.prototype.setProjectName = function(name) {
@@ -370,6 +373,7 @@ SnapDriver.prototype.inviteCollaborator = async function(username) {
     const otherUserItem = dialog.listField.elements
         .find(element => element.username === username);
 
+    if (!otherUserItem) throw new Error(`Could not find user: ${username}`);
     dialog.listField.select(otherUserItem);
 
     // click the invite button
