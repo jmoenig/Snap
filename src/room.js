@@ -783,33 +783,31 @@ RoomMorph.prototype.promptInvite = function (id, role, roomName, inviter) {
 };
 
 RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
-    var myself = this;
-    // TODO: Change this..
     SnapCloud.respondToInvitation(
         id,
         accepted,
-        function (project) {
+        async project => {
             // Load the project or make the project empty
-            if (project) {
-                myself.ide.source = 'cloud';
-                myself.ide.droppedText(project.SourceCode);
-                if (project.Public === 'true') {
-                    location.hash = '#present:Username=' +
-                        encodeURIComponent(SnapCloud.username) +
-                        '&ProjectName=' +
-                        encodeURIComponent(project.ProjectName);
-                }
-            } else {  // Empty the project
-                myself.ide.newRole(role);
+            this.ide.source = 'cloud';
+            if (project.Public === 'true') {
+                location.hash = '#present:Username=' +
+                    encodeURIComponent(SnapCloud.username) +
+                    '&ProjectName=' +
+                    encodeURIComponent(project.ProjectName);
             }
-            myself.ide.showMessage(localize('Opening ') + role +
-                localize(' at ') + project.RoomName, 2);
-            myself.ide.silentSetProjectName(role);
+            const msg = this.ide.showMessage(localize('Opening ') + role +
+                localize(' at ') + project.RoomName);
+            if (project.SourceCode) {
+                await this.ide.droppedText(project.SourceCode);
+            } else {  // Empty the project
+                this.ide.newRole(role);
+                await SnapActions.openProject();
+            }
+            msg.destroy();
+            this.ide.silentSetProjectName(role);
             SnapCloud.disconnect();
         },
-        function(err) {
-            myself.ide.showMessage(err, 2);
-        }
+        err => this.ide.showMessage(err, 2)
     );
 };
 
