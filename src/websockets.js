@@ -73,9 +73,9 @@ WebSocketManager.MessageHandlers = {
     },
 
     'close-invite': function(msg) {
-        if (this.ide.room.invitations[msg.id]) {
-            this.ide.room.invitations[msg.id].destroy();
-            delete this.ide.room.invitations[msg.id];
+        const dialog = DialogBoxMorph.prototype.instances[msg.id];
+        if (dialog) {
+            dialog.destroy();
         }
     },
 

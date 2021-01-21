@@ -35,7 +35,6 @@ RoomMorph.prototype.init = function(ide) {
     this.isReadOnly = false;
     this.ide = ide;
     this.displayedMsgMorphs = [];
-    this.invitations = {};  // open invitations
     this.trace = {};
 
     this.ownerId = null;
@@ -767,38 +766,28 @@ RoomMorph.prototype.inviteGuest = function (friend, role) {
 
 RoomMorph.prototype.promptInvite = function (id, role, roomName, inviter) {
     // Create a confirm dialog about joining the group
-    var myself = this,
-        // unpack the params
-        action = this._invitationResponse.bind(this, id, true, role),
-        dialog = new DialogBoxMorph(null, action),
-        msg;
+    const dialog = new DialogBoxMorph(
+        null,
+        () => this.respondToInvitation(id, role, true)
+    ).withKey(id);
+    const msg = inviter === SnapCloud.username ?
+        'Would you like to move to "' + roomName + '"?' :
+        inviter + ' has invited you to join\nhim/her at "' + roomName + '"';
 
-    if (inviter === SnapCloud.username) {
-        msg = 'Would you like to move to "' + roomName + '"?';
-    } else {
-        msg = inviter + ' has invited you to join\nhim/her at "' + roomName +
-            '"\nAccept?';
-    }
-
-    dialog.cancel = function() {
-        myself._invitationResponse(id, false, role);
-        delete myself.invitations[id];
-        this.destroy();
-    };
-
+    dialog.cancel = () => this.respondToInvitation(id, role, false);
     dialog.askYesNo(
         'Room Invitation',
         localize(msg),
         this.ide.world()
     );
-    this.invitations[id] = dialog;
 };
 
-RoomMorph.prototype._invitationResponse = function (id, response, role) {
+RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
     var myself = this;
-    SnapCloud.invitationResponse(
+    // TODO: Change this..
+    SnapCloud.respondToInvitation(
         id,
-        response,
+        accepted,
         function (project) {
             // Load the project or make the project empty
             if (project) {

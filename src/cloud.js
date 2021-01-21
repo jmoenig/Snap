@@ -512,7 +512,7 @@ Cloud.prototype.cloneRole = function(roleName, onSuccess, onFail) {
     );
 };
 
-Cloud.prototype.invitationResponse = function (id, accepted, onSuccess, onFail) {
+Cloud.prototype.respondToInvitation = function (id, accepted, onSuccess, onFail) {
     var myself = this,
         args = [id, accepted, SnapCloud.clientId];
 
