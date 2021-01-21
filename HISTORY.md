@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed a glitch in the animation library's "sine in-out" easing function 
+
 ### 2021-01-21
 * new dev version
+* animation library: fixed a glitch in the "sine in-out" easing function 
 
 ## 6.5.1
 * **New Features:**
