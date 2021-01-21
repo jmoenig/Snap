@@ -22,7 +22,7 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'reporter',
         category: 'network',
         spec: 'call %s with %s',
-        defaults: ['PublicRoles'],
+        defaults: ['CloudVariables'],
         deprecated: true  // deprecated blocks are not shown when searching for blocks
     };
 
@@ -30,7 +30,7 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'reporter',
         category: 'network',
         spec: 'call %serviceNames / %rpcActions with %s',
-        defaults: ['PublicRoles'],
+        defaults: ['CloudVariables'],
         deprecated: true
     };
 
@@ -38,21 +38,21 @@ SpriteMorph.prototype.initBlocks = function () {
         type: 'reporter',
         category: 'network',
         spec: 'call %serviceNames / %rpcMethod',
-        defaults: ['PublicRoles']
+        defaults: ['CloudVariables']
     };
 
     SpriteMorph.prototype.blocks.doRunRPC = {
         type: 'command',
         category: 'network',
         spec: 'run %serviceNames / %rpcMethod',
-        defaults: ['PublicRoles']
+        defaults: ['CloudVariables']
     };
 
     SpriteMorph.prototype.blocks.getCostumeFromRPC = {
         type: 'reporter',
         category: 'network',
         spec: 'costume from %serviceNames / %rpcActions with %s',
-        defaults: ['PublicRoles', ''],
+        defaults: ['CloudVariables', ''],
         deprecated: true
     };
 
