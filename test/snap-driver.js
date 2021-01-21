@@ -40,14 +40,13 @@ SnapDriver.prototype.dialog = function() {
 // Controlling the IDE
 SnapDriver.prototype.reset = async function() {
     // Close all open dialogs
-    const oldVersion = this.ide().room.version;
     const dialogs = this.world().children.slice(1);
     dialogs.forEach(dialog => dialog.destroy());
 
     this.ide().exitReplayMode();
     await this.ide().newProject();
     await this.expect(
-        () => this.ide().room.version !== oldVersion,
+        () => this.ide().room.version !== -1,
         'No room state received'
     );
 };

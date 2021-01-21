@@ -2,6 +2,30 @@
 describe('collaboration', function() {
     this.timeout(7500);
 
+    it('should close prompt if rejected', async () => {
+        await driver.user1.reset();
+        const {SnapCloud} = driver.user2.globals();
+        driver.user1.invite(SnapCloud.username);
+        await driver.user2.expect(
+            () => driver.user2.dialogs()
+                .find(d => d.key && d.key.includes('invite')),
+            `Invited user never received invite`,
+            {maxWait: 1000}
+        );
+
+        const dialog = driver.user2.dialogs()
+            .filter(dialog => dialog.key)
+            .find(dialog => dialog.key.includes('invite'));
+        const cancelBtn = dialog.buttons.children.find(btn => btn.action === 'cancel');
+        driver.user2.click(cancelBtn);
+
+        await driver.user2.expect(
+            () => driver.user2.dialogs().length === 0,
+            'Dialog did not close. Maybe an error occurred?',
+            {maxWait: 1000}
+        );
+    });
+
     describe('NO existing edits', function() {
         before(async () => {
             await driver.user1.reset();
