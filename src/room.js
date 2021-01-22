@@ -784,6 +784,10 @@ RoomMorph.prototype.promptInvite = function (id, role, roomName, inviter) {
         localize(msg),
         this.ide.world()
     );
+    setTimeout(
+        () => dialog.destroy(),
+        30000
+    );
 };
 
 RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
