@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-January-05';
+modules.threads = '2021-January-25';
 
 var ThreadManager;
 var Process;
@@ -5832,6 +5832,12 @@ Process.prototype.doSetInstrument = function (num) {
 // Process image processing primitives
 
 Process.prototype.reportGetImageAttribute = function (choice, name) {
+    if (this.enableHyperOps) {
+        if (name instanceof List) {
+            return name.map(each => this.reportGetImageAttribute(choice, each));
+        }
+    }
+
     var cst = this.costumeNamed(name) || new Costume(),
         option = this.inputOption(choice);
 

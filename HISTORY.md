@@ -2,8 +2,13 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * hyperized image attribute reporter primitive (monadic)
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
+
+### 2021-01-25
+* threads: hyperized image attribute reporter primitive (monadic)
 
 ### 2021-01-21
 * new dev version
