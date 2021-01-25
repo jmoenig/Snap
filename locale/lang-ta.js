@@ -185,7 +185,7 @@ SnapTranslator.dict.ta = {
     'translator_e-mail':
         'vnkmr7620@gmail.com', // optional
     'last_changed':
-        '2020-12-09', // this, too, will appear in the Translators tab
+        '2021-01-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

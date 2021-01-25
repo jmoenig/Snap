@@ -7,9 +7,12 @@
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
     * fixed a postMessage glitch in the API, thanks, Bernat!
+* **Translation Updates:**
+    * Tamil, thanks, Barthdry!
 
 ### 2021-01-25
 * threads: hyperized image attribute reporter primitive (monadic)
+* pulled pending PRs
 
 ### 2021-01-21
 * new dev version
