@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -202,11 +202,11 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world*/
+/*global modules, IDE_Morph, isString, Map, List, world, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-December-22';
+modules.api = '2021-January-25';
 
 // IDE_Morph external communication API - experimental
 /*
