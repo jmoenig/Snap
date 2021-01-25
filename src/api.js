@@ -218,13 +218,15 @@ modules.api = '2020-December-22';
 window.onmessage = function (event) {
     // make the API accessible from outside an iframe
     var ide = world.children[0];
-    window.top.postMessage(
-        {
-            selector: event.data.selector,
-            response: ide[event.data.selector].apply(ide, event.data.params)
-        },
-        '*'
-    );
+    if (!isNil(event.data.selector)) {
+        window.top.postMessage(
+            {
+                selector: event.data.selector,
+                response: ide[event.data.selector].apply(ide, event.data.params)
+            },
+            '*'
+        );
+    }
 };
 
 IDE_Morph.prototype.broadcast = function(message, callback) {
