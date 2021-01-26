@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2020-December-11';
+modules.store = '2021-January-26';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1253,7 +1253,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
             : new CommandBlockMorph();
     block.selector = 'errorObsolete';
     block.color = new Color(200, 0, 20);
-    block.setSpec('Obsolete!');
+    block.setSpec('Undefined!');
     block.isDraggable = true;
     return block;
 };

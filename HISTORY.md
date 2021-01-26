@@ -7,6 +7,7 @@
     * when constructing a costume from a pixel list handle single values as greyscale
     * experimental "column _ of _" reporter relabelling option for "item _ of _"
     * experimental "width of _" reporter relabelling option for "length of _"
+    * renamed "Obsolete!" blocks to "Undefined!"
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
     * fixed a postMessage glitch in the API, thanks, Bernat!
@@ -22,6 +23,7 @@
 * threads, objects experimental "width of _" reporter relabelling option for "length of _"
 * updated German translation (with experimental block specs)
 * fixed an input slot spec glitch in the Turkish translation 
+* store: renamed "Obsolete!" blocks to "Undefined!"
 
 ### 2021-01-25
 * threads: hyperized image attribute reporter primitive (monadic)
