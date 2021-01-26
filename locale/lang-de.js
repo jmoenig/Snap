@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2020-12-21', // this, too, will appear in the Translators tab
+        '2021-01-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -795,10 +795,14 @@ SnapTranslator.dict.de = {
         '%s am Anfang von %l',
     'item %idx of %l':
         'Element %idx von %l',
+    'column %idx of %l':
+        'Spalte %idx von %l',
     'all but first of %l':
         'alles au\u00dfer dem ersten von %l',
     'length of %l':
         'L\u00e4nge von %l',
+    'width of %l':
+        'Breite von %l',
     '%l contains %s':
         '%l enth\u00e4lt %s',
     'thing':
