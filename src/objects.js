@@ -1334,6 +1334,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'length of %l'
         },
+        reportTableWidth: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'width of %l'
+        },
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
@@ -1719,6 +1724,8 @@ SpriteMorph.prototype.blockAlternatives = {
     // lists
     reportListItem: ['reportTableColumn'],
     reportTableColumn: ['reportListItem'],
+    reportListLength: ['reportTableWidth'],
+    reportTableWidth: ['reportListLength'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],

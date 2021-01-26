@@ -6,6 +6,7 @@
     * hyperized image attribute reporter primitive (monadic)
     * when constructing a costume from a pixel list handle single values as greyscale
     * experimental "column _ of _" reporter relabelling option for "item _ of _"
+    * experimental "width of _" reporter relabelling option for "length of _"
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
     * fixed a postMessage glitch in the API, thanks, Bernat!
@@ -15,6 +16,7 @@
 ### 2021-01-26
 * threads: handle single values as greyscale when constructing a costume from a pixel list
 * threads, objects experimental "column _ of _" reporter relabelling option for "item _ of _"
+* threads, objects experimental "width of _" reporter relabelling option for "length of _"
 
 ### 2021-01-25
 * threads: hyperized image attribute reporter primitive (monadic)

@@ -2006,19 +2006,20 @@ Process.prototype.reportItems = function (indices, list) {
     }
 };
 
-// Process - other basic list accessors
+// Process - experimental tabular list accessors
+
+Process.prototype.reportTableWidth = function (list) {
+    // experimental - answer the length of the longest sub-list
+    this.assertType(list, 'list');
+    return Math.max(...list.itemsArray().map(row =>
+        row instanceof List ? row.length() : 0)
+    );
+};
 
 Process.prototype.reportTableColumn = function (index, list) {
     // experimental and probably controversial as a primitive,
     // because it's so nice and easy to write in Snap!
     var col;
-
-    function columns() {
-        return Math.max(...list.itemsArray().map(row =>
-            row instanceof List ? row.length() : 0)
-        );
-    }
-
     if (!this.isMatrix(list)) {
         throw new Error(
             'expecting ' + 'table' + ' but getting ' + this.reportTypeOf(list)
@@ -2028,14 +2029,16 @@ Process.prototype.reportTableColumn = function (index, list) {
         return new List(new Array(list.length()));
     }
     if (this.inputOption(index) === 'any') {
-        col = this.reportBasicRandom(1, columns());
+        col = this.reportBasicRandom(1, this.reportTableWidth(list));
         return list.map(row => row.at(col));
     }
     if (this.inputOption(index) === 'last') {
-        return list.map(row => row.at(columns()));
+        return list.map(row => row.at(this.reportTableWidth(list)));
     }
     return list.map(row => row.at(index));
 };
+
+// Process - other basic list accessors
 
 Process.prototype.reportListLength = function (list) {
     this.assertType(list, 'list');
