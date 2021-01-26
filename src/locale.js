@@ -487,7 +487,7 @@ SnapTranslator.dict.tr = {
     'translator_e-mail':
         'tguneysu@msn.com', // hakanatas@gmail.com, mustafaipekbayrak@gmail.com',
     'last_changed':
-        '2020-09-20'
+        '2021-01-26'
 };
 
 SnapTranslator.dict.hu = {

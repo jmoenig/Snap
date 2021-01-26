@@ -10,15 +10,18 @@
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
     * fixed a postMessage glitch in the API, thanks, Bernat!
+    * fixed a glitch in the Turkish translation that broke the "Looks" blocks category
 * **Translation Updates:**
     * Tamil, thanks, Barthdry!
     * German
+    * Turkish
 
 ### 2021-01-26
 * threads: handle single values as greyscale when constructing a costume from a pixel list
 * threads, objects experimental "column _ of _" reporter relabelling option for "item _ of _"
 * threads, objects experimental "width of _" reporter relabelling option for "length of _"
 * updated German translation (with experimental block specs)
+* fixed an input slot spec glitch in the Turkish translation 
 
 ### 2021-01-25
 * threads: hyperized image attribute reporter primitive (monadic)

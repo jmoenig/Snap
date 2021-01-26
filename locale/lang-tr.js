@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.tr = {
     'translator_e-mail':
         'tguneysu@msn.com', // optional (Mail adresleri)  hakanatas@gmail.com, mustafaipekbayrak@gmail.com', 
     'last_changed':
-        '2020-09-20', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
+        '2021-01-26', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
 
     // GUI
     // control bar:
@@ -354,7 +354,7 @@ SnapTranslator.dict.tr = {
     '%img of costume %cst':
         '%img kostümünün: %cst',
     'new costume %l width %dim height %dim':
-        'yeni kostüm %1 genişlik: %dim yükseklik: %dim',
+        'yeni kostüm %l genişlik: %dim yükseklik: %dim',
     'stretch %cst x: %n y: %n %':
         'esnet %cst x: %n y: %n %',
     'change %eff effect by %n':
