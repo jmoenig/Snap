@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-January-05';
+modules.objects = '2021-January-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -1318,6 +1318,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'item %idx of %l',
             defaults: [1]
         },
+        reportTableColumn: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'column %idx of %l',
+            defaults: [1]
+        },
         reportCDR: {
             type: 'reporter',
             category: 'lists',
@@ -1710,7 +1716,11 @@ SpriteMorph.prototype.blockAlternatives = {
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
 
-    // lists - HOFs
+    // lists
+    reportListItem: ['reportTableColumn'],
+    reportTableColumn: ['reportListItem'],
+
+    // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
     reportKeep: ['reportFindFirst', 'reportMap'],
     reportFindFirst: ['reportKeep', 'reportMap'],
