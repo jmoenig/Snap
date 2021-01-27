@@ -17,6 +17,9 @@
     * German
     * Turkish
 
+### 2021-01-27
+* threads: hyperized new experimental "column" primitive
+
 ### 2021-01-26
 * threads: handle single values as greyscale when constructing a costume from a pixel list
 * threads, objects experimental "column _ of _" reporter relabelling option for "item _ of _"

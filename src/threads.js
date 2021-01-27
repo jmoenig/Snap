@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-January-26';
+modules.threads = '2021-January-27';
 
 var ThreadManager;
 var Process;
@@ -2019,7 +2019,7 @@ Process.prototype.reportTableWidth = function (list) {
 Process.prototype.reportTableColumn = function (index, list) {
     // experimental and probably controversial as a primitive,
     // because it's so nice and easy to write in Snap!
-    var col;
+    var rank, col;
     if (!this.isMatrix(list)) {
         throw new Error(
             'expecting ' + 'table' + ' but getting ' + this.reportTypeOf(list)
@@ -2034,6 +2034,16 @@ Process.prototype.reportTableColumn = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         return list.map(row => row.at(this.reportTableWidth(list)));
+    }
+    rank = this.rank(index);
+    if (rank > 0 && this.enableHyperOps) {
+        if (rank === 1) {
+            if (index.isEmpty()) {
+                return list.map(item => item);
+            }
+            return list.map(row => index.map(idx => row.at(idx)));
+        }
+        throw new Error('cannot use nested list\nfor selecting columns');
     }
     return list.map(row => row.at(index));
 };
