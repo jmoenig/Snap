@@ -7,6 +7,7 @@
     * when constructing a costume from a pixel list handle single values as greyscale
     * experimental "column _ of _" reporter relabelling option for "item _ of _"
     * experimental "width of _" reporter relabelling option for "length of _"
+    * experimental "rotate (list)" primitive relabelling option for "all but first"
     * renamed "Obsolete!" blocks to "Undefined!"
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
@@ -16,6 +17,9 @@
     * Tamil, thanks, Barthdry!
     * German
     * Turkish
+
+### 2021-01-29
+* threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
 
 ### 2021-01-27
 * threads: hyperized new experimental "column" primitive
