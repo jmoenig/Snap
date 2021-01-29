@@ -21,6 +21,7 @@
 * threads, objects: removed previous experimental "column" and "width" primitives again
 * lists, threads, objects refactored experimental "rotate" primitive
 * updated German translation
+* added more relabelling options for "rotate"
 
 ### 2021-01-27
 * threads: hyperized new experimental "column" primitive

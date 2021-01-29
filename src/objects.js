@@ -1716,8 +1716,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doHideVar: ['doShowVar'],
 
     // lists
-    reportCDR: ['reportTableRotated'],
-    reportTableRotated: ['reportCDR'],
+    reportCDR: ['reportTableRotated', 'reportListLength'],
+    reportTableRotated: ['reportCDR', 'reportListLength'],
+    reportListLength: ['reportTableRotated', 'reportCDR'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
