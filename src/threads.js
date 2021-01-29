@@ -2008,57 +2008,30 @@ Process.prototype.reportItems = function (indices, list) {
 
 // Process - experimental tabular list accessors
 
-Process.prototype.reportTableWidth = function (list) {
-    // experimental - answer the length of the longest sub-list
-    this.assertType(list, 'list');
-    return Math.max(...list.itemsArray().map(row =>
-        row instanceof List ? row.length() : 0)
-    );
-};
-
-Process.prototype.reportTableColumn = function (index, list) {
-    // experimental and probably controversial as a primitive,
-    // because it's so nice and easy to write in Snap!
-    var rank, col;
-    if (!this.isMatrix(list)) {
-        throw new Error(
-            'expecting ' + 'table' + ' but getting ' + this.reportTypeOf(list)
-        );
-    }
-    if (index === '') {
-        return new List(new Array(list.length()));
-    }
-    if (this.inputOption(index) === 'any') {
-        col = this.reportBasicRandom(1, this.reportTableWidth(list));
-        return list.map(row => row.at(col));
-    }
-    if (this.inputOption(index) === 'last') {
-        return list.map(row => row.at(this.reportTableWidth(list)));
-    }
-    rank = this.rank(index);
-    if (rank > 0 && this.enableHyperOps) {
-        if (rank === 1) {
-            if (index.isEmpty()) {
-                return list.map(item => item);
-            }
-            return list.map(row => index.map(idx => row.at(idx)));
-        }
-        throw new Error('cannot use nested list\nfor selecting columns');
-    }
-    return list.map(row => row.at(index));
-};
-
 Process.prototype.reportTableRotated = function (list) {
     // experimental and probably controversial as a primitive,
     // because it's so nice and easy to write in Snap!
     this.assertType(list, 'list');
-    var width = Math.max(this.reportTableWidth(list), 1),
-        col = (tab, c) => tab.map(row => row.at(c)),
-        table = [],
-        src, i;
+    var col, src, i, item,
+        width = 1,
+        len = list.length(),
+        table = [];
+
+    // determine the maximum sublist length
+    for (i = 1; i <= len; i += 1) {
+        item = list.at(i);
+        width = Math.max(width, item instanceof List ? item.length() : 0);
+    }
+
+    // convert orphaned items into rows
     src = list.map(row =>
         row instanceof List ? row : new List(new Array(width).fill(row))
     );
+
+    // define the mapper funciton
+    col = (tab, c) => tab.map(row => row.at(c));
+
+    // create the transform
     for (i = 1; i <= width; i += 1) {
         table.push(col(src, i));
     }

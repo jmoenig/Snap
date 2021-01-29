@@ -1318,12 +1318,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'item %idx of %l',
             defaults: [1]
         },
-        reportTableColumn: {
-            type: 'reporter',
-            category: 'lists',
-            spec: 'column %idx of %l',
-            defaults: [1]
-        },
         reportCDR: {
             type: 'reporter',
             category: 'lists',
@@ -1338,11 +1332,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'length of %l'
-        },
-        reportTableWidth: {
-            type: 'reporter',
-            category: 'lists',
-            spec: 'width of %l'
         },
         reportListContainsItem: {
             type: 'predicate',
@@ -1729,10 +1718,6 @@ SpriteMorph.prototype.blockAlternatives = {
     // lists
     reportCDR: ['reportTableRotated'],
     reportTableRotated: ['reportCDR'],
-    reportListItem: ['reportTableColumn'],
-    reportTableColumn: ['reportListItem'],
-    reportListLength: ['reportTableWidth'],
-    reportTableWidth: ['reportListLength'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],

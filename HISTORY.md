@@ -5,8 +5,6 @@
 * **Notable Changes:**
     * hyperized image attribute reporter primitive (monadic)
     * when constructing a costume from a pixel list handle single values as greyscale
-    * experimental "column _ of _" reporter relabelling option for "item _ of _"
-    * experimental "width of _" reporter relabelling option for "length of _"
     * experimental "rotate (list)" primitive relabelling option for "all but first"
     * renamed "Obsolete!" blocks to "Undefined!"
 * **Notable Fixes:**
@@ -20,6 +18,7 @@
 
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
+* threads, objects: removed previous experimental "column" and "width" primitives again
 
 ### 2021-01-27
 * threads: hyperized new experimental "column" primitive
