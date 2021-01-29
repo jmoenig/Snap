@@ -19,6 +19,7 @@
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
 * threads, objects: removed previous experimental "column" and "width" primitives again
+* lists, threads, objects refactored experimental "rotate" primitive
 
 ### 2021-01-27
 * threads: hyperized new experimental "column" primitive

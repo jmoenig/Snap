@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2020 by Jens Mönig and Brian Harvey
+    Copyright (C) 2021 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2020-December-01';
+modules.lists = '2021-January-29';
 
 var List;
 var ListWatcherMorph;
@@ -101,6 +101,7 @@ var ListWatcherMorph;
 
     conversion:
     -----------
+    rotated()               - answer a 2D list with rows turned into columns
     asArray()               - answer me as JavaScript array, convert to arrayed
     itemsArray()            - answer a JavaScript array shallow copy of myself
     asText()                - answer my elements (recursively) concatenated
@@ -374,6 +375,36 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
 };
 
 // List conversion:
+
+List.prototype.rotated = function () {
+    // answer a 2D list where each item has turned into a row,
+    // convert orphaned items into lists,
+    // fill ragged columns with orphaned values
+    var col, src, i, item,
+        width = 1,
+        len = this.length(),
+        table = [];
+
+    // determine the maximum sublist length
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        width = Math.max(width, item instanceof List ? item.length() : 0);
+    }
+
+    // convert orphaned items into rows
+    src = this.map(row =>
+        row instanceof List ? row : new List(new Array(width).fill(row))
+    );
+
+    // define the mapper funciton
+    col = (tab, c) => tab.map(row => row.at(c));
+
+    // create the transform
+    for (i = 1; i <= width; i += 1) {
+        table.push(col(src, i));
+    }
+    return new List(table);
+};
 
 List.prototype.asArray = function () {
     // for use in the evaluator

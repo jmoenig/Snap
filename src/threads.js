@@ -2012,30 +2012,7 @@ Process.prototype.reportTableRotated = function (list) {
     // experimental and probably controversial as a primitive,
     // because it's so nice and easy to write in Snap!
     this.assertType(list, 'list');
-    var col, src, i, item,
-        width = 1,
-        len = list.length(),
-        table = [];
-
-    // determine the maximum sublist length
-    for (i = 1; i <= len; i += 1) {
-        item = list.at(i);
-        width = Math.max(width, item instanceof List ? item.length() : 0);
-    }
-
-    // convert orphaned items into rows
-    src = list.map(row =>
-        row instanceof List ? row : new List(new Array(width).fill(row))
-    );
-
-    // define the mapper funciton
-    col = (tab, c) => tab.map(row => row.at(c));
-
-    // create the transform
-    for (i = 1; i <= width; i += 1) {
-        table.push(col(src, i));
-    }
-    return new List(table);
+    return list.rotated();
 };
 
 // Process - other basic list accessors
