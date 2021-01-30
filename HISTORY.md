@@ -11,6 +11,7 @@
     * fixed a glitch in the animation library's "sine in-out" easing function 
     * fixed a postMessage glitch in the API, thanks, Bernat!
     * fixed a glitch in the Turkish translation that broke the "Looks" blocks category
+    * fixed a glitch that prevented the text cursor from displaying instantly in certain situations
 * **Translation Updates:**
     * Tamil, thanks, Barthdry!
     * German
@@ -20,6 +21,7 @@
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
 * objects: added "transpose" to palette for testing
 * updated German translation for "transpose"
+* morphic: fixed #2768
 
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
