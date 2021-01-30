@@ -16,6 +16,9 @@
     * German
     * Turkish
 
+### 2021-01-30
+* threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
+
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
 * threads, objects: removed previous experimental "column" and "width" primitives again

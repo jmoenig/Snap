@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-January-29';
+modules.threads = '2021-January-30';
 
 var ThreadManager;
 var Process;
@@ -2008,11 +2008,9 @@ Process.prototype.reportItems = function (indices, list) {
 
 // Process - experimental tabular list accessors
 
-Process.prototype.reportTableRotated = function (list) {
-    // experimental and probably controversial as a primitive,
-    // because it's so nice and easy to write in Snap!
+Process.prototype.reportTranspose = function (list) {
     this.assertType(list, 'list');
-    return list.rotated();
+    return list.transpose();
 };
 
 // Process - other basic list accessors

@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-January-29';
+modules.lists = '2021-January-30';
 
 var List;
 var ListWatcherMorph;
@@ -101,7 +101,7 @@ var ListWatcherMorph;
 
     conversion:
     -----------
-    rotated()               - answer a 2D list with rows turned into columns
+    transpose()             - answer a 2D list with rows turned into columns
     asArray()               - answer me as JavaScript array, convert to arrayed
     itemsArray()            - answer a JavaScript array shallow copy of myself
     asText()                - answer my elements (recursively) concatenated
@@ -376,10 +376,10 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
 
 // List conversion:
 
-List.prototype.rotated = function () {
+List.prototype.transpose = function () {
     // answer a 2D list where each item has turned into a row,
-    // convert orphaned items into lists,
-    // fill ragged columns with orphaned values
+    // convert atomic items into lists,
+    // fill ragged columns with atomic values, if any, or empty cells
     var col, src, i, item,
         width = 1,
         len = this.length(),
@@ -391,12 +391,12 @@ List.prototype.rotated = function () {
         width = Math.max(width, item instanceof List ? item.length() : 0);
     }
 
-    // convert orphaned items into rows
+    // convert atomic items into rows
     src = this.map(row =>
         row instanceof List ? row : new List(new Array(width).fill(row))
     );
 
-    // define the mapper funciton
+    // define the mapper function
     col = (tab, c) => tab.map(row => row.at(c));
 
     // create the transform

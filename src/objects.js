@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-January-29';
+modules.objects = '2021-January-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1323,10 +1323,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'all but first of %l'
         },
-        reportTableRotated: {
+        reportTranspose: {
             type: 'reporter',
             category: 'lists',
-            spec: 'rotate %l'
+            spec: 'transpose %l'
         },
         reportListLength: {
             type: 'reporter',
@@ -1575,6 +1575,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'doSetGlobalFlag',
             inputs: [['turbo mode']],
             offset: 1
+        },
+        reportTableRotated: {
+            selector: 'reportTranspose',
+            offset: 0
         }
     };
 };
@@ -1716,9 +1720,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doHideVar: ['doShowVar'],
 
     // lists
-    reportCDR: ['reportTableRotated', 'reportListLength'],
-    reportTableRotated: ['reportCDR', 'reportListLength'],
-    reportListLength: ['reportTableRotated', 'reportCDR'],
+    reportCDR: ['reportTranspose', 'reportListLength'],
+    reportTranspose: ['reportCDR', 'reportListLength'],
+    reportListLength: ['reportTranspose', 'reportCDR'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
