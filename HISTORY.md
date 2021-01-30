@@ -5,7 +5,7 @@
 * **Notable Changes:**
     * hyperized image attribute reporter primitive (monadic)
     * when constructing a costume from a pixel list handle single values as greyscale
-    * experimental "rotate (list)" primitive relabelling option for "all but first"
+    * experimental "transpose (list)" primitive relabelling option for "all but first"
     * renamed "Obsolete!" blocks to "Undefined!"
 * **Notable Fixes:**
     * fixed a glitch in the animation library's "sine in-out" easing function 
@@ -18,6 +18,7 @@
 
 ### 2021-01-30
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
+* objects: added "transpose" to palette for testing
 
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"

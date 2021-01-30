@@ -1323,11 +1323,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'all but first of %l'
         },
-        reportTranspose: {
-            type: 'reporter',
-            category: 'lists',
-            spec: 'transpose %l'
-        },
         reportListLength: {
             type: 'reporter',
             category: 'lists',
@@ -1384,10 +1379,15 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, 10]
         },
 
-        reportConcatenatedLists: { // only in dev mode - experimental
+        reportConcatenatedLists: {
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
+        },
+        reportTranspose: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'transpose %l'
         },
 
         // HOFs
@@ -2767,6 +2767,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -2943,6 +2944,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListLength',
                         'reportListIndex',
                         'reportConcatenatedLists',
+                        'reportTranspose',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8926,6 +8928,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
