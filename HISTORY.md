@@ -19,6 +19,7 @@
 ### 2021-01-30
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
 * objects: added "transpose" to palette for testing
+* updated German translation for "transpose"
 
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"
