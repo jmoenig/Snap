@@ -22,6 +22,7 @@
 * objects: added "transpose" to palette for testing
 * updated German translation for "transpose"
 * morphic: fixed #2768
+* objects: removed "transpose" from the palette for now
 
 ### 2021-01-29
 * threads, objects: new experimental "rotate (list)" primitive relabelling option for "all but first"

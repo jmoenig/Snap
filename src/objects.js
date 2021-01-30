@@ -2767,7 +2767,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportTranspose'));
+        // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -2944,7 +2944,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListLength',
                         'reportListIndex',
                         'reportConcatenatedLists',
-                        'reportTranspose',
+                        // 'reportTranspose',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8928,7 +8928,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportTranspose'));
+        // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
