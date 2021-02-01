@@ -17,6 +17,9 @@
     * German
     * Turkish
 
+### 2021-01-02
+* lists: refactored some matrix operations
+
 ### 2021-01-30
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
 * objects: added "transpose" to palette for testing

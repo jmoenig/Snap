@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-January-30';
+modules.lists = '2021-February-01';
 
 var List;
 var ListWatcherMorph;
@@ -210,10 +210,83 @@ List.prototype.clear = function () {
     this.changed();
 };
 
-List.prototype.map = function(callback) {
+// List utilities
+
+List.prototype.map = function (callback) {
     return new List(
         this.itemsArray().map(callback)
     );
+};
+
+// List matrix operations and utilities - very experimental, not yet in use
+
+List.prototype.deepMap = function (callback) {
+    return this.map(item => item instanceof List ?
+        item.deepMap(callback)
+            : callback(item));
+};
+
+List.prototype.size = function () {
+    // count the number of atomic elements
+    var count = 0;
+    this.deepMap(() => count += 1);
+    return count;
+};
+
+List.prototype.rank = function () {
+    var rank = 0,
+        cur = this;
+    while (cur instanceof List) {
+        rank += 1;
+        cur = cur.at(1);
+    }
+    return rank;
+};
+
+List.prototype.shape = function () {
+    var shp = [],
+        cur = this;
+    while (cur instanceof List) {
+        shp.push(this.length());
+        cur = cur.at(1);
+    }
+    return new List(shp);
+};
+
+List.prototype.width = function () {
+    // answer the maximum length of my direct sub-lists, if any
+    var i, item,
+        width = 0,
+        len = this.length();
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        width = Math.max(width, item instanceof List ? item.length() : 0);
+    }
+    return width;
+};
+
+List.prototype.transpose = function () {
+    // answer a 2D list where each item has turned into a row,
+    // convert atomic items into lists,
+    // fill ragged columns with atomic values, if any, or empty cells
+    // not yet implemented: higher dimensions exceeding 2D
+    var col, src, i,
+        width = Math.max(this.width(), 1),
+        table = [];
+
+    // convert atomic items into rows
+    src = this.map(row =>
+        row instanceof List ? row : new List(new Array(width).fill(row))
+    );
+
+    // define the mapper function
+    col = (tab, c) => tab.map(row => row.at(c));
+
+    // create the transform
+    for (i = 1; i <= width; i += 1) {
+        table.push(col(src, i));
+    }
+    return new List(table);
 };
 
 // List getters (all hybrid):
@@ -375,36 +448,6 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
 };
 
 // List conversion:
-
-List.prototype.transpose = function () {
-    // answer a 2D list where each item has turned into a row,
-    // convert atomic items into lists,
-    // fill ragged columns with atomic values, if any, or empty cells
-    var col, src, i, item,
-        width = 1,
-        len = this.length(),
-        table = [];
-
-    // determine the maximum sublist length
-    for (i = 1; i <= len; i += 1) {
-        item = this.at(i);
-        width = Math.max(width, item instanceof List ? item.length() : 0);
-    }
-
-    // convert atomic items into rows
-    src = this.map(row =>
-        row instanceof List ? row : new List(new Array(width).fill(row))
-    );
-
-    // define the mapper function
-    col = (tab, c) => tab.map(row => row.at(c));
-
-    // create the transform
-    for (i = 1; i <= width; i += 1) {
-        table.push(col(src, i));
-    }
-    return new List(table);
-};
 
 List.prototype.asArray = function () {
     // for use in the evaluator
