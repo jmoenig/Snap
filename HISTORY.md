@@ -3,6 +3,7 @@
 ## in development:
 
 * **Notable Changes:**
+    * identity comparison of texts is now case-sensitive
     * hyperized image attribute reporter primitive (monadic)
     * when constructing a costume from a pixel list handle single values as greyscale
     * experimental "transpose (list)" primitive relabelling option for "all but first"
@@ -19,6 +20,7 @@
 
 ### 2021-01-02
 * lists: refactored some matrix operations
+* threads: made identity comparison of texts case-sensitive
 
 ### 2021-01-30
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
