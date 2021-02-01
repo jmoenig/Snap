@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2020-December-22';
+modules.blocks = '2021-February-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3012,8 +3012,8 @@ BlockMorph.prototype.userMenu = function () {
                 }
                 if (ide) {
                     ide.saveXMLAs(
-                        ide.serializer.serialize(this),
-                        this.selector + ' script',
+                        ide.serializer.serialize(top),
+                        top.selector + ' script',
                         false);
                 }
             },

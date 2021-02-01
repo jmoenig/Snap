@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-January-21';
+modules.gui = '2021-February-01';
 
 // Declarations
 
@@ -2283,6 +2283,9 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
+    }
+    if (aString.indexOf('<block') === 0) {
+        aString = '<script>' + aString + '</script>';
     }
     if (aString.indexOf('<script') === 0) {
         return this.openScriptString(aString);

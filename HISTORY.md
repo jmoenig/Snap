@@ -13,6 +13,7 @@
     * fixed a postMessage glitch in the API, thanks, Bernat!
     * fixed a glitch in the Turkish translation that broke the "Looks" blocks category
     * fixed a glitch that prevented the text cursor from displaying instantly in certain situations
+    * fixed importing exported reporter-scripts (experimental feature)
 * **Translation Updates:**
     * Tamil, thanks, Barthdry!
     * German
@@ -21,6 +22,7 @@
 ### 2021-01-02
 * lists: refactored some matrix operations
 * threads: made identity comparison of texts case-sensitive
+* blocks, gui: fixed importing exported reporter-scripts (experimental feature)
 
 ### 2021-01-30
 * threads, objects, lists: renamed experimental "rotate" primitive into "transpose"
