@@ -21,6 +21,7 @@
 
 ### 2021-02-02
 * lists: added a few internal - as of now unused - matrix operations
+* lists, threads: refactored hyper list access
 
 ### 2021-02-01
 * lists: refactored some matrix operations

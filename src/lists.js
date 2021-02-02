@@ -392,7 +392,57 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
     return v;
 };
 
-// List matrix operations and utilities - very experimental, not yet in use
+// List matrix operations and utilities - very experimental
+
+List.prototype.items = function (indices) {
+    // This. This is it. The pinnacle of my programmer's life.
+    // After days of roaming about my house and garden,
+    // of taking showers and rummaging through the fridge,
+    // of strumming the charango and the five ukuleles
+    // sitting next to my laptop on my desk,
+    // and of letting my mind wander far and wide,
+    // to come up with this design, always thinking
+    // "What would Brian do?".
+    // And look, Ma, it's turned out all beautiful! -jens
+
+    return makeSelector(
+        this.rank(),
+        indices.cdr(),
+        makeLeafSelector(indices.at(1))
+    )(this);
+
+    function makeSelector(rank, indices, next) {
+        if (rank === 1) {
+            return next;
+        }
+        return makeSelector(
+            rank - 1,
+            indices.cdr(),
+            makeBranch(
+                indices.at(1) || new List(),
+                next
+            )
+        );
+    }
+
+    function makeBranch(indices, next) {
+        return function(data) {
+            if (indices.isEmpty()) {
+                return data.map(item => next(item));
+            }
+            return indices.map(idx => next(data.at(idx)));
+        };
+    }
+
+    function makeLeafSelector(indices) {
+        return function (data) {
+            if (indices.isEmpty()) {
+                return data.map(item => item);
+            }
+            return indices.map(idx => data.at(idx));
+        };
+    }
+};
 
 List.prototype.size = function () {
     // count the number of all atomic elements
@@ -408,8 +458,19 @@ List.prototype.ravel = function () {
     return new List(all);
 };
 
-List.prototype.rank = function () {
+List.prototype.rank = function (quick) {
     // answer the number of my dimensions
+    if (quick) { // only look at the first elements of each dimension
+        var rank = 0,
+            cur = this;
+        while (cur instanceof List) {
+            rank += 1;
+            cur = cur.at(1);
+        }
+        return rank;
+    }
+
+    // traverse the whole structure for irregularly shaped nested lists
     return 1 + Math.max(...this.itemsArray().map(item =>
         item instanceof List ? item.rank() : 0)
     );

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-01';
+modules.threads = '2021-February-02';
 
 var ThreadManager;
 var Process;
@@ -1932,7 +1932,6 @@ Process.prototype.shadowListAttribute = function (list) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
-    var rank;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -1943,67 +1942,16 @@ Process.prototype.reportListItem = function (index, list) {
     if (this.inputOption(index) === 'last') {
         return list.at(list.length());
     }
-    rank = this.rank(index);
-    if (rank > 0 && this.enableHyperOps) {
-        if (rank === 1) {
+    if (index instanceof List && this.enableHyperOps) {
+        if (index.rank(true) === 1) { // quick - only look at first element
             if (index.isEmpty()) {
                 return list.map(item => item);
             }
             return index.map(idx => list.at(idx));
         }
-        return this.reportItems(index, list);
+        return list.items(index);
     }
     return list.at(index);
-};
-
-Process.prototype.reportItems = function (indices, list) {
-    // This. This is it. The pinnacle of my programmer's life.
-    // After days of roaming about my house and garden,
-    // of taking showers and rummaging through the fridge,
-    // of strumming the charango and the five ukuleles
-    // sitting next to my laptop on my desk,
-    // and of letting my mind wander far and wide,
-    // to come up with this design, always thinking
-    // "What would Brian do?".
-    // And look, Ma, it's turned out all beautiful! -jens
-
-    return makeSelector(
-        this.rank(list),
-        indices.cdr(),
-        makeLeafSelector(indices.at(1))
-    )(list);
-
-    function makeSelector(rank, indices, next) {
-        if (rank === 1) {
-            return next;
-        }
-        return makeSelector(
-            rank - 1,
-            indices.cdr(),
-            makeBranch(
-                indices.at(1) || new List(),
-                next
-            )
-        );
-    }
-
-    function makeBranch(indices, next) {
-        return function(data) {
-            if (indices.isEmpty()) {
-                return data.map(item => next(item));
-            }
-            return indices.map(idx => next(data.at(idx)));
-        };
-    }
-
-    function makeLeafSelector(indices) {
-        return function (data) {
-            if (indices.isEmpty()) {
-                return data.map(item => item);
-            }
-            return indices.map(idx => data.at(idx));
-        };
-    }
 };
 
 // Process - experimental tabular list accessors
@@ -3735,16 +3683,6 @@ Process.prototype.hyperZip = function (baseOp, a, b) {
 
 Process.prototype.isMatrix = function (data) {
     return data instanceof List && data.at(1) instanceof List;
-};
-
-Process.prototype.rank = function(data) {
-    var rank = 0,
-        cur = data;
-    while (cur instanceof List) {
-        rank += 1;
-        cur = cur.at(1);
-    }
-    return rank;
 };
 
 // Process math primtives - arithmetic
