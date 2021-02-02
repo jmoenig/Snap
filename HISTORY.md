@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.5.2
 * **Notable Changes:**
     * identity comparison of texts is now case-sensitive
     * hyperized image attribute reporter primitive (monadic)
@@ -22,6 +23,7 @@
 ### 2021-02-02
 * lists: added a few internal - as of now unused - matrix operations
 * lists, threads: refactored hyper list access
+* prepared patch
 
 ### 2021-02-01
 * lists: refactored some matrix operations
