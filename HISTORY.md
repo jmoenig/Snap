@@ -19,7 +19,10 @@
     * German
     * Turkish
 
-### 2021-01-02
+### 2021-02-02
+* lists: added a few internal - as of now unused - matrix operations
+
+### 2021-02-01
 * lists: refactored some matrix operations
 * threads: made identity comparison of texts case-sensitive
 * blocks, gui: fixed importing exported reporter-scripts (experimental feature)

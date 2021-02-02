@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-01';
+modules.lists = '2021-February-02';
 
 var List;
 var ListWatcherMorph;
@@ -101,7 +101,6 @@ var ListWatcherMorph;
 
     conversion:
     -----------
-    transpose()             - answer a 2D list with rows turned into columns
     asArray()               - answer me as JavaScript array, convert to arrayed
     itemsArray()            - answer a JavaScript array shallow copy of myself
     asText()                - answer my elements (recursively) concatenated
@@ -111,6 +110,17 @@ var ListWatcherMorph;
     utility:
     ---------
     map(callback)           - answer an arrayed copy applying a JS func to all
+    deepMap(callback)       - same as map for all atomic elements
+
+    matrix ops (arrayed)
+    --------------------
+    size()                  - count the number of all atomic elements
+    rank()                  - answer the number of my dimensions
+    shape()                 - answer a list of the max size for each dimension
+    width()                 - ansswer the maximum length of my columns, if any
+    flatten()               - answer a concatenated list of columns and atoms
+    ravel()                 - answer a flat list of all atoms in all sublists
+    transpose()             - answer a 2D list with rows turned into columns
 */
 
 // List instance creation:
@@ -218,75 +228,10 @@ List.prototype.map = function (callback) {
     );
 };
 
-// List matrix operations and utilities - very experimental, not yet in use
-
 List.prototype.deepMap = function (callback) {
     return this.map(item => item instanceof List ?
         item.deepMap(callback)
             : callback(item));
-};
-
-List.prototype.size = function () {
-    // count the number of atomic elements
-    var count = 0;
-    this.deepMap(() => count += 1);
-    return count;
-};
-
-List.prototype.rank = function () {
-    var rank = 0,
-        cur = this;
-    while (cur instanceof List) {
-        rank += 1;
-        cur = cur.at(1);
-    }
-    return rank;
-};
-
-List.prototype.shape = function () {
-    var shp = [],
-        cur = this;
-    while (cur instanceof List) {
-        shp.push(this.length());
-        cur = cur.at(1);
-    }
-    return new List(shp);
-};
-
-List.prototype.width = function () {
-    // answer the maximum length of my direct sub-lists, if any
-    var i, item,
-        width = 0,
-        len = this.length();
-    for (i = 1; i <= len; i += 1) {
-        item = this.at(i);
-        width = Math.max(width, item instanceof List ? item.length() : 0);
-    }
-    return width;
-};
-
-List.prototype.transpose = function () {
-    // answer a 2D list where each item has turned into a row,
-    // convert atomic items into lists,
-    // fill ragged columns with atomic values, if any, or empty cells
-    // not yet implemented: higher dimensions exceeding 2D
-    var col, src, i,
-        width = Math.max(this.width(), 1),
-        table = [];
-
-    // convert atomic items into rows
-    src = this.map(row =>
-        row instanceof List ? row : new List(new Array(width).fill(row))
-    );
-
-    // define the mapper function
-    col = (tab, c) => tab.map(row => row.at(c));
-
-    // create the transform
-    for (i = 1; i <= width; i += 1) {
-        table.push(col(src, i));
-    }
-    return new List(table);
 };
 
 // List getters (all hybrid):
@@ -445,6 +390,112 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
         }
     }
     return v;
+};
+
+// List matrix operations and utilities - very experimental, not yet in use
+
+List.prototype.size = function () {
+    // count the number of all atomic elements
+    var count = 0;
+    this.deepMap(() => count += 1);
+    return count;
+};
+
+List.prototype.ravel = function () {
+    // answer a flat list containing all atomic elements in all sublists
+    var all = [];
+    this.deepMap(atom => all.push(atom));
+    return new List(all);
+};
+
+List.prototype.rank = function () {
+    // answer the number of my dimensions
+    return 1 + Math.max(...this.itemsArray().map(item =>
+        item instanceof List ? item.rank() : 0)
+    );
+};
+
+List.prototype.shape = function () {
+    // answer a list of the maximum size for each dimension
+    var dim,
+        rank = this.rank(),
+        shp = new List([this.length()]);
+    for (dim = 2; dim <= rank; dim += 1) {
+        shp.add(
+            Math.max(
+                ...this.getDimension(dim).map(item =>
+                    item.length()
+                ).itemsArray()
+            )
+        );
+    }
+    return shp;
+};
+
+List.prototype.getDimension = function (rank = 0) {
+    // private - answer a list of all elements of the specified rank
+    if (rank < 1) {return new List(); }
+    if (rank === 1) {
+        return this.map(item => item);
+    }
+    if (rank === 2) {
+        return new List(this.itemsArray().filter(item => item instanceof List));
+    }
+    return new List(
+        this.getDimension(rank - 1).flatten().itemsArray().filter(
+            value => value instanceof List
+        )
+    );
+};
+
+List.prototype.width = function () {
+    // private - answer the maximum length of my direct sub-lists (columns), if any
+    var i, item,
+        width = 0,
+        len = this.length();
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        width = Math.max(width, item instanceof List ? item.length() : 0);
+    }
+    return width;
+};
+
+List.prototype.flatten = function () {
+    // answer a new list that concatenates my direct sublists (columns)
+    // and atomic elements
+    var flat = [];
+    this.itemsArray().forEach(item => {
+        if (item instanceof List) {
+            item.itemsArray().forEach(value => flat.push(value));
+        } else {
+            flat.push(item);
+        }
+    });
+    return new List(flat);
+};
+
+List.prototype.transpose = function () {
+    // answer a 2D list where each item has turned into a row,
+    // convert atomic items into lists,
+    // fill ragged columns with atomic values, if any, or empty cells
+    // not yet implemented: higher dimensions exceeding 2D
+    var col, src, i,
+        width = Math.max(this.width(), 1),
+        table = [];
+
+    // convert atomic items into rows
+    src = this.map(row =>
+        row instanceof List ? row : new List(new Array(width).fill(row))
+    );
+
+    // define the mapper function
+    col = (tab, c) => tab.map(row => row.at(c));
+
+    // create the transform
+    for (i = 1; i <= width; i += 1) {
+        table.push(col(src, i));
+    }
+    return new List(table);
 };
 
 // List conversion:
