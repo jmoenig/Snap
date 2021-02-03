@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-02-03
+* new dev version
+
 ## 6.5.2
 * **Notable Changes:**
     * identity comparison of texts is now case-sensitive
