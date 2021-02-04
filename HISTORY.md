@@ -9,6 +9,7 @@
 * lists, threads: changed query semantics for table selectors in ITEM OF to rows, columns, planes, etc.
 * pushed dev version number
 * lists: tweaked query()
+* cloud: trimmed usernames, thanks, Michael
 
 ### 2021-02-03
 * new dev version
