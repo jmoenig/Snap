@@ -2,6 +2,12 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
+
+### 2021-02-04
+* lists, threads: changed query semantics for table selectors in ITEM OF to rows, columns, planes, etc.
+
 ### 2021-02-03
 * new dev version
 

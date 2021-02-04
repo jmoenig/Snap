@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-02';
+modules.lists = '2021-February-04';
 
 var List;
 var ListWatcherMorph;
@@ -394,7 +394,34 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
 
 // List matrix operations and utilities - very experimental
 
+List.prototype.query = function (indices) {
+    // assumes a 2D argument list where each slot represents
+    // the indices to select from a dimension
+    // e.g. [rows, columns, planes]
+    var select;
+    if (indices.isEmpty()) {
+        return this.map(e => e);
+    }
+    if (indices.quickRank() === 1) {
+        return indices.map(i => this.at(i));
+    }
+    select = indices.at(1).isEmpty() ?
+        this.range(1, this.length())
+            : indices.at(1);
+    return select.map(i => this.at(i)).map(
+            e => e instanceof List? e.query(indices.cdr()) : e
+    );
+};
+
+List.prototype.range = function (start, end) {
+    // private - answer a list of ascending numbers, incremented by 1
+    return new List([...Array(end - start + 1)].map((e, i) => i + start));
+};
+
 List.prototype.items = function (indices) {
+    // deprecated. Same as query() above, except in reverse order.
+    // e.g. [planes, columns, rows]
+
     // This. This is it. The pinnacle of my programmer's life.
     // After days of roaming about my house and garden,
     // of taking showers and rummaging through the fridge,
@@ -458,22 +485,24 @@ List.prototype.ravel = function () {
     return new List(all);
 };
 
-List.prototype.rank = function (quick) {
+List.prototype.rank = function () {
     // answer the number of my dimensions
-    if (quick) { // only look at the first elements of each dimension
-        var rank = 0,
-            cur = this;
-        while (cur instanceof List) {
-            rank += 1;
-            cur = cur.at(1);
-        }
-        return rank;
-    }
-
     // traverse the whole structure for irregularly shaped nested lists
     return 1 + Math.max(...this.itemsArray().map(item =>
         item instanceof List ? item.rank() : 0)
     );
+};
+
+List.prototype.quickRank = function (quick) {
+    // answer the number of my dimensions
+    // only look at the first elements of each dimension
+    var rank = 0,
+        cur = this;
+    while (cur instanceof List) {
+        rank += 1;
+        cur = cur.at(1);
+    }
+    return rank;
 };
 
 List.prototype.shape = function () {
