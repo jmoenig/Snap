@@ -121,6 +121,7 @@ var ListWatcherMorph;
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     transpose()             - answer a 2D list with rows turned into columns
+    query()                 - answer a part of a list or multidimensionel struct
 */
 
 // List instance creation:
@@ -398,16 +399,21 @@ List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var select;
+    var first, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    if (indices.quickRank() === 1) {
+    if (indices.rank() === 1) {
         return indices.map(i => this.at(i));
     }
-    select = indices.at(1).isEmpty() ?
-        this.range(1, this.length())
-            : indices.at(1);
+    first = indices.at(1);
+    if (first instanceof List) {
+        select = first.isEmpty() ?
+            this.range(1, this.length())
+                : first;
+    } else {
+        select = new List([first]);
+    }
     return select.map(i => this.at(i)).map(
             e => e instanceof List? e.query(indices.cdr()) : e
     );
@@ -491,18 +497,6 @@ List.prototype.rank = function () {
     return 1 + Math.max(...this.itemsArray().map(item =>
         item instanceof List ? item.rank() : 0)
     );
-};
-
-List.prototype.quickRank = function (quick) {
-    // answer the number of my dimensions
-    // only look at the first elements of each dimension
-    var rank = 0,
-        cur = this;
-    while (cur instanceof List) {
-        rank += 1;
-        cur = cur.at(1);
-    }
-    return rank;
 };
 
 List.prototype.shape = function () {
