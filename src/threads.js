@@ -1973,6 +1973,11 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list.ravel();
     case 'transpose':
         return list.transpose();
+    case 'txt':
+        if (list.canBeTXT()) {
+            return list.asTXT();
+        }
+        throw new Error('unable to convert to TXT');
     case 'csv':
         if (list.canBeCSV()) {
             return list.asCSV();

@@ -749,6 +749,18 @@ List.prototype.asJSON = function (guessObjects) {
     return JSON.stringify(objectify(this, guessObjects));
 };
 
+List.prototype.canBeTXT = function () {
+    return this.itemsArray().every(item =>
+        isString(item) || (typeof item === 'number')
+    );
+};
+
+List.prototype.asTXT = function () {
+    // Caution, no error catching!
+    // this method assumes that the list.canBeJSON()
+    return this.itemsArray().join('\n');
+};
+
 // List testing
 
 List.prototype.equalTo = function (other) {

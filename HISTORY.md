@@ -15,6 +15,7 @@
 * blocks, objects, threads: added experimental "atribute of list" reporter primitive to dev mode
 * objects: replaced "length of list" primitive with new "attribute of list" reporter
 * objects: added "txt" option to list attribure dropdown - not yet operational
+* lists, threads: added "txt" list conversion
 
 ### 2021-02-04
 * lists, threads: changed query semantics for table selectors in ITEM OF to rows, columns, planes, etc.
