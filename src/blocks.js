@@ -466,7 +466,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'length' : ['length'],
-            'size' : ['size'],
+            // 'size' : ['size'],
             'rank' : ['rank'],
             'shape' : ['shape'],
             'ravel' : ['ravel'],
