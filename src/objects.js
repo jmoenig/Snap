@@ -1324,13 +1324,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'all but first of %l'
         },
-        reportListLength: {
+        reportListLength: { // deprecated as of v6.6
             type: 'reporter',
             category: 'lists',
             spec: 'length of %l'
         },
-        reportListAttribute: { // only in dev mode - experimental
-            dev: true,
+        reportListAttribute: {
             type: 'reporter',
             category: 'lists',
             spec: '%la of %l',
@@ -1587,6 +1586,16 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportTableRotated: {
             selector: 'reportTranspose',
             offset: 0
+        },
+        reportTranspose: {
+            selector: 'reportListAttribute',
+            inputs: [['transpose']],
+            offset: 1
+        },
+        reportListLength: {
+            selector: 'reportListAttribute',
+            inputs: [['length']],
+            offset: 1
         }
     };
 };
@@ -1728,10 +1737,6 @@ SpriteMorph.prototype.blockAlternatives = {
     doHideVar: ['doShowVar'],
 
     // lists
-    reportCDR: ['reportTranspose', 'reportListLength'],
-    reportTranspose: ['reportCDR', 'reportListLength'],
-    reportListLength: ['reportTranspose', 'reportCDR'],
-
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
     reportKeep: ['reportFindFirst', 'reportMap'],
@@ -2762,7 +2767,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
-        blocks.push(block('reportListLength'));
+        blocks.push(block('reportListAttribute'));
         blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
@@ -2794,7 +2799,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
-            blocks.push(block('reportListAttribute'));
         }
 
     /////////////////////////////////
@@ -2950,10 +2954,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCONS',
                         'reportListItem',
                         'reportCDR',
-                        'reportListLength',
+                        'reportListAttribute',
                         'reportListIndex',
                         'reportConcatenatedLists',
-                        // 'reportTranspose',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8924,7 +8927,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
-        blocks.push(block('reportListLength'));
+        blocks.push(block('reportListAttribute'));
         blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
@@ -8956,7 +8959,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
-            blocks.push(block('reportListAttribute'));
         }
 
     /////////////////////////////////
