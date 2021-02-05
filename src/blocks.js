@@ -472,6 +472,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'ravel' : ['ravel'],
             'transpose' : ['transpose'],
             '~' : null,
+            'txt' : ['txt'],
             'csv' : ['csv'],
             'json' : ['json']
         }

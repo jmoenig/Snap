@@ -13,7 +13,8 @@
 * new manual for v6.6, thanks, Brian!
 * objects: don't show internal "compile" reporter in search results
 * blocks, objects, threads: added experimental "atribute of list" reporter primitive to dev mode
-* replaced "length of list" primitive with new "attribute of list" reporter
+* objects: replaced "length of list" primitive with new "attribute of list" reporter
+* objects: added "txt" option to list attribure dropdown - not yet operational
 
 ### 2021-02-04
 * lists, threads: changed query semantics for table selectors in ITEM OF to rows, columns, planes, etc.
