@@ -1329,6 +1329,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'length of %l'
         },
+        reportListAttribute: { // only in dev mode - experimental
+            dev: true,
+            type: 'reporter',
+            category: 'lists',
+            spec: '%la of %l',
+            defaults: [['length']]
+        },
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
@@ -2787,6 +2794,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push(block('reportListAttribute'));
         }
 
     /////////////////////////////////
@@ -8948,6 +8956,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push(block('reportListAttribute'));
         }
 
     /////////////////////////////////

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-04';
+modules.threads = '2021-February-05';
 
 var ThreadManager;
 var Process;
@@ -1956,6 +1956,37 @@ Process.prototype.reportTranspose = function (list) {
 };
 
 // Process - other basic list accessors
+
+Process.prototype.reportListAttribute = function (choice, list) {
+    var option = this.inputOption(choice);
+    this.assertType(list, 'list');
+    switch (option) {
+    case 'length':
+        return list.length();
+    case 'size':
+        return list.size();
+    case 'rank':
+        return list.rank();
+    case 'shape':
+        return list.shape();
+    case 'ravel':
+        return list.ravel();
+    case 'transpose':
+        return list.transpose();
+    case 'csv':
+        if (list.canBeCSV()) {
+            return list.asCSV();
+        }
+        throw new Error('unable to convert to CSV');
+    case 'json':
+        if (list.canBeJSON()) {
+            return list.asJSON();
+        }
+        throw new Error('unable to convert to JSON');
+    default:
+        return 0;
+    }
+};
 
 Process.prototype.reportListLength = function (list) {
     this.assertType(list, 'list');

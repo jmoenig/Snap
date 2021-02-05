@@ -11,7 +11,8 @@
 
 ### 2021-02-05
 * new manual for v6.6, thanks, Brian!
-* blocks: don't show internal "compile" reporter in search results
+* objects: don't show internal "compile" reporter in search results
+* blocks, objects, threads: added experimental "atribute of list" reporter primitive to dev mode
 
 ### 2021-02-04
 * lists, threads: changed query semantics for table selectors in ITEM OF to rows, columns, planes, etc.
