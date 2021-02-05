@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-January-30';
+modules.objects = '2021-February-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -1259,6 +1259,7 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [['encode URI'], "Abelson & Sussman"]
         },
         reportCompiled: { // experimental
+            dev: true,
             type: 'reporter',
             category: 'operators',
             spec: 'compile %repRing for %n args',
