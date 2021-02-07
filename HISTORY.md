@@ -11,6 +11,7 @@
 
 ### 2021-02-06
 * simplified private list.range() method
+* blocks: changed wordings for list attributes
 
 ### 2021-02-05
 * new manual for v6.6, thanks, Brian!

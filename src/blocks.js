@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-February-05';
+modules.blocks = '2021-February-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -468,8 +468,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'length' : ['length'],
             // 'size' : ['size'],
             'rank' : ['rank'],
-            'shape' : ['shape'],
-            'ravel' : ['ravel'],
+            'dimensions' : ['dimensions'],
+            'flatten' : ['flatten'],
             'transpose' : ['transpose'],
             '~' : null,
             'txt' : ['txt'],
