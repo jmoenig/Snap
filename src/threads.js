@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-05';
+modules.threads = '2021-February-07';
 
 var ThreadManager;
 var Process;
@@ -1967,13 +1967,13 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list.size();
     case 'rank':
         return list.rank();
-    case 'shape':
+    case 'dimensions':
         return list.shape();
-    case 'ravel':
+    case 'flatten':
         return list.ravel();
     case 'transpose':
         return list.transpose();
-    case 'txt':
+    case 'lines':
         if (list.canBeTXT()) {
             return list.asTXT();
         }
