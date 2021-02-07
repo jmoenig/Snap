@@ -472,7 +472,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'flatten' : ['flatten'],
             'transpose' : ['transpose'],
             '~' : null,
-            'txt' : ['txt'],
+            'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
         }
