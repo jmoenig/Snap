@@ -9,6 +9,9 @@
 * **Documentation Updates:**
     * updated manual (e.g. p.20) with hyper-semantics of ITEM OF, thanks Brian 
 
+### 2021-02-06
+* simplified private list.range() method
+
 ### 2021-02-05
 * new manual for v6.6, thanks, Brian!
 * objects: don't show internal "compile" reporter in search results

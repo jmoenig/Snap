@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-04';
+modules.lists = '2021-February-07';
 
 var List;
 var ListWatcherMorph;
@@ -409,7 +409,7 @@ List.prototype.query = function (indices) {
     first = indices.at(1);
     if (first instanceof List) {
         select = first.isEmpty() ?
-            this.range(1, this.length())
+            this.range(this.length())
                 : first;
     } else {
         select = new List([first]);
@@ -419,9 +419,9 @@ List.prototype.query = function (indices) {
     );
 };
 
-List.prototype.range = function (start, end) {
-    // private - answer a list of ascending numbers, incremented by 1
-    return new List([...Array(end - start + 1)].map((e, i) => i + start));
+List.prototype.range = function (upTo) {
+    // private - answer a list of integers from 1 up to the given ceiling
+    return new List([...Array(upTo)].map((e, i) => i + 1));
 };
 
 List.prototype.items = function (indices) {
