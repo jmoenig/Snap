@@ -13,6 +13,7 @@
 * lists, objects, threads: new RESHAPE primitive
 * lists: added internal naive (recursive)  version of CROSSPRODUCT
 * lists: added TRANSPOSE for higher dimensions, thanks, Brian!
+* objects, blocks, threads: added "cross product" to "append" as dropdown, and "reverse" to "length"
 
 ### 2021-02-06
 * simplified private list.range() method

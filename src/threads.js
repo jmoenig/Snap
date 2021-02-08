@@ -1988,6 +1988,8 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list.ravel();
     case 'transpose':
         return list.transpose();
+    case 'reverse':
+        return list.reversed();
     case 'lines':
         if (list.canBeTXT()) {
             return list.asTXT();
@@ -2075,6 +2077,18 @@ Process.prototype.reportBasicNumbers = function (start, end) {
         }
     }
     return new List(result);
+};
+
+Process.prototype.reportListCombination = function (choice, lists) {
+    var option = this.inputOption(choice);
+    switch (option) {
+    case 'append':
+        return this.reportConcatenatedLists(lists);
+    case 'cross product':
+        return this.reportCrossproduct(lists);
+    default:
+        return 0;
+    }
 };
 
 Process.prototype.reportConcatenatedLists = function (lists) {

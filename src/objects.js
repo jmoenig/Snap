@@ -1385,8 +1385,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'numbers from %n to %n',
             defaults: [1, 10]
         },
-
-        reportConcatenatedLists: {
+        reportListCombination: {
+            type: 'reporter',
+            category: 'lists',
+            spec: '%mlfunc %lists',
+            defaults: [['append']]
+        },
+        reportConcatenatedLists: { // deprecated
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
@@ -1600,6 +1605,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportListLength: {
             selector: 'reportListAttribute',
             inputs: [['length']],
+            offset: 1
+        },
+        reportConcatenatedLists: {
+            selector: 'reportListCombination',
+            inputs: [['append']],
             offset: 1
         }
     };
@@ -2783,7 +2793,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportListCombination'));
         blocks.push(block('reportReshape'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
@@ -2960,7 +2970,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCDR',
                         'reportListAttribute',
                         'reportListIndex',
-                        'reportConcatenatedLists',
+                        'reportListCombination',
                         'reportReshape',
                         'reportListContainsItem',
                         'reportListIsEmpty',
@@ -8944,7 +8954,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportListCombination'));
         blocks.push(block('reportReshape'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
