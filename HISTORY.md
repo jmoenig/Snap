@@ -9,7 +9,10 @@
 * **Documentation Updates:**
     * updated manual (e.g. p.20) with hyper-semantics of ITEM OF, thanks Brian 
 
-### 2021-02-06
+### 2021-02-09
+* lists: refactored matrix ops to avoid JS stack overflows
+
+### 2021-02-08
 * lists, objects, threads: new RESHAPE primitive
 * lists: added internal naive (recursive)  version of CROSSPRODUCT
 * lists: added TRANSPOSE for higher dimensions, thanks, Brian!

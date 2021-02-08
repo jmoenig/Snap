@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-08';
+modules.lists = '2021-February-09';
 
 var List;
 var ListWatcherMorph;
@@ -544,7 +544,8 @@ List.prototype.getDimension = function (rank = 0) {
 };
 
 List.prototype.width = function () {
-    // private - answer the maximum length of my direct sub-lists (columns), if any
+    // private - answer the maximum length of my direct sub-lists (columns),
+    // if any
     var i, item,
         width = 0,
         len = this.length();
@@ -660,14 +661,27 @@ List.prototype.crossproduct = function () {
     // expects myself to be a list of lists.
     // answers a new list of all possible tuples
     // with one item from each of my sublists
-    if (this.isEmpty()) {
-        return new List([new List()]);
+    var result = new List(),
+        len = this.length(),
+        lengths = this.map(each => each.length()),
+        size = lengths.itemsArray().reduce((a, b) => a * b),
+        i, k, row, factor;
+
+    for (i = 1; i <= size; i += 1) {
+        row = new List();
+        factor = 1;
+        for (k = 1; k <= len; k += 1) {
+            row.add(
+                this.at(k).at(
+                    ((Math.ceil(i / ((size / lengths.at(k)) * factor)) - 1) %
+                        lengths.at(k)) + 1
+                )
+            );
+            factor /= lengths.at(k);
+        }
+        result.add(row);
     }
-    return this.at(1).map(
-        first => this.cdr().crossproduct().map(
-            each => this.cons(first, each)
-        )
-    ).flatten();
+    return result;
 };
 
 List.prototype.strideTranspose = function () {
