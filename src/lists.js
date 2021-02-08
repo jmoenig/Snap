@@ -122,6 +122,7 @@ var ListWatcherMorph;
     ravel()                 - answer a flat list of all atoms in all sublists
     transpose()             - answer a 2D list with rows turned into columns
     reshape()               - answer a new list formatted to the given dimensions.
+    crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
 */
 
@@ -640,6 +641,20 @@ List.prototype.asChunksOf = function (size) {
         sub.add(this.at(i + 1));
     }
     return trg;
+};
+
+List.prototype.crossproduct = function () {
+    // expects myself to be a list of lists.
+    // answers a new list of all possible tuples
+    // with one item from each of my sublists
+    if (this.isEmpty()) {
+        return new List([new List()]);
+    }
+    return this.at(1).map(
+        first => this.cdr().crossproduct().map(
+            each => this.cons(first, each)
+        )
+    ).flatten();
 };
 
 // List conversion:
