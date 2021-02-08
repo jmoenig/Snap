@@ -564,7 +564,11 @@ List.prototype.transpose = function () {
     // answer a 2D list where each item has turned into a row,
     // convert atomic items into lists,
     // fill ragged columns with atomic values, if any, or empty cells
-    // not yet implemented: higher dimensions exceeding 2D
+
+    if (this.rank() > 2) {
+        return this.strideTranspose();
+    }
+
     var col, src, i,
         width = Math.max(this.width(), 1),
         table = [];
@@ -655,6 +659,54 @@ List.prototype.crossproduct = function () {
             each => this.cons(first, each)
         )
     ).flatten();
+};
+
+List.prototype.strideTranspose = function () {
+    // private - transpose a matric of rank > 2
+    // thanks, Brian!
+    var oldShape = this.shape(),
+        newShape = oldShape.reversed(),
+        oldSizes = new List([1]),
+        newSizes = new List([1]),
+        oldFlat = this.ravel(),
+        newFlat = new List(),
+        product = 1,
+        i;
+
+    function newIndex(old, os, ns) {
+        var foo;
+        if (os.isEmpty()) {
+            return 0;
+        }
+        foo = Math.floor(old / ns.at(1));
+        return foo * os.at(1) + newIndex(
+            old % ns.at(1),
+            os.cdr(),
+            ns.cdr()
+        );
+    }
+
+    for (i = oldShape.length(); i > 1; i -= 1) {
+        product *= oldShape.at(1);
+        newSizes.add(product, 1);
+    }
+    product = 1;
+    for (i = 1; i <= oldShape.length() - 1; i += 1) {
+        product *= oldShape.at(1);
+        oldSizes.add(product);
+    }
+    for (i = 1; i <= oldFlat.length(); i += 1) {
+        newFlat.add(
+            oldFlat.at(i),
+            newIndex(i, oldSizes, newSizes)
+        );
+    }
+    return newFlat.reshape(newShape);
+};
+
+List.prototype.reversed = function () {
+    // private - only for arrayed lists
+    return new List(this.itemsArray().reverse());
 };
 
 // List conversion:

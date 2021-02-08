@@ -12,6 +12,7 @@
 ### 2021-02-06
 * lists, objects, threads: new RESHAPE primitive
 * lists: added internal naive (recursive)  version of CROSSPRODUCT
+* lists: added TRANSPOSE for higher dimensions, thanks, Brian!
 
 ### 2021-02-06
 * simplified private list.range() method
