@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-February-05';
+modules.objects = '2021-February-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -1391,10 +1391,15 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
-        reportTranspose: {
+        reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
             spec: 'transpose %l'
+        },
+        reportReshape: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'reshape %l to %mult%n'
         },
 
         // HOFs
@@ -2780,6 +2785,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
         // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
@@ -2957,6 +2963,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportListAttribute',
                         'reportListIndex',
                         'reportConcatenatedLists',
+                        'reportReshape',
                         'reportListContainsItem',
                         'reportListIsEmpty',
                         'doForEach',
@@ -8940,6 +8947,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doForEach'));
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
         // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));

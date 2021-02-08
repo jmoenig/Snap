@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-07';
+modules.threads = '2021-February-08';
 
 var ThreadManager;
 var Process;
@@ -1948,11 +1948,17 @@ Process.prototype.reportListItem = function (index, list) {
     return list.at(index);
 };
 
-// Process - experimental tabular list accessors
+// Process - experimental tabular list ops
 
 Process.prototype.reportTranspose = function (list) {
     this.assertType(list, 'list');
     return list.transpose();
+};
+
+Process.prototype.reportReshape = function (list, shape) {
+    this.assertType(list, 'list');
+    this.assertType(shape, 'list');
+    return list.reshape(shape);
 };
 
 // Process - other basic list accessors

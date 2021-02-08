@@ -10,6 +10,9 @@
     * updated manual (e.g. p.20) with hyper-semantics of ITEM OF, thanks Brian 
 
 ### 2021-02-06
+* lists, objects, threads: new RESHAPE primitive
+
+### 2021-02-06
 * simplified private list.range() method
 * blocks: changed wordings for list attributes
 

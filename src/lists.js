@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-07';
+modules.lists = '2021-February-08';
 
 var List;
 var ListWatcherMorph;
@@ -121,6 +121,7 @@ var ListWatcherMorph;
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     transpose()             - answer a 2D list with rows turned into columns
+    reshape()               - answer a new list formatted to the given dimensions.
     query()                 - answer a part of a list or multidimensionel struct
 */
 
@@ -580,6 +581,60 @@ List.prototype.transpose = function () {
         table.push(col(src, i));
     }
     return new List(table);
+};
+
+List.prototype.reshape = function (dimensions) {
+    // answer a new list formatted to fit the given dimensions.
+    // truncate excess elements, if any.
+    // pad with (repetitions of) existing elements
+    var src = this.ravel().itemsArray(),
+        size = dimensions.isEmpty() ? 0
+            : dimensions.itemsArray().reduce((a, b) => a * b),
+        i = 0,
+        trg;
+
+    if (size < src.length) {
+        trg = src.slice(0, size);
+    } else {
+        trg = src.slice();
+        while (trg.length < size) {
+            if (i >= src.length) {
+                i = 0;
+            }
+            trg.push(src[i]);
+            i += 1;
+        }
+    }
+    return new List(trg).folded(dimensions).at(1);
+};
+
+List.prototype.folded = function (dimensions) {
+    // private
+    var len = dimensions.length(),
+        trg = this,
+        i;
+    if (len == 0) {
+        return this.map(e => e);
+    }
+    for (i = len; i > 0; i -= 1) {
+        trg = trg.asChunksOf(dimensions.at(i));
+    }
+    return trg;
+};
+
+List.prototype.asChunksOf = function (size) {
+    // private
+    var trg = new List(),
+        len = this.length(),
+        sub, i;
+    for (i = 0; i < len; i += 1) {
+        if (i % size === 0) {
+            sub = new List();
+            trg.add(sub);
+        }
+        sub.add(this.at(i + 1));
+    }
+    return trg;
 };
 
 // List conversion:
