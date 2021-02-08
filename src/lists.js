@@ -593,9 +593,12 @@ List.prototype.reshape = function (dimensions) {
         i = 0,
         trg;
 
+    // make sure the items count matches the specified target dimensions
     if (size < src.length) {
+        // truncate excess elements from the source
         trg = src.slice(0, size);
     } else {
+        // pad the source by repeating its existing elements
         trg = src.slice();
         while (trg.length < size) {
             if (i >= src.length) {
@@ -605,7 +608,9 @@ List.prototype.reshape = function (dimensions) {
             i += 1;
         }
     }
-    return new List(trg).folded(dimensions).at(1);
+
+    // fold the doctored source into the specified dimensions
+    return new List(trg).folded(dimensions);
 };
 
 List.prototype.folded = function (dimensions) {
@@ -613,10 +618,10 @@ List.prototype.folded = function (dimensions) {
     var len = dimensions.length(),
         trg = this,
         i;
-    if (len == 0) {
+    if (len < 2) {
         return this.map(e => e);
     }
-    for (i = len; i > 0; i -= 1) {
+    for (i = len; i > 1; i -= 1) {
         trg = trg.asChunksOf(dimensions.at(i));
     }
     return trg;
