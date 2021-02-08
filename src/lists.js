@@ -496,10 +496,19 @@ List.prototype.ravel = function () {
 List.prototype.rank = function () {
     // answer the number of my dimensions
     // traverse the whole structure for irregularly shaped nested lists
-    return 1 + Math.max(...this.itemsArray().map(item =>
-        item instanceof List ? item.rank() : 0)
-    );
+    var rank = 1,
+        len = this.length(),
+        item, i;
+
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        if (item instanceof List) {
+            rank = Math.max(rank, 1 + item.rank());
+        }
+    }
+    return rank;
 };
+
 
 List.prototype.shape = function () {
     // answer a list of the maximum size for each dimension
