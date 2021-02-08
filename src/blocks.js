@@ -1011,6 +1011,11 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%l',
         defaults: 2
     },
+    '%nums': {
+        type: 'multi',
+        slots: '%n',
+        defaults: 2
+    },
     '%exp': {
         type: 'multi',
         slots: '%s',

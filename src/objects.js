@@ -1404,7 +1404,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportReshape: {
             type: 'reporter',
             category: 'lists',
-            spec: 'reshape %l to %mult%n'
+            spec: 'reshape %l to %nums'
         },
 
         // HOFs
