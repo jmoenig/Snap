@@ -1955,6 +1955,15 @@ Process.prototype.reportTranspose = function (list) {
     return list.transpose();
 };
 
+Process.prototype.reportCrossproduct = function (lists) {
+    this.assertType(lists, 'list');
+    if (lists.isEmpty()) {
+        return lists;
+    }
+    this.assertType(lists.at(1), 'list');
+    return lists.crossproduct();
+};
+
 Process.prototype.reportReshape = function (list, shape) {
     this.assertType(list, 'list');
     this.assertType(shape, 'list');

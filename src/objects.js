@@ -1741,7 +1741,6 @@ SpriteMorph.prototype.blockAlternatives = {
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
 
-    // lists
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
     reportKeep: ['reportFindFirst', 'reportMap'],
@@ -2786,7 +2785,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
-        // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -8948,7 +8946,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
-        // blocks.push(block('reportTranspose'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
