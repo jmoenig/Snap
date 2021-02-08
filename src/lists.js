@@ -509,20 +509,20 @@ List.prototype.rank = function () {
     return rank;
 };
 
-
 List.prototype.shape = function () {
     // answer a list of the maximum size for each dimension
     var dim,
         rank = this.rank(),
-        shp = new List([this.length()]);
+        shp = new List([this.length()]),
+        max, items, i, len;
     for (dim = 2; dim <= rank; dim += 1) {
-        shp.add(
-            Math.max(
-                ...this.getDimension(dim).map(item =>
-                    item.length()
-                ).itemsArray()
-            )
-        );
+        max = 0;
+        items = this.getDimension(dim);
+        len = items.length();
+        for (i = 1; i <= len; i += 1) {
+            max = Math.max(max, items.at(i).length());
+        }
+        shp.add(max);
     }
     return shp;
 };
