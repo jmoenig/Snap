@@ -1406,7 +1406,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportReshape: {
             type: 'reporter',
             category: 'lists',
-            spec: 'reshape %l to %nums'
+            spec: 'reshape %l to %nums',
+            defaults: [null, [4, 3]]
         },
 
         // HOFs
@@ -2229,6 +2230,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
             for (i = 0; i < defaults.length; i += 1) {
                 if (defaults[i] !== null) {
                     inputs[i].setContents(defaults[i]);
+                    if (inputs[i] instanceof MultiArgMorph) {
+                        inputs[i].defaults = defaults[i];
+                    }
                 }
             }
         }

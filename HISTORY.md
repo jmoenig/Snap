@@ -18,6 +18,7 @@
 * threads: enhanced 'reshape' to also handle scalars
 * lists: limit crash-dangerous matrix-exploding ops to 1 MM elements (reshape, crossproduct)
 * objects, threads: took out "crossproduct" primitive option from the palette
+* objects, blocks: added defaults to RESHAPE in palette
 
 ### 2021-02-08
 * lists, objects, threads: new RESHAPE primitive

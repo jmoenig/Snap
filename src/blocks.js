@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-February-08';
+modules.blocks = '2021-February-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1241,11 +1241,15 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     // set default value
     if (!noValues) {
         if (inp !== -1) {
-            if (deflt instanceof MultiArgMorph) {
+            if (deflt instanceof MultiArgMorph && !inp) {
+                // first - and only - input is variadic
                 deflt.setContents(this.defaults);
                 deflt.defaults = this.defaults;
             } else if (!isNil(this.defaults[inp])) {
                 deflt.setContents(this.defaults[inp]);
+                if (deflt instanceof MultiArgMorph) {
+                    deflt.defaults = this.defaults[inp];
+                }
             }
         }
     }
