@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-February-08';
+modules.objects = '2021-February-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1594,8 +1594,9 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             offset: 1
         },
         reportTableRotated: {
-            selector: 'reportTranspose',
-            offset: 0
+            selector: 'reportListAttribute',
+            inputs: [['transpose']],
+            offset: 1
         },
         reportTranspose: {
             selector: 'reportListAttribute',
