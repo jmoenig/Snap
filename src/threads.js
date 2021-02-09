@@ -1974,33 +1974,39 @@ Process.prototype.reportReshape = function (list, shape) {
 
 Process.prototype.reportListAttribute = function (choice, list) {
     var option = this.inputOption(choice);
-    this.assertType(list, 'list');
     switch (option) {
     case 'length':
+        this.assertType(list, 'list');
         return list.length();
     case 'size':
+        this.assertType(list, 'list');
         return list.size();
     case 'rank':
-        return list.rank();
+        return list instanceof List ? list.rank() : 0;
     case 'dimensions':
-        return list.shape();
+        return list instanceof List ? list.shape() : new List();
     case 'flatten':
-        return list.ravel();
+        return list instanceof List ? list.ravel() : new List([list]);
     case 'transpose':
+        this.assertType(list, 'list');
         return list.transpose();
     case 'reverse':
+        this.assertType(list, 'list');
         return list.reversed();
     case 'lines':
+        this.assertType(list, 'list');
         if (list.canBeTXT()) {
             return list.asTXT();
         }
         throw new Error('unable to convert to TXT');
     case 'csv':
+        this.assertType(list, 'list');
         if (list.canBeCSV()) {
             return list.asCSV();
         }
         throw new Error('unable to convert to CSV');
     case 'json':
+        this.assertType(list, 'list');
         if (list.canBeJSON()) {
             return list.asJSON();
         }

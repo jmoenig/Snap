@@ -14,6 +14,7 @@
 * lists: refactored matrix ops to avoid JS stack overflows
 * objects: fixed internal migration for "transpose" block
 * threads: enhanced MIN and MAX to also operate on text
+* threads: enhanced list attributes 'rank', 'shape' and 'ravel' to also handle scalars
 
 ### 2021-02-08
 * lists, objects, threads: new RESHAPE primitive
