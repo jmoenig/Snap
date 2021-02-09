@@ -16,6 +16,7 @@
 * threads: enhanced MIN and MAX to also operate on text
 * threads: enhanced list attributes 'rank', 'shape' and 'ravel' to also handle scalars
 * threads: enhanced 'reshape' to also handle scalars
+* lists: limit crash-dangerous matrix-exploding ops to 1 MM elements (reshape, crossproduct)
 
 ### 2021-02-08
 * lists, objects, threads: new RESHAPE primitive

@@ -613,6 +613,11 @@ List.prototype.reshape = function (dimensions) {
         // truncate excess elements from the source
         trg = src.slice(0, size);
     } else {
+        if (size > src.length && dimensions.length() > 2 && size > 1000000) {
+            // limit usage of reshape to grow to a maximum size of 1MM rows
+            // in higher dimensions to prevent accidental dimension overflow
+            throw new Error('exceeding the size limit for reshape');
+        }
         // pad the source by repeating its existing elements
         trg = src.slice();
         while (trg.length < size) {
@@ -666,6 +671,12 @@ List.prototype.crossproduct = function () {
         lengths = this.map(each => each.length()),
         size = lengths.itemsArray().reduce((a, b) => a * b),
         i, k, row, factor;
+
+    // limit crossproduct to a maximum size of 1MM rows
+    // to guard against accidental memory overflows in Chrome
+    if (size > 1000000) {
+        throw new Error('exceeding the size limit for cross product');
+    }
 
     for (i = 1; i <= size; i += 1) {
         row = new List();
