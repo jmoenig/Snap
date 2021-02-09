@@ -1965,8 +1965,8 @@ Process.prototype.reportCrossproduct = function (lists) {
 };
 
 Process.prototype.reportReshape = function (list, shape) {
-    this.assertType(list, 'list');
     this.assertType(shape, 'list');
+    list = list instanceof List ? list : new List([list]);
     return list.reshape(shape);
 };
 
