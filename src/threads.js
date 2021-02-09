@@ -2086,6 +2086,7 @@ Process.prototype.reportBasicNumbers = function (start, end) {
 };
 
 Process.prototype.reportListCombination = function (choice, lists) {
+    // experimental, currently not in use
     var option = this.inputOption(choice);
     switch (option) {
     case 'append':
