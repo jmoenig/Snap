@@ -4,14 +4,16 @@
 
 * **Notable Changes:**
     * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
+    * enhanced MIN and MAX to also operate on text
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
 * **Documentation Updates:**
-    * updated manual (e.g. p.20) with hyper-semantics of ITEM OF, thanks Brian 
+    * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 
 ### 2021-02-09
 * lists: refactored matrix ops to avoid JS stack overflows
 * objects: fixed internal migration for "transpose" block
+* threads: enhanced MIN and MAX to also operate on text
 
 ### 2021-02-08
 * lists, objects, threads: new RESHAPE primitive

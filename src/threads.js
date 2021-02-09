@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-08';
+modules.threads = '2021-February-09';
 
 var ThreadManager;
 var Process;
@@ -3824,7 +3824,14 @@ Process.prototype.reportMin = function (a, b) {
 };
 
 Process.prototype.reportBasicMin = function (a, b) {
-    return Math.min(+a, +b);
+    // return Math.min(+a, +b); // enhanced to also work with text
+    var x = +a,
+        y = +b;
+    if (isNaN(x) || isNaN(y)) {
+        x = a;
+        y = b;
+    }
+    return x < y ? x : y;
 };
 
 Process.prototype.reportMax = function (a, b) {
@@ -3832,7 +3839,14 @@ Process.prototype.reportMax = function (a, b) {
 };
 
 Process.prototype.reportBasicMax = function (a, b) {
-    return Math.max(+a, +b);
+    // return Math.max(+a, +b); // enhanced to also work with text
+    var x = +a,
+        y = +b;
+    if (isNaN(x) || isNaN(y)) {
+        x = a;
+        y = b;
+    }
+    return x > y ? x : y;
 };
 
 // Process logic primitives - hyper-diadic / monadic where applicable
