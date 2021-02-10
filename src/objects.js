@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-February-09';
+modules.objects = '2021-February-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -1729,18 +1729,24 @@ SpriteMorph.prototype.blockAlternatives = {
         'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
         'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
-    reportEquals: ['reportNotEquals', 'reportLessThan',
+    reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
-    reportNotEquals: ['reportEquals', 'reportLessThan',
+    reportNotEquals: ['reportEquals', 'reportIsIdentical', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
     reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
-        'reportNotEquals', 'reportLessThan', 'reportLessThanOrEquals'],
+        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals'],
     reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
-        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
+        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
-        'reportNotEquals', 'reportLessThan', 'reportLessThanOrEquals'],
+        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals'],
+    reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
 
