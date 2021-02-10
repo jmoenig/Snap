@@ -2,11 +2,16 @@
 
 ## in development:
 
+* **New Features:**
+    * new "reshape" primitive for lists
+    * list operations as dropdown menu of new "length of list" block
 * **Notable Changes:**
     * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
+    * changed "length of list" to become a general list operations primitive
     * enhanced MIN and MAX to also operate on text
     * added "is _ identical to _ ?" to relabel options of equals
     * enabled scientific notation in numeric text fields
+    * removed experimental "transpose (list)" primitive - has been merged into "length of list"
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
 * **Documentation Updates:**
