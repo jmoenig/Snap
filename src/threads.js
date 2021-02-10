@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-09';
+modules.threads = '2021-February-10';
 
 var ThreadManager;
 var Process;
@@ -1998,7 +1998,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
         if (list.canBeTXT()) {
             return list.asTXT();
         }
-        throw new Error('unable to convert to TXT');
+        throw new Error('unable to convert to lines');
     case 'csv':
         this.assertType(list, 'list');
         if (list.canBeCSV()) {
