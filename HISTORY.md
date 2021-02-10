@@ -5,14 +5,16 @@
 * **Notable Changes:**
     * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
     * enhanced MIN and MAX to also operate on text
-    * added "is _ identical to _ ?" to relabel options of equals 
+    * added "is _ identical to _ ?" to relabel options of equals
+    * enabled scientific notation in numeric text fields
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 
 ### 2021-02-10
-* objects: added "is _ identical to _ ?" to relabel options of equals 
+* objects: added "is _ identical to _ ?" to relabel options of equals
+* morphic: enable scientific notation in numeric text fields
 
 ### 2021-02-09
 * lists: refactored matrix ops to avoid JS stack overflows

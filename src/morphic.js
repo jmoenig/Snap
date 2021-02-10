@@ -1280,7 +1280,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2021-January-30';
+var morphicVersion = '2021-February-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -5637,19 +5637,24 @@ CursorMorph.prototype.processInput = function (event) {
     // filter invalid chars for numeric fields
     function filterText (content) {
         var points = 0,
+            hasE = false,
             result = '',
             i, ch, valid;
         for (i = 0; i < content.length; i += 1) {
             ch = content.charAt(i);
             valid = (
                 ('0' <= ch && ch <= '9') || // digits
-                (i === 0 && ch === '-')  || // leading '-'
+                (ch.toLowerCase() === 'e') || // scientific notation
+                ((i === 0 || hasE) && ch === '-')  || // leading '-' or sc. not.
                 (ch === '.' && points === 0) // at most '.'
             );
             if (valid) {
                 result += ch;
                 if (ch === '.') {
                     points += 1;
+                }
+                if (ch.toLowerCase() === 'e') {
+                    hasE = true;
                 }
             }
         }
