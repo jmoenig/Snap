@@ -11,11 +11,14 @@
     * don't show internal "compile" reporter in search results
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
+* **Translation Updates:**
+    * German
 
 ### 2021-02-10
 * objects: added "is _ identical to _ ?" to relabel options of equals
 * morphic: enable scientific notation in numeric text fields
 * threads: changed error message for "lines" conversion
+* updated German translations
 
 ### 2021-02-09
 * lists: refactored matrix ops to avoid JS stack overflows

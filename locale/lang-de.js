@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-01-30', // this, too, will appear in the Translators tab
+        '2021-02-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -797,10 +797,20 @@ SnapTranslator.dict.de = {
         'Element %idx von %l',
     'all but first of %l':
         'alles au\u00dfer dem ersten von %l',
-    'transpose %l':
-        'transponiere %l',
-    'length of %l':
-        'L\u00e4nge von %l',
+    '%la of %l':
+        '%la von %l',
+    'rank':
+        'Rang',
+    'dimensions':
+        'Dimensionen',
+    'flatten':
+        'Auflistung',
+    'transpose':
+        'Transponierte',
+    'reverse':
+        'Umkehrung',
+    'lines':
+        'Textzeilen',
     '%l contains %s':
         '%l enth\u00e4lt %s',
     'thing':
@@ -835,6 +845,8 @@ SnapTranslator.dict.de = {
         'Index',
     'append %lists':
         'verbinde %lists',
+    'reshape %l to %nums':
+        'strukturiere %l in %nums',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
