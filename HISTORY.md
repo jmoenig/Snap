@@ -12,12 +12,16 @@
     * added "is _ identical to _ ?" to relabel options of equals
     * enabled scientific notation in numeric text fields
     * removed experimental "transpose (list)" primitive - has been merged into "length of list"
+    * rearranged the blocks in the lists category palette (moved commands up)
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 * **Translation Updates:**
     * German
+
+### 2021-02-11
+* objects: rearranged the blocks in the lists category palette 
 
 ### 2021-02-10
 * objects: added "is _ identical to _ ?" to relabel options of equals
