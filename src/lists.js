@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-09';
+modules.lists = '2021-February-11';
 
 var List;
 var ListWatcherMorph;
@@ -121,6 +121,7 @@ var ListWatcherMorph;
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     transpose()             - answer a 2D list with rows turned into columns
+    reversed()              - answer a reversed shallow copy of the list
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
@@ -739,8 +740,8 @@ List.prototype.strideTranspose = function () {
 };
 
 List.prototype.reversed = function () {
-    // private - only for arrayed lists
-    return new List(this.itemsArray().reverse());
+    // only for arrayed lists
+    return new List(this.itemsArray().slice().reverse());
 };
 
 // List conversion:

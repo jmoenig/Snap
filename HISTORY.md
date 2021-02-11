@@ -21,7 +21,8 @@
     * German
 
 ### 2021-02-11
-* objects: rearranged the blocks in the lists category palette 
+* objects: rearranged the blocks in the lists category palette
+* lists: fixed list.reverse() to return a shallow copy instead of mutating the original
 
 ### 2021-02-10
 * objects: added "is _ identical to _ ?" to relabel options of equals
