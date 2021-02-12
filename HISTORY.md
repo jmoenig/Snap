@@ -20,6 +20,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-02-12
+* blocks, threads, lists: distinguish between "transpose" (<3D) and "deep transpose"
+
 ### 2021-02-11
 * objects: rearranged the blocks in the lists category palette
 * lists: fixed list.reverse() to return a shallow copy instead of mutating the original

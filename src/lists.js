@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-11';
+modules.lists = '2021-February-12';
 
 var List;
 var ListWatcherMorph;
@@ -572,13 +572,16 @@ List.prototype.flatten = function () {
 };
 
 List.prototype.transpose = function () {
-    // answer a 2D list where each item has turned into a row,
-    // convert atomic items into lists,
-    // fill ragged columns with atomic values, if any, or empty cells
-
     if (this.rank() > 2) {
         return this.strideTranspose();
     }
+    return this.transpose2D();
+};
+
+List.prototype.transpose2D = function () {
+    // answer a 2D list where each item has turned into a row,
+    // convert atomic items into lists,
+    // fill ragged columns with atomic values, if any, or empty cells
 
     var col, src, i,
         width = Math.max(this.width(), 1),

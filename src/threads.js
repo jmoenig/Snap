@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-10';
+modules.threads = '2021-February-12';
 
 var ThreadManager;
 var Process;
@@ -1988,6 +1988,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'flatten':
         return list instanceof List ? list.ravel() : new List([list]);
     case 'transpose':
+        this.assertType(list, 'list');
+        return list.transpose2D();
+    case 'deep transpose':
         this.assertType(list, 'list');
         return list.transpose();
     case 'reverse':
