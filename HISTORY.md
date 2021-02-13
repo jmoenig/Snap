@@ -15,6 +15,7 @@
     * rearranged the blocks in the lists category palette (moved commands up)
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
+    * fixed a bug for showing the senders of a message
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 * **Translation Updates:**
@@ -22,6 +23,7 @@
 
 ### 2021-02-13
 * blocks, threads, lists: distinguish between "columns" (<3D) and (deep) "transpose"
+* byob: fixed a bug for showing the senders of a message
 
 ### 2021-02-12
 * blocks, threads, lists: distinguish between "transpose" (<3D) and "deep transpose"

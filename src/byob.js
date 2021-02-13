@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -107,7 +107,7 @@ WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2020-December-22';
+modules.byob = '2021-February-13';
 
 // Declarations
 
@@ -617,7 +617,9 @@ CustomBlockDefinition.prototype.collectDependencies = function (
 CustomBlockDefinition.prototype.isSending = function (message, receiverName) {
     return this.scripts.concat(
         this.body ? [this.body.expression] : []
-    ).some(script => script.isSending(message, receiverName));
+    ).some(script => script instanceof BlockMorph &&
+        script.isSending(message, receiverName)
+    );
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
