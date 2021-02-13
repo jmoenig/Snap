@@ -20,6 +20,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-02-13
+* blocks, threads, lists: distinguish between "columns" (<3D) and (deep) "transpose"
+
 ### 2021-02-12
 * blocks, threads, lists: distinguish between "transpose" (<3D) and "deep transpose"
 

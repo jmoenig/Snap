@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-12';
+modules.lists = '2021-February-13';
 
 var List;
 var ListWatcherMorph;
@@ -120,7 +120,8 @@ var ListWatcherMorph;
     width()                 - ansswer the maximum length of my columns, if any
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
-    transpose()             - answer a 2D list with rows turned into columns
+    columns()               - answer a 2D list with rows turned into columns
+    transpose()             - answer the matrix transpose over all dimensions
     reversed()              - answer a reversed shallow copy of the list
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
@@ -575,10 +576,10 @@ List.prototype.transpose = function () {
     if (this.rank() > 2) {
         return this.strideTranspose();
     }
-    return this.transpose2D();
+    return this.columns();
 };
 
-List.prototype.transpose2D = function () {
+List.prototype.columns = function () {
     // answer a 2D list where each item has turned into a row,
     // convert atomic items into lists,
     // fill ragged columns with atomic values, if any, or empty cells
