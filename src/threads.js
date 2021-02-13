@@ -1989,7 +1989,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list instanceof List ? list.ravel() : new List([list]);
     case 'columns':
         this.assertType(list, 'list');
-        return list.transpose2D();
+        return list.columns();
     case 'transpose':
         this.assertType(list, 'list');
         return list.transpose();
