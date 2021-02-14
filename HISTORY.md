@@ -21,6 +21,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-02-14
+* fixed transcription typos in strideTranspose(), thanks, Brian!
+
 ### 2021-02-13
 * blocks, threads, lists: distinguish between "columns" (<3D) and (deep) "transpose"
 * byob: fixed a bug for showing the senders of a message
