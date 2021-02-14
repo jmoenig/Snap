@@ -726,18 +726,18 @@ List.prototype.strideTranspose = function () {
     }
 
     for (i = oldShape.length(); i > 1; i -= 1) {
-        product *= oldShape.at(1);
+        product *= oldShape.at(i);
         newSizes.add(product, 1);
     }
     product = 1;
     for (i = 1; i <= oldShape.length() - 1; i += 1) {
-        product *= oldShape.at(1);
+        product *= oldShape.at(i);
         oldSizes.add(product);
     }
     for (i = 1; i <= oldFlat.length(); i += 1) {
-        newFlat.add(
+        newFlat.put(
             oldFlat.at(i),
-            newIndex(i, oldSizes, newSizes)
+            newIndex(i-1, oldSizes, newSizes)+1
         );
     }
     return newFlat.reshape(newShape);
