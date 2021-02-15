@@ -26,6 +26,7 @@
 ### 2021-02-15
 * threads: fixed #2783
 * threads: fixed #2784
+* blocks: took out "transpose" from "length" dropdown
 
 ### 2021-02-14
 * lists: fixed transcription typos in strideTranspose(), thanks, Brian!
