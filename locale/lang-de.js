@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-02-10', // this, too, will appear in the Translators tab
+        '2021-02-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -805,8 +805,8 @@ SnapTranslator.dict.de = {
         'Dimensionen',
     'flatten':
         'Auflistung',
-    'transpose':
-        'Transponierte',
+    'columns':
+        'Spalten',
     'reverse':
         'Umkehrung',
     'lines':
