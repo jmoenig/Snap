@@ -17,6 +17,7 @@
     * don't show internal "compile" reporter in search results
     * fixed a bug for showing the senders of a message
     * compiled "find first" now also reports empty instead of false if none is found
+    * support one level of currying in the experimental JS JIT compiler
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 * **Translation Updates:**
@@ -24,6 +25,7 @@
 
 ### 2021-02-15
 * threads: fixed #2783
+* threads: fixed #2784
 
 ### 2021-02-14
 * lists: fixed transcription typos in strideTranspose(), thanks, Brian!

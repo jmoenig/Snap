@@ -7027,6 +7027,15 @@ JSCompiler.prototype.compileExpression = function (block) {
             'custom blocks'
         );
 
+    // special evaluation primitives
+    case 'doRun':
+    case 'evaluate':
+        return 'invoke(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+
     // special command forms
     case 'doSetVar': // redirect var to process
         return 'arguments[arguments.length - 1].setVarNamed(' +
