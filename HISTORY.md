@@ -5,6 +5,7 @@
 * **New Features:**
     * new "reshape" primitive for lists
     * list operations as dropdown menu of new "length of list" block
+    * support for ranges of indices using zero and negative numbers inside index-lists in "item of"
 * **Notable Changes:**
     * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
     * changed "length of list" to become a general list operations primitive
@@ -30,6 +31,7 @@
 * blocks: took out "transpose" from "length" dropdown
 * German translation update
 * removed "reverse" block from the "frequency distribution analysis" library
+* support for ranges of indices using zero and negative numbers inside index-lists in "item of"
 
 ### 2021-02-14
 * lists: fixed transcription typos in strideTranspose(), thanks, Brian!

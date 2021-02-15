@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-14';
+modules.lists = '2021-February-15';
 
 var List;
 var ListWatcherMorph;
@@ -408,24 +408,50 @@ List.prototype.query = function (indices) {
         return this.map(e => e);
     }
     if (indices.rank() === 1) {
-        return indices.map(i => this.at(i));
+        return this.rangify(indices).map(i => this.at(i));
     }
     first = indices.at(1);
     if (first instanceof List) {
         select = first.isEmpty() ?
-            this.range(this.length())
-                : first;
+            this.range(1, this.length())
+                : this.rangify(first);
     } else {
-        select = new List([first]);
+        select = this.rangify(new List([first]));
     }
     return select.map(i => this.at(i)).map(
             e => e instanceof List? e.query(indices.cdr()) : e
     );
 };
 
-List.prototype.range = function (upTo) {
-    // private - answer a list of integers from 1 up to the given ceiling
-    return new List([...Array(upTo)].map((e, i) => i + 1));
+List.prototype.rangify = function (indices) {
+    // private
+    var result = [],
+        len = this.length(),
+        current = 0,
+        start, end;
+    indices.itemsArray().forEach(idx => {
+        idx = +idx;
+        if (idx > 0) {
+            result.push(idx);
+            current = idx;
+        } else {
+            end = len + idx;
+            if (current !== end) {
+                start = current < end ? current + 1 : current - 1;
+                this.range(start, end).itemsArray().forEach(
+                    num => result.push(num)
+                );
+            }
+        }
+    });
+    return new List(result);
+};
+
+List.prototype.range = function (start, end) {
+    // private - answer a list of integers from start to the given end
+    return new List([...Array(Math.abs(end - start) + 1)].map((e, i) =>
+        start < end ? start + i : start - i
+    ));
 };
 
 List.prototype.items = function (indices) {
