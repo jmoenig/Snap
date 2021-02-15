@@ -13,6 +13,7 @@
     * enabled scientific notation in numeric text fields
     * removed experimental "transpose (list)" primitive - has been merged into "length of list"
     * rearranged the blocks in the lists category palette (moved commands up)
+    * removed "reverse" block from the "frequency distribution analysis" library
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
     * fixed a bug for showing the senders of a message
@@ -28,6 +29,7 @@
 * threads: fixed #2784
 * blocks: took out "transpose" from "length" dropdown
 * German translation update
+* removed "reverse" block from the "frequency distribution analysis" library
 
 ### 2021-02-14
 * lists: fixed transcription typos in strideTranspose(), thanks, Brian!
