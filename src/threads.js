@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-13';
+modules.threads = '2021-February-15';
 
 var ThreadManager;
 var Process;
@@ -6347,7 +6347,7 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
             return src[i];
          }
     }
-    return false;
+    return '';
 };
 
 Process.prototype.reportAtomicCombine = function (list, reporter) {

@@ -16,13 +16,17 @@
 * **Notable Fixes:**
     * don't show internal "compile" reporter in search results
     * fixed a bug for showing the senders of a message
+    * compiled "find first" now also reports empty instead of false if none is found
 * **Documentation Updates:**
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 * **Translation Updates:**
     * German
 
+### 2021-02-15
+* threads: fixed #2783
+
 ### 2021-02-14
-* fixed transcription typos in strideTranspose(), thanks, Brian!
+* lists: fixed transcription typos in strideTranspose(), thanks, Brian!
 
 ### 2021-02-13
 * blocks, threads, lists: distinguish between "columns" (<3D) and (deep) "transpose"
