@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-February-16';
+modules.objects = '2021-February-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -1409,6 +1409,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'reshape %l to %nums',
             defaults: [null, [4, 3]]
         },
+        reportSlice: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'slice %l by %nums',
+            defaults: [null, [2, -1]]
+        },
 
         // HOFs
         reportMap: {
@@ -1755,6 +1761,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
+
+    // lists:
+    reportReshape: ['reportSlice'],
+    reportSlice: ['reportReshape'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
