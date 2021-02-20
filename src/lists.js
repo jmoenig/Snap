@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-15';
+modules.lists = '2021-February-20';
 
 var List;
 var ListWatcherMorph;
@@ -126,6 +126,7 @@ var ListWatcherMorph;
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
+    slice()                 - same as query() turning negative indices into slices
 */
 
 // List instance creation:
@@ -408,6 +409,47 @@ List.prototype.query = function (indices) {
         return this.map(e => e);
     }
     if (indices.rank() === 1) {
+        return indices.map(i => this.at(i));
+    }
+    first = indices.at(1);
+    if (first instanceof List) {
+        select = first.isEmpty() ?
+            this.range(1, this.length())
+                : first;
+    } else {
+        select = new List([first]);
+    }
+    return select.map(i => this.at(i)).map(
+            e => e instanceof List? e.query(indices.cdr()) : e
+    );
+};
+
+List.prototype.slice = function (indices) {
+    // EXPERIMENTAL - NOT IN USE.
+    // assumes a 2D argument list where each slot represents
+    // the indices to select from a dimension
+    // e.g. [rows, columns, planes]
+    //
+    // slicing spec:
+    // positive integers represent single indices,
+    // negative integes and zero represent slices starting at the
+    // index following the last specified positive integer up to / down to
+    // my length offset by the negative / zero integer
+    //
+    // Currently unused and NOT part of the ITEM OF primitivie in
+    // production Snap, because negative indices are used in exercises and
+    // curriculum activities relying on them returning zero / empty values
+    // rather than wrapped ones, e.g. when creating a "reverb" or "echo"
+    // effect from sound samples.
+    //
+    // to be revisited in the future, perhaps as seperate primitive.
+    // -Jens
+
+    var first, select;
+    if (indices.isEmpty()) {
+        return this.map(e => e);
+    }
+    if (indices.rank() === 1) {
         return this.rangify(indices).map(i => this.at(i));
     }
     first = indices.at(1);
@@ -419,12 +461,16 @@ List.prototype.query = function (indices) {
         select = this.rangify(new List([first]));
     }
     return select.map(i => this.at(i)).map(
-            e => e instanceof List? e.query(indices.cdr()) : e
+            e => e instanceof List? e.slice(indices.cdr()) : e
     );
 };
 
 List.prototype.rangify = function (indices) {
-    // private
+    // EXPERIMENTAL - NOT IN USE.
+    // private - answer a list of indices with zero and negative integers
+    // replaced by slices of consecutive indices ranging from the next
+    // index following the last specified single index up / down to
+    // my length offset by the negative / zero index.
     var result = [],
         len = this.length(),
         current = 0,
