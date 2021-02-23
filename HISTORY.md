@@ -5,7 +5,6 @@
 * **New Features:**
     * new "reshape" primitive for lists
     * list operations as dropdown menu of new "length of list" block
-    * experimental list slice() primitive, hidden, available via find / relabel
 * **Notable Changes:**
     * 2D lists inside ITEM OF now have the right order of dimensions (rows, columns, planes, etc.)
     * changed "length of list" to become a general list operations primitive
@@ -23,6 +22,9 @@
     * updated manual with hyper-semantics of ITEM OF, thanks Brian!
 * **Translation Updates:**
     * German
+
+### 2021-02-23
+* threads, objects: commented out experimental slice() primitive
 
 ### 2021-02-20
 * lists: removed experimental list.slice() feature from production code
