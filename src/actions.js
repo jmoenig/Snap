@@ -1994,9 +1994,16 @@ ActionManager.prototype.__updateBlockDefinitions = function(block) {
         editor.updateDefinition();
         const scripts = editor.body.contents;
         scripts.children.forEach(block => {
-            const scriptRoot = block instanceof PrototypeHatBlockMorph ?
-                block.nextBlock() : block;
-            this.traverse(scriptRoot, block => this._blocks[block.id] = block);
+            const recordBlock = block => this._blocks[block.id] = block;
+
+            if (block instanceof PrototypeHatBlockMorph) {
+                const scriptRoot = block.nextBlock();
+                if (scriptRoot) {
+                    this.traverse(scriptRoot, recordBlock);
+                }
+            } else {
+                this.traverse(block, recordBlock);
+            }
         });
     }
 };
