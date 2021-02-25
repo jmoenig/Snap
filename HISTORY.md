@@ -23,6 +23,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-02-25
+* updated manual, thanks, Brian!
+
 ### 2021-02-23
 * threads, objects: commented out experimental slice() primitive
 
