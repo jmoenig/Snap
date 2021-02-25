@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.6.0
 * **New Features:**
     * new "reshape" primitive for lists
     * list operations as dropdown menu of new "length of list" block
