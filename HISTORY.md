@@ -25,6 +25,7 @@
 
 ### 2021-02-25
 * updated manual, thanks, Brian!
+* prepared minor release
 
 ### 2021-02-23
 * threads, objects: commented out experimental slice() primitive
