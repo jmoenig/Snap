@@ -127,6 +127,12 @@ SpriteMorph.prototype.initBlocks = function () {
         spec: 'stage height'
     };
 
+    SpriteMorph.prototype.blocks.reportImageOfObject = {
+        type: 'reporter',
+        category: 'sensing',
+        spec: 'image of %self',
+    };
+
     SpriteMorph.prototype.blocks.reportUsername = {
         type: 'reporter',
         category: 'sensing',

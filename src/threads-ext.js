@@ -462,6 +462,13 @@ Process.prototype.reportStageHeight = function () {
     return stage.dimensions.y;
 };
 
+Process.prototype.reportImageOfObject = function (object) {
+    object = this.reportObject(object);
+    if (object !== undefined) {
+        return new Costume(object.fullImage());
+    }
+};
+
 // helps executing async functions in custom js blocks
 // WARN it could be slower than non-promise based approach
 // when calling this function, return only if the return value is not undefined.
