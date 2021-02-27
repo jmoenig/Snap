@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-February-15';
+modules.blocks = '2021-February-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1824,6 +1824,14 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             } else {
                 lines.push([part]);
             }
+        } else if (this.isVertical() && !(part instanceof FrameMorph)) {
+            // variadic ring-inputs are arranged vertically
+            // except the arrows for expanding and collapsing them
+            if (l.length > 0) {
+                lines.push(l);
+            }
+            l = [part];
+            x = part.fullBounds().width() + space;
         } else if (part instanceof BlockHighlightMorph) {
             nop(); // should be redundant now
             // this.fullChanged();
@@ -2059,6 +2067,11 @@ SyntaxElementMorph.prototype.methodIconExtent = function () {
     var ico = this.fontSize * 1.2;
     return this.hasLocationPin() ? new Point(ico * 0.66, ico)
     		: new Point(0, 0);
+};
+
+SyntaxElementMorph.prototype.isVertical = function () {
+    // control layout rule of variadic inputs, default is false
+    return false;
 };
 
 // SyntaxElementMorph evaluating:
@@ -11774,6 +11787,10 @@ MultiArgMorph.prototype.removeInput = function () {
         }
     }
     this.fixLayout();
+};
+
+MultiArgMorph.prototype.isVertical = function () {
+    return contains(['%repRing', '%predRing', '%cmdRing'], this.slotSpec);
 };
 
 MultiArgMorph.prototype.is3ArgRingInHOF = function () {

@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
+
 ### 2021-02-27
 * new dev version
+* blocks: arrange variadic ring inputs vertically (e.g. the reporter rings in PIPE)
 
 ## 6.6.0
 * **New Features:**
