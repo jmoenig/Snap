@@ -1832,10 +1832,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             }
             l = [part];
             x = part.fullBounds().width() + space;
-        } else if (part instanceof BlockHighlightMorph) {
-            nop(); // should be redundant now
-            // this.fullChanged();
-            // this.removeChild(part);
         } else {
             if (part.isVisible) {
                 x += part.fullBounds().width() + space;

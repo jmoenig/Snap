@@ -8,6 +8,7 @@
 ### 2021-02-27
 * new dev version
 * blocks: arrange variadic ring inputs vertically (e.g. the reporter rings in PIPE)
+* blocks: removed a redundant unused case for block highlights 
 
 ## 6.6.0
 * **New Features:**
