@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-02-27
+* new dev version
+
 ## 6.6.0
 * **New Features:**
     * new "reshape" primitive for lists
