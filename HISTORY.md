@@ -3,11 +3,13 @@
 ## in development:
 
 * **Notable Changes:**
+    * custom block label parts inside the prototype (in the block editor) are now displayed the same as in block instances
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
     * improved layout and rendering of (+) buttons in custom block prototypes
 
 ### 2021-03-01
 * byob: improved layout and rendering of (+) buttons in custom block prototypes
+* byob: display custom block label parts in the prototype (in the block editor) the same as in block instances
 
 ### 2021-02-27
 * new dev version

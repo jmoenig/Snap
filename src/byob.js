@@ -56,14 +56,12 @@
         VariableDialogMorph
 
     Morph*
+        BlockLabelFragmentMorph
         BlockLabelPlaceHolderMorph
 
     ReporterBlockMorph***
         CustomReporterBlockMorph
         JaggedBlockMorph
-
-    StringMorph*
-        BlockLabelFragmentMorph
 
     TemplateSlotMorph***
         BlockInputFragmentMorph
@@ -1009,25 +1007,17 @@ CustomCommandBlockMorph.prototype.edit = function () {
 };
 
 CustomCommandBlockMorph.prototype.labelPart = function (spec) {
-    var part;
-
     if (!this.isPrototype) {
         return CustomCommandBlockMorph.uber.labelPart.call(this, spec);
     }
     if ((spec[0] === '%') && (spec.length > 1)) {
-        // part = new BlockInputFragmentMorph(spec.slice(1));
-        part = new BlockInputFragmentMorph(spec.replace(/%/g, ''));
-    } else {
-        part = new BlockLabelFragmentMorph(spec);
-        part.fontSize = this.fontSize;
-        part.color = WHITE;
-        part.isBold = true;
-        part.shadowColor = this.color.darker(this.labelContrast);
-        part.shadowOffset = this.embossing;
-        part.fixLayout();
-        part.rerender();
+        // return new BlockInputFragmentMorph(spec.slice(1));
+        return new BlockInputFragmentMorph(spec.replace(/%/g, ''));
     }
-    return part;
+    return new BlockLabelFragmentMorph(
+        spec,
+        CustomCommandBlockMorph.uber.labelPart.call(this, spec)
+    );
 };
 
 CustomCommandBlockMorph.prototype.placeHolder = function () {
@@ -2791,50 +2781,50 @@ BlockLabelFragment.prototype.setSingleInputType = function (type) {
     to edit my contents and to turn me into an input placeholder.
 */
 
-// BlockLabelFragmentMorph inherits from StringMorph:
+// BlockLabelFragmentMorph inherits from Morph:
 
-BlockLabelFragmentMorph.prototype = new StringMorph();
+BlockLabelFragmentMorph.prototype = new Morph();
 BlockLabelFragmentMorph.prototype.constructor = BlockLabelFragmentMorph;
-BlockLabelFragmentMorph.uber = StringMorph.prototype;
+BlockLabelFragmentMorph.uber = Morph.prototype;
 
 // BlockLabelFragmentMorph instance creation:
 
-function BlockLabelFragmentMorph(text) {
-    this.init(text);
+function BlockLabelFragmentMorph(spec, shape) {
+    this.init(spec, shape);
 }
 
-BlockLabelFragmentMorph.prototype.init = function (text) {
-    this.fragment = new BlockLabelFragment(text);
+BlockLabelFragmentMorph.prototype.init = function (spec, shape) {
+    BlockLabelFragmentMorph.uber.init.call(this);
+    this.spec = spec;
+    this.fragment = new BlockLabelFragment(spec);
     this.fragment.type = null;
     this.sO = null; // temporary backup for shadowOffset
-    BlockLabelFragmentMorph.uber.init.call(
-        this,
-        text,
-        null, // font size
-        SyntaxElementMorph.prototype.labelFontStyle,
-        null, // bold
-        null, // italic
-        null, // numeric
-        null, // shadow offset
-        null, // shadow color
-        null, // color
-        SyntaxElementMorph.prototype.labelFontName
-    );
+    this.shape =  shape; // the actual label part, a StringMorph or SymbolMorph
+    this.add(shape);
+//    this.fixLayout();
 };
+
+BlockLabelFragmentMorph.prototype.fixLayout = function () {
+    this.bounds = this.shape.bounds;
+};
+
+BlockLabelFragmentMorph.prototype.render = nop;
 
 // BlockLabelFragmentMorph events:
 
 BlockLabelFragmentMorph.prototype.mouseEnter = function () {
-    this.sO = this.shadowOffset;
-    this.shadowOffset = this.sO.neg();
+    this.sO = this.shape.shadowOffset;
+    this.shape.shadowOffset = this.sO.neg();
+    this.shape.fixLayout();
+    this.shape.rerender();
     this.fixLayout();
-    this.rerender();
 };
 
 BlockLabelFragmentMorph.prototype.mouseLeave = function () {
-    this.shadowOffset = this.sO;
+    this.shape.shadowOffset = this.sO;
+    this.shape.fixLayout();
+    this.shape.rerender();
     this.fixLayout();
-    this.rerender();
 };
 
 BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
@@ -2855,7 +2845,7 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
         frag,
         null,
         () => this.updateBlockLabel(frag),
-        this,
+        this.spec,
         this.parent.definition.category
     ).open(
         this instanceof BlockLabelFragmentMorph ?
@@ -2881,11 +2871,11 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
     var symbolColor = new Color(100, 100, 130),
         menu = new MenuMorph(
             (string) => {
-                var tuple = this.text.split('-');
+                var tuple = this.spec.split('-');
                 this.changed();
                 tuple[0] = '$' + string;
                 this.text = tuple.join('-');
-                this.fragment.labelString = this.text;
+                this.fragment.labelString = this.spec;
                 this.parent.parent.changed();
                 this.fixLayout();
                 this.parent.parent.fixLayout();
