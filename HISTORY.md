@@ -4,6 +4,10 @@
 
 * **Notable Changes:**
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
+    * improved layout and rendering of (+) buttons in custom block prototypes
+
+### 2021-03-01
+* byob: improved layout and rendering of (+) buttons in custom block prototypes
 
 ### 2021-02-27
 * new dev version

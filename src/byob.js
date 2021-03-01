@@ -55,14 +55,15 @@
         InputSlotDialogMorph
         VariableDialogMorph
 
+    Morph*
+        BlockLabelPlaceHolderMorph
+
     ReporterBlockMorph***
         CustomReporterBlockMorph
         JaggedBlockMorph
 
-
     StringMorph*
         BlockLabelFragmentMorph
-        BlockLabelPlaceHolderMorph
 
     TemplateSlotMorph***
         BlockInputFragmentMorph
@@ -95,19 +96,19 @@
 
 */
 
-/*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map,
-StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph, WHITE,
+/*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph, Map, Morph,
+StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph, WHITE, copy,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process, isString,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph, StringMorph,
 nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
-ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph, fontHeight,
-StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph,
-MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
-WatcherMorph, Variable, BooleanSlotMorph, XML_Serializer, SnapTranslator*/
+ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
+StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
+MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
+WatcherMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-February-13';
+modules.byob = '2021-March-01';
 
 // Declarations
 
@@ -2913,11 +2914,11 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
     circle. I can be clicked to add a new word or input to the prototype.
 */
 
-// BlockLabelPlaceHolderMorph inherits from StringMorph:
+// BlockLabelPlaceHolderMorph inherits from Morph:
 
-BlockLabelPlaceHolderMorph.prototype = new StringMorph();
+BlockLabelPlaceHolderMorph.prototype = new Morph();
 BlockLabelPlaceHolderMorph.prototype.constructor = BlockLabelPlaceHolderMorph;
-BlockLabelPlaceHolderMorph.uber = StringMorph.prototype;
+BlockLabelPlaceHolderMorph.uber = Morph.prototype;
 
 // BlockLabelPlaceHolderMorph preferences settings
 
@@ -2934,28 +2935,17 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
     this.fragment.type = '%s';
     this.fragment.isDeleted = true;
     this.isHighlighted = false;
-    this.isProtectedLabel = true; // doesn't participate in zebra coloring
-    BlockLabelFragmentMorph.uber.init.call(this, '+');
+    BlockLabelFragmentMorph.uber.init.call(this);
 };
 
 // BlockLabelPlaceHolderMorph drawing
 
 BlockLabelPlaceHolderMorph.prototype.fixLayout = function () {
-    // set my text contents depending on the "plainLabel" flag
-    if (this.plainLabel) {
-        this.text = this.isHighlighted ? ' + ' : '';
-    }
-
-    // determine my extent
-    this.measureCtx.font = this.font();
-    this.bounds.corner = this.bounds.origin.add(
-        new Point(
-            Math.max(
-                this.measureCtx.measureText(this.text).width,
-                SyntaxElementMorph.prototype.scale
-            ),
-            fontHeight(this.fontSize)
-        )
+    var h = fontHeight(SyntaxElementMorph.prototype.fontSize * 1.4);
+    this.bounds.setHeight(h);
+    this.bounds.setWidth(
+        this.isHighlighted || !this.plainLabel ? h / 2 :
+            SyntaxElementMorph.prototype.scale
     );
 
     // notify my parent of layout change - move to fixLayout()
@@ -2970,18 +2960,19 @@ BlockLabelPlaceHolderMorph.prototype.fixLayout = function () {
 };
 
 BlockLabelPlaceHolderMorph.prototype.render = function (ctx) {
-    var cx, cy;
+    var cx = this.width() / 2,
+        cy = this.height() / 2,
+        r = Math.min(cx, cy),
+        unit = SyntaxElementMorph.prototype.scale;
 
     // draw background, if any
     if (this.isHighlighted) {
-        cx = this.width() / 2;
-        cy = this.height() / 2;
         ctx.fillStyle = this.color.toString();
         ctx.beginPath();
         ctx.arc(
             cx,
-            cy * 1.2,
-            Math.min(cx, cy),
+            cy,
+            r,
             radians(0),
             radians(360),
             false
@@ -2990,14 +2981,16 @@ BlockLabelPlaceHolderMorph.prototype.render = function (ctx) {
         ctx.fill();
     }
 
-    // prepare context for drawing text
-    ctx.font = this.font();
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'bottom';
-
-    // now draw the actual text
-    ctx.fillStyle = this.isHighlighted ? 'white' : this.color.toString();
-    ctx.fillText(this.text, 0, fontHeight(this.fontSize));
+    if (!this.plainLabel || this.isHighlighted) {
+        ctx.strokeStyle = this.isHighlighted ? 'white' : this.color.toString();
+        ctx.lineWidth = unit;
+        ctx.beginPath();
+        ctx.moveTo(unit, cy);
+        ctx.lineTo(r * 2 - unit, cy);
+        ctx.moveTo(r, cy - r + unit);
+        ctx.lineTo(r, cy + r - unit);
+        ctx.stroke();
+    }
 };
 
 // BlockLabelPlaceHolderMorph events:
