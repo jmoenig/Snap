@@ -2158,7 +2158,6 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         );
     }
     scripts.add(proto);
-    proto.fixBlockColor(null, true);
 
     this.definition.scripts.forEach(element => {
         block = element.fullCopy();
@@ -2196,7 +2195,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     block = proto.parts()[0];
     block.forceNormalColoring();
-    block.fixBlockColor(proto, true);
+    proto.fixBlockColor(null, true);
+
 };
 
 BlockEditorMorph.prototype.popUp = function () {

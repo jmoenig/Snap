@@ -5,11 +5,13 @@
 * **Notable Changes:**
     * custom block label parts inside the prototype (in the block editor) are now displayed the same as in block instances
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
+    * changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
     * improved layout and rendering of (+) buttons in custom block prototypes
 
 ### 2021-03-01
 * byob: improved layout and rendering of (+) buttons in custom block prototypes
 * byob: display custom block label parts in the prototype (in the block editor) the same as in block instances
+* byob: changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
 
 ### 2021-02-27
 * new dev version
