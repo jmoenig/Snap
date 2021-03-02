@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-February-23';
+modules.threads = '2021-March-02';
 
 var ThreadManager;
 var Process;
@@ -2899,6 +2899,14 @@ Process.prototype.reportCombine = function (list, reporter) {
     }
     if (list.isLinked) {
         if (this.context.accumulator === null) {
+            // check for special cases to speed up
+            if (this.canRunOptimizedForCombine(reporter)) {
+                return this.reportListAggregation(
+                    list,
+                    reporter.expression.selector
+                );
+            }
+            // initialize the accumulator
             this.context.accumulator = {
                 source : list.cdr(),
                 idx : 1,
@@ -2919,6 +2927,14 @@ Process.prototype.reportCombine = function (list, reporter) {
         next = this.context.accumulator.source.at(1);
     } else { // arrayed
         if (this.context.accumulator === null) {
+            // check for special cases to speed up
+            if (this.canRunOptimizedForCombine(reporter)) {
+                return this.reportListAggregation(
+                    list,
+                    reporter.expression.selector
+                );
+            }
+            // initialize the accumulator
             this.context.accumulator = {
                 idx : 1,
                 target : list.at(1)
@@ -2944,6 +2960,54 @@ Process.prototype.reportCombine = function (list, reporter) {
         parms.push(list);
     }
     this.evaluate(reporter, new List(parms));
+};
+
+Process.prototype.reportListAggregation = function (list, selector) {
+    // private - used by reportCombine to optimize certain commutative
+    // operations such as sum, product, min, max hyperized all at once
+    var len = list.length(),
+        result, i;
+
+    if (len === 0) {
+        return 0;
+    }
+    result = list.at(1);
+    if (len > 1) {
+        for (i = 2; i <= len; i += 1) {
+            result = this[selector](result, list.at(i));
+        }
+    }
+    return result;
+};
+
+Process.prototype.canRunOptimizedForCombine = function (aContext) {
+    // private - used by reportCombine to check for optimizable
+    // special cases
+    var op = aContext.expression.selector,
+        eligible;
+    if (!op) {
+        return false;
+    }
+    eligible = ['reportSum', 'reportProduct', 'reportMin', 'reportMax'];
+    if (!contains(eligible, op)) {
+        return false;
+    }
+
+    // scan the expression's inputs, we can assume there are exactly two,
+    // because we're only looking at eligible selectors. Make sure none is
+    // a non-empty input slot or a variable getter whose name doesn't
+    // correspond to an input of the context.
+    // make sure the context has either no or exactly two inputs.
+    if (aContext.inputs.length === 0) {
+        return aContext.expression.inputs().every(each => each.bindingID);
+    }
+    if (aContext.inputs.length !== 2) {
+        return false;
+    }
+    return aContext.expression.inputs().every(each =>
+        each.selector === 'reportGetVar' &&
+            contains(aContext.inputs, each.blockSpec)
+    );
 };
 
 // Process interpolated primitives
