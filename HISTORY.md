@@ -18,6 +18,7 @@
 * threads: optimized special cases for compiled version of COMBINE
 * gui, objects: undelete sprites 
 * threads: correct identities when combining the items of an empty list with + /  * / min / max
+* gui: pushed dev version to 6.7 because of new documentable features
 
 ### 2021-03-01
 * byob: improved layout and rendering of (+) buttons in custom block prototypes
