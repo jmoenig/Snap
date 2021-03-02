@@ -2893,10 +2893,6 @@ Process.prototype.reportCombine = function (list, reporter) {
 
     var next, current, index, parms;
     this.assertType(list, 'list');
-    if (list.length() < 2) {
-        this.returnValueToParentContext(list.length() ? list.at(1) : 0);
-        return;
-    }
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             // check for special cases to speed up
@@ -2906,6 +2902,13 @@ Process.prototype.reportCombine = function (list, reporter) {
                     reporter.expression.selector
                 );
             }
+
+            // test for base cases
+            if (list.length() < 2) {
+                this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+                return;
+            }
+
             // initialize the accumulator
             this.context.accumulator = {
                 source : list.cdr(),
@@ -2934,6 +2937,13 @@ Process.prototype.reportCombine = function (list, reporter) {
                     reporter.expression.selector
                 );
             }
+
+            // test for base cases
+            if (list.length() < 2) {
+                this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+                return;
+            }
+
             // initialize the accumulator
             this.context.accumulator = {
                 idx : 1,
@@ -2967,9 +2977,17 @@ Process.prototype.reportListAggregation = function (list, selector) {
     // operations such as sum, product, min, max hyperized all at once
     var len = list.length(),
         result, i;
-
     if (len === 0) {
-        return 0;
+        switch (selector) {
+        case 'reportProduct':
+            return 1;
+        case 'reportMin':
+            return Infinity;
+        case 'reportMax':
+            return -Infinity;
+        default: // reportSum
+            return 0;
+        }
     }
     result = list.at(1);
     if (len > 1) {
