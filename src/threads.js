@@ -6429,14 +6429,21 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     // #3 - optional | index
     // #4 - optional | source list
 
+    var result, src, len, formalParameterCount, parms, func, i;
     this.assertType(list, 'list');
-    var result = '',
-        src = list.itemsArray(),
-        len = src.length,
-        formalParameterCount = reporter.inputs.length,
-        parms,
-        func,
-        i;
+
+    // check for special cases to speed up
+    if (this.canRunOptimizedForCombine(reporter)) {
+        return this.reportListAggregation(
+            list,
+            reporter.expression.selector
+        );
+    }
+
+    result = '';
+    src = list.itemsArray();
+    len = src.length;
+    formalParameterCount = reporter.inputs.length;
 
 	if (len === 0) {
  		return result;

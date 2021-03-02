@@ -11,6 +11,7 @@
 
 ### 2021-03-02
 * threads: optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
+* threads: optimized special cases for compiled version of COMBINE
 
 ### 2021-03-01
 * byob: improved layout and rendering of (+) buttons in custom block prototypes
