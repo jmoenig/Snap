@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-February-23';
+modules.objects = '2021-March-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -7229,7 +7229,7 @@ SpriteMorph.prototype.inheritedMethods = function () {
 
 // SpriteMorph thumbnail
 
-SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
+SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe, noCorpse) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
     // a "recycleMe canvas can be passed for re-use
@@ -7259,7 +7259,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
     }
 
     ctx.save();
-    if (this.isCorpse) {
+    if (this.isCorpse && !noCorpse) {
         ctx.globalAlpha = 0.3;
     }
     if (w && h && src.width && src.height) {
@@ -7270,7 +7270,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
             Math.floor(yOffset / scale)
         );
     }
-    if (this.isCorpse) {
+    if (this.isCorpse && !noCorpse) {
         ctx.restore();
         xOut('white', 0.8, 6);
         xOut('black', 0.8, 1);

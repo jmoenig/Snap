@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-February-27';
+modules.gui = '2021-March-02';
 
 // Declarations
 
@@ -234,6 +234,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.currentTab = 'scripts';
     this.projectName = '';
     this.projectNotes = '';
+
+    this.trash = []; // deleted sprites
 
     // logoURL is disabled because the image data is hard-copied
     // to avoid tainting the world canvas
@@ -3071,6 +3073,9 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
 
     this.selectSprite(this.currentSprite);
     this.recordUnsavedChanges();
+
+    // remember the deleted sprite so it can be recovered again later
+    this.trash.push(sprite);
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
@@ -3968,6 +3973,11 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select a sound from the media library'
     );
 
+    if (this.trash.length) {
+        menu.addLine();
+        menu.addItem('Undelete...', 'undeleteSprites');
+    }
+
     menu.popup(world, pos);
 };
 
@@ -4228,6 +4238,41 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         dialog.corner,
         dialog.corner
     );
+};
+
+IDE_Morph.prototype.undeleteSprites = function () {
+    // pop up a menu showing deleted sprites that can be recovered
+    // by clicking on them
+    var menu = new MenuMorph(this.undelete, 'Undelete', this),
+        pos = this.controlBar.projectButton.bottomLeft();
+
+    this.trash.forEach(sprite =>
+        menu.addItem(
+            [
+                sprite.thumbnail(new Point(24, 24), null, true), // no corpse
+                sprite.name,
+            ],
+            sprite
+        )
+    );
+    menu.popup(this.world(), pos);
+};
+
+IDE_Morph.prototype.undelete = function (aSprite) {
+    var rnd = Process.prototype.reportBasicRandom;
+    aSprite.isCorpse = false;
+    aSprite.version = Date.now();
+    aSprite.name = this.newSpriteName(aSprite.name);
+    aSprite.setCenter(this.stage.center());
+    this.stage.add(aSprite);
+    aSprite.setXPosition(rnd.call(this, -100, 100));
+    aSprite.setYPosition(rnd.call(this, -100, 100));
+    aSprite.fixLayout();
+    aSprite.rerender();
+    this.sprites.add(aSprite);
+    this.corral.addSprite(aSprite);
+    this.selectSprite(aSprite);
+    this.trash = this.trash.filter(sprite => sprite.isCorpse);
 };
 
 // IDE_Morph menu actions

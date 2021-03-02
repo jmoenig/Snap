@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **New Features:**
+    * undelete sprites
 * **Notable Changes:**
     * optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
     * custom block label parts inside the prototype (in the block editor) are now displayed the same as in block instances
@@ -12,6 +14,7 @@
 ### 2021-03-02
 * threads: optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
 * threads: optimized special cases for compiled version of COMBINE
+* gui, objects: undelete sprites 
 
 ### 2021-03-01
 * byob: improved layout and rendering of (+) buttons in custom block prototypes
