@@ -15,6 +15,7 @@
 
 ### 2021-03-03
 * symbols: added "trash" symbol
+* symbols: added "trashFull" symbol
 
 ### 2021-03-02
 * threads: optimized special cases for COMBINE (sum, product, min, max) by up to 34 x

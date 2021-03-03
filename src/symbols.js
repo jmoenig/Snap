@@ -144,7 +144,8 @@ SymbolMorph.prototype.names = [
     'list',
     'flipVertical',
     'flipHorizontal',
-    'trash'
+    'trash',
+    'trashFull'
 ];
 
 // SymbolMorph instance creation:
@@ -478,6 +479,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'trash':
         this.renderSymbolTrash(ctx, aColor);
+        break;
+    case 'trashFull':
+        this.renderSymbolTrashFull(ctx, aColor);
         break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
@@ -2325,6 +2329,59 @@ SymbolMorph.prototype.renderSymbolTrash = function (ctx, color) {
     ctx.stroke();
 };
 
+SymbolMorph.prototype.renderSymbolTrashFull = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 5.5);
+        ctx.arc(x, step * 5.5, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 5.5);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 4);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 4);
+    ctx.lineTo(step, step * 4);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // document
+    ctx.beginPath();
+    ctx.moveTo(step * 2, 0);
+    ctx.lineTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 8, step * 3.5);
+    ctx.lineTo(step * 2, step * 3.5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = color.darker(25).toString();
+    ctx.beginPath();
+    ctx.moveTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 6, step * 2);
+    ctx.closePath();
+    ctx.fill();
+};
 
 /*
 // register examples with the World demo menu
