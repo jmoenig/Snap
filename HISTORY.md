@@ -13,6 +13,9 @@
 * **Notable Fixes:**
     * correct identities when combining the items of an empty list with + /  * / min / max
 
+### 2021-03-03
+* symbols: added "trash" symbol
+
 ### 2021-03-02
 * threads: optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
 * threads: optimized special cases for compiled version of COMBINE

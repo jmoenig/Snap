@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-October-07';
+modules.symbols = '2021-March-03';
 
 var SymbolMorph;
 
@@ -143,7 +143,8 @@ SymbolMorph.prototype.names = [
     'globeBig',
     'list',
     'flipVertical',
-    'flipHorizontal'
+    'flipHorizontal',
+    'trash'
 ];
 
 // SymbolMorph instance creation:
@@ -474,6 +475,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'flipHorizontal':
         this.renderSymbolFlipHorizontal(ctx, aColor);
+        break;
+    case 'trash':
+        this.renderSymbolTrash(ctx, aColor);
         break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
@@ -2258,12 +2262,67 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
-    };
+};
     
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
     ctx.translate(0, this.size);
     ctx.rotate(radians(-90));
     this.renderSymbolFlipHorizontal(ctx, color);
+};
+
+SymbolMorph.prototype.renderSymbolTrash = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 4);
+        ctx.arc(x, step * 4, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 4);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 2.5);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 2.5);
+    ctx.lineTo(step, step * 2.5);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // the lid
+    ctx.lineWidth = step;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = step;
+    ctx.beginPath();
+    ctx.moveTo(step / 2, step * 1.5);
+    ctx.lineTo(step * 9.5, step * 1.5);
+    ctx.stroke();
+
+    // the handle on the lid
+    ctx.lineWidth = step / 2;
+    ctx.beginPath();
+    ctx.moveTo(step * 3, step * 1.5);
+    ctx.lineTo(step * 4, step * 0.25);
+    ctx.lineTo(step * 6, step * 0.25);
+    ctx.lineTo(step * 7, step * 1.5);
+    ctx.stroke();
 };
 
 
