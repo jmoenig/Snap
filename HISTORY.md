@@ -16,6 +16,7 @@
 ### 2021-03-03
 * gui: added trash button for undeleting sprites
 * gui: accept drops of sprites and sprite-icons in trash button
+* gui: animate undeleted sprites to glide back onstage
 
 ### 2021-03-03
 * symbols: added "trash" symbol

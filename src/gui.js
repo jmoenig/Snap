@@ -4029,7 +4029,7 @@ IDE_Morph.prototype.projectMenu = function () {
         menu.addItem(
             'Undelete...',
             () => this.undeleteSprites(
-                this.controlBar.projectButton.bottomLeft() // +++
+                this.controlBar.projectButton.bottomLeft()
             )
         );
     }
@@ -4299,7 +4299,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 IDE_Morph.prototype.undeleteSprites = function (pos) {
     // pop up a menu showing deleted sprites that can be recovered
     // by clicking on them
-    var menu = new MenuMorph(this.undelete, null, this);
+    var menu = new MenuMorph(sprite => this.undelete(sprite, pos), null, this);
         pos = pos || this.corralBar.bottomRight();
 
     this.trash.forEach(sprite =>
@@ -4314,22 +4314,30 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
     menu.popup(this.world(), pos);
 };
 
-IDE_Morph.prototype.undelete = function (aSprite) {
-    // +++ to do: animate (from trash can or from palette => from menu)
+IDE_Morph.prototype.undelete = function (aSprite, pos) {
     var rnd = Process.prototype.reportBasicRandom;
-    aSprite.isCorpse = false;
-    aSprite.version = Date.now();
-    aSprite.name = this.newSpriteName(aSprite.name);
-    aSprite.setCenter(this.stage.center());
-    this.stage.add(aSprite);
-    aSprite.setXPosition(rnd.call(this, -100, 100));
-    aSprite.setYPosition(rnd.call(this, -100, 100));
-    aSprite.fixLayout();
-    aSprite.rerender();
-    this.sprites.add(aSprite);
-    this.corral.addSprite(aSprite);
-    this.selectSprite(aSprite);
-    this.trash = this.trash.filter(sprite => sprite.isCorpse);
+
+    aSprite.setCenter(pos);
+    this.world().add(aSprite);
+    aSprite.glideTo(
+        this.stage.center().subtract(aSprite.extent().divideBy(2)),
+        this.isAnimating ? 100 : 0,
+        null, // easing
+        () => {
+            aSprite.isCorpse = false;
+            aSprite.version = Date.now();
+            aSprite.name = this.newSpriteName(aSprite.name);
+            this.stage.add(aSprite);
+            aSprite.setXPosition(rnd.call(this, -50, 50));
+            aSprite.setYPosition(rnd.call(this, -50, 59));
+            aSprite.fixLayout();
+            aSprite.rerender();
+            this.sprites.add(aSprite);
+            this.corral.addSprite(aSprite);
+            this.selectSprite(aSprite);
+            this.trash = this.trash.filter(sprite => sprite.isCorpse);
+        }
+    );
 };
 
 // IDE_Morph menu actions
