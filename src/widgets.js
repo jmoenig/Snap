@@ -2538,6 +2538,10 @@ DialogBoxMorph.prototype.fixLayout = function () {
     }
 
     if (this.label) {
+        this.bounds.setWidth(Math.max(
+            this.width(),
+            this.label.width() + this.padding * 2,
+        ));
         this.label.setCenter(this.center());
         this.label.setTop(this.top() + (th - this.label.height()) / 2);
     }
