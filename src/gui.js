@@ -1845,6 +1845,18 @@ IDE_Morph.prototype.createCorralBar = function () {
     trashbutton.setRight(this.corralBar.right() - padding);
     this.corralBar.add(trashbutton);
 
+    trashbutton.wantsDropOf = (morph) =>
+        morph instanceof SpriteMorph || morph instanceof SpriteIconMorph;
+
+    trashbutton.reactToDropOf = (droppedMorph) => {
+        if (droppedMorph instanceof SpriteMorph) {
+            this.removeSprite(droppedMorph);
+        } else if (droppedMorph instanceof SpriteIconMorph) {
+            droppedMorph.destroy();
+            this.removeSprite(droppedMorph.object);
+        }
+    };
+
     this.corralBar.fixLayout = function () {
         function updateDisplayOf(button) {
             if (button && button.right() > trashbutton.left() - padding) {
