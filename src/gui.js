@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-02';
+modules.gui = '2021-March-04';
 
 // Declarations
 
@@ -1720,6 +1720,8 @@ IDE_Morph.prototype.createCorralBar = function () {
         newbutton,
         paintbutton,
         cambutton,
+        trashbutton,
+        myself = this,
         colors = MorphicPreferences.isFlat ? this.tabColors
         : [
             this.groupColor,
@@ -1734,6 +1736,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
+    this.corralBar.setWidth(this.stage.width());
     this.add(this.corralBar);
 
     // new sprite button
@@ -1819,6 +1822,42 @@ IDE_Morph.prototype.createCorralBar = function () {
             }
         );
     }
+
+    // trash button
+    trashbutton = new PushButtonMorph(
+        this,
+        "undeleteSprites",
+        new SymbolMorph("trash", 18)
+    );
+    trashbutton.corner = 12;
+    trashbutton.color = colors[0];
+    trashbutton.highlightColor = colors[1];
+    trashbutton.pressColor = colors[2];
+    trashbutton.labelMinExtent = new Point(36, 18);
+    trashbutton.padding = 0;
+    trashbutton.labelShadowOffset = new Point(-1, -1);
+    trashbutton.labelShadowColor = colors[1];
+    trashbutton.labelColor = this.buttonLabelColor;
+    trashbutton.contrast = this.buttonContrast;
+    // trashbutton.hint = "bring back deleted sprites";
+    trashbutton.fixLayout();
+    trashbutton.setCenter(this.corralBar.center());
+    trashbutton.setRight(this.corralBar.right() - padding);
+    this.corralBar.add(trashbutton);
+
+    this.corralBar.fixLayout = function () {
+        function updateDisplayOf(button) {
+            if (button && button.right() > trashbutton.left() - padding) {
+                button.hide();
+            } else {
+                button.show();
+            }
+        }
+        this.setWidth(myself.stage.width());
+        trashbutton.setRight(this.right() - padding);
+        updateDisplayOf(cambutton);
+        updateDisplayOf(paintbutton);
+    };
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -3975,7 +4014,12 @@ IDE_Morph.prototype.projectMenu = function () {
 
     if (this.trash.length) {
         menu.addLine();
-        menu.addItem('Undelete...', 'undeleteSprites');
+        menu.addItem(
+            'Undelete...',
+            () => this.undeleteSprites(
+                this.controlBar.projectButton.bottomLeft() // +++
+            )
+        );
     }
 
     menu.popup(world, pos);
@@ -4240,11 +4284,11 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     );
 };
 
-IDE_Morph.prototype.undeleteSprites = function () {
+IDE_Morph.prototype.undeleteSprites = function (pos) {
     // pop up a menu showing deleted sprites that can be recovered
     // by clicking on them
-    var menu = new MenuMorph(this.undelete, 'Undelete', this),
-        pos = this.controlBar.projectButton.bottomLeft();
+    var menu = new MenuMorph(this.undelete, null, this);
+        pos = pos || this.corralBar.bottomRight();
 
     this.trash.forEach(sprite =>
         menu.addItem(
@@ -4259,6 +4303,7 @@ IDE_Morph.prototype.undeleteSprites = function () {
 };
 
 IDE_Morph.prototype.undelete = function (aSprite) {
+    // +++ to do: animate (from trash can or from palette => from menu)
     var rnd = Process.prototype.reportBasicRandom;
     aSprite.isCorpse = false;
     aSprite.version = Date.now();
@@ -4540,6 +4585,7 @@ IDE_Morph.prototype.newProject = function () {
     this.hasUnsavedEdits = false;
     this.setProjectName('');
     this.projectNotes = '';
+    this.trash = [];
     this.createStage();
     this.add(this.stage);
     this.createCorral();
@@ -5026,6 +5072,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableSublistIDs = false;
     StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
+    this.trash = [];
     this.hasUnsavedEdits = false;
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -5067,6 +5114,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableSublistIDs = false;
     StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
+    this.trash = [];
     this.hasUnsavedEdits = false;
     if (Process.prototype.isCatchingErrors) {
         try {

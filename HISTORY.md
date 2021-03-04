@@ -14,6 +14,9 @@
     * correct identities when combining the items of an empty list with + /  * / min / max
 
 ### 2021-03-03
+* gui: added trash button for undeleting sprites
+
+### 2021-03-03
 * symbols: added "trash" symbol
 * symbols: added "trashFull" symbol
 
