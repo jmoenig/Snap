@@ -3,6 +3,21 @@
    world, Services, BLACK*/
 // Extensions to the Snap blocks
 
+function sortDict(dict) {
+    var keys = Object.keys(dict).sort(),
+        sortedDict = {};
+
+    for (var i = 0; i < keys.length; i++) {
+        if (dict[keys[i]] instanceof Object && !Array.isArray(dict[keys[i]])) {
+            sortedDict[keys[i]] = sortDict(dict[keys[i]]);
+        } else {
+            sortedDict[keys[i]] = dict[keys[i]];
+        }
+    }
+
+    return sortedDict;
+}
+
 
 // support for help dialogbox on service blocks
 BlockMorph.prototype._showHelp = BlockMorph.prototype.showHelp;
@@ -259,21 +274,6 @@ InputSlotMorph.prototype.serviceNames = async function () {
         subMenu,
         name;
 
-    function sortDict(dict) {
-        var keys = Object.keys(dict).sort(),
-            sortedDict = {};
-
-        for (var i = 0; i < keys.length; i++) {
-            if (dict[keys[i]] instanceof Object && !Array.isArray(dict[keys[i]])) {
-                sortedDict[keys[i]] = sortDict(dict[keys[i]]);
-            } else {
-                sortedDict[keys[i]] = dict[keys[i]];
-            }
-        }
-
-        return sortedDict;
-    }
-
     for (var i = services.length; i--;) {
         name = services[i].name;
         const url = services[i].url;
@@ -378,10 +378,20 @@ RPCInputSlotMorph.prototype.getServiceMetadata = function () {
 
 // sets this.fieldsFor and returns the method signature dict
 RPCInputSlotMorph.prototype.methodSignature = function () {
-    var actionNames,
+    var rpcNames,
         block,
         metadata,
         dict = {};
+
+    function addRPCMenuItem(name, categories) {
+        const subMenu = categories.reduce((subMenu, category) => {
+            if (!subMenu[category]) {
+                subMenu[category] = {};
+            }
+            return subMenu[category];
+        }, dict);
+        subMenu[name] = name;
+    }
 
     const service = this.getServiceName();
     if (service) {
@@ -389,21 +399,27 @@ RPCInputSlotMorph.prototype.methodSignature = function () {
         try {
             metadata = this.getServiceMetadata();
             this.fieldsFor = metadata.rpcs;
-            actionNames = Object.keys(this.fieldsFor);
+            rpcNames = Object.keys(this.fieldsFor);
             this.isCurrentRPCSupported = true;
         } catch (e) {
             this.isCurrentRPCSupported = false;
             block = this.parentThatIsA(BlockMorph);
             block.showBubble(localize('Service "' + service + '" is not available'));
-            actionNames = [];
+            rpcNames = [];
         }
 
-        for (var i = actionNames.length; i--;) {
-            var aName = actionNames[i];
-            if (!this.fieldsFor[aName].deprecated) dict[aName] = aName;
-        }
+        rpcNames.forEach(name => {
+            const {deprecated, categories=[]} = this.fieldsFor[name];
+            if (!deprecated) {
+                if (categories.length) {
+                    categories.forEach(categoryList => addRPCMenuItem(name, categoryList));
+                } else {
+                    addRPCMenuItem(name, []);
+                }
+            }
+        });
     }
-    return dict;
+    return sortDict(dict);
 };
 
 RPCInputSlotMorph.prototype.evaluate = function() {
