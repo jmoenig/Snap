@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-04';
+modules.gui = '2021-March-05';
 
 // Declarations
 
@@ -4299,8 +4299,16 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 IDE_Morph.prototype.undeleteSprites = function (pos) {
     // pop up a menu showing deleted sprites that can be recovered
     // by clicking on them
+
     var menu = new MenuMorph(sprite => this.undelete(sprite, pos), null, this);
         pos = pos || this.corralBar.bottomRight();
+
+    /*
+    if (!this.trash.length) {
+        IDE_Morph.uber.inform.call(this, 'trash is empty');
+        return;
+    }
+    */
 
     this.trash.forEach(sprite =>
         menu.addItem(
