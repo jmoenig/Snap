@@ -13,11 +13,14 @@
 * **Notable Fixes:**
     * displaying a table containing the stage no longer crashes the page
     * correct identities when combining the items of an empty list with + /  * / min / max
+* **Translation Updates:**
+    * German
 
 ### 2021-03-05
 * tables, objects: displaying a table containing the stage no longer crashes the page
 * gui: added "trash is empty" information, commented out for now
 * gui: changed gui strings for undelete feature
+* updated German translation
 
 ### 2021-03-04
 * gui: added trash button for undeleting sprites

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-02-15', // this, too, will appear in the Translators tab
+        '2021-03-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -947,6 +947,12 @@ SnapTranslator.dict.de = {
         'Kostüm aus der Medienbibliothek auswählen',
     'Select a sound from the media library':
         'Klang aus der Medienbibliothek auswählen',
+    'Undelete sprites...':
+        'Objekte wiederherstellen...',
+    'Bring back deleted sprites':
+        'Gelöschte Objekte zurückholen',
+    'trash is empty':
+        'der Mülleimer ist leer',
 
     //Libraries
     'Import library':
