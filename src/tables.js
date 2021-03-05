@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
 ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows*/
 
-modules.tables = '2020-October-06';
+modules.tables = '2021-March-05';
 
 var Table;
 var TableCellMorph;
@@ -381,7 +381,7 @@ TableCellMorph.prototype.render = function (ctx) {
 TableCellMorph.prototype.dataRepresentation = function (dta) {
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
-            return dta.thumbnail(new Point(40, 40));
+            return dta.thumbnail(new Point(40, 40), null, true); // no watchers
         } else {
             return dta.fullImage();
         }

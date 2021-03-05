@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-March-02';
+modules.objects = '2021-March-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -9080,18 +9080,19 @@ StageMorph.prototype.fullImage = Morph.prototype.fullImage;
 
 // StageMorph thumbnail
 
-StageMorph.prototype.thumbnail = function (extentPoint, recycleMe) {
+StageMorph.prototype.thumbnail = function (extentPoint, recycleMe, noWatchers) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
     // a "recycleMe canvas can be passed for re-use
-    return this.fancyThumbnail(extentPoint, null, false, recycleMe);
+    return this.fancyThumbnail(extentPoint, null, false, recycleMe, noWatchers);
 };
 
 StageMorph.prototype.fancyThumbnail = function (
     extentPoint,
     excludedSprite,
     nonRetina,
-    recycleMe
+    recycleMe,
+    noWatchers
 ) {
     var src = this.getImage(),
         scale = Math.min(
@@ -9130,7 +9131,7 @@ StageMorph.prototype.fancyThumbnail = function (
         ctx.restore();
     }
     this.children.forEach(morph => {
-        if (morph.isVisible && (morph !== excludedSprite)) {
+        if ((isSnapObject(morph) || !noWatchers) && morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();
             fimg = morph.fullImage();
             if (fimg.width && fimg.height) {

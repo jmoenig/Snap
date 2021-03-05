@@ -11,9 +11,13 @@
     * changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
     * improved layout and rendering of (+) buttons in custom block prototypes
 * **Notable Fixes:**
+    * displaying a table containing the stage no longer crashes the page
     * correct identities when combining the items of an empty list with + /  * / min / max
 
-### 2021-03-03
+### 2021-03-05
+* tables, objects: displaying a table containing the stage no longer crashes the page
+
+### 2021-03-04
 * gui: added trash button for undeleting sprites
 * gui: accept drops of sprites and sprite-icons in trash button
 * gui: animate undeleted sprites to glide back onstage
