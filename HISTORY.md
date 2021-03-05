@@ -17,6 +17,7 @@
 ### 2021-03-05
 * tables, objects: displaying a table containing the stage no longer crashes the page
 * gui: added "trash is empty" information, commented out for now
+* gui: changed gui strings for undelete feature
 
 ### 2021-03-04
 * gui: added trash button for undeleting sprites

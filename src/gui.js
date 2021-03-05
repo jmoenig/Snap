@@ -4027,10 +4027,11 @@ IDE_Morph.prototype.projectMenu = function () {
     if (this.trash.length) {
         menu.addLine();
         menu.addItem(
-            'Undelete...',
+            'Undelete sprites...',
             () => this.undeleteSprites(
                 this.controlBar.projectButton.bottomLeft()
-            )
+            ),
+            'Bring back deleted sprites'
         );
     }
 
@@ -4303,13 +4304,10 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
     var menu = new MenuMorph(sprite => this.undelete(sprite, pos), null, this);
         pos = pos || this.corralBar.bottomRight();
 
-    /*
     if (!this.trash.length) {
-        IDE_Morph.uber.inform.call(this, 'trash is empty');
+        this.showMessage('trash is empty');
         return;
     }
-    */
-
     this.trash.forEach(sprite =>
         menu.addItem(
             [
