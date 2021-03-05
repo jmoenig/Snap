@@ -77,7 +77,7 @@ Yes, this is a 22-step process.  :-(
 
 5.  Save again.
 
-6.  Scroll through the entire manual, looking for bad page breaks, mislabeled headings, and pictures out of place.  (Some old pictures that are run in with text were inserted into their pages by putting a bunch of spaces in the text, setting the picture's "Wrap Text" to "None," and manually positioning the picture.  These pictures will be out of place if the text on that page changes.  To fix them, move the picture out of the way; delete the extra spaces (keeping one before and/or one after where the picture belongs, depending on nearby punctuation; set the pictures "Wrap Text" to "Tight"; then position the picture where it belongs.  The last little bit of positioning should be done with the cursor arrow keys rather than with the mouse.  Finally, go to
+6.  Scroll through the entire manual, looking for bad page breaks, mislabeled headings, and pictures out of place.  (Some old pictures that are run in with text were inserted into their pages by putting a bunch of spaces in the text, setting the picture's "Wrap Text" to "None," and manually positioning the picture.  These pictures will be out of place if the text on that page changes.  To fix them, move the picture out of the way; delete the extra spaces (keeping one before and/or one after where the picture belongs, depending on nearby punctuation; set the picture's "Wrap Text" to "Tight"; then position the picture where it belongs.  The last little bit of positioning should be done with the cursor arrow keys rather than with the mouse.  Finally, go to
 	Format Picture > Layout > Advanced > Text Wrapping
 and change the left distance to 0 and the right distance to 0.6 inches.)
 
