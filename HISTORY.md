@@ -6,6 +6,7 @@
     * undelete sprites
 * **Notable Changes:**
     * optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
+    *  rebind (relabel) recursive calls when duplicating a custom block definition 
     * custom block label parts inside the prototype (in the block editor) are now displayed the same as in block instances
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
     * changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
@@ -21,6 +22,7 @@
 * gui: added "trash is empty" information, commented out for now
 * gui: changed gui strings for undelete feature
 * updated German translation
+* byob: rebind (relabel) recursive calls when duplicating a custom block definition 
 
 ### 2021-03-04
 * gui: added trash button for undeleting sprites

@@ -106,7 +106,7 @@ WatcherMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-March-01';
+modules.byob = '2021-March-05';
 
 // Declarations
 
@@ -1255,8 +1255,18 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
         dup = def.copyAndBindTo(rcvr),
         spec = dup.spec,
+        exp = dup.body.expression,
         count = 1;
-    
+
+    function rebindRecursiveCalls(topBlock) {
+        topBlock.forAllChildren(morph => {
+            if (morph.definition === def) {
+                morph.definition = dup;
+                morph.refresh();
+            }
+        });
+    }
+
     if (this.isGlobal) {
         ide.stage.globalBlocks.push(dup);
     } else {
@@ -1268,6 +1278,13 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
         count += 1;
         dup.spec = spec + ' (' + count + ')';
     }
+
+    // rebind recursive calls
+    dup.scripts.forEach(script => rebindRecursiveCalls(script));
+    if (exp instanceof BlockMorph) {
+        rebindRecursiveCalls(exp);
+    }
+ 
 
     ide.flushPaletteCache();
     ide.refreshPalette();
