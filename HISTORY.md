@@ -11,11 +11,17 @@
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
     * changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
     * improved layout and rendering of (+) buttons in custom block prototypes
+    * updated libraries: list utilities, variadic reporters, iteration-composition, colors and APL, thanks, Brian!
 * **Notable Fixes:**
     * displaying a table containing the stage no longer crashes the page
     * correct identities when combining the items of an empty list with + /  * / min / max
+* **Documentation Updates:**
+    * updated manual, thanks Brian!
 * **Translation Updates:**
     * German
+
+### 2021-03-06
+* updated libraries and manual, thanks, Brian!
 
 ### 2021-03-05
 * tables, objects: displaying a table containing the stage no longer crashes the page
