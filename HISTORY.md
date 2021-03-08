@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.7.0
 * **New Features:**
     * undelete sprites
 * **Notable Changes:**
@@ -19,6 +20,9 @@
     * updated manual, thanks Brian!
 * **Translation Updates:**
     * German
+
+### 2021-03-08
+* prepared minor release
 
 ### 2021-03-06
 * updated libraries and manual, thanks, Brian!
