@@ -76,7 +76,7 @@ Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,  nop,
 TextMorph, contains, degrees, detect, newCanvas, radians, CursorMorph,
 FrameMorph, MenuMorph, Morph, invoke, MorphicPreferences, WHITE,
 PenMorph, Point, Rectangle, ScrollFrameMorph, SliderMorph,
-StringMorph, TextMorph, contains, copy, degrees, detect,
+StringMorph, TextMorph, contains, copy, degrees, detect, MessageCreatorMorph
 isString, newCanvas, nop, radians, modules, IDE_Morph, SnapActions
 VariableDialogMorph, Context, List, RingMorph, VideoMotion,
 SpeechBubbleMorph, InputSlotMorph, isNil, TableDialogMorph,
@@ -2217,17 +2217,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     }
 
     function addMessageType(desc) {
-        var stage = myself.parentThatIsA(StageMorph);
-
-        desc.fields = desc.fields.filter(function(field) {
-            return !!field;
-        });
+        const stage = myself.parentThatIsA(StageMorph);
+        const name = desc.name.trim();
+        const fields = desc.fields
+            .map(field => field.trim())
+            .filter(field => !!field);
 
         // Check that the message type doesn't already exist
-        if (stage.messageTypes.getMsgType(desc.name)) {
+        if (stage.messageTypes.getMsgType(name)) {
             myself.inform('that name is already in use');
         } else {
-            SnapActions.addMessageType(desc.name, desc.fields);
+            SnapActions.addMessageType(name, fields);
         }
     }
 
@@ -8565,17 +8565,17 @@ StageMorph.prototype.blockTemplates = function (category) {
     }
 
     function addMessageType(desc) {
-        var stage = myself.parentThatIsA(StageMorph);
-
-        desc.fields = desc.fields.filter(function(field) {
-            return !!field;
-        });
+        const stage = myself.parentThatIsA(StageMorph);
+        const name = desc.name.trim();
+        const fields = desc.fields
+            .map(field => field.trim())
+            .filter(field => !!field);
 
         // Check that the message type doesn't already exist
-        if (stage.messageTypes.getMsgType(desc.name)) {
+        if (stage.messageTypes.getMsgType(name)) {
             myself.inform('that name is already in use');
         } else {
-            SnapActions.addMessageType(desc.name, desc.fields);
+            SnapActions.addMessageType(name, fields);
         }
     }
 
