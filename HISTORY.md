@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-09
+* new dev version
+
 ## 6.7.0
 * **New Features:**
     * undelete sprites
