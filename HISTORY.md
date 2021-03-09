@@ -3,11 +3,13 @@
 ## in development:
 
 * **Notable Fixes:**
+    * fixed recursive calls in PIPE
     * the "length of list" block no longer appears twice in search results
 
 ### 2021-03-09
 * new dev version
 * objects: fixed #2797
+* fixed recursive calls in PIPE 
 
 ## 6.7.0
 * **New Features:**
