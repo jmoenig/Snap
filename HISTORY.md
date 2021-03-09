@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.7.1
 * **Notable Fixes:**
     * fixed recursive calls in PIPE
     * the "length of list" block no longer appears twice in search results
@@ -14,6 +15,7 @@
 * fixed recursive calls in PIPE
 * lists: prevent usage of lists as dictionaries
 * store: fixed #2798
+* prepared patch
 
 ## 6.7.0
 * **New Features:**
