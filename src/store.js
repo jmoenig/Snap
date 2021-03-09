@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-January-26';
+modules.store = '2021-March-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -2229,7 +2229,7 @@ ColorSlotMorph.prototype.toXML = function (serializer) {
 List.prototype.toXML = function (serializer, mediaContext) {
     // mediaContext is an optional name-stub
     // when collecting media into a separate module
-    var xml, value, item;
+    var xml, value;
 
     if (this.hasOnlyAtomicData() &&
             (!this.isLinked || !StageMorph.prototype.enableSublistIDs)) {
@@ -2243,9 +2243,9 @@ List.prototype.toXML = function (serializer, mediaContext) {
     }
 
     if (this.isLinked) {
-        xml = '<list linked="linked" ~>';
         if (StageMorph.prototype.enableSublistIDs) {
             // recursively nest tails:
+            xml = '<list linked="linked" ~>';
             value = this.first;
             if (!isNil(value)) {
                 xml += serializer.format(
@@ -2263,24 +2263,21 @@ List.prototype.toXML = function (serializer, mediaContext) {
             }
             return xml + '</list>';
         }
-        // else sequentially serialize tails:
-        item = this;
-        do {
-            value = item.first;
-            if (!isNil(value)) {
-                xml += serializer.format(
+        // else shallow copy as array and mark as linked:
+        return serializer.format(
+            '<list linked="linked" ~>%</list>',
+            this.itemsArray().reduce((xml, item) => {
+                return xml + serializer.format(
                     '<item>%</item>',
-                    typeof value === 'object' ?
-                            (isSnapObject(value) ? ''
-                                    : serializer.store(value, mediaContext))
-                            : typeof value === 'boolean' ?
-                                    serializer.format('<bool>$</bool>', value)
-                                    : serializer.format('<l>$</l>', value)
+                    typeof item === 'object' ?
+                            (isSnapObject(item) ? ''
+                                    : serializer.store(item, mediaContext))
+                            : typeof item === 'boolean' ?
+                                    serializer.format('<bool>$</bool>', item)
+                                    : serializer.format('<l>$</l>', item)
                 );
-            }
-            item = item.rest;
-        } while (!isNil(item));
-        return xml + '</list>';
+            }, '')
+        );
     }
     // dynamic array:
     return serializer.format(
