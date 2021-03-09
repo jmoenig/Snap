@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * the "length of list" block no longer appears twice in search results
+
 ### 2021-03-09
 * new dev version
+* objects: fixed #2797
 
 ## 6.7.0
 * **New Features:**

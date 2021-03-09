@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-March-05';
+modules.objects = '2021-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1325,6 +1325,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'all but first of %l'
         },
         reportListLength: { // deprecated as of v6.6
+            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'length of %l'
