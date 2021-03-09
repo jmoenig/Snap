@@ -13,7 +13,7 @@
 * objects: fixed #2797
 * fixed recursive calls in PIPE
 * lists: prevent usage of lists as dictionaries
-* store: fixed ##2798
+* store: fixed #2798
 
 ## 6.7.0
 * **New Features:**
