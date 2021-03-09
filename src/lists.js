@@ -63,7 +63,7 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-February-20';
+modules.lists = '2021-March-09';
 
 var List;
 var ListWatcherMorph;
@@ -192,7 +192,7 @@ List.prototype.add = function (element, index) {
     insert the element before the given slot index,
     if no index is specifed, append the element
 */
-    var idx = index || this.length() + 1,
+    var idx = Math.round(+index) || this.length() + 1,
         obj = isNil(element) ? null : element;
 
     this.becomeArray();
@@ -202,19 +202,23 @@ List.prototype.add = function (element, index) {
 
 List.prototype.put = function (element, index) {
     // exchange the element at the given slot for another
-    var data = element === 0 ? 0
+    var idx = Math.round(+index) || 0,
+        data = element === 0 ? 0
             : element === false ? false
                     : element || null;
 
     this.becomeArray();
-    this.contents[index - 1] = data;
+    if (idx < 1 || idx > this.contents.length) {
+        return;
+    }
+    this.contents[idx - 1] = data;
     this.changed();
 };
 
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
     this.becomeArray();
-    this.contents.splice(index - 1, 1);
+    this.contents.splice(Math.round(+index || 0) - 1, 1);
     this.changed();
 };
 
@@ -256,7 +260,9 @@ List.prototype.length = function () {
 };
 
 List.prototype.at = function (index) {
-    var value, idx = +index, pair = this;
+    var value,
+        idx = Math.round(+index || 0),
+        pair = this;
     while (pair.isLinked) {
         if (idx > 1) {
             pair = pair.rest;

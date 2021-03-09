@@ -5,11 +5,13 @@
 * **Notable Fixes:**
     * fixed recursive calls in PIPE
     * the "length of list" block no longer appears twice in search results
+    * prevent inserting items at non-integer / out-of-bounds indices
 
 ### 2021-03-09
 * new dev version
 * objects: fixed #2797
-* fixed recursive calls in PIPE 
+* fixed recursive calls in PIPE
+* lists: prevent usage of lists as dictionaries
 
 ## 6.7.0
 * **New Features:**
