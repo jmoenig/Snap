@@ -5356,9 +5356,7 @@ IDE_Morph.prototype.openProject = function (name) {
 };
 
 IDE_Morph.prototype.switchToScene = function (scene) {
-    var stage = this.stage,
-        sprites = [],
-        sprite;
+    var sprites = [];
     if (!scene || !scene.stage) {
         return;
     }
@@ -5370,23 +5368,17 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     if (this.globalVariables) {
         this.globalVariables = scene.globalVariables;
     }
-    if (stage) {
-        stage.destroy();
-    }
+    this.stage.destroy();
     this.add(scene.stage);
     this.stage = scene.stage;
     sprites = this.stage.children.filter(
         child => child instanceof SpriteMorph
     );
     sprites.sort((x, y) => x.idx - y.idx);
-
     this.sprites = new List(sprites);
-    sprite = sprites[0] || scene.stage;
-
-    this.stage.fixLayout();
     this.stage.pauseGenericHatBlocks();
     this.createCorral();
-    this.selectSprite(sprite);
+    this.selectSprite(sprites[0] || this.stage);
     this.fixLayout();
     this.world().keyboardFocus = this.stage;
 };
