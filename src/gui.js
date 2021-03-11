@@ -5355,22 +5355,22 @@ IDE_Morph.prototype.openProject = function (name) {
     }
 };
 
-IDE_Morph.prototype.switchToScene = function (scene) {
+IDE_Morph.prototype.switchToScene = function (project) {
     var sprites = [];
-    if (!scene || !scene.stage) {
+    if (!project || !project.stage) {
         return;
     }
     this.siblings().forEach(morph =>
         morph.destroy()
     );
-    this.projectName = scene.name;
-    this.projectNotes = scene.notes || '';
+    this.projectName = project.name;
+    this.projectNotes = project.notes || '';
     if (this.globalVariables) {
-        this.globalVariables = scene.globalVariables;
+        this.globalVariables = project.globalVariables;
     }
     this.stage.destroy();
-    this.add(scene.stage);
-    this.stage = scene.stage;
+    this.add(project.stage);
+    this.stage = project.stage;
     sprites = this.stage.children.filter(
         child => child instanceof SpriteMorph
     );
