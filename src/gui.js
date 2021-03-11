@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-09';
+modules.gui = '2021-March-11';
 
 // Declarations
 
@@ -4353,7 +4353,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 6.7.2 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5102,17 +5102,15 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.hasUnsavedEdits = false;
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.openProject(
-                this.serializer.load(str, this),
-                this
+            this.switchToScene(
+                this.serializer.load(str, this)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.openProject(
-            this.serializer.load(str, this),
-            this
+        this.switchToScene(
+            this.serializer.load(str, this)
         );
     }
     this.stopFastTracking();
@@ -5146,13 +5144,12 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         try {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
-            this.serializer.openProject(
+            this.switchToScene(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
                     this,
                     model.attributes.remixID
-                ),
-                this
+                )
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
@@ -5160,13 +5157,12 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     } else {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
-        this.serializer.openProject(
+        this.switchToScene(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
                 this,
                 model.attributes.remixID
-            ),
-            this
+            )
         );
     }
     this.stopFastTracking();
@@ -5357,6 +5353,42 @@ IDE_Morph.prototype.openProject = function (name) {
         this.openProjectString(str);
         this.setURL('#open:' + str);
     }
+};
+
+IDE_Morph.prototype.switchToScene = function (scene) {
+    var stage = this.stage,
+        sprites = [],
+        sprite;
+    if (!scene || !scene.stage) {
+        return;
+    }
+    this.siblings().forEach(morph =>
+        morph.destroy()
+    );
+    this.projectName = scene.name;
+    this.projectNotes = scene.notes || '';
+    if (this.globalVariables) {
+        this.globalVariables = scene.globalVariables;
+    }
+    if (stage) {
+        stage.destroy();
+    }
+    this.add(scene.stage);
+    this.stage = scene.stage;
+    sprites = this.stage.children.filter(
+        child => child instanceof SpriteMorph
+    );
+    sprites.sort((x, y) => x.idx - y.idx);
+
+    this.sprites = new List(sprites);
+    sprite = sprites[0] || scene.stage;
+
+    this.stage.fixLayout();
+    this.stage.pauseGenericHatBlocks();
+    this.createCorral();
+    this.selectSprite(sprite);
+    this.fixLayout();
+    this.world().keyboardFocus = this.stage;
 };
 
 IDE_Morph.prototype.setURL = function (str) {

@@ -49,19 +49,18 @@
 
 */
 
-/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph,
-WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph,
+/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph, console,
+WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph, Sound,
 CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
-Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
+Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
-localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences, Process,
-SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas, contains*/
+localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
+SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-09';
+modules.store = '2021-March-11';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1615,48 +1614,6 @@ SnapSerializer.prototype.loadColor = function (colorString) {
         parseFloat(c[2]),
         parseFloat(c[3])
     );
-};
-
-SnapSerializer.prototype.openProject = function (project, ide) {
-    var stage = ide.stage,
-        sprites = [],
-        sprite;
-    if (!project || !project.stage) {
-        return;
-    }
-    ide.siblings().forEach(morph =>
-        morph.destroy()
-    );
-    ide.projectName = project.name;
-    ide.projectNotes = project.notes || '';
-    if (ide.globalVariables) {
-        ide.globalVariables = project.globalVariables;
-    }
-    if (stage) {
-        stage.destroy();
-    }
-    ide.add(project.stage);
-    ide.stage = project.stage;
-    sprites = ide.stage.children.filter(
-        child => child instanceof SpriteMorph
-    );
-    sprites.sort((x, y) => x.idx - y.idx);
-
-    ide.sprites = new List(sprites);
-    sprite = sprites[0] || project.stage;
-
-    if (sizeOf(this.mediaDict) > 0) {
-        ide.hasChangedMedia = false;
-        this.mediaDict = {};
-    } else {
-        ide.hasChangedMedia = true;
-    }
-    project.stage.fixLayout();
-    project.stage.pauseGenericHatBlocks();
-    ide.createCorral();
-    ide.selectSprite(sprite);
-    ide.fixLayout();
-    ide.world().keyboardFocus = project.stage;
 };
 
 // SnapSerializer XML-representation of objects:
