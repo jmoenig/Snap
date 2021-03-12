@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-12
+* scenes, gui, store: added scenes class
+
 ### 2021-03-11
 * gui, store: refactor loading a project into the IDE
 

@@ -362,14 +362,13 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         project.notes = model.notes.contents;
     }
     model.globalVariables = model.project.childNamed('variables');
-    project.globalVariables = new VariableFrame();
 
     /* Stage */
 
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
-    project.stage = new StageMorph(project.globalVariables);
     project.stage.remixID = remixID;
+
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,
             'id'
@@ -631,13 +630,11 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     // public - answer a new Array of custom block definitions
     // represented by the given XML String
-    var stage = new StageMorph(),
-        model;
+    var stage, model;
 
     this.scene = new Scene();
-    this.scene.stage = stage;
     this.scene.targetStage = targetStage; // for secondary block def look-up
-
+    stage = this.scene.stage;
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
@@ -661,12 +658,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     // into the current project of the ide
     var model, project;
 
-    this.scene = new Scene();
-    this.scene.globalVariables = ide.globalVariables;
-    this.scene.stage = ide.stage;
-
+    this.scene = new Scene(ide.stage);
     project = this.scene;
-
     project.sprites[project.stage.name] = project.stage;
 
     model = this.parse(xmlString);

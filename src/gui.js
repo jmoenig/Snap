@@ -74,11 +74,12 @@ CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
 BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
-Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
+Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK,
+Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-11';
+modules.gui = '2021-March-12';
 
 // Declarations
 
@@ -227,7 +228,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.source = null;
     this.serializer = new SnapSerializer();
 
-    this.globalVariables = new VariableFrame();
+    this.scene = new Scene();
+    this.globalVariables = this.scene.globalVariables;
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
     this.currentCategory = 'motion';
@@ -5363,11 +5365,10 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     this.siblings().forEach(morph =>
         morph.destroy()
     );
+    this.scene = scene;
     this.projectName = scene.name;
     this.projectNotes = scene.notes || '';
-    if (this.globalVariables) {
-        this.globalVariables = scene.globalVariables;
-    }
+    this.globalVariables = scene.globalVariables;
     this.stage.destroy();
     this.add(scene.stage);
     this.stage = scene.stage;

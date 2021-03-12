@@ -47,7 +47,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global modules*/
+/*global modules, VariableFrame, aStageMorph*/
 
 modules.scenes = '2021-March-12';
 
@@ -60,11 +60,12 @@ modules.scenes = '2021-March-12';
 
 // Scene instance creation:
 
-function Scene() {
+function Scene(aStageMorph) {
     this.name = null;
     this.notes = null;
-    this.globalVariables = null;
-    this.stage = null;
+    this.globalVariables = aStageMorph ?
+        aStageMorph.globalVariables() : new VariableFrame();
+    this.stage = aStageMorph || new StageMorph(this.globalVariables);
 
     // for deserializing - do not persist
     this.sprites = {};
