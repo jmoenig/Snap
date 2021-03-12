@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs morphic.js, xml.js, and most of Snap!'s other modules
+    needs morphic.js, xml.js, scenes.js and most of Snap!'s other modules
 
 
     hierarchy
@@ -56,11 +56,11 @@ Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
-SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains*/
+SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-11';
+modules.store = '2021-March-12';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ function SnapSerializer() {
 // SnapSerializer initialization:
 
 SnapSerializer.prototype.init = function () {
-    this.scene = {};
+    this.scene = new Scene();
     this.objects = {};
     this.mediaDict = {};
 };
@@ -330,7 +330,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
 SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     // private
-    var project = {sprites: {}},
+    var project = new Scene(),
         model,
         nameID;
 
@@ -634,11 +634,10 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     var stage = new StageMorph(),
         model;
 
-    this.scene = {
-        stage: stage,
-        sprites: {},
-        targetStage: targetStage // for secondary custom block def look-up
-    };
+    this.scene = new Scene();
+    this.scene.stage = stage;
+    this.scene.targetStage = targetStage; // for secondary block def look-up
+
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
@@ -652,7 +651,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
-    this.scene = {};
+    this.scene = new Scene();
     this.mediaDict = {};
     return stage.globalBlocks;
 };
@@ -662,11 +661,12 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     // into the current project of the ide
     var model, project;
 
-    project = this.scene = {
-        globalVariables: ide.globalVariables,
-        stage: ide.stage,
-        sprites: {}
-    };
+    this.scene = new Scene();
+    this.scene.globalVariables = ide.globalVariables;
+    this.scene.stage = ide.stage;
+
+    project = this.scene;
+
     project.sprites[project.stage.name] = project.stage;
 
     model = this.parse(xmlString);
@@ -739,7 +739,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     });
 
     this.objects = {};
-    this.scene = {};
+    this.scene = new Scene();
     this.mediaDict = {};
 
     ide.stage.fixLayout();
