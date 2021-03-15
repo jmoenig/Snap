@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
 ### 2021-03-15
 * new dev version
+* Catalan translation update, thanks, Joan!
 
 ## 6.7.1
 * **Notable Fixes:**
