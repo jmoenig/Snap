@@ -3,6 +3,15 @@
 ## in development:
 
 ### 2021-03-15
+* gui: marked methods for scene refactorings
+
+### 2021-03-12
+* scenes, gui, store: added scenes class
+
+### 2021-03-11
+* gui, store: refactor loading a project into the IDE
+
+### 2021-03-09
 * new dev version
 
 ## 6.7.1
