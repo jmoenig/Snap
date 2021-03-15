@@ -2,6 +2,9 @@
 
 ## in development:
 
+## 6.7.2
+* **Notable Changes:**
+    * disabled empty-slot implicit parameter in FOREACH
 * **Notable Fixes:**
     * fixed "transpose" in the APL library, thanks, Brian!
 * **Translation Updates:**
@@ -20,6 +23,8 @@
 * new dev version
 * Catalan translation update, thanks, Joan!
 * lists, apl: fixed "transpose", thanks, Brian!
+* threads: disabled empty-slot implicit parameter in FOREACH
+* prepared patch release
 
 ## 6.7.1
 * **Notable Fixes:**
