@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2020-12-21', // this, too, will appear in the Translators tab
+        '2021-03-14', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -704,8 +704,20 @@ SnapTranslator.dict.ca = {
         'element %idx de %l',
     'all but first of %l':
         '%l sense el primer element',
-    'length of %l':
-        'longitud de %l',
+    '%la of %l':
+        '%la de %l',
+    'rank':
+        'rang',
+    'dimensions':
+        'dimensions',
+    'flatten':
+        'aplanament',
+    'columns':
+        'columnes',
+    'reverse':
+        'revers',
+    'lines':
+        'línies',
     '%l contains %s':
         '%l conté %s',
     'thing':
@@ -740,6 +752,8 @@ SnapTranslator.dict.ca = {
         'element',
     'append %lists':
         'annexa %lists',
+   'reshape %l to %nums':
+        'redimensiona %l a %nums',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
@@ -843,6 +857,12 @@ SnapTranslator.dict.ca = {
         'Llibreries...',
     'Import library':
         'Importa una llibreria',
+    'Undelete sprites...':
+        'Recupera objectes...',
+    'Bring back deleted sprites':
+        'Recupera objectes esborrats',
+    'trash is empty':
+        'la paperera està buida',
 
     // cloud menu
     'Login...':
@@ -1105,6 +1125,8 @@ SnapTranslator.dict.ca = {
         'desfés l\'últim moviment\nde blocs',
     'redrop':
         'refés',
+    'clear undrop queue':
+        'esborra la llista d\'accions desades', 
     'use the keyboard\nto enter blocks':
     	'utilitza el teclat\nper escriure els blocs',
     'scripts pic...':
