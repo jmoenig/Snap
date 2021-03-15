@@ -786,7 +786,7 @@ List.prototype.strideTranspose = function () {
         oldSizes = new List([1]),
         newSizes = new List([1]),
         oldFlat = this.ravel(),
-        newFlat = new List(),
+        newFlat = new List(new Array(oldFlat.length())),
         product = 1,
         i;
 
