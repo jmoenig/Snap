@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-15
+* new dev version
+
 ## 6.7.1
 * **Notable Fixes:**
     * fixed recursive calls in PIPE
