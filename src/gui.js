@@ -79,7 +79,7 @@ Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-12';
+modules.gui = '2021-March-15';
 
 // Declarations
 
@@ -4588,7 +4588,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
     text.edit();
 };
 
-IDE_Morph.prototype.newProject = function () {
+IDE_Morph.prototype.newProject = function () { // +++
     this.source = this.cloud.username ? 'cloud' : null;
     if (this.stage) {
         this.stage.destroy();
@@ -4596,6 +4596,9 @@ IDE_Morph.prototype.newProject = function () {
     if (location.hash.substr(0, 6) !== '#lang:') {
         location.hash = '';
     }
+    // +++ this.switchToScene(new Scene());
+
+
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
@@ -5089,7 +5092,7 @@ IDE_Morph.prototype.openProjectString = function (str, callback) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str) {
+IDE_Morph.prototype.rawOpenProjectString = function (str) { // +++
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     StageMorph.prototype.hiddenPrimitives = {};
@@ -5130,7 +5133,7 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
+IDE_Morph.prototype.rawOpenCloudDataString = function (str) { // +++
     var model;
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
@@ -5357,7 +5360,7 @@ IDE_Morph.prototype.openProject = function (name) {
     }
 };
 
-IDE_Morph.prototype.switchToScene = function (scene) {
+IDE_Morph.prototype.switchToScene = function (scene) { // +++
     var sprites = [];
     if (!scene || !scene.stage) {
         return;

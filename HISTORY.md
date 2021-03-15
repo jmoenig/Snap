@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-15
+* gui: marked methods for scene refactorings
+
 ### 2021-03-12
 * scenes, gui, store: added scenes class
 
