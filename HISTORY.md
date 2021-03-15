@@ -2,12 +2,15 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed "transpose" in the APL library, thanks, Brian!
 * **Translation Updates:**
     * Catalan, thanks, Joan!
 
 ### 2021-03-15
 * new dev version
 * Catalan translation update, thanks, Joan!
+* lists, apl: fixed "transpose", thanks, Brian!
 
 ## 6.7.1
 * **Notable Fixes:**
