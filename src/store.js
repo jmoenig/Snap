@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs morphic.js, xml.js, scenes.js and most of Snap!'s other modules
+    needs morphic.js, xml.js, and most of Snap!'s other modules
 
 
     hierarchy
@@ -49,18 +49,19 @@
 
 */
 
-/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph, console,
-WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph, Sound,
+/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph,
+WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph,
 CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
-Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
+Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
-localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
-SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
+localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences, Process,
+SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
+normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-12';
+modules.store = '2021-March-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -278,7 +279,7 @@ function SnapSerializer() {
 // SnapSerializer initialization:
 
 SnapSerializer.prototype.init = function () {
-    this.scene = new Scene();
+    this.project = {};
     this.objects = {};
     this.mediaDict = {};
 };
@@ -330,11 +331,11 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
 SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     // private
-    var project = new Scene(),
+    var project = {sprites: {}},
         model,
         nameID;
 
-    this.scene = project;
+    this.project = project;
 
     model = {project: xmlNode };
     if (+xmlNode.attributes.version > this.version) {
@@ -362,13 +363,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         project.notes = model.notes.contents;
     }
     model.globalVariables = model.project.childNamed('variables');
+    project.globalVariables = new VariableFrame();
 
     /* Stage */
 
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
+    project.stage = new StageMorph(project.globalVariables);
     project.stage.remixID = remixID;
-
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,
             'id'
@@ -482,10 +484,10 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     );
 
     // restore inheritance and nesting associations
-    this.scene.stage.children.forEach(sprite => {
+    this.project.stage.children.forEach(sprite => {
         var exemplar, anchor;
         if (sprite.inheritanceInfo) { // only sprites can inherit
-            exemplar = this.scene.sprites[
+            exemplar = this.project.sprites[
                 sprite.inheritanceInfo.exemplar
             ];
             if (exemplar) {
@@ -495,14 +497,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             sprite.updatePropagationCache();
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
-            anchor = this.scene.sprites[sprite.nestingInfo.anchor];
+            anchor = this.project.sprites[sprite.nestingInfo.anchor];
             if (anchor) {
                 anchor.attachPart(sprite);
             }
             sprite.rotatesWithAnchor = (sprite.nestingInfo.synch === 'true');
         }
     });
-    this.scene.stage.children.forEach(sprite => {
+    this.project.stage.children.forEach(sprite => {
         var costume;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
@@ -619,7 +621,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     });
 
     // clear sprites' inherited methods caches, if any
-    this.scene.stage.children.forEach(
+    this.project.stage.children.forEach(
         sprite => sprite.inheritedMethodsCache = []
     );
 
@@ -630,11 +632,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     // public - answer a new Array of custom block definitions
     // represented by the given XML String
-    var stage, model;
+    var stage = new StageMorph(),
+        model;
 
-    this.scene = new Scene();
-    this.scene.targetStage = targetStage; // for secondary block def look-up
-    stage = this.scene.stage;
+    this.project = {
+        stage: stage,
+        sprites: {},
+        targetStage: targetStage // for secondary custom block def look-up
+    };
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
@@ -648,7 +653,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
-    this.scene = new Scene();
+    this.project = {};
     this.mediaDict = {};
     return stage.globalBlocks;
 };
@@ -658,8 +663,11 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     // into the current project of the ide
     var model, project;
 
-    this.scene = new Scene(ide.stage);
-    project = this.scene;
+    project = this.project = {
+        globalVariables: ide.globalVariables,
+        stage: ide.stage,
+        sprites: {}
+    };
     project.sprites[project.stage.name] = project.stage;
 
     model = this.parse(xmlString);
@@ -732,7 +740,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     });
 
     this.objects = {};
-    this.scene = new Scene();
+    this.project = {};
     this.mediaDict = {};
 
     ide.stage.fixLayout();
@@ -1104,9 +1112,9 @@ SnapSerializer.prototype.loadScript = function (model, object) {
 
     // Check whether we're importing a single script, not a script as part of a
     // whole project
-    if (!this.scene.stage) {
-        this.scene.stage = object.parentThatIsA(StageMorph);
-        this.scene.targetStage = this.scene.stage;
+    if (!this.project.stage) {
+        this.project.stage = object.parentThatIsA(StageMorph);
+        this.project.targetStage = this.project.stage;
     }
 
     model.children.forEach(child => {
@@ -1177,15 +1185,15 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
-        receiver = isGlobal ? this.scene.stage : object;
+        receiver = isGlobal ? this.project.stage : object;
         if (isGlobal) {
             info = detect(
                 receiver.globalBlocks,
                 block => block.blockSpec() === model.attributes.s
             );
-            if (!info && this.scene.targetStage) { // importing block files
+            if (!info && this.project.targetStage) { // importing block files
                 info = detect(
-                    this.scene.targetStage.globalBlocks,
+                    this.project.targetStage.globalBlocks,
                     block => block.blockSpec() === model.attributes.s
                 );
             }
@@ -1403,13 +1411,13 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         });
         return v;
     case 'sprite':
-        v  = new SpriteMorph(this.scene.globalVariables);
+        v  = new SpriteMorph(this.project.globalVariables);
         if (model.attributes.id) {
             this.objects[model.attributes.id] = v;
         }
         if (model.attributes.name) {
             v.name = model.attributes.name;
-            this.scene.sprites[model.attributes.name] = v;
+            this.project.sprites[model.attributes.name] = v;
         }
         if (model.attributes.idx) {
             v.idx = +model.attributes.idx;
@@ -1427,7 +1435,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         if (model.attributes.pan) {
             v.pan = +model.attributes.pan;
         }
-        this.scene.stage.add(v);
+        this.project.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
             model.attributes.rotation || '1'
@@ -1607,6 +1615,48 @@ SnapSerializer.prototype.loadColor = function (colorString) {
         parseFloat(c[2]),
         parseFloat(c[3])
     );
+};
+
+SnapSerializer.prototype.openProject = function (project, ide) {
+    var stage = ide.stage,
+        sprites = [],
+        sprite;
+    if (!project || !project.stage) {
+        return;
+    }
+    ide.siblings().forEach(morph =>
+        morph.destroy()
+    );
+    ide.projectName = project.name;
+    ide.projectNotes = project.notes || '';
+    if (ide.globalVariables) {
+        ide.globalVariables = project.globalVariables;
+    }
+    if (stage) {
+        stage.destroy();
+    }
+    ide.add(project.stage);
+    ide.stage = project.stage;
+    sprites = ide.stage.children.filter(
+        child => child instanceof SpriteMorph
+    );
+    sprites.sort((x, y) => x.idx - y.idx);
+
+    ide.sprites = new List(sprites);
+    sprite = sprites[0] || project.stage;
+
+    if (sizeOf(this.mediaDict) > 0) {
+        ide.hasChangedMedia = false;
+        this.mediaDict = {};
+    } else {
+        ide.hasChangedMedia = true;
+    }
+    project.stage.fixLayout();
+    project.stage.pauseGenericHatBlocks();
+    ide.createCorral();
+    ide.selectSprite(sprite);
+    ide.fixLayout();
+    ide.world().keyboardFocus = project.stage;
 };
 
 // SnapSerializer XML-representation of objects:
