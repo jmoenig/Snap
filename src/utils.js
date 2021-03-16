@@ -66,3 +66,8 @@ utils.defer = function() {
 
     return deferred;
 };
+
+utils.sleep = function(time=0) {
+    return new Promise(resolve => setTimeout(resolve, time));
+};
+

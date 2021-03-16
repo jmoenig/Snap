@@ -2397,7 +2397,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
 
     // import as plain text data
-    this.openDataString(aString, lbl, 'text');
+    return this.openDataString(aString, lbl, 'text');
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
@@ -5467,15 +5467,11 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     );
 };
 
-IDE_Morph.prototype.openDataString = function (str, name, type) {
-    var msg;
-    this.nextSteps([
-        () => msg = this.showMessage('Opening data...'),
-        () => {
-            this.rawOpenDataString(str, name, type);
-            msg.destroy();
-        }
-    ]);
+IDE_Morph.prototype.openDataString = async function (str, name, type) {
+    const msg = this.showMessage(localize('Opening data...'));
+    await utils.sleep();
+    await this.rawOpenDataString(str, name, type);
+    msg.destroy();
 };
 
 IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
