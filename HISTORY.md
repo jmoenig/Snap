@@ -2,8 +2,15 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * repeat stops when encountering a non-numerical counter input, thanks, Stefan!
+    * updated list-utilities library, thanks, Brian!
+
 ### 2021-03-17
 * objects, gui, paint, sketch, store: de-globalized stage dimensions 
+* new dev version
+* threads fixed repeat for non-numbers, thanks Stefan!
+* updated list-utilities library, thanks, Brian!
 
 ## 6.7.2
 * **Notable Changes:**
