@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-17
+* objects, gui, paint, sketch, store: de-globalized stage dimensions 
+
 ## 6.7.2
 * **Notable Changes:**
     * disabled empty-slot implicit parameter in FOREACH

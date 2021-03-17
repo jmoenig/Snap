@@ -60,7 +60,7 @@ SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-12';
+modules.store = '2021-March-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -411,16 +411,15 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         project.pentrails.src = model.pentrails.contents;
     }
     project.stage.setTempo(model.stage.attributes.tempo);
-    StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
-        StageMorph.prototype.dimensions.x =
+        project.stage.dimensions.x =
             Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
-        StageMorph.prototype.dimensions.y =
+        project.stage.dimensions.y =
             Math.max(+model.stage.attributes.height, 180);
     }
-    project.stage.setExtent(StageMorph.prototype.dimensions);
+    project.stage.setExtent(project.stage.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
     BooleanSlotMorph.prototype.isTernary =
@@ -1692,8 +1691,8 @@ StageMorph.prototype.toXML = function (serializer) {
         (ide && ide.projectNotes) ? ide.projectNotes : '',
         thumbdata,
         this.name,
-        StageMorph.prototype.dimensions.x,
-        StageMorph.prototype.dimensions.y,
+        this.dimensions.x,
+        this.dimensions.y,
         costumeIdx,
         this.color.r,
         this.color.g,

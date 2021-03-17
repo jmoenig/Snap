@@ -79,7 +79,7 @@ Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-15';
+modules.gui = '2021-March-17';
 
 // Declarations
 
@@ -1092,7 +1092,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
         x = Math.min(
             startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
-            myself.right() - StageMorph.prototype.dimensions.x *
+            myself.right() - myself.stage.dimensions.x *
                 (myself.isSmallStage ? myself.stageRatio : 1)
         );
         [stageSizeButton, appModeButton].forEach(button => {
@@ -2108,16 +2108,16 @@ IDE_Morph.prototype.setExtent = function (point) {
         if (this.isEmbedMode) {
             minExt = new Point(100, 100);
         } else {
-            minExt = StageMorph.prototype.dimensions.add(
+            minExt = this.stage.dimensions.add(
                 this.controlBar.height() + 10
             );
         }
     } else {
         if (this.stageRatio > 1) {
-            minExt = padding.add(StageMorph.prototype.dimensions);
+            minExt = padding.add(this.stage.dimensions);
         } else {
             minExt = padding.add(
-                StageMorph.prototype.dimensions.multiplyBy(this.stageRatio)
+                this.stage.dimensions.multiplyBy(this.stageRatio)
             );
         }
     }
@@ -2245,11 +2245,10 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     }
 
     // checking if the costume is bigger than the stage and, if so, fit it
-    if (StageMorph.prototype.dimensions.x < w ||
-            StageMorph.prototype.dimensions.y < h) {
+    if (this.stage.dimensions.x < w || this.stage.dimensions.y < h) {
         scale = Math.min(
-            (StageMorph.prototype.dimensions.x / w),
-            (StageMorph.prototype.dimensions.y / h)
+            (this.stage.dimensions.x / w),
+            (this.stage.dimensions.y / h)
         );
         normalizing = true;
         w = w * scale;
@@ -4602,7 +4601,7 @@ IDE_Morph.prototype.newProject = function () { // +++
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
-    StageMorph.prototype.dimensions = new Point(480, 360);
+    // +++ StageMorph.prototype.dimensions = new Point(480, 360);
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
@@ -6168,7 +6167,7 @@ IDE_Morph.prototype.userSetStageSize = function () {
         this
     ).promptVector(
         "Stage size",
-        StageMorph.prototype.dimensions,
+        this.stage.dimensions,
         new Point(480, 360),
         'Stage width',
         'Stage height',
@@ -6186,16 +6185,16 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     function zoom() {
         myself.step = function () {
             var delta = ext.subtract(
-                StageMorph.prototype.dimensions
+                myself.stage.dimensions
             ).divideBy(2);
             if (delta.abs().lt(new Point(5, 5))) {
-                StageMorph.prototype.dimensions = ext;
+                myself.stage.dimensions = ext;
                 delete myself.step;
             } else {
-                StageMorph.prototype.dimensions =
-                    StageMorph.prototype.dimensions.add(delta);
+                myself.stage.dimensions =
+                    myself.stage.dimensions.add(delta);
             }
-            myself.stage.setExtent(StageMorph.prototype.dimensions);
+            myself.stage.setExtent(myself.stage.dimensions);
             myself.stage.clearPenTrails();
             myself.fixLayout();
             this.setExtent(world.extent());
@@ -6210,8 +6209,8 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     if (this.isAnimating) {
         zoom();
     } else {
-        StageMorph.prototype.dimensions = ext;
-        this.stage.setExtent(StageMorph.prototype.dimensions);
+        this.stage.dimensions = ext;
+        this.stage.setExtent(this.stage.dimensions);
         this.stage.clearPenTrails();
         this.fixLayout();
         this.setExtent(world.extent());
@@ -9597,11 +9596,14 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 };
 
 WardrobeMorph.prototype.paintNew = function () {
-    var cos = new Costume(
+    var ide = this.parentThatIsA(IDE_Morph),
+        cos = new Costume(
             newCanvas(null, true),
-            this.sprite.newCostumeName(localize('Untitled'))
-        ),
-        ide = this.parentThatIsA(IDE_Morph);
+            this.sprite.newCostumeName(localize('Untitled')),
+            null, // rotation center
+            null, // don't shrink-to-fit
+            ide.stage.dimensions // max extent
+        );
 
     cos.edit(
         this.world(),

@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-March-09';
+modules.objects = '2021-March-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -3732,7 +3732,9 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
-    var w = 0, h = 0;
+    var w = 0,
+        h = 0,
+        stage;
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (this.costume) {
             // recycle dimensions of current costume
@@ -3741,8 +3743,9 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         }
         if (w * h !== id.length()) {
             // assume stage's dimensions
-            w = StageMorph.prototype.dimensions.x;
-            h = StageMorph.prototype.dimensions.y;
+            stage = this.parentThatIsA(StageMorph);
+            w = stage.dimensions.x;
+            h = stage.dimensions.y;
         }
         id = Process.prototype.reportNewCostume(
             id,
@@ -7660,7 +7663,7 @@ StageMorph.uber = FrameMorph.prototype;
 
 // StageMorph preferences settings
 
-StageMorph.prototype.dimensions = new Point(480, 360); // unscaled extent
+StageMorph.prototype.dimensions = new Point(480, 360); // fallback unscaled ext
 StageMorph.prototype.frameRate = 0; // unscheduled per default
 
 StageMorph.prototype.isCachingPrimitives
@@ -7688,6 +7691,7 @@ function StageMorph(globals) {
 
 StageMorph.prototype.init = function (globals) {
     this.name = localize('Stage');
+    this.dimensions = new Point(480, 360); // unscaled extent
     this.instrument = null;
     this.threads = new ThreadManager();
     this.variables = new VariableFrame(globals || null, this);
@@ -9886,10 +9890,10 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 // Costume instance creation
 
-function Costume(canvas, name, rotationCenter, noFit) {
+function Costume(canvas, name, rotationCenter, noFit, maxExtent) {
     this.contents = canvas ? normalizeCanvas(canvas, true)
             : newCanvas(null, true);
-    if (!noFit) {this.shrinkToFit(this.maxExtent()); }
+    if (!noFit) {this.shrinkToFit(maxExtent || this.maxExtent()); }
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
     this.version = Date.now(); // for observer optimization
@@ -10094,7 +10098,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions, true) :
+                newCanvas(anIDE.stage.dimensions, true) :
                 this.contents,
         isnew ?
                 null :
@@ -10341,7 +10345,7 @@ SVG_Costume.prototype.edit = function (
     editor.oncancel = oncancel || nop;
     editor.openIn(
         aWorld,
-        isnew ? newCanvas(StageMorph.prototype.dimensions) : this.contents,
+        isnew ? newCanvas(anIDE.stage.dimensions) : this.contents,
         isnew ? new Point(240, 180) : this.rotationCenter,
         (img, rc, shapes) => {
             myself.contents = img;
@@ -12165,7 +12169,6 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(StageMorph.prototype.dimensions.x - 20);
     this.fixLayout();
 };
 
