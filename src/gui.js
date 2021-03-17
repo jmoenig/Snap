@@ -419,7 +419,7 @@ IDE_Morph.prototype.onOpen = function () {
     }
 };
 
-IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
+IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
     var myself = this,
         urlLanguage,
         hash,
@@ -489,9 +489,9 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
                 ),
                 1
             )) {
-            this.droppedText(hash);
+            await this.droppedText(hash);
         } else {
-            this.droppedText(getURL(hash));
+            await this.droppedText(getURL(hash));
         }
     } else if (loc.hash.substr(0, 5) === '#run:') {
         hash = loc.hash.substr(5);
@@ -504,9 +504,9 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
             hash = decodeURIComponent(hash);
         }
         if (hash.substr(0, 8) === '<project>') {
-            SnapActions.openProject(hash);
+            await SnapActions.openProject(hash);
         } else {
-            SnapActions.openProject(getURL(hash));
+            await SnapActions.openProject(getURL(hash));
         }
         this.toggleAppMode(true);
         this.runScripts();
@@ -521,31 +521,18 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
             dict = SnapCloud.parseDict(loc.hash.substr(9));
         }
 
-        SnapCloud.getPublicProject(
-            SnapCloud.encodeDict(dict),
-            function (projectData) {
-                var msg;
-                myself.nextSteps([
-                    function () {
-                        msg = myself.showMessage('Opening project...');
-                    },
-                    function () {nop(); }, // yield (bug in Chrome)
-                    function () {
-                        var action = myself.droppedText(projectData);
-                        if (action) {
-                            action.then(function () {
-                                myself.hasChangedMedia = true;
-                                myself.shield.destroy();
-                                myself.shield = null;
-                                msg.destroy();
-                                applyFlags(dict);
-                            });
-                        }
-                    }
-                ]);
-            },
-            this.cloudError()
-        );
+        try {
+            const projectData = await SnapCloud.getPublicProject(SnapCloud.encodeDict(dict));
+            const msg = myself.showMessage('Opening project...');
+            await myself.droppedText(projectData);  // TODO: TEST THIS
+            myself.hasChangedMedia = true;
+            myself.shield.destroy();
+            myself.shield = null;
+            msg.destroy();
+            applyFlags(dict);
+        } catch (err) {
+            this.cloudError()(err.message);
+        }
     } else if (loc.hash.substr(0, 7) === '#cloud:') {
         this.shield = new Morph();
         this.shield.alpha = 0;
@@ -557,29 +544,18 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
         dict = SnapCloud.parseDict(loc.hash.substr(7));
         dict.Username = dict.Username.toLowerCase();
 
-        SnapCloud.getPublicProject(
-            SnapCloud.encodeDict(dict),
-            function (projectData) {
-                var msg;
-                myself.nextSteps([
-                    function () {
-                        msg = myself.showMessage('Opening project...');
-                    },
-                    function () {nop(); }, // yield (bug in Chrome)
-                    function () {
-                        var action = SnapActions.openProject(projectData);
-                        action.then(function() {
-                            myself.hasChangedMedia = true;
-                            myself.shield.destroy();
-                            myself.shield = null;
-                            msg.destroy();
-                            myself.toggleAppMode(false);
-                        });
-                    }
-                ]);
-            },
-            this.cloudError()
-        );
+        try {
+            const projectData = await SnapCloud.getPublicProject(SnapCloud.encodeDict(dict));
+            const msg = this.showMessage(localize('Opening project...'));
+            await SnapActions.openProject(projectData);
+            this.hasChangedMedia = true;
+            this.shield.destroy();
+            this.shield = null;
+            msg.destroy();
+            this.toggleAppMode(false);
+        } catch (err) {
+            this.cloudError()(err.message);
+        }
     } else if (loc.hash.substr(0, 4) === '#dl:') {
         myself.showMessage('Fetching project\nfrom the cloud...');
 
@@ -587,13 +563,12 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
         dict = SnapCloud.parseDict(loc.hash.substr(4));
         dict.Username = dict.Username.toLowerCase();
 
-        SnapCloud.getPublicProject(
-            SnapCloud.encodeDict(dict),
-            function (projectData) {
-                window.open('data:text/xml,' + projectData);
-            },
-            this.cloudError()
-        );
+        try {
+            const projectData = await SnapCloud.getPublicProject(SnapCloud.encodeDict(dict));
+            window.open('data:text/xml,' + projectData);
+        } catch (err) {
+            this.cloudError()(err.message);
+        }
     } else if (loc.hash.substr(0, 6) === '#lang:') {
         urlLanguage = loc.hash.substr(6);
         this.setLanguage(urlLanguage);
@@ -606,36 +581,21 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
         SnapActions.enableCollaboration();
         SnapActions.joinSession(sessionId, this.cloudError());
     } else if (loc.hash.substr(0, 9) === '#example:' || dict.action === 'example') {
-        var example = dict ? dict.ProjectName : loc.hash.substr(9),
-            msg;
+        const example = dict ? dict.ProjectName : loc.hash.substr(9);
 
         this.shield = new Morph();
         this.shield.alpha = 0;
         this.shield.setExtent(this.parent.extent());
         this.parent.add(this.shield);
 
-        var projectData = myself.getURL(myself.resourceURL('Examples', example));
-
-        myself.nextSteps([
-            function () {
-                msg = myself.showMessage('Opening ' + example + ' example...');
-            },
-            function () {nop(); }, // yield (bug in Chrome)
-            function () {
-                var action = myself.droppedText(projectData);
-                if (action) {
-                    action.then(function () {
-                        myself.hasChangedMedia = true;
-                        if (myself.shield) {
-                            myself.shield.destroy();
-                            myself.shield = null;
-                        }
-                        msg.destroy();
-                        applyFlags(dict);
-                    });
-                }
-            }
-        ]);
+        const projectData = this.getURL(myself.resourceURL('Examples', example));
+        const msg = myself.showMessage('Opening ' + example + ' example...');
+        await this.droppedText(projectData);
+        myself.hasChangedMedia = true;
+        this.shield.destroy();
+        this.shield = null;
+        msg.destroy();
+        applyFlags(dict);
     } else if (loc.hash.substr(0, 9) === '#private:' || dict.action === 'private') {
         var name = dict ? dict.ProjectName : loc.hash.substr(9),
             isLoggedIn = SnapCloud.username !== null;
@@ -645,37 +605,20 @@ IDE_Morph.prototype.interpretUrlAnchors = function (loc) {
             return;
         }
 
-        myself.nextSteps([
-            function () {
-                msg = myself.showMessage('Opening ' + name + ' example...');
-            },
-            function () {nop(); }, // yield (bug in Chrome)
-            function () {
-                // This needs to be able to open a project by name, too
-                // TODO: FIXME
-                SnapCloud.getProjectByName(
-                    SnapCloud.username,
-                    dict.ProjectName,
-                    function (xml) {
-                        msg.destroy();
-                        var action = myself.rawLoadCloudProject(xml);
-                        if (action) {
-                            action.then(function() {
-                                applyFlags(dict);
-                            });
-                        } else {
-                            applyFlags(dict);
-                        }
-                    },
-                    myself.cloudError()
-                );
-            }
-        ]);
+        const msg = myself.showMessage('Opening ' + name + ' example...');
+        try {
+            const xml = await SnapCloud.getProjectByName(SnapCloud.username, dict.ProjectName);
+            await myself.rawLoadCloudProject(xml);
+            applyFlags(dict);
+        } catch (err) {
+            this.cloudError()(err.message);
+        }
+        msg.destroy();
 
     } else if (loc.hash.substr(0, 7) === '#signup' || dict.action === 'signup') {
         this.createCloudAccount();
     } else {
-        myself.newProject();
+        await myself.newProject();
     }
 
     this.world().keyboardFocus = this.stage;
@@ -3255,7 +3198,7 @@ IDE_Morph.prototype.cloudMenu = function () {
             'open shared project from cloud...',
             () => {
                 this.prompt('Author name…', usr => {
-                    this.prompt('Project name...', prj => {
+                    this.prompt('Project name...', async prj => {
                         var id = 'Username=' +
                             encodeURIComponent(usr.toLowerCase()) +
                             '&ProjectName=' +
@@ -3263,32 +3206,19 @@ IDE_Morph.prototype.cloudMenu = function () {
                         this.showMessage(
                             'Fetching project\nfrom the cloud...'
                         );
-                        SnapCloud.getPublicProject(
-                            id,
-                            projectData => {
-                                var msg;
-                                if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
-                                        'data:text/xml,' + projectData
-                                    );
-                                }
-                                this.nextSteps([
-                                    () => {
-                                        msg = this.showMessage(
-                                            'Opening project...'
-                                        );
-                                    },
-                                    function () {nop(); }, // yield (Chrome)
-                                    function () {
-                                        SnapActions.openProject(projectData)
-                                            .then(function() {
-                                                msg.destroy();
-                                            });
-                                    }
-                                ]);
-                            },
-                            this.cloudError()
-                        );
+                        try {
+                            const projectData = await SnapCloud.getPublicProject(id);
+                            if (!Process.prototype.isCatchingErrors) {
+                                window.open(
+                                    'data:text/xml,' + projectData
+                                );
+                            }
+                            const msg = this.showMessage('Opening project...');
+                            await SnapActions.openProject(projectData);
+                            msg.destroy();
+                        } catch (err) {
+                            this.cloudError()(err.message);
+                        }
 
                     }, null, 'project');
                 }, null, 'project');
