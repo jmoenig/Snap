@@ -2535,7 +2535,8 @@ Process.prototype.doRepeat = function (counter, body) {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
+    if (isNaN(counter) || counter < 1) { 
+	// was '=== 0', which caused infinite loops on non-ints
         return null;
     }
     this.popContext();
