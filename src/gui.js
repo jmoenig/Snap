@@ -462,7 +462,7 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         // only force my world to get focus if I'm not in embed mode
         // to prevent the iFrame from involuntarily scrolling into view
         if (!myself.isEmbedMode) {
-            world.worldCanvas.focus();
+            myself.world().worldCanvas.focus();
         }
     }
 
