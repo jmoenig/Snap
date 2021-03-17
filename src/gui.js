@@ -637,6 +637,16 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
             );
         }
     }
+
+    if (dict.setVariable) {
+        const [varName, value] = dict.setVariable.split('=');
+        const exists = this.globalVariables.allNames().includes(varName);
+        if (exists) {
+            this.globalVariables.setVar(varName, value);
+        } else {
+            await this.droppedText(value, varName, 'text');
+        }
+    }
 };
 
 // IDE_Morph construction

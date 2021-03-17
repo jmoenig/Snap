@@ -435,6 +435,38 @@ describe('ide', function() {
         });
     });
 
+    describe('URL anchors', function () {
+        const frame = document.getElementsByTagName('iframe')[0];
+
+        describe('set variable', function () {
+            it('should set variable', async () => {
+                const querystring = '?setVariable=' + encodeURIComponent('testVariable=testValue');
+                await reloadIframe(frame, window.origin + querystring);
+                await driver.actionsSettled();
+
+                await driver.expect(
+                    () => driver.ide().globalVariables.allNames().includes('testVariable'),
+                    `Variable testVariable not found`
+                );
+            });
+
+            it('should set variable and open example', async () => {
+                const querystring = '?action=example&ProjectName=Movies&editMode&noRun&' +
+                    'setVariable=' + encodeURIComponent('testVariable=testValue');
+                await reloadIframe(frame, window.origin + querystring);
+                await driver.expect(
+                    () => driver.ide().currentSprite.scripts.children.length,
+                    `Example project scripts did not appear`
+                );
+
+                await driver.expect(
+                    () => driver.ide().globalVariables.allNames().includes('testVariable'),
+                    `Variable testVariable not found`
+                );
+            });
+        });
+    });
+
     describe('embedded', function() {
         describe('load', function() {
             const frame = document.getElementsByTagName('iframe')[0];
@@ -545,14 +577,6 @@ describe('ide', function() {
                 }
             }
 
-            async function reloadIframe(frame, url=window.origin) {
-                driver.disableExitPrompt();
-                driver.setWindow(frame.contentWindow);
-                frame.setAttribute('src', url);
-                return new Promise(resolve => {
-                    frame.onload = resolve;
-                });
-            }
         });
 
         describe('api', function() {
@@ -632,5 +656,14 @@ describe('ide', function() {
             });
         });
     });
+
+    async function reloadIframe(frame, url=window.origin) {
+        driver.disableExitPrompt();
+        driver.setWindow(frame.contentWindow);
+        frame.setAttribute('src', url);
+        return new Promise(resolve => {
+            frame.onload = resolve;
+        });
+    }
 });
 
