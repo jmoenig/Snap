@@ -47,9 +47,9 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global modules, VariableFrame, aStageMorph*/
+/*global modules, VariableFrame, StageMorph, SpriteMorph*/
 
-modules.scenes = '2021-March-12';
+modules.scenes = '2021-March-18';
 
 // Scene /////////////////////////////////////////////////////////
 
@@ -61,8 +61,8 @@ modules.scenes = '2021-March-12';
 // Scene instance creation:
 
 function Scene(aStageMorph) {
-    this.name = null;
-    this.notes = null;
+    this.name = '';
+    this.notes = '';
     this.globalVariables = aStageMorph ?
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
@@ -71,3 +71,14 @@ function Scene(aStageMorph) {
     this.sprites = {};
     this.targetStage = null;
 }
+
+Scene.prototype.addDefaultSprite = function () {
+    var sprite = new SpriteMorph(this.globalVariables);
+    sprite.setPosition(
+        this.stage.center().subtract(
+            sprite.extent().divideBy(2)
+        )
+    );
+    this.stage.add(sprite);
+    return sprite;
+};

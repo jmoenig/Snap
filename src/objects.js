@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-March-17';
+modules.objects = '2021-March-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -7776,6 +7776,7 @@ StageMorph.prototype.init = function (globals) {
 
     StageMorph.uber.init.call(this);
 
+    this.setExtent(this.dimensions);
     this.isCachingImage = true;
     this.cachedHSV = this.color.hsv();
     this.acceptsDrops = false;

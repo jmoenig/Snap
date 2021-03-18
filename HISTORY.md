@@ -6,6 +6,9 @@
     * repeat stops when encountering a non-numerical counter input, thanks, Stefan!
     * updated list-utilities library, thanks, Brian!
 
+### 2021-03-18
+* gui, scenes, objects: more scene-refactorings
+
 ### 2021-03-17
 * objects, gui, paint, sketch, store: de-globalized stage dimensions 
 * new dev version

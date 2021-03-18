@@ -62,7 +62,7 @@
 */
 
 /*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Audio,
-ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame, Sound,
+ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, Sound, Scene,
 StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, normalizeCanvas,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
@@ -74,12 +74,11 @@ CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
 BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
-Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK,
-Scene*/
+Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-17';
+modules.gui = '2021-March-18';
 
 // Declarations
 
@@ -213,7 +212,7 @@ function IDE_Morph(isAutoFill) {
     this.init(isAutoFill);
 }
 
-IDE_Morph.prototype.init = function (isAutoFill) {
+IDE_Morph.prototype.init = function (isAutoFill) { // +++
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
@@ -230,12 +229,12 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.scene = new Scene();
     this.globalVariables = this.scene.globalVariables;
-    this.currentSprite = new SpriteMorph(this.globalVariables);
+    this.currentSprite = this.scene.addDefaultSprite();
     this.sprites = new List([this.currentSprite]);
+    this.projectName = this.scene.name;
+    this.projectNotes = this.scene.notes;
     this.currentCategory = 'motion';
     this.currentTab = 'scripts';
-    this.projectName = '';
-    this.projectNotes = '';
 
     this.trash = []; // deleted sprites
 
@@ -1377,20 +1376,11 @@ IDE_Morph.prototype.createPaletteHandle = function () {
 };
 
 IDE_Morph.prototype.createStage = function () {
-    // assumes that the logo pane has already been created
-    if (this.stage) {this.stage.destroy(); }
-    StageMorph.prototype.frameRate = 0;
-    this.stage = new StageMorph(this.globalVariables);
-    this.stage.setExtent(this.stage.dimensions); // dimensions are fixed
-    if (this.currentSprite instanceof SpriteMorph) {
-        this.currentSprite.setPosition(
-            this.stage.center().subtract(
-                this.currentSprite.extent().divideBy(2)
-            )
-        );
-        this.stage.add(this.currentSprite);
+    if (this.stage) {
+        this.stage.destroy();
     }
-    this.add(this.stage);
+    this.add(this.scene.stage);
+    this.stage = this.scene.stage;
 };
 
 IDE_Morph.prototype.createStageHandle = function () {
@@ -2820,7 +2810,7 @@ IDE_Morph.prototype.restore = function () {
 
 // IDE_Morph sprite list access
 
-IDE_Morph.prototype.addNewSprite = function () {
+IDE_Morph.prototype.addNewSprite = function () { // +++ sceneify
     var sprite = new SpriteMorph(this.globalVariables),
         rnd = Process.prototype.reportBasicRandom;
 
@@ -2847,7 +2837,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.selectSprite(sprite);
 };
 
-IDE_Morph.prototype.paintNewSprite = function () {
+IDE_Morph.prototype.paintNewSprite = function () { // +++ sceneify
     var sprite = new SpriteMorph(this.globalVariables),
         cos = new Costume();
 
@@ -2870,7 +2860,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
     );
 };
 
-IDE_Morph.prototype.newCamSprite = function () {
+IDE_Morph.prototype.newCamSprite = function () { // +++ sceneify
     var sprite = new SpriteMorph(this.globalVariables),
         camDialog;
 
@@ -4588,6 +4578,9 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () { // +++
+    var scene = new Scene();
+
+    scene.addDefaultSprite();
     this.source = this.cloud.username ? 'cloud' : null;
     if (this.stage) {
         this.stage.destroy();
@@ -4595,32 +4588,7 @@ IDE_Morph.prototype.newProject = function () { // +++
     if (location.hash.substr(0, 6) !== '#lang:') {
         location.hash = '';
     }
-    // +++ this.switchToScene(new Scene());
-
-
-    this.globalVariables = new VariableFrame();
-    this.currentSprite = new SpriteMorph(this.globalVariables);
-    this.sprites = new List([this.currentSprite]);
-    // +++ StageMorph.prototype.dimensions = new Point(480, 360);
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    StageMorph.prototype.enablePenLogging = false;
-    SpriteMorph.prototype.useFlatLineEnds = false;
-    Process.prototype.enableLiveCoding = false;
-    Process.prototype.enableHyperOps = true;
-    this.hasUnsavedEdits = false;
-    this.setProjectName('');
-    this.projectNotes = '';
-    this.trash = [];
-    this.createStage();
-    this.add(this.stage);
-    this.createCorral();
-    this.selectSprite(this.stage.children[0]);
-    this.fixLayout();
+    this.switchToScene(scene);
 };
 
 IDE_Morph.prototype.save = function () {
@@ -5091,19 +5059,9 @@ IDE_Morph.prototype.openProjectString = function (str, callback) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str) { // +++
+IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    StageMorph.prototype.enablePenLogging = false;
-    Process.prototype.enableLiveCoding = false;
-    this.trash = [];
-    this.hasUnsavedEdits = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.switchToScene(
@@ -5132,18 +5090,9 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenCloudDataString = function (str) { // +++
+IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     var model;
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    StageMorph.prototype.enablePenLogging = false;
-    Process.prototype.enableLiveCoding = false;
-    this.trash = [];
-    this.hasUnsavedEdits = false;
+
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -5359,7 +5308,7 @@ IDE_Morph.prototype.openProject = function (name) {
     }
 };
 
-IDE_Morph.prototype.switchToScene = function (scene) { // +++
+IDE_Morph.prototype.switchToScene = function (scene) {
     var sprites = [];
     if (!scene || !scene.stage) {
         return;
@@ -5383,6 +5332,21 @@ IDE_Morph.prototype.switchToScene = function (scene) { // +++
     this.createCorral();
     this.selectSprite(sprites[0] || this.stage);
     this.fixLayout();
+
+    // +++ to do: de-globablize settings:
+    StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = true;
+    StageMorph.prototype.enableSublistIDs = false;
+    StageMorph.prototype.enablePenLogging = false;
+    SpriteMorph.prototype.useFlatLineEnds = false;
+    Process.prototype.enableLiveCoding = false;
+    Process.prototype.enableHyperOps = true;
+    this.hasUnsavedEdits = false;
+    this.trash = [];
+
     this.world().keyboardFocus = this.stage;
 };
 
