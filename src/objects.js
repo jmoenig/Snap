@@ -10054,7 +10054,8 @@ Costume.prototype.flipped = function () {
         new Point(
             this.width() - this.rotationCenter.x,
             this.rotationCenter.y
-        )
+        ),
+        true // no shrink-wrap
     );
     return flipped;
 };

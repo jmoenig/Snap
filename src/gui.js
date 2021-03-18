@@ -2810,7 +2810,7 @@ IDE_Morph.prototype.restore = function () {
 
 // IDE_Morph sprite list access
 
-IDE_Morph.prototype.addNewSprite = function () { // +++ sceneify
+IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         rnd = Process.prototype.reportBasicRandom;
 
@@ -2837,7 +2837,7 @@ IDE_Morph.prototype.addNewSprite = function () { // +++ sceneify
     this.selectSprite(sprite);
 };
 
-IDE_Morph.prototype.paintNewSprite = function () { // +++ sceneify
+IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         cos = new Costume();
 
@@ -2860,7 +2860,7 @@ IDE_Morph.prototype.paintNewSprite = function () { // +++ sceneify
     );
 };
 
-IDE_Morph.prototype.newCamSprite = function () { // +++ sceneify
+IDE_Morph.prototype.newCamSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         camDialog;
 
@@ -4577,7 +4577,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
     text.edit();
 };
 
-IDE_Morph.prototype.newProject = function () { // +++
+IDE_Morph.prototype.newProject = function () {
     var scene = new Scene();
 
     scene.addDefaultSprite();
@@ -10376,7 +10376,9 @@ CamSnapshotDialogMorph.prototype.ok = function () {
     this.accept(
         new Costume(
             this.videoView.fullImage(),
-            this.sprite.newCostumeName('camera')
+            this.sprite.newCostumeName('camera'),
+            null,
+            true // no shrink-wrap
         ).flipped()
     );
 };
