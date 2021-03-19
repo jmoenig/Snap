@@ -85,7 +85,7 @@ and change the left distance to 0 and the right distance to 0.6 inches.)
 
 8.  Onward to the index!  Click inside the index; the entire thing will be selected in grey.  Now in the Word menu choose Insert > Index and Tables...  In the "Formats" menu, choose "Modern."  Then click OK.  Word will ask if you want to replace the selected index.  Say yes.
 
-9.  Now edit the index.  First, delete the headings for punctuation characters (!, ., and #).  Don't be afraid about the entire index still being selected in grey; you can select a subset of the index (such as a heading) within the big selection.  Next, delete the heading for the "fi" ligature, and the (second) "F" heading after it.  Scan through looking for widows and orphans, and try to fix them by adjusting spacing around individual headings.
+9.  Now edit the index.  First, delete the headings for punctuation characters (!, ., #, and ⚡).  Don't be afraid about the entire index still being selected in grey; you can select a subset of the index (such as a heading) within the big selection.  Next, delete the heading for the "fi" ligature, and the (second) "F" heading after it.  Scan through looking for widows and orphans, and try to fix them by adjusting spacing around individual headings.
 
 10.  These issues are mostly fixed, but read the entire index looking for font problems.  If you find one, don't just fix it in the index; go back to the page indicated and fix the entry there.  (Click the ¶ button to make it visible.)
 
@@ -100,10 +100,11 @@ and change the left distance to 0 and the right distance to 0.6 inches.)
 15.  You now have a PDF; time to massage it.  If you're on a Mac, find the file "snap-manual-meta.workflow" and double click it.  Edit the Snap version number in the Title field, then click the Run button at the top right.  If you're not on a Mac, find something equivalent for your operating system and edit this file to add that information.  The goal is to change the PDF's metadata to get "Microsoft Word" out of the title.
 
 16.  You're done with the required steps, but your PDF is 80Mb.  It would be nice to reduce that.  Fire up your virtual Windows machine and copy the PDF to its desktop.  (For me, the following steps crash Acrobat on my Mac.  That's why I have to shrink the PDF on my virtual PC.  If it works on your Mac, great!)
+Also copy the file "Snap Manual Link Dictionary.ald" from the help folder of the repo onto your PC desktop.  You also need to have AutoBookmarker Pro installed on your PC.
 
-17.  Open it in Acrobat.  Go through their extremely obnoxious login process.
+17.  Open SnapManual.pdf in Acrobat.  Go through their extremely obnoxious login process.
 
-18.  Choose "Reduce file size" from the File menu.
+18.  Choose "Action Wizard" from the Tools menu, then choose "Frobnicate Snap Manual" as the action to perform.  This will both reduce the size and make the links in the Table of Contents, the Index, and URLs active.
 
 19.  Go eat dinner.
 

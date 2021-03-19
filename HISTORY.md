@@ -2,9 +2,19 @@
 
 ## in development:
 
+## 6.7.3
+* **Notable Changes:**
+    * hyperized "key _ pressed?" predicate
 * **Notable Fixes:**
     * repeat stops when encountering a non-numerical counter input, thanks, Stefan!
     * updated list-utilities library, thanks, Brian!
+* **Documentation Updates:**
+    * updated manual with links in the toc, thanks Brian!
+
+### 2021-03-19
+* manual updated with active links and links in the toc, thanks, Brian!
+* threads: hyperized "key _ pressed?" predicate
+* prepared patch
 
 ### 2021-03-18
 * gui, scenes, objects: more scene-refactorings
