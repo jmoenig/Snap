@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-March-17';
+modules.threads = '2021-March-19';
 
 var ThreadManager;
 var Process;
@@ -5625,12 +5625,18 @@ Process.prototype.reportMouseDown = function () {
 };
 
 Process.prototype.reportKeyPressed = function (keyString) {
+    // hyper-monadic
     var stage;
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
             if (this.inputOption(keyString) === 'any key') {
                 return Object.keys(stage.keysPressed).length > 0;
+            }
+            if (keyString instanceof List && this.enableHyperOps) {
+                return keyString.map(
+                    each => stage.keysPressed[each] !== undefined
+                );
             }
             return stage.keysPressed[keyString] !== undefined;
         }

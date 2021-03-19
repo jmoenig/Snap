@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * hyperized "key _ pressed?" predicate
 * **Notable Fixes:**
     * repeat stops when encountering a non-numerical counter input, thanks, Stefan!
     * updated list-utilities library, thanks, Brian!
@@ -10,6 +12,7 @@
 
 ### 2021-03-19
 * manual updated with active links and links in the toc, thanks, Brian!
+* threads: hyperized "key _ pressed?" predicate
 
 ### 2021-03-17
 * new dev version
