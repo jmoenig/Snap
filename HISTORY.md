@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.7.3
 * **Notable Changes:**
     * hyperized "key _ pressed?" predicate
 * **Notable Fixes:**
@@ -13,6 +14,7 @@
 ### 2021-03-19
 * manual updated with active links and links in the toc, thanks, Brian!
 * threads: hyperized "key _ pressed?" predicate
+* prepared patch
 
 ### 2021-03-17
 * new dev version
