@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-19
+* gui, store, scenes: capture global settings in scenes
+
 ## 6.7.3
 * **Notable Changes:**
     * hyperized "key _ pressed?" predicate

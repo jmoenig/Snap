@@ -5316,6 +5316,7 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     this.siblings().forEach(morph =>
         morph.destroy()
     );
+    this.scene.captureGlobalSettings();
     this.scene = scene;
     this.projectName = scene.name;
     this.projectNotes = scene.notes || '';
@@ -5332,21 +5333,9 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     this.createCorral();
     this.selectSprite(sprites[0] || this.stage);
     this.fixLayout();
-
-    // +++ to do: de-globablize settings:
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    StageMorph.prototype.enablePenLogging = false;
-    SpriteMorph.prototype.useFlatLineEnds = false;
-    Process.prototype.enableLiveCoding = false;
-    Process.prototype.enableHyperOps = true;
+    scene.applyGlobalSettings();
     this.hasUnsavedEdits = false;
-    this.trash = [];
-
+    this.trash = []; // +++ sceneify
     this.world().keyboardFocus = this.stage;
 };
 

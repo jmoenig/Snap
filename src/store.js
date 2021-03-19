@@ -60,7 +60,7 @@ SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-17';
+modules.store = '2021-March-19';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -393,7 +393,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         project.stage.pan = +model.stage.attributes.pan;
     }
     if (model.stage.attributes.penlog) {
-        StageMorph.prototype.enablePenLogging =
+        project.enablePenLogging =
             (model.stage.attributes.penlog === 'true');
     }
 
@@ -420,19 +420,19 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             Math.max(+model.stage.attributes.height, 180);
     }
     project.stage.setExtent(project.stage.dimensions);
-    SpriteMorph.prototype.useFlatLineEnds =
+    project.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
     BooleanSlotMorph.prototype.isTernary =
         model.stage.attributes.ternary !== 'false';
-    Process.prototype.enableHyperOps =
+    project.enableHyperOps =
         model.stage.attributes.hyperops !== 'false';
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
-    StageMorph.prototype.enableCodeMapping =
+    project.enableCodeMapping =
         model.stage.attributes.codify === 'true';
-    StageMorph.prototype.enableInheritance =
+    project.enableInheritance =
         model.stage.attributes.inheritance !== 'false';
-    StageMorph.prototype.enableSublistIDs =
+    project.enableSublistIDs =
         model.stage.attributes.sublistIDs === 'true';
 
     model.hiddenPrimitives = model.project.childNamed('hidden');
@@ -440,7 +440,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         model.hiddenPrimitives.contents.split(' ').forEach(
             sel => {
                 if (sel) {
-                    StageMorph.prototype.hiddenPrimitives[sel] = true;
+                    project.hiddenPrimitives[sel] = true;
                 }
             }
         );
@@ -449,14 +449,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     model.codeHeaders = model.project.childNamed('headers');
     if (model.codeHeaders) {
         model.codeHeaders.children.forEach(
-            xml => StageMorph.prototype.codeHeaders[xml.tag] = xml.contents
+            xml => project.codeHeaders[xml.tag] = xml.contents
         );
     }
 
     model.codeMappings = model.project.childNamed('code');
     if (model.codeMappings) {
         model.codeMappings.children.forEach(
-            xml => StageMorph.prototype.codeMappings[xml.tag] = xml.contents
+            xml => project.codeMappings[xml.tag] = xml.contents
         );
     }
 

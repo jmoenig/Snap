@@ -47,9 +47,9 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global modules, VariableFrame, StageMorph, SpriteMorph*/
+/*global modules, VariableFrame, StageMorph, SpriteMorph, Process*/
 
-modules.scenes = '2021-March-18';
+modules.scenes = '2021-March-19';
 
 // Scene /////////////////////////////////////////////////////////
 
@@ -67,6 +67,20 @@ function Scene(aStageMorph) {
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
 
+    // global settings (shared)
+    this.hiddenPrimitives = {};
+    this.codeMappings = {};
+    this.codeHeaders = {};
+
+    // global settings (copied)
+    this.enableCodeMapping = false;
+    this.enableInheritance = true;
+    this.enableSublistIDs = false;
+    this.enablePenLogging = false;
+    this.useFlatLineEnds = false;
+    this.enableLiveCoding = false;
+    this.enableHyperOps = true;
+
     // for deserializing - do not persist
     this.sprites = {};
     this.targetStage = null;
@@ -81,4 +95,30 @@ Scene.prototype.addDefaultSprite = function () {
     );
     this.stage.add(sprite);
     return sprite;
+};
+
+Scene.prototype.captureGlobalSettings = function () {
+    this.hiddenPrimitives = StageMorph.prototype.hiddenPrimitives;
+    this.codeMappings = StageMorph.prototype.codeMappings;
+    this.codeHeaders = StageMorph.prototype.codeHeaders;
+    this.enableCodeMapping = StageMorph.prototype.enableCodeMapping;
+    this.enableInheritance = StageMorph.prototype.enableInheritance;
+    this.enableSublistIDs = StageMorph.prototype.enableSublistIDs;
+    this.enablePenLogging = StageMorph.prototype.enablePenLogging;
+    this.useFlatLineEnds = SpriteMorph.prototype.useFlatLineEnds;
+    this.enableLiveCoding = Process.prototype.enableLiveCoding;
+    this.enableHyperOps = Process.prototype.enableHyperOps;
+};
+
+Scene.prototype.applyGlobalSettings = function () {
+    StageMorph.prototype.hiddenPrimitives = this.hiddenPrimitives;
+    StageMorph.prototype.codeMappings = this.codeMappings;
+    StageMorph.prototype.codeHeaders = this.codeHeaders;
+    StageMorph.prototype.enableCodeMapping = this.enableCodeMapping;
+    StageMorph.prototype.enableInheritance = this.enableInheritance;
+    StageMorph.prototype.enableSublistIDs = this.enableSublistIDs;
+    StageMorph.prototype.enablePenLogging = this.enablePenLogging;
+    SpriteMorph.prototype.useFlatLineEnds = this.useFlatLineEnds;
+    Process.prototype.enableLiveCoding = this.enableLiveCoding;
+    Process.prototype.enableHyperOps = this.enableHyperOps;
 };
