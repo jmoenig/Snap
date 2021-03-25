@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-25
+* gui, scenes: sceneified trash
+
 ### 2021-03-19
 * gui, store, scenes: capture global settings in scenes
 

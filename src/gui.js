@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-19';
+modules.gui = '2021-March-25';
 
 // Declarations
 
@@ -212,7 +212,7 @@ function IDE_Morph(isAutoFill) {
     this.init(isAutoFill);
 }
 
-IDE_Morph.prototype.init = function (isAutoFill) { // +++
+IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
@@ -235,8 +235,6 @@ IDE_Morph.prototype.init = function (isAutoFill) { // +++
     this.projectNotes = this.scene.notes;
     this.currentCategory = 'motion';
     this.currentTab = 'scripts';
-
-    this.trash = []; // deleted sprites
 
     // logoURL is disabled because the image data is hard-copied
     // to avoid tainting the world canvas
@@ -3117,7 +3115,7 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.recordUnsavedChanges();
 
     // remember the deleted sprite so it can be recovered again later
-    this.trash.push(sprite);
+    this.scene.trash.push(sprite);
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
@@ -4015,7 +4013,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select a sound from the media library'
     );
 
-    if (this.trash.length) {
+    if (this.scene.trash.length) {
         menu.addLine();
         menu.addItem(
             'Undelete sprites...',
@@ -4295,11 +4293,11 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
     var menu = new MenuMorph(sprite => this.undelete(sprite, pos), null, this);
         pos = pos || this.corralBar.bottomRight();
 
-    if (!this.trash.length) {
+    if (!this.scene.trash.length) {
         this.showMessage('trash is empty');
         return;
     }
-    this.trash.forEach(sprite =>
+    this.scene.trash.forEach(sprite =>
         menu.addItem(
             [
                 sprite.thumbnail(new Point(24, 24), null, true), // no corpse
@@ -4332,7 +4330,7 @@ IDE_Morph.prototype.undelete = function (aSprite, pos) {
             this.sprites.add(aSprite);
             this.corral.addSprite(aSprite);
             this.selectSprite(aSprite);
-            this.trash = this.trash.filter(sprite => sprite.isCorpse);
+            this.scene.updateTrash();
         }
     );
 };
@@ -5335,7 +5333,6 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     this.fixLayout();
     scene.applyGlobalSettings();
     this.hasUnsavedEdits = false;
-    this.trash = []; // +++ sceneify
     this.world().keyboardFocus = this.stage;
 };
 

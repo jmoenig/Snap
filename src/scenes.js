@@ -49,7 +49,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process*/
 
-modules.scenes = '2021-March-19';
+modules.scenes = '2021-March-25';
 
 // Scene /////////////////////////////////////////////////////////
 
@@ -84,6 +84,9 @@ function Scene(aStageMorph) {
     // for deserializing - do not persist
     this.sprites = {};
     this.targetStage = null;
+
+    // for undeleting sprites - do not persist
+    this.trash = [];
 }
 
 Scene.prototype.addDefaultSprite = function () {
@@ -121,4 +124,8 @@ Scene.prototype.applyGlobalSettings = function () {
     SpriteMorph.prototype.useFlatLineEnds = this.useFlatLineEnds;
     Process.prototype.enableLiveCoding = this.enableLiveCoding;
     Process.prototype.enableHyperOps = this.enableHyperOps;
+};
+
+Scene.prototype.updateTrash = function () {
+    this.trash = this.trash.filter(sprite => sprite.isCorpse);
 };
