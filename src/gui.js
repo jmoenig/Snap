@@ -227,7 +227,12 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.source = null;
     this.serializer = new SnapSerializer();
 
-    this.scene = new Scene();
+    // scenes
+    this.scenes = [new Scene()];
+    this.scene = this.scenes[0];
+    this.isAddingScenes = false; // to be factored out
+
+    // editor
     this.globalVariables = this.scene.globalVariables;
     this.currentSprite = this.scene.addDefaultSprite();
     this.sprites = new List([this.currentSprite]);
@@ -3466,6 +3471,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to support\nnative JavaScript functions'
     );
     */
+    addPreference(
+        'Add scenes',
+        () => this.isAddingScenes = !this.isAddingScenes,
+        this.isAddingScenes,
+        'uncheck to replace the current project,\nwith a new one',
+        'check to add other projects,\nto this one',
+        true
+    );
     if (isRetinaSupported()) {
         addPreference(
             'Retina display support',
@@ -3863,6 +3876,9 @@ IDE_Morph.prototype.projectMenu = function () {
         backup = this.availableBackup(shiftClicked);
 
     menu = new MenuMorph(this);
+    if (this.scenes.length > 1) {
+        menu.addItem('Scenes...', 'scenesMenu');
+    }
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
     menu.addPair('New', 'createNewProject', '^N');
@@ -4524,6 +4540,28 @@ IDE_Morph.prototype.aboutSnap = function () {
     dlg.fixLayout();
 };
 
+IDE_Morph.prototype.scenesMenu = function () {
+    var menu = new MenuMorph(scn => this.switchToScene(scn), null, this),
+        world = this.world(),
+        pos = this.controlBar.projectButton.bottomLeft(),
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy();
+
+    empty.render = nop;
+    this.scenes.forEach(scn =>
+        menu.addItem(
+            [
+                this.scene === scn ? tick : empty,
+                scn.name
+            ],
+            scn
+        )
+    );
+    menu.popup(world, pos);
+};
 
 IDE_Morph.prototype.editProjectNotes = function () {
     var dialog = new DialogBoxMorph().withKey('projectNotes'),
@@ -4586,7 +4624,7 @@ IDE_Morph.prototype.newProject = function () {
     if (location.hash.substr(0, 6) !== '#lang:') {
         location.hash = '';
     }
-    this.switchToScene(scene);
+    this.openScene(scene);
 };
 
 IDE_Morph.prototype.save = function () {
@@ -5062,14 +5100,14 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.switchToScene(
+            this.openScene(
                 this.serializer.load(str, this)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.switchToScene(
+        this.openScene(
             this.serializer.load(str, this)
         );
     }
@@ -5095,7 +5133,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         try {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
-            this.switchToScene(
+            this.openScene(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
                     this,
@@ -5108,7 +5146,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     } else {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
-        this.switchToScene(
+        this.openScene(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
                 this,
@@ -5304,6 +5342,14 @@ IDE_Morph.prototype.openProject = function (name) {
         this.openProjectString(str);
         this.setURL('#open:' + str);
     }
+};
+
+IDE_Morph.prototype.openScene = function (scene) {
+    if (!this.isAddingScenes) {
+        this.scenes = [];
+    }
+    this.scenes.push(scene);
+    this.switchToScene(scene);
 };
 
 IDE_Morph.prototype.switchToScene = function (scene) {
