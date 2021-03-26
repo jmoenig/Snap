@@ -278,13 +278,14 @@ SnapDriver.prototype.moveToRole = function(name) {
     }
 };
 
-SnapDriver.prototype.login = async function(name, password='password') {
+SnapDriver.prototype.login = async function(name, password='password', opts) {
     const btn = this.ide().controlBar.cloudButton;
     this.click(btn);
 
     let dropdown = await this.expect(
         () => this.dialog(),
         new Error('Cloud menu never appeared'),
+        opts
     );
     const logoutBtn = dropdown.children.find(item => item.action === 'logout');
     const isLoggedIn = !!logoutBtn;
@@ -293,7 +294,8 @@ SnapDriver.prototype.login = async function(name, password='password') {
         this.click(logoutBtn);
         await this.expect(
             () => this.isShowingDialogTitle(title => title.includes('disconnected')),
-            `Did not see logout message`
+            `Did not see logout message`,
+            opts
         );
     }
 
@@ -303,6 +305,7 @@ SnapDriver.prototype.login = async function(name, password='password') {
     dropdown = await this.expect(
         () => this.dialog(),
         new Error('Cloud menu never appeared'),
+        opts
     );
     const loginBtn = dropdown.children.find(item => item.action === 'initializeCloud');
     this.click(loginBtn);
@@ -315,7 +318,8 @@ SnapDriver.prototype.login = async function(name, password='password') {
     this.dialog().ok();
     await this.expect(
         () => !!this.isShowingDialogTitle(title => title.includes('Logged in')),
-        `Did not see connected message`
+        `Did not see connected message`,
+        opts
     );
 };
 
