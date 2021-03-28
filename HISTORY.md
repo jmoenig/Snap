@@ -2,10 +2,13 @@
 
 ## in development:
 * **Notable Fixes:**
-    * fixed DEAL in the APL library, thanks, Brian
+    * fixed DEAL in the APL library, thanks, Brian!
+    * fixed a resizing edge case bug for the stage prompter (ASK command)
 
 ### 2021-03-28
 * new dev version
+* fixed DEAL in the APL library, thanks, Brian!
+* objects: fixed a resizing edge case bug for the stage prompter (ASK command)
 
 ## 6.7.3
 * **Notable Changes:**
