@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed DEAL in the APL library, thanks, Brian
 
 ### 2021-03-28
 * new dev version
