@@ -4,6 +4,7 @@
 
 ### 2021-03-30
 * gui: added documentation
+* gui: added SceneIconMorph and SceneAlbumMorph prototypes 
 
 ### 2021-03-25
 * gui, scenes: sceneified trash

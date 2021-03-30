@@ -46,6 +46,8 @@
         WardrobeMorph
         SoundIconMorph
         JukeboxMorph
+        SceneIconMorph
+        SceneAlbumMorph
         StageHandleMorph
         PaletteHandleMorph
         CamSnapshotDialogMorph
@@ -94,6 +96,8 @@ var TurtleIconMorph;
 var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
+var SceneIconMorph;
+var SceneAlbumMorph;
 var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
@@ -10027,6 +10031,316 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.shadowAttribute('sounds');
     this.sprite.sounds.add(costume, idx + 1);
     this.updateList();
+};
+
+// SceneIconMorph ////////////////////////////////////////////////////
+
+/*
+    I am a selectable element in a SceneAlbum, keeping
+    a self-updating thumbnail of the scene I'm respresenting, and a
+    self-updating label of the scene's name (in case it is changed
+    elsewhere)
+*/
+
+// SceneIconMorph inherits from ToggleButtonMorph (Widgets)
+// ... and copies methods from SpriteIconMorph
+
+SceneIconMorph.prototype = new ToggleButtonMorph();
+SceneIconMorph.prototype.constructor = SceneIconMorph;
+SceneIconMorph.uber = ToggleButtonMorph.prototype;
+
+// SceneIconMorph settings
+
+SceneIconMorph.prototype.thumbSize = new Point(80, 60);
+SceneIconMorph.prototype.labelShadowOffset = null;
+SceneIconMorph.prototype.labelShadowColor = null;
+SceneIconMorph.prototype.labelColor = WHITE;
+SceneIconMorph.prototype.fontSize = 9;
+
+// SceneIconMorph instance creation:
+
+function SceneIconMorph(aScene) {
+    this.init(aScene);
+}
+
+SceneIconMorph.prototype.init = function (aScene) {
+    var colors, action, query;
+
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
+
+    action = () => {
+        // make my scene the current one
+        var ide = this.parentThatIsA(IDE_Morph),
+            album = this.parentThatIsA(SceneAlbumMorph);
+
+        if (ide) {
+            ide.switchToScene(this.object);
+        }
+        if (album) {
+            album.updateSelection();
+        }
+    };
+
+    query = () => {
+        // answer true if my scene is the current one
+        var ide = this.parentThatIsA(IDE_Morph);
+
+        if (ide) {
+            return ide.scene === this.object;
+        }
+        return false;
+    };
+
+    // additional properties:
+    this.object = aScene || new Scene(); // mandatory, actually
+    this.version = this.object.version;
+    this.thumbnail = null;
+
+    // initialize inherited properties:
+    SceneIconMorph.uber.init.call(
+        this,
+        colors, // color overrides, <array>: [normal, highlight, pressed]
+        null, // target - not needed here
+        action, // a toggle function
+        this.object.name, // label string
+        query, // predicate/selector
+        null, // environment
+        null // hint
+    );
+
+    // override defaults and build additional components
+    this.isDraggable = true;
+    this.createThumbnail();
+    this.padding = 2;
+    this.corner = 8;
+    this.fixLayout();
+    this.fps = 1;
+};
+
+SceneIconMorph.prototype.createThumbnail =
+    SpriteIconMorph.prototype.createThumbnail; // +++
+/*
+    if (this.thumbnail) {
+        this.thumbnail.destroy();
+    }
+
+    this.thumbnail = new Morph();
+    this.thumbnail.isCachingImage = true;
+    this.thumbnail.bounds.setExtent(this.thumbSize);
+    if (this.object instanceof SpriteMorph) { // support nested sprites
+        this.thumbnail.cachedImage = this.object.fullThumbnail(
+            this.thumbSize,
+            this.thumbnail.cachedImage
+        );
+        this.add(this.thumbnail);
+        this.createRotationButton();
+    } else {
+        this.thumbnail.cachedImage = this.object.thumbnail(
+            this.thumbSize,
+            this.thumbnail.cachedImage
+        );
+        this.add(this.thumbnail);
+    }
+*/
+
+SceneIconMorph.prototype.createLabel
+    = SpriteIconMorph.prototype.createLabel;
+
+// SceneIconMorph stepping
+
+SceneIconMorph.prototype.step
+    = SpriteIconMorph.prototype.step;
+
+// SceneIconMorph layout
+
+SceneIconMorph.prototype.fixLayout
+    = SpriteIconMorph.prototype.fixLayout;
+
+// SceneIconMorph menu
+
+SceneIconMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this),
+        ide = this.parentThatIsA(IDE_Morph);
+    if (!(this.object instanceof Scene)) {return null; }
+    menu.addItem("rename", "renameScene");
+    if (ide.scenes.length > 1) {
+        menu.addItem("delete", "removeScene");
+    }
+    // menu.addItem("export", "exportScene");
+    return menu;
+};
+
+SceneIconMorph.prototype.renameScene = function () {
+    var scene = this.object,
+        album = this.parentThatIsA(SceneAlbumMorph),
+        ide = this.parentThatIsA(IDE_Morph);
+    new DialogBoxMorph(
+        null,
+        answer => {
+            if (answer && (answer !== scene.name)) {
+                scene.name = album.scene.newSceneName(
+                    answer,
+                    scene
+                );
+                scene.version = Date.now();
+                ide.recordUnsavedChanges();
+            }
+        }
+    ).prompt(
+        'rename scene',
+        scene.name,
+        this.world()
+    );
+};
+
+SceneIconMorph.prototype.removeScene = function () {
+    var album = this.parentThatIsA(SceneAlbumMorph),
+        idx = this.parent.children.indexOf(this),
+        off = 0, // 2,
+        ide = this.parentThatIsA(IDE_Morph);
+    album.removeSceneAt(idx - off); // ignore buttons
+    if (ide.scene === this.object) {
+        ide.switchToScene(ide.scenes[0]);
+    }
+};
+
+SceneIconMorph.prototype.exportScene = function () {
+    // under construction
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+};
+
+// SceneIconMorph drawing
+
+SceneIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
+
+// SceneIconMorph drag & drop
+
+SceneIconMorph.prototype.rootForGrab = function () {
+    // +++ to do: make sure scene icons can only be grabbed if there are
+    // more than 1
+    return this;
+};
+
+SceneIconMorph.prototype.prepareToBeGrabbed = function () {
+    this.mouseClickLeft(); // select me
+    this.removeScene();
+};
+
+// SceneAlbumMorph ///////////////////////////////////////////////////////
+
+// I am a watcher on a project's scenes list // +++ to do: make scenes a list
+
+// SceneAlbumMorph inherits from ScrollFrameMorph
+
+SceneAlbumMorph.prototype = new ScrollFrameMorph();
+SceneAlbumMorph.prototype.constructor = SceneAlbumMorph;
+SceneAlbumMorph.uber = ScrollFrameMorph.prototype;
+
+// SceneAlbumMorph instance creation:
+
+function SceneAlbumMorph(anIDE, sliderColor) {
+    this.init(anIDE, sliderColor);
+}
+
+SceneAlbumMorph.prototype.init = function (anIDE, sliderColor) {
+    // additional properties
+    this.ide = anIDE;
+    this.scene = anIDE.scene;
+    this.version = null;
+
+    // initialize inherited properties
+    SceneAlbumMorph.uber.init.call(this, null, null, sliderColor);
+
+    // configure inherited properties
+    this.fps = 2;
+    this.updateList();
+    this.updateSelection();
+};
+
+// SceneAlbumMorph updating
+
+SceneAlbumMorph.prototype.updateList = function () {
+    var x = this.left() + 5,
+        y = this.top() + 5,
+        padding = 4,
+        oldPos = this.contents.position(),
+        icon;
+
+    this.changed();
+
+    this.contents.destroy();
+    this.contents = new FrameMorph(this);
+    this.contents.acceptsDrops = false;
+    this.contents.reactToDropOf = (icon) => {
+        this.reactToDropOf(icon);
+    };
+    this.addBack(this.contents);
+
+    this.ide.scenes.asArray().forEach(scene => {
+        icon = new SceneIconMorph(scene);
+        icon.setPosition(new Point(x, y));
+        this.addContents(icon);
+        y = icon.bottom() + padding;
+    });
+    this.version = this.ide.scenes.lastChanged;
+
+    this.contents.setPosition(oldPos);
+    this.adjustScrollBars();
+    this.changed();
+
+    this.updateSelection();
+};
+
+SceneAlbumMorph.prototype.updateSelection = function () {
+    this.contents.children.forEach(function (morph) {
+        if (morph.refresh) {morph.refresh(); }
+    });
+    this.scene = this.ide.scene;
+};
+
+// SceneAlbumMorph stepping
+
+SceneAlbumMorph.prototype.step = function () {
+    if (this.version !== this.ide.scenes.lastChanged) {
+        this.updateList();
+    }
+    if (this.scene !== this.ide.scene) {
+        this.updateSelection();
+    }
+};
+
+// Wardrobe ops
+
+SceneAlbumMorph.prototype.removeSceneAt = function (idx) {
+    this.ide.scenes.remove(idx);
+    this.updateList();
+};
+
+// SceneAlbumMorph drag & drop
+
+SceneAlbumMorph.prototype.wantsDropOf = function (morph) {
+    return morph instanceof SceneIconMorph;
+};
+
+SceneAlbumMorph.prototype.reactToDropOf = function (icon) {
+    var idx = 0,
+        scene = icon.object,
+        top = icon.top();
+    icon.destroy();
+    this.contents.children.forEach(item => {
+        if (item instanceof SceneIconMorph && item.top() < top - 4) {
+            idx += 1;
+        }
+    });
+    this.ide.scenes.add(scene, idx + 1);
+    this.updateList();
+    icon.mouseClickLeft(); // select
 };
 
 // StageHandleMorph ////////////////////////////////////////////////////////

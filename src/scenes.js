@@ -49,7 +49,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process*/
 
-modules.scenes = '2021-March-25';
+modules.scenes = '2021-March-30';
 
 // Scene /////////////////////////////////////////////////////////
 
@@ -87,6 +87,9 @@ function Scene(aStageMorph) {
 
     // for undeleting sprites - do not persist
     this.trash = [];
+
+    // for observer optimization - do not persist
+    this.version = Date.now();
 }
 
 Scene.prototype.addDefaultSprite = function () {
