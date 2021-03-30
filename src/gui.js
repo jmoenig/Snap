@@ -39,10 +39,13 @@
 
         IDE_Morph
         ProjectDialogMorph
+        LibraryImportDialogMorph
         SpriteIconMorph
         TurtleIconMorph
         CostumeIconMorph
         WardrobeMorph
+        SoundIconMorph
+        JukeboxMorph
         StageHandleMorph
         PaletteHandleMorph
         CamSnapshotDialogMorph
@@ -78,7 +81,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-25';
+modules.gui = '2021-March-30';
 
 // Declarations
 

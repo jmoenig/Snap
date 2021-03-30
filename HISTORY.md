@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-03-30
+* gui: added documentation
+
 ### 2021-03-25
 * gui, scenes: sceneified trash
 * gui: first "live" multi-scene experiment
