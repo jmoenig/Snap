@@ -235,8 +235,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.serializer = new SnapSerializer();
 
     // scenes
-    this.scenes = [new Scene()];
-    this.scene = this.scenes[0];
+    this.scenes = new List([new Scene()]);
+    this.scene = this.scenes.at(1);
     this.isAddingScenes = false; // to be factored out
 
     // editor
@@ -3883,7 +3883,7 @@ IDE_Morph.prototype.projectMenu = function () {
         backup = this.availableBackup(shiftClicked);
 
     menu = new MenuMorph(this);
-    if (this.scenes.length > 1) {
+    if (this.scenes.length() > 1) {
         menu.addItem('Scenes...', 'scenesMenu');
     }
     menu.addItem('Project notes...', 'editProjectNotes');
@@ -4558,7 +4558,7 @@ IDE_Morph.prototype.scenesMenu = function () {
         empty = tick.fullCopy();
 
     empty.render = nop;
-    this.scenes.forEach(scn =>
+    this.scenes.asArray().forEach(scn =>
         menu.addItem(
             [
                 this.scene === scn ? tick : empty,
@@ -5353,9 +5353,9 @@ IDE_Morph.prototype.openProject = function (name) {
 
 IDE_Morph.prototype.openScene = function (scene) {
     if (!this.isAddingScenes) {
-        this.scenes = [];
+        this.scenes = new List();
     }
-    this.scenes.push(scene);
+    this.scenes.add(scene);
     this.switchToScene(scene);
 };
 
@@ -10167,7 +10167,7 @@ SceneIconMorph.prototype.userMenu = function () {
         ide = this.parentThatIsA(IDE_Morph);
     if (!(this.object instanceof Scene)) {return null; }
     menu.addItem("rename", "renameScene");
-    if (ide.scenes.length > 1) {
+    if (ide.scenes.length() > 1) {
         menu.addItem("delete", "removeScene");
     }
     // menu.addItem("export", "exportScene");
@@ -10204,7 +10204,7 @@ SceneIconMorph.prototype.removeScene = function () {
         ide = this.parentThatIsA(IDE_Morph);
     album.removeSceneAt(idx - off); // ignore buttons
     if (ide.scene === this.object) {
-        ide.switchToScene(ide.scenes[0]);
+        ide.switchToScene(ide.scenes.at(1));
     }
 };
 
