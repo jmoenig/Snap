@@ -10121,9 +10121,7 @@ SceneIconMorph.prototype.init = function (aScene) {
     this.fps = 1;
 };
 
-SceneIconMorph.prototype.createThumbnail =
-    SpriteIconMorph.prototype.createThumbnail; // +++
-/*
+SceneIconMorph.prototype.createThumbnail = function () {
     if (this.thumbnail) {
         this.thumbnail.destroy();
     }
@@ -10131,21 +10129,12 @@ SceneIconMorph.prototype.createThumbnail =
     this.thumbnail = new Morph();
     this.thumbnail.isCachingImage = true;
     this.thumbnail.bounds.setExtent(this.thumbSize);
-    if (this.object instanceof SpriteMorph) { // support nested sprites
-        this.thumbnail.cachedImage = this.object.fullThumbnail(
-            this.thumbSize,
-            this.thumbnail.cachedImage
-        );
-        this.add(this.thumbnail);
-        this.createRotationButton();
-    } else {
-        this.thumbnail.cachedImage = this.object.thumbnail(
-            this.thumbSize,
-            this.thumbnail.cachedImage
-        );
-        this.add(this.thumbnail);
-    }
-*/
+    this.thumbnail.cachedImage = this.object.stage.thumbnail(
+        this.thumbSize,
+        this.thumbnail.cachedImage
+    );
+    this.add(this.thumbnail);
+};
 
 SceneIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
@@ -10234,7 +10223,7 @@ SceneIconMorph.prototype.prepareToBeGrabbed = function () {
 
 // SceneAlbumMorph ///////////////////////////////////////////////////////
 
-// I am a watcher on a project's scenes list // +++ to do: make scenes a list
+// I am a watcher on a project's scenes list
 
 // SceneAlbumMorph inherits from ScrollFrameMorph
 

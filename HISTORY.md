@@ -6,6 +6,7 @@
 * gui: added documentation
 * gui: added SceneIconMorph and SceneAlbumMorph prototypes 
 * gui: turned scenes into an observable list
+* gui: added scene icon thumbnails
 
 ### 2021-03-25
 * gui, scenes: sceneified trash
