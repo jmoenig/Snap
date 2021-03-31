@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-30';
+modules.gui = '2021-March-31';
 
 // Declarations
 
@@ -151,6 +151,8 @@ IDE_Morph.prototype.setDefaultDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
 
     SyntaxElementMorph.prototype.contrast = 65;
     ScriptsMorph.prototype.feedbackColor = WHITE;
@@ -189,6 +191,8 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SoundIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
     SyntaxElementMorph.prototype.contrast = 25;
@@ -10051,7 +10055,7 @@ SceneIconMorph.uber = ToggleButtonMorph.prototype;
 
 // SceneIconMorph settings
 
-SceneIconMorph.prototype.thumbSize = new Point(80, 60);
+SceneIconMorph.prototype.thumbSize = new Point(40, 40); // (80, 60);
 SceneIconMorph.prototype.labelShadowOffset = null;
 SceneIconMorph.prototype.labelShadowColor = null;
 SceneIconMorph.prototype.labelColor = WHITE;
