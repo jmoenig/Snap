@@ -1920,7 +1920,8 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.add(frame);
 
     this.corral.fixLayout = function () {
-        this.stageIcon.setCenter(this.center());
+        // this.stageIcon.setCenter(this.center()); // version before scenes
+        this.stageIcon.setTop(this.top());
         this.stageIcon.setLeft(this.left() + padding);
         this.frame.setLeft(this.stageIcon.right() + padding);
         this.frame.setExtent(new Point(

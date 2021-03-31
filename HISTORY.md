@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2021-03-31
+* gui: tweaked scene icon settings
+* gui: moved stage icon to the top of the corral
+
 ### 2021-03-30
 * gui: added documentation
 * gui: added SceneIconMorph and SceneAlbumMorph prototypes 
