@@ -1919,10 +1919,22 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.frame = frame;
     this.corral.add(frame);
 
+    // scenes +++
+    this.corral.album = new SceneAlbumMorph(this, this.sliderColor);
+    this.corral.album.color = this.groupColor; // +++ this.frameColor;
+    this.corral.add(this.corral.album);
+
     this.corral.fixLayout = function () {
         // this.stageIcon.setCenter(this.center()); // version before scenes
         this.stageIcon.setTop(this.top());
         this.stageIcon.setLeft(this.left() + padding);
+
+        // scenes +++
+        this.album.setLeft(this.left());
+        this.album.setTop(this.stageIcon.bottom() + padding);
+        this.album.setWidth(this.stageIcon.width() + padding * 2);
+        this.album.setHeight(this.height() - this.stageIcon.height() - padding);
+
         this.frame.setLeft(this.stageIcon.right() + padding);
         this.frame.setExtent(new Point(
             this.right() - this.frame.left(),
@@ -10056,7 +10068,7 @@ SceneIconMorph.uber = ToggleButtonMorph.prototype;
 
 // SceneIconMorph settings
 
-SceneIconMorph.prototype.thumbSize = new Point(40, 40); // (80, 60);
+SceneIconMorph.prototype.thumbSize = new Point(40, 30); // +++ (40, 40), (80, 60);
 SceneIconMorph.prototype.labelShadowOffset = null;
 SceneIconMorph.prototype.labelShadowColor = null;
 SceneIconMorph.prototype.labelColor = WHITE;
@@ -10093,7 +10105,6 @@ SceneIconMorph.prototype.init = function (aScene) {
     query = () => {
         // answer true if my scene is the current one
         var ide = this.parentThatIsA(IDE_Morph);
-
         if (ide) {
             return ide.scene === this.object;
         }
@@ -10111,7 +10122,7 @@ SceneIconMorph.prototype.init = function (aScene) {
         colors, // color overrides, <array>: [normal, highlight, pressed]
         null, // target - not needed here
         action, // a toggle function
-        this.object.name, // label string
+        this.object.name || localize('untitled'), // label string // +++
         query, // predicate/selector
         null, // environment
         null // hint
@@ -10141,8 +10152,37 @@ SceneIconMorph.prototype.createThumbnail = function () {
     this.add(this.thumbnail);
 };
 
+/* +++
 SceneIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
+*/
+
+SceneIconMorph.prototype.createLabel = function () { // +++
+    var txt;
+
+    if (this.label) {
+        this.label.destroy();
+    }
+    txt = new StringMorph(
+        this.object.name || localize('untitled'),
+        this.fontSize,
+        this.fontStyle,
+        false, // true
+        false,
+        false,
+        this.labelShadowOffset,
+        this.labelShadowColor,
+        this.labelColor
+    );
+
+    this.label = new FrameMorph();
+    this.label.acceptsDrops = false;
+    this.label.alpha = 0;
+    this.label.setExtent(txt.extent());
+    txt.setPosition(this.label.position());
+    this.label.add(txt);
+    this.add(this.label);
+};
 
 // SceneIconMorph stepping
 
