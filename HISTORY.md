@@ -4,6 +4,7 @@
 
 ### 2021-04-01
 * gui: made scene icons selectable
+* gui: made scene icons observe the scene's stage versions
 
 ### 2021-03-31
 * gui: tweaked scene icon settings

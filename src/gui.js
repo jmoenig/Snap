@@ -10109,7 +10109,7 @@ SceneIconMorph.prototype.init = function (aScene) {
 
     // additional properties:
     this.object = aScene || new Scene(); // mandatory, actually
-    this.version = this.object.version;
+    this.version = this.object.stage.version;
     this.thumbnail = null;
 
     // initialize inherited properties:
@@ -10182,8 +10182,15 @@ SceneIconMorph.prototype.createLabel = function () { // +++
 
 // SceneIconMorph stepping
 
-SceneIconMorph.prototype.step
-    = SpriteIconMorph.prototype.step;
+SceneIconMorph.prototype.step = function () {
+    if (this.version !== this.object.stage.version) {
+        this.createThumbnail();
+        this.createLabel();
+        this.fixLayout();
+        this.version = this.object.stage.version;
+        this.refresh();
+    }
+};
 
 // SceneIconMorph layout
 
@@ -10216,7 +10223,7 @@ SceneIconMorph.prototype.renameScene = function () {
                     answer,
                     scene
                 );
-                scene.version = Date.now();
+                scene.stage.version = Date.now(); // +++ also do this in other places
                 ide.recordUnsavedChanges();
             }
         }

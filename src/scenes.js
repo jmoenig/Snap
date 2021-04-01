@@ -87,9 +87,6 @@ function Scene(aStageMorph) {
 
     // for undeleting sprites - do not persist
     this.trash = [];
-
-    // for observer optimization - do not persist
-    this.version = Date.now();
 }
 
 Scene.prototype.addDefaultSprite = function () {
