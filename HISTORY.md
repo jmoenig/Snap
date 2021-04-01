@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-04-01
+* gui: made scene icons selectable
+
 ### 2021-03-31
 * gui: tweaked scene icon settings
 * gui: moved stage icon to the top of the corral

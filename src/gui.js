@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-March-31';
+modules.gui = '2021-April-1';
 
 // Declarations
 
@@ -10093,20 +10093,16 @@ SceneIconMorph.prototype.init = function (aScene) {
         // make my scene the current one
         var ide = this.parentThatIsA(IDE_Morph),
             album = this.parentThatIsA(SceneAlbumMorph);
-
-        if (ide) {
-            ide.switchToScene(this.object);
-        }
-        if (album) {
-            album.updateSelection();
-        }
+        album.scene = this.object;
+        ide.switchToScene(this.object);
+        album.updateSelection();
     };
 
     query = () => {
         // answer true if my scene is the current one
-        var ide = this.parentThatIsA(IDE_Morph);
-        if (ide) {
-            return ide.scene === this.object;
+        var album = this.parentThatIsA(SceneAlbumMorph);
+        if (album) {
+            return album.scene === this.object;
         }
         return false;
     };
