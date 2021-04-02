@@ -1,6 +1,19 @@
 # Snap! (BYOB) History
 
-## in development:
+## in development for v7:
+* **New Features:**
+    * Scenes
+* **Notable Fixes:**
+    * made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-04-01
+* gui: made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-04-01
+* gui: made scene icons selectable
+* gui: made scene icons observe the scene's stage versions
+
+## 6.7.4 dev:
 * **Notable Fixes:**
     * fixed DEAL in the APL library, thanks, Brian!
     * fixed a resizing edge case bug for the stage prompter (ASK command)
@@ -9,10 +22,6 @@
 * new dev version
 * fixed DEAL in the APL library, thanks, Brian!
 * objects: fixed a resizing edge case bug for the stage prompter (ASK command)
-
-### 2021-04-01
-* gui: made scene icons selectable
-* gui: made scene icons observe the scene's stage versions
 
 ### 2021-03-31
 * gui: tweaked scene icon settings

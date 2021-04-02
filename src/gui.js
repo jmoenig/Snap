@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-1';
+modules.gui = '2021-April-2';
 
 // Declarations
 
@@ -9469,7 +9469,7 @@ WardrobeMorph.prototype.init = function (aSprite, sliderColor) {
     WardrobeMorph.uber.init.call(this, null, null, sliderColor);
 
     // configure inherited properties
-    this.fps = 2;
+    // this.fps = 2; // commented out to make scrollbars more responsive
     this.updateList();
 };
 
@@ -9935,7 +9935,7 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
 
     // configure inherited properties
     this.acceptsDrops = false;
-    this.fps = 2;
+    // this.fps = 2; // commented out to make scrollbars more responsive
     this.updateList();
 };
 
@@ -10295,7 +10295,7 @@ SceneAlbumMorph.prototype.init = function (anIDE, sliderColor) {
     SceneAlbumMorph.uber.init.call(this, null, null, sliderColor);
 
     // configure inherited properties
-    this.fps = 2;
+    // this.fps = 2; // commented out to make scrollbars more responsive
     this.updateList();
     this.updateSelection();
 };
