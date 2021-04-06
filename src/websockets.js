@@ -590,7 +590,7 @@ class MessageHandlerQueue {
     }
 
     isHandlerIdle() {
-        return !this.stage.threads.findProcess(this.handler);
+        return !this.stage.threads.findProcess(this.handler, this.receiver);
     }
 
     getExpectedMsgType() {
@@ -606,3 +606,5 @@ class MessageHandlerQueue {
         return nextMsg;
     }
 }
+
+WebSocketManager.MessageHandlerQueue = MessageHandlerQueue;
