@@ -20,10 +20,10 @@ describe('save', function() {
             }
 
             describe('basic tests', function() {
-                beforeEach(() => {
-                    return driver.reset()
-                        .then(() => driver.addBlock('doIfElse'))
-                        .then(() => driver.selectCategory('control'));
+                beforeEach(async () => {
+                    await driver.reset();
+                    await driver.addBlock('doIfElse');
+                    await driver.selectCategory('control');
                 });
 
                 it('should be able to save and reload the project', async function() {
@@ -212,16 +212,16 @@ describe('save', function() {
             describe('setProjectName', function() {
                 before(() => driver.reset());
 
-                it('should not allow name collisions', function() {
+                it('should not allow name collisions', async function() {
                     const name = `collision-test-${Date.now()}`;
-                    return driver.saveProjectAs(name)
-                        .then(() => driver.reset())
-                        .then(() => driver.setProjectNameNoConfirm(name))
-                        .then(() => driver.expect(
-                            () => driver.ide().room.name.startsWith(name),
-                            `Name did not update to a variant of ${name}`
-                        ))
-                        .then(() => expect(driver.ide().room.name).toNotBe(name));
+                    await driver.saveProjectAs(name);
+                    await driver.reset();
+                    await driver.setProjectNameNoConfirm(name);
+                    await driver.expect(
+                        () => driver.ide().room.name.startsWith(name),
+                        `Name did not update to a variant of ${name}`
+                    );
+                    await expect(driver.ide().room.name).toNotBe(name);
                 });
             });
         });
