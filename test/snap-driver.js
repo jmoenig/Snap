@@ -243,7 +243,7 @@ SnapDriver.prototype.expect = async function(fn, msg, opts={}) {
 };
 
 // netsblox additions
-SnapDriver.prototype.newRole = function(name) {
+SnapDriver.prototype.newRole = async function(name) {
     this.selectTab('room');
 
     // Click on the plus icon
@@ -252,11 +252,6 @@ SnapDriver.prototype.newRole = function(name) {
     this.keys(name);
     let dialog = this.dialog();
     dialog.ok();
-};
-
-// drives the UI to create a new role and waits for it to show up
-SnapDriver.prototype.newRoleNWait = async function(name) {
-    this.newRole(name);
     await this.expect(() => this.ide().room.getRole(name), `new role didn't show up.`);
 };
 

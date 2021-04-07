@@ -270,7 +270,7 @@ describe('room', function() {
 
         before(async function() {
             // create a new role
-            await driver.newRoleNWait(newRoleName);
+            await driver.newRole(newRoleName);
 
             // delete the newly created role
             const role = driver.ide().room.getRole(newRoleName);
