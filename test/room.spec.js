@@ -35,6 +35,67 @@ describe('room', function() {
         });
     });
 
+    describe('debugger', function() {
+        const messages = ['hi', 'how', 'are', 'you'];
+        before(async () => {
+            await driver.reset();
+            await driver.newRole('OtherRole');
+            await driver.selectTab('room');
+            const roomEditor = driver.ide().spriteEditor;
+
+            const toggleTraceBtn = () => roomEditor.toolBar.children
+                .find(c => c.hint.includes('network trace'));
+
+            const replayerBtn = () => roomEditor.toolBar.children
+                .find(c => c.hint.includes('View last network trace'));
+
+            driver.click(toggleTraceBtn());
+            const {projectName, room} = driver.ide();
+            const srcId = [projectName, room.name, room.ownerId].join('@');
+            await messages.reduce(
+                (lastSend, content) => lastSend.then(async () => {
+                    await driver.sleep(50);
+                    driver.ide().sockets.sendMessage({
+                        type: 'message',
+                        dstId: 'OtherRole',
+                        srcId,
+                        msgType: 'message',
+                        content: {msg: content},
+                    });
+                }),
+                Promise.resolve()
+            );
+            driver.click(toggleTraceBtn());
+            driver.click(await driver.expect(replayerBtn));
+        });
+
+        it('should show/update message contents on click', async function() {
+            const {stepForwardButton} = driver.ide().spriteEditor.replayControls;
+            driver.click(stepForwardButton);
+            const msgMorph = await driver.expect(
+                () => driver.ide().room.displayedMsgMorphs[0],
+                'No messages displayed'
+            );
+            driver.click(msgMorph.message);
+            assert(
+                driver.dialog().labelString.startsWith('Contents of'),
+                'Message inspector dialog not shown'
+            );
+            const label = driver.dialog().label;
+            const titlePosition = label.position();
+            console.log(titlePosition);
+            driver.click(stepForwardButton);
+            await driver.expect(
+                () => driver.dialog().label !== label,
+                'Message inspector not updated'
+            );
+            assert(
+                driver.dialog().label.position().eq(titlePosition),
+                'Message inspector dialog not updated correctly'
+            );
+        });
+    });
+
     describe('new', function() {
         const name = 'newRoleName';
         let initialRoleName = '';

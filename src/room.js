@@ -1230,6 +1230,7 @@ MessageInspectorMorph.prototype.setMessage = function (message) {
     this.createLabel();
 
     this.addBody(new TableFrameMorph(this.tableView, true));
+    this.fixLayout();
     this.rerender();
 };
 
