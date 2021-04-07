@@ -44,9 +44,11 @@ SnapDriver.prototype.reset = async function() {
     dialogs.forEach(dialog => dialog.destroy());
 
     this.ide().exitReplayMode();
+    const {SnapCloud} = this.globals();
+    const projectId = SnapCloud.projectId;
     await this.ide().newProject();
     await this.expect(
-        () => this.ide().room.version !== -1,
+        () => this.ide().room.version !== -1 && SnapCloud.projectId !== projectId,
         'No room state received'
     );
 };
