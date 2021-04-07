@@ -10,6 +10,23 @@ describe('ide', function() {
         return driver.reset();
     });
 
+    describe('login', function() {
+        it('should show error on incorrect username/password', async function() {
+            let loginFailed = false;
+            try {
+                await driver.login('test', 'ThisPasswordIsIncorrect', {maxWait: 1800});
+            } catch (err) {
+                const dialog = driver.dialog();
+                assert(
+                    dialog.body.text.toLowerCase().includes('incorrect password'),
+                    'Incorrect password dialog not shown'
+                );
+                loginFailed = true;
+            }
+            assert(loginFailed, 'Login should fail with incorrect password');
+        });
+    });
+
     describe('about', function() {
         it('should show about message', function() {
             const len = driver.dialogs().length;

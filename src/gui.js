@@ -6365,7 +6365,7 @@ IDE_Morph.prototype.initializeCloudWithSnap = function () {
 
                 this.showMessage(msg, 2);
             } catch (err) {
-                this.cloudError(err.message);
+                this.cloudError()(err.message);
             }
         }
     ).withKey('cloudlogin').promptCredentials(
@@ -6402,7 +6402,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 let msg = localize('Logged in as ') + username;
                 this.showMessage(msg, 2);
             } catch (err) {
-                this.cloudError(err.message);
+                this.cloudError()(err.message);
             }
         }
     ).withKey('cloudlogin').promptCredentials(
