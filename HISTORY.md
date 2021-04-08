@@ -6,6 +6,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-04-08
+* gui: scroll selected scene icon into view
+
 ### 2021-04-01
 * gui: made scrollbars in the wardrobe and jukebox more responsive
 

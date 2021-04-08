@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-2';
+modules.gui = '2021-April-8';
 
 // Declarations
 
@@ -1878,9 +1878,10 @@ IDE_Morph.prototype.createCorralBar = function () {
     };
 };
 
-IDE_Morph.prototype.createCorral = function () {
+IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     // assumes the corral bar has already been created
-    var frame, padding = 5, myself = this;
+    var frame, padding = 5, myself = this,
+        album = this.corral? this.corral.album : null;
 
     this.createStageHandle();
     this.createPaletteHandle();
@@ -1920,7 +1921,8 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.add(frame);
 
     // scenes +++
-    this.corral.album = new SceneAlbumMorph(this, this.sliderColor);
+    this.corral.album = keepSceneAlbum ? album
+            : new SceneAlbumMorph(this, this.sliderColor);
     this.corral.album.color = this.groupColor; // +++ this.frameColor;
     this.corral.add(this.corral.album);
 
@@ -1988,7 +1990,7 @@ IDE_Morph.prototype.createCorral = function () {
             }
         });
         myself.sprites.add(spriteIcon.object, idx);
-        myself.createCorral();
+        myself.createCorral(true); // keep scenes
         myself.fixLayout();
     };
 };
@@ -3133,7 +3135,7 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     if (idx > 0) {
         this.sprites.remove(idx);
     }
-    this.createCorral();
+    this.createCorral(true); // keep scenes
     this.fixLayout();
     this.currentSprite = detect(
         this.stage.children,
@@ -5373,10 +5375,10 @@ IDE_Morph.prototype.openScene = function (scene) {
         this.scenes = new List();
     }
     this.scenes.add(scene);
-    this.switchToScene(scene);
+    this.switchToScene(scene, this.isAddingScenes);
 };
 
-IDE_Morph.prototype.switchToScene = function (scene) {
+IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     var sprites = [];
     if (!scene || !scene.stage) {
         return;
@@ -5398,9 +5400,15 @@ IDE_Morph.prototype.switchToScene = function (scene) {
     sprites.sort((x, y) => x.idx - y.idx);
     this.sprites = new List(sprites);
     this.stage.pauseGenericHatBlocks();
-    this.createCorral();
+    this.createCorral(!refreshAlbum); // keep scenes
     this.selectSprite(sprites[0] || this.stage);
     this.fixLayout();
+    this.corral.album.updateSelection();
+    this.corral.album.contents.children.forEach(function (morph) {
+        if (morph.state) {
+            morph.scrollIntoView();
+        }
+    });
     scene.applyGlobalSettings();
     this.hasUnsavedEdits = false;
     this.world().keyboardFocus = this.stage;
@@ -8899,7 +8907,7 @@ SpriteIconMorph.prototype.prepareToBeGrabbed = function () {
     if (ide) {
         idx = ide.sprites.asArray().indexOf(this.object);
         ide.sprites.remove(idx + 1);
-        ide.createCorral();
+        ide.createCorral(true); // keep scenes
         ide.fixLayout();
     }
 };
@@ -9591,7 +9599,9 @@ WardrobeMorph.prototype.updateList = function () {
 
 WardrobeMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }
+        if (morph.refresh) {
+            morph.refresh();
+        }
     });
     this.spriteVersion = this.sprite.version;
 };
@@ -10004,7 +10014,9 @@ JukeboxMorph.prototype.updateList = function () {
 
 JukeboxMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(morph => {
-        if (morph.refresh) {morph.refresh(); }
+        if (morph.refresh) {
+            morph.refresh();
+        }
     });
     this.spriteVersion = this.sprite.version;
 };
@@ -10095,7 +10107,6 @@ SceneIconMorph.prototype.init = function (aScene) {
             album = this.parentThatIsA(SceneAlbumMorph);
         album.scene = this.object;
         ide.switchToScene(this.object);
-        album.updateSelection();
     };
 
     query = () => {
@@ -10336,7 +10347,9 @@ SceneAlbumMorph.prototype.updateList = function () {
 
 SceneAlbumMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }
+        if (morph.refresh) {
+            morph.refresh();
+        }
     });
     this.scene = this.ide.scene;
 };
