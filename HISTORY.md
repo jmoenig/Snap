@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 6.7.4
 * **Notable Fixes:**
     * fixed DEAL in the APL library, thanks, Brian!
     * fixed a resizing edge case bug for the stage prompter (ASK command)
@@ -8,6 +10,7 @@
 
 ### 2021-04-09
 * objects fixed #2821 - "index of" block not found by search
+* prepared patch
 
 ### 2021-03-28
 * new dev version
