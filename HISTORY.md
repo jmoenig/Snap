@@ -4,6 +4,10 @@
 * **Notable Fixes:**
     * fixed DEAL in the APL library, thanks, Brian!
     * fixed a resizing edge case bug for the stage prompter (ASK command)
+    * fixed finding "index of" block by search 
+
+### 2021-04-09
+* objects fixed #2821 - "index of" block not found by search
 
 ### 2021-03-28
 * new dev version

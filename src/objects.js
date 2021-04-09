@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-March-28';
+modules.objects = '2021-April-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1348,7 +1348,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'is %l empty?'
         },
         reportListIndex: {
-            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'index of %s in %l',
