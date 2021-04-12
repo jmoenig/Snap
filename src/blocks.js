@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-February-27';
+modules.blocks = '2021-April-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -747,6 +747,11 @@ SyntaxElementMorph.prototype.labelParts = {
             'variables' : ['variables'],
             'parameters' : ['parameters']
         }
+    },
+    '%scn': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'scenesMenu'
     },
 
     // video
@@ -2455,6 +2460,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %r      - round reporter slot
     %p      - hexagonal predicate slot
     %vid    - chameleon colored rectangular drop-down for video modes
+    %scn    - chameleon colored rectangular drop-down for scene names
 
     rings:
 
@@ -9728,13 +9734,33 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
         'spectrum' : ['spectrum'],
         'resolution' : ['resolution']
     };
-    if (searching) {return {}; }
+    if (searching) {return dict; }
 
     if (this.world().currentKey === 16) { // shift
         dict['~'] = null;
         dict.modifier = ['modifier'];
         dict.output = ['output'];
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.scenesMenu = function (searching) {
+    var scenes = this.parentThatIsA(IDE_Morph).scenes,
+        dict = {};
+
+    if (!searching && scenes.length() > 1) {
+        scenes.itemsArray().forEach(scn => {
+            if (scn.name) {
+                dict[scn.name] = scn.name;
+            }
+        });
+    }
+    dict['~'] = null;
+    dict.next = ['next'];
+    dict.previous = ['previous'];
+    dict['1 '] = 1; // trailing space needed to prevent undesired sorting
+    dict.last = ['last'];
+    dict.random = ['random'];
     return dict;
 };
 

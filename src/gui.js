@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-09';
+modules.gui = '2021-April-12';
 
 // Declarations
 
@@ -10346,12 +10346,12 @@ SceneAlbumMorph.prototype.updateList = function () {
 };
 
 SceneAlbumMorph.prototype.updateSelection = function () {
+    this.scene = this.ide.scene;
     this.contents.children.forEach(function (morph) {
         if (morph.refresh) {
             morph.refresh();
         }
     });
-    this.scene = this.ide.scene;
 };
 
 // SceneAlbumMorph stepping

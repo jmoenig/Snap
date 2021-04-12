@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-April-09';
+modules.objects = '2021-April-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -425,6 +425,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'go back %n layers',
             defaults: [1]
+        },
+        doSwitchToScene: {
+            type: 'command',
+            category: 'looks',
+            spec: 'switch to scene %scn',
+            defaults: [['next']]
         },
 
         // Looks - Debugging primitives for development mode
@@ -2414,6 +2420,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
+        blocks.push('-');
+        blocks.push(block('doSwitchToScene'));
 
     // for debugging: ///////////////
 
@@ -8617,6 +8625,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('hide'));
         blocks.push(watcherToggle('reportShown'));
         blocks.push(block('reportShown'));
+        blocks.push('-');
+        blocks.push(block('doSwitchToScene'));
 
     // for debugging: ///////////////
 
