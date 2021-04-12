@@ -10247,7 +10247,7 @@ SceneIconMorph.prototype.renameScene = function () {
 
 SceneIconMorph.prototype.removeScene = function () {
     var album = this.parentThatIsA(SceneAlbumMorph),
-        idx = this.parent.children.indexOf(this),
+        idx = this.parent.children.indexOf(this) + 1,
         off = 0, // 2,
         ide = this.parentThatIsA(IDE_Morph);
     album.removeSceneAt(idx - off); // ignore buttons
