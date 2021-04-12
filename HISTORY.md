@@ -8,6 +8,7 @@
 
 ### 2021-04-12
 * blocks, objects, threads, gui: new "switch to scene _" command primitive
+* morphic, gui: support bulk-file-drop for importing scenes
 
 ### 2021-04-08
 * gui: scroll selected scene icon into view

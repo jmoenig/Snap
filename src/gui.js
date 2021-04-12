@@ -293,6 +293,9 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.savingPreferences = true; // for bh's infamous "Eisenbergification"
 
+    this.bulkDropInProgress = false; // for handling multiple file-drops
+    this.cachedSceneFlag = null; // for importing multiple scenes at once
+
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
 
@@ -2194,6 +2197,17 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
         document.body.removeChild(this.filePicker);
         this.filePicker = null;
     }
+};
+
+IDE_Morph.prototype.beginBulkDrop = function () {
+    this.bulkDropInProgress = true;
+    this.cachedSceneFlag = this.isAddingScenes;
+    this.isAddingScenes = true;
+};
+
+IDE_Morph.prototype.endBulkDrop = function () {
+    this.isAddingScenes = this.cachedSceneFlag;
+    this.bulkDropInProgress = false;
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
@@ -5111,6 +5125,11 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 
 IDE_Morph.prototype.openProjectString = function (str, callback) {
     var msg;
+    if (this.bulkDropInProgress) {
+            this.rawOpenProjectString(str);
+            if (callback) {callback(); }
+            return;
+    }
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
