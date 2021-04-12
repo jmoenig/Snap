@@ -1926,7 +1926,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     // scenes +++
     this.corral.album = keepSceneAlbum ? album
             : new SceneAlbumMorph(this, this.sliderColor);
-    this.corral.album.color = this.groupColor; // +++ this.frameColor;
+    this.corral.album.color = this.frameColor; // this.groupColor;
     this.corral.add(this.corral.album);
 
     this.corral.fixLayout = function () {
@@ -10115,9 +10115,9 @@ SceneIconMorph.prototype.init = function (aScene) {
     var colors, action, query;
 
     colors = [
-        IDE_Morph.prototype.groupColor,
         IDE_Morph.prototype.frameColor,
-        IDE_Morph.prototype.frameColor
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.groupColor
     ];
 
     action = () => {
