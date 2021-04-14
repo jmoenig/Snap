@@ -6,6 +6,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-04-14
+* scenes: new Project class
+
 ### 2021-04-12
 * blocks, objects, threads, gui: new "switch to scene _" command primitive
 * morphic, gui: support bulk-file-drop for importing scenes
