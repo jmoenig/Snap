@@ -9,6 +9,7 @@
 ### 2021-04-14
 * scenes: new Project class
 * store: sceneified projects
+* gui: switched to scene-based project serialization
 
 ### 2021-04-12
 * blocks, objects, threads, gui: new "switch to scene _" command primitive

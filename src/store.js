@@ -1619,6 +1619,18 @@ Array.prototype.toXML = function (serializer) {
     );
 };
 
+// Scenes
+
+Scene.prototype.toXML = function (serializer) {
+    var tmp = new Scene(),
+        xml;
+    tmp.captureGlobalSettings();
+    this.applyGlobalSettings();
+    xml = this.stage.toXML(serializer);
+    tmp.applyGlobalSettings();
+    return xml;
+};
+
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {

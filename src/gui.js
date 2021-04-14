@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-12';
+modules.gui = '2021-April-14';
 
 // Declarations
 
@@ -2586,12 +2586,12 @@ IDE_Morph.prototype.refreshIDE = function () {
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(this.scene);
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.stage);
+        projectData = this.serializer.serialize(this.scene);
     }
     SpriteMorph.prototype.initBlocks();
     this.buildPanes();
@@ -2784,7 +2784,7 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
     // private
     var username = this.cloud.username;
     try {
-        localStorage['-snap-backup-'] = this.serializer.serialize(this.stage);
+        localStorage['-snap-backup-'] = this.serializer.serialize(this.scene);
         delete localStorage['-snap-bakflag-'];
         if (username) {
             localStorage['-snap-bakuser-'] = username;
@@ -4714,7 +4714,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
         try {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
+            str = this.serializer.serialize(this.scene);
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
@@ -5658,12 +5658,12 @@ IDE_Morph.prototype.toggleDynamicInputLabels = function () {
         !SyntaxElementMorph.prototype.dynamicInputLabels;
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(this.scene);
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.stage);
+        projectData = this.serializer.serialize(this.scene);
     }
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
@@ -6025,12 +6025,12 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     if (!this.loadNewProject) {
         if (Process.prototype.isCatchingErrors) {
             try {
-                projectData = this.serializer.serialize(this.stage);
+                projectData = this.serializer.serialize(this.scene);
             } catch (err) {
                 this.showMessage('Serialization failed: ' + err);
             }
         } else {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(this.scene);
         }
     }
     SpriteMorph.prototype.initBlocks();
@@ -6133,12 +6133,12 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     var projectData;
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(this.scene);
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.stage);
+        projectData = this.serializer.serialize(this.scene);
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
@@ -6473,7 +6473,7 @@ IDE_Morph.prototype.logout = function () {
 };
 
 IDE_Morph.prototype.buildProjectRequest = function () {
-    var xml = this.serializer.serialize(this.stage),
+    var xml = this.serializer.serialize(this.scene),
         thumbnail = normalizeCanvas(
             this.stage.thumbnail(
                 SnapSerializer.prototype.thumbnailSize
@@ -6589,7 +6589,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.stage);
+                str = this.serializer.serialize(this.scene);
                 this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
@@ -6599,7 +6599,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
+            str = this.serializer.serialize(this.scene);
             this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
@@ -6617,7 +6617,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.stage);
+                str = this.serializer.serialize(this.scene);
                 media = this.serializer.mediaXML(name);
                 dta = '<snapdata>' + str + media + '</snapdata>';
                 this.saveXMLAs(str, this.projectName);
@@ -6629,7 +6629,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
+            str = this.serializer.serialize(this.scene);
             media = this.serializer.mediaXML(name);
             dta = '<snapdata>' + str + media + '</snapdata>';
             this.saveXMLAs(str, this.projectName);
