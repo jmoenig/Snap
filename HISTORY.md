@@ -10,6 +10,7 @@
 
 ### 2021-04-16
 * scenes, store, gui: remember last edited sprite in a scene / project
+* scenes: removed Project class
 
 ### 2021-04-14
 * scenes: new Project class
