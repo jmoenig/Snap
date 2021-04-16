@@ -34,7 +34,6 @@
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
 
-    Project
     Scene
 
     credits
@@ -51,23 +50,6 @@
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
 
 modules.scenes = '2021-April-16';
-
-
-// Projecct /////////////////////////////////////////////////////////
-
-// I am a container for a set of one or more Snap! scenes,
-// the IDE operates on an instance of me
-
-// Project instance creation:
-
-function Project() {
-    this.name = '';
-    this.notes = '';
-    this.scenes = new List();
-
-    // for undeleting scenes - do not persist
-    this.trash = [];
-}
 
 // Scene /////////////////////////////////////////////////////////
 
