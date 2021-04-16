@@ -324,15 +324,15 @@ SnapDriver.prototype.logout = async function() {
     const btn = this.ide().controlBar.cloudButton;
     this.click(btn);
 
-    const dropdown = this.dialog();
+    const dropdown = await this.expect(() => this.dialog(), new Error('Cloud menu never appeared'));
     const logoutBtn = dropdown.children.find(item => item.action === 'logout');
     const isLoggedIn = !!logoutBtn;
 
     if (isLoggedIn) {
         this.click(logoutBtn);
         await this.expect(
-            () => this.isShowingDialogTitle(title => title.includes('disconnected')),
-            `Did not see logout message`
+            () => !this.ide().cloud.username,
+            `Did not reset username`
         );
     } else {
         throw new Error('no one is logged in');
