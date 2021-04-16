@@ -50,7 +50,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
 
-modules.scenes = '2021-April-14';
+modules.scenes = '2021-April-16';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -85,6 +85,10 @@ function Scene(aStageMorph) {
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
 
+    // cached IDE state
+    this.sprites = new List();
+    this.currentSprite = null;
+
     // global settings (shared)
     this.hiddenPrimitives = {};
     this.codeMappings = {};
@@ -100,12 +104,32 @@ function Scene(aStageMorph) {
     this.enableHyperOps = true;
 
     // for deserializing - do not persist
-    this.sprites = {};
+    this.spritesDict = {};
     this.targetStage = null;
+    this.spriteIdx = null;
 
     // for undeleting sprites - do not persist
     this.trash = [];
 }
+
+Scene.prototype.initialize = function () {
+    // initialize after deserializing
+    // only to be called by store
+    var objs = this.stage.children.filter(
+        child => child instanceof SpriteMorph
+    );
+    objs.sort((x, y) => x.idx - y.idx);
+    this.sprites = new List(objs);
+    if (this.spriteIdx === null && this.sprites.length() > 0) {
+        this.currentSprite = this.sprites.at(1);
+    } else if (this.spriteIdx === 0) {
+        this.currentSprite = this.stage;
+    } else {
+        this.currentSprite = this.sprites.at(this.spriteIdx) ||
+            this.stage;
+    }
+    return this;
+};
 
 Scene.prototype.addDefaultSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables);
@@ -115,6 +139,8 @@ Scene.prototype.addDefaultSprite = function () {
         )
     );
     this.stage.add(sprite);
+    this.sprites.add(sprite);
+    this.currentSprite = sprite;
     return sprite;
 };
 

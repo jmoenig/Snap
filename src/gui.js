@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-14';
+modules.gui = '2021-April-16';
 
 // Declarations
 
@@ -246,7 +246,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // editor
     this.globalVariables = this.scene.globalVariables;
     this.currentSprite = this.scene.addDefaultSprite();
-    this.sprites = new List([this.currentSprite]);
+    this.sprites = this.scene.sprites;
     this.projectName = this.scene.name;
     this.projectNotes = this.scene.notes;
     this.currentCategory = 'motion';
@@ -2543,6 +2543,7 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
         this.currentSprite.scripts.focus.stopEditing();
     }
     this.currentSprite = sprite;
+    this.scene.currentSprite = sprite;
     this.createPalette();
     this.createSpriteBar();
     this.createSpriteEditor();
@@ -5398,7 +5399,6 @@ IDE_Morph.prototype.openScene = function (scene) {
 };
 
 IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
-    var sprites = [];
     if (!scene || !scene.stage) {
         return;
     }
@@ -5413,14 +5413,10 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     this.stage.destroy();
     this.add(scene.stage);
     this.stage = scene.stage;
-    sprites = this.stage.children.filter(
-        child => child instanceof SpriteMorph
-    );
-    sprites.sort((x, y) => x.idx - y.idx);
-    this.sprites = new List(sprites);
+    this.sprites = scene.sprites;
     this.stage.pauseGenericHatBlocks();
     this.createCorral(!refreshAlbum); // keep scenes
-    this.selectSprite(sprites[0] || this.stage);
+    this.selectSprite(this.scene.currentSprite);
     this.fixLayout();
     this.corral.album.updateSelection();
     this.corral.album.contents.children.forEach(function (morph) {

@@ -3,8 +3,13 @@
 ## in development for v7:
 * **New Features:**
     * Scenes
+* **Notable Changes:**
+    * saved projects remember the last edited srpite
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-04-16
+* scenes, store, gui: remember last edited sprite in a scene / project
 
 ### 2021-04-14
 * scenes: new Project class

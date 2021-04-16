@@ -60,7 +60,7 @@ SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-14';
+modules.store = '2021-April-16';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -392,6 +392,9 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     if (model.stage.attributes.pan) {
         scene.stage.pan = +model.stage.attributes.pan;
     }
+    if (model.stage.attributes.select) {
+        scene.spriteIdx = +model.stage.attributes.select;
+    }
     if (model.stage.attributes.penlog) {
         scene.enablePenLogging =
             (model.stage.attributes.penlog === 'true');
@@ -474,7 +477,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     /* Sprites */
 
     model.sprites = model.stage.require('sprites');
-    scene.sprites[scene.stage.name] = scene.stage;
+    scene.spritesDict[scene.stage.name] = scene.stage;
 
     model.sprites.childrenNamed('sprite').forEach(
         model => this.loadValue(model)
@@ -484,7 +487,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     this.scene.stage.children.forEach(sprite => {
         var exemplar, anchor;
         if (sprite.inheritanceInfo) { // only sprites can inherit
-            exemplar = this.scene.sprites[
+            exemplar = this.scene.spritesDict[
                 sprite.inheritanceInfo.exemplar
             ];
             if (exemplar) {
@@ -494,7 +497,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             sprite.updatePropagationCache();
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
-            anchor = this.scene.sprites[sprite.nestingInfo.anchor];
+            anchor = this.scene.spritesDict[sprite.nestingInfo.anchor];
             if (anchor) {
                 anchor.attachPart(sprite);
             }
@@ -554,7 +557,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         target = Object.prototype.hasOwnProperty.call(
             model.attributes,
             'scope'
-        ) ? scene.sprites[model.attributes.scope] : null;
+        ) ? scene.spritesDict[model.attributes.scope] : null;
 
         // determine whether the watcher is hidden, slightly
         // complicated to retain backward compatibility
@@ -623,7 +626,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     );
 
     this.objects = {};
-    return scene;
+    return scene.initialize();
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
@@ -659,7 +662,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 
     this.scene = new Scene(ide.stage);
     scene = this.scene;
-    scene.sprites[scene.stage.name] = scene.stage;
+    scene.spritesDict[scene.stage.name] = scene.stage;
 
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
@@ -673,7 +676,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.name) {
             sprite.name = ide.newSpriteName(model.attributes.name);
-            scene.sprites[sprite.name] = sprite;
+            scene.spritesDict[sprite.name] = sprite;
         }
         if (model.attributes.color) {
             sprite.color = this.loadColor(model.attributes.color);
@@ -707,7 +710,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     scene.stage.children.forEach(sprite => {
         var exemplar, anchor;
         if (sprite.inheritanceInfo) { // only sprites can inherit
-            exemplar = scene.sprites[
+            exemplar = scene.spritesDict[
                 sprite.inheritanceInfo.exemplar
             ];
             if (exemplar) {
@@ -715,7 +718,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             }
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
-            anchor = scene.sprites[sprite.nestingInfo.anchor];
+            anchor = scene.spritesDict[sprite.nestingInfo.anchor];
             if (anchor) {
                 anchor.attachPart(sprite);
             }
@@ -1408,7 +1411,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.name) {
             v.name = model.attributes.name;
-            this.scene.sprites[model.attributes.name] = v;
+            this.scene.spritesDict[model.attributes.name] = v;
         }
         if (model.attributes.idx) {
             v.idx = +model.attributes.idx;
@@ -1672,6 +1675,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
+            'select="@" ' +
             'penlog="@" ' +
             '%' +
             'volume="@" ' +
@@ -1712,6 +1716,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
+        ide.sprites.asArray().indexOf(ide.currentSprite) + 1,
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
