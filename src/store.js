@@ -56,7 +56,8 @@ Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
-SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene*/
+SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene,
+Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -1622,7 +1623,14 @@ Array.prototype.toXML = function (serializer) {
     );
 };
 
-// Scenes
+// Scenes & multi-scene projects
+
+Project.prototype.toXML = function (serializer) {
+    return serializer.format(
+        '<scenes>%</scenes>',
+        serializer.store(this.scenes.itemsArray())
+    );
+};
 
 Scene.prototype.toXML = function (serializer) {
     var tmp = new Scene(),
