@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-04-17
+* new dev version
+
 ## 6.7.4
 * **Notable Fixes:**
     * fixed DEAL in the APL library, thanks, Brian!
