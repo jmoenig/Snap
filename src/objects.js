@@ -5377,8 +5377,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     var stage = this.parentThatIsA(StageMorph),
         stageScale = stage ? stage.scale : 1,
         bubble = this.talkBubble(),
-        middle = this.center().y,
-        // step = new Point(-10, 10);
+        bottom = this.bottom(),
         step = this.extent().divideBy(10)
             .max(new Point(5, 5).scaleBy(stageScale))
             .multiplyBy(new Point(-1, 1));
@@ -5392,7 +5391,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     }
     bubble.setLeft(this.right());
     bubble.setBottom(this.top());
-    while (!this.isTouching(bubble) && bubble.bottom() < middle) {
+    while (!this.isTouching(bubble) && bubble.bottom() < bottom) {
         bubble.moveBy(step);
     }
     bubble.moveBy(step.mirror());
