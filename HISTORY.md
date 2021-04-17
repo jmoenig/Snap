@@ -1,12 +1,15 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * speed-up  talk bubble positioning by 5x
 * **Notable Fixes:**
     * work around a floating point precision glitch in "ray length"
 
 ### 2021-04-17
 * new dev version
 * threads: worked around a floating point precision glitch in "ray length"
+* objects: speed-up  talk bubble positioning by 5x
 
 ## 6.7.4
 * **Notable Fixes:**
