@@ -1539,6 +1539,7 @@ function EditRoleMorph(room, role) {
 }
 
 EditRoleMorph.prototype.init = function(room, role) {
+    const {name} = role;
     EditRoleMorph.uber.init.call(this);
     this.room = room;
     this.role = role;
@@ -1572,8 +1573,10 @@ EditRoleMorph.prototype.init = function(room, role) {
         }
         this.addButton('inviteUser', 'Invite User');
 
-        if (name !== this.room.role() &&  // can't evict own role
-            (this.room.isOwner() || this.room.isGuest(role.users))) {
+        const hasEvictableUsers = this.role.users
+            .filter(user => user.uuid !== SnapCloud.clientId)
+            .length;
+        if (this.room.isOwner() && hasEvictableUsers) {
             this.addButton('evictUser', 'Evict User');
         }
     } else {  // vacant
@@ -1662,10 +1665,8 @@ EditRoleMorph.prototype.moveToRole = function() {
 };
 
 EditRoleMorph.prototype.evictUser = function() {
-    // TODO: which user?
-    // FIXME: ask which user
-    // This could be moved to clicking on the username
-    this.room.evictUser(this.role.users[0]);
+    const user = this.role.users.find(user => user.uuid !== SnapCloud.clientId);
+    this.room.evictUser(user);
     this.destroy();
 };
 

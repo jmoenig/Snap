@@ -128,30 +128,29 @@ NetsBloxMorph.prototype.settingsMenu = function () {
     return menu;
 };
 
-NetsBloxMorph.prototype.newProject = function (projectName) {
-    // Get new room name
-    var myself = this,
-        callback = function(info) {
-            myself.createRoom();
-            myself.room.silentSetRoomName(info.name);
-            if (!projectName) {
-                myself.updateUrlQueryString();
-            }
-            return SnapActions.openProject()
-                .then(function() {
-                    myself.silentSetProjectName(info.roleName);
-                });
+NetsBloxMorph.prototype.newProject = async function (projectName) {
+    let projectInfo;
+    try {
+        projectInfo = await SnapCloud.newProject(projectName);
+    } catch (err) {
+        projectInfo = {
+            name: projectName || 'untitled',
+            roleName: 'myRole',
+            projectId: this.cloud.projectId,
+            roleId: this.cloud.roleId,
         };
+    }
+    await this.newProjectFromInfo(projectInfo, !projectName);
+};
 
-    return SnapCloud.newProject(projectName)
-        .then(callback)
-        .catch(function() {
-            var defaults = {
-                name: projectName || 'untitled',
-                roleName: 'myRole',
-            };
-            callback(defaults);
-        });
+NetsBloxMorph.prototype.newProjectFromInfo = async function (projectInfo, updateUrl) {
+    this.createRoom();
+    this.room.silentSetRoomName(projectInfo.name);
+    if (updateUrl) {
+        this.updateUrlQueryString();
+    }
+    await SnapActions.openProject();
+    this.silentSetProjectName(projectInfo.roleName);
 };
 
 NetsBloxMorph.prototype.newRole = function (name) {

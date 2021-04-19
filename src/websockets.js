@@ -95,9 +95,9 @@ WebSocketManager.MessageHandlers = {
         this.ide.newProject();
     },
 
-    'evicted': function() {
+    'evicted': function(msg) {
         this.ide.showMessage('You have been evicted from the project.');
-        this.ide.newProject();
+        this.ide.newProjectFromInfo(msg.state);
     },
 
     'permission-elevation-request': function(msg) {
