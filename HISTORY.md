@@ -5,6 +5,10 @@
     * speed-up  talk bubble positioning by 5x
 * **Notable Fixes:**
     * work around a floating point precision glitch in "ray length"
+    * fixed an occasional rendering glitch when changing the display style of a variable watcher
+
+### 2021-04-17
+* objects: fixed an occasional rendering glitch when changing the display style of a variable watcher 
 
 ### 2021-04-17
 * new dev version
