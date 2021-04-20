@@ -246,6 +246,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
     this.projectsInURLs = false;
+    this.allowMsgsWhileCollaborating = null;  // null is false but unset by user; "false" means user confirmed behavior.
     this.applySavedSettings();
 
     // additional properties:
@@ -3689,6 +3690,29 @@ IDE_Morph.prototype.settingsMenu = function () {
         SnapSerializer.prototype.isSavingHistory,
         'uncheck to only save project',
         'check to save replay with project',
+        false
+    );
+    addPreference(
+        'Messaging while collaborating?',
+        async () => {
+
+            if (!this.allowMsgsWhileCollaborating) {
+                const title = localize('Send messages while collaborating?');
+                const message = localize('By default, message sending is disabled when collaborating because it can make\ndebugging distributed applications difficult.\n\n') +
+                    localize('When multiple users collaborate, each collaborating user may send his/her own response\nto a received message. ') +
+                    localize('This is problematic when using the "send msg and wait"\nblock as well as for applications like turn-based games.\n\n') +
+                    localize('Would you like to enable message sending while collaborating?');
+                const confirmed = await this.confirm(message, title);
+                if (confirmed) {
+                    this.allowMsgsWhileCollaborating = !this.allowMsgsWhileCollaborating;
+                }
+            } else {
+                this.allowMsgsWhileCollaborating = !this.allowMsgsWhileCollaborating;
+            }
+        },
+        this.allowMsgsWhileCollaborating,
+        'uncheck to block message sending while multiple users occupy a single role',
+        'check to allow message sending while multiple users occupy a single role',
         false
     );
     menu.addLine(); // everything below this line is stored in the project

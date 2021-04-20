@@ -1,5 +1,5 @@
 /* global Process, IDE_Morph, Costume, StageMorph, List, SnapActions,
- isObject, newCanvas, Point, SnapCloud, Services */
+ isObject, newCanvas, Point, SnapCloud, Services, localize */
 
 // Additional Process Capabilities
 Process.prototype.doSocketMessage = function (msgInfo) {
@@ -12,7 +12,18 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents;
 
     // check if collaborating. If so, show a message but don't send
-    if (SnapActions.isCollaborating() && !SnapActions.isLeader) {
+    const isCollaborating = SnapActions.isCollaborating() && !SnapActions.isLeader;
+    if (isCollaborating && !ide.allowMsgsWhileCollaborating) {
+        const isUsingDefaultMsgSendingOption = ide.allowMsgsWhileCollaborating === null;
+        if (isUsingDefaultMsgSendingOption) {
+            const title = localize('Message sending blocked while collaborating');
+            const message = localize('By default, message sending is disabled when collaborating because it can make\ndebugging distributed applications difficult.\n\n') +
+                localize('When multiple users collaborate, each collaborating user may send his/her own response\nto a received message. ') +
+                localize('This is problematic when using the "send msg and wait"\nblock as well as for applications like turn-based games.\n\n') +
+                localize('Would you like to enable message sending while collaborating?');
+            ide.confirm(message, title)
+                .then(confirmed => ide.allowMsgsWhileCollaborating = confirmed);
+        }
         this.topBlock.showBubble('Cannot send message when collaborating');
         return;
     }

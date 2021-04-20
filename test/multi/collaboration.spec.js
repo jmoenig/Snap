@@ -213,4 +213,95 @@ describe('collaboration', function() {
             });
         });
     });
+
+    describe('message sending', function() {
+        let block;
+        before(async () => {
+            await driver.user1.reset();
+            const {SnapCloud} = driver.user2.globals();
+            driver.user1.invite(SnapCloud.username);
+            await driver.user2.expect(
+                () => driver.user2.dialogs()
+                    .find(d => d.key && d.key.includes('invite')),
+                `Invited user never received invite`
+            );
+
+            const dialog = driver.user2.dialogs()
+                .filter(dialog => dialog.key)
+                .find(dialog => dialog.key.includes('invite'));
+            dialog.ok();
+
+            // add message sending block
+            block = await driver.user1.addBlock('doSocketMessage');
+            driver.user1.click(block.inputs()[0]);
+            const msgDialog = await driver.user1.expect(
+                () => driver.user1.dialog(),
+                'Message type dropdown did not appear'
+            );
+            driver.user1.click(msgDialog.children[2]);
+            await driver.user1.actionsSettled();
+        });
+
+        afterEach(() => driver.user1.dialogs().forEach(d => d.destroy()));
+
+        it('should not allow message sending', async function() {
+            const {threads} = driver.user1.ide().stage;
+            let called = false;
+            driver.user1.ide().sockets.sendMessage = () => called = true;
+            driver.user1.click(block);
+
+            await driver.user1.expect(
+                () => threads.processes.length === 0,
+                'Message sending process did not finish!'
+            );
+            delete driver.user1.ide().sockets.sendMessage;
+
+            assert(!called, 'Message sent but should have been blocked!');
+        });
+
+        it('should prompt user about enabling msg sending', async function() {
+            const {threads} = driver.user1.ide().stage;
+            driver.user1.click(block);
+
+            await driver.user1.expect(
+                () => threads.processes.length === 0,
+                'Message sending process did not finish!'
+            );
+
+            const dialog = driver.user1.dialogs()
+                .find(dialog => dialog.labelString.includes('Message sending blocked'));
+            assert(dialog, 'No message sending dialog shown');
+        });
+
+        it('should not prompt user about enabling msg sending if explicitly set', async function() {
+            const {threads} = driver.user1.ide().stage;
+            driver.user1.ide().allowMsgsWhileCollaborating = false;
+            driver.user1.click(block);
+
+            await driver.user1.expect(
+                () => threads.processes.length === 0,
+                'Message sending process did not finish!'
+            );
+
+            const dialog = driver.user1.dialogs()
+                .find(dialog => (dialog.labelString || '').includes('Message sending blocked'));
+            assert(!dialog, 'Message sending dialog shown');
+        });
+
+        it('should allow message sending if enabled', async function() {
+            const {threads} = driver.user1.ide().stage;
+            driver.user1.ide().allowMsgsWhileCollaborating = true;
+            let called = false;
+            driver.user1.ide().sockets.sendMessage = () => called = true;
+            driver.user1.click(block);
+
+            await driver.user1.expect(
+                () => threads.processes.length === 0,
+                'Message sending process did not finish!'
+            );
+            delete driver.user1.ide().sockets.sendMessage;
+
+            assert(called, 'Message not sent despite sending being enabled!');
+        });
+    });
 });
