@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-04-20
+* scenes, store, gui: multi-scene project serialization format, first pass 
+
 ### 2021-04-16
 * scenes, store, gui: remember last edited sprite in a scene / project
 * scenes: removed Project class

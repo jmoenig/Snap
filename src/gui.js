@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-16';
+modules.gui = '2021-April-20';
 
 // Declarations
 
@@ -4710,10 +4710,10 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
     // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
 
-    if (this.scenes.length() > 1) { // +++
+    // if (this.scenes.length() > 1) { // +++
         this.exportScenes(this.scenes.at(1).name, plain);
         return;
-    }
+    // }
 
     if (name) {
         this.setProjectName(name);

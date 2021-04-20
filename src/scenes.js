@@ -50,7 +50,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
 
-modules.scenes = '2021-April-16';
+modules.scenes = '2021-April-20';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -61,8 +61,9 @@ modules.scenes = '2021-April-16';
 // Project instance creation:
 
 function Project(scenes) {
-    this.name = '';
-    this.notes = '';
+    this.name = 'Test';
+    this.notes = 'some notes';
+    this.thumbnail = null;
     this.scenes = scenes || new List();
 
     // for undeleting scenes - do not persist

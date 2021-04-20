@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-16';
+modules.store = '2021-April-20';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ function XML_Serializer() {
 XML_Serializer.prototype.idProperty = 'serializationID';
 XML_Serializer.prototype.mediaIdProperty = 'serializationMediaID';
 XML_Serializer.prototype.mediaDetectionProperty = 'isMedia';
-XML_Serializer.prototype.version = 1; // increment on structural change
+XML_Serializer.prototype.version = 2; // increment on structural change
 
 // XML_Serializer accessing:
 
@@ -247,7 +247,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 6, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -1626,24 +1626,91 @@ Array.prototype.toXML = function (serializer) {
 // Scenes & multi-scene projects
 
 Project.prototype.toXML = function (serializer) {
+    var thumbdata;
+
+    // thumb data catch cross-origin tainting exception when using SVG costumes
+    try {
+        thumbdata = this.thumbnail.toDataURL('image/png');
+    } catch (error) {
+        thumbdata = null;
+    }
+
     return serializer.format(
-        '<scenes>%</scenes>',
+        '<project name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<scenes>%</scenes>' +
+            '</project>',
+        this.name || localize('Untitled'),
+        serializer.app,
+        serializer.version,
+        this.notes || '',
+        thumbdata,
         serializer.store(this.scenes.itemsArray())
     );
 };
 
 Scene.prototype.toXML = function (serializer) {
     var tmp = new Scene(),
+        thumbdata,
         xml;
+
+    function code(key) {
+        var str = '';
+        Object.keys(StageMorph.prototype[key]).forEach(
+            selector => {
+                str += (
+                    '<' + selector + '>' +
+                        XML_Element.prototype.escape(
+                            StageMorph.prototype[key][selector]
+                        ) +
+                        '</' + selector + '>'
+                );
+            }
+        );
+        return str;
+    }
+
+    // catch cross-origin tainting exception when using SVG costumes
+    try {
+        thumbdata = this.thumbnail.toDataURL('image/png');
+    } catch (error) {
+        thumbdata = null;
+    }
+
     tmp.captureGlobalSettings();
     this.applyGlobalSettings();
-    xml = this.stage.toXML(serializer);
+    xml = serializer.format(
+        '<scene name="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '%' + // stage
+            '</scene>',
+        this.name || localize('Untitled'),
+        this.notes || '',
+        thumbdata,
+        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+                (a, b) => a + ' ' + b,
+                ''
+            ),
+        code('codeHeaders'),
+        code('codeMappings'),
+        serializer.store(this.stage.globalBlocks),
+        serializer.store(this.globalVariables),
+        serializer.store(this.stage)
+    );
     tmp.applyGlobalSettings();
     return xml;
 };
 
 // Sprites
 
+/*
 StageMorph.prototype.toXML = function (serializer) {
     var thumbnail = normalizeCanvas(
             this.thumbnail(SnapSerializer.prototype.thumbnailSize),
@@ -1759,6 +1826,74 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : ''
+    );
+};
+*/
+
+StageMorph.prototype.toXML = function (serializer) {
+    var costumeIdx = this.getCostumeIdx(),
+        ide = this.parentThatIsA(IDE_Morph);
+
+    this.removeAllClones();
+    return serializer.format(
+            '<stage width="@" height="@" ' +
+            'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
+            'select="@" ' +
+            'penlog="@" ' +
+            '%' +
+            'volume="@" ' +
+            'pan="@" ' +
+            'lines="@" ' +
+            'ternary="@" ' +
+            'hyperops="@" ' +
+            'codify="@" ' +
+            'inheritance="@" ' +
+            'sublistIDs="@" ' +
+            'scheduled="@" ~>' +
+            '<pentrails>$</pentrails>' +
+            '%' + // current costume, if it's not in the wardrobe
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<variables>%</variables>' +
+            '<blocks>%</blocks>' +
+            '<scripts>%</scripts>' +
+            '<sprites>%</sprites>' +
+            '</stage>',
+        this.dimensions.x,
+        this.dimensions.y,
+        costumeIdx,
+        this.color.r,
+        this.color.g,
+        this.color.b,
+        this.color.a,
+        this.getTempo(),
+        this.isThreadSafe,
+        ide.sprites.asArray().indexOf(ide.currentSprite) + 1,
+        this.enablePenLogging,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        this.volume,
+        this.pan,
+        SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
+        BooleanSlotMorph.prototype.isTernary,
+        Process.prototype.enableHyperOps === true,
+        this.enableCodeMapping,
+        this.enableInheritance,
+        this.enableSublistIDs,
+        StageMorph.prototype.frameRate !== 0,
+        normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
+
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        serializer.store(this.variables),
+        serializer.store(this.customBlocks),
+        serializer.store(this.scripts),
+        serializer.store(this.children)
     );
 };
 
