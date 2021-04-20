@@ -106,7 +106,7 @@ WatcherMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-March-05';
+modules.byob = '2021-April-20';
 
 // Declarations
 
@@ -645,6 +645,9 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
     CustomCommandBlockMorph.uber.init.call(this);
+    if (isProto) {
+        this.isTemplate = true;
+    }
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     this.variables = null;
@@ -653,6 +656,17 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     if (definition) { // needed for de-serializing
         this.refresh();
     }
+};
+
+CustomCommandBlockMorph.prototype.reactToTemplateCopy = function () {
+    var def;
+    if (this.isPrototype) {
+        def = this.definition;
+        this.isPrototype = false;
+        this.refresh();
+        this.refreshDefaults(def);
+    }
+    CustomCommandBlockMorph.uber.reactToTemplateCopy.call(this);
 };
 
 CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
@@ -1413,6 +1427,9 @@ CustomReporterBlockMorph.prototype.init = function (
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
     CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
+    if (isProto) {
+        this.isTemplate = true;
+    }
     this.category = definition.category;
     this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
@@ -1425,6 +1442,9 @@ CustomReporterBlockMorph.prototype.init = function (
 
 CustomReporterBlockMorph.prototype.initializeVariables =
     CustomCommandBlockMorph.prototype.initializeVariables;
+
+CustomReporterBlockMorph.prototype.reactToTemplateCopy =
+    CustomCommandBlockMorph.prototype.reactToTemplateCopy;
 
 CustomReporterBlockMorph.prototype.refresh = function (aDefinition) {
     var def = aDefinition || this.definition;

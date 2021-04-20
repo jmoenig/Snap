@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * you can now also "peel off" custom block instances from their prototype templates in the block editor
 * **Notable Changes:**
     * speed-up  talk bubble positioning by 5x
 * **Notable Fixes:**
@@ -9,7 +11,8 @@
 
 ### 2021-04-17
 * objects: fixed an occasional rendering glitch when changing the display style of a variable watcher
-* objects: tweaked CellMorph shadow rendering 
+* objects: tweaked CellMorph shadow rendering
+* byob: enable "peeling off" custom block instances from their prototype templates
 
 ### 2021-04-17
 * new dev version
