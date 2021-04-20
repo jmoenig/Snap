@@ -8,7 +8,8 @@
     * fixed an occasional rendering glitch when changing the display style of a variable watcher
 
 ### 2021-04-17
-* objects: fixed an occasional rendering glitch when changing the display style of a variable watcher 
+* objects: fixed an occasional rendering glitch when changing the display style of a variable watcher
+* objects: tweaked CellMorph shadow rendering 
 
 ### 2021-04-17
 * new dev version

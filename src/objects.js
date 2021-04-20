@@ -11271,7 +11271,7 @@ CellMorph.prototype.render = function (ctx) {
             ctx.shadowOffsetY = this.border;
             ctx.shadowBlur = this.border;
             ctx.shadowColor = this.color.darker(80).toString();
-            this.drawShadow(ctx, this.edge, this.border / 2);
+            this.drawShadow(ctx, this.edge, 0);
         }
     }
 };
@@ -11285,10 +11285,8 @@ CellMorph.prototype.drawShadow = function (context, radius, inset) {
     context.beginPath();
     context.moveTo(0, h - offset);
     context.lineTo(0, offset);
-    context.stroke();
 
     // top left:
-    context.beginPath();
     context.arc(
         offset,
         offset,
@@ -11297,11 +11295,8 @@ CellMorph.prototype.drawShadow = function (context, radius, inset) {
         radians(-90),
         false
     );
-    context.stroke();
 
     // top right:
-    context.beginPath();
-    context.moveTo(offset, 0);
     context.lineTo(w - offset, 0);
     context.stroke();
 };
