@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-20';
+modules.gui = '2021-April-21';
 
 // Declarations
 
@@ -5410,7 +5410,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     }
 };
 
-IDE_Morph.prototype.openProject = function (name) {
+IDE_Morph.prototype.openProjectName = function (name) {
     var str;
     if (name) {
         this.showMessage('opening project\n' + name);
@@ -5419,6 +5419,15 @@ IDE_Morph.prototype.openProject = function (name) {
         this.openProjectString(str);
         this.setURL('#open:' + str);
     }
+};
+
+IDE_Morph.prototype.openProject = function (project) {
+    if (this.isAddingScenes) {
+        project.scenes.itemsArray().forEach(scene => this.scenes.add(scene));
+    } else {
+        this.scenes = project.scenes;
+    }
+    this.switchToScene(project.scenes.at(1), true); // refresh album
 };
 
 IDE_Morph.prototype.openScene = function (scene) {
@@ -7615,7 +7624,7 @@ ProjectDialogMorph.prototype.openProject = function () {
 
     } else { // 'local'
         this.ide.source = null;
-        this.ide.backup(() => this.ide.openProject(proj.name));
+        this.ide.backup(() => this.ide.openProjectName(proj.name));
         this.destroy();
     }
 };

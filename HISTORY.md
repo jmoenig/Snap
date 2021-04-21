@@ -9,7 +9,7 @@
     * made scrollbars in the wardrobe and jukebox more responsive
 
 ### 2021-04-21
-* store: refactored project loading structure
+* store, gui: refactored project loading structure
 
 ### 2021-04-20
 * scenes, store, gui: multi-scene project serialization format, first pass 
