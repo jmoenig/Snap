@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-20';
+modules.store = '2021-April-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -326,10 +326,10 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
                 '\n\nand may be incompatible or fail to load here.'
         );
     }
-    return this.rawLoadProjectModel(xmlNode, remixID);
+    return this.loadScene(xmlNode, remixID);
 };
 
-SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
+SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     // private
     var scene = new Scene(),
         model,
