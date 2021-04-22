@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-21';
+modules.store = '2021-April-22';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -316,7 +316,9 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
     // show a warning if the origin apps differ
 
     var appInfo = xmlNode.attributes.app,
-        app = appInfo ? appInfo.split(' ')[0] : null;
+        app = appInfo ? appInfo.split(' ')[0] : null,
+        scenesModel = xmlNode.childNamed('scenes'),
+        project = new Project();
 
     if (ide && app && app !== this.app.split(' ')[0]) {
         ide.inform(
@@ -326,7 +328,14 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
                 '\n\nand may be incompatible or fail to load here.'
         );
     }
-    return this.loadScene(xmlNode, remixID);
+    if (scenesModel) {
+        scenesModel.childrenNamed('scene').forEach(model =>
+            project.scenes.add(this.loadScene(model))
+        );
+    } else {
+        project.scenes.add(this.loadScene(xmlNode, remixID));
+    }
+    return project;
 };
 
 SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {

@@ -5177,14 +5177,14 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.openScene(
+            this.openProject(
                 this.serializer.load(str, this)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.openScene(
+        this.openProject(
             this.serializer.load(str, this)
         );
     }
