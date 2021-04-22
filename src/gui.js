@@ -4707,36 +4707,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
     // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
 
-    // if (this.scenes.length() > 1) { // +++
-        this.exportScenes(this.scenes.at(1).name, plain);
-        return;
-    // }
-
-    if (name) {
-        this.setProjectName(name);
-        dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
-        try {
-            menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.scene);
-            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name);
-            menu.destroy();
-            this.recordSavedChanges();
-            this.showMessage('Exported!', 1);
-        } catch (err) {
-            if (Process.prototype.isCatchingErrors) {
-                this.showMessage('Export failed: ' + err);
-            } else {
-                throw err;
-            }
-        }
-    }
-};
-
-IDE_Morph.prototype.exportScenes = function (name, plain) { // +++
-    // experimental export of multi-scene project - under construction
-
-    var menu, str, dataPrefix;
+    name = this.scenes.at(1).name; // +++
 
     if (name) {
         this.setProjectName(name);
