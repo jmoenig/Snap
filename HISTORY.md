@@ -11,6 +11,7 @@
 ### 2021-04-22
 * store, gui: first pass at deserializing multi-scene projects
 * gui, scenes: migrated "new project" feature
+* gui: replaced openScene() with openProject()
 
 ### 2021-04-21
 * store, gui: refactored project loading structure

@@ -5207,7 +5207,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         try {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
-            this.openScene(
+            this.openProject(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
                     this,
@@ -5220,7 +5220,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     } else {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
-        this.openScene(
+        this.openProject(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
                 this,
@@ -5425,14 +5425,6 @@ IDE_Morph.prototype.openProject = function (project) {
         this.scenes = project.scenes;
     }
     this.switchToScene(project.scenes.at(1), true); // refresh album
-};
-
-IDE_Morph.prototype.openScene = function (scene) {
-    if (!this.isAddingScenes) {
-        this.scenes = new List();
-    }
-    this.scenes.add(scene);
-    this.switchToScene(scene, this.isAddingScenes);
 };
 
 IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
