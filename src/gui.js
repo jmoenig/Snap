@@ -4655,17 +4655,14 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () {
-    var scene = new Scene();
+    var project = new Project();
 
-    scene.addDefaultSprite();
+    project.addDefaultScene();
     this.source = this.cloud.username ? 'cloud' : null;
-    if (this.stage) {
-        this.stage.destroy();
-    }
     if (location.hash.substr(0, 6) !== '#lang:') {
         location.hash = '';
     }
-    this.openScene(scene);
+    this.openProject(project);
 };
 
 IDE_Morph.prototype.save = function () {

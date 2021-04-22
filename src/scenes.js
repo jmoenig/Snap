@@ -50,7 +50,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
 
-modules.scenes = '2021-April-20';
+modules.scenes = '2021-April-22';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -69,6 +69,12 @@ function Project(scenes) {
     // for undeleting scenes - do not persist
     this.trash = [];
 }
+
+Project.prototype.addDefaultScene = function () {
+    var scene = new Scene();
+    scene.addDefaultSprite();
+    this.scenes.add(scene);
+};
 
 // Scene /////////////////////////////////////////////////////////
 
