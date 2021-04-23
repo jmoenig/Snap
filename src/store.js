@@ -334,13 +334,16 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         );
     }
     if (scenesModel) {
+        if (scenesModel.attributes.select) {
+            project.sceneIdx = +scenesModel.attributes.select;
+        }
         scenesModel.childrenNamed('scene').forEach(model =>
             project.scenes.add(this.loadScene(model))
         );
     } else {
         project.scenes.add(this.loadScene(xmlNode, remixID));
     }
-    return project;
+    return project.initialize();
 };
 
 SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
@@ -1652,13 +1655,15 @@ Project.prototype.toXML = function (serializer) {
         '<project name="@" app="@" version="@">' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
-            '<scenes>%</scenes>' +
+            '<scenes select="@">%</scenes>' +
             '</project>',
         this.name || localize('Untitled'),
         serializer.app,
         serializer.version,
         this.notes || '',
         thumbdata,
+        this.scenes.asArray().indexOf(
+            this.currentScene) + 1,
         serializer.store(this.scenes.itemsArray())
     );
 };

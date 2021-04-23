@@ -2587,12 +2587,16 @@ IDE_Morph.prototype.refreshIDE = function () {
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(new Project(this.scenes));
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(new Project(this.scenes));
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
     }
     SpriteMorph.prototype.initBlocks();
     this.buildPanes();
@@ -2786,7 +2790,7 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
     var username = this.cloud.username;
     try {
         localStorage['-snap-backup-'] = this.serializer.serialize(
-            new Project(this.scenes)
+            new Project(this.scenes, this.scene)
         );
         delete localStorage['-snap-bakflag-'];
         if (username) {
@@ -4716,7 +4720,9 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
         try {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(new Project(this.scenes));
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
@@ -5397,7 +5403,10 @@ IDE_Morph.prototype.openProject = function (project) {
     } else {
         this.scenes = project.scenes;
     }
-    this.switchToScene(project.scenes.at(1), true); // refresh album
+    this.switchToScene(
+        project.currentScene || project.scenes.at(1),
+        true  // refresh album
+    );
 };
 
 IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
@@ -6010,13 +6019,15 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 projectData = this.serializer.serialize(
-                    new Project(this.scenes)
+                    new Project(this.scenes, this.scene)
                 );
             } catch (err) {
                 this.showMessage('Serialization failed: ' + err);
             }
         } else {
-            projectData = this.serializer.serialize(new Project(this.scenes));
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
         }
     }
     SpriteMorph.prototype.initBlocks();
@@ -6119,12 +6130,16 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     var projectData;
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(new Project(this.scenes));
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(new Project(this.scenes));
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();

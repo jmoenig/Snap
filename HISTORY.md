@@ -14,6 +14,7 @@
 * gui: sceneified toggling dynamic input labels and switching languages
 * gui: sceneified "zoom blocks"
 * store: moved sprite-selection attribute from stage to scenes tag
+* scenes, store, gui: remember last edited scene in a project
 
 ### 2021-04-22
 * store, gui: first pass at deserializing multi-scene projects
