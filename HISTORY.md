@@ -8,6 +8,10 @@
 * **Notable Fixes:**
     * work around a floating point precision glitch in "ray length"
     * fixed an occasional rendering glitch when changing the display style of a variable watcher
+    * fixed color effect for negative inputs, thanks, Brian!
+
+### 2021-04-23
+* objects: fixed color effect for negative inputs, thanks, Brian!
 
 ### 2021-04-17
 * objects: fixed an occasional rendering glitch when changing the display style of a variable watcher
