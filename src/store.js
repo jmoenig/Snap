@@ -407,9 +407,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     if (model.stage.attributes.pan) {
         scene.stage.pan = +model.stage.attributes.pan;
     }
-    if (model.stage.attributes.select) {
-        scene.spriteIdx = +model.stage.attributes.select;
-    }
     if (model.stage.attributes.penlog) {
         scene.enablePenLogging =
             (model.stage.attributes.penlog === 'true');
@@ -492,8 +489,10 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     /* Sprites */
 
     model.sprites = model.stage.require('sprites');
+    if (model.sprites.attributes.select) {
+        scene.spriteIdx = +model.sprites.attributes.select;
+    }
     scene.spritesDict[scene.stage.name] = scene.stage;
-
     model.sprites.childrenNamed('sprite').forEach(
         model => this.loadValue(model)
     );
@@ -1731,7 +1730,6 @@ StageMorph.prototype.toXML = function (serializer) {
     return serializer.format(
             '<stage width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-            'select="@" ' +
             'penlog="@" ' +
             '%' +
             'volume="@" ' +
@@ -1750,7 +1748,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<variables>%</variables>' +
             '<blocks>%</blocks>' +
             '<scripts>%</scripts>' +
-            '<sprites>%</sprites>' +
+            '<sprites select="@">%</sprites>' +
             '</stage>',
         this.dimensions.x,
         this.dimensions.y,
@@ -1761,8 +1759,6 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
-        serializer.root.sprites.asArray().indexOf(
-            serializer.root.currentSprite) + 1,
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
@@ -1787,6 +1783,8 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.variables),
         serializer.store(this.customBlocks),
         serializer.store(this.scripts),
+        serializer.root.sprites.asArray().indexOf(
+            serializer.root.currentSprite) + 1,
         serializer.store(this.children)
     );
 };
