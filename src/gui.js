@@ -5650,24 +5650,10 @@ IDE_Morph.prototype.toggleZebraColoring = function () {
     );
 };
 
-IDE_Morph.prototype.toggleDynamicInputLabels = function () { // +++ use refreshIDE()
-    var projectData;
+IDE_Morph.prototype.toggleDynamicInputLabels = function () {
     SyntaxElementMorph.prototype.dynamicInputLabels =
         !SyntaxElementMorph.prototype.dynamicInputLabels;
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            projectData = this.serializer.serialize(this.scene);
-        } catch (err) {
-            this.showMessage('Serialization failed: ' + err);
-        }
-    } else {
-        projectData = this.serializer.serialize(this.scene);
-    }
-    SpriteMorph.prototype.initBlocks();
-    this.spriteBar.tabBar.tabTo('scripts');
-    this.createCategories();
-    this.createCorralBar();
-    this.openProjectString(projectData);
+    this.refreshIDE();
 };
 
 IDE_Morph.prototype.toggleBlurredShadows = function () {
@@ -6016,19 +6002,21 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) { // +++ use refreshIDE()
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
         if (Process.prototype.isCatchingErrors) {
             try {
-                projectData = this.serializer.serialize(this.scene);
+                projectData = this.serializer.serialize(
+                    new Project(this.scenes)
+                );
             } catch (err) {
                 this.showMessage('Serialization failed: ' + err);
             }
         } else {
-            projectData = this.serializer.serialize(this.scene);
+            projectData = this.serializer.serialize(new Project(this.scenes));
         }
     }
     SpriteMorph.prototype.initBlocks();
