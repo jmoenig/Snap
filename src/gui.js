@@ -6115,16 +6115,16 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     );
 };
 
-IDE_Morph.prototype.setBlocksScale = function (num) { // +++ use refreshIDE()
+IDE_Morph.prototype.setBlocksScale = function (num) {
     var projectData;
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.scene);
+            projectData = this.serializer.serialize(new Project(this.scenes));
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.scene);
+        projectData = this.serializer.serialize(new Project(this.scenes));
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();

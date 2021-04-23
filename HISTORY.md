@@ -12,6 +12,7 @@
 * store: serialize sprite-order from scenes
 * gui: sceneified refreshIDE()
 * gui: sceneified toggling dynamic input labels and switching languages
+* gui: sceneified "zoom blocks"
 
 ### 2021-04-22
 * store, gui: first pass at deserializing multi-scene projects
