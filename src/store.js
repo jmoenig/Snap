@@ -1761,7 +1761,8 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
-        serializer.root.sprites.asArray().indexOf(serializer.root.currentSprite) + 1,
+        serializer.root.sprites.asArray().indexOf(
+            serializer.root.currentSprite) + 1,
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',

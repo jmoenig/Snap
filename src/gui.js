@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-21';
+modules.gui = '2021-April-23';
 
 // Declarations
 
@@ -2587,12 +2587,12 @@ IDE_Morph.prototype.refreshIDE = function () {
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.scene);
+            projectData = this.serializer.serialize(new Project(this.scenes));
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.scene);
+        projectData = this.serializer.serialize(new Project(this.scenes));
     }
     SpriteMorph.prototype.initBlocks();
     this.buildPanes();
@@ -2785,7 +2785,9 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
     // private
     var username = this.cloud.username;
     try {
-        localStorage['-snap-backup-'] = this.serializer.serialize(this.scene);
+        localStorage['-snap-backup-'] = this.serializer.serialize(
+            new Project(this.scenes)
+        );
         delete localStorage['-snap-bakflag-'];
         if (username) {
             localStorage['-snap-bakuser-'] = username;
@@ -5648,7 +5650,7 @@ IDE_Morph.prototype.toggleZebraColoring = function () {
     );
 };
 
-IDE_Morph.prototype.toggleDynamicInputLabels = function () {
+IDE_Morph.prototype.toggleDynamicInputLabels = function () { // +++ use refreshIDE()
     var projectData;
     SyntaxElementMorph.prototype.dynamicInputLabels =
         !SyntaxElementMorph.prototype.dynamicInputLabels;
@@ -6014,7 +6016,7 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) { // +++ use refreshIDE()
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
@@ -6125,7 +6127,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     );
 };
 
-IDE_Morph.prototype.setBlocksScale = function (num) {
+IDE_Morph.prototype.setBlocksScale = function (num) { // +++ use refreshIDE()
     var projectData;
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -6468,7 +6470,7 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
-IDE_Morph.prototype.buildProjectRequest = function () {
+IDE_Morph.prototype.buildProjectRequest = function () { // +++ Oh, sweet Jesus!
     var xml = this.serializer.serialize(this.scene),
         thumbnail = normalizeCanvas(
             this.stage.thumbnail(
@@ -6577,7 +6579,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
     // this.hasChangedMedia = false;
 };
 
-IDE_Morph.prototype.exportProjectNoMedia = function (name) {
+IDE_Morph.prototype.exportProjectNoMedia = function (name) { // +++ Sigh...
     var menu, str;
     this.serializer.isCollectingMedia = true;
     if (name) {
@@ -6605,7 +6607,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     this.serializer.flushMedia();
 };
 
-IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
+IDE_Morph.prototype.exportProjectAsCloudData = function (name) { // +++ revisit
     var menu, str, media, dta;
     this.serializer.isCollectingMedia = true;
     if (name) {
