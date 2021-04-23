@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-22';
+modules.store = '2021-April-23';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -78,6 +78,7 @@ modules.store = '2021-April-22';
 function XML_Serializer() {
     this.contents = [];
     this.media = [];
+    this.root = {};
     this.isCollectingMedia = false;
     this.isExportingBlocksLibrary = false;
 }
@@ -108,6 +109,9 @@ XML_Serializer.prototype.store = function (object, mediaID) {
         // unsupported type, to be checked before calling store()
         // when debugging, be sure to throw an error at this point
         return '';
+    }
+    if (object instanceof Scene) {
+        this.root = object;
     }
     if (this.isCollectingMedia && object[this.mediaDetectionProperty]) {
         this.addMedia(object, mediaID);
@@ -174,6 +178,7 @@ XML_Serializer.prototype.flush = function () {
     // private - free all objects and empty my contents
     this.contents.forEach(obj => delete obj[this.idProperty]);
     this.contents = [];
+    this.root = {};
 };
 
 XML_Serializer.prototype.flushMedia = function () {
@@ -1720,8 +1725,7 @@ Scene.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var costumeIdx = this.getCostumeIdx(),
-        ide = this.parentThatIsA(IDE_Morph);
+    var costumeIdx = this.getCostumeIdx();
 
     this.removeAllClones();
     return serializer.format(
@@ -1757,7 +1761,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
-        ide.sprites.asArray().indexOf(ide.currentSprite) + 1,
+        serializer.root.sprites.asArray().indexOf(serializer.root.currentSprite) + 1,
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
@@ -1787,9 +1791,7 @@ StageMorph.prototype.toXML = function (serializer) {
 };
 
 SpriteMorph.prototype.toXML = function (serializer) {
-    var stage = this.parentThatIsA(StageMorph),
-        ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
-        idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+    var idx = serializer.root.sprites.asArray().indexOf(this) + 1,
         costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),

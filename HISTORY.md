@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-04-23
+* store: serialize sprite-order from scenes
+
 ### 2021-04-22
 * store, gui: first pass at deserializing multi-scene projects
 * gui, scenes: migrated "new project" feature
