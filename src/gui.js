@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-April-23';
+modules.gui = '2021-April-28';
 
 // Declarations
 
@@ -1930,15 +1930,20 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.corral.add(this.corral.album);
 
     this.corral.fixLayout = function () {
-        // this.stageIcon.setCenter(this.center()); // version before scenes
-        this.stageIcon.setTop(this.top());
+        this.stageIcon.setCenter(this.center());
         this.stageIcon.setLeft(this.left() + padding);
 
         // scenes +++
-        this.album.setLeft(this.left());
-        this.album.setTop(this.stageIcon.bottom() + padding);
-        this.album.setWidth(this.stageIcon.width() + padding * 2);
-        this.album.setHeight(this.height() - this.stageIcon.height() - padding);
+        if (myself.scenes.length() < 2) {
+            this.album.hide();
+        } else {
+            this.stageIcon.setTop(this.top());
+            this.album.show();
+            this.album.setLeft(this.left());
+            this.album.setTop(this.stageIcon.bottom() + padding);
+            this.album.setWidth(this.stageIcon.width() + padding * 2);
+            this.album.setHeight(this.height() - this.stageIcon.height() - padding); // +++
+        }
 
         this.frame.setLeft(this.stageIcon.right() + padding);
         this.frame.setExtent(new Point(

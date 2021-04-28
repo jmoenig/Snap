@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-04-28
+* gui: only show scene album if the project has more than a single scene
+
 ### 2021-04-23
 * store: serialize sprite-order from scenes
 * gui: sceneified refreshIDE()
