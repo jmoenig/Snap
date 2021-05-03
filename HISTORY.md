@@ -16,6 +16,7 @@
 
 ### 2021-05-03
 * new versions of "Colors" and bignums libraries, updated documentation, thanks, Brian
+* bumped dev version to v6.8
 
 ### 2021-04-23
 * objects: fixed color effect for negative inputs, thanks, Brian!
