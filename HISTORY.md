@@ -1,11 +1,13 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 6.8.0
 * **New Features:**
-    * you can now also "peel off" custom block instances from their prototype templates in the block editor
     * first-class colors, sorta, in the new "Colors" library, thanks, Brian!
+    * you can now also "peel off" custom block instances from their prototype templates in the block editor
 * **Notable Changes:**
-    * speed-up  talk bubble positioning by 5x
+    * speed-up talk bubble positioning by 5x
 * **Notable Fixes:**
     * work around a floating point precision glitch in "ray length"
     * fixed an occasional rendering glitch when changing the display style of a variable watcher
@@ -17,6 +19,7 @@
 ### 2021-05-03
 * new versions of "Colors" and bignums libraries, updated documentation, thanks, Brian
 * bumped dev version to v6.8
+* prepared minor release
 
 ### 2021-04-23
 * objects: fixed color effect for negative inputs, thanks, Brian!
