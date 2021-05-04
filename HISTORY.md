@@ -4,7 +4,7 @@
 
 ## 6.8.1
 * **Notable Fixes:**
-fixed peeling off niladic custom block instances from prototype templates
+    * fixed peeling off niladic custom block instances from prototype templates
 
 ### 2021-05-04
 * new dev version
