@@ -282,13 +282,15 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
             if (user.username) {
                 myself.username = user.username;
                 myself.verified = user.verified;
+                myself.previous_username_admin = user.previous_username_admin;
             }
             if (onSuccess) {
             	onSuccess.call(
                     null,
                     user.username,
                     user.role,
-                    response ? JSON.parse(response) : null
+                    response ? JSON.parse(response) : null,
+                    user.previous_username_admin
                 );
             }
         },
@@ -326,6 +328,34 @@ Cloud.prototype.logout = function (onSuccess, onError) {
         'logout failed'
     );
 };
+
+Cloud.prototype.logoutAlias = function (onSuccess, onError) {
+    var myself = this;
+    this.getCurrentUser(
+        function (user) {
+            if (user.username && user.previous_username_admin) {
+                myself.login(
+                    user.previous_username_admin,
+                    0, // password is irrelevant
+                    false, // ignored
+                    function (username, role, previous_username_admin, response) {
+                        alert(
+                            response.message,
+                            function () {
+                                onSuccess.call();
+                                sessionStorage.previous_username_admin = previous_username_admin;
+                                sessionStorage.username = username;
+                                sessionStorage.role = role;
+                            }
+                        );
+                    },
+                    onError
+                );
+            }
+        },
+        onError
+    );
+}
 
 Cloud.prototype.login = function (
 	username,
