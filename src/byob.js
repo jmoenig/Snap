@@ -106,7 +106,7 @@ WatcherMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-April-20';
+modules.byob = '2021-May-04';
 
 // Declarations
 
@@ -663,6 +663,7 @@ CustomCommandBlockMorph.prototype.reactToTemplateCopy = function () {
     if (this.isPrototype) {
         def = this.definition;
         this.isPrototype = false;
+        this.setSpec(' ');
         this.refresh();
         this.refreshDefaults(def);
     }

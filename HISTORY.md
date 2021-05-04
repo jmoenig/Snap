@@ -4,6 +4,7 @@
 
 ### 2021-05-04
 * new dev version
+* gui: fixed "peeling off" niladic custom block instances from prototype templates
 
 ## 6.8.0
 * **New Features:**
