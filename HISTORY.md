@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-05-04
+* new dev version
+
 ## 6.8.0
 * **New Features:**
     * first-class colors, sorta, in the new "Colors" library, thanks, Brian!
