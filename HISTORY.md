@@ -57,6 +57,15 @@
 
 ## in development:
 
+## 6.8.1
+* **Notable Fixes:**
+    * fixed peeling off niladic custom block instances from prototype templates
+
+### 2021-05-04
+* new dev version
+* gui: fixed "peeling off" niladic custom block instances from prototype templates
+* prepared patch
+
 ## 6.8.0
 * **New Features:**
     * first-class colors, sorta, in the new "Colors" library, thanks, Brian!
