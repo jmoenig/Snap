@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-04';
+modules.gui = '2021-May-10';
 
 // Declarations
 
@@ -241,7 +241,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // scenes
     this.scenes = new List([new Scene()]);
     this.scene = this.scenes.at(1);
-    this.isAddingScenes = false; // to be factored out
+    this.isAddingScenes = false;
+    this.isAddingNextScene = false;
 
     // editor
     this.globalVariables = this.scene.globalVariables;
@@ -2348,7 +2349,23 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
 
 IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     var lbl = name ? name.split('.')[0] : '',
-        ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '';
+        ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '',
+        setting = this.isAddingScenes;
+
+    // handle the special situation of adding a scene to the current project
+    if (this.isAddingNextScene) {
+        this.isAddingScenes = true;
+        if (aString.indexOf('<project') === 0) {
+            location.hash = '';
+            this.openProjectString(aString);
+        } else if (aString.indexOf('<snapdata') === 0) {
+            location.hash = '';
+            this.openCloudDataString(aString);
+        }
+        this.isAddingScenes = setting;
+        this.isAddingNextScene = false;
+        return;
+    }
 
     // check for Snap specific files, projects, libraries, sprites, scripts
     if (aString.indexOf('<project') === 0) {
@@ -4039,6 +4056,12 @@ IDE_Morph.prototype.projectMenu = function () {
         );
     }
 
+    // +++
+    menu.addLine();
+    menu.addPair('New scene', 'createNewScene');
+    menu.addPair('Add scene...', 'addScene');
+    // +++
+
     menu.addLine();
     menu.addItem(
         'Libraries...',
@@ -4161,6 +4184,8 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
 
 IDE_Morph.prototype.importLocalFile = function () {
     var inp = document.createElement('input'),
+        addingScenes = this.isAddingScenes,
+        myself = this,
         world = this.world();
 
     if (this.filePicker) {
@@ -4183,6 +4208,9 @@ IDE_Morph.prototype.importLocalFile = function () {
         () => {
             document.body.removeChild(inp);
             this.filePicker = null;
+            if (addingScenes) {
+                myself.isAddingNextScene = true; // +++
+            }
             world.hand.processDrop(inp.files);
         },
         false
@@ -4676,6 +4704,13 @@ IDE_Morph.prototype.newProject = function () {
     this.openProject(project);
 };
 
+IDE_Morph.prototype.createNewScene = function () { // +++
+    var setting = this.isAddingScenes;
+    this.isAddingScenes = true;
+    this.newProject();
+    this.isAddingScenes = setting;
+};
+
 IDE_Morph.prototype.save = function () {
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
@@ -5138,7 +5173,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 
 IDE_Morph.prototype.openProjectString = function (str, callback) {
     var msg;
-    if (this.bulkDropInProgress) {
+    if (this.bulkDropInProgress || this.isAddingScenes) { // +++
             this.rawOpenProjectString(str);
             if (callback) {callback(); }
             return;
@@ -5185,8 +5220,12 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
-    var model;
+    var model,
+        setting = this.isAddingScenes; // +++
 
+    if (this.isAddingNextScene) {
+        this.isAddingScenes = true;
+    }
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -5213,6 +5252,8 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         );
     }
     this.stopFastTracking();
+    this.isAddingScenes = setting;
+    this.isAddingNextScene = false;
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
@@ -5896,6 +5937,22 @@ IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
 
 IDE_Morph.prototype.createNewProject = function () {
     this.backup(() => this.newProject());
+};
+
+IDE_Morph.prototype.addScene = function () { // +++
+    var setting = this.isAddingScenes;
+    if (location.protocol === 'file:') {
+        // bypass the project import dialog and directly pop up
+        // the local file picker.
+        // this should not be necessary, we should be able
+        // to access the cloud even when running Snap! locally
+        // to be worked on.... (jens)
+        this.isAddingScenes = true;
+        this.importLocalFile();
+        this.isAddingScenes = setting;
+        return;
+    }
+    new ProjectDialogMorph(this, 'add').popUp();
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {
@@ -6928,12 +6985,23 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     );
 
     // override inherited properites:
-    this.labelString = this.task === 'save' ? 'Save Project' : 'Open Project';
+    switch (this.task) {
+    case 'save':
+        this.labelString = 'Save Project';
+        break;
+    case 'add':
+        this.labelString = 'Add Scene';
+        break;
+    default: // 'open'
+        this.task = 'open';
+        this.labelString = 'Open Project';
+    }
+
     this.createLabel();
     this.key = 'project' + task;
 
     // build contents
-    if (task === 'open' && this.source === 'disk') {
+    if ((task === 'open' || task === 'add') && this.source === 'disk') {
         // give the user a chance to switch to another source
         this.source = null;
         this.buildContents();
@@ -6976,7 +7044,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     }
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
         if (this.hasLocalProjects() || this.ide.world().currentKey === 16) {
@@ -7051,7 +7119,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.notesField.acceptsDrops = false;
     this.notesField.contents.acceptsDrops = false;
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.notesText = new TextMorph('');
     } else { // 'save'
         this.notesText = new TextMorph(this.ide.projectNotes);
@@ -7069,6 +7137,11 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
+        this.recoverButton = this.addButton('recoveryDialog', 'Recover', true);
+        this.recoverButton.hide();
+    } else if (this.task === 'add') {
+        this.addButton('addScene', 'Add');
+        this.action = 'addScene';
         this.recoverButton = this.addButton('recoveryDialog', 'Recover', true);
         this.recoverButton.hide();
     } else { // 'save'
@@ -7411,7 +7484,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.shareButton.hide();
     this.unshareButton.hide();
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.recoverButton.hide();
     }
 
@@ -7424,7 +7497,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     }
     this.buttons.fixLayout();
     this.fixLayout();
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.clearDetails();
     }
 };
@@ -7501,7 +7574,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         if (this.nameField) {
             this.nameField.setContents(item.projectname || '');
         }
-        if (this.task === 'open') {
+        if (this.task === 'open' || this.task === 'add') {
             this.notesText.text = item.notes || '';
             this.notesText.rerender();
             this.notesField.contents.adjustBounds();
@@ -7549,7 +7622,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         this.edit();
     };
     this.body.add(this.listField);
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.recoverButton.show();
     }
     this.shareButton.show();
@@ -7557,7 +7630,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.clearDetails();
     }
 };
@@ -7579,6 +7652,27 @@ ProjectDialogMorph.prototype.recoveryDialog = function () {
     new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
 };
 
+ProjectDialogMorph.prototype.addScene = function () { // +++
+    var proj = this.listField.selected,
+        src;
+    if (!proj) {return; }
+    this.ide.isAddingNextScene = true;
+    this.ide.source = this.source;
+    if (this.source === 'cloud') {
+        this.addCloudScene(proj);
+    } else if (this.source === 'examples') {
+        // Note "file" is a property of the parseResourceFile function.
+        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
+        this.ide.openProjectString(src);
+        this.destroy();
+
+    } else { // 'local'
+        this.ide.source = null;
+        this.ide.openProjectName(proj.name);
+        this.destroy();
+    }
+};
+
 ProjectDialogMorph.prototype.openProject = function () {
     var proj = this.listField.selected,
         src;
@@ -7597,6 +7691,14 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.ide.backup(() => this.ide.openProjectName(proj.name));
         this.destroy();
     }
+};
+
+ProjectDialogMorph.prototype.addCloudScene = function (project, delta) {
+    // no need to backup
+    this.ide.nextSteps([
+        () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
+        () => this.rawOpenCloudProject(project, delta)
+    ]);
 };
 
 ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {

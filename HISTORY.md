@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-10
+* gui: project menu entries for "new scene" and "add scene" 
+
 ### 2021-04-28
 * gui: only show scene album if the project has more than a single scene
 
