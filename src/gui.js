@@ -1884,7 +1884,7 @@ IDE_Morph.prototype.createCorralBar = function () {
 
 IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     // assumes the corral bar has already been created
-    var frame, padding = 5, line = this.padding, myself = this,
+    var frame, padding = 5, myself = this,
         album = this.corral? this.corral.album : null;
 
     this.createStageHandle();
@@ -1924,15 +1924,11 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.corral.frame = frame;
     this.corral.add(frame);
 
-    // scenes +++
-    this.corral.albumFrame = new Morph();
-    this.corral.albumFrame.color = this.backgroundColor;
-    this.corral.add(this.corral.albumFrame);
-
+    // scenes ++++
     this.corral.album = keepSceneAlbum ? album
             : new SceneAlbumMorph(this, this.sliderColor);
-    this.corral.album.color = this.groupColor; // this.frameColor;
-    this.corral.albumFrame.add(this.corral.album);
+    this.corral.album.color = this.frameColor; // this.groupColor;
+    this.corral.add(this.corral.album);
 
     this.corral.fixLayout = function () {
         this.stageIcon.setCenter(this.center());
@@ -1940,24 +1936,14 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
         // scenes +++
         if (myself.scenes.length() < 2) {
-            this.albumFrame.hide();
+            this.album.hide();
         } else {
             this.stageIcon.setTop(this.top());
-            this.albumFrame.show();
-
-            this.albumFrame.setLeft(this.left());
-            this.albumFrame.setTop(this.stageIcon.bottom() + padding);
-            this.albumFrame.setWidth(this.stageIcon.width() + padding * 2);
-            this.albumFrame.setHeight(
-                this.height() - this.stageIcon.height() - padding
-            );
-
+            this.album.show();
             this.album.setLeft(this.left());
-            this.album.setTop(this.stageIcon.bottom() + padding + line);
-            this.album.setWidth(this.stageIcon.width() + padding * 2 - line);
-            this.album.setHeight(
-                this.height() - this.stageIcon.height() - padding - line
-            );
+            this.album.setTop(this.stageIcon.bottom() + padding);
+            this.album.setWidth(this.stageIcon.width() + padding * 2);
+            this.album.setHeight(this.height() - this.stageIcon.height() - padding); // +++
         }
 
         this.frame.setLeft(this.stageIcon.right() + padding);
@@ -10244,9 +10230,9 @@ SceneIconMorph.prototype.init = function (aScene) {
     var colors, action, query;
 
     colors = [
-        IDE_Morph.prototype.groupColor,
         IDE_Morph.prototype.frameColor,
-        IDE_Morph.prototype.frameColor
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.groupColor
     ];
 
     action = () => {
