@@ -10,6 +10,7 @@
 
 ### 2021-05-11
 * gui: add multi-scene projects 
+* gui: adjusted scene album rendering
 
 ### 2021-05-10
 * gui: project menu entries for "new scene" and "add scene" 
