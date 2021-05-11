@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-10';
+modules.gui = '2021-May-11';
 
 // Declarations
 
@@ -4209,7 +4209,7 @@ IDE_Morph.prototype.importLocalFile = function () {
             document.body.removeChild(inp);
             this.filePicker = null;
             if (addingScenes) {
-                myself.isAddingNextScene = true; // +++
+                myself.isAddingNextScene = true;
             }
             world.hand.processDrop(inp.files);
         },
@@ -7372,7 +7372,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 // ProjectDialogMorph ops
 
 ProjectDialogMorph.prototype.setSource = function (source) {
-    var msg;
+    var msg, setting;
 
     this.source = source;
     this.srcBar.children.forEach(button =>
@@ -7409,7 +7409,14 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             this.projectList = [];
         } else {
             this.destroy();
-            this.ide.importLocalFile();
+            if (this.task === 'add') {
+                setting = this.ide.isAddingScenes;
+                this.ide.isAddingScenes = true;
+                this.ide.importLocalFile();
+                this.ide.isAddingScenes = setting;
+            } else {
+                this.ide.importLocalFile();
+            }
             return;
         }
         break;
