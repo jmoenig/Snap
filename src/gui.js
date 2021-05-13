@@ -364,9 +364,6 @@ IDE_Morph.prototype.openIn = function (world) {
         if (dict.noExitWarning) {
             window.onbeforeunload = nop;
         }
-        if (dict.lang) {
-            myself.setLanguage(dict.lang, null, true); // don't persist
-        }
 
         // only force my world to get focus if I'm not in embed mode
         // to prevent the iFrame from involuntarily scrolling into view
@@ -606,16 +603,33 @@ IDE_Morph.prototype.openIn = function (world) {
                 this.cloudError()
             );
         } else if (location.hash.substr(0, 6) === '#lang:') {
-            urlLanguage = location.hash.substr(6);
-            this.setLanguage(urlLanguage, null, true); // don't persist
-            this.loadNewProject = true;
+            dict = myself.cloud.parseDict(location.hash.substr(6));
+            applyFlags(dict);
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
         this.loadNewProject = false;
     }
 
-    if (this.userLanguage) {
+    function launcherLangSetting() {
+        var langSetting = null;
+        if (location.hash.substr(0, 6) === '#lang:') {
+            if (location.hash.charAt(8) === '_') {
+                langSetting = location.hash.slice(6,11);
+            } else {
+                langSetting = location.hash.slice(6,8);
+            }
+        }
+        // lang-flag wins lang-anchor setting
+        langSetting = myself.cloud.parseDict(location.hash).lang || langSetting;
+        return langSetting;
+    }
+
+    if (launcherLangSetting()) {
+        // launch with this non-persisten lang setting
+        this.loadNewProject = true;
+        this.setLanguage(launcherLangSetting(), interpretUrlAnchors, true);
+    } else if (this.userLanguage) {
         this.loadNewProject = true;
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
