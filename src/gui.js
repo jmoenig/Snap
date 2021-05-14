@@ -457,26 +457,38 @@ IDE_Morph.prototype.openIn = function (world) {
                     }
                 );
             }
-        } else if (location.hash.substr(0, 5) === '#run:') {
+       } else if (location.hash.substr(0, 5) === '#run:') {
+            dict = '';
             hash = location.hash.substr(5);
-            idx = hash.indexOf("&");
-            if (idx > 0) {
-                hash = hash.slice(0, idx);
-            }
+
+            //decoding if hash is an encoded URI
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
             }
-            if (hash.substr(0, 8) === '<project>') {
-                this.rawOpenProjectString(hash);
-                applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
+            idx = hash.indexOf("&");
+
+            // supporting three URL cases
+
+            // xml project
+            if (hash.substr(0, 8) === '<project') {
+                this.rawOpenProjectString(hash.slice(0,hash.indexOf('</project>') + 10));
+                applyFlags(myself.cloud.parseDict(hash.substr(hash.indexOf('</project>') + 10)));
+            // no project, only flags
+            } else if (idx == 0){
+                applyFlags(myself.cloud.parseDict(hash));
+            // xml file path
+            // three path types allowed: absolute (http...) , relative to site ("/path") or relative to folder ("path")
             } else {
                 this.shield = new Morph();
                 this.shield.alpha = 0;
                 this.shield.setExtent(this.parent.extent());
                 this.parent.add(this.shield);
                 this.showMessage('Fetching project...');
-
+                if (idx > 0) {
+                    dict = myself.cloud.parseDict(hash.substr(idx));
+                    hash = hash.slice(0,idx);
+                }
                 this.getURL(
                     hash,
                     projectData => {
@@ -498,11 +510,7 @@ IDE_Morph.prototype.openIn = function (world) {
                                 this.shield = null;
                                 msg.destroy();
                                 // this.toggleAppMode(true);
-                                applyFlags(
-                                    this.cloud.parseDict(
-                                        location.hash.substr(5)
-                                    )
-                                );
+                                applyFlags(dict);
                             }
                         ]);
                     }
