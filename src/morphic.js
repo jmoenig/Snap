@@ -5608,23 +5608,27 @@ CursorMorph.prototype.processKeyDown = function (event) {
 CursorMorph.prototype.processKeyUp = function (event) {
     // handle selection change and cursor position change.
     var textarea = this.textarea,
-        target = this.target;
+        target = this.target,
+        positionSlot;
 
     if (textarea.selectionStart === textarea.selectionEnd) {
         target.startMark = null;
         target.endMark = null;
+        positionSlot = textarea.selectionStart;
     } else {
         if (textarea.selectionDirection === 'backward') {
             target.startMark = textarea.selectionEnd;
             target.endMark = textarea.selectionStart;
+            positionSlot = textarea.selectionStart;
         } else {
             target.startMark = textarea.selectionStart;
             target.endMark = textarea.selectionEnd;
+            positionSlot = textarea.selectionEnd;
         }
     }
     target.fixLayout();
     target.rerender();
-    this.gotoSlot(textarea.selectionEnd);
+    this.gotoSlot(positionSlot);
 };
 
 CursorMorph.prototype.processInput = function (event) {
