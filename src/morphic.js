@@ -5513,6 +5513,7 @@ CursorMorph.prototype.init = function (aStringOrTextMorph, aTextarea) {
     // override inherited defaults
     ls = fontHeight(this.target.fontSize);
     this.setExtent(new Point(Math.max(Math.floor(ls / 20), 1), ls));
+    this.color = this.target.color;
     
     if (this.target instanceof TextMorph &&
             (this.target.alignment !== 'left')) {
@@ -5523,6 +5524,12 @@ CursorMorph.prototype.init = function (aStringOrTextMorph, aTextarea) {
     this.gotoSlot(this.slot);
     this.updateTextAreaPosition();
     this.syncTextareaSelectionWith(this.target);
+};
+
+// CursorMorph drawing:
+
+CursorMorph.prototype.getRenderColor = function () {
+    return this.target.getRenderColor();
 };
 
 // CursorMorph event handling
