@@ -6619,7 +6619,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     );
 };
 
-IDE_Morph.prototype.exportProjectMedia = function (name) {
+IDE_Morph.prototype.exportProjectMedia = function (name) { // +++ revisit for scenes
     var menu, media;
     this.serializer.isCollectingMedia = true;
     if (name) {
@@ -6684,7 +6684,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) { // +++ revisit
                 str = this.serializer.serialize(this.scene);
                 media = this.serializer.mediaXML(name);
                 dta = '<snapdata>' + str + media + '</snapdata>';
-                this.saveXMLAs(str, this.projectName);
+                this.saveXMLAs(dta, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
