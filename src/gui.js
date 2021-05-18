@@ -3212,6 +3212,13 @@ IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
     return this.newName(name, all);
 };
 
+IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
+    var all = this.scenes.asArray().filter(each =>
+            each !== ignoredScene
+        ).map(each => each.name);
+    return this.newName(name, all);
+};
+
 IDE_Morph.prototype.newName = function (name, elements) {
     var ix = name.indexOf('('),
         stem = (ix < 0) ? name : name.substring(0, ix),
@@ -5445,7 +5452,10 @@ IDE_Morph.prototype.openProjectName = function (name) {
 
 IDE_Morph.prototype.openProject = function (project) {
     if (this.isAddingScenes) {
-        project.scenes.itemsArray().forEach(scene => this.scenes.add(scene));
+        project.scenes.itemsArray().forEach(scene => {
+            scene.name = this.newSceneName(scene.name, scene);
+            this.scenes.add(scene);
+        });
     } else {
         this.scenes = project.scenes;
     }
@@ -10371,13 +10381,12 @@ SceneIconMorph.prototype.userMenu = function () {
 
 SceneIconMorph.prototype.renameScene = function () {
     var scene = this.object,
-        album = this.parentThatIsA(SceneAlbumMorph),
         ide = this.parentThatIsA(IDE_Morph);
     new DialogBoxMorph(
         null,
         answer => {
             if (answer && (answer !== scene.name)) {
-                scene.name = album.scene.newSceneName(
+                scene.name = ide.newSceneName(
                     answer,
                     scene
                 );
