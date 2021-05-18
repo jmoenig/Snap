@@ -6535,20 +6535,24 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
-IDE_Morph.prototype.buildProjectRequest = function () { // +++ Oh, sweet Jesus!
-    var xml = this.serializer.serialize(this.scene),
-        thumbnail = normalizeCanvas(
+IDE_Morph.prototype.buildProjectRequest = function () {
+    var thumbnail = normalizeCanvas(
             this.stage.thumbnail(
                 SnapSerializer.prototype.thumbnailSize
         )).toDataURL(),
-        body;
+        body,
+        xml;
 
     this.serializer.isCollectingMedia = true;
+    xml = this.serializer.serialize(new Project(this.scenes, this.scene));
     body = {
         notes: this.projectNotes,
         xml: xml,
-        media: this.hasChangedMedia ?
+        /*
+        media: this.hasChangedMedia ? // incremental media upload, disabled
             this.serializer.mediaXML(this.projectName) : null,
+        */
+        media: this.serializer.mediaXML(this.projectName),
         thumbnail: thumbnail,
         remixID: this.stage.remixID
     };
@@ -6619,7 +6623,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     );
 };
 
-IDE_Morph.prototype.exportProjectMedia = function (name) { // +++ revisit for scenes
+IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
     if (name) {
@@ -6645,7 +6649,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) { // +++ revisit for sc
     // this.hasChangedMedia = false;
 };
 
-IDE_Morph.prototype.exportProjectNoMedia = function (name) { // +++ Sigh...
+IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
     this.serializer.isCollectingMedia = true;
     if (name) {
@@ -6677,7 +6681,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) { // +++ Sigh...
     this.serializer.flushMedia();
 };
 
-IDE_Morph.prototype.exportProjectAsCloudData = function (name) { // +++ revisit
+IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
     this.serializer.isCollectingMedia = true;
     if (name) {
