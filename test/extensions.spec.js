@@ -67,4 +67,13 @@ describe('extensions', function() {
             2
         );
     });
+
+    it('should show new blocks on the stage', function() {
+        driver.selectStage();
+        driver.selectCategory('TEST!');
+        assert.equal(
+            driver.palette().contents.children.length,
+            2
+        );
+    });
 });

@@ -9061,6 +9061,18 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(this.makeBlockButton());
     } else if (cat === 'custom') {
         blocks.push(this.makeBlockButton());
+    } else {
+        const ide = this.parentThatIsA(IDE_Morph);
+        const extBlocks = ide.extensions.getBlockTemplates(cat)
+            .map(item => {
+                const isBlockName = typeof item === 'string' && !['-', '='].includes(item);
+                if (isBlockName) {
+                    return block(item);
+                }
+                return item;
+            });
+        blocks.push(...extBlocks);
+        blocks.push(this.makeBlockButton());
     }
     return blocks;
 };
