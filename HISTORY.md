@@ -11,6 +11,7 @@
 ### 2021-05-18
 * gui: fixed exporting media only for a single scene
 * gui: fixed cloud file format components
+* gui: "projectized" cloud file format for a single scene
 
 ### 2021-05-11
 * gui: add multi-scene projects 

@@ -6626,7 +6626,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) { // +++ revisit for sc
         this.setProjectName(name);
         try {
             menu = this.showMessage('Exporting');
-            this.serializer.serialize(this.scene);
+            this.serializer.serialize(new Project(this.scenes, this.scene));
             media = this.serializer.mediaXML(name);
             this.saveXMLAs(media, this.projectName + ' media');
             menu.destroy();
@@ -6653,7 +6653,9 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) { // +++ Sigh...
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.scene);
+                str = this.serializer.serialize(
+                    new Project(this.scenes, this.scene)
+                );
                 this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
@@ -6663,7 +6665,9 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) { // +++ Sigh...
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.scene);
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
             this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
@@ -6681,7 +6685,9 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) { // +++ revisit
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.scene);
+                str = this.serializer.serialize(
+                    new Project(this.scenes, this.scene)
+                );
                 media = this.serializer.mediaXML(name);
                 dta = '<snapdata>' + str + media + '</snapdata>';
                 this.saveXMLAs(dta, this.projectName);
@@ -6693,7 +6699,9 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) { // +++ revisit
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.scene);
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
             media = this.serializer.mediaXML(name);
             dta = '<snapdata>' + str + media + '</snapdata>';
             this.saveXMLAs(str, this.projectName);
