@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-11';
+modules.gui = '2021-May-18';
 
 // Declarations
 
@@ -6626,6 +6626,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
         this.setProjectName(name);
         try {
             menu = this.showMessage('Exporting');
+            this.serializer.serialize(this.scene);
             media = this.serializer.mediaXML(name);
             this.saveXMLAs(media, this.projectName + ' media');
             menu.destroy();

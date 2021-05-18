@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-18
+* gui: fixed exporting media only for a single scene
+
 ### 2021-05-11
 * gui: add multi-scene projects 
 * gui: adjusted scene album rendering
