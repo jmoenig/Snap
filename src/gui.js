@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-18';
+modules.gui = '2021-May-19';
 
 // Declarations
 
@@ -10368,14 +10368,13 @@ SceneIconMorph.prototype.fixLayout
 // SceneIconMorph menu
 
 SceneIconMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this),
-        ide = this.parentThatIsA(IDE_Morph);
-    if (!(this.object instanceof Scene)) {return null; }
-    menu.addItem("rename", "renameScene");
-    if (ide.scenes.length() > 1) {
-        menu.addItem("delete", "removeScene");
+    var menu = new MenuMorph(this);
+    if (!(this.object instanceof Scene) || this.isProjectScene()) {
+        return null;
     }
-    // menu.addItem("export", "exportScene");
+    menu.addItem("rename", "renameScene");
+    menu.addItem("delete", "removeScene");
+    menu.addItem("export", "exportScene");
     return menu;
 };
 
@@ -10416,6 +10415,15 @@ SceneIconMorph.prototype.exportScene = function () {
     // under construction
     var ide = this.parentThatIsA(IDE_Morph);
     ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+};
+
+// SceneIconMorph ops
+
+SceneIconMorph.prototype.isProjectScene = function (anIDE) {
+    // the first scene of a project cannot be renamed, deleted or rearranged,
+    // because its name and project notes are those of the project
+    var ide = anIDE || this.parentThatIsA(IDE_Morph);
+    return ide.scenes.indexOf(this.object) === 1;
 };
 
 // SceneIconMorph drawing

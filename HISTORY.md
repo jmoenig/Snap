@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-19
+* gui: disabled scene icon context menu for project scene
+
 ### 2021-05-18
 * gui: fixed exporting media only for a single scene
 * gui: fixed cloud file format components
