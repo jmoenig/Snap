@@ -1924,7 +1924,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.corral.frame = frame;
     this.corral.add(frame);
 
-    // scenes ++++
+    // scenes +++
     this.corral.album = keepSceneAlbum ? album
             : new SceneAlbumMorph(this, this.sliderColor);
     this.corral.album.color = this.frameColor; // this.groupColor;
@@ -10369,11 +10369,13 @@ SceneIconMorph.prototype.fixLayout
 
 SceneIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
-    if (!(this.object instanceof Scene) || this.isProjectScene()) {
+    if (!(this.object instanceof Scene)) {
         return null;
     }
-    menu.addItem("rename", "renameScene");
-    menu.addItem("delete", "removeScene");
+    if (!this.isProjectScene()) {
+        menu.addItem("rename", "renameScene");
+        menu.addItem("delete", "removeScene");
+    }
     menu.addItem("export", "exportScene");
     return menu;
 };
@@ -10412,9 +10414,26 @@ SceneIconMorph.prototype.removeScene = function () {
 };
 
 SceneIconMorph.prototype.exportScene = function () {
-    // under construction
-    var ide = this.parentThatIsA(IDE_Morph);
-    ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    // Export scene as project XML, saving a file to disk
+    var menu, str,
+        ide = this.parentThatIsA(IDE_Morph),
+        name = this.object.name || localize('untitled');
+
+    try {
+        menu = ide.showMessage('Exporting');
+        str = ide.serializer.serialize(
+            new Project(new List([this.object]), this.object)
+        );
+        ide.saveXMLAs(str, name);
+        menu.destroy();
+        ide.showMessage('Exported!', 1);
+    } catch (err) {
+        if (Process.prototype.isCatchingErrors) {
+            ide.showMessage('Export failed: ' + err);
+        } else {
+            throw err;
+        }
+    }
 };
 
 // SceneIconMorph ops
