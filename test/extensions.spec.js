@@ -16,7 +16,8 @@ describe('extensions', function() {
                 'TEST!',
                 new Color(10, 100, 10),
                 [
-                    'newBlock'
+                    new Extension.Palette.Block('newBlock'),
+                    new Extension.Palette.Block('newBlock').withWatcherToggle()
                 ]
             )
         ];
@@ -55,25 +56,33 @@ describe('extensions', function() {
     it.skip('should save required extensions in xml', function() {
     });
 
-    it('should add new category', function() {
-        const categories = driver.ide().categories.children.map(c => c.labelString);
-        assert(categories.includes('TEST!'));
-    });
+    describe('palette', function() {
+        it('should add new category', function() {
+            const categories = driver.ide().categories.children.map(c => c.labelString);
+            assert(categories.includes('TEST!'));
+        });
 
-    it('should add new blocks', function() {
-        driver.selectCategory('TEST!');
-        assert.equal(
-            driver.palette().contents.children.length,
-            2
-        );
-    });
+        it('should add new blocks', function() {
+            driver.selectCategory('TEST!');
+            assert.equal(
+                driver.palette().contents.children.length,
+                2
+            );
+        });
 
-    it('should show new blocks on the stage', function() {
-        driver.selectStage();
-        driver.selectCategory('TEST!');
-        assert.equal(
-            driver.palette().contents.children.length,
-            2
-        );
+        it('should show new blocks on the stage', function() {
+            driver.selectStage();
+            driver.selectCategory('TEST!');
+            assert(
+                driver.palette().contents.children.length > 1
+            );
+        });
+
+        it('should watcher toggles in palette', function() {
+            driver.selectCategory('TEST!');
+            const {ToggleMorph} = driver.globals();
+            const toggle = driver.palette().contents.children.find(child => child instanceof ToggleMorph);
+            assert(toggle);
+        });
     });
 });

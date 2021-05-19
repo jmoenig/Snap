@@ -2786,10 +2786,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     } else {
         const ide = this.parentThatIsA(IDE_Morph);
         const extBlocks = ide.extensions.getBlockTemplates(cat)
-            .map(item => {
-                const isBlockName = typeof item === 'string' && !['-', '='].includes(item);
-                if (isBlockName) {
-                    return block(item);
+            .flatMap(item => {
+                switch (item.type) {
+                case 'block':
+                    return block(item.name);
+                case 'watcher':
+                    return [
+                        watcherToggle(item.name),
+                        block(item.name)
+                    ];
+                case 'space':
+                    return item.name;
                 }
                 return item;
             });
@@ -9064,10 +9071,17 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else {
         const ide = this.parentThatIsA(IDE_Morph);
         const extBlocks = ide.extensions.getBlockTemplates(cat)
-            .map(item => {
-                const isBlockName = typeof item === 'string' && !['-', '='].includes(item);
-                if (isBlockName) {
-                    return block(item);
+            .flatMap(item => {
+                switch (item.type) {
+                case 'block':
+                    return block(item.name);
+                case 'watcher':
+                    return [
+                        watcherToggle(item.name),
+                        block(item.name)
+                    ];
+                case 'space':
+                    return item.name;
                 }
                 return item;
             });
