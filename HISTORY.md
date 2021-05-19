@@ -14,6 +14,7 @@
 * gui: made sure the project scene stays in place
 * gui: added exporting single scenes
 * scenes, store: removed redundant properties "notes" and "thumbnail" from project
+* store: removed "thumbnail" property from scene xml
 
 ### 2021-05-18
 * gui: fixed exporting media only for a single scene
