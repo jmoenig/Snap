@@ -10555,6 +10555,7 @@ SceneAlbumMorph.prototype.reactToDropOf = function (icon) {
             idx += 1;
         }
     });
+    idx = Math.max(idx, 1); // the project scene cannot the rearranged
     this.ide.scenes.add(scene, idx + 1);
     this.updateList();
     icon.mouseClickLeft(); // select
