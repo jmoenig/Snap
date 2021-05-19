@@ -2257,8 +2257,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('yPosition', this.inheritsAttribute('y position')));
         blocks.push(watcherToggle('direction'));
         blocks.push(block('direction', this.inheritsAttribute('direction')));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'looks') {
 
@@ -2311,9 +2309,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'sound') {
 
         blocks.push(block('playSound'));
@@ -2362,9 +2357,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
@@ -2389,8 +2381,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('-');
         blocks.push(block('doPasteOn'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'network') {
         blocks.push(block('receiveSocketMessage'));
@@ -2493,8 +2483,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'sensing') {
 
@@ -2567,9 +2555,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
 	/////////////////////////////////
 
-		blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'operators') {
 
         blocks.push(block('reifyScript'));
@@ -2632,9 +2617,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'variables') {
 
@@ -2769,23 +2751,19 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-
         if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push('=');
             blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapValueCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-            blocks.push('=');
         }
+ 	}
 
-        blocks.push(this.makeBlockButton());
-    } else if (cat === 'custom') {
-        blocks.push(this.makeBlockButton());
-    } else {
-        const ide = this.parentThatIsA(IDE_Morph);
-        const extBlocks = ide.extensions.getBlockTemplates(cat)
+    const ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        const extBlocks = ide.extensions.getPaletteContents(this, cat)
             .flatMap(item => {
                 switch (item.type) {
                 case 'block':
@@ -2801,8 +2779,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 return item;
             });
         blocks.push(...extBlocks);
-        blocks.push(this.makeBlockButton());
- 	}
+    }
+
+    blocks.push('=');
+    blocks.push(this.makeBlockButton(cat));
+
     return blocks;
 };
 
@@ -8594,8 +8575,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
         blocks.push(txt);
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'looks') {
 
@@ -8634,9 +8613,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'sound') {
 
@@ -8686,9 +8662,6 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
@@ -8700,9 +8673,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('-');
         blocks.push(block('doPasteOn'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'network') {
         blocks.push(block('receiveSocketMessage'));
         blocks.push(block('doSocketMessage'));
@@ -8800,8 +8770,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'sensing') {
 
@@ -8869,9 +8837,6 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
     } else if (cat === 'operators') {
 
         blocks.push(block('reifyScript'));
@@ -8934,9 +8899,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
 
     //////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
     } else if (cat === 'variables') {
 
@@ -9054,23 +9016,20 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     /////////////////////////////////
 
-        blocks.push('=');
-
         if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push('=');
             blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapValueCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-            blocks.push('=');
         }
 
-        blocks.push(this.makeBlockButton());
-    } else if (cat === 'custom') {
-        blocks.push(this.makeBlockButton());
-    } else {
-        const ide = this.parentThatIsA(IDE_Morph);
-        const extBlocks = ide.extensions.getBlockTemplates(cat)
+    }
+
+    const ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        const extBlocks = ide.extensions.getPaletteContents(this, cat)
             .flatMap(item => {
                 switch (item.type) {
                 case 'block':
@@ -9086,8 +9045,11 @@ StageMorph.prototype.blockTemplates = function (category) {
                 return item;
             });
         blocks.push(...extBlocks);
-        blocks.push(this.makeBlockButton());
     }
+    blocks.push('=');
+    blocks.push(this.makeBlockButton(cat));
+
+
     return blocks;
 };
 

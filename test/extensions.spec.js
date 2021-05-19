@@ -2,7 +2,7 @@
 describe('extensions', function() {
     let TestExtension;
     before(() => {
-        const {NetsBloxExtensions,Extension,Color} = driver.globals();
+        const {NetsBloxExtensions,Extension,Color,SpriteMorph,StageMorph} = driver.globals();
 
         TestExtension = function() {};
         TestExtension.prototype = new Extension('TestExt');
@@ -15,12 +15,29 @@ describe('extensions', function() {
             new Extension.Category(
                 'TEST!',
                 new Color(10, 100, 10),
+            )
+        ];
+
+        TestExtension.prototype.getPalette = () => [
+            new Extension.PaletteCategory(
+                'TEST!',
+                [
+                    new Extension.Palette.Block('newBlock'),
+                    new Extension.Palette.Block('newBlock').withWatcherToggle(),
+                    new Extension.Palette.Block('spriteBlock'),
+                ],
+                SpriteMorph
+            ),
+            new Extension.PaletteCategory(
+                'TEST!',
                 [
                     new Extension.Palette.Block('newBlock'),
                     new Extension.Palette.Block('newBlock').withWatcherToggle()
-                ]
-            )
+                ],
+                StageMorph
+            ),
         ];
+
         TestExtension.prototype.getBlocks = () => [
             new Extension.Block(
                 'newBlock',
@@ -29,6 +46,14 @@ describe('extensions', function() {
                 'test block',
                 [],
                 () => 'This is a test.'
+            ),
+            new Extension.Block(
+                'spriteBlock',
+                'reporter',
+                'TEST!',
+                'sprite-only block',
+                [],
+                () => 'This is another test.'
             )
         ];
 
@@ -83,6 +108,21 @@ describe('extensions', function() {
             const {ToggleMorph} = driver.globals();
             const toggle = driver.palette().contents.children.find(child => child instanceof ToggleMorph);
             assert(toggle);
+        });
+
+        it('should show sprite block on sprite', function() {
+            const {name} = driver.ide().sprites.at(1);
+            driver.selectSprite(name);
+            driver.selectCategory('TEST!');
+            const block = driver.palette().contents.children.find(child => child.selector === 'spriteBlock');
+            assert(block);
+        });
+
+        it('should hide sprite block on stage', function() {
+            driver.selectStage();
+            driver.selectCategory('TEST!');
+            const block = driver.palette().contents.children.find(child => child.selector === 'spriteBlock');
+            assert(!block);
         });
     });
 });

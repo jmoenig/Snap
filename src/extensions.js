@@ -56,13 +56,12 @@
             SpriteMorph.prototype.blockColor[name] = color;
         }
 
-        getBlockTemplates(categoryName) {
-            const categories = this.registry.flatMap(ext => ext.getCategories());
-            const category = categories.find(cat => cat.name === categoryName);
-            if (category) {
-                return category.blocks;
-            }
-            return [];
+        getPaletteContents(targetObject, categoryName) {
+            const paletteContents = this.registry.flatMap(ext => ext.getPalette())
+                .filter(paletteCat => paletteCat.isVisible(targetObject, categoryName))
+                .flatMap(paletteCat => paletteCat.contents);
+
+            return paletteContents;
         }
 
         initBlocks() {
@@ -95,6 +94,22 @@
         return [];
     };
 
+    Extension.prototype.getPalette = function(/*target, category*/) {
+        return [];
+    };
+
+    class PaletteCategory {
+        constructor(category, contents, targetObject) {
+            this.category = category;
+            this.contents = contents;
+            this.targetObject = targetObject;
+        }
+
+        isVisible(target, category) {
+            return this.category === category && (!this.targetObject || target instanceof this.targetObject);
+        }
+    }
+
     class CustomBlock {
         constructor(name, type, category, spec, defaults=[], impl) {
             this.name = name;
@@ -107,10 +122,9 @@
     }
 
     class Category {
-        constructor(name, color=new Color(120, 120, 120), blocks=[]) {
+        constructor(name, color=new Color(120, 120, 120)) {
             this.name = name;
             this.color = color;
-            this.blocks = blocks;
         }
     }
 
@@ -126,14 +140,16 @@
         }
     }
 
-    Extension.Palette = {
-        Block: PaletteBlock,
-        Space: {name: '-', type: 'space'},
-    };
+    Extension.PaletteCategory = PaletteCategory;
+    Extension.Palette = {};
+    Extension.Palette.Block = PaletteBlock;
+    Extension.Palette.Space = {name: '-', type: 'space'};
+    Extension.Palette.BigSpace = {name: '=', type: 'space'};
     Extension.Block = CustomBlock;
     Extension.Category = Category;
 
     globals.Extension = Extension;
     globals.ExtensionRegistry = ExtensionRegistry;
+
 })(this);
 var NetsBloxExtensions;
