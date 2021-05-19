@@ -50,7 +50,7 @@
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
 
-modules.scenes = '2021-April-23';
+modules.scenes = '2021-May-19';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -61,11 +61,14 @@ modules.scenes = '2021-April-23';
 // Project instance creation:
 
 function Project(scenes, current) {
-    this.name = 'Test';
-    this.notes = 'some notes';
-    this.thumbnail = null;
+    var projectScene;
+
     this.scenes = scenes || new List();
     this.currentScene = current;
+
+    // proxied for display
+    projectScene = this.scenes.at(1);
+    this.name = projectScene ? projectScene.name : null;
 
     // for deserializing - do not persist
     this.sceneIdx = null;

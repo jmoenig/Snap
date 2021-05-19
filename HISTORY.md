@@ -13,6 +13,7 @@
 * gui: disabled dragging the project scene icon
 * gui: made sure the project scene stays in place
 * gui: added exporting single scenes
+* scenes, store: removed redundant properties "notes" and "thumbnail" from project
 
 ### 2021-05-18
 * gui: fixed exporting media only for a single scene
