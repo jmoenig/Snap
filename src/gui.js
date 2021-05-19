@@ -10494,8 +10494,11 @@ SceneAlbumMorph.prototype.updateList = function () {
     };
     this.addBack(this.contents);
 
-    this.ide.scenes.asArray().forEach(scene => {
+    this.ide.scenes.asArray().forEach((scene, i) => {
         icon = new SceneIconMorph(scene);
+        if (i < 1) {
+            icon.isDraggable = false; // project scene cannot be rearranged
+        }
         icon.setPosition(new Point(x, y));
         this.addContents(icon);
         y = icon.bottom() + padding;
