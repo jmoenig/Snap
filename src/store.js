@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-May-19';
+modules.store = '2021-May-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1642,13 +1642,26 @@ Array.prototype.toXML = function (serializer) {
 // Scenes & multi-scene projects
 
 Project.prototype.toXML = function (serializer) {
+    var thumbdata;
+
+    // thumb data catch cross-origin tainting exception when using SVG costumes
+    try {
+        thumbdata = this.thumbnail.toDataURL('image/png');
+    } catch (error) {
+        thumbdata = null;
+    }
+
     return serializer.format(
         '<project name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
             '<scenes select="@">%</scenes>' +
             '</project>',
         this.name || localize('Untitled'),
         serializer.app,
         serializer.version,
+        this.notes || '',
+        thumbdata,
         this.scenes.asArray().indexOf(
             this.currentScene) + 1,
         serializer.store(this.scenes.itemsArray())

@@ -68,7 +68,7 @@
 
 /*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Audio,
 ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, Sound, Scene, Note,
-StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, normalizeCanvas,
+StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, BlockEditorMorph,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences,BlockMorph, ToggleMorph,
@@ -79,11 +79,11 @@ CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
 BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
-Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
+Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-20';
+modules.gui = '2021-May-21';
 
 // Declarations
 
@@ -4760,7 +4760,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
     // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
 
-    name = this.scenes.at(1).name; // +++
+    name = this.scenes.at(1).name; // +++++
 
     if (name) {
         this.setProjectName(name);
@@ -6546,25 +6546,22 @@ IDE_Morph.prototype.logout = function () {
 };
 
 IDE_Morph.prototype.buildProjectRequest = function () {
-    var thumbnail = normalizeCanvas(
-            this.stage.thumbnail(
-                SnapSerializer.prototype.thumbnailSize
-        )).toDataURL(),
+    var proj = new Project(this.scenes, this.scene),
         body,
         xml;
 
     this.serializer.isCollectingMedia = true;
-    xml = this.serializer.serialize(new Project(this.scenes, this.scene));
+    xml = this.serializer.serialize(proj);
     body = {
-        notes: this.projectNotes,
+        notes: proj.notes,
         xml: xml,
         /*
         media: this.hasChangedMedia ? // incremental media upload, disabled
-            this.serializer.mediaXML(this.projectName) : null,
+            this.serializer.mediaXML(proj.name) : null,
         */
-        media: this.serializer.mediaXML(this.projectName),
-        thumbnail: thumbnail,
-        remixID: this.stage.remixID
+        media: this.serializer.mediaXML(proj.name),
+        thumbnail: proj.thumbnail.toDataURL(),
+        remixID: this.stage.remixID // +++ sceneify remixID
     };
     this.serializer.isCollectingMedia = false;
     this.serializer.flushMedia();

@@ -48,9 +48,10 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
+/*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
+normalizeCanvas, SnapSerializer*/
 
-modules.scenes = '2021-May-19';
+modules.scenes = '2021-May-21';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -67,8 +68,18 @@ function Project(scenes, current) {
     this.currentScene = current;
 
     // proxied for display
+    this.name = null;
+    this.notes = null;
+    this.thumbnail = null;
+
     projectScene = this.scenes.at(1);
-    this.name = projectScene ? projectScene.name : null;
+    if (projectScene) {
+        this.name = projectScene.name;
+        this.notes = projectScene.notes;
+        this.thumbnail = normalizeCanvas(
+            projectScene.stage.thumbnail(SnapSerializer.prototype.thumbnailSize)
+        );
+    }
 
     // for deserializing - do not persist
     this.sceneIdx = null;

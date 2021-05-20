@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-21
+* gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
+
 ### 2021-05-20
 * gui: marked projectName to be refactored and sceneified
 
