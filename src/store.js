@@ -453,6 +453,8 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     scene.enableSublistIDs =
         model.stage.attributes.sublistIDs === 'true';
 
+    scene.unifiedPalette = model.stage.unifiedPalette === 'true';
+
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(

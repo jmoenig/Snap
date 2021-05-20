@@ -1693,7 +1693,7 @@ SpriteMorph.prototype.blockAlternatives = {
     changeBackgroundHSVA: ['setBackgroundHSVA'],
     changeSize: ['setSize'],
     setSize: ['changeSize'],
-    
+
     // control:
     doBroadcast: ['doBroadcastAndWait', 'doSend'],
     doBroadcastAndWait: ['doBroadcast', 'doSend'],
@@ -2358,7 +2358,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
     }
 
-    if (cat === 'motion') {
+    if (cat === 'motion' || cat === 'unified') {
 
         blocks.push(block('forward'));
         blocks.push(block('turn'));
@@ -2384,10 +2384,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('yPosition', this.inheritsAttribute('y position')));
         blocks.push(watcherToggle('direction'));
         blocks.push(block('direction', this.inheritsAttribute('direction')));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'looks') {
+    }
+    if (cat === 'looks' || cat === 'unified') {
 
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
@@ -2423,7 +2422,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doSwitchToScene'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -2440,12 +2439,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doScreenshot'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
-    } else if (cat === 'sound') {
+    }
+    if (cat === 'sound' || cat === 'unified') {
 
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
@@ -2477,7 +2472,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playFreq'));
         blocks.push(block('stopFreq'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -2491,12 +2486,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doPlayFrequency'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
-    } else if (cat === 'pen') {
+    }
+    if (cat === 'pen' || cat === 'unified') {
 
         blocks.push(block('clear'));
         blocks.push('-');
@@ -2521,10 +2512,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'control') {
+    }
+    if (cat === 'control' || cat === 'unified') {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
@@ -2571,10 +2561,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'sensing') {
+    }
+    if (cat === 'sensing' || cat === 'unified') {
 
         blocks.push(block('reportTouchingObject'));
         blocks.push(block('reportTouchingColor'));
@@ -2617,7 +2606,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportDate'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
 
@@ -2636,12 +2625,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportYieldCount'));
         }
 
-	/////////////////////////////////
-
-		blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
-    } else if (cat === 'operators') {
+    }
+    if (cat === 'operators' || cat === 'unified') {
 
         blocks.push(block('reifyScript'));
         blocks.push(block('reifyReporter'));
@@ -2687,7 +2672,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             }
         }
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -2702,12 +2687,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportTextFunction'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
-    } else if (cat === 'variables') {
+    }
+    if (cat === 'variables' || cat === 'unified') {
 
         button = new PushButtonMorph(
             null,
@@ -2787,14 +2768,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
 
-    // inheritance:
+        // inheritance:
 
         if (StageMorph.prototype.enableInheritance) {
             blocks.push('-');
             blocks.push(block('doDeleteAttr'));
         }
 
-    ///////////////////////////////
+        ///////////////////////////////
 
         blocks.push('=');
 
@@ -2825,7 +2806,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -2839,21 +2820,23 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doShowTable'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
-
         if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push('=');
             blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapValueCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-            blocks.push('=');
         }
+    }
 
-        blocks.push(this.makeBlockButton());
- 	}
+    if (cat !== ' unified') {
+        // TODO: Should probably show thos.
+        // what should category default to?
+        blocks.push('=');
+        blocks.push(this.makeBlockButton(cat));
+    }
+
     return blocks;
 };
 
@@ -2941,7 +2924,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    
+
     palette.toolBar = new AlignmentMorph('column');
 
     searchButton = new PushButtonMorph(
@@ -6002,7 +5985,7 @@ SpriteMorph.prototype.xRight = function () {
     }
     return this.right();
 };
- 
+
 SpriteMorph.prototype.yTop = function () {
     var stage = this.parentThatIsA(StageMorph);
 
@@ -6289,7 +6272,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
         globals = this.globalVariables(),
         watcher,
         others;
-        
+
     if (stage === null) {
         return null;
     }
@@ -8599,7 +8582,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
     }
 
-    if (cat === 'motion') {
+    if (cat === 'motion' || cat === 'unified') {
 
         txt = new TextMorph(localize(
             'Stage selected:\nno motion primitives'
@@ -8610,7 +8593,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'looks') {
+    }
+    if (cat === 'looks' || cat === 'unified') {
 
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
@@ -8633,8 +8617,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doSwitchToScene'));
 
-    // for debugging: ///////////////
-
+        // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
             txt = new TextMorph(localize(
@@ -8650,12 +8633,12 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doScreenshot'));
         }
 
-    /////////////////////////////////
-
+        /////////////////////////////////
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'sound') {
+    }
+    if (cat === 'sound' || cat === 'unified') {
 
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
@@ -8687,8 +8670,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playFreq'));
         blocks.push(block('stopFreq'));
 
-    // for debugging: ///////////////
-
+        // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
             txt = new TextMorph(localize(
@@ -8701,12 +8683,12 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doPlayFrequency'));
         }
 
-    /////////////////////////////////
-
+        /////////////////////////////////
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'pen') {
+    }
+    if (cat === 'pen' || cat === 'unified') {
 
         blocks.push(block('clear'));
         blocks.push('-');
@@ -8721,7 +8703,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'control') {
+    }
+    if (cat === 'control' || cat === 'unified') {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
@@ -8769,7 +8752,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'sensing') {
+    }
+    if (cat === 'sensing' || cat === 'unified') {
 
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
@@ -8807,7 +8791,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportDate'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
 
@@ -8826,12 +8810,13 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportYieldCount'));
         }
 
-    /////////////////////////////////
+        /////////////////////////////////
 
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'operators') {
+    }
+    if (cat === 'operators' || cat === 'unified') {
 
         blocks.push(block('reifyScript'));
         blocks.push(block('reifyReporter'));
@@ -8877,7 +8862,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             }
         }
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -8892,12 +8877,12 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportTextFunction'));
         }
 
-    //////////////////////////////////
-
+        //////////////////////////////////
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
-    } else if (cat === 'variables') {
+    }
+    if (cat === 'variables' || cat === 'unified') {
 
         button = new PushButtonMorph(
             null,
@@ -8998,7 +8983,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
-    // for debugging: ///////////////
+        // for debugging: ///////////////
 
         if (this.world().isDevMode) {
             blocks.push('-');
@@ -9012,7 +8997,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doShowTable'));
         }
 
-    /////////////////////////////////
+        //////// /////////////////////////
 
         blocks.push('=');
 

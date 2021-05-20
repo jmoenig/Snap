@@ -250,7 +250,11 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.sprites = this.scene.sprites;
     this.projectName = this.scene.name;
     this.projectNotes = this.scene.notes;
-    this.currentCategory = 'motion';
+    if (this.scene.unifiedPalette) {
+        this.currentCategory = 'unified';
+    } else {
+        this.currentCategory = 'motion';
+    }
     this.currentTab = 'scripts';
 
     // logoURL is disabled because the image data is hard-copied
@@ -393,7 +397,7 @@ IDE_Morph.prototype.openIn = function (world) {
             world.worldCanvas.focus();
         }
     }
-    
+
     function autoRun () {
         // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
@@ -1228,6 +1232,17 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.bounds.setWidth(this.paletteWidth);
     // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
+    if (this.scene.unifiedPalette) {
+        // TODO: What should this look like?
+        // Ensure there's a min height so the Sprite toolbar has a correct layout.
+        // Include the search bar + make a block button here?
+        this.categories.bounds.setHeight(84);
+        let wastedSpace = new Morph();
+        wastedSpace.setExtent(new Point(this.paletteWidth, 84));
+        this.categories.add(wastedSpace);
+        this.add(this.categories);
+        return;
+    }
     function addCategoryButton(category) {
         var labelWidth = 75,
             colors = [
@@ -1313,11 +1328,13 @@ IDE_Morph.prototype.createCategories = function () {
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
+    let unifiedPalette = this.scene.unifiedPalette;
 
     if (this.palette) {
         this.palette.destroy();
     }
 
+    // TODO: Always show if unified?
     if (forSearching) {
         this.palette = new ScrollFrameMorph(
             null,
@@ -2298,7 +2315,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     // all the images are:
         // sized, with 'width' and 'height' attributes
         // fitted to stage dimensions
-        // and with their 'viewBox' attribute 
+        // and with their 'viewBox' attribute
     if (normalizing) {
         svgNormalized = new Image(w, h);
         svgObj.setAttribute('width', w);
@@ -3910,6 +3927,28 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => Process.prototype.enableHyperOps =
             !Process.prototype.enableHyperOps,
         Process.prototype.enableHyperOps,
+        'uncheck to disable\nusing operators on lists and tables',
+        'check to enable\nusing operators on lists and tables',
+        false
+    );
+    addPreference(
+        'Unified Palette',
+        () => {
+            this.scene.unifiedPalette = !this.scene.unifiedPalette;
+            if (this.scene.unifiedPalette) {
+                this.currentCategory = 'unified';
+            } else {
+                this.currentCategory = 'motion';
+            }
+            this.createCategories();
+            this.categories.fixLayout();
+            this.fixLayout();
+            this.flushBlocksCache();
+            this.flushPaletteCache();
+            this.currentSprite.palette(this.currentCategory);
+            this.refreshPalette(true);
+        },
+        this.scene.unifiedPalette,
         'uncheck to disable\nusing operators on lists and tables',
         'check to enable\nusing operators on lists and tables',
         false
@@ -11014,7 +11053,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 audio: {
                     channelCount: 1 // force mono, currently only works on FF
                 }
-                
+
             }
         ).then(stream => {
             this.mediaRecorder = new MediaRecorder(stream);

@@ -111,6 +111,7 @@ function Scene(aStageMorph) {
     this.hiddenPrimitives = {};
     this.codeMappings = {};
     this.codeHeaders = {};
+    this.unifiedPalette = false;
 
     // global settings (copied)
     this.enableCodeMapping = false;
@@ -164,6 +165,7 @@ Scene.prototype.addDefaultSprite = function () {
 
 Scene.prototype.captureGlobalSettings = function () {
     this.hiddenPrimitives = StageMorph.prototype.hiddenPrimitives;
+    this.unifiedPalette = StageMorph.prototype.unifiedPalette;
     this.codeMappings = StageMorph.prototype.codeMappings;
     this.codeHeaders = StageMorph.prototype.codeHeaders;
     this.enableCodeMapping = StageMorph.prototype.enableCodeMapping;
@@ -177,6 +179,7 @@ Scene.prototype.captureGlobalSettings = function () {
 
 Scene.prototype.applyGlobalSettings = function () {
     StageMorph.prototype.hiddenPrimitives = this.hiddenPrimitives;
+    StageMorph.prototype.unifiedPalette = this.unifiedPalette;
     StageMorph.prototype.codeMappings = this.codeMappings;
     StageMorph.prototype.codeHeaders = this.codeHeaders;
     StageMorph.prototype.enableCodeMapping = this.enableCodeMapping;
