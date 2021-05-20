@@ -8,6 +8,9 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-20
+* gui: marked projectName to be refactored and sceneified
+
 ### 2021-05-19
 * gui: disabled scene icon context menu for project scene
 * gui: disabled dragging the project scene icon

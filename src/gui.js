@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-19';
+modules.gui = '2021-May-20';
 
 // Declarations
 
@@ -2113,7 +2113,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     }
 };
 
-IDE_Morph.prototype.setProjectName = function (string) {
+IDE_Morph.prototype.setProjectName = function (string) { // ++++ change to scene name / distinguish scene name an project name
     this.projectName = string.replace(/['"]/g, ''); // filter quotation marks
     this.hasChangedMedia = true;
     this.controlBar.updateLabel();
