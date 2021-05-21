@@ -7117,7 +7117,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     this.body.add(this.preview);
     if (this.task === 'save') {
-        thumbnail = this.ide.stage.thumbnail( // +++ get the project thumbnail
+        thumbnail = this.ide.scenes.at(1).stage.thumbnail(
             SnapSerializer.prototype.thumbnailSize
         );
         this.preview.texture = null;
