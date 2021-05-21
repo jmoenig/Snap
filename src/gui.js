@@ -4020,7 +4020,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Export project...',
         () => {
             var pn = this.getProjectName();
-            if (this.pn) {
+            if (pn) {
                 this.exportProject(pn);
             } else {
                 this.prompt(
