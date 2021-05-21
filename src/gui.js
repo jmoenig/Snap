@@ -277,9 +277,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.filePicker = null;
 
     // incrementally saving projects to the cloud is currently unused
-    this.hasChangedMedia = false;
-
-    this.hasUnsavedEdits = false; // keeping track of when to internally backup
+    this.hasChangedMedia = false; // +++ sceneify, or get of it
 
     this.isAnimating = true;
     this.paletteWidth = 200; // initially same as logo width
@@ -1175,7 +1173,7 @@ IDE_Morph.prototype.createControlBar = function () {
     };
 
     this.controlBar.updateLabel = function () {
-        var prefix = myself.hasUnsavedEdits ? '\u270E ' : '',
+        var prefix = myself.hasUnsavedEdits() ? '\u270E ' : '',
             suffix = myself.world().isDevMode ?
                 ' - ' + localize('development mode') : '',
             txt;
@@ -2796,13 +2794,17 @@ IDE_Morph.prototype.hasLocalStorage = function () {
 
 // IDE_Morph recording unsaved changes
 
+IDE_Morph.prototype.hasUnsavedEdits = function () {
+    return this.scenes.itemsArray().some(any => any.hasUnsavedEdits);
+};
+
 IDE_Morph.prototype.recordUnsavedChanges = function () {
-    this.hasUnsavedEdits = true;
+    this.scene.hasUnsavedEdits = true;
     this.updateChanges();
 };
 
 IDE_Morph.prototype.recordSavedChanges = function () {
-    this.hasUnsavedEdits = false;
+    this.scenes.itemsArray().forEach(scene => scene.hasUnsavedEdits = false);
     this.updateChanges();
 };
 
@@ -2826,7 +2828,7 @@ IDE_Morph.prototype.backup = function (callback) {
     // Save the current project for the currently logged in user
     // to localstorage, then perform the given callback, e.g.
     // load a new project.
-    if (this.hasUnsavedEdits) {
+    if (this.hasUnsavedEdits()) {
         this.confirm(
             'Replace the current project with a new one?',
             'Unsaved Changes!',
@@ -5493,7 +5495,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         }
     });
     scene.applyGlobalSettings();
-    this.hasUnsavedEdits = false;
     this.world().keyboardFocus = this.stage;
 };
 

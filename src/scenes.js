@@ -116,6 +116,7 @@ function Scene(aStageMorph) {
     this.globalVariables = aStageMorph ?
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
+    this.hasUnsavedEdits = false;
 
     // cached IDE state
     this.sprites = new List();

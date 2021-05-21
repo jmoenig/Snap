@@ -14,6 +14,7 @@
 * gui: sceneified project notes
 * gui: adjusted project thumbnail in "save" dialog
 * gui: some cleanups
+* gui, scenes: sceneified unsaved changes management
 
 ### 2021-05-20
 * gui: marked projectName to be refactored and sceneified
