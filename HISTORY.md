@@ -11,6 +11,7 @@
 ### 2021-05-21
 * gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
 * gui: distinguished project name from scene names, removed hidden "export as plain text" option
+* gui: sceneified project notes
 
 ### 2021-05-20
 * gui: marked projectName to be refactored and sceneified

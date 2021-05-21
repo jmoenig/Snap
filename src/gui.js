@@ -248,7 +248,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.globalVariables = this.scene.globalVariables;
     this.currentSprite = this.scene.addDefaultSprite();
     this.sprites = this.scene.sprites;
-    this.projectNotes = this.scene.notes; // +++ sceneify rename to scene notes
     this.currentCategory = 'motion';
     this.currentTab = 'scripts';
 
@@ -2112,7 +2111,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     }
 };
 
-// IDE_Morph project name
+// IDE_Morph project properties
 
 IDE_Morph.prototype.getProjectName = function () {
     return this.scenes.at(1).name;
@@ -2124,12 +2123,28 @@ IDE_Morph.prototype.setProjectName = function (string) {
     if (name !== projectScene.name) {
         projectScene.name = name;
         projectScene.stage.version = Date.now();
-        this.hasChangedMedia = true; // +++ sceneify this
+        this.recordUnsavedChanges(); // +++ sceneify this
         if (projectScene === this.scene) {
             this.controlBar.updateLabel();
         }
     }
     return name;
+};
+
+IDE_Morph.prototype.getProjectNotes = function () {
+    return this.scenes.at(1).notes;
+};
+
+IDE_Morph.prototype.setProjectNotes = function (string) {
+    var projectScene = this.scenes.at(1);
+    if (string !== projectScene.notes) {
+        projectScene.notes = string;
+        projectScene.stage.version = Date.now();
+        this.recordUnsavedChanges(); // +++ sceneify this
+        if (projectScene === this.scene) {
+            this.controlBar.updateLabel();
+        }
+    }
 };
 
 // IDE_Morph resizing
@@ -3969,10 +3984,7 @@ IDE_Morph.prototype.projectMenu = function () {
         backup = this.availableBackup(shiftClicked);
 
     menu = new MenuMorph(this);
-    if (this.scenes.length() > 1) {
-        menu.addItem('Scenes...', 'scenesMenu');
-    }
-    menu.addItem('Project notes...', 'editProjectNotes');
+    menu.addItem('Notes...', 'editNotes');
     menu.addLine();
     menu.addPair('New', 'createNewProject', '^N');
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
@@ -4056,12 +4068,12 @@ IDE_Morph.prototype.projectMenu = function () {
         );
     }
 
-    // +++
     menu.addLine();
+    if (this.scenes.length() > 1) {
+        menu.addItem('Scenes...', 'scenesMenu');
+    }
     menu.addPair('New scene', 'createNewScene');
     menu.addPair('Add scene...', 'addScene');
-    // +++
-
     menu.addLine();
     menu.addItem(
         'Libraries...',
@@ -4643,10 +4655,10 @@ IDE_Morph.prototype.scenesMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.editProjectNotes = function () {
-    var dialog = new DialogBoxMorph().withKey('projectNotes'),
+IDE_Morph.prototype.editNotes = function () {
+    var dialog = new DialogBoxMorph().withKey('notes'),
         frame = new ScrollFrameMorph(),
-        text = new TextMorph(this.projectNotes || ''),
+        text = new TextMorph(this.scene.notes || ''),
         size = 250,
         world = this.world();
 
@@ -4676,13 +4688,13 @@ IDE_Morph.prototype.editProjectNotes = function () {
     dialog.target = this;
 
     dialog.action = (note) => {
-        this.projectNotes = note;
-        this.recordUnsavedChanges();
+        this.scene.notes = note;
+        this.recordUnsavedChanges(); // +++ sceneify this
     };
 
     dialog.justDropped = () => text.edit();
 
-    dialog.labelString = 'Project Notes';
+    dialog.labelString = 'Notes';
     dialog.createLabel();
     dialog.addBody(frame);
     dialog.addButton('ok', 'OK');
@@ -5049,7 +5061,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) { // ++++ s
     }
 
     // project notes
-    notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
+    notes = Process.prototype.reportTextSplit(this.scene.notes, 'line');
     notes.asArray().forEach(paragraph => add(paragraph));
 
     // table of contents
@@ -5463,8 +5475,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     );
     this.scene.captureGlobalSettings();
     this.scene = scene;
-    // +++ this.projectName = scene.name; // remove
-    this.projectNotes = scene.notes || '';
     this.globalVariables = scene.globalVariables;
     this.stage.destroy();
     this.add(scene.stage);
@@ -7107,7 +7117,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     this.body.add(this.preview);
     if (this.task === 'save') {
-        thumbnail = this.ide.stage.thumbnail(
+        thumbnail = this.ide.stage.thumbnail( // +++ get the project thumbnail
             SnapSerializer.prototype.thumbnailSize
         );
         this.preview.texture = null;
@@ -7131,7 +7141,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open' || this.task === 'add') {
         this.notesText = new TextMorph('');
     } else { // 'save'
-        this.notesText = new TextMorph(this.ide.projectNotes);
+        this.notesText = new TextMorph(this.ide.getProjectNotes());
         this.notesText.isEditable = true;
         this.notesText.enableSelecting();
     }
@@ -7754,8 +7764,8 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text;
 
-    if (this.ide.projectNotes !== notes) {
-        this.ide.projectNotes = notes;
+    if (this.ide.getProjectNotes() !== notes) {
+        this.ide.setProjectNotes(notes);
     }
     if (name) {
         if (this.source === 'cloud') {
