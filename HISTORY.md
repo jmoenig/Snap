@@ -13,6 +13,7 @@
 * gui: distinguished project name from scene names, removed hidden "export as plain text" option
 * gui: sceneified project notes
 * gui: adjusted project thumbnail in "save" dialog
+* gui: some cleanups
 
 ### 2021-05-20
 * gui: marked projectName to be refactored and sceneified

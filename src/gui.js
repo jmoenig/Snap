@@ -1922,17 +1922,17 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.corral.frame = frame;
     this.corral.add(frame);
 
-    // scenes +++
+    // scenes corral
     this.corral.album = keepSceneAlbum ? album
             : new SceneAlbumMorph(this, this.sliderColor);
-    this.corral.album.color = this.frameColor; // this.groupColor;
+    this.corral.album.color = this.frameColor;
     this.corral.add(this.corral.album);
 
     this.corral.fixLayout = function () {
         this.stageIcon.setCenter(this.center());
         this.stageIcon.setLeft(this.left() + padding);
 
-        // scenes +++
+        // scenes
         if (myself.scenes.length() < 2) {
             this.album.hide();
         } else {
@@ -1941,7 +1941,9 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
             this.album.setLeft(this.left());
             this.album.setTop(this.stageIcon.bottom() + padding);
             this.album.setWidth(this.stageIcon.width() + padding * 2);
-            this.album.setHeight(this.height() - this.stageIcon.height() - padding); // +++
+            this.album.setHeight(
+                this.height() - this.stageIcon.height() - padding
+            );
         }
 
         this.frame.setLeft(this.stageIcon.right() + padding);
@@ -4716,7 +4718,7 @@ IDE_Morph.prototype.newProject = function () {
     this.openProject(project);
 };
 
-IDE_Morph.prototype.createNewScene = function () { // +++
+IDE_Morph.prototype.createNewScene = function () {
     var setting = this.isAddingScenes;
     this.isAddingScenes = true;
     this.newProject();
@@ -4900,7 +4902,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     this.saveCanvasAs(pic, this.scene.name || localize('Untitled'));
 };
 
-IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) { // ++++ sceneify: make it "scene summary" and include it in the scene icon context menu
+IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     var html, head, meta, css, body, pname, notes, toc, globalVars,
         stage = this.stage;
 
@@ -5000,7 +5002,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) { // ++++ s
         }
     }
 
-    pname = this.getProjectName() || localize('untitled'); // ++++ sceneify
+    pname = this.scene.name || localize('untitled');
 
     html = new XML_Element('html');
     html.attributes.lang = SnapTranslator.language;
@@ -5181,7 +5183,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) { // ++++ s
 
 IDE_Morph.prototype.openProjectString = function (str, callback) {
     var msg;
-    if (this.bulkDropInProgress || this.isAddingScenes) { // +++
+    if (this.bulkDropInProgress || this.isAddingScenes) {
             this.rawOpenProjectString(str);
             if (callback) {callback(); }
             return;
@@ -5229,7 +5231,7 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     var model,
-        setting = this.isAddingScenes; // +++
+        setting = this.isAddingScenes;
 
     if (this.isAddingNextScene) {
         this.isAddingScenes = true;
@@ -5948,7 +5950,7 @@ IDE_Morph.prototype.createNewProject = function () {
     this.backup(() => this.newProject());
 };
 
-IDE_Morph.prototype.addScene = function () { // +++
+IDE_Morph.prototype.addScene = function () {
     var setting = this.isAddingScenes;
     if (location.protocol === 'file:') {
         // bypass the project import dialog and directly pop up
@@ -7678,7 +7680,7 @@ ProjectDialogMorph.prototype.recoveryDialog = function () {
     new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
 };
 
-ProjectDialogMorph.prototype.addScene = function () { // +++
+ProjectDialogMorph.prototype.addScene = function () {
     var proj = this.listField.selected,
         src;
     if (!proj) {return; }
@@ -10233,7 +10235,7 @@ SceneIconMorph.uber = ToggleButtonMorph.prototype;
 
 // SceneIconMorph settings
 
-SceneIconMorph.prototype.thumbSize = new Point(40, 30); // +++ (40, 40), (80, 60);
+SceneIconMorph.prototype.thumbSize = new Point(40, 30);
 SceneIconMorph.prototype.labelShadowOffset = null;
 SceneIconMorph.prototype.labelShadowColor = null;
 SceneIconMorph.prototype.labelColor = WHITE;
@@ -10282,7 +10284,7 @@ SceneIconMorph.prototype.init = function (aScene) {
         colors, // color overrides, <array>: [normal, highlight, pressed]
         null, // target - not needed here
         action, // a toggle function
-        this.object.name || localize('untitled'), // label string // +++
+        this.object.name || localize('untitled'), // label string
         query, // predicate/selector
         null, // environment
         null // hint
@@ -10312,12 +10314,7 @@ SceneIconMorph.prototype.createThumbnail = function () {
     this.add(this.thumbnail);
 };
 
-/* +++
-SceneIconMorph.prototype.createLabel
-    = SpriteIconMorph.prototype.createLabel;
-*/
-
-SceneIconMorph.prototype.createLabel = function () { // +++
+SceneIconMorph.prototype.createLabel = function () {
     var txt;
 
     if (this.label) {
@@ -10452,8 +10449,6 @@ SceneIconMorph.prototype.render
 // SceneIconMorph drag & drop
 
 SceneIconMorph.prototype.rootForGrab = function () {
-    // +++ to do: make sure scene icons can only be grabbed if there are
-    // more than 1
     return this;
 };
 
