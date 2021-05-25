@@ -8,6 +8,33 @@
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
 
+### 2021-05-21
+* gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
+* gui: distinguished project name from scene names, removed hidden "export as plain text" option
+* gui: sceneified project notes
+* gui: adjusted project thumbnail in "save" dialog
+* gui: some cleanups
+* gui, scenes: sceneified unsaved changes management
+* blocks: fixed search-blocks for scenesMenu
+
+### 2021-05-20
+* gui: marked projectName to be refactored and sceneified
+
+### 2021-05-19
+* gui: disabled scene icon context menu for project scene
+* gui: disabled dragging the project scene icon
+* gui: made sure the project scene stays in place
+* gui: added exporting single scenes
+* scenes, store: removed redundant properties "notes" and "thumbnail" from project
+* store: removed "thumbnail" property from scene xml
+
+### 2021-05-18
+* gui: fixed exporting media only for a single scene
+* gui: fixed cloud file format components
+* gui: "projectized" cloud file format for a single scene
+* gui: fixed cloud file format for multi-scene projects
+* gui: ensured unique scene names
+
 ### 2021-05-11
 * gui: add multi-scene projects 
 * gui: adjusted scene album rendering

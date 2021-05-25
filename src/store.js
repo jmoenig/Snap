@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-April-23';
+modules.store = '2021-May-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1672,7 +1672,6 @@ Project.prototype.toXML = function (serializer) {
 
 Scene.prototype.toXML = function (serializer) {
     var tmp = new Scene(),
-        thumbdata,
         xml;
 
     function code(key) {
@@ -1691,19 +1690,11 @@ Scene.prototype.toXML = function (serializer) {
         return str;
     }
 
-    // catch cross-origin tainting exception when using SVG costumes
-    try {
-        thumbdata = this.thumbnail.toDataURL('image/png');
-    } catch (error) {
-        thumbdata = null;
-    }
-
     tmp.captureGlobalSettings();
     this.applyGlobalSettings();
     xml = serializer.format(
         '<scene name="@">' +
             '<notes>$</notes>' +
-            '<thumbnail>$</thumbnail>' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
             '<code>%</code>' +
@@ -1713,7 +1704,6 @@ Scene.prototype.toXML = function (serializer) {
             '</scene>',
         this.name || localize('Untitled'),
         this.notes || '',
-        thumbdata,
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
                 ''

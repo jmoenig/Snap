@@ -48,9 +48,10 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-/*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List*/
+/*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
+normalizeCanvas, SnapSerializer*/
 
-modules.scenes = '2021-April-23';
+modules.scenes = '2021-May-21';
 
 
 // Projecct /////////////////////////////////////////////////////////
@@ -61,11 +62,24 @@ modules.scenes = '2021-April-23';
 // Project instance creation:
 
 function Project(scenes, current) {
-    this.name = 'Test';
-    this.notes = 'some notes';
-    this.thumbnail = null;
+    var projectScene;
+
     this.scenes = scenes || new List();
     this.currentScene = current;
+
+    // proxied for display
+    this.name = null;
+    this.notes = null;
+    this.thumbnail = null;
+
+    projectScene = this.scenes.at(1);
+    if (projectScene) {
+        this.name = projectScene.name;
+        this.notes = projectScene.notes;
+        this.thumbnail = normalizeCanvas(
+            projectScene.stage.thumbnail(SnapSerializer.prototype.thumbnailSize)
+        );
+    }
 
     // for deserializing - do not persist
     this.sceneIdx = null;
@@ -102,6 +116,7 @@ function Scene(aStageMorph) {
     this.globalVariables = aStageMorph ?
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
+    this.hasUnsavedEdits = false;
 
     // cached IDE state
     this.sprites = new List();
