@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-May-21';
+modules.blocks = '2021-April-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9745,17 +9745,15 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
 };
 
 InputSlotMorph.prototype.scenesMenu = function (searching) {
-    var dict = {},
-        scenes;
-    if (!searching) {
-        scenes = this.parentThatIsA(IDE_Morph).scenes;
-        if (scenes.length() > 1) {
-            scenes.itemsArray().forEach(scn => {
-                if (scn.name) {
-                    dict[scn.name] = scn.name;
-                }
-            });
-        }
+    var scenes = this.parentThatIsA(IDE_Morph).scenes,
+        dict = {};
+
+    if (!searching && scenes.length() > 1) {
+        scenes.itemsArray().forEach(scn => {
+            if (scn.name) {
+                dict[scn.name] = scn.name;
+            }
+        });
     }
     dict['~'] = null;
     dict.next = ['next'];

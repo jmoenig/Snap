@@ -1218,7 +1218,8 @@ IDE_Morph.prototype.createControlBar = function () {
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    var myself = this;
+    var myself = this,
+        categorySelectionAction;
 
     if (this.categories) {
         this.categories.destroy();
@@ -1228,17 +1229,27 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.bounds.setWidth(this.paletteWidth);
     // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
+
     if (this.scene.unifiedPalette) {
-        // TODO: What should this look like?
-        // Ensure there's a min height so the Sprite toolbar has a correct layout.
-        // Include the search bar + make a block button here?
-        this.categories.bounds.setHeight(84);
-        let wastedSpace = new Morph();
-        wastedSpace.setExtent(new Point(this.paletteWidth, 84));
-        this.categories.add(wastedSpace);
-        this.add(this.categories);
-        return;
+        categorySelectionAction = scrollToCategory;
+    } else {
+        categorySelectionAction = changePallete;
     }
+
+    function changePallete(category) {
+        return () => {
+            myself.currentCategory = category;
+            myself.categories.children.forEach(each =>
+                each.refresh()
+            );
+            myself.refreshPalette(true);
+        }
+    }
+
+    function scrollToCategory(category) {
+        return () => myself.scrollPaletteToCategory(category);
+    }
+
     function addCategoryButton(category) {
         var labelWidth = 75,
             colors = [
@@ -1251,13 +1262,7 @@ IDE_Morph.prototype.createCategories = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            () => {
-                myself.currentCategory = category;
-                myself.categories.children.forEach(each =>
-                    each.refresh()
-                );
-                myself.refreshPalette(true);
-            },
+            categorySelectionAction(category),
             category[0].toUpperCase().concat(category.slice(1)), // label
             () => myself.currentCategory === category, // query
             null, // env
@@ -1324,13 +1329,11 @@ IDE_Morph.prototype.createCategories = function () {
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
-    let unifiedPalette = this.scene.unifiedPalette;
 
     if (this.palette) {
         this.palette.destroy();
     }
 
-    // TODO: Always show if unified?
     if (forSearching) {
         this.palette = new ScrollFrameMorph(
             null,
@@ -2500,6 +2503,21 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
     }
 };
+
+IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
+    var topOfCategory,
+        palette = this.palette.contents;
+    // pallete scroll top - block top + palette actual top + palette padding
+    palette.children.some(block => {
+        if (block.category == category) {
+            topOfCategory = block;
+            return true;
+        }
+    });
+    palette.setTop(
+        palette.top() - topOfCategory.top() + this.palette.top() + this.palette.padding
+    );
+}
 
 IDE_Morph.prototype.pressStart = function () {
     if (this.world().currentKey === 16) { // shiftClicked
@@ -3992,8 +4010,8 @@ IDE_Morph.prototype.settingsMenu = function () {
             this.refreshPalette(true);
         },
         this.scene.unifiedPalette,
-        'uncheck to disable\nusing operators on lists and tables',
-        'check to enable\nusing operators on lists and tables',
+        'uncheck to show only the selected category\'s blocks',
+        'check to show all blocks in a single palette',
         false
     );
     addPreference(
