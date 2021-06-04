@@ -117,6 +117,7 @@ function Scene(aStageMorph) {
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
     this.hasUnsavedEdits = false;
+    this.unifiedPalette = false;
 
     // cached IDE state
     this.sprites = new List();
@@ -126,7 +127,6 @@ function Scene(aStageMorph) {
     this.hiddenPrimitives = {};
     this.codeMappings = {};
     this.codeHeaders = {};
-    this.unifiedPalette = false;
 
     // global settings (copied)
     this.enableCodeMapping = false;

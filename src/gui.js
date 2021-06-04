@@ -248,11 +248,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.globalVariables = this.scene.globalVariables;
     this.currentSprite = this.scene.addDefaultSprite();
     this.sprites = this.scene.sprites;
-    if (this.scene.unifiedPalette) {
-        this.currentCategory = 'unified';
-    } else {
-        this.currentCategory = 'motion';
-    }
+    this.currentCategory = 'motion';
     this.currentTab = 'scripts';
 
     // logoURL is disabled because the image data is hard-copied
@@ -2021,6 +2017,20 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
         myself.fixLayout();
     };
 };
+
+IDE_Morph.prototype.unsetUnifiedPalete = function () {
+    this.scene.unifiedPalette = false;
+    this.currentCategory = 'motion';
+    this.createCategories();
+    this.refreshPalette();
+}
+
+IDE_Morph.prototype.setUnifiedPalete = function () {
+    this.scene.unifiedPalette = true;
+    this.currentCategory = 'unified';
+    this.createCategories();
+    this.refreshPalette();
+}
 
 // IDE_Morph layout
 
@@ -3995,19 +4005,11 @@ IDE_Morph.prototype.settingsMenu = function () {
     addPreference(
         'Unified Palette',
         () => {
-            this.scene.unifiedPalette = !this.scene.unifiedPalette;
             if (this.scene.unifiedPalette) {
-                this.currentCategory = 'unified';
+                this.unsetUnifiedPalete();
             } else {
-                this.currentCategory = 'motion';
+                this.setUnifiedPalete();
             }
-            this.createCategories();
-            this.categories.fixLayout();
-            this.fixLayout();
-            this.flushBlocksCache();
-            this.flushPaletteCache();
-            this.currentSprite.palette(this.currentCategory);
-            this.refreshPalette(true);
         },
         this.scene.unifiedPalette,
         'uncheck to show only the selected category\'s blocks',
@@ -5553,15 +5555,13 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     scene.applyGlobalSettings();
     this.world().keyboardFocus = this.stage;
 
-    if (scene.unifiedPalette) {
-        this.currentCategory = 'unified';
+    if (this.currentCategory != 'unified' && scene.unifiedPalette) {
+        this.setUnifiedPalete();
     } else if (this.currentCategory == 'unified' && !scene.unifiedPalette) {
-        // Only switch to motion if the palette is no longer unified.
-        this.currentCategory = 'motion';
+        this.unsetUnifiedPalete();
     }
 
     this.fixLayout();
-    this.refreshPalette();
 };
 
 IDE_Morph.prototype.setURL = function (str) {
