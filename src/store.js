@@ -381,7 +381,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     model.globalVariables = model.scene.childNamed('variables');
 
-    scene.unifiedPalette = model.attributes.unifiedPalette === 'true';
+    scene.unifiedPalette = model.scene.attributes.unifiedPalette === 'true';
 
     /* Stage */
 

@@ -5544,7 +5544,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     this.stage.pauseGenericHatBlocks();
     this.createCorral(!refreshAlbum); // keep scenes
     this.selectSprite(this.scene.currentSprite);
-    this.fixLayout();
     this.corral.album.updateSelection();
     this.corral.album.contents.children.forEach(function (morph) {
         if (morph.state) {
@@ -5553,6 +5552,16 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     });
     scene.applyGlobalSettings();
     this.world().keyboardFocus = this.stage;
+
+    if (scene.unifiedPalette) {
+        this.currentCategory = 'unified';
+    } else if (this.currentCategory == 'unified' && !scene.unifiedPalette) {
+        // Only switch to motion if the palette is no longer unified.
+        this.currentCategory = 'motion';
+    }
+
+    this.fixLayout();
+    this.refreshPalette();
 };
 
 IDE_Morph.prototype.setURL = function (str) {
