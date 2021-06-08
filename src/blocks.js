@@ -926,7 +926,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'ring slot'
         tags: 'static',
         kind: 'command', 'reporter', 'predicate'
-        
+
     */
     '%rc': {
         type: 'ring slot',
@@ -2052,7 +2052,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             return;
         }
     }
-    
+
     this.fixHighlight();
 };
 
@@ -3233,21 +3233,10 @@ BlockMorph.prototype.developersMenu = function () {
 };
 
 BlockMorph.prototype.hidePrimitive = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
+    var ide = this.parentThatIsA(IDE_Morph);
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
-    };
-    cat = dict[this.selector] || this.category;
-    if (cat === 'lists') {cat = 'variables'; }
-    ide.flushBlocksCache(cat);
+    ide.flushBlocksCache(ide.currentCategory);
     ide.refreshPalette();
 };
 
@@ -4247,7 +4236,7 @@ BlockMorph.prototype.render = function (ctx) {
         this.outlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -5883,11 +5872,11 @@ function ReporterBlockMorph(isPredicate) {
 ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
- 
+
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
     this.rerender();
- 
+
     this.cachedSlotSpec = null; // don't serialize
     this.isLocalVarTemplate = null; // don't serialize
 };
@@ -6578,7 +6567,7 @@ RingMorph.prototype.render = function (ctx) {
         // ctx.closePath();
         ctx.clip('evenodd');
         ctx.fillRect(0, 0, this.width(), this.height());
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -14263,7 +14252,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 
     cmd = new CommandBlockMorph();
     cmd.setSpec('command %cmdRing');
-    
+
     rings = new CommandBlockMorph();
     rings.setSpec('reporter %repRing predicate %predRing');
 
