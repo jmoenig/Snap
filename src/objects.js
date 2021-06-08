@@ -2385,6 +2385,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('direction'));
         blocks.push(block('direction', this.inheritsAttribute('direction')));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'looks' || cat === 'unified') {
 
@@ -2439,6 +2440,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doScreenshot'));
         }
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'sound' || cat === 'unified') {
 
@@ -2486,6 +2488,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doPlayFrequency'));
         }
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'pen' || cat === 'unified') {
 
@@ -2513,6 +2516,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'control' || cat === 'unified') {
 
@@ -2562,6 +2566,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPauseAll'));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'sensing' || cat === 'unified') {
 
@@ -2625,6 +2630,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportYieldCount'));
         }
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'operators' || cat === 'unified') {
 
@@ -2687,6 +2693,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportTextFunction'));
         }
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'variables' || cat === 'unified') {
 
@@ -2830,12 +2837,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
     }
 
-    if (cat !== ' unified') {
-        // TODO: Should probably show thos.
-        // what should category default to?
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-    }
+    blocks.push('=');
+    blocks.push(this.makeBlockButton(cat));
 
     return blocks;
 };
@@ -8582,7 +8585,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         }
     }
 
-    if (cat === 'motion' || cat === 'unified') {
+    if (cat === 'motion') {
 
         txt = new TextMorph(localize(
             'Stage selected:\nno motion primitives'
@@ -8590,9 +8593,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
         blocks.push(txt);
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'looks' || cat === 'unified') {
 
@@ -8633,10 +8635,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doScreenshot'));
         }
 
-        /////////////////////////////////
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'sound' || cat === 'unified') {
 
@@ -8683,10 +8682,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doPlayFrequency'));
         }
 
-        /////////////////////////////////
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'pen' || cat === 'unified') {
 
@@ -8700,9 +8696,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'control' || cat === 'unified') {
 
@@ -8749,9 +8744,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
 
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'sensing' || cat === 'unified') {
 
@@ -8810,11 +8804,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportYieldCount'));
         }
 
-        /////////////////////////////////
-
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'operators' || cat === 'unified') {
 
@@ -8877,10 +8867,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportTextFunction'));
         }
 
-        //////////////////////////////////
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(cat));
-
+        if (cat === 'unified') {blocks.push('='); }
     }
     if (cat === 'variables' || cat === 'unified') {
 
@@ -9010,8 +8997,12 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('=');
         }
 
-        blocks.push(this.makeBlockButton());
+        if (cat === 'unified') {blocks.push('='); }
     }
+
+    blocks.push('=');
+    blocks.push(this.makeBlockButton(cat));
+
     return blocks;
 };
 
