@@ -2022,14 +2022,24 @@ IDE_Morph.prototype.unsetUnifiedPalete = function () {
     this.scene.unifiedPalette = false;
     this.currentCategory = 'motion';
     this.createCategories();
-    this.refreshPalette();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.flushBlocksCache();
+    this.flushPaletteCache();
+    this.currentSprite.palette(this.currentCategory);
+    this.refreshPalette(true);
 }
 
 IDE_Morph.prototype.setUnifiedPalete = function () {
     this.scene.unifiedPalette = true;
     this.currentCategory = 'unified';
     this.createCategories();
-    this.refreshPalette();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.flushBlocksCache();
+    this.flushPaletteCache();
+    this.currentSprite.palette(this.currentCategory);
+    this.refreshPalette(true);
 }
 
 // IDE_Morph layout
