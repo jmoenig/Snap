@@ -30,18 +30,15 @@
       frames.forEach(frame => {
         frame.setAttribute('src', window.origin);
       });
-      function startTests() {
+      async function startTests() {
           let loaded = 0;
-          return frames
-              .reduce((promise, frame) => {
-                  return promise.then(() => {
-                      const id = frame.getAttribute('id');
-                      driver[id] = new SnapDriver();
-                      driver[id].setWindow(frame.contentWindow);
-                      return driver[id].login('test');
-                  });
-              }, Promise.resolve())
-              .then(() => mocha.run());
+          await Promise.all(frames.map(frame => {
+              const id = frame.getAttribute('id');
+              driver[id] = new SnapDriver();
+              driver[id].setWindow(frame.contentWindow);
+              return driver[id].login('test');
+          }));
+          return mocha.run();
       }
 
       function checkLoaded() {
