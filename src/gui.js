@@ -2306,7 +2306,7 @@ IDE_Morph.prototype.getAudioAsBase64 = async function (src) {
     }
 };
 
-IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
+IDE_Morph.prototype.droppedText = async function (aString, name, fileType) {
     var lbl = name ? name.split('.')[0] : '',
         ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '';
 
@@ -2340,7 +2340,20 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     fileType = fileType || 'text';
 
     if (aString.indexOf('<script') === 0) {
-        return this.openScriptString(aString);
+        const script = await this.openScriptString(aString);
+        if (script) {
+            const handIsFull = this.world().hand.children.length;
+            if (handIsFull) {
+                this.showMessage(localize('Cannot import scripts while dragging another object.'));
+            } else {
+                script.setPosition(this.palette.center());
+                this.palette.add(script);
+                delete script.id;
+                script.pickUp(this.world());
+                this.showMessage(localize('Imported script.'), 2);
+            }
+        }
+        return;
     }
     // check for encoded data-sets, CSV, JSON
     if (fileType.indexOf('csv') !== -1 || ext === 'csv') {
@@ -5397,13 +5410,16 @@ IDE_Morph.prototype.openMediaString = function (str) {
 
 IDE_Morph.prototype.openScriptString = function (str) {
     var msg;
-    this.nextSteps([
-        () => msg = this.showMessage('Opening script...'),
-        () => {
-            this.rawOpenScriptString(str);
-            msg.destroy();
-        }
-    ]);
+    return new Promise(resolve => {
+        this.nextSteps([
+            () => msg = this.showMessage('Opening script...'),
+            () => {
+                const script = this.rawOpenScriptString(str);
+                msg.destroy();
+                resolve(script);
+            },
+        ]);
+    });
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
@@ -5422,13 +5438,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         xml = this.serializer.loadScript(str, this.currentSprite);
         script = this.serializer.loadScript(xml, this.currentSprite);
     }
-    script.setPosition(this.world().hand.position());
-    scripts.add(script);
-    scripts.adjustBounds();
-    this.showMessage(
-        'Imported Script.',
-        2
-    );
+    return script;
 };
 
 IDE_Morph.prototype.openDataString = async function (str, name, type) {

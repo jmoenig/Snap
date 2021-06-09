@@ -18,6 +18,46 @@ describe('blocks', function() {
             .then(() => driver.selectCategory('control'));
     });
 
+    describe('import scripts', function() {
+        const SCRIPT_XML = '<script><block s="forward"><l>10</l></block><block s="turn"><l>15</l></block><block s="setHeading"><l>90</l></block></script>';
+        afterEach(function() {
+            const {world} = driver.globals();
+            world.hand.children = [];
+        });
+
+        it('should add scripts to hand', async function() {
+            const {world} = driver.globals();
+            await driver.ide().droppedText(SCRIPT_XML);
+            assert.equal(world.hand.children.length, 1);
+            const [child] = world.hand.children;
+            assert.equal(child.selector, 'forward');
+        });
+
+        it('should not add scripts to hand if already dragging', async function() {
+            const {world, Morph} = driver.globals();
+            const morph = new Morph();
+            world.hand.children.push(morph);
+            await driver.ide().droppedText(SCRIPT_XML);
+            assert.equal(world.hand.children.length, 1);
+            const [child] = world.hand.children;
+            assert.equal(child, morph);
+        });
+
+        it('should not have an ID on the script', async function() {
+            const {world} = driver.globals();
+            await driver.ide().droppedText(SCRIPT_XML);
+            assert.equal(world.hand.children.length, 1);
+            const [child] = world.hand.children;
+            assert(!child.id);
+        });
+
+        it('should set grabOrigin to palette', async function() {
+            const {world} = driver.globals();
+            await driver.ide().droppedText(SCRIPT_XML);
+            assert(world.hand.grabOrigin.origin === driver.ide().palette);
+        });
+    });
+
     it('should create block', function() {
         return driver.addBlock('doIfElse', position)
             .then(block => expect(!!block).toBe(true));
