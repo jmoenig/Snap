@@ -46,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2021-March-15';
+modules.locale = '2021-June-09';
 
 // Global stuff
 
@@ -318,11 +318,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski',
     'language_translator':
-        'Witek Kranas & deKrain',
+        'Witek Kranas & deKrain & Andrzej Batorski',
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2017-11-09'
+        '2021-05-15'
 };
 
 SnapTranslator.dict.zh_TW = {

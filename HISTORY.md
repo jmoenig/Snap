@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **Translation Updates:**
+    * Polish, thanks, Witek!
+
 ### 2021-06-09
 * new dev version
+* Polish translation update, thanks, Witek!
 
 ## 6.8.1
 * **Notable Fixes:**
