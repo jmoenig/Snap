@@ -632,3 +632,13 @@ SnapTranslator.dict.he = {
     'last_changed':
         '2020-04-21'
 };
+SnapTranslator.dict.hi = {
+	'language_name':
+        'हिंदी',
+    'language_translator':
+        'Barthdry',
+    'translator_e-mail':
+        'barathkumarbasker2007@gmail.com',
+    'last_changed':
+        '2021-05-08'
+};
