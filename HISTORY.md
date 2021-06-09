@@ -5,6 +5,7 @@
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
     * fixed bignums library and and made colors library faster, thanks, Brian!
+    * fixed setting the IDE language via a url parameter, thanks, Joan!
 * **Translation Updates:**
     * Polish, thanks, Witek!
     * new Hindi translation, thanks, Barthdry!
@@ -15,6 +16,7 @@
 * blocks: register unsaved changes when the user edits a comment
 * new Hindi translation, thanks, Barthdry!
 * fixed bignums library and and made colors library faster, thanks, Brian!
+* fixed setting the IDE language via a url parameter, thanks, Joan!
 
 ## 6.8.1
 * **Notable Fixes:**
