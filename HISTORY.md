@@ -4,6 +4,7 @@
 
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
+    * fixed bignums library and and made colors library faster, thanks, Brian!
 * **Translation Updates:**
     * Polish, thanks, Witek!
     * new Hindi translation, thanks, Barthdry!
@@ -13,6 +14,7 @@
 * Polish translation update, thanks, Witek!
 * blocks: register unsaved changes when the user edits a comment
 * new Hindi translation, thanks, Barthdry!
+* fixed bignums library and and made colors library faster, thanks, Brian!
 
 ## 6.8.1
 * **Notable Fixes:**
