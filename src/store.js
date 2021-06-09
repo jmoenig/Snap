@@ -1164,17 +1164,15 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes['var']
             );
         } else {
-        /*
-        // disable loading JavaScript functions, commented out for now
-        if (model.attributes.s === 'reportJSFunction' &&
-                !Process.prototype.enableJS) {
-            if (window.confirm('enable JavaScript?')) {
-                Process.prototype.enableJS = true;
-            } else {
-                throw new Error('JavaScript is not enabled');
+            // disable loading JavaScript functions
+            if (model.attributes.s === 'reportJSFunction' &&
+                    !Process.prototype.enableJS) {
+                if (window.confirm('enable JavaScript?')) {
+                    Process.prototype.enableJS = true;
+                } else {
+                    throw new Error('JavaScript is not enabled');
+                }
             }
-        }
-        */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
             migration = SpriteMorph.prototype.blockMigrations[
                 model.attributes.s
