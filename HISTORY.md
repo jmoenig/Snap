@@ -3,7 +3,7 @@
 ## in development:
 
 * **Notable Changes:**
-    * JS-functions are now disabled by default until switched on in the settings menu per session  
+    * JS-functions are now disabled by default until switched on in the settings menu per session, or if the user accepts the when loading a project  
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
     * fixed bignums library and and made colors library faster, thanks, Brian!
