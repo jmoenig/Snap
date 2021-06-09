@@ -18,8 +18,9 @@
 * blocks: register unsaved changes when the user edits a comment
 * new Hindi translation, thanks, Barthdry!
 * fixed bignums library and and made colors library faster, thanks, Brian!
-* fixed setting the IDE language via a url parameter, thanks, Joan!
-* reinstated JS-function control, disabled JS-functions by default
+* gui: fixed setting the IDE language via a url parameter, thanks, Joan!
+* threads, gui, objects, byob, store: reinstated JS-function control, disabled JS-functions by default
+* gui, store: automatically logout when the user enablesJavaScript, commented out for now
 
 ## 6.8.1
 * **Notable Fixes:**

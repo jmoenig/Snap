@@ -3497,6 +3497,11 @@ IDE_Morph.prototype.settingsMenu = function () {
     addPreference(
         'JavaScript',
         () => {
+            /*
+            if (!Process.prototype.enableJS) {
+                this.logout();
+            }
+            */
             Process.prototype.enableJS = !Process.prototype.enableJS;
             this.currentSprite.blocksCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
@@ -3504,7 +3509,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
-        'check to support\nnative JavaScript functions'
+        'check to support\nnative JavaScript functions' /* +
+            '.\n' +
+            'NOTE: You will have to manually\n' +
+            'sign in again to access your account.' */
     );
     if (isRetinaSupported()) {
         addPreference(
