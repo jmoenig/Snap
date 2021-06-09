@@ -286,7 +286,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, myself = this, urlLanguage = null;
+    var hash, myself = this;
 
     function initUser(username) {
         sessionStorage.username = username;
@@ -472,13 +472,22 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // xml project
             if (hash.substr(0, 8) === '<project') {
-                this.rawOpenProjectString(hash.slice(0,hash.indexOf('</project>') + 10));
-                applyFlags(myself.cloud.parseDict(hash.substr(hash.indexOf('</project>') + 10)));
+                this.rawOpenProjectString(
+                    hash.slice(0,hash.indexOf('</project>') + 10)
+                );
+                applyFlags(
+                    myself.cloud.parseDict(
+                        hash.substr(hash.indexOf('</project>') + 10)
+                    )
+                );
             // no project, only flags
             } else if (idx == 0){
                 applyFlags(myself.cloud.parseDict(hash));
             // xml file path
-            // three path types allowed: absolute (http...) , relative to site ("/path") or relative to folder ("path")
+            // three path types allowed:
+            //  (1) absolute (http...),
+            //  (2) relative to site ("/path") or
+            //  (3) relative to folder ("path")
             } else {
                 this.shield = new Morph();
                 this.shield.alpha = 0;
