@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-April-23';
+modules.objects = '2021-June-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -2671,7 +2671,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
 
-        if (true) { // (Process.prototype.enableJS) {
+        if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {
@@ -8854,7 +8854,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
 
-        if (true) { // (Process.prototype.enableJS) {
+        if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {

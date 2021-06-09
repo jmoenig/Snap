@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-March-09';
+modules.store = '2021-June-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1165,7 +1165,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             );
         } else {
         /*
-        // disable JavaScript functions, commented out for now
+        // disable loading JavaScript functions, commented out for now
         if (model.attributes.s === 'reportJSFunction' &&
                 !Process.prototype.enableJS) {
             if (window.confirm('enable JavaScript?')) {

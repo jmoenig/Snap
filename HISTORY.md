@@ -2,6 +2,8 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * JS-functions are now disabled by default until switched on in the settings menu per session  
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
     * fixed bignums library and and made colors library faster, thanks, Brian!
@@ -17,6 +19,7 @@
 * new Hindi translation, thanks, Barthdry!
 * fixed bignums library and and made colors library faster, thanks, Brian!
 * fixed setting the IDE language via a url parameter, thanks, Joan!
+* reinstated JS-function control, disabled JS-functions by default
 
 ## 6.8.1
 * **Notable Fixes:**

@@ -3494,7 +3494,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'microphoneMenu'
     );
     menu.addLine();
-    /*
     addPreference(
         'JavaScript',
         () => {
@@ -3507,7 +3506,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to disable support for\nnative JavaScript functions',
         'check to support\nnative JavaScript functions'
     );
-    */
     if (isRetinaSupported()) {
         addPreference(
             'Retina display support',
