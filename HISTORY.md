@@ -6,11 +6,13 @@
     * register unsaved changes when the user edits a comment
 * **Translation Updates:**
     * Polish, thanks, Witek!
+    * new Hindi translation, thanks, Barthdry!
 
 ### 2021-06-09
 * new dev version
 * Polish translation update, thanks, Witek!
 * blocks: register unsaved changes when the user edits a comment
+* new Hindi translation, thanks, Barthdry!
 
 ## 6.8.1
 * **Notable Fixes:**
