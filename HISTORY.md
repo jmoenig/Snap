@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-06-09
+* new dev version
+
 ## 6.8.1
 * **Notable Fixes:**
     * fixed peeling off niladic custom block instances from prototype templates
