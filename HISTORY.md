@@ -2,12 +2,15 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * register unsaved changes when the user edits a comment
 * **Translation Updates:**
     * Polish, thanks, Witek!
 
 ### 2021-06-09
 * new dev version
 * Polish translation update, thanks, Witek!
+* blocks: register unsaved changes when the user edits a comment
 
 ## 6.8.1
 * **Notable Fixes:**

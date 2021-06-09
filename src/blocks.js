@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-February-27';
+modules.blocks = '2021-June-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13152,9 +13152,13 @@ CommentMorph.prototype.mouseClickLeft = function () {
 
 CommentMorph.prototype.layoutChanged = function () {
     // react to a change of the contents area
+    var ide = this.parentThatIsA(IDE_Morph);
     this.fixLayout();
     this.align();
     this.comeToFront();
+    if (ide) {
+        ide.recordUnsavedChanges();
+    }
 };
 
 CommentMorph.prototype.fixLayout = function () {
