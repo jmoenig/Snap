@@ -16,6 +16,7 @@
 ### 2021-06-10
 * threads: error messages in presentation mode are now shown as pop-up messages onstage  
 * store: commented out modal prompt to enable JS when loading a project that uses it
+* gui: renamed setting to "JavaScript extensions"
 
 ### 2021-06-09
 * new dev version

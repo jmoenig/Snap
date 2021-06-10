@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-June-09';
+modules.gui = '2021-June-10';
 
 // Declarations
 
@@ -3495,7 +3495,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     menu.addLine();
     addPreference(
-        'JavaScript',
+        'JavaScript extensions',
         () => {
             /*
             if (!Process.prototype.enableJS) {
