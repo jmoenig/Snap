@@ -3,7 +3,8 @@
 ## in development:
 
 * **Notable Changes:**
-    * JS-functions are now disabled by default until switched on in the settings menu per session, or if the user accepts the when loading a project  
+    * JS-functions are now disabled by default until switched on in the settings menu per session
+    * error messages in presentation mode are now shown as pop-up messages onstage  
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
     * fixed bignums library and and made colors library faster, thanks, Brian!
@@ -11,6 +12,10 @@
 * **Translation Updates:**
     * Polish, thanks, Witek!
     * new Hindi translation, thanks, Barthdry!
+
+### 2021-06-10
+* threads: error messages in presentation mode are now shown as pop-up messages onstage  
+* store: commented out modal prompt to enable JS when loading a project that uses it
 
 ### 2021-06-09
 * new dev version

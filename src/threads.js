@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-June-09';
+modules.threads = '2021-June-10';
 
 var ThreadManager;
 var Process;
@@ -1106,19 +1106,24 @@ Process.prototype.expectReport = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element;
+    var m = element,
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-    m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
-        this.exportResult,
-        this.receiver
-    );
+    if (ide.isAppMode) {
+        ide.showMessage(error.name + '\n' + error.message);
+    } else {
+        if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+        m.showBubble(
+            (m === element ? '' : 'Inside: ')
+                + error.name
+                + '\n'
+                + error.message,
+            this.exportResult,
+            this.receiver
+        );
+    }
 };
 
 Process.prototype.errorObsolete = function () {
@@ -1185,9 +1190,6 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 };
 
 Process.prototype.reportJSFunction = function (parmNames, body) {
-    if (!this.enableJS) {
-        throw new Error('JavaScript is not enabled');
-    }
     return Function.apply(
         null,
         parmNames.itemsArray().concat([body])
@@ -1208,7 +1210,7 @@ Process.prototype.evaluate = function (
     }
     if (context instanceof Function) {
         if (!this.enableJS) {
-            throw new Error('JavaScript is not enabled');
+            throw new Error('JavaScript extensions for Snap!\nare turned off');
         }
         return context.apply(
             this.blockReceiver(),

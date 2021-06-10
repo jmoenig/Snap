@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-June-09';
+modules.store = '2021-June-10';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1165,6 +1165,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             );
         } else {
             // disable loading JavaScript functions
+            /*
             if (model.attributes.s === 'reportJSFunction' &&
                     !Process.prototype.enableJS) {
                 if (window.confirm('enable JavaScript?')) {
@@ -1173,6 +1174,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                     throw new Error('JavaScript is not enabled');
                 }
             }
+            */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
             migration = SpriteMorph.prototype.blockMigrations[
                 model.attributes.s
