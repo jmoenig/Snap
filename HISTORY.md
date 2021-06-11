@@ -13,6 +13,9 @@
     * Polish, thanks, Witek!
     * new Hindi translation, thanks, Barthdry!
 
+### 2021-06-11
+* byob, blocks: catch JS functions inside custom dropdown definitions
+
 ### 2021-06-10
 * threads: error messages in presentation mode are now shown as pop-up messages onstage  
 * store: commented out modal prompt to enable JS when loading a project that uses it

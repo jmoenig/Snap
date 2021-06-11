@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-09';
+modules.blocks = '2021-June-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9099,6 +9099,10 @@ InputSlotMorph.prototype.menuFromDict = function (
     }
 
     if (choices instanceof Function) {
+        if (!Process.prototype.enableJS) {
+            menu.addItem('JavaScript extensions for Snap!\nare turned off');
+            return menu;
+        }
         choices = choices.call(this);
     } else if (isString(choices)) {
         choices = this[choices]();
