@@ -158,7 +158,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-May-21';
+modules.blocks = '2021-June-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9105,6 +9105,10 @@ InputSlotMorph.prototype.menuFromDict = function (
     }
 
     if (choices instanceof Function) {
+        if (!Process.prototype.enableJS) {
+            menu.addItem('JavaScript extensions for Snap!\nare turned off');
+            return menu;
+        }
         choices = choices.call(this);
     } else if (isString(choices)) {
         choices = this[choices]();
@@ -13180,9 +13184,13 @@ CommentMorph.prototype.mouseClickLeft = function () {
 
 CommentMorph.prototype.layoutChanged = function () {
     // react to a change of the contents area
+    var ide = this.parentThatIsA(IDE_Morph);
     this.fixLayout();
     this.align();
     this.comeToFront();
+    if (ide) {
+        ide.recordUnsavedChanges();
+    }
 };
 
 CommentMorph.prototype.fixLayout = function () {

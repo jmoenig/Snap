@@ -1,10 +1,10 @@
 /*
 
-    lang-de.js
+    lang-hi.js
 
-    German translation for SNAP!
+    Hindi translation for SNAP!
 
-    written by Jens Mönig
+    written by Barthdry (Barath Kumar)
 
     Copyright (C) 2021 by Jens Mönig
 
@@ -166,101 +166,99 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.hi = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
+	अ, आ      \u0905, \u0906
+	According to the \uXXXX
+	\u09 Assigned for Hindi
 */
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'हिंदी', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig, Jadga H\u00fcgle', // your name for the Translators tab
+        'Barthdry', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org, jadga.huegle@sap.com', // optional
+        'barathkumarbasker2007@gmail.com', // optional
     'last_changed':
-        '2021-06-11', // this, too, will appear in the Translators tab
+        '2021-05-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'शीर्षकहीन',
     'development mode':
-        'Hackermodus',
+        'विकास मोड',
 
     // categories:
     'Motion':
-        'Bewegung',
+        'प्रस्ताव',
     'Looks':
-        'Aussehen',
+        'नज़र',
     'Sound':
-        'Klang',
+        'आवाज़',
     'Pen':
-        'Stift',
+        'कलम',
     'Control':
-        'Steuerung',
+        'नियंत्रण',
     'Sensing':
-        'F\u00fchlen',
+        'संवेदन',
     'Operators':
-        'Operatoren',
+        'ऑपरेटर',
     'Variables':
-        'Variablen',
+        'चर',
     'Lists':
-        'Listen',
+        'सूची',
     'Other':
-        'Andere',
+        'अन्य',
 
     // editor:
     'draggable':
-        'greifbar',
+        'खींचने योग्य',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'स्क्रिप्ट',
     'Costumes':
-        'Kost\u00fcme',
+        'पोशाक',
     'Backgrounds':
-        'Hintergr\u00fcnde',
+        'पृष्ठभूमि',
     'Sounds':
-        'Kl\u00e4nge',
+        'आवाज़',
 
     // names:
     'Sprite':
-        'Objekt',
+        'स्प्राइट',
     'Stage':
-        'B\u00fchne',
+        'मंच',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'घुमाएँ नहीं',
     'can rotate':
-        'frei drehbar',
+        'घुमा सकते हैं',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'केवल बाएं / दाएं चेहरा',
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'एक नया स्प्राइट जोड़ें',
     'add a new Turtle sprite':
-        'neues Objekt hinzufügen',
+        'एक नया दिशा सूचक स्प्राइट जोड़ें',
     'paint a new sprite':
-        'neues Objekt zeichnen',
+        'एक नया स्प्राइट पेंट करें',
     'take a camera snapshot and\nimport it as a new sprite':
-        'neues Objekt mit Webcam-Kostüm hinzufügen',
+        'एक कैमरा स्नैपशॉट लें और इसे एक नए स्प्राइट के रूप में आयात करें',
     
 
     // tab help
-    'costumes tab help':
-        'Bilder durch Hereinziehen von einer anderen\n'
-            + 'Webseite oder vom Computer importieren',
+    'costumes tab help': //Import a picture from another web page or from your computer by dropping it here.
+        'किसी अन्य वेब पेज से या अपने कंप्यूटर\n'
+            + 'से चित्र को यहां ड्रॉप करके आयात करें',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch Hereinziehen importieren',
+        'इसे यहां खींचकर अपने\n कंप्यूटर से ध्वनि आयात करें',
 
     // primitive blocks:
 
@@ -296,629 +294,628 @@ SnapTranslator.dict.de = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'चरण चयनित: \nकोई गति आदिम नहीं',
 
     'move %n steps':
-        'gehe %n Schritte',
+        '%n कदम चलें',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        '%clockwise %n डिग्री बारी',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        '%counterclockwise %n डिग्री बारी',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        '%dir दिशा में इंगित करें',
     'point towards %dst':
-        'zeige auf %dst',
+        '%dst की ओर इशारा',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'जाओ x: %n y: %n',
     'go to %dst':
-        'gehe zu %dst',
+        '%dst जाओ',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        'फिसलन %n सेकंड. to x: %n y: %n',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'परिवर्तन x बदल दो %n',
     'set x to %n':
-        'setze x auf %n',
+        'सेट x से %n',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'परिवर्तन y बदल दो %n',
     'set y to %n':
-        'setze y auf %n',
+        'सेट y से %n',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'अगर किनारे पर है तो उछाल',
     'x position':
-        'x-Position',
+        'x स्थिति',
     'y position':
-        'y-Position',
+        'y स्थिति',
     'direction':
-        'Richtung',
+        'दिशा',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        '%cst कॉस्ट्यूम पर स्विच करें',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'अगली पोशाक',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'पोशाक #',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        'कहो %s तक %n सेकंड',
     'say %s':
-        'sage %s',
+        'कहो %s',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        'सोचो %s तक %n सेकंड',
     'think %s':
-        'denke %s',
+        'सोचो %s',
     'Hello!':
-        'Hallo!',
+        'नमस्ते!',
     'Hmm...':
-        'Hmm...',
+        'हम्म....',
     '%img of costume %cst':
-        '%img von Kostüm %cst',
+        '%img की पोशाक %cst',
     'new costume %l width %dim height %dim':
-        'neues Kostüm %l Breite %dim Höhe %dim',
+        'नई पोशाक %l चौड़ाई %dim ऊंचाई %dim',
     'stretch %cst x: %n y: %n %':
-        'strecke %cst x: %n y: %n %',
+        'खिंचाव %cst x: %n y: %n %',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        'परिवर्तन %eff द्वारा प्रभाव %n',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        'सेट %eff -Effekt auf %n',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'स्पष्ट ग्राफिक प्रभाव',
     '%eff effect':
-        '%eff -Effekt',
+        '%eff प्रभाव',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'द्वारा आकार बदलें %n',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'आकार निर्धारित करें %n %',
     'size':
-        'Gr\u00f6\u00dfe',
+        'आकार',
     'show':
-        'anzeigen',
+        'प्रदर्शन',
     'hide':
-        'verstecken',
+        'छिपाना',
     'shown?':
-        'angezeigt?',
+        'दिखाया?',
     'go to %layer layer':
-        'gehe nach %layer',
+        'जाओ %layer परत',
     'front':
-        'vorn',
+        'सामने',
     'back':
-        'hinten',
+        'पीछे',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        'पीछे जाओ %n परतों',
 
     'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+        'development mode \ndebugging primitives:',
     'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
+        'console.log %mult%s',
     'alert %mult%s':
-        'Pop-up: %mult%s',
+        'window.alert %mult%s',
 
     'pixels':
-        'Pixel',
+        'पिक्सल',
     'current':
-        'aktuell',
+        'वर्तमान',
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        'आवाज़ बजाना %snd',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        'आवाज़ बजाना %snd जब तक किया गया',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'सभी आवाज़ बंद करो',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        'विश्राम करना %n बीट्स',
     'play sound %snd at %rate Hz':
-        'spiele Klang %snd mit %rate Hz',
+        'आवाज़ बजाना %snd पर %rate हेटर्स',
     '%aa of sound %snd':
-        '%aa von Klang %snd',
+        '%aa की आवाज़ %snd',
     'duration':
-        'Dauer',
+        'समयांतराल',
     'length':
-        'Länge',
+        'लंबाई',
     'number of channels':
-        'Anzahl Kanäle',
+        'चैनलों की संख्या',
     'new sound %l rate %rate Hz':
-        'neuer Klang %l Abtastrate %rate Hz',
+        'नया आवाज़ %l मूल्यांकन %rate हेटर्स',
     'play note %note for %n beats':
-        'spiele Note %note f\u00fcr %n Schl\u00e4ge',
+        'संगीत नोट चलाएं %note तक %n बीट्स',
     'set instrument to %inst':
-        'setze Instrument auf %inst',
+        'करने के लिए उपकरण सेट करें %inst',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'द्वारा गति बदलें %n बी पी एम',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'के लिए टेम्पो सेट करें %n बी पी एम',
     'tempo':
-        'Tempo',
+        'टेम्पो',
     'change volume by %n':
-        'ändere Lautstärke um %n',
+        'द्वारा मात्रा बदलें %n',
     'set volume to %n %':
-        'setze Lautstärke auf %n %',
+        'की मात्रा निर्धारित करें %n %',
     'change balance by %n':
-        'ändere Balance um %n',
+        'द्वारा संतुलन में बदलाव %n',
     'set balance to %n':
-        'setze Balance auf %n',
+        'के लिए संतुलन सेट करें %n',
     'balance':
-        'Balance',
+        'संतुलन',
     'play frequency %n Hz':
-        'spiele Frequenz %n Hz',
+        'संगीत प्ले आवृत्ति %n हेटर्स',
     'stop frequency':
-        'stoppe Frequenz',
+        'रुकें आवृत्ति',
     'play %n Hz for %n secs':
-        'spiele %n Hz f\u00fcr %n Sek.',
+        'सचलाएं %n हेटर्स for %n सेकंड',
 
     // "instruments", i.e. wave forms
     '(1) sine':
-        '(1) Sinus',
+        '(1) सिने',
     '(2) square':
-        '(2) Quadrat',
+        '(2) स्क्वायर',
     '(3) sawtooth':
-        '(3) Sägeblatt',
+        '(3) आराघर का गिटार',
     '(4) triangle':
-        '(4) Dreieck',
+        '(4) त्रिकोण साधन',
 
     // pen:
     'clear':
-        'wische',
+        'सब कुछ मिटा दें',
     'pen down':
-        'Stift runter',
+        'नीचे कलम',
     'pen up':
-        'Stift hoch',
+        'कलम ऊपर',
     'pen down?':
-        'Stift unten?',
+        'नीचे कलम?',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'पेन रंग सेट करें %clr',
     'set background color to %clr':
-        'setze Hintergrundfarbe auf %clr',
+        'पकरने के लिए पृष्ठभूमि रंग सेट %clr',
     'change pen %hsva by %n':
-        '\u00e4ndere Stift %hsva um %n',
+        'कलम बदल दो %hsva से %n',
     'change background %hsva by %n':
-        '\u00e4ndere Hintergrund %hsva um %n',
+        'पृष्ठभूमि का रंग बदलें %hsva से %n',
     'set pen %hsva to %n':
-        'setze Stift %hsva auf %n',
+        ' पेन सेट %hsva सेवा मेरे %n',
     'set background %hsva to %n':
-        'setze Hintergrund %hsva auf %n',
+        'पृष्ठभूमि सेट %hsva सेवा मेरे %n',
     'pen %pen':
-        'Stift %pen',
+        'कलम %pen',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'द्वारा लिंग का आकार बदलें %n',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'पेन का आकार निर्धारित करें %n',
     'stamp':
-        'stemple',
+        'स्टाम्प',
     'fill':
-        'male aus',
+        'भरण',
     'write %s size %n':
-        'schreibe %s Größe %n',
+        'लिखना %s आकार %n',
     'paste on %spr':
-        'drucke auf %spr',
+        'पर पेस्ट करें %spr',
     'cut from %spr':
-        'schneide aus %spr',
+        'से काटो %spr',
     'pen vectors':
-        'Vektor-Malspuren',
+        'पेन वेक्टर',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        'जब %greenflag क्लिक किया',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        'जब %keyHat दबाई जाती है',
     'when I am %interaction':
-        'Wenn ich %interaction werde',
+        'जब मैं %interaction werde',
     'clicked':
-        'angeklickt',
+        'क्लिक किया',
     'pressed':
-        'gedr\u00fcckt',
+        'दब गया',
     'dropped':
-        'abgestellt',
+        'गिरा',
     'mouse-entered':
-        'vom Mauszeiger betreten',
+        'माउस ने प्रवेश किया',
     'mouse-departed':
-        'vom Mauszeiger verlassen',
+        'माउस चला गया',
     'scrolled-down':
-    	'nach unten gescrollt',
+    	'नीचे स्क्रॉल किया गया',
     'scrolled-up':
-        'nach oben gescrollt',
+        'ऊपर स्क्रॉल किया गया',
     'stopped':
-        'gestoppt',
+        'रोका हुआ',
     'when %b':
-        'Wenn %b',
+        'जब %b',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        'जब मैं प्राप्त करता हूँ %msgHat ',
     'broadcast %msg':
-        'sende %msg an alle',
+        'प्रसारण %msg',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        'प्रसारण %msg और रुको',
     'send %msg to %spr':
-        'sende %msg an %spr',
+        'भेजने %msg को %spr',
     'Message name':
-        'Nachricht',
+        'संदेश का नाम',
     'message':
-        'Nachricht',
+        'संदेश',
     'any message':
-        'eine beliebige Nachricht',
+        'कोई संदेश',
     'wait %n secs':
-        'warte %n Sek.',
+        'रुको %n सेकंड.',
     'wait until %b':
-        'warte bis %b',
+        'जब तक इंतजार %b',
     'forever %loop':
-        'fortlaufend %loop',
+        'उम्र भर %loop',
     'repeat %n %loop':
-        'wiederhole %n mal %loop',
+        'दोहराना %n %loop',
     'repeat until %b %loop':
-        'wiederhole bis %b %loop',
+        'दोहराओ जब तक %b %loop',
     'for %upvar = %n to %n %cla':
-        'für %upvar = %n bis %n %cla',
+        'जब %upvar = %n to %n %cla',
     'if %b %c':
-        'falls %b %c',
+        'अगर %b %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'अगर %b %c अन्य %c',
     'if %b then %s else %s':
-        'falls %b dann %s sonst %s',
+        'अगर %b तब फिर %s अन्य %s',
     'report %s':
-        'berichte %s',
+        'रिपोर्ट %s',
     'stop %stopChoices':
-        'stoppe %stopChoices',
+        'रुकें %stopChoices',
     'all':
-        'alles',
+        'सब',
     'this script':
-        'dieses Skript',
+        'यह स्क्रिप्ट',
     'this block':
-        'diesen Block',
+        'यह ब्लॉक',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        'यह %stopOthersChoices',
     'all but this script':
-        'alles au\u00dfer diesem Skript',
+        'सभी लेकिन यह स्क्रिप्ट all',
     'other scripts in sprite':
-        'andere Skripte in diesem Objekt',
+        'इस स्प्राइट में अन्य लिपि',
     'pause all %pause':
-        'pausiere alles %pause',
+        'सभी को रोकें %pause',
     'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
+        'चलाना %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
+        'प्रक्षेपण %cmdRing %inputs',
     'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
+        'कॉल %repRing %inputs',
     'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
+        'चलाना %cmdRing w/continuation',
     'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
+        'कॉल %cmdRing w/continuation',
     'warp %c':
-        'Warp %c',
+        'ताना %c', //Reference Needed
     'when I start as a clone':
-        'Wenn ich als Klon starte',
+        'जब मैं क्लोन के रूप में शुरू करता हूं',
     'create a clone of %cln':
-        'klone %cln',
+        'क्लोन बनाएं %cln',
     'a new clone of %cln':
-        'neuer Klon von %cln',
+        'एक नया क्लोन %cln',
     'myself':
-        'selbst',
+        'खुद',
     'delete this clone':
-        'entferne diesen Klon',
+        'इस क्लोन को हटाएं',
     'tell %spr to %cmdRing %inputs':
-        'lasse %spr %cmdRing tun %inputs',
+        'बताओ %spr %cmdRing को  %inputs',
     'ask %spr for %repRing %inputs':
-        'frage %spr nach %repRing %inputs',
+        'पूछना %spr को %repRing %inputs',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        'मार्मिक %col ?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        'मार्मिक %clr ?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        'रंग %clr मार्मिक %clr ?',
     'ask %s and wait':
-        'frage %s und warte',
+        'पूछना %s और प्रतीक्ष करो',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'तुम्हारा नाम क्या हे?',
     'answer':
-        'Antwort',
+        'उत्तर',
     'mouse x':
-        'Maus x-Position',
+        'माउस x',
     'mouse y':
-        'Maus y-Position',
+        'माउस y',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'नीचे नीचे?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        'कुंजी %key दबाई गई?',
     '%rel to %dst':
-        '%rel zu %dst',
+        '%rel से %dst',
     'distance':
-    	'Entfernung',
+    	'दूरी',
     'ray length':
-        'Strahlenlänge',
+        'किरण की लंबाई',
     '%asp at %loc' :
-        '%asp bei %loc',
+        '%asp पर %loc',
     'r-g-b-a':
-        'R-G-B-A Farbwerte',
+        'r-g-b-a',
     'sprites' :
-        'Objekte',
+        'स्प्राइट',
     'reset timer':
-        'starte Stoppuhr neu',
+        'टाइमर रीसेट करें',
     'timer':
-        'Stoppuhr',
+        'टाइमर',
     '%att of %spr':
-        '%att von %spr',
+        '%att का %spr',
     'my %get':
-        'Attribut %get',
+        'मेरे %get',
     'object %self':
-        'Objekt %self',
+        'वस्तु %self',
     'http:// %s':
         'http:// %s',
     'turbo mode':
-        'Turbomodus',
+        'टर्बो मोड',
     'flat line ends':
-        'flache Pinselstriche',
+        'समतल रेखा समाप्त होती है',
     'is %setting on?':
-        'ist %setting an?',
+        'है %setting चालू चालू?',
     'set %setting to %b':
-        'setze %setting auf %b',
+        'सेट %setting से %b',
     'current %dates':
-        'Kalender %dates',
+        'वर्तमान %dates',
     'year':
-        'Jahr',
+        'साल',
     'month':
-        'Monat',
+        'महीना',
     'date':
-        'Datum',
+        'तारीख',
     'day of week':
-        'Wochentag',
+        'सप्ताह का दिन',
     'hour':
-        'Stunde',
+        'घंटे',
     'minute':
-        'Minute',
+        'मिनट',
     'second':
-        'Sekunde',
+        'सेकंड',
     'time in milliseconds':
-        'Zeit in Millisekunden',
+        'मिलीसेकेंड',
     'microphone %audio':
-        'Mikrofon %audio',
+        'माइक्रोफ़ोन %audio',
     'volume':
-        'Lautstärke',
+        'वॉल्यूम',
     'note':
-        'Note',
+        'राग',
     'frequency':
-        'Frequenz',
+        'आवृत्ति',
     'samples':
-        'Signale',
+        'नमूने',
     'sample rate':
-        'Abtastrate',
+        'sample rate',
     'spectrum':
-        'Frequenzspektrum',
+        'स्पेक्ट्रम',
     'resolution':
-        'Auflösung',
+        'संकल्प के',
     'Microphone resolution...':
-        'Mikrofonauflösung...',
+        'माइक्रोफोन संकल्प....',
     'Microphone':
-        'Mikrofon',
+        'माइक्रोफ़ोन',
     'low':
-        'niedrig',
+        'कम',
     'high':
-        'hoch',
+        'उच्च',
     'max':
-        'max',
+        'मैक्स',
     'video %vid on %self':
-        'Video %vid auf %self',
+        'वीडियो %vid पर %self',
     'motion':
-        'Bewegung',
+        'प्रस्ताव',
     'snap':
-        'Snap',
+        'स्नैप',
     'set video transparency to %n':
-        'setze Videotransparenz auf %n',
+        'वीडियो पारदर्शिता सेट करें %n',
     'video capture':
-        'Videoaufnahme',
+        'विडियो रिकॉर्ड',
     'mirror video':
-        'Video gespiegelt',
+        'मिरर वीडियो',
     'filtered for %clr':
-        'nach %clr gefiltert',
+        'फ़िल्टर करें %clr',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'ढेर का आकार',
     'frames':
-        'Rahmenz\u00e4hler',
+        'फ्रेम्स',
     'log pen vectors':
-        'Vektoraufzeichnung',
+        'लॉग पेन वेक्टर',
 
     // operators:
     '%n mod %n':
-        '%n modulo %n',
+        '%n mod %n',
     'round %n':
-        '%n gerundet',
+        'round %n',
     '%fun of %n':
-        '%fun von %n',
+        '%fun का %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'यादृच्छिक चुनें %n से %n',
     '%b and %b':
-        '%b und %b',
+        '%b और %b',
     '%b or %b':
-        '%b oder %b',
+        '%b या %b',
     'not %b':
-        'nicht %b',
+        'नहीं %b',
     'true':
-        'wahr',
+        'सच',
     'false':
-        'falsch',
+        'असत्य',
     'join %words':
-        'verbinde %words',
+        'शामिल %words',
     'split %s by %delim':
-        'trenne %s nach %delim',
+        'विभाजित करें %s द्वारा %delim',
     'hello':
-        'Hallo',
+        'नमस्ते',
     'world':
-        'Welt',
+        'विश्व',
     'letter %idx of %s':
-        'Zeichen %idx von %s',
+        'वर्ण %idx का %s',
     'length of %s':
-        'L\u00e4nge von Text %s',
+        'लंबाई का  %s',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'Unicode Of %s',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'Unicode %n as letter',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        'यह %s प्रकार %typ ?',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        ' %s के समान है %s ?',
     'JavaScript function ( %mult%s ) { %code }':
-        'JavaScript Funktion ( %mult%s ) { %code }',
+        'Javascript function ( %mult%s ) { %code }',
     'compile %repRing':
-    	'kompiliere %repRing',
+    	'संकलन %repRing',
 
     'type of %s':
-        'Typ von %s',
+        'के प्रकार %s',
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'एक चर बनाओ',
     'Variable name':
-        'Variablenname',
+        'चर का नाम',
     'Script variable name':
-        'Skriptvariablenname',
+        'स्क्रिप्ट चर नाम',
     'inherit %shd':
-        'erbe %shd',
+        'इनहेरिट %shd',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'एक चर हटाएं',
 
     'set %var to %s':
-        'setze %var auf %s',
+        'सेट %var को %s',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        'परिवर्तन %var से %n',
     'show variable %var':
-        'zeige Variable %var',
+        'चर दिखाओ %var',
     'hide variable %var':
-        'verstecke Variable %var',
+        'चर छुपाएं %var',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'स्क्रिप्ट चर %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
-    'numbers from %n to %n':
-        'Zahlen von %n bis %n',
+        'सूची %exp',
+    'numbers from %n to %n':   //#Untranslated Because Of complication
+        'numbers %n to %n',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        '%s in front of %l',
     'item %idx of %l':
-        'Element %idx von %l',
+        'item %idx of %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        'all but first of %l',
     '%la of %l':
-        '%la von %l',
+        '%la of %l',
     'rank':
-        'Rang',
+        'rank',
     'dimensions':
-        'Dimensionen',
+        'dimensions',
     'flatten':
-        'Auflistung',
+        'flatten',
     'columns':
-        'Spalten',
+        'columns',
     'reverse':
-        'Umkehrung',
+        'reverse',
     'lines':
-        'Textzeilen',
+        'lines',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        '%l contains %s',
     'thing':
-        'etwas',
+        'thing',
     'is %l empty?':
-        'ist %l leer?',
+        'is %l empty?',
     'index of %s in %l':
-        'Index von %s in %l',
+        'index of %s in %l',
     'map %repRing over %l':
-        'wende %repRing an auf %l',
+        'map %repRing over %l',
     'keep items %predRing from %l':
-        'behalte Elemente, die %predRing aus %l',
+        'keep items %predRing from %l',
     'find first item %predRing in %l':
-        'finde das erste Element, das %predRing in %l',
+        'find first item %predRing in %l',
     'combine %l using %repRing':
-        'kombiniere die Elemente von %l mit %repRing',
+        'combine %l using %repRing',
     '%blitz map %repRing over %l':
-        '%blitz wende %repRing an auf %l',
+        '%blitz map %repRing over %l',
     '%blitz keep items %predRing from %l':
-        '%blitz behalte Elemente, die %predRing aus %l',
+        '%blitz keep items %predRing from %l',
     '%blitz find first item %predRing in %l':
-        '%blitz finde das erste Element, das %predRing in %l',
+        '%blitz find first item %predRing in %l',
     '%blitz combine %l using %repRing':
-        '%blitz kombiniere die Elemente von %l mit %repRing',
+        '%blitz combine %l using %repRing',
     'for each %upvar in %l %cla':
-        'für jedes %upvar von %l %cla',
+        'for each %upvar in %l %cla',
     'item':
-        'Element',
+        'मद',
     'value':
-        'Wert',
+        'मूल्य',
     'index':
         'Index',
     'append %lists':
-        'verbinde %lists',
+        'सूची %lists',
     'reshape %l to %nums':
-        'strukturiere %l in %nums',
+        'reshape %l to %nums',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        'add %s to %l',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        'delete %ida of %l',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        'insert %s at %idx of %l',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'replace item %idx of %l with %s',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'ब्लॉक बनाना',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'के बारे में...',
     'Reference manual':
-        'Handbuch lesen',
+        'संदर्भ पुस्तिका',
     'Snap! website':
-        'Snap! Webseite',
+        'Snap! वेबसाइट',
     'Download source':
-        'Quellcode runterladen',
+        'Download Source',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'Switch back to user mode',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
+        'disable deep-Morphic\ncontext menus\nand show user-friendly ones',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'Switch to dev mode',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'प्रोजेक्ट नोट्स...',
     'New':
-        'Neu',
+        'नया',
     'Open...':
-        '\u00d6ffnen...',
+        'खुला हुआ...',
     'Save':
-        'Sichern',
+        'बचाएं',
     'Save to disk':
-        'Abpeichern',
+        'डिस्क में सहेजो',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'dieses Projekt herunterladen\nund lokal speichern\n'
             + '(nicht von allen Browsern unters\u00fctzt)',
     'Save As...':
-        'Sichern als...',
+        'के रूप रक्षित करें...',
     'Import...':
-        'Importieren...',
+        'आयात...',
     'file menu import hint':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken,\n'
             + 'ein Kost\u00fcm oder einen Klang',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'सादा पाठ के रूप में निर्यात परियोजना...',
     'Export project...':
-        'Projekt exportieren...',
+        'निर्यात परियोजना...',
     'save project data as XML\nto your downloads folder':
-        'Projekt als XML-Datei in den Download-\nOrdner des Browsers speichern',
+        'प्रोजेक्ट डेटा को इस रूप में सहेजें XML\nto your downloads folder',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'show project data as XML\nin a new browser window',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'निर्यात ब्लॉक...',
     'save global custom block\ndefinitions as XML':
-        'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
+        'save global custom block\ndefinitions as XML',
     'Unused blocks...':
-          'nicht verwendete Bl\u00f6cke...',
+          'अप्रयुक्त ब्लॉक...',
     'find unused global custom blocks\nand remove their definitions':
-        'nicht verwendete Bl\u00f6cke finden\nund entfernen',
+        'अप्रयुक्त वैश्विक कस्टम ब्लॉक खोजें\n and remove their usage',
     'Remove unused blocks':
-        'nicht verwendete Bl\u00f6cke entfernen',
+        'अप्रयुक्त ब्लॉक हटाएं',
     'there are currently no unused\nglobal custom blocks in this project':
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
@@ -1075,14 +1072,6 @@ SnapTranslator.dict.de = {
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
             + 'zu erm\u00f6glichen',
-    'JavaScript extensions':
-        'JavaScript Erweiterungen',
-    'check to support\nnative JavaScript functions':
-        'einschalten um JavaScript-Funktionen\ndirekt in Snap! zu ermöglichen',
-    'uncheck to disable support for\nnative JavaScript functions':
-        'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
-    'JavaScript extensions for Snap!\nare turned off':
-        'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
     'Input sliders':
         'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1640,145 +1629,145 @@ SnapTranslator.dict.de = {
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'स्नैप के बारे में',
     'Back...':
-        'Zur\u00fcck...',
+        'वापस....',
     'License...':
-        'Lizenz...',
+        'लाइसेंस....',
     'Modules...':
-        'Komponenten...',
+        'मॉड्यूल....',
     'Credits...':
-        'Mitwirkende...',
+        'क्रेडिट....',
     'Translators...':
-        '\u00dcbersetzer',
+        'अनुवादकों',
     'License':
-        'Lizenz',
+        'लाइसेंस',
     'current module versions:':
         'Komponenten-Versionen',
     'Contributors':
-        'Mitwirkende',
+        'योगदानवाला',
     'Translations':
-        '\u00dcbersetzungen',
+        'अनुवाद',
 
     // variable watchers
     'normal':
-        'normal',
+        'साधारण',
     'large':
-        'gro\u00df',
+        'big',
     'slider':
-        'Regler',
+        'स्लाइडर',
     'slider min...':
-        'Minimalwert...',
+        'स्लाइडर न्यूनतम',
     'slider max...':
-        'Maximalwert...',
+        'स्लाइडर अधिकतम',
     'import...':
-        'Importieren...',
+        'आयात....',
     'raw data...':
-        'Rohdaten...',
+        'कच्चा डेटा....',
     'import without attempting to\nparse or format data':
-        'Daten unformatiert\nimportieren',
+        'डेटा स्वरूपित करने के\n प्रयास के बिना आयात',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'स्लाइडर न्यूनतम मूल्य',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'स्लाइडर अधिकतम मूल्य',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'लंबाई: ',
 
     // comments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'टिप्पणी यहाँ जोड़ें....',
     'comment pic...':
-        'Kommentarbild',
+        'टिप्पणी की तस्वीर....',
     'save a picture\nof this comment':
-        'ein Bild dieser\nAnmerkung speichern',
+        'इस टिप्पणी की\n एक तस्वीर को बचाओ',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) दाईं',
     '(-90) left':
-        '(-90) links',
+        '(-90) बाएं',
     '(0) up':
-        '(0) oben',
+        '(0) ऊपर',
     '(180) down':
-        '(180) unten',
+        '(180) नीचे',
     'random':
-    	'zufällig',
+    	'यादृच्छिक',
      'random position':
-     	'zufällige Position',
+     	'यादृच्छिक स्थान',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'माऊस पाइंटर',
     'edge':
-        'Kante',
+        'एज',
     'pen trails':
-        'Malspuren',
+        'कलम का निशान',
     'center':
-        'Mitte',
+        'मध्य',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'दिशा सूचक',
     'Empty':
-        'Leer',
+        'खाली',
     'Paint a new costume':
-        'neues Kostüm zeichnen',
+        'एक नई पोशाक पेंट करें',
     'Import a new costume from your webcam':
-        'neues Kostüm mit der Webcam aufnehmen',
+        'अपने वेबकैम से एक नई पोशाक आयात करें',
     'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Überprüfe, ob der Browser auf dem aktuellsten Stand \nund die Webcam korrekt konfiguriert ist.\n\nFür einige Browser muss Snap! mit HTTPS geöffnet\nwerden, um auf die Kamera zuzugreifen.\n\nErsetze dafür den "http://"-Teil in der Adresszeile mit"https://"',
+        'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.',
     'Camera':
-        'Kamera',
+        'कैमरा',
     
     // sounds
     'Record a new sound':
-        'neuen Klang aufnehmen',
+        'एक नई ध्वनि रिकॉर्ड करें',
     
 
     // graphical effects, pen color
     'color':
-        'Farbe',
+        'रंग',
     'hue':
-        'Farbton',
+        ' विविध रंग',
     'fisheye':
-        'Fischauge',
+        'मछली की आँख',
     'whirl':
-        'Wirbel',
+        'चक्कर',
     'pixelate':
-        'Pixel',
+        'पिक्सेलेट',
     'mosaic':
-        'Mosaik',
+        'मौज़ेक',
     'saturation':
-        'Sättigung',
+        'परिपूर्णता',
     'brightness':
-        'Helligkeit',
+        'चमक',
     'transparency':
-        'Transparenz',
+        'पारदर्शिता',
     'ghost':
-        'Durchsichtigkeit',
+        'भूत',
     'negative':
-        'Farbumkehr',
+        'नकारात्मक',
     'comic':
-        'Moire',
+        'हास्य',
     'confetti':
-        'Farbverschiebung',
+        'कंफ़ेद्दी',
 
     // keys
     'space':
-        'Leertaste',
+        'स्पेस बार',
     'up arrow':
-        'Pfeil nach oben',
+        'ऊपर ऐरो कुंजी',
     'down arrow':
-        'Pfeil nach unten',
+        'नीचे ऐरो कुंजी',
     'right arrow':
-        'Pfeil nach rechts',
+        'दाईं ऐरो कुंजी',
     'left arrow':
-        'Pfeil nach links',
+        'बाईं ऐरो कुंजी',
     'any key':
-        'beliebige Taste',
+        'कोई भी कुंजी',
     'a':
         'a',
     'b':
@@ -1854,31 +1843,31 @@ SnapTranslator.dict.de = {
 
     // messages
     'new...':
-        'Neu...',
+        'नया....',
     '__shout__go__':
-        'grüne Flagge angeklickt',
+        '__shout__go__',
 
-    // math functions
+    // math functions (I made to Full Form for Understanding)
     'abs':
-        'Betrag',
+        'absolute',
     'ceiling':
-        'Aufgerundet',
+        'ceiling',
     'floor':
-        'Abgerundet',
+        'floor',
     'sqrt':
-        'Wurzel',
+        'वर्गमूल',
     'sin':
-        'sin',
+        'sine',
     'cos':
-        'cos',
+        'cosine',
     'tan':
-        'tan',
+        'tangent',
     'asin':
-        'asin',
+        'asine',
     'acos':
-        'acos',
+        'acosine',
     'atan':
-        'atan',
+        'atangent',
     'ln':
         'ln',
     'e^':
@@ -1886,133 +1875,133 @@ SnapTranslator.dict.de = {
 
     // Boolean expressions keyboard entry
     'not':
-        'nicht',
+        'नहीं',
 
     // delimiters
     'letter':
-        'Buchstabe',
+        'वर्ण',
     'word':
-        'Wort',
+        'शब्द',
     'whitespace':
-        'Leerraum',
+        'खाली स्थान के',
     'line':
-        'Zeilenvorschub',
+        'लाइन',
     'tab':
-        'Tabulator',
+        'टैबुलाटर',
     'cr':
-        'Wagenr\u00fccklauf',
+        'cr',
 
     // data types
     'number':
-        'Zahl',
+        'संख्या',
     'text':
-        'Text',
+        'टेक्स्ट',
     'Boolean':
-        'Boole',
+        'बूलियन',
     'list':
-        'Liste',
+        'सूची',
     'command':
-        'Befehlsblock',
+        'आदेश',
     'reporter':
-        'Funktionsblock',
+        'रिपोर्टर',
     'predicate':
-        'Pr\u00e4dikat',
+        'विधेय',
     'sprite':
-        'Objekt',
+        'स्प्राइट',
 
     // list indices
     'last':
-        'letztes',
+        'पिछले',
     'any':
-        'beliebig',
+        'कोई भी',
 
     // attributes
     'my':
-        'Attribut',
+        'मेरे',
     'neighbors':
-        'Nachbarn',
+        'पड़ोसी',
     'self':
-        'selbst',
+        'स्वयं',
     'other sprites':
-        'andere Objekte',
+        'अन्य स्प्राइट्स',
     'parts':
-        'Teile',
+        'पार्ट्स',
     'anchor':
-        'Verankerung',
+        'ऐंकर',
     'parent':
-        'Vorfahr',
+        'माता-पिता',
     'temporary?':
-        'temporär?',
+        'अस्थायी?',
     'children':
-        'Abkömmlinge',
+        'बच्चे',
     'clones':
-        'Klone',
+        'क्लोन',
     'other clones':
-        'andere Klone',
+        'अन्य क्लोन',
     'dangling?':
-        'baumelnd?',
+        'झूलने?',
     'draggable?':
-        'greifbar?',
+        'खींचने योग्य?',
     'rotation style':
-        'Drehtyp',
+        'रोटेशन अंदाज',
     'rotation x':
-        'Drehpunkt x',
+        'रोटेशन x',
     'rotation y':
-        'Drehpunkt y',
+        'रोटेशन y',
     'center x':
-        'Mittelpunkt x',
+        'केन्द्र x',
     'center y':
-        'Mittelpunkt y',
+        'केन्द्र y',
     'name':
-        'Name',
+        'नाम',
     'costume':
-        'Kostüm',
+        'पोशाक',
     'stage':
-        'B\u00fchne',
+        'मंच',
     'costumes':
-        'Kostüme',
+        'पोशाक',
     'sounds':
-        'Klänge',
+        'आवाज़',
     'scripts':
-        'Skripte',
+        'स्क्रिप्ट',
     'width':
-        'Breite',
+        'चौड़ाई',
     'height':
-        'Höhe',
+        'ऊंचाई',
     'left':
-        'Rand links',
+        'बाएं',
     'right':
-        'Rand rechts',
+        'दाईं',
     'top':
-        'Rand oben',
+        'ऊपर',
     'bottom':
-        'Rand unten',
+        'तल',
 
     // attributes in the SET block's dropdown
     'my anchor':
-        'Attribut Verankerung',
+        'मेरे लंगर',
     'my parent':
-        'Attribut Vorfahr',
+        'मेरे माता पिता',
     'my name':
-        'Attribut Name',
+        'मेरा नाम',
     'my temporary?':
-        'Attribut temporär?',
+        'मेरा अस्थायी?',
     'my dangling?':
-        'Attribut baumelnd?',
+        'मेरी झूलने?',
     'my draggable?':
-        'Attribut greifbar?',
+        'मेरी खींचने योग्य?',
     'my rotation style':
-        'Attribut Drehtyp',
+        'मेरी रोटेशन शैली',
     'my rotation x':
-        'Attribut Drehpunkt x',
+        'मेरा रोटेशन x',
     'my rotation y':
-        'Attribut Drehpunkt y',
+        'मेरा रोटेशन y',
 
     // inheritance
     'inherited':
-        'geerbt',
+        'विरासत में मिला',
     'check to inherit\nfrom':
-        'einschalten, um zu erben\nvon',
+        'विरासत की जाँच करें\nसे',
     'uncheck to\ndisinherit':
-        'ausschalten, um \nnicht mehr zu erben'
+        'डिस्चार्ज करने से\nअनचेक करें'
 };

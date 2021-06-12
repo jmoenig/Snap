@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
 
-modules.threads = '2021-April-17';
+modules.threads = '2021-June-10';
 
 var ThreadManager;
 var Process;
@@ -562,7 +562,7 @@ Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
-// Process.prototype.enableJS = false;
+Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
@@ -1106,19 +1106,24 @@ Process.prototype.expectReport = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element;
+    var m = element,
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-    m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
-        this.exportResult,
-        this.receiver
-    );
+    if (ide.isAppMode) {
+        ide.showMessage(error.name + '\n' + error.message);
+    } else {
+        if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+        m.showBubble(
+            (m === element ? '' : 'Inside: ')
+                + error.name
+                + '\n'
+                + error.message,
+            this.exportResult,
+            this.receiver
+        );
+    }
 };
 
 Process.prototype.errorObsolete = function () {
@@ -1204,9 +1209,9 @@ Process.prototype.evaluate = function (
         return this.returnValueToParentContext(null);
     }
     if (context instanceof Function) {
-        // if (!this.enableJS) {
-        //     throw new Error('JavaScript is not enabled');
-        // }
+        if (!this.enableJS) {
+            throw new Error('JavaScript extensions for Snap!\nare turned off');
+        }
         return context.apply(
             this.blockReceiver(),
             args.itemsArray().concat([this])

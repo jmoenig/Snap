@@ -92,6 +92,37 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * JS-functions are now disabled by default until switched on in the settings menu per session
+    * error messages in presentation mode are now shown as pop-up messages onstage  
+* **Notable Fixes:**
+    * register unsaved changes when the user edits a comment
+    * fixed bignums library and and made colors library faster, thanks, Brian!
+    * fixed setting the IDE language via a url parameter, thanks, Joan!
+* **Translation Updates:**
+    * Polish, thanks, Witek!
+    * new Hindi translation, thanks, Barthdry!
+    * German
+
+### 2021-06-11
+* byob, blocks: catch JS functions inside custom dropdown definitions
+* German translation update
+
+### 2021-06-10
+* threads: error messages in presentation mode are now shown as pop-up messages onstage  
+* store: commented out modal prompt to enable JS when loading a project that uses it
+* gui: renamed setting to "JavaScript extensions"
+
+### 2021-06-09
+* new dev version
+* Polish translation update, thanks, Witek!
+* blocks: register unsaved changes when the user edits a comment
+* new Hindi translation, thanks, Barthdry!
+* fixed bignums library and and made colors library faster, thanks, Brian!
+* gui: fixed setting the IDE language via a url parameter, thanks, Joan!
+* threads, gui, objects, byob, store: reinstated JS-function control, disabled JS-functions by default
+* gui, store: automatically logout when the user enablesJavaScript, commented out for now
+
 ## 6.8.1
 * **Notable Fixes:**
     * fixed peeling off niladic custom block instances from prototype templates
