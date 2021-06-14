@@ -59,9 +59,10 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
-TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
+SnapExtensions*/
 
-modules.threads = '2021-June-10';
+modules.threads = '2021-June-14';
 
 var ThreadManager;
 var Process;
@@ -809,6 +810,23 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             this.popContext();
         }
     }
+};
+
+// Process: Primitive Extensions (for libraries etc.)
+
+Process.prototype.doApplyExtension = function (prim, args) {
+    this.reportApplyExtension(prim, args);
+};
+
+Process.prototype.reportApplyExtension = function (prim, args) {
+    var ext = SnapExtensions.get(prim);
+    if (isNil(ext)) {
+        throw new Error('missing / unspecified extension: ' + prim);
+    }
+    return ext.apply(
+        this.blockReceiver(),
+        args.itemsArray().concat([this])
+    );
 };
 
 // Process: Special Forms Blocks Primitives

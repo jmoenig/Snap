@@ -4,6 +4,7 @@
 
 ### 2021-06-14
 * new dev version
+* threads, blocks, objects, extensions: new safe extensions mechanism
 
 ## 6.9.0
 * **Notable Changes:**
