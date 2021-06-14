@@ -7,6 +7,7 @@
 * threads, blocks, objects, extensions: new safe extensions mechanism
 * objects: added new "primitive" blocks to dev palette
 * updated list-utilities library
+* updated animation library
 
 ## 6.9.0
 * **Notable Changes:**
