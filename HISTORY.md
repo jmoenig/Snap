@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-06-14
+* new dev version
+
 ## 6.9.0
 * **Notable Changes:**
     * JS-functions are now disabled by default until switched on in the settings menu per session
