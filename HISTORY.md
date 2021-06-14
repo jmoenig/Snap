@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 6.9.0
 * **Notable Changes:**
     * JS-functions are now disabled by default until switched on in the settings menu per session
     * error messages in presentation mode are now shown as pop-up messages onstage  
@@ -13,6 +14,9 @@
     * Polish, thanks, Witek!
     * new Hindi translation, thanks, Barthdry!
     * German
+
+### 2021-06-14
+* prepared release
 
 ### 2021-06-11
 * byob, blocks: catch JS functions inside custom dropdown definitions
