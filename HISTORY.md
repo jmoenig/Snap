@@ -8,6 +8,7 @@
 * objects: added new "primitive" blocks to dev palette
 * updated list-utilities library
 * updated animation library
+* updated frequency-distribution-analysis library
 
 ## 6.9.0
 * **Notable Changes:**
