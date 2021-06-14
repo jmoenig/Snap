@@ -5,6 +5,7 @@
 ### 2021-06-14
 * new dev version
 * threads, blocks, objects, extensions: new safe extensions mechanism
+* objects: added new "primitive" blocks to dev palette
 
 ## 6.9.0
 * **Notable Changes:**

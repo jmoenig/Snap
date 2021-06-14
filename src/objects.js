@@ -2841,6 +2841,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
         }
 
     /////////////////////////////////
@@ -9007,6 +9010,9 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
         }
 
     /////////////////////////////////
