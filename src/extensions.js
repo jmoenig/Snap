@@ -27,7 +27,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, List, StageMorph*/
+/*global modules, List, StageMorph, Costume*/
 
 modules.extensions = '2021-June-14';
 
@@ -119,53 +119,119 @@ SnapExtensions.set(
 SnapExtensions.set(
     'map_lon(x)',
     function (x) {
-        return this.parentThatIsA(StageMorph).lonFromSnapX(x);
+        return this.parentThatIsA(StageMorph).worldMap.lonFromSnapX(x);
     }
 );
 
 SnapExtensions.set(
     'map_lat(y)',
     function (y) {
-        return this.parentThatIsA(StageMorph).latFromSnapY(y);
+        return this.parentThatIsA(StageMorph).worldMap.latFromSnapY(y);
     }
 );
 
 SnapExtensions.set(
     'map_view(lon, lat)',
     function (lon, lat) {
-        this.parentThatIsA(StageMorph).setView(lon, lat);
+        this.parentThatIsA(StageMorph).worldMap.setView(lon, lat);
     }
 );
 
 SnapExtensions.set(
     'map_y(lat)',
     function (lat) {
-        return this.parentThatIsA(StageMorph).snapYfromLat(lat);
+        return this.parentThatIsA(StageMorph).worldMap.snapYfromLat(lat);
     }
 );
 
 SnapExtensions.set(
     'map_x(lon)',
     function (lon) {
-        return this.parentThatIsA(StageMorph).snapXfromLon(lon);
+        return this.parentThatIsA(StageMorph).worldMap.snapXfromLon(lon);
     }
 );
 
 SnapExtensions.set(
     'map_pan(x, y)',
     function (x, y) {
-        this.parentThatIsA(StageMorph).panBy(x, y);
+        this.parentThatIsA(StageMorph).worldMap.panBy(x, y);
     }
 );
 
 SnapExtensions.set(
     'map_dist(lat1, lon1, lat2, lon2)',
     function (lat1, lon1, lat2, lon2) {
-        return this.parentThatIsA(StageMorph).distanceInKm(
+        return this.parentThatIsA(StageMorph).worldMap.distanceInKm(
             lat1,
             lon1,
             lat2,
             lon2
         );
+    }
+);
+
+SnapExtensions.set(
+    'map_location',
+    function () {
+        var crd = new List(),
+            myself = this,
+            options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+        function success(pos) {
+            crd = new List([
+                pos.coords.latitude,
+                pos.coords.longitude
+            ]);
+        }
+
+        function error(err) {
+            crd = new List([37.872099, -122.257852]);
+            myself.inform('Warning:\nGeolocation failed.');
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            success,
+            error,
+            options
+        );
+
+        return function () {return crd; };
+    }
+);
+
+SnapExtensions.set(
+    'map_update',
+    function () {
+        var stage = this.parentThatIsA(StageMorph);
+        stage.worldMap.extent = stage.dimensions;
+        stage.worldMap.render();
+    }
+);
+
+SnapExtensions.set(
+    'map_loaded',
+    function () {
+        return !this.parentThatIsA(StageMorph).worldMap.loading;
+    }
+);
+
+SnapExtensions.set(
+    'map_costume',
+    function () {
+        return new Costume(
+            this.parentThatIsA(StageMorph).worldMap.canvas,
+            'map'
+        );
+    }
+);
+
+SnapExtensions.set(
+    'map_style',
+    function (name) {
+        this.parentThatIsA(StageMorph).worldMap.setHost(name);
     }
 );

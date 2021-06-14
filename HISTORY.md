@@ -11,6 +11,7 @@
 * updated frequency-distribution-analysis library
 * extensions: added some world-map extension primitives
 * threads: associate setting with JSF-block rather than the evaluator
+* extensions: added more world-map extension primitives
 
 ## 6.9.0
 * **Notable Changes:**
