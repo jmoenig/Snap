@@ -27,7 +27,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, List*/
+/*global modules, List, StageMorph*/
 
 modules.extensions = '2021-June-14';
 
@@ -97,5 +97,75 @@ SnapExtensions.set(
     'group(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicGroup(data, fn);
+    }
+);
+
+// World map:
+
+SnapExtensions.set(
+    'map_zoom',
+    function () {
+        return this.parentThatIsA(StageMorph).worldMap.zoom;
+    }
+);
+
+SnapExtensions.set(
+    'map_zoom(n)',
+    function (num) {
+        this.parentThatIsA(StageMorph).worldMap.setZoom(num);
+    }
+);
+
+SnapExtensions.set(
+    'map_lon(x)',
+    function (x) {
+        return this.parentThatIsA(StageMorph).lonFromSnapX(x);
+    }
+);
+
+SnapExtensions.set(
+    'map_lat(y)',
+    function (y) {
+        return this.parentThatIsA(StageMorph).latFromSnapY(y);
+    }
+);
+
+SnapExtensions.set(
+    'map_view(lon, lat)',
+    function (lon, lat) {
+        this.parentThatIsA(StageMorph).setView(lon, lat);
+    }
+);
+
+SnapExtensions.set(
+    'map_y(lat)',
+    function (lat) {
+        return this.parentThatIsA(StageMorph).snapYfromLat(lat);
+    }
+);
+
+SnapExtensions.set(
+    'map_x(lon)',
+    function (lon) {
+        return this.parentThatIsA(StageMorph).snapXfromLon(lon);
+    }
+);
+
+SnapExtensions.set(
+    'map_pan(x, y)',
+    function (x, y) {
+        this.parentThatIsA(StageMorph).panBy(x, y);
+    }
+);
+
+SnapExtensions.set(
+    'map_dist(lat1, lon1, lat2, lon2)',
+    function (lat1, lon1, lat2, lon2) {
+        return this.parentThatIsA(StageMorph).distanceInKm(
+            lat1,
+            lon1,
+            lat2,
+            lon2
+        );
     }
 );

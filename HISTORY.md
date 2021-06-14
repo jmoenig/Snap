@@ -9,6 +9,7 @@
 * updated list-utilities library
 * updated animation library
 * updated frequency-distribution-analysis library
+* extensions: added some world-map extension primitives
 
 ## 6.9.0
 * **Notable Changes:**
