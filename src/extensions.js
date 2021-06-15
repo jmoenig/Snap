@@ -35,44 +35,59 @@ modules.extensions = '2021-June-15';
 
 var SnapExtensions = new Map();
 
-// exceptions:
+/*
+    naming convention for extension primitives:
+    -------------------------------------------
+    domain-prefix_function-name(parameter-list)
+
+    example: 'lst_sort(list, fn)'
+
+    domain-prefix:  3-letter lowercase identifier followee by an underscore
+            e.g.:   err_, lst_, txt_, dta_, map_
+
+    function-name: short, single word if possible, lowercase
+
+    parameter-list: comma separated names or type indicators
+*/
+
+// errors & exceptions (err_):
 
 SnapExtensions.set(
-    'error(msg)',
+    'err_error(msg)',
     function (msg) {
         throw new Error(msg);
     }
 );
 
-// list utils:
+// list utils (lst_):
 
 SnapExtensions.set(
-    'sort(list, fn)',
+    'lst_sort(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicSort(data, fn);
     }
 );
 
 SnapExtensions.set(
-    'linked(list)',
+    'lst_linked(list)',
     function (data) {
         return data.isLinked;
     }
 );
 
-// text utils:
+// text utils (txt_):
 
 SnapExtensions.set(
-    'lowercase(txt)',
+    'txt_lowercase(txt)',
     function (txt) {
         return txt.toLowerCase();
     }
 );
 
-// frequency distribution analysis:
+// data sciene & frequency distribution analysis (dta_):
 
 SnapExtensions.set(
-    'analyze(list)',
+    'dta_analyze(list)',
     function (list) {
         var dict = new Map(),
             result = [],
@@ -94,13 +109,13 @@ SnapExtensions.set(
 );
 
 SnapExtensions.set(
-    'group(list, fn)',
+    'dta_group(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicGroup(data, fn);
     }
 );
 
-// World map:
+// World map (map_):
 
 SnapExtensions.set(
     'map_zoom',
