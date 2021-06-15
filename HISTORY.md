@@ -4,6 +4,7 @@
 
 ### 2021-06-15
 * extensions: tweaked world-map primitives
+* updated maps library
 
 ### 2021-06-14
 * new dev version
