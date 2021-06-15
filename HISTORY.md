@@ -7,6 +7,7 @@
 * updated maps library
 * extensions: new naming convention
 * updated list-utilities library
+* extensions: documented function semantics
 
 ### 2021-06-14
 * new dev version

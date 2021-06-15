@@ -36,18 +36,26 @@ modules.extensions = '2021-June-15';
 var SnapExtensions = new Map();
 
 /*
-    naming convention for extension primitives:
-    -------------------------------------------
-    domain-prefix_function-name(parameter-list)
+    SnapExtensions is a global dictionary of named functions which appear
+    in the drop-down menus of the hidden extension "primitive" blocks sorted
+    alphabetically.
 
+    naming conventions
+    ------------------
+    domain-prefix_function-name(parameter-list)
     example: 'lst_sort(list, fn)'
 
-    domain-prefix:  3-letter lowercase identifier followee by an underscore
-            e.g.:   err_, lst_, txt_, dta_, map_
+    - domain-prefix:    3-letter lowercase identifier followee by an underscore
+               e.g.:    err_, lst_, txt_, dta_, map_
 
-    function-name: short, single word if possible, lowercase
+    - function-name: short, single word if possible, lowercase
+    - parameter-list: comma separated names or type indicators
 
-    parameter-list: comma separated names or type indicators
+    function semantics
+    ------------------
+    - functions are called by the "primitive" blocks with any arguments provided
+    - "this" refers to the current snap object (sprite or stage) at call-time
+    - a reference to the current process is always passed as last argument
 */
 
 // errors & exceptions (err_):
