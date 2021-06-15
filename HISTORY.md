@@ -13,6 +13,7 @@
 * updated words-sentences library
 ' extensions: added tts
 * updated text-to-speech library
+* updated bar-charts library
 
 ### 2021-06-14
 * new dev version
