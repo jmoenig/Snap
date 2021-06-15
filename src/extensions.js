@@ -46,7 +46,7 @@ var SnapExtensions = new Map();
     example: 'lst_sort(list, fn)'
 
     - domain-prefix:    3-letter lowercase identifier followee by an underscore
-               e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_
+               e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_, geo_
 
     - function-name: short, single word if possible, lowercase
     - parameter-list: comma separated names or type indicators
@@ -194,38 +194,6 @@ SnapExtensions.set(
 );
 
 SnapExtensions.set(
-    'map_location',
-    function () {
-        var crd = new List(),
-            myself = this,
-            options = {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            };
-
-        function success(pos) {
-            crd = new List([
-                pos.coords.latitude,
-                pos.coords.longitude
-            ]);
-        }
-
-        function error(err) {
-            crd = new List([37.872099, -122.257852]);
-            myself.inform('Warning:\nGeolocation failed.');
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            success,
-            error,
-            options
-        );
-        return () => crd;
-    }
-);
-
-SnapExtensions.set(
     'map_update',
     function () {
         var stage = this.parentThatIsA(StageMorph);
@@ -302,3 +270,41 @@ SnapExtensions.set(
         proc.pushContext();
     }
 );
+
+// Geo-location (geo_)
+
+SnapExtensions.set(
+    'geo_location(acc?)',
+    function (includeAccuracy) {
+        var crd = new List(),
+            myself = this,
+            options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+        function success(pos) {
+            crd = new List([
+                pos.coords.latitude,
+                pos.coords.longitude
+            ]);
+            if (includeAccuracy) {
+                crd.add(pos.coords.accuracy);
+            }
+        }
+
+        function error(err) {
+            crd = new List([37.872099, -122.257852]);
+            myself.inform('Warning:\nGeolocation failed.');
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            success,
+            error,
+            options
+        );
+        return () => crd;
+    }
+);
+
