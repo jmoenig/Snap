@@ -221,8 +221,7 @@ SnapExtensions.set(
             error,
             options
         );
-
-        return function () {return crd; };
+        return () => crd;
     }
 );
 
