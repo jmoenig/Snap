@@ -26,6 +26,7 @@
 * updated http-blocks library
 * updated pixels library
 * updated audio library
+* updated localstorage library
 
 ### 2021-06-14
 * new dev version
