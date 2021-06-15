@@ -6,6 +6,7 @@
 * extensions: tweaked world-map primitives
 * updated maps library
 * extensions: new naming convention
+* updated list-utilities library
 
 ### 2021-06-14
 * new dev version
