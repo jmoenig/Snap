@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2021-06-15
+* extensions: tweaked world-map primitives
+
 ### 2021-06-14
 * new dev version
 * threads, blocks, objects, extensions: new safe extensions mechanism

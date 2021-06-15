@@ -29,7 +29,7 @@
 
 /*global modules, List, StageMorph, Costume*/
 
-modules.extensions = '2021-June-14';
+modules.extensions = '2021-June-15';
 
 // Global stuff
 
@@ -230,7 +230,7 @@ SnapExtensions.set(
 );
 
 SnapExtensions.set(
-    'map_style',
+    'map_style(name)',
     function (name) {
         this.parentThatIsA(StageMorph).worldMap.setHost(name);
     }
