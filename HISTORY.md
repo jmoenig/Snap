@@ -12,6 +12,7 @@
 * updated animation library
 * updated words-sentences library
 ' extensions: added tts
+* updated text-to-speech library
 
 ### 2021-06-14
 * new dev version
