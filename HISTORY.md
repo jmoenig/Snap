@@ -20,6 +20,7 @@
 * updated text-to-speech library
 * updated bar-charts library
 * fixed #2850 (occasional invisible error message), thanks, Ken, for the bug report!
+* extensions: added long-form xhr primitive
 
 ### 2021-06-14
 * new dev version

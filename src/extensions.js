@@ -46,7 +46,7 @@ var SnapExtensions = new Map();
     example: 'lst_sort(list, fn)'
 
     - domain-prefix:    3-letter lowercase identifier followee by an underscore
-               e.g.:    err_, lst_, txt_, dta_, map_, tts_
+               e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_
 
     - function-name: short, single word if possible, lowercase
     - parameter-list: comma separated names or type indicators
@@ -271,5 +271,34 @@ SnapExtensions.set(
         utter.onend = () => isDone = true;
         window.speechSynthesis.speak(utter);
         return () => isDone;
+    }
+);
+
+// XHR:
+
+SnapExtensions.set(
+    'xhr_request(mth, url, dta, hdrs)',
+    function (method, url, data, headers, proc) {
+        var response, i, header;
+        if (!proc.httpRequest) {
+            proc.httpRequest = new XMLHttpRequest();
+            proc.httpRequest.open(method, url, true);
+            proc.assertType(headers, 'list');
+            for (i = 1; i <= headers.length(); i += 1) {
+                header = headers.at(i);
+                proc.assertType(header, 'list');
+                proc.httpRequest.setRequestHeader(
+                    header.at(1),
+                    header.at(2)
+                );
+            }
+            proc.httpRequest.send(data || null);
+        } else if (proc.httpRequest.readyState === 4) {
+            response = proc.httpRequest.responseText;
+            proc.httpRequest = null;
+            return response;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
     }
 );
