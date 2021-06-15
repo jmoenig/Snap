@@ -25,6 +25,7 @@
 * maps: changed default style to OpenStreetMap
 * updated http-blocks library
 * updated pixels library
+* updated audio library
 
 ### 2021-06-14
 * new dev version
