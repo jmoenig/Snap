@@ -23,6 +23,7 @@
 * extensions: added long-form xhr primitive
 * extensions: added geolocation extension primitive
 * maps: changed default style to OpenStreetMap
+* updated http-blocks library
 
 ### 2021-06-14
 * new dev version
