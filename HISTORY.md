@@ -11,6 +11,7 @@
 * updated frequency-distribution-analysis library
 * updated animation library
 * updated words-sentences library
+' extensions: added tts
 
 ### 2021-06-14
 * new dev version

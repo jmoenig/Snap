@@ -27,7 +27,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, List, StageMorph, Costume*/
+/*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance*/
 
 modules.extensions = '2021-June-15';
 
@@ -46,7 +46,7 @@ var SnapExtensions = new Map();
     example: 'lst_sort(list, fn)'
 
     - domain-prefix:    3-letter lowercase identifier followee by an underscore
-               e.g.:    err_, lst_, txt_, dta_, map_
+               e.g.:    err_, lst_, txt_, dta_, map_, tts_
 
     - function-name: short, single word if possible, lowercase
     - parameter-list: comma separated names or type indicators
@@ -256,5 +256,21 @@ SnapExtensions.set(
     'map_style(name)',
     function (name) {
         this.parentThatIsA(StageMorph).worldMap.setHost(name);
+    }
+);
+
+// text-to-speech (tts_):
+
+SnapExtensions.set(
+    'tts_speak(txt, lang, pitch, rate)',
+    function (msg, accent, pitch, rate) {
+        var utter = new SpeechSynthesisUtterance(msg),
+            isDone = false;
+        utter.lang = accent;
+        utter.pitch = pitch;
+        utter.rate = rate;
+        utter.onend = () => isDone = true;
+        window.speechSynthesis.speak(utter);
+        return () => isDone;
     }
 );
