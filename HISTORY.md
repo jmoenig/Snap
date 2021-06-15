@@ -22,6 +22,7 @@
 * fixed #2850 (occasional invisible error message), thanks, Ken, for the bug report!
 * extensions: added long-form xhr primitive
 * extensions: added geolocation extension primitive
+* maps: changed default style to OpenStreetMap
 
 ### 2021-06-14
 * new dev version
