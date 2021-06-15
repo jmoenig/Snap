@@ -46,7 +46,8 @@ var SnapExtensions = new Map();
     domain-prefix_function-name(parameter-list)
     example: 'lst_sort(list, fn)'
 
-    - domain-prefix:    3-letter lowercase identifier followee by an underscore
+    - domain-prefix:    max 3-letter lowercase identifier
+                        followed by an underscore
                e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_, geo_, mda_
 
     - function-name: short, single word if possible, lowercase
@@ -355,5 +356,54 @@ SnapExtensions.set(
         soundRecorder.key = 'microphone';
         soundRecorder.popUp(this.world());
         return () => result;
+    }
+);
+
+// Database (db_):
+
+SnapExtensions.set(
+    'db_store(key, val)',
+    function (key, value, proc) {
+        proc.assertType(key, ['text', 'number']);
+        proc.assertType(value, ['text', 'number']);
+        window.localStorage.setItem('-snap-project-' + key, '' + value);
+    }
+);
+
+SnapExtensions.set(
+    'db_getall',
+    function () {
+        var str = window.localStorage,
+            len = str.length,
+            result = [],
+            key,
+            i;
+        for (i = 0; i < len; i += 1) {
+            key = str.key(i);
+            if (key.startsWith('-snap-project-')) {
+                result.push(new List([key.slice(14), str.getItem(key)]));
+            }
+        }
+        return new List(result);
+    }
+);
+
+SnapExtensions.set(
+    'db_remove(key)',
+    function (key, proc) {
+        proc.assertType(key, ['text', 'number']);
+        window.localStorage.removeItem('-snap-project-' + key);
+    }
+);
+
+SnapExtensions.set(
+    'db_get(key)',
+    function (key) {
+        var str = window.localStorage,
+            result = str.getItem('-snap-project-'+key);
+        if (!result) {
+           return false;
+        }
+        return result;
     }
 );
