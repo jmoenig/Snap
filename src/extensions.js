@@ -27,7 +27,8 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance*/
+/*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance,
+IDE_Morph, CamSnapshotDialogMorph*/
 
 modules.extensions = '2021-June-15';
 
@@ -46,7 +47,7 @@ var SnapExtensions = new Map();
     example: 'lst_sort(list, fn)'
 
     - domain-prefix:    3-letter lowercase identifier followee by an underscore
-               e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_, geo_
+               e.g.:    err_, lst_, txt_, dta_, map_, tts_, xhr_, geo_, mda_
 
     - function-name: short, single word if possible, lowercase
     - parameter-list: comma separated names or type indicators
@@ -308,3 +309,24 @@ SnapExtensions.set(
     }
 );
 
+// MediaComp (mda_)
+
+SnapExtensions.set(
+    'mda_snap',
+    function () {
+        var camDialog,
+            result = false;
+        camDialog = new CamSnapshotDialogMorph(
+            this.parentThatIsA(IDE_Morph),
+            this,
+            () => result = null,
+            function (costume) {
+                result = costume;
+                this.close();
+            }
+        );
+        camDialog.key = 'camera';
+        camDialog.popUp(this.world());
+        return () => result;
+    }
+);
