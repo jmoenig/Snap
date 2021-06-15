@@ -9,6 +9,7 @@
 * updated list-utilities library
 * extensions: documented function semantics
 * updated frequency-distribution-analysis library
+* updated animation library
 
 ### 2021-06-14
 * new dev version
