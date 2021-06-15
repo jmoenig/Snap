@@ -27,8 +27,8 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance,
-IDE_Morph, CamSnapshotDialogMorph*/
+/*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
+IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph*/
 
 modules.extensions = '2021-June-15';
 
@@ -327,6 +327,33 @@ SnapExtensions.set(
         );
         camDialog.key = 'camera';
         camDialog.popUp(this.world());
+        return () => result;
+    }
+);
+
+SnapExtensions.set(
+    'mda_record',
+    function () {
+        var soundRecorder,
+            result = false;
+        soundRecorder = new SoundRecorderDialogMorph(
+            function (audio) {
+                if (audio) {
+                    result = new Sound(audio, 'recording');
+                } else {
+                    result = null;
+                    this.destroy();
+                }
+            }
+        );
+
+        soundRecorder.cancel = function () {
+            result = null;
+            this.destroy();
+        };
+
+        soundRecorder.key = 'microphone';
+        soundRecorder.popUp(this.world());
         return () => result;
     }
 );
