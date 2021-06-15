@@ -158,7 +158,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-14';
+modules.blocks = '2021-June-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2095,11 +2095,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         img,
         morphToShow,
         isClickable = false,
-        ide = this.parentThatIsA(IDE_Morph),
+        ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
-        wrrld = this.world();
+        wrrld = this.world() || target.world();
 
     if ((value === undefined) || !wrrld) {
         return null;

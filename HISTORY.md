@@ -2,6 +2,11 @@
 
 ## in development:
 
+* **New Features:**
+    * new extension primitives
+* **Notable Fixes:**
+    * fixed occasional invisible error messages
+
 ### 2021-06-15
 * extensions: tweaked world-map primitives
 * updated maps library
@@ -14,6 +19,7 @@
 ' extensions: added tts
 * updated text-to-speech library
 * updated bar-charts library
+* fixed #2850 (occasional invisible error message), thanks, Ken, for the bug report!
 
 ### 2021-06-14
 * new dev version
