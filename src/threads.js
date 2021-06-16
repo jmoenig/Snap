@@ -62,7 +62,7 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions*/
 
-modules.threads = '2021-June-14';
+modules.threads = '2021-June-16';
 
 var ThreadManager;
 var Process;
@@ -1123,7 +1123,7 @@ Process.prototype.expectReport = function () {
 
 // Process Exception Handling
 
-Process.prototype.handleError = function (error, element) {
+Process.prototype.throwError = function (error, element) {
     var m = element,
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
     this.stop();
@@ -1143,6 +1143,30 @@ Process.prototype.handleError = function (error, element) {
         );
     }
 };
+
+Process.prototype.tryCatch = function (action, exception, errVarName) {
+    var next = this.context.continuation();
+
+    this.handleError = function(error) {
+        this.resetErrorHandling();
+        if (exception.expression instanceof CommandBlockMorph) {
+            exception.expression = exception.expression.blockSequence();
+        }
+        exception.pc = 0;
+        exception.outerContext.variables.addVar(errVarName);
+        exception.outerContext.variables.setVar(errVarName, error.message);
+        this.context = exception;
+        this.evaluate(next, new List(), true);
+    };
+
+    this.evaluate(action, new List(), true);
+};
+
+Process.prototype.resetErrorHandling = function () {
+    this.handleError = this.throwError;
+};
+
+Process.prototype.resetErrorHandling();
 
 Process.prototype.errorObsolete = function () {
     throw new Error('a custom block definition is missing');

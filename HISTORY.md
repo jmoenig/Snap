@@ -8,6 +8,9 @@
     * fixed occasional invisible error messages
 
 ### 2021-06-15
+* threads: added exception handling primitives for try/catch
+
+### 2021-06-15
 * extensions: tweaked world-map primitives
 * updated maps library
 * extensions: new naming convention
