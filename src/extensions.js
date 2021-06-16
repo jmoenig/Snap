@@ -30,7 +30,7 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph*/
 
-modules.extensions = '2021-June-15';
+modules.extensions = '2021-June-16';
 
 // Global stuff
 
@@ -66,6 +66,20 @@ SnapExtensions.set(
     'err_error(msg)',
     function (msg) {
         throw new Error(msg);
+    }
+);
+
+SnapExtensions.set(
+    'err_try(cmd, catch, err)',
+    function (action, exception, errVarName, proc) {
+        proc.tryCatch(action, exception, errVarName);
+    }
+);
+
+SnapExtensions.set(
+    'err_reset',
+    function (proc) {
+        proc.resetErrorHandling();
     }
 );
 
