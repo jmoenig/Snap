@@ -12,6 +12,7 @@
 * extensions: added try-catch extension primitives
 * updated try-catch library
 * extensions: added object-naming extension primitive
+* updated text-costume library
 
 ### 2021-06-15
 * extensions: tweaked world-map primitives
