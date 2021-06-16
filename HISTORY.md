@@ -10,6 +10,7 @@
 ### 2021-06-15
 * threads: added exception handling primitives for try/catch
 * extensions: added try-catch extension primitives
+* updated try-catch library
 
 ### 2021-06-15
 * extensions: tweaked world-map primitives
