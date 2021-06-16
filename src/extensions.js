@@ -28,7 +28,8 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
-IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph*/
+IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, SpriteMorph,
+isSnapObject*/
 
 modules.extensions = '2021-June-16';
 
@@ -419,5 +420,28 @@ SnapExtensions.set(
            return false;
         }
         return result;
+    }
+);
+
+// Object properties (obj_)
+
+SnapExtensions.set(
+    'obj_name(obj, name)',
+    function (obj, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(obj, [SpriteMorph, StageMorph, Costume, Sound]);
+        if (isSnapObject(obj)) {
+            obj.setName(ide.newSpriteName(name, obj));
+            ide.recordUnsavedChanges();
+        } else if (obj instanceof Costume) {
+            obj.name = this.newCostumeName(name, obj);
+            obj.version = Date.now();
+            ide.hasChangedMedia = true;
+            ide.recordUnsavedChanges();
+        } else if (obj instanceof Sound) {
+            obj.name = ide.newSoundName(name);
+            ide.hasChangedMedia = true;
+            ide.recordUnsavedChanges();
+        }
     }
 );
