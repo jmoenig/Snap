@@ -28,8 +28,7 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
-IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, SpriteMorph,
-isSnapObject*/
+IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject*/
 
 modules.extensions = '2021-June-16';
 
@@ -429,7 +428,7 @@ SnapExtensions.set(
     'obj_name(obj, name)',
     function (obj, name, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
-        proc.assertType(obj, [SpriteMorph, StageMorph, Costume, Sound]);
+        proc.assertType(obj, ['sprite', 'stage', 'costume', 'sound']);
         if (isSnapObject(obj)) {
             obj.setName(ide.newSpriteName(name, obj));
             ide.recordUnsavedChanges();
