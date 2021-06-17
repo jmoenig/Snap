@@ -62,7 +62,7 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions*/
 
-modules.threads = '2021-June-16';
+modules.threads = '2021-June-17';
 
 var ThreadManager;
 var Process;
@@ -1690,8 +1690,9 @@ Process.prototype.reportGetVar = function () {
     );
 };
 
-Process.prototype.doShowVar = function (varName) {
-    var varFrame = (this.context || this.homeContext).variables,
+Process.prototype.doShowVar = function (varName, context) {
+    // context is an optional start-context to be used by extensions
+    var varFrame = (context || (this.context || this.homeContext)).variables,
         stage,
         watcher,
         target,
@@ -1753,9 +1754,10 @@ Process.prototype.doShowVar = function (varName) {
     }
 };
 
-Process.prototype.doHideVar = function (varName) {
+Process.prototype.doHideVar = function (varName, context) {
     // if no varName is specified delete all watchers on temporaries
-    var varFrame = this.context.variables,
+    // context is an optional start-context to be used by extensions
+    var varFrame = (context || this.context).variables,
         stage,
         watcher,
         target,
@@ -6868,6 +6870,16 @@ Context.prototype.stackSize = function () {
         return 1;
     }
     return 1 + this.parentContext.stackSize();
+};
+
+Context.prototype.isInCustomBlock = function () {
+    if (this.isCustomBlock) {
+        return true;
+    }
+    if (this.parentContext) {
+        return this.parentContext.isInCustomBlock();
+    }
+    return false;
 };
 
 // Variable /////////////////////////////////////////////////////////////////

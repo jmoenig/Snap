@@ -28,7 +28,7 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
-IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject*/
+IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop*/
 
 modules.extensions = '2021-June-17';
 
@@ -81,6 +81,11 @@ SnapExtensions.set(
     function (proc) {
         proc.resetErrorHandling();
     }
+);
+
+SnapExtensions.set(
+    'err_ignore',
+    nop
 );
 
 // list utils (lst_):
@@ -303,7 +308,7 @@ SnapExtensions.set(
     }
 );
 
-// Geo-location (geo_)
+// Geo-location (geo_):
 
 SnapExtensions.set(
     'geo_location(acc?)',
@@ -438,7 +443,7 @@ SnapExtensions.set(
     }
 );
 
-// Object properties (obj_)
+// Object properties (obj_):
 
 SnapExtensions.set(
     'obj_name(obj, name)',
@@ -458,5 +463,104 @@ SnapExtensions.set(
             ide.hasChangedMedia = true;
             ide.recordUnsavedChanges();
         }
+    }
+);
+
+// Variables (var_):
+
+SnapExtensions.set(
+    'var_declare(scope, name)',
+    function (scope, name, proc) {
+        var frame;
+        proc.assertType(name, 'text');
+        if (name === '') {return; }
+        if (scope === 'script') {
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        } else if (scope === 'sprite') {
+            frame = this.variables;
+        } else {
+            frame = this.globalVariables();
+        }
+        if (frame.vars[name] === undefined) {
+            frame.addVar(name);
+        }
+    }
+);
+
+SnapExtensions.set(
+    'var_delete(name)',
+    function (name, proc) {
+        var local;
+        proc.assertType(name, 'text');
+        if (name === '') {return; }
+        local = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        if (local.vars[name] !== undefined) {
+            delete local.vars[name];
+        } else if (this.deletableVariableNames().indexOf(name) > -1) {
+            this.deleteVariable(name);
+        }
+    }
+);
+
+SnapExtensions.set(
+    'var_get(name)',
+    function (name, proc) {
+        proc.assertType(name, 'text');
+        return proc.homeContext.variables.getVar(name);
+    }
+);
+
+SnapExtensions.set(
+    'var_set(name, val)',
+    function (name, val, proc) {
+        var local;
+        proc.assertType(name, 'text');
+        if (name === '') {return; }
+        local = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        local.setVar(name, val);
+    }
+);
+
+SnapExtensions.set(
+    'var_show(name)',
+    function (name, proc) {
+        proc.doShowVar(
+            name,
+            proc.context.isInCustomBlock() ?
+                proc.homeContext
+                : proc.context.outerContext
+        );
+    }
+);
+
+SnapExtensions.set(
+    'var_hide(name)',
+    function (name, proc) {
+        proc.doHideVar(
+            name,
+            proc.context.isInCustomBlock() ?
+                proc.homeContext
+                : proc.context.outerContext
+        );
+    }
+);
+
+// IDE (ide_):
+
+SnapExtensions.set(
+    'ide_refreshpalette(name)',
+    function (name) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        if (name !== 'variables') {
+            ide.flushBlocksCache(name);
+        }
+        ide.flushBlocksCache('variables'); // b/c of inheritance
+        ide.refreshPalette();
     }
 );
