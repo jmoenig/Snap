@@ -7,6 +7,10 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
+### 2021-06-18
+* extensions: added text extension primitives
+
+
 ### 2021-06-17
 * extensions: added APL extension primitives
 * updated apl library

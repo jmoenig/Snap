@@ -30,7 +30,7 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop*/
 
-modules.extensions = '2021-June-17';
+modules.extensions = '2021-June-18';
 
 // Global stuff
 
@@ -110,6 +110,13 @@ SnapExtensions.set(
     'txt_lowercase(txt)',
     function (txt) {
         return txt.toLowerCase();
+    }
+);
+
+SnapExtensions.set(
+    'txt_indexof(sub, txt)',
+    function (sub, txt) {
+        return txt.indexOf(sub) + 1;
     }
 );
 
