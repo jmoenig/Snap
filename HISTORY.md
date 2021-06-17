@@ -9,6 +9,7 @@
 
 ### 2021-06-16
 * extensions: added APL extension primitives
+* updated apl library
 
 ### 2021-06-16
 * threads: added exception handling primitives for try/catch
