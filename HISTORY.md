@@ -11,6 +11,7 @@
 * extensions: added APL extension primitives
 * updated apl library
 * threads, extensions: added variable extension primitives
+* updated make-variables library
 
 ### 2021-06-16
 * threads: added exception handling primitives for try/catch
