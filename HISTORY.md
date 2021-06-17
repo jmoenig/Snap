@@ -7,7 +7,10 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
-### 2021-06-15
+### 2021-06-16
+* extensions: added APL extension primitives
+
+### 2021-06-16
 * threads: added exception handling primitives for try/catch
 * extensions: added try-catch extension primitives
 * updated try-catch library

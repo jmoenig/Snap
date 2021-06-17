@@ -30,7 +30,7 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject*/
 
-modules.extensions = '2021-June-16';
+modules.extensions = '2021-June-17';
 
 // Global stuff
 
@@ -136,6 +136,22 @@ SnapExtensions.set(
     'dta_group(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicGroup(data, fn);
+    }
+);
+
+SnapExtensions.set(
+    'dta_transpose(list)',
+    function (data, proc) {
+        proc.assertType(data, 'list');
+        return data.transpose();
+    }
+);
+
+SnapExtensions.set(
+    'dta_crossproduct(list)',
+    function (data, proc) {
+        proc.assertType(data, 'list');
+        return data.crossproduct();
     }
 );
 
