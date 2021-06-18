@@ -10,6 +10,7 @@
 ### 2021-06-18
 * extensions: added text extension primitives
 * updated strings library
+* extensions: tweaked variable declaration extension primitive, commented out palette refresh prim
 
 ### 2021-06-17
 * extensions: added APL extension primitives

@@ -478,7 +478,7 @@ SnapExtensions.set(
 SnapExtensions.set(
     'var_declare(scope, name)',
     function (scope, name, proc) {
-        var frame;
+        var ide, frame;
         proc.assertType(name, 'text');
         if (name === '') {return; }
         if (scope === 'script') {
@@ -492,6 +492,9 @@ SnapExtensions.set(
         }
         if (frame.vars[name] === undefined) {
             frame.addVar(name);
+            ide = this.parentThatIsA(IDE_Morph);
+            ide.flushBlocksCache('variables'); // b/c of inheritance
+            ide.refreshPalette();
         }
     }
 );
@@ -560,6 +563,7 @@ SnapExtensions.set(
 
 // IDE (ide_):
 
+/*
 SnapExtensions.set(
     'ide_refreshpalette(name)',
     function (name) {
@@ -571,3 +575,4 @@ SnapExtensions.set(
         ide.refreshPalette();
     }
 );
+*/
