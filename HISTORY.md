@@ -14,6 +14,7 @@
 * tweaked make-variables library
 * tweaked strings library
 * extensions: added color library dropdown menu
+* blocks, threads, extensions: separated extension primitives from extension dropdown menus
 
 ### 2021-06-17
 * extensions: added APL extension primitives

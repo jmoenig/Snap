@@ -34,7 +34,10 @@ modules.extensions = '2021-June-18';
 
 // Global stuff
 
-var SnapExtensions = new Map();
+var SnapExtensions = {
+    primitives: new Map(),
+    menus: new Map()
+};
 
 /*
     SnapExtensions is a global dictionary of named functions which appear
@@ -62,42 +65,42 @@ var SnapExtensions = new Map();
 
 // errors & exceptions (err_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
         throw new Error(msg);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'err_try(cmd, catch, err)',
     function (action, exception, errVarName, proc) {
         proc.tryCatch(action, exception, errVarName);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'err_reset',
     function (proc) {
         proc.resetErrorHandling();
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'err_ignore',
     nop
 );
 
 // list utils (lst_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'lst_sort(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicSort(data, fn);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'lst_linked(list)',
     function (data) {
         return data.isLinked;
@@ -106,14 +109,14 @@ SnapExtensions.set(
 
 // text utils (txt_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'txt_lowercase(txt)',
     function (txt) {
         return txt.toLowerCase();
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'txt_indexof(sub, txt)',
     function (sub, txt) {
         return txt.indexOf(sub) + 1;
@@ -122,7 +125,7 @@ SnapExtensions.set(
 
 // data sciene & frequency distribution analysis (dta_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'dta_analyze(list)',
     function (list) {
         var dict = new Map(),
@@ -144,14 +147,14 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'dta_group(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicGroup(data, fn);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'dta_transpose(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
@@ -159,7 +162,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'dta_crossproduct(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
@@ -169,63 +172,63 @@ SnapExtensions.set(
 
 // World map (map_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_zoom',
     function () {
         return this.parentThatIsA(StageMorph).worldMap.zoom;
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_zoom(n)',
     function (num) {
         this.parentThatIsA(StageMorph).worldMap.setZoom(num);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_lon(x)',
     function (x) {
         return this.parentThatIsA(StageMorph).worldMap.lonFromSnapX(x);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_lat(y)',
     function (y) {
         return this.parentThatIsA(StageMorph).worldMap.latFromSnapY(y);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_view(lon, lat)',
     function (lon, lat) {
         this.parentThatIsA(StageMorph).worldMap.setView(lon, lat);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_y(lat)',
     function (lat) {
         return this.parentThatIsA(StageMorph).worldMap.snapYfromLat(lat);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_x(lon)',
     function (lon) {
         return this.parentThatIsA(StageMorph).worldMap.snapXfromLon(lon);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_pan(x, y)',
     function (x, y) {
         this.parentThatIsA(StageMorph).worldMap.panBy(x, y);
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_dist(lat1, lon1, lat2, lon2)',
     function (lat1, lon1, lat2, lon2) {
         return this.parentThatIsA(StageMorph).worldMap.distanceInKm(
@@ -237,7 +240,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_update',
     function () {
         var stage = this.parentThatIsA(StageMorph);
@@ -246,14 +249,14 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_loaded',
     function () {
         return !this.parentThatIsA(StageMorph).worldMap.loading;
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_costume',
     function () {
         return new Costume(
@@ -263,7 +266,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'map_style(name)',
     function (name) {
         this.parentThatIsA(StageMorph).worldMap.setHost(name);
@@ -272,7 +275,7 @@ SnapExtensions.set(
 
 // text-to-speech (tts_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'tts_speak(txt, lang, pitch, rate)',
     function (msg, accent, pitch, rate) {
         var utter = new SpeechSynthesisUtterance(msg),
@@ -288,7 +291,7 @@ SnapExtensions.set(
 
 // XHR:
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
     function (method, url, data, headers, proc) {
         var response, i, header;
@@ -317,7 +320,7 @@ SnapExtensions.set(
 
 // Geo-location (geo_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'geo_location(acc?)',
     function (includeAccuracy) {
         var crd = new List(),
@@ -354,7 +357,7 @@ SnapExtensions.set(
 
 // MediaComp (mda_)
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'mda_snap',
     function () {
         var camDialog,
@@ -374,7 +377,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'mda_record',
     function () {
         var soundRecorder,
@@ -403,7 +406,7 @@ SnapExtensions.set(
 
 // Database (db_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'db_store(key, val)',
     function (key, value, proc) {
         proc.assertType(key, ['text', 'number']);
@@ -412,7 +415,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'db_getall',
     function () {
         var str = window.localStorage,
@@ -430,7 +433,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'db_remove(key)',
     function (key, proc) {
         proc.assertType(key, ['text', 'number']);
@@ -438,7 +441,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'db_get(key)',
     function (key) {
         var str = window.localStorage,
@@ -452,7 +455,7 @@ SnapExtensions.set(
 
 // Object properties (obj_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'obj_name(obj, name)',
     function (obj, name, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
@@ -475,7 +478,7 @@ SnapExtensions.set(
 
 // Variables (var_):
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_declare(scope, name)',
     function (scope, name, proc) {
         var ide, frame;
@@ -499,7 +502,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_delete(name)',
     function (name, proc) {
         var local;
@@ -516,7 +519,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_get(name)',
     function (name, proc) {
         proc.assertType(name, 'text');
@@ -524,7 +527,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_set(name, val)',
     function (name, val, proc) {
         var local;
@@ -537,7 +540,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_show(name)',
     function (name, proc) {
         proc.doShowVar(
@@ -549,7 +552,7 @@ SnapExtensions.set(
     }
 );
 
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'var_hide(name)',
     function (name, proc) {
         proc.doHideVar(
@@ -564,7 +567,7 @@ SnapExtensions.set(
 // IDE (ide_):
 // not needed right now, commented out for possibly later
 /*
-SnapExtensions.set(
+SnapExtensions.primitives.set(
     'ide_refreshpalette(name)',
     function (name) {
         var ide = this.parentThatIsA(IDE_Morph);
@@ -579,8 +582,8 @@ SnapExtensions.set(
 
 // Brian's colors (sigh, clr_):
 
-SnapExtensions.set(
-    'clr_menu',
+SnapExtensions.menus.set(
+    'clr_numbers',
     function () {
         var menuName = this.parent.inputs()[0].evaluate(), // first slot
             output,

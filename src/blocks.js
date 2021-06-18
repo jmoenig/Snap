@@ -158,7 +158,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-15';
+modules.blocks = '2021-June-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9329,7 +9329,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
 
 InputSlotMorph.prototype.primitivesMenu = function () {
     var dict = {},
-        allNames = Array.from(SnapExtensions.keys());
+        allNames = Array.from(SnapExtensions.primitives.keys());
 
     allNames.sort().forEach(name =>
         dict[name] = name

@@ -62,7 +62,7 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions*/
 
-modules.threads = '2021-June-17';
+modules.threads = '2021-June-18';
 
 var ThreadManager;
 var Process;
@@ -819,7 +819,7 @@ Process.prototype.doApplyExtension = function (prim, args) {
 };
 
 Process.prototype.reportApplyExtension = function (prim, args) {
-    var ext = SnapExtensions.get(prim);
+    var ext = SnapExtensions.primitives.get(prim);
     if (isNil(ext)) {
         throw new Error('missing / unspecified extension: ' + prim);
     }
