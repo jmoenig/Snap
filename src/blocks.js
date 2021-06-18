@@ -9082,6 +9082,7 @@ InputSlotMorph.prototype.menuFromDict = function (
 {
     var key, dial, flag,
     	myself = this,
+        selector,
         block = this.parentThatIsA(BlockMorph),
         ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(
@@ -9110,7 +9111,18 @@ InputSlotMorph.prototype.menuFromDict = function (
         }
         choices = choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices]();
+        if (choices.indexOf('ext_') === 0) {
+            selector = choices.slice(4);
+            choices = SnapExtensions.menus.get(selector);
+            if (choices) {
+                choices = choices.call(this);
+            } else {
+                menu.addItem('cannot find extension menu "' + selector + '"');
+                return menu;
+            }
+        } else {
+            choices = this[choices]();
+        }
         if (!choices) { // menu has already happened
             return;
         }

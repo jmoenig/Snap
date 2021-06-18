@@ -15,6 +15,7 @@
 * tweaked strings library
 * extensions: added color library dropdown menu
 * blocks, threads, extensions: separated extension primitives from extension dropdown menus
+* blocks, byob: dynamic extension dropdown menu support
 
 ### 2021-06-17
 * extensions: added APL extension primitives
