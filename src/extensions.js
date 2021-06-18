@@ -562,7 +562,7 @@ SnapExtensions.set(
 );
 
 // IDE (ide_):
-
+// not needed right now, commented out for possibly later
 /*
 SnapExtensions.set(
     'ide_refreshpalette(name)',
@@ -576,3 +576,232 @@ SnapExtensions.set(
     }
 );
 */
+
+// Brian's colors (sigh, clr_):
+
+SnapExtensions.set(
+    'clr_menu',
+    function () {
+        var menuName = this.parent.inputs()[0].evaluate(), // first slot
+            output,
+            menus = {
+                'color number': [
+                    "0 black=0",
+                    "14 white=14",
+                    "20 spectral red=20",
+                    "25 darkest red=25",
+                    "30 saddle brown=30",
+                    "35 darkest brown=35",
+                    "40 spectral orange=40",
+                    "45 darkest orange=45",
+                    "50 spectral yellow=50",
+                    "55 darkest yellow=55",
+                    "60 spectral green=60",
+                    "65 darkest green=65",
+                    "70 spectral cyan=70",
+                    "75 darkest cyan=75",
+                    "80 spectral blue=80",
+                    "85 darkest blue=85",
+                    "90 spectral violet=90",
+                    "95 magenta=95"
+                ],
+                'fair hue': [
+                    "0 red=0",
+                    "12.5 brown=12.5",
+                    "25 orange=25",
+                    "37.5 yellow=37.5",
+                    "50 green=50",
+                    "62.5 cyan=62.5",
+                    "75 blue=75",
+                    "87.5 violet=87.5"
+                ],
+                'crayon': [
+                    "grays",
+                    [
+                        "0 black #000000=0",
+                        "1 gray7 #121212=1",
+                        "2 gray14 #242424=2",
+                        "3 gray21 #363636=3",
+                        "4 gray28 #484848=4",
+                        "5 gray36 #5c5c5c=5",
+                        "6 gray43 #6d6d6d=6",
+                        "7 gray50 #7f7f7f=7",
+                        "8 gray57 #919191=8",
+                        "9 gray64 #a3a3a3=9",
+                        "10 gray71 #b5b5b5=10",
+                        "11 gray78 #c8c8c8=11",
+                        "12 gray85 #dadada=12",
+                        "13 gray92 #ececec=13",
+                        "14 white #ffffff=14"
+                    ],
+                    "pinks",
+                    [
+                        "15 deep pink #ff1493=15",
+                        "16 hot pink #ff69b4=16",
+                        "17 bright pink #ff007f=17",
+                        "18 raspberry #e30b5d=18",
+                        "19 amaranth #e52b50=19"
+                    ],
+                    "reds",
+                    [
+                        "20 red #ff0000=20",
+                        "21 burgundy #900020=21",
+                        "22 cherry #990000=22",
+                        "23 dark candy apple red #a40000=23",
+                        "24 sanguine #c00000=24",
+                        "25 maroon #800000=25",
+                        "26 crimson #c90016=26",
+                        "27 Lists #d94d11=27",
+                        "28 candy apple red #ff0800=28",
+                        "29 coquelicot #ff3800=29"
+                    ],
+                    "browns",
+                    [
+                        "30 saddle brown #8b4513=30",
+                        "31 chocolate #7b3f00=31",
+                        "32 kobicha #6b4423=32",
+                        "33 sepia #704214=33",
+                        "34 chestnut #954535=34",
+                        "35 dark brown #654321=35",
+                        "36 brown #964b00=36",
+                        "37 golden brown #996515=37",
+                        "38 cinnamon #b87333=38",
+                        "39 copper #d2691e=39"
+                    ],
+                    "oranges",
+                    [
+                        "40 orange #ff7f00=40",
+                        "41 Pantone orange #ff5800=41",
+                        "42 pumpkin #ff7518=42",
+                        "43 Variables #f3761d=43",
+                        "44 Spanish orange #e86100=44",
+                        "45 burnt orange #cc5500=45",
+                        "46 sinopia #cb410b=46",
+                        "47 ochre #cc7722=47",
+                        "48 carrot #ed9121=48",
+                        "49 tangerine #f28500=49"
+                    ],
+                    "yellows",
+                    [
+                        "50 yellow #ffff00=50",
+                        "51 Control #e6a822=51",
+                        "52 dark goldenrod #b8860b=52",
+                        "53 goldenrod #daa520=53",
+                        "54 saffron #f4c430=54",
+                        "55 sandstorm #ecd540=55",
+                        "56 mustard #ffdb58=56",
+                        "57 gold #ffd700=57",
+                        "58 egg yolk #fee33e=58",
+                        "59 rubber duck #fbe108=59"
+                    ],
+                    "greens",
+                    [
+                        "60 lime #00ff00=60",
+                        "61 apple green #8db600=61",
+                        "62 Operators #62c213=62",
+                        "63 forest green #228b22=63",
+                        "64 green #008000=64",
+                        "65 dark green #006400=65",
+                        "66 dark pastel green #03c03c=66",
+                        "67 emerald #50c878=67",
+                        "68 mint #3eb489=68",
+                        "69 Pen #00a178=69"
+                    ],
+                    "cyans",
+                    [
+                        "70 aqua (cyan) #00ffff=70",
+                        "71 dark cyan #008b8b=71",
+                        "72 cerulean #007ba7=72",
+                        "73 iceberg #71a6d2=73",
+                        "74 Sensing #0494dc=74",
+                        "75 teal #008080=75",
+                        "76 light sky blue #87cefa=76",
+                        "77 deep sky blue #00bfff=77",
+                        "78 dodger blue #1e90ff=78",
+                        "79 azure #007fff=79"
+                    ],
+                    "blues",
+                    [
+                        "80 blue #0000ff=80",
+                        "81 midnight blue #191970=81",
+                        "82 dark powder blue #003399=82",
+                        "83 cobalt #0047ab=83",
+                        "84 denim #1560bd=84",
+                        "85 navy blue #000080=85",
+                        "86 steel blue #4682b4=86",
+                        "87 Motion #4a6cd4=87",
+                        "88 cornflower #6495ed=88",
+                        "89 slate blue #6a5acd=89"
+                    ],
+                    "purples",
+                    [
+                        "90 violet #8000ff=90",
+                        "91 Looks #8f56e3=91",
+                        "92 grape #6f2da8=92",
+                        "93 indigo #4b0082=93",
+                        "94 x11 purple #a020f0=94",
+                        "95 magenta (fuchia) #ff00ff=95",
+                        "96 dark orchid #9932cc=96",
+                        "97 Sound #cf4ad9=97",
+                        "98 purple #7f007f=98",
+                        "99 dark magenta #8b008b=99"
+                    ]
+                ]
+            };
+
+        function makeMenuHelper(items, output) {
+            // in an array, walk through the items in pairs
+            var i = 0,
+                label, possiblyNested, hasEquals, nestingOutput;
+            while (i < items.length) {
+                label = items[i];
+                possiblyNested = items[i + 1];
+                // if possiblyNested is array, it is a nest under label
+                // if possiblyNested is string, it is just a sibling
+                if (possiblyNested === undefined) {
+                    // label is actually the last element of the list
+                    hasEquals = label.split("=");
+                    if (hasEquals.length === 2) {
+                        output[hasEquals[0]] = hasEquals[1];
+                        i += 1;
+                    } else if (hasEquals.length === 3) {
+                        output[hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]]
+                            = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
+                        i += 1;
+                    } else {
+                        output[label] = label;
+                        i += 1;
+                    }
+                } else if (typeof possiblyNested == "string") {
+                    hasEquals = label.split("=");
+                    if (hasEquals.length == 2) {
+                        output[hasEquals[0]] = hasEquals[1];
+                        i += 1;
+                    } else if (hasEquals.length == 3) {
+                        output[hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]]
+                            = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
+                        i += 1;
+                    } else {
+                        output[label] = label;
+                        i += 1;
+                    }
+                } else if (Array.isArray(possiblyNested)) {
+                    nestingOutput = {};
+                    makeMenuHelper(possiblyNested, nestingOutput);
+                    output[label] = nestingOutput;
+                    i += 2;
+                } else {
+                    throw new Error("Bad value at index " + i);
+                }
+            }
+        }
+
+        try {
+            output = {};
+            makeMenuHelper(menus[menuName], output);
+            return output;
+        } catch(err) {
+            nop(err);
+        }
+    }
+);
