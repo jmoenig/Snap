@@ -28,9 +28,10 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
-IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop*/
+IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
+Color, contains*/
 
-modules.extensions = '2021-June-18';
+modules.extensions = '2021-June-19';
 
 // Global stuff
 
@@ -580,10 +581,43 @@ SnapExtensions.primitives.set(
 );
 */
 
-// Brian's colors (sigh, clr_):
+// Colors (clr_):
+
+SnapExtensions.primitives.set(
+    'clr_rgba(r, g, b, a)',
+    function (r, g, b, a) {
+        return new Color(r, g, b, a);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_channel(clr, rgba)',
+    function (clr, rgba) {
+        if (contains(['r', 'g', 'b', 'a'], rgba)) {
+            return clr[rgba];
+        }
+        throw new Error('unknown rgba color channel "' + rgba + '"');
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_hsv(h, s, v)',
+    function (h, s, v) {
+        var c = new Color();
+        c.set_hsv(h, s, v);
+        return c;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_setpen(clr)',
+    function (clr) {
+        this.setColor(clr);
+    }
+);
 
 SnapExtensions.menus.set(
-    'clr_numbers',
+    'clr_numbers', // Brian's browns and oranges, sigh...
     function () {
         var menuName = this.parent.inputs()[0].evaluate(), // first slot
             output,

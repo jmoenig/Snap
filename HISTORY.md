@@ -7,6 +7,9 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
+### 2021-06-19
+* extensions: added color extension primitives
+
 ### 2021-06-18
 * extensions: added text extension primitives
 * updated strings library
