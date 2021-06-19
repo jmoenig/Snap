@@ -10,6 +10,7 @@
 ### 2021-06-19
 * extensions: added color extension primitives
 * byob: fixed search for dynamic extension menus
+* tweaked make-vars library to reduce internal dependencies
 
 ### 2021-06-18
 * extensions: added text extension primitives
