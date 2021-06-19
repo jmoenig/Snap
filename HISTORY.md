@@ -9,6 +9,7 @@
 
 ### 2021-06-19
 * extensions: added color extension primitives
+* byob: fixed search for dynamic extension menus
 
 ### 2021-06-18
 * extensions: added text extension primitives

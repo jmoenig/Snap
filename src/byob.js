@@ -106,7 +106,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-June-18';
+modules.byob = '2021-June-19';
 
 // Declarations
 
@@ -380,16 +380,19 @@ CustomBlockDefinition.prototype.menuSearchWords = function () {
         var menu = this.dropDownMenuOf(slot);
         if (menu) {
             if (isString(menu)) { // special menu, translates its values
-                menu = InputSlotMorph.prototype[menu](true);
-                terms.push(
-                    Object.values(menu).map(entry => {
-                        if (isNil(entry)) {return ''; }
-                        if (entry instanceof Array) {
-                            return localize(entry[0]);
-                        }
-                        return entry.toString();
-                    }).join(' ')
-                );
+                if (typeof InputSlotMorph.prototype[menu] === 'function') {
+                    // catch typos in extension menus
+                    menu = InputSlotMorph.prototype[menu](true);
+                    terms.push(
+                        Object.values(menu).map(entry => {
+                            if (isNil(entry)) {return ''; }
+                            if (entry instanceof Array) {
+                                return localize(entry[0]);
+                            }
+                            return entry.toString();
+                        }).join(' ')
+                    );
+                }
             } else { // assume a dictionary, take its keys
                 terms.push(Object.keys(menu).join(' '));
             }
