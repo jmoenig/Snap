@@ -616,6 +616,13 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'clr_pen',
+    function () {
+        return this.color;
+    }
+);
+
 SnapExtensions.menus.set(
     'clr_numbers', // Brian's browns and oranges, sigh...
     function () {
