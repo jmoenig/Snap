@@ -601,6 +601,13 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'clr_hsv(clr)',
+    function (clr) {
+        return new List(clr.hsv());
+    }
+);
+
+SnapExtensions.primitives.set(
     'clr_hsv(h, s, v)',
     function (h, s, v) {
         var c = new Color();
