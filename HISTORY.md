@@ -4,8 +4,13 @@
 
 * **New Features:**
     * new extension primitives
+* **Notable Changes:**
+    * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS exstensions
 * **Notable Fixes:**
     * fixed occasional invisible error messages
+
+### 2021-06-19
+* updated extensions documentation
 
 ### 2021-06-19
 * extensions: added color extension primitives

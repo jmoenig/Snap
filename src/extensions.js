@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, contains*/
 
-modules.extensions = '2021-June-19';
+modules.extensions = '2021-June-20';
 
 // Global stuff
 
@@ -41,9 +41,19 @@ var SnapExtensions = {
 };
 
 /*
-    SnapExtensions is a global dictionary of named functions which appear
-    in the drop-down menus of the hidden extension "primitive" blocks sorted
-    alphabetically.
+    SnapExtensions is a set of two global dictionaries of named functions to be
+    used as extension primitives for blocks or dynamic dropdown menus. Block
+    extensions are stored in the "primitives" dictionary of SnapExtensions,
+    dynamic dropdown menus in the "menus" section.
+
+    
+    1. Primitives (additional blocks)
+    =================================
+    The names under which primitives are stored will apear in the dropdown
+    menus of the hidden extension "primitive" blocks sorted alphabetically.
+    (You can find those extension primitives in Snap's search bar or in dev
+    mode. There are two version of the primitive block, a command version and
+    a reporter one, both show the same list of available extensions.
 
     naming conventions
     ------------------
@@ -62,6 +72,40 @@ var SnapExtensions = {
     - functions are called by the "primitive" blocks with any arguments provided
     - "this" refers to the current snap object (sprite or stage) at call-time
     - a reference to the current process is always passed as last argument
+
+
+    2. Menus (for input slots)
+    ==========================
+    The names of the available dynamic drowdown menus can be written into the
+    "options" dialog when defining an input slot. Additionally you can choose
+    from a list of available menus when holding down the shift-key while
+    clicking on the partial-gear button in Snap's input-slot dialog.
+
+    naming conventions
+    ------------------
+    domain-prefix_function-name
+    example: 'clr_number'
+
+    - domain-prefix:    max 3-letter lowercase identifier
+                        followed by an underscore
+               e.g.:    clr_, txt_, lst_
+
+    - function-name: short, single word if possible, lowercase
+    - NOTE: dynamic menu functions cannot have any inputs
+
+    function semantics
+    ------------------
+    - "this" refers to the current input-slot at call-time
+    - to get a handle on the current block use "this.parentThatIsA(BlockMorph")
+    - likewise to get a handle on the current sprite use
+      "this.parentThatIsA(IDE_Morph).currentSprite"
+    - if you want the menu of one input slot to depend on the contents of
+      another input slot of the same block, you can get a handle to the block
+      using the above method, and then access all inputs by calling
+      "block.inputs()". This will give you an array of all input slots.
+      You can access the contents of an input slot by calling "slot.evaluate()"
+
+    Whatever you do, please use these extension capabilities sensibly.
 */
 
 // errors & exceptions (err_):
