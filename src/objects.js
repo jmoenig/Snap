@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-June-09';
+modules.objects = '2021-June-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -1508,6 +1508,18 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'code of %cmdRing'
         },
 
+        // Extensions
+        doApplyExtension: {
+            type: 'command',
+            category: 'other',
+            spec: 'primitive %prim %mult%s'
+        },
+        reportApplyExtension: {
+            type: 'reporter',
+            category: 'other',
+            spec: 'primitive %prim %mult%s'
+        },
+
         // Video motion
         doSetVideoTransparency: {
             type: 'command',
@@ -1520,7 +1532,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']]
-        },
+        }
     };
 };
 
@@ -2837,6 +2849,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
         }
 
     /////////////////////////////////
@@ -9010,6 +9025,9 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
         }
 
     /////////////////////////////////

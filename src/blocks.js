@@ -146,19 +146,19 @@
 
 /*global Array, BoxMorph,
 Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
-Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph, ZERO,
-String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
-document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
-radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
+Morph, MorphicPreferences, Object, ScrollFrameMorph, ShadowMorph, ZERO, Sound,
+String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph, nop,
+document, getDocumentPositionOf, isNaN, isString, newCanvas, parseFloat, isNil,
+radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, SymbolMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
-Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil, CLEAR,
+Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
+CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-11';
+modules.blocks = '2021-June-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -351,6 +351,11 @@ SyntaxElementMorph.prototype.labelParts = {
             '(3) sawtooth' : 3,
             '(4) triangle' : 4
         }
+    },
+    '%prim': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'primitivesMenu'
     },
     '%audio': {
         type: 'input',
@@ -2095,11 +2100,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         img,
         morphToShow,
         isClickable = false,
-        ide = this.parentThatIsA(IDE_Morph),
+        ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
-        wrrld = this.world();
+        wrrld = this.world() || target.world();
 
     if ((value === undefined) || !wrrld) {
         return null;
@@ -9083,6 +9088,7 @@ InputSlotMorph.prototype.menuFromDict = function (
 {
     var key, dial, flag,
     	myself = this,
+        selector,
         block = this.parentThatIsA(BlockMorph),
         ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(
@@ -9111,7 +9117,18 @@ InputSlotMorph.prototype.menuFromDict = function (
         }
         choices = choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices]();
+        if (choices.indexOf('ext_') === 0) {
+            selector = choices.slice(4);
+            choices = SnapExtensions.menus.get(selector);
+            if (choices) {
+                choices = choices.call(this);
+            } else {
+                menu.addItem('cannot find extension menu "' + selector + '"');
+                return menu;
+            }
+        } else {
+            choices = this[choices]();
+        }
         if (!choices) { // menu has already happened
             return;
         }
@@ -9325,6 +9342,16 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
             null,
             this.world()
         );
+    return dict;
+};
+
+InputSlotMorph.prototype.primitivesMenu = function () {
+    var dict = {},
+        allNames = Array.from(SnapExtensions.primitives.keys());
+
+    allNames.sort().forEach(name =>
+        dict[name] = name
+    );
     return dict;
 };
 
