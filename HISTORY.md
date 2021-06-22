@@ -9,7 +9,10 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
-### 2021-06-19
+### 2021-06-22
+* extensions: added script-loading extension primitive
+
+### 2021-06-20
 * updated extensions documentation
 
 ### 2021-06-19

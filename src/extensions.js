@@ -31,13 +31,14 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, contains*/
 
-modules.extensions = '2021-June-20';
+modules.extensions = '2021-June-22';
 
 // Global stuff
 
 var SnapExtensions = {
     primitives: new Map(),
-    menus: new Map()
+    menus: new Map(),
+    scripts: []
 };
 
 /*
@@ -107,6 +108,8 @@ var SnapExtensions = {
 
     Whatever you do, please use these extension capabilities sensibly.
 */
+
+// Primitives
 
 // errors & exceptions (err_):
 
@@ -674,6 +677,17 @@ SnapExtensions.primitives.set(
     }
 );
 
+// loading external scripts (scr_)
+
+SnapExtensions.primitives.set(
+    'scr_load(url)',
+    function (url) {
+        return SnapExtensions.loadScript(url);
+    }
+);
+
+// Menus
+
 SnapExtensions.menus.set(
     'clr_numbers', // Brian's browns and oranges, sigh...
     function () {
@@ -900,3 +914,22 @@ SnapExtensions.menus.set(
         }
     }
 );
+
+// Scripts
+
+SnapExtensions.loadScript = function (url) {
+    var scriptElement,
+        isLoaded = false;
+
+    if (contains(this.scripts, url)) {
+        return () => true;
+    }
+    scriptElement = document.createElement('script');
+    scriptElement.onload = () => {
+        this.scripts.push(url);
+        isLoaded = true;
+    };
+    document.head.appendChild(scriptElement);
+    scriptElement.src = url;
+    return () => isLoaded;
+};
