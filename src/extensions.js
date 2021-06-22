@@ -1,4 +1,4 @@
-/*globals SpriteMorph*/
+/*globals SpriteMorph, Process, StageMorph*/
 (function(globals) {
     class ExtensionRegistry {
         constructor(ide) {
@@ -35,7 +35,9 @@
 
         validate(extension) {
             extension.getBlocks().forEach(block => {
-                if (SpriteMorph.prototype[block.name]) {
+                const alreadyExists = SpriteMorph.prototype[block.name] ||
+                    StageMorph.prototype[block.name] || Process.prototype[block.name];
+                if (alreadyExists) {
                     throw new Error(`Cannot override existing "${block.name}" block`);
                 }
             });
@@ -67,12 +69,25 @@
         initBlocks() {
             // TODO: refactor this so we can unregister extensions
             const allBlocks = this.registry.flatMap(ext => ext.getBlocks());
+            const palettes = this.registry.flatMap(ext => ext.getPalette());
+            const findReceivers = spec => palettes
+                .filter(p => p.contents.find(block => block.type === 'watcher' && block.name === spec))
+                .map(palette => palette.targetObject)
+                .reduce((rcvrs, next) => {
+                    if (!rcvrs.includes(next)) {
+                        rcvrs.push(next);
+                    }
+                    return rcvrs;
+                }, []);
+
             allBlocks.forEach(block => {
                 SpriteMorph.prototype.blocks[block.name] = {
                     type: block.type,
                     category: block.category,
                     spec: block.spec
                 };
+                const receivers = findReceivers(block.name);
+                receivers.forEach(Rcvr => Rcvr.prototype[block.name] = block.impl);
                 Process.prototype[block.name] = block.impl;
             });
         }

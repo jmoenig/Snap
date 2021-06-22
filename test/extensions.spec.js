@@ -103,11 +103,18 @@ describe('extensions', function() {
             );
         });
 
-        it('should watcher toggles in palette', function() {
+        it('should show watcher toggles in palette', function() {
             driver.selectCategory('TEST!');
             const {ToggleMorph} = driver.globals();
             const toggle = driver.palette().contents.children.find(child => child instanceof ToggleMorph);
             assert(toggle);
+        });
+
+        it('should create toggleable watchers in palette', function() {
+            driver.selectCategory('TEST!');
+            const {ToggleMorph} = driver.globals();
+            const toggle = driver.palette().contents.children.find(child => child instanceof ToggleMorph);
+            driver.click(toggle);
         });
 
         it('should show sprite block on sprite', function() {
