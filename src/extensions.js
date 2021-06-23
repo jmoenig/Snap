@@ -38,7 +38,10 @@ modules.extensions = '2021-June-23';
 var SnapExtensions = {
     primitives: new Map(),
     menus: new Map(),
-    scripts: []
+    scripts: [],
+    urls: [
+        'libraries/'
+    ]
 };
 
 /*
@@ -687,6 +690,9 @@ SnapExtensions.primitives.set(
             proc.context.accumulator = {done: false};
             if (contains(SnapExtensions.scripts, url)) {
                 return;
+            }
+            if (!(SnapExtensions.urls.some(any => url.indexOf(any) === 0))) {
+                throw new Error('unlisted extension url:\n"' + url + '"');
             }
             scriptElement = document.createElement('script');
             scriptElement.onload = () => {
