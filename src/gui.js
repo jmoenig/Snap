@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-June-14';
+modules.gui = '2021-June-23';
 
 // Declarations
 
