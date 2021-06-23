@@ -9,6 +9,9 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
+### 2021-06-23
+* updated bignums library
+
 ### 2021-06-22
 * extensions: added script-loading extension primitive
 
