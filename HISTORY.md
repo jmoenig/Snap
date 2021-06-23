@@ -11,6 +11,7 @@
 
 ### 2021-06-23
 * updated bignums library
+* pushed dev version to 6.10
 
 ### 2021-06-22
 * extensions: added script-loading extension primitive
