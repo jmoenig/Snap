@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, contains*/
 
-modules.extensions = '2021-June-22';
+modules.extensions = '2021-June-23';
 
 // Global stuff
 
@@ -681,9 +681,27 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'scr_load(url)',
-    function (url) {
-        return SnapExtensions.loadScript(url);
+    function (url, proc) {
+        var scriptElement;
+        if (!proc.context.accumulator) {
+            proc.context.accumulator = {done: false};
+            if (contains(SnapExtensions.scripts, url)) {
+                return;
+            }
+            scriptElement = document.createElement('script');
+            scriptElement.onload = () => {
+                SnapExtensions.scripts.push(url);
+                proc.context.accumulator.done = true;
+            };
+            document.head.appendChild(scriptElement);
+            scriptElement.src = url;
+        } else if (proc.context.accumulator.done) {
+            return;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
     }
+
 );
 
 // Menus
@@ -914,22 +932,3 @@ SnapExtensions.menus.set(
         }
     }
 );
-
-// Scripts
-
-SnapExtensions.loadScript = function (url) {
-    var scriptElement,
-        isLoaded = false;
-
-    if (contains(this.scripts, url)) {
-        return () => true;
-    }
-    scriptElement = document.createElement('script');
-    scriptElement.onload = () => {
-        this.scripts.push(url);
-        isLoaded = true;
-    };
-    document.head.appendChild(scriptElement);
-    scriptElement.src = url;
-    return () => isLoaded;
-};
