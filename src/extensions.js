@@ -49,6 +49,11 @@ var SnapExtensions = {
     used as extension primitives for blocks or dynamic dropdown menus. Block
     extensions are stored in the "primitives" dictionary of SnapExtensions,
     dynamic dropdown menus in the "menus" section.
+    
+    You can also extend Snap! with your own externally hosted JavaScript file(s)
+    and have them add your own extension primitives and menus to the global
+    SnapExtensions dictionaries. This lets you provide libraries to support
+    special APIs and custom hardware.
 
     
     1. Primitives (additional blocks)
@@ -109,6 +114,37 @@ var SnapExtensions = {
       "block.inputs()". This will give you an array of all input slots.
       You can access the contents of an input slot by calling "slot.evaluate()"
 
+
+    3. External JavaScript files
+    ============================
+    You can provide extensions for your custom hardware or for arbitrary APIs
+    or extend Snap! with JavaScript libraries from other parties. You can
+    load additional JavaScript files using the "src_load(url)" extension
+    primitive inside Snap, which you can find using Snap's search bar in the
+    IDE. The loading primitive will wait until the source file has fully loaded
+    and its defined functions are ready to be called.
+    
+    adding primitives to SnapExtensions
+    -----------------------------------
+    It is the suggested best practice to expose your own extension primitives
+    by adding them to the global SnapExtensions libraries (for primitives and
+    menus) using the very same conventions described herein, and then to offer
+    a library of custom blocks that make calls to your additional operations.
+
+    publishing an extension
+    -----------------------
+    Running the "src_load(url)" primitive will throw an error unless you first
+    check the "Enable JavaScript extensions" setting in Snap's preferences menu,
+    or if your JavaScript extension comes from a list of trusted hosts.
+    While you develop your JavaScript extension it's recommended to turn the
+    "Enable JavaScript extensions" setting on to load the extension once, and
+    then to turn it off again, so you can make sure your custom blocks are not
+    using any "JS Function" blocks (because those will be caught if the
+    preference is turned off).
+    When you're ready to publish your extension you can contact us to allow-list
+    the url hosting your JS file, or you can send me a Github pull-request to
+    include it in the main Snap branch.
+    
     Whatever you do, please use these extension capabilities sensibly.
 */
 
@@ -680,10 +716,10 @@ SnapExtensions.primitives.set(
     }
 );
 
-// loading external scripts (scr_)
+// loading external scripts (src_)
 
 SnapExtensions.primitives.set(
-    'scr_load(url)',
+    'src_load(url)',
     function (url, proc) {
         var scriptElement;
         if (!proc.context.accumulator) {
