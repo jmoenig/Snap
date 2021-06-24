@@ -10,6 +10,9 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
+### 2021-06-24
+* extensions: tweaked loading unlisted script-extensions
+
 ### 2021-06-23
 * updated bignums library
 * pushed dev version to 6.10

@@ -29,9 +29,9 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, contains*/
+Color, Process, contains*/
 
-modules.extensions = '2021-June-23';
+modules.extensions = '2021-June-24';
 
 // Global stuff
 
@@ -691,23 +691,28 @@ SnapExtensions.primitives.set(
             if (contains(SnapExtensions.scripts, url)) {
                 return;
             }
-            if (!(SnapExtensions.urls.some(any => url.indexOf(any) === 0))) {
-                throw new Error('unlisted extension url:\n"' + url + '"');
+            if (Process.prototype.enableJS || SnapExtensions.urls.some(
+                any => url.indexOf(any) === 0)
+            ) {
+                scriptElement = document.createElement('script');
+                scriptElement.onload = () => {
+                    SnapExtensions.scripts.push(url);
+                    proc.context.accumulator.done = true;
+                };
+                document.head.appendChild(scriptElement);
+                scriptElement.src = url;
+            } else {
+                throw new Error(
+                    'unlisted extension url:\n"' + url + '"\n' +
+                    'JavaScript extensions for Snap!\nare turned off'
+                );
             }
-            scriptElement = document.createElement('script');
-            scriptElement.onload = () => {
-                SnapExtensions.scripts.push(url);
-                proc.context.accumulator.done = true;
-            };
-            document.head.appendChild(scriptElement);
-            scriptElement.src = url;
         } else if (proc.context.accumulator.done) {
             return;
         }
         proc.pushContext('doYield');
         proc.pushContext();
     }
-
 );
 
 // Menus
