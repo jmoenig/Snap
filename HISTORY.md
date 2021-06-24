@@ -12,6 +12,7 @@
 
 ### 2021-06-24
 * extensions: tweaked loading unlisted script-extensions
+* byob, threads, store: removed unused code
 
 ### 2021-06-23
 * updated bignums library
