@@ -14,6 +14,7 @@
 * extensions: tweaked loading unlisted script-extensions
 * byob, threads, store: removed unused code
 * extensions: added documentation for adding external JS modules
+* updated bignumbers library
 
 ### 2021-06-23
 * updated bignums library
