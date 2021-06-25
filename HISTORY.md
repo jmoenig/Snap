@@ -10,6 +10,9 @@
 * **Notable Fixes:**
     * fixed occasional invisible error messages
 
+### 2021-06-25
+* extensions: added first rough experimental version of web-serial extension primitives
+
 ### 2021-06-24
 * extensions: tweaked loading unlisted script-extensions
 * byob, threads, store: removed unused code
