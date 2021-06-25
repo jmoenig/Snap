@@ -12,6 +12,7 @@
 
 ### 2021-06-25
 * extensions: added first rough experimental version of web-serial extension primitives
+* extensions: commented out web-serial extension prims while thinking about their design
 
 ### 2021-06-24
 * extensions: tweaked loading unlisted script-extensions

@@ -718,16 +718,25 @@ SnapExtensions.primitives.set(
 
 // web serial (srl_): // +++ under construction
 
+// commented out for now, pondering - among others, the following questions:
+//
+// * why only support one single port? Why not as many as you want? because "ports" have no object representation in Snap? aren't first-class? Maybe
+// * what happens if you run the "open" block again, while ports are already open?
+// * Should ports be closed when you open another project? Or even when the user presses the red stop sign button?
+// * Should projects and scripts store vendor-specific port-wishes (e.g. "Calliope") and try to automatically connect to those if present?
+//
+
+/*
 SnapExtensions.primitives.set(
     'srl_open',
     function () {
 
-        var world = this.world(); // +++ change to IDE
+        var world = this.world(); // +++ change to IDE, perhaps expand to support multiple open ports
 
         async function webSerialConnect() { // +++ instead of async make it Snap! thread friendly
             // Prompt user to choose a serial port and open the one selected.
 
-            var vendorIDs = [
+            var vendorIDs = [ // +++ make it an option to only show these selected vendorIDs, allow to show all existing ones!
                 {usbVendorId: 0x0403},		// FTDI
                 {usbVendorId: 0x0d28},		// micro:bit, Calliope
                 {usbVendorId: 0x10c4},		// Silicon Laboratories, Inc. (CP210x)
@@ -741,14 +750,14 @@ SnapExtensions.primitives.set(
             ];
             world.webSerialPort = await navigator.serial.requestPort({filters: vendorIDs}).catch((e) => { console.log(e); }); // +++ make "await" Snap! thread friendly, change UI if possible to a non-blocking Morphic menu/dialog
             if (!world.webSerialPort) {return; } // no serial port selected
-            await world.webSerialPort.open({ baudRate: 115200 }); // +++ make "await" Snap! thread friendly
+            await world.webSerialPort.open({ baudRate: 115200 }); // +++ make baudrate an optional input (?), make "await" Snap! thread friendly
             world.webSerialReader = await world.webSerialPort.readable.getReader(); // +++ make "await" Snap! thread friendly
             webSerialReadLoop();
         }
 
         async function webSerialReadLoop() {
             try {
-                while (true) { // +++ should be improved, make thread-friendly
+                while (true) { // +++ should be improved, make thread-friendly, why is it a loop anyway?
                     var {value, done} = await world.webSerialReader.read(); // +++ make "await" Snap! thread friendly
                     if (value) {
                         world.serialInputBuffers.push(Array.from(value));
@@ -816,6 +825,7 @@ SnapExtensions.primitives.set(
         w.releaseLock();
     }
 );
+*/
 
 // loading external scripts (src_)
 
