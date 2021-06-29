@@ -2025,7 +2025,6 @@ IDE_Morph.prototype.unsetUnifiedPalete = function () {
     this.categories.fixLayout();
     this.fixLayout();
     this.flushBlocksCache();
-    this.flushPaletteCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
 }
@@ -5729,12 +5728,16 @@ IDE_Morph.prototype.switchToDevMode = function () {
 };
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
+    alert(`blocks cacbe flushed for ${category}`);
     // if no category is specified, the whole cache gets flushed
+    // the 'unified' category is always flushed.
     if (category) {
         this.stage.blocksCache[category] = null;
+        this.stage.blocksCache.unified = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.blocksCache[category] = null;
+                m.blocksCache.unified = null;
             }
         });
     } else {

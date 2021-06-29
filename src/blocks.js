@@ -7184,7 +7184,7 @@ ScriptsMorph.prototype.userMenu = function () {
                         } else {
                             obj.customBlocks.push(definition);
                         }
-                        ide.flushPaletteCache();
+                        ide.flushBlocksCache();
                         ide.refreshPalette();
                         new BlockEditorMorph(definition, obj).popUp();
                     }

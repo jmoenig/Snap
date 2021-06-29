@@ -2097,7 +2097,7 @@ SpriteMorph.prototype.fixLayout = function () {
         this.setCenter(currentCenter, true); // just me
         this.rotationOffset = this.extent().divideBy(2);
     }
- };
+};
 
 SpriteMorph.prototype.render = function (ctx) {
     var myself = this,
@@ -2275,8 +2275,7 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 SpriteMorph.prototype.blockTemplates = function (category) {
     var blocks = [], myself = this, varNames, button,
-        cat = category || 'motion', txt,
-        inheritedVars = this.inheritedVariableNames();
+        cat = category || 'motion', paletteDefitions;
 
     function block(selector, isGhosted) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
@@ -2342,6 +2341,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         return menu;
     }
 
+    function devModeText() {
+        let txt = new TextMorph(localize('development mode \ndebugging primitives:'));
+        txt.fontSize = 9;
+        txt.setColor(this.paletteTextColor);
+        return txt;
+    }
+
     function addVar(pair) {
         var ide;
         if (pair) {
@@ -2358,487 +2364,496 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
     }
 
-    if (cat === 'motion' || cat === 'unified') {
-
-        blocks.push(block('forward'));
-        blocks.push(block('turn'));
-        blocks.push(block('turnLeft'));
-        blocks.push('-');
-        blocks.push(block('setHeading'));
-        blocks.push(block('doFaceTowards'));
-        blocks.push('-');
-        blocks.push(block('gotoXY'));
-        blocks.push(block('doGotoObject'));
-        blocks.push(block('doGlide'));
-        blocks.push('-');
-        blocks.push(block('changeXPosition'));
-        blocks.push(block('setXPosition'));
-        blocks.push(block('changeYPosition'));
-        blocks.push(block('setYPosition'));
-        blocks.push('-');
-        blocks.push(block('bounceOffEdge'));
-        blocks.push('-');
-        blocks.push(watcherToggle('xPosition'));
-        blocks.push(block('xPosition', this.inheritsAttribute('x position')));
-        blocks.push(watcherToggle('yPosition'));
-        blocks.push(block('yPosition', this.inheritsAttribute('y position')));
-        blocks.push(watcherToggle('direction'));
-        blocks.push(block('direction', this.inheritsAttribute('direction')));
-
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'looks' || cat === 'unified') {
-
-        blocks.push(block('doSwitchToCostume'));
-        blocks.push(block('doWearNextCostume'));
-        blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
-        blocks.push('-');
-        blocks.push(block('doSayFor'));
-        blocks.push(block('bubble'));
-        blocks.push(block('doThinkFor'));
-        blocks.push(block('doThink'));
-        blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
-        blocks.push(block('reportNewCostumeStretched'));
-        blocks.push(block('reportNewCostume'));
-        blocks.push('-');
-        blocks.push(block('changeEffect'));
-        blocks.push(block('setEffect'));
-        blocks.push(block('clearEffects'));
-        blocks.push(block('getEffect'));
-        blocks.push('-');
-        blocks.push(block('changeScale'));
-        blocks.push(block('setScale'));
-        blocks.push(watcherToggle('getScale'));
-        blocks.push(block('getScale', this.inheritsAttribute('size')));
-        blocks.push('-');
-        blocks.push(block('show'));
-        blocks.push(block('hide'));
-        blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
-        blocks.push('-');
-        blocks.push(block('goToLayer'));
-        blocks.push(block('goBack'));
-        blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
-
-        // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
+    paletteDefitions = {
+        motion: () => {
+            blocks.push(block('forward'));
+            blocks.push(block('turn'));
+            blocks.push(block('turnLeft'));
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
+            blocks.push(block('setHeading'));
+            blocks.push(block('doFaceTowards'));
             blocks.push('-');
-            blocks.push(block('log'));
-            blocks.push(block('alert'));
+            blocks.push(block('gotoXY'));
+            blocks.push(block('doGotoObject'));
+            blocks.push(block('doGlide'));
             blocks.push('-');
-            blocks.push(block('doScreenshot'));
-        }
-
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'sound' || cat === 'unified') {
-
-        blocks.push(block('playSound'));
-        blocks.push(block('doPlaySoundUntilDone'));
-        blocks.push(block('doStopAllSounds'));
-        blocks.push('-');
-        blocks.push(block('doPlaySoundAtRate'));
-        blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
-        blocks.push('-');
-        blocks.push(block('doRest'));
-        blocks.push(block('doPlayNote'));
-        blocks.push(block('doSetInstrument'));
-        blocks.push('-');
-        blocks.push(block('doChangeTempo'));
-        blocks.push(block('doSetTempo'));
-        blocks.push(watcherToggle('getTempo'));
-        blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('changeVolume'));
-        blocks.push(block('setVolume'));
-        blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume', this.inheritsAttribute('volume')));
-        blocks.push('-');
-        blocks.push(block('changePan'));
-        blocks.push(block('setPan'));
-        blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan', this.inheritsAttribute('balance')));
-        blocks.push('-');
-        blocks.push(block('playFreq'));
-        blocks.push(block('stopFreq'));
-
-        // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
+            blocks.push(block('changeXPosition'));
+            blocks.push(block('setXPosition'));
+            blocks.push(block('changeYPosition'));
+            blocks.push(block('setYPosition'));
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
+            blocks.push(block('bounceOffEdge'));
             blocks.push('-');
-            blocks.push(block('doPlayFrequency'));
-        }
+            blocks.push(watcherToggle('xPosition'));
+            blocks.push(block('xPosition', this.inheritsAttribute('x position')));
+            blocks.push(watcherToggle('yPosition'));
+            blocks.push(block('yPosition', this.inheritsAttribute('y position')));
+            blocks.push(watcherToggle('direction'));
+            blocks.push(block('direction', this.inheritsAttribute('direction')));
+        },
 
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'pen' || cat === 'unified') {
-
-        blocks.push(block('clear'));
-        blocks.push('-');
-        blocks.push(block('down'));
-        blocks.push(block('up'));
-        blocks.push(watcherToggle('getPenDown'));
-        blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
-        blocks.push('-');
-        blocks.push(block('setColor'));
-        blocks.push(block('changePenHSVA'));
-        blocks.push(block('setPenHSVA'));
-        blocks.push(block('getPenAttribute'));
-        blocks.push('-');
-        blocks.push(block('changeSize'));
-        blocks.push(block('setSize'));
-        blocks.push('-');
-        blocks.push(block('doStamp'));
-        blocks.push(block('floodFill'));
-        blocks.push(block('write'));
-        blocks.push('-');
-        blocks.push(block('reportPenTrailsAsCostume'));
-        blocks.push('-');
-        blocks.push(block('doPasteOn'));
-        blocks.push(block('doCutFrom'));
-
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'control' || cat === 'unified') {
-
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveCondition'));
-        blocks.push(block('receiveMessage'));
-        blocks.push('-');
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('doSend'));
-        blocks.push(watcherToggle('getLastMessage'));
-        blocks.push(block('getLastMessage'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
-        blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
-        blocks.push('-');
-        blocks.push(block('doForever'));
-        blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
-        blocks.push(block('doFor'));
-        blocks.push('-');
-        blocks.push(block('doIf'));
-        blocks.push(block('doIfElse'));
-        blocks.push(block('reportIfElse'));
-        blocks.push('-');
-        blocks.push(block('doReport'));
-        blocks.push(block('doStopThis'));
-        blocks.push('-');
-        blocks.push(block('doRun'));
-        blocks.push(block('fork'));
-        blocks.push(block('evaluate'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
-        blocks.push('-');
-        blocks.push(block('doCallCC'));
-        blocks.push(block('reportCallCC'));
-        blocks.push('-');
-        blocks.push(block('receiveOnClone'));
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push(block('removeClone'));
-        blocks.push('-');
-        blocks.push(block('doPauseAll'));
-
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'sensing' || cat === 'unified') {
-
-        blocks.push(block('reportTouchingObject'));
-        blocks.push(block('reportTouchingColor'));
-        blocks.push(block('reportColorIsTouchingColor'));
-        blocks.push('-');
-        blocks.push(block('doAsk'));
-        blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('getLastAnswer'));
-        blocks.push('-');
-        blocks.push(watcherToggle('reportMouseX'));
-        blocks.push(block('reportMouseX'));
-        blocks.push(watcherToggle('reportMouseY'));
-        blocks.push(block('reportMouseY'));
-        blocks.push(block('reportMouseDown'));
-        blocks.push('-');
-        blocks.push(block('reportKeyPressed'));
-        blocks.push('-');
-        blocks.push(block('reportRelationTo'));
-        blocks.push(block('reportAspect'));
-        blocks.push('-');
-        blocks.push(block('doResetTimer'));
-        blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('getTimer'));
-        blocks.push('-');
-        blocks.push(block('reportAttributeOf'));
-
-        if (SpriteMorph.prototype.enableFirstClass) {
-            blocks.push(block('reportGet'));
-        }
-
-        blocks.push(block('reportObject'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push(block('reportAudio'));
-        blocks.push(block('reportVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push('-');
-        blocks.push(block('reportGlobalFlag'));
-        blocks.push(block('doSetGlobalFlag'));
-        blocks.push('-');
-        blocks.push(block('reportDate'));
-
-        // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-
+        looks: () => {
+            blocks.push(block('doSwitchToCostume'));
+            blocks.push(block('doWearNextCostume'));
+            blocks.push(watcherToggle('getCostumeIdx'));
+            blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
+            blocks.push(block('doSayFor'));
+            blocks.push(block('bubble'));
+            blocks.push(block('doThinkFor'));
+            blocks.push(block('doThink'));
             blocks.push('-');
-            blocks.push(watcherToggle('reportThreadCount'));
-            blocks.push(block('reportThreadCount'));
-            blocks.push(block('reportStackSize'));
-            blocks.push(block('reportFrameCount'));
-            blocks.push(block('reportYieldCount'));
-        }
+            blocks.push(block('reportGetImageAttribute'));
+            blocks.push(block('reportNewCostumeStretched'));
+            blocks.push(block('reportNewCostume'));
+            blocks.push('-');
+            blocks.push(block('changeEffect'));
+            blocks.push(block('setEffect'));
+            blocks.push(block('clearEffects'));
+            blocks.push(block('getEffect'));
+            blocks.push('-');
+            blocks.push(block('changeScale'));
+            blocks.push(block('setScale'));
+            blocks.push(watcherToggle('getScale'));
+            blocks.push(block('getScale', this.inheritsAttribute('size')));
+            blocks.push('-');
+            blocks.push(block('show'));
+            blocks.push(block('hide'));
+            blocks.push(watcherToggle('reportShown'));
+            blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
+            blocks.push('-');
+            blocks.push(block('goToLayer'));
+            blocks.push(block('goBack'));
+            blocks.push('-');
+            blocks.push(block('doSwitchToScene'));
 
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'operators' || cat === 'unified') {
+            // for debugging: ///////////////
 
-        blocks.push(block('reifyScript'));
-        blocks.push(block('reifyReporter'));
-        blocks.push(block('reifyPredicate'));
-        blocks.push('#');
-        blocks.push('-');
-        blocks.push(block('reportSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
-        blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportRandom'));
-        blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportGreaterThan'));
-        blocks.push('-');
-        blocks.push(block('reportAnd'));
-        blocks.push(block('reportOr'));
-        blocks.push(block('reportNot'));
-        blocks.push(block('reportBoolean'));
-        blocks.push('-');
-        blocks.push(block('reportJoinWords'));
-        blocks.push(block('reportTextSplit'));
-        blocks.push(block('reportLetter'));
-        blocks.push(block('reportStringSize'));
-        blocks.push('-');
-        blocks.push(block('reportUnicode'));
-        blocks.push(block('reportUnicodeAsLetter'));
-        blocks.push('-');
-        blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+            if (this.world().isDevMode) {
+                blocks.push('-');
+                blocks.push(devModeText());
+                blocks.push('-');
+                blocks.push(block('log'));
+                blocks.push(block('alert'));
+                blocks.push('-');
+                blocks.push(block('doScreenshot'));
+            }
+        },
 
-        if (true) { // (Process.prototype.enableJS) {
+        sound: () => {
+            blocks.push(block('playSound'));
+            blocks.push(block('doPlaySoundUntilDone'));
+            blocks.push(block('doStopAllSounds'));
+            blocks.push('-');
+            blocks.push(block('doPlaySoundAtRate'));
+            blocks.push(block('reportGetSoundAttribute'));
+            blocks.push(block('reportNewSoundFromSamples'));
+            blocks.push('-');
+            blocks.push(block('doRest'));
+            blocks.push(block('doPlayNote'));
+            blocks.push(block('doSetInstrument'));
+            blocks.push('-');
+            blocks.push(block('doChangeTempo'));
+            blocks.push(block('doSetTempo'));
+            blocks.push(watcherToggle('getTempo'));
+            blocks.push(block('getTempo'));
+            blocks.push('-');
+            blocks.push(block('changeVolume'));
+            blocks.push(block('setVolume'));
+            blocks.push(watcherToggle('getVolume'));
+            blocks.push(block('getVolume', this.inheritsAttribute('volume')));
+            blocks.push('-');
+            blocks.push(block('changePan'));
+            blocks.push(block('setPan'));
+            blocks.push(watcherToggle('getPan'));
+            blocks.push(block('getPan', this.inheritsAttribute('balance')));
+            blocks.push('-');
+            blocks.push(block('playFreq'));
+            blocks.push(block('stopFreq'));
+
+            // for debugging: ///////////////
+
+            if (this.world().isDevMode) {
+                blocks.push('-');
+                blocks.push(devModeText());
+                blocks.push('-');
+                blocks.push(block('doPlayFrequency'));
+            }
+        },
+
+        pen: () => {
+            blocks.push(block('clear'));
+            blocks.push('-');
+            blocks.push(block('down'));
+            blocks.push(block('up'));
+            blocks.push(watcherToggle('getPenDown'));
+            blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
+            blocks.push('-');
+            blocks.push(block('setColor'));
+            blocks.push(block('changePenHSVA'));
+            blocks.push(block('setPenHSVA'));
+            blocks.push(block('getPenAttribute'));
+            blocks.push('-');
+            blocks.push(block('changeSize'));
+            blocks.push(block('setSize'));
+            blocks.push('-');
+            blocks.push(block('doStamp'));
+            blocks.push(block('floodFill'));
+            blocks.push(block('write'));
+            blocks.push('-');
+            blocks.push(block('reportPenTrailsAsCostume'));
+            blocks.push('-');
+            blocks.push(block('doPasteOn'));
+            blocks.push(block('doCutFrom'));
+        },
+
+        control: () => {
+            blocks.push(block('receiveGo'));
+            blocks.push(block('receiveKey'));
+            blocks.push(block('receiveInteraction'));
+            blocks.push(block('receiveCondition'));
+            blocks.push(block('receiveMessage'));
+            blocks.push('-');
+            blocks.push(block('doBroadcast'));
+            blocks.push(block('doBroadcastAndWait'));
+            blocks.push(block('doSend'));
+            blocks.push(watcherToggle('getLastMessage'));
+            blocks.push(block('getLastMessage'));
+            blocks.push('-');
+            blocks.push(block('doWarp'));
+            blocks.push('-');
+            blocks.push(block('doWait'));
+            blocks.push(block('doWaitUntil'));
+            blocks.push('-');
+            blocks.push(block('doForever'));
+            blocks.push(block('doRepeat'));
+            blocks.push(block('doUntil'));
+            blocks.push(block('doFor'));
+            blocks.push('-');
+            blocks.push(block('doIf'));
+            blocks.push(block('doIfElse'));
+            blocks.push(block('reportIfElse'));
+            blocks.push('-');
+            blocks.push(block('doReport'));
+            blocks.push(block('doStopThis'));
+            blocks.push('-');
+            blocks.push(block('doRun'));
+            blocks.push(block('fork'));
+            blocks.push(block('evaluate'));
+            blocks.push('-');
+            blocks.push(block('doTellTo'));
+            blocks.push(block('reportAskFor'));
+            blocks.push('-');
+            blocks.push(block('doCallCC'));
+            blocks.push(block('reportCallCC'));
+            blocks.push('-');
+            blocks.push(block('receiveOnClone'));
+            blocks.push(block('createClone'));
+            blocks.push(block('newClone'));
+            blocks.push(block('removeClone'));
+            blocks.push('-');
+            blocks.push(block('doPauseAll'));
+        },
+
+        sensing: () => {
+            blocks.push(block('reportTouchingObject'));
+            blocks.push(block('reportTouchingColor'));
+            blocks.push(block('reportColorIsTouchingColor'));
+            blocks.push('-');
+            blocks.push(block('doAsk'));
+            blocks.push(watcherToggle('getLastAnswer'));
+            blocks.push(block('getLastAnswer'));
+            blocks.push('-');
+            blocks.push(watcherToggle('reportMouseX'));
+            blocks.push(block('reportMouseX'));
+            blocks.push(watcherToggle('reportMouseY'));
+            blocks.push(block('reportMouseY'));
+            blocks.push(block('reportMouseDown'));
+            blocks.push('-');
+            blocks.push(block('reportKeyPressed'));
+            blocks.push('-');
+            blocks.push(block('reportRelationTo'));
+            blocks.push(block('reportAspect'));
+            blocks.push('-');
+            blocks.push(block('doResetTimer'));
+            blocks.push(watcherToggle('getTimer'));
+            blocks.push(block('getTimer'));
+            blocks.push('-');
+            blocks.push(block('reportAttributeOf'));
+
+            if (SpriteMorph.prototype.enableFirstClass) {
+                blocks.push(block('reportGet'));
+            }
+
+            blocks.push(block('reportObject'));
+            blocks.push('-');
+            blocks.push(block('reportURL'));
+            blocks.push(block('reportAudio'));
+            blocks.push(block('reportVideo'));
+            blocks.push(block('doSetVideoTransparency'));
+            blocks.push('-');
+            blocks.push(block('reportGlobalFlag'));
+            blocks.push(block('doSetGlobalFlag'));
+            blocks.push('-');
+            blocks.push(block('reportDate'));
+
+            // for debugging: ///////////////
+
+            if (this.world().isDevMode) {
+                blocks.push('-');
+                blocks.push(devModeText());
+                blocks.push('-');
+                blocks.push(watcherToggle('reportThreadCount'));
+                blocks.push(block('reportThreadCount'));
+                blocks.push(block('reportStackSize'));
+                blocks.push(block('reportFrameCount'));
+                blocks.push(block('reportYieldCount'));
+            }
+        },
+
+        operators: () => {
+            blocks.push(block('reifyScript'));
+            blocks.push(block('reifyReporter'));
+            blocks.push(block('reifyPredicate'));
+            blocks.push('#');
+            blocks.push('-');
+            blocks.push(block('reportSum'));
+            blocks.push(block('reportDifference'));
+            blocks.push(block('reportProduct'));
+            blocks.push(block('reportQuotient'));
+            blocks.push(block('reportPower'));
+            blocks.push('-');
+            blocks.push(block('reportModulus'));
+            blocks.push(block('reportRound'));
+            blocks.push(block('reportMonadic'));
+            blocks.push(block('reportRandom'));
+            blocks.push('-');
+            blocks.push(block('reportLessThan'));
+            blocks.push(block('reportEquals'));
+            blocks.push(block('reportGreaterThan'));
+            blocks.push('-');
+            blocks.push(block('reportAnd'));
+            blocks.push(block('reportOr'));
+            blocks.push(block('reportNot'));
+            blocks.push(block('reportBoolean'));
+            blocks.push('-');
+            blocks.push(block('reportJoinWords'));
+            blocks.push(block('reportTextSplit'));
+            blocks.push(block('reportLetter'));
+            blocks.push(block('reportStringSize'));
+            blocks.push('-');
+            blocks.push(block('reportUnicode'));
+            blocks.push(block('reportUnicodeAsLetter'));
+            blocks.push('-');
+            blocks.push(block('reportIsA'));
+            blocks.push(block('reportIsIdentical'));
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {
-	            blocks.push(block('reportCompiled'));
+                blocks.push(block('reportCompiled'));
             }
-        }
 
-        // for debugging: ///////////////
+            // for debugging: ///////////////
 
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
-        }
+            if (this.world().isDevMode) {
+                blocks.push('-');
+                blocks.push(devModeText());
+                blocks.push('-');
+                blocks.push(block('reportTypeOf'));
+                blocks.push(block('reportTextFunction'));
+            }
+        },
 
-        if (cat === 'unified') {blocks.push('='); }
-    }
-    if (cat === 'variables' || cat === 'unified') {
-
-        button = new PushButtonMorph(
-            null,
-            function () {
-                new VariableDialogMorph(
-                    null,
-                    addVar,
-                    myself
-                ).prompt(
-                    'Variable name',
-                    null,
-                    myself.world()
-                );
-            },
-            'Make a variable'
-        );
-        button.userMenu = helpMenu;
-        button.selector = 'addVariable';
-        button.showHelp = BlockMorph.prototype.showHelp;
-        blocks.push(button);
-
-        if (this.deletableVariableNames().length > 0) {
+        variables: () => {
             button = new PushButtonMorph(
                 null,
                 function () {
-                    var menu = new MenuMorph(
-                        myself.deleteVariable,
+                    new VariableDialogMorph(
                         null,
+                        addVar,
                         myself
+                    ).prompt(
+                        'Variable name',
+                        null,
+                        myself.world()
                     );
-                    myself.deletableVariableNames().forEach(name =>
-                        menu.addItem(
-                            name,
-                            name,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            true // verbatim - don't translate
-                        )
-                    );
-                    menu.popUpAtHand(myself.world());
                 },
-                'Delete a variable'
+                'Make a variable'
             );
             button.userMenu = helpMenu;
-            button.selector = 'deleteVariable';
+            button.selector = 'addVariable';
             button.showHelp = BlockMorph.prototype.showHelp;
             blocks.push(button);
-        }
 
-        blocks.push('-');
+            if (this.deletableVariableNames().length > 0) {
+                button = new PushButtonMorph(
+                    null,
+                    function () {
+                        var menu = new MenuMorph(
+                            myself.deleteVariable,
+                            null,
+                            myself
+                        );
+                        myself.deletableVariableNames().forEach(name =>
+                            menu.addItem(
+                                name,
+                                name,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                true // verbatim - don't translate
+                            )
+                        );
+                        menu.popUpAtHand(myself.world());
+                    },
+                    'Delete a variable'
+                );
+                button.userMenu = helpMenu;
+                button.selector = 'deleteVariable';
+                button.showHelp = BlockMorph.prototype.showHelp;
+                blocks.push(button);
+            }
 
-        varNames = this.reachableGlobalVariableNames(true);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name));
-                blocks.push(variableBlock(name));
-            });
             blocks.push('-');
-        }
 
-        varNames = this.allLocalVariableNames(true);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name));
-                blocks.push(variableBlock(name, true));
-            });
-            blocks.push('-');
-        }
+            varNames = this.reachableGlobalVariableNames(true);
+            if (varNames.length > 0) {
+                varNames.forEach(name => {
+                    blocks.push(variableWatcherToggle(name));
+                    blocks.push(variableBlock(name));
+                });
+                blocks.push('-');
+            }
 
-        blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
-        blocks.push(block('doShowVar'));
-        blocks.push(block('doHideVar'));
-        blocks.push(block('doDeclareVariables'));
+            varNames = this.allLocalVariableNames(true);
+            if (varNames.length > 0) {
+                varNames.forEach(name => {
+                    blocks.push(variableWatcherToggle(name));
+                    blocks.push(variableBlock(name, true));
+                });
+                blocks.push('-');
+            }
 
-        // inheritance:
+            blocks.push(block('doSetVar'));
+            blocks.push(block('doChangeVar'));
+            blocks.push(block('doShowVar'));
+            blocks.push(block('doHideVar'));
+            blocks.push(block('doDeclareVariables'));
 
-        if (StageMorph.prototype.enableInheritance) {
-            blocks.push('-');
-            blocks.push(block('doDeleteAttr'));
-        }
+            // inheritance:
 
-        ///////////////////////////////
+            if (StageMorph.prototype.enableInheritance) {
+                blocks.push('-');
+                blocks.push(block('doDeleteAttr'));
+            }
 
-        blocks.push('=');
+            ///////////////////////////////
 
-        blocks.push(block('reportNewList'));
-        blocks.push(block('reportNumbers'));
-        blocks.push('-');
-        blocks.push(block('reportCONS'));
-        blocks.push(block('reportListItem'));
-        blocks.push(block('reportCDR'));
-        blocks.push('-');
-        blocks.push(block('reportListAttribute'));
-        blocks.push(block('reportListIndex'));
-        blocks.push(block('reportListContainsItem'));
-        blocks.push(block('reportListIsEmpty'));
-        blocks.push('-');
-        blocks.push(block('reportMap'));
-        blocks.push(block('reportKeep'));
-        blocks.push(block('reportFindFirst'));
-        blocks.push(block('reportCombine'));
-        blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push('-');
-        blocks.push(block('doAddToList'));
-        blocks.push(block('doDeleteFromList'));
-        blocks.push(block('doInsertInList'));
-        blocks.push(block('doReplaceInList'));
-
-        // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-        }
-
-        if (StageMorph.prototype.enableCodeMapping) {
             blocks.push('=');
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
+
+            blocks.push(block('reportNewList'));
+            blocks.push(block('reportNumbers'));
             blocks.push('-');
-            blocks.push(block('reportMappedCode'));
+            blocks.push(block('reportCONS'));
+            blocks.push(block('reportListItem'));
+            blocks.push(block('reportCDR'));
+            blocks.push('-');
+            blocks.push(block('reportListAttribute'));
+            blocks.push(block('reportListIndex'));
+            blocks.push(block('reportListContainsItem'));
+            blocks.push(block('reportListIsEmpty'));
+            blocks.push('-');
+            blocks.push(block('reportMap'));
+            blocks.push(block('reportKeep'));
+            blocks.push(block('reportFindFirst'));
+            blocks.push(block('reportCombine'));
+            blocks.push('-');
+            blocks.push(block('doForEach'));
+            blocks.push('-');
+            blocks.push(block('reportConcatenatedLists'));
+            blocks.push(block('reportReshape'));
+            blocks.push('-');
+            blocks.push(block('doAddToList'));
+            blocks.push(block('doDeleteFromList'));
+            blocks.push(block('doInsertInList'));
+            blocks.push(block('doReplaceInList'));
+
+            // for debugging: ///////////////
+
+            if (this.world().isDevMode) {
+                blocks.push('-');
+                blocks.push(devModeText());
+                blocks.push('-');
+                blocks.push(block('doShowTable'));
+            }
+
+            if (StageMorph.prototype.enableCodeMapping) {
+                blocks.push('=');
+                blocks.push(block('doMapCodeOrHeader'));
+                blocks.push(block('doMapValueCode'));
+                blocks.push(block('doMapListCode'));
+                blocks.push('-');
+                blocks.push(block('reportMappedCode'));
+            }
         }
     }
 
-    blocks.push('=');
-    blocks.push(this.makeBlockButton(cat));
+    // In a Unified Palette custom blocks appear following each category,
+    // but there is only 1 make a block button (at the end).
+    if (cat === 'unified') {
+        for (currentCategory in paletteDefitions) {
+            paletteDefitions[currentCategory]();
+            blocks.push('=');
+
+            blocks.push(...this.customBlockTemplatesForCategory(currentCategory));
+        }
+        blocks.push(this.makeBlockButton());
+    } else {
+        paletteDefitions[cat]();
+
+        blocks.push('=');
+        blocks.push(this.makeBlockButton(cat));
+        blocks.push('=');
+        blocks.push(...this.customBlockTemplatesForCategory(cat));
+    }
+
+    return blocks;
+};
+
+// returns an array all custom block templates for a selected category.
+SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
+    var ide = this.parentThatIsA(IDE_Morph), blocks = [],
+        isInherited = false, block, inheritedBlocks;
+
+    function addCustomBlock(definition) {
+        if (category === 'unified' || definition.category === category ||
+                (category === 'variables'
+                && contains(['lists', 'other'], definition.category))) {
+            block = definition.templateInstance();
+            if (isInherited) {block.ghost(); }
+            blocks.push(block);
+        }
+    }
+
+    // global custom blocks:
+    if (ide && ide.stage) {
+        ide.stage.globalBlocks.forEach(addCustomBlock);
+        if (this.customBlocks.length) {blocks.push('='); }
+    }
+
+    // local custom blocks:
+    this.customBlocks.forEach(addCustomBlock);
+
+    // inherited custom blocks:
+    if (this.exemplar) {
+        inheritedBlocks = this.inheritedBlocks(true);
+        if (this.customBlocks.length && inheritedBlocks.length) {blocks.push('='); }
+        isInherited = true;
+        inheritedBlocks.forEach(addCustomBlock);
+    }
 
     return blocks;
 };
@@ -2869,6 +2884,7 @@ SpriteMorph.prototype.makeBlock = function () {
         category = ide.currentCategory,
         clr = SpriteMorph.prototype.blockColor[category],
         dlg;
+    debugger;
     dlg = new BlockDialogMorph(
         null,
         definition => {
@@ -2878,7 +2894,7 @@ SpriteMorph.prototype.makeBlock = function () {
                 } else {
                     this.customBlocks.push(definition);
                 }
-                ide.flushPaletteCache();
+                ide.flushBlocksCache();
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
@@ -2886,7 +2902,7 @@ SpriteMorph.prototype.makeBlock = function () {
         },
         this
     );
-    if (category !== 'variables') {
+    if (category !== 'variables' || category !== 'unified') {
         dlg.category = category;
         dlg.categories.children.forEach(each => each.refresh());
         dlg.types.children.forEach(each => {
@@ -3066,8 +3082,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
         return menu;
     };
 
-    // primitives:
-
     blocks = this.blocksCache[category];
     if (!blocks) {
         blocks = this.blockTemplates(category);
@@ -3108,74 +3122,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
         }
     });
-
-    // global custom blocks:
-
-    if (stage) {
-        y += unit * 1.6;
-
-        stage.globalBlocks.forEach(definition => {
-            var block;
-            if (definition.category === category ||
-                    (category === 'variables'
-                        && contains(
-                            ['lists', 'other'],
-                            definition.category
-                        ))) {
-                block = definition.templateInstance();
-                y += unit * 0.3;
-                block.setPosition(new Point(x, y));
-                palette.addContents(block);
-                x = 0;
-                y += block.height();
-            }
-        });
-    }
-
-    // local custom blocks:
-
-    y += unit * 1.6;
-    this.customBlocks.forEach(definition => {
-        var block;
-        if (definition.category === category ||
-                (category === 'variables'
-                    && contains(
-                        ['lists', 'other'],
-                        definition.category
-                    ))) {
-            block = definition.templateInstance();
-            y += unit * 0.3;
-            block.setPosition(new Point(x, y));
-            palette.addContents(block);
-            x = 0;
-            y += block.height();
-        }
-    });
-
-    // inherited custom blocks:
-
-    // y += unit * 1.6;
-    if (this.exemplar) {
-        this.inheritedBlocks(true).forEach(definition => {
-            var block;
-            if (definition.category === category ||
-                    (category === 'variables'
-                        && contains(
-                            ['lists', 'other'],
-                            definition.category
-                        ))) {
-                block = definition.templateInstance();
-                y += unit * 0.3;
-                block.setPosition(new Point(x, y));
-                palette.addContents(block);
-                block.ghost();
-                x = 0;
-                y += block.height();
-            }
-        });
-    }
-
-    //layout
 
     palette.scrollX(palette.padding);
     palette.scrollY(palette.padding);
