@@ -81,6 +81,22 @@ describe('extensions', function() {
     it.skip('should save required extensions in xml', function() {
     });
 
+    describe('ExtensionRegistry', function() {
+        it('should defer registration until after initialization', function() {
+            const {ExtensionRegistry} = driver.globals();
+            const registry = new ExtensionRegistry();
+            let loaded = false;
+            function SimpleExtension() {
+                loaded = true;
+            }
+
+            registry.register(SimpleExtension);
+            assert(!loaded);
+            registry.initialize(driver.ide());
+            assert(loaded);
+        });
+    });
+
     describe('palette', function() {
         it('should add new category', function() {
             const categories = driver.ide().categories.children.map(c => c.labelString);

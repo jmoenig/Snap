@@ -1,12 +1,19 @@
 /*globals SpriteMorph, Process, StageMorph*/
 (function(globals) {
     class ExtensionRegistry {
-        constructor(ide) {
-            this.ide = ide;
+        constructor() {
+            this.ide = null;
             this.registry = [];
+            this.pendingExtensions = [];
         }
 
-        register(Extension) {
+        initialize(ide) {
+            this.ide = ide;
+            this.pendingExtensions.forEach(ext => this.load(ext));
+            this.pendingExtensions = [];
+        }
+
+        load(Extension) {
             const extension = new Extension(this.ide);  // TODO: Replace the IDE with an official API?
             if (this.isLoaded(extension.name)) {
                 return;
@@ -31,6 +38,18 @@
             this.ide.createCorralBar();
             this.ide.fixLayout();
             SpriteMorph.prototype.initBlocks();
+        }
+
+        register(Extension) {
+            if (this.isReady()) {
+                this.load(Extension);
+            } else {
+                this.pendingExtensions.push(Extension);
+            }
+        }
+
+        isReady() {
+            return !!this.ide;
         }
 
         validate(extension) {
@@ -165,6 +184,6 @@
 
     globals.Extension = Extension;
     globals.ExtensionRegistry = ExtensionRegistry;
+    globals.NetsBloxExtensions = new ExtensionRegistry();
 
 })(this);
-var NetsBloxExtensions;

@@ -307,8 +307,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // override inherited properites:
     this.color = this.backgroundColor;
     this.activeEditor = this;
-    this.extensions = new ExtensionRegistry(this);
-    NetsBloxExtensions = this.extensions;
+    this.extensions = NetsBloxExtensions;
+    this.extensions.initialize(this);
 };
 
 IDE_Morph.prototype.openIn = function (world) {
