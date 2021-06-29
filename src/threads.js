@@ -59,9 +59,10 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
-TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume*/
+TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
+SnapExtensions*/
 
-modules.threads = '2021-April-17';
+modules.threads = '2021-June-24';
 
 var ThreadManager;
 var Process;
@@ -562,7 +563,7 @@ Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.enableCompiling = false; // experimental
 Process.prototype.flashTime = 0; // experimental
-// Process.prototype.enableJS = false;
+Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
@@ -809,6 +810,23 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             this.popContext();
         }
     }
+};
+
+// Process: Primitive Extensions (for libraries etc.)
+
+Process.prototype.doApplyExtension = function (prim, args) {
+    this.reportApplyExtension(prim, args);
+};
+
+Process.prototype.reportApplyExtension = function (prim, args) {
+    var ext = SnapExtensions.primitives.get(prim);
+    if (isNil(ext)) {
+        throw new Error('missing / unspecified extension: ' + prim);
+    }
+    return ext.apply(
+        this.blockReceiver(),
+        args.itemsArray().concat([this])
+    );
 };
 
 // Process: Special Forms Blocks Primitives
@@ -1105,21 +1123,50 @@ Process.prototype.expectReport = function () {
 
 // Process Exception Handling
 
-Process.prototype.handleError = function (error, element) {
-    var m = element;
+Process.prototype.throwError = function (error, element) {
+    var m = element,
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-    m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
-        this.exportResult,
-        this.receiver
-    );
+    if (ide.isAppMode) {
+        ide.showMessage(error.name + '\n' + error.message);
+    } else {
+        if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+        m.showBubble(
+            (m === element ? '' : 'Inside: ')
+                + error.name
+                + '\n'
+                + error.message,
+            this.exportResult,
+            this.receiver
+        );
+    }
 };
+
+Process.prototype.tryCatch = function (action, exception, errVarName) {
+    var next = this.context.continuation();
+
+    this.handleError = function(error) {
+        this.resetErrorHandling();
+        if (exception.expression instanceof CommandBlockMorph) {
+            exception.expression = exception.expression.blockSequence();
+        }
+        exception.pc = 0;
+        exception.outerContext.variables.addVar(errVarName);
+        exception.outerContext.variables.setVar(errVarName, error.message);
+        this.context = exception;
+        this.evaluate(next, new List(), true);
+    };
+
+    this.evaluate(action, new List(), true);
+};
+
+Process.prototype.resetErrorHandling = function () {
+    this.handleError = this.throwError;
+};
+
+Process.prototype.resetErrorHandling();
 
 Process.prototype.errorObsolete = function () {
     throw new Error('a custom block definition is missing');
@@ -1185,6 +1232,9 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 };
 
 Process.prototype.reportJSFunction = function (parmNames, body) {
+    if (!this.enableJS) {
+        throw new Error('JavaScript extensions for Snap!\nare turned off');
+    }
     return Function.apply(
         null,
         parmNames.itemsArray().concat([body])
@@ -1204,9 +1254,6 @@ Process.prototype.evaluate = function (
         return this.returnValueToParentContext(null);
     }
     if (context instanceof Function) {
-        // if (!this.enableJS) {
-        //     throw new Error('JavaScript is not enabled');
-        // }
         return context.apply(
             this.blockReceiver(),
             args.itemsArray().concat([this])
@@ -1638,8 +1685,9 @@ Process.prototype.reportGetVar = function () {
     );
 };
 
-Process.prototype.doShowVar = function (varName) {
-    var varFrame = (this.context || this.homeContext).variables,
+Process.prototype.doShowVar = function (varName, context) {
+    // context is an optional start-context to be used by extensions
+    var varFrame = (context || (this.context || this.homeContext)).variables,
         stage,
         watcher,
         target,
@@ -1701,9 +1749,10 @@ Process.prototype.doShowVar = function (varName) {
     }
 };
 
-Process.prototype.doHideVar = function (varName) {
+Process.prototype.doHideVar = function (varName, context) {
     // if no varName is specified delete all watchers on temporaries
-    var varFrame = this.context.variables,
+    // context is an optional start-context to be used by extensions
+    var varFrame = (context || this.context).variables,
         stage,
         watcher,
         target,
@@ -6865,6 +6914,16 @@ Context.prototype.stackSize = function () {
         return 1;
     }
     return 1 + this.parentContext.stackSize();
+};
+
+Context.prototype.isInCustomBlock = function () {
+    if (this.isCustomBlock) {
+        return true;
+    }
+    if (this.parentContext) {
+        return this.parentContext.isInCustomBlock();
+    }
+    return false;
 };
 
 // Variable /////////////////////////////////////////////////////////////////

@@ -102,11 +102,11 @@ nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
-WatcherMorph, XML_Serializer, SnapTranslator*/
+WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-May-04';
+modules.byob = '2021-June-24';
 
 // Declarations
 
@@ -331,7 +331,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'directionDialMenu'
                 ],
                 fname
-            )) {
+            ) || fname.indexOf('ext_') === 0) {
                 return fname;
             }
         }
@@ -347,9 +347,6 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
     if (string.match(/^function\s*\(.*\)\s*{.*\n/)) {
         // It's a JS function definition.
         // Let's extract its params and body, and return a Function out of them.
-        // if (!this.enableJS) {
-        //     throw new Error('JavaScript is not enabled');
-        // }
         params = string.match(/^function\s*\((.*)\)/)[1].split(',');
         body = string.split('\n').slice(1,-1).join('\n');
         return Function.apply(null, params.concat([body]));
@@ -378,16 +375,19 @@ CustomBlockDefinition.prototype.menuSearchWords = function () {
         var menu = this.dropDownMenuOf(slot);
         if (menu) {
             if (isString(menu)) { // special menu, translates its values
-                menu = InputSlotMorph.prototype[menu](true);
-                terms.push(
-                    Object.values(menu).map(entry => {
-                        if (isNil(entry)) {return ''; }
-                        if (entry instanceof Array) {
-                            return localize(entry[0]);
-                        }
-                        return entry.toString();
-                    }).join(' ')
-                );
+                if (typeof InputSlotMorph.prototype[menu] === 'function') {
+                    // catch typos in extension menus
+                    menu = InputSlotMorph.prototype[menu](true);
+                    terms.push(
+                        Object.values(menu).map(entry => {
+                            if (isNil(entry)) {return ''; }
+                            if (entry instanceof Array) {
+                                return localize(entry[0]);
+                            }
+                            return entry.toString();
+                        }).join(' ')
+                    );
+                }
             } else { // assume a dictionary, take its keys
                 terms.push(Object.keys(menu).join(' '));
             }
@@ -2747,6 +2747,13 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
     );
 };
 
+BlockLabelFragment.prototype.hasExtensionMenu = function () {
+    return contains(
+        Array.from(SnapExtensions.menus.keys()).map(str => '§_ext_' + str),
+        this.options
+    );
+};
+
 // arity
 
 BlockLabelFragment.prototype.isSingleInput = function () {
@@ -3739,6 +3746,13 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 localize('special'),
                 this.specialSlotsMenu()
             );
+            if (this.world().currentKey === 16) { // shift-key down
+                menu.addMenu(
+                    (this.fragment.hasExtensionMenu() ? on : off) +
+                    localize('extension'),
+                    this.extensionOptionsMenu()
+                );
+            }
             return menu;
         }
         return this.specialSlotsMenu();
@@ -3803,6 +3817,27 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('variables', '§_getVarNamesDict');
     addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
     addSpecialOptions('360° dial', '§_directionDialMenu');
+    return menu;
+};
+
+InputSlotDialogMorph.prototype.extensionOptionsMenu = function () {
+    var menu = new MenuMorph(this.setSlotOptions, null, this),
+        myself = this,
+        selectors = Array.from(SnapExtensions.menus.keys()),
+        on = '\u26AB ',
+        off = '\u26AA ';
+
+    function addSpecialOptions(label, selector) {
+        menu.addItem(
+            (myself.fragment.options === selector ?
+                    on : off) + localize(label),
+            selector
+        );
+    }
+
+    selectors.forEach(sel => {
+        addSpecialOptions(sel.slice(4), '§_ext_' + sel);
+    });
     return menu;
 };
 

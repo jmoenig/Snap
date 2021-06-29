@@ -46,7 +46,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2021-March-15';
+modules.locale = '2021-June-11';
 
 // Global stuff
 
@@ -168,7 +168,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2021-03-05'
+        '2021-06-11'
 };
 
 SnapTranslator.dict.it = {
@@ -318,11 +318,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski',
     'language_translator':
-        'Witek Kranas & deKrain',
+        'Witek Kranas & deKrain & Andrzej Batorski',
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2017-11-09'
+        '2021-05-15'
 };
 
 SnapTranslator.dict.zh_TW = {
@@ -631,4 +631,14 @@ SnapTranslator.dict.he = {
         'cohenyossi81@gmail.com',
     'last_changed':
         '2020-04-21'
+};
+SnapTranslator.dict.hi = {
+	'language_name':
+        'हिंदी',
+    'language_translator':
+        'Barthdry',
+    'translator_e-mail':
+        'barathkumarbasker2007@gmail.com',
+    'last_changed':
+        '2021-05-08'
 };

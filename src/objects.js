@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-April-23';
+modules.objects = '2021-June-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -1508,6 +1508,18 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'code of %cmdRing'
         },
 
+        // Extensions
+        doApplyExtension: {
+            type: 'command',
+            category: 'other',
+            spec: 'primitive %prim %mult%s'
+        },
+        reportApplyExtension: {
+            type: 'reporter',
+            category: 'other',
+            spec: 'primitive %prim %mult%s'
+        },
+
         // Video motion
         doSetVideoTransparency: {
             type: 'command',
@@ -1520,7 +1532,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']]
-        },
+        }
     };
 };
 
@@ -2555,6 +2567,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doPauseAll'));
         },
 
+<<<<<<< HEAD
         sensing: () => {
             blocks.push(block('reportTouchingObject'));
             blocks.push(block('reportTouchingColor'));
@@ -2571,6 +2584,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportMouseDown'));
             blocks.push('-');
             blocks.push(block('reportKeyPressed'));
+=======
+        if (Process.prototype.enableJS) {
+>>>>>>> upstream/scenes
             blocks.push('-');
             blocks.push(block('reportRelationTo'));
             blocks.push(block('reportAspect'));
@@ -2761,6 +2777,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportListItem'));
             blocks.push(block('reportCDR'));
             blocks.push('-');
+<<<<<<< HEAD
             blocks.push(block('reportListAttribute'));
             blocks.push(block('reportListIndex'));
             blocks.push(block('reportListContainsItem'));
@@ -2798,6 +2815,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 blocks.push('-');
                 blocks.push(block('reportMappedCode'));
             }
+=======
+            blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
+>>>>>>> upstream/scenes
         }
     }
 
@@ -8790,7 +8813,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
 
-        if (true) { // (Process.prototype.enableJS) {
+        if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {
@@ -8928,6 +8951,9 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('doShowTable'));
+            blocks.push('-');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
         }
 
         //////// /////////////////////////

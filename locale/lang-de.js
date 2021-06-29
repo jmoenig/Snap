@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-03-05', // this, too, will appear in the Translators tab
+        '2021-06-11', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1075,6 +1075,14 @@ SnapTranslator.dict.de = {
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
             + 'zu erm\u00f6glichen',
+    'JavaScript extensions':
+        'JavaScript Erweiterungen',
+    'check to support\nnative JavaScript functions':
+        'einschalten um JavaScript-Funktionen\ndirekt in Snap! zu ermöglichen',
+    'uncheck to disable support for\nnative JavaScript functions':
+        'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
+    'JavaScript extensions for Snap!\nare turned off':
+        'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
     'Input sliders':
         'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':

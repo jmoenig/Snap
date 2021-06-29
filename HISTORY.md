@@ -92,6 +92,128 @@
 
 ## in development:
 
+* **New Features:**
+    * new extension primitives
+* **Notable Changes:**
+    * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
+    * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
+* **Notable Fixes:**
+    * fixed occasional invisible error messages
+
+### 2021-06-24
+* extensions: tweaked loading unlisted script-extensions
+* byob, threads, store: removed unused code
+* extensions: added documentation for adding external JS modules
+* updated bignumbers library
+
+### 2021-06-23
+* updated bignums library
+* pushed dev version to 6.10
+* took out device libraries (Hummingbird blocks and Leap Motion)
+
+### 2021-06-22
+* extensions: added script-loading extension primitive
+
+### 2021-06-20
+* updated extensions documentation
+
+### 2021-06-19
+* extensions: added color extension primitives
+* byob: fixed search for dynamic extension menus
+* tweaked make-vars library to reduce internal dependencies
+* updated the abominable colors library ;-)
+
+### 2021-06-18
+* extensions: added text extension primitives
+* updated strings library
+* extensions: tweaked variable declaration extension primitive, commented out palette refresh prim
+* tweaked make-variables library
+* tweaked strings library
+* extensions: added color library dropdown menu
+* blocks, threads, extensions: separated extension primitives from extension dropdown menus
+* blocks, byob: dynamic extension dropdown menu support
+* updated strings library (changed variable name to '_case independent')
+
+### 2021-06-17
+* extensions: added APL extension primitives
+* updated apl library
+* threads, extensions: added variable extension primitives
+* updated make-variables library
+
+### 2021-06-16
+* threads: added exception handling primitives for try/catch
+* extensions: added try-catch extension primitives
+* updated try-catch library
+* extensions: added object-naming extension primitive
+* updated text-costume library
+
+### 2021-06-15
+* extensions: tweaked world-map primitives
+* updated maps library
+* extensions: new naming convention
+* updated list-utilities library
+* extensions: documented function semantics
+* updated frequency-distribution-analysis library
+* updated animation library
+* updated words-sentences library
+' extensions: added tts
+* updated text-to-speech library
+* updated bar-charts library
+* fixed #2850 (occasional invisible error message), thanks, Ken, for the bug report!
+* extensions: added long-form xhr primitive
+* extensions: added geolocation extension primitive
+* maps: changed default style to OpenStreetMap
+* updated http-blocks library
+* updated pixels library
+* updated audio library
+* updated localstorage library
+
+### 2021-06-14
+* new dev version
+* threads, blocks, objects, extensions: new safe extensions mechanism
+* objects: added new "primitive" blocks to dev palette
+* updated list-utilities library
+* updated animation library
+* updated frequency-distribution-analysis library
+* extensions: added some world-map extension primitives
+* threads: associate setting with JSF-block rather than the evaluator
+* extensions: added more world-map extension primitives
+
+## 6.9.0
+* **Notable Changes:**
+    * JS-functions are now disabled by default until switched on in the settings menu per session
+    * error messages in presentation mode are now shown as pop-up messages onstage  
+* **Notable Fixes:**
+    * register unsaved changes when the user edits a comment
+    * fixed bignums library and and made colors library faster, thanks, Brian!
+    * fixed setting the IDE language via a url parameter, thanks, Joan!
+* **Translation Updates:**
+    * Polish, thanks, Witek!
+    * new Hindi translation, thanks, Barthdry!
+    * German
+
+### 2021-06-14
+* prepared release
+
+### 2021-06-11
+* byob, blocks: catch JS functions inside custom dropdown definitions
+* German translation update
+
+### 2021-06-10
+* threads: error messages in presentation mode are now shown as pop-up messages onstage  
+* store: commented out modal prompt to enable JS when loading a project that uses it
+* gui: renamed setting to "JavaScript extensions"
+
+### 2021-06-09
+* new dev version
+* Polish translation update, thanks, Witek!
+* blocks: register unsaved changes when the user edits a comment
+* new Hindi translation, thanks, Barthdry!
+* fixed bignums library and and made colors library faster, thanks, Brian!
+* gui: fixed setting the IDE language via a url parameter, thanks, Joan!
+* threads, gui, objects, byob, store: reinstated JS-function control, disabled JS-functions by default
+* gui, store: automatically logout when the user enablesJavaScript, commented out for now
+
 ## 6.8.1
 * **Notable Fixes:**
     * fixed peeling off niladic custom block instances from prototype templates

@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-May-21';
+modules.gui = '2021-June-23';
 
 // Declarations
 
@@ -301,7 +301,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, myself = this, urlLanguage = null;
+    var hash, myself = this;
 
     function initUser(username) {
         sessionStorage.username = username;
@@ -378,9 +378,6 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.noExitWarning) {
             window.onbeforeunload = nop;
-        }
-        if (dict.lang) {
-            myself.setLanguage(dict.lang, null, true); // don't persist
         }
 
         // only force my world to get focus if I'm not in embed mode
@@ -475,26 +472,47 @@ IDE_Morph.prototype.openIn = function (world) {
                     }
                 );
             }
-        } else if (location.hash.substr(0, 5) === '#run:') {
+       } else if (location.hash.substr(0, 5) === '#run:') {
+            dict = '';
             hash = location.hash.substr(5);
-            idx = hash.indexOf("&");
-            if (idx > 0) {
-                hash = hash.slice(0, idx);
-            }
+
+            //decoding if hash is an encoded URI
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
             }
-            if (hash.substr(0, 8) === '<project>') {
-                this.rawOpenProjectString(hash);
-                applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
+            idx = hash.indexOf("&");
+
+            // supporting three URL cases
+
+            // xml project
+            if (hash.substr(0, 8) === '<project') {
+                this.rawOpenProjectString(
+                    hash.slice(0,hash.indexOf('</project>') + 10)
+                );
+                applyFlags(
+                    myself.cloud.parseDict(
+                        hash.substr(hash.indexOf('</project>') + 10)
+                    )
+                );
+            // no project, only flags
+            } else if (idx == 0){
+                applyFlags(myself.cloud.parseDict(hash));
+            // xml file path
+            // three path types allowed:
+            //  (1) absolute (http...),
+            //  (2) relative to site ("/path") or
+            //  (3) relative to folder ("path")
             } else {
                 this.shield = new Morph();
                 this.shield.alpha = 0;
                 this.shield.setExtent(this.parent.extent());
                 this.parent.add(this.shield);
                 this.showMessage('Fetching project...');
-
+                if (idx > 0) {
+                    dict = myself.cloud.parseDict(hash.substr(idx));
+                    hash = hash.slice(0,idx);
+                }
                 this.getURL(
                     hash,
                     projectData => {
@@ -516,11 +534,7 @@ IDE_Morph.prototype.openIn = function (world) {
                                 this.shield = null;
                                 msg.destroy();
                                 // this.toggleAppMode(true);
-                                applyFlags(
-                                    this.cloud.parseDict(
-                                        location.hash.substr(5)
-                                    )
-                                );
+                                applyFlags(dict);
                             }
                         ]);
                     }
@@ -621,16 +635,33 @@ IDE_Morph.prototype.openIn = function (world) {
                 this.cloudError()
             );
         } else if (location.hash.substr(0, 6) === '#lang:') {
-            urlLanguage = location.hash.substr(6);
-            this.setLanguage(urlLanguage, null, true); // don't persist
-            this.loadNewProject = true;
+            dict = myself.cloud.parseDict(location.hash.substr(6));
+            applyFlags(dict);
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
         this.loadNewProject = false;
     }
 
-    if (this.userLanguage) {
+    function launcherLangSetting() {
+        var langSetting = null;
+        if (location.hash.substr(0, 6) === '#lang:') {
+            if (location.hash.charAt(8) === '_') {
+                langSetting = location.hash.slice(6,11);
+            } else {
+                langSetting = location.hash.slice(6,8);
+            }
+        }
+        // lang-flag wins lang-anchor setting
+        langSetting = myself.cloud.parseDict(location.hash).lang || langSetting;
+        return langSetting;
+    }
+
+    if (launcherLangSetting()) {
+        // launch with this non-persisten lang setting
+        this.loadNewProject = true;
+        this.setLanguage(launcherLangSetting(), interpretUrlAnchors, true);
+    } else if (this.userLanguage) {
         this.loadNewProject = true;
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
@@ -3623,10 +3654,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         'microphoneMenu'
     );
     menu.addLine();
-    /*
     addPreference(
-        'JavaScript',
+        'JavaScript extensions',
         () => {
+            /*
+            if (!Process.prototype.enableJS) {
+                this.logout();
+            }
+            */
             Process.prototype.enableJS = !Process.prototype.enableJS;
             this.currentSprite.blocksCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
@@ -3634,9 +3669,11 @@ IDE_Morph.prototype.settingsMenu = function () {
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
-        'check to support\nnative JavaScript functions'
+        'check to support\nnative JavaScript functions' /* +
+            '.\n' +
+            'NOTE: You will have to manually\n' +
+            'sign in again to access your account.' */
     );
-    */
     addPreference(
         'Add scenes',
         () => this.isAddingScenes = !this.isAddingScenes,
