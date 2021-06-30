@@ -3237,11 +3237,22 @@ BlockMorph.prototype.developersMenu = function () {
     return menu;
 };
 
-BlockMorph.prototype.hidePrimitive = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+BlockMorph.prototype.hidePrimitive = function (args) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    ide.flushBlocksCache(ide.currentCategory);
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
     ide.refreshPalette();
 };
 

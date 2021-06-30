@@ -5791,9 +5791,11 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
         this.stage.paletteCache[category] = null;
+        this.stage.paletteCache.unified = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache[category] = null;
+                m.paletteCache.unified = null;
             }
         });
     } else {
