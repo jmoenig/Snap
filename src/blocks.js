@@ -3237,7 +3237,7 @@ BlockMorph.prototype.developersMenu = function () {
     return menu;
 };
 
-BlockMorph.prototype.hidePrimitive = function (args) {
+BlockMorph.prototype.hidePrimitive = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         dict,
         cat;
