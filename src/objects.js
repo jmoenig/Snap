@@ -3098,7 +3098,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
             ),
             []);
     } else {
-        blocks = this.getPrimitiveTemplates(category);
+        // ensure we do not modify the cached array
+        blocks = this.getPrimitiveTemplates(category).slice();
     }
     blocks.push('=');
     blocks.push(this.makeBlockButton(category));
