@@ -2828,9 +2828,8 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (category === 'unified' || definition.category === category ||
-                (category === 'variables'
-                && contains(['lists', 'other'], definition.category))) {
+        if (definition.category === category ||
+                (Array.isArray(category) && category.includes(definition.category))) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -3103,6 +3102,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
     blocks.push('=');
     blocks.push(this.makeBlockButton(category));
+
+    if (category === 'variables') {
+        category = ['variables', 'lists', 'other'];
+    }
 
     if (category !== 'unified') {
         blocks.push('=');
