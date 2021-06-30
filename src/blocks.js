@@ -9777,18 +9777,17 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
 
 InputSlotMorph.prototype.scenesMenu = function (searching) {
     var dict = {},
-         scenes;
-     if (!searching) {
-         scenes = this.parentThatIsA(IDE_Morph).scenes;
-         if (scenes.length() > 1) {
-             scenes.itemsArray().forEach(scn => {
-                 if (scn.name) {
-                     dict[scn.name] = scn.name;
-                 }
-             });
-         }
+        scenes;
+    if (!searching) {
+        scenes = this.parentThatIsA(IDE_Morph).scenes;
+        if (scenes.length() > 1) {
+            scenes.itemsArray().forEach(scn => {
+                if (scn.name) {
+                    dict[scn.name] = scn.name;
+                }
+            });
+        }
     }
-
     dict['~'] = null;
     dict.next = ['next'];
     dict.previous = ['previous'];
