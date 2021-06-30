@@ -53,12 +53,24 @@
         }
 
         validate(extension) {
+            const palettes = extension.getPalette();
+
             extension.getBlocks().forEach(block => {
                 const alreadyExists = SpriteMorph.prototype[block.name] ||
                     StageMorph.prototype[block.name] || Process.prototype[block.name];
+
                 if (alreadyExists) {
                     throw new Error(`Cannot override existing "${block.name}" block`);
                 }
+
+                const receivers = this.findWatcherReceivers(palettes, block.name);
+                receivers.forEach(rcvr => {
+                    if (!block.receivers.includes(rcvr)) {
+                        const msg = `Cannot add a watcher toggle for "${block.spec}" on ${rcvr.name}.` +
+                            ` Did you forget to add ".for(${rcvr.name})" when defining the block?`;
+                        throw new Error(msg);
+                    }
+                });
             });
         }
 
@@ -85,11 +97,8 @@
             return paletteContents;
         }
 
-        initBlocks() {
-            // TODO: refactor this so we can unregister extensions
-            const allBlocks = this.registry.flatMap(ext => ext.getBlocks());
-            const palettes = this.registry.flatMap(ext => ext.getPalette());
-            const findReceivers = spec => palettes
+        findWatcherReceivers(palettes, spec) {
+            const receivers = palettes
                 .filter(p => p.contents.find(block => block.type === 'watcher' && block.name === spec))
                 .map(palette => palette.targetObject)
                 .reduce((rcvrs, next) => {
@@ -98,6 +107,13 @@
                     }
                     return rcvrs;
                 }, []);
+            return receivers;
+        }
+
+        initBlocks() {
+            // TODO: refactor this so we can unregister extensions
+            const allBlocks = this.registry.flatMap(ext => ext.getBlocks());
+            const palettes = this.registry.flatMap(ext => ext.getPalette());
 
             allBlocks.forEach(block => {
                 SpriteMorph.prototype.blocks[block.name] = {
@@ -105,9 +121,19 @@
                     category: block.category,
                     spec: block.spec
                 };
-                const receivers = findReceivers(block.name);
+                const receivers = this.findWatcherReceivers(palettes, block.name);
+                receivers.forEach(rcvr => {
+                    if (!block.receivers.includes(rcvr)) {
+                        const msg = `Cannot add a watcher toggle for ${block.spec} on ${rcvr.name}.` +
+                            ` Did you forget to add ".for(${rcvr.name})" when defining the block?`;
+                        throw new Error(msg);
+                    }
+                });
+
+                if (receivers.length === 0) {
+                    receivers.push(Process);
+                }
                 receivers.forEach(Rcvr => Rcvr.prototype[block.name] = block.impl);
-                Process.prototype[block.name] = block.impl;
             });
         }
     }
@@ -152,6 +178,12 @@
             this.spec = spec;
             this.defaults = defaults;
             this.impl = impl;
+            this.receivers = [];
+        }
+
+        for(...receivers) {
+            this.receivers = receivers;
+            return this;
         }
     }
 
