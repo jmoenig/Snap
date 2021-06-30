@@ -308,7 +308,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.color = this.backgroundColor;
     this.activeEditor = this;
     this.extensions = NetsBloxExtensions;
-    this.extensions.initialize(this);
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -380,6 +379,7 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         this.onOpen();
     }
+    this.extensions.initialize(this);
     this.initializeEmbeddedAPI();
     window.dispatchEvent(new CustomEvent("ideLoaded"));
 };
