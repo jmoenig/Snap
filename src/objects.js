@@ -1837,7 +1837,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotatesWithAnchor = true;
     this.layers = null; // cache for dragging nested sprites, don't serialize
 
-    this.blocksCache = {}; // not to be serialized (!)
+    this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
@@ -1902,7 +1902,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.gainNode = null;
     c.pannerNode = null;
     c.freqPlayer = null;
-    c.blocksCache = {};
+    c.primitivesCache = {};
     c.paletteCache = {};
     c.imageData = {};
     c.cachedHSV = c.color.hsv();
@@ -2929,11 +2929,11 @@ SpriteMorph.prototype.makeBlock = function () {
 };
 
 SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
-    blocks = this.blocksCache[category];
+    blocks = this.primitivesCache[category];
     if (!blocks) {
         blocks = this.blockTemplates(category);
         if (this.isCachingPrimitives) {
-            this.blocksCache[category] = blocks;
+            this.primitivesCache[category] = blocks;
         }
     }
     return blocks;
@@ -3589,7 +3589,7 @@ SpriteMorph.prototype.addVariable = function (name, isGlobal) {
         }
     } else {
         this.variables.addVar(name);
-        this.blocksCache.variables = null;
+        this.primitivesCache.variables = null;
     }
 };
 
@@ -7691,7 +7691,7 @@ StageMorph.prototype.init = function (globals) {
     this.cachedHSV = [0, 0, 0]; // for background hsv support, not serialized
 
     this.keysPressed = {}; // for handling keyboard events, do not persist
-    this.blocksCache = {}; // not to be serialized (!)
+    this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
@@ -8543,7 +8543,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 ide = myself.parentThatIsA(IDE_Morph);
                 myself.addVariable(pair[0], pair[1]);
                 myself.toggleVariableWatcher(pair[0], pair[1]);
-                myself.blocksCache[cat] = null;
+                myself.primitivesCache[cat] = null;
                 myself.paletteCache[cat] = null;
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();

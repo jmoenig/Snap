@@ -3663,7 +3663,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             */
             Process.prototype.enableJS = !Process.prototype.enableJS;
-            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.primitivesCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
             this.refreshPalette();
         },
@@ -3904,7 +3904,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             SpriteMorph.prototype.enableFirstClass =
                 !SpriteMorph.prototype.enableFirstClass;
-            this.currentSprite.blocksCache.sensing = null;
+            this.currentSprite.primitivesCache.sensing = null;
             this.currentSprite.paletteCache.sensing = null;
             this.refreshPalette();
         },
@@ -3978,7 +3978,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             Process.prototype.enableCompiling =
                 !Process.prototype.enableCompiling;
-            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.primitivesCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
             this.refreshPalette();
         },
@@ -4016,7 +4016,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
-            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.primitivesCache.variables = null;
             this.currentSprite.paletteCache.variables = null;
             this.refreshPalette();
         },
@@ -4030,7 +4030,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableInheritance =
                 !StageMorph.prototype.enableInheritance;
-            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.primitivesCache.variables = null;
             this.currentSprite.paletteCache.variables = null;
             this.refreshPalette();
         },
@@ -5768,19 +5768,19 @@ IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     // the 'unified' category is always flushed.
     if (category) {
-        this.stage.blocksCache[category] = null;
-        this.stage.blocksCache.unified = null;
+        this.stage.primitivesCache[category] = null;
+        this.stage.primitivesCache.unified = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache[category] = null;
-                m.blocksCache.unified = null;
+                m.primitivesCache[category] = null;
+                m.primitivesCache.unified = null;
             }
         });
     } else {
-        this.stage.blocksCache = {};
+        this.stage.primitivesCache = {};
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache = {};
+                m.primitivesCache = {};
             }
         });
     }
