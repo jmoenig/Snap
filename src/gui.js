@@ -5765,7 +5765,6 @@ IDE_Morph.prototype.switchToDevMode = function () {
 };
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
-    alert(`blocks cacbe flushed for ${category}`);
     // if no category is specified, the whole cache gets flushed
     // the 'unified' category is always flushed.
     if (category) {
