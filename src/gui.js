@@ -2049,29 +2049,6 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     };
 };
 
-IDE_Morph.prototype.unsetUnifiedPalete = function () {
-    this.scene.unifiedPalette = false;
-    this.currentCategory = 'motion';
-    this.createCategories();
-    this.categories.fixLayout();
-    this.fixLayout();
-    this.flushBlocksCache();
-    this.currentSprite.palette(this.currentCategory);
-    this.refreshPalette(true);
-}
-
-IDE_Morph.prototype.setUnifiedPalete = function () {
-    this.scene.unifiedPalette = true;
-    this.currentCategory = 'unified';
-    this.createCategories();
-    this.categories.fixLayout();
-    this.fixLayout();
-    this.flushBlocksCache();
-    this.flushPaletteCache();
-    this.currentSprite.palette(this.currentCategory);
-    this.refreshPalette(true);
-}
-
 // IDE_Morph layout
 
 IDE_Morph.prototype.fixLayout = function (situation) {
@@ -4050,13 +4027,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Unified Palette',
-        () => {
-            if (this.scene.unifiedPalette) {
-                this.unsetUnifiedPalete();
-            } else {
-                this.setUnifiedPalete();
-            }
-        },
+        () => this.toggleUnifiedPalette(),
         this.scene.unifiedPalette,
         'uncheck to show only the selected category\'s blocks',
         'check to show all blocks in a single palette',
@@ -5602,9 +5573,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     this.world().keyboardFocus = this.stage;
 
     if (this.currentCategory != 'unified' && scene.unifiedPalette) {
-        this.setUnifiedPalete();
+        this.toggleUnifiedPalette();
     } else if (this.currentCategory == 'unified' && !scene.unifiedPalette) {
-        this.unsetUnifiedPalete();
+        this.toggleUnifiedPalette();
     }
 
     this.fixLayout();
@@ -5766,14 +5737,11 @@ IDE_Morph.prototype.switchToDevMode = function () {
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
-    // the 'unified' category is always flushed.
     if (category) {
         this.stage.primitivesCache[category] = null;
-        this.stage.primitivesCache.unified = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.primitivesCache[category] = null;
-                m.primitivesCache.unified = null;
             }
         });
     } else {
@@ -6048,6 +6016,22 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
         zoomTo(1);
     }
 };
+
+IDE_Morph.prototype.toggleUnifiedPalette = function () {
+    this.scene.unifiedPalette = !this.scene.unifiedPalette;
+    if (this.scene.unifiedPalette) {
+        this.currentCategory = 'unified';
+    } else {
+        this.currentCategory = 'motion';
+    }
+
+    this.createCategories();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.flushBlocksCache();
+    this.currentSprite.palette(this.currentCategory);
+    this.refreshPalette(true);
+}
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,

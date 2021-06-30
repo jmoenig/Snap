@@ -2637,7 +2637,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
-            blocks.push(devModeText());
+            blocks.push(this.devModeText());
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
@@ -2645,7 +2645,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     } else if (category === 'variables') {
 
-        blocks.push(this.makeAVariableButton());
+        blocks.push(this.makeVariableButton());
         if (this.deletableVariableNames().length > 0) {
             blocks.push(this.deleteVariableButton());
         }
@@ -2713,7 +2713,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
-            blocks.push(devModeText());
+            blocks.push(this.devModeText());
             blocks.push('-');
             blocks.push(block('doShowTable'));
             blocks.push('-');
@@ -2735,7 +2735,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 };
 
 // Utitlies displayed in the palette
-SpriteMorph.prototype.makeAVariableButton = function() {
+SpriteMorph.prototype.makeVariableButton = function () {
     let button, myself = this;
 
     function addVar(pair) {
@@ -2769,7 +2769,7 @@ SpriteMorph.prototype.makeAVariableButton = function() {
         },
         'Make a variable'
     );
-    button.userMenu = this.newHelpMenu;
+    button.userMenu = this.helpMenu;
     button.selector = 'addVariable';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
@@ -2802,7 +2802,7 @@ SpriteMorph.prototype.deleteVariableButton = function () {
         },
         'Delete a variable'
     );
-    button.userMenu = this.newHelpMenu;
+    button.userMenu = this.helpMenu;
     button.selector = 'deleteVariable';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
@@ -2815,7 +2815,7 @@ SpriteMorph.prototype.devModeText = function () {
     return txt;
 }
 
-SpriteMorph.prototype.newHelpMenu = function () {
+SpriteMorph.prototype.helpMenu = function () {
     // return a 1 item context menu for anything that implements a 'showHelp' method.
     var menu = new MenuMorph(this);
     menu.addItem('help...', 'showHelp');
@@ -2865,7 +2865,7 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
         'Make a block'
     );
 
-    button.userMenu = this.newHelpMenu;
+    button.userMenu = this.helpMenu;
     button.selector = 'addCustomBlock';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
@@ -2887,7 +2887,7 @@ SpriteMorph.prototype.makeBlock = function () {
                 } else {
                     this.customBlocks.push(definition);
                 }
-                ide.flushBlocksCache();
+                ide.flushPaletteCache();
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
@@ -8780,7 +8780,7 @@ StageMorph.prototype.blockTemplates = function (category) {
     }
     if (category === 'variables') {
 
-        blocks.push(this.makeAVariableButton());
+        blocks.push(this.makeVariableButton());
         if (this.variables.allNames().length > 0) {
             blocks.push(this.deleteVariableButton());
         }
@@ -8856,23 +8856,11 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-            blocks.push('=');
         }
     }
 
     return blocks;
 };
-
-// StageMorph Palette Utilities
-StageMorph.prototype.newHelpMenu = SpriteMorph.prototype.newHelpMenu;
-StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
-StageMorph.prototype.makeAVariableButton = SpriteMorph.prototype.makeAVariableButton;
-StageMorph.prototype.devModeText = SpriteMorph.prototype.devModeText;
-StageMorph.prototype.deleteVariableButton = SpriteMorph.prototype.deleteVariableButton;
-StageMorph.prototype.customBlockTemplatesForCategory =
-    SpriteMorph.prototype.customBlockTemplatesForCategory;
-StageMorph.prototype.getPrimitiveTemplates =
-    SpriteMorph.prototype.getPrimitiveTemplates;
 
 // StageMorph primitives
 
@@ -9151,17 +9139,26 @@ StageMorph.prototype.categories = SpriteMorph.prototype.categories;
 StageMorph.prototype.blockColor = SpriteMorph.prototype.blockColor;
 StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
 StageMorph.prototype.setName = SpriteMorph.prototype.setName;
-StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
-StageMorph.prototype.makeBlock = SpriteMorph.prototype.makeBlock;
-StageMorph.prototype.palette = SpriteMorph.prototype.palette;
-StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
-StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
-StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
 StageMorph.prototype.reporterize = SpriteMorph.prototype.reporterize;
 StageMorph.prototype.variableBlock = SpriteMorph.prototype.variableBlock;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
+
+// StageMorph Palette Utilities
+
+StageMorph.prototype.makeBlock = SpriteMorph.prototype.makeBlock;
+StageMorph.prototype.helpMenu = SpriteMorph.prototype.helpMenu;
+StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
+StageMorph.prototype.makeVariableButton = SpriteMorph.prototype.makeVariableButton;
+StageMorph.prototype.devModeText = SpriteMorph.prototype.devModeText;
+StageMorph.prototype.deleteVariableButton = SpriteMorph.prototype.deleteVariableButton;
+StageMorph.prototype.customBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
+StageMorph.prototype.getPrimitiveTemplates = SpriteMorph.prototype.getPrimitiveTemplates;
+StageMorph.prototype.palette = SpriteMorph.prototype.palette;
+StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
+StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
+StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
 
 // StageMorph neighbor detection
 
