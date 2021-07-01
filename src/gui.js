@@ -2532,18 +2532,11 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 };
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
-    var topOfCategory,
-        palette = this.palette.contents;
-    // pallete scroll top - block top + palette actual top + palette padding
-    palette.children.some(block => {
-        if (block.category == category) {
-            topOfCategory = block;
-            return true;
-        }
-    });
-    palette.setTop(
-        palette.top() - topOfCategory.top() + this.palette.top() + this.palette.padding
-    );
+    let palette = this.palette,
+        firstInCategory = palette.contents.children.find(block => block.category == category);
+
+    palette.scrollY(palette.top() - firstInCategory.top() + palette.padding);
+    palette.adjustScrollBars();
 }
 
 IDE_Morph.prototype.pressStart = function () {

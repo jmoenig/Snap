@@ -2961,7 +2961,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     searchButton.edge = 0;
     searchButton.padding = 3;
     searchButton.fixLayout();
-	palette.toolBar.add(searchButton);
+    palette.toolBar.add(searchButton);
 
     makeButton = new PushButtonMorph(
         this,
