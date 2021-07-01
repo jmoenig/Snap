@@ -336,9 +336,9 @@ Cloud.prototype.logoutAlias = function (onSuccess, onError) {
             if (user.username && user.previous_username_admin) {
                 myself.login(
                     user.previous_username_admin,
-                    0, // password is irrelevant
-                    false, // ignored
-                    function (username, role, previous_username_admin, response) {
+                    '', // password is irrelevant, but can't be null
+                    false, // ignored, will use the Admin's settings saved in the backend
+                    function (username, role, response, previous_username_admin) {
                         alert(
                             response.message,
                             function () {
