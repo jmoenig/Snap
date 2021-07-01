@@ -3286,6 +3286,7 @@ SpriteMorph.prototype.searchBlocks = function (
     var myself = this,
         unit = SyntaxElementMorph.prototype.fontSize,
         ide = this.parentThatIsA(IDE_Morph),
+        oldTop = ide.palette.contents.top(),
         oldSearch = '',
         searchBar = new InputFieldMorph(searchString || ''),
         searchPane = ide.createPalette('forSearch'),
@@ -3393,6 +3394,7 @@ SpriteMorph.prototype.searchBlocks = function (
 
     searchBar.cancel = function () {
         ide.refreshPalette();
+        ide.palette.contents.setTop(oldTop);
         ide.palette.adjustScrollBars();
     };
 
