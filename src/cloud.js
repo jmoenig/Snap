@@ -338,7 +338,7 @@ Cloud.prototype.logoutAlias = function (onSuccess, onError) {
                     user.previous_username_admin,
                     '', // password is irrelevant, but can't be null
                     false, // ignored, will use the Admin's settings saved in the backend
-                    function (username, role, response, previous_username_admin) {
+                    function (username, role, previous_username_admin, response) {
                         alert(
                             response.message,
                             function () {
