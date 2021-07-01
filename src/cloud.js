@@ -289,8 +289,8 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
                     null,
                     user.username,
                     user.role,
-                    response ? JSON.parse(response) : null,
-                    user.previous_username_admin
+                    user.previous_username_admin,
+                    response ? JSON.parse(response) : null
                 );
             }
         },
