@@ -1260,10 +1260,10 @@ IDE_Morph.prototype.createCategories = function () {
     if (this.scene.unifiedPalette) {
         categorySelectionAction = scrollToCategory;
     } else {
-        categorySelectionAction = changePallete;
+        categorySelectionAction = changePalette;
     }
 
-    function changePallete(category) {
+    function changePalette(category) {
         return () => {
             myself.currentCategory = category;
             myself.categories.children.forEach(each =>
