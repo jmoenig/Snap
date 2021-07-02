@@ -11,11 +11,13 @@
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
+    * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
 
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!
 * merged scenes branch
+* morphic: fixed centering of menus, thanks, Brian Broll!
 
 ### 2021-05-21
 * gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
