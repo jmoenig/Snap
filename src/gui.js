@@ -2536,8 +2536,14 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
         firstInCategory = palette.contents.children.find(
             block => block.category === category
         ),
-        delta = palette.top() - firstInCategory.top() + palette.padding,
-        msecs = this.isAnimating ? 700 : 0;
+        msecs = this.isAnimating ? 700 : 0,
+        delta;
+
+        if (firstInCategory === undefined) {
+            return;
+        }
+        delta = palette.top() - firstInCategory.top() + palette.padding;
+
 
         this.world().animations.push(new Animation(
             y => { // setter
