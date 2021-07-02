@@ -2537,7 +2537,7 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
             block => block.category === category
         ),
         delta = palette.top() - firstInCategory.top() + palette.padding,
-        msecs = this.isAnimating ? 100 : 0;
+        msecs = this.isAnimating ? 700 : 0;
 
         this.world().animations.push(new Animation(
             y => { // setter
@@ -2548,7 +2548,7 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
             () => palette.contents.top(), // getter
             delta, // delta
             msecs, // duration in ms
-            'cubic_in', // easing
+            t => Math.pow(t, 6), // easing
             null // onComplete
         ));
 };
