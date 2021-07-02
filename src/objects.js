@@ -2825,8 +2825,8 @@ SpriteMorph.prototype.helpMenu = function () {
     return menu;
 };
 
-// returns an array alock templates for a selected category.
 SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
+    // returns an array of block templates for a selected category.
     var ide = this.parentThatIsA(IDE_Morph), blocks = [],
         isInherited = false, block, inheritedBlocks;
 
