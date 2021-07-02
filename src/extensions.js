@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains*/
 
-modules.extensions = '2021-June-24';
+modules.extensions = '2021-July-02';
 
 // Global stuff
 
