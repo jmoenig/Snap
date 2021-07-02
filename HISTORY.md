@@ -18,6 +18,7 @@
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!
 * merged scenes branch
 * morphic: fixed centering of menus, thanks, Brian Broll!
+* gui: animate scrollToPaletteCategory()
 
 ### 2021-05-21
 * gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML

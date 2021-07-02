@@ -2532,13 +2532,25 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 };
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
-    let palette = this.palette,
+    var palette = this.palette,
         firstInCategory = palette.contents.children.find(
             block => block.category === category
-        );
+        ),
+        delta = palette.top() - firstInCategory.top() + palette.padding,
+        msecs = this.isAnimating ? 100 : 0;
 
-    palette.scrollY(palette.top() - firstInCategory.top() + palette.padding);
-    palette.adjustScrollBars();
+        this.world().animations.push(new Animation(
+            y => { // setter
+                palette.contents.setTop(y);
+                palette.contents.keepInScrollFrame();
+                palette.adjustScrollBars();
+            },
+            () => palette.contents.top(), // getter
+            delta, // delta
+            msecs, // duration in ms
+            'cubic_in', // easing
+            null // onComplete
+        ));
 };
 
 IDE_Morph.prototype.pressStart = function () {
