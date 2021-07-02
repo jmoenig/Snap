@@ -158,7 +158,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-18';
+modules.blocks = '2021-July-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -753,6 +753,11 @@ SyntaxElementMorph.prototype.labelParts = {
             'parameters' : ['parameters']
         }
     },
+    '%scn': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'scenesMenu'
+    },
 
     // video
 
@@ -926,7 +931,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'ring slot'
         tags: 'static',
         kind: 'command', 'reporter', 'predicate'
-        
+
     */
     '%rc': {
         type: 'ring slot',
@@ -2052,7 +2057,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             return;
         }
     }
-    
+
     this.fixHighlight();
 };
 
@@ -2460,6 +2465,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %r      - round reporter slot
     %p      - hexagonal predicate slot
     %vid    - chameleon colored rectangular drop-down for video modes
+    %scn    - chameleon colored rectangular drop-down for scene names
 
     rings:
 
@@ -4246,7 +4252,7 @@ BlockMorph.prototype.render = function (ctx) {
         this.outlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -5882,11 +5888,11 @@ function ReporterBlockMorph(isPredicate) {
 ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
- 
+
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
     this.rerender();
- 
+
     this.cachedSlotSpec = null; // don't serialize
     this.isLocalVarTemplate = null; // don't serialize
 };
@@ -6577,7 +6583,7 @@ RingMorph.prototype.render = function (ctx) {
         // ctx.closePath();
         ctx.clip('evenodd');
         ctx.fillRect(0, 0, this.width(), this.height());
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -9759,13 +9765,35 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
         'spectrum' : ['spectrum'],
         'resolution' : ['resolution']
     };
-    if (searching) {return {}; }
+    if (searching) {return dict; }
 
     if (this.world().currentKey === 16) { // shift
         dict['~'] = null;
         dict.modifier = ['modifier'];
         dict.output = ['output'];
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.scenesMenu = function (searching) {
+    var dict = {},
+        scenes;
+    if (!searching) {
+        scenes = this.parentThatIsA(IDE_Morph).scenes;
+        if (scenes.length() > 1) {
+            scenes.itemsArray().forEach(scn => {
+                if (scn.name) {
+                    dict[scn.name] = scn.name;
+                }
+            });
+        }
+    }
+    dict['~'] = null;
+    dict.next = ['next'];
+    dict.previous = ['previous'];
+    dict['1 '] = 1; // trailing space needed to prevent undesired sorting
+    dict.last = ['last'];
+    dict.random = ['random'];
     return dict;
 };
 
@@ -11002,7 +11030,8 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     var w = this.width(),
         r = this.height() / 2,
         shift = this.edge / 2,
-        slideStep = (this.width() - this.height()) / 4 * Math.max(0, (progress || 0)),
+        slideStep = (this.width() - this.height()) / 4 *
+            Math.max(0, (progress || 0)),
         gradient,
         x,
         y = r,
@@ -14272,7 +14301,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 
     cmd = new CommandBlockMorph();
     cmd.setSpec('command %cmdRing');
-    
+
     rings = new CommandBlockMorph();
     rings.setSpec('reporter %repRing predicate %predRing');
 

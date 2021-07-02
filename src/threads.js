@@ -4657,6 +4657,55 @@ Process.prototype.goToLayer = function (name) {
     }
 };
 
+// Process scene primitives
+
+Process.prototype.doSwitchToScene = function (id) {
+    var rcvr = this.blockReceiver(),
+        idx = 0,
+        ide, scenes, num, scene;
+
+    this.assertAlive(rcvr);
+    ide = rcvr.parentThatIsA(IDE_Morph);
+    scenes = ide.scenes;
+
+    if (id instanceof Array) { // special named indices
+        switch (this.inputOption(id)) {
+        case 'next':
+            idx = scenes.indexOf(ide.scene) + 1;
+            if (idx > scenes.length()) {
+                idx = 1;
+            }
+            break;
+        case 'previous':
+            idx = scenes.indexOf(ide.scene) - 1;
+            if (idx < 1) {
+                idx = scenes.length();
+            }
+            break;
+        case 'last':
+            idx = scenes.length();
+            break;
+        case 'random':
+            idx = this.reportBasicRandom(1, scenes.length());
+            break;
+        }
+        ide.switchToScene(scenes.at(idx));
+        return;
+    }
+
+    scene = detect(scenes.itemsArray(), scn => scn.name === id);
+    if (scene === null) {
+        num = parseFloat(id);
+        if (isNaN(num)) {
+            return;
+        }
+        scene = scenes.at(num);
+    }
+
+    ide.switchToScene(scene);
+};
+
+
 // Process color primitives
 
 Process.prototype.setHSVA = function (name, num) {

@@ -1,5 +1,99 @@
 # Snap! (BYOB) History
 
+## in development for v7:
+* **New Features:**
+    * Scenes
+    * unified blocks palette option, thanks, Michael!
+* **Notable Changes:**
+    * saved projects remember the last edited srpite
+* **Notable Fixes:**
+    * made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-07-02
+* gui, object, store, etc.: unified blocks palette option, thanks, Michael!
+
+### 2021-05-21
+* gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
+* gui: distinguished project name from scene names, removed hidden "export as plain text" option
+* gui: sceneified project notes
+* gui: adjusted project thumbnail in "save" dialog
+* gui: some cleanups
+* gui, scenes: sceneified unsaved changes management
+* blocks: fixed search-blocks for scenesMenu
+
+### 2021-05-20
+* gui: marked projectName to be refactored and sceneified
+
+### 2021-05-19
+* gui: disabled scene icon context menu for project scene
+* gui: disabled dragging the project scene icon
+* gui: made sure the project scene stays in place
+* gui: added exporting single scenes
+* scenes, store: removed redundant properties "notes" and "thumbnail" from project
+* store: removed "thumbnail" property from scene xml
+
+### 2021-05-18
+* gui: fixed exporting media only for a single scene
+* gui: fixed cloud file format components
+* gui: "projectized" cloud file format for a single scene
+* gui: fixed cloud file format for multi-scene projects
+* gui: ensured unique scene names
+
+### 2021-05-11
+* gui: add multi-scene projects 
+* gui: adjusted scene album rendering
+* gui: tweaked scene album rendering
+
+### 2021-05-10
+* gui: project menu entries for "new scene" and "add scene" 
+
+### 2021-04-28
+* gui: only show scene album if the project has more than a single scene
+
+### 2021-04-23
+* store: serialize sprite-order from scenes
+* gui: sceneified refreshIDE()
+* gui: sceneified toggling dynamic input labels and switching languages
+* gui: sceneified "zoom blocks"
+* store: moved sprite-selection attribute from stage to scenes tag
+* scenes, store, gui: remember last edited scene in a project
+
+### 2021-04-22
+* store, gui: first pass at deserializing multi-scene projects
+* gui, scenes: migrated "new project" feature
+* gui: replaced openScene() with openProject()
+
+### 2021-04-21
+* store, gui: refactored project loading structure
+
+### 2021-04-20
+* scenes, store, gui: multi-scene project serialization format, first pass 
+
+### 2021-04-16
+* scenes, store, gui: remember last edited sprite in a scene / project
+* scenes: removed Project class
+* scenes, store, gui: export multi-scene projects
+
+### 2021-04-14
+* scenes: new Project class
+* store: sceneified projects
+* gui: switched to scene-based project serialization
+
+### 2021-04-12
+* blocks, objects, threads, gui: new "switch to scene _" command primitive
+* morphic, gui: support bulk-file-drop for importing scenes
+* gui: tweaked scene album colors
+
+### 2021-04-08
+* gui: scroll selected scene icon into view
+
+### 2021-04-01
+* gui: made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-04-01
+* gui: made scene icons selectable
+* gui: made scene icons observe the scene's stage versions
+
 ## in development:
 
 * **New Features:**
@@ -187,6 +281,23 @@
 * fixed DEAL in the APL library, thanks, Brian!
 * objects: fixed a resizing edge case bug for the stage prompter (ASK command)
 
+### 2021-03-31
+* gui: tweaked scene icon settings
+* gui: moved stage icon to the top of the corral
+
+### 2021-03-30
+* gui: added documentation
+* gui: added SceneIconMorph and SceneAlbumMorph prototypes 
+* gui: turned scenes into an observable list
+* gui: added scene icon thumbnails
+
+### 2021-03-25
+* gui, scenes: sceneified trash
+* gui: first "live" multi-scene experiment
+
+### 2021-03-19
+* gui, store, scenes: capture global settings in scenes
+
 ## 6.7.3
 * **Notable Changes:**
     * hyperized "key _ pressed?" predicate
@@ -201,7 +312,11 @@
 * threads: hyperized "key _ pressed?" predicate
 * prepared patch
 
+### 2021-03-18
+* gui, scenes, objects: more scene-refactorings
+
 ### 2021-03-17
+* objects, gui, paint, sketch, store: de-globalized stage dimensions 
 * new dev version
 * threads fixed repeat for non-numbers, thanks Stefan!
 * updated list-utilities library, thanks, Brian!
@@ -215,6 +330,15 @@
     * Catalan, thanks, Joan!
 
 ### 2021-03-15
+* gui: marked methods for scene refactorings
+
+### 2021-03-12
+* scenes, gui, store: added scenes class
+
+### 2021-03-11
+* gui, store: refactor loading a project into the IDE
+
+### 2021-03-09
 * new dev version
 * Catalan translation update, thanks, Joan!
 * lists, apl: fixed "transpose", thanks, Brian!
