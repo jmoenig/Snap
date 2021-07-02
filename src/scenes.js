@@ -51,7 +51,7 @@
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
 normalizeCanvas, SnapSerializer*/
 
-modules.scenes = '2021-May-21';
+modules.scenes = '2021-July-02';
 
 
 // Projecct /////////////////////////////////////////////////////////

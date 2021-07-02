@@ -158,7 +158,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-18';
+modules.blocks = '2021-July-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11030,7 +11030,8 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     var w = this.width(),
         r = this.height() / 2,
         shift = this.edge / 2,
-        slideStep = (this.width() - this.height()) / 4 * Math.max(0, (progress || 0)),
+        slideStep = (this.width() - this.height()) / 4 *
+            Math.max(0, (progress || 0)),
         gradient,
         x,
         y = r,

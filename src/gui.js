@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-June-23';
+modules.gui = '2021-July-02';
 
 // Declarations
 
@@ -1270,7 +1270,7 @@ IDE_Morph.prototype.createCategories = function () {
                 each.refresh()
             );
             myself.refreshPalette(true);
-        }
+        };
     }
 
     function scrollToCategory(category) {
@@ -2533,11 +2533,13 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
     let palette = this.palette,
-        firstInCategory = palette.contents.children.find(block => block.category == category);
+        firstInCategory = palette.contents.children.find(
+            block => block.category === category
+        );
 
     palette.scrollY(palette.top() - firstInCategory.top() + palette.padding);
     palette.adjustScrollBars();
-}
+};
 
 IDE_Morph.prototype.pressStart = function () {
     if (this.world().currentKey === 16) { // shiftClicked
@@ -6024,7 +6026,7 @@ IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
-}
+};
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,

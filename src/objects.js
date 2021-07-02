@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-June-14';
+modules.objects = '2021-July-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -856,7 +856,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doTellTo: {
             type: 'command',
             category: 'control',
-            // spec: 'tell %spr to %cl' // I liked this version much better, -Jens
+            // spec: 'tell %spr to %cl' // I liked this version better, -Jens
             spec: 'tell %spr to %cmdRing %inputs'
         },
         reportAskFor: {
@@ -2285,9 +2285,9 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 // SpriteMorph block templates
 
-SpriteMorph.prototype.blockTemplates = function (category) {
+SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
     var blocks = [], myself = this, varNames,
-        category = category || 'motion';
+        inheritedVars = this.inheritedVariableNames();
 
     function block(selector, isGhosted) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
@@ -2456,7 +2456,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
-            blocks.push(devModeText());
+            blocks.push(this.devModeText());
             blocks.push('-');
             blocks.push(block('doPlayFrequency'));
         }
@@ -2736,7 +2736,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
 // Utitlies displayed in the palette
 SpriteMorph.prototype.makeVariableButton = function () {
-    let button, myself = this;
+    var button, myself = this;
 
     function addVar(pair) {
         var ide;
@@ -2773,10 +2773,10 @@ SpriteMorph.prototype.makeVariableButton = function () {
     button.selector = 'addVariable';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
-}
+};
 
 SpriteMorph.prototype.deleteVariableButton = function () {
-    let button, myself = this;
+    var button, myself = this;
     button = new PushButtonMorph(
         null,
         function () {
@@ -2806,21 +2806,24 @@ SpriteMorph.prototype.deleteVariableButton = function () {
     button.selector = 'deleteVariable';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
-}
+};
 
 SpriteMorph.prototype.devModeText = function () {
-    let txt = new TextMorph(localize('development mode \ndebugging primitives:'));
+    var txt = new TextMorph(
+        localize('development mode \ndebugging primitives:')
+    );
     txt.fontSize = 9;
     txt.setColor(this.paletteTextColor);
     return txt;
-}
+};
 
 SpriteMorph.prototype.helpMenu = function () {
-    // return a 1 item context menu for anything that implements a 'showHelp' method.
+    // return a 1 item context menu for anything that implements
+    // a 'showHelp' method.
     var menu = new MenuMorph(this);
     menu.addItem('help...', 'showHelp');
     return menu;
-}
+};
 
 // returns an array alock templates for a selected category.
 SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
@@ -2829,7 +2832,8 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
 
     function addCustomBlock(definition) {
         if (definition.category === category ||
-                (Array.isArray(category) && category.includes(definition.category))) {
+            (Array.isArray(category) && category.includes(definition.category))
+        ) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -2848,7 +2852,9 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
     // inherited custom blocks:
     if (this.exemplar) {
         inheritedBlocks = this.inheritedBlocks(true);
-        if (this.customBlocks.length && inheritedBlocks.length) {blocks.push('='); }
+        if (this.customBlocks.length && inheritedBlocks.length) {
+            blocks.push('=');
+        }
         isInherited = true;
         inheritedBlocks.forEach(addCustomBlock);
     }
@@ -2910,7 +2916,7 @@ SpriteMorph.prototype.makeBlock = function () {
 };
 
 SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
-    blocks = this.primitivesCache[category];
+    var blocks = this.primitivesCache[category];
     if (!blocks) {
         blocks = this.blockTemplates(category);
         if (this.isCachingPrimitives) {
@@ -2918,7 +2924,7 @@ SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
         }
     }
     return blocks;
-}
+};
 
 SpriteMorph.prototype.palette = function (category) {
     if (!this.paletteCache[category]) {
@@ -2935,7 +2941,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
         ry = 0,
         blocks,
         hideNextSpace = false,
-        stage = this.parentThatIsA(StageMorph),
         shade = new Color(140, 140, 140),
         searchButton,
         makeButton;
@@ -4325,7 +4330,7 @@ SpriteMorph.prototype.setColorComponentHSVA = function (idx, num) {
 
     idx = +idx;
     if (idx < 0 || idx > 3) {return; }
-    if (idx == 0) {
+    if (idx === 0) {
         if (n < 0 || n > 100) { // wrap the hue
             n = (n < 0 ? 100 : 0) + n % 100;
         }
@@ -8479,9 +8484,8 @@ StageMorph.prototype.pauseGenericHatBlocks = function () {
 
 // StageMorph block templates
 
-StageMorph.prototype.blockTemplates = function (category) {
-    var blocks = [], myself = this, varNames,
-        category = category || 'motion', txt;
+StageMorph.prototype.blockTemplates = function (category = 'motion') {
+    var blocks = [], myself = this, varNames, txt;
 
     function block(selector) {
         if (myself.hiddenPrimitives[selector]) {
@@ -8989,7 +8993,9 @@ StageMorph.prototype.fancyThumbnail = function (
         ctx.restore();
     }
     this.children.forEach(morph => {
-        if ((isSnapObject(morph) || !noWatchers) && morph.isVisible && (morph !== excludedSprite)) {
+        if ((isSnapObject(morph) || !noWatchers) &&
+            morph.isVisible && (morph !== excludedSprite)
+        ) {
             fb = morph.fullBounds();
             fimg = morph.fullImage();
             if (fimg.width && fimg.height) {
@@ -9100,7 +9106,7 @@ StageMorph.prototype.setColorComponentHSVA = function (idx, num) {
 
     idx = +idx;
     if (idx < 0 || idx > 3) {return; }
-    if (idx == 0) {
+    if (idx === 0) {
         if (n < 0 || n > 100) { // wrap the hue
             n = (n < 0 ? 100 : 0) + n % 100;
         }
@@ -9156,11 +9162,21 @@ StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 StageMorph.prototype.makeBlock = SpriteMorph.prototype.makeBlock;
 StageMorph.prototype.helpMenu = SpriteMorph.prototype.helpMenu;
 StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
-StageMorph.prototype.makeVariableButton = SpriteMorph.prototype.makeVariableButton;
+
+StageMorph.prototype.makeVariableButton
+    = SpriteMorph.prototype.makeVariableButton;
+
 StageMorph.prototype.devModeText = SpriteMorph.prototype.devModeText;
-StageMorph.prototype.deleteVariableButton = SpriteMorph.prototype.deleteVariableButton;
-StageMorph.prototype.customBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
-StageMorph.prototype.getPrimitiveTemplates = SpriteMorph.prototype.getPrimitiveTemplates;
+
+StageMorph.prototype.deleteVariableButton
+    = SpriteMorph.prototype.deleteVariableButton;
+
+StageMorph.prototype.customBlockTemplatesForCategory
+    = SpriteMorph.prototype.customBlockTemplatesForCategory;
+
+StageMorph.prototype.getPrimitiveTemplates
+    = SpriteMorph.prototype.getPrimitiveTemplates;
+
 StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
