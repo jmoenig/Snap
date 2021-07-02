@@ -3,14 +3,19 @@
 ## in development for v7:
 * **New Features:**
     * Scenes
+    * Extensions
     * unified blocks palette option, thanks, Michael!
 * **Notable Changes:**
     * saved projects remember the last edited srpite
+    * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
+    * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
+    * fixed occasional invisible error messages
 
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!
+* merged scenes branch
 
 ### 2021-05-21
 * gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
@@ -93,16 +98,6 @@
 ### 2021-04-01
 * gui: made scene icons selectable
 * gui: made scene icons observe the scene's stage versions
-
-## in development:
-
-* **New Features:**
-    * new extension primitives
-* **Notable Changes:**
-    * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
-    * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
-* **Notable Fixes:**
-    * fixed occasional invisible error messages
 
 ### 2021-07-02
 * extensions: took out web-serial extension prims (not yet ready)
