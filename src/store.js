@@ -380,6 +380,8 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     model.globalVariables = model.scene.childNamed('variables');
 
+    scene.unifiedPalette = model.scene.attributes.unifiedPalette === 'true';
+
     /* Stage */
 
     model.stage = model.scene.require('stage');
@@ -1678,7 +1680,7 @@ Scene.prototype.toXML = function (serializer) {
     tmp.captureGlobalSettings();
     this.applyGlobalSettings();
     xml = serializer.format(
-        '<scene name="@">' +
+        '<scene name="@" unifiedPalette="@">' +
             '<notes>$</notes>' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
@@ -1688,6 +1690,7 @@ Scene.prototype.toXML = function (serializer) {
             '%' + // stage
             '</scene>',
         this.name || localize('Untitled'),
+        this.unifiedPalette,
         this.notes || '',
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,

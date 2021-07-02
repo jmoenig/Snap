@@ -386,7 +386,7 @@ IDE_Morph.prototype.openIn = function (world) {
             world.worldCanvas.focus();
         }
     }
-    
+
     function autoRun () {
         // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
@@ -1245,7 +1245,8 @@ IDE_Morph.prototype.createControlBar = function () {
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    var myself = this;
+    var myself = this,
+        categorySelectionAction;
 
     if (this.categories) {
         this.categories.destroy();
@@ -1254,6 +1255,27 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
     // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+
+
+    if (this.scene.unifiedPalette) {
+        categorySelectionAction = scrollToCategory;
+    } else {
+        categorySelectionAction = changePallete;
+    }
+
+    function changePallete(category) {
+        return () => {
+            myself.currentCategory = category;
+            myself.categories.children.forEach(each =>
+                each.refresh()
+            );
+            myself.refreshPalette(true);
+        }
+    }
+
+    function scrollToCategory(category) {
+        return () => myself.scrollPaletteToCategory(category);
+    }
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -1267,13 +1289,7 @@ IDE_Morph.prototype.createCategories = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            () => {
-                myself.currentCategory = category;
-                myself.categories.children.forEach(each =>
-                    each.refresh()
-                );
-                myself.refreshPalette(true);
-            },
+            categorySelectionAction(category),
             category[0].toUpperCase().concat(category.slice(1)), // label
             () => myself.currentCategory === category, // query
             null, // env
@@ -2357,7 +2373,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     // all the images are:
         // sized, with 'width' and 'height' attributes
         // fitted to stage dimensions
-        // and with their 'viewBox' attribute 
+        // and with their 'viewBox' attribute
     if (normalizing) {
         svgNormalized = new Image(w, h);
         svgObj.setAttribute('width', w);
@@ -2514,6 +2530,14 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
     }
 };
+
+IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
+    let palette = this.palette,
+        firstInCategory = palette.contents.children.find(block => block.category == category);
+
+    palette.scrollY(palette.top() - firstInCategory.top() + palette.padding);
+    palette.adjustScrollBars();
+}
 
 IDE_Morph.prototype.pressStart = function () {
     if (this.world().currentKey === 16) { // shiftClicked
@@ -3609,7 +3633,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             */
             Process.prototype.enableJS = !Process.prototype.enableJS;
-            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.primitivesCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
             this.refreshPalette();
         },
@@ -3850,7 +3874,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             SpriteMorph.prototype.enableFirstClass =
                 !SpriteMorph.prototype.enableFirstClass;
-            this.currentSprite.blocksCache.sensing = null;
+            this.currentSprite.primitivesCache.sensing = null;
             this.currentSprite.paletteCache.sensing = null;
             this.refreshPalette();
         },
@@ -3924,7 +3948,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             Process.prototype.enableCompiling =
                 !Process.prototype.enableCompiling;
-            this.currentSprite.blocksCache.operators = null;
+            this.currentSprite.primitivesCache.operators = null;
             this.currentSprite.paletteCache.operators = null;
             this.refreshPalette();
         },
@@ -3962,7 +3986,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
-            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.primitivesCache.variables = null;
             this.currentSprite.paletteCache.variables = null;
             this.refreshPalette();
         },
@@ -3976,7 +4000,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableInheritance =
                 !StageMorph.prototype.enableInheritance;
-            this.currentSprite.blocksCache.variables = null;
+            this.currentSprite.primitivesCache.variables = null;
             this.currentSprite.paletteCache.variables = null;
             this.refreshPalette();
         },
@@ -3992,6 +4016,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableHyperOps,
         'uncheck to disable\nusing operators on lists and tables',
         'check to enable\nusing operators on lists and tables',
+        false
+    );
+    addPreference(
+        'Unified Palette',
+        () => this.toggleUnifiedPalette(),
+        this.scene.unifiedPalette,
+        'uncheck to show only the selected category\'s blocks',
+        'check to show all blocks in a single palette',
         false
     );
     addPreference(
@@ -5524,7 +5556,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     this.stage.pauseGenericHatBlocks();
     this.createCorral(!refreshAlbum); // keep scenes
     this.selectSprite(this.scene.currentSprite);
-    this.fixLayout();
     this.corral.album.updateSelection();
     this.corral.album.contents.children.forEach(function (morph) {
         if (morph.state) {
@@ -5533,6 +5564,14 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     });
     scene.applyGlobalSettings();
     this.world().keyboardFocus = this.stage;
+
+    if (this.currentCategory != 'unified' && scene.unifiedPalette) {
+        this.toggleUnifiedPalette();
+    } else if (this.currentCategory == 'unified' && !scene.unifiedPalette) {
+        this.toggleUnifiedPalette();
+    }
+
+    this.fixLayout();
 };
 
 IDE_Morph.prototype.setURL = function (str) {
@@ -5692,17 +5731,17 @@ IDE_Morph.prototype.switchToDevMode = function () {
 IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
-        this.stage.blocksCache[category] = null;
+        this.stage.primitivesCache[category] = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache[category] = null;
+                m.primitivesCache[category] = null;
             }
         });
     } else {
-        this.stage.blocksCache = {};
+        this.stage.primitivesCache = {};
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache = {};
+                m.primitivesCache = {};
             }
         });
     }
@@ -5713,9 +5752,11 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
         this.stage.paletteCache[category] = null;
+        this.stage.paletteCache.unified = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache[category] = null;
+                m.paletteCache.unified = null;
             }
         });
     } else {
@@ -5968,6 +6009,22 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
         zoomTo(1);
     }
 };
+
+IDE_Morph.prototype.toggleUnifiedPalette = function () {
+    this.scene.unifiedPalette = !this.scene.unifiedPalette;
+    if (this.scene.unifiedPalette) {
+        this.currentCategory = 'unified';
+    } else {
+        this.currentCategory = 'motion';
+    }
+
+    this.createCategories();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.flushBlocksCache();
+    this.currentSprite.palette(this.currentCategory);
+    this.refreshPalette(true);
+}
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,
@@ -11099,7 +11156,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 audio: {
                     channelCount: 1 // force mono, currently only works on FF
                 }
-                
+
             }
         ).then(stream => {
             this.mediaRecorder = new MediaRecorder(stream);
