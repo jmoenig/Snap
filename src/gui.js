@@ -1256,12 +1256,8 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.bounds.setWidth(this.paletteWidth);
     // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
 
-
-    if (this.scene.unifiedPalette) {
-        categorySelectionAction = scrollToCategory;
-    } else {
-        categorySelectionAction = changePalette;
-    }
+    categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
+        : changePalette;
 
     function changePalette(category) {
         return () => {
@@ -1367,6 +1363,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             null,
             this.currentSprite.sliderColor
         );
+        this.palette.isForSearching = true;
 
         // search toolbar (floating cancel button):
         /* commented out for now
@@ -2533,30 +2530,31 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
     var palette = this.palette,
-        firstInCategory = palette.contents.children.find(
-            block => block.category === category
-        ),
         msecs = this.isAnimating ? 700 : 0,
+        firstInCategory,
         delta;
 
-        if (firstInCategory === undefined) {
-            return;
-        }
-        delta = palette.top() - firstInCategory.top() + palette.padding;
-
-
-        this.world().animations.push(new Animation(
-            y => { // setter
-                palette.contents.setTop(y);
-                palette.contents.keepInScrollFrame();
-                palette.adjustScrollBars();
-            },
-            () => palette.contents.top(), // getter
-            delta, // delta
-            msecs, // duration in ms
-            t => Math.pow(t, 6), // easing
-            null // onComplete
-        ));
+    if (palette.isForSearching) {
+        this.refreshPalette();
+        palette = this.palette;
+    }
+    firstInCategory = palette.contents.children.find(
+        block => block.category === category
+    );
+    if (firstInCategory === undefined) {return; }
+    delta = palette.top() - firstInCategory.top() + palette.padding;
+    this.world().animations.push(new Animation(
+        y => { // setter
+            palette.contents.setTop(y);
+            palette.contents.keepInScrollFrame();
+            palette.adjustScrollBars();
+        },
+        () => palette.contents.top(), // getter
+        delta, // delta
+        msecs, // duration in ms
+        t => Math.pow(t, 6), // easing
+        null // onComplete
+    ));
 };
 
 IDE_Morph.prototype.pressStart = function () {
