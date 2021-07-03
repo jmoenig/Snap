@@ -19,6 +19,7 @@
 * gui: fixed the paletteHandle for the unified palette
 * gui, scenes, store: fixed unified palette for multi-scene projects
 * gui: fixed unified palette for searching
+* gui: renamed "Unified palette" to "Single palette" in the settings menu
 
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!

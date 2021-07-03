@@ -4037,7 +4037,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
-        'Unified Palette',
+        'Single palette',
         () => this.toggleUnifiedPalette(),
         this.scene.unifiedPalette,
         'uncheck to show only the selected category\'s blocks',
