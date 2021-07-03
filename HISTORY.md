@@ -2,9 +2,9 @@
 
 ## in development for v7:
 * **New Features:**
-    * Scenes
-    * Extensions
-    * unified blocks palette option, thanks, Michael!
+    * scenes
+    * extensions
+    * single blocks palette option, thanks, Michael!
 * **Notable Changes:**
     * saved projects remember the last edited srpite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -13,6 +13,8 @@
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
+* **Translation Updates:**
+    * German
 
 ### 2021-07-03
 * objects: arranged the blocks in the unified palette column-wise
@@ -20,6 +22,7 @@
 * gui, scenes, store: fixed unified palette for multi-scene projects
 * gui: fixed unified palette for searching
 * gui: renamed "Unified palette" to "Single palette" in the settings menu
+* updated German translation for unified palette setting
 
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!
