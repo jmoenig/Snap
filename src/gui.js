@@ -5583,15 +5583,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         }
     });
     scene.applyGlobalSettings();
-    this.world().keyboardFocus = this.stage;
-
-    if (this.currentCategory != 'unified' && scene.unifiedPalette) {
-        this.toggleUnifiedPalette();
-    } else if (this.currentCategory == 'unified' && !scene.unifiedPalette) {
-        this.toggleUnifiedPalette();
-    }
-
+    this.setUnifiedPalette(scene.unifiedPalette);
     this.fixLayout();
+    this.world().keyboardFocus = this.stage;
 };
 
 IDE_Morph.prototype.setURL = function (str) {
@@ -6031,13 +6025,17 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
 };
 
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
-    this.scene.unifiedPalette = !this.scene.unifiedPalette;
-    if (this.scene.unifiedPalette) {
-        this.currentCategory = 'unified';
-    } else {
-        this.currentCategory = 'motion';
-    }
+    this.setUnifiedPalette(!this.scene.unifiedPalette);
+};
 
+IDE_Morph.prototype.setUnifiedPalette = function (bool) {
+    if (this.scene.unifiedPalette === bool &&
+        (bool === (this.currentCategory === 'unified'))
+    ) {
+        return;
+    }
+    this.scene.unifiedPalette = bool;
+    this.currentCategory = bool ? 'unified' : 'motion';
     this.createCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();

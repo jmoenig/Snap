@@ -61,7 +61,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-02';
+modules.store = '2021-July-03';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -374,13 +374,12 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         }
         scene.name = 'Untitled ' + nameID;
     }
+    scene.unifiedPalette = model.scene.attributes.palette === 'single';
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
     }
     model.globalVariables = model.scene.childNamed('variables');
-
-    scene.unifiedPalette = model.scene.attributes.unifiedPalette === 'true';
 
     /* Stage */
 
@@ -1680,7 +1679,7 @@ Scene.prototype.toXML = function (serializer) {
     tmp.captureGlobalSettings();
     this.applyGlobalSettings();
     xml = serializer.format(
-        '<scene name="@" unifiedPalette="@">' +
+        '<scene name="@"%>' +
             '<notes>$</notes>' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
@@ -1690,7 +1689,7 @@ Scene.prototype.toXML = function (serializer) {
             '%' + // stage
             '</scene>',
         this.name || localize('Untitled'),
-        this.unifiedPalette,
+        this.unifiedPalette ? ' palette="single"' : '',
         this.notes || '',
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
