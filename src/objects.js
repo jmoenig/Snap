@@ -84,7 +84,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-July-02';
+modules.objects = '2021-July-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -2943,7 +2943,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
         hideNextSpace = false,
         shade = new Color(140, 140, 140),
         searchButton,
-        makeButton;
+        makeButton,
+        unifiedCategories;
 
     palette.owner = this;
     palette.padding = unit / 2;
@@ -3093,7 +3094,13 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        blocks = this.categories.reduce((blocks, category) =>
+        // arrange the blocks in the unified palette column-wise:
+        unifiedCategories = this.categories.filter(
+            (elem, idx) => idx % 2 === 0
+        ).concat(this.categories.filter(
+            (elem, idx) => idx % 2 === 1)
+        );
+        blocks = unifiedCategories.reduce((blocks, category) =>
             blocks.concat(
                 this.getPrimitiveTemplates(category),
                 '=',

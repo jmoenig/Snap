@@ -14,6 +14,9 @@
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
 
+### 2021-07-03
+* objects: arranged the blocks in the unified palette column-wise
+
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!
 * merged scenes branch
