@@ -16,6 +16,7 @@
 
 ### 2021-07-03
 * objects: arranged the blocks in the unified palette column-wise
+* gui: fixed the paletteHandle for the unified palette 
 
 ### 2021-07-02
 * gui, object, store, etc.: unified blocks palette option, thanks, Michael!

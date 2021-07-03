@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-02';
+modules.gui = '2021-July-03';
 
 // Declarations
 
@@ -6039,6 +6039,7 @@ IDE_Morph.prototype.toggleUnifiedPalette = function () {
     }
 
     this.createCategories();
+    this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
     this.flushBlocksCache();
