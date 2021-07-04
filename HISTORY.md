@@ -13,8 +13,12 @@
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
+    * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 * **Translation Updates:**
     * German
+
+### 2021-07-04
+* fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 
 ### 2021-07-03
 * objects: arranged the blocks in the unified palette column-wise
