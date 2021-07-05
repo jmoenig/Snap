@@ -79,11 +79,11 @@ CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
 BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
-Animation, BoxMorph, BlockDialogMorph, Project, ZERO, BLACK*/
+Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-03';
+modules.gui = '2021-July-05';
 
 // Declarations
 
@@ -1246,7 +1246,10 @@ IDE_Morph.prototype.createControlBar = function () {
 
 IDE_Morph.prototype.createCategories = function () {
     var myself = this,
-        categorySelectionAction;
+        categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
+            : changePalette,
+        categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
+            : queryCurrentCategory;
 
     if (this.categories) {
         this.categories.destroy();
@@ -1255,9 +1258,6 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
     // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
-
-    categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
-        : changePalette;
 
     function changePalette(category) {
         return () => {
@@ -1271,6 +1271,14 @@ IDE_Morph.prototype.createCategories = function () {
 
     function scrollToCategory(category) {
         return () => myself.scrollPaletteToCategory(category);
+    }
+
+    function queryCurrentCategory(category) {
+        return () => myself.currentCategory === category;
+    }
+
+    function queryTopCategory(category) {
+        return () => myself.topVisibleCategoryInPalette() === category;
     }
 
     function addCategoryButton(category) {
@@ -1287,7 +1295,7 @@ IDE_Morph.prototype.createCategories = function () {
             myself, // the IDE is the target
             categorySelectionAction(category),
             category[0].toUpperCase().concat(category.slice(1)), // label
-            () => myself.currentCategory === category, // query
+            categoryQueryAction(category), // query
             null, // env
             null, // hint
             labelWidth, // minWidth
@@ -1352,6 +1360,8 @@ IDE_Morph.prototype.createCategories = function () {
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
+    var myself = this,
+        vScrollAction;
 
     if (this.palette) {
         this.palette.destroy();
@@ -1382,6 +1392,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         this.palette.toolBar.fixLayout();
         this.palette.add(this.palette.toolBar);
 	    */
+
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
     }
@@ -1389,6 +1400,19 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.acceptsDrops = true;
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
+
+    if (this.scene.unifiedPalette) {
+        this.palette.adjustScrollBars = function () {
+            ScrollFrameMorph.prototype.adjustScrollBars.call(this);
+            myself.categories.children.forEach(each => each.refresh());
+        };
+
+        vScrollAction = this.palette.vBar.action;
+        this.palette.vBar.action = function (num) {
+            vScrollAction(num);
+            myself.categories.children.forEach(each => each.refresh());
+        };
+    }
 
     this.palette.reactToDropOf = (droppedMorph, hand) => {
         if (droppedMorph instanceof DialogBoxMorph) {
@@ -2555,6 +2579,33 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
         t => Math.pow(t, 6), // easing
         null // onComplete
     ));
+};
+
+IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
+    // private - answer the topmost (partially) visible
+    // block category in the palette, so it can be indicated
+    // as "current category" in the category selection buttons
+    var top;
+    if (!this.palette) {return; }
+    top = this.palette.contents.children.find(morph =>
+        morph.category && morph.bounds.intersects(this.palette.bounds)
+    );
+    if (top) {
+        if (top.category === 'other') {
+            if (top.selector === 'doWarp') {
+                return 'control';
+            }
+            if (top instanceof RingMorph) {
+                return 'operators';
+            }
+            return 'variables';
+        }
+        if (top.category === 'lists') {
+            return 'variables';
+        }
+        return top.category;
+    }
+    return null;
 };
 
 IDE_Morph.prototype.pressStart = function () {

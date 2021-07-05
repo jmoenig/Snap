@@ -17,6 +17,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-07-05
+* gui: unified palette: indicate "selected" category in selector buttons
+
 ### 2021-07-04
 * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 
