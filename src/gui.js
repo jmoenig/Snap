@@ -2569,6 +2569,7 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
     );
     if (firstInCategory === undefined) {return; }
     delta = palette.top() - firstInCategory.top() + palette.padding;
+    if (delta === 0) {return; }
     this.world().animations.push(new Animation(
         y => { // setter
             palette.contents.setTop(y);
