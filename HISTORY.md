@@ -5,6 +5,7 @@
     * scenes
     * extensions
     * single blocks palette option, thanks, Michael!
+    * web-serial support, thanks, Dariusz Dorożalski!
 * **Notable Changes:**
     * saved projects remember the last edited srpite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -19,6 +20,7 @@
 
 ### 2021-07-05
 * gui: unified palette: indicate "selected" category in selector buttons
+* extensions: web-serial extension primitives, pioneered by Dariusz Dorożalski
 
 ### 2021-07-04
 * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!

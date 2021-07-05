@@ -31,7 +31,9 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains*/
 
-modules.extensions = '2021-July-02';
+/*jshint esversion:11*/
+
+modules.extensions = '2021-July-05';
 
 // Global stuff
 
@@ -716,7 +718,160 @@ SnapExtensions.primitives.set(
     }
 );
 
-// loading external scripts (src_)
+// web serial (srl_):
+
+SnapExtensions.primitives.set(
+    'srl_open(baud, buffer)',
+    function (baud, buf, proc) {
+        var acc = proc.context.accumulator;
+
+        async function forceClose(port){
+            try {
+                if (!port?.writable) {return; } // already closed
+                // console.log("force close...", port);
+                if (port._reader) {await port._reader.cancel(); }
+                if (port?.readable) {await port.readable.cancel(); }
+                if (port?.writable) {await port.writable.abort(); }
+                if (port?.writable) {await port.close(); } // close if open
+            } catch (e) {
+                // console.log( e);
+                acc.result = e;
+            }
+        }
+
+        if (!acc) {
+            acc = proc.context.accumulator = {result: false};
+            (async function (baud) {
+                try {
+                    var port;
+                    port = await navigator.serial.requestPort();
+                    await forceClose(port);
+                    await port.open({
+                        baudRate: baud,
+                        bufferSize: buf || 15000
+                    });
+                    acc.result = port;
+                } catch(e) {
+                    acc.result = e;
+                }
+            }) (baud || 115200);
+        } else if (acc.result !== false) {
+            if (acc.result instanceof  Error) {
+                throw acc.result;
+            }
+            return acc.result;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'srl_close(port)',
+    function (port, proc) {
+        var acc = proc.context.accumulator;
+
+        if (!acc) {
+            acc = proc.context.accumulator = {result: false};
+            (async function (port) {
+                try {
+                    // console.log("pending close...", port);
+                    if (port._reader) {await port._read.cancel(); }
+                    if (port?.readable) {await port.readable.cancel(); }
+                    if (port?.writable) {await port.writable.abort(); }
+                    if (port?.readable || port?.writable) {await port.close(); }
+                    acc.result =  true;
+                } catch (e) {
+                    // console.log(e);
+                    acc.result = e;
+                }
+            }) (port);
+        } else if (acc.result !== false) {
+            if (acc.result instanceof  Error) {
+                throw acc.result;
+            }
+            return;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'srl_read(port)',
+    function (port, proc) {
+        var acc = proc.context.accumulator;
+
+        function timeout(msecs) {
+            return new Promise((resolve, reject) =>
+                setTimeout(
+                    () => reject(Error("Timeout")),
+                    msecs
+                )
+            );
+        }
+
+        if (!acc) {
+            acc = proc.context.accumulator = {result: false};
+            (async function (port) {
+                var reader, data;
+                try {
+                    if(!port?.readable) {throw Error( "Port not opened."); }
+                    reader = port.readable.getReader();
+                    data = await Promise.race([ reader.read(), timeout(0)]);
+                    acc.result = new List( data?.value);
+                } catch (e) {
+                    if (reader) {await reader.cancel(); }
+                    acc.result = (e.message === "Timeout") ? true : e;
+                }
+                if (reader) {await reader.releaseLock(); }
+            }) (port);
+        } else if (acc.result !== false) {
+            if (acc.result instanceof  Error) {
+                throw acc.result;
+            }
+            return acc.result;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'srl_write(port, bytes)',
+    function (port, bytes, proc) {
+        var acc = proc.context.accumulator;
+
+        if (!acc) {
+            acc = proc.context.accumulator = {result: false};
+            (async function (port, bytes) {
+                var writer;
+                try {
+                    if (!port?.writable) {throw Error( "Port not opened."); }
+                    try {
+                        writer = port.writable.getWriter();
+                        await writer.write(Uint8Array.from( bytes.itemsArray()));
+                        acc.result =  true;
+                    } finally {
+                        await writer.close();
+                    }
+                } catch(e) {
+                    acc.result = e;
+                }
+            }) (port, bytes);
+
+        } else if (acc.result !== false) {
+            if (acc.result instanceof  Error) {
+                throw acc.result;
+            }
+            return;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+// loading external scripts (src_):
 
 SnapExtensions.primitives.set(
     'src_load(url)',
