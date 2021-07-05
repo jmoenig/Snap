@@ -21,6 +21,10 @@ localstorage_module.xml	Database	Persistent key-value storage across Snap! sessi
 ~	~
 ~	~
 ~	~
+serial_module.xml	Serial Ports	Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)
+~	~
+~	~
+~	~
 word-sentence.xml	Words, sentences	One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.
 strings.xml	Strings, Multi-line input	Extract substrings of a string in various ways. In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
 apl.xml	APL primitives	Adds features from the APL language supporting hyperblocks.

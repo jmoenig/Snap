@@ -21,6 +21,7 @@
 ### 2021-07-05
 * gui: unified palette: indicate "selected" category in selector buttons
 * extensions: web-serial extension primitives, pioneered by Dariusz Dorożalski
+* added new "serial ports" library
 
 ### 2021-07-04
 * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
