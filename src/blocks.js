@@ -156,9 +156,11 @@ Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-July-02';
+modules.blocks = '2021-July-05';
 
 var SyntaxElementMorph;
 var BlockMorph;

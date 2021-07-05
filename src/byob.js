@@ -104,9 +104,11 @@ StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-June-24';
+modules.byob = '2021-July-05';
 
 // Declarations
 

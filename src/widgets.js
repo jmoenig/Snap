@@ -85,7 +85,9 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note, useBlurredShadows*/
 
-modules.widgets = '2021-January-05';
+/*jshint esversion: 6*/
+
+modules.widgets = '2021-July-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;

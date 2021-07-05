@@ -54,8 +54,6 @@
 
 */
 
-// Global settings /////////////////////////////////////////////////////
-
 /*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
@@ -63,7 +61,11 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 ZERO, WHITE*/
 
-modules.lists = '2021-March-15';
+/*jshint esversion: 6*/
+
+// Global settings /////////////////////////////////////////////////////
+
+modules.lists = '2021-July-05';
 
 var List;
 var ListWatcherMorph;

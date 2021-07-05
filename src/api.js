@@ -204,9 +204,11 @@
 
 /*global modules, IDE_Morph, isString, Map, List, world, isNil*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2021-January-25';
+modules.api = '2021-July-05';
 
 // IDE_Morph external communication API - experimental
 /*

@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains*/
 
-/*jshint esversion:11*/
+/*jshint esversion: 11*/
 
 modules.extensions = '2021-July-05';
 
@@ -1094,8 +1094,9 @@ SnapExtensions.menus.set(
                         output[hasEquals[0]] = hasEquals[1];
                         i += 1;
                     } else if (hasEquals.length === 3) {
-                        output[hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]]
-                            = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
+                        output[
+                            hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]
+                        ] = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
                         i += 1;
                     } else {
                         output[label] = label;
@@ -1107,8 +1108,9 @@ SnapExtensions.menus.set(
                         output[hasEquals[0]] = hasEquals[1];
                         i += 1;
                     } else if (hasEquals.length == 3) {
-                        output[hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]]
-                            = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
+                        output[
+                            hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2]
+                        ] = hasEquals[0]+"\u00A0"+"="+"\u00A0"+hasEquals[2];
                         i += 1;
                     } else {
                         output[label] = label;

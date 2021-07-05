@@ -84,7 +84,9 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
-modules.objects = '2021-July-03';
+/*jshint esversion: 6*/
+
+modules.objects = '2021-July-05';
 
 var SpriteMorph;
 var StageMorph;

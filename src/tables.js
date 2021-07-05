@@ -70,7 +70,9 @@ SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
 ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows*/
 
-modules.tables = '2021-March-05';
+/*jshint esversion: 6*/
+
+modules.tables = '2021-July-05';
 
 var Table;
 var TableCellMorph;

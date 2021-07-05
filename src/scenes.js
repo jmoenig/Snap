@@ -46,13 +46,14 @@
 
 */
 
-// Global stuff ////////////////////////////////////////////////////////
-
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
 normalizeCanvas, SnapSerializer*/
 
-modules.scenes = '2021-July-03';
+/*jshint esversion: 6*/
 
+// Global stuff ////////////////////////////////////////////////////////
+
+modules.scenes = '2021-July-05';
 
 // Projecct /////////////////////////////////////////////////////////
 

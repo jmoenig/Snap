@@ -65,9 +65,11 @@
 
 /*global modules, detect, Node, isNil*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2020-April-27';
+modules.xml = '2021-July-05';
 
 // Declarations
 

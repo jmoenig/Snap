@@ -62,7 +62,9 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions*/
 
-modules.threads = '2021-June-24';
+/*jshint esversion: 6*/
+
+modules.threads = '2021-July-05';
 
 var ThreadManager;
 var Process;

@@ -1289,7 +1289,9 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2021-July-02';
+/*jshint esversion: 6*/
+
+var morphicVersion = '2021-July-05';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 

@@ -46,9 +46,11 @@
 
 /*global modules, contains*/
 
-modules.locale = '2021-June-11';
+/*jshint esversion: 6*/
 
 // Global stuff
+
+modules.locale = '2021-July-05';
 
 var Localizer;
 var SnapTranslator = new Localizer();

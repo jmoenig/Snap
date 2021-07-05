@@ -59,9 +59,11 @@ localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
 SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene,
 Project*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-03';
+modules.store = '2021-July-05';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*

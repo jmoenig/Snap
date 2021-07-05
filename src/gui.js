@@ -81,6 +81,8 @@ BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
 modules.gui = '2021-July-05';

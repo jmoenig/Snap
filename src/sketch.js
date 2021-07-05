@@ -63,7 +63,9 @@ PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph, isNil,
 TextMorph, Image, newCanvas, PaintEditorMorph, Costume, nop, PaintCanvasMorph,
 StringMorph, detect, modules*/
 
-modules.sketch = '2021-March-17';
+/*jshint esversion: 6*/
+
+modules.sketch = '2021-July-05';
 
 // Declarations
 

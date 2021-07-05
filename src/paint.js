@@ -81,9 +81,11 @@ Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph,  isNil,
 localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph, modules,
 BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2021-March-17';
+modules.paint = '2021-July-05';
 
 // Declarations
 
