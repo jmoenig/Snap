@@ -24,6 +24,7 @@
 * added new "serial ports" library
 * added jshint esversion tags
 * gui: unified palette: don't animate scrolling if delta is zero
+* byob: replaced checkboxes in custom block context menus with symbols
 
 ### 2021-07-04
 * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
