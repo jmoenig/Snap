@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-July-05';
+modules.scenes = '2021-July-06';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -118,7 +118,7 @@ function Scene(aStageMorph) {
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
     this.hasUnsavedEdits = false;
-    this.unifiedPalette = false;
+    this.unifiedPalette = true;
 
     // cached IDE state
     this.sprites = new List();

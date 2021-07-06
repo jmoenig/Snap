@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-05';
+modules.gui = '2021-July-06';
 
 // Declarations
 
@@ -250,7 +250,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.globalVariables = this.scene.globalVariables;
     this.currentSprite = this.scene.addDefaultSprite();
     this.sprites = this.scene.sprites;
-    this.currentCategory = 'motion';
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'motion';
     this.currentTab = 'scripts';
 
     // logoURL is disabled because the image data is hard-copied

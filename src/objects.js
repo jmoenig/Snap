@@ -2289,7 +2289,9 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
     var blocks = [], myself = this, varNames,
-        inheritedVars = this.inheritedVariableNames();
+        inheritedVars = this.inheritedVariableNames(),
+        wrld = this.world(),
+        devMode = wrld && wrld.isDevMode;
 
     function block(selector, isGhosted) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
@@ -2413,7 +2415,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2456,7 +2458,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('stopFreq'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2581,7 +2583,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('reportDate'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2637,7 +2639,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
             }
         }
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2713,7 +2715,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doReplaceInList'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
