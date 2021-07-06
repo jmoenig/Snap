@@ -2883,7 +2883,9 @@ SpriteMorph.prototype.makeBlock = function () {
     // prompt the user to make a new block
     var ide = this.parentThatIsA(IDE_Morph),
         stage = this.parentThatIsA(StageMorph),
-        category = ide.currentCategory,
+        category = ide.currentCategory === 'unified' ?
+            ide.topVisibleCategoryInPalette()
+            : ide.currentCategory,
         clr = SpriteMorph.prototype.blockColor[category],
         dlg;
     dlg = new BlockDialogMorph(

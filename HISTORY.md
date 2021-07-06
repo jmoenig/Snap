@@ -22,6 +22,7 @@
 ### 2021-07-06
 * byob, objects: new feature: hide custom helper blocks in palette
 * German translation update (hiding helper blocks in the palette)
+* gui: unified palette: offer the currently visible category when letting the user make a block
 
 ### 2021-07-05
 * gui: unified palette: indicate "selected" category in selector buttons
