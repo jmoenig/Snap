@@ -1176,9 +1176,9 @@ Process.prototype.errorBubble = function (error, element) {
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
         errorIsNested = isNil(element.world()),
-        errorPrefix = errorIsNested ? localize('Inside a custom block') + ':\n' : '',
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`: '',
         errorMessage = new TextMorph(
-            errorPrefix + localize(error.name) + ':\n' + error.message,
+            `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
             SyntaxElementMorph.prototype.fontSize
         ),
         img, blockImage;
@@ -1186,22 +1186,13 @@ Process.prototype.errorBubble = function (error, element) {
     errorMorph.add(errorMessage);
     errorMorph.alpha = 0;
     if (errorIsNested) {
-        window.element = element;
+        errorMorph.text += `\n${localize('The error occured at:')}\n`;
         img = element.errorPic();
         blockImage = new Morph();
         blockImage.isCachingImage = true;
-        blockImage.bounds.setWidth(img.width);
-        blockImage.bounds.setHeight(img.height);
-
-        // blockImage.setExtent(new Point(img.width, img.height));
+        blockImage.setExtent(new Point(img.width, img.height));
         blockImage.cachedImage = img;
-        // blockImage.image = img;
-        // errorMessage.setTop(blockImage.height() + 2);
         errorMorph.add(blockImage);
-        // errorMorph.setExtent(new Point(
-        //     Math.max(blockImage.width(), errorMessage.width()),
-        //     blockImage.height() + errorMessage.height()
-        // ));
         errorMorph.fixLayout();
     }
 
