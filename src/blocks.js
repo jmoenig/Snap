@@ -4192,6 +4192,19 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
+BlockMorph.prototype.errorPic = function () {
+    // return a picture of myself, that approximately fits in "one line"
+    // filter any blocks beneath me, so that users only see the first
+    // block that caused an error.
+    if (this.nextBlock) {
+        var copy = this.fullCopy();
+        copy.removeChild(copy.nextBlock());
+        return copy.fullImage();
+    }
+
+    return this.fullImage();
+}
+
 BlockMorph.prototype.fullImage = function () {
     // answer a canvas image meant for (semi-) transparent blocks
     // that lets the background shine through

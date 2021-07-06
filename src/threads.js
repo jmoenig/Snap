@@ -1136,10 +1136,7 @@ Process.prototype.throwError = function (error, element) {
     } else {
         if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
         m.showBubble(
-            (m === element ? '' : 'Inside: ')
-                + error.name
-                + '\n'
-                + error.message,
+            this.errorBubble(error, element),
             this.exportResult,
             this.receiver
         );
@@ -1173,6 +1170,43 @@ Process.prototype.resetErrorHandling();
 Process.prototype.errorObsolete = function () {
     throw new Error('a custom block definition is missing');
 };
+
+Process.prototype.errorBubble = function (error, element) {
+    // Return a morph containing an image of the elment causing the error
+    // above the text of error.
+    var errorMorph = new AlignmentMorph('column', 5),
+        errorIsNested = isNil(element.world()),
+        errorPrefix = errorIsNested ? localize('Inside a custom block') + ':\n' : '',
+        errorMessage = new TextMorph(
+            errorPrefix + localize(error.name) + ':\n' + error.message,
+            SyntaxElementMorph.prototype.fontSize
+        ),
+        img, blockImage;
+
+    errorMorph.add(errorMessage);
+    errorMorph.alpha = 0;
+    if (errorIsNested) {
+        window.element = element;
+        img = element.errorPic();
+        blockImage = new Morph();
+        blockImage.isCachingImage = true;
+        blockImage.bounds.setWidth(img.width);
+        blockImage.bounds.setHeight(img.height);
+
+        // blockImage.setExtent(new Point(img.width, img.height));
+        blockImage.cachedImage = img;
+        // blockImage.image = img;
+        // errorMessage.setTop(blockImage.height() + 2);
+        errorMorph.add(blockImage);
+        // errorMorph.setExtent(new Point(
+        //     Math.max(blockImage.width(), errorMessage.width()),
+        //     blockImage.height() + errorMessage.height()
+        // ));
+        errorMorph.fixLayout();
+    }
+
+    return errorMorph;
+}
 
 // Process Lambda primitives
 
@@ -2586,7 +2620,7 @@ Process.prototype.doRepeat = function (counter, body) {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    if (isNaN(counter) || counter < 1) { 
+    if (isNaN(counter) || counter < 1) {
 	// was '=== 0', which caused infinite loops on non-ints
         return null;
     }
