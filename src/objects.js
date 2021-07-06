@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-05';
+modules.objects = '2021-July-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2833,8 +2833,9 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (definition.category === category ||
-            (Array.isArray(category) && category.includes(definition.category))
+        if (!definition.isHelper &&
+            (definition.category === category ||
+            (Array.isArray(category) && category.includes(definition.category)))
         ) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }

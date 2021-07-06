@@ -6,6 +6,7 @@
     * extensions
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
+    * hide custom helper blocks in palette
 * **Notable Changes:**
     * saved projects remember the last edited srpite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -17,6 +18,9 @@
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 * **Translation Updates:**
     * German
+
+### 2021-07-06
+* byob, objects: new feature: hide custom helper blocks in palette
 
 ### 2021-07-05
 * gui: unified palette: indicate "selected" category in selector buttons
