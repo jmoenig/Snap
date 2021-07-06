@@ -3071,9 +3071,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     if (category === 'unified') {
                         more.unified = Object.values(more).reduce((x, y) => x.concat(y));
                     }
-                    (more[category] || []).forEach(sel => {
+                    (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
-                    });
+                    );
                     ide.flushBlocksCache(category);
                     ide.refreshPalette();
                 }
