@@ -1136,10 +1136,7 @@ Process.prototype.throwError = function (error, element) {
     } else {
         if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
         m.showBubble(
-            (m === element ? '' : 'Inside: ')
-                + error.name
-                + '\n'
-                + error.message,
+            this.errorBubble(error, element),
             this.exportResult,
             this.receiver
         );
@@ -1173,6 +1170,32 @@ Process.prototype.resetErrorHandling();
 Process.prototype.errorObsolete = function () {
     throw new Error('a custom block definition is missing');
 };
+
+Process.prototype.errorBubble = function (error, element) {
+    // Return a morph containing an image of the elment causing the error
+    // above the text of error.
+    var errorMorph = new AlignmentMorph('column', 5),
+        errorIsNested = isNil(element.world()),
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`: '',
+        errorMessage = new TextMorph(
+            `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
+            SyntaxElementMorph.prototype.fontSize
+        ),
+        blockToShow = element;
+
+    errorMorph.add(errorMessage);
+    if (errorIsNested) {
+        if (blockToShow.selector === 'reportGetVar') {
+            // if I am a single variable, show my caller in the output.
+            blockToShow = blockToShow.parent;
+        }
+        errorMorph.text += `\n${localize('The error occured at:')}\n`;
+        errorMorph.add(blockToShow);
+        errorMorph.fixLayout();
+    }
+
+    return errorMorph;
+}
 
 // Process Lambda primitives
 
@@ -2586,7 +2609,7 @@ Process.prototype.doRepeat = function (counter, body) {
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    if (isNaN(counter) || counter < 1) { 
+    if (isNaN(counter) || counter < 1) {
 	// was '=== 0', which caused infinite loops on non-ints
         return null;
     }
