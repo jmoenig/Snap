@@ -5797,7 +5797,7 @@ IDE_Morph.prototype.switchToDevMode = function () {
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
-    if (category) {
+    if (category && category !== 'unified') {
         this.stage.primitivesCache[category] = null;
         this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {

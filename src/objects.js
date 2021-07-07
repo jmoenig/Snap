@@ -3064,10 +3064,13 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 function () {
                     var defs = SpriteMorph.prototype.blocks;
                     Object.keys(defs).forEach(sel => {
-                        if (defs[sel].category === category) {
+                        if (defs[sel].category === category || category === 'unified') {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
+                    if (category === 'unified') {
+                        more.unified = Object.values(more).reduce((x, y) => x.concat(y));
+                    }
                     (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
                     );
