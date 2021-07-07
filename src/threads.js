@@ -1181,18 +1181,16 @@ Process.prototype.errorBubble = function (error, element) {
             `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
             SyntaxElementMorph.prototype.fontSize
         ),
-        img, blockImage;
+        blockToShow = element;
 
     errorMorph.add(errorMessage);
-    errorMorph.alpha = 0;
     if (errorIsNested) {
+        if (blockToShow.selector === 'reportGetVar') {
+            // if I am a single variable, show my caller in the output.
+            blockToShow = blockToShow.parent;
+        }
         errorMorph.text += `\n${localize('The error occured at:')}\n`;
-        img = element.errorPic();
-        blockImage = new Morph();
-        blockImage.isCachingImage = true;
-        blockImage.setExtent(new Point(img.width, img.height));
-        blockImage.cachedImage = img;
-        errorMorph.add(blockImage);
+        errorMorph.add(blockToShow);
         errorMorph.fixLayout();
     }
 

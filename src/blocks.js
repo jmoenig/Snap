@@ -4192,24 +4192,6 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
-BlockMorph.prototype.errorPic = function () {
-    // return a picture of myself, that approximately fits in "one line"
-    // filter any blocks beneath me, so that users only see the first
-    // block that caused an error.
-    var block = this;
-    if (block.selector === 'reportGetVar') {
-        // if I am a single variable, show my caller in the output.
-        block = block.parent;
-    }
-    if (block.nextBlock) {
-        var copy = block.fullCopy();
-        copy.removeChild(copy.nextBlock());
-        return copy.fullImage();
-    }
-
-    return block.fullImage();
-}
-
 BlockMorph.prototype.fullImage = function () {
     // answer a canvas image meant for (semi-) transparent blocks
     // that lets the background shine through
