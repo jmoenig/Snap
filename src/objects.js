@@ -3032,9 +3032,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
             return Object.keys(hiddens).some(any =>
-                !isNil(defs[any]) &&
+                !isNil(defs[any]) && (category === 'unified' ||
                     (defs[any].category === category ||
-                        contains((more[category] || []), any))
+                        contains((more[category] || []), any)))
             );
         }
 
@@ -3064,12 +3064,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 function () {
                     var defs = SpriteMorph.prototype.blocks;
                     Object.keys(defs).forEach(sel => {
-                        if (defs[sel].category === category || category === 'unified') {
+                        if (defs[sel].category === category ||
+                                category === 'unified') {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
                     if (category === 'unified') {
-                        more.unified = Object.values(more).reduce((x, y) => x.concat(y));
+                        more.unified = Object.values(more).reduce((x, y) =>
+                            x.concat(y));
                     }
                     (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
@@ -3086,7 +3088,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
                     Object.keys(hiddens).forEach(sel => {
-                        if (defs[sel] && (defs[sel].category === category)) {
+                        if (defs[sel] && (category === 'unified' ||
+                                (defs[sel].category === category))) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
