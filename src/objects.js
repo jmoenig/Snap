@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-05';
+modules.objects = '2021-July-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2289,7 +2289,9 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
     var blocks = [], myself = this, varNames,
-        inheritedVars = this.inheritedVariableNames();
+        inheritedVars = this.inheritedVariableNames(),
+        wrld = this.world(),
+        devMode = wrld && wrld.isDevMode;
 
     function block(selector, isGhosted) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
@@ -2413,7 +2415,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2456,7 +2458,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('stopFreq'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2581,7 +2583,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('reportDate'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2637,7 +2639,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
             }
         }
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2713,7 +2715,7 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doReplaceInList'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (devMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -2833,8 +2835,9 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (definition.category === category ||
-            (Array.isArray(category) && category.includes(definition.category))
+        if (!definition.isHelper &&
+            (definition.category === category ||
+            (Array.isArray(category) && category.includes(definition.category)))
         ) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
@@ -2882,7 +2885,9 @@ SpriteMorph.prototype.makeBlock = function () {
     // prompt the user to make a new block
     var ide = this.parentThatIsA(IDE_Morph),
         stage = this.parentThatIsA(StageMorph),
-        category = ide.currentCategory,
+        category = ide.currentCategory === 'unified' ?
+            ide.topVisibleCategoryInPalette()
+            : ide.currentCategory,
         clr = SpriteMorph.prototype.blockColor[category],
         dlg;
     dlg = new BlockDialogMorph(

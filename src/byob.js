@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-July-05';
+modules.byob = '2021-July-06';
 
 // Declarations
 
@@ -145,6 +145,7 @@ function CustomBlockDefinition(spec, receiver) {
         // value: [type, default, options, isReadOnly]
     this.variableNames = [];
     this.comment = null;
+    this.isHelper = false;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
     this.translations = {}; // experimental, format: {lang : spec}
@@ -1174,6 +1175,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 );
             }
         }
+        addOption(
+            'in palette',
+            () => hat.isHelper = !hat.isHelper,
+            !hat.isHelper,
+            'uncheck to\nhide in palette',
+            'check to\nshow in palette'
+        );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
         if (!menu) {
@@ -2404,6 +2412,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         }
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
+        this.definition.isHelper = head.isHelper;
         if (head.comment) {
             this.definition.comment = head.comment.fullCopy();
             this.definition.comment.block = true; // serialize in short form
@@ -2474,6 +2483,14 @@ BlockEditorMorph.prototype.variableNames = function () {
         this.body.contents.children,
         c => c instanceof PrototypeHatBlockMorph
     ).variableNames();
+};
+
+BlockEditorMorph.prototype.isHelper = function () {
+    // answer the helper declaration from my (edited) prototype hat
+    return detect(
+        this.body.contents.children,
+        c => c instanceof PrototypeHatBlockMorph
+    ).isHelper;
 };
 
 // BlockEditorMorph translation
@@ -2577,6 +2594,7 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     // additional attributes to store edited data
     this.blockCategory = definition ? definition.category : null;
     this.type = definition ? definition.type : null;
+    this.isHelper = definition ? definition.isHelper : false;
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
