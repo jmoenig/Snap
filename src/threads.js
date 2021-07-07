@@ -60,11 +60,11 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions*/
+SnapExtensions, AlignmentMorph, TextMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-05';
+modules.threads = '2021-July-07';
 
 var ThreadManager;
 var Process;
@@ -1176,7 +1176,8 @@ Process.prototype.errorBubble = function (error, element) {
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
         errorIsNested = isNil(element.world()),
-        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`: '',
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`
+            : '',
         errorMessage = new TextMorph(
             `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
             SyntaxElementMorph.prototype.fontSize
@@ -1195,7 +1196,7 @@ Process.prototype.errorBubble = function (error, element) {
     }
 
     return errorMorph;
-}
+};
 
 // Process Lambda primitives
 

@@ -8,9 +8,10 @@
     * web-serial support, thanks, Dariusz Dorożalski!
     * hide custom helper blocks in palette
 * **Notable Changes:**
-    * saved projects remember the last edited srpite
+    * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
+    * display blocks with their error messages for custom blocks, thanks, Michael!
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -22,6 +23,7 @@
 ### 2021-07-07
 * morphic, gui: tweaked perish() animation
 * objects: fixed "hide / show primitives" for unified palette
+* threads: display blocks with their error messages for custom blocks, thanks, Michael!
 
 ### 2021-07-06
 * byob, objects: new feature: hide custom helper blocks in palette
