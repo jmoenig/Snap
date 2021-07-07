@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-06';
+modules.gui = '2021-July-07';
 
 // Declarations
 
@@ -1426,7 +1426,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             this.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
             this.currentSprite.wearCostume(null);
-            droppedMorph.perish();
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else if (droppedMorph instanceof BlockMorph) {
             this.stage.threads.stopAllForBlock(droppedMorph);
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
@@ -1434,9 +1434,9 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
                 hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
                 hand.grabOrigin.origin.recordDrop(hand.grabOrigin);
             }
-            droppedMorph.perish();
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else {
-            droppedMorph.perish();
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
         }
     };
 

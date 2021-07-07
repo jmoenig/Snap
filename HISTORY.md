@@ -19,6 +19,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-07-07
+* morphic, gui: tweaked perish() animation
+
 ### 2021-07-06
 * byob, objects: new feature: hide custom helper blocks in palette
 * German translation update (hiding helper blocks in the palette)

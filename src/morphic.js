@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-July-05';
+var morphicVersion = '2021-July-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4073,7 +4073,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
             x => this.setLeft(x),
             () => this.left(),
             -(this.left() - endPoint.x),
-            msecs || 100,
+            msecs === 0 ? 0 : msecs || 100,
             easing
         );
     world.animations.push(horizontal);
@@ -4081,7 +4081,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
         y => this.setTop(y),
         () => this.top(),
         -(this.top() - endPoint.y),
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         easing,
         () => {
             horizontal.setter(horizontal.destination);
@@ -4105,7 +4105,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
         },
         () => this.alpha,
         endAlpha - this.alpha,
-        msecs || 200,
+        msecs === 0 ? 0 : msecs || 200,
         easing,
         () => {
             this.alpha = oldAlpha;
@@ -4117,7 +4117,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
 Morph.prototype.perish = function (msecs, onComplete) {
     this.fadeTo(
         0,
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         null,
         () => {
             this.destroy();
