@@ -5631,6 +5631,7 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     this.createCorral(!refreshAlbum); // keep scenes
     this.selectSprite(this.scene.currentSprite);
     this.corral.album.updateSelection();
+    this.fixLayout();
     this.corral.album.contents.children.forEach(function (morph) {
         if (morph.state) {
             morph.scrollIntoView();
@@ -5638,7 +5639,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     });
     scene.applyGlobalSettings();
     this.setUnifiedPalette(scene.unifiedPalette);
-    this.fixLayout();
     this.world().keyboardFocus = this.stage;
 };
 
