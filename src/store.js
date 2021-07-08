@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-06';
+modules.store = '2021-July-08';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -376,7 +376,8 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         }
         scene.name = 'Untitled ' + nameID;
     }
-    scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    // unified palette persistence commented out during development:
+    // scene.unifiedPalette = model.scene.attributes.palette === 'single';
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
@@ -1692,7 +1693,8 @@ Scene.prototype.toXML = function (serializer) {
             '%' + // stage
             '</scene>',
         this.name || localize('Untitled'),
-        this.unifiedPalette ? ' palette="single"' : '',
+        '', // unified palette persistence commented out during development
+        // this.unifiedPalette ? ' palette="single"' : '',
         this.notes || '',
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
