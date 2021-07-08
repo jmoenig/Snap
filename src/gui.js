@@ -2552,6 +2552,7 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
     if (!shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
     }
+    this.palette.adjustScrollBars();
 };
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
