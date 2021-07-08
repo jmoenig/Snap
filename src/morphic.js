@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-July-07';
+var morphicVersion = '2021-July-08';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3422,24 +3422,26 @@ Morph.prototype.keepWithin = function (aMorph) {
 
 Morph.prototype.scrollIntoView = function () {
     var leftOff, rightOff, topOff, bottomOff,
-        sf = this.parentThatIsA(ScrollFrameMorph);
+        sf = this.parentThatIsA(ScrollFrameMorph),
+        fb;
     if (!sf) {return; }
+    fb = this.fullBounds();
     rightOff = Math.min(
-        this.fullBounds().right() - sf.right(),
+        fb.right() - sf.right(),
         sf.contents.right() - sf.right()
     );
     if (rightOff > 0) {
         sf.contents.moveBy(new Point(-rightOff, 0));
     }
-    leftOff = this.fullBounds().left() - sf.left();
+    leftOff = fb.left() - sf.left();
     if (leftOff < 0) {
         sf.contents.moveBy(new Point(-leftOff, 0));
     }
-    topOff = this.fullBounds().top() - sf.top();
+    topOff = fb.top() - sf.top();
     if (topOff < 0) {
         sf.contents.moveBy(new Point(0, -topOff));
     }
-    bottomOff = this.fullBounds().bottom() - sf.bottom();
+    bottomOff = fb.bottom() - sf.bottom();
     if (bottomOff > 0) {
         sf.contents.moveBy(new Point(0, -bottomOff));
     }
