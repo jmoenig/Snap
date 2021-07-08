@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-07';
+modules.gui = '2021-July-08';
 
 // Declarations
 
@@ -2556,7 +2556,7 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 
 IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
     var palette = this.palette,
-        msecs = this.isAnimating ? 700 : 0,
+        msecs = this.isAnimating ? 200 : 0,
         firstInCategory,
         delta;
 

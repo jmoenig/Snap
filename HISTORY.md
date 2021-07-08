@@ -22,6 +22,7 @@
 
 ### 2021-07-08
 * objects: added category labels to unified palette
+* gui: accelerated unified palette scrolling animation
 
 ### 2021-07-07
 * morphic, gui: tweaked perish() animation
