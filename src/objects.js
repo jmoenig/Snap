@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-07';
+modules.objects = '2021-July-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -2812,6 +2812,18 @@ SpriteMorph.prototype.deleteVariableButton = function () {
     return button;
 };
 
+SpriteMorph.prototype.categoryText = function (category) {
+    var txt = new StringMorph(
+        localize(category),
+        11,
+        null,
+        true
+    );
+    txt.setColor(this.paletteTextColor);
+    txt.category = category;
+    return txt;
+};
+
 SpriteMorph.prototype.devModeText = function () {
     var txt = new TextMorph(
         localize('development mode \ndebugging primitives:')
@@ -3108,13 +3120,22 @@ SpriteMorph.prototype.freshPalette = function (category) {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
         // arrange the blocks in the unified palette column-wise:
-        unifiedCategories = this.categories.filter(
+        let cat1 = this.categories.slice(0, 8),
+            cat2 = this.categories.slice(8);
+
+        unifiedCategories = cat1.filter(
             (elem, idx) => idx % 2 === 0
-        ).concat(this.categories.filter(
+        ).concat(cat1.filter(
             (elem, idx) => idx % 2 === 1)
-        );
+        ).concat(cat2);
         blocks = unifiedCategories.reduce((blocks, category) =>
             blocks.concat(
+                category === 'lists' ?
+                    [] :
+                    [
+                        this.categoryText(category),
+                        '-'
+                    ],
                 this.getPrimitiveTemplates(category),
                 '=',
                 this.customBlockTemplatesForCategory(category),
@@ -9186,6 +9207,7 @@ StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
 StageMorph.prototype.makeVariableButton
     = SpriteMorph.prototype.makeVariableButton;
 
+StageMorph.prototype.categoryText = SpriteMorph.prototype.categoryText;
 StageMorph.prototype.devModeText = SpriteMorph.prototype.devModeText;
 
 StageMorph.prototype.deleteVariableButton

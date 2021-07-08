@@ -20,6 +20,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-07-08
+* objects: added category labels to unified palette
+
 ### 2021-07-07
 * morphic, gui: tweaked perish() animation
 * objects: fixed "hide / show primitives" for unified palette
