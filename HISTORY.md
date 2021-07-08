@@ -25,7 +25,6 @@
 * gui: accelerated unified palette scrolling animation
 * adjust scroll bars when refreshing the palette
 * store: commented out saving the unified palette setting in the project xml during development
-* morphic: optimized Morph >> scrollIntoView()
 
 ### 2021-07-07
 * morphic, gui: tweaked perish() animation
