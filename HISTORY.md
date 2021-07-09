@@ -12,7 +12,7 @@
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
-    * made scrollbars thinner by default
+    * made scrollbars thinner by default and slightly transparent in flat design mode
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -24,6 +24,7 @@
 ### 2021-07-09
 * extensions: whitelisted 'https://snap.berkeley.edu/'
 * morphic: made scrollbars thinner by default
+* morphic: tweaked slider transparency for flat design mode
 
 ### 2021-07-08
 * objects: added category labels to unified palette

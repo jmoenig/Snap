@@ -7040,12 +7040,13 @@ SliderMorph.prototype.init = function (
     this.offset = null;
     this.button = new SliderButtonMorph();
     this.button.isDraggable = false;
+    this.button.alpha = MorphicPreferences.isFlat ? 0.7 : 1;
     this.button.color = new Color(200, 200, 200);
     this.button.highlightColor = new Color(210, 210, 255);
     this.button.pressColor = new Color(180, 180, 255);
     SliderMorph.uber.init.call(this, orientation);
     this.add(this.button);
-    this.alpha = 0.3;
+    this.alpha = MorphicPreferences.isFlat ? 0 : 0.3;
     this.color = color || new Color(0, 0, 0);
     this.setExtent(new Point(20, 100));
     this.fixLayout();
