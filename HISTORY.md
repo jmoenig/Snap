@@ -25,6 +25,7 @@
 * extensions: whitelisted 'https://snap.berkeley.edu/'
 * morphic: made scrollbars thinner by default
 * morphic: tweaked slider transparency for flat design mode
+* objects: translation support for category labels in the unified palette
 
 ### 2021-07-08
 * objects: added category labels to unified palette

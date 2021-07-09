@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-08';
+modules.objects = '2021-July-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -2814,7 +2814,7 @@ SpriteMorph.prototype.deleteVariableButton = function () {
 
 SpriteMorph.prototype.categoryText = function (category) {
     var txt = new StringMorph(
-        localize(category),
+        localize(category[0].toUpperCase().concat(category.slice(1))),
         11,
         null,
         true
