@@ -20,6 +20,9 @@
 * **Translation Updates:**
     * German
 
+### 2021-07-09
+* extensions: whitelisted 'https://snap.berkeley.edu/'
+
 ### 2021-07-08
 * objects: added category labels to unified palette
 * gui: accelerated unified palette scrolling animation

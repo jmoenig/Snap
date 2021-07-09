@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-July-05';
+modules.extensions = '2021-July-09';
 
 // Global stuff
 
@@ -42,7 +42,8 @@ var SnapExtensions = {
     menus: new Map(),
     scripts: [],
     urls: [
-        'libraries/'
+        'libraries/',
+        'https://snap.berkeley.edu/'
     ]
 };
 
