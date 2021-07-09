@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-07';
+modules.threads = '2021-July-09';
 
 var ThreadManager;
 var Process;
@@ -1191,7 +1191,7 @@ Process.prototype.errorBubble = function (error, element) {
             blockToShow = blockToShow.parent;
         }
         errorMorph.text += `\n${localize('The error occured at:')}\n`;
-        errorMorph.add(blockToShow);
+        errorMorph.add(blockToShow.fullCopy());
         errorMorph.fixLayout();
     }
 

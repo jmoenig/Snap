@@ -26,6 +26,7 @@
 * morphic: made scrollbars thinner by default
 * morphic: tweaked slider transparency for flat design mode
 * objects: translation support for category labels in the unified palette
+* threads: fixed vanishing JSF block bug in new error messages
 
 ### 2021-07-08
 * objects: added category labels to unified palette
