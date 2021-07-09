@@ -12,6 +12,7 @@
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
+    * made scrollbars thinner by default
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -22,6 +23,7 @@
 
 ### 2021-07-09
 * extensions: whitelisted 'https://snap.berkeley.edu/'
+* morphic: made scrollbars thinner by default
 
 ### 2021-07-08
 * objects: added category labels to unified palette

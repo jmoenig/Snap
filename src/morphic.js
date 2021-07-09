@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-July-07';
+var morphicVersion = '2021-July-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1314,7 +1314,7 @@ var standardSettings = {
     prompterFontSize: 12,
     prompterSliderSize: 10,
     handleSize: 15,
-    scrollBarSize: 12,
+    scrollBarSize: 9, // was 12,
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: false, // turned on by touch events, don't set
