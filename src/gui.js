@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-08';
+modules.gui = '2021-July-09';
 
 // Declarations
 
@@ -3706,8 +3706,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             */
             Process.prototype.enableJS = !Process.prototype.enableJS;
-            this.currentSprite.primitivesCache.operators = null;
-            this.currentSprite.paletteCache.operators = null;
+            this.flushBlocksCache('operators');
             this.refreshPalette();
         },
         Process.prototype.enableJS,
@@ -3947,8 +3946,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             SpriteMorph.prototype.enableFirstClass =
                 !SpriteMorph.prototype.enableFirstClass;
-            this.currentSprite.primitivesCache.sensing = null;
-            this.currentSprite.paletteCache.sensing = null;
+            this.flushBlocksCache('sensing');
             this.refreshPalette();
         },
         SpriteMorph.prototype.enableFirstClass,
@@ -4021,8 +4019,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             Process.prototype.enableCompiling =
                 !Process.prototype.enableCompiling;
-            this.currentSprite.primitivesCache.operators = null;
-            this.currentSprite.paletteCache.operators = null;
+            this.flushBlocksCache('operators');
             this.refreshPalette();
         },
         Process.prototype.enableCompiling,
@@ -4059,8 +4056,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
-            this.currentSprite.primitivesCache.variables = null;
-            this.currentSprite.paletteCache.variables = null;
+            this.flushBlocksCache('variables');
             this.refreshPalette();
         },
         StageMorph.prototype.enableCodeMapping,
@@ -4073,8 +4069,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => {
             StageMorph.prototype.enableInheritance =
                 !StageMorph.prototype.enableInheritance;
-            this.currentSprite.primitivesCache.variables = null;
-            this.currentSprite.paletteCache.variables = null;
+            this.flushBlocksCache('variables');
             this.refreshPalette();
         },
         StageMorph.prototype.enableInheritance,
