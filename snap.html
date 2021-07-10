@@ -40,7 +40,7 @@
             var world;
             window.onload = function () {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('./sw.js');
+                    navigator.serviceWorker.register('sw.js');
                 }
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
