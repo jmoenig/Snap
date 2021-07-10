@@ -1,6 +1,5 @@
 var cacheName = 'snap-pwa';
 var filesToCache = [
-//    '/',
     'snap.html',
     'src/morphic.js',
     'src/symbols.js',
