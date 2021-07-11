@@ -7,7 +7,7 @@
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
     * hide custom helper blocks in palette
-    * PWA, thanks, John, for pioneering this in Mircoblocks!
+    * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -21,6 +21,9 @@
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 * **Translation Updates:**
     * German
+
+### 2021-07-11
+* added libraries and media to cache, thanks, Joan!
 
 ### 2021-07-10
 * PWA support, thanks, John, for showing me!

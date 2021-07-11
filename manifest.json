@@ -2,6 +2,18 @@
   "name": "Snap!",
   "short_name": "Snap!",
   "icons": [{
+      "src": "img/snap-icon-72.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-96.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-120.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
       "src": "img/snap-icon-128.png",
       "sizes": "128x128",
       "type": "image/png"
@@ -20,6 +32,10 @@
       "purpose": "any maskable"
     }, {
       "src": "img/snap-icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-384.png",
       "sizes": "256x256",
       "type": "image/png"
     }, {
