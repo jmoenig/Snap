@@ -5774,6 +5774,7 @@ HatBlockMorph.prototype.updateReadout = function () {
         readColor = new Color(242, 119, 68);
     if (!world) return;
     const ide = this.parentThatIsA(IDE_Morph);
+    if (!ide) return;
     const queue = ide.sockets.getMessageQueue(this);
     this.msgCount =  queue ? queue.contents.length : 0;
     var readout = this.readout();
