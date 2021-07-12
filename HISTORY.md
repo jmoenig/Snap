@@ -25,6 +25,7 @@
 
 ### 2021-07-12
 * Chinese translation update, thanks, Simon!
+* objects: fixed refactored "Delete a variable" button for stage palette
 
 ### 2021-07-11
 * added libraries and media to cache, thanks, Joan!
