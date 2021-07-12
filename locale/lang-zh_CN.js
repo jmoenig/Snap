@@ -125,7 +125,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2020-05-13',
+        '2021-07-12',
 
     // GUI
     // control bar:

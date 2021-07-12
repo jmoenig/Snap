@@ -21,6 +21,10 @@
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
 * **Translation Updates:**
     * German
+    * Chinese, thanks, Simon!
+
+### 2021-07-12
+* Chinese translation update, thanks, Simon!
 
 ### 2021-07-11
 * added libraries and media to cache, thanks, Joan!
