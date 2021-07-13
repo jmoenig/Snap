@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-12';
+modules.objects = '2021-July-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -2953,7 +2953,8 @@ SpriteMorph.prototype.palette = function (category) {
 };
 
 SpriteMorph.prototype.freshPalette = function (category) {
-    var palette = new ScrollFrameMorph(null, null, this.sliderColor),
+    var myself = this,
+        palette = new ScrollFrameMorph(null, null, this.sliderColor),
         unit = SyntaxElementMorph.prototype.fontSize,
         x = 0,
         y = 5,
@@ -3067,7 +3068,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 ),
                 localize('find blocks') + '...'
             ],
-            () => this.searchBlocks(),
+            () => myself.searchBlocks(),
             '^F'
         );
         if (canHidePrimitives()) {

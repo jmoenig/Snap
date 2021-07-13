@@ -23,6 +23,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-13
+* objects: fixed search from palette context menu
+
 ### 2021-07-12
 * Chinese translation update, thanks, Simon!
 * objects: fixed refactored "Delete a variable" button for stage palette
