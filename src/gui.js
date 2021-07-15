@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-09';
+modules.gui = '2021-July-15';
 
 // Declarations
 
@@ -2150,7 +2150,8 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding - 8
+            //this.categories.bottom() - this.spriteBar.top() - padding - 8
+            this.spriteBar.top() + 44
         ));
         this.spriteBar.fixLayout();
 
