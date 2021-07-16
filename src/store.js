@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-08';
+modules.store = '2021-July-16';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1661,8 +1661,7 @@ Project.prototype.toXML = function (serializer) {
 };
 
 Scene.prototype.toXML = function (serializer) {
-    var tmp = new Scene(),
-        xml;
+    var xml;
 
     function code(key) {
         var str = '';
@@ -1680,8 +1679,6 @@ Scene.prototype.toXML = function (serializer) {
         return str;
     }
 
-    tmp.captureGlobalSettings();
-    this.applyGlobalSettings();
     xml = serializer.format(
         '<scene name="@"%>' +
             '<notes>$</notes>' +
@@ -1696,7 +1693,7 @@ Scene.prototype.toXML = function (serializer) {
         '', // unified palette persistence commented out during development
         // this.unifiedPalette ? ' palette="single"' : '',
         this.notes || '',
-        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+        Object.keys(this.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
                 ''
             ),
@@ -1706,7 +1703,6 @@ Scene.prototype.toXML = function (serializer) {
         serializer.store(this.globalVariables),
         serializer.store(this.stage)
     );
-    tmp.applyGlobalSettings();
     return xml;
 };
 

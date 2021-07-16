@@ -2764,6 +2764,7 @@ IDE_Morph.prototype.flatDesign = function () {
 IDE_Morph.prototype.refreshIDE = function () {
     var projectData;
 
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
             projectData = this.serializer.serialize(
@@ -2971,6 +2972,7 @@ IDE_Morph.prototype.backup = function (callback) {
 IDE_Morph.prototype.backupAndDo = function (callback) {
     // private
     var username = this.cloud.username;
+    this.scene.captureGlobalSettings();
     try {
         localStorage['-snap-backup-'] = this.serializer.serialize(
             new Project(this.scenes, this.scene)
@@ -4909,6 +4911,7 @@ IDE_Morph.prototype.exportProject = function (name) {
     var menu, str;
     if (name) {
         name = this.setProjectName(name);
+        this.scene.captureGlobalSettings();
         try {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(
@@ -6253,6 +6256,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
+        this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
             try {
                 projectData = this.serializer.serialize(
@@ -6365,6 +6369,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 
 IDE_Morph.prototype.setBlocksScale = function (num) {
     var projectData;
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
             projectData = this.serializer.serialize(
@@ -6715,6 +6720,7 @@ IDE_Morph.prototype.buildProjectRequest = function () {
         body,
         xml;
 
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     xml = this.serializer.serialize(proj);
     body = {
@@ -6797,6 +6803,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
@@ -6823,6 +6830,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         name = this.setProjectName(name);
@@ -6855,6 +6863,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         name = this.setProjectName(name);
