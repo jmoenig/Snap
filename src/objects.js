@@ -3117,13 +3117,13 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        // arrange the blocks in the unified palette column-wise:
         blocks = this.categories.reduce((blocks, category) => {
             let header = [ this.categoryText(category), '-' ],
                 primitives = this.getPrimitiveTemplates(category),
                 customs = this.customBlockTemplatesForCategory(category),
                 showHeader = !['lists', 'other'].includes(category) &&
-                    (primitives.some(item => item instanceof BlockMorph) || customs.length);
+                    (primitives.some(item =>
+                        item instanceof BlockMorph) || customs.length);
 
             return blocks.concat(
                 showHeader ? header : [],
