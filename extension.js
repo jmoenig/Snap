@@ -52,11 +52,11 @@ SnapExtensions.primitives.set(
 
         sprite.videoCanvas = new VideoCanvasWrapper(url);
 
-        sprite.doSwitchToCostume = function(id, noShadow){
+        sprite.wearCostume = function(id, noShadow){
             sprite.videoCanvas.destroy();
             delete sprite.videoCanvas;
-            sprite.doSwitchToCostume = (id, noShadow) => SpriteMorph.prototype.doSwitchToCostume.call(sprite, id, noShadow);
-            sprite.doSwitchToCostume(id, noShadow);
+            sprite.wearCostume = (id, noShadow) => SpriteMorph.prototype.wearCostume.call(sprite, id, noShadow);
+            sprite.wearCostume(id, noShadow);
         }
 
 
@@ -67,7 +67,7 @@ SnapExtensions.primitives.set(
         }
 
         sprite.videoCanvas.addDrawFrameAction(()=>{
-            SpriteMorph.prototype.doSwitchToCostume.call(sprite, new Costume(sprite.videoCanvas.canvas));
+            SpriteMorph.prototype.wearCostume.call(sprite, new Costume(sprite.videoCanvas.canvas));
         })
 
         sprite.videoCanvas.play();
