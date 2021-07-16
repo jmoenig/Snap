@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-13';
+modules.objects = '2021-July-16';
 
 var SpriteMorph;
 var StageMorph;
