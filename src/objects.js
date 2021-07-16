@@ -2847,10 +2847,7 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (!definition.isHelper &&
-            (definition.category === category ||
-            (Array.isArray(category) && category.includes(definition.category)))
-        ) {
+        if (!definition.isHelper && definition.category === category) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -3047,15 +3044,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
 
         function hasHiddenPrimitives() {
-            console.log('HAS HIDDEN PRIMITIVES CALLED');
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
-                console.log(Object.keys(hiddens).some(any =>
-                    !isNil(defs[any]) && (category === 'unified' ||
-                        (defs[any].category === category ||
-                            contains((more[category] || []), any)))
-                ))
-                return Object.keys(hiddens).some(any =>
+            return Object.keys(hiddens).some(any =>
                 !isNil(defs[any]) && (category === 'unified' ||
                     (defs[any].category === category ||
                         contains((more[category] || []), any)))
@@ -3143,14 +3134,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 showHeader = !['lists', 'other'].includes(category) &&
                     (primitives.some(item => item instanceof BlockMorph) || customs.length);
 
-            console.log('SHow header?', showHeader, category)
-            console.log(primitives.some(item => item instanceof BlockMorph))
             return blocks.concat(
                 showHeader ? header : [],
-                primitives,
-                '=',
-                customs,
-                '='
+                primitives, '=',
+                customs, '='
             );
         }, []);
     } else {
@@ -3160,14 +3147,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
     blocks.push('=');
     blocks.push(this.makeBlockButton(category));
 
-    if (category === 'variables') {
-        category = ['variables', 'lists', 'other'];
-    }
-
     if (category !== 'unified') {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
+    } else if (category === 'variables') {
+        blocks.push(...this.customBlockTemplatesForCategory('lists'));
+        blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
+
 
     blocks.forEach(block => {
         if (block === null) {
