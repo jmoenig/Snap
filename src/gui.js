@@ -5637,7 +5637,10 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         }
     });
     scene.applyGlobalSettings();
-    this.setUnifiedPalette(scene.unifiedPalette);
+    if (!this.setUnifiedPalette(scene.unifiedPalette)) {
+        this.flushBlocksCache();
+        this.refreshPalette(true);
+    }
     this.world().keyboardFocus = this.stage;
 };
 
@@ -6082,10 +6085,12 @@ IDE_Morph.prototype.toggleUnifiedPalette = function () {
 };
 
 IDE_Morph.prototype.setUnifiedPalette = function (bool) {
+    // answer true or false indicating whether the palette
+    // has already been refreshed by this operation
     if (this.scene.unifiedPalette === bool &&
         (bool === (this.currentCategory === 'unified'))
     ) {
-        return;
+        return false;
     }
     this.scene.unifiedPalette = bool;
     this.currentCategory = bool ? 'unified' : 'motion';
@@ -6096,6 +6101,7 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
+    return true;
 };
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {

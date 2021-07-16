@@ -35,6 +35,7 @@
 * byob: rearranged internal order of categories
 * objects: fixed overlapping blocks bug in unified palette
 * store, gui: fixed capturing global settings for serializing scenes
+* gui: update palette when switching to a new scene / loading a new project
 
 ### 2021-07-15
 * gui: made sprite-bar height independent of the number of categories
