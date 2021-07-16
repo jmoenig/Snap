@@ -3041,7 +3041,18 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     ]
             };
 
+        if (category === 'unified') {
+            more.unified = Object.values(more).reduce((x, y) =>
+                x.concat(y));
+        }
+
         function hasHiddenPrimitives() {
+            console.log('HAS HIDDEN PRIMITIVES CALLED');
+            console.log(Object.keys(hiddens).some(any =>
+                !isNil(defs[any]) && (category === 'unified' ||
+                    (defs[any].category === category ||
+                        contains((more[category] || []), any)))
+            ))
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
             return Object.keys(hiddens).some(any =>
@@ -3082,10 +3093,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
-                    if (category === 'unified') {
-                        more.unified = Object.values(more).reduce((x, y) =>
-                            x.concat(y));
-                    }
                     (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
                     );
