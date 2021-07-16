@@ -23,6 +23,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-15
+* gui: made sprite-bar height independent of the number of categories
+
 ### 2021-07-13
 * objects: fixed search from palette context menu
 
