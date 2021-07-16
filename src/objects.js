@@ -3118,7 +3118,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        // arrange the blocks in the unified palette column-wise:er
+        // arrange the blocks in the unified palette column-wise:
         let cat1 = this.categories.slice(0, 8),
             cat2 = this.categories.slice(8);
 
