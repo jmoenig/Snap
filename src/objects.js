@@ -138,12 +138,12 @@ SpriteMorph.prototype.attributes =
 SpriteMorph.prototype.categories =
     [
         'motion',
-        'control',
         'looks',
-        'sensing',
         'sound',
-        'operators',
         'pen',
+        'control',
+        'sensing',
+        'operators',
         'variables',
         'lists',
         'other'
@@ -2960,8 +2960,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         hideNextSpace = false,
         shade = new Color(140, 140, 140),
         searchButton,
-        makeButton,
-        unifiedCategories;
+        makeButton;
 
     palette.owner = this;
     palette.padding = unit / 2;
@@ -3119,15 +3118,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
         // arrange the blocks in the unified palette column-wise:
-        let cat1 = this.categories.slice(0, 8),
-            cat2 = this.categories.slice(8);
-
-        unifiedCategories = cat1.filter(
-            (elem, idx) => idx % 2 === 0
-        ).concat(cat1.filter(
-            (elem, idx) => idx % 2 === 1)
-        ).concat(cat2);
-        blocks = unifiedCategories.reduce((blocks, category) => {
+        blocks = this.categories.reduce((blocks, category) => {
             let header = [ this.categoryText(category), '-' ],
                 primitives = this.getPrimitiveTemplates(category),
                 customs = this.customBlockTemplatesForCategory(category),
@@ -3154,7 +3145,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
-
 
     blocks.forEach(block => {
         if (block === null) {

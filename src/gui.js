@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-15';
+modules.gui = '2021-July-16';
 
 // Declarations
 
@@ -1335,8 +1335,8 @@ IDE_Morph.prototype.createCategories = function () {
 
         myself.categories.children.forEach(button => {
             i += 1;
-            row = Math.ceil(i / 2);
-            col = 2 - (i % 2);
+            row = 1 + ((i - 1) % 4);
+            col = i < 5 ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + (row * yPadding + ((row - 1) * buttonHeight) + border)

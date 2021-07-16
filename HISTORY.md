@@ -31,6 +31,7 @@
 * new libraries manual versions, thanks, Brian!
 * palette hiding/showing primitives fixes, tanks, Michael!
 * readme update, thanks, Michael!
+* objects, gui: rearranged internal order of categories
 
 ### 2021-07-15
 * gui: made sprite-bar height independent of the number of categories
