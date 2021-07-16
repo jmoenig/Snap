@@ -33,6 +33,7 @@
 * readme update, thanks, Michael!
 * objects, gui: rearranged internal order of categories
 * byob: rearranged internal order of categories
+* objects: fixed overlapping blocks bug in unified palette
 
 ### 2021-07-15
 * gui: made sprite-bar height independent of the number of categories

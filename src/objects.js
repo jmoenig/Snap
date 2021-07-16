@@ -3160,7 +3160,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             hideNextSpace = true;
         } else if (block === '#') {
             x = 0;
-            y = ry;
+            y = (ry === 0 ? y : ry);
         } else {
             hideNextSpace = false;
             if (x === 0) {
@@ -3168,8 +3168,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
             block.setPosition(new Point(x, y));
             palette.addContents(block);
-            if (block instanceof ToggleMorph
-                    || (block instanceof RingMorph)) {
+            if (block instanceof ToggleMorph) {
+                x = block.right() + unit / 2;
+            } else if (block instanceof RingMorph) {
                 x = block.right() + unit / 2;
                 ry = block.bottom();
             } else {
