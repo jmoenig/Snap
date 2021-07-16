@@ -3048,14 +3048,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
         function hasHiddenPrimitives() {
             console.log('HAS HIDDEN PRIMITIVES CALLED');
-            console.log(Object.keys(hiddens).some(any =>
-                !isNil(defs[any]) && (category === 'unified' ||
-                    (defs[any].category === category ||
-                        contains((more[category] || []), any)))
-            ))
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
-            return Object.keys(hiddens).some(any =>
+                console.log(Object.keys(hiddens).some(any =>
+                    !isNil(defs[any]) && (category === 'unified' ||
+                        (defs[any].category === category ||
+                            contains((more[category] || []), any)))
+                ))
+                return Object.keys(hiddens).some(any =>
                 !isNil(defs[any]) && (category === 'unified' ||
                     (defs[any].category === category ||
                         contains((more[category] || []), any)))
@@ -3127,7 +3127,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        // arrange the blocks in the unified palette column-wise:
+        // arrange the blocks in the unified palette column-wise:er
         let cat1 = this.categories.slice(0, 8),
             cat2 = this.categories.slice(8);
 
@@ -3136,20 +3136,23 @@ SpriteMorph.prototype.freshPalette = function (category) {
         ).concat(cat1.filter(
             (elem, idx) => idx % 2 === 1)
         ).concat(cat2);
-        blocks = unifiedCategories.reduce((blocks, category) =>
-            blocks.concat(
-                category === 'lists' ?
-                    [] :
-                    [
-                        this.categoryText(category),
-                        '-'
-                    ],
-                this.getPrimitiveTemplates(category),
+        blocks = unifiedCategories.reduce((blocks, category) => {
+            let header = [ this.categoryText(category), '-' ],
+                primitives = this.getPrimitiveTemplates(category),
+                customs = this.customBlockTemplatesForCategory(category),
+                showHeader = !['lists', 'other'].includes(category) &&
+                    (primitives.some(item => item instanceof BlockMorph) || customs.length);
+
+            console.log('SHow header?', showHeader, category)
+            console.log(primitives.some(item => item instanceof BlockMorph))
+            return blocks.concat(
+                showHeader ? header : [],
+                primitives,
                 '=',
-                this.customBlockTemplatesForCategory(category),
+                customs,
                 '='
-            ),
-            []);
+            );
+        }, []);
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
