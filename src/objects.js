@@ -2847,10 +2847,7 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (!definition.isHelper &&
-            (definition.category === category ||
-            (Array.isArray(category) && category.includes(definition.category)))
-        ) {
+        if (!definition.isHelper && definition.category === category) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -3041,6 +3038,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     ]
             };
 
+        if (category === 'unified') {
+            more.unified = Object.values(more).reduce((x, y) =>
+                x.concat(y));
+        }
+
         function hasHiddenPrimitives() {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
@@ -3082,10 +3084,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
-                    if (category === 'unified') {
-                        more.unified = Object.values(more).reduce((x, y) =>
-                            x.concat(y));
-                    }
                     (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
                     );
@@ -3129,20 +3127,19 @@ SpriteMorph.prototype.freshPalette = function (category) {
         ).concat(cat1.filter(
             (elem, idx) => idx % 2 === 1)
         ).concat(cat2);
-        blocks = unifiedCategories.reduce((blocks, category) =>
-            blocks.concat(
-                category === 'lists' ?
-                    [] :
-                    [
-                        this.categoryText(category),
-                        '-'
-                    ],
-                this.getPrimitiveTemplates(category),
-                '=',
-                this.customBlockTemplatesForCategory(category),
-                '='
-            ),
-            []);
+        blocks = unifiedCategories.reduce((blocks, category) => {
+            let header = [ this.categoryText(category), '-' ],
+                primitives = this.getPrimitiveTemplates(category),
+                customs = this.customBlockTemplatesForCategory(category),
+                showHeader = !['lists', 'other'].includes(category) &&
+                    (primitives.some(item => item instanceof BlockMorph) || customs.length);
+
+            return blocks.concat(
+                showHeader ? header : [],
+                primitives, '=',
+                customs, '='
+            );
+        }, []);
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
@@ -3150,14 +3147,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
     blocks.push('=');
     blocks.push(this.makeBlockButton(category));
 
-    if (category === 'variables') {
-        category = ['variables', 'lists', 'other'];
-    }
-
     if (category !== 'unified') {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
+    } else if (category === 'variables') {
+        blocks.push(...this.customBlockTemplatesForCategory('lists'));
+        blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
+
 
     blocks.forEach(block => {
         if (block === null) {
