@@ -47,8 +47,8 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'video_costume(sprite,url,loop)',
-    (sprite, url, loop) => {
+    prefix+'video_costume(sprite,url,loop,loading_text)',
+    (sprite, url, loop, loading_text) => {
 
         sprite.videoCanvas = new VideoCanvasWrapper(url);
 
@@ -59,15 +59,34 @@ SnapExtensions.primitives.set(
             sprite.wearCostume(id, noShadow);
         }
 
-
-
-
         if(loop) {
             sprite.videoCanvas.setLoop(true);
         }
 
         sprite.videoCanvas.addDrawFrameAction(()=>{
-            SpriteMorph.prototype.wearCostume.call(sprite, new Costume(sprite.videoCanvas.canvas));
+
+            if(sprite.videoCanvas){
+                var canvas;
+                if(sprite.videoCanvas.video.readyState === 4){
+                    canvas = sprite.videoCanvas.canvas;
+                }
+                else if(loading_text) {
+                    canvas = newCanvas(null, true);
+                    canvas.width = 300;
+                    canvas.height = 100;
+                    var ctx = canvas.getContext("2d");
+                    ctx.font = "15px sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(loading_text, canvas.width/2, 15);
+                }
+
+                if(canvas){
+                    SpriteMorph.prototype.wearCostume.call(sprite, new Costume(canvas));
+                }
+            }
+
+
+
         })
 
         sprite.videoCanvas.play();
@@ -192,8 +211,7 @@ VideoCanvasWrapper.prototype.init = function(url){
         var ctx = myself.canvas.getContext('2d');
         var v = this;
         (function drawFrame(){
-            if(!myself.video.paused && !myself.video.ended){
-
+            if(myself.video && !myself.video.paused && !myself.video.ended){
                 // retina support does not play nicely here,
                 // so call the original drawImage
                 if(isRetinaEnabled()){
@@ -208,6 +226,7 @@ VideoCanvasWrapper.prototype.init = function(url){
                 })
 
                 requestAnimationFrame(drawFrame);
+
 
             }
         })();
@@ -233,6 +252,14 @@ VideoCanvasWrapper.prototype.addLoadedMetadataAction = function(action) {
 }
 
 VideoCanvasWrapper.prototype.loadVideo = function(src){
+    fetch(src).then(function(response) {
+        return response;
+    }).catch(function() {
+        throw new Error("Cannot load video. If this URL is valid, the domain may not have proper CORS policies set.")
+    });
+
+    // We can only take video that has CORS set up
+    this.video.crossOrigin = "Anonymous"
     this.video.src = src;
 }
 
@@ -250,6 +277,9 @@ VideoCanvasWrapper.prototype.stop = function(){
 }
 
 VideoCanvasWrapper.prototype.destroy = function(){
+    // this.onLoadedMetadataActions = [];
+    // this.onLoadedMetadataActions = [];
     this.stop();
     this.video.remove();
+    delete this.video;
 }
