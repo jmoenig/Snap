@@ -14,14 +14,31 @@
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
+    * libraries can now have hidden helper blocks
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
+* **Documentation Updates:**
+    * updated manual, thanks Brian!
+    * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-07-16
+* new libraries manual versions, thanks, Brian!
+* palette hiding/showing primitives fixes, tanks, Michael!
+* readme update, thanks, Michael!
+* objects, gui: rearranged internal order of categories
+* byob: rearranged internal order of categories
+* objects: fixed overlapping blocks bug in unified palette
+* store, gui: fixed capturing global settings for serializing scenes
+* gui: update palette when switching to a new scene / loading a new project
+
+### 2021-07-15
+* gui: made sprite-bar height independent of the number of categories
 
 ### 2021-07-13
 * objects: fixed search from palette context menu

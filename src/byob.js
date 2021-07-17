@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-July-06';
+modules.byob = '2021-July-16';
 
 // Declarations
 
@@ -1811,7 +1811,9 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
         colors = [
             IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
             SpriteMorph.prototype.blockColor[category]
         ],
         button;
@@ -1869,8 +1871,13 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
 
     this.categories.children.forEach(button => {
         i += 1;
-        row = Math.ceil(i / 2);
-        col = 2 - (i % 2);
+        if (i < 8) {
+            row = 1 + ((i - 1) % 4);
+            col = i < 5 ? 1 : 2;
+        } else {
+            row = Math.ceil(i / 2);
+            col = 2 - (i % 2);
+        }
         button.setPosition(new Point(
             l + (col * xPadding + ((col - 1) * buttonWidth)),
             t + (row * yPadding + ((row - 1) * buttonHeight) + border)

@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-09';
+modules.gui = '2021-July-16';
 
 // Declarations
 
@@ -1335,8 +1335,8 @@ IDE_Morph.prototype.createCategories = function () {
 
         myself.categories.children.forEach(button => {
             i += 1;
-            row = Math.ceil(i / 2);
-            col = 2 - (i % 2);
+            row = 1 + ((i - 1) % 4);
+            col = i < 5 ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + (row * yPadding + ((row - 1) * buttonHeight) + border)
@@ -2150,7 +2150,8 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding - 8
+            //this.categories.bottom() - this.spriteBar.top() - padding - 8
+            this.spriteBar.top() + 44
         ));
         this.spriteBar.fixLayout();
 
@@ -2763,6 +2764,7 @@ IDE_Morph.prototype.flatDesign = function () {
 IDE_Morph.prototype.refreshIDE = function () {
     var projectData;
 
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
             projectData = this.serializer.serialize(
@@ -2970,6 +2972,7 @@ IDE_Morph.prototype.backup = function (callback) {
 IDE_Morph.prototype.backupAndDo = function (callback) {
     // private
     var username = this.cloud.username;
+    this.scene.captureGlobalSettings();
     try {
         localStorage['-snap-backup-'] = this.serializer.serialize(
             new Project(this.scenes, this.scene)
@@ -4908,6 +4911,7 @@ IDE_Morph.prototype.exportProject = function (name) {
     var menu, str;
     if (name) {
         name = this.setProjectName(name);
+        this.scene.captureGlobalSettings();
         try {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(
@@ -5633,7 +5637,10 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         }
     });
     scene.applyGlobalSettings();
-    this.setUnifiedPalette(scene.unifiedPalette);
+    if (!this.setUnifiedPalette(scene.unifiedPalette)) {
+        this.flushBlocksCache();
+        this.refreshPalette(true);
+    }
     this.world().keyboardFocus = this.stage;
 };
 
@@ -6078,10 +6085,12 @@ IDE_Morph.prototype.toggleUnifiedPalette = function () {
 };
 
 IDE_Morph.prototype.setUnifiedPalette = function (bool) {
+    // answer true or false indicating whether the palette
+    // has already been refreshed by this operation
     if (this.scene.unifiedPalette === bool &&
         (bool === (this.currentCategory === 'unified'))
     ) {
-        return;
+        return false;
     }
     this.scene.unifiedPalette = bool;
     this.currentCategory = bool ? 'unified' : 'motion';
@@ -6092,6 +6101,7 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
+    return true;
 };
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
@@ -6252,6 +6262,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
+        this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
             try {
                 projectData = this.serializer.serialize(
@@ -6364,6 +6375,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 
 IDE_Morph.prototype.setBlocksScale = function (num) {
     var projectData;
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
             projectData = this.serializer.serialize(
@@ -6714,6 +6726,7 @@ IDE_Morph.prototype.buildProjectRequest = function () {
         body,
         xml;
 
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     xml = this.serializer.serialize(proj);
     body = {
@@ -6796,6 +6809,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
@@ -6822,6 +6836,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         name = this.setProjectName(name);
@@ -6854,6 +6869,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         name = this.setProjectName(name);

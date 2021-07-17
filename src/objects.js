@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-13';
+modules.objects = '2021-July-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -138,12 +138,12 @@ SpriteMorph.prototype.attributes =
 SpriteMorph.prototype.categories =
     [
         'motion',
-        'control',
         'looks',
-        'sensing',
         'sound',
-        'operators',
         'pen',
+        'control',
+        'sensing',
+        'operators',
         'variables',
         'lists',
         'other'
@@ -2847,10 +2847,7 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (!definition.isHelper &&
-            (definition.category === category ||
-            (Array.isArray(category) && category.includes(definition.category)))
-        ) {
+        if (!definition.isHelper && definition.category === category) {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -2963,8 +2960,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         hideNextSpace = false,
         shade = new Color(140, 140, 140),
         searchButton,
-        makeButton,
-        unifiedCategories;
+        makeButton;
 
     palette.owner = this;
     palette.padding = unit / 2;
@@ -3041,6 +3037,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     ]
             };
 
+        if (category === 'unified') {
+            more.unified = Object.values(more).reduce((x, y) =>
+                x.concat(y));
+        }
+
         function hasHiddenPrimitives() {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
@@ -3082,10 +3083,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                             StageMorph.prototype.hiddenPrimitives[sel] = true;
                         }
                     });
-                    if (category === 'unified') {
-                        more.unified = Object.values(more).reduce((x, y) =>
-                            x.concat(y));
-                    }
                     (more[category] || []).forEach(sel =>
                         StageMorph.prototype.hiddenPrimitives[sel] = true
                     );
@@ -3120,29 +3117,20 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        // arrange the blocks in the unified palette column-wise:
-        let cat1 = this.categories.slice(0, 8),
-            cat2 = this.categories.slice(8);
+        blocks = this.categories.reduce((blocks, category) => {
+            let header = [ this.categoryText(category), '-' ],
+                primitives = this.getPrimitiveTemplates(category),
+                customs = this.customBlockTemplatesForCategory(category),
+                showHeader = !['lists', 'other'].includes(category) &&
+                    (primitives.some(item =>
+                        item instanceof BlockMorph) || customs.length);
 
-        unifiedCategories = cat1.filter(
-            (elem, idx) => idx % 2 === 0
-        ).concat(cat1.filter(
-            (elem, idx) => idx % 2 === 1)
-        ).concat(cat2);
-        blocks = unifiedCategories.reduce((blocks, category) =>
-            blocks.concat(
-                category === 'lists' ?
-                    [] :
-                    [
-                        this.categoryText(category),
-                        '-'
-                    ],
-                this.getPrimitiveTemplates(category),
-                '=',
-                this.customBlockTemplatesForCategory(category),
-                '='
-            ),
-            []);
+            return blocks.concat(
+                showHeader ? header : [],
+                primitives, '=',
+                customs, '='
+            );
+        }, []);
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
@@ -3150,13 +3138,12 @@ SpriteMorph.prototype.freshPalette = function (category) {
     blocks.push('=');
     blocks.push(this.makeBlockButton(category));
 
-    if (category === 'variables') {
-        category = ['variables', 'lists', 'other'];
-    }
-
     if (category !== 'unified') {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
+    } else if (category === 'variables') {
+        blocks.push(...this.customBlockTemplatesForCategory('lists'));
+        blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
 
     blocks.forEach(block => {
@@ -3173,7 +3160,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             hideNextSpace = true;
         } else if (block === '#') {
             x = 0;
-            y = ry;
+            y = (ry === 0 ? y : ry);
         } else {
             hideNextSpace = false;
             if (x === 0) {
@@ -3181,8 +3168,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
             block.setPosition(new Point(x, y));
             palette.addContents(block);
-            if (block instanceof ToggleMorph
-                    || (block instanceof RingMorph)) {
+            if (block instanceof ToggleMorph) {
+                x = block.right() + unit / 2;
+            } else if (block instanceof RingMorph) {
                 x = block.right() + unit / 2;
                 ry = block.bottom();
             } else {
