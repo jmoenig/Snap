@@ -50,6 +50,11 @@ SnapExtensions.primitives.set(
     prefix+'video_costume(sprite,url,loop,loading_text)',
     (sprite, url, loop, loading_text) => {
 
+        if(sprite.videoCanvas){
+            sprite.videoCanvas.destroy();
+            delete sprite.videoCanvas;
+        }
+
         sprite.videoCanvas = new VideoCanvasWrapper(url);
 
         sprite.wearCostume = function(id, noShadow){
@@ -66,7 +71,7 @@ SnapExtensions.primitives.set(
         sprite.videoCanvas.addDrawFrameAction(()=>{
 
             if(sprite.videoCanvas){
-                var canvas;
+                var canvas = null;
                 if(sprite.videoCanvas.video.readyState === 4 && sprite.videoCanvas.canvas.height > 0 && sprite.videoCanvas.canvas.width > 0){
                     canvas = sprite.videoCanvas.canvas;
                 }
