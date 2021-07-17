@@ -67,7 +67,7 @@ SnapExtensions.primitives.set(
 
             if(sprite.videoCanvas){
                 var canvas;
-                if(sprite.videoCanvas.video.readyState === 4){
+                if(sprite.videoCanvas.video.readyState === 4 && sprite.videoCanvas.canvas.height > 0 && sprite.videoCanvas.canvas.width > 0){
                     canvas = sprite.videoCanvas.canvas;
                 }
                 else if(loading_text) {
