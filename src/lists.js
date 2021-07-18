@@ -687,11 +687,15 @@ List.prototype.reshape = function (dimensions) {
     // answer a new list formatted to fit the given dimensions.
     // truncate excess elements, if any.
     // pad with (repetitions of) existing elements
-    var src = this.ravel().itemsArray();
+    var size,
+	i = 0,
+	trg,
+	src = this.ravel().itemsArray();
+
+	// if no dimensions, report a scalar
 	if (dimensions.isEmpty()) return src[0];
-    var size = dimensions.itemsArray().reduce((a, b) => a * b),
-        i = 0,
-        trg;
+
+    size = dimensions.itemsArray().reduce((a, b) => a * b);
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {
