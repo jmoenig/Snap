@@ -45,16 +45,17 @@ BlockMorph.prototype.showHelp = async function() {
             metadata = metadata.rpcs[methodName];
             help = metadata.description;
             // add argument descriptions, if available
-            var args = metadata.args;
-            for (var i = 0; i < args.length; i++) {
-                var arg = args[i];
-                if (arg.description) {
-                    var optionalStr = arg.optional ? '[optional]' : '';
-                    help += '\n' + arg.name + ': ' + arg.description + ' ' + optionalStr;
-                }
+            for (const arg of metadata.args.filter(s => s.description)) {
+                var optionalStr = arg.optional ? '[optional]' : '';
+                help += `\n${arg.name}: ${arg.description} ${optionalStr}`;
             }
+            // add a direct link to the official docs page
+            const cat = metadata.categories && metadata.categories.length ? metadata.categories[0] : 'index';
+            help += `\n\n${SERVER_URL}/docs/services/${serviceName}/${cat}.html#${serviceName}.${methodName}`;
         } else {  // get service description
             help = metadata.description;
+            // add a direct link to the official docs page
+            help += `\n\n${SERVER_URL}/docs/services/${serviceName}/index.html`;
         }
         if (!help) help = 'Description not available';
     } else {
