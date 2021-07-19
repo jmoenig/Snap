@@ -27,6 +27,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-19
+* fixed #2863, thanks ,Brian!
+
 ### 2021-07-16
 * new libraries manual versions, thanks, Brian!
 * palette hiding/showing primitives fixes, tanks, Michael!
