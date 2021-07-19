@@ -2,44 +2,10 @@ var ide = world.children.find(child => {
         return child instanceof IDE_Morph;
 });
 
-var prefix = 'mrw_';
-
-function unifiedPalette(){
-        ide.setUnifiedPalette(true);
-}
-
-var hidePrimitives = ()=>{
-    var defs = SpriteMorph.prototype.blocks;
-        Object.keys(defs).forEach(sel => {
-                StageMorph.prototype.hiddenPrimitives[sel] = true;
-        });
-        ide.flushBlocksCache('unified');
-        ide.refreshPalette();
-}
-
-var showPrimitives = () => {
-    StageMorph.prototype.hiddenPrimitives = {}
-    ide.flushBlocksCache('unified');
-    ide.refreshPalette();
-}
+var prefix = 'vid_';
 
 SnapExtensions.primitives.set(
-    prefix+'enter',
-    () => {
-            unifiedPalette();
-            hidePrimitives();
-    }
-)
-
-SnapExtensions.primitives.set(
-    prefix+'exit',
-    () => {
-        showPrimitives();
-    }
-)
-
-SnapExtensions.primitives.set(
-    prefix+'play_video(url)',
+    prefix+'player(url)',
     (url) => {
         var player = new VideoPlayerMorph(url);
         world.add(player);
@@ -47,7 +13,7 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'video_costume(sprite,url,loop,loading_text)',
+    prefix+'costume(sprite,url,loop,loading_text)',
     (sprite, url, loop, loading_text) => {
 
         if(sprite.videoCanvas){
@@ -89,23 +55,10 @@ SnapExtensions.primitives.set(
                     SpriteMorph.prototype.wearCostume.call(sprite, new Costume(canvas));
                 }
             }
-
-
-
         })
-
         sprite.videoCanvas.play();
     }
 )
-
-// SnapExtensions.primitives.set(
-//     prefix+'video_costume_play(sprite)',
-//     (sprite) => {
-//         if(sprite.videoCanvas){
-//             sprite.videoCanvas.play();
-//         }
-//     }
-// )
 
 /**
  * Displays the specified video inside of a dialog box with player controls.
@@ -263,7 +216,7 @@ VideoCanvasWrapper.prototype.loadVideo = function(src){
         throw new Error("Cannot load video. If this URL is valid, the domain may not have proper CORS policies set.")
     });
 
-    // We can only take video that has CORS set up
+    // We can only take video that has Access-Control-Allow-Origin set to *
     this.video.crossOrigin = "Anonymous"
     this.video.src = src;
 }
@@ -282,8 +235,6 @@ VideoCanvasWrapper.prototype.stop = function(){
 }
 
 VideoCanvasWrapper.prototype.destroy = function(){
-    // this.onLoadedMetadataActions = [];
-    // this.onLoadedMetadataActions = [];
     this.stop();
     this.video.remove();
     delete this.video;
