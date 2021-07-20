@@ -1,5 +1,65 @@
 var prefix = 'ft_';
 
+
+SnapExtensions.primitives.set(
+    prefix + 'write_on_stage(text, size, font, color, sprite)',
+    (text, size, font, color, sprite, proc) => {
+        var stage = sprite.parentThatIsA(StageMorph);
+        if (sprite == stage) {
+            throw new Error(
+                'LABEL cannot be used from the stage because the stage does not have a postion.\n'
+                + 'Use LABEL from a sprite to draw text.');
+        }
+
+        if (typeof text !== 'string' && typeof text !== 'number') {
+            throw new Error('LABEL can only draw text or numbers, not a ' + proc.reportTypeOf(text));
+        }
+
+        var canvas = stage.penTrails(),
+            context = canvas.getContext('2d'),
+            rotation = radians(sprite.direction() - 90),
+            trans = new Point(
+                sprite.center().x - stage.left(),
+                sprite.center().y - stage.top()
+            ),
+            isWarped = sprite.Warped,
+            len,
+            pos;
+
+
+
+        if (isWarped) {endWarp(); }
+        context.save();
+
+        trans = trans.multiplyBy(1 / stage.scale);
+        context.translate(trans.x, trans.y);
+        context.rotate(rotation);
+
+        var dimensions = renderText(text, canvas, size, 0, 0, font, color);
+        len = dimensions[0];
+
+        context.translate(-trans.x, -trans.y);
+        context.restore();
+        pos = new Point(
+            len * Math.sin(radians(sprite.direction())),
+            len * Math.cos(radians(sprite.direction())));
+        pos = pos.add(new Point(sprite.xPosition(), sprite.yPosition()));
+        sprite.gotoXY(pos.x, pos.y, false);
+        sprite.changed();
+
+
+        if (isWarped) {sprite.startWarp(); }
+        stage.changed();
+
+
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'set_costume_name(costume, name)',
+    (costume, name) => costume.name = name
+)
+
 SnapExtensions.primitives.set(
     prefix+'is_bubble(part)',
     part => part.isBubble
