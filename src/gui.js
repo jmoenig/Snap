@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-16';
+modules.gui = '2021-July-20';
 
 // Declarations
 
@@ -4218,6 +4218,16 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addPair('New scene', 'createNewScene');
     menu.addPair('Add scene...', 'addScene');
+
+    if (shiftClicked) {
+        menu.addItem(
+            'New blocks palette...',
+            'createNewCategory',
+            backup,
+            new Color(100, 0, 0)
+        );
+    }
+
     menu.addLine();
     menu.addItem(
         'Libraries...',
@@ -4866,6 +4876,25 @@ IDE_Morph.prototype.createNewScene = function () {
     this.isAddingScenes = true;
     this.newProject();
     this.isAddingScenes = setting;
+};
+
+IDE_Morph.prototype.createNewCategory = function () {
+    new DialogBoxMorph(
+        this,
+        cat => this.addPaletteCategory(cat.name, cat.color),
+        this
+    ).promptCategory(
+        "New Palette",
+        'Category name',
+        new Color(255, 255, 40),
+        this.world(),
+        null, // pic
+        null // msg
+    );
+};
+
+IDE_Morph.prototype.addPaletteCategory = function (name, color) {
+    this.scene.customCategories.set(name, color);
 };
 
 IDE_Morph.prototype.save = function () {

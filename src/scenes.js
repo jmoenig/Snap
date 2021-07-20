@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-July-06';
+modules.scenes = '2021-July-20';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -117,6 +117,7 @@ function Scene(aStageMorph) {
     this.globalVariables = aStageMorph ?
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
+    this.customCategories = new Map(); // key: name, value: color
     this.hasUnsavedEdits = false;
     this.unifiedPalette = true;
 

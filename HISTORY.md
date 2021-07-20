@@ -29,7 +29,8 @@
     * Chinese, thanks, Simon!
 
 ### 2021-07-20
-* threads, estensions blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!
+* threads, extensions: blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!
+* widgets, scenes, gui: custom category prompter
 
 ### 2021-07-19
 * fixed #2863, thanks, Brian!
