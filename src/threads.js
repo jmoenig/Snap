@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-09';
+modules.threads = '2021-July-20';
 
 var ThreadManager;
 var Process;

@@ -15,6 +15,7 @@
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * libraries can now have hidden helper blocks
+    * blocked xhr requests to from Snap! to s.b.e
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -27,8 +28,11 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-20
+* threads, estensions blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!
+
 ### 2021-07-19
-* fixed #2863, thanks ,Brian!
+* fixed #2863, thanks, Brian!
 
 ### 2021-07-16
 * new libraries manual versions, thanks, Brian!

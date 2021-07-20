@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-July-09';
+modules.extensions = '2021-July-20';
 
 // Global stuff
 
