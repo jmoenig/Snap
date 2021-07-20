@@ -385,6 +385,7 @@ SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
     function (method, url, data, headers, proc) {
         var response, i, header;
+        Process.prototype.checkURLAllowed(url);
         if (!proc.httpRequest) {
             proc.httpRequest = new XMLHttpRequest();
             proc.httpRequest.open(method, url, true);
