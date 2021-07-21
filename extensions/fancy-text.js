@@ -81,10 +81,10 @@ SnapExtensions.primitives.set(
     (contents, fontSize, font) => renderText(contents, newCanvas(), fontSize, 0, 0, font)
 )
 
-SnapExtensions.primitives.set(
-    prefix+'new_canvas(w,h)',
-    (w,h) => newCanvas(new Point(parseInt(w),parseInt(h)))
-)
+// SnapExtensions.primitives.set(
+//     prefix+'new_canvas(w,h)',
+//     (w,h) => newCanvas(new Point(parseInt(w),parseInt(h)))
+// )
 
 SnapExtensions.primitives.set(
     prefix+'array_to_list',
@@ -92,11 +92,10 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'draw_empty_bubble(canvas, tipPos)',
-    (canvas, tipPos) => {
-        var ctx = canvas.getContext('2d'),
-            w = canvas.width,
-            h = canvas.height,
+    prefix+'empty_bubble(w, h, tipPos)',
+    (w, h, tipPos) => {
+        var canvas = newCanvas(new Point(parseInt(w), parseInt(h))),
+            ctx = canvas.getContext('2d'),
             r = h/4;
 
         ctx.save();
@@ -169,6 +168,8 @@ SnapExtensions.primitives.set(
         ctx.restore();
 
         canvas.tipPosition = tipPos;
+
+        return canvas;
     }
 )
 
