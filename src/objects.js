@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-16';
+modules.objects = '2021-July-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -160,6 +160,16 @@ SpriteMorph.prototype.blockColor = {
     variables : new Color(243, 118, 29),
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
+};
+
+SpriteMorph.prototype.customCategories = new Map(); // key: name, value: color
+
+SpriteMorph.prototype.allCategories = function () {
+    return this.categories.concat(Array.from(this.customCategories.keys()));
+};
+
+SpriteMorph.prototype.blockColorFor = function (category) {
+    return this.blockColor[category] || this.customCategories.get(category);
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
@@ -2246,7 +2256,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         : info.type === 'hat' ? new HatBlockMorph()
             : info.type === 'ring' ? new RingMorph()
                 : new ReporterBlockMorph(info.type === 'predicate');
-    block.color = this.blockColor[info.category];
+    block.color = this.blockColorFor(info.category);
     block.category = info.category;
     block.selector = migration ? migration.selector : selector;
     if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
@@ -2897,7 +2907,7 @@ SpriteMorph.prototype.makeBlock = function () {
         category = ide.currentCategory === 'unified' ?
             ide.topVisibleCategoryInPalette()
             : ide.currentCategory,
-        clr = SpriteMorph.prototype.blockColor[category],
+        clr = SpriteMorph.prototype.blockColorFor(category),
         dlg;
     dlg = new BlockDialogMorph(
         null,
@@ -3117,7 +3127,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        blocks = this.categories.reduce((blocks, category) => {
+        blocks = this.allCategories().reduce((blocks, category) => {
             let header = [ this.categoryText(category), '-' ],
                 primitives = this.getPrimitiveTemplates(category),
                 customs = this.customBlockTemplatesForCategory(category),

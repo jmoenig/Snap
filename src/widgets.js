@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2021-July-20';
+modules.widgets = '2021-July-21';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1919,6 +1919,7 @@ DialogBoxMorph.prototype.promptCategory = function (
         );
     }
 
+    field.setWidth(160);
     side = field.height() * 0.8;
     picker.setExtent(new Point(side, side));
     picker.setColor(color);

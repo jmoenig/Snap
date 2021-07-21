@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-July-20';
+modules.scenes = '2021-July-21';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -117,7 +117,6 @@ function Scene(aStageMorph) {
     this.globalVariables = aStageMorph ?
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
-    this.customCategories = new Map(); // key: name, value: color
     this.hasUnsavedEdits = false;
     this.unifiedPalette = true;
 
@@ -129,6 +128,7 @@ function Scene(aStageMorph) {
     this.hiddenPrimitives = {};
     this.codeMappings = {};
     this.codeHeaders = {};
+    this.customCategories = new Map(); // key: name, value: color
 
     // global settings (copied)
     this.enableCodeMapping = false;
@@ -191,6 +191,7 @@ Scene.prototype.captureGlobalSettings = function () {
     this.useFlatLineEnds = SpriteMorph.prototype.useFlatLineEnds;
     this.enableLiveCoding = Process.prototype.enableLiveCoding;
     this.enableHyperOps = Process.prototype.enableHyperOps;
+    this.customCategories = SpriteMorph.prototype.customCategories;
 };
 
 Scene.prototype.applyGlobalSettings = function () {
@@ -204,6 +205,7 @@ Scene.prototype.applyGlobalSettings = function () {
     SpriteMorph.prototype.useFlatLineEnds = this.useFlatLineEnds;
     Process.prototype.enableLiveCoding = this.enableLiveCoding;
     Process.prototype.enableHyperOps = this.enableHyperOps;
+    SpriteMorph.prototype.customCategories = this.customCategories;
 };
 
 Scene.prototype.updateTrash = function () {

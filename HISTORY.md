@@ -7,6 +7,7 @@
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
     * hide custom helper blocks in palette
+    * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
@@ -27,6 +28,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-07-21
+* user defined custom block palettes, under construction
 
 ### 2021-07-20
 * threads, extensions: blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!

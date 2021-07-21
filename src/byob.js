@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-July-16';
+modules.byob = '2021-July-21';
 
 // Declarations
 
@@ -1770,7 +1770,7 @@ BlockDialogMorph.prototype.openForChange = function (
     pic,
     preventTypeChange // <bool>
 ) {
-    var clr = SpriteMorph.prototype.blockColor[category];
+    var clr = SpriteMorph.prototype.blockColorFor(category);
     this.key = 'changeABlock';
     this.category = category;
     this.blockType = type;
@@ -1805,6 +1805,11 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
     SpriteMorph.prototype.categories.forEach(cat =>
         this.addCategoryButton(cat)
     );
+
+    // to do: sort alphabetically
+    SpriteMorph.prototype.customCategories.forEach((color, name) =>
+        this.addCustomCategoryButton(name, color)
+    );
 };
 
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
@@ -1814,7 +1819,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
             IDE_Morph.prototype.frameColor.darker
                 (MorphicPreferences.isFlat ? 5 : 50
             ),
-            SpriteMorph.prototype.blockColor[category]
+            SpriteMorph.prototype.blockColorFor(category)
         ],
         button;
 
@@ -1856,31 +1861,82 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     return button;
 };
 
+BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
+    var labelWidth = 172,
+        colors = [
+            IDE_Morph.prototype.frameColor,
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
+            clr
+        ],
+        button;
+
+    button = new ToggleButtonMorph(
+        colors,
+        this, // this block dialog box is the target
+        () => {
+            this.category = category;
+            this.categories.children.forEach(each =>
+                each.refresh()
+            );
+            if (this.types) {
+                this.types.children.forEach(each =>
+                    each.setColor(colors[2])
+                );
+            }
+            this.edit();
+        },
+        category, // UCase label
+        () => this.category === category, // query
+        null, // env
+        null, // hint
+        labelWidth, // minWidth
+        true // has preview
+    );
+
+    button.corner = 8;
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = WHITE;
+        }
+    button.contrast = this.buttonContrast;
+    button.fixLayout();
+    button.refresh();
+    this.categories.add(button);
+    return button;
+};
+
 BlockDialogMorph.prototype.fixCategoriesLayout = function () {
     var buttonWidth = this.categories.children[0].width(), // all the same
         buttonHeight = this.categories.children[0].height(), // all the same
+        more = SpriteMorph.prototype.customCategories.size,
         xPadding = 15,
         yPadding = 2,
         border = 10, // this.categories.border,
-        rows =  Math.ceil((this.categories.children.length) / 2),
         l = this.categories.left(),
         t = this.categories.top(),
-        i = 0,
         row,
         col;
 
-    this.categories.children.forEach(button => {
-        i += 1;
+    this.categories.children.forEach((button, i) => {
         if (i < 8) {
-            row = 1 + ((i - 1) % 4);
-            col = i < 5 ? 1 : 2;
+            row = i % 4;
+            col = Math.ceil((i + 1) / 4);
+        } else if (i < 10) {
+            row = 4;
+            col = 10 - i;
         } else {
-            row = Math.ceil(i / 2);
-            col = 2 - (i % 2);
+            row = i - 5;
+            col = 1;
         }
         button.setPosition(new Point(
             l + (col * xPadding + ((col - 1) * buttonWidth)),
-            t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+            t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
+                (i > 9 ? border / 2 : 0)
         ));
     });
 
@@ -1889,17 +1945,24 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.border = 0;
         this.categories.edge = 0;
     }
-    this.categories.setExtent(new Point(
-        3 * xPadding + 2 * buttonWidth,
-        (rows + 1) * yPadding + rows * buttonHeight + 2 * border
-    ));
+    this.categories.setWidth(
+        3 * xPadding + 2 * buttonWidth
+    );
+
+    this.categories.setHeight(
+        (5 + 1) * yPadding
+            + 5 * buttonHeight
+            + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
+            + 2 * border
+    );
+
 };
 
 // type radio buttons
 
 BlockDialogMorph.prototype.createTypeButtons = function () {
     var block,
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
 
 
     block = new CommandBlockMorph();
@@ -2657,7 +2720,7 @@ PrototypeHatBlockMorph.prototype.fixBlockColor = function (
             this.alternateBlockColor();
         }
     } else if (this.category && !this.color.eq(
-            SpriteMorph.prototype.blockColor[this.category]
+            SpriteMorph.prototype.blockColorFor(this.category)
         )) {
         this.alternateBlockColor();
     }
@@ -3202,7 +3265,7 @@ InputSlotDialogMorph.prototype.init = function (
 InputSlotDialogMorph.prototype.createTypeButtons = function () {
     var block,
         arrow,
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
 
 
     block = new JaggedBlockMorph(localize('Title text'));
