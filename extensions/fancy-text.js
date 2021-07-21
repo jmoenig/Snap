@@ -78,13 +78,10 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     prefix+'measure_text(contents, fontSize, font)',
-    (contents, fontSize, font) => renderText(contents, newCanvas(), fontSize, 0, 0, font)
+    (contents, fontSize, font) => {
+        return renderText(contents, newCanvas(), fontSize, 0, 0, font)
+    }
 )
-
-// SnapExtensions.primitives.set(
-//     prefix+'new_canvas(w,h)',
-//     (w,h) => newCanvas(new Point(parseInt(w),parseInt(h)))
-// )
 
 SnapExtensions.primitives.set(
     prefix+'array_to_list',
@@ -94,82 +91,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'empty_bubble(w, h, tipPos)',
     (w, h, tipPos) => {
-        var canvas = newCanvas(new Point(parseInt(w), parseInt(h))),
-            ctx = canvas.getContext('2d'),
-            r = h/4;
-
-        ctx.save();
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.strokeStyle = '#000000';
-
-// Tip
-        function drawTip(fillIt) {
-            ctx.beginPath();
-            switch (tipPos) {
-                case 'top left':
-                    ctx.moveTo(0, 0);
-                    ctx.lineTo(2*r, r/2);
-                    ctx.lineTo(2*r, r);
-                    break;
-                case 'bottom left':
-                    ctx.moveTo(0, h);
-                    ctx.lineTo(2*r, h-r/2);
-                    ctx.lineTo(2*r, h-r);
-                    break;
-                case 'top right':
-                    ctx.moveTo(w, 0);
-                    ctx.lineTo(w-2*r, r/2);
-                    ctx.lineTo(w-2*r, r);
-                    break;
-                case 'bottom right':
-                    ctx.moveTo(w, h);
-                    ctx.lineTo(w-2*r, h-r/2);
-                    ctx.lineTo(w-2*r, h-r);
-                    break;
-            }
-            ctx.closePath();
-            if (fillIt) {
-                ctx.fill();
-            } else {
-                ctx.stroke();
-            }
-        }
-
-        drawTip(false);
-
-// Bubble
-        ctx.beginPath();
-        ctx.moveTo(2*r, 0);
-
-//top
-        ctx.lineTo(w-2*r, 0);
-//top right
-        ctx.arcTo(w-r, 0, w-r, r, r);
-// right
-        ctx.lineTo(w-r, h-r);
-// bottom right
-        ctx.arcTo(w-r, h, w-2*r, h, r);
-// bottom
-        ctx.lineTo(2*r, h);
-// bottom left
-        ctx.arcTo(r, h, r, h-2*r, r);
-// left
-        ctx.lineTo(r, r);
-// top left
-        ctx.arcTo(r, 0, r*2, 0, r);
-
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        drawTip(true);
-
-        ctx.restore();
-
-        canvas.tipPosition = tipPos;
-
-        return canvas;
+        return createEmptyBubble(w, h, tipPos);
     }
 )
 
@@ -199,6 +121,87 @@ SnapExtensions.primitives.set(
     prefix+'mouseClickLeft(obj)',
     obj => obj.mouseClickLeft()
 )
+
+var createEmptyBubble = function (w, h, tipPos) {
+    var canvas = newCanvas(new Point(parseInt(w) + parseInt(h), parseInt(h))),
+        ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        r = h/4;
+
+    ctx.save();
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.strokeStyle = '#000000';
+
+// Tip
+    function drawTip(fillIt) {
+        ctx.beginPath();
+        switch (tipPos) {
+            case 'top left':
+                ctx.moveTo(0, 0);
+                ctx.lineTo(2*r, r/2);
+                ctx.lineTo(2*r, r);
+                break;
+            case 'bottom left':
+                ctx.moveTo(0, h);
+                ctx.lineTo(2*r, h-r/2);
+                ctx.lineTo(2*r, h-r);
+                break;
+            case 'top right':
+                ctx.moveTo(w, 0);
+                ctx.lineTo(w-2*r, r/2);
+                ctx.lineTo(w-2*r, r);
+                break;
+            case 'bottom right':
+                ctx.moveTo(w, h);
+                ctx.lineTo(w-2*r, h-r/2);
+                ctx.lineTo(w-2*r, h-r);
+                break;
+        }
+        ctx.closePath();
+        if (fillIt) {
+            ctx.fill();
+        } else {
+            ctx.stroke();
+        }
+    }
+
+    drawTip(false);
+
+// Bubble
+    ctx.beginPath();
+    ctx.moveTo(2*r, 0);
+
+//top
+    ctx.lineTo(w-2*r, 0);
+//top right
+    ctx.arcTo(w-r, 0, w-r, r, r);
+// right
+    ctx.lineTo(w-r, h-r);
+// bottom right
+    ctx.arcTo(w-r, h, w-2*r, h, r);
+// bottom
+    ctx.lineTo(2*r, h);
+// bottom left
+    ctx.arcTo(r, h, r, h-2*r, r);
+// left
+    ctx.lineTo(r, r);
+// top left
+    ctx.arcTo(r, 0, r*2, 0, r);
+
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    drawTip(true);
+
+    ctx.restore();
+
+    canvas.tipPosition = tipPos;
+
+    return canvas;
+}
 
 var renderText = function (aString, canvas, fontSize, offsetX, offsetY, font, color) {
     // Takes a pseudo-markdown string, possibly containing fractions, and
