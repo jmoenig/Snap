@@ -9830,8 +9830,11 @@ function Costume(canvas, name, rotationCenter, noFit, maxExtent) {
     this.loaded = null; // for de-serialization only
 }
 
+Costume.prototype.maxDimensions = new Point(480, 360);
+
 Costume.prototype.maxExtent = function () {
-    return StageMorph.prototype.dimensions;
+    // return StageMorph.prototype.dimensions;
+    return this.maxDimensions;
 };
 
 Costume.prototype.toString = function () {

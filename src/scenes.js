@@ -47,13 +47,13 @@
 */
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
-normalizeCanvas, SnapSerializer*/
+normalizeCanvas, SnapSerializer, Costume*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-July-21';
+modules.scenes = '2021-July-22';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -195,6 +195,7 @@ Scene.prototype.captureGlobalSettings = function () {
 };
 
 Scene.prototype.applyGlobalSettings = function () {
+    Costume.prototype.maxDimensions = this.stage.dimensions;
     StageMorph.prototype.hiddenPrimitives = this.hiddenPrimitives;
     StageMorph.prototype.codeMappings = this.codeMappings;
     StageMorph.prototype.codeHeaders = this.codeHeaders;

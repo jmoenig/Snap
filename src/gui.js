@@ -6587,6 +6587,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.controlBar.stageSizeButton.refresh();
     this.stage.stopVideo();
     this.setExtent(world.extent());
+    Costume.prototype.maxDimensions = aPoint;
     if (this.isAnimating) {
         zoom();
     } else {

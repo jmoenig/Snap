@@ -35,6 +35,7 @@
 * store: load user defined palettes
 * gui: restore custom palettes when activating a scene
 * added new category feature to palette context menu
+* gui, objects, scenes: fixed costume maximum extent
 
 ### 2021-07-21
 * user defined custom block palettes, under construction
