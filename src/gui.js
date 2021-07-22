@@ -4933,6 +4933,36 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     this.fixLayout();
 };
 
+IDE_Morph.prototype.deleteUserCategory = function () {
+    var menu = new MenuMorph(
+        this.deletePaletteCategory,
+        null,
+        this
+    );
+    SpriteMorph.prototype.customCategories.forEach((clr, name) =>
+        menu.addItem(
+            name,
+            name,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            true // verbatim - don't translate
+        )
+    );
+    menu.popUpAtHand(this.world());
+};
+
+IDE_Morph.prototype.deletePaletteCategory = function (name) {
+    SpriteMorph.prototype.customCategories.delete(name);
+    this.createCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.fixLayout();
+};
+
 IDE_Morph.prototype.save = function () {
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server

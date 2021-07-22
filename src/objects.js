@@ -3121,10 +3121,17 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 }
             );
         }
+        menu.addLine();
         menu.addItem(
-            'make a palette...',
+            'make a category...',
             () => this.parentThatIsA(IDE_Morph).createNewCategory()
         );
+        if (SpriteMorph.prototype.customCategories.size) {
+            menu.addItem(
+                'delete a category...',
+                () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
+            );
+        }
         return menu;
     };
 
