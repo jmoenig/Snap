@@ -29,6 +29,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-23
+* byob, objects, gui, store: support custom categories in libraries
+
 ### 2021-07-22
 * store: serialize user defined block palettes
 * objects: enabled custom categories for the stage

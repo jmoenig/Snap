@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-22';
+modules.gui = '2021-July-23';
 
 // Declarations
 
@@ -5566,6 +5566,10 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     } else {
         new BlockImportDialogMorph(blocks, this.stage, name).popUp();
     }
+    this.createCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.fixLayout();
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
@@ -8679,6 +8683,11 @@ function LibraryImportDialogMorph(ide, librariesData) {
 }
 
 LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
+    // additional properties
+    this.isLoadingLibrary = false;
+    this.originalCategories = null;
+    this.captureOriginalCategories();
+
     // initialize inherited properties:
     LibraryImportDialogMorph.uber.init.call(
         this,
@@ -8707,6 +8716,13 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.createLabel();
 
     this.buildContents();
+};
+
+LibraryImportDialogMorph.prototype.captureOriginalCategories = function () {
+    this.originalCategories = new Map();
+    SpriteMorph.customCategories.forEach((color, name) =>
+        this.originalCategories.set(name, color)
+    );
 };
 
 LibraryImportDialogMorph.prototype.buildContents = function () {
@@ -8835,6 +8851,13 @@ LibraryImportDialogMorph.prototype.popUp = function () {
     }
 };
 
+LibraryImportDialogMorph.prototype.destroy = function () {
+    LibraryImportDialogMorph.uber.destroy.call(this);
+    if (!this.isLoadingLibrary) {
+        SpriteMorph.prototype.customCategories = this.originalCategories;
+    }
+};
+
 LibraryImportDialogMorph.prototype.fixListFieldItemColors =
     ProjectDialogMorph.prototype.fixListFieldItemColors;
 
@@ -8912,14 +8935,18 @@ LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
     return this.libraryCache[key];
 };
 
-LibraryImportDialogMorph.prototype.importLibrary = function () {
+LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
     if (!this.listField.selected) {return; }
 
-    var blocks,
+    var // blocks,
         ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
+    // restore captured user-blocks categories
+    SpriteMorph.prototype.customCategories = this.originalCategories;
+
+/*
     if (this.hasCached(selectedLibrary)) {
         blocks = this.cachedLibrary(selectedLibrary);
         blocks.forEach(def => {
@@ -8929,14 +8956,16 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         });
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
+*/
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
-            function(libraryText) {
+            libraryText => {
                 ide.droppedText(libraryText, libraryName);
+                this.isLoadingLibrary = true;
             }
         );
-    }
+//    }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
