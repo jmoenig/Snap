@@ -4259,16 +4259,6 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addPair('New scene', 'createNewScene');
     menu.addPair('Add scene...', 'addScene');
-
-    if (shiftClicked) {
-        menu.addItem(
-            'New blocks palette...',
-            'createNewCategory',
-            backup,
-            new Color(100, 0, 0)
-        );
-    }
-
     menu.addLine();
     menu.addItem(
         'Libraries...',
@@ -4941,11 +4931,6 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
-    /*
-    this.flushBlocksCache();
-    this.currentSprite.palette(this.currentCategory);
-    this.refreshPalette(true);
-    */
 };
 
 IDE_Morph.prototype.save = function () {
