@@ -32,6 +32,7 @@
 ### 2021-07-22
 * store: serialize user defined block palettes
 * objects: enabled custom categories for the stage
+* store: load user defined palettes
 
 ### 2021-07-21
 * user defined custom block palettes, under construction

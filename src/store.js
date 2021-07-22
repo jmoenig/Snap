@@ -382,6 +382,10 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     if (model.notes) {
         scene.notes = model.notes.contents;
     }
+    model.palette = model.scene.childNamed('palette');
+    if (model.palette) {
+        scene.customCategories = this.loadPalette(model.palette);
+    }
     model.globalVariables = model.scene.childNamed('variables');
 
     /* Stage */
@@ -1618,6 +1622,15 @@ SnapSerializer.prototype.loadColor = function (colorString) {
         parseFloat(c[2]),
         parseFloat(c[3])
     );
+};
+
+SnapSerializer.prototype.loadPalette = function (model) {
+    // private
+    var p = new Map();
+    model.childrenNamed('category').forEach(node =>
+        p.set(node.attributes.name, this.loadColor(node.attributes.color))
+    );
+    return p;
 };
 
 // SnapSerializer XML-representation of objects:
