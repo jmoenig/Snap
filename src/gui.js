@@ -8720,7 +8720,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
 
 LibraryImportDialogMorph.prototype.captureOriginalCategories = function () {
     this.originalCategories = new Map();
-    SpriteMorph.customCategories.forEach((color, name) =>
+    SpriteMorph.prototype.customCategories.forEach((color, name) =>
         this.originalCategories.set(name, color)
     );
 };
