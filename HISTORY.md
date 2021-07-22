@@ -33,6 +33,7 @@
 * store: serialize user defined block palettes
 * objects: enabled custom categories for the stage
 * store: load user defined palettes
+* gui: restore custom palettes when activating a scene
 
 ### 2021-07-21
 * user defined custom block palettes, under construction
