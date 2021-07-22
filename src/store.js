@@ -385,6 +385,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     model.palette = model.scene.childNamed('palette');
     if (model.palette) {
         scene.customCategories = this.loadPalette(model.palette);
+        SpriteMorph.prototype.customCategories = scene.customCategories;
     }
     model.globalVariables = model.scene.childNamed('variables');
 
@@ -1221,7 +1222,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
         if (!info || !contains(
         		// catch other forks' blocks
-        		SpriteMorph.prototype.categories, info.category
+        		SpriteMorph.prototype.allCategories(), info.category
         )) {
             return this.obsoleteBlock(isReporter);
         }

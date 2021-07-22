@@ -4956,10 +4956,22 @@ IDE_Morph.prototype.deleteUserCategory = function () {
 };
 
 IDE_Morph.prototype.deletePaletteCategory = function (name) {
+    var allCustomBlocks = this.stage.globalBlocks.slice();
+    this.sprites.asArray().concat(this.stage).forEach(obj =>
+        allCustomBlocks.push(...obj.customBlocks)
+    );
+    allCustomBlocks.forEach(def => {
+        if (def.category === name) {
+            def.category = 'other';
+            // to do: refresh all block instances
+        }
+    });
     SpriteMorph.prototype.customCategories.delete(name);
     this.createCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
+    this.flushPaletteCache();
+    this.refreshPalette();
     this.fixLayout();
 };
 
