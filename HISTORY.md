@@ -31,6 +31,7 @@
 
 ### 2021-07-23
 * byob, objects, gui, store: support custom categories in libraries
+* gui, byob: arrange custom categories alphabetically
 
 ### 2021-07-22
 * store: serialize user defined block palettes

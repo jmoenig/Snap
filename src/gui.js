@@ -1391,9 +1391,14 @@ IDE_Morph.prototype.createCategories = function () {
         }
     });
 
-    // to do: sort alphabetically
-    SpriteMorph.prototype.customCategories.forEach((color, name) =>
-        addCustomCategoryButton(name, color)
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
     );
 
     fixCategoriesLayout();

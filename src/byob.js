@@ -1806,9 +1806,14 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
         this.addCategoryButton(cat)
     );
 
-    // to do: sort alphabetically
-    SpriteMorph.prototype.customCategories.forEach((color, name) =>
-        this.addCustomCategoryButton(name, color)
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        this.addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
     );
 };
 
