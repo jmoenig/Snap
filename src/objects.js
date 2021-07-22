@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-21';
+modules.objects = '2021-July-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -3127,20 +3127,23 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        blocks = this.allCategories().reduce((blocks, category) => {
-            let header = [ this.categoryText(category), '-' ],
-                primitives = this.getPrimitiveTemplates(category),
-                customs = this.customBlockTemplatesForCategory(category),
-                showHeader = !['lists', 'other'].includes(category) &&
-                    (primitives.some(item =>
-                        item instanceof BlockMorph) || customs.length);
+        blocks = SpriteMorph.prototype.allCategories().reduce(
+            (blocks, category) => {
+                let header = [ this.categoryText(category), '-' ],
+                    primitives = this.getPrimitiveTemplates(category),
+                    customs = this.customBlockTemplatesForCategory(category),
+                    showHeader = !['lists', 'other'].includes(category) &&
+                        (primitives.some(item =>
+                            item instanceof BlockMorph) || customs.length);
 
-            return blocks.concat(
-                showHeader ? header : [],
-                primitives, '=',
-                customs, '='
-            );
-        }, []);
+                return blocks.concat(
+                    showHeader ? header : [],
+                    primitives, '=',
+                    customs, '='
+                );
+            },
+            []
+        );
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
