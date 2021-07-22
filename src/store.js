@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-16';
+modules.store = '2021-July-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1622,6 +1622,24 @@ SnapSerializer.prototype.loadColor = function (colorString) {
 
 // SnapSerializer XML-representation of objects:
 
+SnapSerializer.prototype.paletteToXML = function (aMap) {
+    var xml;
+    if (aMap.size === 0) {return ''; }
+    xml = '<palette>';
+    aMap.forEach((value, key) => {
+        xml += this.format(
+            '<category name="@" color="%,%,%,%"/>',
+            key,
+            value.r,
+            value.g,
+            value.b,
+            value.a
+        );
+    });
+    xml += '</palette>';
+    return xml;
+};
+
 // Generics
 
 Array.prototype.toXML = function (serializer) {
@@ -1682,6 +1700,7 @@ Scene.prototype.toXML = function (serializer) {
     xml = serializer.format(
         '<scene name="@"%>' +
             '<notes>$</notes>' +
+            '%' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
             '<code>%</code>' +
@@ -1693,6 +1712,7 @@ Scene.prototype.toXML = function (serializer) {
         '', // unified palette persistence commented out during development
         // this.unifiedPalette ? ' palette="single"' : '',
         this.notes || '',
+        serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
                 ''

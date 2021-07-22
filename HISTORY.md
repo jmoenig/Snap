@@ -29,6 +29,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-22
+* store: serialize user defined block palettes
+
 ### 2021-07-21
 * user defined custom block palettes, under construction
 
