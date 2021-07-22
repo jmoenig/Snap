@@ -4926,15 +4926,16 @@ IDE_Morph.prototype.createNewCategory = function () {
         this
     ).promptCategory(
         "New Palette",
-        'Category name',
-        new Color(0,214,126),
+        null,
+        new Color(0,116,143),
         this.world(),
         null, // pic
-        null // msg
+        'Blocks category name:' // msg
     );
 };
 
 IDE_Morph.prototype.addPaletteCategory = function (name, color) {
+    if (name === '') {return; }
     SpriteMorph.prototype.customCategories.set(name, color);
     this.createCategories();
     this.createPaletteHandle();

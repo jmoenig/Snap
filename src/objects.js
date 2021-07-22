@@ -3121,6 +3121,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 }
             );
         }
+        menu.addItem(
+            'make a palette...',
+            () => this.parentThatIsA(IDE_Morph).createNewCategory()
+        );
         return menu;
     };
 
