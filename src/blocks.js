@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-July-05';
+modules.blocks = '2021-July-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4273,7 +4273,7 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         x = this.edge + this.labelPadding,
         y = this.edge,
         isNormal =
-            this.color === SpriteMorph.prototype.blockColor[this.category];
+            this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
     if (this.isPredicate) {
         x = this.rounding;
@@ -4486,7 +4486,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
         }
     }
     if (!nearest) { // top block
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
         if (!this.color.eq(clr)) {
             this.alternateBlockColor();
         }
@@ -4495,7 +4495,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
             this.alternateBlockColor();
         }
     } else if (this.category && !this.color.eq(
-            SpriteMorph.prototype.blockColor[this.category]
+            SpriteMorph.prototype.blockColorFor(this.category)
         )) {
         this.alternateBlockColor();
     }
@@ -4505,7 +4505,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
 };
 
 BlockMorph.prototype.forceNormalColoring = function () {
-    var clr = SpriteMorph.prototype.blockColor[this.category];
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
     this.setColor(clr);
     this.setLabelColor(
         WHITE,
@@ -4516,7 +4516,7 @@ BlockMorph.prototype.forceNormalColoring = function () {
 };
 
 BlockMorph.prototype.alternateBlockColor = function () {
-    var clr = SpriteMorph.prototype.blockColor[this.category];
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
 
     if (this.color.eq(clr)) {
         this.setColor(
@@ -4533,13 +4533,13 @@ BlockMorph.prototype.alternateBlockColor = function () {
 
 BlockMorph.prototype.ghost = function () {
     this.setColor(
-        SpriteMorph.prototype.blockColor[this.category].lighter(35)
+        SpriteMorph.prototype.blockColorFor(this.category).lighter(35)
     );
 };
 
 BlockMorph.prototype.fixLabelColor = function () {
     if (this.zebraContrast > 0 && this.category) {
-        var clr = SpriteMorph.prototype.blockColor[this.category];
+        var clr = SpriteMorph.prototype.blockColorFor(this.category);
         if (this.color.eq(clr)) {
             this.setLabelColor(
                 WHITE,

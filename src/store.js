@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-16';
+modules.store = '2021-July-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -381,6 +381,10 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
+    }
+    model.palette = model.scene.childNamed('palette');
+    if (model.palette) {
+        scene.customCategories = this.loadPalette(model.palette);
     }
     model.globalVariables = model.scene.childNamed('variables');
 
@@ -1620,7 +1624,34 @@ SnapSerializer.prototype.loadColor = function (colorString) {
     );
 };
 
+SnapSerializer.prototype.loadPalette = function (model) {
+    // private
+    var p = new Map();
+    model.childrenNamed('category').forEach(node =>
+        p.set(node.attributes.name, this.loadColor(node.attributes.color))
+    );
+    return p;
+};
+
 // SnapSerializer XML-representation of objects:
+
+SnapSerializer.prototype.paletteToXML = function (aMap) {
+    var xml;
+    if (aMap.size === 0) {return ''; }
+    xml = '<palette>';
+    aMap.forEach((value, key) => {
+        xml += this.format(
+            '<category name="@" color="%,%,%,%"/>',
+            key,
+            value.r,
+            value.g,
+            value.b,
+            value.a
+        );
+    });
+    xml += '</palette>';
+    return xml;
+};
 
 // Generics
 
@@ -1682,6 +1713,7 @@ Scene.prototype.toXML = function (serializer) {
     xml = serializer.format(
         '<scene name="@"%>' +
             '<notes>$</notes>' +
+            '%' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
             '<code>%</code>' +
@@ -1693,6 +1725,7 @@ Scene.prototype.toXML = function (serializer) {
         '', // unified palette persistence commented out during development
         // this.unifiedPalette ? ' palette="single"' : '',
         this.notes || '',
+        serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
                 ''

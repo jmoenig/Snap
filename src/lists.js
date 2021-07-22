@@ -65,7 +65,7 @@ ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2021-July-05';
+modules.lists = '2021-July-19';
 
 var List;
 var ListWatcherMorph;
@@ -688,10 +688,13 @@ List.prototype.reshape = function (dimensions) {
     // truncate excess elements, if any.
     // pad with (repetitions of) existing elements
     var src = this.ravel().itemsArray(),
-        size = dimensions.isEmpty() ? 0
-            : dimensions.itemsArray().reduce((a, b) => a * b),
-        i = 0,
-        trg;
+	i = 0,
+    size, trg;
+
+    // if no dimensions, report a scalar
+    if (dimensions.isEmpty()) {return src[0]; }
+
+    size = dimensions.itemsArray().reduce((a, b) => a * b);
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {

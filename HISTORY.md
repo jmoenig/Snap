@@ -7,6 +7,7 @@
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
     * hide custom helper blocks in palette
+    * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
@@ -15,6 +16,7 @@
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * libraries can now have hidden helper blocks
+    * blocked xhr requests to from Snap! to s.b.e
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -26,6 +28,26 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-07-22
+* store: serialize user defined block palettes
+* objects: enabled custom categories for the stage
+* store: load user defined palettes
+* gui: restore custom palettes when activating a scene
+* objects: added new category feature to palette context menu
+* gui, objects, scenes: fixed costume maximum extent
+* gui: cleaned up hidden menu
+* objects, gui: added delete category feature to palette context menu
+
+### 2021-07-21
+* user defined custom block palettes, under construction
+
+### 2021-07-20
+* threads, extensions: blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!
+* widgets, scenes, gui: custom category prompter
+
+### 2021-07-19
+* fixed #2863, thanks, Brian!
 
 ### 2021-07-16
 * new libraries manual versions, thanks, Brian!

@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-09';
+modules.threads = '2021-July-20';
 
 var ThreadManager;
 var Process;
@@ -3632,6 +3632,7 @@ Process.prototype.reportLastAnswer = function () {
 
 Process.prototype.reportURL = function (url) {
     var response;
+    this.checkURLAllowed(url);
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
         if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
@@ -3661,6 +3662,14 @@ Process.prototype.reportURL = function (url) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.checkURLAllowed = function (url) {
+    if ([ 'users', 'logout', 'projects', 'collections' ].some(
+        which => url.match(`snap\.berkeley\.edu.*${which}`))
+    ) {
+        throw new Error('Request blocked');
+    }
 };
 
 // Process event messages primitives
