@@ -1816,7 +1816,7 @@ StageMorph.prototype.toXML = function (serializer) {
 };
 
 SpriteMorph.prototype.toXML = function (serializer) {
-    var idx = serializer.root.sprites.asArray().indexOf(this) + 1,
+    var idx = serializer.scene.sprites.asArray().indexOf(this) + 1,
         costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),
