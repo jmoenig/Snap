@@ -100,7 +100,6 @@ MicroWorld.prototype.init = function (ide) {
     };
     this.enableKeyboard = true;
     this.simpleBlockDialog = false;
-    this.customJS = null;
     this.zoom = 1;
     this.uneditableBlocks = false;
     this.isActive = false;
@@ -113,7 +112,10 @@ MicroWorld.prototype.init = function (ide) {
     this.originalHiddenPrimitives = {};
 
     this.originalCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
+
+    this.originalBlockMorphGetInput = BlockDialogMorph.prototype.getInput;
 };
+
 
 MicroWorld.prototype.enter = function () {
     if(this.isActive){
@@ -132,13 +134,6 @@ MicroWorld.prototype.enter = function () {
         ScriptsMorph.prototype.enableKeyboard = false;
     }
     ide.currentSprite.scripts.updateToolbar();
-
-    if (this.customJS) {
-        Function.apply(
-            null,
-            [ this.customJS ]
-        ).call(ide);
-    }
 
     this.setBlocksScale(this.zoom);
 
@@ -165,6 +160,12 @@ MicroWorld.prototype.enter = function () {
             return;
         }
         return myself.originalFireKeyEvent.call(this, key);
+    }
+
+    BlockDialogMorph.prototype.getInput = function() {
+        var def = myself.originalBlockMorphGetInput.call(this);
+        def.codeHeader = 'microworld';
+        return def;
     }
 };
 
@@ -201,6 +202,8 @@ MicroWorld.prototype.escape = function () {
     StageMorph.prototype.fireKeyEvent = this.originalFireKeyEvent;
 
     this.restorePalette();
+
+    BlockDialogMorph.prototype.getInput = this.originalBlockMorphGetInput;
 };
 
 MicroWorld.prototype.createPalette = function () {
@@ -213,6 +216,12 @@ MicroWorld.prototype.createPalette = function () {
             .filter(block => {
                 if(block === "="){
                     return false;
+                }
+
+                if(block.definition && block.definition.codeHeader){
+                    if(block.definition.codeHeader === 'microworld'){
+                        return true;
+                    }
                 }
 
                 return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
@@ -329,21 +338,18 @@ MicroWorld.prototype.restorePalette = function() {
     StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.originalHiddenPrimitives);
     ide.flushBlocksCache('unified');
 
-
+    // switch out of unified palette, if necessary
     this.ide.setUnifiedPalette(this.originalCategory === 'unified');
+    // restore the previously-selected category
     ide.currentCategory = this.originalCategory;
     ide.refreshPalette(true);
 
-    // make sure current category is selected
     ide.categories.fixLayout();
     ide.categories.children.forEach(each =>
         each.refresh()
     );
 
     ide.fixLayout();
-
-
-//
 }
 
 MicroWorld.prototype.loadCustomBlocks = function () {
