@@ -23,6 +23,23 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'enter',
+    () => {
+        if(ide.stage.microworld){
+            ide.stage.microworld.enter();
+        }
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'escape',
+    () => {
+        if(ide.stage.microworld){
+            ide.stage.microworld.escape();
+        }
+    }
+)
 
 SnapExtensions.primitives.set(
     prefix+'load(params)',
@@ -41,7 +58,6 @@ SnapExtensions.primitives.set(
 
         microworld.zoom = params.zoom;
         microworld.enableKeyboard = params.enableKeyboard;
-        microworld.enterOnLoad = params.enterOnLoad;
         microworld.simpleBlockDialog = params.simpleBlockDialog;
         microworld.hiddenMorphs = params.hiddenMorphs.split(",").map(item => item.trim());
         microworld.projectMenu = params.projectMenu;
@@ -66,10 +82,6 @@ SnapExtensions.primitives.set(
     }
 )
 
-SnapExtensions.primitives.set(
-    prefix+'enter',
-    () => {}
-)
 
 function MicroWorld (ide) {
     this.init(ide);
@@ -78,7 +90,7 @@ function MicroWorld (ide) {
 MicroWorld.prototype.init = function (ide) {
     this.ide = ide;
     this.hiddenMorphs = [];
-    this.blockSpecs = [];
+    this.blockSpecs = ['load extension development %s', 'forward'];
     this.projectMenu = [];
     this.blockContextMenu = [];
     this.buttons = {
@@ -90,18 +102,23 @@ MicroWorld.prototype.init = function (ide) {
     this.simpleBlockDialog = false;
     this.customJS = null;
     this.zoom = 1;
-    this.enterOnLoad = false;
     this.uneditableBlocks = false;
     this.isActive = false;
     this.suppressedKeyEvents = [];
 
     // backup settings for exiting microworld
     this.originalFireKeyEvent = StageMorph.prototype.fireKeyEvent;
+
     this.originalCategory = null;
     this.originalHiddenPrimitives = {};
+
+    this.originalCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
 };
 
 MicroWorld.prototype.enter = function () {
+    if(this.isActive){
+        return;
+    }
     var ide = this.ide,
         myself = this;
 
@@ -152,6 +169,9 @@ MicroWorld.prototype.enter = function () {
 };
 
 MicroWorld.prototype.escape = function () {
+    if(!this.isActive){
+        return;
+    }
     var ide = this.ide,
         myself = this;
 
@@ -188,6 +208,18 @@ MicroWorld.prototype.createPalette = function () {
         myself = this,
         ide = this.ide;
 
+    SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
+        var blocks = myself.originalCustomBlockTemplatesForCategory.call(sprite, category)
+            .filter(block => {
+                if(block === "="){
+                    return false;
+                }
+
+                return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
+            })
+        return blocks;
+    }
+
     // backup old settings
     this.originalCategory = ide.currentCategory;
 
@@ -206,7 +238,7 @@ MicroWorld.prototype.createPalette = function () {
     });
 
     ide.flushBlocksCache('unified');
-    ide.refreshPalette();
+    ide.refreshPalette(true);
 
 
 
@@ -290,6 +322,8 @@ MicroWorld.prototype.createPalette = function () {
 MicroWorld.prototype.restorePalette = function() {
     var myself = this,
         ide = this.ide;
+
+    SpriteMorph.prototype.customBlockTemplatesForCategory = this.originalCustomBlockTemplatesForCategory;
 
     // restore primitives
     StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.originalHiddenPrimitives);
