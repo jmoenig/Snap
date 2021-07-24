@@ -2814,10 +2814,17 @@ BlockMorph.prototype.userMenu = function () {
                     );
                 }
             } else if (this.selector !== 'evaluateCustomBlock') {
-                menu.addItem(
-                    "hide",
-                    'hidePrimitive'
-                );
+                if (StageMorph.prototype.hiddenPrimitives[this.selector] === true) {
+                    menu.addItem(
+                        'show',
+                        'showPrimitive'
+                    );
+                } else {
+                    menu.addItem(
+                        'hide',
+                        'hidePrimitive'
+                    );
+                }
             }
 
             // allow toggling inheritable attributes
@@ -3256,6 +3263,41 @@ BlockMorph.prototype.hidePrimitive = function () {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+BlockMorph.prototype.showPrimitive = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
+    if (!ide) {return; }
+    delete StageMorph.prototype.hiddenPrimitives[this.selector];
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
+
+BlockMorph.prototype.paletteForBlock = function () {
+    var dict, palette;
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+
+    palette = dict[this.selector] || this.category;
+    if (palette === 'lists' || palette === 'other') {palette = 'variables'; }
+    return palette;
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {
