@@ -4,7 +4,7 @@ var ide = world.children.find(child => {
     prefix = 'mw_';
 
 SnapExtensions.primitives.set(
-    prefix+'get_specs(blocks)',
+    prefix+'get_specs_from_blocks(blocks)',
     (blocks) => {
         var specs = [];
         blocks.contents.map(block => {
@@ -82,15 +82,30 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_block_specs(specs)',
+    (specs) => {
+        if(ide.stage.microworld){
+            ide.stage.microworld.setBlockSpecs(specs);
+        }
+    }
+
+)
+
 
 function MicroWorld (ide) {
     this.init(ide);
 }
 
+MicroWorld.prototype.setBlockSpecs = function(specs){
+    // @todo refresh palette, etc so that the updated list shows up
+    this.blockSpecs = specs.contents;
+}
+
 MicroWorld.prototype.init = function (ide) {
     this.ide = ide;
     this.hiddenMorphs = [];
-    this.blockSpecs = ['load extension development %s', 'forward'];
+    this.blockSpecs = [];
     this.projectMenu = [];
     this.blockContextMenu = [];
     this.buttons = {
