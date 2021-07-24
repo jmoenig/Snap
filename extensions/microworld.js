@@ -218,11 +218,9 @@ MicroWorld.prototype.createPalette = function () {
                     return false;
                 }
 
-                if(block.definition && block.definition.codeHeader){
-                    if(block.definition.codeHeader === 'microworld'){
-                        return true;
-                    }
-                }
+                // if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
+                //     return true;
+                // }
 
                 return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
             })
@@ -239,6 +237,8 @@ MicroWorld.prototype.createPalette = function () {
 
     // hide primitives
     var defs = SpriteMorph.prototype.blocks;
+
+    StageMorph.prototype.hiddenPrimitives = {};
 
     Object.keys(defs).forEach(sel => {
         if(this.blockSpecs.indexOf(sel) === -1){
@@ -355,16 +355,16 @@ MicroWorld.prototype.restorePalette = function() {
 MicroWorld.prototype.loadCustomBlocks = function () {
     // We load our custom blocks from the stage.
     // They're watermarked with 'microworld' in their codeHeader
-    var sprite = this.ide.currentSprite,
-        blocks = this.ide.stage.globalBlocks.filter(
-            function (block) {
-                return block.codeHeader === 'microworld';
-            }
-        );
-
-    blocks.forEach(function (block) {
-        sprite.blocksCache['microworld'].push(block.templateInstance());
-    });
+    // var sprite = this.ide.currentSprite,
+    //     blocks = this.ide.stage.globalBlocks.filter(
+    //         function (block) {
+    //             return block.codeHeader === 'microworld';
+    //         }
+    //     );
+    //
+    // blocks.forEach(function (block) {
+    //     sprite.blocksCache['microworld'].push(block.templateInstance());
+    // });
 
     // sprite.refreshMicroWorldPalette();
 };
