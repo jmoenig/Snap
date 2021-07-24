@@ -3247,40 +3247,22 @@ BlockMorph.prototype.developersMenu = function () {
 };
 
 BlockMorph.prototype.hidePrimitive = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
+    var ide = this.parentThatIsA(IDE_Morph);
+
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
-    };
-    cat = dict[this.selector] || this.category;
-    if (cat === 'lists') {cat = 'variables'; }
-    ide.flushBlocksCache(cat);
+
+    ide.flushBlocksCache(this.paletteForBlock());
     ide.refreshPalette();
 };
 
 BlockMorph.prototype.showPrimitive = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
+    var ide = this.parentThatIsA(IDE_Morph);
+
     if (!ide) {return; }
     delete StageMorph.prototype.hiddenPrimitives[this.selector];
-    dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
-    };
-    cat = dict[this.selector] || this.category;
-    if (cat === 'lists') {cat = 'variables'; }
-    ide.flushBlocksCache(cat);
+
+    ide.flushBlocksCache(this.paletteForBlock());
     ide.refreshPalette();
 };
 
