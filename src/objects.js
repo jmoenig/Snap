@@ -3310,8 +3310,7 @@ SpriteMorph.prototype.blocksMatching = function (
     // primitives
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
-        if (!StageMorph.prototype.hiddenPrimitives[selector] &&
-                contains(types, blocksDict[selector].type)) {
+        if (contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
                 spec = localize(block.alias || block.spec),
                 rel = relevance(labelOf(spec), search);
