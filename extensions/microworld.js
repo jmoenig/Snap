@@ -98,7 +98,7 @@ MicroWorld.prototype.init = function (ide) {
     // backup settings for exiting microworld
     this.originalFireKeyEvent = StageMorph.prototype.fireKeyEvent;
     this.originalCategory = null;
-    this.originalHiddenPrimitives = [];
+    this.originalHiddenPrimitives = {};
 };
 
 MicroWorld.prototype.enter = function () {
@@ -183,24 +183,6 @@ MicroWorld.prototype.escape = function () {
     this.restorePalette();
 };
 
-MicroWorld.prototype.hidePrimitives = function () {
-    // hide primitives
-    var defs = SpriteMorph.prototype.blocks;
-
-    Object.keys(defs).forEach(sel => {
-        if(this.blockSpecs.indexOf(sel) === -1){
-            StageMorph.prototype.hiddenPrimitives[sel] = true;
-        }
-    });
-}
-
-MicroWorld.prototype.showPrimitives = function() {
-    StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.originalHiddenPrimitives);
-    ide.flushBlocksCache('unified');
-    ide.refreshPalette();
-}
-
-
 MicroWorld.prototype.createPalette = function () {
     var sprite = this.ide.currentSprite,
         myself = this,
@@ -209,10 +191,19 @@ MicroWorld.prototype.createPalette = function () {
     // backup old settings
     this.originalCategory = ide.currentCategory;
 
-    ide.setUnifiedPalette(true);
+
     this.originalHiddenPrimitives = Object.assign({},StageMorph.prototype.hiddenPrimitives);
 
-    this.hidePrimitives();
+    ide.setUnifiedPalette(true);
+
+    // hide primitives
+    var defs = SpriteMorph.prototype.blocks;
+
+    Object.keys(defs).forEach(sel => {
+        if(this.blockSpecs.indexOf(sel) === -1){
+            StageMorph.prototype.hiddenPrimitives[sel] = true;
+        }
+    });
 
     ide.flushBlocksCache('unified');
     ide.refreshPalette();
@@ -300,14 +291,25 @@ MicroWorld.prototype.restorePalette = function() {
     var myself = this,
         ide = this.ide;
 
-    ide.currentCategory = this.originalCategory;
+    // restore primitives
+    StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.originalHiddenPrimitives);
+    ide.flushBlocksCache('unified');
+
+
     this.ide.setUnifiedPalette(this.originalCategory === 'unified');
-
-    this.showPrimitives();
-
+    ide.currentCategory = this.originalCategory;
     ide.refreshPalette(true);
+
+    // make sure current category is selected
+    ide.categories.fixLayout();
+    ide.categories.children.forEach(each =>
+        each.refresh()
+    );
+
     ide.fixLayout();
 
+
+//
 }
 
 MicroWorld.prototype.loadCustomBlocks = function () {
