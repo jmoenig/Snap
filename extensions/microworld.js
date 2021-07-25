@@ -236,6 +236,9 @@ MicroWorld.prototype.createPalette = function () {
                 // if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
                 //     return true;
                 // }
+                    if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
+                        return true;
+                    }
 
                 return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
             })
