@@ -2814,7 +2814,7 @@ BlockMorph.prototype.userMenu = function () {
                     );
                 }
             } else if (this.selector !== 'evaluateCustomBlock') {
-                if (StageMorph.prototype.hiddenPrimitives[this.selector] === true) {
+                if (this.isHidden()) {
                     menu.addItem(
                         'show',
                         'showPrimitive'
@@ -3245,6 +3245,10 @@ BlockMorph.prototype.developersMenu = function () {
     );
     return menu;
 };
+
+BlockMorph.prototype.isHidden = function () {
+    return StageMorph.prototype.hiddenPrimitives[this.selector] === true;
+}
 
 BlockMorph.prototype.hidePrimitive = function () {
     var ide = this.parentThatIsA(IDE_Morph);
