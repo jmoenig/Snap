@@ -94,9 +94,11 @@ function MicroWorld (ide) {
 }
 
 MicroWorld.prototype.setBlockSpecs = function(specs){
-    // @todo refresh palette, etc so that the updated list shows up
     this.blockSpecs = specs.contents;
 
+    if(this.isActive){
+        this.loadSpecs();
+    }
 
 }
 
