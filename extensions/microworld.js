@@ -162,32 +162,11 @@ MicroWorld.prototype.enter = function () {
     this.makeButtons();
 
     this.hideAllMorphs();
+
     this.ide.fixLayout();
 
-
-    if(!StageMorph.prototype.oldFireKeyEvent) {
-        StageMorph.prototype.oldFireKeyEvent = StageMorph.prototype.fireKeyEvent;
-
-        StageMorph.prototype.fireKeyEvent = function(key){
-            if(myself.isActive && myself.suppressedKeyEvents.indexOf(key) > -1){
-                return;
-            }
-            return this.oldFireKeyEvent(key);
-        }
-
-    }
-
-    if(!BlockDialogMorph.prototype.oldGetInput){
-        BlockDialogMorph.prototype.oldGetInput = BlockDialogMorph.prototype.getInput;
-        BlockDialogMorph.prototype.getInput = function() {
-            if(!myself.isActive){
-                return this.oldGetInput();
-            }
-            var def = this.oldGetInput();
-            def.codeHeader = 'microworld';
-            return def;
-        }
-    }
+    this.updateGetInputFunction();
+    this.updateKeyFireFunction();
 
 };
 
@@ -210,11 +189,7 @@ MicroWorld.prototype.escape = function () {
         ide.corralButtonsFrame = null;
     }
 
-    this.hiddenMorphs.forEach(
-        function (selector) {
-            myself.showMorph(selector);
-        }
-    );
+    this.showAllMorphs();
 
     ide.fixLayout();
 
@@ -222,6 +197,36 @@ MicroWorld.prototype.escape = function () {
 
     this.restorePalette();
 };
+
+MicroWorld.prototype.updateGetInputFunction = function() {
+    var myself = this;
+    if(!BlockDialogMorph.prototype.oldGetInput){
+        BlockDialogMorph.prototype.oldGetInput = BlockDialogMorph.prototype.getInput;
+        BlockDialogMorph.prototype.getInput = function() {
+            if(!myself.isActive){
+                return this.oldGetInput();
+            }
+            var def = this.oldGetInput();
+            def.codeHeader = 'microworld';
+            return def;
+        }
+    }
+}
+
+MicroWorld.prototype.updateKeyFireFunction = function(){
+    var myself = this;
+    if(!StageMorph.prototype.oldFireKeyEvent) {
+        StageMorph.prototype.oldFireKeyEvent = StageMorph.prototype.fireKeyEvent;
+
+        StageMorph.prototype.fireKeyEvent = function(key){
+            if(myself.isActive && myself.suppressedKeyEvents.indexOf(key) > -1){
+                return;
+            }
+            return this.oldFireKeyEvent(key);
+        }
+
+    }
+}
 
 MicroWorld.prototype.createPalette = function () {
     var ide = this.ide;
@@ -234,6 +239,7 @@ MicroWorld.prototype.createPalette = function () {
 
     this.loadSpecs();
 };
+
 
 MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
     var myself = this;
@@ -460,6 +466,15 @@ MicroWorld.prototype.hideAllMorphs = function () {
         }
     );
 };
+
+MicroWorld.prototype.showAllMorphs = function () {
+    var myself = this;
+    this.hiddenMorphs.forEach(
+        function (selector) {
+            myself.showMorph(selector);
+        }
+    );
+}
 
 MicroWorld.prototype.hideMorph = function (morphSelector) {
     // given (i.e.) 'categoryList', calls this.hideCategoryList()
