@@ -96,6 +96,8 @@ function MicroWorld (ide) {
 MicroWorld.prototype.setBlockSpecs = function(specs){
     // @todo refresh palette, etc so that the updated list shows up
     this.blockSpecs = specs.contents;
+
+
 }
 
 MicroWorld.prototype.init = function (ide) {
@@ -272,84 +274,6 @@ MicroWorld.prototype.createPalette = function () {
 
     ide.flushBlocksCache('unified');
     ide.refreshPalette(true);
-
-
-
-    // // helper functions to build block templates
-    // function primitiveBlock (selector) {
-    //     var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
-    //     if (!newBlock) { return null; }
-    //     newBlock.isTemplate = true;
-    //     return newBlock;
-    // };
-    // function customBlock (spec) {
-    //     var newBlock =
-    //         ide.stage.globalBlocks.find(function (block) {
-    //             return block.spec == spec;
-    //         });
-    //     if (!newBlock) { return null; }
-    //     return newBlock.templateInstance();
-    // };
-    // function block (selectorOrSpec) {
-    //     if (selectorOrSpec === '-' || selectorOrSpec === '=') {
-    //         return selectorOrSpec;
-    //     } else {
-    //         return primitiveBlock(selectorOrSpec) ||
-    //             customBlock(selectorOrSpec);
-    //     }
-    // };
-    //
-    // // create the cache for the new category and fill it up with blocks
-    // sprite.blocksCache['microworld'] = [];
-    // blocks = sprite.blocksCache['microworld'];
-    //
-    // this.blockSpecs.forEach(function (spec) {
-    //     var aBlock = block(spec);
-    //     if (aBlock) { blocks.push(aBlock); }
-    // });
-    //
-    // if (this.buttons['palette'].length > 0) {
-    //     blocks.push("=");
-    //     this.buttons['palette'].forEach(function (definition) {
-    //         blocks.push(myself.makeButton(definition));
-    //     });
-    // }
-    //
-    // blocks.push("=");
-    // blocks.push(sprite.makeBlockButton('microworld'));
-    //
-    // sprite.refreshMicroWorldPalette = function () {
-    //     // only refresh if in microWorld mode
-    //     if (myself.isActive) {
-    //         blocks.forEach(
-    //             function(block){
-    //                 if (block.isCorpse) {
-    //                     blocks.splice(blocks.indexOf(block), 1);
-    //                     block.destroy();
-    //                 }
-    //             }
-    //         );
-    //         sprite.customPalette = sprite.freshPalette('microworld');
-    //         sprite.customPalette.userMenu = nop;
-    //         sprite.paletteCache['microworld'] = sprite.customPalette;
-    //         ide.currentCategory = 'microworld';
-    //         ide.refreshPalette(true);
-    //
-    //         ide.fixLayout();
-    //     }
-    // };
-    //
-    // sprite.refreshMicroWorldPalette();
-    //
-    // // flushPaletteCache should also refresh the MicroWorld palette
-    // // otherwise deleting custom blocks leaves it in a funny state
-    // if (!ide.oldFlushPaletteCache) {
-    //     ide.oldFlushPaletteCache = ide.flushPaletteCache;
-    //     ide.flushPaletteCache = function (category) {
-    //         this.oldFlushPaletteCache(category);
-    //         sprite.refreshMicroWorldPalette();
-    //     };
-    // }
 };
 
 MicroWorld.prototype.restorePalette = function() {
