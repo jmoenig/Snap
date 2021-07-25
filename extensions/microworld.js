@@ -222,12 +222,20 @@ MicroWorld.prototype.escape = function () {
 };
 
 MicroWorld.prototype.createPalette = function () {
-    var sprite = this.ide.currentSprite,
-        myself = this,
-        ide = this.ide;
+    var ide = this.ide;
 
+    // backup old settings
+    this.oldCategory = ide.currentCategory;
+    this.oldHiddenPrimitives = Object.assign({},StageMorph.prototype.hiddenPrimitives);
+
+    ide.setUnifiedPalette(true);
+
+    this.loadSpecs();
+};
+
+MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
+    var myself = this;
     if(!SpriteMorph.prototype.oldCustomBlockTemplatesForCategory) {
-
         SpriteMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
 
         SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
@@ -235,13 +243,11 @@ MicroWorld.prototype.createPalette = function () {
             if(!myself.isActive){
                 return this.oldCustomBlockTemplatesForCategory(category);
             }
-
             var blocks = this.oldCustomBlockTemplatesForCategory(category)
                 .filter(block => {
                     if(block === "="){
                         return false;
                     }
-
                     if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
                         return true;
                     }
@@ -250,17 +256,19 @@ MicroWorld.prototype.createPalette = function () {
                 })
             return blocks;
         }
-
     }
+}
 
+MicroWorld.prototype.loadSpecs = function (){
 
+    this.updateCustomBlockTemplateFunction();
+    this.showOnlyRelevantPrimitives();
 
-    // backup old settings
-    this.oldCategory = ide.currentCategory;
-    this.oldHiddenPrimitives = Object.assign({},StageMorph.prototype.hiddenPrimitives);
+    ide.flushBlocksCache('unified');
+    ide.refreshPalette(true);
+}
 
-    ide.setUnifiedPalette(true);
-
+MicroWorld.prototype.showOnlyRelevantPrimitives = function(){
     // hide primitives
     var defs = SpriteMorph.prototype.blocks;
 
@@ -271,10 +279,7 @@ MicroWorld.prototype.createPalette = function () {
             StageMorph.prototype.hiddenPrimitives[sel] = true;
         }
     });
-
-    ide.flushBlocksCache('unified');
-    ide.refreshPalette(true);
-};
+}
 
 MicroWorld.prototype.restorePalette = function() {
     var myself = this,
