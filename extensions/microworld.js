@@ -46,13 +46,9 @@ SnapExtensions.primitives.set(
     (params) => {
         params = JSON.parse(params);
 
-        // don't reset the microworld while we're in it
-        // probably only useful during development of this extension, but doesn't hurt anything
-        if(ide.stage.microworld && ide.stage.microworld.isActive){
-            ide.stage.microworld.escape();
+        if(!ide.stage.microworld){
+            ide.stage.microworld = new MicroWorld(ide);
         }
-
-        ide.stage.microworld = new MicroWorld(ide);
 
         var microworld = ide.stage.microworld;
 
@@ -121,14 +117,8 @@ MicroWorld.prototype.init = function (ide) {
     this.suppressedKeyEvents = [];
 
     // backup settings for exiting microworld
-    this.originalFireKeyEvent = StageMorph.prototype.fireKeyEvent;
-
-    this.originalCategory = null;
-    this.originalHiddenPrimitives = {};
-
-    this.originalCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
-
-    this.originalBlockMorphGetInput = BlockDialogMorph.prototype.getInput;
+    this.oldCategory = null;
+    this.oldHiddenPrimitives = {};
 };
 
 
@@ -170,18 +160,31 @@ MicroWorld.prototype.enter = function () {
     this.hideAllMorphs();
     this.ide.fixLayout();
 
-    StageMorph.prototype.fireKeyEvent = function(key){
-        if(myself.suppressedKeyEvents.indexOf(key) > -1){
-            return;
+
+    if(!StageMorph.prototype.oldFireKeyEvent) {
+        StageMorph.prototype.oldFireKeyEvent = StageMorph.prototype.fireKeyEvent;
+
+        StageMorph.prototype.fireKeyEvent = function(key){
+            if(myself.isActive && myself.suppressedKeyEvents.indexOf(key) > -1){
+                return;
+            }
+            return this.oldFireKeyEvent(key);
         }
-        return myself.originalFireKeyEvent.call(this, key);
+
     }
 
-    BlockDialogMorph.prototype.getInput = function() {
-        var def = myself.originalBlockMorphGetInput.call(this);
-        def.codeHeader = 'microworld';
-        return def;
+    if(!BlockDialogMorph.prototype.oldGetInput){
+        BlockDialogMorph.prototype.oldGetInput = BlockDialogMorph.prototype.getInput;
+        BlockDialogMorph.prototype.getInput = function() {
+            if(!myself.isActive){
+                return this.oldGetInput();
+            }
+            var def = this.oldGetInput();
+            def.codeHeader = 'microworld';
+            return def;
+        }
     }
+
 };
 
 MicroWorld.prototype.escape = function () {
@@ -213,12 +216,7 @@ MicroWorld.prototype.escape = function () {
 
     ide.savingPreferences = true;
 
-    // restore non-microworld values and settings
-    StageMorph.prototype.fireKeyEvent = this.originalFireKeyEvent;
-
     this.restorePalette();
-
-    BlockDialogMorph.prototype.getInput = this.originalBlockMorphGetInput;
 };
 
 MicroWorld.prototype.createPalette = function () {
@@ -226,30 +224,38 @@ MicroWorld.prototype.createPalette = function () {
         myself = this,
         ide = this.ide;
 
-    SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
-        var blocks = myself.originalCustomBlockTemplatesForCategory.call(sprite, category)
-            .filter(block => {
-                if(block === "="){
-                    return false;
-                }
+    if(!SpriteMorph.prototype.oldCustomBlockTemplatesForCategory) {
 
-                // if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
-                //     return true;
-                // }
+        SpriteMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
+
+        SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
+
+            if(!myself.isActive){
+                return this.oldCustomBlockTemplatesForCategory(category);
+            }
+
+            var blocks = this.oldCustomBlockTemplatesForCategory(category)
+                .filter(block => {
+                    if(block === "="){
+                        return false;
+                    }
+
                     if(block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld'){
                         return true;
                     }
 
-                return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
-            })
-        return blocks;
+                    return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
+                })
+            return blocks;
+        }
+
     }
 
+
+
     // backup old settings
-    this.originalCategory = ide.currentCategory;
-
-
-    this.originalHiddenPrimitives = Object.assign({},StageMorph.prototype.hiddenPrimitives);
+    this.oldCategory = ide.currentCategory;
+    this.oldHiddenPrimitives = Object.assign({},StageMorph.prototype.hiddenPrimitives);
 
     ide.setUnifiedPalette(true);
 
@@ -350,16 +356,14 @@ MicroWorld.prototype.restorePalette = function() {
     var myself = this,
         ide = this.ide;
 
-    SpriteMorph.prototype.customBlockTemplatesForCategory = this.originalCustomBlockTemplatesForCategory;
-
     // restore primitives
-    StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.originalHiddenPrimitives);
+    StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.oldHiddenPrimitives);
     ide.flushBlocksCache('unified');
 
     // switch out of unified palette, if necessary
-    this.ide.setUnifiedPalette(this.originalCategory === 'unified');
+    this.ide.setUnifiedPalette(this.oldCategory === 'unified');
     // restore the previously-selected category
-    ide.currentCategory = this.originalCategory;
+    ide.currentCategory = this.oldCategory;
     ide.refreshPalette(true);
 
     ide.categories.fixLayout();
