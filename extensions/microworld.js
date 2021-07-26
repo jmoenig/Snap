@@ -61,7 +61,6 @@ SnapExtensions.primitives.set(
 
         var microworld = ide.stage.microworld;
 
-        microworld.zoom = params.zoom;
         microworld.enableKeyboard = params.enableKeyboard;
         microworld.simpleBlockDialog = params.simpleBlockDialog;
         microworld.hiddenMorphs = params.hiddenMorphs.split(",").map(item => item.trim());
@@ -97,6 +96,15 @@ SnapExtensions.primitives.set(
 
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_zoom(zoom)',
+    (zoom) => {
+        doIfMicroworld(microworld => {
+            microworld.setZoom(zoom);
+        })
+    }
+)
+
 
 function MicroWorld (ide) {
     this.init(ide);
@@ -109,6 +117,15 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
         this.loadSpecs();
     }
 
+}
+
+MicroWorld.prototype.setZoom = function(zoom) {
+    this.zoom = zoom;
+    if(this.isActive){
+        this.setBlocksScale(zoom);
+        this.ide.flushBlocksCache('unified');
+        this.ide.refreshPalette(true);
+    }
 }
 
 MicroWorld.prototype.init = function (ide) {
