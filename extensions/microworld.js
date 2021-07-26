@@ -143,6 +143,7 @@ MicroWorld.prototype.init = function (ide) {
     this.simpleBlockDialog = false;
     this.zoom = 1;
     this.uneditableBlocks = false;
+    this.isTransitioning = false;
     this.isActive = false;
     this.suppressedKeyEvents = [];
 
@@ -160,6 +161,7 @@ MicroWorld.prototype.enter = function () {
         myself = this;
 
     this.isActive = true;
+    this.isTransitioning = true;
 
     ide.savingPreferences = false;
 
@@ -188,10 +190,12 @@ MicroWorld.prototype.enter = function () {
 
     this.hideAllMorphs();
 
-    this.ide.fixLayout();
-
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
+
+    this.isTransitioning = false;
+
+    this.refreshLayouts();
 
 };
 
@@ -202,7 +206,7 @@ MicroWorld.prototype.escape = function () {
     var ide = this.ide,
         myself = this;
 
-    this.isActive = false;
+    this.isTransitioning = true;
 
     ScriptsMorph.prototype.enableKeyboard =
         !(ide.getSetting('keyboard') === false);
@@ -216,11 +220,14 @@ MicroWorld.prototype.escape = function () {
 
     this.showAllMorphs();
 
-    ide.fixLayout();
-
     ide.savingPreferences = true;
 
     this.restorePalette();
+
+    this.isActive = false;
+    this.isTransitioning = false;
+
+    this.refreshLayouts();
 };
 
 MicroWorld.prototype.updateGetInputFunction = function() {
@@ -297,8 +304,10 @@ MicroWorld.prototype.loadSpecs = function (){
     this.updateCustomBlockTemplateFunction();
     this.showOnlyRelevantPrimitives();
 
-    ide.flushBlocksCache('unified');
-    ide.refreshPalette(true);
+    if(this.isActive){
+        this.refreshLayouts();
+    }
+
 }
 
 MicroWorld.prototype.showOnlyRelevantPrimitives = function(){
@@ -320,20 +329,30 @@ MicroWorld.prototype.restorePalette = function() {
 
     // restore primitives
     StageMorph.prototype.hiddenPrimitives = Object.assign({}, this.oldHiddenPrimitives);
-    ide.flushBlocksCache('unified');
+
 
     // switch out of unified palette, if necessary
     ide.setUnifiedPalette(this.oldCategory === 'unified');
     // restore the previously-selected category
     ide.currentCategory = this.oldCategory;
-    ide.refreshPalette(true);
+
 
     ide.categories.fixLayout();
     ide.categories.children.forEach(each =>
         each.refresh()
     );
 
-    ide.fixLayout();
+    this.refreshLayouts();
+}
+
+MicroWorld.prototype.refreshLayouts = function() {
+    var ide = this.ide;
+
+    if(!this.isTransitioning){
+        ide.fixLayout();
+        ide.flushBlocksCache('unified');
+        ide.refreshPalette(true);
+    }
 }
 
 MicroWorld.prototype.setBlocksScale = function (zoom) {
