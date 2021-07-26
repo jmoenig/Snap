@@ -120,11 +120,17 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
 }
 
 MicroWorld.prototype.setZoom = function(zoom) {
-    this.zoom = zoom;
+    if(zoom === this.zoom){
+        return;
+    }
+    this.zoom = parseFloat(zoom);
+    this.updateZoom();
+}
+
+MicroWorld.prototype.updateZoom = function(){
     if(this.isActive){
-        this.setBlocksScale(zoom);
-        this.ide.flushBlocksCache('unified');
-        this.ide.refreshPalette(true);
+        this.setBlocksScale(this.zoom);
+        this.refreshLayouts();
     }
 }
 
@@ -172,7 +178,9 @@ MicroWorld.prototype.enter = function () {
     }
     ide.currentSprite.scripts.updateToolbar();
 
-    this.setBlocksScale(this.zoom);
+    if(this.zoom !== (parseFloat(ide.getSetting('zoom')) || 1)){
+        this.updateZoom();
+    }
 
     if (this.simpleBlockDialog) {
         // Never launch in expanded form
