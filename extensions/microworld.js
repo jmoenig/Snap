@@ -8,7 +8,7 @@ function doIfMicroworld(cb){
         cb(ide.stage.microworld);
     }
     else {
-       throw new Error("No microworld loaded! Make sure to run primitive mw_load");
+       throw new Error("No microworld loaded! Make sure to run primitive "+prefix+"load");
     }
 }
 
