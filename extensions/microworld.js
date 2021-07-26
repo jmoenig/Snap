@@ -293,7 +293,7 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
 }
 
 MicroWorld.prototype.loadSpecs = function (){
-
+    var ide = this.ide;
     this.updateCustomBlockTemplateFunction();
     this.showOnlyRelevantPrimitives();
 
@@ -323,7 +323,7 @@ MicroWorld.prototype.restorePalette = function() {
     ide.flushBlocksCache('unified');
 
     // switch out of unified palette, if necessary
-    this.ide.setUnifiedPalette(this.oldCategory === 'unified');
+    ide.setUnifiedPalette(this.oldCategory === 'unified');
     // restore the previously-selected category
     ide.currentCategory = this.oldCategory;
     ide.refreshPalette(true);
