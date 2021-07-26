@@ -3,6 +3,15 @@ var ide = world.children.find(child => {
 }),
     prefix = 'mw_';
 
+function doIfMicroworld(cb){
+    if(ide.stage.microworld){
+        cb(ide.stage.microworld);
+    }
+    else {
+       throw new Error("No microworld loaded! Make sure to run primitive mw_load");
+    }
+}
+
 SnapExtensions.primitives.set(
     prefix+'get_specs_from_blocks(blocks)',
     (blocks) => {
@@ -26,18 +35,18 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'enter',
     () => {
-        if(ide.stage.microworld){
-            ide.stage.microworld.enter();
-        }
+        doIfMicroworld(microworld => {
+            microworld.enter();
+        })
     }
 )
 
 SnapExtensions.primitives.set(
     prefix+'escape',
     () => {
-        if(ide.stage.microworld){
-            ide.stage.microworld.escape();
-        }
+        doIfMicroworld(microworld => {
+            microworld.escape();
+        })
     }
 )
 
@@ -81,9 +90,9 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_block_specs(specs)',
     (specs) => {
-        if(ide.stage.microworld){
-            ide.stage.microworld.setBlockSpecs(specs);
-        }
+        doIfMicroworld(microworld => {
+            microworld.setBlockSpecs(specs);
+        });
     }
 
 )
