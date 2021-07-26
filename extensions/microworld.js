@@ -166,7 +166,6 @@ MicroWorld.prototype.enter = function () {
     }
 
     this.createPalette();
-    this.loadCustomBlocks();
 
     this.makeButtons();
 
@@ -319,23 +318,6 @@ MicroWorld.prototype.restorePalette = function() {
 
     ide.fixLayout();
 }
-
-MicroWorld.prototype.loadCustomBlocks = function () {
-    // We load our custom blocks from the stage.
-    // They're watermarked with 'microworld' in their codeHeader
-    // var sprite = this.ide.currentSprite,
-    //     blocks = this.ide.stage.globalBlocks.filter(
-    //         function (block) {
-    //             return block.codeHeader === 'microworld';
-    //         }
-    //     );
-    //
-    // blocks.forEach(function (block) {
-    //     sprite.blocksCache['microworld'].push(block.templateInstance());
-    // });
-
-    // sprite.refreshMicroWorldPalette();
-};
 
 MicroWorld.prototype.setBlocksScale = function (zoom) {
     // !!! EXPERIMENTAL !!! sets blocks scale without reloading the project
