@@ -61,7 +61,6 @@ SnapExtensions.primitives.set(
 
         var microworld = ide.stage.microworld;
 
-        microworld.hiddenMorphs = params.hiddenMorphs.split(",").map(item => item.trim());
         microworld.projectMenu = params.projectMenu;
         microworld.blockContextMenu = params.blockContextMenu;
 
@@ -92,6 +91,15 @@ SnapExtensions.primitives.set(
         });
     }
 
+)
+
+SnapExtensions.primitives.set(
+    prefix+'set_hidden_morphs(morphs)',
+    morphs => {
+        doIfMicroworld(microworld => {
+            microworld.setHiddenMorphs(morphs);
+        })
+    }
 )
 
 SnapExtensions.primitives.set(
@@ -133,6 +141,25 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
 
 }
 
+MicroWorld.prototype.setHiddenMorphs = function(morphs){
+    var oldIsLoading = this.isLoading;
+    if(this.isActive){
+        this.isLoading = true;
+        this.showAllMorphs();
+        this.isLoading = oldIsLoading;
+    }
+    if(!morphs){
+        this.hiddenMorphs = [];
+    }
+    else{
+        this.hiddenMorphs = (morphs).split(",").map(item => item.trim());
+    }
+
+    if(this.isActive){
+        this.hideAllMorphs();
+    }
+}
+
 MicroWorld.prototype.setZoom = function(zoom){
     if(this.isActive){
         this.setBlocksScale(zoom);
@@ -162,7 +189,7 @@ MicroWorld.prototype.init = function (ide) {
     // this.simpleBlockDialog = false;
     this.zoom = 1;
     this.uneditableBlocks = false;
-    this.isTransitioning = false;
+    this.isLoading = false;
     this.isActive = false;
     this.suppressedKeyEvents = [];
 
@@ -180,7 +207,7 @@ MicroWorld.prototype.enter = function () {
         myself = this;
 
     this.isActive = true;
-    this.isTransitioning = true;
+    this.isLoading = true;
 
     ide.savingPreferences = false;
 
@@ -209,7 +236,7 @@ MicroWorld.prototype.enter = function () {
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
 
-    this.isTransitioning = false;
+    this.isLoading = false;
 
     this.refreshLayouts();
 
@@ -222,7 +249,7 @@ MicroWorld.prototype.escape = function () {
     var ide = this.ide,
         myself = this;
 
-    this.isTransitioning = true;
+    this.isLoading = true;
 
     this.setKeyboard(!(ide.getSetting('keyboard') === false));
 
@@ -240,7 +267,7 @@ MicroWorld.prototype.escape = function () {
     this.restorePalette();
 
     this.isActive = false;
-    this.isTransitioning = false;
+    this.isLoading = false;
 
     this.refreshLayouts();
 };
@@ -363,7 +390,7 @@ MicroWorld.prototype.restorePalette = function() {
 MicroWorld.prototype.refreshLayouts = function() {
     var ide = this.ide;
 
-    if(!this.isTransitioning){
+    if(!this.isLoading){
         ide.fixLayout();
         ide.flushBlocksCache('unified');
         ide.refreshPalette(true);
@@ -507,6 +534,7 @@ MicroWorld.prototype.hideAllMorphs = function () {
             myself.hideMorph(selector);
         }
     );
+    this.refreshLayouts();
 };
 
 MicroWorld.prototype.showAllMorphs = function () {
@@ -516,6 +544,7 @@ MicroWorld.prototype.showAllMorphs = function () {
             myself.showMorph(selector);
         }
     );
+    this.refreshLayouts();
 }
 
 MicroWorld.prototype.hideMorph = function (morphSelector) {
