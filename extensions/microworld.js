@@ -61,7 +61,6 @@ SnapExtensions.primitives.set(
 
         var microworld = ide.stage.microworld;
 
-        microworld.simpleBlockDialog = params.simpleBlockDialog;
         microworld.hiddenMorphs = params.hiddenMorphs.split(",").map(item => item.trim());
         microworld.projectMenu = params.projectMenu;
         microworld.blockContextMenu = params.blockContextMenu;
@@ -160,7 +159,7 @@ MicroWorld.prototype.init = function (ide) {
         'corral': []
     };
     this.enableKeyboard = true;
-    this.simpleBlockDialog = false;
+    // this.simpleBlockDialog = false;
     this.zoom = 1;
     this.uneditableBlocks = false;
     this.isTransitioning = false;
@@ -191,10 +190,10 @@ MicroWorld.prototype.enter = function () {
         this.setZoom(this.zoom);
     }
 
-    if (this.simpleBlockDialog) {
-        // Never launch in expanded form
-        InputSlotDialogMorph.prototype.isLaunchingExpanded = false;
-    }
+    // if (this.simpleBlockDialog) {
+    //     // Never launch in expanded form
+    //     InputSlotDialogMorph.prototype.isLaunchingExpanded = false;
+    // }
 
     if (ide.corralButtonsFrame) {
         ide.corralButtonsFrame.destroy();
