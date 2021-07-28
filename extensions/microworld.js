@@ -99,7 +99,12 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_zoom(zoom)',
     (zoom) => {
+        zoom = parseFloat(zoom);
         doIfMicroworld(microworld => {
+            if(microworld.zoom === zoom){
+                return;
+            }
+            microworld.zoom = zoom;
             microworld.setZoom(zoom);
         })
     }
@@ -119,17 +124,9 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
 
 }
 
-MicroWorld.prototype.setZoom = function(zoom) {
-    if(zoom === this.zoom){
-        return;
-    }
-    this.zoom = parseFloat(zoom);
-    this.updateZoom();
-}
-
-MicroWorld.prototype.updateZoom = function(){
+MicroWorld.prototype.setZoom = function(zoom){
     if(this.isActive){
-        this.setBlocksScale(this.zoom);
+        this.setBlocksScale(zoom);
         this.refreshLayouts();
     }
 }
@@ -179,7 +176,7 @@ MicroWorld.prototype.enter = function () {
     ide.currentSprite.scripts.updateToolbar();
 
     if(this.zoom !== (parseFloat(ide.getSetting('zoom')) || 1)){
-        this.updateZoom();
+        this.setZoom(this.zoom);
     }
 
     if (this.simpleBlockDialog) {
@@ -219,7 +216,7 @@ MicroWorld.prototype.escape = function () {
     ScriptsMorph.prototype.enableKeyboard =
         !(ide.getSetting('keyboard') === false);
 
-    this.setBlocksScale(ide.getSetting('zoom') || 1);
+    this.setZoom(ide.getSetting('zoom') || 1);
 
     if (ide.corralButtonsFrame) {
         ide.corralButtonsFrame.destroy();
