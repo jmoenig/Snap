@@ -110,6 +110,17 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_enable_keyboard(enable)',
+    enableKeyboard => {
+        doIfMicroworld(microworld => {
+            microworld.enableKeyboard = enableKeyboard;
+            microworld.setKeyboard(enableKeyboard);
+        })
+
+    }
+)
+
 
 function MicroWorld (ide) {
     this.init(ide);
@@ -128,6 +139,13 @@ MicroWorld.prototype.setZoom = function(zoom){
     if(this.isActive){
         this.setBlocksScale(zoom);
         this.refreshLayouts();
+    }
+}
+
+MicroWorld.prototype.setKeyboard = function(keyboard){
+    ScriptsMorph.prototype.enableKeyboard = keyboard;
+    if(this.isActive){
+        this.ide.currentSprite.scripts.updateToolbar();
     }
 }
 
@@ -168,12 +186,7 @@ MicroWorld.prototype.enter = function () {
 
     ide.savingPreferences = false;
 
-    if (this.enableKeyboard) {
-        ScriptsMorph.prototype.enableKeyboard = true;
-    } else {
-        ScriptsMorph.prototype.enableKeyboard = false;
-    }
-    ide.currentSprite.scripts.updateToolbar();
+    this.setKeyboard(this.enableKeyboard);
 
     if(this.zoom !== (parseFloat(ide.getSetting('zoom')) || 1)){
         this.setZoom(this.zoom);
@@ -213,8 +226,7 @@ MicroWorld.prototype.escape = function () {
 
     this.isTransitioning = true;
 
-    ScriptsMorph.prototype.enableKeyboard =
-        !(ide.getSetting('keyboard') === false);
+    this.setKeyboard(!(ide.getSetting('keyboard') === false));
 
     this.setZoom(ide.getSetting('zoom') || 1);
 
