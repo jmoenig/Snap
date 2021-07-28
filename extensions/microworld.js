@@ -61,7 +61,6 @@ SnapExtensions.primitives.set(
 
         var microworld = ide.stage.microworld;
 
-        microworld.enableKeyboard = params.enableKeyboard;
         microworld.simpleBlockDialog = params.simpleBlockDialog;
         microworld.hiddenMorphs = params.hiddenMorphs.split(",").map(item => item.trim());
         microworld.projectMenu = params.projectMenu;
