@@ -1,6 +1,6 @@
 var ide = world.children.find(child => {
-    return child instanceof IDE_Morph;
-}),
+        return child instanceof IDE_Morph;
+    }),
     prefix = 'mw_';
 
 function doIfMicroworld(cb){
@@ -8,7 +8,7 @@ function doIfMicroworld(cb){
         cb(ide.stage.microworld);
     }
     else {
-       throw new Error("No microworld loaded! Make sure to run primitive "+prefix+"load");
+        throw new Error("No microworld loaded! Make sure to run primitive "+prefix+"load");
     }
 }
 
@@ -61,8 +61,8 @@ SnapExtensions.primitives.set(
 
         var microworld = ide.stage.microworld;
 
-        microworld.projectMenu = params.projectMenu;
-        microworld.blockContextMenu = params.blockContextMenu;
+        microworld.projectMenu = params.projectMenu.split(',').map(item => item.trim());
+        microworld.blockContextMenu = params.blockContextMenu.split(',').map(item => item.trim());
 
         // add the enter/escape options to the Snap! logo
         ide.logo.userMenu = function () {
@@ -236,6 +236,10 @@ MicroWorld.prototype.enter = function () {
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
 
+    // intercept menus
+    this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
+    this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
+
     this.isLoading = false;
 
     this.refreshLayouts();
@@ -301,6 +305,43 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
 
     }
 }
+
+/**
+ * Intercepts the function that creates a menu to limit the options for the MicroWorld
+ * @param prototype Prototype where the function to intercept is defined
+ * @param functionName The function to intercept
+ * @param menuSelector The property on the MicroWorld that contains the menu selectors to show
+ * @param changeAfterOpen true if we want to modify the menu after it's created in the world; false if we want to modify the menu and return it
+ */
+MicroWorld.prototype.changeMenu = function(prototype, functionName, menuSelector, changeAfterOpen) {
+    var myself = this,
+        oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
+
+    if(!prototype || !prototype[functionName]) {
+        return;
+    }
+
+    if(!prototype[oldFunctionName]){
+        prototype[oldFunctionName] = prototype[functionName];
+        prototype[functionName] = function (){
+            var menu = this[oldFunctionName]();
+            if(myself.isActive){
+                if(changeAfterOpen) {
+                    var openMenu = myself.ide.currentSprite.world().activeMenu || null;
+                    if(openMenu){
+                        myself.setupMenu(menuSelector, openMenu);
+                        openMenu.createItems();
+                    }
+                }
+                else{
+                    return myself.setupMenu(menuSelector, menu);
+                }
+            }
+            return menu;
+        }
+    }
+}
+
 
 MicroWorld.prototype.createPalette = function () {
     var ide = this.ide;
@@ -525,6 +566,7 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
         }
     );
     menu.items = items;
+    return menu;
 };
 
 MicroWorld.prototype.hideAllMorphs = function () {
