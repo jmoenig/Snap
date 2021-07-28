@@ -53,16 +53,12 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'load(params)',
     (params) => {
-        params = JSON.parse(params);
 
         if(!ide.stage.microworld){
             ide.stage.microworld = new MicroWorld(ide);
         }
 
         var microworld = ide.stage.microworld;
-
-        microworld.projectMenu = params.projectMenu.split(',').map(item => item.trim());
-        microworld.blockContextMenu = params.blockContextMenu.split(',').map(item => item.trim());
 
         // add the enter/escape options to the Snap! logo
         ide.logo.userMenu = function () {
@@ -98,6 +94,15 @@ SnapExtensions.primitives.set(
     morphs => {
         doIfMicroworld(microworld => {
             microworld.setHiddenMorphs(morphs);
+        })
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'set_menu_items(menu,items)',
+    (menu, items) => {
+        doIfMicroworld(microworld => {
+            microworld.setMenuItems(menu, items);
         })
     }
 )
@@ -160,12 +165,17 @@ MicroWorld.prototype.setHiddenMorphs = function(morphs){
     }
 }
 
+MicroWorld.prototype.setMenuItems = function(menu, items){
+    this.menus[menu] = (items).split(",").map(item => item.trim());
+}
+
 MicroWorld.prototype.setZoom = function(zoom){
     if(this.isActive){
         this.setBlocksScale(zoom);
         this.refreshLayouts();
     }
 }
+
 
 MicroWorld.prototype.setKeyboard = function(keyboard){
     ScriptsMorph.prototype.enableKeyboard = keyboard;
@@ -178,8 +188,12 @@ MicroWorld.prototype.init = function (ide) {
     this.ide = ide;
     this.hiddenMorphs = [];
     this.blockSpecs = [];
-    this.projectMenu = [];
-    this.blockContextMenu = [];
+
+    this.menus = {
+        projectMenu: [],
+        blockContextMenu: []
+    }
+
     this.buttons = {
         'scripts': [],
         'palette': [],
@@ -552,7 +566,7 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
     // Only keep the items whose label is included in the `menuSelector` array
     // can't use Array >> filter because we may also want to reorder items
     var items = [];
-    this[menuSelector].forEach(
+    this.menus[menuSelector].forEach(
         function (itemLabel) {
             var item = menu.items.find(
                 function (each) {
