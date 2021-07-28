@@ -69,7 +69,7 @@
         <script type="text/javascript" src="src/store-ext.js"></script>
         <script type="text/javascript" src="src/actions-ext.js"></script>
         {{ } else { }}
-        <script type="text/javascript" src="dist/app.min.js?v=1.27.2"></script>
+        <script type="text/javascript" src="dist/app.min.js?v=1.28.0"></script>
         {{ } }}
 
         <script type="text/javascript">
