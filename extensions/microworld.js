@@ -51,13 +51,11 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'load(params)',
-    (params) => {
-
+    prefix+'load',
+    () => {
         if(!ide.stage.microworld){
             ide.stage.microworld = new MicroWorld(ide);
         }
-
         var microworld = ide.stage.microworld;
 
         // add the enter/escape options to the Snap! logo
