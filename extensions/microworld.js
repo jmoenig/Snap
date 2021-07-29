@@ -130,6 +130,15 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_enable_variables(enable)',
+    enableVariables => {
+        doIfMicroworld(microworld => {
+            microworld.setEnableVariables(enableVariables);
+        })
+    }
+)
+
 
 function MicroWorld (ide) {
     this.init(ide);
@@ -142,6 +151,13 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
         this.loadSpecs();
     }
 
+}
+
+MicroWorld.prototype.setEnableVariables = function(enableVariables){
+    this.enableVariables = enableVariables;
+    if(this.isActive){
+        this.loadSpecs();
+    }
 }
 
 MicroWorld.prototype.setHiddenMorphs = function(morphs){
@@ -186,6 +202,8 @@ MicroWorld.prototype.init = function (ide) {
     this.ide = ide;
     this.hiddenMorphs = [];
     this.blockSpecs = [];
+
+    this.enableVariables = true;
 
     this.menus = {
         projectMenu: [],
@@ -421,9 +439,36 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
     }
 }
 
+MicroWorld.prototype.updateBlockTemplatesFunction = function() {
+    var myself = this;
+
+    function filterVariables(category){
+        var blocks = this.oldBlockTemplates(category);
+
+        if(myself.isActive && category === 'variables' && !myself.enableVariables){
+            blocks = blocks.filter(block => {
+               if(block instanceof PushButtonMorph || (block && block.selector && block.selector === 'reportGetVar')){
+                   return false;
+               }
+               return true;
+            });
+        }
+
+        return blocks;
+    }
+
+    if(!SpriteMorph.prototype.oldBlockTemplates){
+        SpriteMorph.prototype.oldBlockTemplates = SpriteMorph.prototype.blockTemplates;
+        StageMorph.prototype.oldBlockTemplates = StageMorph.prototype.blockTemplates;
+        SpriteMorph.prototype.blockTemplates = filterVariables;
+        StageMorph.prototype.blockTemplates = filterVariables;
+    }
+}
+
 MicroWorld.prototype.loadSpecs = function (){
     var ide = this.ide;
     this.updateCustomBlockTemplateFunction();
+    this.updateBlockTemplatesFunction();
     this.showOnlyRelevantPrimitives();
 
     if(this.isActive){
