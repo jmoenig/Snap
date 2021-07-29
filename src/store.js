@@ -52,12 +52,12 @@
 /*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph,
 WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph,
 CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
-Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
+Color, List, newCanvas, Costume, Sound, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences, Process,
-SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas, SnapActions, copy, SnapUndo, contains*/
+SyntaxElementMorph, Variable, isSnapObject, BooleanSlotMorph,
+normalizeCanvas, SnapActions, copy, SnapUndo, contains, MessageInputSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -1812,6 +1812,11 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         this.loadHistory(model.childNamed('history'));
         v.fixLayout();
 
+        var messageTypes = model.childNamed('messageTypes');
+        if (messageTypes) {
+            messageTypes.children.forEach(msgType => this.loadMessageType(this.project.stage, msgType));
+        }
+
         return v;
     case 'context':
         v = new Context(null);
@@ -2374,12 +2379,14 @@ SpriteMorph.prototype.toPortableXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
-        customBlocks = this.customBlocks || [];
+        customBlocks = this.customBlocks || [],
+        messageTypes = new MessageFrame();
 
     if (serializer.dependencies) {
         customBlocks = customBlocks.filter(function(block) {
             return serializer.dependencies.customBlocks.includes(block);
         });
+        serializer.dependencies.messageTypes.forEach(msgType => messageTypes.addMsgType(msgType));
     }
 
     return serializer.format(
@@ -2395,6 +2402,7 @@ SpriteMorph.prototype.toPortableXML = function (serializer) {
             '<costumes>%</costumes>' +
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
+            '<messageTypes>%</messageTypes>' +
             '<blocks>%</blocks>' +
             '<scripts>%</scripts>' +
             '</sprite>',
@@ -2439,6 +2447,7 @@ SpriteMorph.prototype.toPortableXML = function (serializer) {
             serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
+        serializer.store(messageTypes),
         !this.customBlocks ?
                     '' : serializer.store(customBlocks),
         serializer.dependencies ? '' : serializer.store(this.scripts)
@@ -3008,6 +3017,7 @@ Context.prototype.getPortableDependencies = function (block, visited) {
     dependencies = {
         variables: [],
         customBlocks: [],
+        messageTypes: [],
     };
 
     if (!block) {
@@ -3040,6 +3050,11 @@ Context.prototype.getPortableDependencies = function (block, visited) {
             const nestedDeps = this.getPortableDependencies(block.definition.body.expression, visited);
             dependencies.customBlocks.push(...nestedDeps.customBlocks);
             dependencies.variables.push(...nestedDeps.variables);
+        } else if (block.selector === 'doSocketMessage' || block.selector === 'doSocketRequest') {
+            const {stage} = SnapActions.ide();
+            const [name] = block.inputs()[0].evaluate();
+            const messageType = stage.messageTypes.getMsgType(name);
+            dependencies.messageTypes.push(messageType);
         }
     });
 
