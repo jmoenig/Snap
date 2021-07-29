@@ -396,6 +396,7 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
     var myself = this;
     if(!SpriteMorph.prototype.oldCustomBlockTemplatesForCategory) {
         SpriteMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
+        StageMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.oldCustomBlockTemplatesForCategory;
 
         SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
 
@@ -415,6 +416,8 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
                 })
             return blocks;
         }
+
+        StageMorph.prototype.customBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
     }
 }
 
