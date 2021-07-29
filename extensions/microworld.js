@@ -247,6 +247,7 @@ MicroWorld.prototype.enter = function () {
 
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
+    this.updateSerializeFunction();
 
     // intercept menus
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
@@ -287,6 +288,29 @@ MicroWorld.prototype.escape = function () {
 
     this.refreshLayouts();
 };
+
+MicroWorld.prototype.updateSerializeFunction = function() {
+    var myself = this,
+    ide = this.ide;
+    if(!XML_Serializer.prototype.oldSerialize){
+        XML_Serializer.prototype.oldSerialize = XML_Serializer.prototype.serialize;
+        XML_Serializer.prototype.serialize = function(object, forBlocksLibrary){
+            var reenter = false;
+            if(myself.isActive){
+                myself.escape();
+                reenter = true;
+                ide.scene.captureGlobalSettings();
+                object = new Project(ide.scenes, ide.scene)
+            }
+            var str = this.oldSerialize(object, forBlocksLibrary);
+            if(reenter){
+                myself.enter();
+                ide.scene.captureGlobalSettings();
+            }
+            return str;
+        }
+    }
+}
 
 MicroWorld.prototype.updateGetInputFunction = function() {
     var myself = this;
