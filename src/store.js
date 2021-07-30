@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-22';
+modules.store = '2021-July-23';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -385,6 +385,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     model.palette = model.scene.childNamed('palette');
     if (model.palette) {
         scene.customCategories = this.loadPalette(model.palette);
+        SpriteMorph.prototype.customCategories = scene.customCategories;
     }
     model.globalVariables = model.scene.childNamed('variables');
 
@@ -665,6 +666,13 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
+    model.palette = model.childNamed('palette');
+    if (model.palette) {
+        SpriteMorph.prototype.customCategories = this.loadPalette(
+            model.palette
+        );
+    }
+    model.removeChild(model.palette);
     this.loadCustomBlocks(stage, model, true);
     this.populateCustomBlocks(
         stage,
@@ -1221,7 +1229,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
         if (!info || !contains(
         		// catch other forks' blocks
-        		SpriteMorph.prototype.categories, info.category
+        		SpriteMorph.prototype.allCategories(), info.category
         )) {
             return this.obsoleteBlock(isReporter);
         }
@@ -1808,7 +1816,7 @@ StageMorph.prototype.toXML = function (serializer) {
 };
 
 SpriteMorph.prototype.toXML = function (serializer) {
-    var idx = serializer.root.sprites.asArray().indexOf(this) + 1,
+    var idx = serializer.scene.sprites.asArray().indexOf(this) + 1,
         costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),

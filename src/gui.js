@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-22';
+modules.gui = '2021-July-29';
 
 // Declarations
 
@@ -1391,9 +1391,14 @@ IDE_Morph.prototype.createCategories = function () {
         }
     });
 
-    // to do: sort alphabetically
-    SpriteMorph.prototype.customCategories.forEach((color, name) =>
-        addCustomCategoryButton(name, color)
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
     );
 
     fixCategoriesLayout();
@@ -4956,11 +4961,34 @@ IDE_Morph.prototype.deleteUserCategory = function () {
 };
 
 IDE_Morph.prototype.deletePaletteCategory = function (name) {
+    this.stage.globalBlocks.forEach(def =>{
+        if (def.category === name) {
+            def.category = 'other';
+            this.currentSprite.allBlockInstances(def).reverse().forEach(
+                block => block.refresh()
+            );
+        }
+    });
+    this.sprites.asArray().concat(this.stage).forEach(obj => {
+        obj.customBlocks.forEach(def => {
+            if (def.category === name) {
+                def.category = 'other';
+                obj.allDependentInvocationsOf(
+                    def.blockSpec()
+                ).reverse().forEach(
+                    block => block.refresh(def)
+                );
+            }
+        });
+    });
     SpriteMorph.prototype.customCategories.delete(name);
     this.createCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
+    this.flushPaletteCache();
+    this.refreshPalette();
     this.fixLayout();
+    this.recordUnsavedChanges();
 };
 
 IDE_Morph.prototype.save = function () {
@@ -5543,6 +5571,10 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     } else {
         new BlockImportDialogMorph(blocks, this.stage, name).popUp();
     }
+    this.createCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.fixLayout();
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
@@ -5708,6 +5740,7 @@ IDE_Morph.prototype.openProject = function (project) {
 };
 
 IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
+    var appMode = this.isAppMode;
     if (!scene || !scene.stage) {
         return;
     }
@@ -5741,6 +5774,7 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         this.currentSprite.palette(this.currentCategory);
         this.refreshPalette(true);
     }
+    this.toggleAppMode(appMode);
     this.world().keyboardFocus = this.stage;
 };
 
@@ -8656,6 +8690,11 @@ function LibraryImportDialogMorph(ide, librariesData) {
 }
 
 LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
+    // additional properties
+    this.isLoadingLibrary = false;
+    this.originalCategories = null;
+    this.captureOriginalCategories();
+
     // initialize inherited properties:
     LibraryImportDialogMorph.uber.init.call(
         this,
@@ -8684,6 +8723,13 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.createLabel();
 
     this.buildContents();
+};
+
+LibraryImportDialogMorph.prototype.captureOriginalCategories = function () {
+    this.originalCategories = new Map();
+    SpriteMorph.prototype.customCategories.forEach((color, name) =>
+        this.originalCategories.set(name, color)
+    );
 };
 
 LibraryImportDialogMorph.prototype.buildContents = function () {
@@ -8812,6 +8858,13 @@ LibraryImportDialogMorph.prototype.popUp = function () {
     }
 };
 
+LibraryImportDialogMorph.prototype.destroy = function () {
+    LibraryImportDialogMorph.uber.destroy.call(this);
+    if (!this.isLoadingLibrary) {
+        SpriteMorph.prototype.customCategories = this.originalCategories;
+    }
+};
+
 LibraryImportDialogMorph.prototype.fixListFieldItemColors =
     ProjectDialogMorph.prototype.fixListFieldItemColors;
 
@@ -8889,14 +8942,18 @@ LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
     return this.libraryCache[key];
 };
 
-LibraryImportDialogMorph.prototype.importLibrary = function () {
+LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
     if (!this.listField.selected) {return; }
 
-    var blocks,
+    var // blocks,
         ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
+    // restore captured user-blocks categories
+    SpriteMorph.prototype.customCategories = this.originalCategories;
+
+/*
     if (this.hasCached(selectedLibrary)) {
         blocks = this.cachedLibrary(selectedLibrary);
         blocks.forEach(def => {
@@ -8906,14 +8963,16 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         });
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
+*/
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
-            function(libraryText) {
+            libraryText => {
                 ide.droppedText(libraryText, libraryName);
+                this.isLoadingLibrary = true;
             }
         );
-    }
+//    }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {

@@ -29,6 +29,14 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-07-29
+* gui: fixed switching scenes in presentation mode
+
+### 2021-07-23
+* byob, objects, gui, store: support custom categories in libraries
+* gui, byob: arrange custom categories alphabetically
+* store: fixed exporting sprites
+
 ### 2021-07-22
 * store: serialize user defined block palettes
 * objects: enabled custom categories for the stage

@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-22';
+modules.objects = '2021-July-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -3165,7 +3165,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category !== 'unified') {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
-    } else if (category === 'variables') {
+    }
+    if (category === 'variables') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
     }

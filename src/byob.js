@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-July-21';
+modules.byob = '2021-July-23';
 
 // Declarations
 
@@ -1806,9 +1806,14 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
         this.addCategoryButton(cat)
     );
 
-    // to do: sort alphabetically
-    SpriteMorph.prototype.customCategories.forEach((color, name) =>
-        this.addCustomCategoryButton(name, color)
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        this.addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
     );
 };
 
@@ -4134,7 +4139,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     // populate palette
     x = palette.left() + padding;
     y = palette.top() + padding;
-    SpriteMorph.prototype.categories.forEach(category => {
+    SpriteMorph.prototype.allCategories().forEach(category => {
         this.blocks.forEach(definition => {
             if (definition.category === category) {
                 if (lastCat && (category !== lastCat)) {
@@ -4230,6 +4235,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '" version="'
             + this.serializer.version
             + '">'
+            + this.paletteXML()
             + str
             + '</blocks>';
         ide.saveXMLAs(
@@ -4243,6 +4249,19 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
+};
+
+BlockExportDialogMorph.prototype.paletteXML = function () {
+    var palette = new Map();
+    this.blocks.forEach(def => {
+        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+            palette.set(
+                def.category,
+                SpriteMorph.prototype.customCategories.get(def.category)
+            );
+        }
+    });
+    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout
