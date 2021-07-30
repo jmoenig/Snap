@@ -312,21 +312,20 @@ MicroWorld.prototype.escape = function () {
 };
 
 MicroWorld.prototype.updateSerializeFunction = function() {
-    var myself = this,
-    ide = this.ide;
+    var ide = this.ide;
     if(!XML_Serializer.prototype.oldSerialize){
         XML_Serializer.prototype.oldSerialize = XML_Serializer.prototype.serialize;
         XML_Serializer.prototype.serialize = function(object, forBlocksLibrary){
             var reenter = false;
-            if(myself.isActive){
-                myself.escape();
+            if(currentMicroworld() && currentMicroworld().isActive){
+                currentMicroworld().escape();
                 reenter = true;
                 ide.scene.captureGlobalSettings();
                 object = new Project(ide.scenes, ide.scene)
             }
             var str = this.oldSerialize(object, forBlocksLibrary);
             if(reenter){
-                myself.enter();
+                currentMicroworld().enter();
                 ide.scene.captureGlobalSettings();
             }
             return str;
@@ -335,11 +334,10 @@ MicroWorld.prototype.updateSerializeFunction = function() {
 }
 
 MicroWorld.prototype.updateGetInputFunction = function() {
-    var myself = this;
     if(!BlockDialogMorph.prototype.oldGetInput){
         BlockDialogMorph.prototype.oldGetInput = BlockDialogMorph.prototype.getInput;
         BlockDialogMorph.prototype.getInput = function() {
-            if(!currentMicroworld().isActive){
+            if(!currentMicroworld() || !currentMicroworld().isActive){
                 return this.oldGetInput();
             }
             var def = this.oldGetInput();
@@ -350,12 +348,11 @@ MicroWorld.prototype.updateGetInputFunction = function() {
 }
 
 MicroWorld.prototype.updateKeyFireFunction = function(){
-    var myself = this;
     if(!StageMorph.prototype.oldFireKeyEvent) {
         StageMorph.prototype.oldFireKeyEvent = StageMorph.prototype.fireKeyEvent;
 
         StageMorph.prototype.fireKeyEvent = function(key){
-            if(currentMicroworld().isActive && currentMicroworld().suppressedKeyEvents.indexOf(key) > -1){
+            if(currentMicroworld() && currentMicroworld().isActive && currentMicroworld().suppressedKeyEvents.indexOf(key) > -1){
                 return;
             }
             return this.oldFireKeyEvent(key);
@@ -372,8 +369,7 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
  * @param changeAfterOpen true if we want to modify the menu after it's created in the world; false if we want to modify the menu and return it
  */
 MicroWorld.prototype.changeMenu = function(prototype, functionName, menuSelector, changeAfterOpen) {
-    var myself = this,
-        oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
+    var oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
 
     if(!prototype || !prototype[functionName]) {
         return;
@@ -383,7 +379,7 @@ MicroWorld.prototype.changeMenu = function(prototype, functionName, menuSelector
         prototype[oldFunctionName] = prototype[functionName];
         prototype[functionName] = function (){
             var menu = this[oldFunctionName]();
-            if(currentMicroworld().isActive){
+            if(currentMicroworld() && currentMicroworld().isActive){
                 if(changeAfterOpen) {
                     var openMenu = currentMicroworld().ide.currentSprite.world().activeMenu || null;
                     if(openMenu){
@@ -415,14 +411,13 @@ MicroWorld.prototype.createPalette = function () {
 
 
 MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
-    var myself = this;
     if(!SpriteMorph.prototype.oldCustomBlockTemplatesForCategory) {
         SpriteMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.customBlockTemplatesForCategory;
         StageMorph.prototype.oldCustomBlockTemplatesForCategory = SpriteMorph.prototype.oldCustomBlockTemplatesForCategory;
 
         SpriteMorph.prototype.customBlockTemplatesForCategory = function(category) {
 
-            if(!myself.isActive){
+            if(!currentMicroworld() || !currentMicroworld().isActive){
                 return this.oldCustomBlockTemplatesForCategory(category);
             }
             var blocks = this.oldCustomBlockTemplatesForCategory(category)
@@ -434,7 +429,7 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
                         return true;
                     }
 
-                    return block.blockSpec && myself.blockSpecs.indexOf(block.blockSpec) > -1;
+                    return block.blockSpec && currentMicroworld().blockSpecs.indexOf(block.blockSpec) > -1;
                 })
             return blocks;
         }
@@ -444,12 +439,10 @@ MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
 }
 
 MicroWorld.prototype.updateBlockTemplatesFunction = function() {
-    var myself = this;
-
     function filterVariables(category){
         var blocks = this.oldBlockTemplates(category);
 
-        if(myself.isActive && category === 'variables' && !myself.enableVariables){
+        if(currentMicroworld() && currentMicroworld().isActive && category === 'variables' && !currentMicroworld().enableVariables){
             blocks = blocks.filter(block => {
                if(block instanceof PushButtonMorph || (block && block.selector && block.selector === 'reportGetVar')){
                    return false;
