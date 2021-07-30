@@ -3,6 +3,10 @@ var ide = world.children.find(child => {
     }),
     prefix = 'mw_';
 
+function currentMicroworld(){
+    return ide.stage.microworld;
+}
+
 function doIfMicroworld(cb){
     if(ide.stage.microworld){
         cb(ide.stage.microworld);
@@ -335,7 +339,7 @@ MicroWorld.prototype.updateGetInputFunction = function() {
     if(!BlockDialogMorph.prototype.oldGetInput){
         BlockDialogMorph.prototype.oldGetInput = BlockDialogMorph.prototype.getInput;
         BlockDialogMorph.prototype.getInput = function() {
-            if(!myself.isActive){
+            if(!currentMicroworld().isActive){
                 return this.oldGetInput();
             }
             var def = this.oldGetInput();
@@ -351,7 +355,7 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
         StageMorph.prototype.oldFireKeyEvent = StageMorph.prototype.fireKeyEvent;
 
         StageMorph.prototype.fireKeyEvent = function(key){
-            if(myself.isActive && myself.suppressedKeyEvents.indexOf(key) > -1){
+            if(currentMicroworld().isActive && currentMicroworld().suppressedKeyEvents.indexOf(key) > -1){
                 return;
             }
             return this.oldFireKeyEvent(key);
@@ -379,16 +383,16 @@ MicroWorld.prototype.changeMenu = function(prototype, functionName, menuSelector
         prototype[oldFunctionName] = prototype[functionName];
         prototype[functionName] = function (){
             var menu = this[oldFunctionName]();
-            if(myself.isActive){
+            if(currentMicroworld().isActive){
                 if(changeAfterOpen) {
-                    var openMenu = myself.ide.currentSprite.world().activeMenu || null;
+                    var openMenu = currentMicroworld().ide.currentSprite.world().activeMenu || null;
                     if(openMenu){
-                        myself.setupMenu(menuSelector, openMenu);
+                        currentMicroworld().setupMenu(menuSelector, openMenu);
                         openMenu.createItems();
                     }
                 }
                 else{
-                    return myself.setupMenu(menuSelector, menu);
+                    return currentMicroworld().setupMenu(menuSelector, menu);
                 }
             }
             return menu;
