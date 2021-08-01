@@ -29,6 +29,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-08-01
+* gui: fixed saving projects with their names
+
 ### 2021-07-29
 * gui: fixed switching scenes in presentation mode
 

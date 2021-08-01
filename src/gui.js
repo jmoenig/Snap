@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-29';
+modules.gui = '2021-Auggust-01';
 
 // Declarations
 
@@ -6932,7 +6932,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );
     this.cloud.saveProject(
-        name,
+        this.getProjectName(),
         projectBody,
         () => {
             this.recordSavedChanges();
