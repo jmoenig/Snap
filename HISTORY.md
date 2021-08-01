@@ -31,6 +31,7 @@
 
 ### 2021-08-01
 * gui: fixed saving projects with their names
+* store: fixed deserializing global settings per scene in multi-scene projects
 
 ### 2021-07-29
 * gui: fixed switching scenes in presentation mode
