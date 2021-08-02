@@ -29,6 +29,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-08-02
+* extensions: updated documentation
+
 ### 2021-08-01
 * gui: fixed saving projects with their names
 * store: fixed deserializing global settings per scene in multi-scene projects
