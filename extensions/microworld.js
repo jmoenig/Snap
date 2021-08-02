@@ -214,6 +214,7 @@ MicroWorld.prototype.init = function (ide) {
         blockContextMenu: ['help...', '0', 'rename...', 'rename all...', 'inherited', 'transient', 'hide', '0', 'header mapping...', 'code mapping...', 'relabel...', 'compile', 'uncompile', 'duplicate', 'block image', 'extract', 'delete', 'add comment', 'script pic...', 'result pic...', 'download script', '0','unringify', 'ringify', '0','senders...','receivers...',],
         paletteContextMenu: ['find blocks...', 'hide primitives', 'show primitives', 'make a category...', 'delete a category...'],
         scriptsContextMenu: ['undrop', 'redrop', '0', 'clean up', 'add comment', 'scripts pic...', '0',  'inherited', 'make a block...'],
+        stageContextMenu: ['edit', 'show all', 'pic...', '0', 'pen trails', 'svg...'],
     }
 
     this.buttons = {
@@ -277,6 +278,7 @@ MicroWorld.prototype.enter = function () {
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
     this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
+    this.changeMenu(StageMorph.prototype, 'userMenu','stageContextMenu', false);
 
     this.isLoading = false;
 
