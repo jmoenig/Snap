@@ -215,6 +215,7 @@ MicroWorld.prototype.init = function (ide) {
         paletteContextMenu: ['find blocks...', 'hide primitives', 'show primitives', 'make a category...', 'delete a category...'],
         scriptsContextMenu: ['undrop', 'redrop', '0', 'clean up', 'add comment', 'scripts pic...', '0',  'inherited', 'make a block...'],
         stageContextMenu: ['edit', 'show all', 'pic...', '0', 'pen trails', 'svg...'],
+        spriteContextMenu: ['duplicate', 'clone', '0', 'delete', 'move', 'rotate', 'pivot', 'edit', 'detatch all parts', 'export...']
     }
 
     this.buttons = {
@@ -279,6 +280,7 @@ MicroWorld.prototype.enter = function () {
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
     this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
     this.changeMenu(StageMorph.prototype, 'userMenu','stageContextMenu', false);
+    this.changeMenu(SpriteMorph.prototype, 'userMenu','spriteContextMenu', false);
 
     this.isLoading = false;
 
