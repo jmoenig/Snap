@@ -774,7 +774,6 @@ MicroWorld.prototype.showPauseButton = function () {
 MicroWorld.prototype.hideSpriteBar = function () {
     // hide tab bar and sprite properties panel
     this.ide.spriteBar.hide();
-    this.ide.spriteBar.hide();
     this.ide.spriteBar.tabBar.hide();
 };
 
