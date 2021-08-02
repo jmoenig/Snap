@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-August-2';
+modules.extensions = '2021-August-3';
 
 // Global stuff
 
@@ -82,6 +82,8 @@ var SnapExtensions = {
     function semantics
     ------------------
     - functions are called by the "primitive" blocks with any arguments provided
+    - use the "function () {}" notation to define functions, not the ES6 arrow
+      notation, otherwise "this" will not get scoped correctly
     - "this" refers to the current snap object (sprite or stage) at call-time
     - a reference to the current process is always passed as last argument
 
@@ -107,6 +109,8 @@ var SnapExtensions = {
 
     function semantics
     ------------------
+    - use the "function () {}" notation to define functions, not the ES6 arrow
+      notation, otherwise "this" will not get scoped correctly
     - "this" refers to the current input-slot at call-time (when the menu is
       requested by the user by clicking on the down-arrow symbol)
     - to get a handle on the current block use "this.parentThatIsA(BlockMorph)"

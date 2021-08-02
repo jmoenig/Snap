@@ -29,6 +29,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-08-03
+* extensions: updated documentation
+
 ### 2021-08-02
 * extensions: updated documentation
 
