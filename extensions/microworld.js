@@ -211,7 +211,8 @@ MicroWorld.prototype.init = function (ide) {
 
     this.menus = {
         projectMenu: [],
-        blockContextMenu: []
+        blockContextMenu: [],
+        paletteContextMenu: []
     }
 
     this.buttons = {
@@ -363,21 +364,21 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
 
 /**
  * Intercepts the function that creates a menu to limit the options for the MicroWorld
- * @param prototype Prototype where the function to intercept is defined
+ * @param owner Object where the function to intercept is defined
  * @param functionName The function to intercept
  * @param menuSelector The property on the MicroWorld that contains the menu selectors to show
  * @param changeAfterOpen true if we want to modify the menu after it's created in the world; false if we want to modify the menu and return it
  */
-MicroWorld.prototype.changeMenu = function(prototype, functionName, menuSelector, changeAfterOpen) {
+MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, changeAfterOpen) {
     var oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
 
-    if(!prototype || !prototype[functionName]) {
+    if(!owner || !owner[functionName]) {
         return;
     }
 
-    if(!prototype[oldFunctionName]){
-        prototype[oldFunctionName] = prototype[functionName];
-        prototype[functionName] = function (){
+    if(!owner[oldFunctionName]){
+        owner[oldFunctionName] = owner[functionName];
+        owner[functionName] = function (){
             var menu = this[oldFunctionName]();
             if(currentMicroworld() && currentMicroworld().isActive){
                 if(changeAfterOpen) {
@@ -516,6 +517,10 @@ MicroWorld.prototype.refreshLayouts = function() {
         ide.fixLayout();
         ide.flushBlocksCache('unified');
         ide.refreshPalette(true);
+
+        // since this isn't defined in the prototype, we need to run it each time the palette is refreshed
+        this.changeMenu(ide.palette, 'userMenu', 'paletteContextMenu', false);
+
     }
 }
 
@@ -635,6 +640,9 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
     var items = [];
     this.menus[menuSelector].forEach(
         function (itemLabel) {
+            if(itemLabel === 'block image'){
+                itemLabel = '[object HTMLCanvasElement]';
+            }
             var item = menu.items.find(
                 function (each) {
                     return each[0].toString() ===
