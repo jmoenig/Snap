@@ -664,6 +664,9 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
             }
         }
     );
+    if(items.length > 0 && items[items.length - 1][0] === 0){
+        items.pop();
+    }
     menu.items = items;
     return menu;
 };
