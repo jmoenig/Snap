@@ -31,6 +31,7 @@
 
 ### 2021-08-03
 * extensions: updated documentation
+* byob: record unsaved changes when applying edits to a custom block definition
 
 ### 2021-08-02
 * extensions: updated documentation
