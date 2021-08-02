@@ -212,7 +212,8 @@ MicroWorld.prototype.init = function (ide) {
     this.menus = {
         projectMenu: [],
         blockContextMenu: [],
-        paletteContextMenu: []
+        paletteContextMenu: [],
+        scriptsContextMenu: [],
     }
 
     this.buttons = {
@@ -275,6 +276,7 @@ MicroWorld.prototype.enter = function () {
     // intercept menus
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
+    this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
 
     this.isLoading = false;
 
