@@ -645,7 +645,11 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
             }
             var item = menu.items.find(
                 function (each) {
-                    return each[0].toString() ===
+                    var label = each[0];
+                    if(Array.isArray(label)){
+                        label = label.find(entry => typeof entry === "string")
+                    }
+                    return label.toString() ===
                         SnapTranslator.translate(itemLabel);
                 }
             );
