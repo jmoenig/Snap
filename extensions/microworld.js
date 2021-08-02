@@ -654,7 +654,11 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
                 }
             );
             if (item) {
-                items.push(item);
+                // don't put a divider line first or immediately after another divider line
+                if(item[0] !==0 || (item[0] === 0 && items.length > 0 && items[items.length - 1][0] !== 0)){
+                    items.push(item);
+                }
+
             }
         }
     );
