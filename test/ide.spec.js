@@ -671,6 +671,30 @@ describe('ide', function() {
                 const action = await getFirstAction;
                 expect(action.type).toBe('addBlock');
             });
+
+            it('should be able to unsubscribe from actions', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                const callback = () => assert(false, 'Received action after removing listener');
+                api.addActionListener(callback);
+                api.removeActionListener(callback);
+                await driver.addBlock('forward');
+                await driver.actionsSettled();
+            });
+
+            it('should be able to subscribe to arbitrary events', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+                const {utils} = driver.globals();
+                const deferred = utils.defer();
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                await api.addEventListener('test', deferred.resolve);
+                driver.ide().events.dispatchEvent(new CustomEvent('test', {detail: {someData: true}}));
+                const event = await deferred.promise;
+                assert.equal(event.type, 'test');
+                assert(event.detail.someData);
+            });
         });
     });
 

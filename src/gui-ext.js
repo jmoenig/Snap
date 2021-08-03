@@ -421,9 +421,27 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
             event.source.postMessage({id, type, username}, event.origin);
             break;
         }
-        case 'emit-actions':
-            SnapActions.listeners.push([event.source, event.origin]);
+        case 'add-listener':
+        {
+            const {id, eventType, listenerId} = data;
+            const {source, origin} = event;
+            const callback = event => {
+                source.postMessage({
+                    type: 'event',
+                    eventType: event.type,
+                    detail: event.detail,
+                }, origin);
+            };
+            self.events.addEventListener(eventType, listenerId, callback);
+            source.postMessage({id, type: 'reply'}, origin);
             break;
+        }
+        case 'remove-listener':
+        {
+            const {id, eventType, listenerId} = data;
+            self.events.removeEventListener(eventType, listenerId);
+            event.source.postMessage({id, type: 'reply'}, event.origin);
+        }
         }
     };
 
@@ -484,6 +502,30 @@ IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
     ].join('');
     return SnapActions.openProject(projectXml);
 };
+
+// Events ///////////////////////////////////////////
+
+class Events extends EventTarget {
+    constructor() {
+        super();
+        this._listeners = {};
+    }
+
+    _registerListener(id, callback) {
+        this._listeners[id] = callback;
+    }
+
+    addEventListener(type, id, callback) {
+        this._registerListener(id, callback);
+        return super.addEventListener(type, callback);
+    }
+
+    removeEventListener(type, id) {
+        const callback = this._listeners[id];
+        delete this._listeners[id];
+        return super.removeEventListener(type, callback);
+    }
+}
 
 // LibraryDialogSources ///////////////////////////////////////////
 

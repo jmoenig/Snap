@@ -1,11 +1,12 @@
 (function(globals) {
 
-    class EmbeddedNetsBloxAPI {
+    class EmbeddedNetsBloxAPI extends EventTarget {
         constructor(element) {
+            super();
             this.element = element;
             this._requests = {};
-            this.listeners = {};
-            this.listeners.action = [];
+            this._listeners = {};
+            this._actionListeners = [];
 
             const receiveMessage = event => {
                 const data = event.data;
@@ -17,9 +18,9 @@
                         request.resolve(data);
                         delete this._requests[id];
                     }
-                } else {
-                    const handlers = this.listeners[type];
-                    handlers.forEach(fn => fn(data.data));
+                } else if (type === 'event') {
+                    const {eventType, detail} = data;
+                    this.dispatchEvent(new CustomEvent(eventType, {detail}));
                 }
             };
 
@@ -39,10 +40,41 @@
         }
 
         async addActionListener(fn) {
-            this.listeners.action.push(fn);
-            this.call({
-                type: 'emit-actions',
+            const callback = event => fn(event.detail);
+            this._actionListeners.push([fn, callback]);
+            await this.addEventListener('action', callback);
+            return callback;
+        }
+
+        async removeActionListener(fn) {
+            const index = this._actionListeners.findIndex(pair => pair[0] === fn);
+            const callback = index > -1 ?
+                this._actionListeners.splice(index, 1).pop()[1] : null;
+            return this.removeEventListener('action', callback);
+        }
+
+        async addEventListener(type, fn) {
+            const listenerId = this.genUuid();
+            this._listeners[listenerId] = fn;
+            await this.reqReply({
+                type: 'add-listener',
+                eventType: type,
+                listenerId,
             });
+            return super.addEventListener(type, fn);
+        }
+
+        async removeEventListener(type, fn) {
+            const listenerId = Object.keys(this._listeners)
+                .find(id => this._listeners[id] === fn);
+
+            await this.reqReply({
+                type: 'remove-listener',
+                eventType: type,
+                listenerId,
+            });
+
+            return super.removeEventListener(type, fn);
         }
 
         async import(name, content) {

@@ -308,6 +308,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.color = this.backgroundColor;
     this.activeEditor = this;
     this.extensions = NetsBloxExtensions;
+    this.events = new Events();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
