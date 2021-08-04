@@ -671,7 +671,7 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
         if(items[items.length - 1][0] === 0){
             items.pop();
         }
-        if(items[0][0] === 0){
+        if(Array.isArray(items[0]) && items[0][0] === 0){
             items.shift();
         }
     }
