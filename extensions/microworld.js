@@ -85,7 +85,7 @@ SnapExtensions.primitives.set(
     prefix+'set_block_specs(specs)',
     (specs) => {
         doIfMicroworld(microworld => {
-            microworld.setBlockSpecs(specs);
+            microworld.setBlockSpecs(specs.contents);
         });
     }
 
@@ -149,8 +149,7 @@ function MicroWorld (ide) {
 }
 
 MicroWorld.prototype.setBlockSpecs = function(specs){
-    this.blockSpecs = specs.contents;
-
+    this.blockSpecs = specs;
     if(this.isActive){
         this.loadSpecs();
     }
