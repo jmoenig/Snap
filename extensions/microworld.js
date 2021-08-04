@@ -88,7 +88,18 @@ SnapExtensions.primitives.set(
             microworld.setBlockSpecs(specs.contents);
         });
     }
+)
 
+SnapExtensions.primitives.set(
+    prefix+'set_editable_blocks(specs)',
+    (specs) => {
+        if(specs.constructor === List){
+            specs = specs.contents;
+        }
+        doIfMicroworld(microworld => {
+            microworld.setEditableBlocks(specs);
+        })
+    }
 )
 
 SnapExtensions.primitives.set(
@@ -154,6 +165,10 @@ MicroWorld.prototype.setBlockSpecs = function(specs){
         this.loadSpecs();
     }
 
+}
+
+MicroWorld.prototype.setEditableBlocks = function(specs){
+    this.editableBlocks = specs;
 }
 
 MicroWorld.prototype.setEnableVariables = function(enableVariables){
@@ -225,7 +240,7 @@ MicroWorld.prototype.init = function (ide) {
     this.enableKeyboard = true;
     // this.simpleBlockDialog = false;
     this.zoom = 1;
-    this.uneditableBlocks = false;
+    this.editableBlocks = 'all';
     this.isLoading = false;
     this.isActive = false;
     this.suppressedKeyEvents = [];
@@ -274,12 +289,27 @@ MicroWorld.prototype.enter = function () {
     this.updateKeyFireFunction();
     this.updateSerializeFunction();
 
+    function addEditingBlocks(items, oldItems){
+        var editItems = ['0','delete block definition...', 'duplicate block definition...','edit...']
+            .map(label => myself.findMenuItem(oldItems, label))
+            .filter(item => !!item);
+
+        if((this.definition && this.definition.codeHeader && this.definition.codeHeader === 'microworld') || myself.editableBlocks === 'all' || (Array.isArray(myself.editableBlocks) && myself.editableBlocks.indexOf(this.blockSpec) > -1)){
+            items = items.concat(editItems);
+        }
+        
+        return items;
+    }
+
     // intercept menus
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
     this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
     this.changeMenu(StageMorph.prototype, 'userMenu','stageContextMenu', false);
     this.changeMenu(SpriteMorph.prototype, 'userMenu','spriteContextMenu', false);
+
+    this.changeMenu(CustomCommandBlockMorph.prototype, 'userMenu', 'blockContextMenu', false, addEditingBlocks)
+    this.changeMenu(CustomReporterBlockMorph.prototype, 'userMenu', 'blockContextMenu', false, addEditingBlocks)
 
     this.isLoading = false;
 
