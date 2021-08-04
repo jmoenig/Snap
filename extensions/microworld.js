@@ -374,27 +374,30 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
  * @param menuSelector The property on the MicroWorld that contains the menu selectors to show
  * @param changeAfterOpen true if we want to modify the menu after it's created in the world; false if we want to modify the menu and return it
  */
-MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, changeAfterOpen) {
+MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, changeAfterOpen, extraFunction) {
     var oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
 
     if(!owner || !owner[functionName]) {
         return;
     }
 
-    if(!owner[oldFunctionName]){
+    if(!owner.hasOwnProperty(oldFunctionName)){
         owner[oldFunctionName] = owner[functionName];
         owner[functionName] = function (){
-            var menu = this[oldFunctionName]();
+            var menu = owner[oldFunctionName].apply(this)
+            if(typeof extraFunction === 'function'){
+                extraFunction = extraFunction.bind(this);
+            }
             if(currentMicroworld() && currentMicroworld().isActive){
                 if(changeAfterOpen) {
                     var openMenu = currentMicroworld().ide.currentSprite.world().activeMenu || null;
                     if(openMenu){
-                        currentMicroworld().setupMenu(menuSelector, openMenu);
+                        currentMicroworld().setupMenu(menuSelector, openMenu, extraFunction);
                         openMenu.createItems();
                     }
                 }
                 else{
-                    return currentMicroworld().setupMenu(menuSelector, menu);
+                    return currentMicroworld().setupMenu(menuSelector, menu, extraFunction);
                 }
             }
             return menu;
@@ -639,42 +642,68 @@ MicroWorld.prototype.makeButton = function (definition) {
     );
 };
 
-MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
+MicroWorld.prototype.findMenuItem = function(items, itemLabel){
+    if(itemLabel === 'block image'){
+        itemLabel = '[object HTMLCanvasElement]';
+    }
+    var item = items.find(
+        function (each) {
+            var label = each[0];
+            if(Array.isArray(label)){
+                label = label.find(entry => typeof entry === "string")
+            }
+            return label.toString() ===
+                SnapTranslator.translate(itemLabel);
+        }
+    );
+    return item;
+}
+
+MicroWorld.prototype.setupMenu = function (menuSelector, menu, extraFunction) {
+    // extraFunction(currentMenuItems, originalMenuItems) is an optional parameter that can specify further transformations
+    // helpful for dynamically deciding if menu items should be included
+
     // Only keep the items whose label is included in the `menuSelector` array
     // can't use Array >> filter because we may also want to reorder items
     var items = [];
+    var originalItems = menu.items;
     this.menus[menuSelector].forEach(
-        function (itemLabel) {
-            if(itemLabel === 'block image'){
-                itemLabel = '[object HTMLCanvasElement]';
-            }
-            var item = menu.items.find(
-                function (each) {
-                    var label = each[0];
-                    if(Array.isArray(label)){
-                        label = label.find(entry => typeof entry === "string")
-                    }
-                    return label.toString() ===
-                        SnapTranslator.translate(itemLabel);
-                }
-            );
+         (itemLabel) => {
+            var item = this.findMenuItem(menu.items, itemLabel);
             if (item) {
-                // don't put a divider line first or immediately after another divider line
-                if(items.length === 0 || item[0] !==0 || (item[0] === 0 && items[items.length - 1][0] !== 0)){
-                    items.push(item);
-                }
+                items.push(item);
             }
         }
     );
+
+    if(typeof extraFunction === 'function'){
+        items = extraFunction(items, originalItems);
+    }
+
+
+    // remove multiple dividers in a row
+    var lastWasDivider = false;
+    items = items.filter(item => {
+        if(item[0] === 0){
+            if(lastWasDivider){
+                return false;
+            }
+            lastWasDivider = true;
+        }
+        else{
+            lastWasDivider = false;
+        }
+        return true;
+    })
+
     if(items.length > 0){
         if(items[items.length - 1][0] === 0){
             items.pop();
         }
-        if(Array.isArray(items[0]) && items[0][0] === 0){
+        if(items[0] && items[0][0] === 0){
             items.shift();
         }
     }
-
 
     menu.items = items;
     return menu;
