@@ -55,6 +55,18 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'is_active?',
+    () => {
+        var active = false;
+        doIfMicroworld(microworld => {
+            console.log(microworld);
+            active = microworld.isActive;
+        })
+        return active;
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'load',
     () => {
         if(!ide.stage.microworld){
