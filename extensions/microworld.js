@@ -59,7 +59,6 @@ SnapExtensions.primitives.set(
     () => {
         var active = false;
         doIfMicroworld(microworld => {
-            console.log(microworld);
             active = microworld.isActive;
         })
         return active;
