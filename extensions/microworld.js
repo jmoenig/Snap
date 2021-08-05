@@ -247,7 +247,7 @@ MicroWorld.prototype.init = function (ide) {
 
     this.menus = {
         projectMenu: ['notes...', '0', 'New', 'Open...', 'Save', 'Save as...', 'Restore unsaved project', 'Clear backup', '0', 'Import...', 'Export project...', 'Export blocks...', 'Unused blocks...', 'Export summary', 'Export summary with drop-shadows', 'Export all sprites as pic...', '0', 'Scenes...', 'New scene', 'Add scene...', '0', 'Libraries', 'Costumes', 'Backgrounds', 'Sounds...', 'Undelete sprites'],
-        blockContextMenu: ['help...', '0', 'rename...', 'rename all...', 'inherited', 'transient', 'hide', '0', 'header mapping...', 'code mapping...', 'relabel...', 'compile', 'uncompile', 'duplicate', 'block image', 'extract', 'delete', 'add comment', 'script pic...', 'result pic...', 'download script', '0','unringify', 'ringify', '0','senders...','receivers...',],
+        blockContextMenu: ['help...', '0', 'rename...', 'rename all...', 'inherited', 'transient', 'hide', '0', 'header mapping...', 'code mapping...', 'relabel...', 'compile', 'uncompile', 'duplicate', 'duplicate single block', 'extract', 'delete', 'add comment', 'script pic...', 'result pic...', 'download script', '0','unringify', 'ringify', '0','senders...','receivers...',],
         paletteContextMenu: ['find blocks...', 'hide primitives', 'show primitives', 'make a category...', 'delete a category...'],
         scriptsContextMenu: ['undrop', 'redrop', '0', 'clean up', 'add comment', 'scripts pic...', '0',  'inherited', 'make a block...'],
         stageContextMenu: ['edit', 'show all', 'pic...', '0', 'pen trails', 'svg...'],
@@ -769,7 +769,7 @@ MicroWorld.prototype.makeButton = function (definition) {
 };
 
 MicroWorld.prototype.findMenuItem = function(items, itemLabel){
-    if(itemLabel === 'block image'){
+    if(itemLabel === 'duplicate single block'){
         itemLabel = '[object HTMLCanvasElement]';
     }
     var item = items.find(
