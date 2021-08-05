@@ -289,15 +289,15 @@ MicroWorld.prototype.enter = function () {
     this.updateKeyFireFunction();
     this.updateSerializeFunction();
 
-    function addEditingBlocks(items, oldItems){
+    function addEditingBlocks(items, oldItems, block){
         var editItems = ['0','delete block definition...', 'duplicate block definition...','edit...']
             .map(label => myself.findMenuItem(oldItems, label))
             .filter(item => !!item);
 
-        if((this.definition && this.definition.codeHeader && this.definition.codeHeader === 'microworld') || myself.editableBlocks === 'all' || (Array.isArray(myself.editableBlocks) && myself.editableBlocks.indexOf(this.blockSpec) > -1)){
+        if((block.definition && block.definition.codeHeader && block.definition.codeHeader === 'microworld') || myself.editableBlocks === 'all' || (Array.isArray(myself.editableBlocks) && myself.editableBlocks.indexOf(block.blockSpec) > -1)){
             items = items.concat(editItems);
         }
-        
+
         return items;
     }
 
@@ -414,23 +414,29 @@ MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, ch
     if(!owner.hasOwnProperty(oldFunctionName)){
         owner[oldFunctionName] = owner[functionName];
         owner[functionName] = function (){
-            var menu = owner[oldFunctionName].apply(this)
-            if(typeof extraFunction === 'function'){
-                extraFunction = extraFunction.bind(this);
-            }
+            // var myself = this;
+            var returnMenu = owner[oldFunctionName].apply(this),
+                menu = returnMenu;
+
             if(currentMicroworld() && currentMicroworld().isActive){
+
+                if(changeAfterOpen){
+                    menu = currentMicroworld().ide.currentSprite.world().activeMenu || null
+                }
+
+                var originalItems = menu.items;
+
+                currentMicroworld().setupMenu(menuSelector, menu);
+                currentMicroworld().transformMenu(menu, originalItems, extraFunction, this);
+                currentMicroworld().cleanMenu(menu);
+
                 if(changeAfterOpen) {
-                    var openMenu = currentMicroworld().ide.currentSprite.world().activeMenu || null;
-                    if(openMenu){
-                        currentMicroworld().setupMenu(menuSelector, openMenu, extraFunction);
-                        openMenu.createItems();
+                    if(menu){
+                        menu.createItems();
                     }
                 }
-                else{
-                    return currentMicroworld().setupMenu(menuSelector, menu, extraFunction);
-                }
             }
-            return menu;
+            return returnMenu;
         }
     }
 }
@@ -689,14 +695,14 @@ MicroWorld.prototype.findMenuItem = function(items, itemLabel){
     return item;
 }
 
-MicroWorld.prototype.setupMenu = function (menuSelector, menu, extraFunction) {
+MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
     // extraFunction(currentMenuItems, originalMenuItems) is an optional parameter that can specify further transformations
     // helpful for dynamically deciding if menu items should be included
 
     // Only keep the items whose label is included in the `menuSelector` array
     // can't use Array >> filter because we may also want to reorder items
     var items = [];
-    var originalItems = menu.items;
+
     this.menus[menuSelector].forEach(
          (itemLabel) => {
             var item = this.findMenuItem(menu.items, itemLabel);
@@ -706,14 +712,23 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu, extraFunction) {
         }
     );
 
+    menu.items = items;
+
+    return menu;
+};
+
+MicroWorld.prototype.transformMenu = function (menu, originalItems, extraFunction, caller){
+
     if(typeof extraFunction === 'function'){
-        items = extraFunction(items, originalItems);
+        menu.items = extraFunction(menu.items, originalItems, caller);
     }
+    return menu;
+}
 
-
+MicroWorld.prototype.cleanMenu = function(menu){
     // remove multiple dividers in a row
-    var lastWasDivider = false;
-    items = items.filter(item => {
+    var lastWasDivider = false,
+    items = menu.items.filter(item => {
         if(item[0] === 0){
             if(lastWasDivider){
                 return false;
@@ -724,7 +739,7 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu, extraFunction) {
             lastWasDivider = false;
         }
         return true;
-    })
+    });
 
     if(items.length > 0){
         if(items[items.length - 1][0] === 0){
@@ -736,8 +751,10 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu, extraFunction) {
     }
 
     menu.items = items;
+
     return menu;
-};
+}
+
 
 MicroWorld.prototype.hideAllMorphs = function () {
     var myself = this;
