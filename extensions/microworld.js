@@ -493,6 +493,7 @@ MicroWorld.prototype.addBeButtonFunction = function (){
  * @param functionName The function to intercept
  * @param menuSelector The property on the MicroWorld that contains the menu selectors to show
  * @param changeAfterOpen true if we want to modify the menu after it's created in the world; false if we want to modify the menu and return it
+ * @param extraFunction Additional transformation to apply on the menu after it has been populated by the specified selectors
  */
 MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, changeAfterOpen, extraFunction) {
     var oldFunctionName = 'mwOld' + functionName[0].toUpperCase() + functionName.slice(1);
@@ -504,7 +505,6 @@ MicroWorld.prototype.changeMenu = function(owner, functionName, menuSelector, ch
     if(!owner.hasOwnProperty(oldFunctionName)){
         owner[oldFunctionName] = owner[functionName];
         owner[functionName] = function (){
-            // var myself = this;
             var returnMenu = owner[oldFunctionName].apply(this),
                 menu = returnMenu;
 
@@ -542,7 +542,7 @@ MicroWorld.prototype.createPalette = function () {
     ide.setUnifiedPalette(true);
 
     this.loadSpecs();
-};
+}
 
 
 MicroWorld.prototype.updateCustomBlockTemplateFunction = function(){
