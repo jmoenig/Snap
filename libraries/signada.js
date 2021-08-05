@@ -28,11 +28,13 @@ SnapExtensions.primitives.set(
             );
         }
         var socket = new WebSocket('ws://' + ip + ':81'),
-            stage = this.parentThatIsA(StageMorph);
+            stage = this.parentThatIsA(StageMorph),
+            cache;
         stage.signada = {};
         stage.signada.ip = ip;
         stage.signada.socket = socket;
         stage.signada.responses = {};
+        stage.signada.responseCache = {};
         stage.signada.lastID = 0;
         stage.signada.eventListener = function(event) {
             response = JSON.parse(event.data);
@@ -40,6 +42,15 @@ SnapExtensions.primitives.set(
                 response[1] = new List(response[1]);
             }
             stage.signada.responses[response[0]] = response[1];
+
+            // Cache the response for when hat blocks
+            cache = Object.values(stage.signada.responseCache).find(
+                each => each.requestID === response[0]
+            );
+            if (cache) {
+                cache.value = response[1];
+                cache.updating = false;
+            }
         };
 
         socket.addEventListener('message', stage.signada.eventListener);
@@ -69,9 +80,16 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'sgd_call(blockname, params)',
-    function (blockname, params, proc) {
-        var signada = this.parentThatIsA(StageMorph).signada;
+    'sgd_call(blockname, params, defaultresponse)',
+    function (blockname, params, defaultresponse, proc) {
+        var signada = this.parentThatIsA(StageMorph).signada,
+            hatBlock = proc.topBlock.parentThatIsA(HatBlockMorph),
+            needsCaching = !isNil(hatBlock) &&
+                (hatBlock.selector === 'receiveCondition'),
+            updatingCache = (signada.responseCache[blockname]?.updating),
+            defaultresponse =
+                (defaultresponse === undefined) ? 0 : defaultresponse;
+
         if (!SnapExtensions.primitives.get('sgd_connected()').call(this)) {
             throw new Error(
                 'You are not connected to any device.\n' +
@@ -79,25 +97,51 @@ SnapExtensions.primitives.set(
                 'try again.'
             );
         }
+
         if (!proc.requestID) {
-            proc.startTime = new Date();
-            var signada = this.parentThatIsA(StageMorph).signada;
-            signada.socket.send(
-                JSON.stringify([signada.lastID, blockname, params.contents])
-            );
-            proc.requestID = signada.lastID;
-            // Last ID wraps at 1.000.000 to make sure it doesn't grow too much
-            // and it doesn't wrap too early, colliding with other requests.
-            signada.lastID = (signada.lastID + 1) % 1000000;
+            if (!needsCaching || !updatingCache) {
+                proc.startTime = new Date();
+                proc.requestID = signada.lastID;
+
+                // Cache responses for reporters inside when hat blocks
+                if (signada.responseCache[blockname]) {
+                    // Let's mark the cached response as updating so we don't
+                    // request it again until we get a response from the device
+                    signada.responseCache[blockname].updating = true;
+                    signada.responseCache[blockname].requestID = proc.requestID;
+                } else {
+                    // Never sent a similar request before. Let's give it a
+                    // default value.
+                    signada.responseCache[blockname] = {
+                        requestID: proc.requestID,
+                        updating: true,
+                        value: defaultresponse
+                    };
+                }
+
+                signada.socket.send(
+                    JSON.stringify([signada.lastID, blockname, params.contents])
+                );
+
+                // Last ID wraps at 1.000.000 to make sure it doesn't grow too
+                // much and doesn't wrap too early
+                signada.lastID = (signada.lastID + 1) % 1000000;
+            }
         } else {
             if (signada.responses[proc.requestID] !== undefined) {
                 return signada.responses[proc.requestID];
             } else if ((new Date() - proc.startTime) > 1000) {
-                // Timeout after 1 second
-                return;
-            } else {
+                // Timeout after 1 second. Return last cached value
+                return signada.responseCache[blockname].value;
             }
         }
+
+        if (needsCaching) {
+            // This reporter needs caching. Let's return the last value for this
+            // particular block name.
+            return signada.responseCache[blockname].value;
+        }
+
         proc.pushContext('doYield');
         proc.pushContext();
     }
