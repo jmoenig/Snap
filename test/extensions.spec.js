@@ -46,15 +46,35 @@ describe('extensions', function() {
                 'test block',
                 [],
                 () => 'This is a test.'
-            ),
+            ).for(SpriteMorph, StageMorph),
             new Extension.Block(
                 'spriteBlock',
                 'reporter',
                 'TEST!',
-                'sprite-only block',
+                'sprite-only block: %testPart',
                 [],
                 () => 'This is another test.'
-            )
+            ).for(SpriteMorph)
+        ];
+
+        const {InputSlotMorph} = driver.globals();
+        TestExtension.prototype.getLabelParts = () => [
+            new Extension.LabelPart(
+                'testPart',
+                () => {
+                    const part = new InputSlotMorph(
+                        null, // text
+                        false, // non-numeric
+                        {
+                            'this is a test': ['this is a test'],
+                            'yet another value': ['yet another value']
+                        },
+                        true
+                    );
+                    part.setContents(['this is a test']);
+                    return part;
+                }
+            ),
         ];
 
         NetsBloxExtensions.register(TestExtension);
@@ -139,6 +159,15 @@ describe('extensions', function() {
             driver.selectCategory('TEST!');
             const block = driver.palette().contents.children.find(child => child.selector === 'spriteBlock');
             assert(block);
+        });
+
+        it('should add label part', function() {
+            const {name} = driver.ide().sprites.at(1);
+            driver.selectSprite(name);
+            driver.selectCategory('TEST!');
+            const block = driver.palette().contents.children.find(child => child.selector === 'spriteBlock');
+            const [inputSlot] = block.inputs();
+            assert.equal(inputSlot.evaluate(), 'this is a test');
         });
 
         it('should hide sprite block on stage', function() {

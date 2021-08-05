@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil, CLEAR,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph, utils,
-SnapActions, SnapUndo*/
+SnapActions, SnapUndo, NetsBloxExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -1908,6 +1908,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setContents(['motion']);
             break;
         default:
+            part = NetsBloxExtensions.getLabelPart(spec);
             nop();
         }
     } else if (spec[0] === '$' &&

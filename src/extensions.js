@@ -78,6 +78,13 @@
             return this.registry.find(ext => ext.name === name);
         }
 
+        getLabelPart(spec) {
+            const part = this.registry.flatMap(ext => ext.getLabelParts()).find(part => part.spec = spec);
+            if (part) {
+                return part.factory(spec);
+            }
+        }
+
         registerCategory(category) {
             const {name, color} = category;
             // TODO: refactor this so we can unregister extensions
@@ -158,6 +165,20 @@
         return [];
     };
 
+    Extension.prototype.getLabelParts = function() {
+        return [];
+    };
+
+    class LabelPart {
+        constructor(spec, fn) {
+            if (spec[0] !== '%') {
+                spec = '%' + spec;
+            }
+            this.spec = spec;
+            this.factory = fn;
+        }
+    }
+
     class PaletteCategory {
         constructor(category, contents, targetObject) {
             this.category = category;
@@ -213,6 +234,7 @@
     Extension.Palette.BigSpace = {name: '=', type: 'space'};
     Extension.Block = CustomBlock;
     Extension.Category = Category;
+    Extension.LabelPart = LabelPart;
 
     globals.Extension = Extension;
     globals.ExtensionRegistry = ExtensionRegistry;
