@@ -103,6 +103,18 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'set_button_blocks(specs)',
+    (specs) => {
+        if(specs.constructor === List){
+            specs = specs.contents;
+        }
+        doIfMicroworld(microworld => {
+            microworld.setButtonBlocks(specs);
+        })
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'set_hidden_morphs(morphs)',
     morphs => {
         doIfMicroworld(microworld => {
@@ -171,6 +183,14 @@ MicroWorld.prototype.setEditableBlocks = function(specs){
     this.editableBlocks = specs;
 }
 
+MicroWorld.prototype.setButtonBlocks = function(specs){
+    this.buttonBlocks = specs;
+    if(this.isActive){
+        this.blocksToButtons(true);
+        this.blocksToButtons();
+    }
+}
+
 MicroWorld.prototype.setEnableVariables = function(enableVariables){
     this.enableVariables = enableVariables;
     if(this.isActive){
@@ -232,6 +252,8 @@ MicroWorld.prototype.init = function (ide) {
         spriteContextMenu: ['duplicate', 'clone', '0', 'delete', 'move', 'rotate', 'pivot', 'edit', 'detatch all parts', 'export...']
     }
 
+    this.buttonBlocks = [];
+
     this.buttons = {
         'scripts': [],
         'palette': [],
@@ -289,6 +311,10 @@ MicroWorld.prototype.enter = function () {
     this.updateKeyFireFunction();
     this.updateSerializeFunction();
 
+    this.addBeButtonFunction();
+
+
+
     function addEditingBlocks(items, oldItems, block){
         var editItems = ['0','delete block definition...', 'duplicate block definition...','edit...']
             .map(label => myself.findMenuItem(oldItems, label))
@@ -310,6 +336,8 @@ MicroWorld.prototype.enter = function () {
 
     this.changeMenu(CustomCommandBlockMorph.prototype, 'userMenu', 'blockContextMenu', false, addEditingBlocks)
     this.changeMenu(CustomReporterBlockMorph.prototype, 'userMenu', 'blockContextMenu', false, addEditingBlocks)
+
+    this.blocksToButtons();
 
     this.isLoading = false;
 
@@ -339,6 +367,8 @@ MicroWorld.prototype.escape = function () {
 
     ide.savingPreferences = true;
 
+    this.blocksToButtons(true);
+
     this.restorePalette();
 
     this.isActive = false;
@@ -346,6 +376,34 @@ MicroWorld.prototype.escape = function () {
 
     this.refreshLayouts();
 };
+
+MicroWorld.prototype.blocksToButtons = function(undo) {
+    var ide = this.ide,
+        sprites;
+
+    if(this.hiddenMorphs.includes('spriteCorral')){
+        sprites = [ide.currentSprite];
+    }
+    else{
+        sprites = Array.from(ide.sprites.contents)
+        sprites.push(ide.stage);
+    }
+
+    sprites.forEach(sprite => {
+        if(sprite.scripts && sprite.scripts.children){
+            sprite.scripts.children.forEach(block => {
+                if(block instanceof CustomCommandBlockMorph){
+                    if(undo){
+                        block.beButton(false);
+                    }
+                    else if(this.buttonBlocks.includes(block.blockSpec)){
+                        block.beButton();
+                    }
+                }
+            })
+        }
+    })
+}
 
 MicroWorld.prototype.updateSerializeFunction = function() {
     var ide = this.ide;
@@ -395,6 +453,36 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
         }
 
     }
+}
+
+MicroWorld.prototype.addBeButtonFunction = function (){
+    if(!CustomCommandBlockMorph.prototype.beButton){}
+    CustomCommandBlockMorph.prototype.beButton = function (button = true) {
+        if(button){
+            this.buttonBackup = {
+                dent: this.dent,
+                corner: this.corner,
+                inset: this.inset,
+                isDraggable: this.isDraggable,
+                attachTargets: this.attachTargets,
+                userMenu: this.userMenu
+            }
+            this.dent = -1;
+            this.corner = 1;
+            this.inset = 0;
+            this.isDraggable = false;
+            this.attachTargets = function () { return []; };
+            this.userMenu = () => new MenuMorph();
+        }
+        else if(this.buttonBackup){
+            this.dent = this.buttonBackup.dent;
+            this.corner = this.buttonBackup.corner;
+            this.inset = this.buttonBackup.inset;
+            this.isDraggable = this.buttonBackup.isDraggable;
+            this.attachTargets = this.buttonBackup.attachTargets;
+            this.userMenu = this.buttonBackup.userMenu;
+        }
+    };
 }
 
 /**
