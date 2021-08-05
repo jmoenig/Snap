@@ -59,25 +59,27 @@ SnapExtensions.primitives.set(
     () => {
         if(!ide.stage.microworld){
             ide.stage.microworld = new MicroWorld(ide);
-        }
-        var microworld = ide.stage.microworld;
 
-        // add the enter/escape options to the Snap! logo
-        ide.logo.userMenu = function () {
-            var menu = new MenuMorph(ide);
-            if (ide.stage.microworld && ide.stage.microworld.isActive) {
-                menu.addItem(
-                    'Escape microworld',
-                    function () { ide.stage.microworld.escape(); }
-                );
-            } else if (ide.stage.microworld) {
-                menu.addItem(
-                    'Enter microworld',
-                    function () { ide.stage.microworld.enter(); }
-                );
-            }
-            return menu;
-        };
+            // add the enter/escape options to the Snap! logo
+            ide.logo.userMenu = function () {
+                var menu = new MenuMorph(ide);
+                if (ide.stage.microworld && ide.stage.microworld.isActive) {
+                    menu.addItem(
+                        'Escape microworld',
+                        function () { ide.stage.microworld.escape(); }
+                    );
+                } else if (ide.stage.microworld) {
+                    menu.addItem(
+                        'Enter microworld',
+                        function () { ide.stage.microworld.enter(); }
+                    );
+                }
+                return menu;
+            };
+
+        }
+
+
     }
 )
 
