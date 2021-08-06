@@ -659,9 +659,10 @@ MicroWorld.prototype.refreshLayouts = function() {
     var ide = this.ide;
 
     if(!this.isLoading){
-        ide.fixLayout();
+
         ide.flushBlocksCache('unified');
         ide.refreshPalette(true);
+        ide.fixLayout();
 
         // since this isn't defined in the prototype, we need to run it each time the palette is refreshed
         this.changeMenu(ide.palette, 'userMenu', 'paletteContextMenu', false);
@@ -979,14 +980,32 @@ MicroWorld.prototype.showPauseButton = function () {
 };
 
 MicroWorld.prototype.hideSpriteBar = function () {
-    // hide tab bar and sprite properties panel
-    this.ide.spriteBar.hide();
-    this.ide.spriteBar.tabBar.hide();
+    var ide = this.ide;
+
+    ide.spriteBar.hide();
+    ide.spriteBar.tabBar.hide();
+
+    if(!IDE_Morph.prototype.oldFixLayout){
+        IDE_Morph.prototype.oldFixLayout = IDE_Morph.prototype.fixLayout;
+    }
+
+    IDE_Morph.prototype.fixLayout = function (situation){
+        this.oldFixLayout(situation);
+        var spriteEditor = ide.spriteEditor;
+        spriteEditor.setTop(spriteEditor.top() - ide.spriteBar.height());
+        spriteEditor.setHeight(spriteEditor.height() + ide.spriteBar.height());
+    }
+
 };
 
 MicroWorld.prototype.showSpriteBar = function () {
     this.ide.spriteBar.show();
     this.ide.spriteBar.tabBar.show();
+
+    if(IDE_Morph.prototype.oldFixLayout){
+        IDE_Morph.prototype.fixLayout = IDE_Morph.prototype.oldFixLayout;
+    }
+
 };
 
 MicroWorld.prototype.hideSpriteCorral = function () {
