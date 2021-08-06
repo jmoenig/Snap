@@ -146,20 +146,6 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'set_zoom(zoom)',
-    (zoom) => {
-        zoom = parseFloat(zoom);
-        doIfMicroworld(microworld => {
-            if(microworld.zoom === zoom){
-                return;
-            }
-            microworld.zoom = zoom;
-            microworld.setZoom(zoom);
-        })
-    }
-)
-
-SnapExtensions.primitives.set(
     prefix+'set_enable_keyboard(enable)',
     enableKeyboard => {
         doIfMicroworld(microworld => {
@@ -234,13 +220,6 @@ MicroWorld.prototype.setMenuItems = function(menu, items){
     this.menus[menu] = (items).split(",").map(item => item.trim());
 }
 
-MicroWorld.prototype.setZoom = function(zoom){
-    if(this.isActive){
-        this.setBlocksScale(zoom);
-        this.refreshLayouts();
-    }
-}
-
 
 MicroWorld.prototype.setKeyboard = function(keyboard){
     ScriptsMorph.prototype.enableKeyboard = keyboard;
@@ -274,7 +253,6 @@ MicroWorld.prototype.init = function (ide) {
     };
     this.enableKeyboard = true;
     // this.simpleBlockDialog = false;
-    this.zoom = 1;
     this.editableBlocks = 'all';
     this.isLoading = false;
     this.isActive = false;
@@ -299,10 +277,6 @@ MicroWorld.prototype.enter = function () {
     ide.savingPreferences = false;
 
     this.setKeyboard(this.enableKeyboard);
-
-    if(this.zoom !== (parseFloat(ide.getSetting('zoom')) || 1)){
-        this.setZoom(this.zoom);
-    }
 
     // if (this.simpleBlockDialog) {
     //     // Never launch in expanded form
@@ -368,8 +342,6 @@ MicroWorld.prototype.escape = function () {
     this.isLoading = true;
 
     this.setKeyboard(!(ide.getSetting('keyboard') === false));
-
-    this.setZoom(ide.getSetting('zoom') || 1);
 
     if (ide.corralButtonsFrame) {
         ide.corralButtonsFrame.destroy();
@@ -670,31 +642,6 @@ MicroWorld.prototype.refreshLayouts = function() {
     }
 }
 
-MicroWorld.prototype.setBlocksScale = function (zoom) {
-    // !!! EXPERIMENTAL !!! sets blocks scale without reloading the project
-    SyntaxElementMorph.prototype.oldScale = SyntaxElementMorph.prototype.scale;
-    SyntaxElementMorph.prototype.setScale(zoom);
-    CommentMorph.prototype.refreshScale();
-    this.ide.sprites.asArray().concat([ this.ide.stage ]).forEach(
-        function (each) {
-            each.blocksCache = {};
-            each.paletteCache = {}
-            each.scripts.forAllChildren(function (child) {
-                if (child.setScale) {
-                    child.setScale(zoom);
-                    child.changed();
-                    child.fixLayout();
-                } else if (child.fontSize) {
-                    child.fontSize = 10 * zoom;
-                    child.changed();
-                } else if (child instanceof SymbolMorph) {
-                    child.size = zoom * 12;
-                    child.changed();
-                }
-            });
-        }
-    );
-};
 
 MicroWorld.prototype.makeButtons = function () {
     var ide = this.ide,
