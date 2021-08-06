@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-July-20';
+modules.extensions = '2021-August-6';
 
 // Global stuff
 
@@ -82,6 +82,8 @@ var SnapExtensions = {
     function semantics
     ------------------
     - functions are called by the "primitive" blocks with any arguments provided
+    - use the "function () {}" notation to define functions, not the ES6 arrow
+      notation, otherwise "this" will not get scoped correctly
     - "this" refers to the current snap object (sprite or stage) at call-time
     - a reference to the current process is always passed as last argument
 
@@ -107,8 +109,11 @@ var SnapExtensions = {
 
     function semantics
     ------------------
-    - "this" refers to the current input-slot at call-time
-    - to get a handle on the current block use "this.parentThatIsA(BlockMorph")
+    - use the "function () {}" notation to define functions, not the ES6 arrow
+      notation, otherwise "this" will not get scoped correctly
+    - "this" refers to the current input-slot at call-time (when the menu is
+      requested by the user by clicking on the down-arrow symbol)
+    - to get a handle on the current block use "this.parentThatIsA(BlockMorph)"
     - likewise to get a handle on the current sprite use
       "this.parentThatIsA(IDE_Morph).currentSprite"
     - if you want the menu of one input slot to depend on the contents of
@@ -122,11 +127,38 @@ var SnapExtensions = {
     ============================
     You can provide extensions for your custom hardware or for arbitrary APIs
     or extend Snap! with JavaScript libraries from other parties. You can
-    load additional JavaScript files using the "src_load(url)" extension
-    primitive inside Snap, which you can find using Snap's search bar in the
-    IDE. The loading primitive will wait until the source file has fully loaded
-    and its defined functions are ready to be called.
+    load additional JavaScript files using the
     
+        src_load(url)
+    
+    extension primitive inside Snap, which you can find using Snap's search bar
+    in the IDE. The loading primitive will wait until the source file has fully
+    loaded and its defined functions are ready to be called.
+    Snap remembers the external extensions that have been already loaded and
+    will ignore any subsequent calls to load the same external extension again.
+    This lets you lazily initialize your extension by simply adding a
+    "src_load(url)" command for your external JS file before calling any of its
+    added functions.
+    
+
+    4. Miscellaneous
+    ================
+
+    calling extension primitives in other JavaScript functions
+    ----------------------------------------------------------
+    you can call other extension primitives from your own JavaScript functions,
+    especially if you want to reuse them in your own extensions. Just make sure
+    to use apply() instead of calling them directly, so "this" gets scoped
+    correctly, e.g.:
+
+        SnapExtensions.primitives.get('var_declare(scope, name)').apply(
+            this,
+            ['global', '_my var', proc]
+        );
+
+    Don't forget to pass in a reference to the current process as last parameter
+    in case the callee requires it.
+
     adding primitives to SnapExtensions
     -----------------------------------
     It is the suggested best practice to expose your own extension primitives
@@ -139,16 +171,24 @@ var SnapExtensions = {
     Running the "src_load(url)" primitive will throw an error unless you first
     check the "Enable JavaScript extensions" setting in Snap's preferences menu,
     or if your JavaScript extension comes from a list of trusted hosts.
-    While you develop your JavaScript extension it's recommended to turn the
-    "Enable JavaScript extensions" setting on to load the extension once, and
+    While you develop your JavaScript extension it's recommended to turn on the
+    "Enable JavaScript extensions" setting to load the extension once, and
     then to turn it off again, so you can make sure your custom blocks are not
     using any "JS Function" blocks (because those will be caught if the
     preference is turned off).
     When you're ready to publish your extension you can contact us to allow-list
     the url hosting your JS file, or you can send me a Github pull-request to
     include it in the main Snap branch.
-    
-    Whatever you do, please use these extension capabilities sensibly.
+    We recommend submitting your extensions to the main Snap! Github repository
+    so they can be made available in the offline versions (source download
+    and PWA).
+    External extensions are a powerful tools to change, override and generally
+    mold Snap into anything you want, so please use these capabilities sensibly.
+    We look forward to your innovations and don't plan to restrict the scope of
+    what extensions are allowed to modify. For security reasons we do ask you to
+    refrain from exposing any form of JS eval(), including "new Function()" to
+    end users (if you want to use eval() internally in your extension we'll
+    frown on you but not reject your contribution).
 */
 
 // Primitives

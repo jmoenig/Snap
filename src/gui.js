@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-29';
+modules.gui = '2021-Auggust-06';
 
 // Declarations
 
@@ -380,6 +380,11 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.noExitWarning) {
             window.onbeforeunload = nop;
+        }
+        if (dict.blocksZoom) {
+            myself.savingPreferences = false;
+            myself.setBlocksScale(Math.max(1,Math.min(dict.blocksZoom, 12)));
+            myself.savingPreferences = true;
         }
 
         // only force my world to get focus if I'm not in embed mode
@@ -6932,7 +6937,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );
     this.cloud.saveProject(
-        name,
+        this.getProjectName(),
         projectBody,
         () => {
             this.recordSavedChanges();
