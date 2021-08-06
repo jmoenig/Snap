@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-August-3';
+modules.extensions = '2021-August-6';
 
 // Global stuff
 
@@ -140,7 +140,25 @@ var SnapExtensions = {
     "src_load(url)" command for your external JS file before calling any of its
     added functions.
     
-    
+
+    4. Miscellaneous
+    ================
+
+    calling extension primitives in other JavaScript functions
+    ----------------------------------------------------------
+    you can call other extension primitives from your own JavaScript functions,
+    especially if you want to reuse them in your own extensions. Just make sure
+    to use apply() instead of calling them directly, so "this" gets scoped
+    correctly, e.g.:
+
+        SnapExtensions.primitives.get('var_declare(scope, name)').apply(
+            this,
+            ['global', '_my var', proc]
+        );
+
+    Don't forget to pass in a reference to the current process as last parameter
+    in case the callee requires it.
+
     adding primitives to SnapExtensions
     -----------------------------------
     It is the suggested best practice to expose your own extension primitives

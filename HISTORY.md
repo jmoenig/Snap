@@ -32,6 +32,7 @@
 
 ### 2021-08-06
 * gui: new "blocksZoom=n" url parameter, thanks, Bernat!
+* extensions: added to the documentation
 
 ### 2021-08-03
 * extensions: updated documentation
