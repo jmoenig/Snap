@@ -97,8 +97,14 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_block_specs(specs)',
     (specs) => {
+        if(specs.constructor === List){
+            specs = specs.contents;
+        }
+        else {
+            throw new Error("Expecting List of block specs");
+        }
         doIfMicroworld(microworld => {
-            microworld.setBlockSpecs(specs.contents);
+            microworld.setBlockSpecs(specs);
         });
     }
 )
@@ -120,6 +126,9 @@ SnapExtensions.primitives.set(
     (specs) => {
         if(specs.constructor === List){
             specs = specs.contents;
+        }
+        else {
+            throw new Error("Expecting List of block specs");
         }
         doIfMicroworld(microworld => {
             microworld.setButtonBlocks(specs);
