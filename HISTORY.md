@@ -9,6 +9,7 @@
     * hide custom helper blocks in palette
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
+    * new "blocksZoom=n" url parameter, thanks, Bernat!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -28,6 +29,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-08-06
+* gui: new "blocksZoom=n" url parameter, thanks, Bernat!
 
 ### 2021-08-03
 * extensions: updated documentation
