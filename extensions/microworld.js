@@ -300,8 +300,6 @@ MicroWorld.prototype.enter = function () {
 
     this.addBeButtonFunction();
 
-
-
     function addEditingBlocks(items, oldItems, block){
         var editItems = ['0','delete block definition...', 'duplicate block definition...','edit...']
             .map(label => myself.findMenuItem(oldItems, label))
@@ -844,8 +842,7 @@ MicroWorld.prototype.showMorph = function (morphSelector) {
 };
 
 MicroWorld.prototype.hideCategoryList = function () {
-    var ide = this.ide,
-        sprite = this.sprite;
+    var ide = this.ide
 
     // hide categories
     ide.categories.hide();
