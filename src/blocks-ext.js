@@ -1,7 +1,11 @@
-/* global nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
+/* globals utils, nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
    ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, localize, SnapCloud, contains,
    world, Services, BLACK, SERVER_URL*/
 // Extensions to the Snap blocks
+
+function getInputTypeMeta() {
+    return utils.getUrlSyncCached(`${SERVER_URL}/services/input-types`, x => JSON.parse(x));
+}
 
 function sortDict(dict) {
     var keys = Object.keys(dict).sort(),
@@ -175,11 +179,13 @@ function StructInputSlotMorph(
     isNumeric,
     choiceDict,
     fieldValues,
-    isReadOnly
+    isReadOnly,
+    fieldMeta,
 ) {
     this.fields = [];
     this.fieldContent = [];
     this.getFieldNames = typeof fieldValues === 'string' ? this[fieldValues] : fieldValues || nop;
+    this.getFieldMeta = fieldMeta || nop;
 
     InputSlotMorph.call(this, value, isNumeric, choiceDict, isReadOnly);
     this.isStatic = true;
@@ -220,6 +226,7 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
             this.parent.removeChild(this.fieldContent[i]);
         }
         this.fields = this.getFieldNames(name);
+        this.fieldsMeta = this.getFieldMeta(name) || [];
         if (!this.fields) {
             this.fields = values.map(function(){ return '???'; });
         }
@@ -236,7 +243,8 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
         this.fieldContent = [];
         for (i = 0; i < this.fields.length; i++) {
             index = myIndex + i + 1;
-            content = this.getFieldValue(this.fields[i], values[i]);
+            const meta = i < this.fieldsMeta.length ? this.fieldsMeta[i] : undefined;
+            content = this.getFieldValue(this.fields[i], values[i], meta);
 
             this.parent.children.splice(index, 0, content);
             content.parent = this.parent;
@@ -257,11 +265,25 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
     }
 };
 
-StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value) {
+StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta) {
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
-        var result = new HintInputSlotMorph(value || '', fieldname);
-        return result;
+        const typeMeta = getInputTypeMeta();
+
+        // follow the base type chain to see if we can make a strongly typed slot
+        for (let type = (meta || {}).type; type; type = (typeMeta[type.name] || {}).baseType) {
+            if (type.name === 'Number') {
+                return new HintInputSlotMorph(value || '', fieldname, true, undefined, false);
+            }
+            if (type.name === 'Enum') {
+                const choiceDict = {};
+                for (const v of type.params) choiceDict[v] = v;
+                return new HintInputSlotMorph(value || '', fieldname, false, choiceDict, true);
+            }
+        }
+
+        // otherwise default to a generic slot that allows anything
+        return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
     }
 
     return value;  // The input slot is occupied by another block
@@ -318,30 +340,27 @@ RPCInputSlotMorph.prototype.constructor = RPCInputSlotMorph;
 RPCInputSlotMorph.uber = StructInputSlotMorph.prototype;
 
 function RPCInputSlotMorph() {
-    StructInputSlotMorph.call(
-        this,
-        null,
-        false,
-        'methodSignature',
-        function(rpcName) {
-            if (!this.fieldsFor || !this.fieldsFor[rpcName]) {
-                this.methodSignature();
-                var isSupported = !!this.fieldsFor;
-                if (!isSupported) {
-                    this.fieldsFor = {};
-                    var msg = 'Service "' + this.getServiceName() + '" is not available';
-                    world.children[0].showMessage && world.children[0].showMessage(msg);
-                }
+    const getFields = rpcName => {
+        if (!this.fieldsFor || !this.fieldsFor[rpcName]) {
+            this.methodSignature();
+            var isSupported = !!this.fieldsFor;
+            if (!isSupported) {
+                this.fieldsFor = {};
+                var msg = 'Service "' + this.getServiceName() + '" is not available';
+                if (world.children[0].showMessage) world.children[0].showMessage(msg);
             }
+        }
 
-            if (this.fieldsFor[rpcName]) {
-                return this.fieldsFor[rpcName].args.map(function(arg) {
-                    return arg.name;
-                });
-            }
-        },
-        true
-    );
+        if (this.fieldsFor[rpcName]) {
+            return this.fieldsFor[rpcName].args;
+        }
+    };
+    const getFieldNames = rpcName => {
+        const fields = getFields(rpcName);
+        if (fields) return fields.map(arg => arg.name);
+    };
+
+    StructInputSlotMorph.call(this, null, false, 'methodSignature', getFieldNames, true, getFields);
 }
 
 RPCInputSlotMorph.prototype.getServiceInputSlot = function () {
@@ -444,42 +463,55 @@ HintInputSlotMorph.prototype = new InputSlotMorph();
 HintInputSlotMorph.prototype.constructor = HintInputSlotMorph;
 HintInputSlotMorph.uber = InputSlotMorph.prototype;
 
-function HintInputSlotMorph(text, hint, isNumeric) {
+function HintInputSlotMorph(text, hint, isNumeric, choiceDict, isReadOnly) {
     var self = this;
 
     this.hintText = hint;
     this.empty = true;
-    InputSlotMorph.call(this, text, isNumeric);
+    InputSlotMorph.call(this, text, isNumeric, choiceDict, isReadOnly);
 
-    // If the StringMorph gets clicked on when empty, the hint text
-    // should be "ghostly"
-    this.contents().mouseClickLeft = function() {
-        if (self.isEmptySlot()) {
-            this.text = '';
-        }
-        StringMorph.prototype.mouseClickLeft.apply(this, arguments);
-    };
+    // If the StringMorph gets clicked on when empty, the hint text should be "ghostly"
+    if (!choiceDict) { // don't wipe out enum inputs
+        this.contents().mouseClickLeft = function() {
+            if (self.isEmptySlot()) {
+                this.text = '';
+            }
+            StringMorph.prototype.mouseClickLeft.apply(this, arguments);
+        };
+    }
 }
 
 HintInputSlotMorph.prototype.evaluate = function() {
     if (this.isEmptySlot()) {  // ignore grey text
-        return this.isNumeric ? 0 : '';
+        return '';
     }
     return InputSlotMorph.prototype.evaluate.call(this);
 };
 
+const WHITE_HINT = new Color(190, 190, 190);
+const BLACK_HINT = new Color(100, 100, 100);
 HintInputSlotMorph.prototype.setContents = function(value) {
-    var color = BLACK,
-        contents = this.contents();
+    const contents = this.contents();
+    let color;
 
-    // If empty, set to the hint text
     InputSlotMorph.prototype.setContents.apply(this, arguments);
-    this.empty = value === '';
-    if (this.isEmptySlot()) {  // Set the contents to the hint text
-        // Set the text to the hint text
+
+    this.overrideWhite = null;
+    this.overrideBlack = null;
+
+    // If empty, set contents to the hint text
+    this.empty = !value || value === '';
+    if (this.isEmptySlot()) {
         contents.text = this.hintText;
-        color = new Color(100, 100, 100);
+        if (this.isReadOnly) {
+            this.overrideWhite = WHITE_HINT;
+            this.overrideBlack = BLACK_HINT;
+        }
+        color = this.isReadOnly ? WHITE_HINT : BLACK_HINT;
+    } else {
+        color = this.isReadOnly ? WHITE : BLACK;
     }
+
     contents.fixLayout();
     contents.color = color;
     contents.rerender();
@@ -518,7 +550,8 @@ var addStructReplaceSupport = function(fn) {
             structInput.fields.length >= inputIndex - structInputIndex) {
 
             relIndex = inputIndex - structInputIndex - 1;
-            const defaultArg = structInput.getFieldValue(structInput.fields[relIndex]);
+            const meta = structInput.fieldsMeta && relIndex < structInput.fieldsMeta.length ? structInput.fieldsMeta[relIndex] : undefined;
+            const defaultArg = structInput.getFieldValue(structInput.fields[relIndex], null, meta);
             this.replaceInput(arg, defaultArg);
             this.cachedInputs = null;
         } else {

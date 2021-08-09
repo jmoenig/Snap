@@ -44,13 +44,13 @@ utils.memoize = function(func){
     };
 };
 
-utils.getUrlSync = function(url) {
+utils.getUrlSync = function(url, parser = x => x) {
     url = ensureFullUrl(url);
     var request = new XMLHttpRequest();
     request.open('GET', url, false);
     request.send();
     if (request.status === 200) {
-        return request.responseText;
+        return parser(request.responseText);
     }
     throw new Error('unable to retrieve ' + url);
 };
