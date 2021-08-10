@@ -742,18 +742,12 @@ MicroWorld.prototype.createCorralButtonsFrame = function () {
 
 MicroWorld.prototype.makeButton = function (definition) {
     var sprite = this.ide.currentSprite,
-        currentLang = SnapTranslator.language,
-        label =
-            !isNil(definition.translations) &&
-            (contains(Object.keys(definition.translations), currentLang)) ?
-                definition.translations[currentLang] :
-                definition.label;
+        label = definition.label;
     return new PushButtonMorph(
         sprite,
-        Function.apply(
-            null,
-            [ definition.action ]
-        ),
+        () => {
+            this.ide.broadcast(definition.message)
+        },
         label
     );
 };
