@@ -306,6 +306,7 @@ MicroWorld.prototype.enter = function () {
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
     this.updateSerializeFunction();
+    this.updateFreshPaletteFunction();
 
     this.addBeButtonFunction();
 
@@ -416,6 +417,51 @@ MicroWorld.prototype.updateSerializeFunction = function() {
             }
             return str;
         }
+    }
+}
+
+MicroWorld.prototype.updateFreshPaletteFunction = function(){
+    var myself = this;
+    if(!SpriteMorph.prototype.oldFreshPalette){
+        SpriteMorph.prototype.oldFreshPalette = SpriteMorph.prototype.freshPalette;
+        StageMorph.prototype.oldFreshPalette = StageMorph.prototype.freshPalette;
+    }
+
+    SpriteMorph.prototype.freshPalette = function (category){
+        var palette = this.oldFreshPalette(category);
+
+        if(currentMicroworld() && currentMicroworld().isActive){
+
+            // @todo
+
+            var buttonsToHide = [];
+
+            if(myself.hiddenMorphs.includes('makeBlockButtons')){
+                buttonsToHide.push('makeBlock');
+            }
+
+            if(myself.hiddenMorphs.includes('searchButton')){
+                buttonsToHide.push('searchBlocks')
+            }
+
+            var toolBarButtons = palette.toolBar.children.filter(child => {
+                return !buttonsToHide.includes(child.action);
+            })
+
+            palette.removeChild(palette.toolBar);
+
+            palette.toolBar = new AlignmentMorph('column');
+
+            toolBarButtons.forEach(button => {
+                palette.toolBar.add(button);
+            })
+
+            palette.toolBar.fixLayout();
+            palette.add(palette.toolBar);
+
+        }
+
+        return palette;
     }
 }
 
