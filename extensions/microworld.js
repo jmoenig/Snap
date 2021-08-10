@@ -433,8 +433,7 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
 
         if(currentMicroworld() && currentMicroworld().isActive){
 
-            // @todo
-
+            // hide buttons in the toolbar
             var toolBarButtons = palette.toolBar.children.filter(child => {
                 return !myself.hiddenPaletteActions.includes(child.action);
             })
@@ -449,6 +448,12 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
 
             palette.toolBar.fixLayout();
             palette.add(palette.toolBar);
+
+            palette.allChildren()
+                .filter(morph => myself.hiddenPaletteActions.includes(morph.action)) // only get items to hide
+                .forEach(morph => {
+                    morph.hide();
+                })
 
         }
 
