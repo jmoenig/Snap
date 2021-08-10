@@ -434,8 +434,26 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
         if(currentMicroworld() && currentMicroworld().isActive){
             palette.allChildren()
                 .filter(morph => myself.hiddenPaletteActions.includes(morph.action)) // only get items to hide
-                .forEach(morph => morph.hide());
+                .forEach(morph => {morph.destroy()});
+
+            palette.contents.adjustBounds();
+
+            var unit = SyntaxElementMorph.prototype.fontSize,
+                x = 5,
+                y = palette.contents.height();
+
+            myself.buttons.palette.forEach(def => {
+                var button = myself.makeButton(def);
+                y += unit * 0.3;
+                button.setPosition(new Point(x, y));
+                palette.addContents(button);
+                y+= button.height();
+            })
+
         }
+
+        palette.scrollX(palette.padding);
+        palette.scrollY(palette.padding);
 
         return palette;
     }
