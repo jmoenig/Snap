@@ -439,6 +439,8 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
 
         return palette;
     }
+
+    StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 }
 
 MicroWorld.prototype.updateGetInputFunction = function() {
