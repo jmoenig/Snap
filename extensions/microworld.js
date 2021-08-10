@@ -432,29 +432,9 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
         var palette = this.oldFreshPalette(category);
 
         if(currentMicroworld() && currentMicroworld().isActive){
-
-            // hide buttons in the toolbar
-            var toolBarButtons = palette.toolBar.children.filter(child => {
-                return !myself.hiddenPaletteActions.includes(child.action);
-            })
-
-            palette.removeChild(palette.toolBar);
-
-            palette.toolBar = new AlignmentMorph('column');
-
-            toolBarButtons.forEach(button => {
-                palette.toolBar.add(button);
-            })
-
-            palette.toolBar.fixLayout();
-            palette.add(palette.toolBar);
-
             palette.allChildren()
                 .filter(morph => myself.hiddenPaletteActions.includes(morph.action)) // only get items to hide
-                .forEach(morph => {
-                    morph.hide();
-                })
-
+                .forEach(morph => morph.hide());
         }
 
         return palette;
