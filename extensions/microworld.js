@@ -137,6 +137,22 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'set_buttons(location, buttons)',
+    (location, buttons) => {
+        if(buttons.constructor === List){
+            buttons = buttons.contents.map(item => JSON.parse(item));
+        }
+        else{
+            throw new Error("Expecting List of buttons");
+        }
+
+        doIfMicroworld(microworld => {
+            microworld.setButtons(location, buttons)
+        })
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'set_hidden_morphs(morphs)',
     morphs => {
         doIfMicroworld(microworld => {
@@ -227,6 +243,17 @@ MicroWorld.prototype.setHiddenMorphs = function(morphs){
 
 MicroWorld.prototype.setMenuItems = function(menu, items){
     this.menus[menu] = (items).split(",").map(item => item.trim());
+}
+
+MicroWorld.prototype.setButtons = function(location, buttons){
+    if(this.isActive){
+        this.destroyButtons();
+    }
+    this.buttons[location] = buttons;
+    if(this.isActive){
+        this.makeButtons();
+        this.refreshLayouts();
+    }
 }
 
 
@@ -359,9 +386,12 @@ MicroWorld.prototype.escape = function () {
 
     this.showAllMorphs();
 
+    this.destroyButtons();
+
     ide.savingPreferences = true;
 
     this.blocksToButtons(true);
+
 
     this.restorePalette();
 
@@ -732,7 +762,35 @@ MicroWorld.prototype.makeButtons = function () {
         );
     }
 
-};
+}
+
+MicroWorld.prototype.destroyButtons = function(){
+
+    var ide = this.ide,
+        sprite = ide.currentSprite,
+        sf = sprite.scripts.parentThatIsA(ScrollFrameMorph);
+
+    if(this.isActive){
+        if (ide.corralButtonsFrame) {
+            ide.corralButtonsFrame.destroy();
+            ide.corralButtonsFrame = null;
+        }
+
+        this.buttons['scripts'].forEach(
+            function (definition) {
+                var button = sf.toolBar.children.find(
+                    function (child) {
+                        return child.labelString == definition.label;
+                    });
+
+                if(button){
+                    sf.toolBar.removeChild(button);
+                    delete sprite.buttons[definition.label];
+                }
+            });
+    }
+
+}
 
 MicroWorld.prototype.createCorralButtonsFrame = function () {
     var ide = this.ide,
@@ -743,8 +801,8 @@ MicroWorld.prototype.createCorralButtonsFrame = function () {
     ide.add(ide.corralButtonsFrame);
     ide.corralButtonsFrame.fixLayout = function () {
         var padding = 5,
-            x = ide.corralButtonsFrame.left() + padding;
-        y = ide.corralButtonsFrame.top() + padding;
+            x = ide.corralButtonsFrame.left() + padding,
+            y = ide.corralButtonsFrame.top() + padding;
         ide.corralButtonsFrame.contents.children.forEach(function (button) {
             if ((x + button.width()) >
                 (ide.corralButtonsFrame.right() - padding)) {
@@ -978,6 +1036,15 @@ MicroWorld.prototype.hideSpriteBar = function () {
         var spriteEditor = ide.spriteEditor;
         spriteEditor.setTop(spriteEditor.top() - ide.spriteBar.height());
         spriteEditor.setHeight(spriteEditor.height() + ide.spriteBar.height());
+
+        if (this.corralButtonsFrame) {
+            this.corralButtonsFrame.setPosition(this.corralBar.position());
+            this.corralButtonsFrame.setWidth(this.corralBar.width());
+            this.corralButtonsFrame.setHeight(
+                this.bottom() - this.corralButtonsFrame.top()
+            );
+            this.corralButtonsFrame.fixLayout();
+        }
     }
 
 };
