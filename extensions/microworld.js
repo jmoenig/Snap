@@ -240,6 +240,7 @@ MicroWorld.prototype.setKeyboard = function(keyboard){
 MicroWorld.prototype.init = function (ide) {
     this.ide = ide;
     this.hiddenMorphs = [];
+    this.hiddenPaletteActions = [];
     this.blockSpecs = [];
 
     this.enableVariables = true;
@@ -434,18 +435,8 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
 
             // @todo
 
-            var buttonsToHide = [];
-
-            if(myself.hiddenMorphs.includes('makeBlockButtons')){
-                buttonsToHide.push('makeBlock');
-            }
-
-            if(myself.hiddenMorphs.includes('searchButton')){
-                buttonsToHide.push('searchBlocks')
-            }
-
             var toolBarButtons = palette.toolBar.children.filter(child => {
-                return !buttonsToHide.includes(child.action);
+                return !myself.hiddenPaletteActions.includes(child.action);
             })
 
             palette.removeChild(palette.toolBar);
@@ -932,26 +923,21 @@ MicroWorld.prototype.showCategoryList = function () {
 };
 
 MicroWorld.prototype.hideMakeBlockButtons = function () {
-    this.hidePaletteButtons('makeBlock');
+    this.hidePaletteButton('makeBlock')
 };
 
+MicroWorld.prototype.showMakeBlockButtons = function () {
+    this.showPaletteButton('makeBlock');
+}
+
 MicroWorld.prototype.hideSearchButton = function () {
-    this.hidePaletteButtons('searchBlocks');
+    this.hidePaletteButton('searchBlocks');
     this.suppressKeyEvent('ctrl f');
 };
 
-MicroWorld.prototype.hidePaletteButtons = function (selector) {
-    this[selector + 'Buttons'] =
-        this.ide.palette.allChildren().filter(
-            function (morph) {
-                return morph.action == selector;
-            }
-        );
-    this[selector + 'Buttons'].forEach(
-        function (each) {
-            each.hide();
-        }
-    );
+MicroWorld.prototype.showSearchButton = function () {
+    this.showPaletteButton('searchBlocks');
+    this.allowKeyEvent('ctrl f');
 }
 
 MicroWorld.prototype.hideSteppingButton = function () {
@@ -1033,4 +1019,16 @@ MicroWorld.prototype.showSpriteCorral = function () {
 
 MicroWorld.prototype.suppressKeyEvent = function(key){
     this.suppressedKeyEvents.push(key);
+}
+
+MicroWorld.prototype.allowKeyEvent = function(key){
+    this.suppressedKeyEvents = this.suppressedKeyEvents.filter(item => item !== key);
+}
+
+MicroWorld.prototype.hidePaletteButton = function(action) {
+    this.hiddenPaletteActions.push(action);
+}
+
+MicroWorld.prototype.showPaletteButton = function(action) {
+    this.hiddenPaletteActions = this.hiddenPaletteActions.filter(item => item !== action);
 }
