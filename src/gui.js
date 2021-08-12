@@ -5142,7 +5142,7 @@ IDE_Morph.prototype.redirectToDevIfError = function (err) {
             'This file requires a new version of Snap!.' +
                 'Select Yes to load the development version.',
             this
-        )
+        );
     }
 };
 
