@@ -5140,7 +5140,7 @@ IDE_Morph.prototype.redirectToDevIfError = function (err) {
         new DialogBoxMorph(this, redirectToDev).askYesNo(
             'Newer Version of Snap! Required',
             'This file requires a new version of Snap!.' +
-                'Select Yes to load the development version.',
+                ' Select Yes to load the development version.',
             this
         );
     }
