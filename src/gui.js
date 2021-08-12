@@ -212,6 +212,8 @@ function IDE_Morph(isAutoFill) {
     this.init(isAutoFill);
 }
 
+IDE_Morph.prototype.developmentPath = '/versions/dev/snap.html';
+
 IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
@@ -371,7 +373,7 @@ IDE_Morph.prototype.openIn = function (world) {
             world.worldCanvas.focus();
         }
     }
-    
+
     function autoRun () {
         // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
@@ -2289,7 +2291,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     // all the images are:
         // sized, with 'width' and 'height' attributes
         // fitted to stage dimensions
-        // and with their 'viewBox' attribute 
+        // and with their 'viewBox' attribute
     if (normalizing) {
         svgNormalized = new Image(w, h);
         svgObj.setAttribute('width', w);
@@ -5124,6 +5126,26 @@ IDE_Morph.prototype.openProjectString = function (str, callback) {
     ]);
 };
 
+IDE_Morph.prototype.redirectToDevIfError = function (err) {
+    if (err.indexOf('newer version of Serializer') === -1) {
+        this.showMessage('Load failed: ' + err);
+        return;
+    }
+
+    function redirectToDev() {
+        window.location = IDE_Morph.prototype.developmentPath + location.hash;
+    }
+
+    if (location.pathname.indexOf(IDE_Morph.prototype.developmentPath) === -1) {
+        new DialogBoxMorph(this, redirectToDev).askYesNo(
+            'Newer Version of Snap! Required',
+            'This file requires a new version of Snap!.' +
+                'Select Yes to load the development version.',
+            this
+        )
+    }
+};
+
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
@@ -5144,7 +5166,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
                 this
             );
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.openProject(
@@ -5192,7 +5214,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
                 this
             );
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         model = this.serializer.parse(str);
@@ -5227,7 +5249,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         try {
             blocks = this.serializer.loadBlocks(str, this.stage);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         blocks = this.serializer.loadBlocks(str, this.stage);
@@ -5265,7 +5287,7 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
         try {
             this.serializer.loadSprites(str, this);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.loadSprites(str, this);
@@ -5277,7 +5299,7 @@ IDE_Morph.prototype.openMediaString = function (str) {
         try {
             this.serializer.loadMedia(str);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.loadMedia(str);
@@ -5306,7 +5328,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
             xml = this.serializer.parse(str, this.currentSprite);
             script = this.serializer.loadScript(xml, this.currentSprite);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         xml = this.serializer.loadScript(str, this.currentSprite);
@@ -10522,7 +10544,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 audio: {
                     channelCount: 1 // force mono, currently only works on FF
                 }
-                
+
             }
         ).then(stream => {
             this.mediaRecorder = new MediaRecorder(stream);
