@@ -7598,7 +7598,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
             this.ide.nextSteps([
                 () => this.ide.openCloudDataString(clouddata)
             ]);
-            this.setURL('#cloud:Username=' +
+            this.ide.setURL('#cloud:Username=' +
                 encodeURIComponent(this.ide.cloud.username) +
                 '&ProjectName=' +
                 encodeURIComponent(proj.projectname));
