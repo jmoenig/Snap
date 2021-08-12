@@ -51,7 +51,7 @@ describe('extensions', function() {
                 'spriteBlock',
                 'reporter',
                 'TEST!',
-                'sprite-only block: %testPart',
+                'sprite-only block: %testPart2',
                 [],
                 () => 'This is another test.'
             ).for(SpriteMorph)
@@ -72,6 +72,22 @@ describe('extensions', function() {
                         true
                     );
                     part.setContents(['this is a test']);
+                    return part;
+                }
+            ),
+            new Extension.LabelPart(
+                'testPart2',
+                () => {
+                    const part = new InputSlotMorph(
+                        null, // text
+                        false, // non-numeric
+                        {
+                            'this is a second test': ['this is a second test'],
+                            'yet another second value': ['yet another second value']
+                        },
+                        true
+                    );
+                    part.setContents(['this is a second test']);
                     return part;
                 }
             ),
@@ -167,7 +183,7 @@ describe('extensions', function() {
             driver.selectCategory('TEST!');
             const block = driver.palette().contents.children.find(child => child.selector === 'spriteBlock');
             const [inputSlot] = block.inputs();
-            assert.equal(inputSlot.evaluate(), 'this is a test');
+            assert.equal(inputSlot.evaluate(), 'this is a second test');
         });
 
         it('should hide sprite block on stage', function() {

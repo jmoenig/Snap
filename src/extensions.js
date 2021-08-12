@@ -79,7 +79,7 @@
         }
 
         getLabelPart(spec) {
-            const part = this.registry.flatMap(ext => ext.getLabelParts()).find(part => part.spec = spec);
+            const part = this.registry.flatMap(ext => ext.getLabelParts()).find(part => part.spec === spec);
             if (part) {
                 return part.factory(spec);
             }
