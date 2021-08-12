@@ -7598,13 +7598,10 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
             this.ide.nextSteps([
                 () => this.ide.openCloudDataString(clouddata)
             ]);
-			location.hash = '';
-            if (proj.ispublic) {
-                location.hash = '#present:Username=' +
-                    encodeURIComponent(this.ide.cloud.username) +
-                    '&ProjectName=' +
-                    encodeURIComponent(proj.projectname);
-            }
+            this.setURL('#cloud:Username=' +
+                encodeURIComponent(this.ide.cloud.username) +
+                '&ProjectName=' +
+                encodeURIComponent(proj.projectname));
         },
         this.ide.cloudError()
     );
