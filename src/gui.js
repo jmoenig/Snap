@@ -7596,12 +7596,12 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
         clouddata => {
             this.ide.source = 'cloud';
             this.ide.nextSteps([
-                () => this.ide.openCloudDataString(clouddata)
+                () => this.ide.openCloudDataString(clouddata),
+                () => this.ide.setURL('#cloud:Username=' +
+                        encodeURIComponent(this.ide.cloud.username) +
+                        '&ProjectName=' +
+                        encodeURIComponent(proj.projectname))
             ]);
-            this.ide.setURL('#cloud:Username=' +
-                encodeURIComponent(this.ide.cloud.username) +
-                '&ProjectName=' +
-                encodeURIComponent(proj.projectname));
         },
         this.ide.cloudError()
     );
@@ -7633,6 +7633,10 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 );
             } else {
                 this.ide.setProjectName(name);
+                this.ide.setURL('#cloud:Username=' +
+                    encodeURIComponent(this.ide.cloud.username) +
+                    '&ProjectName=' +
+                    encodeURIComponent(name));
                 this.saveCloudProject();
             }
         } else if (this.source === 'disk') {
