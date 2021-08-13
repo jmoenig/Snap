@@ -95,7 +95,10 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_block_specs(specs)',
     (specs) => {
-        if(specs.constructor === List){
+        if(!specs){
+            specs = [];
+        }
+        else if(specs.constructor === List){
             specs = specs.contents;
         }
         else {
@@ -110,8 +113,17 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_editable_blocks(specs)',
     (specs) => {
-        if(specs.constructor === List){
+        if(!specs){
+            specs = [];
+        }
+        else if(specs === 'all'){
+            specs = 'all';
+        }
+        else if(specs.constructor === List){
             specs = specs.contents;
+        }
+        else {
+            throw new Error("Expecting 'all' or List of block specs");
         }
         doIfMicroworld(microworld => {
             microworld.setEditableBlocks(specs);
@@ -122,7 +134,10 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_button_blocks(specs)',
     (specs) => {
-        if(specs.constructor === List){
+        if(!specs){
+            specs = [];
+        }
+        else if(specs.constructor === List){
             specs = specs.contents;
         }
         else {
@@ -137,7 +152,10 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_buttons(location, buttons)',
     (location, buttons) => {
-        if(buttons.constructor === List){
+        if(!buttons){
+            buttons = [];
+        }
+        else if(buttons.constructor === List){
             buttons = buttons.contents.map(item => JSON.parse(item));
         }
         else{
