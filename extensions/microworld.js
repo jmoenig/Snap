@@ -17,22 +17,20 @@ function doIfMicroworld(cb){
 }
 
 SnapExtensions.primitives.set(
-    prefix+'get_specs_from_blocks(blocks)',
-    (blocks) => {
-        var specs = [];
-        blocks.contents.map(block => {
+    prefix+'get_spec_from_block(block)',
+    (block) => {
             if(!block.expression){
                 return;
             }
             if(block.expression.selector && block.expression.selector !== 'evaluateCustomBlock'){
-                specs.push(block.expression.selector);
+                return block.expression.selector;
             }
             else if(block.expression.blockSpec) {
-                specs.push(block.expression.blockSpec);
+                return block.expression.blockSpec;
             }
-        })
 
-        return new List(specs);
+            return;
+
     }
 )
 
