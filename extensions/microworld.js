@@ -20,7 +20,7 @@ SnapExtensions.primitives.set(
     prefix+'get_spec_from_block(block)',
     (block) => {
             if(!block.expression){
-                return;
+                return "";
             }
             if(block.expression.selector && block.expression.selector !== 'evaluateCustomBlock'){
                 return block.expression.selector;
@@ -29,7 +29,7 @@ SnapExtensions.primitives.set(
                 return block.expression.blockSpec;
             }
 
-            return;
+            return "";
 
     }
 )
