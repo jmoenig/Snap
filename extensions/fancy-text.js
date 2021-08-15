@@ -56,6 +56,11 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'remove_formatting_characters(text)',
+    text => text.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1,-1))
+)
+
+SnapExtensions.primitives.set(
     prefix+'set_costume_name(costume, name)',
     (costume, name) => costume.name = name
 )
