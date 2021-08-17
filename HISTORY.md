@@ -1,4 +1,4 @@
-# Snap! (BYOB) History
+# Snap<em>!</em> (BYOB) History
 
 ## in development:
 
@@ -9,6 +9,14 @@ This is a small patch to support projects which have begun to use v7 development
   * Snap! now offers to redirect you to the development version if you load a file with a newer serializer version.
   * Extension authors who maintain development versions may want to set `IDE_Morph.prototype.developmentPath`
   * Extension authors who want to disable this behavior should set `IDE_Morph.prototype.developmentPath = 'snap.html'`
+  * When opening a project from the Cloud, the URL now updates to include the username and projectname of that project. This allows direct links to private projects.
+  The URL is _no longer_ a way to tell if a project is shared.
+* **Notable Fixes:**
+  * Fixed the bignums library, thanks Brian!
+
+### 2021-08-17
+* prepared release
+
 ## 6.9.0
 * **Notable Changes:**
     * JS-functions are now disabled by default until switched on in the settings menu per session
