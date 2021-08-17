@@ -78,7 +78,7 @@ Animation, BoxMorph, BlockEditorMorph, BlockDialogMorph, Note, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-June-14';
+modules.gui = '2021-August-12';
 
 // Declarations
 
@@ -211,6 +211,8 @@ IDE_Morph.prototype.setDefaultDesign();
 function IDE_Morph(isAutoFill) {
     this.init(isAutoFill);
 }
+
+IDE_Morph.prototype.developmentPath = '/versions/dev/snap.html';
 
 IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
@@ -371,7 +373,7 @@ IDE_Morph.prototype.openIn = function (world) {
             world.worldCanvas.focus();
         }
     }
-    
+
     function autoRun () {
         // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
@@ -2289,7 +2291,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     // all the images are:
         // sized, with 'width' and 'height' attributes
         // fitted to stage dimensions
-        // and with their 'viewBox' attribute 
+        // and with their 'viewBox' attribute
     if (normalizing) {
         svgNormalized = new Image(w, h);
         svgObj.setAttribute('width', w);
@@ -4390,7 +4392,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 6.9.0\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 6.9.1\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4704,7 +4706,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         try {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage);
-            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            this.setURL('open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
             this.recordSavedChanges();
@@ -5124,6 +5126,26 @@ IDE_Morph.prototype.openProjectString = function (str, callback) {
     ]);
 };
 
+IDE_Morph.prototype.redirectToDevIfError = function (err) {
+    if (err.indexOf('newer version of Serializer') === -1) {
+        this.showMessage('Load failed: ' + err);
+        return;
+    }
+
+    function redirectToDev() {
+        window.location = IDE_Morph.prototype.developmentPath + location.hash;
+    }
+
+    if (location.pathname.indexOf(IDE_Morph.prototype.developmentPath) === -1) {
+        new DialogBoxMorph(this, redirectToDev).askYesNo(
+            'Newer Version of Snap! Required',
+            'This file requires a new version of Snap!.' +
+                ' Select Yes to load the development version.',
+            this
+        );
+    }
+};
+
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
@@ -5144,7 +5166,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
                 this
             );
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.openProject(
@@ -5192,7 +5214,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
                 this
             );
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         model = this.serializer.parse(str);
@@ -5227,7 +5249,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         try {
             blocks = this.serializer.loadBlocks(str, this.stage);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         blocks = this.serializer.loadBlocks(str, this.stage);
@@ -5265,7 +5287,7 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
         try {
             this.serializer.loadSprites(str, this);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.loadSprites(str, this);
@@ -5277,7 +5299,7 @@ IDE_Morph.prototype.openMediaString = function (str) {
         try {
             this.serializer.loadMedia(str);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         this.serializer.loadMedia(str);
@@ -5306,7 +5328,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
             xml = this.serializer.parse(str, this.currentSprite);
             script = this.serializer.loadScript(xml, this.currentSprite);
         } catch (err) {
-            this.showMessage('Load failed: ' + err);
+            this.redirectToDevIfError(err);
         }
     } else {
         xml = this.serializer.loadScript(str, this.currentSprite);
@@ -5392,7 +5414,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        this.setURL('#open:' + str);
+        this.setURL('open:' + str);
     }
 };
 
@@ -7576,13 +7598,9 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
             this.ide.nextSteps([
                 () => this.ide.openCloudDataString(clouddata)
             ]);
-			location.hash = '';
-            if (proj.ispublic) {
-                location.hash = '#present:Username=' +
-                    encodeURIComponent(this.ide.cloud.username) +
-                    '&ProjectName=' +
-                    encodeURIComponent(proj.projectname);
-            }
+            location.hash =
+                `cloud:Username=${encodeURIComponent(this.ide.cloud.username)}` +
+                `&ProjectName=${encodeURIComponent(proj.projectname)}`;
         },
         this.ide.cloudError()
     );
@@ -7614,6 +7632,9 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 );
             } else {
                 this.ide.setProjectName(name);
+                location.hash =
+                    `cloud:Username=${encodeURIComponent(this.ide.cloud.username)}` +
+                    `&ProjectName=${encodeURIComponent(name)}`;
                 this.saveCloudProject();
             }
         } else if (this.source === 'disk') {
@@ -7702,16 +7723,6 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('shared.', 2);
-
-                        // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
-                            var usr = ide.cloud.username,
-                                projectId = 'Username=' +
-                                    encodeURIComponent(usr.toLowerCase()) +
-                                    '&ProjectName=' +
-                                    encodeURIComponent(proj.projectname);
-                            location.hash = 'present:' + projectId;
-                        }
                     },
                     this.ide.cloudError()
                 );
@@ -7748,9 +7759,6 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('unshared.', 2);
-                        if (proj.projectname === ide.projectName) {
-                            location.hash = '';
-                        }
                     },
                     this.ide.cloudError()
                 );
@@ -7786,16 +7794,6 @@ ProjectDialogMorph.prototype.publishProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('published.', 2);
-
-                        // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
-                            var usr = ide.cloud.username,
-                                projectId = 'Username=' +
-                                    encodeURIComponent(usr.toLowerCase()) +
-                                    '&ProjectName=' +
-                                    encodeURIComponent(proj.projectname);
-                            location.hash = 'present:' + projectId;
-                        }
                     },
                     this.ide.cloudError()
                 );
@@ -10522,7 +10520,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 audio: {
                     channelCount: 1 // force mono, currently only works on FF
                 }
-                
+
             }
         ).then(stream => {
             this.mediaRecorder = new MediaRecorder(stream);
