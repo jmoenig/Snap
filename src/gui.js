@@ -4706,7 +4706,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         try {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage);
-            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            this.setURL('open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
             this.recordSavedChanges();
@@ -5414,7 +5414,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        this.setURL('#open:' + str);
+        this.setURL('open:' + str);
     }
 };
 
@@ -7595,12 +7595,12 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
         delta,
         clouddata => {
             this.ide.source = 'cloud';
-            this.ide.setURL('#cloud:Username=' +
-                encodeURIComponent(this.ide.cloud.username) +
-                '&ProjectName=' + encodeURIComponent(proj.projectname));
             this.ide.nextSteps([
                 () => this.ide.openCloudDataString(clouddata)
             ]);
+            location.hash =
+                `cloud:Username=${encodeURIComponent(this.ide.cloud.username)}` +
+                `&ProjectName=${encodeURIComponent(proj.projectname)}`;
         },
         this.ide.cloudError()
     );
@@ -7632,10 +7632,9 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 );
             } else {
                 this.ide.setProjectName(name);
-                this.ide.setURL('#cloud:Username=' +
-                    encodeURIComponent(this.ide.cloud.username) +
-                    '&ProjectName=' +
-                    encodeURIComponent(name));
+                location.hash =
+                    `cloud:Username=${encodeURIComponent(this.ide.cloud.username)}` +
+                    `&ProjectName=${encodeURIComponent(name)}`;
                 this.saveCloudProject();
             }
         } else if (this.source === 'disk') {
@@ -7724,16 +7723,6 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('shared.', 2);
-
-                        // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
-                            var usr = ide.cloud.username,
-                                projectId = 'Username=' +
-                                    encodeURIComponent(usr.toLowerCase()) +
-                                    '&ProjectName=' +
-                                    encodeURIComponent(proj.projectname);
-                            location.hash = 'present:' + projectId;
-                        }
                     },
                     this.ide.cloudError()
                 );
@@ -7770,9 +7759,6 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('unshared.', 2);
-                        if (proj.projectname === ide.projectName) {
-                            location.hash = '';
-                        }
                     },
                     this.ide.cloudError()
                 );
@@ -7808,16 +7794,6 @@ ProjectDialogMorph.prototype.publishProject = function () {
                         this.buttons.fixLayout();
                         this.rerender();
                         this.ide.showMessage('published.', 2);
-
-                        // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
-                            var usr = ide.cloud.username,
-                                projectId = 'Username=' +
-                                    encodeURIComponent(usr.toLowerCase()) +
-                                    '&ProjectName=' +
-                                    encodeURIComponent(proj.projectname);
-                            location.hash = 'present:' + projectId;
-                        }
                     },
                     this.ide.cloudError()
                 );
