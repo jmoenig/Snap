@@ -93,6 +93,16 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'switch_to_sprite(sprite)',
+    spriteName => {
+        var sprite = ide.sprites.contents.find(eachSprite => eachSprite.name === spriteName);
+        if(sprite){
+            ide.selectSprite(sprite);
+        }
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'set_block_specs(specs)',
     (specs) => {
         if(!specs){
