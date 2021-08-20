@@ -5,10 +5,10 @@ var ide = world.children.find(child => {
 
 SnapExtensions.primitives.set(
     prefix+'load_sound(url, varName)',
-    (src, context) => {
+    (src, varName, context) => {
         ide.getURL(
             src,
-            function (blob, varName = 'base64') {
+            function (blob) {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
