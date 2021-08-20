@@ -4,16 +4,16 @@ var ide = world.children.find(child => {
     prefix = 'rs_';
 
 SnapExtensions.primitives.set(
-    prefix+'load_sound(url)',
+    prefix+'load_sound(url, varName)',
     (src, context) => {
         ide.getURL(
             src,
-            function (blob) {
+            function (blob, varName = 'base64') {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     var base64 = reader.result;
-                    context.setVarNamed('base64', 'data:audio/ogg;base64,' + base64.split(',')[1]);
+                    context.setVarNamed(varName, 'data:audio/ogg;base64,' + base64.split(',')[1]);
                 };
             },
             'blob'
