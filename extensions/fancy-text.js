@@ -61,11 +61,6 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'set_costume_name(costume, name)',
-    (costume, name) => costume.name = name
-)
-
-SnapExtensions.primitives.set(
     prefix+'is_bubble(part)',
     part => part.isBubble
 )
