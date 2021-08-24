@@ -2,6 +2,11 @@
 
 ## in development:
 
+## v6.9.2
+
+* **Notable Changes**
+  * `#present:` is the mode used for project URLs when opening them via the cloud. (Opening a project, then reloading the page will now load the project in the "presenter" view.)
+
 ## v6.9.1
 This is a small patch to support projects which have begun to use v7 development.
 
