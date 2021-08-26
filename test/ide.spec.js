@@ -652,6 +652,15 @@ describe('ide', function() {
                 expect(!!xml).toBe(true);
             });
 
+            it('should be able to export the project (as guest)', async () => {
+                await driver.logout();
+                await driver.reset();
+                const [frame] = document.getElementsByTagName('iframe');
+                const api = new EmbeddedNetsBloxAPI(frame);
+                const xml = await api.getProjectXML();
+                assert(xml.startsWith('<'), `Expected XML but found: ${xml}`);
+            });
+
             it('should be able to get the username', async () => {
                 const [frame] = document.getElementsByTagName('iframe');
 
