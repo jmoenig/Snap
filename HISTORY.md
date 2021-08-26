@@ -23,12 +23,16 @@
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
+    * colors library: fixed SET PEN to work with more than a single sprite per costume,  thanks, Jadga, for the report!
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-08-27
+* colors library: fixed SET PEN to work with more than a single sprite per costume, thanks, Jadga, for the report!
 
 ### 2021-08-06
 * gui: new "blocksZoom=n" url parameter, thanks, Bernat!
