@@ -25,6 +25,7 @@
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
     * colors library: fixed SET PEN to work with more than a single sprite per costume,  thanks, Jadga, for the report!
     * fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+    * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
@@ -34,6 +35,7 @@
 
 ### 2021-09-06
 * blocks: fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+* gui: fixed copying unattached comments among sprites, thanks, Jadga, for the report!
 
 ### 2021-08-27
 * colors library: fixed SET PEN to work with more than a single sprite per costume, thanks, Jadga, for the report!

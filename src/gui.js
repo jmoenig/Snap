@@ -9419,12 +9419,13 @@ SpriteIconMorph.prototype.wantsDropOf = function (morph) {
     // allow scripts & media to be copied from one sprite to another
     // by drag & drop
     return morph instanceof BlockMorph
+        || (morph instanceof CommentMorph)
         || (morph instanceof CostumeIconMorph)
         || (morph instanceof SoundIconMorph);
 };
 
 SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
-    if (morph instanceof BlockMorph) {
+    if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
         this.copyStack(morph);
     } else if (morph instanceof CostumeIconMorph) {
         this.copyCostume(morph.object);
@@ -9446,7 +9447,9 @@ SpriteIconMorph.prototype.copyStack = function (block) {
 
     dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
     sprite.scripts.add(dup);
-    dup.allComments().forEach(comment => comment.align(dup));
+    if (dup instanceof BlockMorph) {
+        dup.allComments().forEach(comment => comment.align(dup));
+    }
     sprite.scripts.adjustBounds();
 
     // delete all local custom blocks (methods) that the receiver
