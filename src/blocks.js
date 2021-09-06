@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-July-21';
+modules.blocks = '2021-September-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13309,7 +13309,9 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "comment pic...",
         () => {
-            var ide = this.parentThatIsA(IDE_Morph);
+            var ide = this.parentThatIsA(IDE_Morph) ||
+                this.parentThatIsA(BlockEditorMorph)
+                    .target.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
                 this.fullImage(),
                 (ide.projectName || localize('untitled')) + ' ' +
