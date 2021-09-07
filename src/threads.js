@@ -4710,6 +4710,7 @@ Process.prototype.doSwitchToScene = function (id) {
         ide, scenes, num, scene;
 
     this.assertAlive(rcvr);
+    if (this.readyToTerminate) {return; } // let the user press "stop" or "esc"
     ide = rcvr.parentThatIsA(IDE_Morph);
     scenes = ide.scenes;
 
@@ -4735,7 +4736,6 @@ Process.prototype.doSwitchToScene = function (id) {
             break;
         }
         ide.switchToScene(scenes.at(idx));
-        ide.stage.fireChangeOfSceneEvent();
         return;
     }
 
@@ -4749,7 +4749,6 @@ Process.prototype.doSwitchToScene = function (id) {
     }
 
     ide.switchToScene(scene);
-    ide.stage.fireChangeOfSceneEvent();
 };
 
 

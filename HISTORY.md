@@ -34,7 +34,8 @@
     * Chinese, thanks, Simon!
 
 ### 2021-09-07
-* blocks, objects, threads: new change-of-scene event 
+* blocks, objects, threads: new change-of-scene event
+* gui, threads: enabled change-of-scene events for user-induced scene switches, made them user-stoppable
 
 ### 2021-09-06
 * blocks: fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
