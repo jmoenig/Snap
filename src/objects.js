@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-July-23';
+modules.objects = '2021-September-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -8430,6 +8430,25 @@ StageMorph.prototype.processKeyPress = function (event) {
 
 StageMorph.prototype.inspectKeyEvent
     = CursorMorph.prototype.inspectKeyEvent;
+
+StageMorph.prototype.fireChangeOfSceneEvent = function () {
+    var procs = [];
+
+    this.children.concat(this).forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksForInteraction(
+                'entering a scene'
+            ).forEach(block =>
+                procs.push(this.threads.startProcess(
+                    block,
+                    morph,
+                    this.isThreadSafe
+                ))
+            );
+        }
+    });
+    return procs;
+};
 
 StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],

@@ -60,11 +60,11 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph*/
+SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-20';
+modules.threads = '2021-September-07';
 
 var ThreadManager;
 var Process;
@@ -3675,7 +3675,7 @@ Process.prototype.checkURLAllowed = function (url) {
                     // Check only against the host -not the protocol, path or
                     // port- of the domain
                     new RegExp(`${(new URL(domain)).host}.*${pathPart}`, 'i'))
-            )
+            );
         }
     )) {
         throw new Error('Request blocked');
@@ -4735,6 +4735,7 @@ Process.prototype.doSwitchToScene = function (id) {
             break;
         }
         ide.switchToScene(scenes.at(idx));
+        ide.stage.fireChangeOfSceneEvent();
         return;
     }
 
@@ -4748,6 +4749,7 @@ Process.prototype.doSwitchToScene = function (id) {
     }
 
     ide.switchToScene(scene);
+    ide.stage.fireChangeOfSceneEvent();
 };
 
 

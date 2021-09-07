@@ -33,6 +33,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-09-07
+* blocks, objects, threads: new change-of-scene event 
+
 ### 2021-09-06
 * blocks: fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
 * gui: fixed copying unattached comments among sprites, thanks, Jadga, for the report!
