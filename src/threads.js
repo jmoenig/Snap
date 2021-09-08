@@ -4741,6 +4741,7 @@ Process.prototype.doSwitchToScene = function (id) {
             break;
         }
         this.stop();
+        // ide.onNextStep = () => // slow down scene switching, disabled for now
         ide.switchToScene(scenes.at(idx));
         return;
     }
@@ -4755,9 +4756,9 @@ Process.prototype.doSwitchToScene = function (id) {
     }
 
     this.stop();
+    // ide.onNextStep = () => // slow down scene switching, disabled for now
     ide.switchToScene(scene);
 };
-
 
 // Process color primitives
 

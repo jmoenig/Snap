@@ -38,6 +38,7 @@
 * blocks, objects, threads: new hat block for "when this scene starts"
 * blocks, threads: changed "switch to scene" to be a stop block
 * threads: disabled "when this scene starts" hat blocks to directly switch to another scene
+* threads: slowed down scene switching to let the user better interrupt it, commented out for now
 
 ### 2021-09-07
 * blocks, objects, threads: new change-of-scene event
