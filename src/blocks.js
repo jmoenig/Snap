@@ -5202,7 +5202,8 @@ CommandBlockMorph.prototype.isStop = function () {
     return ([
         'doForever',
         'doReport',
-        'removeClone'
+        'removeClone',
+        'doSwitchToScene'
     ].indexOf(this.selector) > -1);
 };
 

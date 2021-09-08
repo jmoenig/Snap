@@ -4735,6 +4735,7 @@ Process.prototype.doSwitchToScene = function (id) {
             idx = this.reportBasicRandom(1, scenes.length());
             break;
         }
+        this.stop();
         ide.switchToScene(scenes.at(idx));
         return;
     }
@@ -4748,6 +4749,7 @@ Process.prototype.doSwitchToScene = function (id) {
         scene = scenes.at(num);
     }
 
+    this.stop();
     ide.switchToScene(scene);
 };
 
