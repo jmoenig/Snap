@@ -37,6 +37,7 @@
 * objects: changed category for "switch to scene" to control
 * blocks, objects, threads: new hat block for "when this scene starts"
 * blocks, threads: changed "switch to scene" to be a stop block
+* threads: disabled "when this scene starts" hat blocks to directly switch to another scene
 
 ### 2021-09-07
 * blocks, objects, threads: new change-of-scene event

@@ -4710,7 +4710,12 @@ Process.prototype.doSwitchToScene = function (id) {
         ide, scenes, num, scene;
 
     this.assertAlive(rcvr);
-    if (this.readyToTerminate) {return; } // let the user press "stop" or "esc"
+    if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
+        // let the user press "stop" or "esc",
+        // prevent "when this scene starts" hat blocks from directly
+        // switching to another
+        return;
+    }
     ide = rcvr.parentThatIsA(IDE_Morph);
     scenes = ide.scenes;
 
