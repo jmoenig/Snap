@@ -33,6 +33,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-09-08
+* objects: changed category for "switch to scene" to control
+
 ### 2021-09-07
 * blocks, objects, threads: new change-of-scene event
 * gui, threads: enabled change-of-scene events for user-induced scene switches, made them user-stoppable

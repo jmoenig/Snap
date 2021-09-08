@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-07';
+modules.objects = '2021-September-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -437,12 +437,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'go back %n layers',
             defaults: [1]
-        },
-        doSwitchToScene: {
-            type: 'command',
-            category: 'looks',
-            spec: 'switch to scene %scn',
-            defaults: [['next']]
         },
 
         // Looks - Debugging primitives for development mode
@@ -906,6 +900,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'pause all %pause'
+        },
+
+        // Scenes
+        doSwitchToScene: {
+            type: 'command',
+            category: 'control',
+            spec: 'switch to scene %scn',
+            defaults: [['next']]
         },
 
         // Sensing
@@ -2421,8 +2423,6 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
-        blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -2548,6 +2548,8 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        blocks.push(block('doSwitchToScene'));
 
     } else if (category === 'sensing') {
 
@@ -8643,8 +8645,6 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('hide'));
         blocks.push(watcherToggle('reportShown'));
         blocks.push(block('reportShown'));
-        blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
@@ -8755,6 +8755,8 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        blocks.push(block('doSwitchToScene'));
 
     } else if (category === 'sensing') {
 
