@@ -903,6 +903,11 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Scenes
+        receiveOnScene: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when this scene starts'
+        },
         doSwitchToScene: {
             type: 'command',
             category: 'control',
@@ -2507,8 +2512,8 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
-        blocks.push(block('receiveMessage'));
         blocks.push('-');
+        blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
@@ -2547,9 +2552,10 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push('-');
+        blocks.push(block('receiveOnScene'));
         blocks.push(block('doSwitchToScene'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (category === 'sensing') {
 
@@ -6092,6 +6098,9 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (morph.selector === 'receiveOnClone') {
                 return message === '__clone__init__';
             }
+            if (morph.selector === 'receiveOnScene') {
+                return message === '__scene__init__';
+            }
         }
         return false;
     });
@@ -8438,9 +8447,7 @@ StageMorph.prototype.fireChangeOfSceneEvent = function () {
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForInteraction(
-                'entering a scene'
-            ).forEach(block =>
+            morph.allHatBlocksFor('__scene__init__').forEach(block =>
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
@@ -8716,8 +8723,8 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
-        blocks.push(block('receiveMessage'));
         blocks.push('-');
+        blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
@@ -8754,9 +8761,10 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push('-');
+        blocks.push(block('receiveOnScene'));
         blocks.push(block('doSwitchToScene'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (category === 'sensing') {
 
