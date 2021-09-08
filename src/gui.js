@@ -8251,7 +8251,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         entry.label.rerender();
                         this.buttons.fixLayout();
                         this.rerender();
-                        this.ide.showMessage('unshared.', 2
+                        this.ide.showMessage('unshared.', 2);
                     },
                     this.ide.cloudError()
                 );
