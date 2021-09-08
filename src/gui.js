@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-July-23';
+modules.gui = '2021-September-07';
 
 // Declarations
 
@@ -380,6 +380,11 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.noExitWarning) {
             window.onbeforeunload = nop;
+        }
+        if (dict.blocksZoom) {
+            myself.savingPreferences = false;
+            myself.setBlocksScale(Math.max(1,Math.min(dict.blocksZoom, 12)));
+            myself.savingPreferences = true;
         }
 
         // only force my world to get focus if I'm not in embed mode
@@ -5740,6 +5745,7 @@ IDE_Morph.prototype.openProject = function (project) {
 };
 
 IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
+    var appMode = this.isAppMode;
     if (!scene || !scene.stage) {
         return;
     }
@@ -5773,7 +5779,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
         this.currentSprite.palette(this.currentCategory);
         this.refreshPalette(true);
     }
+    this.toggleAppMode(appMode);
     this.world().keyboardFocus = this.stage;
+    this.stage.fireChangeOfSceneEvent();
 };
 
 IDE_Morph.prototype.setURL = function (str) {
@@ -6930,7 +6938,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );
     this.cloud.saveProject(
-        name,
+        this.getProjectName(),
         projectBody,
         () => {
             this.recordSavedChanges();
@@ -9412,12 +9420,13 @@ SpriteIconMorph.prototype.wantsDropOf = function (morph) {
     // allow scripts & media to be copied from one sprite to another
     // by drag & drop
     return morph instanceof BlockMorph
+        || (morph instanceof CommentMorph)
         || (morph instanceof CostumeIconMorph)
         || (morph instanceof SoundIconMorph);
 };
 
 SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
-    if (morph instanceof BlockMorph) {
+    if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
         this.copyStack(morph);
     } else if (morph instanceof CostumeIconMorph) {
         this.copyCostume(morph.object);
@@ -9439,7 +9448,9 @@ SpriteIconMorph.prototype.copyStack = function (block) {
 
     dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
     sprite.scripts.add(dup);
-    dup.allComments().forEach(comment => comment.align(dup));
+    if (dup instanceof BlockMorph) {
+        dup.allComments().forEach(comment => comment.align(dup));
+    }
     sprite.scripts.adjustBounds();
 
     // delete all local custom blocks (methods) that the receiver

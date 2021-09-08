@@ -9,6 +9,7 @@
     * hide custom helper blocks in palette
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
+    * new "blocksZoom=n" url parameter, thanks, Bernat!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -22,12 +23,44 @@
     * fixed centering of menus, thanks, Brian Broll!
     * fixed occasional invisible error messages
     * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
+    * colors library: fixed SET PEN to work with more than a single sprite per costume,  thanks, Jadga, for the report!
+    * fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+    * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-09-07
+* blocks, objects, threads: new change-of-scene event
+* gui, threads: enabled change-of-scene events for user-induced scene switches, made them user-stoppable
+
+### 2021-09-06
+* blocks: fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+* gui: fixed copying unattached comments among sprites, thanks, Jadga, for the report!
+
+### 2021-08-27
+* colors library: fixed SET PEN to work with more than a single sprite per costume, thanks, Jadga, for the report!
+
+### 2021-08-06
+* gui: new "blocksZoom=n" url parameter, thanks, Bernat!
+* extensions: added to the documentation
+
+### 2021-08-03
+* extensions: updated documentation
+* byob: record unsaved changes when applying edits to a custom block definition
+
+### 2021-08-02
+* extensions: updated documentation
+
+### 2021-08-01
+* gui: fixed saving projects with their names
+* store: fixed deserializing global settings per scene in multi-scene projects
+
+### 2021-07-29
+* gui: fixed switching scenes in presentation mode
 
 ### 2021-07-23
 * byob, objects, gui, store: support custom categories in libraries

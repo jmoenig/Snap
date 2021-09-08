@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-July-23';
+modules.store = '2021-August-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -338,9 +338,11 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         if (scenesModel.attributes.select) {
             project.sceneIdx = +scenesModel.attributes.select;
         }
-        scenesModel.childrenNamed('scene').forEach(model =>
-            project.scenes.add(this.loadScene(model))
-        );
+        scenesModel.childrenNamed('scene').forEach(model => {
+            ide.scene.captureGlobalSettings();
+            project.scenes.add(this.loadScene(model));
+            ide.scene.applyGlobalSettings();
+        });
     } else {
         project.scenes.add(this.loadScene(xmlNode, remixID));
     }

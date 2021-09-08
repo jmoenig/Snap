@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-July-23';
+modules.byob = '2021-August-03';
 
 // Declarations
 
@@ -2508,6 +2508,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
     ide.refreshPalette();
+    ide.recordUnsavedChanges();
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {

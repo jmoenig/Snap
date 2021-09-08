@@ -60,11 +60,11 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph*/
+SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-July-20';
+modules.threads = '2021-September-07';
 
 var ThreadManager;
 var Process;
@@ -3666,8 +3666,18 @@ Process.prototype.reportURL = function (url) {
 
 Process.prototype.checkURLAllowed = function (url) {
     if ([ 'users', 'logout', 'projects', 'collections' ].some(
-        which => url.match(`snap\.berkeley\.edu.*${which}`))
-    ) {
+        pathPart => {
+            // Check out whether we're targeting one of the remote domains
+            return Object.values(Cloud.prototype.knownDomains).filter(
+                each => each.includes('snap')
+            ).some(
+                domain => url.match(
+                    // Check only against the host -not the protocol, path or
+                    // port- of the domain
+                    new RegExp(`${(new URL(domain)).host}.*${pathPart}`, 'i'))
+            );
+        }
+    )) {
         throw new Error('Request blocked');
     }
 };
@@ -4700,6 +4710,7 @@ Process.prototype.doSwitchToScene = function (id) {
         ide, scenes, num, scene;
 
     this.assertAlive(rcvr);
+    if (this.readyToTerminate) {return; } // let the user press "stop" or "esc"
     ide = rcvr.parentThatIsA(IDE_Morph);
     scenes = ide.scenes;
 
