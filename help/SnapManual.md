@@ -22,7 +22,7 @@ Displayed figures:  The manual is inconsistent between centering and left-justif
 
 There is a special case of display alignment for pictures with a list as the shown result of an expression.  These pictures take a lot of vertical space, so in some cases they are aligned right, with a text paragraph in a text box to the left of the speech balloon but overlapping horizontally with the actual block.  See page 38 for two examples.
 
-Pictures in line with text (typically a single block):  Text Wrap > Tight, then Format Picture > Layout > Advanced left space to zero, right space to 0.6 inches.  Then you can drag the block where it belongs in the text, but the fine positioning will require the cursor arrow keys.  Put spaces in the text left or right of the picture where syntactically appropriate, i.e., where you'd put a space left or right of a word.  To see why pictures taller than a single block are problematic in line, look at the second paragraph on page 7.  It's layed out correctly, with respect to its meaning, but it /looks/ screwy.  I should fix it.
+Pictures in line with text (typically a single block):  Text Wrap > Tight, then Format Picture > Layout > Advanced left space to zero, right space to 0.06 inches.  Then you can drag the block where it belongs in the text, but the fine positioning will require the cursor arrow keys.  Put spaces in the text left or right of the picture where syntactically appropriate, i.e., where you'd put a space left or right of a word.  To see why pictures taller than a single block are problematic in line, look at the second paragraph on page 7.  It's layed out correctly, with respect to its meaning, but it /looks/ screwy.  I should fix it.
 
 Writing style:  Use exclamation points (other than in the name "Snap!") very sparingly; they should indicate danger, not enthusiasm.  Absolutely do not suggest that something is "fun" or "interesting," etc.  (But "more interesting" is okay when it means that you are giving a first, trivial example followed by an example that actually does something useful.)
 
@@ -73,13 +73,13 @@ Yes, this is a 22-step process.  :-(
 
 3.  Carefully check every line of the Table of Contents!  Look for wrong fonts, missing labels (I, II, etc for level 1; A, B, etc for level 2; nothing for level 3), Chapter VII header at the top of the second column (if not, adjust spacing around chapters in the first column), Heading 2 letters restarting from A in each chapter.
 
-4.  Edit Table of Contents: On page 2, insert a page break before Appendix A; change the text of II.E ("if you lose...") to boldface italic.  On page 3, insert a column break before Appendix B.
+4.  Edit Table of Contents: On page 2, insert a page break before Appendix A; change the text of II.E ("if you lose...") to boldface italic.  On page 3, insert a column break before Appendix B.  Manually fix the page number for the Index at the end of the ToC, which is not an official section (so it won't be numbered or lettered), so not automatically updated by Word.
 
 5.  Save again.
 
 6.  Scroll through the entire manual, looking for bad page breaks, mislabeled headings, and pictures out of place.  (Some old pictures that are run in with text were inserted into their pages by putting a bunch of spaces in the text, setting the picture's "Wrap Text" to "None," and manually positioning the picture.  These pictures will be out of place if the text on that page changes.  To fix them, move the picture out of the way; delete the extra spaces (keeping one before and/or one after where the picture belongs, depending on nearby punctuation; set the picture's "Wrap Text" to "Tight"; then position the picture where it belongs.  The last little bit of positioning should be done with the cursor arrow keys rather than with the mouse.  Finally, go to
 	Format Picture > Layout > Advanced > Text Wrapping
-and change the left distance to 0 and the right distance to 0.6 inches.)
+and change the left distance to 0 and the right distance to 0.06 inches.)
 
 7.  If you made changes, save again, then go back to step 2.
 

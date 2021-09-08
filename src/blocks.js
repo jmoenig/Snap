@@ -146,19 +146,21 @@
 
 /*global Array, BoxMorph,
 Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
-Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph, ZERO,
-String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph,
-document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
-radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
+Morph, MorphicPreferences, Object, ScrollFrameMorph, ShadowMorph, ZERO, Sound,
+String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph, nop,
+document, getDocumentPositionOf, isNaN, isString, newCanvas, parseFloat, isNil,
+radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, SymbolMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
-Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil, CLEAR,
+Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
+CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
+
+/*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-June-11';
+modules.blocks = '2021-September-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -352,6 +354,11 @@ SyntaxElementMorph.prototype.labelParts = {
             '(4) triangle' : 4
         }
     },
+    '%prim': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'primitivesMenu'
+    },
     '%audio': {
         type: 'input',
         tags: 'read-only static',
@@ -409,7 +416,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'mouse-departed' : ['mouse-departed'],
             'scrolled-up' : ['scrolled-up'],
             'scrolled-down' : ['scrolled-down'],
-            'stopped' : ['stopped'] // experimental
+            'stopped' : ['stopped'], // experimental
+            'entering a scene' : ['entering a scene'] // experimental
         }
     },
     '%dates': {
@@ -748,6 +756,11 @@ SyntaxElementMorph.prototype.labelParts = {
             'parameters' : ['parameters']
         }
     },
+    '%scn': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'scenesMenu'
+    },
 
     // video
 
@@ -921,7 +934,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'ring slot'
         tags: 'static',
         kind: 'command', 'reporter', 'predicate'
-        
+
     */
     '%rc': {
         type: 'ring slot',
@@ -2047,7 +2060,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             return;
         }
     }
-    
+
     this.fixHighlight();
 };
 
@@ -2090,11 +2103,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         img,
         morphToShow,
         isClickable = false,
-        ide = this.parentThatIsA(IDE_Morph),
+        ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
-        wrrld = this.world();
+        wrrld = this.world() || target.world();
 
     if ((value === undefined) || !wrrld) {
         return null;
@@ -2455,6 +2468,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %r      - round reporter slot
     %p      - hexagonal predicate slot
     %vid    - chameleon colored rectangular drop-down for video modes
+    %scn    - chameleon colored rectangular drop-down for scene names
 
     rings:
 
@@ -4241,7 +4255,7 @@ BlockMorph.prototype.render = function (ctx) {
         this.outlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -4260,7 +4274,7 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         x = this.edge + this.labelPadding,
         y = this.edge,
         isNormal =
-            this.color === SpriteMorph.prototype.blockColor[this.category];
+            this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
     if (this.isPredicate) {
         x = this.rounding;
@@ -4473,7 +4487,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
         }
     }
     if (!nearest) { // top block
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
         if (!this.color.eq(clr)) {
             this.alternateBlockColor();
         }
@@ -4482,7 +4496,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
             this.alternateBlockColor();
         }
     } else if (this.category && !this.color.eq(
-            SpriteMorph.prototype.blockColor[this.category]
+            SpriteMorph.prototype.blockColorFor(this.category)
         )) {
         this.alternateBlockColor();
     }
@@ -4492,7 +4506,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
 };
 
 BlockMorph.prototype.forceNormalColoring = function () {
-    var clr = SpriteMorph.prototype.blockColor[this.category];
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
     this.setColor(clr);
     this.setLabelColor(
         WHITE,
@@ -4503,7 +4517,7 @@ BlockMorph.prototype.forceNormalColoring = function () {
 };
 
 BlockMorph.prototype.alternateBlockColor = function () {
-    var clr = SpriteMorph.prototype.blockColor[this.category];
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
 
     if (this.color.eq(clr)) {
         this.setColor(
@@ -4520,13 +4534,13 @@ BlockMorph.prototype.alternateBlockColor = function () {
 
 BlockMorph.prototype.ghost = function () {
     this.setColor(
-        SpriteMorph.prototype.blockColor[this.category].lighter(35)
+        SpriteMorph.prototype.blockColorFor(this.category).lighter(35)
     );
 };
 
 BlockMorph.prototype.fixLabelColor = function () {
     if (this.zebraContrast > 0 && this.category) {
-        var clr = SpriteMorph.prototype.blockColor[this.category];
+        var clr = SpriteMorph.prototype.blockColorFor(this.category);
         if (this.color.eq(clr)) {
             this.setLabelColor(
                 WHITE,
@@ -5877,11 +5891,11 @@ function ReporterBlockMorph(isPredicate) {
 ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
- 
+
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
     this.rerender();
- 
+
     this.cachedSlotSpec = null; // don't serialize
     this.isLocalVarTemplate = null; // don't serialize
 };
@@ -6572,7 +6586,7 @@ RingMorph.prototype.render = function (ctx) {
         // ctx.closePath();
         ctx.clip('evenodd');
         ctx.fillRect(0, 0, this.width(), this.height());
-    
+
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
@@ -9077,6 +9091,7 @@ InputSlotMorph.prototype.menuFromDict = function (
 {
     var key, dial, flag,
     	myself = this,
+        selector,
         block = this.parentThatIsA(BlockMorph),
         ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(
@@ -9105,7 +9120,18 @@ InputSlotMorph.prototype.menuFromDict = function (
         }
         choices = choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices]();
+        if (choices.indexOf('ext_') === 0) {
+            selector = choices.slice(4);
+            choices = SnapExtensions.menus.get(selector);
+            if (choices) {
+                choices = choices.call(this);
+            } else {
+                menu.addItem('cannot find extension menu "' + selector + '"');
+                return menu;
+            }
+        } else {
+            choices = this[choices]();
+        }
         if (!choices) { // menu has already happened
             return;
         }
@@ -9319,6 +9345,16 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
             null,
             this.world()
         );
+    return dict;
+};
+
+InputSlotMorph.prototype.primitivesMenu = function () {
+    var dict = {},
+        allNames = Array.from(SnapExtensions.primitives.keys());
+
+    allNames.sort().forEach(name =>
+        dict[name] = name
+    );
     return dict;
 };
 
@@ -9732,13 +9768,35 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
         'spectrum' : ['spectrum'],
         'resolution' : ['resolution']
     };
-    if (searching) {return {}; }
+    if (searching) {return dict; }
 
     if (this.world().currentKey === 16) { // shift
         dict['~'] = null;
         dict.modifier = ['modifier'];
         dict.output = ['output'];
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.scenesMenu = function (searching) {
+    var dict = {},
+        scenes;
+    if (!searching) {
+        scenes = this.parentThatIsA(IDE_Morph).scenes;
+        if (scenes.length() > 1) {
+            scenes.itemsArray().forEach(scn => {
+                if (scn.name) {
+                    dict[scn.name] = scn.name;
+                }
+            });
+        }
+    }
+    dict['~'] = null;
+    dict.next = ['next'];
+    dict.previous = ['previous'];
+    dict['1 '] = 1; // trailing space needed to prevent undesired sorting
+    dict.last = ['last'];
+    dict.random = ['random'];
     return dict;
 };
 
@@ -10975,7 +11033,8 @@ BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
     var w = this.width(),
         r = this.height() / 2,
         shift = this.edge / 2,
-        slideStep = (this.width() - this.height()) / 4 * Math.max(0, (progress || 0)),
+        slideStep = (this.width() - this.height()) / 4 *
+            Math.max(0, (progress || 0)),
         gradient,
         x,
         y = r,
@@ -13251,7 +13310,9 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "comment pic...",
         () => {
-            var ide = this.parentThatIsA(IDE_Morph);
+            var ide = this.parentThatIsA(IDE_Morph) ||
+                this.parentThatIsA(BlockEditorMorph)
+                    .target.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
                 this.fullImage(),
                 (ide.projectName || localize('untitled')) + ' ' +
@@ -14245,7 +14306,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
 
     cmd = new CommandBlockMorph();
     cmd.setSpec('command %cmdRing');
-    
+
     rings = new CommandBlockMorph();
     rings.setSpec('reporter %repRing predicate %predRing');
 

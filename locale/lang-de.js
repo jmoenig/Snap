@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-06-11', // this, too, will appear in the Translators tab
+        '2021-07-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1165,7 +1165,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um Malstiftbewegungen\nnicht mehr aufzuzeichnen',
     'check to turn on\nlogging pen vectors':
         'einschalten, um Malstiftbewegungen\nals Vektor aufzuzeichnen',
-
+    'Single palette':
+        'Einheitliche Palette',
+    'check to show all blocks in a single palette':
+        'einschalten, um alle Blöcke in einer einzigen Palette zu sehen',
+    'uncheck to show only the selected category\'s blocks':
+        'ausschalten, um nur die Blöcke der ausgewählten Kategorie zu sehen',
 
     // inputs
     'with inputs':
@@ -1246,6 +1251,12 @@ SnapTranslator.dict.de = {
         'mit allen verwendeten Blöcken',
     'edit...':
         'Bearbeiten...',
+    'translations...':
+        'Übersetzungen...',
+    'block variables...':
+        'Blockvariablen...',
+    'in palette':
+        'In der Palette',
 
     // sprites:
     'edit':

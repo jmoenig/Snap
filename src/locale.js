@@ -46,9 +46,11 @@
 
 /*global modules, contains*/
 
-modules.locale = '2021-June-11';
+/*jshint esversion: 6*/
 
 // Global stuff
+
+modules.locale = '2021-July-12';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -168,7 +170,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2021-06-11'
+        '2021-07-06'
 };
 
 SnapTranslator.dict.it = {
@@ -241,11 +243,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2020-07-03'
+        '2021-07-12'
 };
 
 SnapTranslator.dict.eo = {

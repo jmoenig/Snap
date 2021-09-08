@@ -102,11 +102,13 @@ nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
-WatcherMorph, XML_Serializer, SnapTranslator*/
+WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
+
+/*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-June-11';
+modules.byob = '2021-August-03';
 
 // Declarations
 
@@ -143,6 +145,7 @@ function CustomBlockDefinition(spec, receiver) {
         // value: [type, default, options, isReadOnly]
     this.variableNames = [];
     this.comment = null;
+    this.isHelper = false;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
     this.translations = {}; // experimental, format: {lang : spec}
@@ -331,7 +334,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'directionDialMenu'
                 ],
                 fname
-            )) {
+            ) || fname.indexOf('ext_') === 0) {
                 return fname;
             }
         }
@@ -347,11 +350,6 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
     if (string.match(/^function\s*\(.*\)\s*{.*\n/)) {
         // It's a JS function definition.
         // Let's extract its params and body, and return a Function out of them.
-        /*
-        if (!Process.prototype.enableJS) {
-            throw new Error('JavaScript is not enabled');
-        }
-        */
         params = string.match(/^function\s*\((.*)\)/)[1].split(',');
         body = string.split('\n').slice(1,-1).join('\n');
         return Function.apply(null, params.concat([body]));
@@ -380,16 +378,19 @@ CustomBlockDefinition.prototype.menuSearchWords = function () {
         var menu = this.dropDownMenuOf(slot);
         if (menu) {
             if (isString(menu)) { // special menu, translates its values
-                menu = InputSlotMorph.prototype[menu](true);
-                terms.push(
-                    Object.values(menu).map(entry => {
-                        if (isNil(entry)) {return ''; }
-                        if (entry instanceof Array) {
-                            return localize(entry[0]);
-                        }
-                        return entry.toString();
-                    }).join(' ')
-                );
+                if (typeof InputSlotMorph.prototype[menu] === 'function') {
+                    // catch typos in extension menus
+                    menu = InputSlotMorph.prototype[menu](true);
+                    terms.push(
+                        Object.values(menu).map(entry => {
+                            if (isNil(entry)) {return ''; }
+                            if (entry instanceof Array) {
+                                return localize(entry[0]);
+                            }
+                            return entry.toString();
+                        }).join(' ')
+                    );
+                }
             } else { // assume a dictionary, take its keys
                 terms.push(Object.keys(menu).join(' '));
             }
@@ -1081,10 +1082,17 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
-        var on = '\u2611 ',
-            off = '\u2610 ';
         menu.addItem(
-            (test ? on : off) + localize(label),
+            [
+                test ? new SymbolMorph(
+                    'checkedBox',
+                    MorphicPreferences.menuFontSize * 0.75
+                ) : new SymbolMorph(
+                    'rectangle',
+                    MorphicPreferences.menuFontSize * 0.75
+                ),
+                localize(label)
+            ],
             toggle,
             test ? onHint : offHint
         );
@@ -1167,6 +1175,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 );
             }
         }
+        addOption(
+            'in palette',
+            () => hat.isHelper = !hat.isHelper,
+            !hat.isHelper,
+            'uncheck to\nhide in palette',
+            'check to\nshow in palette'
+        );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
         if (!menu) {
@@ -1755,7 +1770,7 @@ BlockDialogMorph.prototype.openForChange = function (
     pic,
     preventTypeChange // <bool>
 ) {
-    var clr = SpriteMorph.prototype.blockColor[category];
+    var clr = SpriteMorph.prototype.blockColorFor(category);
     this.key = 'changeABlock';
     this.category = category;
     this.blockType = type;
@@ -1790,14 +1805,26 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
     SpriteMorph.prototype.categories.forEach(cat =>
         this.addCategoryButton(cat)
     );
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        this.addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
+    );
 };
 
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
         colors = [
             IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
-            SpriteMorph.prototype.blockColor[category]
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
+            SpriteMorph.prototype.blockColorFor(category)
         ],
         button;
 
@@ -1839,26 +1866,82 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     return button;
 };
 
+BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
+    var labelWidth = 172,
+        colors = [
+            IDE_Morph.prototype.frameColor,
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
+            clr
+        ],
+        button;
+
+    button = new ToggleButtonMorph(
+        colors,
+        this, // this block dialog box is the target
+        () => {
+            this.category = category;
+            this.categories.children.forEach(each =>
+                each.refresh()
+            );
+            if (this.types) {
+                this.types.children.forEach(each =>
+                    each.setColor(colors[2])
+                );
+            }
+            this.edit();
+        },
+        category, // UCase label
+        () => this.category === category, // query
+        null, // env
+        null, // hint
+        labelWidth, // minWidth
+        true // has preview
+    );
+
+    button.corner = 8;
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = WHITE;
+        }
+    button.contrast = this.buttonContrast;
+    button.fixLayout();
+    button.refresh();
+    this.categories.add(button);
+    return button;
+};
+
 BlockDialogMorph.prototype.fixCategoriesLayout = function () {
     var buttonWidth = this.categories.children[0].width(), // all the same
         buttonHeight = this.categories.children[0].height(), // all the same
+        more = SpriteMorph.prototype.customCategories.size,
         xPadding = 15,
         yPadding = 2,
         border = 10, // this.categories.border,
-        rows =  Math.ceil((this.categories.children.length) / 2),
         l = this.categories.left(),
         t = this.categories.top(),
-        i = 0,
         row,
         col;
 
-    this.categories.children.forEach(button => {
-        i += 1;
-        row = Math.ceil(i / 2);
-        col = 2 - (i % 2);
+    this.categories.children.forEach((button, i) => {
+        if (i < 8) {
+            row = i % 4;
+            col = Math.ceil((i + 1) / 4);
+        } else if (i < 10) {
+            row = 4;
+            col = 10 - i;
+        } else {
+            row = i - 5;
+            col = 1;
+        }
         button.setPosition(new Point(
             l + (col * xPadding + ((col - 1) * buttonWidth)),
-            t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+            t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
+                (i > 9 ? border / 2 : 0)
         ));
     });
 
@@ -1867,17 +1950,24 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.border = 0;
         this.categories.edge = 0;
     }
-    this.categories.setExtent(new Point(
-        3 * xPadding + 2 * buttonWidth,
-        (rows + 1) * yPadding + rows * buttonHeight + 2 * border
-    ));
+    this.categories.setWidth(
+        3 * xPadding + 2 * buttonWidth
+    );
+
+    this.categories.setHeight(
+        (5 + 1) * yPadding
+            + 5 * buttonHeight
+            + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
+            + 2 * border
+    );
+
 };
 
 // type radio buttons
 
 BlockDialogMorph.prototype.createTypeButtons = function () {
     var block,
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
 
 
     block = new CommandBlockMorph();
@@ -2397,6 +2487,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         }
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
+        this.definition.isHelper = head.isHelper;
         if (head.comment) {
             this.definition.comment = head.comment.fullCopy();
             this.definition.comment.block = true; // serialize in short form
@@ -2417,6 +2508,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
     ide.refreshPalette();
+    ide.recordUnsavedChanges();
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -2467,6 +2559,14 @@ BlockEditorMorph.prototype.variableNames = function () {
         this.body.contents.children,
         c => c instanceof PrototypeHatBlockMorph
     ).variableNames();
+};
+
+BlockEditorMorph.prototype.isHelper = function () {
+    // answer the helper declaration from my (edited) prototype hat
+    return detect(
+        this.body.contents.children,
+        c => c instanceof PrototypeHatBlockMorph
+    ).isHelper;
 };
 
 // BlockEditorMorph translation
@@ -2570,6 +2670,7 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     // additional attributes to store edited data
     this.blockCategory = definition ? definition.category : null;
     this.type = definition ? definition.type : null;
+    this.isHelper = definition ? definition.isHelper : false;
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
@@ -2625,7 +2726,7 @@ PrototypeHatBlockMorph.prototype.fixBlockColor = function (
             this.alternateBlockColor();
         }
     } else if (this.category && !this.color.eq(
-            SpriteMorph.prototype.blockColor[this.category]
+            SpriteMorph.prototype.blockColorFor(this.category)
         )) {
         this.alternateBlockColor();
     }
@@ -2745,6 +2846,13 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_pianoKeyboardMenu',
             '§_directionDialMenu'
         ],
+        this.options
+    );
+};
+
+BlockLabelFragment.prototype.hasExtensionMenu = function () {
+    return contains(
+        Array.from(SnapExtensions.menus.keys()).map(str => '§_ext_' + str),
         this.options
     );
 };
@@ -3163,7 +3271,7 @@ InputSlotDialogMorph.prototype.init = function (
 InputSlotDialogMorph.prototype.createTypeButtons = function () {
     var block,
         arrow,
-        clr = SpriteMorph.prototype.blockColor[this.category];
+        clr = SpriteMorph.prototype.blockColorFor(this.category);
 
 
     block = new JaggedBlockMorph(localize('Title text'));
@@ -3741,6 +3849,13 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 localize('special'),
                 this.specialSlotsMenu()
             );
+            if (this.world().currentKey === 16) { // shift-key down
+                menu.addMenu(
+                    (this.fragment.hasExtensionMenu() ? on : off) +
+                    localize('extension'),
+                    this.extensionOptionsMenu()
+                );
+            }
             return menu;
         }
         return this.specialSlotsMenu();
@@ -3805,6 +3920,27 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('variables', '§_getVarNamesDict');
     addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
     addSpecialOptions('360° dial', '§_directionDialMenu');
+    return menu;
+};
+
+InputSlotDialogMorph.prototype.extensionOptionsMenu = function () {
+    var menu = new MenuMorph(this.setSlotOptions, null, this),
+        myself = this,
+        selectors = Array.from(SnapExtensions.menus.keys()),
+        on = '\u26AB ',
+        off = '\u26AA ';
+
+    function addSpecialOptions(label, selector) {
+        menu.addItem(
+            (myself.fragment.options === selector ?
+                    on : off) + localize(label),
+            selector
+        );
+    }
+
+    selectors.forEach(sel => {
+        addSpecialOptions(sel.slice(4), '§_ext_' + sel);
+    });
     return menu;
 };
 
@@ -4004,7 +4140,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     // populate palette
     x = palette.left() + padding;
     y = palette.top() + padding;
-    SpriteMorph.prototype.categories.forEach(category => {
+    SpriteMorph.prototype.allCategories().forEach(category => {
         this.blocks.forEach(definition => {
             if (definition.category === category) {
                 if (lastCat && (category !== lastCat)) {
@@ -4100,6 +4236,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '" version="'
             + this.serializer.version
             + '">'
+            + this.paletteXML()
             + str
             + '</blocks>';
         ide.saveXMLAs(
@@ -4113,6 +4250,19 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
+};
+
+BlockExportDialogMorph.prototype.paletteXML = function () {
+    var palette = new Map();
+    this.blocks.forEach(def => {
+        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+            palette.set(
+                def.category,
+                SpriteMorph.prototype.customCategories.get(def.category)
+            );
+        }
+    });
+    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout

@@ -79,13 +79,15 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO,
-StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, BLACK, WHITE,
-HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
-ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph, MenuItemMorph, Note, useBlurredShadows*/
+/*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO, Note,
+StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, ColorPaletteMorph,
+HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph, isNil,
+ArrowMorph, MenuMorph, isString, SliderMorph, MorphicPreferences, BLACK, WHITE,
+ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
-modules.widgets = '2021-January-05';
+/*jshint esversion: 6*/
+
+modules.widgets = '2021-July-21';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1882,6 +1884,126 @@ DialogBoxMorph.prototype.promptVector = function (
 
     if (!this.key) {
         this.key = 'vector' + title;
+    }
+
+    this.popUp(world);
+};
+
+DialogBoxMorph.prototype.promptCategory = function (
+    title,
+    name,
+    color,
+    world,
+    pic,
+    msg
+) {
+    var row = new AlignmentMorph('row', 4),
+        field = new InputFieldMorph(name),
+        picker = new BoxMorph(2, 1),
+        inp = new AlignmentMorph('column', 2),
+        bdy = new AlignmentMorph('column', this.padding),
+        side;
+
+    function labelText(string) {
+        return new TextMorph(
+            localize(string),
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE // shadowColor
+        );
+    }
+
+    field.setWidth(160);
+    side = field.height() * 0.8;
+    picker.setExtent(new Point(side, side));
+    picker.setColor(color);
+
+    picker.mouseClickLeft = () => {
+        var hand = world.hand,
+            posInDocument = getDocumentPositionOf(world.worldCanvas),
+            mouseMoveBak = hand.processMouseMove,
+            mouseDownBak = hand.processMouseDown,
+            mouseUpBak = hand.processMouseUp,
+            pal = new ColorPaletteMorph(null, new Point(160, 100));
+
+        world.add(pal);
+        pal.setPosition(picker.topRight().add(new Point(this.edge,0)));
+
+        hand.processMouseMove = (event) => {
+            var clr = world.getGlobalPixelColor(hand.position());
+            hand.setPosition(new Point(
+                event.pageX - posInDocument.x,
+                event.pageY - posInDocument.y
+            ));
+            if (!clr.a) {
+                // ignore transparent,
+                // needed for retina-display support
+                return;
+            }
+            picker.setColor(clr);
+        };
+
+        hand.processMouseDown = nop;
+
+        hand.processMouseUp = () => {
+            pal.destroy();
+            hand.processMouseMove = mouseMoveBak;
+            hand.processMouseDown = mouseDownBak;
+            hand.processMouseUp = mouseUpBak;
+        };
+    };
+
+    inp.alignment = 'left';
+    inp.setColor(this.color);
+    bdy.setColor(this.color);
+    row.setColor(this.color);
+
+    row.add(field);
+    row.add(picker);
+    inp.add(row);
+
+    if (msg) {
+        bdy.add(labelText(msg));
+    }
+
+    bdy.add(inp);
+
+    row.fixLayout();
+    field.fixLayout();
+    picker.fixLayout();
+    inp.fixLayout();
+    bdy.fixLayout();
+
+    this.labelString = title;
+    this.createLabel();
+    if (pic) {this.setPicture(pic); }
+
+    this.addBody(bdy);
+
+    this.addButton('ok', 'OK');
+
+    this.addButton('cancel', 'Cancel');
+    this.fixLayout();
+
+    this.edit = function () {
+        field.edit();
+    };
+
+    this.getInput = function () {
+        return {
+            name: field.getValue(),
+            color: picker.color.copy()
+        };
+    };
+
+    if (!this.key) {
+        this.key = 'category' + title;
     }
 
     this.popUp(world);

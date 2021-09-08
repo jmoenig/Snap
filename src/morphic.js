@@ -678,6 +678,15 @@
 
         droppedBinary(anArrayBuffer, name)
 
+    In case multiple files are dropped simulateneously the events
+
+        beginBulkDrop()
+        endBulkDrop()
+
+    are dispatched to to Morphs interested in bracketing the bulk operation,
+    and the endBulkDrop() event is only signalled after the contents last file
+    has been asynchronously made available.
+
 
     (e) keyboard events
     -------------------
@@ -1280,7 +1289,9 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2021-June-09';
+/*jshint esversion: 6*/
+
+var morphicVersion = '2021-July-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1303,7 +1314,7 @@ var standardSettings = {
     prompterFontSize: 12,
     prompterSliderSize: 10,
     handleSize: 15,
-    scrollBarSize: 12,
+    scrollBarSize: 9, // was 12,
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: false, // turned on by touch events, don't set
@@ -4062,7 +4073,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
             x => this.setLeft(x),
             () => this.left(),
             -(this.left() - endPoint.x),
-            msecs || 100,
+            msecs === 0 ? 0 : msecs || 100,
             easing
         );
     world.animations.push(horizontal);
@@ -4070,7 +4081,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
         y => this.setTop(y),
         () => this.top(),
         -(this.top() - endPoint.y),
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         easing,
         () => {
             horizontal.setter(horizontal.destination);
@@ -4094,7 +4105,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
         },
         () => this.alpha,
         endAlpha - this.alpha,
-        msecs || 200,
+        msecs === 0 ? 0 : msecs || 200,
         easing,
         () => {
             this.alpha = oldAlpha;
@@ -4106,7 +4117,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
 Morph.prototype.perish = function (msecs, onComplete) {
     this.fadeTo(
         0,
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         null,
         () => {
             this.destroy();
@@ -7029,12 +7040,13 @@ SliderMorph.prototype.init = function (
     this.offset = null;
     this.button = new SliderButtonMorph();
     this.button.isDraggable = false;
+    this.button.alpha = MorphicPreferences.isFlat ? 0.7 : 1;
     this.button.color = new Color(200, 200, 200);
     this.button.highlightColor = new Color(210, 210, 255);
     this.button.pressColor = new Color(180, 180, 255);
     SliderMorph.uber.init.call(this, orientation);
     this.add(this.button);
-    this.alpha = 0.3;
+    this.alpha = MorphicPreferences.isFlat ? 0 : 0.3;
     this.color = color || new Color(0, 0, 0);
     this.setExtent(new Point(20, 100));
     this.fixLayout();
@@ -8229,6 +8241,7 @@ MenuMorph.prototype.popUpAtHand = function (world) {
 MenuMorph.prototype.popUpCenteredAtHand = function (world) {
     var wrrld = world || this.world;
     this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.hand.position().subtract(
@@ -8240,6 +8253,7 @@ MenuMorph.prototype.popUpCenteredAtHand = function (world) {
 MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     var wrrld = world || this.world;
     this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.center().subtract(
@@ -11583,6 +11597,9 @@ HandMorph.prototype.processMouseScroll = function (event) {
         droppedSVG
         droppedAudio
         droppedText
+
+        beginBulkDrop
+        endBulkDrop
 */
 
 HandMorph.prototype.processDrop = function (event) {
@@ -11596,11 +11613,20 @@ HandMorph.prototype.processDrop = function (event) {
         droppedAudio(audio, name)
         droppedText(text, name, type)
 
-    events to interested Morphs at the mouse pointer
+    events to interested Morphs at the mouse pointer.
+
+    In case multiple files are dropped simulateneously also displatch
+    the events
+
+        beginBulkDrop()
+        endBulkDrop()
+
+    to Morphs interested in bracketing the bulk operation
 */
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        fileCount,
         url = event.dataTransfer ?
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
@@ -11614,11 +11640,15 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readSVG(aFile) {
         var pic = new Image(),
-            frd = new FileReader();
-        while (!target.droppedSVG) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedSVG) {
+            trg = trg.parent;
         }
-        pic.onload = () => target.droppedSVG(pic, aFile.name);
+        pic.onload = () => {
+            trg.droppedSVG(pic, aFile.name);
+            bulkDrop();
+        };
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
@@ -11626,14 +11656,16 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readImage(aFile) {
         var pic = new Image(),
-            frd = new FileReader();
-        while (!target.droppedImage) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedImage) {
+            trg = trg.parent;
         }
         pic.onload = () => {
             canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
-            target.droppedImage(canvas, aFile.name);
+            trg.droppedImage(canvas, aFile.name);
+            bulkDrop();
         };
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
@@ -11642,37 +11674,62 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readAudio(aFile) {
         var snd = new Audio(),
-            frd = new FileReader();
-        while (!target.droppedAudio) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedAudio) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
             snd.src = e.target.result;
-            target.droppedAudio(snd, aFile.name);
+            trg.droppedAudio(snd, aFile.name);
+            bulkDrop();
         };
         frd.readAsDataURL(aFile);
     }
 
     function readText(aFile) {
-        var frd = new FileReader();
-        while (!target.droppedText) {
-            target = target.parent;
+        var frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedText) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
-            target.droppedText(e.target.result, aFile.name, aFile.type);
+            trg.droppedText(e.target.result, aFile.name, aFile.type);
+            bulkDrop();
         };
         frd.readAsText(aFile);
     }
 
     function readBinary(aFile) {
-        var frd = new FileReader();
-        while (!target.droppedBinary) {
-            target = target.parent;
+        var frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedBinary) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
-            target.droppedBinary(e.target.result, aFile.name);
+            trg.droppedBinary(e.target.result, aFile.name);
+            bulkDrop();
         };
         frd.readAsArrayBuffer(aFile);
+    }
+
+    function beginBulkDrop() {
+        var trg = target;
+        while (!trg.beginBulkDrop) {
+            trg = trg.parent;
+        }
+        trg.beginBulkDrop();
+    }
+
+    function bulkDrop() {
+        var trg = target;
+            fileCount -= 1;
+        if (files.length > 1 && fileCount === 0) {
+            while (!trg.endBulkDrop) {
+                trg = trg.parent;
+            }
+            trg.endBulkDrop();
+        }
     }
 
     function readURL(url, callback) {
@@ -11708,6 +11765,10 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     if (files.length > 0) {
+        fileCount = files.length;
+        if (fileCount > 1) {
+            beginBulkDrop();
+        }
         for (i = 0; i < files.length; i += 1) {
             file = files[i];
             suffix = file.name.slice(
@@ -12250,13 +12311,17 @@ WorldMorph.prototype.wantsDropOf = function () {
     return this.acceptsDrops;
 };
 
-WorldMorph.prototype.droppedImage = function () {
-    return null;
-};
+WorldMorph.prototype.droppedImage = nop;
 
-WorldMorph.prototype.droppedSVG = function () {
-    return null;
-};
+WorldMorph.prototype.droppedSVG = nop;
+
+WorldMorph.prototype.droppedAudio = nop;
+
+WorldMorph.prototype.droppedText = nop;
+
+WorldMorph.prototype.beginBulkDrop = nop;
+
+WorldMorph.prototype.endBulkDrop = nop;
 
 // WorldMorph text field tabbing:
 

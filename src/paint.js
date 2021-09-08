@@ -71,18 +71,21 @@
 
     2020 Apr 14 - Morphic2 migration (Jens)
     2020 May 17 - Pipette alpha fix (Joan)
-    2020 July 13 - modified scale buttons (Jadga)
+    2020 Jul 13 - modified scale buttons (Jadga)
+
+    2021 Mar 17 - moved stage dimension handling to scenes (Jens)
 */
 
-/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
-Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph, nop,
-localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
-BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
-StageMorph, isNil, SVG_Costume*/
+/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph, nop,
+Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph,  isNil,
+localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph, modules,
+BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume*/
+
+/*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2020-July-13';
+modules.paint = '2021-July-05';
 
 // Declarations
 
@@ -106,6 +109,7 @@ function PaintEditorMorph() {
 
 PaintEditorMorph.prototype.init = function () {
     // additional properties:
+    this.ide = null;
     this.paper = null; // paint canvas
     this.oncancel = null;
 
@@ -116,15 +120,16 @@ PaintEditorMorph.prototype.init = function () {
     this.labelString = "Paint Editor";
     this.createLabel();
 
-    // build contents:
-    this.buildContents();
+    // building the contents happens when I am opened with an IDE
+    // so my extent can be adjusted accordingly (jens)
+    // this.buildContents();
 };
 
 PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
     this.paper = new PaintCanvasMorph(function () {return myself.shift; });
-    this.paper.setExtent(StageMorph.prototype.dimensions);
+    this.paper.setExtent(this.ide.stage.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
     this.controls = new AlignmentMorph('column', this.padding / 2);
@@ -292,6 +297,8 @@ PaintEditorMorph.prototype.openIn = function (
     this.oldim = oldim;
     this.callback = callback || nop;
     this.ide = anIDE;
+
+    this.buildContents();
 
     this.processKeyUp = function () {
         myself.shift = false;

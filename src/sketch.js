@@ -54,14 +54,18 @@
         - select primary color with right-click (in addition to shift-click)
     2020, April 15 (Jens):
         - migrated to new Morphic2 architecture
+    2021, March 17 (Jens):
+        - moved stage dimension handling to scenes
 */
 
-/*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
-PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
-TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
-localize, PaintCanvasMorph, StringMorph, detect, modules*/
+/*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, localize,
+PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph, isNil,
+TextMorph, Image, newCanvas, PaintEditorMorph, Costume, nop, PaintCanvasMorph,
+StringMorph, detect, modules*/
 
-modules.sketch = '2020-July-13';
+/*jshint esversion: 6*/
+
+modules.sketch = '2021-July-05';
 
 // Declarations
 
@@ -999,7 +1003,7 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
 };
 
 VectorPaintEditorMorph.prototype.convertToBitmap = function () {
-    var canvas = newCanvas(StageMorph.prototype.dimensions),
+    var canvas = newCanvas(this.ide.stage.dimensions),
         myself = this;
 
     this.object = new Costume();
@@ -1053,7 +1057,14 @@ VectorPaintEditorMorph.prototype.openIn = function (
     var myself = this,
         isEmpty = isNil(shapes) || shapes.length === 0;
 
-    VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback, anIDE);
+    VectorPaintEditorMorph.uber.openIn.call(
+        this,
+        world,
+        null,
+        oldrc,
+        callback,
+        anIDE
+    );
     this.ide = anIDE;
     this.paper.drawNew();
     this.paper.changed();
@@ -1203,7 +1214,7 @@ VectorPaintEditorMorph.prototype.buildContents = function() {
 
     this.paper.destroy();
     this.paper = new VectorPaintCanvasMorph(myself.shift);
-    this.paper.setExtent(StageMorph.prototype.dimensions);
+    this.paper.setExtent(this.ide.stage.dimensions);
     this.body.add(this.paper);
 
     this.refreshToolButtons();

@@ -1,0 +1,51 @@
+{
+  "name": "Snap!",
+  "short_name": "Snap!",
+  "icons": [{
+      "src": "img/snap-icon-72.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-96.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-120.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }, {
+      "src": "img/snap-icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-384.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "img/snap-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+  "lang": "en-US",
+  "start_url": "./snap.html",
+  "display": "standalone",
+  "background_color": "white",
+  "theme_color": "white"
+}

@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs morphic.js, xml.js, and most of Snap!'s other modules
+    needs morphic.js, xml.js, scenes.js and most of Snap!'s other modules
 
 
     hierarchy
@@ -49,20 +49,21 @@
 
 */
 
-/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph,
-WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph,
+/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph, console,
+WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph, Sound,
 CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
-Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
+Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
-localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences, Process,
-SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas, contains*/
+localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
+SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene,
+Project*/
+
+/*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-June-10';
-
+modules.store = '2021-August-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -78,6 +79,7 @@ modules.store = '2021-June-10';
 function XML_Serializer() {
     this.contents = [];
     this.media = [];
+    this.root = {};
     this.isCollectingMedia = false;
     this.isExportingBlocksLibrary = false;
 }
@@ -87,7 +89,7 @@ function XML_Serializer() {
 XML_Serializer.prototype.idProperty = 'serializationID';
 XML_Serializer.prototype.mediaIdProperty = 'serializationMediaID';
 XML_Serializer.prototype.mediaDetectionProperty = 'isMedia';
-XML_Serializer.prototype.version = 1; // increment on structural change
+XML_Serializer.prototype.version = 2; // increment on structural change
 
 // XML_Serializer accessing:
 
@@ -108,6 +110,9 @@ XML_Serializer.prototype.store = function (object, mediaID) {
         // unsupported type, to be checked before calling store()
         // when debugging, be sure to throw an error at this point
         return '';
+    }
+    if (object instanceof Scene) {
+        this.root = object;
     }
     if (this.isCollectingMedia && object[this.mediaDetectionProperty]) {
         this.addMedia(object, mediaID);
@@ -174,6 +179,7 @@ XML_Serializer.prototype.flush = function () {
     // private - free all objects and empty my contents
     this.contents.forEach(obj => delete obj[this.idProperty]);
     this.contents = [];
+    this.root = {};
 };
 
 XML_Serializer.prototype.flushMedia = function () {
@@ -247,7 +253,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 6, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -279,7 +285,7 @@ function SnapSerializer() {
 // SnapSerializer initialization:
 
 SnapSerializer.prototype.init = function () {
-    this.project = {};
+    this.scene = new Scene();
     this.objects = {};
     this.mediaDict = {};
 };
@@ -316,7 +322,9 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
     // show a warning if the origin apps differ
 
     var appInfo = xmlNode.attributes.app,
-        app = appInfo ? appInfo.split(' ')[0] : null;
+        app = appInfo ? appInfo.split(' ')[0] : null,
+        scenesModel = xmlNode.childNamed('scenes'),
+        project = new Project();
 
     if (ide && app && app !== this.app.split(' ')[0]) {
         ide.inform(
@@ -326,18 +334,30 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
                 '\n\nand may be incompatible or fail to load here.'
         );
     }
-    return this.rawLoadProjectModel(xmlNode, remixID);
+    if (scenesModel) {
+        if (scenesModel.attributes.select) {
+            project.sceneIdx = +scenesModel.attributes.select;
+        }
+        scenesModel.childrenNamed('scene').forEach(model => {
+            ide.scene.captureGlobalSettings();
+            project.scenes.add(this.loadScene(model));
+            ide.scene.applyGlobalSettings();
+        });
+    } else {
+        project.scenes.add(this.loadScene(xmlNode, remixID));
+    }
+    return project.initialize();
 };
 
-SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
+SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     // private
-    var project = {sprites: {}},
+    var scene = new Scene(),
         model,
         nameID;
 
-    this.project = project;
+    this.scene = scene;
 
-    model = {project: xmlNode };
+    model = {scene: xmlNode };
     if (+xmlNode.attributes.version > this.version) {
         throw 'Project uses newer version of Serializer';
     }
@@ -345,8 +365,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     /* Project Info */
 
     this.objects = {};
-    project.name = model.project.attributes.name;
-    if (!project.name) {
+    scene.name = model.scene.attributes.name;
+    if (!scene.name) {
         nameID = 1;
         while (
             Object.prototype.hasOwnProperty.call(
@@ -356,138 +376,145 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         ) {
             nameID += 1;
         }
-        project.name = 'Untitled ' + nameID;
+        scene.name = 'Untitled ' + nameID;
     }
-    model.notes = model.project.childNamed('notes');
+    // unified palette persistence commented out during development:
+    // scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    model.notes = model.scene.childNamed('notes');
     if (model.notes) {
-        project.notes = model.notes.contents;
+        scene.notes = model.notes.contents;
     }
-    model.globalVariables = model.project.childNamed('variables');
-    project.globalVariables = new VariableFrame();
+    model.palette = model.scene.childNamed('palette');
+    if (model.palette) {
+        scene.customCategories = this.loadPalette(model.palette);
+        SpriteMorph.prototype.customCategories = scene.customCategories;
+    }
+    model.globalVariables = model.scene.childNamed('variables');
 
     /* Stage */
 
-    model.stage = model.project.require('stage');
+    model.stage = model.scene.require('stage');
     StageMorph.prototype.frameRate = 0;
-    project.stage = new StageMorph(project.globalVariables);
-    project.stage.remixID = remixID;
+    scene.stage.remixID = remixID;
+
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,
             'id'
         )) {
-        this.objects[model.stage.attributes.id] = project.stage;
+        this.objects[model.stage.attributes.id] = scene.stage;
     }
     if (model.stage.attributes.name) {
-        project.stage.name = model.stage.attributes.name;
+        scene.stage.name = model.stage.attributes.name;
     }
     if (model.stage.attributes.color) {
-        project.stage.color = this.loadColor(model.stage.attributes.color);
-        project.stage.cachedHSV = project.stage.color.hsv();
+        scene.stage.color = this.loadColor(model.stage.attributes.color);
+        scene.stage.cachedHSV = scene.stage.color.hsv();
     }
     if (model.stage.attributes.scheduled === 'true') {
-        project.stage.fps = 30;
+        scene.stage.fps = 30;
         StageMorph.prototype.frameRate = 30;
     }
     if (model.stage.attributes.volume) {
-        project.stage.volume = +model.stage.attributes.volume;
+        scene.stage.volume = +model.stage.attributes.volume;
     }
     if (model.stage.attributes.pan) {
-        project.stage.pan = +model.stage.attributes.pan;
+        scene.stage.pan = +model.stage.attributes.pan;
     }
     if (model.stage.attributes.penlog) {
-        StageMorph.prototype.enablePenLogging =
+        scene.enablePenLogging =
             (model.stage.attributes.penlog === 'true');
     }
 
     model.pentrails = model.stage.childNamed('pentrails');
     if (model.pentrails) {
-        project.pentrails = new Image();
-        project.pentrails.onload = function () {
-            if (project.stage.trailsCanvas) { // work-around a bug in FF
-                normalizeCanvas(project.stage.trailsCanvas);
-                var context = project.stage.trailsCanvas.getContext('2d');
-                context.drawImage(project.pentrails, 0, 0);
-                project.stage.changed();
+        scene.pentrails = new Image();
+        scene.pentrails.onload = function () {
+            if (scene.stage.trailsCanvas) { // work-around a bug in FF
+                normalizeCanvas(scene.stage.trailsCanvas);
+                var context = scene.stage.trailsCanvas.getContext('2d');
+                context.drawImage(scene.pentrails, 0, 0);
+                scene.stage.changed();
             }
         };
-        project.pentrails.src = model.pentrails.contents;
+        scene.pentrails.src = model.pentrails.contents;
     }
-    project.stage.setTempo(model.stage.attributes.tempo);
-    StageMorph.prototype.dimensions = new Point(480, 360);
+    scene.stage.setTempo(model.stage.attributes.tempo);
     if (model.stage.attributes.width) {
-        StageMorph.prototype.dimensions.x =
+        scene.stage.dimensions.x =
             Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
-        StageMorph.prototype.dimensions.y =
+        scene.stage.dimensions.y =
             Math.max(+model.stage.attributes.height, 180);
     }
-    project.stage.setExtent(StageMorph.prototype.dimensions);
-    SpriteMorph.prototype.useFlatLineEnds =
+    scene.stage.setExtent(scene.stage.dimensions);
+    scene.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
     BooleanSlotMorph.prototype.isTernary =
         model.stage.attributes.ternary !== 'false';
-    Process.prototype.enableHyperOps =
+    scene.enableHyperOps =
         model.stage.attributes.hyperops !== 'false';
-    project.stage.isThreadSafe =
+    scene.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
-    StageMorph.prototype.enableCodeMapping =
+    scene.enableCodeMapping =
         model.stage.attributes.codify === 'true';
-    StageMorph.prototype.enableInheritance =
+    scene.enableInheritance =
         model.stage.attributes.inheritance !== 'false';
-    StageMorph.prototype.enableSublistIDs =
+    scene.enableSublistIDs =
         model.stage.attributes.sublistIDs === 'true';
 
-    model.hiddenPrimitives = model.project.childNamed('hidden');
+    model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
             sel => {
                 if (sel) {
-                    StageMorph.prototype.hiddenPrimitives[sel] = true;
+                    scene.hiddenPrimitives[sel] = true;
                 }
             }
         );
     }
 
-    model.codeHeaders = model.project.childNamed('headers');
+    model.codeHeaders = model.scene.childNamed('headers');
     if (model.codeHeaders) {
         model.codeHeaders.children.forEach(
-            xml => StageMorph.prototype.codeHeaders[xml.tag] = xml.contents
+            xml => scene.codeHeaders[xml.tag] = xml.contents
         );
     }
 
-    model.codeMappings = model.project.childNamed('code');
+    model.codeMappings = model.scene.childNamed('code');
     if (model.codeMappings) {
         model.codeMappings.children.forEach(
-            xml => StageMorph.prototype.codeMappings[xml.tag] = xml.contents
+            xml => scene.codeMappings[xml.tag] = xml.contents
         );
     }
 
-    model.globalBlocks = model.project.childNamed('blocks');
+    model.globalBlocks = model.scene.childNamed('blocks');
     if (model.globalBlocks) {
-        this.loadCustomBlocks(project.stage, model.globalBlocks, true);
+        this.loadCustomBlocks(scene.stage, model.globalBlocks, true);
         this.populateCustomBlocks(
-            project.stage,
+            scene.stage,
             model.globalBlocks,
             true
         );
     }
-    this.loadObject(project.stage, model.stage);
+    this.loadObject(scene.stage, model.stage);
 
     /* Sprites */
 
     model.sprites = model.stage.require('sprites');
-    project.sprites[project.stage.name] = project.stage;
-
+    if (model.sprites.attributes.select) {
+        scene.spriteIdx = +model.sprites.attributes.select;
+    }
+    scene.spritesDict[scene.stage.name] = scene.stage;
     model.sprites.childrenNamed('sprite').forEach(
         model => this.loadValue(model)
     );
 
     // restore inheritance and nesting associations
-    this.project.stage.children.forEach(sprite => {
+    this.scene.stage.children.forEach(sprite => {
         var exemplar, anchor;
         if (sprite.inheritanceInfo) { // only sprites can inherit
-            exemplar = this.project.sprites[
+            exemplar = this.scene.spritesDict[
                 sprite.inheritanceInfo.exemplar
             ];
             if (exemplar) {
@@ -497,14 +524,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             sprite.updatePropagationCache();
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
-            anchor = this.project.sprites[sprite.nestingInfo.anchor];
+            anchor = this.scene.spritesDict[sprite.nestingInfo.anchor];
             if (anchor) {
                 anchor.attachPart(sprite);
             }
             sprite.rotatesWithAnchor = (sprite.nestingInfo.synch === 'true');
         }
     });
-    this.project.stage.children.forEach(sprite => {
+    this.scene.stage.children.forEach(sprite => {
         var costume;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
@@ -541,7 +568,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 
     if (model.globalVariables) {
         this.loadVariables(
-            project.globalVariables,
+            scene.globalVariables,
             model.globalVariables
         );
     }
@@ -557,7 +584,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
         target = Object.prototype.hasOwnProperty.call(
             model.attributes,
             'scope'
-        ) ? project.sprites[model.attributes.scope] : null;
+        ) ? scene.spritesDict[model.attributes.scope] : null;
 
         // determine whether the watcher is hidden, slightly
         // complicated to retain backward compatibility
@@ -575,7 +602,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             watcher = new WatcherMorph(
                 model.attributes['var'],
                 color,
-                isNil(target) ? project.globalVariables
+                isNil(target) ? scene.globalVariables
                     : target.variables,
                 model.attributes['var'],
                 hidden
@@ -595,12 +622,12 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             watcher.setSliderMax(model.attributes.max || '100', true);
         }
         watcher.setPosition(
-            project.stage.topLeft().add(new Point(
+            scene.stage.topLeft().add(new Point(
                 +model.attributes.x || 0,
                 +model.attributes.y || 0
             ))
         );
-        project.stage.add(watcher);
+        scene.stage.add(watcher);
         watcher.onNextStep = function () {this.currentValue = null; };
 
         // set watcher's contentsMorph's extent if it is showing a list and
@@ -621,29 +648,33 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     });
 
     // clear sprites' inherited methods caches, if any
-    this.project.stage.children.forEach(
+    this.scene.stage.children.forEach(
         sprite => sprite.inheritedMethodsCache = []
     );
 
     this.objects = {};
-    return project;
+    return scene.initialize();
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     // public - answer a new Array of custom block definitions
     // represented by the given XML String
-    var stage = new StageMorph(),
-        model;
+    var stage, model;
 
-    this.project = {
-        stage: stage,
-        sprites: {},
-        targetStage: targetStage // for secondary custom block def look-up
-    };
+    this.scene = new Scene();
+    this.scene.targetStage = targetStage; // for secondary block def look-up
+    stage = this.scene.stage;
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
+    model.palette = model.childNamed('palette');
+    if (model.palette) {
+        SpriteMorph.prototype.customCategories = this.loadPalette(
+            model.palette
+        );
+    }
+    model.removeChild(model.palette);
     this.loadCustomBlocks(stage, model, true);
     this.populateCustomBlocks(
         stage,
@@ -653,36 +684,33 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
-    this.project = {};
+    this.scene = new Scene();
     this.mediaDict = {};
     return stage.globalBlocks;
 };
 
 SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     // public - import a set of sprites represented by xmlString
-    // into the current project of the ide
-    var model, project;
+    // into the current scene of the ide
+    var model, scene;
 
-    project = this.project = {
-        globalVariables: ide.globalVariables,
-        stage: ide.stage,
-        sprites: {}
-    };
-    project.sprites[project.stage.name] = project.stage;
+    this.scene = new Scene(ide.stage);
+    scene = this.scene;
+    scene.spritesDict[scene.stage.name] = scene.stage;
 
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(model => {
-        var sprite  = new SpriteMorph(project.globalVariables);
+        var sprite  = new SpriteMorph(scene.globalVariables);
 
         if (model.attributes.id) {
             this.objects[model.attributes.id] = sprite;
         }
         if (model.attributes.name) {
             sprite.name = ide.newSpriteName(model.attributes.name);
-            project.sprites[sprite.name] = sprite;
+            scene.spritesDict[sprite.name] = sprite;
         }
         if (model.attributes.color) {
             sprite.color = this.loadColor(model.attributes.color);
@@ -697,7 +725,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         if (model.attributes.pan) {
             sprite.pan = +model.attributes.pan;
         }
-        project.stage.add(sprite);
+        scene.stage.add(sprite);
         ide.sprites.add(sprite);
         sprite.scale = parseFloat(model.attributes.scale || '1');
         sprite.rotationStyle = parseFloat(
@@ -713,10 +741,10 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     });
 
     // restore inheritance and nesting associations
-    project.stage.children.forEach(sprite => {
+    scene.stage.children.forEach(sprite => {
         var exemplar, anchor;
         if (sprite.inheritanceInfo) { // only sprites can inherit
-            exemplar = project.sprites[
+            exemplar = scene.spritesDict[
                 sprite.inheritanceInfo.exemplar
             ];
             if (exemplar) {
@@ -724,14 +752,14 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             }
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
-            anchor = project.sprites[sprite.nestingInfo.anchor];
+            anchor = scene.spritesDict[sprite.nestingInfo.anchor];
             if (anchor) {
                 anchor.attachPart(sprite);
             }
             sprite.rotatesWithAnchor = (sprite.nestingInfo.synch === 'true');
         }
     });
-    project.stage.children.forEach(sprite => {
+    scene.stage.children.forEach(sprite => {
         delete sprite.inheritanceInfo;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
@@ -740,7 +768,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     });
 
     this.objects = {};
-    this.project = {};
+    this.scene = new Scene();
     this.mediaDict = {};
 
     ide.stage.fixLayout();
@@ -942,6 +970,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         );
         definition.category = child.attributes.category || 'other';
         definition.type = child.attributes.type || 'command';
+        definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -1111,10 +1140,10 @@ SnapSerializer.prototype.loadScript = function (model, object) {
     var topBlock, block, nextBlock;
 
     // Check whether we're importing a single script, not a script as part of a
-    // whole project
-    if (!this.project.stage) {
-        this.project.stage = object.parentThatIsA(StageMorph);
-        this.project.targetStage = this.project.stage;
+    // whole scene
+    if (!this.scene.stage) {
+        this.scene.stage = object.parentThatIsA(StageMorph);
+        this.scene.targetStage = this.scene.stage;
     }
 
     model.children.forEach(child => {
@@ -1164,17 +1193,6 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes['var']
             );
         } else {
-            // disable loading JavaScript functions
-            /*
-            if (model.attributes.s === 'reportJSFunction' &&
-                    !Process.prototype.enableJS) {
-                if (window.confirm('enable JavaScript?')) {
-                    Process.prototype.enableJS = true;
-                } else {
-                    throw new Error('JavaScript is not enabled');
-                }
-            }
-            */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
             migration = SpriteMorph.prototype.blockMigrations[
                 model.attributes.s
@@ -1185,15 +1203,15 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
-        receiver = isGlobal ? this.project.stage : object;
+        receiver = isGlobal ? this.scene.stage : object;
         if (isGlobal) {
             info = detect(
                 receiver.globalBlocks,
                 block => block.blockSpec() === model.attributes.s
             );
-            if (!info && this.project.targetStage) { // importing block files
+            if (!info && this.scene.targetStage) { // importing block files
                 info = detect(
-                    this.project.targetStage.globalBlocks,
+                    this.scene.targetStage.globalBlocks,
                     block => block.blockSpec() === model.attributes.s
                 );
             }
@@ -1213,7 +1231,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         }
         if (!info || !contains(
         		// catch other forks' blocks
-        		SpriteMorph.prototype.categories, info.category
+        		SpriteMorph.prototype.allCategories(), info.category
         )) {
             return this.obsoleteBlock(isReporter);
         }
@@ -1410,13 +1428,13 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         });
         return v;
     case 'sprite':
-        v  = new SpriteMorph(this.project.globalVariables);
+        v  = new SpriteMorph(this.scene.globalVariables);
         if (model.attributes.id) {
             this.objects[model.attributes.id] = v;
         }
         if (model.attributes.name) {
             v.name = model.attributes.name;
-            this.project.sprites[model.attributes.name] = v;
+            this.scene.spritesDict[model.attributes.name] = v;
         }
         if (model.attributes.idx) {
             v.idx = +model.attributes.idx;
@@ -1434,7 +1452,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         if (model.attributes.pan) {
             v.pan = +model.attributes.pan;
         }
-        this.project.stage.add(v);
+        this.scene.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
             model.attributes.rotation || '1'
@@ -1616,49 +1634,34 @@ SnapSerializer.prototype.loadColor = function (colorString) {
     );
 };
 
-SnapSerializer.prototype.openProject = function (project, ide) {
-    var stage = ide.stage,
-        sprites = [],
-        sprite;
-    if (!project || !project.stage) {
-        return;
-    }
-    ide.siblings().forEach(morph =>
-        morph.destroy()
+SnapSerializer.prototype.loadPalette = function (model) {
+    // private
+    var p = new Map();
+    model.childrenNamed('category').forEach(node =>
+        p.set(node.attributes.name, this.loadColor(node.attributes.color))
     );
-    ide.projectName = project.name;
-    ide.projectNotes = project.notes || '';
-    if (ide.globalVariables) {
-        ide.globalVariables = project.globalVariables;
-    }
-    if (stage) {
-        stage.destroy();
-    }
-    ide.add(project.stage);
-    ide.stage = project.stage;
-    sprites = ide.stage.children.filter(
-        child => child instanceof SpriteMorph
-    );
-    sprites.sort((x, y) => x.idx - y.idx);
-
-    ide.sprites = new List(sprites);
-    sprite = sprites[0] || project.stage;
-
-    if (sizeOf(this.mediaDict) > 0) {
-        ide.hasChangedMedia = false;
-        this.mediaDict = {};
-    } else {
-        ide.hasChangedMedia = true;
-    }
-    project.stage.fixLayout();
-    project.stage.pauseGenericHatBlocks();
-    ide.createCorral();
-    ide.selectSprite(sprite);
-    ide.fixLayout();
-    ide.world().keyboardFocus = project.stage;
+    return p;
 };
 
 // SnapSerializer XML-representation of objects:
+
+SnapSerializer.prototype.paletteToXML = function (aMap) {
+    var xml;
+    if (aMap.size === 0) {return ''; }
+    xml = '<palette>';
+    aMap.forEach((value, key) => {
+        xml += this.format(
+            '<category name="@" color="%,%,%,%"/>',
+            key,
+            value.r,
+            value.g,
+            value.b,
+            value.a
+        );
+    });
+    xml += '</palette>';
+    return xml;
+};
 
 // Generics
 
@@ -1669,23 +1672,37 @@ Array.prototype.toXML = function (serializer) {
     );
 };
 
-// Sprites
+// Scenes & multi-scene projects
 
-StageMorph.prototype.toXML = function (serializer) {
-    var thumbnail = normalizeCanvas(
-            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
-            true
-        ),
-        thumbdata,
-        costumeIdx = this.getCostumeIdx(),
-        ide = this.parentThatIsA(IDE_Morph);
+Project.prototype.toXML = function (serializer) {
+    var thumbdata;
 
-    // catch cross-origin tainting exception when using SVG costumes
+    // thumb data catch cross-origin tainting exception when using SVG costumes
     try {
-        thumbdata = thumbnail.toDataURL('image/png');
+        thumbdata = this.thumbnail.toDataURL('image/png');
     } catch (error) {
         thumbdata = null;
     }
+
+    return serializer.format(
+        '<project name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<scenes select="@">%</scenes>' +
+            '</project>',
+        this.name || localize('Untitled'),
+        serializer.app,
+        serializer.version,
+        this.notes || '',
+        thumbdata,
+        this.scenes.asArray().indexOf(
+            this.currentScene) + 1,
+        serializer.store(this.scenes.itemsArray())
+    );
+};
+
+Scene.prototype.toXML = function (serializer) {
+    var xml;
 
     function code(key) {
         var str = '';
@@ -1703,12 +1720,43 @@ StageMorph.prototype.toXML = function (serializer) {
         return str;
     }
 
+    xml = serializer.format(
+        '<scene name="@"%>' +
+            '<notes>$</notes>' +
+            '%' +
+            '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '%' + // stage
+            '</scene>',
+        this.name || localize('Untitled'),
+        '', // unified palette persistence commented out during development
+        // this.unifiedPalette ? ' palette="single"' : '',
+        this.notes || '',
+        serializer.paletteToXML(this.customCategories),
+        Object.keys(this.hiddenPrimitives).reduce(
+                (a, b) => a + ' ' + b,
+                ''
+            ),
+        code('codeHeaders'),
+        code('codeMappings'),
+        serializer.store(this.stage.globalBlocks),
+        serializer.store(this.globalVariables),
+        serializer.store(this.stage)
+    );
+    return xml;
+};
+
+// Sprites
+
+StageMorph.prototype.toXML = function (serializer) {
+    var costumeIdx = this.getCostumeIdx();
+
     this.removeAllClones();
     return serializer.format(
-        '<project name="@" app="@" version="@">' +
-            '<notes>$</notes>' +
-            '<thumbnail>$</thumbnail>' +
-            '<stage name="@" width="@" height="@" ' +
+            '<stage width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             'penlog="@" ' +
             '%' +
@@ -1727,22 +1775,11 @@ StageMorph.prototype.toXML = function (serializer) {
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
             '<blocks>%</blocks>' +
-            '<scripts>%</scripts><sprites>%</sprites>' +
-            '</stage>' +
-            '<hidden>$</hidden>' +
-            '<headers>%</headers>' +
-            '<code>%</code>' +
-            '<blocks>%</blocks>' +
-            '<variables>%</variables>' +
-            '</project>',
-        (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
-        serializer.app,
-        serializer.version,
-        (ide && ide.projectNotes) ? ide.projectNotes : '',
-        thumbdata,
-        this.name,
-        StageMorph.prototype.dimensions.x,
-        StageMorph.prototype.dimensions.y,
+            '<scripts>%</scripts>' +
+            '<sprites select="@">%</sprites>' +
+            '</stage>',
+        this.dimensions.x,
+        this.dimensions.y,
         costumeIdx,
         this.color.r,
         this.color.g,
@@ -1774,23 +1811,14 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.variables),
         serializer.store(this.customBlocks),
         serializer.store(this.scripts),
-        serializer.store(this.children),
-        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
-                (a, b) => a + ' ' + b,
-                ''
-            ),
-        code('codeHeaders'),
-        code('codeMappings'),
-        serializer.store(this.globalBlocks),
-        (ide && ide.globalVariables) ?
-                    serializer.store(ide.globalVariables) : ''
+        serializer.root.sprites.asArray().indexOf(
+            serializer.root.currentSprite) + 1,
+        serializer.store(this.children)
     );
 };
 
 SpriteMorph.prototype.toXML = function (serializer) {
-    var stage = this.parentThatIsA(StageMorph),
-        ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
-        idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+    var idx = serializer.scene.sprites.asArray().indexOf(this) + 1,
         costumeIdx = this.getCostumeIdx(),
         noCostumes = this.inheritsAttribute('costumes'),
         noSounds = this.inheritsAttribute('sounds'),
@@ -2107,7 +2135,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@">' +
+        '<block-definition s="@" type="@" category="@"%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2118,6 +2146,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.spec,
         this.type,
         this.category || 'other',
+        this.isHelper ? ' helper="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),

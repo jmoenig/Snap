@@ -121,11 +121,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2020-05-13',
+        '2021-07-12',
 
     // GUI
     // control bar:
@@ -672,6 +672,8 @@ SnapTranslator.dict.zh_CN = {
         '中间',
     'paste on %spr':
         '拼贴在 %spr 上',
+    'cut from %spr':
+        '从 %spr 剪切',      
     'pen vectors':
         '画笔矢量',    
 
@@ -1003,7 +1005,29 @@ SnapTranslator.dict.zh_CN = {
     'for each %upvar in %l %cla':
         '逐个执行 %upvar 来自 %l %cla',
     'item':
-        '项',                                      
+        '项',      
+    '%la of %l':
+        '%l 的 %la',
+    'rank':
+        '维数',
+    'dimensions':
+        '维度',
+    'flatten':
+        '一维化',
+    'columns':
+        '行列转置',
+    'reverse':
+        '倒序',
+    'lines':
+        '行',       
+    'index':
+        '索引',
+    'index of %s in %l':
+        '%s 在 %l 中的索引',        
+    'append %lists':
+        '追加合并 %lists',
+    'reshape %l to %nums':
+        '重构列表 %l 为 %nums',     
 
     // other
     'Make a block':
@@ -1241,6 +1265,8 @@ SnapTranslator.dict.zh_CN = {
         '语言…',
     'Zoom blocks...':
         '放大积木…',
+    'Fade blocks...':
+        '积木边框隐身...',       
     'Stage size...':
         '舞台大小…',
     'Stage size':
@@ -1439,6 +1465,18 @@ SnapTranslator.dict.zh_CN = {
     // context menus:
     'help':
         '帮助',
+    'Hyper blocks support':
+        '支持超级运算积木',
+    'uncheck to disable\nusing operators on lists and tables':
+         '取消勾选以禁用作用于列表和表格的超级运算符',
+    'check to enable\nusing operators on lists and tables':
+         '勾选以启用作用于列表和表格的超级运算符',
+    'Log pen vectors':
+        '记录画笔矢量',
+    'uncheck to turn off\nlogging pen vectors':
+        '取消勾选以停止记录画笔矢量',
+    'check to turn on\nlogging pen vectors':
+        '勾选以开始记录画笔矢量',        
 
     // palette:
     'hide primitives':
@@ -2060,20 +2098,10 @@ SnapTranslator.dict.zh_CN = {
         '向下取整',
     'sqrt':
         '平方根',
-    'sin':
-        '正弦',
-    'cos':
-        '余弦',
-    'tan':
-        '正切',
-    'asin':
-        '反正弦',
-    'acos':
-        '反余弦',
-    'atan':
-        '反正切',
-    'ln':
-        '自然对数',
+    'neg':
+        '取反',
+    'sign':
+        '符号',  
     'e^':
         'e^',
 
@@ -2130,6 +2158,10 @@ SnapTranslator.dict.zh_CN = {
         '母角色',
     'children':
         '子角色',
+    'temporary?':
+        '属性为临时?',
+    'draggable?':
+        '是否可拖动?',       
     'clones':
         '克隆',
     'other clones':
