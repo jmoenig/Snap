@@ -40,6 +40,15 @@
             SpriteMorph.prototype.initBlocks();
         }
 
+        onNewProject() {
+            this.registry.forEach(ext => ext.onNewProject());
+            this.onOpenRole();
+        }
+
+        onOpenRole() {
+            this.registry.forEach(ext => ext.onOpenRole());
+        }
+
         register(Extension) {
             if (this.isReady()) {
                 this.load(Extension);
@@ -167,6 +176,10 @@
 
     Extension.prototype.getLabelParts = function() {
         return [];
+    };
+
+    Extension.prototype.onNewProject =
+    Extension.prototype.onOpenRole = function() {
     };
 
     class LabelPart {

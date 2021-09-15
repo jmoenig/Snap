@@ -500,7 +500,9 @@ IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
         role.childNamed('media').toString(),
         '</snapdata>'
     ].join('');
-    return SnapActions.openProject(projectXml);
+
+    return SnapActions.openProject(projectXml)
+        .then(() => this.extensions.onOpenRole());
 };
 
 // Events ///////////////////////////////////////////

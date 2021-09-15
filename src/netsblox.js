@@ -141,6 +141,7 @@ NetsBloxMorph.prototype.newProject = async function (projectName) {
         };
     }
     await this.newProjectFromInfo(projectInfo, !projectName);
+    this.extensions.onNewProject();
 };
 
 NetsBloxMorph.prototype.newProjectFromInfo = async function (projectInfo, updateUrl) {

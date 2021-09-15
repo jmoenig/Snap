@@ -193,4 +193,28 @@ describe('extensions', function() {
             assert(!block);
         });
     });
+
+    describe('onNewProject', function() {
+        it('should call function on new project', function(done) {
+            driver.reset();
+            TestExtension.prototype.onNewProject = () => {
+                delete TestExtension.prototype.onNewProject;
+                done();
+            };
+        });
+    });
+
+    describe('onOpenRole', function() {
+        it('should call function on switch roles', async function() {
+            const {utils} = driver.globals();
+            await driver.newRole('testRole');
+            const deferred = utils.defer();
+            TestExtension.prototype.onOpenRole = () => {
+                delete TestExtension.prototype.onOpenRole;
+                deferred.resolve();
+            };
+            await driver.moveToRole('testRole');
+            await deferred.promise;
+        });
+    });
 });

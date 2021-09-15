@@ -581,10 +581,10 @@ RoomMorph.prototype.moveToRole = function(role) {
     myself.ide.showMessage('moving to ' + role.name);
     SnapCloud.getProject(
         SnapCloud.projectId,
-        function(project) {
-            myself.ide.showMessage('moved to ' + role.name + '!');
-            myself.ide.silentSetProjectName(role.name);
-            myself.ide.source = 'cloud';
+        async project => {
+            this.ide.showMessage('moved to ' + role.name + '!');
+            this.ide.silentSetProjectName(role.name);
+            this.ide.source = 'cloud';
 
             // Load the project or make the project empty
             if (project) {
@@ -596,16 +596,18 @@ RoomMorph.prototype.moveToRole = function(role) {
                 }
 
                 if (project.SourceCode) {
-                    myself.ide.droppedText(project.SourceCode);
+                    this.ide.droppedText(project.SourceCode);
                 } else {  // newly created role
-                    SnapActions.openProject();
+                    await SnapActions.openProject();
+                    this.ide.extensions.onOpenRole();
                 }
             } else {  // Empty the project FIXME
-                SnapActions.openProject();
+                await SnapActions.openProject();
+                this.ide.extensions.onOpenRole();
             }
         },
-        function (err, lbl) {
-            myself.ide.cloudError().call(null, err, lbl);
+        (err, lbl) => {
+            this.ide.cloudError().call(null, err, lbl);
         },
         role.id
     );
