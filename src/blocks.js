@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-September-07';
+modules.blocks = '2021-September-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -416,8 +416,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'mouse-departed' : ['mouse-departed'],
             'scrolled-up' : ['scrolled-up'],
             'scrolled-down' : ['scrolled-down'],
-            'stopped' : ['stopped'], // experimental
-            'entering a scene' : ['entering a scene'] // experimental
+            'stopped' : ['stopped'] // experimental
         }
     },
     '%dates': {
@@ -3165,6 +3164,8 @@ BlockMorph.prototype.showMessageUsers = function () {
         message = '__shout__go__';
     } else if (this.selector === 'receiveOnClone') {
         message = '__clone__init__';
+    } else if (this.selector === 'receiveOnScene') {
+        message = '__scene__init__';
     } else if (inputs[0] instanceof InputSlotMorph) {
         message = inputs[0].evaluate();
     }
@@ -5229,7 +5230,8 @@ CommandBlockMorph.prototype.isStop = function () {
     return ([
         'doForever',
         'doReport',
-        'removeClone'
+        'removeClone',
+        'doSwitchToScene'
     ].indexOf(this.selector) > -1);
 };
 

@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-07';
+modules.objects = '2021-September-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -437,12 +437,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'go back %n layers',
             defaults: [1]
-        },
-        doSwitchToScene: {
-            type: 'command',
-            category: 'looks',
-            spec: 'switch to scene %scn',
-            defaults: [['next']]
         },
 
         // Looks - Debugging primitives for development mode
@@ -906,6 +900,19 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'pause all %pause'
+        },
+
+        // Scenes
+        receiveOnScene: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when this scene starts'
+        },
+        doSwitchToScene: {
+            type: 'command',
+            category: 'control',
+            spec: 'switch to scene %scn',
+            defaults: [['next']]
         },
 
         // Sensing
@@ -2421,8 +2428,6 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push('-');
         blocks.push(block('goToLayer'));
         blocks.push(block('goBack'));
-        blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -2507,8 +2512,8 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
-        blocks.push(block('receiveMessage'));
         blocks.push('-');
+        blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
@@ -2546,6 +2551,9 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
+        blocks.push('-');
+        blocks.push(block('receiveOnScene'));
+        blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
 
@@ -6089,6 +6097,9 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (morph.selector === 'receiveOnClone') {
                 return message === '__clone__init__';
             }
+            if (morph.selector === 'receiveOnScene') {
+                return message === '__scene__init__';
+            }
         }
         return false;
     });
@@ -8435,9 +8446,7 @@ StageMorph.prototype.fireChangeOfSceneEvent = function () {
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForInteraction(
-                'entering a scene'
-            ).forEach(block =>
+            morph.allHatBlocksFor('__scene__init__').forEach(block =>
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
@@ -8642,8 +8651,6 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('hide'));
         blocks.push(watcherToggle('reportShown'));
         blocks.push(block('reportShown'));
-        blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
@@ -8715,8 +8722,8 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
-        blocks.push(block('receiveMessage'));
         blocks.push('-');
+        blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
@@ -8752,6 +8759,9 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push('-');
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
+        blocks.push('-');
+        blocks.push(block('receiveOnScene'));
+        blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
 

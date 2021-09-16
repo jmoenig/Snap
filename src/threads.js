@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-September-07';
+modules.threads = '2021-September-08';
 
 var ThreadManager;
 var Process;
@@ -4710,7 +4710,12 @@ Process.prototype.doSwitchToScene = function (id) {
         ide, scenes, num, scene;
 
     this.assertAlive(rcvr);
-    if (this.readyToTerminate) {return; } // let the user press "stop" or "esc"
+    if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
+        // let the user press "stop" or "esc",
+        // prevent "when this scene starts" hat blocks from directly
+        // switching to another
+        return;
+    }
     ide = rcvr.parentThatIsA(IDE_Morph);
     scenes = ide.scenes;
 
@@ -4735,6 +4740,8 @@ Process.prototype.doSwitchToScene = function (id) {
             idx = this.reportBasicRandom(1, scenes.length());
             break;
         }
+        this.stop();
+        // ide.onNextStep = () => // slow down scene switching, disabled for now
         ide.switchToScene(scenes.at(idx));
         return;
     }
@@ -4748,9 +4755,10 @@ Process.prototype.doSwitchToScene = function (id) {
         scene = scenes.at(num);
     }
 
+    this.stop();
+    // ide.onNextStep = () => // slow down scene switching, disabled for now
     ide.switchToScene(scene);
 };
-
 
 // Process color primitives
 

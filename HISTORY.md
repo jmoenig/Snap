@@ -33,6 +33,16 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-09-09
+* German translation update
+
+### 2021-09-08
+* objects: changed category for "switch to scene" to control
+* blocks, objects, threads: new hat block for "when this scene starts"
+* blocks, threads: changed "switch to scene" to be a stop block
+* threads: disabled "when this scene starts" hat blocks to directly switch to another scene
+* threads: slowed down scene switching to let the user better interrupt it, commented out for now
+
 ### 2021-09-07
 * blocks, objects, threads: new change-of-scene event
 * gui, threads: enabled change-of-scene events for user-induced scene switches, made them user-stoppable
