@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-08';
+modules.objects = '2021-September-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -906,7 +906,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveOnScene: {
             type: 'hat',
             category: 'control',
-            spec: 'when this scene starts'
+            spec: 'when switched to this scene'
         },
         doSwitchToScene: {
             type: 'command',

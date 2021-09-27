@@ -16,7 +16,6 @@
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
-    * libraries can now have hidden helper blocks
     * blocked xhr requests to from Snap! to s.b.e
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
@@ -32,6 +31,10 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-09-27
+* objects: renamed scene event hat block
+* German translation update
 
 ### 2021-09-09
 * German translation update

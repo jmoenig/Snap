@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-09-9', // this, too, will appear in the Translators tab
+        '2021-09-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -593,8 +593,8 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'when this scene starts':
-        'Wenn diese Szene beginnt',
+    'when switched to this scene':
+        'Wenn zu dieser Szene gewechselt',
     'switch to scene %scn':
         'wechsle zur Szene %scn',
     'next':
