@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-27';
+modules.objects = '2021-September-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -742,6 +742,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'when I receive %msgHat'
+        },
+        receiveTransmission: { // experimental v7
+            dev: true,
+            type: 'hat',
+            category: 'control',
+            spec: 'when I receive %transmission'
         },
         receiveCondition: {
             type: 'hat',
@@ -2556,6 +2562,14 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+
+        // for debugging: ///////////////
+        if (devMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('receiveTransmission'));
+        }
 
     } else if (category === 'sensing') {
 
@@ -6083,22 +6097,29 @@ SpriteMorph.prototype.allSendersOf = function (message, receiverName, known) {
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     if (typeof message === 'number') { message = message.toString(); }
     return this.scripts.children.filter(morph => {
-        var event;
-        if (morph.selector) {
-            if (morph.selector === 'receiveMessage') {
+        var sel = morph.selector,
+            event;
+        if (sel) {
+            if (sel === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
                 return event === message
                     || (event instanceof Array
                         && message !== '__shout__go__'
-                        && message !== '__clone__init__');
+                        && message !== '__clone__init__'
+                        && message !== '__scene__init__');
             }
-            if (morph.selector === 'receiveGo') {
+            if (sel === 'receiveTransmission') {
+                return message !== '__shout__go__'
+                    && message !== '__clone__init__'
+                    && message !== '__scene__init__';
+            }
+            if (sel === 'receiveGo') {
                 return message === '__shout__go__';
             }
-            if (morph.selector === 'receiveOnClone') {
+            if (sel === 'receiveOnClone') {
                 return message === '__clone__init__';
             }
-            if (morph.selector === 'receiveOnScene') {
+            if (sel === 'receiveOnScene') {
                 return message === '__scene__init__';
             }
         }
@@ -8725,11 +8746,11 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
+        blocks.push(watcherToggle('getLastMessage'));
+        blocks.push(block('getLastMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
-        blocks.push(watcherToggle('getLastMessage'));
-        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -8765,6 +8786,14 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+
+        // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('receiveTransmission'));
+        }
 
     } else if (category === 'sensing') {
 

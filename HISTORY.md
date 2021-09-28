@@ -10,6 +10,7 @@
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
+    * new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -31,6 +32,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-09-28
+* objects, blocks, threads: new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
 
 ### 2021-09-27
 * objects: renamed scene event hat block

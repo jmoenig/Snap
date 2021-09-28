@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-September-08';
+modules.threads = '2021-September-28';
 
 var ThreadManager;
 var Process;
@@ -3729,13 +3729,33 @@ Process.prototype.doBroadcast = function (message) {
     if (msg !== '') {
         stage.lastMessage = message; // the actual data structure
         rcvrs.forEach(morph => {
+            var varFrame;
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
-                    procs.push(stage.threads.startProcess(
-                        block,
-                        morph,
-                        stage.isThreadSafe
-                    ));
+                    if (block.selector === 'receiveTransmission') {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(
+                            block.inputs()[0].evaluate(),
+                            message
+                        );
+                        procs.push(stage.threads.startProcess(
+                            block,
+                            morph,
+                            stage.isThreadSafe,
+                            null, // exportResult (bool)
+                            null, // callback
+                            null, // isClicked
+                            null, // rightAway
+                            null, // atomic
+                            varFrame
+                        ));
+                    } else {
+                        procs.push(stage.threads.startProcess(
+                            block,
+                            morph,
+                            stage.isThreadSafe
+                        ));
+                    }
                 });
             }
         });

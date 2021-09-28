@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-September-08';
+modules.blocks = '2021-September-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -959,6 +959,10 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'template',
         label: 'a'
     },
+    '%transmission': { // experimental v7
+        type: 'template',
+        label: 'message'
+    },
     '%upvar': {
         type: 'template',
         label: '\u2191' // up-arrow
@@ -1629,7 +1633,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             }
             break;
         case 'template':
-            part = new TemplateSlotMorph(info.label);
+            part = new TemplateSlotMorph(localize(info.label));
             break;
         case 'color':
             part = new ColorSlotMorph();
