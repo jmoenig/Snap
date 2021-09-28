@@ -507,9 +507,11 @@ IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
 
 // Events ///////////////////////////////////////////
 
-class Events extends EventTarget {
+class Events {
+    // closure compiler bug prevents us from subclassing EventTarget
+    // For more information, check out https://github.com/NetsBlox/NetsBlox/issues/3254
     constructor() {
-        super();
+        this._events = new EventTarget();
         this._listeners = {};
     }
 
@@ -519,13 +521,17 @@ class Events extends EventTarget {
 
     addEventListener(type, id, callback) {
         this._registerListener(id, callback);
-        return super.addEventListener(type, callback);
+        return this._events.addEventListener(type, callback);
     }
 
     removeEventListener(type, id) {
         const callback = this._listeners[id];
         delete this._listeners[id];
-        return super.removeEventListener(type, callback);
+        return this._events.removeEventListener(type, callback);
+    }
+
+    dispatchEvent() {
+        return this._events.dispatchEvent(...arguments);
     }
 }
 
