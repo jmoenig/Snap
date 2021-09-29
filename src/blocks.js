@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-September-28';
+modules.blocks = '2021-September-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -959,10 +959,6 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'template',
         label: 'a'
     },
-    '%transmission': { // experimental v7
-        type: 'template',
-        label: 'message'
-    },
     '%upvar': {
         type: 'template',
         label: '\u2191' // up-arrow
@@ -1633,7 +1629,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             }
             break;
         case 'template':
-            part = new TemplateSlotMorph(localize(info.label));
+            part = new TemplateSlotMorph(info.label);
             break;
         case 'color':
             part = new ColorSlotMorph();
@@ -10501,7 +10497,7 @@ TemplateSlotMorph.prototype.contents = function () {
 
 TemplateSlotMorph.prototype.setContents = function (aString) {
     var tmp = this.template();
-    tmp.setSpec(aString);
+    tmp.setSpec(aString instanceof Array? localize(aString[0]) : aString);
     tmp.fixBlockColor(); // fix zebra coloring
     tmp.fixLabelColor();
 };

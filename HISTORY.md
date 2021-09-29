@@ -33,6 +33,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-09-29
+* objects, blocks: refactored experimental "When I receive message" hat block
+
 ### 2021-09-28
 * objects, blocks, threads: new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
 

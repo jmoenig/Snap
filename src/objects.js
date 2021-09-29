@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-28';
+modules.objects = '2021-September-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -747,7 +747,8 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %transmission'
+            spec: 'when I receive %t',
+            defaults: [['message']]
         },
         receiveCondition: {
             type: 'hat',
