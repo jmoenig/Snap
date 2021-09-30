@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-29';
+modules.objects = '2021-September-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -729,7 +729,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed',
+            spec: 'when %keyHat key pressed %keyName',
             defaults: [['space']]
         },
         receiveInteraction: {
@@ -741,14 +741,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %msgHat'
-        },
-        receiveTransmission: { // experimental v7
-            dev: true,
-            type: 'hat',
-            category: 'control',
-            spec: 'when I receive %t',
-            defaults: [['message']]
+            spec: 'when I receive %msgHat %message'
         },
         receiveCondition: {
             type: 'hat',
@@ -913,12 +906,12 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveOnScene: {
             type: 'hat',
             category: 'control',
-            spec: 'when switched to this scene'
+            spec: 'when switched to this scene %message'
         },
         doSwitchToScene: {
             type: 'command',
             category: 'control',
-            spec: 'switch to scene %scn',
+            spec: 'switch to scene %scn %send',
             defaults: [['next']]
         },
 
@@ -2524,8 +2517,6 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
-        blocks.push(watcherToggle('getLastMessage'));
-        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -2569,7 +2560,8 @@ SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
-            blocks.push(block('receiveTransmission'));
+            blocks.push(watcherToggle('getLastMessage'));
+            blocks.push(block('getLastMessage'));
         }
 
     } else if (category === 'sensing') {
@@ -6109,11 +6101,6 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
                         && message !== '__clone__init__'
                         && message !== '__scene__init__');
             }
-            if (sel === 'receiveTransmission') {
-                return message !== '__shout__go__'
-                    && message !== '__clone__init__'
-                    && message !== '__scene__init__';
-            }
             if (sel === 'receiveGo') {
                 return message === '__shout__go__';
             }
@@ -8441,13 +8428,25 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksForKey(evt).forEach(block =>
+            morph.allHatBlocksForKey(evt).forEach(block => {
+                var varName =  block.inputs()[1].evaluate()[0],
+                    varFrame;
+                if (varName) {
+                    varFrame = new VariableFrame();
+                    varFrame.addVar(varName, evt);
+                }
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    true // ignore running scripts, was: myself.isThreadSafe
-                ))
-            );
+                    true, // ignore running scripts, was: myself.isThreadSafe
+                    null, // exportResult (bool)
+                    null, // callback
+                    null, // isClicked
+                    null, // rightAway
+                    null, // atomic
+                    varFrame
+                ));
+            });
         }
     });
     return procs;
@@ -8464,18 +8463,30 @@ StageMorph.prototype.processKeyPress = function (event) {
 StageMorph.prototype.inspectKeyEvent
     = CursorMorph.prototype.inspectKeyEvent;
 
-StageMorph.prototype.fireChangeOfSceneEvent = function () {
+StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
     var procs = [];
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__scene__init__').forEach(block =>
+            morph.allHatBlocksFor('__scene__init__').forEach(block => {
+                var varName =  block.inputs()[0].evaluate()[0],
+                    varFrame;
+                if (varName) {
+                    varFrame = new VariableFrame();
+                    varFrame.addVar(varName, isNil(message) ? '' : message);
+                }
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    this.isThreadSafe
-                ))
-            );
+                    this.isThreadSafe,
+                    null, // exportResult (bool)
+                    null, // callback
+                    null, // isClicked
+                    null, // rightAway
+                    null, // atomic
+                    varFrame
+                ));
+            });
         }
     });
     return procs;
@@ -8747,8 +8758,6 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
-        blocks.push(watcherToggle('getLastMessage'));
-        blocks.push(block('getLastMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
@@ -8793,7 +8802,8 @@ StageMorph.prototype.blockTemplates = function (category = 'motion') {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
-            blocks.push(block('receiveTransmission'));
+            blocks.push(watcherToggle('getLastMessage'));
+            blocks.push(block('getLastMessage'));
         }
 
     } else if (category === 'sensing') {

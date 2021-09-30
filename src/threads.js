@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-September-28';
+modules.threads = '2021-September-30';
 
 var ThreadManager;
 var Process;
@@ -3729,15 +3729,15 @@ Process.prototype.doBroadcast = function (message) {
     if (msg !== '') {
         stage.lastMessage = message; // the actual data structure
         rcvrs.forEach(morph => {
-            var varFrame;
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
-                    if (block.selector === 'receiveTransmission') {
-                        varFrame = new VariableFrame();
-                        varFrame.addVar(
-                            block.inputs()[0].evaluate(),
-                            message
-                        );
+                    var varName, varFrame;
+                    if (block.selector === 'receiveMessage') {
+                        varName = block.inputs()[1].evaluate()[0];
+                        if (varName) {
+                            varFrame = new VariableFrame();
+                            varFrame.addVar(varName, message);
+                        }
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
@@ -4724,11 +4724,11 @@ Process.prototype.goToLayer = function (name) {
 
 // Process scene primitives
 
-Process.prototype.doSwitchToScene = function (id) {
+Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
+        message = transmission.at(1),
         ide, scenes, num, scene;
-
     this.assertAlive(rcvr);
     if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
         // let the user press "stop" or "esc",
@@ -4762,7 +4762,7 @@ Process.prototype.doSwitchToScene = function (id) {
         }
         this.stop();
         // ide.onNextStep = () => // slow down scene switching, disabled for now
-        ide.switchToScene(scenes.at(idx));
+        ide.switchToScene(scenes.at(idx), null, message);
         return;
     }
 
@@ -4776,8 +4776,7 @@ Process.prototype.doSwitchToScene = function (id) {
     }
 
     this.stop();
-    // ide.onNextStep = () => // slow down scene switching, disabled for now
-    ide.switchToScene(scene);
+    ide.switchToScene(scene, null, message);
 };
 
 // Process color primitives

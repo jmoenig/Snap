@@ -10,7 +10,7 @@
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
-    * new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
+    * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -18,6 +18,7 @@
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
+    * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -32,6 +33,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-09-30
+* blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
 
 ### 2021-09-29
 * objects, blocks: refactored experimental "When I receive message" hat block
