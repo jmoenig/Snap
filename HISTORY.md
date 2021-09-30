@@ -39,6 +39,7 @@
 * blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
 * blocks: disabled dropping reporters onto message hat block input slots
 * threads: restricted inter-scene messages to text and numbers
+* objects: assign case-sensitive key symbol to key event hat blocks' upvars
 
 ### 2021-09-29
 * objects, blocks: refactored experimental "When I receive message" hat block

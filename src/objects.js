@@ -8433,7 +8433,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                     varFrame;
                 if (varName) {
                     varFrame = new VariableFrame();
-                    varFrame.addVar(varName, evt);
+                    varFrame.addVar(varName, key); // original, not lowercased
                 }
                 procs.push(this.threads.startProcess(
                     block,
