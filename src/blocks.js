@@ -590,7 +590,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%msgHat': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: 'messagesReceivedMenu'
     },
     '%att': {
