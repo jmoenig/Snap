@@ -4730,6 +4730,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
         message = transmission.at(1),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
+    this.assertType(message, ['text', 'number']);
     if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
         // let the user press "stop" or "esc",
         // prevent "when this scene starts" hat blocks from directly
