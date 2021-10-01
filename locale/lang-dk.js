@@ -422,8 +422,8 @@ SnapTranslator.dict.dk = {
         'n\u00E5r %greenflag klikkes',
     'when %keyHat key pressed %keyName':
         'n\u00E5r %keyHat trykkes %keyName',
-    'when I am clicked':
-        'n\u00E5r jeg klikkes',
+    'when I am %interaction':
+        'n\u00E5r jeg %interaction',
     'when I receive %msgHat %message':
         'n\u00E5r jeg modtager %msgHat %message',
     'broadcast %msg':
