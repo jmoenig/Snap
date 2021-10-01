@@ -58,6 +58,7 @@
 * migrated Czech block specs
 * migrated Valencian-Catalan block specs
 * migrated Arabic block specs
+* migrated and fixed Bulgarian block specs
 
 ### 2021-09-30
 * blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
