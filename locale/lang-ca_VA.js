@@ -417,8 +417,8 @@ SnapTranslator.dict.ca_VA = {
     // control:
     'when %greenflag clicked':
         'Quan la %greenflag es prema',
-    'when %keyHat key pressed':
-        'Quan la tecla %keyHat es prema',
+    'when %keyHat key pressed %keyName':
+        'Quan la tecla %keyHat es prema %keyName',
     'when I am %interaction':
         'Quan %interaction aquest personatge',
     'clicked':
@@ -433,8 +433,8 @@ SnapTranslator.dict.ca_VA = {
         'el ratolí isca d\'',
     'when %b':
         'quan %b',
-    'when I receive %msgHat':
-        'Quan reba %msgHat',
+    'when I receive %msgHat %message':
+        'Quan reba %msgHat %message',
     'broadcast %msg':
         'Envia a tots %msg',
     'broadcast %msg and wait':
