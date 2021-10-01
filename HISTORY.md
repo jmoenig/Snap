@@ -52,6 +52,7 @@
 * migrated Croatian block specs
 * migrated Finnish block specs
 * migrated Estonian block specs
+* migrated Esperanto block specs
 
 ### 2021-09-30
 * blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks

@@ -419,8 +419,8 @@ SnapTranslator.dict.eo = {
     // control:
     'when %greenflag clicked':
         'Kiam %greenflag estas alklakita',
-    'when %keyHat key pressed':
-        'se %keyHat klavo estas premita',
+    'when %keyHat key pressed %keyName':
+        'se %keyHat klavo estas premita %keyName',
     'when I am %interaction':
         'Dum mi estas %interaction',
     'clicked':
@@ -435,8 +435,8 @@ SnapTranslator.dict.eo = {
         'lasita de musa montrilo',
     'when %b':
         'kiam %b',
-    'when I receive %msgHat':
-        'Kiam mi ricevas %msgHat',
+    'when I receive %msgHat %message':
+        'Kiam mi ricevas %msgHat %message',
     'broadcast %msg':
         'elsendi %msg al \u0109iuj',
     'broadcast %msg and wait':
