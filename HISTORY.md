@@ -35,6 +35,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-01
+* objects: tweaked detectable keynames and representations
+
 ### 2021-09-30
 * blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
 * blocks: disabled dropping reporters onto message hat block input slots

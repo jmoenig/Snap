@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-September-30';
+modules.objects = '2021-October-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -8377,7 +8377,9 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
             event.keyCode || event.charCode
         );
         if (event.ctrlKey || event.metaKey) {
-            keyName = 'ctrl ' + (event.shiftKey ? 'shift ' : '') + keyName;
+            keyName =
+                (keyName === 'Control' || keyName === 'Meta' ? '' : 'ctrl ') +
+                    (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
     action.call(this, keyName);
@@ -8433,7 +8435,10 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                     varFrame;
                 if (varName) {
                     varFrame = new VariableFrame();
-                    varFrame.addVar(varName, key); // original, not lowercased
+                    varFrame.addVar(
+                        varName,
+                        key === 'space' ? ' ' : key // not lowercased
+                    );
                 }
                 procs.push(this.threads.startProcess(
                     block,
