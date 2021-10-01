@@ -46,6 +46,7 @@
 * migrated Brazilian-Portuguese block specs
 * migrated Malayalam block specs
 * migrated Korean block specs
+* migrated Kannada block specs
 
 ### 2021-09-30
 * blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
