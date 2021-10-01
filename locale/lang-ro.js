@@ -413,8 +413,8 @@ SnapTranslator.dict.ro = {
     // control:
     'when %greenflag clicked':
         'cand se apasa %greenflag',
-    'when %keyHat key pressed':
-        'cand se apasa tasta %keyHat',
+    'when %keyHat key pressed %keyName':
+        'cand se apasa tasta %keyHat %keyName',
     'when I am %interaction':
         'cand sunt %interaction',
     'clicked':
@@ -427,8 +427,8 @@ SnapTranslator.dict.ro = {
         'in contact cu mouse-ul',
     'mouse-departed':
         'indepratat de langa mouse',
-    'when I receive %msgHat':
-        'cand primesc %msgHat',
+    'when I receive %msgHat %message':
+        'cand primesc %msgHat %message',
     'broadcast %msg':
         'trimite mesajul %msg tuturor',
     'broadcast %msg and wait':
