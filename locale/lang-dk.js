@@ -420,12 +420,12 @@ SnapTranslator.dict.dk = {
     // control:
     'when %greenflag clicked':
         'n\u00E5r %greenflag klikkes',
-    'when %keyHat key pressed':
-        'n\u00E5r %keyHat trykkes',
+    'when %keyHat key pressed %keyName':
+        'n\u00E5r %keyHat trykkes %keyName',
     'when I am clicked':
         'n\u00E5r jeg klikkes',
-    'when I receive %msgHat':
-        'n\u00E5r jeg modtager %msgHat',
+    'when I receive %msgHat %message':
+        'n\u00E5r jeg modtager %msgHat %message',
     'broadcast %msg':
         'send %msg',
     'broadcast %msg and wait':
