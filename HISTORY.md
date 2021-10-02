@@ -37,6 +37,7 @@
 
 ### 2021-10-02
 * migrated Indonesian block specs
+* migrated Galician block specs
 
 ### 2021-10-01
 * objects: tweaked detectable keynames and representations
