@@ -417,8 +417,8 @@ SnapTranslator.dict.id = {
     // control:
     'when %greenflag clicked':
         'ketika %greenflag diklik',
-    'when %keyHat key pressed':
-        'ketika %keyHat ditekan',
+    'when %keyHat key pressed %keyName':
+        'ketika %keyHat ditekan %keyName',
     'when I am %interaction':
         'ketika aku %interaction',
     'clicked':
@@ -433,8 +433,8 @@ SnapTranslator.dict.id = {
         'ditinggalkan tetikus',
     'when %b':
         'ketika %b',
-    'when I receive %msgHat':
-        'ketika aku menerima %msgHat',
+    'when I receive %msgHat %message':
+        'ketika aku menerima %msgHat %message',
     'broadcast %msg':
         'beritakan %msg',
     'broadcast %msg and wait':

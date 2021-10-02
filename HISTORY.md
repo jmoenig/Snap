@@ -35,6 +35,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-02
+* migrated Indonesian block specs
+
 ### 2021-10-01
 * objects: tweaked detectable keynames and representations
 * German translation update
