@@ -416,12 +416,12 @@ SnapTranslator.dict.ja_HIRA = {
     // control:
     'when %greenflag clicked':
         '%greenflag がおされたとき',
-    'when %keyHat key pressed':
-        '%keyHat がおされたとき',
-    'when I am clicked':
-        'じぶんがクリックされたとき',
-    'when I receive %msgHat':
-        '%msgHat をうけとったとき',
+    'when %keyHat key pressed %keyName':
+        '%keyHat %keyName がおされたとき',
+    'when I am %interaction':
+        '%interaction じぶんがクリックされたとき',
+    'when I receive %msgHat %message':
+        '%msgHat %message をうけとったとき',
     'broadcast %msg':
         '%msg をおくる',
     'broadcast %msg and wait':

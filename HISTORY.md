@@ -37,6 +37,7 @@
 
 ### 2021-10-02
 * migrated Hebrew block specs
+* migrated and fixed Japanese Hiragana block specs
 
 ### 2021-10-02
 * migrated Indonesian block specs
