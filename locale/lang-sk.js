@@ -497,8 +497,8 @@ SnapTranslator.dict.sk = {
     // control:
     'when %greenflag clicked':
         'Po kliknut\u00ED na %greenflag',
-    'when %keyHat key pressed':
-        'po stla\u010Den\u00ED kl\u00E1vesy %keyHat',
+    'when %keyHat key pressed %keyName':
+        'po stla\u010Den\u00ED kl\u00E1vesy %keyHat %keyName',
     'when I am %interaction':
         'ke\u010F %interaction',
     'clicked':
@@ -519,8 +519,8 @@ SnapTranslator.dict.sk = {
         'zastaven\u00FD',
     'when %b':
         'Ke\u010F %b',
-    'when I receive %msgHat':
-        'po prijat\u00ED spr\u00E1vy %msgHat',
+    'when I receive %msgHat %message':
+        'po prijat\u00ED spr\u00E1vy %msgHat %message',
     'broadcast %msg':
         'posla\u0165 v\u0161etk\u00FDm %msg',
     'broadcast %msg and wait':
