@@ -517,8 +517,8 @@ SnapTranslator.dict.he = {
     // control:
     'when %greenflag clicked':
         'נלחץ %greenflag כאשר_כפתור',
-    'when %keyHat key pressed':
-        'נלחץ %keyHat כאשר_כפתור',
+    'when %keyHat key pressed %keyName':
+        'נלחץ %keyHat כאשר_כפתור %keyName',
     'when I am %interaction':
         'כאשר_אני %interaction',
     'clicked':
@@ -533,8 +533,8 @@ SnapTranslator.dict.he = {
         'עכבר-יוצא',
     'when %b':
         '%b כאשר',
-    'when I receive %msgHat':
-        '%msgHat כאשר_אני_מקבל',
+    'when I receive %msgHat %message':
+        '%message %msgHat כאשר_אני_מקבל',
     'broadcast %msg':
         'שדר_הודעה %msg',
     'broadcast %msg and wait':

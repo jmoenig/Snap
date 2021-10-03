@@ -36,6 +36,9 @@
     * Chinese, thanks, Simon!
 
 ### 2021-10-02
+* migrated Hebrew block specs
+
+### 2021-10-02
 * migrated Indonesian block specs
 * migrated Galician block specs
 
