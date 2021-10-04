@@ -496,8 +496,8 @@ SnapTranslator.dict.no = {
     // control:
     'when %greenflag clicked':
         'n\u00E5r %greenflag klikket',
-    'when %keyHat key pressed':
-        'n\u00E5r tast %keyHat trykket',
+    'when %keyHat key pressed %keyName':
+        'n\u00E5r tast %keyHat trykket %keyName',
     'when I am %interaction':
         'n\u00E5r jeg blir %interaction',
     'clicked':
@@ -518,8 +518,8 @@ SnapTranslator.dict.no = {
         'stoppet',
     'when %b':
         'n\u00E5r %b',
-    'when I receive %msgHat':
-        'n\u00E5r jeg mottar %msgHat',
+    'when I receive %msgHat %message':
+        'n\u00E5r jeg mottar %msgHat %message',
     'broadcast %msg':
         'kringkast %msg',
     'broadcast %msg and wait':
