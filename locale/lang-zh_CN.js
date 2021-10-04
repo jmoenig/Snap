@@ -680,8 +680,8 @@ SnapTranslator.dict.zh_CN = {
   // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
-    'when %keyHat key pressed':
-        '当按下 %keyHat 键',
+    'when %keyHat key pressed %keyName':
+        '当按下 %keyHat 键 %keyName',
     'when I am %interaction':
         '当 %interaction 我',
     'clicked':
@@ -702,8 +702,8 @@ SnapTranslator.dict.zh_CN = {
         '停止',    
     'when %b':
         '当 %b',
-    'when I receive %msgHat':
-        '当接收到 %msgHat',
+    'when I receive %msgHat %message':
+        '当接收到 %msgHat %message',
     'broadcast %msg':
         '广播 %msg',
     'broadcast %msg and wait':
@@ -1007,7 +1007,7 @@ SnapTranslator.dict.zh_CN = {
     'item':
         '项',      
     '%la of %l':
-        '%l 的 %la',
+        '%la 的 %l',
     'rank':
         '维数',
     'dimensions':

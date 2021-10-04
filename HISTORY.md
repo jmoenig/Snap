@@ -50,6 +50,7 @@
 * migrated Catalan block specs
 * migrated Hindi block specs
 * migrated Polish block specs
+* migrated and fixed Simplified Chinese block specs
 
 ### 2021-10-03
 * migrated Hebrew block specs
