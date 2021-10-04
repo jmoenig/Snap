@@ -11,6 +11,7 @@
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
     * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
+    * added "enter" key to key-pressed dropdown
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -37,6 +38,7 @@
     * Chinese, thanks, Simon!
 
 ### 2021-10-04
+* blocks: added "enter" key to key-pressed dropdown
 * migrated Bangla block specs
 * migrated Portuguese block specs
 * migrated Norwegian block specs

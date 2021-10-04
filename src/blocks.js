@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-September-30';
+modules.blocks = '2021-October-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9258,6 +9258,7 @@ InputSlotMorph.prototype.keysMenu = function () {
         'down arrow': ['down arrow'],
         'right arrow': ['right arrow'],
         'left arrow': ['left arrow'],
+        enter: ['enter'],
         space : ['space'],
         '+' : ['+'],
         '-' : ['-'],
