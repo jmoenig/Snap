@@ -28,6 +28,7 @@
     * fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
     * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
     * disabled dropping reporters onto message hat block input slots
+    * fixed outdated blocks specs for "When I am ..." hat block in many translations
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
