@@ -417,8 +417,8 @@ SnapTranslator.dict.pt_BR = {
         'quando clicar em %greenflag',
     'when %keyHat key pressed %keyName':
         'quando a tecla %keyHat for pressionada %keyName',
-    'when I am clicked':
-        'quando este ator for clicado',
+    'when I am %interaction':
+        'quando este ator for %interaction',
     'when I receive %msgHat %message':
         'quando receber %msgHat %message',
     'broadcast %msg':
