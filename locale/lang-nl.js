@@ -493,8 +493,8 @@ SnapTranslator.dict.nl = {
     // control:
     'when %greenflag clicked':
         'wanneer %greenflag wordt aangeklikt',
-    'when %keyHat key pressed':
-        'wanneer %keyHat wordt ingedrukt',
+    'when %keyHat key pressed %keyName':
+        'wanneer %keyHat wordt ingedrukt %keyName',
     'when I am %interaction':
         'wanneer ik %interaction word',
     'clicked':
@@ -515,8 +515,8 @@ SnapTranslator.dict.nl = {
         'gestopt',
     'when %b':
         'wanneer %b',
-    'when I receive %msgHat':
-        'wanneer ik %msgHat ontvang',
+    'when I receive %msgHat %message':
+        'wanneer ik %msgHat ontvang %message',
     'broadcast %msg':
         'zend signaal %msg',
     'broadcast %msg and wait':
