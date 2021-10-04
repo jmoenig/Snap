@@ -502,8 +502,8 @@ SnapTranslator.dict.pl = {
     // control:
     'when %greenflag clicked':
         'kiedy klikni\u0119to %greenflag',
-    'when %keyHat key pressed':
-        'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
+    'when %keyHat key pressed %keyName':
+        'kiedy klawisz %keyHat naci\u015Bni\u0119ty %keyName',
     'when I am %interaction':
         'kiedy zostan\u0119 %interaction',
     'clicked':
@@ -524,8 +524,8 @@ SnapTranslator.dict.pl = {
         'zatrzymany',
     'when %b':
         'kiedy %b',
-    'when I receive %msgHat':
-        'kiedy otrzymam %msgHat',
+    'when I receive %msgHat %message':
+        'kiedy otrzymam %msgHat %message',
     'broadcast %msg':
         'nadaj %msg do wszystkich',
     'broadcast %msg and wait':

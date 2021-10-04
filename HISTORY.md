@@ -49,6 +49,7 @@
 * migrated Turkish block specs
 * migrated Catalan block specs
 * migrated Hindi block specs
+* migrated Polish block specs
 
 ### 2021-10-03
 * migrated Hebrew block specs
