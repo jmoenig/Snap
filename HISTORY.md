@@ -40,6 +40,7 @@
 * migrated Portuguese block specs
 * migrated Norwegian block specs
 * migrated French block specs
+* migrated Italian block specs
 
 ### 2021-10-03
 * migrated Hebrew block specs
