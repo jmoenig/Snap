@@ -53,6 +53,7 @@
 * migrated and fixed Simplified Chinese block specs
 * fixed Telagu block specs for %interaction
 * fixed Brazilian-Portuguese block specs for %interaction
+* fixed Malayalam block specs for %interaction
 
 ### 2021-10-03
 * migrated Hebrew block specs

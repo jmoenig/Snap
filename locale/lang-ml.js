@@ -416,8 +416,8 @@ SnapTranslator.dict.ml = {
         '%greenflag ക്ലിക്ക് ചെയ്യുമ്പോള്‍',
     'when %keyHat key pressed %keyName':
         '%keyHat %keyName കീ അമര്‍ത്തുമ്പോള്‍',
-    'when I am clicked':
-        'Wenn ich angeklickt werde',
+    'when I am %interaction':
+        'when I am %interaction',
     'when I receive %msgHat %message':
         'ഞാന്‍ %msgHat %message സ്വീകരിക്കുമ്പോള്‍',
     'broadcast %msg':
