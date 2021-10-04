@@ -2179,7 +2179,7 @@ SnapTranslator.dict.zh_CN = {
     'center x':
         '中心点x坐标',
     'center y':
-        '中心店y坐标',
+        '中心点y坐标',
     'pen is down?':
         '画笔已落下？',
     'name':
