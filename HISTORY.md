@@ -6,7 +6,7 @@
     * extensions
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
-    * hide custom helper blocks in palette
+    * hide custom helper blocks in palette, also use "hide/show var" primitive on custom blocks (same as on primitives)
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
@@ -40,6 +40,7 @@
 ### 2021-10-04
 * blocks: added "enter" key to key-pressed dropdown
 * updated German translation for "enter" key
+* threads: extended "hide/show var" primitive to also hide/show custom blocks in the palette
 
 * migrated Bangla block specs
 * migrated Portuguese block specs

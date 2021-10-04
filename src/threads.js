@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-September-30';
+modules.threads = '2021-October-04';
 
 var ThreadManager;
 var Process;
@@ -1726,7 +1726,11 @@ Process.prototype.doShowVar = function (varName, context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         } else {
-            this.doChangePrimitiveVisibility(name.expression, false);
+            if (name.expression.isCustomBlock) {
+                this.doChangeCustomBlockVisibility(name.expression, false);
+            } else {
+                this.doChangePrimitiveVisibility(name.expression, false);
+            }
             return;
         }
     }
@@ -1788,7 +1792,11 @@ Process.prototype.doHideVar = function (varName, context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         } else {
-            this.doChangePrimitiveVisibility(name.expression, true);
+            if (name.expression.isCustomBlock) {
+                this.doChangeCustomBlockVisibility(name.expression, true);
+            } else {
+                this.doChangePrimitiveVisibility(name.expression, true);
+            }
             return;
         }
     }
@@ -1852,9 +1860,23 @@ Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
         reifyPredicate: 'operators',
         doDeclareVariables: 'variables'
     };
-    cat = dict[this.selector] || this.category;
+    cat = dict[aBlock.selector] || aBlock.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
+// Process hiding and showing custom blocks primitives
+
+Process.prototype.doChangeCustomBlockVisibility = function (aBlock, hideIt) {
+    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
+        method = aBlock.isGlobal ? aBlock.definition
+            : this.blockReceiver().getLocalMethod(aBlock.semanticSpec);
+    if (!ide || !method || (aBlock.selector !== 'evaluateCustomBlock')) {
+        return;
+    }
+    method.isHelper = !!hideIt; // force type to be Boolean
+    ide.flushBlocksCache(aBlock.category);
     ide.refreshPalette();
 };
 
