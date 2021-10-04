@@ -419,8 +419,10 @@ SnapTranslator.dict.fi = {
         'kun klikataan %greenflag',
     'when %keyHat key pressed %keyName':
         'kun painetaan %keyHat %keyName',
-    'when I am clicked':
-        'kun minua klikataan',
+    'when I am %interaction':
+        'kun minua %interaction',
+    'clicked':
+        'klikataan',
     'when I receive %msgHat %message':
         'kun vastaanotan sanoman %msgHat %message',
     'broadcast %msg':
