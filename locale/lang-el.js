@@ -504,8 +504,8 @@ SnapTranslator.dict.el = {
     // control:
     'when %greenflag clicked':
         'όταν το %greenflag πατηθεί',
-    'when %keyHat key pressed':
-        'όταν το %keyHat πλήκτρο πατηθεί',
+    'when %keyHat key pressed %keyName':
+        'όταν το %keyHat πλήκτρο πατηθεί %keyName',
     'when I am %interaction':
         'όταν μου συμβεί %interaction',
     'clicked':
@@ -526,8 +526,8 @@ SnapTranslator.dict.el = {
         'σταματημένο',
     'when %b':
         'όταν %b',
-    'when I receive %msgHat':
-        'όταν δεχτώ %msgHat',
+    'when I receive %msgHat %message':
+        'όταν δεχτώ %msgHat %message',
     'broadcast %msg':
         'στείλε το %msg',
     'broadcast %msg and wait':
