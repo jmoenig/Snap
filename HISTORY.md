@@ -39,6 +39,8 @@
 
 ### 2021-10-04
 * blocks: added "enter" key to key-pressed dropdown
+* updated German translation for "enter" key
+
 * migrated Bangla block specs
 * migrated Portuguese block specs
 * migrated Norwegian block specs
