@@ -35,7 +35,10 @@
     * German
     * Chinese, thanks, Simon!
 
-### 2021-10-02
+### 2021-10-04
+* migrated Bangla block specs
+
+### 2021-10-03
 * migrated Hebrew block specs
 * migrated and fixed Japanese Hiragana block specs
 * migrated Slovak block specs
