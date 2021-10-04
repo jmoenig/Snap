@@ -496,8 +496,8 @@ SnapTranslator.dict.hi = {
     // control:
     'when %greenflag clicked':
         'जब %greenflag क्लिक किया',
-    'when %keyHat key pressed':
-        'जब %keyHat दबाई जाती है',
+    'when %keyHat key pressed %keyName':
+        'जब %keyHat दबाई जाती है %keyName',
     'when I am %interaction':
         'जब मैं %interaction werde',
     'clicked':
@@ -518,8 +518,8 @@ SnapTranslator.dict.hi = {
         'रोका हुआ',
     'when %b':
         'जब %b',
-    'when I receive %msgHat':
-        'जब मैं प्राप्त करता हूँ %msgHat ',
+    'when I receive %msgHat %message':
+        'जब मैं प्राप्त करता हूँ %msgHat %message',
     'broadcast %msg':
         'प्रसारण %msg',
     'broadcast %msg and wait':
