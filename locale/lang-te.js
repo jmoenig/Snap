@@ -417,8 +417,8 @@ SnapTranslator.dict.te = {
         '%greenflag ఒత్తినప్పుడ',
     'when %keyHat key pressed %keyName':
         '%keyHat %keyName కీ ఒత్తినప్పుడ',
-    'when I am clicked':
-        'Wenn ich angeklickt werde',
+    'when I am %interaction':
+        'when I am %interaction',
     'when I receive %msgHat %message':
         '%msgHat %message నేను స్వీకరించినప్పుడు',
     'broadcast %msg':
