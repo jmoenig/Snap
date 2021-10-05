@@ -37,6 +37,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-05
+* threads, store: added infrastructure for hiding individual variables in palette
+
 ### 2021-10-04
 * blocks: added "enter" key to key-pressed dropdown
 * updated German translation for "enter" key

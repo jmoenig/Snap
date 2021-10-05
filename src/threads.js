@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-04';
+modules.threads = '2021-October-05';
 
 var ThreadManager;
 var Process;
@@ -7024,18 +7024,20 @@ Context.prototype.isInCustomBlock = function () {
 
 // Variable /////////////////////////////////////////////////////////////////
 
-function Variable(value, isTransient) {
+function Variable(value, isTransient, isHidden) {
     this.value = value;
     this.isTransient = isTransient || false; // prevent value serialization
+    this.isHidden = isHidden || false; // not shown in the blocks palette
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + (this.isTransient ? 'transient ' : '') + 'Variable [' +
-        this.value + ']';
+    return 'a ' + (this.isTransient ? 'transient ' : '') +
+        (this.isHidden ? 'hidden ' : '') +
+        'Variable [' + this.value + ']';
 };
 
 Variable.prototype.copy = function () {
-    return new Variable(this.value, this.isTransient);
+    return new Variable(this.value, this.isTransient, this.isHidden);
 };
 
 // VariableFrame ///////////////////////////////////////////////////////

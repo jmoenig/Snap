@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-August-01';
+modules.store = '2021-October-05';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -946,6 +946,7 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element, object) {
         value = child.children[0];
         v = new Variable();
         v.isTransient = (child.attributes.transient === 'true');
+        v.isHidden = (child.attributes.hidden === 'true');
         v.value = (v.isTransient || !value ) ? 0
                 : this.loadValue(value, object);
         varFrame.vars[child.attributes.name] = v;
@@ -1930,17 +1931,24 @@ Sound.prototype.toXML = function (serializer) {
 VariableFrame.prototype.toXML = function (serializer) {
     return Object.keys(this.vars).reduce((vars, v) => {
         var val = this.vars[v].value,
+            transient = this.vars[v].isTransient,
+            hidden = this.vars[v].isHidden,
             dta;
-        if (this.vars[v].isTransient) {
+
+        if (transient || val === undefined || val === null) {
             dta = serializer.format(
-                '<variable name="@" transient="true"/>',
-                v)
-            ;
-        } else if (val === undefined || val === null) {
-            dta = serializer.format('<variable name="@"/>', v);
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '/>',
+                v
+            );
         } else {
             dta = serializer.format(
-                '<variable name="@">%</variable>',
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '>%</variable>',
                 v,
                 typeof val === 'object' ?
                         (isSnapObject(val) ? ''
