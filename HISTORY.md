@@ -41,6 +41,7 @@
 * threads: programmatically hide individual variables in palette
 * extensions: new extension primitives for hiding and showing arbitrary blocks in the palette
 * threads: keep hidden variables out of the palette and drop-down menus
+* objects: added utilities to enumerate all palette blocks for hiding & showing
 
 ### 2021-10-05
 * threads, store: added infrastructure for hiding individual variables in palette

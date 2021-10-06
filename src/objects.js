@@ -86,7 +86,7 @@ AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-04';
+modules.objects = '2021-October-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2866,13 +2866,18 @@ SpriteMorph.prototype.helpMenu = function () {
     return menu;
 };
 
-SpriteMorph.prototype.customBlockTemplatesForCategory = function (category) {
+SpriteMorph.prototype.customBlockTemplatesForCategory = function (
+    category,
+    includeHidden
+) {
     // returns an array of block templates for a selected category.
     var ide = this.parentThatIsA(IDE_Morph), blocks = [],
         isInherited = false, block, inheritedBlocks;
 
     function addCustomBlock(definition) {
-        if (!definition.isHelper && definition.category === category) {
+        if ((!definition.isHelper || includeHidden) &&
+            definition.category === category)
+        {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
             blocks.push(block);
@@ -3223,6 +3228,24 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.scrollX(palette.padding);
     palette.scrollY(palette.padding);
     return palette;
+};
+
+// SpriteMorph utilities for showing & hiding blocks in the palette
+
+SpriteMorph.prototype.allPaletteBlocks = function () {
+    // private - only to be used for showing & hiding blocks im the palette
+    var blocks = SpriteMorph.prototype.allCategories().reduce(
+        (blocks, category) => {
+            let primitives = this.blockTemplates(category),
+                customs = this.customBlockTemplatesForCategory(category, true);
+            return blocks.concat(
+                primitives,
+                customs
+            );
+        },
+        []
+    );
+    return blocks.filter(each => each instanceof BlockMorph);
 };
 
 // SpriteMorph blocks searching
