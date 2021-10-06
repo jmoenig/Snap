@@ -3248,6 +3248,19 @@ SpriteMorph.prototype.allPaletteBlocks = function () {
     return blocks.filter(each => each instanceof BlockMorph);
 };
 
+SpriteMorph.prototype.isHidingBlock = function (aBlock) {
+    if (aBlock.isCustomBlock) {
+        return (
+            aBlock.isGlobal ? aBlock.definition
+                : this.getLocalMethod(aBlock.semanticSpec)
+        ).isHelper;
+    }
+    if (aBlock.selector === 'reportGetVar') {
+        return this.variables.find(name).vars[aBlock.blockSpec].isHidden;
+    }
+    return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
+};
+
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt) {
     if (aBlock.isCustomBlock) {
         this.changeCustomBlockVisibility(aBlock, hideIt);
@@ -9393,6 +9406,8 @@ StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
 
 StageMorph.prototype.allPaletteBlocks
     = SpriteMorph.prototype.allPaletteBlocks;
+
+StageMorph.prototype.isHidingBlock = SpriteMorph.prototype.isHidingBlock;
 
 StageMorph.prototype.changeBlockVisibility
     = SpriteMorph.prototype.changeBlockVisibility;
