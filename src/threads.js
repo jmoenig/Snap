@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-05';
+modules.threads = '2021-October-06';
 
 var ThreadManager;
 var Process;
@@ -1839,7 +1839,17 @@ Process.prototype.doRemoveTemporaries = function () {
     }
 };
 
-// Process hiding and showing primitives primitives :-)
+// Process hiding and showing blocks in the palette
+
+Process.prototype.doChangeBlockVisibility = function (aBlock, hideIt) {
+    if (aBlock.isCustomBlock) {
+        this.doChangeCustomBlockVisibility(aBlock, hideIt);
+    } else if (aBlock.spec === 'reportGetVar') {
+        this.doChangeVarBlockVisibility(aBlock.blockSpec, hideIt);
+    } else {
+        this.doChangePrimitiveVisibility(aBlock, hideIt);
+    }
+};
 
 Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
@@ -1864,9 +1874,8 @@ Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
-};
 
-// Process hiding and showing custom blocks primitives
+};
 
 Process.prototype.doChangeCustomBlockVisibility = function (aBlock, hideIt) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
@@ -1877,6 +1886,14 @@ Process.prototype.doChangeCustomBlockVisibility = function (aBlock, hideIt) {
     }
     method.isHelper = !!hideIt; // force type to be Boolean
     ide.flushBlocksCache(aBlock.category);
+    ide.refreshPalette();
+};
+
+Process.prototype.doChangeVarBlockVisibility = function (name, hideIt) {
+    var rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph);
+    rcvr.variables.find(name).vars[name].isHidden = !!hideIt;
+    ide.flushBlocksCache('variables');
     ide.refreshPalette();
 };
 
