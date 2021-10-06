@@ -701,7 +701,7 @@ SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
         proc.assertType(context, ['command', 'reporter', 'predicate']);
-        proc.doChangeBlockVisibility(context.expression, true);
+        this.changeBlockVisibility(context.expression, true);
     }
 );
 
@@ -709,7 +709,7 @@ SnapExtensions.primitives.set(
     'ide_show(block)',
     function (context, proc) {
         proc.assertType(context, ['command', 'reporter', 'predicate']);
-        proc.doChangeBlockVisibility(context.expression, false);
+        this.changeBlockVisibility(context.expression, false);
     }
 );
 

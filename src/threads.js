@@ -1726,11 +1726,7 @@ Process.prototype.doShowVar = function (varName, context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         } else {
-            if (name.expression.isCustomBlock) {
-                this.doChangeCustomBlockVisibility(name.expression, false);
-            } else {
-                this.doChangePrimitiveVisibility(name.expression, false);
-            }
+            this.blockReceiver().changeBlockVisibility(name.expression, false);
             return;
         }
     }
@@ -1792,11 +1788,7 @@ Process.prototype.doHideVar = function (varName, context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         } else {
-            if (name.expression.isCustomBlock) {
-                this.doChangeCustomBlockVisibility(name.expression, true);
-            } else {
-                this.doChangePrimitiveVisibility(name.expression, true);
-            }
+            this.blockReceiver().changeBlockVisibility(name.expression, true);
             return;
         }
     }
@@ -1837,64 +1829,6 @@ Process.prototype.doRemoveTemporaries = function () {
             });
         }
     }
-};
-
-// Process hiding and showing blocks in the palette
-
-Process.prototype.doChangeBlockVisibility = function (aBlock, hideIt) {
-    if (aBlock.isCustomBlock) {
-        this.doChangeCustomBlockVisibility(aBlock, hideIt);
-    } else if (aBlock.selector === 'reportGetVar') {
-        this.doChangeVarBlockVisibility(aBlock.blockSpec, hideIt);
-    } else {
-        this.doChangePrimitiveVisibility(aBlock, hideIt);
-    }
-};
-
-Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
-    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
-    if (!ide || (aBlock.selector === 'evaluateCustomBlock')) {
-        return;
-    }
-    if (hideIt) {
-        StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
-    } else {
-        delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
-    }
-    dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
-    };
-    cat = dict[aBlock.selector] || aBlock.category;
-    if (cat === 'lists') {cat = 'variables'; }
-    ide.flushBlocksCache(cat);
-    ide.refreshPalette();
-
-};
-
-Process.prototype.doChangeCustomBlockVisibility = function (aBlock, hideIt) {
-    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
-        method = aBlock.isGlobal ? aBlock.definition
-            : this.blockReceiver().getLocalMethod(aBlock.semanticSpec);
-    if (!ide || !method || (aBlock.selector !== 'evaluateCustomBlock')) {
-        return;
-    }
-    method.isHelper = !!hideIt; // force type to be Boolean
-    ide.flushBlocksCache(aBlock.category);
-    ide.refreshPalette();
-};
-
-Process.prototype.doChangeVarBlockVisibility = function (name, hideIt) {
-    var rcvr = this.blockReceiver(),
-        ide = rcvr.parentThatIsA(IDE_Morph);
-    rcvr.variables.find(name).vars[name].isHidden = !!hideIt;
-    ide.flushBlocksCache('variables');
-    ide.refreshPalette();
 };
 
 // Process sprite inheritance primitives

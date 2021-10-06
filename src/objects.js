@@ -3248,6 +3248,60 @@ SpriteMorph.prototype.allPaletteBlocks = function () {
     return blocks.filter(each => each instanceof BlockMorph);
 };
 
+SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt) {
+    if (aBlock.isCustomBlock) {
+        this.changeCustomBlockVisibility(aBlock, hideIt);
+    } else if (aBlock.selector === 'reportGetVar') {
+        this.changeVarBlockVisibility(aBlock.blockSpec, hideIt);
+    } else {
+        this.changePrimitiveVisibility(aBlock, hideIt);
+    }
+};
+
+SpriteMorph.prototype.changePrimitiveVisibility = function (aBlock, hideIt) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
+    if (!ide || (aBlock.selector === 'evaluateCustomBlock')) {
+        return;
+    }
+    if (hideIt) {
+        StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
+    } else {
+        delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
+    }
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[aBlock.selector] || aBlock.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
+SpriteMorph.prototype.changeCustomBlockVisibility = function (aBlock, hideIt) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        method = aBlock.isGlobal ? aBlock.definition
+            : this.getLocalMethod(aBlock.semanticSpec);
+    if (!ide || !method || (aBlock.selector !== 'evaluateCustomBlock')) {
+        return;
+    }
+    method.isHelper = !!hideIt; // force type to be Boolean
+    ide.flushBlocksCache(aBlock.category);
+    ide.refreshPalette();
+};
+
+SpriteMorph.prototype.changeVarBlockVisibility = function (name, hideIt) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    this.variables.find(name).vars[name].isHidden = !!hideIt;
+    ide.flushBlocksCache('variables');
+    ide.refreshPalette();
+};
+
 // SpriteMorph blocks searching
 
 SpriteMorph.prototype.blocksMatching = function (
@@ -9334,6 +9388,23 @@ StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
 StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
+
+// StageMorph utilities for showing & hiding blocks in the palette
+
+StageMorph.prototype.allPaletteBlocks
+    = SpriteMorph.prototype.allPaletteBlocks;
+
+StageMorph.prototype.changeBlockVisibility
+    = SpriteMorph.prototype.changeBlockVisibility;
+
+StageMorph.prototype.changePrimitiveVisibility
+    = SpriteMorph.prototype.changePrimitiveVisibility;
+
+StageMorph.prototype.changeCustomBlockVisibility
+    = SpriteMorph.prototype.changeCustomBlockVisibility;
+
+StageMorph.prototype.changeVarBlockVisibility
+    = SpriteMorph.prototype.changeVarBlockVisibility;
 
 // StageMorph neighbor detection
 
