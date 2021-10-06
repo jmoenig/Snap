@@ -1844,7 +1844,7 @@ Process.prototype.doRemoveTemporaries = function () {
 Process.prototype.doChangeBlockVisibility = function (aBlock, hideIt) {
     if (aBlock.isCustomBlock) {
         this.doChangeCustomBlockVisibility(aBlock, hideIt);
-    } else if (aBlock.spec === 'reportGetVar') {
+    } else if (aBlock.selector === 'reportGetVar') {
         this.doChangeVarBlockVisibility(aBlock.blockSpec, hideIt);
     } else {
         this.doChangePrimitiveVisibility(aBlock, hideIt);
@@ -7203,17 +7203,19 @@ VariableFrame.prototype.deleteVar = function (name) {
 
 // VariableFrame tools
 
-VariableFrame.prototype.names = function () {
+VariableFrame.prototype.names = function (includeHidden) {
     var each, names = [];
     for (each in this.vars) {
         if (Object.prototype.hasOwnProperty.call(this.vars, each)) {
-            names.push(each);
+            if (!this.vars[each].isHidden || includeHidden) {
+                names.push(each);
+            }
         }
     }
     return names;
 };
 
-VariableFrame.prototype.allNamesDict = function (upTo) {
+VariableFrame.prototype.allNamesDict = function (upTo, includeHidden) {
 	// "upTo" is an optional parent frame at which to stop, e.g. globals
     var dict = {}, current = this;
 
@@ -7221,7 +7223,9 @@ VariableFrame.prototype.allNamesDict = function (upTo) {
         var eachKey;
         for (eachKey in srcDict) {
             if (Object.prototype.hasOwnProperty.call(srcDict, eachKey)) {
-                trgtDict[eachKey] = eachKey;
+                if (!srcDict[eachKey].isHidden || includeHidden) {
+                    trgtDict[eachKey] = eachKey;
+                }
             }
         }
     }
@@ -7233,13 +7237,13 @@ VariableFrame.prototype.allNamesDict = function (upTo) {
     return dict;
 };
 
-VariableFrame.prototype.allNames = function (upTo) {
+VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 /*
     only show the names of the lexical scope, hybrid scoping is
     reserved to the daring ;-)
 	"upTo" is an optional parent frame at which to stop, e.g. globals
 */
-    var answer = [], each, dict = this.allNamesDict(upTo);
+    var answer = [], each, dict = this.allNamesDict(upTo, includeHidden);
 
     for (each in dict) {
         if (Object.prototype.hasOwnProperty.call(dict, each)) {
