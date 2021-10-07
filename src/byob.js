@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-August-03';
+modules.byob = '2021-October-07';
 
 // Declarations
 
@@ -4449,4 +4449,151 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
 // BlockRemovalDialogMorph layout
 
 BlockRemovalDialogMorph.prototype.fixLayout
+    = BlockEditorMorph.prototype.fixLayout;
+
+// BlockVisibilityDialogMorph //////////////////////////////////////////////////
+
+// BlockVisibilityDialogMorph inherits from DialogBoxMorph
+// and pseudo-inherits from BlockExportDialogMorph:
+
+BlockVisibilityDialogMorph.prototype = new DialogBoxMorph();
+BlockVisibilityDialogMorph.prototype.constructor = BlockVisibilityDialogMorph;
+BlockVisibilityDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockVisibilityDialogMorph constants:
+
+BlockVisibilityDialogMorph.prototype.key = 'blockVisibility';
+
+// BlockVisibilityDialogMorph instance creation:
+
+function BlockVisibilityDialogMorph(target) {
+    this.init(target);
+}
+
+BlockVisibilityDialogMorph.prototype.init = function (target) {
+    // additional properties:
+    this.blocks = target.allPaletteBlocks();
+    this.selection = this.blocks.filter(each => target.isHidingBlock(each));
+    this.handle = null;
+
+    // initialize inherited properties:
+    BlockVisibilityDialogMorph.uber.init.call(
+        this,
+        target,
+        () => this.hideBlocks(),
+        null // environment
+    );
+
+    // override inherited properites:
+    this.labelString = localize('Hide blocks in palette')
+        + (name ? ': ' : '')
+        + name || '';
+    this.createLabel();
+
+    // build contents
+    this.buildContents();
+};
+
+BlockVisibilityDialogMorph.prototype.buildContents = function () {
+    var palette, x, y, checkBox, lastCat,
+        padding = 4;
+
+    // create plaette
+    palette = new ScrollFrameMorph(
+        null,
+        null,
+        SpriteMorph.prototype.sliderColor
+    );
+    palette.color = SpriteMorph.prototype.paletteColor;
+    palette.padding = padding;
+    palette.isDraggable = false;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = false;
+
+    // populate palette
+    x = palette.left() + padding;
+    y = palette.top() + padding;
+
+    this.blocks.forEach(block => {
+        if (lastCat && (block.category !== lastCat)) {
+            y += padding;
+        }
+        lastCat = block.category;
+
+        checkBox = new ToggleMorph(
+            'checkbox',
+            this,
+            () => {
+                var idx = this.selection.indexOf(block);
+                if (idx > -1) {
+                    this.selection.splice(idx, 1);
+                } else {
+                    this.selection.push(block);
+                }
+            },
+            null,
+            () => contains(this.selection, block),
+            null,
+            null,
+            block.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+
+    palette.scrollX(padding);
+    palette.scrollY(padding);
+    this.addBody(palette);
+
+    this.addButton('ok', 'OK');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(220, 300));
+    this.fixLayout();
+};
+
+BlockVisibilityDialogMorph.prototype.popUp
+    = BlockExportDialogMorph.prototype.popUp;
+
+// BlockVisibilityDialogMorph menu
+
+BlockVisibilityDialogMorph.prototype.userMenu
+    = BlockExportDialogMorph.prototype.userMenu;
+
+BlockVisibilityDialogMorph.prototype.selectAll = function () {
+    this.selection = this.blocks.slice(0);
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockVisibilityDialogMorph.prototype.selectNone = function () {
+    this.selection = [];
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+// BlockVisibilityDialogMorph ops
+
+BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.blocks.forEach(block => this.target.changeBlockVisibility(
+        block,
+        contains(this.selection, block))
+    );
+    if (this.selection.length === 0) {
+        StageMorph.prototype.hiddenPrimitives = [];
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+    }
+};
+
+// BlockVisibilityDialogMorph layout
+
+BlockVisibilityDialogMorph.prototype.fixLayout
     = BlockEditorMorph.prototype.fixLayout;

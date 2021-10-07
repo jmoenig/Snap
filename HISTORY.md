@@ -37,6 +37,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-07
+* objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette
+
 ### 2021-10-06
 * threads: programmatically hide individual variables in palette
 * extensions: new extension primitives for hiding and showing arbitrary blocks in the palette

@@ -82,11 +82,12 @@ VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, HandleMorph,
 SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows*/
+AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
+BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-06';
+modules.objects = '2021-October-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -2304,14 +2305,17 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 // SpriteMorph block templates
 
-SpriteMorph.prototype.blockTemplates = function (category = 'motion') {
+SpriteMorph.prototype.blockTemplates = function (
+    category = 'motion',
+    all = false // include hidden blocks
+) {
     var blocks = [], myself = this, varNames,
         inheritedVars = this.inheritedVariableNames(),
         wrld = this.world(),
         devMode = wrld && wrld.isDevMode;
 
     function block(selector, isGhosted) {
-        if (StageMorph.prototype.hiddenPrimitives[selector]) {
+        if (StageMorph.prototype.hiddenPrimitives[selector] && !all) {
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
@@ -3141,6 +3145,12 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 }
             );
         }
+
+        menu.addItem( // +++
+            'hide blocks...',
+            () => new BlockVisibilityDialogMorph(myself).popUp(myself.world())
+        );
+
         menu.addLine();
         menu.addItem(
             'make a category...',
@@ -3236,7 +3246,7 @@ SpriteMorph.prototype.allPaletteBlocks = function () {
     // private - only to be used for showing & hiding blocks im the palette
     var blocks = SpriteMorph.prototype.allCategories().reduce(
         (blocks, category) => {
-            let primitives = this.blockTemplates(category),
+            let primitives = this.blockTemplates(category, true),
                 customs = this.customBlockTemplatesForCategory(category, true);
             return blocks.concat(
                 primitives,
@@ -8695,11 +8705,14 @@ StageMorph.prototype.pauseGenericHatBlocks = function () {
 
 // StageMorph block templates
 
-StageMorph.prototype.blockTemplates = function (category = 'motion') {
+StageMorph.prototype.blockTemplates = function (
+    category = 'motion',
+    all = false // include hidden blocks
+) {
     var blocks = [], myself = this, varNames, txt;
 
     function block(selector) {
-        if (myself.hiddenPrimitives[selector]) {
+        if (myself.hiddenPrimitives[selector] && !all) {
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
