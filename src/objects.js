@@ -3038,62 +3038,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     // menu:
     palette.userMenu = function () {
-        var menu = new MenuMorph(),
-            ide = this.parentThatIsA(IDE_Morph),
-            more = {
-                operators:
-                    ['reifyScript', 'reifyReporter', 'reifyPredicate'],
-                control:
-                    ['doWarp'],
-                variables:
-                    [
-                        'doDeclareVariables',
-                        'reportNewList',
-                        'reportNumbers',
-                        'reportCONS',
-                        'reportListItem',
-                        'reportCDR',
-                        'reportListAttribute',
-                        'reportListIndex',
-                        'reportConcatenatedLists',
-                        'reportReshape',
-                        'reportListContainsItem',
-                        'reportListIsEmpty',
-                        'doForEach',
-                        'reportMap',
-                        'reportKeep',
-                        'reportFindFirst',
-                        'reportCombine',
-                        'doAddToList',
-                        'doDeleteFromList',
-                        'doInsertInList',
-                        'doReplaceInList'
-                    ]
-            };
-
-        if (category === 'unified') {
-            more.unified = Object.values(more).reduce((x, y) =>
-                x.concat(y));
-        }
-
-        function hasHiddenPrimitives() {
-            var defs = SpriteMorph.prototype.blocks,
-                hiddens = StageMorph.prototype.hiddenPrimitives;
-            return Object.keys(hiddens).some(any =>
-                !isNil(defs[any]) && (category === 'unified' ||
-                    (defs[any].category === category ||
-                        contains((more[category] || []), any)))
-            );
-        }
-
-        function canHidePrimitives() {
-            return palette.contents.children.some(any =>
-                contains(
-                    Object.keys(SpriteMorph.prototype.blocks),
-                    any.selector
-                )
-            );
-        }
+        var menu = new MenuMorph();
 
         menu.addPair(
             [
@@ -3106,51 +3051,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
             () => myself.searchBlocks(),
             '^F'
         );
-        if (canHidePrimitives()) {
-            menu.addItem(
-                'hide primitives',
-                function () {
-                    var defs = SpriteMorph.prototype.blocks;
-                    Object.keys(defs).forEach(sel => {
-                        if (defs[sel].category === category ||
-                                category === 'unified') {
-                            StageMorph.prototype.hiddenPrimitives[sel] = true;
-                        }
-                    });
-                    (more[category] || []).forEach(sel =>
-                        StageMorph.prototype.hiddenPrimitives[sel] = true
-                    );
-                    ide.flushBlocksCache(category);
-                    ide.refreshPalette();
-                }
-            );
-        }
-        if (hasHiddenPrimitives()) {
-            menu.addItem(
-                'show primitives',
-                function () {
-                    var hiddens = StageMorph.prototype.hiddenPrimitives,
-                        defs = SpriteMorph.prototype.blocks;
-                    Object.keys(hiddens).forEach(sel => {
-                        if (defs[sel] && (category === 'unified' ||
-                                (defs[sel].category === category))) {
-                            delete StageMorph.prototype.hiddenPrimitives[sel];
-                        }
-                    });
-                    (more[category] || []).forEach(sel =>
-                        delete StageMorph.prototype.hiddenPrimitives[sel]
-                    );
-                    ide.flushBlocksCache(category);
-                    ide.refreshPalette();
-                }
-            );
-        }
-
-        menu.addItem( // +++
+        menu.addItem(
             'hide blocks...',
             () => new BlockVisibilityDialogMorph(myself).popUp(myself.world())
         );
-
         menu.addLine();
         menu.addItem(
             'make a category...',
