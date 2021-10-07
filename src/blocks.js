@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-04';
+modules.blocks = '2021-October-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2834,11 +2834,6 @@ BlockMorph.prototype.userMenu = function () {
                         'rename all blocks that\naccess this variable'
                     );
                 }
-            } else if (this.selector !== 'evaluateCustomBlock') {
-                menu.addItem(
-                    "hide",
-                    'hidePrimitive'
-                );
             }
 
             // allow toggling inheritable attributes
@@ -3260,25 +3255,6 @@ BlockMorph.prototype.developersMenu = function () {
         )
     );
     return menu;
-};
-
-BlockMorph.prototype.hidePrimitive = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
-    if (!ide) {return; }
-    StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
-    };
-    cat = dict[this.selector] || this.category;
-    if (cat === 'lists') {cat = 'variables'; }
-    ide.flushBlocksCache(cat);
-    ide.refreshPalette();
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {

@@ -40,6 +40,7 @@
 ### 2021-10-07
 * objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette
 * ojects: simplified palette context menu
+* blocks: removed "hide" option from context menu of primitive blocks in the palette 
 
 ### 2021-10-06
 * threads: programmatically hide individual variables in palette
