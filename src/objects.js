@@ -3175,28 +3175,22 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
     return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
 };
 
-SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt) {
+SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
+    var ide, dict, cat;
     if (aBlock.isCustomBlock) {
-        this.changeCustomBlockVisibility(aBlock, hideIt);
+        (aBlock.isGlobal ? aBlock.definition
+            : this.getLocalMethod(aBlock.semanticSpec)
+        ).isHelper = !!hideIt;
     } else if (aBlock.selector === 'reportGetVar') {
-        this.changeVarBlockVisibility(aBlock.blockSpec, hideIt);
+        this.variables.find(name).vars[name].isHidden = !!hideIt;
     } else {
-        this.changePrimitiveVisibility(aBlock, hideIt);
+        if (hideIt) {
+            StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
+        } else {
+            delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
+        }
     }
-};
-
-SpriteMorph.prototype.changePrimitiveVisibility = function (aBlock, hideIt) {
-    var ide = this.parentThatIsA(IDE_Morph),
-        dict,
-        cat;
-    if (!ide || (aBlock.selector === 'evaluateCustomBlock')) {
-        return;
-    }
-    if (hideIt) {
-        StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
-    } else {
-        delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
-    }
+    if (quick) {return; }
     dict = {
         doWarp: 'control',
         reifyScript: 'operators',
@@ -3207,25 +3201,6 @@ SpriteMorph.prototype.changePrimitiveVisibility = function (aBlock, hideIt) {
     cat = dict[aBlock.selector] || aBlock.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
-    ide.refreshPalette();
-};
-
-SpriteMorph.prototype.changeCustomBlockVisibility = function (aBlock, hideIt) {
-    var ide = this.parentThatIsA(IDE_Morph),
-        method = aBlock.isGlobal ? aBlock.definition
-            : this.getLocalMethod(aBlock.semanticSpec);
-    if (!ide || !method || (aBlock.selector !== 'evaluateCustomBlock')) {
-        return;
-    }
-    method.isHelper = !!hideIt; // force type to be Boolean
-    ide.flushBlocksCache(aBlock.category);
-    ide.refreshPalette();
-};
-
-SpriteMorph.prototype.changeVarBlockVisibility = function (name, hideIt) {
-    var ide = this.parentThatIsA(IDE_Morph);
-    this.variables.find(name).vars[name].isHidden = !!hideIt;
-    ide.flushBlocksCache('variables');
     ide.refreshPalette();
 };
 

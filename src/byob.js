@@ -4584,13 +4584,14 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockVisibility(
         block,
-        contains(this.selection, block))
-    );
+        contains(this.selection, block),
+        true // quick - without palette update
+    ));
     if (this.selection.length === 0) {
         StageMorph.prototype.hiddenPrimitives = [];
-        ide.flushBlocksCache();
-        ide.refreshPalette();
     }
+    ide.flushBlocksCache();
+    ide.refreshPalette();
 };
 
 // BlockVisibilityDialogMorph layout
