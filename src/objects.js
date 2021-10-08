@@ -3167,7 +3167,7 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
     if (aBlock.isCustomBlock) {
         return (
             aBlock.isGlobal ? aBlock.definition
-                : this.getLocalMethod(aBlock.semanticSpec)
+                : this.getMethod(aBlock.semanticSpec)
         ).isHelper;
     }
     if (aBlock.selector === 'reportGetVar') {
@@ -3182,7 +3182,7 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     var ide, dict, cat;
     if (aBlock.isCustomBlock) {
         (aBlock.isGlobal ? aBlock.definition
-            : this.getLocalMethod(aBlock.semanticSpec)
+            : this.getMethod(aBlock.semanticSpec)
         ).isHelper = !!hideIt;
     } else if (aBlock.selector === 'reportGetVar') {
         this.variables.find(

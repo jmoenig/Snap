@@ -43,6 +43,7 @@
 * objects: tweaked variable block visibility
 * objects: filter hidden blocks out from search / keyboard input results
 * objects: prevent deprecated "message" reporter from showing up in search results
+* objects: tweaked hiding / showing inherited local blocks
 
 ### 2021-10-07
 * objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette
