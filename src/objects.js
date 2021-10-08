@@ -759,7 +759,8 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'broadcast %msg and wait'
         },
-        getLastMessage: {
+        getLastMessage: {  // retained for legacy compatibility
+            dev: true,
             type: 'reporter',
             category: 'control',
             spec: 'message'
