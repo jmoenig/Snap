@@ -15,7 +15,8 @@
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
-    * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus) 
+    * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
+    * hidden blocks don't appear in search results / keyboard input options 
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
@@ -40,6 +41,7 @@
 
 ### 2021-10-08
 * objects: tweaked variable block visibility
+* objects: filter hidden blocks out from search / keyboard input results
 
 ### 2021-10-07
 * objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette

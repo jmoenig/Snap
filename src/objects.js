@@ -3332,7 +3332,8 @@ SpriteMorph.prototype.blocksMatching = function (
         }
     }
     blocks.sort((x, y) => x[1] < y[1] ? -1 : 1);
-    return blocks.map(each => each[0]);
+    blocks = blocks.map(each => each[0]);
+    return blocks.filter(each => !this.isHidingBlock(each));
 };
 
 SpriteMorph.prototype.searchBlocks = function (
