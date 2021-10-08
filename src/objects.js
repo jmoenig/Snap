@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-07';
+modules.objects = '2021-October-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -2684,7 +2684,7 @@ SpriteMorph.prototype.blockTemplates = function (
         }
         blocks.push('-');
 
-        varNames = this.reachableGlobalVariableNames(true);
+        varNames = this.reachableGlobalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
@@ -2693,7 +2693,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
         }
 
-        varNames = this.allLocalVariableNames(true);
+        varNames = this.allLocalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
@@ -3170,7 +3170,9 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
         ).isHelper;
     }
     if (aBlock.selector === 'reportGetVar') {
-        return this.variables.find(name).vars[aBlock.blockSpec].isHidden;
+        return this.variables.find(
+            aBlock.blockSpec
+        ).vars[aBlock.blockSpec].isHidden;
     }
     return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
 };
@@ -3182,7 +3184,9 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
             : this.getLocalMethod(aBlock.semanticSpec)
         ).isHelper = !!hideIt;
     } else if (aBlock.selector === 'reportGetVar') {
-        this.variables.find(name).vars[name].isHidden = !!hideIt;
+        this.variables.find(
+            aBlock.blockSpec
+        ).vars[aBlock.blockSpec].isHidden = !!hideIt;
     } else {
         if (hideIt) {
             StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
@@ -7152,16 +7156,17 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
     return contains(this.variables.names(), varName);
 };
 
-SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
+SpriteMorph.prototype.allLocalVariableNames = function (sorted, all) {
+    // "all" includes hidden ones in the palette
     var exceptGlobals = this.globalVariables(),
-        globalNames = exceptGlobals.names(),
+        globalNames = exceptGlobals.names(all),
         data;
 
     function alphabetically(x, y) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
- 	data = this.variables.allNames(exceptGlobals).filter(each =>
+ 	data = this.variables.allNames(exceptGlobals, all).filter(each =>
 		!contains(globalNames, each)
     );
 	if (sorted) {
@@ -7170,15 +7175,16 @@ SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
    return data;
 };
 
-SpriteMorph.prototype.reachableGlobalVariableNames = function (sorted) {
-    var locals = this.allLocalVariableNames(),
+SpriteMorph.prototype.reachableGlobalVariableNames = function (sorted, all) {
+    // "all" includes hidden ones in the palette
+    var locals = this.allLocalVariableNames(null, all),
     	data;
 
     function alphabetically(x, y) {
         return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
     }
 
-	data = this.globalVariables().names().filter(each =>
+	data = this.globalVariables().names(all).filter(each =>
     	!contains(locals, each)
 	);
     if (sorted) {
@@ -8907,7 +8913,7 @@ StageMorph.prototype.blockTemplates = function (
         }
         blocks.push('-');
 
-        varNames = this.reachableGlobalVariableNames(true);
+        varNames = this.reachableGlobalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
@@ -8916,7 +8922,7 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
         }
 
-        varNames = this.allLocalVariableNames(true);
+        varNames = this.allLocalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
