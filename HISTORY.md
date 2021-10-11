@@ -39,6 +39,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-11
+* objects: sort order of blocks in custom categories alphabetically in the unified palette
+
 ### 2021-10-08
 * objects: tweaked variable block visibility
 * objects: filter hidden blocks out from search / keyboard input results
