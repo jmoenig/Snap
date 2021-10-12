@@ -7,6 +7,7 @@
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
     * hide any block, including variables and custom helper blocks in palette, also use "hide/show var" primitive on custom blocks (same as on primitives)
+    * generate Parsons Problems from projects: Hide all unused blocks from the scripting area in the palette
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
@@ -43,6 +44,7 @@
 * scenes, store: store single palette setting per project (for making extensions)
 * gui, scenes, objects: added scene-setting to hide/show category names in the unified palette
 * store: made "hide/show categories in unified palette" setting persistent
+* byob: hide unused blocks in palette
 
 ### 2021-10-11
 * objects: sort order of blocks in custom categories alphabetically in the unified palette

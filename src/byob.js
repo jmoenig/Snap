@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-October-07';
+modules.byob = '2021-October-12';
 
 // Declarations
 
@@ -4561,8 +4561,15 @@ BlockVisibilityDialogMorph.prototype.popUp
 
 // BlockVisibilityDialogMorph menu
 
-BlockVisibilityDialogMorph.prototype.userMenu
-    = BlockExportDialogMorph.prototype.userMenu;
+BlockVisibilityDialogMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this, 'select');
+    menu.addItem('all', 'selectAll');
+    menu.addItem('none', 'selectNone');
+    menu.addLine();
+    menu.addItem('unused', 'selectUnused');
+    return menu;
+};
+
 
 BlockVisibilityDialogMorph.prototype.selectAll = function () {
     this.selection = this.blocks.slice(0);
@@ -4573,6 +4580,43 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
 
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockVisibilityDialogMorph.prototype.selectUnused = function () {
+    var used = this.target.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uPrim = [],
+        uCust = [],
+        uVars = [];
+
+    used.forEach(b => {
+        if (b.isCustomBlock) {
+            uCust.push(b.isGlobal ? b.definition
+                : this.target.getMethod(b.semanticSpec));
+        } else if (b.selector === 'reportGetVar') {
+            uVars.push(b.blockSpec);
+        } else {
+            uPrim.push(b.selector);
+        }
+    });
+
+    this.selection = this.blocks.filter(b => {
+        if (b.isCustomBlock) {
+            return !contains(
+                uCust,
+                b.isGlobal ? b.definition
+                    : this.target.getMethod(b.semanticSpec)
+                );
+        } else if (b.selector === 'reportGetVar') {
+            return !contains(uVars, b.blockSpec);
+        } else {
+            return !contains(uPrim, b.selector);
+        }
+    });
+
     this.body.contents.children.forEach(checkBox => {
         checkBox.refresh();
     });
