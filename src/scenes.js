@@ -119,6 +119,7 @@ function Scene(aStageMorph) {
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
     this.hasUnsavedEdits = false;
     this.unifiedPalette = false;
+    this.showCategories = true;
 
     // cached IDE state
     this.sprites = new List();

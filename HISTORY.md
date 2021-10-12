@@ -41,6 +41,7 @@
 
 ### 2021-10-12
 * scenes, store: store single palette setting per project (for making extensions)
+* gui, scenes, objects: added scene-setting to hide/show category names in the unified palette 
 
 ### 2021-10-11
 * objects: sort order of blocks in custom categories alphabetically in the unified palette

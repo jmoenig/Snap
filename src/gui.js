@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-September-30';
+modules.gui = '2021-October-12';
 
 // Declarations
 
@@ -4148,6 +4148,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to show all blocks in a single palette',
         false
     );
+    if (this.scene.unifiedPalette) {
+        addPreference(
+            'Show categories',
+            () => this.toggleCategoryNames(),
+            this.scene.unifiedPalette,
+            'uncheck to hide\ncategory names\nin the palette',
+            'check to show\ncategory names\nin the palette'
+        );
+    }
     addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
@@ -6243,6 +6252,13 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.refreshPalette(true);
     return true;
 };
+
+IDE_Morph.prototype.toggleCategoryNames = function () {
+    this.scene.showCategories = !this.scene.showCategories;
+    this.flushBlocksCache();
+    this.refreshPalette();
+};
+
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,

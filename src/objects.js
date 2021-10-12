@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-11';
+modules.objects = '2021-October-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -2989,6 +2989,7 @@ SpriteMorph.prototype.palette = function (category) {
 SpriteMorph.prototype.freshPalette = function (category) {
     var myself = this,
         palette = new ScrollFrameMorph(null, null, this.sliderColor),
+        showCategories,
         unit = SyntaxElementMorph.prototype.fontSize,
         x = 0,
         y = 5,
@@ -3075,12 +3076,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
+        showCategories = this.parentThatIsA(IDE_Morph).scene.showCategories;
         blocks = SpriteMorph.prototype.allCategories().reduce(
             (blocks, category) => {
-                let header = [ this.categoryText(category), '-' ],
+                let header = [this.categoryText(category), '-' ],
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
-                    showHeader = !['lists', 'other'].includes(category) &&
+                    showHeader = showCategories &&
+                        !['lists', 'other'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
