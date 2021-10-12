@@ -379,6 +379,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         scene.name = 'Untitled ' + nameID;
     }
     scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    scene.showCategories = model.scene.attributes.categories !== 'false';
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
@@ -1721,7 +1722,7 @@ Scene.prototype.toXML = function (serializer) {
     }
 
     xml = serializer.format(
-        '<scene name="@"%>' +
+        '<scene name="@"%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1733,6 +1734,8 @@ Scene.prototype.toXML = function (serializer) {
             '</scene>',
         this.name || localize('Untitled'),
         this.unifiedPalette ? ' palette="single"' : '',
+        this.unifiedPalette && !this.showCategories ?
+            ' categories="false"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
