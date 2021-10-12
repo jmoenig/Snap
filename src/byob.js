@@ -4636,6 +4636,7 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     }
     ide.flushBlocksCache();
     ide.refreshPalette();
+    ide.recordUnsavedChanges()
 };
 
 // BlockVisibilityDialogMorph layout

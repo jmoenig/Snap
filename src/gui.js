@@ -5000,7 +5000,7 @@ IDE_Morph.prototype.deletePaletteCategory = function (name) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.flushPaletteCache();
-    this.refreshPalette();
+    this.refreshPalette(true);
     this.fixLayout();
     this.recordUnsavedChanges();
 };
@@ -6250,6 +6250,7 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
+    this.recordUnsavedChanges();
     return true;
 };
 
@@ -6257,6 +6258,7 @@ IDE_Morph.prototype.toggleCategoryNames = function () {
     this.scene.showCategories = !this.scene.showCategories;
     this.flushBlocksCache();
     this.refreshPalette();
+    this.recordUnsavedChanges();
 };
 
 
