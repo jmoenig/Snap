@@ -3079,7 +3079,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         showCategories = this.parentThatIsA(IDE_Morph).scene.showCategories;
         blocks = SpriteMorph.prototype.allCategories().reduce(
             (blocks, category) => {
-                let header = [this.categoryText(category), '-' ],
+                let header = [this.categoryText(category), '-'],
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
@@ -3087,10 +3087,17 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
+                if (!showCategories && category !== 'variables') {
+                    primitives = primitives.filter(each =>
+                        each !== '-' && each !== '=');
+                }
+
                 return blocks.concat(
                     showHeader ? header : [],
-                    primitives, '=',
-                    customs, '='
+                    primitives,
+                    showHeader ? '=' : null,
+                    customs,
+                    showHeader ? '=' : '-'
                 );
             },
             []

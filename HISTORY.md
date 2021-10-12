@@ -45,6 +45,7 @@
 * gui, scenes, objects: added scene-setting to hide/show category names in the unified palette
 * store: made "hide/show categories in unified palette" setting persistent
 * byob: hide unused blocks in palette
+* objects: tweaked unified palette formatting for hidden categories
 
 ### 2021-10-11
 * objects: sort order of blocks in custom categories alphabetically in the unified palette
