@@ -13,6 +13,7 @@
     * new "blocksZoom=n" url parameter, thanks, Bernat!
     * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
     * added "enter" key to key-pressed dropdown
+    * added "green flag" symbol to message drop-down
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -45,6 +46,7 @@
 * gui, byob: scroll selected custom category button into view
 * gui: fixed "show categories" setting display
 * gui: sort custom category menu ("delete a category") alphabetically
+* blocks: enabled symbols inside input slots, activated %greenflag as selectable message
 
 ### 2021-10-12
 * scenes, store: store single palette setting per project (for making extensions)

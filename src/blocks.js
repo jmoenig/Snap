@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-07';
+modules.blocks = '2021-October-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8972,6 +8972,7 @@ InputSlotMorph.prototype.init = function (
     contents.isShowingBlanks = true;
 
 	this.selectedBlock = null;
+    this.symbol = null;
 
     this.isUnevaluated = false;
     this.choices = choiceDict || null; // object, function or selector
@@ -9023,10 +9024,20 @@ InputSlotMorph.prototype.setContents = function (data) {
 	if (this.selectedBlock) {
    		this.selectedBlock = null;
 	}
+	if (this.symbol) {
+        this.symbol.destroy();
+   		this.symbol = null;
+	}
 
     if (isConstant) {
-        dta = localize(dta[0]);
-        cnts.isItalic = !this.isReadOnly;
+        if (dta[0] === '__shout__go__') {
+            this.symbol = this.labelPart('%greenflag');
+            this.add(this.symbol);
+            dta = '';
+        } else {
+            dta = localize(dta[0]);
+            cnts.isItalic = !this.isReadOnly;
+        }
     } else if (dta instanceof BlockMorph) {
     	this.selectedBlock = dta;
       	dta = ''; // make sure the contents text emptied
@@ -9293,9 +9304,7 @@ InputSlotMorph.prototype.messagesMenu = function (searching) {
     allNames.sort().forEach(name =>
         dict[name] = name
     );
-    if (this.world().currentKey === 16) { // shift
-        dict.__shout__go__ = ['__shout__go__'];
-    }
+    dict.__shout__go__ = ['__shout__go__'];
     if (allNames.length > 0) {
         dict['~'] = null;
     }
@@ -9850,8 +9859,16 @@ InputSlotMorph.prototype.fixLayout = function () {
             + arrowWidth
             + this.edge * 2
             + this.typeInPadding * 2;
-     } else {
-    	height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
+    } else if (this.symbol) {
+        this.symbol.fixLayout();
+        this.symbol.setPosition(this.position().add(this.edge * 2));
+        height = this.symbol.height() + this.edge * 4;
+        width = this.symbol.width()
+            + arrowWidth
+            + this.edge * 4
+            + this.typeInPadding * 2;
+    } else {
+        height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
         if (this.isNumeric) {
             width = contents.width()
                 + Math.floor(arrowWidth * 0.5)
@@ -10033,6 +10050,12 @@ InputSlotMorph.prototype.evaluate = function () {
  	if (this.selectedBlock) {
   		return this.selectedBlock;
   	}
+    if (this.symbol) {
+        if (this.symbol.name === 'flag') {
+            return ['__shout__go__'];
+        }
+        return '';
+    }
     if (this.constant) {
         return this.constant;
     }
@@ -10047,7 +10070,7 @@ InputSlotMorph.prototype.evaluate = function () {
 };
 
 InputSlotMorph.prototype.isEmptySlot = function () {
-    return this.contents().text === '' && !this.selectedBlock;
+    return this.contents().text === '' && !this.selectedBlock && !this.symbol;
 };
 
 // InputSlotMorph single-stepping:
@@ -10139,7 +10162,6 @@ InputSlotMorph.prototype.render = function (ctx) {
             this.edge
         );
  	}
-
 };
 
 InputSlotMorph.prototype.drawRectBorder = function (ctx) {
