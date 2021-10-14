@@ -1267,7 +1267,12 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.buttons = [];
 
     this.categories.refresh = function () {
-        this.buttons.forEach(cat => cat.refresh());
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
     };
 
     function changePalette(category) {

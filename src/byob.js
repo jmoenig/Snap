@@ -1756,7 +1756,12 @@ BlockDialogMorph.prototype.init = function (target, action, environment) {
     this.categories.buttons = [];
 
     this.categories.refresh = function () {
-        this.buttons.forEach(cat => cat.refresh());
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
     };
 
     this.createCategoryButtons();

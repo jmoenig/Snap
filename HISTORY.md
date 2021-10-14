@@ -42,6 +42,7 @@
 
 ### 2021-10-14
 * gui, byob, objects: scroll custom category buttons if there are more than 6
+* gui, byob: scroll selected custom category button into view
 
 ### 2021-10-12
 * scenes, store: store single palette setting per project (for making extensions)
