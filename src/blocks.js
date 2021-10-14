@@ -2834,7 +2834,6 @@ BlockMorph.prototype.userMenu = function () {
                         'rename all blocks that\naccess this variable'
                     );
                 }
-<<<<<<< HEAD
             } else if (this.selector !== 'evaluateCustomBlock') {
                 if (this.isHidden()) {
                     menu.addItem(
@@ -2847,8 +2846,6 @@ BlockMorph.prototype.userMenu = function () {
                         'hidePrimitive'
                     );
                 }
-=======
->>>>>>> master
             }
 
             // allow toggling inheritable attributes
