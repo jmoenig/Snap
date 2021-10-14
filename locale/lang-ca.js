@@ -463,8 +463,8 @@ SnapTranslator.dict.ca = {
     // control:
     'when %greenflag clicked':
         'Quan la %greenflag es premi',
-    'when %keyHat key pressed':
-        'Quan la tecla %keyHat es premi',
+    'when %keyHat key pressed %keyName':
+        'Quan la tecla %keyHat es premi %keyName',
     'when I am %interaction':
         'Quan %interaction aquest personatge',
     'clicked':
@@ -479,8 +479,8 @@ SnapTranslator.dict.ca = {
         'el ratolí surti d\'',
     'when %b':
         'quan %b',
-    'when I receive %msgHat':
-        'Quan rebi %msgHat',
+    'when I receive %msgHat %message':
+        'Quan rebi %msgHat %message',
     'broadcast %msg':
         'Envia a tots %msg',
     'broadcast %msg and wait':

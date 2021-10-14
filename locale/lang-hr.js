@@ -417,8 +417,8 @@ SnapTranslator.dict.hr = {
     // control:
     'when %greenflag clicked':
         'kad kliknem na %greenflag',
-    'when %keyHat key pressed':
-        'kad pritisnem tipku %keyHat',
+    'when %keyHat key pressed %keyName':
+        'kad pritisnem tipku %keyHat %keyName',
     'when I am %interaction':
         'kad me %interaction',
     'clicked':
@@ -431,8 +431,8 @@ SnapTranslator.dict.hr = {
         'mi\u0161 posjeti',
     'mouse-departed':
         'mi\u0161 napusti',
-    'when I receive %msgHat':
-        'kad spazim doga\u0111aj %msgHat',
+    'when I receive %msgHat %message':
+        'kad spazim doga\u0111aj %msgHat %message',
     'broadcast %msg':
         'objavljujem doga\u0111aj %msg',
     'broadcast %msg and wait':

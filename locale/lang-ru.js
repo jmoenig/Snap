@@ -499,8 +499,8 @@ SnapTranslator.dict.ru = {
     // control:
     'when %greenflag clicked':
         'при нажатии на %greenflag',
-    'when %keyHat key pressed':
-        'при нажатии клавиши %keyHat',
+    'when %keyHat key pressed %keyName':
+        'при нажатии клавиши %keyHat %keyName',
     'when I am %interaction':
         'когда меня %interaction',
     'clicked':
@@ -521,8 +521,8 @@ SnapTranslator.dict.ru = {
         'остановят',
     'when %b':
         'когда %b',
-    'when I receive %msgHat':
-        'когда я получу %msgHat',
+    'when I receive %msgHat %message':
+        'когда я получу %msgHat %message',
     'broadcast %msg':
         'разослать %msg всем',
     'broadcast %msg and wait':

@@ -415,12 +415,12 @@ SnapTranslator.dict.pt_BR = {
     // Eventos e Controle:
     'when %greenflag clicked':
         'quando clicar em %greenflag',
-    'when %keyHat key pressed':
-        'quando a tecla %keyHat for pressionada',
-    'when I am clicked':
-        'quando este ator for clicado',
-    'when I receive %msgHat':
-        'quando receber %msgHat',
+    'when %keyHat key pressed %keyName':
+        'quando a tecla %keyHat for pressionada %keyName',
+    'when I am %interaction':
+        'quando este ator for %interaction',
+    'when I receive %msgHat %message':
+        'quando receber %msgHat %message',
     'broadcast %msg':
         'envie %msg a todos',
     'broadcast %msg and wait':

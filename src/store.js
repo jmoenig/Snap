@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-August-01';
+modules.store = '2021-October-12';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -378,8 +378,8 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         }
         scene.name = 'Untitled ' + nameID;
     }
-    // unified palette persistence commented out during development:
-    // scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    scene.showCategories = model.scene.attributes.categories !== 'false';
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
@@ -946,6 +946,7 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element, object) {
         value = child.children[0];
         v = new Variable();
         v.isTransient = (child.attributes.transient === 'true');
+        v.isHidden = (child.attributes.hidden === 'true');
         v.value = (v.isTransient || !value ) ? 0
                 : this.loadValue(value, object);
         varFrame.vars[child.attributes.name] = v;
@@ -1721,7 +1722,7 @@ Scene.prototype.toXML = function (serializer) {
     }
 
     xml = serializer.format(
-        '<scene name="@"%>' +
+        '<scene name="@"%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1732,8 +1733,9 @@ Scene.prototype.toXML = function (serializer) {
             '%' + // stage
             '</scene>',
         this.name || localize('Untitled'),
-        '', // unified palette persistence commented out during development
-        // this.unifiedPalette ? ' palette="single"' : '',
+        this.unifiedPalette ? ' palette="single"' : '',
+        this.unifiedPalette && !this.showCategories ?
+            ' categories="false"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
@@ -1930,17 +1932,24 @@ Sound.prototype.toXML = function (serializer) {
 VariableFrame.prototype.toXML = function (serializer) {
     return Object.keys(this.vars).reduce((vars, v) => {
         var val = this.vars[v].value,
+            transient = this.vars[v].isTransient,
+            hidden = this.vars[v].isHidden,
             dta;
-        if (this.vars[v].isTransient) {
+
+        if (transient || val === undefined || val === null) {
             dta = serializer.format(
-                '<variable name="@" transient="true"/>',
-                v)
-            ;
-        } else if (val === undefined || val === null) {
-            dta = serializer.format('<variable name="@"/>', v);
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '/>',
+                v
+            );
         } else {
             dta = serializer.format(
-                '<variable name="@">%</variable>',
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '>%</variable>',
                 v,
                 typeof val === 'object' ?
                         (isSnapObject(val) ? ''

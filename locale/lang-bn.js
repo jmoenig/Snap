@@ -439,8 +439,8 @@ SnapTranslator.dict.bn = {
     // control:
     'when %greenflag clicked':
         'যখন %greenflag ক্লিক করা হবে',
-    'when %keyHat key pressed':
-        'যখন %keyHat ক্লিক করা হবে',
+    'when %keyHat key pressed %keyName':
+        'যখন %keyHat %keyName ক্লিক করা হবে',
     'when I am %interaction':
         'যখন আমাকে %interaction',
     'clicked':
@@ -461,8 +461,8 @@ SnapTranslator.dict.bn = {
         'থামানো হবে',
     'when %b':
         'যখন %b শর্তটি সত্য হবে',
-    'when I receive %msgHat':
-        'যখন আমি পাব বার্তা %msgHat',
+    'when I receive %msgHat %message':
+        'যখন আমি পাব বার্তা %msgHat %message',
     'broadcast %msg':
         'বার্তা %msg সম্প্রচার কর',
     'broadcast %msg and wait':

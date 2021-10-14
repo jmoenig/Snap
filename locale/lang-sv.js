@@ -1261,10 +1261,10 @@ SnapTranslator.dict.sv = {
     // missing labels from initial translation added below
     'add a new sprite':
         'ny sprite',
-    'when %keyHat key pressed':
-        'n\u00E4r tangent %keyHat trycks ned',
-    'when I receive %msgHat':
-        'n\u00E4r jag tar emot %msgHat',
+    'when %keyHat key pressed %keyName':
+        'n\u00E4r tangent %keyHat trycks ned %keyName',
+    'when I receive %msgHat %message':
+        'n\u00E4r jag tar emot %msgHat %message',
     'message':
         'meddelande',
     'any message':

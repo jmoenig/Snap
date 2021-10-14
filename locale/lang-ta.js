@@ -414,12 +414,12 @@ SnapTranslator.dict.ta = {
     // control:
     'when %greenflag clicked':
         '%greenflag அழுத்தும்பொழுது',
-    'when %keyHat key pressed':
-        '%keyHat கீ அழுத்தும்பொழுது',
-    'when I am clicked':
-        'நான் சொடுக்கும் போது',
-    'when I receive %msgHat':
-        '%msgHat பெறுகையில்',
+    'when %keyHat key pressed %keyName':
+        '%keyHat %keyName கீ அழுத்தும்பொழுது',
+    'when I am %interaction':
+        '%interaction நான் சொடுக்கும் போது',
+    'when I receive %msgHat %message':
+        '%msgHat %message பெறுகையில்',
     'broadcast %msg':
         '%msg செலித்தி',
     'broadcast %msg and wait':

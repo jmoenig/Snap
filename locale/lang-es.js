@@ -576,14 +576,14 @@ SnapTranslator.dict.es = {
     // control:
     'when %greenflag clicked':
         'cuando se pulse %greenflag',
-    'when %keyHat key pressed':
-        'cuando se pulse la tecla %keyHat',
+    'when %keyHat key pressed %keyName':
+        'cuando se pulse la tecla %keyHat %keyName',
     'when I am %interaction':
         'cuando me %interaction',
     'when %b':
         'cuando %b',
-    'when I receive %msgHat':
-        'cuando me llegue %msgHat',
+    'when I receive %msgHat %message':
+        'cuando me llegue %msgHat %message',
     'broadcast %msg':
         'enviar mensaje %msg',
     'broadcast %msg and wait':

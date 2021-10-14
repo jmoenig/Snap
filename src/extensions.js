@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-August-6';
+modules.extensions = '2021-October-06';
 
 // Global stuff
 
@@ -696,9 +696,26 @@ SnapExtensions.primitives.set(
 );
 
 // IDE (ide_):
-// not needed right now, commented out for possibly later
+
+SnapExtensions.primitives.set(
+    'ide_hide(block)',
+    function (context, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, true);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_show(block)',
+    function (context, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, false);
+    }
+);
+
 /*
 SnapExtensions.primitives.set(
+    // not needed right now, commented out for possibly later
     'ide_refreshpalette(name)',
     function (name) {
         var ide = this.parentThatIsA(IDE_Morph);

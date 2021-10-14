@@ -496,8 +496,8 @@ SnapTranslator.dict.tr = {
     // control:
     'when %greenflag clicked':
         '%greenflag tıklanınca',
-    'when %keyHat key pressed':
-        '%keyHat tuşuna basılınca',
+    'when %keyHat key pressed %keyName':
+        '%keyHat tuşuna basılınca %keyName',
     'when I am %interaction':
         'kukla %interaction zaman','clicked':
         'tıklandığı',
@@ -517,8 +517,8 @@ SnapTranslator.dict.tr = {
         'durdurulduğu',
     'when %b':
         '%b olunca',
-    'when I receive %msgHat':
-        '%msgHat haberi gelince',
+    'when I receive %msgHat %message':
+        '%msgHat haberi gelince %message',
     'broadcast %msg':
         '%msg yayımla',
     'broadcast %msg and wait':

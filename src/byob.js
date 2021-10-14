@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-August-03';
+modules.byob = '2021-October-14';
 
 // Declarations
 
@@ -1753,6 +1753,17 @@ BlockDialogMorph.prototype.init = function (target, action, environment) {
     this.categories = new BoxMorph();
     this.categories.color = SpriteMorph.prototype.paletteColor.lighter(8);
     this.categories.borderColor = this.categories.color.lighter(40);
+    this.categories.buttons = [];
+
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
+    };
+
     this.createCategoryButtons();
     this.fixCategoriesLayout();
     this.add(this.categories);
@@ -1775,9 +1786,7 @@ BlockDialogMorph.prototype.openForChange = function (
     this.category = category;
     this.blockType = type;
 
-    this.categories.children.forEach(each =>
-        each.refresh()
-    );
+    this.categories.refresh();
     this.types.children.forEach(each => {
         each.setColor(clr);
         each.refresh();
@@ -1833,9 +1842,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
         this, // this block dialog box is the target
         () => {
             this.category = category;
-            this.categories.children.forEach(each =>
-                each.refresh()
-            );
+            this.categories.refresh();
             if (this.types) {
                 this.types.children.forEach(each =>
                     each.setColor(colors[2])
@@ -1863,6 +1870,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.fixLayout();
     button.refresh();
     this.categories.add(button);
+    this.categories.buttons.push(button);
     return button;
 };
 
@@ -1882,9 +1890,7 @@ BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
         this, // this block dialog box is the target
         () => {
             this.category = category;
-            this.categories.children.forEach(each =>
-                each.refresh()
-            );
+            this.categories.refresh();
             if (this.types) {
                 this.types.children.forEach(each =>
                     each.setColor(colors[2])
@@ -1912,6 +1918,7 @@ BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
     button.fixLayout();
     button.refresh();
     this.categories.add(button);
+    this.categories.buttons.push(button);
     return button;
 };
 
@@ -1924,8 +1931,14 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         border = 10, // this.categories.border,
         l = this.categories.left(),
         t = this.categories.top(),
+        scroller,
         row,
-        col;
+        col,
+        i;
+
+    this.categories.setWidth(
+        3 * xPadding + 2 * buttonWidth
+    );
 
     this.categories.children.forEach((button, i) => {
         if (i < 8) {
@@ -1950,17 +1963,43 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.border = 0;
         this.categories.edge = 0;
     }
-    this.categories.setWidth(
-        3 * xPadding + 2 * buttonWidth
-    );
 
-    this.categories.setHeight(
-        (5 + 1) * yPadding
-            + 5 * buttonHeight
-            + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
-            + 2 * border
-    );
+    if (more > 6) {
+        scroller = new ScrollFrameMorph(
+            null,
+            null,
+            SpriteMorph.prototype.sliderColor.lighter()
+        );
+        scroller.setColor(this.categories.color);
+        scroller.acceptsDrops = false;
+        scroller.contents.acceptsDrops = false;
+        scroller.setPosition(
+            new Point(
+                this.categories.left() + this.categories.border,
+                this.categories.children[10].top()
+            )
+        );
+        scroller.setWidth(this.categories.width() - this.categories.border * 2);
+        scroller.setHeight(buttonHeight * 6 + yPadding * 5);
 
+        for (i = 0; i < more; i += 1) {
+            scroller.addContents(this.categories.children[10]);
+        }
+        this.categories.add(scroller);
+        this.categories.setHeight(
+            (5 + 1) * yPadding
+                + 5 * buttonHeight
+                + 6 * (yPadding + buttonHeight) + border + 2
+                + 2 * border
+        );
+    } else {
+        this.categories.setHeight(
+            (5 + 1) * yPadding
+                + 5 * buttonHeight
+                + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
+                + 2 * border
+        );
+    }
 };
 
 // type radio buttons
@@ -4449,4 +4488,197 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
 // BlockRemovalDialogMorph layout
 
 BlockRemovalDialogMorph.prototype.fixLayout
+    = BlockEditorMorph.prototype.fixLayout;
+
+// BlockVisibilityDialogMorph //////////////////////////////////////////////////
+
+// BlockVisibilityDialogMorph inherits from DialogBoxMorph
+// and pseudo-inherits from BlockExportDialogMorph:
+
+BlockVisibilityDialogMorph.prototype = new DialogBoxMorph();
+BlockVisibilityDialogMorph.prototype.constructor = BlockVisibilityDialogMorph;
+BlockVisibilityDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockVisibilityDialogMorph constants:
+
+BlockVisibilityDialogMorph.prototype.key = 'blockVisibility';
+
+// BlockVisibilityDialogMorph instance creation:
+
+function BlockVisibilityDialogMorph(target) {
+    this.init(target);
+}
+
+BlockVisibilityDialogMorph.prototype.init = function (target) {
+    // additional properties:
+    this.blocks = target.allPaletteBlocks();
+    this.selection = this.blocks.filter(each => target.isHidingBlock(each));
+    this.handle = null;
+
+    // initialize inherited properties:
+    BlockVisibilityDialogMorph.uber.init.call(
+        this,
+        target,
+        () => this.hideBlocks(),
+        null // environment
+    );
+
+    // override inherited properites:
+    this.labelString = localize('Hide blocks in palette')
+        + (name ? ': ' : '')
+        + name || '';
+    this.createLabel();
+
+    // build contents
+    this.buildContents();
+};
+
+BlockVisibilityDialogMorph.prototype.buildContents = function () {
+    var palette, x, y, checkBox, lastCat,
+        padding = 4;
+
+    // create plaette
+    palette = new ScrollFrameMorph(
+        null,
+        null,
+        SpriteMorph.prototype.sliderColor
+    );
+    palette.color = SpriteMorph.prototype.paletteColor;
+    palette.padding = padding;
+    palette.isDraggable = false;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = false;
+
+    // populate palette
+    x = palette.left() + padding;
+    y = palette.top() + padding;
+
+    this.blocks.forEach(block => {
+        if (lastCat && (block.category !== lastCat)) {
+            y += padding;
+        }
+        lastCat = block.category;
+
+        checkBox = new ToggleMorph(
+            'checkbox',
+            this,
+            () => {
+                var idx = this.selection.indexOf(block);
+                if (idx > -1) {
+                    this.selection.splice(idx, 1);
+                } else {
+                    this.selection.push(block);
+                }
+            },
+            null,
+            () => contains(this.selection, block),
+            null,
+            null,
+            block.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+
+    palette.scrollX(padding);
+    palette.scrollY(padding);
+    this.addBody(palette);
+
+    this.addButton('ok', 'OK');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(220, 300));
+    this.fixLayout();
+};
+
+BlockVisibilityDialogMorph.prototype.popUp
+    = BlockExportDialogMorph.prototype.popUp;
+
+// BlockVisibilityDialogMorph menu
+
+BlockVisibilityDialogMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this, 'select');
+    menu.addItem('all', 'selectAll');
+    menu.addItem('none', 'selectNone');
+    menu.addLine();
+    menu.addItem('unused', 'selectUnused');
+    return menu;
+};
+
+
+BlockVisibilityDialogMorph.prototype.selectAll = function () {
+    this.selection = this.blocks.slice(0);
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockVisibilityDialogMorph.prototype.selectNone = function () {
+    this.selection = [];
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockVisibilityDialogMorph.prototype.selectUnused = function () {
+    var used = this.target.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uPrim = [],
+        uCust = [],
+        uVars = [];
+
+    used.forEach(b => {
+        if (b.isCustomBlock) {
+            uCust.push(b.isGlobal ? b.definition
+                : this.target.getMethod(b.semanticSpec));
+        } else if (b.selector === 'reportGetVar') {
+            uVars.push(b.blockSpec);
+        } else {
+            uPrim.push(b.selector);
+        }
+    });
+
+    this.selection = this.blocks.filter(b => {
+        if (b.isCustomBlock) {
+            return !contains(
+                uCust,
+                b.isGlobal ? b.definition
+                    : this.target.getMethod(b.semanticSpec)
+                );
+        } else if (b.selector === 'reportGetVar') {
+            return !contains(uVars, b.blockSpec);
+        } else {
+            return !contains(uPrim, b.selector);
+        }
+    });
+
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+// BlockVisibilityDialogMorph ops
+
+BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.blocks.forEach(block => this.target.changeBlockVisibility(
+        block,
+        contains(this.selection, block),
+        true // quick - without palette update
+    ));
+    if (this.selection.length === 0) {
+        StageMorph.prototype.hiddenPrimitives = [];
+    }
+    ide.flushBlocksCache();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+};
+
+// BlockVisibilityDialogMorph layout
+
+BlockVisibilityDialogMorph.prototype.fixLayout
     = BlockEditorMorph.prototype.fixLayout;

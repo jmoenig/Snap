@@ -417,12 +417,14 @@ SnapTranslator.dict.fi = {
     // control:
     'when %greenflag clicked':
         'kun klikataan %greenflag',
-    'when %keyHat key pressed':
-        'kun painetaan %keyHat',
-    'when I am clicked':
-        'kun minua klikataan',
-    'when I receive %msgHat':
-        'kun vastaanotan sanoman %msgHat',
+    'when %keyHat key pressed %keyName':
+        'kun painetaan %keyHat %keyName',
+    'when I am %interaction':
+        'kun minua %interaction',
+    'clicked':
+        'klikataan',
+    'when I receive %msgHat %message':
+        'kun vastaanotan sanoman %msgHat %message',
     'broadcast %msg':
         'l\u00e4het\u00e4 sanoma %msg',
     'broadcast %msg and wait':

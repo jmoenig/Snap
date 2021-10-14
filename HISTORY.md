@@ -6,18 +6,24 @@
     * extensions
     * single blocks palette option, thanks, Michael!
     * web-serial support, thanks, Dariusz Dorożalski!
-    * hide custom helper blocks in palette
+    * hide any block, including variables and custom helper blocks in palette, also use "hide/show var" primitive on custom blocks (same as on primitives)
+    * generate Parsons Problems from projects: Hide all unused blocks from the scripting area in the palette
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
+    * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
+    * added "enter" key to key-pressed dropdown
+    * added "green flag" symbol to message drop-down
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
+    * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
+    * hidden blocks don't appear in search results / keyboard input options 
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
-    * libraries can now have hidden helper blocks
     * blocked xhr requests to from Snap! to s.b.e
+    * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -26,12 +32,134 @@
     * colors library: fixed SET PEN to work with more than a single sprite per costume,  thanks, Jadga, for the report!
     * fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
     * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
+    * disabled dropping reporters onto message hat block input slots
+    * fixed outdated blocks specs for "When I am ..." hat block in many translations
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-14
+* gui, byob, objects: scroll custom category buttons if there are more than 6
+* gui, byob: scroll selected custom category button into view
+* gui: fixed "show categories" setting display
+* gui: sort custom category menu ("delete a category") alphabetically
+* blocks: enabled symbols inside input slots, activated %greenflag as selectable message
+
+### 2021-10-12
+* scenes, store: store single palette setting per project (for making extensions)
+* gui, scenes, objects: added scene-setting to hide/show category names in the unified palette
+* store: made "hide/show categories in unified palette" setting persistent
+* byob: hide unused blocks in palette
+* objects: tweaked unified palette formatting for hidden categories
+
+### 2021-10-11
+* objects: sort order of blocks in custom categories alphabetically in the unified palette
+
+### 2021-10-08
+* objects: tweaked variable block visibility
+* objects: filter hidden blocks out from search / keyboard input results
+* objects: prevent deprecated "message" reporter from showing up in search results
+* objects: tweaked hiding / showing inherited local blocks
+
+### 2021-10-07
+* objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette
+* ojects: simplified palette context menu
+* blocks: removed "hide" option from context menu of primitive blocks in the palette
+* objects, byob: optimized bulk hiding & showing palette blocks 
+
+### 2021-10-06
+* threads: programmatically hide individual variables in palette
+* extensions: new extension primitives for hiding and showing arbitrary blocks in the palette
+* threads: keep hidden variables out of the palette and drop-down menus
+* objects: added utilities to enumerate all palette blocks for hiding & showing
+* objects, threads, extensions: refactored block hiding methods
+* objects: added method to check whether an arbitrary block is hidden in the palette
+
+### 2021-10-05
+* threads, store: added infrastructure for hiding individual variables in palette
+
+### 2021-10-04
+* blocks: added "enter" key to key-pressed dropdown
+* updated German translation for "enter" key
+* threads: extended "hide/show var" primitive to also hide/show custom blocks in the palette
+
+* migrated Bangla block specs
+* migrated Portuguese block specs
+* migrated Norwegian block specs
+* migrated French block specs
+* migrated Italian block specs
+* migrated Greek block specs
+* migrated Spanish block specs
+* migrated Russian block specs
+* migrated Dutch block specs
+* migrated and fixed Tamil block specs
+* migrated Turkish block specs
+* migrated Catalan block specs
+* migrated Hindi block specs
+* migrated Polish block specs
+* migrated and fixed Simplified Chinese block specs
+* fixed Telagu block specs for %interaction
+* fixed Brazilian-Portuguese block specs for %interaction
+* fixed Malayalam block specs for %interaction
+* fixed Korean block specs for %interaction
+* fixed Kannada block specs for %interaction
+* fixed Finnish block specs for %interaction
+
+### 2021-10-03
+* migrated Hebrew block specs
+* migrated and fixed Japanese Hiragana block specs
+* migrated Slovak block specs
+* migrated Ukrainian block specs
+* migrated and fixed Japanese block specs
+
+### 2021-10-02
+* migrated Indonesian block specs
+* migrated Galician block specs
+
+### 2021-10-01
+* objects: tweaked detectable keynames and representations
+* German translation update
+* migrated Euskara block specs
+* migrated Telagu block specs
+* migrated Swedish block specs
+* migrated Slovenian block specs
+* migrated Romanian block specs
+* migrated Brazilian-Portuguese block specs
+* migrated Malayalam block specs
+* migrated Korean block specs
+* migrated Kannada block specs
+* migrated Interlingua block specs
+* migrated Hungarian block specs
+* migrated Croatian block specs
+* migrated Finnish block specs
+* migrated Estonian block specs
+* migrated Esperanto block specs
+* migrated Danish block specs
+* fixed Danish block spec for "When I am %interaction"
+* migrated Czech block specs
+* migrated Valencian-Catalan block specs
+* migrated Arabic block specs
+* migrated and fixed Bulgarian block specs
+* migrated and fixed Traditial-Chinese block specs
+
+### 2021-09-30
+* blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
+* blocks: disabled dropping reporters onto message hat block input slots
+* threads: restricted inter-scene messages to text and numbers
+* objects: assign case-sensitive key symbol to key event hat blocks' upvars
+
+### 2021-09-29
+* objects, blocks: refactored experimental "When I receive message" hat block
+
+### 2021-09-28
+* objects, blocks, threads: new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
+
+### 2021-09-27
+* objects: renamed scene event hat block
+* German translation update
 
 ### 2021-09-09
 * German translation update

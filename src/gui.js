@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-September-07';
+modules.gui = '2021-October-14';
 
 // Declarations
 
@@ -1264,12 +1264,21 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
-    // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+    this.categories.buttons = [];
+
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
+    };
 
     function changePalette(category) {
         return () => {
             myself.currentCategory = category;
-            myself.categories.children.forEach(each =>
+            myself.categories.buttons.forEach(each =>
                 each.refresh()
             );
             myself.refreshPalette(true);
@@ -1320,6 +1329,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);
+        myself.categories.buttons.push(button);
         return button;
     }
 
@@ -1355,6 +1365,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);
+        myself.categories.buttons.push(button);
         return button;
     }
 
@@ -1369,8 +1380,10 @@ IDE_Morph.prototype.createCategories = function () {
             yPadding = 2,
             l = myself.categories.left(),
             t = myself.categories.top(),
+            scroller,
             row,
-            col;
+            col,
+            i;
 
         myself.categories.children.forEach((button, i) => {
             row = i < 8 ? i % 4 : i - 4;
@@ -1382,12 +1395,37 @@ IDE_Morph.prototype.createCategories = function () {
             ));
         });
 
-        myself.categories.setHeight(
-            (4 + 1) * yPadding
-                + 4 * buttonHeight
-                + (more ? (more * (yPadding + buttonHeight) + border + 2) : 0)
-                + 2 * border
-        );
+        if (more > 6) {
+            scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
+            scroller.setColor(myself.groupColor);
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.setPosition(
+                new Point(0, myself.categories.children[8].top())
+            );
+            scroller.setWidth(myself.paletteWidth);
+            scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+
+            for (i = 0; i < more; i += 1) {
+                scroller.addContents(myself.categories.children[8]);
+            }
+            myself.categories.add(scroller);
+            myself.categories.setHeight(
+                (4 + 1) * yPadding
+                    + 4 * buttonHeight
+                    + 6 * (yPadding + buttonHeight) + border + 2
+                    + 2 * border
+            );
+        } else {
+            myself.categories.setHeight(
+                (4 + 1) * yPadding
+                    + 4 * buttonHeight
+                    + (more ?
+                        (more * (yPadding + buttonHeight) + border + 2)
+                            : 0)
+                    + 2 * border
+            );
+        }
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
@@ -1457,13 +1495,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     if (this.scene.unifiedPalette) {
         this.palette.adjustScrollBars = function () {
             ScrollFrameMorph.prototype.adjustScrollBars.call(this);
-            myself.categories.children.forEach(each => each.refresh());
+            myself.categories.refresh();
         };
 
         vScrollAction = this.palette.vBar.action;
         this.palette.vBar.action = function (num) {
             vScrollAction(num);
-            myself.categories.children.forEach(each => each.refresh());
+            myself.categories.buttons.forEach(each => each.refresh());
         };
     }
 
@@ -4148,6 +4186,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to show all blocks in a single palette',
         false
     );
+    if (this.scene.unifiedPalette) {
+        addPreference(
+            'Show categories',
+            () => this.toggleCategoryNames(),
+            this.scene.showCategories,
+            'uncheck to hide\ncategory names\nin the palette',
+            'check to show\ncategory names\nin the palette'
+        );
+    }
     addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
@@ -4949,7 +4996,11 @@ IDE_Morph.prototype.deleteUserCategory = function () {
         null,
         this
     );
-    SpriteMorph.prototype.customCategories.forEach((clr, name) =>
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
         menu.addItem(
             name,
             name,
@@ -4991,7 +5042,7 @@ IDE_Morph.prototype.deletePaletteCategory = function (name) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.flushPaletteCache();
-    this.refreshPalette();
+    this.refreshPalette(true);
     this.fixLayout();
     this.recordUnsavedChanges();
 };
@@ -5706,9 +5757,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
     this.currentCategory = 'variables';
-    this.categories.children.forEach(each =>
-        each.refresh()
-    );
+    this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {
         dlg = new TableDialogMorph(data);
@@ -5744,7 +5793,7 @@ IDE_Morph.prototype.openProject = function (project) {
     );
 };
 
-IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
+IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
     var appMode = this.isAppMode;
     if (!scene || !scene.stage) {
         return;
@@ -5781,7 +5830,7 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum) {
     }
     this.toggleAppMode(appMode);
     this.world().keyboardFocus = this.stage;
-    this.stage.fireChangeOfSceneEvent();
+    this.stage.fireChangeOfSceneEvent(msg);
 };
 
 IDE_Morph.prototype.setURL = function (str) {
@@ -6241,8 +6290,17 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
+    this.recordUnsavedChanges();
     return true;
 };
+
+IDE_Morph.prototype.toggleCategoryNames = function () {
+    this.scene.showCategories = !this.scene.showCategories;
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.recordUnsavedChanges();
+};
+
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,

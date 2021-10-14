@@ -410,12 +410,12 @@ SnapTranslator.dict.bg = {
     // control:
     'when %greenflag clicked':
         'когато %greenflag е кликнат',
-    'when %keyHat key pressed':
-        'когато бутон %keyHat е натиснат',
-    'when I am clicked':
-        'когато кликнеш върху мен',
-    'when I receive %msgHat':
-        'когато получа %msgHat',
+    'when %keyHat key pressed %keyName':
+        'когато бутон %keyHat е натиснат %keyName',
+    'when I am %interaction':
+        'когато %interaction върху мен',
+    'when I receive %msgHat %message':
+        'когато получа %msgHat %message',
     'broadcast %msg':
         'изпрати %msg към всички',
     'broadcast %msg and wait':

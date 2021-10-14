@@ -413,8 +413,8 @@ SnapTranslator.dict.hu = {
     // control:
     'when %greenflag clicked':
         '%greenflag -ra kattintáskor',
-    'when %keyHat key pressed':
-        '%keyHat lenyomásakor',
+    'when %keyHat key pressed %keyName':
+        '%keyHat lenyomásakor %keyName',
     'when I am %interaction':
         'amikor %interaction ',
     'clicked':
@@ -427,8 +427,8 @@ SnapTranslator.dict.hu = {
         'az egér fölém kerül',
     'mouse-departed':
         'az egér lemegy rólam',
-    'when I receive %msgHat':
-        '%msgHat üzenet érkezésekor',
+    'when I receive %msgHat %message':
+        '%msgHat üzenet érkezésekor %message',
     'broadcast %msg':
         'küldj mindenkinek %msg üzenetet',
     'broadcast %msg and wait':

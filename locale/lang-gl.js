@@ -448,8 +448,8 @@ SnapTranslator.dict.gl = {
     // control:
     'when %greenflag clicked':
         'ao facer clic en %greenflag',
-    'when %keyHat key pressed':
-        'ao premer a tecla %keyHat',
+    'when %keyHat key pressed %keyName':
+        'ao premer a tecla %keyHat %keyName',
     'when I am %interaction':
         'ao %interaction nesta personaxe',
     'clicked':
@@ -464,8 +464,8 @@ SnapTranslator.dict.gl = {
         'separar o rato',
     'when %b':
         'cando %b',
-    'when I receive %msgHat':
-        'ao recibir %msgHat',
+    'when I receive %msgHat %message':
+        'ao recibir %msgHat %message',
     'broadcast %msg':
         'enviar a todos %msg',
     'broadcast %msg and wait':

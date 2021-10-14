@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-09-9', // this, too, will appear in the Translators tab
+        '2021-10-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -499,8 +499,10 @@ SnapTranslator.dict.de = {
     // control:
     'when %greenflag clicked':
         'Wenn %greenflag angeklickt',
-    'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+    'when %keyHat key pressed %keyName':
+        'Wenn Taste %keyHat gedr\u00fcckt %keyName',
+    'key':
+        'Taste',
     'when I am %interaction':
         'Wenn ich %interaction werde',
     'clicked':
@@ -521,8 +523,8 @@ SnapTranslator.dict.de = {
         'gestoppt',
     'when %b':
         'Wenn %b',
-    'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+    'when I receive %msgHat %message':
+        'Wenn ich %msgHat empfange %message',
     'broadcast %msg':
         'sende %msg an alle',
     'broadcast %msg and wait':
@@ -593,10 +595,12 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'when this scene starts':
-        'Wenn diese Szene beginnt',
-    'switch to scene %scn':
-        'wechsle zur Szene %scn',
+    'when switched to this scene %message':
+        'Wenn zur Szene gewechselt %message',
+    'switch to scene %scn %send':
+        'wechsle zur Szene %scn %send',
+    'and send':
+        'und sende',
     'next':
         'nächste',
     'previous':
@@ -1788,6 +1792,8 @@ SnapTranslator.dict.de = {
     // keys
     'space':
         'Leertaste',
+    'enter':
+        'Eingabetaste',
     'up arrow':
         'Pfeil nach oben',
     'down arrow':
