@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-October-12';
+modules.gui = '2021-October-14';
 
 // Declarations
 
@@ -1264,12 +1264,16 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
-    // this.categories.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+    this.categories.buttons = [];
+
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => cat.refresh());
+    };
 
     function changePalette(category) {
         return () => {
             myself.currentCategory = category;
-            myself.categories.children.forEach(each =>
+            myself.categories.buttons.forEach(each =>
                 each.refresh()
             );
             myself.refreshPalette(true);
@@ -1320,6 +1324,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);
+        myself.categories.buttons.push(button);
         return button;
     }
 
@@ -1355,6 +1360,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);
+        myself.categories.buttons.push(button);
         return button;
     }
 
@@ -1369,8 +1375,10 @@ IDE_Morph.prototype.createCategories = function () {
             yPadding = 2,
             l = myself.categories.left(),
             t = myself.categories.top(),
+            scroller,
             row,
-            col;
+            col,
+            i;
 
         myself.categories.children.forEach((button, i) => {
             row = i < 8 ? i % 4 : i - 4;
@@ -1382,12 +1390,37 @@ IDE_Morph.prototype.createCategories = function () {
             ));
         });
 
-        myself.categories.setHeight(
-            (4 + 1) * yPadding
-                + 4 * buttonHeight
-                + (more ? (more * (yPadding + buttonHeight) + border + 2) : 0)
-                + 2 * border
-        );
+        if (more > 6) {
+            scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
+            scroller.setColor(myself.groupColor);
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.setPosition(
+                new Point(0, myself.categories.children[8].top())
+            );
+            scroller.setWidth(myself.paletteWidth);
+            scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+
+            for (i = 0; i < more; i += 1) {
+                scroller.addContents(myself.categories.children[8]);
+            }
+            myself.categories.add(scroller);
+            myself.categories.setHeight(
+                (4 + 1) * yPadding
+                    + 4 * buttonHeight
+                    + 6 * (yPadding + buttonHeight) + border + 2
+                    + 2 * border
+            );
+        } else {
+            myself.categories.setHeight(
+                (4 + 1) * yPadding
+                    + 4 * buttonHeight
+                    + (more ?
+                        (more * (yPadding + buttonHeight) + border + 2)
+                            : 0)
+                    + 2 * border
+            );
+        }
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
@@ -1457,13 +1490,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     if (this.scene.unifiedPalette) {
         this.palette.adjustScrollBars = function () {
             ScrollFrameMorph.prototype.adjustScrollBars.call(this);
-            myself.categories.children.forEach(each => each.refresh());
+            myself.categories.refresh();
         };
 
         vScrollAction = this.palette.vBar.action;
         this.palette.vBar.action = function (num) {
             vScrollAction(num);
-            myself.categories.children.forEach(each => each.refresh());
+            myself.categories.buttons.forEach(each => each.refresh());
         };
     }
 
@@ -5715,9 +5748,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
     this.currentCategory = 'variables';
-    this.categories.children.forEach(each =>
-        each.refresh()
-    );
+    this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {
         dlg = new TableDialogMorph(data);

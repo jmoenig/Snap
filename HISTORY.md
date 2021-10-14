@@ -40,6 +40,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-14
+* gui, byob, objects: scroll custom category buttons if there are more than 6
+
 ### 2021-10-12
 * scenes, store: store single palette setting per project (for making extensions)
 * gui, scenes, objects: added scene-setting to hide/show category names in the unified palette
