@@ -4996,7 +4996,11 @@ IDE_Morph.prototype.deleteUserCategory = function () {
         null,
         this
     );
-    SpriteMorph.prototype.customCategories.forEach((clr, name) =>
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
         menu.addItem(
             name,
             name,

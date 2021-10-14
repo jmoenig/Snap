@@ -44,6 +44,7 @@
 * gui, byob, objects: scroll custom category buttons if there are more than 6
 * gui, byob: scroll selected custom category button into view
 * gui: fixed "show categories" setting display
+* gui: sort custom category menu ("delete a category") alphabetically
 
 ### 2021-10-12
 * scenes, store: store single palette setting per project (for making extensions)
