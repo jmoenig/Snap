@@ -4190,7 +4190,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         addPreference(
             'Show categories',
             () => this.toggleCategoryNames(),
-            this.scene.unifiedPalette,
+            this.scene.showCategories,
             'uncheck to hide\ncategory names\nin the palette',
             'check to show\ncategory names\nin the palette'
         );
