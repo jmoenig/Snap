@@ -41,6 +41,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-19
+* threads: enable sending green-flag events to specific sprites
+
 ### 2021-10-14
 * gui, byob, objects: scroll custom category buttons if there are more than 6
 * gui, byob: scroll selected custom category button into view

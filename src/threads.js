@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-06';
+modules.threads = '2021-October-19';
 
 var ThreadManager;
 var Process;
@@ -3677,7 +3677,7 @@ Process.prototype.doBroadcast = function (message) {
     }
     if (message instanceof List && (message.length() === 2)) {
         thisObj = this.blockReceiver();
-        msg = message.at(1);
+        msg = this.inputOption(message.at(1));
         trg = message.at(2);
         if (isSnapObject(trg)) {
             rcvrs = [trg];
