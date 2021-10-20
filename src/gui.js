@@ -561,7 +561,7 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
             this.cloudError()(err.message);
         }
     } else if (loc.hash.substr(0, 4) === '#dl:') {
-        myself.showMessage('Fetching project\nfrom the cloud...');
+        let m = myself.showMessage('Fetching project\nfrom the cloud...');
 
         // make sure to lowercase the username
         dict = SnapCloud.parseDict(loc.hash.substr(4));
@@ -569,7 +569,27 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
         try {
             const projectData = await SnapCloud.getPublicProject(SnapCloud.encodeDict(dict));
-            window.open('data:text/xml,' + projectData);
+            const blob = new Blob([projectData], {type: 'text/xml'});
+            const url = URL.createObjectURL(blob);
+
+            // Create temporary link for download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = dict.ProjectName + ".xml";
+
+            document.body.appendChild(link);
+            link.dispatchEvent(
+                new MouseEvent('click', { 
+                bubbles: true, 
+                cancelable: true, 
+                view: window 
+                })
+            );
+
+            // Cleanup
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            m.destroy();
         } catch (err) {
             this.cloudError()(err.message);
         }
