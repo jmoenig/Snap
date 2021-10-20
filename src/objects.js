@@ -2552,9 +2552,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -8797,9 +8796,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push('-');
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
