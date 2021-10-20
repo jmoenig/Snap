@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-14';
+modules.blocks = '2021-October-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -593,6 +593,10 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: 'messagesReceivedMenu'
     },
+    '%msgSend': {
+        type: 'input',
+        menu: 'eventsMenu'
+    },
     '%att': {
         type: 'input',
         tags: 'read-only',
@@ -994,7 +998,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%send': {
         type: 'multi',
-        slots: '%s',
+        slots: '%msgSend',
         label: 'and send',
         tags: 'static',
         max: 1
@@ -9357,6 +9361,11 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
     return dict;
 };
 
+InputSlotMorph.prototype.eventsMenu = function (searching) {
+    if (searching) {return {}; }
+    return {__shout__go__: ['__shout__go__']};
+};
+
 InputSlotMorph.prototype.primitivesMenu = function () {
     var dict = {},
         allNames = Array.from(SnapExtensions.primitives.keys());
@@ -9919,7 +9928,8 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
-    if (this.isReadOnly || this.arrow().bounds.containsPoint(pos)) {
+    if (this.isReadOnly || this.symbol ||
+            this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
         this.selectForEdit().contents().edit();
@@ -9929,7 +9939,7 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
-    } else if (this.isReadOnly) {
+    } else if (this.isReadOnly || this.symbol) {
         this.dropDownMenu();
     } else {
         this.contents().edit();

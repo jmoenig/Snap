@@ -41,6 +41,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-20
+* blocks: enable sending green-flag events when switching scenes
+
 ### 2021-10-19
 * threads: enable sending green-flag events to specific sprites
 
