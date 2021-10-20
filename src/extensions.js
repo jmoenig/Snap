@@ -135,7 +135,8 @@
                 SpriteMorph.prototype.blocks[block.name] = {
                     type: block.type,
                     category: block.category,
-                    spec: block.spec
+                    spec: block.spec,
+                    defaults: block.defaults
                 };
                 const receivers = this.findWatcherReceivers(palettes, block.name);
                 receivers.forEach(rcvr => {

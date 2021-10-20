@@ -309,6 +309,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.activeEditor = this;
     this.extensions = NetsBloxExtensions;
     this.events = new Events();
+
+    this.hiddenCategories = [];
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -1256,6 +1258,14 @@ IDE_Morph.prototype.createCategories = function () {
     if (this.categories) {
         this.categories.destroy();
     }
+
+    if (contains(this.hiddenCategories, this.currentCategory)) {
+        this.currentCategory = SpriteMorph.prototype.categories.find(function (cat) {
+            return !contains(['lists', 'other'], cat) && !contains(myself.hiddenCategories, cat);
+        });
+        this.createPalette();
+    }
+
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
@@ -1288,6 +1298,19 @@ IDE_Morph.prototype.createCategories = function () {
             true // has preview
         );
 
+        button.userMenu = function() {
+            var shiftClicked = world.currentKey === 16;
+            if (!shiftClicked || myself.categories.children.length <= 1) {
+                return;
+            }
+
+            var menu = new MenuMorph(myself);
+            menu.addItem("hide category", function() {
+                this.hideCategory(category);
+            }, null, new Color(100, 0, 0));
+            return menu;
+        };
+
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -1301,6 +1324,18 @@ IDE_Morph.prototype.createCategories = function () {
         myself.categories.add(button);
         return button;
     }
+
+    this.categories.userMenu = function() {
+        var shiftClicked = world.currentKey === 16;
+        if (!shiftClicked || myself.hiddenCategories.length <= 0) {
+            return;
+        }
+
+        var menu = new MenuMorph(myself);
+        menu.addItem("show hidden categories", 'showHiddenCategories',
+            null, new Color(100, 0, 0));
+        return menu;
+    };
 
     function fixCategoriesLayout() {
         var buttonWidth = myself.categories.children[0].width(),
@@ -1335,13 +1370,27 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['lists', 'other'], cat)) {
+        if (!contains(['lists', 'other'], cat) && !contains(myself.hiddenCategories, cat)) {
             addCategoryButton(cat);
         }
     });
     fixCategoriesLayout();
     this.add(this.categories);
 };
+
+IDE_Morph.prototype.hideCategory = function(category) {
+    this.hiddenCategories.push(category);
+    this.createCategories();
+    this.createPaletteHandle();
+    this.fixLayout();
+}
+
+IDE_Morph.prototype.showHiddenCategories = function() {
+    this.hiddenCategories.length = 0;
+    this.createCategories();
+    this.createPaletteHandle();
+    this.fixLayout();
+}
 
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
