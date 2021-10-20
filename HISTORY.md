@@ -45,6 +45,7 @@
 * blocks: enable sending green-flag events when switching scenes
 * blocks, objects, gui, threads: removed "When switched to this scene hat block"
 * objects: rearranged "switch to scene" and "pause all" blocks in the palette
+* updated German translation (removed "when switched to this scene")
 
 ### 2021-10-19
 * threads: enable sending green-flag events to specific sprites
