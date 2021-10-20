@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-19';
+modules.threads = '2021-October-20';
 
 var ThreadManager;
 var Process;
@@ -4700,11 +4700,11 @@ Process.prototype.goToLayer = function (name) {
 Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
-        message = transmission.at(1),
+        message = this.inputOption(transmission.at(1)),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
     this.assertType(message, ['text', 'number']);
-    if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
+    if (this.readyToTerminate) {
         // let the user press "stop" or "esc",
         // prevent "when this scene starts" hat blocks from directly
         // switching to another

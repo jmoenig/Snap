@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-14';
+modules.objects = '2021-October-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -907,11 +907,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Scenes
-        receiveOnScene: {
-            type: 'hat',
-            category: 'control',
-            spec: 'when switched to this scene %message'
-        },
         doSwitchToScene: {
             type: 'command',
             category: 'control',
@@ -2557,7 +2552,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
-        blocks.push(block('receiveOnScene'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
@@ -6095,17 +6089,13 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
                 return event === message
                     || (event instanceof Array
                         && message !== '__shout__go__'
-                        && message !== '__clone__init__'
-                        && message !== '__scene__init__');
+                        && message !== '__clone__init__');
             }
             if (sel === 'receiveGo') {
                 return message === '__shout__go__';
             }
             if (sel === 'receiveOnClone') {
                 return message === '__clone__init__';
-            }
-            if (sel === 'receiveOnScene') {
-                return message === '__scene__init__';
             }
         }
         return false;
@@ -8472,24 +8462,32 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__scene__init__').forEach(block => {
-                var varName =  block.inputs()[0].evaluate()[0],
-                    varFrame;
-                if (varName) {
-                    varFrame = new VariableFrame();
-                    varFrame.addVar(varName, isNil(message) ? '' : message);
+            morph.allHatBlocksFor(message).forEach(block => {
+                var varName, varFrame;
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(varName, message);
+                    }
+                    procs.push(this.threads.startProcess(
+                        block,
+                        morph,
+                        this.isThreadSafe,
+                        null, // exportResult (bool)
+                        null, // callback
+                        null, // isClicked
+                        null, // rightAway
+                        null, // atomic
+                        varFrame
+                    ));
+                } else {
+                    procs.push(this.threads.startProcess(
+                        block,
+                        morph,
+                        this.isThreadSafe
+                    ));
                 }
-                procs.push(this.threads.startProcess(
-                    block,
-                    morph,
-                    this.isThreadSafe,
-                    null, // exportResult (bool)
-                    null, // callback
-                    null, // isClicked
-                    null, // rightAway
-                    null, // atomic
-                    varFrame
-                ));
             });
         }
     });
@@ -8799,7 +8797,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push('-');
-        blocks.push(block('receiveOnScene'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));

@@ -3177,8 +3177,6 @@ BlockMorph.prototype.showMessageUsers = function () {
         message = '__shout__go__';
     } else if (this.selector === 'receiveOnClone') {
         message = '__clone__init__';
-    } else if (this.selector === 'receiveOnScene') {
-        message = '__scene__init__';
     } else if (inputs[0] instanceof InputSlotMorph) {
         message = inputs[0].evaluate();
     }

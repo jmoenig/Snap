@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-October-14';
+modules.gui = '2021-October-20';
 
 // Declarations
 
@@ -5830,7 +5830,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
     }
     this.toggleAppMode(appMode);
     this.world().keyboardFocus = this.stage;
-    this.stage.fireChangeOfSceneEvent(msg);
+    if (msg) {
+        this.stage.fireChangeOfSceneEvent(msg);
+    }
 };
 
 IDE_Morph.prototype.setURL = function (str) {

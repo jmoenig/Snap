@@ -11,7 +11,7 @@
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
-    * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
+    * message and key hat blocks can be expanded to show an optional upvar referencing their event data
     * added "enter" key to key-pressed dropdown
     * added "green flag" symbol to message drop-down
 * **Notable Changes:**
@@ -43,6 +43,7 @@
 
 ### 2021-10-20
 * blocks: enable sending green-flag events when switching scenes
+* blocks, objects, gui, threads: removed "When switched to this scene hat block"
 
 ### 2021-10-19
 * threads: enable sending green-flag events to specific sprites
