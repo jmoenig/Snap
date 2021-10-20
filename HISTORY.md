@@ -46,6 +46,7 @@
 * blocks, objects, gui, threads: removed "When switched to this scene hat block"
 * objects: rearranged "switch to scene" and "pause all" blocks in the palette
 * updated German translation (removed "when switched to this scene")
+* blocks, threads: removed options "1" and "last" from "switch to scene" dropdown
 
 ### 2021-10-19
 * threads: enable sending green-flag events to specific sprites

@@ -9810,8 +9810,8 @@ InputSlotMorph.prototype.scenesMenu = function (searching) {
     dict['~'] = null;
     dict.next = ['next'];
     dict.previous = ['previous'];
-    dict['1 '] = 1; // trailing space needed to prevent undesired sorting
-    dict.last = ['last'];
+    // dict['1 '] = 1; // trailing space needed to prevent undesired sorting
+    // dict.last = ['last'];
     dict.random = ['random'];
     return dict;
 };

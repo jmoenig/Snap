@@ -4727,9 +4727,11 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
                 idx = scenes.length();
             }
             break;
+        /*
         case 'last':
             idx = scenes.length();
             break;
+        */
         case 'random':
             idx = this.reportBasicRandom(1, scenes.length());
             break;
