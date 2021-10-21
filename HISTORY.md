@@ -18,7 +18,8 @@
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
-    * hidden blocks don't appear in search results / keyboard input options 
+    * hidden blocks don't appear in search results / keyboard input options
+    * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
@@ -40,6 +41,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-21
+* threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
 
 ### 2021-10-20
 * blocks: enable sending green-flag events when switching scenes

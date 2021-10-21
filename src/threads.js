@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-20';
+modules.threads = '2021-October-21';
 
 var ThreadManager;
 var Process;
@@ -3714,7 +3714,8 @@ Process.prototype.doBroadcast = function (message) {
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
-                            stage.isThreadSafe,
+                            stage.isThreadSafe || // make "any msg" threadsafe
+                                block.inputs()[0].evaluate() instanceof Array,
                             null, // exportResult (bool)
                             null, // callback
                             null, // isClicked

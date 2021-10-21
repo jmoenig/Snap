@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-20';
+modules.objects = '2021-October-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -8472,7 +8472,8 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
                     procs.push(this.threads.startProcess(
                         block,
                         morph,
-                        this.isThreadSafe,
+                        this.isThreadSafe || // make "any msg" threadsafe
+                            block.inputs()[0].evaluate() instanceof Array,
                         null, // exportResult (bool)
                         null, // callback
                         null, // isClicked
