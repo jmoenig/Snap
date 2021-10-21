@@ -49,6 +49,7 @@
 * threads: took out broadcasting a 2-item list to mean a message directed to a particular sprite
 * blocks, objects, threads: added "all" option to the receiver-dropdown of the SEND block
 * objects, blocks, threads: replaced BROADCAST block variants with SEND block variants
+* tweaked German translation for "all"
 
 ### 2021-10-20
 * blocks: enable sending green-flag events when switching scenes

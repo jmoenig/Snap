@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-10-20', // this, too, will appear in the Translators tab
+        '2021-10-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -560,7 +560,7 @@ SnapTranslator.dict.de = {
     'stop %stopChoices':
         'stoppe %stopChoices',
     'all':
-        'alles',
+        'alle',
     'this script':
         'dieses Skript',
     'this block':
