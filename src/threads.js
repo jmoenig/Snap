@@ -4682,12 +4682,12 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
         message = this.inputOption(transmission.at(1)),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
-    this.assertType(message, ['text', 'number', 'list']);
+    this.assertType(message, ['text', 'number', 'Boolean', 'list']);
     if (message instanceof List && !message.canBeJSON()) {
         // make sure only atomic leafs are inside the list
         // don't actually encode the list as json, though
         throw new Error(localize(
-            'can only send lists\nwith atomic data\nto another scene'
+            'cannot send media,\nsprites or procedures\nto another scene'
         ));
     }
     if (this.readyToTerminate) {
