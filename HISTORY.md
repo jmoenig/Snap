@@ -19,6 +19,7 @@
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
     * hidden blocks don't appear in search results / keyboard input options
+    * renamed BROADCAST to SEND and added a second input for message receivers, default is "all"
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
@@ -47,6 +48,7 @@
 * threads: enabled sending atomic lists to other scenes
 * threads: took out broadcasting a 2-item list to mean a message directed to a particular sprite
 * blocks, objects, threads: added "all" option to the receiver-dropdown of the SEND block
+* objects, blocks, threads: replaced BROADCAST block variants with SEND block variants
 
 ### 2021-10-20
 * blocks: enable sending green-flag events when switching scenes

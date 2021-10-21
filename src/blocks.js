@@ -3133,7 +3133,7 @@ BlockMorph.prototype.userMenu = function () {
         return menu;
     }
     if (contains(
-        ['doBroadcast', 'doSend', 'doBroadcastAndWait', 'receiveMessage',
+        ['doSend', 'doSendAndWait', 'receiveMessage',
             'receiveOnClone', 'receiveGo'],
         this.selector
     )) {
@@ -3228,15 +3228,12 @@ BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
         }
         if ((morph.selector) &&
                 contains(
-                    ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
+                    ['doSend', 'doSendAndWait'],
                     morph.selector)
         ) {
             event = morph.inputs()[0].evaluate();
-            if (morph.selector === 'doSend') {
-                eventReceiver = morph.inputs()[1].evaluate();
-            }
-            return ((morph.selector !== 'doSend') ||
-                    (receiverName === eventReceiver)) &&
+            eventReceiver = morph.inputs()[1].evaluate();
+            return receiverName === eventReceiver &&
                 ((event === message) ||
                     (message instanceof Array &&
                         message[0] === 'any message'));

@@ -751,16 +751,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when %b'
         },
-        doBroadcast: {
-            type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg'
-        },
-        doBroadcastAndWait: {
-            type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg and wait'
-        },
         getLastMessage: {  // retained for legacy compatibility
             dev: true,
             type: 'reporter',
@@ -771,6 +761,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'send %msg to %rcv',
+            defaults: [null, ['all']]
+        },
+        doSendAndWait: {
+            type: 'command',
+            category: 'control',
+            spec: 'send %msg to %rcv and wait',
             defaults: [null, ['all']]
         },
         doWait: {
@@ -1655,6 +1651,16 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportListAttribute',
             inputs: [['length']],
             offset: 1
+        },
+        doBroadcast: {
+            selector: 'doSend',
+            inputs: [null, ['all']],
+            offset: 0
+        },
+        doBroadcastAndWait: {
+            selector: 'doSendAndWait',
+            inputs: [null, ['all']],
+            offset: 0
         }
     };
 };
@@ -1726,9 +1732,8 @@ SpriteMorph.prototype.blockAlternatives = {
     setSize: ['changeSize'],
 
     // control:
-    doBroadcast: ['doBroadcastAndWait', 'doSend'],
-    doBroadcastAndWait: ['doBroadcast', 'doSend'],
-    doSend: ['doBroadcast', 'doBroadcastAndWait'],
+    doSend: ['doSendAndWait'],
+    doSendAndWait: ['doSend'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
@@ -2517,9 +2522,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
+        blocks.push(block('doSendAndWait'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -8764,9 +8768,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('doSend'));
+        blocks.push(block('doSendAndWait'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');

@@ -3657,89 +3657,6 @@ Process.prototype.checkURLAllowed = function (url) {
 
 // Process event messages primitives
 
-Process.prototype.doBroadcast = function (message) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        rcvrs = stage.children.concat(stage),
-        msg = this.inputOption(message),
-        procs = [];
-
-    if (!this.canBroadcast) {
-        return [];
-    }
-    if (msg !== '') {
-        stage.lastMessage = message; // the actual data structure
-        rcvrs.forEach(morph => {
-            if (isSnapObject(morph)) {
-                morph.allHatBlocksFor(msg).forEach(block => {
-                    var varName, varFrame;
-                    if (block.selector === 'receiveMessage') {
-                        varName = block.inputs()[1].evaluate()[0];
-                        if (varName) {
-                            varFrame = new VariableFrame();
-                            varFrame.addVar(varName, message);
-                        }
-                        procs.push(stage.threads.startProcess(
-                            block,
-                            morph,
-                            stage.isThreadSafe || // make "any msg" threadsafe
-                                block.inputs()[0].evaluate() instanceof Array,
-                            null, // exportResult (bool)
-                            null, // callback
-                            null, // isClicked
-                            null, // rightAway
-                            null, // atomic
-                            varFrame
-                        ));
-                    } else {
-                        procs.push(stage.threads.startProcess(
-                            block,
-                            morph,
-                            stage.isThreadSafe
-                        ));
-                    }
-                });
-            }
-        });
-        (stage.messageCallbacks[''] || []).forEach(callback =>
-            callback(msg) // for "any" message, pass it along as argument
-        );
-        (stage.messageCallbacks[msg] || []).forEach(callback =>
-            callback() // for a particular message
-        );
-    }
-    return procs;
-};
-
-Process.prototype.doBroadcastAndWait = function (message) {
-    if (!this.context.activeSends) {
-        this.context.activeSends = this.doBroadcast(message);
-        if (this.isRunning()) {
-            this.context.activeSends.forEach(proc =>
-                proc.runStep()
-            );
-        }
-    }
-    this.context.activeSends = this.context.activeSends.filter(proc =>
-        proc.isRunning()
-    );
-    if (this.context.activeSends.length === 0) {
-        return null;
-    }
-    this.pushContext('doYield');
-    this.pushContext();
-};
-
-Process.prototype.getLastMessage = function () {
-    var stage;
-    if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            return stage.getLastMessage();
-        }
-    }
-    return '';
-};
-
 Process.prototype.doSend = function (message, target) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         thisObj,
@@ -3816,6 +3733,36 @@ Process.prototype.doSend = function (message, target) {
         );
     }
     return procs;
+};
+
+Process.prototype.doSendAndWait = function (message, target) {
+    if (!this.context.activeSends) {
+        this.context.activeSends = this.doSend(message, target);
+        if (this.isRunning()) {
+            this.context.activeSends.forEach(proc =>
+                proc.runStep()
+            );
+        }
+    }
+    this.context.activeSends = this.context.activeSends.filter(proc =>
+        proc.isRunning()
+    );
+    if (this.context.activeSends.length === 0) {
+        return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.getLastMessage = function () {
+    var stage;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            return stage.getLastMessage();
+        }
+    }
+    return '';
 };
 
 // Process type inference
