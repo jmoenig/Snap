@@ -4085,7 +4085,7 @@ Process.prototype.reportIsIdentical = function (a, b) {
         // compare texts case-sentitive
         return a === b;
     }
-    if (this.isImmutable(a) || this.isImmutable(b)) {
+    if (Process.prototype.isImmutable(a) || Process.prototype.isImmutable(b)) {
         return snapEquals(a, b);
     }
 
