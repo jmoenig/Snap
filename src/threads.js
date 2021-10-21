@@ -3753,7 +3753,9 @@ Process.prototype.doSend = function (message, target) {
 
     // determine the receivers
     thisObj = this.blockReceiver();
-    if (isSnapObject(target)) {
+    if (target instanceof Array && target[0] === 'all') {
+        rcvrs = stage.children.concat(stage);
+    } else if (isSnapObject(target)) {
         rcvrs = [target];
     } else if (isString(target)) {
         // assume the string to be the name of a sprite or the stage

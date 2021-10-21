@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-20';
+modules.blocks = '2021-October-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -514,6 +514,11 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only',
         menu: 'locationMenu'
+    },
+    '%rcv': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'receiversMenu'
     },
     '%spr': {
         type: 'input',
@@ -9526,6 +9531,22 @@ InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
             dict[name] = name
         );
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.receiversMenu = function (searching) {
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        dict = {all: ['all']};
+
+    if (searching) {return dict; }
+    dict['~'] = null;
+    dict[stage.name] = stage.name;
+    stage.children.forEach(morph => {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+            dict[morph.name] = morph.name;
+        }
+    });
     return dict;
 };
 

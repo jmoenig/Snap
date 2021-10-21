@@ -770,7 +770,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doSend: {
             type: 'command',
             category: 'control',
-            spec: 'send %msg to %spr'
+            spec: 'send %msg to %rcv',
+            defaults: [null, ['all']]
         },
         doWait: {
             type: 'command',
