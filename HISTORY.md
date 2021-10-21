@@ -45,6 +45,7 @@
 ### 2021-10-21
 * threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
 * threads: enabled sending atomic lists to other scenes
+* threads: took out broadcasting a 2-item list to mean a message directed to a particular sprite
 
 ### 2021-10-20
 * blocks: enable sending green-flag events when switching scenes

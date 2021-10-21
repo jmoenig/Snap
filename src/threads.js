@@ -3658,46 +3658,13 @@ Process.prototype.checkURLAllowed = function (url) {
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {
-    // messages are user-defined events, and by default global, same as in
-    // Scratch. An experimental feature, messages can be sent to a single
-    // sprite or to a list of sprites by using a 2-item list in the message
-    // slot, where the first slot is a message text, and the second slot
-    // its recipient(s), identified either by a single name or sprite, or by
-    // a list of names or sprites (can be a heterogeneous list).
-
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        thisObj,
+        rcvrs = stage.children.concat(stage),
         msg = this.inputOption(message),
-        trg,
-        rcvrs,
         procs = [];
 
     if (!this.canBroadcast) {
         return [];
-    }
-    if (message instanceof List && (message.length() === 2)) {
-        thisObj = this.blockReceiver();
-        msg = this.inputOption(message.at(1));
-        trg = message.at(2);
-        if (isSnapObject(trg)) {
-            rcvrs = [trg];
-        } else if (isString(trg)) {
-            // assume the string to be the name of a sprite or the stage
-            if (trg === stage.name) {
-                rcvrs = [stage];
-            } else {
-                rcvrs = [this.getOtherObject(trg, thisObj, stage)];
-            }
-        } else if (trg instanceof List) {
-            // assume all elements to be sprites or sprite names
-            rcvrs = trg.itemsArray().map(each =>
-                this.getOtherObject(each, thisObj, stage)
-            );
-        } else {
-            return; // abort
-        }
-    } else { // global
-        rcvrs = stage.children.concat(stage);
     }
     if (msg !== '') {
         stage.lastMessage = message; // the actual data structure
@@ -3774,17 +3741,79 @@ Process.prototype.getLastMessage = function () {
 };
 
 Process.prototype.doSend = function (message, target) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-    this.doBroadcast(
-        new List(
-            [
-                message,
-                target instanceof List ? target :
-                    target === stage.name ? new List([stage]) :
-                        new List([target])
-            ]
-        )
-    );
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        thisObj,
+        msg = this.inputOption(message),
+        rcvrs,
+        procs = [];
+
+    if (!this.canBroadcast) {
+        return [];
+    }
+
+    // determine the receivers
+    thisObj = this.blockReceiver();
+    if (isSnapObject(target)) {
+        rcvrs = [target];
+    } else if (isString(target)) {
+        // assume the string to be the name of a sprite or the stage
+        if (target === stage.name) {
+            rcvrs = [stage];
+        } else {
+            rcvrs = [this.getOtherObject(target, thisObj, stage)];
+        }
+    } else if (target instanceof List) {
+        // assume all elements to be sprites or sprite names
+        rcvrs = target.itemsArray().map(each =>
+            this.getOtherObject(each, thisObj, stage)
+        );
+    } else {
+        return; // abort
+    }
+
+    // transmit the message
+    if (msg !== '') {
+        stage.lastMessage = message; // retained for backwards compatibility
+        rcvrs.forEach(morph => {
+            if (isSnapObject(morph)) {
+                morph.allHatBlocksFor(msg).forEach(block => {
+                    var varName, varFrame;
+                    if (block.selector === 'receiveMessage') {
+                        varName = block.inputs()[1].evaluate()[0];
+                        if (varName) {
+                            varFrame = new VariableFrame();
+                            varFrame.addVar(varName, message);
+                        }
+                        procs.push(stage.threads.startProcess(
+                            block,
+                            morph,
+                            stage.isThreadSafe || // make "any msg" threadsafe
+                                block.inputs()[0].evaluate() instanceof Array,
+                            null, // exportResult (bool)
+                            null, // callback
+                            null, // isClicked
+                            null, // rightAway
+                            null, // atomic
+                            varFrame
+                        ));
+                    } else {
+                        procs.push(stage.threads.startProcess(
+                            block,
+                            morph,
+                            stage.isThreadSafe
+                        ));
+                    }
+                });
+            }
+        });
+        (stage.messageCallbacks[''] || []).forEach(callback =>
+            callback(msg) // for "any" message, pass it along as argument
+        );
+        (stage.messageCallbacks[msg] || []).forEach(callback =>
+            callback() // for a particular message
+        );
+    }
+    return procs;
 };
 
 // Process type inference
