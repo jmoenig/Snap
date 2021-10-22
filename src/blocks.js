@@ -1840,6 +1840,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         ico = this instanceof BlockMorph && this.hasLocationPin() ?
         	this.methodIconExtent().x + space : 0,
         bottomCorrection,
+        rightMost,
         hasLoopCSlot = false,
         hasLoopArrow = false;
 
@@ -2023,8 +2024,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             maxX - this.left() + this.labelPadding - this.edge
         );
         // adjust right padding if rightmost input has arrows
-        if (parts[parts.length - 1] instanceof MultiArgMorph
-                && (lines.length === 1)) {
+        rightMost = parts[parts.length - 1];
+        if (rightMost instanceof MultiArgMorph && rightMost.isVisible &&
+                (lines.length === 1)) {
             blockWidth -= space;
         }
         // adjust width to hat width
