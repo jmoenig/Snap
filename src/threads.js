@@ -4683,12 +4683,16 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
     this.assertType(message, ['text', 'number', 'Boolean', 'list']);
-    if (message instanceof List && !message.canBeJSON()) {
+    if (message instanceof List) {
         // make sure only atomic leafs are inside the list
         // don't actually encode the list as json, though
-        throw new Error(localize(
-            'cannot send media,\nsprites or procedures\nto another scene'
-        ));
+        if (message.canBeJSON()) {
+            message = message.deepMap(leaf => leaf); // deep copy the list
+        } else {
+            throw new Error(localize(
+                'cannot send media,\nsprites or procedures\nto another scene'
+            ));
+        }
     }
     if (this.readyToTerminate) {
         // let the user press "stop" or "esc",

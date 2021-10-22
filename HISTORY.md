@@ -49,6 +49,7 @@
 * blocks: only show "key" upvar in the "When ... is pressed" hat if "any key" is selected
 * blocks: tweaked blocks layout for hidden expansion slots
 * blocks, objects, store, threads: made SEND blocks expandable for receivers and renamed them back to BROADCAST 
+* threads: deep copy atomic lists sent from one scene to another
 
 ### 2021-10-21
 * threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
