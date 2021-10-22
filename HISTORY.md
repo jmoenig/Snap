@@ -44,7 +44,8 @@
     * Chinese, thanks, Simon!
 
 ### 2021-10-22
-* blocks, objects: Only show the "message" upvar in the "When I receive" hat if "any message" is selected
+* blocks, objects: only show the "message" upvar in the "When I receive" hat if "any message" is selected
+* blocks: only show "key" upvar in the "When ... is pressed" hat if "any key" is selected
 
 ### 2021-10-21
 * threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)

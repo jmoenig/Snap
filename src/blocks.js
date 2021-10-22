@@ -587,7 +587,8 @@ SyntaxElementMorph.prototype.labelParts = {
     '%keyHat': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'keysMenu'
+        menu: 'keysMenu',
+        react: 'updateEventUpvar'
     },
     '%msg': {
         type: 'input',
@@ -598,7 +599,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: 'messagesReceivedMenu',
-        react: 'updateMessageUpvar'
+        react: 'updateEventUpvar'
     },
     '%msgSend': {
         type: 'input',
@@ -10024,13 +10025,13 @@ InputSlotMorph.prototype.userMenu = function () {
     the "onSetContents" property to the name of the according method
 */
 
-InputSlotMorph.prototype.updateMessageUpvar = function (data) {
+InputSlotMorph.prototype.updateEventUpvar = function (data) {
     // assumes a second multi-arg input slot to my right that is
     // either shown or hidden and collapsed based on whether
-    // "any message" is selected as choice.
+    // "any ..." is selected as choice.
 
     var trg = this.parent.inputs()[1];
-    if (data instanceof Array && data[0] === 'any message') {
+    if (data instanceof Array && data[0].indexOf('any') === 0) {
         trg.show();
     } else {
         trg.removeInput();
