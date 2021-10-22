@@ -43,6 +43,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-22
+* blocks, objects: Only show the "message" upvar in the "When I receive" hat if "any message" is selected
+
 ### 2021-10-21
 * threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
 * threads: enabled sending atomic lists to other scenes

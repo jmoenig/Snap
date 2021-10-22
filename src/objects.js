@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-21';
+modules.objects = '2021-October-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -744,7 +744,8 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %msgHat %message'
+            spec: 'when I receive %msgHat %message',
+            defaults: [''] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
             type: 'hat',

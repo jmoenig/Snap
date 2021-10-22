@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-21';
+modules.blocks = '2021-October-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -311,6 +311,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input'
         tags: 'numeric read-only unevaluated landscape static'
         menu: dictionary or selector
+        react: selector
     */
     '%s': {
         type: 'input'
@@ -596,7 +597,8 @@ SyntaxElementMorph.prototype.labelParts = {
     '%msgHat': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'messagesReceivedMenu'
+        menu: 'messagesReceivedMenu',
+        react: 'updateMessageUpvar'
     },
     '%msgSend': {
         type: 'input',
@@ -1610,6 +1612,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         switch (info.type) {
         case 'input':
             part = new InputSlotMorph(null, null, info.menu);
+            part.onSetContents = info.react || null;
             break;
         case 'text entry':
             part = new TextSlotMorph();
@@ -8928,10 +8931,10 @@ CSlotMorph.prototype.drawBottomEdge = function (ctx) {
     my most important public attributes and accessors are:
 
     setContents(str/float)    - display the argument (string or float)
-    contents().text            - get the displayed string
-    choices                    - a key/value list for my optional drop-down
+    contents().text           - get the displayed string
+    choices                   - a key/value list for my optional drop-down
     isReadOnly                - governs whether I am editable or not
-    isNumeric                - governs my outer shape (round or rect)
+    isNumeric                 - governs my outer shape (round or rect)
 
     my block specs are:
 
@@ -8985,6 +8988,7 @@ InputSlotMorph.prototype.init = function (
     this.isReadOnly = isReadOnly || false;
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
     this.constant = null;
+    this.onSetContents = null;
 
     InputSlotMorph.uber.init.call(this, null, true);
     this.color = WHITE;
@@ -9068,6 +9072,11 @@ InputSlotMorph.prototype.setContents = function (data) {
     // adjust to zebra coloring:
     if (this.isReadOnly && (this.parent instanceof BlockMorph)) {
         this.parent.fixLabelColor();
+    }
+
+    // run onSetContents if any
+    if (this.onSetContents) {
+        this[this.onSetContents](data);
     }
 };
 
@@ -10005,6 +10014,31 @@ InputSlotMorph.prototype.userMenu = function () {
     }
     return menu;
 };
+
+// InputSlotMorph reacting to user choices
+
+/*
+    if selecting an option from a dropdown menu might affect the visibility
+    or contents of another input slot, the methods in this section can
+    offer functionality that can be specified externally by setting
+    the "onSetContents" property to the name of the according method
+*/
+
+InputSlotMorph.prototype.updateMessageUpvar = function (data) {
+    // assumes a second multi-arg input slot to my right that is
+    // either shown or hidden and collapsed based on whether
+    // "any message" is selected as choice.
+
+    var trg = this.parent.inputs()[1];
+    if (data instanceof Array && data[0] === 'any message') {
+        trg.show();
+    } else {
+        trg.removeInput();
+        trg.hide();
+    }
+    this.parent.fixLayout();
+};
+
 
 // InputSlotMorph code mapping
 
