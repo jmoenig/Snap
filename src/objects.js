@@ -758,16 +758,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'message'
         },
-        doSend: {
+        doBroadcast: {
             type: 'command',
             category: 'control',
-            spec: 'send %msg to %rcv',
+            spec: 'broadcast %msg %receive',
             defaults: [null, ['all']]
         },
-        doSendAndWait: {
+        doBroadcastAndWait: {
             type: 'command',
             category: 'control',
-            spec: 'send %msg to %rcv and wait',
+            spec: 'broadcast %msg %receive and wait',
             defaults: [null, ['all']]
         },
         doWait: {
@@ -1653,14 +1653,9 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             inputs: [['length']],
             offset: 1
         },
-        doBroadcast: {
-            selector: 'doSend',
-            inputs: [null, ['all']],
-            offset: 0
-        },
-        doBroadcastAndWait: {
-            selector: 'doSendAndWait',
-            inputs: [null, ['all']],
+        doSend: {
+            selector: 'doBroadcast',
+            expand: 1,
             offset: 0
         }
     };
@@ -1733,8 +1728,8 @@ SpriteMorph.prototype.blockAlternatives = {
     setSize: ['changeSize'],
 
     // control:
-    doSend: ['doSendAndWait'],
-    doSendAndWait: ['doSend'],
+    doBroadcast: ['doBroadcastAndWait'],
+    doBroadcastAndWait: ['doBroadcast'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
@@ -2276,6 +2271,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         block.isStatic = true;
     }
     block.setSpec(localize(info.spec));
+    if (migration && migration.expand) {
+        block.inputs()[migration.expand].addInput();
+    }
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
         block.defaults = defaults;
@@ -2523,8 +2521,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
-        blocks.push(block('doSend'));
-        blocks.push(block('doSendAndWait'));
+        blocks.push(block('doBroadcast'));
+        blocks.push(block('doBroadcastAndWait'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -8769,8 +8767,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
-        blocks.push(block('doSend'));
-        blocks.push(block('doSendAndWait'));
+        blocks.push(block('doBroadcast'));
+        blocks.push(block('doBroadcastAndWait'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');

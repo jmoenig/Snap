@@ -1011,6 +1011,13 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'static',
         max: 1
     },
+    '%receive': {
+        type: 'multi',
+        slots: '%rcv',
+        label: 'to',
+        tags: 'static',
+        max: 1
+    },
     '%scriptVars': {
         type: 'multi',
         slots: '%t',
@@ -3139,7 +3146,7 @@ BlockMorph.prototype.userMenu = function () {
         return menu;
     }
     if (contains(
-        ['doSend', 'doSendAndWait', 'receiveMessage',
+        ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage',
             'receiveOnClone', 'receiveGo'],
         this.selector
     )) {
@@ -3192,7 +3199,8 @@ BlockMorph.prototype.showMessageUsers = function () {
         message = inputs[0].evaluate();
     }
 
-    if (((this.selector === 'doSend') && inputs[1] instanceof InputSlotMorph)) {
+    if (((this.selector === 'doBroadcast') &&
+            inputs[1] instanceof InputSlotMorph)) {
         receiverName = this.inputs()[1].evaluate();
     } else if (this.selector.indexOf('receive') === 0) {
         receiverName = this.scriptTarget().name;
@@ -3205,7 +3213,7 @@ BlockMorph.prototype.showMessageUsers = function () {
         corral.frame.contents.children.concat(corral.stageIcon).forEach(
             icon => {
                 if (icon.object &&
-                    ((this.selector !== 'doSend' ||
+                    ((this.selector !== 'doBroadcast' ||
                         receiverName === icon.object.name) &&
                     (icon.object[getter](
                         message,
@@ -3234,7 +3242,7 @@ BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
         }
         if ((morph.selector) &&
                 contains(
-                    ['doSend', 'doSendAndWait'],
+                    ['doBroadcast', 'doBroadcastAndWait'],
                     morph.selector)
         ) {
             event = morph.inputs()[0].evaluate();
@@ -11750,6 +11758,15 @@ MultiArgMorph.prototype.getSpec = function () {
 
 MultiArgMorph.prototype.setContents = function (anArray) {
     var inputs = this.inputs(), i;
+
+    if (!(anArray instanceof Array) && this.slotSpec === '%rcv') {
+        // special case for migrating former SEND block inputs to
+        // newer BROADCAST expansion slots for receivers
+        // this can be removed once all SEND blocks have been
+        // converted to v7
+        anArray = [anArray];
+    }
+
     for (i = 0; i < anArray.length; i += 1) {
         if (anArray[i] !== null && (inputs[i])) {
             inputs[i].setContents(anArray[i]);

@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-21';
+modules.threads = '2021-October-22';
 
 var ThreadManager;
 var Process;
@@ -3657,20 +3657,20 @@ Process.prototype.checkURLAllowed = function (url) {
 
 // Process event messages primitives
 
-Process.prototype.doSend = function (message, target) {
+Process.prototype.doBroadcast = function (message, receivers) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        target = this.inputOption(receivers.at(1) || ['all']),
         thisObj,
         msg = this.inputOption(message),
         rcvrs,
         procs = [];
-
     if (!this.canBroadcast) {
         return [];
     }
 
     // determine the receivers
     thisObj = this.blockReceiver();
-    if (target instanceof Array && target[0] === 'all') {
+    if (target === 'all') {
         rcvrs = stage.children.concat(stage);
     } else if (isSnapObject(target)) {
         rcvrs = [target];
@@ -3735,9 +3735,9 @@ Process.prototype.doSend = function (message, target) {
     return procs;
 };
 
-Process.prototype.doSendAndWait = function (message, target) {
+Process.prototype.doBroadcastAndWait = function (message, target) {
     if (!this.context.activeSends) {
-        this.context.activeSends = this.doSend(message, target);
+        this.context.activeSends = this.doBroadcast(message, target);
         if (this.isRunning()) {
             this.context.activeSends.forEach(proc =>
                 proc.runStep()

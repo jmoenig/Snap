@@ -19,7 +19,8 @@
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
     * hidden blocks don't appear in search results / keyboard input options
-    * renamed BROADCAST to SEND and added a second input for message receivers, default is "all"
+    * made BROADCAST blocks expandable and added a second input for message receivers, default is "all"
+    * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
     * display blocks with their error messages for custom blocks, thanks, Michael!
@@ -47,6 +48,7 @@
 * blocks, objects: only show the "message" upvar in the "When I receive" hat if "any message" is selected
 * blocks: only show "key" upvar in the "When ... is pressed" hat if "any key" is selected
 * blocks: tweaked blocks layout for hidden expansion slots
+* blocks, objects, store, threads: made SEND blocks expandable for receivers and renamed them back to BROADCAST 
 
 ### 2021-10-21
 * threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
