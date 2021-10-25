@@ -108,7 +108,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-October-14';
+modules.byob = '2021-October-25';
 
 // Declarations
 
@@ -1287,7 +1287,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
         dup = def.copyAndBindTo(rcvr),
         spec = dup.spec,
-        exp = dup.body.expression,
+        exp = dup.body? dup.body.expression : null,
         count = 1;
 
     function rebindRecursiveCalls(topBlock) {

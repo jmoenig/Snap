@@ -37,12 +37,16 @@
     * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
     * disabled dropping reporters onto message hat block input slots
     * fixed outdated blocks specs for "When I am ..." hat block in many translations
+    * fixed duplicating custom block definitions that don't have a body
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-25
+* byob: fixed #2902
 
 ### 2021-10-22
 * blocks, objects: only show the "message" upvar in the "When I receive" hat if "any message" is selected
