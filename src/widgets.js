@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2021-July-21';
+modules.widgets = '2021-October-26';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1889,6 +1889,114 @@ DialogBoxMorph.prototype.promptVector = function (
     this.popUp(world);
 };
 
+DialogBoxMorph.prototype.promptRGB = function (
+    title,
+    color,
+    world,
+    pic,
+    msg
+) {
+    var clr = new AlignmentMorph('row', 4),
+        iw = this.fontSize * 4,
+        rInp = new InputFieldMorph(color.r.toString(), true),
+        gInp = new InputFieldMorph(color.g.toString(), true),
+        bInp = new InputFieldMorph(color.b.toString(), true),
+        rCol = new AlignmentMorph('column', 2),// +++
+        gCol = new AlignmentMorph('column', 2),
+        bCol = new AlignmentMorph('column', 2),
+        inp = new AlignmentMorph('column', 2),
+        bdy = new AlignmentMorph('column', this.padding);
+
+    function labelText(string) {
+        return new TextMorph(
+            localize(string),
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE // shadowColor
+        );
+    }
+
+    function constrain(num) {
+        return Math.max(0, Math.min(num, 255));
+    }
+
+    rInp.contents().minWidth = iw;
+    rInp.setWidth(iw);
+    gInp.contents().minWidth = iw;
+    gInp.setWidth(iw);
+    bInp.contents().minWidth = iw;
+    bInp.setWidth(iw);
+
+    inp.alignment = 'left';
+    inp.setColor(this.color);
+    bdy.setColor(this.color);
+    rCol.alignment = 'left';
+    rCol.setColor(this.color);
+    gCol.alignment = 'left';
+    gCol.setColor(this.color);
+    bCol.alignment = 'left';
+    bCol.setColor(this.color);
+
+    rCol.add(labelText('red'));
+    rCol.add(rInp);
+    gCol.add(labelText('green'));
+    gCol.add(gInp);
+    bCol.add(labelText('blue'));
+    bCol.add(bInp); // +++
+    clr.add(rCol);
+    clr.add(gCol);
+    clr.add(bCol);
+    inp.add(clr);
+
+    if (msg) {
+        bdy.add(labelText(msg));
+    }
+
+    bdy.add(inp);
+
+    clr.fixLayout();
+    rCol.fixLayout();
+    gCol.fixLayout();
+    bCol.fixLayout();
+    inp.fixLayout();
+    bdy.fixLayout();
+
+    this.labelString = title;
+    this.createLabel();
+    if (pic) {this.setPicture(pic); }
+
+    this.addBody(bdy);
+
+    this.addButton('ok', 'OK');
+
+    this.addButton('cancel', 'Cancel');
+    this.fixLayout();
+
+    this.edit = function () {
+        rInp.edit();
+    };
+
+    this.getInput = function () {
+        return new Color(
+            constrain(rInp.getValue()),
+            constrain(gInp.getValue()),
+            constrain(bInp.getValue())
+        );
+    };
+
+    if (!this.key) {
+        this.key = 'RGB' + title;
+    }
+
+    this.popUp(world);
+};
+
 DialogBoxMorph.prototype.promptCategory = function (
     title,
     name,
@@ -1957,6 +2065,20 @@ DialogBoxMorph.prototype.promptCategory = function (
             hand.processMouseDown = mouseDownBak;
             hand.processMouseUp = mouseUpBak;
         };
+    };
+
+    picker.mouseClickRight = () => {
+        new DialogBoxMorph(
+            this,
+            (clr) => picker.setColor(clr),
+            this
+        ).promptRGB(
+            "Category color",
+            picker.color,
+            this.world(),
+            null, // pic
+            null // msg
+        );
     };
 
     inp.alignment = 'left';

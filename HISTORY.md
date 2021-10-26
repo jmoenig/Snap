@@ -50,6 +50,7 @@
 * objects: don't show codification and js-func blocks in search results unless enabled
 * gui, objects: new "showingExtensions" session setting for showing extension prims in the palette
 * German translation update for "extension blocks" setting
+* widgets: r-g-b editor for custom category colors (right-click on color-field)
 
 ### 2021-10-25
 * byob: fixed #2902
