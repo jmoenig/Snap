@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-10-21', // this, too, will appear in the Translators tab
+        '2021-10-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1093,6 +1093,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
     'JavaScript extensions for Snap!\nare turned off':
         'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
+    'Extension blocks':
+        'Erweiterungsblöcke',
+    'uncheck to hide extension\nprimitives in the palette':
+        'ausschalten um Blöcke für Erweiterungen\nin der Palette zu verbergen',
+    'check to show extension\nprimitives in the palette':
+        'einschalten um Blöcke für Erweiterungen\nin der Palette anzuzeigen',
     'Input sliders':
         'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':
