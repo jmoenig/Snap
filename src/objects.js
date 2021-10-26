@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-22';
+modules.objects = '2021-October-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -3187,6 +3187,24 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
     return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
 };
 
+SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
+    // show or hide certain kinds of blocks in search results only
+    // if they are enabled
+    var sel = aBlock.selector;
+    if (sel === 'reportJSFunction') {
+        return !Process.prototype.enableJS;
+    }
+    if (
+        sel === 'doMapCodeOrHeader' ||
+        sel === 'doMapValueCode' ||
+        sel === 'doMapListCode' ||
+        sel === 'reportMappedCode'
+    ) {
+        return !StageMorph.prototype.enableCodeMapping;
+    }
+    return false;
+};
+
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     var ide, dict, cat;
     if (aBlock.isCustomBlock) {
@@ -3343,7 +3361,10 @@ SpriteMorph.prototype.blocksMatching = function (
     }
     blocks.sort((x, y) => x[1] < y[1] ? -1 : 1);
     blocks = blocks.map(each => each[0]);
-    return blocks.filter(each => !this.isHidingBlock(each));
+    return blocks.filter(each =>
+        !this.isHidingBlock(each) &&
+        !this.isDisablingBlock(each)
+    );
 };
 
 SpriteMorph.prototype.searchBlocks = function (
