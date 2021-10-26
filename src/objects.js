@@ -183,6 +183,7 @@ SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
+SpriteMorph.prototype.showingExtensions = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
@@ -2743,13 +2744,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-            blocks.push('-');
+        if (SpriteMorph.prototype.showingExtensions) {
+            blocks.push('=');
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }
@@ -2761,6 +2757,14 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
+        }
+
+        // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('doShowTable'));
         }
     }
 
@@ -3193,6 +3197,12 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
     var sel = aBlock.selector;
     if (sel === 'reportJSFunction') {
         return !Process.prototype.enableJS;
+    }
+    if (
+        sel === 'doApplyExtension' ||
+        sel === 'reportApplyExtension'
+    ) {
+        return !SpriteMorph.prototype.showingExtensions;
     }
     if (
         sel === 'doMapCodeOrHeader' ||
@@ -8998,25 +9008,27 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
+        if (SpriteMorph.prototype.showingExtensions) {
+            blocks.push('=');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
+        }
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push('=');
+            blocks.push(block('doMapCodeOrHeader'));
+            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+        }
+
         // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
             blocks.push(block('doShowTable'));
-            blocks.push('-');
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
-        }
-
-        blocks.push('=');
-
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
         }
     }
 

@@ -48,6 +48,7 @@
 
 ### 2021-10-26
 * objects: don't show codification and js-func blocks in search results unless enabled
+* gui, objects: new "showingExtensions" session setting for showing extension prims in the palette
 
 ### 2021-10-25
 * byob: fixed #2902

@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-October-20';
+modules.gui = '2021-October-26';
 
 // Declarations
 
@@ -3807,6 +3807,18 @@ IDE_Morph.prototype.settingsMenu = function () {
             '.\n' +
             'NOTE: You will have to manually\n' +
             'sign in again to access your account.' */
+    );
+    addPreference(
+        'Extension blocks',
+        () => {
+            SpriteMorph.prototype.showingExtensions =
+                !SpriteMorph.prototype.showingExtensions;
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+        },
+        SpriteMorph.prototype.showingExtensions,
+        'uncheck to hide extension\nprimitives in the palette',
+        'check to show extension\nprimitives in the palette'
     );
     addPreference(
         'Add scenes',
