@@ -23,7 +23,8 @@
     * made BROADCAST blocks expandable and added a second input for message receivers, default is "all"
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
-    * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
+    * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
+    * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
@@ -45,6 +46,9 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-27
+* included bbt extensions
 
 ### 2021-10-26
 * objects: don't show codification and js-func blocks in search results unless enabled
