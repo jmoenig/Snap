@@ -35,6 +35,10 @@
       "sizes": "256x256",
       "type": "image/png"
     }, {
+      "src": "img/snap-icon-384.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
       "src": "img/snap-icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
