@@ -51,6 +51,7 @@
 * included bbt extensions
 * updated service worker to cache bbtSnapExtension.js
 * pwa versioning & cache-busting mechanism 
+* changed PWA icon to Alonzo
 
 ### 2021-10-26
 * objects: don't show codification and js-func blocks in search results unless enabled
