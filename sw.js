@@ -1,4 +1,4 @@
-var SnapVersion = '7-dev-alpha1'
+var SnapVersion = '7-dev-alpha2'
 
 var cacheName = 'snap-pwa',
     filesToCache = [
