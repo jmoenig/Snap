@@ -49,6 +49,7 @@
 
 ### 2021-10-27
 * included bbt extensions
+* updated service worker to cache bbtSnapExtension.js
 
 ### 2021-10-26
 * objects: don't show codification and js-func blocks in search results unless enabled
