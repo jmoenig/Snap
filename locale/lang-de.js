@@ -1213,6 +1213,10 @@ SnapTranslator.dict.de = {
         'Blöcke finden',
     'hide blocks...':
         'Blöcke verbergen...',
+    'Hide blocks in palette':
+        'Blöcke verbergen',
+    'unused':
+        'nicht verwendete',
     'make a category...':
         'Neue Kategorie...',
     'New Category':
