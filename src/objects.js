@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-26';
+modules.objects = '2021-October-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -762,14 +762,12 @@ SpriteMorph.prototype.initBlocks = function () {
         doBroadcast: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg %receive',
-            defaults: [null, ['all']]
+            spec: 'broadcast %msg %receive'
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg %receive and wait',
-            defaults: [null, ['all']]
+            spec: 'broadcast %msg %receive and wait'
         },
         doWait: {
             type: 'command',

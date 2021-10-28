@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-22';
+modules.blocks = '2021-October-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -312,6 +312,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'numeric read-only unevaluated landscape static'
         menu: dictionary or selector
         react: selector
+        value: string, number or Array for localized strings / constants
     */
     '%s': {
         type: 'input'
@@ -519,7 +520,8 @@ SyntaxElementMorph.prototype.labelParts = {
     '%rcv': {
         type: 'input',
         tags: 'read-only',
-        menu: 'receiversMenu'
+        menu: 'receiversMenu',
+        value: ['all']
     },
     '%spr': {
         type: 'input',
@@ -1701,6 +1703,17 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         default:
             throw new Error('unknown label part type: "' + info.type + '"');
+        }
+
+        // apply the default value
+        // -----------------------
+        // only for input slots and Boolean inputs,
+        // and only for rare exceptions where we cannot
+        // specify the default values in the block specs,
+        // e.g. for expandable "reeiver" slots in "broadcast"
+
+        if (!isNil(info.value)) {
+            part.setContents(info.value);
         }
 
         // apply the tags

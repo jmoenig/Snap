@@ -48,6 +48,7 @@
     * Chinese, thanks, Simon!
 
 ### 2021-10-28
+* introduced default values for expandable slot specs
 * updated German translation
 * migrated Basque and Swedish translations to new BROADCAST block specs
 
