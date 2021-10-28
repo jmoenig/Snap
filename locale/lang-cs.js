@@ -432,10 +432,10 @@ SnapTranslator.dict.cs = {
         'ze mě sjede myš',
     'when I receive %msgHat %message':
         'po přijetí zprávy %msgHat %message',
-    'broadcast %msg':
-        'poslat všem %msg',
-    'broadcast %msg and wait':
-        'poslat všem %msg a čekat',
+    'broadcast %msg %receive':
+        'poslat %msg %receive',
+    'broadcast %msg %receive and wait':
+        'poslat %msg %receive a čekat',
     'Message name':
         'název zprávy',
     'message':

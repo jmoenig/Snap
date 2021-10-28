@@ -53,6 +53,7 @@
 * migrated Basque and Swedish translations to new BROADCAST block specs
 * migrated Slovenian, Romanian and Interlingua translations to new BROADCAST block specs
 * migrated Estonian, Hungarian, Croatian and Esperanto translations to new BROADCAST block specs
+* migrated Danish, Czech, Valencian Catalan and Arabic translations to new BROADCAST block specs
 
 ### 2021-10-27
 * included bbt extensions
