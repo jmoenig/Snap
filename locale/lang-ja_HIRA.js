@@ -422,10 +422,10 @@ SnapTranslator.dict.ja_HIRA = {
         '%interaction じぶんがクリックされたとき',
     'when I receive %msgHat %message':
         '%msgHat %message をうけとったとき',
-    'broadcast %msg':
-        '%msg をおくる',
-    'broadcast %msg and wait':
-        '%msg をおくってまつ',
+    'broadcast %msg %receive':
+        '%msg %receive をおくる',
+    'broadcast %msg %receive and wait':
+        '%msg %receive をおくってまつ',
     'Message name':
         'メッセージめい',
     'wait %n secs':

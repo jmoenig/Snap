@@ -521,10 +521,10 @@ SnapTranslator.dict.sk = {
         'Ke\u010F %b',
     'when I receive %msgHat %message':
         'po prijat\u00ED spr\u00E1vy %msgHat %message',
-    'broadcast %msg':
-        'posla\u0165 v\u0161etk\u00FDm %msg',
-    'broadcast %msg and wait':
-        'posla\u0165 v\u0161etk\u00FDm %msg a \u010Daka\u0165',
+    'broadcast %msg %receive':
+        'posla\u0165 %msg %receive',
+    'broadcast %msg %receive and wait':
+        'posla\u0165 %msg %receive a \u010Daka\u0165',
     'Message name':
         'n\u00E1zov spr\u00E1vy',
     'message':

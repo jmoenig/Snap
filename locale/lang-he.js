@@ -535,10 +535,10 @@ SnapTranslator.dict.he = {
         '%b כאשר',
     'when I receive %msgHat %message':
         '%message %msgHat כאשר_אני_מקבל',
-    'broadcast %msg':
-        'שדר_הודעה %msg',
-    'broadcast %msg and wait':
-        'והמתן %msg שדר_הודעה',
+    'broadcast %msg %receive':
+        'שדר_הודעה %msg %receive',
+    'broadcast %msg %receive and wait':
+        'והמתן %msg %receive שדר_הודעה',
     'Message name':
         'שם ההודעה',
     'message':
