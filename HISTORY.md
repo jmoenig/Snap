@@ -57,6 +57,7 @@
 * migrated Bulgarian, Traditional Chinese, Indonesian and Galician translations to new BROADCAST block specs
 * migrated Hebrew, Japanese Hiragana, Slovakian and Ukrainian translations to new BROADCAST block specs
 * migrated Japanese, Bangla, Portuguese and Norwegian translations to new BROADCAST block specs
+* migrated French, Italian, Greek and Spanish translations to new BROADCAST block specs
 
 ### 2021-10-27
 * included bbt extensions

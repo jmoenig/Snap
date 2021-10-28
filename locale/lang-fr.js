@@ -450,10 +450,12 @@ SnapTranslator.dict.fr = {
     'Quand je suis %interaction',
     'when I receive %msgHat %message':
         'Quand je re\u00E7ois %msgHat %message',
-    'broadcast %msg':
-        'envoyer \u00E0 tous %msg',
-    'broadcast %msg and wait':
-        'envoyer \u00E0 tous %msg et attendre',
+    'broadcast %msg %receive':
+        'envoyer %msg %receive',
+    'broadcast %msg %receive and wait':
+        'envoyer %msg %receive et attendre',
+    'to':
+        '\u00E0',
     'Message name':
         'Nom du message',
     'wait %n secs':
@@ -1045,7 +1047,7 @@ SnapTranslator.dict.fr = {
     'select':
         's\u00E9lectionner',
     'all':
-        'tout',
+        'tous',
     'none':
         'aucun',
 

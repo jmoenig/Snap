@@ -584,10 +584,12 @@ SnapTranslator.dict.es = {
         'cuando %b',
     'when I receive %msgHat %message':
         'cuando me llegue %msgHat %message',
-    'broadcast %msg':
-        'enviar mensaje %msg',
-    'broadcast %msg and wait':
-        'enviar mensaje %msg y esperar',
+    'broadcast %msg %receive':
+        'enviar mensaje %msg %receive',
+    'broadcast %msg %receive and wait':
+        'enviar mensaje %msg %receive y esperar',
+    'to':
+        'a',
     'message':
         'mensaje',
     'warp %c':
