@@ -704,10 +704,10 @@ SnapTranslator.dict.zh_CN = {
         '当 %b',
     'when I receive %msgHat %message':
         '当接收到 %msgHat %message',
-    'broadcast %msg':
-        '广播 %msg',
-    'broadcast %msg and wait':
-        '广播 %msg 并等待',
+    'broadcast %msg %receive':
+        '广播 %msg %receive',
+    'broadcast %msg %receive and wait':
+        '广播 %msg %receive 并等待',
     'send %msg to %spr':
         '发送消息 %msg 给 %spr',
     'Message name':

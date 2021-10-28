@@ -61,6 +61,7 @@
 * migrated Russian, Dutch, Tamil and Turkish translations to new BROADCAST block specs
 * migrated Catalan, Hindi, Polish and Telagu translations to new BROADCAST block specs
 * migrated Brazilian Portuguese, Malayam, Korean and Kannada translations to new BROADCAST block specs
+* migrated Finnish and Simplified Chinese translations to new BROADCAST block specs
 
 ### 2021-10-27
 * included bbt extensions
