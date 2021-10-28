@@ -523,10 +523,12 @@ SnapTranslator.dict.ru = {
         'когда %b',
     'when I receive %msgHat %message':
         'когда я получу %msgHat %message',
-    'broadcast %msg':
-        'разослать %msg всем',
-    'broadcast %msg and wait':
-        'разослать %msg всем и ждать',
+    'broadcast %msg %receive':
+        'разослать %msg %receive',
+    'broadcast %msg %receive and wait':
+        'разослать %msg %receive и ждать',
+    'to':
+        'адресату',
     'send %msg to %spr':
         'отправить %msg адресату %spr',
     'Message name':

@@ -519,10 +519,10 @@ SnapTranslator.dict.tr = {
         '%b olunca',
     'when I receive %msgHat %message':
         '%msgHat haberi gelince %message',
-    'broadcast %msg':
-        '%msg yayımla',
-    'broadcast %msg and wait':
-        '%msg yayımla ve bekle',
+    'broadcast %msg %receive':
+        '%msg %receive yayımla',
+    'broadcast %msg %receive and wait':
+        '%msg %receive yayımla ve bekle',
     'send %msg to %spr':
         '%msg mesajını %spr yolla',
     'Message name':
