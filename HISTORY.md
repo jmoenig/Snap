@@ -51,6 +51,7 @@
 * introduced default values for expandable slot specs
 * updated German translation
 * migrated Basque and Swedish translations to new BROADCAST block specs
+* migrated Slovenian, Romanian and Interlingua translations to new BROADCAST block specs
 
 ### 2021-10-27
 * included bbt extensions

@@ -441,10 +441,12 @@ SnapTranslator.dict.ia = {
         'mure parti',  // 'quita'
     'when I receive %msgHat %message':
         'cuando io recipe %msgHat %message',
-    'broadcast %msg':
-        'mitte %msg a omne',
-    'broadcast %msg and wait':
-        'mitte %msg a omni e attende',
+    'broadcast %msg %receive':
+        'mitte %msg %receive',
+    'broadcast %msg %receive and wait':
+        'mitte %msg %receive e attende',
+    'to':
+        'a',
     'Message name':
         'Nomine de message',
     'message':
