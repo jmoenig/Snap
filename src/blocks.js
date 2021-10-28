@@ -1705,17 +1705,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             throw new Error('unknown label part type: "' + info.type + '"');
         }
 
-        // apply the default value
-        // -----------------------
-        // only for input slots and Boolean inputs,
-        // and only for rare exceptions where we cannot
-        // specify the default values in the block specs,
-        // e.g. for expandable "reeiver" slots in "broadcast"
-
-        if (!isNil(info.value)) {
-            part.setContents(info.value);
-        }
-
         // apply the tags
         // ---------------
         // input: numeric, read-only, unevaluated, landscape, static
@@ -1786,6 +1775,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             });
             part.fixLayout();
         }
+
+        // apply the default value
+        // -----------------------
+        // only for input slots and Boolean inputs,
+        // and only for rare exceptions where we cannot
+        // specify the default values in the block specs,
+        // e.g. for expandable "reeiver" slots in "broadcast"
+
+        if (!isNil(info.value)) {
+            part.setContents(info.value);
+        }
+
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
