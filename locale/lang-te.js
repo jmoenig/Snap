@@ -421,10 +421,10 @@ SnapTranslator.dict.te = {
         'when I am %interaction',
     'when I receive %msgHat %message':
         '%msgHat %message నేను స్వీకరించినప్పుడు',
-    'broadcast %msg':
-        'ప్రసార %msg',
-    'broadcast %msg and wait':
-        '%msg ని ప్రసారం చేసి,  వేచివుండు',
+    'broadcast %msg %receive':
+        'ప్రసార %msg %receive',
+    'broadcast %msg %receive and wait':
+        '%msg %receive ని ప్రసారం చేసి,  వేచివుండు',
     'Message name':
         'సందేశం పేర',
     'message':

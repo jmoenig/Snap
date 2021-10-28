@@ -526,10 +526,12 @@ SnapTranslator.dict.pl = {
         'kiedy %b',
     'when I receive %msgHat %message':
         'kiedy otrzymam %msgHat %message',
-    'broadcast %msg':
-        'nadaj %msg do wszystkich',
-    'broadcast %msg and wait':
-        'nadaj %msg do wszystkich i czekaj',
+    'broadcast %msg %receive':
+        'nadaj %msg %receive',
+    'broadcast %msg %receive and wait':
+        'nadaj %msg %receive i czekaj',
+    'to':
+        'do',
     'send %msg to %spr':
         'nadaj %msg do %spr',
     'Message name':
@@ -561,7 +563,7 @@ SnapTranslator.dict.pl = {
     'stop %stopChoices':
         'zatrzymaj %stopChoices',
     'all':
-        'wszystko',
+        'wszystkich',
     'this script':
         'ten skrypt',
     'this block':
