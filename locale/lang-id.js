@@ -435,10 +435,10 @@ SnapTranslator.dict.id = {
         'ketika %b',
     'when I receive %msgHat %message':
         'ketika aku menerima %msgHat %message',
-    'broadcast %msg':
-        'beritakan %msg',
-    'broadcast %msg and wait':
-        'beritakan %msg dan tunggu',
+    'broadcast %msg %receive':
+        'beritakan %msg %receive',
+    'broadcast %msg %receive and wait':
+        'beritakan %msg %receive dan tunggu',
     'Message name':
         'Nama pesan',
     'message':
