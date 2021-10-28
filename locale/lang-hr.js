@@ -433,10 +433,10 @@ SnapTranslator.dict.hr = {
         'mi\u0161 napusti',
     'when I receive %msgHat %message':
         'kad spazim doga\u0111aj %msgHat %message',
-    'broadcast %msg':
-        'objavljujem doga\u0111aj %msg',
-    'broadcast %msg and wait':
-        'objavljujem doga\u0111aj %msg i \u010Dekam',
+    'broadcast %msg %receive':
+        'objavljujem doga\u0111aj %msg %receive',
+    'broadcast %msg %receive and wait':
+        'objavljujem doga\u0111aj %msg %receive i \u010Dekam',
     'Message name':
         'Ime doga\u0111aja',
     'message':

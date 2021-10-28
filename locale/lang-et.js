@@ -257,10 +257,10 @@ SnapTranslator.dict.et = {
         'kui %b',
     'when I receive %msgHat %message':
         'kui saan teate %msgHat %message',
-    'broadcast %msg':
-        'saada teade %msg',
-    'broadcast %msg and wait':
-        'saada teade %msg ja oota',
+    'broadcast %msg %receive':
+        'saada teade %msg %receive',
+    'broadcast %msg %receive and wait':
+        'saada teade %msg %receive ja oota',
     'Message name':
         'Teate nimi',
     'message':
