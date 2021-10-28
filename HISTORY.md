@@ -47,6 +47,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-28
+* migrated Basque and Swedish translations to new BROADCAST block specs
+
 ### 2021-10-27
 * included bbt extensions
 * updated service worker to cache bbtSnapExtension.js

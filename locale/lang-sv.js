@@ -426,10 +426,10 @@ SnapTranslator.dict.sv = {
         'n\u00E4r jag klickas p\u00E5',
     'when I receive %msg':
         'n\u00E4r jag tar emot meddelande %msg',
-    'broadcast %msg':
-        'skicka meddelande %msg',
-    'broadcast %msg and wait':
-        'skicka meddelande %msg och v\u00E4nta',
+    'broadcast %msg %receive':
+        'skicka meddelande %msg %receive',
+    'broadcast %msg %receive and wait':
+        'skicka meddelande %msg %receive och v\u00E4nta',
     'Message name':
         'Meddelandets namn',
     'wait %n secs':

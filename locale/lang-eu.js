@@ -560,10 +560,10 @@ SnapTranslator.dict.eu = {
         '%b denean',
     'when I receive %msgHat %message':
         '%msgHat jasotzen dudanean %message',
-    'broadcast %msg':
-        'igorri %msg',
-    'broadcast %msg and wait':
-        'igorri %msg eta itxaron',
+    'broadcast %msg %receive':
+        'igorri %msg %receive',
+    'broadcast %msg %receive and wait':
+        'igorri %msg %receive eta itxaron',
     'Message name':
         'Mezuaren izena',
     'message':
