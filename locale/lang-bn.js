@@ -463,10 +463,10 @@ SnapTranslator.dict.bn = {
         'যখন %b শর্তটি সত্য হবে',
     'when I receive %msgHat %message':
         'যখন আমি পাব বার্তা %msgHat %message',
-    'broadcast %msg':
-        'বার্তা %msg সম্প্রচার কর',
-    'broadcast %msg and wait':
-        'বার্তা %msg সম্প্রচার করে অপেক্ষা কর',
+    'broadcast %msg %receive':
+        'বার্তা %msg %receive সম্প্রচার কর',
+    'broadcast %msg %receive and wait':
+        'বার্তা %msg %receive সম্প্রচার করে অপেক্ষা কর',
     'send %msg to %spr':
         'বার্তা %msg সম্প্রচার কর %spr',
     'Message name':
