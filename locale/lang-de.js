@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-10-26', // this, too, will appear in the Translators tab
+        '2021-10-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -525,10 +525,12 @@ SnapTranslator.dict.de = {
         'Wenn %b',
     'when I receive %msgHat %message':
         'Wenn ich %msgHat empfange %message',
-    'broadcast %msg':
-        'sende %msg an alle',
-    'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+    'broadcast %msg %receive':
+        'sende %msg %receive',
+    'broadcast %msg %receive and wait':
+        'sende %msg %receive und warte',
+    'to':
+        'an',
     'send %msg to %spr':
         'sende %msg an %spr',
     'Message name':
