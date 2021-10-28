@@ -420,10 +420,10 @@ SnapTranslator.dict.ml = {
         'when I am %interaction',
     'when I receive %msgHat %message':
         'ഞാന്‍ %msgHat %message സ്വീകരിക്കുമ്പോള്‍',
-    'broadcast %msg':
-        '%msg വിളംബരം ചെയ്യുക',
-    'broadcast %msg and wait':
-        '%msg വിളംബരം ചെയ്തു കാത്തിരിക്കുക',
+    'broadcast %msg %receive':
+        '%msg %receive വിളംബരം ചെയ്യുക',
+    'broadcast %msg %receive and wait':
+        '%msg %receive വിളംബരം ചെയ്തു കാത്തിരിക്കുക',
     'Message name':
         'സന്ദേശത്തിന്റെ പേര്',
     'message':
