@@ -531,8 +531,6 @@ SnapTranslator.dict.de = {
         'sende %msg %receive und warte',
     'to':
         'an',
-    'send %msg to %spr':
-        'sende %msg an %spr',
     'Message name':
         'Nachricht',
     'message':
@@ -1186,9 +1184,15 @@ SnapTranslator.dict.de = {
     'Single palette':
         'Einheitliche Palette',
     'check to show all blocks in a single palette':
-        'einschalten, um alle Blöcke in einer einzigen Palette zu sehen',
+        'einschalten, um alle Blöcke in\neiner einzigen Palette zu sehen',
     'uncheck to show only the selected category\'s blocks':
         'ausschalten, um nur die Blöcke der ausgewählten Kategorie zu sehen',
+    'Show categories':
+        'Kategorien anzeigen',
+    'uncheck to hide\ncategory names\nin the palette':
+        'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
+    'check to show\ncategory names\nin the palette':
+        'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
 
     // inputs
     'with inputs':
@@ -1207,10 +1211,24 @@ SnapTranslator.dict.de = {
     // palette:
     'find blocks':
         'Blöcke finden',
-    'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
-    'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+    'hide blocks...':
+        'Blöcke verbergen...',
+    'make a category...':
+        'Neue Kategorie...',
+    'New Category':
+        'Neue Kategorie',
+    'Blocks category name:':
+        'Name der neuen Block-Gruppe:',
+    'Category color':
+        'Kategoriefarbe',
+    'red':
+        'rot',
+    'green':
+        'grün',
+    'blue':
+        'blau',
+    'delete a category...':
+        'Kategorie löschen...',
 
     // blocks:
     'help...':

@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-October-27';
+modules.gui = '2021-October-28';
 
 // Declarations
 
@@ -4704,7 +4704,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev211027 -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev211028 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4984,7 +4984,7 @@ IDE_Morph.prototype.createNewCategory = function () {
         cat => this.addPaletteCategory(cat.name, cat.color),
         this
     ).promptCategory(
-        "New Palette",
+        "New Category",
         null,
         new Color(0,116,143),
         this.world(),
