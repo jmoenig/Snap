@@ -50,6 +50,7 @@
 ### 2021-10-29
 * objects: flood-fill edge case fix, thanks, Dariusz!
 * gui: removed obsolete dev comments
+* blocks, objects: fixed scanning for senders and receivers of messages for new BROADCAST scheme
 
 ### 2021-10-28
 * introduced default values for expandable slot specs

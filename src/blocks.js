@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-28';
+modules.blocks = '2021-October-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3196,14 +3196,19 @@ BlockMorph.prototype.userMenu = function () {
 };
 
 BlockMorph.prototype.showMessageUsers = function () {
+    // for the following selectors:
+    // ['doBroadcast', 'doBroadcastAndWait',
+    // 'receiveMessage', 'receiveOnClone', 'receiveGo']
+
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
                 .target.parentThatIsA(IDE_Morph),
         corral = ide.corral,
-        getter = (this.selector.indexOf('receive') === 0) ?
-            'allSendersOf' : 'allHatBlocksFor',
+        isSender = this.selector.indexOf('doBroadcast') === 0,
+        isReceiver = this.selector.indexOf('receive') === 0,
+        getter = isReceiver ? 'allSendersOf' : 'allHatBlocksFor',
         inputs = this.inputs(),
-        message, receiverName, knownSenders;
+        message, receiverSlot, receiverName, knownSenders;
 
     if (this.selector === 'receiveGo') {
         message = '__shout__go__';
@@ -3211,33 +3216,41 @@ BlockMorph.prototype.showMessageUsers = function () {
         message = '__clone__init__';
     } else if (inputs[0] instanceof InputSlotMorph) {
         message = inputs[0].evaluate();
+        if (isSender && message instanceof Array) {
+            message = message[0];
+        }
     }
 
-    if (((this.selector === 'doBroadcast') &&
-            inputs[1] instanceof InputSlotMorph)) {
-        receiverName = this.inputs()[1].evaluate();
-    } else if (this.selector.indexOf('receive') === 0) {
+    if (isSender) {
+        receiverSlot = inputs[1].inputs()[0];
+        if (receiverSlot instanceof InputSlotMorph) {
+            receiverName = receiverSlot.evaluate();
+            if (receiverName instanceof Array) { // ['all']
+                receiverName = null;
+            }
+        }
+    } else if (isReceiver) {
         receiverName = this.scriptTarget().name;
     }
 
     if (message !== '') {
-        if (getter === 'allSendersOf') {
+        if (isReceiver) {
             knownSenders = ide.stage.globalBlocksSending(message, receiverName);
         }
         corral.frame.contents.children.concat(corral.stageIcon).forEach(
             icon => {
                 if (icon.object &&
-                    ((this.selector !== 'doBroadcast' ||
-                        receiverName === icon.object.name) &&
-                    (icon.object[getter](
+                    icon.object[getter](
                         message,
                         receiverName,
                         knownSenders
-                    ).length > 0))
+                    ).length
                 ) {
                     icon.flash();
                 }
             }
+
+
         );
     }
 };
@@ -3247,24 +3260,31 @@ BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
         message = message.toString();
     }
     return this.allChildren().some(morph => {
-        var event, eventReceiver;
+        var inputs, event, receiverSlot, eventReceiver;
         if (morph.isCustomBlock &&
                 morph.isGlobal &&
                     contains(known, morph.definition)
         ) {
             return true;
         }
-        if ((morph.selector) &&
-                contains(
-                    ['doBroadcast', 'doBroadcastAndWait'],
-                    morph.selector)
-        ) {
-            event = morph.inputs()[0].evaluate();
-            eventReceiver = morph.inputs()[1].evaluate();
-            return receiverName === eventReceiver &&
+        if (morph.selector && morph.selector.indexOf('doBroadcast') === 0) {
+            inputs = morph.inputs();
+            event = inputs[0].evaluate();
+            if (event instanceof Array) {
+                event = event[0];
+            }
+            receiverSlot = inputs[1].inputs()[0];
+            if (receiverSlot instanceof InputSlotMorph) {
+                eventReceiver = receiverSlot.evaluate();
+                if (eventReceiver instanceof Array) { // ['all']
+                    eventReceiver = null;
+                }
+            }
+            return (!eventReceiver || (receiverName === eventReceiver)) &&
                 ((event === message) ||
                     (message instanceof Array &&
-                        message[0] === 'any message'));
+                        message[0] === 'any message' &&
+                        event !== '__shout__go__'));
         }
         return false;
     });

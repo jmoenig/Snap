@@ -9718,7 +9718,7 @@ StageMorph.prototype.reportPenTrailsAsCostume = function () {
 StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
     // "transitive hull"
     var all = this.globalBlocks.filter(
-            def =>def.isSending(message, receiverName)
+            def => def.isSending(message, receiverName)
         );
     this.globalBlocks.forEach(def => {
         if (def.collectDependencies().some(dep => contains(all, dep))) {
