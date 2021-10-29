@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-28';
+modules.objects = '2021-October-29';
 
 var SpriteMorph;
 var StageMorph;

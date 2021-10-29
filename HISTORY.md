@@ -47,6 +47,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-10-29
+* objects: flood-fill edge case fix, thanks, Dariusz!
+
 ### 2021-10-28
 * introduced default values for expandable slot specs
 * updated German translation
