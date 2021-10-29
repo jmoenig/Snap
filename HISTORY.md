@@ -49,6 +49,7 @@
 
 ### 2021-10-29
 * objects: flood-fill edge case fix, thanks, Dariusz!
+* gui: removed obsolete dev comments
 
 ### 2021-10-28
 * introduced default values for expandable slot specs
