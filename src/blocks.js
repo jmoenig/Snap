@@ -6743,6 +6743,10 @@ RingMorph.prototype.dataType = function () {
     }
 };
 
+RingMorph.prototype.isEmptySlot = function () {
+    return !this.contents();
+};
+
 // RingMorph zebra coloring
 
 RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
