@@ -39,7 +39,6 @@
         <script type="text/javascript" src="src/paint.js"></script>
         <script type="text/javascript" src="src/cloud.js"></script>
         <script type="text/javascript" src="src/gui.js"></script>
-        <script type="text/javascript" src="src/paint.js"></script>
         <script type="text/javascript" src="src/video.js"></script>
         <script type="text/javascript" src="src/sketch.js"></script>
         <script type="text/javascript" src="src/lists.js"></script>
