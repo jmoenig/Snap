@@ -40,12 +40,16 @@
     * disabled dropping reporters onto message hat block input slots
     * fixed outdated blocks specs for "When I am ..." hat block in many translations
     * fixed duplicating custom block definitions that don't have a body
+    * allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-11-03
+* sketch: allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
 
 ### 2021-10-29
 * objects: flood-fill edge case fix, thanks, Dariusz!

@@ -65,7 +65,7 @@ StringMorph, detect, modules*/
 
 /*jshint esversion: 6*/
 
-modules.sketch = '2021-July-05';
+modules.sketch = '2021-November-03';
 
 // Declarations
 
@@ -1315,6 +1315,9 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             this.action(this.getPixelColor(pos), true);
         }
     };
+
+    // also allow selecting the fill color via touch-hold
+    pc.colorpicker.mouseClickRight = pc.colorpicker.mouseDownRight;
 
     pc.colorpicker.action(new Color(0, 0, 0)); // secondary color
     pc.colorpicker.action('transparent', true);
