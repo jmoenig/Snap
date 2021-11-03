@@ -50,6 +50,7 @@
 
 ### 2021-11-03
 * sketch: allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
+* updated version history
 
 ### 2021-10-29
 * objects: flood-fill edge case fix, thanks, Dariusz!
