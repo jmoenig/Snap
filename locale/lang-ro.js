@@ -429,10 +429,10 @@ SnapTranslator.dict.ro = {
         'indepratat de langa mouse',
     'when I receive %msgHat %message':
         'cand primesc %msgHat %message',
-    'broadcast %msg':
-        'trimite mesajul %msg tuturor',
-    'broadcast %msg and wait':
-        'trimite mesajul %msg tuturor si asteapta',
+    'broadcast %msg %receive':
+        'trimite mesajul %msg %receive tuturor',
+    'broadcast %msg %receive and wait':
+        'trimite mesajul %msg %receive tuturor si asteapta',
     'Message name':
         'Mesaj',
     'message':

@@ -528,10 +528,12 @@ SnapTranslator.dict.el = {
         'όταν %b',
     'when I receive %msgHat %message':
         'όταν δεχτώ %msgHat %message',
-    'broadcast %msg':
-        'στείλε το %msg',
-    'broadcast %msg and wait':
-        'στείλε το %msg και περίμενε',
+    'broadcast %msg %receive':
+        'στείλε το %msg %receive',
+    'broadcast %msg %receive and wait':
+        'στείλε το %msg %receive και περίμενε',
+    'to':
+        'στο',
     'send %msg to %spr':
         'αποστολή του %msg στο %spr',
     'Message name':

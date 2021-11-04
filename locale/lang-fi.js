@@ -425,10 +425,10 @@ SnapTranslator.dict.fi = {
         'klikataan',
     'when I receive %msgHat %message':
         'kun vastaanotan sanoman %msgHat %message',
-    'broadcast %msg':
-        'l\u00e4het\u00e4 sanoma %msg',
-    'broadcast %msg and wait':
-        'l\u00e4het\u00e4 sanoma %msg ja odota',
+    'broadcast %msg %receive':
+        'l\u00e4het\u00e4 sanoma %msg %receive',
+    'broadcast %msg %receive and wait':
+        'l\u00e4het\u00e4 sanoma %msg %receive ja odota',
     'Message name':
         'Sanoma',
     'message':

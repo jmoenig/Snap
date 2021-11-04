@@ -435,10 +435,10 @@ SnapTranslator.dict.ca_VA = {
         'quan %b',
     'when I receive %msgHat %message':
         'Quan reba %msgHat %message',
-    'broadcast %msg':
-        'Envia a tots %msg',
-    'broadcast %msg and wait':
-        'Envia a tots %msg i espera',
+    'broadcast %msg %receive':
+        'Envia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'Envia %msg %receive i espera',
     'Message name':
         'Nom del missatge',
     'message':

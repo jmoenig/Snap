@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-10-04', // this, too, will appear in the Translators tab
+        '2021-10-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -525,12 +525,12 @@ SnapTranslator.dict.de = {
         'Wenn %b',
     'when I receive %msgHat %message':
         'Wenn ich %msgHat empfange %message',
-    'broadcast %msg':
-        'sende %msg an alle',
-    'broadcast %msg and wait':
-        'sende %msg an alle und warte',
-    'send %msg to %spr':
-        'sende %msg an %spr',
+    'broadcast %msg %receive':
+        'sende %msg %receive',
+    'broadcast %msg %receive and wait':
+        'sende %msg %receive und warte',
+    'to':
+        'an',
     'Message name':
         'Nachricht',
     'message':
@@ -560,7 +560,7 @@ SnapTranslator.dict.de = {
     'stop %stopChoices':
         'stoppe %stopChoices',
     'all':
-        'alles',
+        'alle',
     'this script':
         'dieses Skript',
     'this block':
@@ -595,8 +595,6 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'when switched to this scene %message':
-        'Wenn zur Szene gewechselt %message',
     'switch to scene %scn %send':
         'wechsle zur Szene %scn %send',
     'and send':
@@ -1095,6 +1093,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
     'JavaScript extensions for Snap!\nare turned off':
         'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
+    'Extension blocks':
+        'Erweiterungsblöcke',
+    'uncheck to hide extension\nprimitives in the palette':
+        'ausschalten um Blöcke für Erweiterungen\nin der Palette zu verbergen',
+    'check to show extension\nprimitives in the palette':
+        'einschalten um Blöcke für Erweiterungen\nin der Palette anzuzeigen',
     'Input sliders':
         'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1180,9 +1184,15 @@ SnapTranslator.dict.de = {
     'Single palette':
         'Einheitliche Palette',
     'check to show all blocks in a single palette':
-        'einschalten, um alle Blöcke in einer einzigen Palette zu sehen',
+        'einschalten, um alle Blöcke in\neiner einzigen Palette zu sehen',
     'uncheck to show only the selected category\'s blocks':
         'ausschalten, um nur die Blöcke der ausgewählten Kategorie zu sehen',
+    'Show categories':
+        'Kategorien anzeigen',
+    'uncheck to hide\ncategory names\nin the palette':
+        'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
+    'check to show\ncategory names\nin the palette':
+        'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
 
     // inputs
     'with inputs':
@@ -1201,10 +1211,28 @@ SnapTranslator.dict.de = {
     // palette:
     'find blocks':
         'Blöcke finden',
-    'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
-    'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+    'hide blocks...':
+        'Blöcke verbergen...',
+    'Hide blocks in palette':
+        'Blöcke verbergen',
+    'unused':
+        'nicht verwendete',
+    'make a category...':
+        'Neue Kategorie...',
+    'New Category':
+        'Neue Kategorie',
+    'Blocks category name:':
+        'Name der neuen Block-Gruppe:',
+    'Category color':
+        'Kategoriefarbe',
+    'red':
+        'rot',
+    'green':
+        'grün',
+    'blue':
+        'blau',
+    'delete a category...':
+        'Kategorie löschen...',
 
     // blocks:
     'help...':

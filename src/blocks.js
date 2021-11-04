@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-14';
+modules.blocks = '2021-October-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -311,6 +311,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input'
         tags: 'numeric read-only unevaluated landscape static'
         menu: dictionary or selector
+        react: selector
+        value: string, number or Array for localized strings / constants
     */
     '%s': {
         type: 'input'
@@ -515,6 +517,12 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'locationMenu'
     },
+    '%rcv': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'receiversMenu',
+        value: ['all']
+    },
     '%spr': {
         type: 'input',
         tags: 'read-only',
@@ -581,7 +589,8 @@ SyntaxElementMorph.prototype.labelParts = {
     '%keyHat': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'keysMenu'
+        menu: 'keysMenu',
+        react: 'updateEventUpvar'
     },
     '%msg': {
         type: 'input',
@@ -591,7 +600,12 @@ SyntaxElementMorph.prototype.labelParts = {
     '%msgHat': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'messagesReceivedMenu'
+        menu: 'messagesReceivedMenu',
+        react: 'updateEventUpvar'
+    },
+    '%msgSend': {
+        type: 'input',
+        menu: 'eventsMenu'
     },
     '%att': {
         type: 'input',
@@ -994,8 +1008,15 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%send': {
         type: 'multi',
-        slots: '%s',
+        slots: '%msgSend',
         label: 'and send',
+        tags: 'static',
+        max: 1
+    },
+    '%receive': {
+        type: 'multi',
+        slots: '%rcv',
+        label: 'to',
         tags: 'static',
         max: 1
     },
@@ -1601,6 +1622,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         switch (info.type) {
         case 'input':
             part = new InputSlotMorph(null, null, info.menu);
+            part.onSetContents = info.react || null;
             break;
         case 'text entry':
             part = new TextSlotMorph();
@@ -1753,6 +1775,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             });
             part.fixLayout();
         }
+
+        // apply the default value
+        // -----------------------
+        // only for input slots and Boolean inputs,
+        // and only for rare exceptions where we cannot
+        // specify the default values in the block specs,
+        // e.g. for expandable "reeiver" slots in "broadcast"
+
+        if (!isNil(info.value)) {
+            part.setContents(info.value);
+        }
+
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -1827,6 +1861,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         ico = this instanceof BlockMorph && this.hasLocationPin() ?
         	this.methodIconExtent().x + space : 0,
         bottomCorrection,
+        rightMost,
         hasLoopCSlot = false,
         hasLoopArrow = false;
 
@@ -2010,8 +2045,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             maxX - this.left() + this.labelPadding - this.edge
         );
         // adjust right padding if rightmost input has arrows
-        if (parts[parts.length - 1] instanceof MultiArgMorph
-                && (lines.length === 1)) {
+        rightMost = parts[parts.length - 1];
+        if (rightMost instanceof MultiArgMorph && rightMost.isVisible &&
+                (lines.length === 1)) {
             blockWidth -= space;
         }
         // adjust width to hat width
@@ -3136,7 +3172,7 @@ BlockMorph.prototype.userMenu = function () {
         return menu;
     }
     if (contains(
-        ['doBroadcast', 'doSend', 'doBroadcastAndWait', 'receiveMessage',
+        ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage',
             'receiveOnClone', 'receiveGo'],
         this.selector
     )) {
@@ -3172,49 +3208,61 @@ BlockMorph.prototype.userMenu = function () {
 };
 
 BlockMorph.prototype.showMessageUsers = function () {
+    // for the following selectors:
+    // ['doBroadcast', 'doBroadcastAndWait',
+    // 'receiveMessage', 'receiveOnClone', 'receiveGo']
+
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
                 .target.parentThatIsA(IDE_Morph),
         corral = ide.corral,
-        getter = (this.selector.indexOf('receive') === 0) ?
-            'allSendersOf' : 'allHatBlocksFor',
+        isSender = this.selector.indexOf('doBroadcast') === 0,
+        isReceiver = this.selector.indexOf('receive') === 0,
+        getter = isReceiver ? 'allSendersOf' : 'allHatBlocksFor',
         inputs = this.inputs(),
-        message, receiverName, knownSenders;
+        message, receiverSlot, receiverName, knownSenders;
 
     if (this.selector === 'receiveGo') {
         message = '__shout__go__';
     } else if (this.selector === 'receiveOnClone') {
         message = '__clone__init__';
-    } else if (this.selector === 'receiveOnScene') {
-        message = '__scene__init__';
     } else if (inputs[0] instanceof InputSlotMorph) {
         message = inputs[0].evaluate();
+        if (isSender && message instanceof Array) {
+            message = message[0];
+        }
     }
 
-    if (((this.selector === 'doSend') && inputs[1] instanceof InputSlotMorph)) {
-        receiverName = this.inputs()[1].evaluate();
-    } else if (this.selector.indexOf('receive') === 0) {
+    if (isSender) {
+        receiverSlot = inputs[1].inputs()[0];
+        if (receiverSlot instanceof InputSlotMorph) {
+            receiverName = receiverSlot.evaluate();
+            if (receiverName instanceof Array) { // ['all']
+                receiverName = null;
+            }
+        }
+    } else if (isReceiver) {
         receiverName = this.scriptTarget().name;
     }
 
     if (message !== '') {
-        if (getter === 'allSendersOf') {
+        if (isReceiver) {
             knownSenders = ide.stage.globalBlocksSending(message, receiverName);
         }
         corral.frame.contents.children.concat(corral.stageIcon).forEach(
             icon => {
                 if (icon.object &&
-                    ((this.selector !== 'doSend' ||
-                        receiverName === icon.object.name) &&
-                    (icon.object[getter](
+                    icon.object[getter](
                         message,
                         receiverName,
                         knownSenders
-                    ).length > 0))
+                    ).length
                 ) {
                     icon.flash();
                 }
             }
+
+
         );
     }
 };
@@ -3224,27 +3272,31 @@ BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
         message = message.toString();
     }
     return this.allChildren().some(morph => {
-        var event, eventReceiver;
+        var inputs, event, receiverSlot, eventReceiver;
         if (morph.isCustomBlock &&
                 morph.isGlobal &&
                     contains(known, morph.definition)
         ) {
             return true;
         }
-        if ((morph.selector) &&
-                contains(
-                    ['doBroadcast', 'doBroadcastAndWait', 'doSend'],
-                    morph.selector)
-        ) {
-            event = morph.inputs()[0].evaluate();
-            if (morph.selector === 'doSend') {
-                eventReceiver = morph.inputs()[1].evaluate();
+        if (morph.selector && morph.selector.indexOf('doBroadcast') === 0) {
+            inputs = morph.inputs();
+            event = inputs[0].evaluate();
+            if (event instanceof Array) {
+                event = event[0];
             }
-            return ((morph.selector !== 'doSend') ||
-                    (receiverName === eventReceiver)) &&
+            receiverSlot = inputs[1].inputs()[0];
+            if (receiverSlot instanceof InputSlotMorph) {
+                eventReceiver = receiverSlot.evaluate();
+                if (eventReceiver instanceof Array) { // ['all']
+                    eventReceiver = null;
+                }
+            }
+            return (!eventReceiver || (receiverName === eventReceiver)) &&
                 ((event === message) ||
                     (message instanceof Array &&
-                        message[0] === 'any message'));
+                        message[0] === 'any message' &&
+                        event !== '__shout__go__'));
         }
         return false;
     });
@@ -8976,10 +9028,10 @@ CSlotMorph.prototype.drawBottomEdge = function (ctx) {
     my most important public attributes and accessors are:
 
     setContents(str/float)    - display the argument (string or float)
-    contents().text            - get the displayed string
-    choices                    - a key/value list for my optional drop-down
+    contents().text           - get the displayed string
+    choices                   - a key/value list for my optional drop-down
     isReadOnly                - governs whether I am editable or not
-    isNumeric                - governs my outer shape (round or rect)
+    isNumeric                 - governs my outer shape (round or rect)
 
     my block specs are:
 
@@ -9033,6 +9085,7 @@ InputSlotMorph.prototype.init = function (
     this.isReadOnly = isReadOnly || false;
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
     this.constant = null;
+    this.onSetContents = null;
 
     InputSlotMorph.uber.init.call(this, null, true);
     this.color = WHITE;
@@ -9116,6 +9169,11 @@ InputSlotMorph.prototype.setContents = function (data) {
     // adjust to zebra coloring:
     if (this.isReadOnly && (this.parent instanceof BlockMorph)) {
         this.parent.fixLabelColor();
+    }
+
+    // run onSetContents if any
+    if (this.onSetContents) {
+        this[this.onSetContents](data);
     }
 };
 
@@ -9409,6 +9467,11 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
     return dict;
 };
 
+InputSlotMorph.prototype.eventsMenu = function (searching) {
+    if (searching) {return {}; }
+    return {__shout__go__: ['__shout__go__']};
+};
+
 InputSlotMorph.prototype.primitivesMenu = function () {
     var dict = {},
         allNames = Array.from(SnapExtensions.primitives.keys());
@@ -9571,6 +9634,22 @@ InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
             dict[name] = name
         );
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.receiversMenu = function (searching) {
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        dict = {all: ['all']};
+
+    if (searching) {return dict; }
+    dict['~'] = null;
+    dict[stage.name] = stage.name;
+    stage.children.forEach(morph => {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+            dict[morph.name] = morph.name;
+        }
+    });
     return dict;
 };
 
@@ -9855,8 +9934,8 @@ InputSlotMorph.prototype.scenesMenu = function (searching) {
     dict['~'] = null;
     dict.next = ['next'];
     dict.previous = ['previous'];
-    dict['1 '] = 1; // trailing space needed to prevent undesired sorting
-    dict.last = ['last'];
+    // dict['1 '] = 1; // trailing space needed to prevent undesired sorting
+    // dict.last = ['last'];
     dict.random = ['random'];
     return dict;
 };
@@ -9971,7 +10050,8 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
-    if (this.isReadOnly || this.arrow().bounds.containsPoint(pos)) {
+    if (this.isReadOnly || this.symbol ||
+            this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
         this.selectForEdit().contents().edit();
@@ -9981,7 +10061,7 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
-    } else if (this.isReadOnly) {
+    } else if (this.isReadOnly || this.symbol) {
         this.dropDownMenu();
     } else {
         this.contents().edit();
@@ -10031,6 +10111,31 @@ InputSlotMorph.prototype.userMenu = function () {
     }
     return menu;
 };
+
+// InputSlotMorph reacting to user choices
+
+/*
+    if selecting an option from a dropdown menu might affect the visibility
+    or contents of another input slot, the methods in this section can
+    offer functionality that can be specified externally by setting
+    the "onSetContents" property to the name of the according method
+*/
+
+InputSlotMorph.prototype.updateEventUpvar = function (data) {
+    // assumes a second multi-arg input slot to my right that is
+    // either shown or hidden and collapsed based on whether
+    // "any ..." is selected as choice.
+
+    var trg = this.parent.inputs()[1];
+    if (data instanceof Array && data[0].indexOf('any') === 0) {
+        trg.show();
+    } else {
+        trg.removeInput();
+        trg.hide();
+    }
+    this.parent.fixLayout();
+};
+
 
 // InputSlotMorph code mapping
 
@@ -11739,6 +11844,15 @@ MultiArgMorph.prototype.getSpec = function () {
 
 MultiArgMorph.prototype.setContents = function (anArray) {
     var inputs = this.inputs(), i;
+
+    if (!(anArray instanceof Array) && this.slotSpec === '%rcv') {
+        // special case for migrating former SEND block inputs to
+        // newer BROADCAST expansion slots for receivers
+        // this can be removed once all SEND blocks have been
+        // converted to v7
+        anArray = [anArray];
+    }
+
     for (i = 0; i < anArray.length; i += 1) {
         if (anArray[i] !== null && (inputs[i])) {
             inputs[i].setContents(anArray[i]);

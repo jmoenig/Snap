@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-October-12';
+modules.store = '2021-October-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1316,7 +1316,18 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         });
         input.fixLayout();
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
-        block.replaceInput(input, this.loadBlock(model, true, object));
+        if (input.slotSpec === '%rcv') {
+            // special case for migrating former SEND block inputs to
+            // newer BROADCAST expansion slots for receivers
+            // this can be removed once all SEND blocks have been
+            // converted to v7
+            input.replaceInput(
+                input.inputs()[0],
+                this.loadBlock(model, true, object)
+            );
+        } else {
+            block.replaceInput(input, this.loadBlock(model, true, object));
+        }
     } else if (model.tag === 'color') {
         input.setColor(this.loadColor(model.contents));
     } else {

@@ -420,10 +420,10 @@ SnapTranslator.dict.ta = {
         '%interaction நான் சொடுக்கும் போது',
     'when I receive %msgHat %message':
         '%msgHat %message பெறுகையில்',
-    'broadcast %msg':
-        '%msg செலித்தி',
-    'broadcast %msg and wait':
-        '%msg செலித்தி காத்திருக்கவும்',
+    'broadcast %msg %receive':
+        '%msg %receive செலித்தி',
+    'broadcast %msg %receive and wait':
+        '%msg %receive செலித்தி காத்திருக்கவும்',
     'Message name':
         'செய்தி பெயர்',
     'message':

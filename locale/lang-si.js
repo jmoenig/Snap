@@ -434,10 +434,10 @@ SnapTranslator.dict.si = {
         'Ko je %b',
     'when I receive %msgHat %message':
         'ko sprejmem %msgHat %message',
-    'broadcast %msg':
-        'po\u0161lji %msg vsem',
-    'broadcast %msg and wait':
-        'po\u0161lji vsem %msg in po\u010Dakaj',
+    'broadcast %msg %receive':
+        'po\u0161lji %msg %receive vsem',
+    'broadcast %msg %receive and wait':
+        'po\u0161lji vsem %msg %receive in po\u010Dakaj',
     'Message name':
         'Obvestilo',
     'message':

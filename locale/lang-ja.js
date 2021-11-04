@@ -422,10 +422,10 @@ SnapTranslator.dict.ja = {
         '%interaction 自分がクリックされたとき',
     'when I receive %msgHat %message':
         '%msgHat %message を受け取ったとき',
-    'broadcast %msg':
-        '%msg を送る',
-    'broadcast %msg and wait':
-        '%msg を送って待つ',
+    'broadcast %msg %receive':
+        '%msg %receive を送る',
+    'broadcast %msg %receive and wait':
+        '%msg %receive を送って待つ',
     'Message name':
         'メッセージ名',
     'wait %n secs':

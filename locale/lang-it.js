@@ -522,10 +522,12 @@ SnapTranslator.dict.it = {
         'quando %b',
     'when I receive %msgHat %message':
         'quando ricevo %msgHat %message',
-    'broadcast %msg':
-        'invia a tutti %msg',
-    'broadcast %msg and wait':
-        'invia a tutti %msg e attendi',
+    'broadcast %msg %receive':
+        'invia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'invia %msg %receive e attendi',
+    'to':
+        'a',
     'send %msg to %spr':
         'invia %msg a %spr',
     'Message name':

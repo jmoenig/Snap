@@ -520,10 +520,12 @@ SnapTranslator.dict.no = {
         'n\u00E5r %b',
     'when I receive %msgHat %message':
         'n\u00E5r jeg mottar %msgHat %message',
-    'broadcast %msg':
-        'kringkast %msg',
-    'broadcast %msg and wait':
-        'kringkast %msg og vent',
+    'broadcast %msg %receive':
+        'kringkast %msg %receive',
+    'broadcast %msg %receive and wait':
+        'kringkast %msg %receive og vent',
+    'to':
+        'til',
     'send %msg to %spr':
         'send %msg til %spr',
     'Message name':

@@ -433,10 +433,10 @@ SnapTranslator.dict.ar = {
         '%b عندما',
     'when I receive %msgHat %message':
         '%msgHat %message رسـالة أستقبال عند',
-    'broadcast %msg':
-        '  %msg بث',
-    'broadcast %msg and wait':
-        'إنتظـر ثم %msg بِـث',
+    'broadcast %msg %receive':
+        '  %msg %receive بث',
+    'broadcast %msg %receive and wait':
+        'إنتظـر ثم %msg %receive بِـث',
     'Message name':
         'اسم الرسالة',
     'message':

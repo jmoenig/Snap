@@ -429,10 +429,10 @@ SnapTranslator.dict.hu = {
         'az egér lemegy rólam',
     'when I receive %msgHat %message':
         '%msgHat üzenet érkezésekor %message',
-    'broadcast %msg':
-        'küldj mindenkinek %msg üzenetet',
-    'broadcast %msg and wait':
-        'küldj mindenkinek %msg üzenetet és várj',
+    'broadcast %msg %receive':
+        'küldj mindenkinek %msg %receive üzenetet',
+    'broadcast %msg %receive and wait':
+        'küldj mindenkinek %msg %receive üzenetet és várj',
     'Message name':
         'Az üzenet neve',
     'message':

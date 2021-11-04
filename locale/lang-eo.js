@@ -437,10 +437,10 @@ SnapTranslator.dict.eo = {
         'kiam %b',
     'when I receive %msgHat %message':
         'Kiam mi ricevas %msgHat %message',
-    'broadcast %msg':
-        'elsendi %msg al \u0109iuj',
-    'broadcast %msg and wait':
-        'elsendi %msg al \u0109iuj kaj atendi',
+    'broadcast %msg %receive':
+        'elsendi %msg %receive',
+    'broadcast %msg %receive and wait':
+        'elsendi %msg %receive kaj atendi',
     'Message name':
         'Mesa\u011donomo',
     'message':

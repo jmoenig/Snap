@@ -85,7 +85,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-October-14';
+modules.gui = '2021-October-29';
 
 // Declarations
 
@@ -279,7 +279,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.filePicker = null;
 
     // incrementally saving projects to the cloud is currently unused
-    this.hasChangedMedia = false; // +++ sceneify, or get of it
+    // and needs to be extended to work with scenes before reactivation
+    this.hasChangedMedia = false;
 
     this.isAnimating = true;
     this.paletteWidth = 200; // initially same as logo width
@@ -2283,7 +2284,7 @@ IDE_Morph.prototype.setProjectName = function (string) {
     if (name !== projectScene.name) {
         projectScene.name = name;
         projectScene.stage.version = Date.now();
-        this.recordUnsavedChanges(); // +++ sceneify this
+        this.recordUnsavedChanges();
         if (projectScene === this.scene) {
             this.controlBar.updateLabel();
         }
@@ -2300,7 +2301,7 @@ IDE_Morph.prototype.setProjectNotes = function (string) {
     if (string !== projectScene.notes) {
         projectScene.notes = string;
         projectScene.stage.version = Date.now();
-        this.recordUnsavedChanges(); // +++ sceneify this
+        this.recordUnsavedChanges();
         if (projectScene === this.scene) {
             this.controlBar.updateLabel();
         }
@@ -3809,6 +3810,18 @@ IDE_Morph.prototype.settingsMenu = function () {
             'sign in again to access your account.' */
     );
     addPreference(
+        'Extension blocks',
+        () => {
+            SpriteMorph.prototype.showingExtensions =
+                !SpriteMorph.prototype.showingExtensions;
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+        },
+        SpriteMorph.prototype.showingExtensions,
+        'uncheck to hide extension\nprimitives in the palette',
+        'check to show extension\nprimitives in the palette'
+    );
+    addPreference(
         'Add scenes',
         () => this.isAddingScenes = !this.isAddingScenes,
         this.isAddingScenes,
@@ -4692,7 +4705,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev211028 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4932,7 +4945,7 @@ IDE_Morph.prototype.editNotes = function () {
 
     dialog.action = (note) => {
         this.scene.notes = note;
-        this.recordUnsavedChanges(); // +++ sceneify this
+        this.recordUnsavedChanges();
     };
 
     dialog.justDropped = () => text.edit();
@@ -4972,7 +4985,7 @@ IDE_Morph.prototype.createNewCategory = function () {
         cat => this.addPaletteCategory(cat.name, cat.color),
         this
     ).promptCategory(
-        "New Palette",
+        "New Category",
         null,
         new Color(0,116,143),
         this.world(),
@@ -5830,7 +5843,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
     }
     this.toggleAppMode(appMode);
     this.world().keyboardFocus = this.stage;
-    this.stage.fireChangeOfSceneEvent(msg);
+    if (msg) {
+        this.stage.fireChangeOfSceneEvent(msg);
+    }
 };
 
 IDE_Morph.prototype.setURL = function (str) {
@@ -9006,7 +9021,12 @@ LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
     return this.libraryCache[key];
 };
 
-LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
+LibraryImportDialogMorph.prototype.importLibrary = function () {
+    // browsing and importing libraries needs to be redesigned because of
+    // custom categories introduced in v7.
+    // currently caching libraries is ignored when loading a library
+    // to avoid creating custom categories that were only looked at
+    // in the libraries browser.
     if (!this.listField.selected) {return; }
 
     var // blocks,
@@ -9017,7 +9037,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
-/*
+    /*
     if (this.hasCached(selectedLibrary)) {
         blocks = this.cachedLibrary(selectedLibrary);
         blocks.forEach(def => {
@@ -9027,7 +9047,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
         });
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
-*/
+    */
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -9036,7 +9056,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () { // +++ clean up
                 this.isLoadingLibrary = true;
             }
         );
-//    }
+    // }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
@@ -10790,11 +10810,11 @@ SceneIconMorph.prototype.renameScene = function () {
                     answer,
                     scene
                 );
-                scene.stage.version = Date.now(); // +++ also do this in other places
+                scene.stage.version = Date.now();
                 if (scene === ide.scene) {
                     ide.controlBar.updateLabel();
                 }
-                ide.recordUnsavedChanges(); // ++++ sceneify unsaved changes
+                ide.recordUnsavedChanges();
             }
         }
     ).prompt(

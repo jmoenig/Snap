@@ -517,10 +517,12 @@ SnapTranslator.dict.nl = {
         'wanneer %b',
     'when I receive %msgHat %message':
         'wanneer ik %msgHat ontvang %message',
-    'broadcast %msg':
-        'zend signaal %msg',
-    'broadcast %msg and wait':
-        'zend signaal %msg en wacht',
+    'broadcast %msg %receive':
+        'zend signaal %msg %receive',
+    'broadcast %msg %receive and wait':
+        'zend signaal %msg %receive en wacht',
+    'to':
+        'naar',
     'send %msg to %spr':
         'zend %msg naar %spr',
     'Message name':

@@ -466,10 +466,12 @@ SnapTranslator.dict.gl = {
         'cando %b',
     'when I receive %msgHat %message':
         'ao recibir %msgHat %message',
-    'broadcast %msg':
-        'enviar a todos %msg',
-    'broadcast %msg and wait':
-        'enviar a todos %msg e agardar',
+    'broadcast %msg %receive':
+        'enviar %msg %receive',
+    'broadcast %msg %receive and wait':
+        'enviar %msg %receive e agardar',
+    'to':
+        'a',
     'Message name':
         'Nome da mensaxe',
     'message':

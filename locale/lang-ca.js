@@ -481,10 +481,12 @@ SnapTranslator.dict.ca = {
         'quan %b',
     'when I receive %msgHat %message':
         'Quan rebi %msgHat %message',
-    'broadcast %msg':
-        'Envia a tots %msg',
-    'broadcast %msg and wait':
-        'Envia a tots %msg i espera',
+    'broadcast %msg %receive':
+        'Envia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'Envia %msg %receive i espera',
+    'to':
+        'a',
     'send %msg to %spr':
         'envia %msg a %spr',
     'Message name':
@@ -516,7 +518,7 @@ SnapTranslator.dict.ca = {
     'stop %stopChoices':
         'atura %stopChoices',
     'all':
-        'tot',
+        'tots',
     'this script':
         'aquest programa',
     'this block':

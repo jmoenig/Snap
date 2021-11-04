@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-14';
+modules.objects = '2021-October-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -183,6 +183,7 @@ SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
+SpriteMorph.prototype.showingExtensions = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
@@ -744,22 +745,13 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %msgHat %message'
+            spec: 'when I receive %msgHat %message',
+            defaults: [''] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
             type: 'hat',
             category: 'control',
             spec: 'when %b'
-        },
-        doBroadcast: {
-            type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg'
-        },
-        doBroadcastAndWait: {
-            type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg and wait'
         },
         getLastMessage: {  // retained for legacy compatibility
             dev: true,
@@ -767,10 +759,15 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'message'
         },
-        doSend: {
+        doBroadcast: {
             type: 'command',
             category: 'control',
-            spec: 'send %msg to %spr'
+            spec: 'broadcast %msg %receive'
+        },
+        doBroadcastAndWait: {
+            type: 'command',
+            category: 'control',
+            spec: 'broadcast %msg %receive and wait'
         },
         doWait: {
             type: 'command',
@@ -907,11 +904,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Scenes
-        receiveOnScene: {
-            type: 'hat',
-            category: 'control',
-            spec: 'when switched to this scene %message'
-        },
         doSwitchToScene: {
             type: 'command',
             category: 'control',
@@ -1659,6 +1651,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportListAttribute',
             inputs: [['length']],
             offset: 1
+        },
+        doSend: {
+            selector: 'doBroadcast',
+            expand: 1,
+            offset: 0
         }
     };
 };
@@ -1730,9 +1727,8 @@ SpriteMorph.prototype.blockAlternatives = {
     setSize: ['changeSize'],
 
     // control:
-    doBroadcast: ['doBroadcastAndWait', 'doSend'],
-    doBroadcastAndWait: ['doBroadcast', 'doSend'],
-    doSend: ['doBroadcast', 'doBroadcastAndWait'],
+    doBroadcast: ['doBroadcastAndWait'],
+    doBroadcastAndWait: ['doBroadcast'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
@@ -2274,6 +2270,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         block.isStatic = true;
     }
     block.setSpec(localize(info.spec));
+    if (migration && migration.expand) {
+        block.inputs()[migration.expand].addInput();
+    }
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
         block.defaults = defaults;
@@ -2523,7 +2522,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('doSend'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -2557,10 +2555,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
-        blocks.push(block('receiveOnScene'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -2746,13 +2742,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-            blocks.push('-');
+        if (SpriteMorph.prototype.showingExtensions) {
+            blocks.push('=');
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }
@@ -2764,6 +2755,14 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
+        }
+
+        // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('doShowTable'));
         }
     }
 
@@ -3190,6 +3189,30 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
     return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
 };
 
+SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
+    // show or hide certain kinds of blocks in search results only
+    // if they are enabled
+    var sel = aBlock.selector;
+    if (sel === 'reportJSFunction') {
+        return !Process.prototype.enableJS;
+    }
+    if (
+        sel === 'doApplyExtension' ||
+        sel === 'reportApplyExtension'
+    ) {
+        return !SpriteMorph.prototype.showingExtensions;
+    }
+    if (
+        sel === 'doMapCodeOrHeader' ||
+        sel === 'doMapValueCode' ||
+        sel === 'doMapListCode' ||
+        sel === 'reportMappedCode'
+    ) {
+        return !StageMorph.prototype.enableCodeMapping;
+    }
+    return false;
+};
+
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     var ide, dict, cat;
     if (aBlock.isCustomBlock) {
@@ -3345,7 +3368,10 @@ SpriteMorph.prototype.blocksMatching = function (
     }
     blocks.sort((x, y) => x[1] < y[1] ? -1 : 1);
     blocks = blocks.map(each => each[0]);
-    return blocks.filter(each => !this.isHidingBlock(each));
+    return blocks.filter(each =>
+        !this.isHidingBlock(each) &&
+        !this.isDisablingBlock(each)
+    );
 };
 
 SpriteMorph.prototype.searchBlocks = function (
@@ -5545,8 +5571,8 @@ SpriteMorph.prototype.floodFill = function () {
         img = ctx.getImageData(0, 0, width, height),
         dta = img.data,
         stack = [
-            Math.round((height / 2) - this.yPosition()) * width +
-            Math.round(this.xPosition() + (width / 2))
+            Math.floor((height / 2) - this.yPosition()) * width +
+            Math.floor(this.xPosition() + (width / 2))
         ],
         current,
         src;
@@ -6094,17 +6120,13 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
                 return event === message
                     || (event instanceof Array
                         && message !== '__shout__go__'
-                        && message !== '__clone__init__'
-                        && message !== '__scene__init__');
+                        && message !== '__clone__init__');
             }
             if (sel === 'receiveGo') {
                 return message === '__shout__go__';
             }
             if (sel === 'receiveOnClone') {
                 return message === '__clone__init__';
-            }
-            if (sel === 'receiveOnScene') {
-                return message === '__scene__init__';
             }
         }
         return false;
@@ -8471,24 +8493,33 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__scene__init__').forEach(block => {
-                var varName =  block.inputs()[0].evaluate()[0],
-                    varFrame;
-                if (varName) {
-                    varFrame = new VariableFrame();
-                    varFrame.addVar(varName, isNil(message) ? '' : message);
+            morph.allHatBlocksFor(message).forEach(block => {
+                var varName, varFrame;
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(varName, message);
+                    }
+                    procs.push(this.threads.startProcess(
+                        block,
+                        morph,
+                        this.isThreadSafe || // make "any msg" threadsafe
+                            block.inputs()[0].evaluate() instanceof Array,
+                        null, // exportResult (bool)
+                        null, // callback
+                        null, // isClicked
+                        null, // rightAway
+                        null, // atomic
+                        varFrame
+                    ));
+                } else {
+                    procs.push(this.threads.startProcess(
+                        block,
+                        morph,
+                        this.isThreadSafe
+                    ));
                 }
-                procs.push(this.threads.startProcess(
-                    block,
-                    morph,
-                    this.isThreadSafe,
-                    null, // exportResult (bool)
-                    null, // callback
-                    null, // isClicked
-                    null, // rightAway
-                    null, // atomic
-                    varFrame
-                ));
             });
         }
     });
@@ -8766,7 +8797,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('doSend'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -8798,10 +8828,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push('-');
-        blocks.push(block('receiveOnScene'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
@@ -8977,25 +9005,27 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
+        if (SpriteMorph.prototype.showingExtensions) {
+            blocks.push('=');
+            blocks.push(block('doApplyExtension'));
+            blocks.push(block('reportApplyExtension'));
+        }
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push('=');
+            blocks.push(block('doMapCodeOrHeader'));
+            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+        }
+
         // for debugging: ///////////////
         if (this.world().isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
             blocks.push(block('doShowTable'));
-            blocks.push('-');
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
-        }
-
-        blocks.push('=');
-
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
         }
     }
 
@@ -9687,7 +9717,7 @@ StageMorph.prototype.reportPenTrailsAsCostume = function () {
 StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
     // "transitive hull"
     var all = this.globalBlocks.filter(
-            def =>def.isSending(message, receiverName)
+            def => def.isSending(message, receiverName)
         );
     this.globalBlocks.forEach(def => {
         if (def.collectDependencies().some(dep => contains(all, dep))) {

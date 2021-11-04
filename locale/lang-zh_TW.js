@@ -421,10 +421,10 @@ SnapTranslator.dict.zh_TW = {
         '當角色被點擊 %interaction',
     'when I receive %msgHat %message':
         '當接收到 %msgHat %message',
-    'broadcast %msg':
-        '廣播 %msg ',
-    'broadcast %msg and wait':
-        '廣播 %msg 並等待',
+    'broadcast %msg %receive':
+        '廣播 %msg %receive',
+    'broadcast %msg %receive and wait':
+        '廣播 %msg %receive 並等待',
     'Message name':
         '資訊名稱',
     'wait %n secs':

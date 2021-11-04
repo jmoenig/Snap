@@ -266,7 +266,7 @@ function loadBlocks (useBigNums) {
             reportIsIdentical: function (a, b) {
                 x = parseNumber(a);
                 y = parseNumber(b);
-                if (Number.isNaN(x) || Number.isNaN(y)) return originalPrims.reportIsIdentical(a, b);
+                if (Number.isNaN(x) || Number.isNaN(y)) return originalPrims.reportIsIdentical.call(this, a, b);
                 return fn['='](x, y);
             },
             reportMonadic: function (fname, n) {

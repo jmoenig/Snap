@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-06';
+modules.threads = '2021-October-22';
 
 var ThreadManager;
 var Process;
@@ -3657,50 +3657,42 @@ Process.prototype.checkURLAllowed = function (url) {
 
 // Process event messages primitives
 
-Process.prototype.doBroadcast = function (message) {
-    // messages are user-defined events, and by default global, same as in
-    // Scratch. An experimental feature, messages can be sent to a single
-    // sprite or to a list of sprites by using a 2-item list in the message
-    // slot, where the first slot is a message text, and the second slot
-    // its recipient(s), identified either by a single name or sprite, or by
-    // a list of names or sprites (can be a heterogeneous list).
-
+Process.prototype.doBroadcast = function (message, receivers) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        target = this.inputOption(receivers.at(1) || ['all']),
         thisObj,
         msg = this.inputOption(message),
-        trg,
         rcvrs,
         procs = [];
-
     if (!this.canBroadcast) {
         return [];
     }
-    if (message instanceof List && (message.length() === 2)) {
-        thisObj = this.blockReceiver();
-        msg = message.at(1);
-        trg = message.at(2);
-        if (isSnapObject(trg)) {
-            rcvrs = [trg];
-        } else if (isString(trg)) {
-            // assume the string to be the name of a sprite or the stage
-            if (trg === stage.name) {
-                rcvrs = [stage];
-            } else {
-                rcvrs = [this.getOtherObject(trg, thisObj, stage)];
-            }
-        } else if (trg instanceof List) {
-            // assume all elements to be sprites or sprite names
-            rcvrs = trg.itemsArray().map(each =>
-                this.getOtherObject(each, thisObj, stage)
-            );
-        } else {
-            return; // abort
-        }
-    } else { // global
+
+    // determine the receivers
+    thisObj = this.blockReceiver();
+    if (target === 'all') {
         rcvrs = stage.children.concat(stage);
+    } else if (isSnapObject(target)) {
+        rcvrs = [target];
+    } else if (isString(target)) {
+        // assume the string to be the name of a sprite or the stage
+        if (target === stage.name) {
+            rcvrs = [stage];
+        } else {
+            rcvrs = [this.getOtherObject(target, thisObj, stage)];
+        }
+    } else if (target instanceof List) {
+        // assume all elements to be sprites or sprite names
+        rcvrs = target.itemsArray().map(each =>
+            this.getOtherObject(each, thisObj, stage)
+        );
+    } else {
+        return; // abort
     }
+
+    // transmit the message
     if (msg !== '') {
-        stage.lastMessage = message; // the actual data structure
+        stage.lastMessage = message; // retained for backwards compatibility
         rcvrs.forEach(morph => {
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
@@ -3714,7 +3706,8 @@ Process.prototype.doBroadcast = function (message) {
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
-                            stage.isThreadSafe,
+                            stage.isThreadSafe || // make "any msg" threadsafe
+                                block.inputs()[0].evaluate() instanceof Array,
                             null, // exportResult (bool)
                             null, // callback
                             null, // isClicked
@@ -3742,9 +3735,9 @@ Process.prototype.doBroadcast = function (message) {
     return procs;
 };
 
-Process.prototype.doBroadcastAndWait = function (message) {
+Process.prototype.doBroadcastAndWait = function (message, target) {
     if (!this.context.activeSends) {
-        this.context.activeSends = this.doBroadcast(message);
+        this.context.activeSends = this.doBroadcast(message, target);
         if (this.isRunning()) {
             this.context.activeSends.forEach(proc =>
                 proc.runStep()
@@ -3770,20 +3763,6 @@ Process.prototype.getLastMessage = function () {
         }
     }
     return '';
-};
-
-Process.prototype.doSend = function (message, target) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-    this.doBroadcast(
-        new List(
-            [
-                message,
-                target instanceof List ? target :
-                    target === stage.name ? new List([stage]) :
-                        new List([target])
-            ]
-        )
-    );
 };
 
 // Process type inference
@@ -4700,11 +4679,22 @@ Process.prototype.goToLayer = function (name) {
 Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
-        message = transmission.at(1),
+        message = this.inputOption(transmission.at(1)),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
-    this.assertType(message, ['text', 'number']);
-    if (this.readyToTerminate || this.topBlock.selector === 'receiveOnScene') {
+    this.assertType(message, ['text', 'number', 'Boolean', 'list']);
+    if (message instanceof List) {
+        // make sure only atomic leafs are inside the list
+        // don't actually encode the list as json, though
+        if (message.canBeJSON()) {
+            message = message.deepMap(leaf => leaf); // deep copy the list
+        } else {
+            throw new Error(localize(
+                'cannot send media,\nsprites or procedures\nto another scene'
+            ));
+        }
+    }
+    if (this.readyToTerminate) {
         // let the user press "stop" or "esc",
         // prevent "when this scene starts" hat blocks from directly
         // switching to another
@@ -4727,9 +4717,11 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
                 idx = scenes.length();
             }
             break;
+        /*
         case 'last':
             idx = scenes.length();
             break;
+        */
         case 'random':
             idx = this.reportBasicRandom(1, scenes.length());
             break;

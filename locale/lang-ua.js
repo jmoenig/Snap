@@ -520,10 +520,10 @@ SnapTranslator.dict.ua = {
         'коли %b',
     'when I receive %msgHat %message':
         'коли я отримаю %msgHat %message',
-    'broadcast %msg':
-        'надіслати %msg всім',
-    'broadcast %msg and wait':
-        'надіслати %msg всім і чекати',
+    'broadcast %msg %receive':
+        'надіслати %msg %receive',
+    'broadcast %msg %receive and wait':
+        'надіслати %msg %receive і чекати',
     'Message name':
         'назва повідомлення',
     'message':

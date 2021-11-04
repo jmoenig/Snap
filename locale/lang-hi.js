@@ -520,10 +520,10 @@ SnapTranslator.dict.hi = {
         'जब %b',
     'when I receive %msgHat %message':
         'जब मैं प्राप्त करता हूँ %msgHat %message',
-    'broadcast %msg':
-        'प्रसारण %msg',
-    'broadcast %msg and wait':
-        'प्रसारण %msg और रुको',
+    'broadcast %msg %receive':
+        'प्रसारण %msg %receive',
+    'broadcast %msg %receive and wait':
+        'प्रसारण %msg %receive और रुको',
     'send %msg to %spr':
         'भेजने %msg को %spr',
     'Message name':

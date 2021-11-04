@@ -11,15 +11,20 @@
     * user defined custom block palettes
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
-    * message, key and scene hat blocks can be expanded to show an optional upvar referencing their event data
+    * message and key hat blocks can be expanded to show an optional upvar referencing their event data
     * added "enter" key to key-pressed dropdown
     * added "green flag" symbol to message drop-down
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
-    * hidden blocks don't appear in search results / keyboard input options 
-    * retired Leap Motion library, took out Hummingbird library (get the current one from Birdbrain)
+    * hidden blocks don't appear in search results / keyboard input options
+    * codification and js-func blocks don't appear in search results unless enabled
+    * made BROADCAST blocks expandable and added a second input for message receivers, default is "all"
+    * migrated SEND blocks to be BROADCAST TO blocks
+    * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
+    * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
+    * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
@@ -34,12 +39,76 @@
     * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
     * disabled dropping reporters onto message hat block input slots
     * fixed outdated blocks specs for "When I am ..." hat block in many translations
+    * fixed duplicating custom block definitions that don't have a body
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-29
+* objects: flood-fill edge case fix, thanks, Dariusz!
+* gui: removed obsolete dev comments
+* blocks, objects: fixed scanning for senders and receivers of messages for new BROADCAST scheme
+
+### 2021-10-28
+* introduced default values for expandable slot specs
+* updated German translation
+* migrated Basque and Swedish translations to new BROADCAST block specs
+* migrated Slovenian, Romanian and Interlingua translations to new BROADCAST block specs
+* migrated Estonian, Hungarian, Croatian and Esperanto translations to new BROADCAST block specs
+* migrated Danish, Czech, Valencian Catalan and Arabic translations to new BROADCAST block specs
+* migrated Bulgarian, Traditional Chinese, Indonesian and Galician translations to new BROADCAST block specs
+* migrated Hebrew, Japanese Hiragana, Slovakian and Ukrainian translations to new BROADCAST block specs
+* migrated Japanese, Bangla, Portuguese and Norwegian translations to new BROADCAST block specs
+* migrated French, Italian, Greek and Spanish translations to new BROADCAST block specs
+* migrated Russian, Dutch, Tamil and Turkish translations to new BROADCAST block specs
+* migrated Catalan, Hindi, Polish and Telagu translations to new BROADCAST block specs
+* migrated Brazilian Portuguese, Malayam, Korean and Kannada translations to new BROADCAST block specs
+* migrated Finnish and Simplified Chinese translations to new BROADCAST block specs
+
+### 2021-10-27
+* included bbt extensions
+* updated service worker to cache bbtSnapExtension.js
+* pwa versioning & cache-busting mechanism 
+* changed PWA icon to Alonzo
+* tweaked PWA
+
+### 2021-10-26
+* objects: don't show codification and js-func blocks in search results unless enabled
+* gui, objects: new "showingExtensions" session setting for showing extension prims in the palette
+* German translation update for "extension blocks" setting
+* widgets: r-g-b editor for custom category colors (right-click on color-field)
+
+### 2021-10-25
+* byob: fixed #2902
+
+### 2021-10-22
+* blocks, objects: only show the "message" upvar in the "When I receive" hat if "any message" is selected
+* blocks: only show "key" upvar in the "When ... is pressed" hat if "any key" is selected
+* blocks: tweaked blocks layout for hidden expansion slots
+* blocks, objects, store, threads: made SEND blocks expandable for receivers and renamed them back to BROADCAST 
+* threads: deep copy atomic lists sent from one scene to another
+* bignum library: fixed IS IDENTICAL
+
+### 2021-10-21
+* threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
+* threads: enabled sending atomic lists to other scenes
+* threads: took out broadcasting a 2-item list to mean a message directed to a particular sprite
+* blocks, objects, threads: added "all" option to the receiver-dropdown of the SEND block
+* objects, blocks, threads: replaced BROADCAST block variants with SEND block variants
+* tweaked German translation for "all"
+
+### 2021-10-20
+* blocks: enable sending green-flag events when switching scenes
+* blocks, objects, gui, threads: removed "When switched to this scene hat block"
+* objects: rearranged "switch to scene" and "pause all" blocks in the palette
+* updated German translation (removed "when switched to this scene")
+* blocks, threads: removed options "1" and "last" from "switch to scene" dropdown
+
+### 2021-10-19
+* threads: enable sending green-flag events to specific sprites
 
 ### 2021-10-14
 * gui, byob, objects: scroll custom category buttons if there are more than 6

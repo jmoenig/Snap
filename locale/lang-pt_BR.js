@@ -421,10 +421,12 @@ SnapTranslator.dict.pt_BR = {
         'quando este ator for %interaction',
     'when I receive %msgHat %message':
         'quando receber %msgHat %message',
-    'broadcast %msg':
-        'envie %msg a todos',
-    'broadcast %msg and wait':
-        'envie %msg a todos e espere',
+    'broadcast %msg %receive':
+        'envie %msg %receive',
+    'broadcast %msg %receive and wait':
+        'envie %msg %receive e espere',
+    'to':
+        'a',
     'Message name':
         'nome da mensagem',
     'message':
@@ -450,7 +452,7 @@ SnapTranslator.dict.pt_BR = {
     'stop %stopChoices':
         'pare %stopChoices',
     'all':
-        'tudo',
+        'todos',
     'this script':
         'este roteiro',
     'this block':

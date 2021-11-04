@@ -426,10 +426,10 @@ SnapTranslator.dict.dk = {
         'n\u00E5r jeg %interaction',
     'when I receive %msgHat %message':
         'n\u00E5r jeg modtager %msgHat %message',
-    'broadcast %msg':
-        'send %msg',
-    'broadcast %msg and wait':
-        'send %msg og vent',
+    'broadcast %msg %receive':
+        'send %msg %receive',
+    'broadcast %msg %receive and wait':
+        'send %msg %receive og vent',
     'Message name':
         'Beskednavn',
     'wait %n secs':
