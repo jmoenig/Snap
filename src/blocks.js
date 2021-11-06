@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-October-29';
+modules.blocks = '2021-November-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3952,7 +3952,14 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     );
 
     function renameVarTo (newName) {
+        var block;
+
         if (this.parent instanceof SyntaxElementMorph) {
+
+            // commented out by jens and reformulated below
+            // in an attempt to catch some bugs in v6:
+
+        /*
             if (this.parentThatIsA(BlockEditorMorph)) {
                 this.doRefactorBlockParameter(
                     oldName,
@@ -3964,6 +3971,34 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
             } else {
                 this.doRefactorScriptVar(oldName, newName, justTheTemplate);
             }
+        */
+
+            // trying to make some things more reliable below,
+            // I guess at one point we'll have to rethink the
+            // whole mechanism (jens)
+
+            if (this.parent instanceof BlockInputFragmentMorph) {
+                this.doRefactorBlockParameter(
+                    oldName,
+                    newName,
+                    justTheTemplate
+                );
+            } else if (this.parent instanceof TemplateSlotMorph) {
+                block = this.parent.parentThatIsA(BlockMorph);
+                if (block instanceof RingMorph) {
+                    this.doRefactorRingParameter(
+                        oldName,
+                        newName,
+                        justTheTemplate
+                    );
+                } else if (block.selector === 'doDeclareVariables') {
+                    this.doRefactorScriptVar(oldName, newName, justTheTemplate);
+                } else {
+                    // I guess it could also be an upvar ... (jens)
+                    // perhaps we should show an error here?
+                }
+            }
+
         } else if (receiver.hasSpriteVariable(oldName)) {
             this.doRefactorSpriteVar(oldName, newName, justTheTemplate);
         } else {
