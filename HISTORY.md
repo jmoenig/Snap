@@ -50,7 +50,8 @@
     * Chinese, thanks, Simon!
 
 ### 2021-11-07
-* widgets, blocks, byob: allow block-instances to be dragged off from templates in the "hide blocks" dialog 
+* widgets, blocks, byob: allow block-instances to be dragged off from templates in the "hide blocks" dialog
+* gui: prevent switching to another sprite if a "hide blocks" dialog is open
 
 ### 2021-11-06
 * blocks: fixed some minor variable-renaming issues
