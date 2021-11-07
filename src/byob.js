@@ -52,6 +52,7 @@
         BlockExportDialogMorph
         BlockImportDialogMorph
         BlockRemovalDialogMorph
+        BlockVisibilityDialogMorph
         InputSlotDialogMorph
         VariableDialogMorph
 
@@ -91,6 +92,7 @@
     BlockExportDialogMorph
     BlockImportDialogMorph
     BlockRemovalDialogMorph
+    BlockVisibilityDialogMorph
 
 */
 
@@ -108,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-October-25';
+modules.byob = '2021-November-07';
 
 // Declarations
 
@@ -128,6 +130,7 @@ var JaggedBlockMorph;
 var BlockExportDialogMorph;
 var BlockImportDialogMorph;
 var BlockRemovalDialogMorph;
+var BlockVisibilityDialogMorph;
 
 // CustomBlockDefinition ///////////////////////////////////////////////
 
@@ -1184,6 +1187,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
+        if (this.parentThatIsA(BlockVisibilityDialogMorph)) {
+            return menu;
+        }
         if (!menu) {
             menu = new MenuMorph(this);
         } else {
@@ -4574,7 +4580,7 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
             () => contains(this.selection, block),
             null,
             null,
-            block.fullImage()
+            block // allow block to be dragged off from templates
         );
         checkBox.setPosition(new Point(
             x,

@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2021-October-26';
+modules.widgets = '2021-November-07';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1196,15 +1196,22 @@ ToggleMorph.prototype.createLabel = function () {
     if (this.toggleElement === null) {
         if (this.element) {
             if (this.element instanceof Morph) {
-                this.toggleElement = new ToggleElementMorph(
-                    this.target,
-                    this.action,
-                    this.element,
-                    this.query,
-                    this.environment,
-                    this.hint,
-                    this.builder
-                );
+                if (this.element.isTemplate) {
+                    this.toggleElement = this.element;
+                    if (!this.element.mouseDownLeft) {
+                        this.element.mouseDownLeft = nop;
+                    }
+                } else {
+                    this.toggleElement = new ToggleElementMorph(
+                        this.target,
+                        this.action,
+                        this.element,
+                        this.query,
+                        this.environment,
+                        this.hint,
+                        this.builder
+                    );
+                }
             } else if (this.element instanceof HTMLCanvasElement) {
                 this.toggleElement = new Morph();
                 this.toggleElement.isCachingImage = true;

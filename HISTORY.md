@@ -49,6 +49,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-11-07
+* widgets, blocks, byob: allow block-instances to be dragged off from templates in the "hide blocks" dialog 
+
 ### 2021-11-06
 * blocks: fixed some minor variable-renaming issues
 

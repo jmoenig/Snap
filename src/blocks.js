@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-06';
+modules.blocks = '2021-November-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2614,13 +2614,17 @@ BlockMorph.prototype.scriptTarget = function () {
     // the user actively clicking on a block inside the IDE
     // there is no direct relationship between a block and a sprite.
     var scripts = this.parentThatIsA(ScriptsMorph),
-        ide;
+        ide, dlg;
     if (scripts) {
         return scripts.scriptTarget();
     }
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         return ide.currentSprite;
+    }
+    dlg = this.parentThatIsA(DialogBoxMorph);
+    if (dlg && isSnapObject(dlg.target)){
+        return dlg.target;
     }
     throw new Error('script target cannot be found for orphaned block');
 };
@@ -3604,8 +3608,8 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
 BlockMorph.prototype.showHelp = function () {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
-        blockEditor,
         pic = new Image(),
+        dlg,
         help,
         def,
         comment,
@@ -3624,9 +3628,9 @@ BlockMorph.prototype.showHelp = function () {
     }
 
     if (!ide) {
-        blockEditor = this.parentThatIsA(BlockEditorMorph);
-        if (blockEditor) {
-            ide = blockEditor.target.parentThatIsA(IDE_Morph);
+        dlg = this.parentThatIsA(DialogBoxMorph);
+        if (dlg && isSnapObject(dlg.target)) {
+            ide = dlg.target.parentThatIsA(IDE_Morph);
         }
     }
 
