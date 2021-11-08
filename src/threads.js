@@ -60,11 +60,11 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph, Cloud*/
+SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-October-22';
+modules.threads = '2021-November-08';
 
 var ThreadManager;
 var Process;
@@ -200,7 +200,17 @@ ThreadManager.prototype.toggleProcess = function (block, receiver) {
     if (active) {
         active.stop();
     } else {
-        return this.startProcess(block, receiver, null, null, null, true);
+        return this.startProcess(
+            block,
+            receiver,
+            null,
+            null,
+            null,
+            true, // isClicked
+            null,
+            null,
+            this.clickFrameFor(block) // for upvars declared inside hat blocks
+        );
     }
 };
 
@@ -488,6 +498,24 @@ ThreadManager.prototype.toggleSingleStepping = function () {
             }
         });
     }
+};
+
+ThreadManager.prototype.clickFrameFor = function (block) {
+    // private - answer a variable frame or null containing upvar declarations
+    // in certain hat blocks if the user manually clicks on them
+    var name, frame;
+    if (block instanceof HatBlockMorph) {
+        if (block.selector === 'receiveKey' ||
+                block.selector === 'receiveMessage') {
+            name = block.inputs()[1].evaluate()[0];
+            if (name) {
+                frame = new VariableFrame();
+                frame.addVar(name, '');
+                return frame;
+            }
+        }
+    }
+    return null;
 };
 
 // Process /////////////////////////////////////////////////////////////

@@ -55,6 +55,7 @@
 * objects, store: renamed internal pen color channel cache
 * objects, blocks, threads: renamed internal pen accessor methods
 * objects, threads, store, extensions: switched pen color dimensions from HSV to HSL
+* threads: fixed upvars in hat block prims when the user clicks on them to run them
 
 ### 2021-11-07
 * widgets, blocks, byob: allow block-instances to be dragged off from templates in the "hide blocks" dialog

@@ -8468,7 +8468,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allHatBlocksForKey(evt).forEach(block => {
-                var varName =  block.inputs()[1].evaluate()[0],
+                var varName = block.inputs()[1].evaluate()[0],
                     varFrame;
                 if (varName) {
                     varFrame = new VariableFrame();
