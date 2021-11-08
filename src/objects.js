@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-October-29';
+modules.objects = '2021-November-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -4442,7 +4442,7 @@ SpriteMorph.prototype.setColorComponentHSVA = function (idx, num) {
     this.gotoXY(x, y);
 };
 
-SpriteMorph.prototype.getColorComponentHSLA = function (idx) {
+SpriteMorph.prototype.getColorComponentHSVA = function (idx) {
     idx = +idx;
     if (idx === 3) {
         return (1 - this.color.a) * 100;
@@ -4453,7 +4453,7 @@ SpriteMorph.prototype.getColorComponentHSLA = function (idx) {
 SpriteMorph.prototype.changeColorComponentHSVA = function (idx, delta) {
     this.setColorComponentHSVA(
         idx,
-        this.getColorComponentHSLA(idx) + (+delta || 0)
+        this.getColorComponentHSVA(idx) + (+delta || 0)
     );
 };
 
@@ -4478,7 +4478,7 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
     if (name === 'size') {
         return this.size || 0;
     }
-    return this.getColorComponentHSLA(options.indexOf(name));
+    return this.getColorComponentHSVA(options.indexOf(name));
 };
 
 // SpriteMorph layers
@@ -9283,8 +9283,8 @@ StageMorph.prototype.setColorComponentHSVA = function (idx, num) {
     this.rerender();
 };
 
-StageMorph.prototype.getColorComponentHSLA
-    = SpriteMorph.prototype.getColorComponentHSLA;
+StageMorph.prototype.getColorComponentHSVA
+    = SpriteMorph.prototype.getColorComponentHSVA;
 
 StageMorph.prototype.changeColorComponentHSVA
     = SpriteMorph.prototype.changeColorComponentHSVA;

@@ -4727,7 +4727,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
-        return this.selectForEdit().focus(); // enable coopy-on-edit
+        return this.selectForEdit().focus(); // enable copy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
         return; // top.mouseClickLeft();
