@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-07';
+modules.blocks = '2021-November-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -646,7 +646,7 @@ SyntaxElementMorph.prototype.labelParts = {
             back : ['back']
         }
     },
-    '%hsva': {
+    '%clrdim': {
         type: 'input',
         tags: 'read-only static',
         menu: {

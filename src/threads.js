@@ -4747,26 +4747,33 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
 
 // Process color primitives
 
-Process.prototype.setHSVA = function (name, num) {
+Process.prototype.setColorDimension = function (name, num) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'];
-    this.blockReceiver().setColorComponentHSVA(
+    this.blockReceiver().setColorDimension(
         options.indexOf(this.inputOption(name)),
         +num
     );
 };
 
-Process.prototype.changeHSVA = function (name, num) {
+Process.prototype.changeColorDimension = function (name, num) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'];
-    this.blockReceiver().changeColorComponentHSVA(
+    this.blockReceiver().changeColorDimension(
         options.indexOf(this.inputOption(name)),
         +num
     );
 };
 
-Process.prototype.setPenHSVA = Process.prototype.setHSVA;
-Process.prototype.changePenHSVA = Process.prototype.changeHSVA;
-Process.prototype.setBackgroundHSVA = Process.prototype.setHSVA;
-Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
+Process.prototype.setPenColorDimension =
+    Process.prototype.setColorDimension;
+
+Process.prototype.changePenColorDimension =
+    Process.prototype.changeColorDimension;
+
+Process.prototype.setBackgroundColorDimension =
+    Process.prototype.setColorDimension;
+
+Process.prototype.changeBackgroundColorDimension =
+    Process.prototype.changeColorDimension;
 
 // Process cutting & pasting primitives
 
