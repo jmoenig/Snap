@@ -1844,7 +1844,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.freqPlayer = null; // Note, to be lazily initialized
 
     // pen color dimensions support
-    this.cachedColorChannels = [0, 0, 0]; // not serialized
+    this.cachedColorDimensions = [0, 0, 0]; // not serialized
 
     // only temporarily for serialization
     this.inheritedMethodsCache = [];
@@ -1893,7 +1893,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.isCachingImage = true;
     this.isFreeForm = true;
-    this.cachedColorChannels = this.color.hsv();
+    this.cachedColorDimensions = this.color.hsv();
     this.isDraggable = true;
     this.isDown = false;
     this.heading = 90;
@@ -1924,7 +1924,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.primitivesCache = {};
     c.paletteCache = {};
     c.imageData = {};
-    c.cachedColorChannels = c.color.hsv();
+    c.cachedColorDimensions = c.color.hsv();
     arr = [];
     this.inheritedAttributes.forEach(att => arr.push(att));
     c.inheritedAttributes = arr;
@@ -4433,8 +4433,8 @@ SpriteMorph.prototype.setColorComponentHSVA = function (idx, num) {
     if (idx === 3) {
         this.color.a = 1 - n / 100;
     } else {
-        this.cachedColorChannels[idx] = n / 100;
-        this.color.set_hsv.apply(this.color, this.cachedColorChannels);
+        this.cachedColorDimensions[idx] = n / 100;
+        this.color.set_hsv.apply(this.color, this.cachedColorDimensions);
     }
     if (!this.costume) {
         this.rerender();
@@ -4447,7 +4447,7 @@ SpriteMorph.prototype.getColorComponentHSVA = function (idx) {
     if (idx === 3) {
         return (1 - this.color.a) * 100;
     }
-    return (this.cachedColorChannels[idx] || 0) * 100;
+    return (this.cachedColorDimensions[idx] || 0) * 100;
 };
 
 SpriteMorph.prototype.changeColorComponentHSVA = function (idx, delta) {
@@ -4466,7 +4466,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
             this.rerender();
             this.silentGotoXY(x, y);
         }
-        this.cachedColorChannels = this.color.hsv();
+        this.cachedColorDimensions = this.color.hsv();
     }
 };
 
@@ -7793,7 +7793,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.scale = 1; // for display modes, do not persist
 
-    this.cachedColorChannels = [0, 0, 0]; // bg color channel support, not serialized
+    this.cachedColorDimensions = [0, 0, 0]; // bg color support, not serialized
 
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.primitivesCache = {}; // not to be serialized (!)
@@ -7847,7 +7847,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.setExtent(this.dimensions);
     this.isCachingImage = true;
-    this.cachedColorChannels = this.color.hsv();
+    this.cachedColorDimensions = this.color.hsv();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
@@ -9277,8 +9277,8 @@ StageMorph.prototype.setColorComponentHSVA = function (idx, num) {
     if (idx === 3) {
         this.color.a = 1 - n / 100;
     } else {
-        this.cachedColorChannels[idx] = n / 100;
-        this.color.set_hsv.apply(this.color, this.cachedColorChannels);
+        this.cachedColorDimensions[idx] = n / 100;
+        this.color.set_hsv.apply(this.color, this.cachedColorDimensions);
     }
     this.rerender();
 };
@@ -9293,7 +9293,7 @@ StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
         this.color = aColor.copy();
         this.rerender();
-        this.cachedColorChannels = this.color.hsv();
+        this.cachedColorDimensions = this.color.hsv();
     }
 };
 

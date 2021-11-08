@@ -408,7 +408,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.color) {
         scene.stage.color = this.loadColor(model.stage.attributes.color);
-        scene.stage.cachedColorChannels = scene.stage.color.hsv();
+        scene.stage.cachedColorDimensions = scene.stage.color.hsv();
     }
     if (model.stage.attributes.scheduled === 'true') {
         scene.stage.fps = 30;
@@ -714,7 +714,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.color) {
             sprite.color = this.loadColor(model.attributes.color);
-            sprite.cachedColorChannels = sprite.color.hsv();
+            sprite.cachedColorDimensions = sprite.color.hsv();
         }
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
@@ -1453,7 +1453,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.color) {
             v.color = this.loadColor(model.attributes.color);
-            v.cachedColorChannels = v.color.hsv();
+            v.cachedColorDimensions = v.color.hsv();
         }
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;
