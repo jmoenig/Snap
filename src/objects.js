@@ -1909,7 +1909,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.isCachingImage = true;
     this.isFreeForm = true;
-    this.cachedColorDimensions = this.color.hsv();
+    this.cachedColorDimensions = this.color.hsl();
     this.isDraggable = true;
     this.isDown = false;
     this.heading = 90;
@@ -1940,7 +1940,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.primitivesCache = {};
     c.paletteCache = {};
     c.imageData = {};
-    c.cachedColorDimensions = c.color.hsv();
+    c.cachedColorDimensions = c.color.hsl();
     arr = [];
     this.inheritedAttributes.forEach(att => arr.push(att));
     c.inheritedAttributes = arr;
@@ -4450,7 +4450,7 @@ SpriteMorph.prototype.setColorDimension = function (idx, num) {
         this.color.a = 1 - n / 100;
     } else {
         this.cachedColorDimensions[idx] = n / 100;
-        this.color.set_hsv.apply(this.color, this.cachedColorDimensions);
+        this.color.set_hsl.apply(this.color, this.cachedColorDimensions);
     }
     if (!this.costume) {
         this.rerender();
@@ -4482,7 +4482,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
             this.rerender();
             this.silentGotoXY(x, y);
         }
-        this.cachedColorDimensions = this.color.hsv();
+        this.cachedColorDimensions = this.color.hsl();
     }
 };
 
@@ -7863,7 +7863,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.setExtent(this.dimensions);
     this.isCachingImage = true;
-    this.cachedColorDimensions = this.color.hsv();
+    this.cachedColorDimensions = this.color.hsl();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
@@ -9294,7 +9294,7 @@ StageMorph.prototype.setColorDimension = function (idx, num) {
         this.color.a = 1 - n / 100;
     } else {
         this.cachedColorDimensions[idx] = n / 100;
-        this.color.set_hsv.apply(this.color, this.cachedColorDimensions);
+        this.color.set_hsl.apply(this.color, this.cachedColorDimensions);
     }
     this.rerender();
 };
@@ -9309,7 +9309,7 @@ StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
         this.color = aColor.copy();
         this.rerender();
-        this.cachedColorDimensions = this.color.hsv();
+        this.cachedColorDimensions = this.color.hsl();
     }
 };
 

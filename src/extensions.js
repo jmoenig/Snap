@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-October-06';
+modules.extensions = '2021-November-08';
 
 // Global stuff
 
@@ -759,6 +759,22 @@ SnapExtensions.primitives.set(
     function (h, s, v) {
         var c = new Color();
         c.set_hsv(h, s, v);
+        return c;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_hsl(clr)',
+    function (clr) {
+        return new List(clr.hsl());
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_hsl(h, s, l)',
+    function (h, s, l) {
+        var c = new Color();
+        c.set_hsl(h, s, l);
         return c;
     }
 );

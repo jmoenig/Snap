@@ -4928,9 +4928,9 @@ Process.prototype.reportAspect = function (aspect, location) {
     // ----------------
     // left input (aspect):
     //
-    //      'hue'           - hsv HUE on a scale of 0 - 100
-    //      'saturation'    - hsv SATURATION on a scale of 0 - 100
-    //      'brightness'    - hsv VALUE on a scale of 0 - 100
+    //      'hue'           - hsl HUE on a scale of 0 - 100
+    //      'saturation'    - hsl SATURATION on a scale of 0 - 100
+    //      'brightness'    - hsl BRIGHTNESS on a scale of 0 - 100
     //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
     //      'r-g-b-a'       - list of rgba values on a scale of 0 - 255 each
     //      'sprites'       - a list of sprites at the location, empty if none
@@ -5023,7 +5023,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     if (idx === 3) {
         return (1 - clr.a) * 100;
     }
-    return clr.hsv()[idx] * 100;
+    return clr.hsl()[idx] * 100;
 };
 
 Process.prototype.colorAtSprite = function (sprite) {
