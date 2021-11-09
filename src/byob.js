@@ -4193,6 +4193,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                 }
                 lastCat = category;
                 block = definition.templateInstance();
+                block.isToggleLabel = true; // mark as unrefreshable label
                 checkBox = new ToggleMorph(
                     'checkbox',
                     this,
@@ -4565,6 +4566,7 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
         }
         lastCat = block.category;
 
+        block.isToggleLabel = true; // mark block as unrefreshable toggle label
         checkBox = new ToggleMorph(
             'checkbox',
             this,

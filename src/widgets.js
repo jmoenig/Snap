@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2021-November-07';
+modules.widgets = '2021-November-09';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1253,7 +1253,8 @@ ToggleMorph.prototype.refresh = function () {
     } else {
         this.tick.hide();
     }
-    if (this.toggleElement && this.toggleElement.refresh) {
+    if (this.toggleElement && this.toggleElement.refresh &&
+            !this.toggleElement.isToggleLabel) {
         this.toggleElement.refresh();
     }
 };
