@@ -3186,6 +3186,7 @@ SpriteMorph.prototype.allPaletteBlocks = function () {
 };
 
 SpriteMorph.prototype.isHidingBlock = function (aBlock) {
+    var frame;
     if (aBlock.isCustomBlock) {
         return (
             aBlock.isGlobal ? aBlock.definition
@@ -3193,9 +3194,11 @@ SpriteMorph.prototype.isHidingBlock = function (aBlock) {
         ).isHelper;
     }
     if (aBlock.selector === 'reportGetVar') {
-        return this.variables.find(
-            aBlock.blockSpec
-        ).vars[aBlock.blockSpec].isHidden;
+        frame = this.variables.silentFind(aBlock.blockSpec);
+        if (!frame) {
+            return false;
+        }
+        return frame.vars[aBlock.blockSpec].isHidden;
     }
     return StageMorph.prototype.hiddenPrimitives[aBlock.selector] === true;
 };

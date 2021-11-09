@@ -54,6 +54,7 @@
 * objects, store: refactored block-migration mechanism
 * gui: changed display of project name in the IDE to PROJECT (SCENE)
 * gui: adjusted random color for new sprites to HSL model
+* objects: fixed keyboard entry for script variable getters
 
 ### 2021-11-08
 * objects: renamed some internal color methods
