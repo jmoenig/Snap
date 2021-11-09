@@ -1082,7 +1082,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         rcvr = this.scriptTarget(),
         myself = this,
         // shiftClicked = this.world().currentKey === 16,
-        menu;
+        dlg, menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
         menu.addItem(
@@ -1187,7 +1187,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
-        if (this.parentThatIsA(BlockVisibilityDialogMorph)) {
+        dlg = this.parentThatIsA(DialogBoxMorph);
+        if (dlg && !(dlg instanceof BlockEditorMorph)) {
             return menu;
         }
         if (!menu) {
