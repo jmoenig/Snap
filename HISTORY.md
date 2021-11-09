@@ -52,6 +52,7 @@
 
 ### 2021-11-09
 * objects, store: refactored block-migration mechanism
+* gui: changed display of project name in the IDE to PROJECT (SCENE)
 
 ### 2021-11-08
 * objects: renamed some internal color methods

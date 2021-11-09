@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-08';
+modules.gui = '2021-November-09';
 
 // Declarations
 
@@ -1216,7 +1216,7 @@ IDE_Morph.prototype.createControlBar = function () {
         var prefix = myself.hasUnsavedEdits() ? '\u270E ' : '',
             suffix = myself.world().isDevMode ?
                 ' - ' + localize('development mode') : '',
-            txt;
+            name, scene, txt;
 
         if (this.label) {
             this.label.destroy();
@@ -1224,8 +1224,11 @@ IDE_Morph.prototype.createControlBar = function () {
         if (myself.isAppMode) {
             return;
         }
+        scene = myself.scenes.at(1) !== myself.scene ?
+                ' (' + myself.scene.name + ')' : '';
+        name = (myself.getProjectName() || localize('untitled'));
         txt = new StringMorph(
-            prefix + (myself.scene.name || localize('untitled')) + suffix,
+            prefix + name +  scene + suffix, // +++
             14,
             'sans-serif',
             true,
