@@ -5173,7 +5173,7 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
     if (unused.length > 0) {
         new BlockRemovalDialogMorph(
             unused,
-            this.stage
+            this
         ).popUp(this.world());
     } else {
         this.inform(

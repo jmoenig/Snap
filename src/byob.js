@@ -4468,7 +4468,7 @@ BlockRemovalDialogMorph.prototype.selectNone
 // BlockRemovalDialogMorph ops
 
 BlockRemovalDialogMorph.prototype.removeBlocks = function () {
-    var ide = this.target.parentThatIsA(IDE_Morph);
+    var ide = this.target;
     if (!ide) {return; }
     if (this.blocks.length > 0) {
         this.blocks.forEach(def => {
