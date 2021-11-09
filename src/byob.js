@@ -1284,7 +1284,8 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     new BlockExportDialogMorph(
         ide.serializer,
-        [this.definition].concat(this.definition.collectDependencies())
+        [this.definition].concat(this.definition.collectDependencies()),
+        ide
     ).popUp(this.world());
 };
 
