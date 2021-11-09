@@ -1228,7 +1228,7 @@ IDE_Morph.prototype.createControlBar = function () {
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
         txt = new StringMorph(
-            prefix + name +  scene + suffix, // +++
+            prefix + name +  scene + suffix,
             14,
             'sans-serif',
             true,
@@ -3152,9 +3152,9 @@ IDE_Morph.prototype.addNewSprite = function () {
     sprite.rerender();
 
     // randomize sprite properties
-    sprite.setColorComponentHSVA(0, rnd.call(this, 0, 100));
-    sprite.setColorComponentHSVA(1, 100);
-    sprite.setColorComponentHSVA(2, rnd.call(this, 50, 100));
+    sprite.setColorDimension(0, rnd.call(this, 0, 100));
+    sprite.setColorDimension(1, 100);
+    sprite.setColorDimension(2, rnd.call(this, 25, 75));
 
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
