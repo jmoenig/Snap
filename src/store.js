@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-08';
+modules.store = '2021-November-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1199,7 +1199,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes.s
             ];
             if (migration) {
-                migrationOffset = migration.offset;
+                migrationOffset = migration.offset || 0;
             }
         }
     } else if (model.tag === 'custom-block') {

@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-08';
+modules.objects = '2021-November-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1618,8 +1618,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             offset: 1
         },
         setPenHSVA: {
-            selector: 'setPenColorDimension',
-            offset: 0
+            selector: 'setPenColorDimension'
         },
         changeHue: {
             selector: 'changePenColorDimension',
@@ -1632,16 +1631,13 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             offset: 1
         },
         changePenHSVA: {
-            selector: 'changePenColorDimension',
-            offset: 0
+            selector: 'changePenColorDimension'
         },
         setBackgroundHSVA: {
-            selector: 'setBackgroundColorDimension',
-            offset: 0
+            selector: 'setBackgroundColorDimension'
         },
         changeBackgroundHSVA: {
-            selector: 'changeBackgroundColorDimension',
-            offset: 0
+            selector: 'changeBackgroundColorDimension'
         },
         reportIsFastTracking: {
             selector: 'reportGlobalFlag',
@@ -1670,8 +1666,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         doSend: {
             selector: 'doBroadcast',
-            expand: 1,
-            offset: 0
+            expand: 1
         }
     };
 };

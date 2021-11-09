@@ -50,6 +50,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-11-09
+* objects, store: refactored block-migration mechanism
+
 ### 2021-11-08
 * objects: renamed some internal color methods
 * objects, store: renamed internal pen color channel cache
