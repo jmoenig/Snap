@@ -4920,7 +4920,7 @@ IDE_Morph.prototype.scenesMenu = function () {
 IDE_Morph.prototype.editNotes = function () {
     var dialog = new DialogBoxMorph().withKey('notes'),
         frame = new ScrollFrameMorph(),
-        text = new TextMorph(this.scene.notes || ''),
+        text = new TextMorph(this.scenes.at(1).notes || ''),
         size = 250,
         world = this.world();
 
