@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-08';
+modules.blocks = '2021-November-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2623,8 +2623,13 @@ BlockMorph.prototype.scriptTarget = function () {
         return ide.currentSprite;
     }
     dlg = this.parentThatIsA(DialogBoxMorph);
-    if (dlg && isSnapObject(dlg.target)){
-        return dlg.target;
+    if (dlg) {
+        if (isSnapObject(dlg.target)) {
+            return dlg.target;
+        }
+        if (dlg.target instanceof IDE_Morph) {
+            return dlg.target.currentSprite;
+        }
     }
     throw new Error('script target cannot be found for orphaned block');
 };

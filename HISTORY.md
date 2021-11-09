@@ -24,6 +24,7 @@
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * changed the color model for pen/background colors from HSV to HSL
+    * allow block-instances to be dragged off from templates in the "export blocks" and "hide blocks" dialogs
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
@@ -56,6 +57,7 @@
 * gui: adjusted random color for new sprites to HSL model
 * objects: fixed keyboard entry for script variable getters
 * gui: changed edit project notes to always edit project motes instead of scene notes
+* byob, blocks, gui: allow block-instances to be dragged off from templates in the "export blocks" dialog
 
 ### 2021-11-08
 * objects: renamed some internal color methods

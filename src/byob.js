@@ -110,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-November-07';
+modules.byob = '2021-November-09';
 
 // Declarations
 
@@ -4140,11 +4140,11 @@ BlockExportDialogMorph.prototype.key = 'blockExport';
 
 // BlockExportDialogMorph instance creation:
 
-function BlockExportDialogMorph(serializer, blocks) {
-    this.init(serializer, blocks);
+function BlockExportDialogMorph(serializer, blocks, target) {
+    this.init(serializer, blocks, target);
 }
 
-BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
+BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
@@ -4153,7 +4153,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
     // initialize inherited properties:
     BlockExportDialogMorph.uber.init.call(
         this,
-        null, // target
+        target, // target
         () => this.exportBlocks(),
         null // environment
     );
@@ -4208,7 +4208,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                     () => contains(this.blocks, definition),
                     null,
                     null,
-                    block.fullImage()
+                    this.target ? block : block.fullImage()
                 );
                 checkBox.setPosition(new Point(
                     x,
