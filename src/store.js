@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-09';
+modules.store = '2021-November-10';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -408,7 +408,9 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.color) {
         scene.stage.color = this.loadColor(model.stage.attributes.color);
-        scene.stage.cachedColorDimensions = scene.stage.color.hsl();
+        scene.stage.cachedColorDimensions = scene.stage.color[
+            SpriteMorph.prototype.penColorModel
+        ]();
     }
     if (model.stage.attributes.scheduled === 'true') {
         scene.stage.fps = 30;
@@ -714,7 +716,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.color) {
             sprite.color = this.loadColor(model.attributes.color);
-            sprite.cachedColorDimensions = sprite.color.hsl();
+            sprite.cachedColorDimensions = sprite.color[sprite.penColorModel]();
         }
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
@@ -1453,7 +1455,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.color) {
             v.color = this.loadColor(model.attributes.color);
-            v.cachedColorDimensions = v.color.hsl();
+            v.cachedColorDimensions = v.color[v.penColorModel]();
         }
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;

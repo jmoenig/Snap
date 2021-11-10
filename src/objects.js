@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-09';
+modules.objects = '2021-November-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -185,6 +185,7 @@ SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
 SpriteMorph.prototype.showingExtensions = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
+SpriteMorph.prototype.penColorModel = 'hsl'; // or 'hsv'
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -1904,7 +1905,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.isCachingImage = true;
     this.isFreeForm = true;
-    this.cachedColorDimensions = this.color.hsl();
+    this.cachedColorDimensions = this.color[this.penColorModel]();
     this.isDraggable = true;
     this.isDown = false;
     this.heading = 90;
@@ -1935,7 +1936,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.primitivesCache = {};
     c.paletteCache = {};
     c.imageData = {};
-    c.cachedColorDimensions = c.color.hsl();
+    c.cachedColorDimensions = c.color[this.penColorModel]();
     arr = [];
     this.inheritedAttributes.forEach(att => arr.push(att));
     c.inheritedAttributes = arr;
@@ -4480,7 +4481,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
             this.rerender();
             this.silentGotoXY(x, y);
         }
-        this.cachedColorDimensions = this.color.hsl();
+        this.cachedColorDimensions = this.color[this.penColorModel]();
     }
 };
 
@@ -7861,7 +7862,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.setExtent(this.dimensions);
     this.isCachingImage = true;
-    this.cachedColorDimensions = this.color.hsl();
+    this.cachedColorDimensions = this.color[this.penColorModel]();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
@@ -9307,7 +9308,9 @@ StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
         this.color = aColor.copy();
         this.rerender();
-        this.cachedColorDimensions = this.color.hsl();
+        this.cachedColorDimensions = this.color[
+            SpriteMorph.prototype.penColorModel
+        ]();
     }
 };
 

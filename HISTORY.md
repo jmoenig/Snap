@@ -51,6 +51,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-11-10
+* objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
+
 ### 2021-11-09
 * objects, store: refactored block-migration mechanism
 * gui: changed display of project name in the IDE to PROJECT (SCENE)
