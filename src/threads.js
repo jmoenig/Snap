@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-08';
+modules.threads = '2021-November-10';
 
 var ThreadManager;
 var Process;
@@ -5051,7 +5051,7 @@ Process.prototype.reportAspect = function (aspect, location) {
     if (idx === 3) {
         return (1 - clr.a) * 100;
     }
-    return clr.hsl()[idx] * 100;
+    return clr[SpriteMorph.prototype.penColorModel]()[idx] * 100;
 };
 
 Process.prototype.colorAtSprite = function (sprite) {
