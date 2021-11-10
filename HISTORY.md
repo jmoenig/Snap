@@ -56,6 +56,7 @@
 * objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
 * gui, objects: new (hidden) pen-color-model preference setting (per session)
 * objects: changed the scale of the graphics color effect from 0-200 to 0-100
+* objects: refactored graphics color effect to reuse Morphic's conversion methods 
 
 ### 2021-11-09
 * objects, store: refactored block-migration mechanism

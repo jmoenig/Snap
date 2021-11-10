@@ -5168,73 +5168,30 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             saturationShift,
             brightnessShift
     ) {
-        var pixels, index, l, r, g, b, max, min, span,
-            h, s, v, i, f, p, q, t, newR, newG, newB;
-        pixels = imagedata.data;
-        for (index = 0, l = pixels.length; index < l; index += 4) {
-            r = pixels[index];
-            g = pixels[index + 1];
-            b = pixels[index + 2];
+        var pixels = imagedata.data,
+            l = pixels.length,
+            clr = new Color(),
+            index, dim;
 
-            max = Math.max(r, g, b);
-            min = Math.min(r, g, b);
-            span = max - min;
-            if (span === 0) {
-                h = s = 0;
-            } else {
-                if (max === r) {
-                    h = (60 * (g - b)) / span;
-                } else if (max === g) {
-                    h = 120 + ((60 * (b - r)) / span);
-                } else if (max === b) {
-                    h = 240 + ((60 * (r - g)) / span);
-                }
-                s = (max - min) / max;
+        for (index = 0; index < l; index += 4) {
+
+            clr.r = pixels[index];
+            clr.g = pixels[index + 1];
+            clr.b = pixels[index + 2];
+
+            dim = clr.hsv();
+            dim[0] = dim[0] * 100 + hueShift;
+            if (dim[0] < 0 || dim[0] > 100) { // wrap the hue
+                dim[0] = (dim[0] < 0 ? 100 : 0) + dim[0] % 100;
             }
-            if (h < 0) {
-                h += 360;
-            }
-            v = max / 255;
+            dim[0] = dim[0] / 100;
+            dim[1] = dim[1] + saturationShift / 100;
+            dim[2] = dim[2] + brightnessShift / 100;
 
-            h = (((h + hueShift * 360 / 100) % 360) + 360) % 360;
-            s = Math.max(0, Math.min(s + saturationShift / 100, 1));
-            v = Math.max(0, Math.min(v + brightnessShift / 100, 1));
-
-            i = Math.floor(h / 60);
-            f = (h / 60) - i;
-            p = v * (1 - s);
-            q = v * (1 - (s * f));
-            t = v * (1 - (s * (1 - f)));
-
-            if (i === 0 || i === 6) {
-                newR = v;
-                newG = t;
-                newB = p;
-            } else if (i === 1) {
-                newR = q;
-                newG = v;
-                newB = p;
-            } else if (i === 2) {
-                newR = p;
-                newG = v;
-                newB = t;
-            } else if (i === 3) {
-                newR = p;
-                newG = q;
-                newB = v;
-            } else if (i === 4) {
-                newR = t;
-                newG = p;
-                newB = v;
-            } else if (i === 5) {
-                newR = v;
-                newG = p;
-                newB = q;
-            }
-
-            pixels[index] = newR * 255;
-            pixels[index + 1] = newG * 255;
-            pixels[index + 2] = newB * 255;
+            clr.set_hsv.apply(clr, dim);
+            pixels[index] = clr.r;
+            pixels[index + 1] = clr.g;
+            pixels[index + 2] = clr.b;
         }
         return imagedata;
     }
