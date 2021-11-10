@@ -7862,7 +7862,9 @@ StageMorph.prototype.init = function (globals) {
 
     this.setExtent(this.dimensions);
     this.isCachingImage = true;
-    this.cachedColorDimensions = this.color[this.penColorModel]();
+    this.cachedColorDimensions = this.color[
+        SpriteMorph.prototype.penColorModel
+    ]();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
