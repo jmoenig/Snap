@@ -12,6 +12,8 @@
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
     * message and key hat blocks can be expanded to show an optional upvar referencing their event data
+    * BROADCAST blocks are expandable to feature a second input for message receivers, default is "all"
+    * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
     * added "enter" key to key-pressed dropdown
     * added "green flag" symbol to message drop-down
 * **Notable Changes:**
@@ -20,11 +22,10 @@
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
     * hidden blocks don't appear in search results / keyboard input options
     * codification and js-func blocks don't appear in search results unless enabled
-    * made BROADCAST blocks expandable and added a second input for message receivers, default is "all"
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * changed the color model for pen/background colors from HSV to HSL
-    * allow block-instances to be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
+    * changed the scale of the graphics color effect from 0-200 to 0-100
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
@@ -54,6 +55,7 @@
 ### 2021-11-10
 * objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
 * gui, objects: new (hidden) pen-color-model preference setting (per session)
+* objects: changed the scale of the graphics color effect from 0-200 to 0-100
 
 ### 2021-11-09
 * objects, store: refactored block-migration mechanism
