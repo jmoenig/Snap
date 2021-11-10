@@ -5162,7 +5162,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return imagedata;
     }
 
-    function transform_HSV(
+    function transform_colorDimensions(
             imagedata,
             hueShift,
             saturationShift,
@@ -5179,7 +5179,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             clr.g = pixels[index + 1];
             clr.b = pixels[index + 2];
 
-            dim = clr.hsv();
+            dim = clr[SpriteMorph.prototype.penColorModel]();
             dim[0] = dim[0] * 100 + hueShift;
             if (dim[0] < 0 || dim[0] > 100) { // wrap the hue
                 dim[0] = (dim[0] < 0 ? 100 : 0) + dim[0] % 100;
@@ -5188,7 +5188,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             dim[1] = dim[1] + saturationShift / 100;
             dim[2] = dim[2] + brightnessShift / 100;
 
-            clr.set_hsv.apply(clr, dim);
+            clr['set_' + SpriteMorph.prototype.penColorModel].apply(clr, dim);
             pixels[index] = clr.r;
             pixels[index + 1] = clr.g;
             pixels[index + 2] = clr.b;
@@ -5286,7 +5286,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         if (this.graphicsValues.color ||
                 this.graphicsValues.saturation ||
                 this.graphicsValues.brightness) {
-            imagedata = transform_HSV(
+            imagedata = transform_colorDimensions(
                 imagedata,
                 this.graphicsValues.color,
                 this.graphicsValues.saturation,
