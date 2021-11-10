@@ -4449,7 +4449,10 @@ SpriteMorph.prototype.setColorDimension = function (idx, num) {
         this.color.a = 1 - n / 100;
     } else {
         this.cachedColorDimensions[idx] = n / 100;
-        this.color.set_hsl.apply(this.color, this.cachedColorDimensions);
+        this.color['set_' + this.penColorModel].apply(
+            this.color,
+            this.cachedColorDimensions
+        );
     }
     if (!this.costume) {
         this.rerender();
@@ -9295,7 +9298,10 @@ StageMorph.prototype.setColorDimension = function (idx, num) {
         this.color.a = 1 - n / 100;
     } else {
         this.cachedColorDimensions[idx] = n / 100;
-        this.color.set_hsl.apply(this.color, this.cachedColorDimensions);
+        this.color['set_' + SpriteMorph.prototype.penColorModel].apply(
+            this.color,
+            this.cachedColorDimensions
+        );
     }
     this.rerender();
 };

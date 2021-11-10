@@ -53,6 +53,7 @@
 
 ### 2021-11-10
 * objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
+* gui, objects: new (hidden) pen-color-model preference setting (per session)
 
 ### 2021-11-09
 * objects, store: refactored block-migration mechanism

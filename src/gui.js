@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-09';
+modules.gui = '2021-November-10';
 
 // Declarations
 
@@ -3845,6 +3845,22 @@ IDE_Morph.prototype.settingsMenu = function () {
             true
         );
     }
+    addPreference(
+        'HSV pen color model',
+        () => SpriteMorph.prototype.penColorModel = 'hsv',
+        SpriteMorph.prototype.penColorModel === 'hsv',
+        null,
+        null,
+        true
+    );
+    addPreference(
+        'HSL pen color model',
+        () => SpriteMorph.prototype.penColorModel = 'hsl',
+        SpriteMorph.prototype.penColorModel === 'hsl',
+        null,
+        null,
+        true
+    );
     addPreference(
         'Input sliders',
         'toggleInputSliders',
