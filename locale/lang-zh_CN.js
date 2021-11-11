@@ -632,10 +632,10 @@ SnapTranslator.dict.zh_CN = {
         '抬笔',
     'set pen color to %clr':
         '把画笔的颜色值设定为 %clr',        
-    'change pen %hsva by %n':
-        '把画笔的 %hsva 增加 %n',
-    'set pen %hsva to %n':
-        '把画笔的 %hsva 设定为 %n',        
+    'change pen %clrdim by %n':
+        '把画笔的 %clrdim 增加 %n',
+    'set pen %clrdim to %n':
+        '把画笔的 %clrdim 设定为 %n',
     'hue':
         '色调',
     'transparency':
@@ -656,10 +656,10 @@ SnapTranslator.dict.zh_CN = {
         '把画笔的大小设定为 %n',
     'set background color to %clr':
         '把背景色设置为 %clr',
-    'change background %hsva by %n':
-        '把背景的 %hsva 增加 %n',        
-    'set background %hsva to %n':
-        '把背景的 %hsva 设定为 %n',        
+    'change background %clrdim by %n':
+        '把背景的 %clrdim 增加 %n',
+    'set background %clrdim to %n':
+        '把背景的 %clrdim 设定为 %n',        
     'stamp':
         '图章',
     'fill':
