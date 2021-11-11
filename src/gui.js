@@ -80,13 +80,13 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph*/
+BlockVisibilityDialogMorph, ThreadManager*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-10';
+modules.gui = '2021-November-11';
 
 // Declarations
 
@@ -4246,6 +4246,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         RingReporterSlotMorph.prototype.enableCommandDrops,
         'uncheck to disable\ndropping commands in reporter rings',
         'check to enable\ndropping commands in all rings',
+        true
+    );
+    addPreference(
+        'Disable click-to-run',
+        () => ThreadManager.prototype.disableClickToRun =
+            !ThreadManager.prototype.disableClickToRun,
+        ThreadManager.prototype.disableClickToRun,
+        'uncheck to enable\ndirectly running blocks\nby clicking on them',
+        'check to disable\ndirectly running blocks\nby clicking on them',
         true
     );
     menu.popup(world, pos);

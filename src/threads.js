@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-10';
+modules.threads = '2021-November-11';
 
 var ThreadManager;
 var Process;
@@ -194,8 +194,12 @@ function ThreadManager() {
 }
 
 ThreadManager.prototype.pauseCustomHatBlocks = false;
+ThreadManager.prototype.disableClickToRun = false;
 
 ThreadManager.prototype.toggleProcess = function (block, receiver) {
+    if (this.disableClickToRun) {
+        return;
+    }
     var active = this.findProcess(block, receiver);
     if (active) {
         active.stop();
