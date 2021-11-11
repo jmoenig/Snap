@@ -463,14 +463,14 @@ SnapTranslator.dict.nl = {
         'maak penkleur %clr',
     'set background color to %clr':
         'maak achtergrondkleur %clr',
-    'change pen %hsva by %n':
-        'verander pen %hsva met %n',
-    'set pen %hsva to %n':
-        'maak pen %hsva %n',
-    'change achtergrondkleur %hsva by %n':
-        'verander pen %hsva met %n',
-    'set achtergrondkleur %hsva to %n':
-        'maak pen %hsva %n',
+    'change pen %clrdim by %n':
+        'verander pen %clrdim met %n',
+    'set pen %clrdim to %n':
+        'maak pen %clrdim %n',
+    'change achtergrondkleur %clrdim by %n':
+        'verander pen %clrdim met %n',
+    'set achtergrondkleur %clrdim to %n':
+        'maak pen %clrdim %n',
     'pen %pen':
         'pen %pen',
     'change pen size by %n':
