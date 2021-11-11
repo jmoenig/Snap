@@ -2781,10 +2781,10 @@ SnapTranslator.dict.es = {
         '¿lápiz bajado?',
     'hue':
         'tonalidad',
-    'change pen %hsva by %n':
-        'cambiar %hsva del lápiz en %n',
-    'set pen %hsva to %n':
-        'fijar %hsva del lápiz a %n',
+    'change pen %clrdim by %n':
+        'cambiar %clrdim del lápiz en %n',
+    'set pen %clrdim to %n':
+        'fijar %clrdim del lápiz a %n',
     'write %s size %n':
         'escribir %s con tamaño %n',
     'paste on %spr':
