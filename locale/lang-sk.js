@@ -469,14 +469,14 @@ SnapTranslator.dict.sk = {
         'nastavi\u0165 farbu pera na %clr',
     'set background color to %clr':
         'nastav pozadie na %clr',
-    'change pen %hsva by %n':
-        'zme\u0148 pero %hsva o %n',
-    'change background %hsva by %n':
-        'zme\u0148 pozadie %hsva o %n',
-    'set pen %hsva to %n':
-        'nastav pero %hsva na %n',
-    'set background %hsva to %n':
-        'nastav pozadie %hsva na %n',
+    'change pen %clrdim by %n':
+        'zme\u0148 pero %clrdim o %n',
+    'change background %clrdim by %n':
+        'zme\u0148 pozadie %clrdim o %n',
+    'set pen %clrdim to %n':
+        'nastav pero %clrdim na %n',
+    'set background %clrdim to %n':
+        'nastav pozadie %clrdim na %n',
     'pen %pen':
         'pero %pen',
     'change pen size by %n':
