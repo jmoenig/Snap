@@ -469,14 +469,14 @@ SnapTranslator.dict.ru = {
         'установить цвет пера %clr',
     'set background color to %clr':
         'установить фоновый цвет %clr',
-     'change pen %hsva by %n':
-        'изменить %hsva пера на %n',
-    'change background %hsva by %n':
-        'изменить %hsva фона на %n',
-    'set pen %hsva to %n':
-        'установить %hsva пера %n',
-    'set background %hsva to %n':
-        'установить %hsva фона %n',
+     'change pen %clrdim by %n':
+        'изменить %clrdim пера на %n',
+    'change background %clrdim by %n':
+        'изменить %clrdim фона на %n',
+    'set pen %clrdim to %n':
+        'установить %clrdim пера %n',
+    'set background %clrdim to %n':
+        'установить %clrdim фона %n',
     'pen %pen':
         '%pen пера',
     'change pen size by %n':
