@@ -472,14 +472,14 @@ SnapTranslator.dict.pl = {
         'ustaw kolor pisaka %clr',
     'set background color to %clr':
         'ustaw kolor t\u0142a %clr',
-    'change pen %hsva by %n':
-        'zmie\u0144 pisak %hsva o %n',
-    'change background %hsva by %n':
-        'zmie\u0144 t\u0142o %hsva o %n',
-    'set pen %hsva to %n':
-        'ustaw pisak %hsva na %n',
-    'set background %hsva to %n':
-        'ustaw t\u0142o %hsva na %n',
+    'change pen %clrdim by %n':
+        'zmie\u0144 pisak %clrdim o %n',
+    'change background %clrdim by %n':
+        'zmie\u0144 t\u0142o %clrdim o %n',
+    'set pen %clrdim to %n':
+        'ustaw pisak %clrdim na %n',
+    'set background %clrdim to %n':
+        'ustaw t\u0142o %clrdim na %n',
     'pen %pen':
         'pisak %pen',
     'change pen size by %n':
