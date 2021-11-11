@@ -482,10 +482,10 @@ SnapTranslator.dict.ua = {
         'штамп',
     'fill':
         'заливка',
-    'change pen %hsva by %n':
-        'змінити властивість %hsva на %n',
-    'set pen %hsva to %n':
-        'встановити властивість %hsva як %n',
+    'change pen %clrdim by %n':
+        'змінити властивість %clrdim на %n',
+    'set pen %clrdim to %n':
+        'встановити властивість %clrdim як %n',
     'pen %pen':
         'олівець %pen',
     'write %s size %n':
