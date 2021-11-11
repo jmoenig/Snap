@@ -494,14 +494,14 @@ SnapTranslator.dict.he = {
         'עט_למטה?',
     'set background color to %clr':
         'קבע_צבע_רקע %clr',
-    'change pen %hsva by %n':
-        'שנה_עט_ב %hsva %n',
-    'change background %hsva by %n':
-        'שנה_רקע_ב %hsva %n',
-    'set pen %hsva to %n':
-        'קבע_עט_ל %hsva %n',
-    'set background %hsva to %n':
-        'קבע_רקע_ל %hsva  %n',
+    'change pen %clrdim by %n':
+        'שנה_עט_ב %clrdim %n',
+    'change background %clrdim by %n':
+        'שנה_רקע_ב %clrdim %n',
+    'set pen %clrdim to %n':
+        'קבע_עט_ל %clrdim %n',
+    'set background %clrdim to %n':
+        'קבע_רקע_ל %clrdim  %n',
     'pen %pen':
         'עט %pen',
     'fill':
