@@ -468,14 +468,14 @@ SnapTranslator.dict.no = {
         'sett pennfarge til %clr',
     'set background color to %clr':
         'sett bakgrunnsfarge til %clr',
-    'change pen %hsva by %n':
-        'endre penn %hsva med %n',
-    'change background %hsva by %n':
-        'endre bakgrunn %hsva med %n',
-    'set pen %hsva to %n':
-        'sett penn %hsva til %n',
-    'set background %hsva to %n':
-        'sett bakgrunn %hsva til %n',
+    'change pen %clrdim by %n':
+        'endre penn %clrdim med %n',
+    'change background %clrdim by %n':
+        'endre bakgrunn %clrdim med %n',
+    'set pen %clrdim to %n':
+        'sett penn %clrdim til %n',
+    'set background %clrdim to %n':
+        'sett bakgrunn %clrdim til %n',
     'pen %pen':
         'penn %pen',
     'change pen size by %n':
