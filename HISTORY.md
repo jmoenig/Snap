@@ -16,6 +16,8 @@
     * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
     * added "enter" key to key-pressed dropdown
     * added "green flag" symbol to message drop-down
+    * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSL
+    * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -24,7 +26,7 @@
     * codification and js-func blocks don't appear in search results unless enabled
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
-    * changed the color model for pen/background colors from HSV to HSL
+    * changed the default color model for pen/background colors and graphic effects from HSV to HSL
     * changed the scale of the graphics color effect from 0-200 to 0-100
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
@@ -57,6 +59,7 @@
 * German translation update, changed %hsva -> %clrdim
 * Brazilian Portuguese translation update, thank you, Cassiano D'Andrea!!
 * threads, gui: experimental "disalbe click-to-run" preference
+* gui, scenes, store: made "pen color model" and "disable click-to-run" settings persistent per scene
 
 ### 2021-11-10
 * objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'

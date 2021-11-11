@@ -3846,22 +3846,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     addPreference(
-        'HSV pen color model',
-        () => SpriteMorph.prototype.penColorModel = 'hsv',
-        SpriteMorph.prototype.penColorModel === 'hsv',
-        null,
-        null,
-        true
-    );
-    addPreference(
-        'HSL pen color model',
-        () => SpriteMorph.prototype.penColorModel = 'hsl',
-        SpriteMorph.prototype.penColorModel === 'hsl',
-        null,
-        null,
-        true
-    );
-    addPreference(
         'Input sliders',
         'toggleInputSliders',
         MorphicPreferences.useSliderForInput,
@@ -4248,6 +4232,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\ndropping commands in all rings',
         true
     );
+
+    addPreference(
+        'HSV pen color model',
+        () => SpriteMorph.prototype.penColorModel =
+            SpriteMorph.prototype.penColorModel === 'hsv' ? 'hsl' : 'hsv',
+        SpriteMorph.prototype.penColorModel === 'hsv',
+        'uncheck to switch pen colors\nand graphic effects\nto HSL (default)',
+        'check to switch pen colors\nand graphic effects\nfrom HSL to HSV',
+        false
+    );
+
     addPreference(
         'Disable click-to-run',
         () => ThreadManager.prototype.disableClickToRun =
@@ -4255,7 +4250,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         ThreadManager.prototype.disableClickToRun,
         'uncheck to enable\ndirectly running blocks\nby clicking on them',
         'check to disable\ndirectly running blocks\nby clicking on them',
-        true
+        false
     );
     menu.popup(world, pos);
 };
