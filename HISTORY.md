@@ -52,6 +52,9 @@
     * German
     * Chinese, thanks, Simon!
 
+### 2021-11-11
+* German translation update, changed %hsva -> %clrdim
+
 ### 2021-11-10
 * objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
 * gui, objects: new (hidden) pen-color-model preference setting (per session)
