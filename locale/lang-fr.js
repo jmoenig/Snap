@@ -417,14 +417,14 @@ SnapTranslator.dict.fr = {
         'mettre la couleur %clr pour le stylo',
     'change pen color by %n':
         'ajouter %n \u00E0 la couleur du stylo',
-    'set pen %hsva to %n':
-        'mettre la %hsva du stylo à %n',
+    'set pen %clrdim to %n':
+        'mettre la %clrdim du stylo à %n',
     'hue':
         'teinte',
     'transparency':
         'transparence',
-    'change pen %hsva by %n':
-        'ajouter à la %hsva du stylo %n',
+    'change pen %clrdim by %n':
+        'ajouter à la %clrdim du stylo %n',
 
     'change pen shade by %n':
         'ajouter %n \u00E0 l\u0027intensit\u00E9 du stylo ',
