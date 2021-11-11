@@ -469,14 +469,14 @@ SnapTranslator.dict.pt = {
         'altera a cor da tua caneta para %clr',
     'set background color to %clr':
         'altera a cor do fundo para %clr',
-    'change pen %hsva by %n':
-        'adiciona a %hsva da tua caneta o valor %n',
-    'change background %hsva by %n':
-        'adiciona a %hsva do fundo o valor %n',
-    'set pen %hsva to %n':
-        'altera %hsva da tua caneta para %n',
-    'set background %hsva to %n':
-        'altera %hsva do fundo para %n',
+    'change pen %clrdim by %n':
+        'adiciona a %clrdim da tua caneta o valor %n',
+    'change background %clrdim by %n':
+        'adiciona a %clrdim do fundo o valor %n',
+    'set pen %clrdim to %n':
+        'altera %clrdim da tua caneta para %n',
+    'set background %clrdim to %n':
+        'altera %clrdim do fundo para %n',
     'pen %pen':
         '%pen da tua caneta',
     'change pen size by %n':
