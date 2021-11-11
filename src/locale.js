@@ -419,11 +419,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        'Aldo von Wangenheim',
+        "Aldo von Wangenheim, Cassiano D'Andrea",
     'translator_e-mail':
-        'awangenh@inf.ufsc.br',
+        'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2014-04-20'
+        '2021-11-11',
 };
 
 SnapTranslator.dict.bn = {
