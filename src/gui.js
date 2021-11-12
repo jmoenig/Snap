@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-11';
+modules.gui = '2021-November-12';
 
 // Declarations
 
@@ -4234,12 +4234,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
 
     addPreference(
-        'HSV pen color model',
+        'HSL pen color model',
         () => SpriteMorph.prototype.penColorModel =
-            SpriteMorph.prototype.penColorModel === 'hsv' ? 'hsl' : 'hsv',
-        SpriteMorph.prototype.penColorModel === 'hsv',
-        'uncheck to switch pen colors\nand graphic effects\nto HSL (default)',
-        'check to switch pen colors\nand graphic effects\nfrom HSL to HSV',
+            SpriteMorph.prototype.penColorModel === 'hsl' ? 'hsv' : 'hsl',
+        SpriteMorph.prototype.penColorModel === 'hsl',
+        'uncheck to switch pen colors\nand graphic effects\nto HSV',
+        'check to switch pen colors\nand graphic effects\nfrom to HSL',
         false
     );
 
