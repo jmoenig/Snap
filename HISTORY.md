@@ -58,6 +58,7 @@
 * store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
 * gui, objects, scenes, store: reverted to HSV as default pen color model
 * store: fixed a serialization conflict for global variables referencing the stage
+* gui: made HSL preference setting hidden behind shift-click
 
 ### 2021-11-11
 * German translation update, changed %hsva -> %clrdim
