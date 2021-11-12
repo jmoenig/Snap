@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-11';
+modules.store = '2021-November-12';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -675,8 +675,8 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     }
     model.palette = model.childNamed('palette');
     if (model.palette) {
-        SpriteMorph.prototype.customCategories = this.loadPalette(
-            model.palette
+        this.loadPalette(model.palette).forEach((value, key) =>
+            SpriteMorph.prototype.customCategories.set(key, value)
         );
     }
     model.removeChild(model.palette);

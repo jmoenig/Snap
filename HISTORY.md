@@ -55,6 +55,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-11-12
+* store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
+
 ### 2021-11-11
 * German translation update, changed %hsva -> %clrdim
 * Brazilian Portuguese translation update, thank you, Cassiano D'Andrea!!
