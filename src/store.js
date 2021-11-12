@@ -1745,8 +1745,8 @@ Scene.prototype.toXML = function (serializer) {
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
-            '<variables>%</variables>' +
             '%' + // stage
+            '<variables>%</variables>' +
             '</scene>',
         this.name || localize('Untitled'),
         this.unifiedPalette ? ' palette="single"' : '',
@@ -1763,8 +1763,8 @@ Scene.prototype.toXML = function (serializer) {
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),
-        serializer.store(this.globalVariables),
-        serializer.store(this.stage)
+        serializer.store(this.stage),
+        serializer.store(this.globalVariables)
     );
     return xml;
 };
