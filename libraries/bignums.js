@@ -75,6 +75,7 @@ function makeGlobalObject () {
     window.bigNumbers = {
         originalEvaluate: InputSlotMorph.prototype.evaluate,
         originalChangeVar: VariableFrame.prototype.changeVar,
+        originalProcessInput: CursorMorph.prototype.processInput,
         originalPrims: {
             reportBasicSum: Process.prototype.reportBasicSum,
             reportBasicDifference: Process.prototype.reportBasicDifference,
@@ -131,6 +132,76 @@ function loadBlocks (useBigNums) {
                 }
 
             }
+        };
+        CursorMorph.prototype.processInput = function (event) {
+            // handle content change.
+            var target = this.target,
+                textarea = this.textarea,
+                filteredContent,
+                caret;
+
+            // filter invalid chars for numeric fields
+            function filterText (content) {
+                var hasE = false,
+                    result = '',
+                    i, ch, valid;
+                for (i = 0; i < content.length; i += 1) {
+                    ch = content.charAt(i);
+                    valid = (
+                        ('0' <= ch && ch <= '9') || // digits
+                        (ch.toLowerCase() === 'e') || // scientific notation
+                        (ch.toLowerCase() === 'i') || // complex a+bi
+                        (contains(['-', '+', '*', '/'], ch))  || // '-' '+' '*' '/'
+                        (ch === '.') // '.'
+                    );
+                    if (valid) {
+                        result += ch;
+                        if (ch.toLowerCase() === 'e') {
+                            hasE = true;
+                        }
+                    }
+                }
+                return result;
+            }
+
+            if (target.isNumeric) {
+                filteredContent = filterText(textarea.value);
+            } else {
+                filteredContent = textarea.value;
+            }
+
+            if (filteredContent.length < textarea.value.length) {
+                textarea.value = filteredContent;
+                caret = Math.min(textarea.selectionStart, filteredContent.length);
+                textarea.selectionEnd = caret;
+                textarea.selectionStart = caret;
+            }
+            // target morph: copy the content and selection status to the target.
+            target.text = filteredContent;
+
+            if (textarea.selectionStart === textarea.selectionEnd) {
+                target.startMark = null;
+                target.endMark = null;
+            } else {
+                if (textarea.selectionDirection === 'backward') {
+                    target.startMark = textarea.selectionEnd;
+                    target.endMark = textarea.selectionStart;
+                } else {
+                    target.startMark = textarea.selectionStart;
+                    target.endMark = textarea.selectionEnd;
+                }
+            }
+            target.changed();
+            target.fixLayout();
+            target.rerender();
+
+            // cursor morph: copy the caret position to cursor morph.
+            this.gotoSlot(textarea.selectionStart);
+
+            this.updateTextAreaPosition();
+
+            // the "reactToInput" event gets triggered AFTER "reactToKeystroke"
+            this.target.escalateEvent('reactToInput', event);
         };
         Object.assign(Process.prototype, {
             reportBasicSum: function (a, b) {
@@ -327,6 +398,7 @@ function loadBlocks (useBigNums) {
     } else {
         InputSlotMorph.prototype.evaluate = window.bigNumbers.originalEvaluate;
         VariableFrame.prototype.changeVar = window.bigNumbers.originalChangeVar;
+        CursorMorph.prototype.processInput = window.bigNumbers.originalProcessInput;
         Object.assign(Process.prototype, originalPrims);
     }
     // +++ done = true;
