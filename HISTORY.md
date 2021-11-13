@@ -26,7 +26,6 @@
     * codification and js-func blocks don't appear in search results unless enabled
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
-    * changed the default color model for pen/background colors and graphic effects from HSV to HSL
     * changed the scale of the graphics color effect from 0-200 to 0-100
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
@@ -54,6 +53,12 @@
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+
+### 2021-11-12
+* store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
+* gui, objects, scenes, store: reverted to HSV as default pen color model
+* store: fixed a serialization conflict for global variables referencing the stage
+* gui: made HSL preference setting hidden behind shift-click
 
 ### 2021-11-11
 * German translation update, changed %hsva -> %clrdim

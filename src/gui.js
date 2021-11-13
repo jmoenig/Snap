@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-11';
+modules.gui = '2021-November-12';
 
 // Declarations
 
@@ -4234,13 +4234,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
 
     addPreference(
-        'HSV pen color model',
+        'HSL pen color model',
         () => SpriteMorph.prototype.penColorModel =
-            SpriteMorph.prototype.penColorModel === 'hsv' ? 'hsl' : 'hsv',
-        SpriteMorph.prototype.penColorModel === 'hsv',
-        'uncheck to switch pen colors\nand graphic effects\nto HSL (default)',
-        'check to switch pen colors\nand graphic effects\nfrom HSL to HSV',
-        false
+            SpriteMorph.prototype.penColorModel === 'hsl' ? 'hsv' : 'hsl',
+        SpriteMorph.prototype.penColorModel === 'hsl',
+        'uncheck to switch pen colors\nand graphic effects\nto HSV',
+        'check to switch pen colors\nand graphic effects\nfrom to HSL',
+        true
     );
 
     addPreference(
@@ -4731,7 +4731,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev211110 -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev211112 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

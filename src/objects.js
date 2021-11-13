@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-10';
+modules.objects = '2021-November-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -185,7 +185,7 @@ SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
 SpriteMorph.prototype.showingExtensions = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
-SpriteMorph.prototype.penColorModel = 'hsl'; // or 'hsv'
+SpriteMorph.prototype.penColorModel = 'hsv'; // or 'hsl'
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 

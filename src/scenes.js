@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-November-11';
+modules.scenes = '2021-November-12';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -140,7 +140,7 @@ function Scene(aStageMorph) {
     this.enableLiveCoding = false;
     this.enableHyperOps = true;
     this.disableClickToRun = false;
-    this.penColorModel = 'hsl'; // can also bei 'hsv'
+    this.penColorModel = 'hsv'; // can also bei 'hsl'
 
     // for deserializing - do not persist
     this.spritesDict = {};
