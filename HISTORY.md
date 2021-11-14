@@ -55,6 +55,9 @@
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
 ### 2021-11-12
+* locale: contextualize translations
+
+### 2021-11-12
 * store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
 * gui, objects, scenes, store: reverted to HSV as default pen color model
 * store: fixed a serialization conflict for global variables referencing the stage

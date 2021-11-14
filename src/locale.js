@@ -44,13 +44,13 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains*/
+/*global modules, contains, SpriteMorph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff
 
-modules.locale = '2021-November-11';
+modules.locale = '2021-November-14';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -67,10 +67,11 @@ function Localizer(language, dict) {
 }
 
 Localizer.prototype.translate = function (string) {
+    var phrase = this.contextualize(string);
     return Object.prototype.hasOwnProperty.call(
         this.dict[this.language],
-        string
-    ) ? this.dict[this.language][string] : string;
+        phrase
+    ) ? this.dict[this.language][phrase] : phrase;
 };
 
 Localizer.prototype.languages = function () {
@@ -114,6 +115,16 @@ Localizer.prototype.unload = function () {
             }
         }
     });
+};
+
+Localizer.prototype.contextualize = function (string) {
+    switch (string) {
+    case 'brightness':
+        return SpriteMorph.prototype.penColorModel === 'hsl' ?
+            'lightness' : string;
+    default:
+        return string;
+    }
 };
 
 // SnapTranslator initialization
