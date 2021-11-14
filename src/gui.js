@@ -4241,8 +4241,8 @@ IDE_Morph.prototype.settingsMenu = function () {
             this.refreshIDE();
         },
         SpriteMorph.prototype.penColorModel === 'hsl',
-        'uncheck to switch pen colors\nand graphic effects\nto HSV',
-        'check to switch pen colors\nand graphic effects\n to HSL',
+        'uncheck to switch pen colors\nand graphic effects to HSV',
+        'check to switch pen colors\nand graphic effects to HSL',
         false
     );
 
