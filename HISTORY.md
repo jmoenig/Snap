@@ -16,7 +16,7 @@
     * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
     * added "enter" key to key-pressed dropdown
     * added "green flag" symbol to message drop-down
-    * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSL
+    * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
     * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
 * **Notable Changes:**
     * saved projects remember the last edited sprite
@@ -56,6 +56,7 @@
 
 ### 2021-11-12
 * locale: contextualize translations
+* gui: refresh IDE when changing the pen color model
 
 ### 2021-11-12
 * store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
