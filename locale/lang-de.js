@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-11', // this, too, will appear in the Translators tab
+        '2021-11-14', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1805,6 +1805,8 @@ SnapTranslator.dict.de = {
     'saturation':
         'Sättigung',
     'brightness':
+        'Helligkeit',
+    'lightness':
         'Helligkeit',
     'transparency':
         'Transparenz',
