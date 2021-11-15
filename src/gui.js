@@ -3815,6 +3815,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to hide extension\nprimitives in the palette',
         'check to show extension\nprimitives in the palette'
     );
+    /*
     addPreference(
         'Add scenes',
         () => this.isAddingScenes = !this.isAddingScenes,
@@ -3823,6 +3824,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to add other projects,\nto this one',
         true
     );
+    */
     if (isRetinaSupported()) {
         addPreference(
             'Retina display support',

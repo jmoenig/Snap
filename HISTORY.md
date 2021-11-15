@@ -61,6 +61,7 @@
 * German translation update
 * gui: made "Hyper blocks support" setting hidden in the gears menu
 * gui, objects, threads, store, translations: Removed old hidden "prefer smooth animations" setting
+* gui: removed experimental hidden "add scenes" option from the settings menus
 
 ### 2021-11-14
 * locale: contextualize translations
