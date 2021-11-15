@@ -1077,14 +1077,6 @@ SnapTranslator.dict.de = {
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
         'ausschalten f\u00fcr kurzen\nInput-Dialog',
-    'Virtual keyboard':
-        'Virtuelle Tastatur',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
     'JavaScript extensions':
         'JavaScript Erweiterungen',
     'check to support\nnative JavaScript functions':

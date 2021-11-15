@@ -3940,14 +3940,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to hide (+) symbols\nin block prototype labels'
     );
     addPreference(
-        'Virtual keyboard',
-        'toggleVirtualKeyboard',
-        MorphicPreferences.useVirtualKeyboard,
-        'uncheck to disable\nvirtual keyboard support\nfor mobile devices',
-        'check to enable\nvirtual keyboard support\nfor mobile devices',
-        true
-    );
-    addPreference(
         'Clicking sound',
         () => {
             BlockMorph.prototype.toggleSnapSound();
@@ -6120,11 +6112,6 @@ IDE_Morph.prototype.togglePlainPrototypeLabels = function () {
 IDE_Morph.prototype.togglePreferEmptySlotDrops = function () {
     ScriptsMorph.prototype.isPreferringEmptySlots =
         !ScriptsMorph.prototype.isPreferringEmptySlots;
-};
-
-IDE_Morph.prototype.toggleVirtualKeyboard = function () {
-    MorphicPreferences.useVirtualKeyboard =
-        !MorphicPreferences.useVirtualKeyboard;
 };
 
 IDE_Morph.prototype.toggleInputSliders = function () {
