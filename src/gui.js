@@ -1276,6 +1276,14 @@ IDE_Morph.prototype.createCategories = function () {
             if (cat.state) {
                 cat.scrollIntoView();
             }
+
+            // indicate whether a category is empty of blocks to show
+            // currently only supported in unified palette mode
+            if (myself.currentSprite.emptyCategoriesCache[cat.category]) {
+                cat.disable();
+            } else {
+                cat.enable();
+            }
         });
     };
 
@@ -1322,6 +1330,7 @@ IDE_Morph.prototype.createCategories = function () {
             true // has preview
         );
 
+        button.category = category;
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -1358,6 +1367,7 @@ IDE_Morph.prototype.createCategories = function () {
             true // has preview
         );
 
+        button.category = category;
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -2806,6 +2816,7 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     }
     this.currentSprite = sprite;
     this.scene.currentSprite = sprite;
+    this.categories.refresh(); // indicate empty categories in unified palette
     this.createPalette();
     this.createSpriteBar();
     this.createSpriteEditor();
@@ -6256,6 +6267,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
 
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.setUnifiedPalette(!this.scene.unifiedPalette);
+    this.categories.refresh(); // update empty categories in single palette mode
 };
 
 IDE_Morph.prototype.setUnifiedPalette = function (bool) {

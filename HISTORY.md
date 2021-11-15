@@ -68,6 +68,7 @@
 * gui, translations: removed old hidden "virtual keyboard" setting
 * gui: removed old hidden "project urls" setting
 * gui: removed hidden "cache inputs" setting (only used for debugging the evaluator)
+* gui, objects: indicate empty categories in single-palette mode 
 
 ### 2021-11-14
 * locale: contextualize translations
