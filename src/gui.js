@@ -232,7 +232,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
-    this.projectsInURLs = false;
     this.applySavedSettings();
 
     // additional properties:
@@ -2881,7 +2880,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
-        longurls = this.getSetting('longurls'),
         plainprototype = this.getSetting('plainprototype'),
         keyboard = this.getSetting('keyboard'),
         tables = this.getSetting('tables'),
@@ -2923,13 +2921,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
-    }
-
-    // project data in URLs
-    if (longurls) {
-        this.projectsInURLs = true;
-    } else {
-        this.projectsInURLs = false;
     }
 
     // keyboard editing
@@ -4008,21 +3999,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         ScriptsMorph.prototype.enableNestedAutoWrapping,
         'uncheck to confine auto-wrapping\nto top-level block stacks',
         'check to enable auto-wrapping\ninside nested block stacks',
-        true
-    );
-    addPreference(
-        'Project URLs',
-        () => {
-            this.projectsInURLs = !this.projectsInURLs;
-            if (this.projectsInURLs) {
-                this.saveSetting('longurls', true);
-            } else {
-                this.removeSetting('longurls');
-            }
-        },
-        this.projectsInURLs,
-        'uncheck to disable\nproject data in URLs',
-        'check to enable\nproject data in URLs',
         true
     );
     addPreference(
@@ -5112,7 +5088,6 @@ IDE_Morph.prototype.exportProject = function (name) {
             str = this.serializer.serialize(
                 new Project(this.scenes, this.scene)
             );
-            this.setURL('#open:data:text/xml,' + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
             this.recordSavedChanges();
@@ -5791,7 +5766,6 @@ IDE_Morph.prototype.openProjectName = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        this.setURL('#open:' + str);
     }
 };
 
@@ -5850,11 +5824,6 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
     if (msg) {
         this.stage.fireChangeOfSceneEvent(msg);
     }
-};
-
-IDE_Morph.prototype.setURL = function (str) {
-    // Set the URL to a project's XML contents
-    location.hash = this.projectsInURLs ? str : '';
 };
 
 IDE_Morph.prototype.saveFileAs = function (

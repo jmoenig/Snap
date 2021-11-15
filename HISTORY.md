@@ -36,7 +36,8 @@
     * blocked xhr requests to from Snap! to s.b.e
     * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
     * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
-    * removed old hidden "virtual keyboard" setting
+    * removed old hidden "virtual keyboard" setting (was no longer used for the last years)
+    * removed old hidden "project urls" setting
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -64,6 +65,7 @@
 * gui, objects, threads, store, translations: Removed old hidden "prefer smooth animations" setting
 * gui: removed experimental hidden "add scenes" option from the settings menus
 * gui, translations: removed old hidden "virtual keyboard" setting
+* gui: removed old hidden "project urls" setting
 
 ### 2021-11-14
 * locale: contextualize translations
