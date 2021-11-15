@@ -3952,6 +3952,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\nIDE animations',
         true
     );
+    /*
     addPreference(
         'Cache Inputs',
         () => {
@@ -3963,6 +3964,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to cache inputs\nboosts recursion',
         true
     );
+    */
     addPreference(
         'Rasterize SVGs',
         () => MorphicPreferences.rasterizeSVGs =

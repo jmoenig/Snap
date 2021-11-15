@@ -38,6 +38,7 @@
     * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
     * removed old hidden "virtual keyboard" setting (was no longer used for the last years)
     * removed old hidden "project urls" setting
+    * removed hidden "cache inputs" setting (only used for debugging the evaluator)
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -66,6 +67,7 @@
 * gui: removed experimental hidden "add scenes" option from the settings menus
 * gui, translations: removed old hidden "virtual keyboard" setting
 * gui: removed old hidden "project urls" setting
+* gui: removed hidden "cache inputs" setting (only used for debugging the evaluator)
 
 ### 2021-11-14
 * locale: contextualize translations
