@@ -55,7 +55,10 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
-### 2021-11-12
+### 2021-11-15
+* German translation update
+
+### 2021-11-14
 * locale: contextualize translations
 * gui: refresh IDE when changing the pen color model
 

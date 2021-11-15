@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-14', // this, too, will appear in the Translators tab
+        '2021-11-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1193,6 +1193,18 @@ SnapTranslator.dict.de = {
         'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
     'check to show\ncategory names\nin the palette':
         'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
+    'HSL pen color model':
+        'HSL Farbmodell',
+     'uncheck to switch pen colors\nand graphic effects to HSV':
+        'ausschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSV zurückzusetzen',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'einschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSL zu setzen',
+    'Disable click-to-run':
+        'Block-Klicks deaktivieren',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
 
     // inputs
     'with inputs':
