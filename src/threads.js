@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-11';
+modules.threads = '2021-November-15';
 
 var ThreadManager;
 var Process;
@@ -2473,9 +2473,6 @@ Process.prototype.doWarp = function (body) {
                 this.homeContext.receiver.startWarp();
             }
             stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-            if (stage) {
-                stage.fps = 0; // variable frame rate
-            }
         }
 
         // this.pushContext('doYield'); // no longer needed in Morphic2
@@ -2503,9 +2500,6 @@ Process.prototype.doStopWarping = function () {
             this.homeContext.receiver.endWarp();
         }
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            stage.fps = stage.frameRate; //  back to fixed frame rate
-        }
     }
 };
 

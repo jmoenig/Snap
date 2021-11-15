@@ -35,6 +35,7 @@
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
     * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
+    * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -59,6 +60,7 @@
 ### 2021-11-15
 * German translation update
 * gui: made "Hyper blocks support" setting hidden in the gears menu
+* gui, objects, threads, store, translations: Removed old hidden "prefer smooth animations" setting
 
 ### 2021-11-14
 * locale: contextualize translations

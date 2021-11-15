@@ -1153,12 +1153,6 @@ SnapTranslator.dict.de = {
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
     'check to disallow\nscript reentrance':
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
-    'Prefer smooth animations':
-        'Fixe Framerate',
-    'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
-    'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
         'Flache Pinselstriche',
     'check for flat ends of lines':

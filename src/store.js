@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-12';
+modules.store = '2021-November-15';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -397,7 +397,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     /* Stage */
 
     model.stage = model.scene.require('stage');
-    StageMorph.prototype.frameRate = 0;
     scene.stage.remixID = remixID;
 
     if (Object.prototype.hasOwnProperty.call(
@@ -414,10 +413,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         scene.stage.cachedColorDimensions = scene.stage.color[
             SpriteMorph.prototype.penColorModel
         ]();
-    }
-    if (model.stage.attributes.scheduled === 'true') {
-        scene.stage.fps = 30;
-        StageMorph.prototype.frameRate = 30;
     }
     if (model.stage.attributes.volume) {
         scene.stage.volume = +model.stage.attributes.volume;
@@ -1788,7 +1783,6 @@ StageMorph.prototype.toXML = function (serializer) {
             'codify="@" ' +
             'inheritance="@" ' +
             'sublistIDs="@" ' +
-            'scheduled="@" ~>' +
             '<pentrails>$</pentrails>' +
             '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
@@ -1818,7 +1812,6 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,
-        StageMorph.prototype.frameRate !== 0,
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
 
         // current costume, if it's not in the wardrobe
