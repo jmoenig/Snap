@@ -3088,7 +3088,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
         showCategories = this.parentThatIsA(IDE_Morph).scene.showCategories;
-        blocks = SpriteMorph.prototype.allCategories().reduce(
+        blocks = SpriteMorph.prototype.allCategories().reduce( // +++
             (blocks, category) => {
                 let header = [this.categoryText(category), '-'],
                     primitives = this.getPrimitiveTemplates(category),

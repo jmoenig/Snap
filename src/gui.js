@@ -2789,7 +2789,7 @@ IDE_Morph.prototype.stopAllScripts = function () {
 
 IDE_Morph.prototype.selectSprite = function (sprite) {
     // prevent switching to another sprite if a block editor or a block
-    // visivility dialog box is open
+    // visibility dialog box is open
     // so local blocks of different sprites don't mix
     if (
         detect(
