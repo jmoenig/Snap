@@ -1782,7 +1782,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'hyperops="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
-            'sublistIDs="@" ' +
+            'sublistIDs="@" ~>' +
             '<pentrails>$</pentrails>' +
             '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
