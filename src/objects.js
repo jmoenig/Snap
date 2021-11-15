@@ -1870,7 +1870,6 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
-    this.emptyCategoriesCache = {}; // not to be serialized;
     this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
 
@@ -1936,7 +1935,6 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.freqPlayer = null;
     c.primitivesCache = {};
     c.paletteCache = {};
-    c.emptyCategoriesCache = {};
     c.imageData = {};
     c.cachedColorDimensions = c.color[this.penColorModel]();
     arr = [];
@@ -3013,14 +3011,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
         searchButton,
         makeButton;
 
-    function isEmptyCategory(blocks) {
-        return blocks.filter(each =>
-            each instanceof BlockMorph && !myself.isHidingBlock(each)
-        ).length === 0;
-    }
-
-    this.emptyCategoriesCache = {};
-
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
@@ -3111,11 +3101,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 if (!showCategories && category !== 'variables') {
                     primitives = primitives.filter(each =>
                         each !== '-' && each !== '=');
-                }
-
-                // update the empty categories cache
-                if (isEmptyCategory(primitives) &&  isEmptyCategory(customs)) {
-                    this.emptyCategoriesCache[category] = true;
                 }
 
                 return blocks.concat(
@@ -7787,7 +7772,6 @@ StageMorph.prototype.init = function (globals) {
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
-    this.emptyCategoriesCache = {}; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
