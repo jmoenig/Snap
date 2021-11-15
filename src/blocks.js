@@ -3101,8 +3101,13 @@ BlockMorph.prototype.userMenu = function () {
                 this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
                     IDE_Morph
             );
+            /* UCB Script Pic Edit:
+             *  - access XML script of the current block using IDE Serializer
+             *  - pass in that XML to the scriptPic() method
+             */
+			var script = ide.serializer.serialize(top);
             ide.saveCanvasAs(
-                top.scriptPic(),
+                top.scriptPic(script),
                 (ide.projectName || localize('untitled')) + ' ' +
                     localize('script pic')
             );
@@ -4269,7 +4274,13 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
     return trgt;
 };
 
-BlockMorph.prototype.scriptPic = function () {
+/* UCB Script Pic Edit: 
+ *  - added parameter to scriptPic() function
+ *  - function now processes XML script passed in as parameter
+ *      and inserts it as iTxt metadata chunk into PNG script pic
+ *  - need to work around complications with custom block definitions
+ */
+BlockMorph.prototype.scriptPic = function (script) {
     // answer a canvas image that also includes comments
     var scr = this.fullImage(),
         fb = this.stackFullBounds(),
@@ -4284,7 +4295,61 @@ BlockMorph.prototype.scriptPic = function () {
         )
     );
     ctx.drawImage(scr, 0, 0);
-    return pic;
+
+    /* UCB Script Pic Edit:
+     *  - Incorporated code provided by Snap-Forum user, Dardoro
+     */
+	// begin Dardoro code
+	const inbDelim = "Snap\tBlocks\tEmbedded"; //in-band XML delimeter
+	function crc32(str, crc) {
+		let table = [...Array(256).keys()].map(it => 
+								[...Array(8)].reduce((cc) => 
+											(cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
+		);
+		crc = [...str].reduce((crc, ch) => { 
+			return (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff]
+		}, (crc ||= 0) ^ (-1));
+		return ( crc ^ (-1) ) >>> 0;
+	};
+	function arr2Str(arr) { 
+		return arr.reduce((res, byte) => res + String.fromCharCode( byte), '');
+	};
+	function int2BStr(val) { 
+		return arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer) ).reverse());
+	};
+	function buildChunk(type , data) { 
+		let res=type+data; 
+		return int2BStr(data.length)+res+int2BStr(crc32(res));
+	};
+	function SaveData(dataURL, name) { 
+		return Object.assign(document.createElement("a"), 
+										{download: name, href: dataURL}).click(); 
+										// .click() simulates getting the script pic
+	};
+	
+	let parts = pic.toDataURL("image/png").split(",");
+	let bPart = atob(parts[1]).split("");
+	let newChunk = buildChunk("iTXt", "Snap!_XML\0\0\0\0\0"+inbDelim+script+inbDelim);
+	bPart.splice(-12, 0, ...newChunk);
+	parts[1]= btoa(bPart.join(""));
+	let name = top?.definition?.spec || top.selector;
+	let newPic = SaveData(parts.join(','), name+".png");
+    // SaveData(parts.join(','), name+".png");
+    // this is the original line of code ^^ that i tried to work around to get the canvas
+	
+    // end Dardoro code
+
+	return newPic;
+	// return pic;
+	
+    /* UCB Script Pic Edit:
+     *  - removed original "return pic" to only return encoded script pic,
+     *      otherwise two files are downloaded
+     *  - instead, right now, downloaded PNG is provided by the ".click()" method
+     *      within the SaveData helper method
+     *  - need to figure out how to return canvas from this function because it 
+     *      leads to unintended behavior when handling custom blocks
+     */
 };
 
 BlockMorph.prototype.fullImage = function () {

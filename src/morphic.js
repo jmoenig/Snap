@@ -11661,12 +11661,70 @@ HandMorph.prototype.processDrop = function (event) {
         while (!trg.droppedImage) {
             trg = trg.parent;
         }
+        
+        /* UCB Script Pic Edit:
+         *  - Added new process for accepting images dropped on script window
+         *  - Images are searched for XML metadata, and if present, users are able to:
+         *      1. Process the script as an XML file and load script
+         *      2. Process the script as an image and load it into the costumes
+         *  - Base code credit given do Snap-Forum user Dardoro
+         */
+
+        function arr2Str(arr) { 
+            return arr.reduce((acc, b) => acc + String.fromCharCode(b), "");
+        };
+        
+        let ide = world.children[0],
+            url = event.dataTransfer?.getData( "text/uri-list"),
+            file = event.dataTransfer?.files?.[0],
+            menu = new MenuMorph(this, "Process Dropped Object");
+
         pic.onload = () => {
             canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
-            trg.droppedImage(canvas, aFile.name);
-            bulkDrop();
+
+            // console.log(this, this.morphAtPointer?.(), ide);
+            // console.log("file: ", file);
+            // console.log("url: ", url);
+
+            (async () => {
+                if (!file && url) {
+                    file = await fetch("https://api.allorigins.win/raw?url="+url)
+                };
+                let buff = new Uint8Array(await file?.arrayBuffer()),
+                    strBuff = arr2Str(buff),
+                    blocks;
+                
+                // console.log("buff: ", strBuff);
+
+                strBuff.includes("Snap\tBlocks\tEmbedded") 
+                    ? blocks = decodeURIComponent(escape((strBuff)?.split("Snap\tBlocks\tEmbedded")[1]))
+                    : blocks = null;
+
+                if (blocks) { 
+                    menu.addItem(
+                        "Interpret script pic as blocks.", 
+                        () => {
+                            ide.droppedText(blocks, file.name, "");
+                        },
+                        "Interpret the code within\nthis script pic as code."
+                    )
+                    menu.addItem(
+                        "Interpret script pic as an image.",
+                        () => {
+                            trg.droppedImage(canvas, aFile.name);
+                            bulkDrop();
+                        },
+                        "Interpret the code within\nthis script pic as an image."
+                    )
+                    menu.popUpCenteredInWorld(this.world);
+                } else {
+                    trg.droppedImage(canvas, aFile.name);
+                    bulkDrop();
+                }
+            })()
         };
+
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);

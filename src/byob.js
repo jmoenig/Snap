@@ -1143,9 +1143,17 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-                var ide = this.world().children[0];
+                /* UCB Script Pic Edit:
+                 *  - added new variables ("top" and "script") to get XML script from current block
+                 *  - pass that XML script into scriptPic() method to embed in PNG image
+                 */
+                var ide = this.world().children[0],
+                    top = this.topBlock(),
+                    script = ide.serializer.serialize(top);
+                // console.log(script);
+
                 ide.saveCanvasAs(
-                    this.topBlock().scriptPic(),
+                    top.scriptPic(script),
                     (ide.projectName || localize('untitled')) + ' ' +
                         localize('script pic')
                 );
