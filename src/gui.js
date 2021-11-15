@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-14';
+modules.gui = '2021-November-15';
 
 // Declarations
 
@@ -4195,7 +4195,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableHyperOps,
         'uncheck to disable\nusing operators on lists and tables',
         'check to enable\nusing operators on lists and tables',
-        false
+        true
     );
     addPreference(
         'Single palette',

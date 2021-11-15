@@ -28,6 +28,7 @@
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * changed the scale of the graphics color effect from 0-200 to 0-100
     * result-bubbles (when clicking on a reporter) now stay visible until the next click
+    * took out "Hyper blocks support" setting from the gears menu (it's now hidden behind shift-click)
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
@@ -57,6 +58,7 @@
 
 ### 2021-11-15
 * German translation update
+* gui: made "Hyper blocks support" setting hidden in the gears menu
 
 ### 2021-11-14
 * locale: contextualize translations
