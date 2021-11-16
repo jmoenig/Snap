@@ -62,6 +62,7 @@
 
 ### 2021-11-16
 * store, gui: updated serializer app tag to v7
+* api: removed incomplete api documentation from the source code
 
 ### 2021-11-15
 * German translation update
