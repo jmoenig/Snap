@@ -39,7 +39,7 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world, isNil*/
+/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project*/
 
 /*jshint esversion: 6*/
 
