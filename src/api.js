@@ -73,6 +73,11 @@ IDE_Morph.prototype.getScenes = function () {
     return this.scenes.itemsArray().map(each => each.name);
 };
 
+IDE_Morph.prototype.getCurrentScene = function () {
+    // return the name of the currently active scene
+    return this.scene.name;
+};
+
 IDE_Morph.prototype.broadcast = function(message, callback) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
