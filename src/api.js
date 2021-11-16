@@ -39,7 +39,8 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project*/
+/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
+detect*/
 
 /*jshint esversion: 6*/
 
@@ -76,6 +77,14 @@ IDE_Morph.prototype.getScenes = function () {
 IDE_Morph.prototype.getCurrentScene = function () {
     // return the name of the currently active scene
     return this.scene.name;
+};
+
+IDE_Morph.prototype.switchTo = function (sceneName) {
+    var scene = detect(this.scenes.itemsArray(), scn => scn.name === sceneName);
+    if (scene === null) {
+         throw new Error('cannot find scene ' + sceneName);
+    }
+    this.switchToScene(scene);
 };
 
 IDE_Morph.prototype.broadcast = function(message, callback) {
