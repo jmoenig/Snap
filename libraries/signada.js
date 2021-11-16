@@ -129,9 +129,12 @@ SnapExtensions.primitives.set(
             }
         } else {
             if (signada.responses[proc.requestID] !== undefined) {
-                return signada.responses[proc.requestID];
+                var response = signada.responses[proc.requestID];
+                proc.requestID = null;
+                return response;
             } else if ((new Date() - proc.startTime) > 1000) {
                 // Timeout after 1 second. Return last cached value
+                proc.requestID = null;
                 return signada.responseCache[blockname].value;
             }
         }
