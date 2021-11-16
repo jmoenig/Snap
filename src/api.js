@@ -68,6 +68,11 @@ window.onmessage = function (event) {
     }
 };
 
+IDE_Morph.prototype.getScenes = function () {
+    // return an array of all scenenames
+    return this.scenes.itemsArray().map(each => each.name);
+};
+
 IDE_Morph.prototype.broadcast = function(message, callback) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
