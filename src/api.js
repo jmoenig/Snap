@@ -87,6 +87,28 @@ IDE_Morph.prototype.switchTo = function (sceneName) {
     this.switchToScene(scene);
 };
 
+IDE_Morph.prototype.processes = function () {
+    // return the number of currently running scripts in the active scene
+    return this.stage.threads.processes.length;
+};
+
+IDE_Morph.prototype.stop = function () {
+    // stop all currently running processes in the active scene
+    // no matter what, without firing a stop event
+    var stage = this.stage;
+    stage.keysPressed = {};
+    stage.threads.stopAll();
+    stage.stopAllActiveSounds();
+    stage.children.forEach(morph => {
+        if (morph.stopTalking) {
+            morph.stopTalking();
+        }
+    });
+    stage.removeAllClones();
+    stage.stopProjection();
+    this.controlBar.pauseButton.refresh();
+};
+
 IDE_Morph.prototype.broadcast = function(message, callback) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
