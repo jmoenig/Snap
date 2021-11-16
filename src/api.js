@@ -174,7 +174,7 @@ IDE_Morph.prototype.newList = function (array) {
 };
 
 IDE_Morph.prototype.getProjectXML = function () {
-    return this.serializer.serialize(this.stage);
+    return this.serializer.serialize(new Project(this.scenes, this.scene));
 };
 
 IDE_Morph.prototype.loadProjectXML = function (projectXML) {
