@@ -60,6 +60,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-11-16
+* store, gui: updated serializer app tag to v7
+
 ### 2021-11-15
 * German translation update
 * gui: made "Hyper blocks support" setting hidden in the gears menu

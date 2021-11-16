@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-15';
+modules.store = '2021-November-16';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -253,7 +253,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
