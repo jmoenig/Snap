@@ -35,6 +35,7 @@
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
     * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
+    * updated the Snap! API and documentation with methods to navigate among scenes and control processes
     * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
     * removed old hidden "virtual keyboard" setting (was no longer used for the last years)
     * removed old hidden "project urls" setting
@@ -63,6 +64,7 @@
 ### 2021-11-16
 * store, gui: updated serializer app tag to v7
 * api: removed incomplete api documentation from the source code
+* updated api documentation
 
 ### 2021-11-15
 * German translation update
