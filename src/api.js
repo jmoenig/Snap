@@ -186,5 +186,5 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
 };
 
 IDE_Morph.prototype.unsavedChanges = function () {
-    return this.hasUnsavedEdits;
+    return this.hasUnsavedEdits();
 };
