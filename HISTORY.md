@@ -66,6 +66,7 @@
 * gui: set the green-flag button's background color to "active" while a thread is running
 * api: changed "processes" method to "isRunning"
 * updated api documentation
+* gui: refresh stop button when switching scenes
 
 ### 2021-11-16
 * store, gui: updated serializer app tag to v7

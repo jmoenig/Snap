@@ -5853,6 +5853,7 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
         this.refreshPalette(true);
     }
     this.toggleAppMode(appMode);
+    this.controlBar.stopButton.refresh();
     this.world().keyboardFocus = this.stage;
     if (msg) {
         this.stage.fireChangeOfSceneEvent(msg);
