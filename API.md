@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, November 16, 2021
+Jens Mönig, Bernat Romagosa, November 17, 2021
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -16,7 +16,7 @@ Currently the API consists of the following methods:
 
 #### Control Processes
 
-* IDE_Morph.prototype.processes()
+* IDE_Morph.prototype.isRunning()
 * IDE_Morph.prototype.stop()
 
 #### Broadcast Messages (and optionally wait)
@@ -139,14 +139,14 @@ The switchTo() method displays the specified scene. It suspends all processes an
 undefined
 
 
-### IDE_Morph.prototype.processes()
-The processes() method returns the number of running threads in the currently active scene. If the return value is zero the scene is idle.
+### IDE_Morph.prototype.isRunning()
+The isRunning() method returns `true` if the active scene is currently running one or more threads, `false` if the scene is idle.
 
 #### syntax
-    ide.processes();
+    ide.isRunning();
 
 #### return value
-a Number
+a Boolean
 
 
 ### IDE_Morph.prototype.stop()
