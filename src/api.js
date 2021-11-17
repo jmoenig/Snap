@@ -46,7 +46,7 @@ detect*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2021-November-16';
+modules.api = '2021-November-17';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -87,9 +87,9 @@ IDE_Morph.prototype.switchTo = function (sceneName) {
     this.switchToScene(scene);
 };
 
-IDE_Morph.prototype.processes = function () {
-    // return the number of currently running scripts in the active scene
-    return this.stage.threads.processes.length;
+IDE_Morph.prototype.isRunning = function () {
+    // return true if the active scene is currently running a script
+    return this.stage.threads.processes.length > 0;
 };
 
 IDE_Morph.prototype.stop = function () {

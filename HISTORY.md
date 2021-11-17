@@ -64,6 +64,7 @@
 
 ### 2021-11-17
 * gui: set the green-flag button's background color to "active" while a thread is running
+* api: changed "processes" method to "isRunning"
 
 ### 2021-11-16
 * store, gui: updated serializer app tag to v7
