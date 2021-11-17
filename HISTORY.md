@@ -15,7 +15,8 @@
     * BROADCAST blocks are expandable to feature a second input for message receivers, default is "all"
     * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
     * added "enter" key to key-pressed dropdown
-    * added "green flag" symbol to message drop-down
+    * added green flag symbol to message drop-down
+    * the green flag button's background color indicates whether the current scene is running or idle 
     * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
     * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
 * **Notable Changes:**
@@ -60,6 +61,9 @@
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+
+### 2021-11-17
+* gui: set the green-flag button's background color to "active" while a thread is running
 
 ### 2021-11-16
 * store, gui: updated serializer app tag to v7
