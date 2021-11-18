@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-17';
+modules.gui = '2021-November-18';
 
 // Declarations
 
@@ -4717,7 +4717,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev211117 -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev211118 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5813,11 +5813,18 @@ IDE_Morph.prototype.openProject = function (project) {
     }
     this.switchToScene(
         project.currentScene || project.scenes.at(1),
-        true  // refresh album
+        true,  // refresh album
+        null, // msg
+        true // pause generic WHEN hat blocks
     );
 };
 
-IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
+IDE_Morph.prototype.switchToScene = function (
+    scene,
+    refreshAlbum,
+    msg,
+    pauseHats
+) {
     var appMode = this.isAppMode;
     if (!scene || !scene.stage) {
         return;
@@ -5832,7 +5839,9 @@ IDE_Morph.prototype.switchToScene = function (scene, refreshAlbum, msg) {
     this.add(scene.stage);
     this.stage = scene.stage;
     this.sprites = scene.sprites;
-    this.stage.pauseGenericHatBlocks();
+    if (pauseHats) {
+        this.stage.pauseGenericHatBlocks();
+    }
     this.createCorral(!refreshAlbum); // keep scenes
     this.selectSprite(this.scene.currentSprite);
     this.corral.album.updateSelection();

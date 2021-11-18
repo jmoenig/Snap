@@ -62,6 +62,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-11-18
+* gui: only pause generic hat blocks when loading a new project, not when switching to a new scene
+
 ### 2021-11-17
 * gui: set the green-flag button's background color to "active" while a thread is running
 * api: changed "processes" method to "isRunning"
