@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-15';
+modules.objects = '2021-November-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -1870,6 +1870,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
+    this.categoriesCache = null; // not to be serialized (!)
     this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
 
@@ -1935,6 +1936,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.freqPlayer = null;
     c.primitivesCache = {};
     c.paletteCache = {};
+    c.categoriesCache = {};
     c.imageData = {};
     c.cachedColorDimensions = c.color[this.penColorModel]();
     arr = [];
@@ -2957,6 +2959,7 @@ SpriteMorph.prototype.makeBlock = function () {
                     this.customBlocks.push(definition);
                 }
                 ide.flushPaletteCache();
+                ide.categories.refreshEmpty();
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
@@ -3171,7 +3174,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 // SpriteMorph utilities for showing & hiding blocks in the palette
 
 SpriteMorph.prototype.allPaletteBlocks = function () {
-    // private - only to be used for showing & hiding blocks im the palette
+    // private - only to be used for showing & hiding blocks in the palette
     var blocks = SpriteMorph.prototype.allCategories().reduce(
         (blocks, category) => {
             let primitives = this.blockTemplates(category, true),
@@ -3257,6 +3260,21 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+SpriteMorph.prototype.emptyCategories = function () {
+    // return a dictionary that indicates for each category whether
+    // it has any shown blocks in it (true) or is empty (false)
+    var hasBlocks = (any) => any instanceof BlockMorph &&
+            !this.isHidingBlock(any);
+    if (this.categoriesCache === null) {
+        this.categoriesCache = {};
+        SpriteMorph.prototype.allCategories().forEach(category =>
+            this.categoriesCache[category] =
+                this.getPrimitiveTemplates(category).some(hasBlocks) ||
+                this.customBlockTemplatesForCategory(category).some(hasBlocks));
+    }
+    return this.categoriesCache;
 };
 
 // SpriteMorph blocks searching
@@ -7772,6 +7790,7 @@ StageMorph.prototype.init = function (globals) {
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
+    this.categoriesCache = null; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
@@ -9342,6 +9361,9 @@ StageMorph.prototype.changeCustomBlockVisibility
 
 StageMorph.prototype.changeVarBlockVisibility
     = SpriteMorph.prototype.changeVarBlockVisibility;
+
+StageMorph.prototype.emptyCategories =
+    SpriteMorph.prototype.emptyCategories;
 
 // StageMorph neighbor detection
 

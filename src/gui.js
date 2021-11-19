@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-18';
+modules.gui = '2021-November-19';
 
 // Declarations
 
@@ -1310,6 +1310,18 @@ IDE_Morph.prototype.createCategories = function () {
         });
     };
 
+    this.categories.refreshEmpty = function () {
+        var dict = myself.currentSprite.emptyCategories();
+        dict.variables = dict.variables || dict.lists || dict.other;
+        this.buttons.forEach(cat => {
+            if (dict[cat.category]) {
+                cat.enable();
+            } else {
+                cat.disable();
+            }
+        });
+    };
+
     function changePalette(category) {
         return () => {
             myself.currentCategory = category;
@@ -1353,6 +1365,7 @@ IDE_Morph.prototype.createCategories = function () {
             true // has preview
         );
 
+        button.category = category;
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -1389,6 +1402,7 @@ IDE_Morph.prototype.createCategories = function () {
             true // has preview
         );
 
+        button.category = category;
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -2818,7 +2832,7 @@ IDE_Morph.prototype.stopAllScripts = function () {
     this.stage.fireStopAllEvent();
 };
 
-IDE_Morph.prototype.selectSprite = function (sprite) {
+IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
     // prevent switching to another sprite if a block editor or a block
     // visibility dialog box is open
     // so local blocks of different sprites don't mix
@@ -2837,6 +2851,9 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     }
     this.currentSprite = sprite;
     this.scene.currentSprite = sprite;
+    if (!noEmptyRefresh) {
+        this.categories.refreshEmpty();
+    }
     this.createPalette();
     this.createSpriteBar();
     this.createSpriteEditor();
@@ -4717,7 +4734,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev211118 -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - dev211119 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5010,6 +5027,7 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     if (name === '') {return; }
     SpriteMorph.prototype.customCategories.set(name, color);
     this.createCategories();
+    this.categories.refreshEmpty();
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
@@ -5068,6 +5086,7 @@ IDE_Morph.prototype.deletePaletteCategory = function (name) {
     this.categories.fixLayout();
     this.flushPaletteCache();
     this.refreshPalette(true);
+    this.categories.refreshEmpty();
     this.fixLayout();
     this.recordUnsavedChanges();
 };
@@ -5653,6 +5672,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         new BlockImportDialogMorph(blocks, this.stage, name).popUp();
     }
     this.createCategories();
+    this.categories.refreshEmpty();
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
@@ -5843,7 +5863,7 @@ IDE_Morph.prototype.switchToScene = function (
         this.stage.pauseGenericHatBlocks();
     }
     this.createCorral(!refreshAlbum); // keep scenes
-    this.selectSprite(this.scene.currentSprite);
+    this.selectSprite(this.scene.currentSprite, true);
     this.corral.album.updateSelection();
     this.fixLayout();
     this.corral.album.contents.children.forEach(function (morph) {
@@ -5858,6 +5878,7 @@ IDE_Morph.prototype.switchToScene = function (
         this.categories.fixLayout();
         this.fixLayout();
         this.flushBlocksCache();
+        this.categories.refreshEmpty();
         this.currentSprite.palette(this.currentCategory);
         this.refreshPalette(true);
     }
@@ -6057,6 +6078,12 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
             }
         });
     }
+    this.stage.categoriesCache = null;
+    this.stage.children.forEach(m => {
+        if (m instanceof SpriteMorph) {
+            m.categoriesCache = null;
+        }
+    });
 };
 
 IDE_Morph.prototype.toggleZebraColoring = function () {
@@ -6297,6 +6324,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
 
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.setUnifiedPalette(!this.scene.unifiedPalette);
+    this.recordUnsavedChanges();
 };
 
 IDE_Morph.prototype.setUnifiedPalette = function (bool) {
@@ -6314,9 +6342,9 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.categories.fixLayout();
     this.fixLayout();
     this.flushBlocksCache();
+    this.categories.refreshEmpty();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
-    this.recordUnsavedChanges();
     return true;
 };
 
@@ -6504,6 +6532,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
+    this.categories.refreshEmpty();
     this.createCorralBar();
     this.fixLayout();
     if (this.loadNewProject) {
@@ -6618,6 +6647,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
+    this.categories.refreshEmpty();
     this.createCorralBar();
     this.fixLayout();
     this.openProjectString(projectData);

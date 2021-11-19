@@ -110,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-November-09';
+modules.byob = '2021-November-19';
 
 // Declarations
 
@@ -1368,6 +1368,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
             ide = rcvr.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.flushPaletteCache();
+                ide.categories.refreshEmpty();
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();
             }
@@ -2554,6 +2555,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
     ide.refreshPalette();
     ide.recordUnsavedChanges();
 };
@@ -4389,6 +4391,7 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
             ide.stage.replaceDoubleDefinitionsFor(def);
         });
         ide.flushPaletteCache();
+        ide.categories.refreshEmpty();
         ide.refreshPalette();
         ide.showMessage(
             'Imported Blocks Module' + (name ? ': ' + name : '') + '.',
@@ -4480,6 +4483,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
             }
         });
         ide.flushPaletteCache();
+        ide.categories.refreshEmpty();
         ide.refreshPalette();
         ide.showMessage(
             this.blocks.length + ' ' + localize('unused block(s) removed'),
