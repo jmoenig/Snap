@@ -65,6 +65,7 @@
 
 ### 2021-11-23
 * byob: refresh category buttons when hiding / showing blocks
+* gui: refresh category buttons when switching to dev mode and back
 
 ### 2021-11-19
 * objects, byob, gui: visually indicate empty categories by half-toning their buttons
