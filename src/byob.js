@@ -110,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-November-19';
+modules.byob = '2021-November-23';
 
 // Declarations
 
@@ -4689,6 +4689,7 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     }
     ide.flushBlocksCache();
     ide.refreshPalette();
+    ide.categories.refreshEmpty();
     ide.recordUnsavedChanges();
 };
 

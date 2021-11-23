@@ -63,6 +63,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-11-23
+* byob: refresh category buttons when hiding / showing blocks
+
 ### 2021-11-19
 * objects, byob, gui: visually indicate empty categories by half-toning their buttons
 
