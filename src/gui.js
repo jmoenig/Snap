@@ -3834,6 +3834,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             Process.prototype.enableJS = !Process.prototype.enableJS;
             this.flushBlocksCache('operators');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
@@ -3849,6 +3850,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !SpriteMorph.prototype.showingExtensions;
             this.flushBlocksCache('variables');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         SpriteMorph.prototype.showingExtensions,
         'uncheck to hide extension\nprimitives in the palette',
@@ -4067,6 +4069,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !SpriteMorph.prototype.enableFirstClass;
             this.flushBlocksCache('sensing');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         SpriteMorph.prototype.enableFirstClass,
         'uncheck to disable support\nfor first-class sprites',
@@ -4140,6 +4143,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !Process.prototype.enableCompiling;
             this.flushBlocksCache('operators');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
@@ -4169,6 +4173,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !StageMorph.prototype.enableCodeMapping;
             this.flushBlocksCache('variables');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         StageMorph.prototype.enableCodeMapping,
         'uncheck to disable\nblock to text mapping features',
@@ -4182,6 +4187,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !StageMorph.prototype.enableInheritance;
             this.flushBlocksCache('variables');
             this.refreshPalette();
+            this.categories.refreshEmpty();
         },
         StageMorph.prototype.enableInheritance,
         'uncheck to disable\nsprite inheritance features',
