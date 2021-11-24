@@ -69,6 +69,7 @@
 * gui, objects, scenes: added scene-setting to hide/show buttons in the unified palette
 * store: made "show buttons" setting for unified palette persistent in the XML
 * German translation update for "Show buttons" setting
+* added indented sub-preferences to the settings menu
 
 ### 2021-11-23
 * byob: refresh category buttons when hiding / showing blocks
