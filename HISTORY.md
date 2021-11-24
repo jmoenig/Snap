@@ -55,6 +55,7 @@
     * fixed duplicating custom block definitions that don't have a body
     * allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
     * fixed some minor variable-renaming issues
+    * fixed STOP OTHER SCRIPTS for use inside TELL
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
@@ -62,6 +63,9 @@
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+
+### 2021-11-24
+* threads: fixed #2918
 
 ### 2021-11-23
 * byob: refresh category buttons when hiding / showing blocks

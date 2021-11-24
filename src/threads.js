@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-15';
+modules.threads = '2021-November-24';
 
 var ThreadManager;
 var Process;
@@ -2447,7 +2447,8 @@ Process.prototype.doStopOthers = function (choice) {
                 break;
             case 'other scripts in sprite':
                 stage.threads.stopAllForReceiver(
-                    this.homeContext.receiver,
+                    this.context.outerContext.receiver,
+                    // this.homeContext.receiver,
                     this
                 );
                 break;
