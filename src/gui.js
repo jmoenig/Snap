@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-23';
+modules.gui = '2021-November-24';
 
 // Declarations
 
@@ -4219,6 +4219,13 @@ IDE_Morph.prototype.settingsMenu = function () {
             'uncheck to hide\ncategory names\nin the palette',
             'check to show\ncategory names\nin the palette'
         );
+        addPreference(
+            'Show buttons',
+            () => this.togglePaletteButtons(),
+            this.scene.showPaletteButtons,
+            'uncheck to hide buttons\nin the palette',
+            'check to show buttons\nin the palette'
+        );
     }
     addPreference(
         'Persist linked sublist IDs',
@@ -6363,6 +6370,12 @@ IDE_Morph.prototype.toggleCategoryNames = function () {
     this.recordUnsavedChanges();
 };
 
+IDE_Morph.prototype.togglePaletteButtons = function () {
+    this.scene.showPaletteButtons = !this.scene.showPaletteButtons;
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.recordUnsavedChanges();
+};
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,

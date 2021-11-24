@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-19';
+modules.objects = '2021-November-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -3003,8 +3003,10 @@ SpriteMorph.prototype.palette = function (category) {
 SpriteMorph.prototype.freshPalette = function (category) {
     var myself = this,
         palette = new ScrollFrameMorph(null, null, this.sliderColor),
-        showCategories,
         unit = SyntaxElementMorph.prototype.fontSize,
+        ide,
+        showCategories,
+        showButtons,
         x = 0,
         y = 5,
         ry = 0,
@@ -3090,7 +3092,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        showCategories = this.parentThatIsA(IDE_Morph).scene.showCategories;
+        ide = this.parentThatIsA(IDE_Morph);
+        showCategories = ide.scene.showCategories;
+        showButtons = ide.scene.showPaletteButtons;
         blocks = SpriteMorph.prototype.allCategories().reduce(
             (blocks, category) => {
                 let header = [this.categoryText(category), '-'],
@@ -3101,9 +3105,17 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
+                // hide category names
                 if (!showCategories && category !== 'variables') {
                     primitives = primitives.filter(each =>
                         each !== '-' && each !== '=');
+                }
+
+                // hide "make / delete a variable" buttons
+                if (!showButtons && category === 'variables') {
+                    primitives = primitives.filter(each =>
+                        !(each instanceof PushButtonMorph &&
+                            !(each instanceof ToggleMorph)));
                 }
 
                 return blocks.concat(
@@ -3120,8 +3132,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
     }
-    blocks.push('=');
-    blocks.push(this.makeBlockButton(category));
+
+    if (category !== 'unified' || showButtons) {
+        blocks.push('=');
+        blocks.push(this.makeBlockButton(category));
+    }
 
     if (category !== 'unified') {
         blocks.push('=');
