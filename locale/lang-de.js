@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-15', // this, too, will appear in the Translators tab
+        '2021-11-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1179,6 +1179,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
     'check to show\ncategory names\nin the palette':
         'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
+    'Show buttons':
+        'Knöpfe anzeigen',
+    'uncheck to hide buttons\nin the palette':
+        'ausschalten, um Knöpfe in\nder Palette zu verbergen',
+    'check to show buttons\nin the palette':
+        'einschalten, um Knöpfe in\nder Palette anzuzeigen',
     'HSL pen color model':
         'HSL Farbmodell',
      'uncheck to switch pen colors\nand graphic effects to HSV':
