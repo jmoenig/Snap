@@ -3786,6 +3786,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         }
     }
 
+    function addSubPreference(label, toggle, test, onHint, offHint, hide) {
+        if (!hide || shiftClicked) {
+            menu.addItem(
+                [
+                    (test? on : off),
+                    '  ' + localize(label)
+                ],
+                toggle,
+                test ? onHint : offHint,
+                hide ? new Color(100, 0, 0) : null
+            );
+        }
+    }
+
     menu = new MenuMorph(this);
     menu.addPair(
         [
@@ -3884,7 +3898,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\ninput sliders for\nentry fields'
     );
     if (MorphicPreferences.useSliderForInput) {
-        addPreference(
+        addSubPreference(
             'Execute on slider change',
             'toggleSliderExecute',
             ArgMorph.prototype.executeOnSliderEdit,
@@ -4212,14 +4226,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     if (this.scene.unifiedPalette) {
-        addPreference(
+        addSubPreference(
             'Show categories',
             () => this.toggleCategoryNames(),
             this.scene.showCategories,
             'uncheck to hide\ncategory names\nin the palette',
             'check to show\ncategory names\nin the palette'
         );
-        addPreference(
+        addSubPreference(
             'Show buttons',
             () => this.togglePaletteButtons(),
             this.scene.showPaletteButtons,
