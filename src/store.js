@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-16';
+modules.store = '2021-November-24';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -380,6 +380,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     scene.unifiedPalette = model.scene.attributes.palette === 'single';
     scene.showCategories = model.scene.attributes.categories !== 'false';
+    scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
@@ -1733,7 +1734,7 @@ Scene.prototype.toXML = function (serializer) {
     }
 
     xml = serializer.format(
-        '<scene name="@"%%%%>' +
+        '<scene name="@"%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1747,6 +1748,8 @@ Scene.prototype.toXML = function (serializer) {
         this.unifiedPalette ? ' palette="single"' : '',
         this.unifiedPalette && !this.showCategories ?
             ' categories="false"' : '',
+        this.unifiedPalette && !this.showPaletteButtons ?
+            ' buttons="false"' : '',
         this.disableClickToRun ? ' clickrun="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.notes || '',

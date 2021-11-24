@@ -67,6 +67,7 @@
 ### 2021-11-24
 * threads: fixed #2918
 * gui, objects, scenes: added scene-setting to hide/show buttons in the unified palette
+* store: made "show buttons" setting for unified palette persistent in the XML
 
 ### 2021-11-23
 * byob: refresh category buttons when hiding / showing blocks
