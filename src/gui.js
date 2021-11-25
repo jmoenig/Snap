@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-24';
+modules.gui = '2021-November-25';
 
 // Declarations
 
@@ -4340,27 +4340,11 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'save project data as XML\nto your downloads folder'
     );
-
-    if (this.stage.globalBlocks.length) {
-        menu.addItem(
-            'Export blocks...',
-            () => this.exportGlobalBlocks(),
-            'save global custom block\ndefinitions as XML'
-        );
-        menu.addItem(
-            'Unused blocks...',
-            () => this.removeUnusedBlocks(),
-            'find unused global custom blocks' +
-                '\nand remove their definitions'
-        );
-    }
-
     menu.addItem(
         'Export summary...',
         () => this.exportProjectSummary(),
         'save a summary\nof this project'
     );
-
     if (shiftClicked) {
         menu.addItem(
             'Export summary with drop-shadows...',
@@ -4378,7 +4362,34 @@ IDE_Morph.prototype.projectMenu = function () {
             new Color(100, 0, 0)
         );
     }
-
+    menu.addLine();
+    if (this.stage.globalBlocks.length) {
+        menu.addItem(
+            'Export blocks...',
+            () => this.exportGlobalBlocks(),
+            'save global custom block\ndefinitions as XML'
+        );
+        menu.addItem(
+            'Unused blocks...',
+            () => this.removeUnusedBlocks(),
+            'find unused global custom blocks' +
+                '\nand remove their definitions'
+        );
+    }
+    menu.addItem(
+        'Hide blocks...',
+        () => new BlockVisibilityDialogMorph(this.currentSprite).popUp(world)
+    );
+    menu.addItem(
+        'New category...',
+        () => this.createNewCategory()
+    );
+    if (SpriteMorph.prototype.customCategories.size) {
+        menu.addItem(
+            'Remove a category...',
+            () => this.deleteUserCategory(pos)
+        );
+    }
     menu.addLine();
     if (this.scenes.length() > 1) {
         menu.addItem('Scenes...', 'scenesMenu');
@@ -4403,7 +4414,6 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-
     menu.addItem(
         localize(graphicsName) + '...',
         () => {
@@ -4437,7 +4447,6 @@ IDE_Morph.prototype.projectMenu = function () {
             'Bring back deleted sprites'
         );
     }
-
     menu.popup(world, pos);
 };
 
@@ -5060,7 +5069,7 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     this.fixLayout();
 };
 
-IDE_Morph.prototype.deleteUserCategory = function () {
+IDE_Morph.prototype.deleteUserCategory = function (pos) {
     var menu = new MenuMorph(
         this.deletePaletteCategory,
         null,
@@ -5083,7 +5092,11 @@ IDE_Morph.prototype.deleteUserCategory = function () {
             true // verbatim - don't translate
         )
     );
-    menu.popUpAtHand(this.world());
+    if (pos) {
+        menu.popup(this.world(), pos);
+    } else {
+        menu.popUpAtHand(this.world());
+    }
 };
 
 IDE_Morph.prototype.deletePaletteCategory = function (name) {

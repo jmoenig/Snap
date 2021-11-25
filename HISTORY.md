@@ -65,6 +65,9 @@
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
 ### 2021-11-24
+* gui: rearranged and amended the project menu
+
+### 2021-11-24
 * threads: fixed #2918
 * gui, objects, scenes: added scene-setting to hide/show buttons in the unified palette
 * store: made "show buttons" setting for unified palette persistent in the XML
