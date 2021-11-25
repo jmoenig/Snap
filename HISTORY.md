@@ -66,6 +66,7 @@
 
 ### 2021-11-24
 * gui: rearranged and amended the project menu
+* German translation update for project menu entries
 
 ### 2021-11-24
 * threads: fixed #2918

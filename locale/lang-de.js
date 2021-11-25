@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-24', // this, too, will appear in the Translators tab
+        '2021-11-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -924,7 +924,7 @@ SnapTranslator.dict.de = {
     'save global custom block\ndefinitions as XML':
         'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
     'Unused blocks...':
-          'nicht verwendete Bl\u00f6cke...',
+          'Nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
         'nicht verwendete Bl\u00f6cke finden\nund entfernen',
     'Remove unused blocks':
@@ -933,6 +933,18 @@ SnapTranslator.dict.de = {
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
         'nicht verwendete Bl\u00f6cke entfernt',
+    'Hide blocks...':
+        'Blöcke verbergen...',
+    'New category...':
+        'Neue Kategorie...',
+    'Remove a category...':
+        'Kategorie löschen...',
+    'Scenes...':
+        'Szenen...',
+    'New scene':
+        'Neue Szene',
+    'Add scene...':
+        'Szene hinzufügen...',
     'Export summary...':
         'Zusammenfassung exportieren...',
     'save a summary\nof this project':
