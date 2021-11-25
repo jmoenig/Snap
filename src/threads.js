@@ -1688,6 +1688,17 @@ Process.prototype.evaluateCustomBlock = function () {
     runnable.expression = runnable.expression.blockSequence();
 };
 
+// Process compiler primitives
+Process.prototype.compile = function () {
+    var args = this.context.inputs;
+    var body = args[0];
+    if (body) {
+        console.log(body.blockSequence());
+    }
+    console.log("COMPILER");
+    console.trace();
+}
+
 // Process variables primitives
 
 Process.prototype.doDeclareVariables = function (varNames) {

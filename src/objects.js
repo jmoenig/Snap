@@ -146,6 +146,7 @@ SpriteMorph.prototype.categories =
         'sensing',
         'operators',
         'variables',
+        'compiler',
         'lists',
         'other'
     ];
@@ -159,6 +160,7 @@ SpriteMorph.prototype.blockColor = {
     sensing : new Color(4, 148, 220),
     operators : new Color(98, 194, 19),
     variables : new Color(243, 118, 29),
+    compiler : new Color(253, 0, 91),
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
 };
@@ -1315,6 +1317,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'other',
             spec: 'script variables %scriptVars'
+        },
+        
+        // Compiler
+        compile: {
+            type: 'command',
+            category: 'compiler',
+            spec: 'compile %c'
         },
 
         // inheritance
@@ -2776,6 +2785,8 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('doShowTable'));
         }
+    } else if (category == "compiler") {
+        blocks.push(block('compile'));
     }
 
     return blocks;
