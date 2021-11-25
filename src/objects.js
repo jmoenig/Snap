@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-24';
+modules.objects = '2021-November-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -5583,6 +5583,12 @@ SpriteMorph.prototype.floodFill = function () {
             Math.floor((height / 2) - this.yPosition()) * width +
             Math.floor(this.xPosition() + (width / 2))
         ],
+        clr = new Color(
+            Math.round(Math.min(Math.max(this.color.r, 0), 255)),
+            Math.round(Math.min(Math.max(this.color.g, 0), 255)),
+            Math.round(Math.min(Math.max(this.color.b, 0), 255)),
+            this.color.a
+        ),
         current,
         src;
 
@@ -5599,10 +5605,10 @@ SpriteMorph.prototype.floodFill = function () {
     }
 
     src = read(stack[0]);
-    if (src[0] === Math.round(this.color.r) &&
-            src[1] === Math.round(this.color.g) &&
-            src[2] === Math.round(this.color.b) &&
-            src[3] === Math.round(this.color.a * 255)) {
+    if (src[0] === clr.r &&
+            src[1] === clr.g &&
+            src[2] === clr.b &&
+            src[3] === Math.round(clr.a * 255)) {
         return;
     }
     while (stack.length > 0) {
@@ -5617,10 +5623,10 @@ SpriteMorph.prototype.floodFill = function () {
                 stack.push(current - width);
             }
         }
-        dta[current * 4] = Math.round(this.color.r);
-        dta[current * 4 + 1] = Math.round(this.color.g);
-        dta[current * 4 + 2] = Math.round(this.color.b);
-        dta[current * 4 + 3] = Math.round(this.color.a * 255);
+        dta[current * 4] = clr.r;
+        dta[current * 4 + 1] = clr.g;
+        dta[current * 4 + 2] = clr.b;
+        dta[current * 4 + 3] = Math.round(clr.a * 255);
     }
     ctx.putImageData(img, 0, 0);
     this.parent.changed();

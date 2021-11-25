@@ -54,6 +54,7 @@
     * fixed outdated blocks specs for "When I am ..." hat block in many translations
     * fixed duplicating custom block definitions that don't have a body
     * allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
+    * fixed an infinite loop in the FILL block when the pen colors have been set to an invalid color (via a bad library)
     * fixed some minor variable-renaming issues
     * fixed STOP OTHER SCRIPTS for use inside TELL
 * **Documentation Updates:**
@@ -67,6 +68,7 @@
 ### 2021-11-24
 * gui: rearranged and amended the project menu
 * German translation update for project menu entries
+* objects: fixed a FILL issue when the pen color has been set to an invalid color via a bad library
 
 ### 2021-11-24
 * threads: fixed #2918
