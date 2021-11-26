@@ -20,6 +20,7 @@
     * empty categories are indicated by half-tone buttons
     * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
     * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
+    * new Signada hardware library, thanks, Citilab Barcelona!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -65,7 +66,10 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
-### 2021-11-24
+### 2021-11-26
+* added signada extension files to the pwa cache
+
+### 2021-11-25
 * gui: rearranged and amended the project menu
 * German translation update for project menu entries
 * objects: fixed a FILL issue when the pen color has been set to an invalid color via a bad library
