@@ -18,6 +18,7 @@
     * added green flag symbol to message drop-down
     * the green flag button's background color indicates whether the current scene is running or idle
     * empty categories are indicated by half-tone buttons
+    * added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter 
     * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
     * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
     * new Signada hardware library, thanks, Citilab Barcelona!
@@ -68,6 +69,7 @@
 
 ### 2021-11-26
 * added signada extension files to the pwa cache
+* blocks, treads, objects: added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter 
 
 ### 2021-11-25
 * gui: rearranged and amended the project menu

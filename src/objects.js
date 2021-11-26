@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-25';
+modules.objects = '2021-November-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -4508,6 +4508,138 @@ SpriteMorph.prototype.changeColorDimension = function (idx, delta) {
     );
 };
 
+SpriteMorph.prototype.setColorRGBA = function (dta) {
+    // dta can be one of the following:
+    // - a 4 item list representing r-g-b-a each on a scale of 0-255
+    // - a 3 item list representing r-g-b leaving a unchanged
+    // - a 1 item list representing greyscale from 0-255 leaving alpha unchanged
+    // - a 2 item list representing greyscale and alpha each from 0-255
+    // - a number representing greyscale from 0-255 leaving alpha unchanged
+    var clr = this.color.copy(),
+        num;
+    if (dta instanceof List) {
+        switch (dta.length()) {
+        case 1:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            clr.g = num;
+            clr.b = num;
+            break;
+        case 2:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            clr.g = num;
+            clr.b = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.a = num / 255;
+            break;
+        case 3:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.g = num;
+            num = Math.max(0, Math.min(+(dta.at(3)), 255));
+            if (isNaN(num)) {return; }
+            clr.b = num;
+            break;
+        case 4:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.g = num;
+            num = Math.max(0, Math.min(+(dta.at(3)), 255));
+            if (isNaN(num)) {return; }
+            clr.b = num;
+            num = Math.max(0, Math.min(+(dta.at(4)), 255));
+            if (isNaN(num)) {return; }
+            clr.a = num / 255;
+            break;
+        default:
+            return;
+        }
+    } else {
+        num = Math.max(0, Math.min(+dta, 255));
+        if (isNaN(num)) {return; }
+        clr.r = num;
+        clr.g = num;
+        clr.b = num;
+    }
+    this.setColor(clr);
+};
+
+SpriteMorph.prototype.changeColorRGBA = function (dta) {
+    // dta can be one of the following:
+    // - a 4 item list representing r-g-b-a each on a scale of 0-255
+    // - a 3 item list representing r-g-b leaving a unchanged
+    // - a 1 item list representing greyscale from 0-255 leaving alpha unchanged
+    // - a 2 item list representing greyscale and alpha each from 0-255
+    // - a number representing greyscale from 0-255 leaving alpha unchanged
+    var clr = this.color.copy(),
+        num;
+    if (dta instanceof List) {
+        switch (dta.length()) {
+        case 1:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            break;
+        case 2:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.a = Math.max(0, Math.min((clr.a * 255) + num, 255)) / 255;
+            break;
+        case 3:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            num = +(dta.at(3));
+            if (isNaN(num)) {return; }
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            break;
+        case 4:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            num = +(dta.at(3));
+            if (isNaN(num)) {return; }
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            num = +(dta.at(4));
+            if (isNaN(num)) {return; }
+            clr.a = Math.max(0, Math.min((clr.a * 255) + num, 255)) / 255;
+            break;
+        default:
+            return;
+        }
+    } else {
+        num = +dta;
+        if (isNaN(num)) {return; }
+        clr.r = Math.max(0, Math.min(clr.r + num, 255));
+        clr.g = Math.max(0, Math.min(clr.g + num, 255));
+        clr.b = Math.max(0, Math.min(clr.b + num, 255));
+    }
+    this.setColor(clr);
+};
+
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
@@ -4528,6 +4660,14 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
         options = ['hue', 'saturation', 'brightness', 'transparency'];
     if (name === 'size') {
         return this.size || 0;
+    }
+    if (name === 'r-g-b-a') {
+        return new List([
+            this.color.r,
+            this.color.g,
+            this.color.b,
+            Math.round(this.color.a * 255)
+        ]);
     }
     return this.getColorDimension(options.indexOf(name));
 };
@@ -9306,6 +9446,12 @@ StageMorph.prototype.getColorDimension =
 
 StageMorph.prototype.changeColorDimension =
     SpriteMorph.prototype.changeColorDimension;
+
+StageMorph.prototype.setColorRGBA =
+    SpriteMorph.prototype.setColorRGBA;
+
+StageMorph.prototype.changeColorRGBA =
+    SpriteMorph.prototype.changeColorRGBA;
 
 StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
