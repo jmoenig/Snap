@@ -68,6 +68,9 @@
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
 ### 2021-11-26
+* blocks, threads: tweaked SET / CHANGE PEN dropdown option to "r-g-b(-a)"
+
+### 2021-11-26
 * added signada extension files to the pwa cache
 * blocks, treads, objects: added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter 
 

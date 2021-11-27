@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-26';
+modules.blocks = '2021-November-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -655,7 +655,7 @@ SyntaxElementMorph.prototype.labelParts = {
             brightness : ['brightness'],
             transparency : ['transparency'],
             '~' : null,
-            'r-g-b-a' : ['r-g-b-a']
+            'r-g-b(-a)' : ['r-g-b(-a)']
         }
     },
     '%pen': {

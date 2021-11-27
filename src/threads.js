@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-26';
+modules.threads = '2021-November-27';
 
 var ThreadManager;
 var Process;
@@ -4777,7 +4777,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
 Process.prototype.setColorDimension = function (name, num) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'],
         choice = this.inputOption(name);
-    if (choice === 'r-g-b-a') {
+    if (choice === 'r-g-b(-a)') {
         this.blockReceiver().setColorRGBA(num);
         return;
     }
@@ -4790,7 +4790,7 @@ Process.prototype.setColorDimension = function (name, num) {
 Process.prototype.changeColorDimension = function (name, num) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'],
         choice = this.inputOption(name);
-    if (choice === 'r-g-b-a') {
+    if (choice === 'r-g-b(-a)') {
         this.blockReceiver().changeColorRGBA(num);
         return;
     }
