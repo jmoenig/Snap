@@ -1323,7 +1323,13 @@ SpriteMorph.prototype.initBlocks = function () {
         compile: {
             type: 'command',
             category: 'compiler',
-            spec: 'compile %c'
+            spec: 'compile %s %c',
+            defaults: ["Unique Block Name", null]
+        },
+        clear_compiled_all: {
+            type: 'reporter',
+            category: 'compiler',
+            spec: 'Clear all compiled code'
         },
 
         // inheritance
@@ -2787,6 +2793,8 @@ SpriteMorph.prototype.blockTemplates = function (
         }
     } else if (category == "compiler") {
         blocks.push(block('compile'));
+        blocks.push('-');
+        blocks.push(block('clear_compiled_all'));
     }
 
     return blocks;
