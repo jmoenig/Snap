@@ -59,6 +59,7 @@
     * fixed an infinite loop in the FILL block when the pen colors have been set to an invalid color (via a bad library)
     * fixed some minor variable-renaming issues
     * fixed STOP OTHER SCRIPTS for use inside TELL
+    * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
@@ -69,6 +70,7 @@
 
 ### 2021-11-26
 * blocks, threads: tweaked SET / CHANGE PEN dropdown option to "r-g-b(-a)"
+* made "remove duplicates" reporter in the "list utilities" library (a lot) faster
 
 ### 2021-11-26
 * added signada extension files to the pwa cache
