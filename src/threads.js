@@ -1689,19 +1689,26 @@ Process.prototype.evaluateCustomBlock = function () {
 };
 
 var compiledFunctions = new Map();
-
+  
 // Process compiler primitives
-Process.prototype.compile = function (codeBlockName, body) {
-    if (body) {
+Process.prototype.compile = function (codeBlockName, body, gen_cont) {
+    // Only this code has access to gen_cont, not Snap
+    var block = this.context.expression,
+        outer = this.context.outerContext, // for tail call elimination
+        isCustomBlock = this.context.isCustomBlock;
+    var gen_code = null;
+    if (gen_cont) {
+        gen_code = gen_cont;
+    } else if (body) {
         try {
-            console.log(typeof compiledFunctions.get(codeBlockName));
+            // console.log(typeof compiledFunctions.get(codeBlockName));
             if (typeof compiledFunctions.get(codeBlockName) != 'function') {
                 var compiler = new JSCompiler(this);
                 var compiled_js = compiler.compileWithSpriteProcessContext(body);
                 console.log(compiled_js);
                 eval("compiledFunctions.set(\"" + codeBlockName + "\", " + compiled_js + ")");
             }
-            compiledFunctions.get(codeBlockName)(this.receiver, this);
+            gen_code = compiledFunctions.get(codeBlockName)(this.receiver, this);
         } catch (error) {
             console.error(error);
             throw error;
@@ -1709,8 +1716,26 @@ Process.prototype.compile = function (codeBlockName, body) {
     } else {
         // Hardcoded compile reset
         compiledFunctions.delete(codeBlockName);
+        gen_code = null; // Generator Code is already null, but
+                         //   more informative to be here also
     }
-    // console.trace();
+
+    if (gen_code) {
+        var gen_output = gen_code.next();
+        console.log(gen_output);
+        
+        if (!gen_output.done) {
+            this.popContext();
+            this.pushContext(block, outer);
+            this.context.isCustomBlock = isCustomBlock;
+            // Add back the inputs to do again, continuing
+            this.context.addInput(codeBlockName);
+            this.context.addInput(body);
+            this.context.addInput(gen_code);
+            this.pushContext('doYield');
+            this.pushContext();
+        }
+    }
 };
 
 Process.prototype.clear_compiled_all = function() {

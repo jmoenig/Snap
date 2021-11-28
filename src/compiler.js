@@ -144,15 +144,14 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileSequence(inputs[2].evaluate()) +
             '}';
     case 'doForever':
-        throw "Forever loop unsupported";
-        args = inputs[0].inputs();
+        var body = inputs[0].inputs()[0];
         var while_body = "";
-        if (args[0]) {
-            while_body = "\n" + this.compileSequence(args[0]);
+        if (body) {
+            while_body = "\n" + this.compileSequence(body);
         }
-        return 'while (true) {\n' + while_body + "\nrequestAnimationFrame(loop);}";
-    case 'doRepeat':
-        throw "For loop unsupported";
+        return "while (!local_process.isInterrupted) {\n" + while_body + "\n;yield 'forever';\n}";
+    case 'doFor':
+        throw "For loops unsupported";
     default:
         target = null;
         if (this.process[selector]) {
@@ -179,7 +178,7 @@ JSCompiler.prototype.compileExpression = function (block) {
 
 JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
     var body = this.compileSequence(commandBlock);
-    return "function (SpriteMorph_prototype, local_process) {\n" + body + "}\n";
+    return "function* (SpriteMorph_prototype, local_process) {\n" + body + "}\n";
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
