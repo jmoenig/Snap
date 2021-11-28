@@ -68,7 +68,10 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
-### 2021-11-26
+### 2021-11-28
+* fixed a glitch in "remove duplicates" in the "list utilities" library 
+
+### 2021-11-27
 * blocks, threads: tweaked SET / CHANGE PEN dropdown option to "r-g-b(-a)"
 * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
 
