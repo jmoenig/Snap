@@ -68,6 +68,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-11-29
+* renamed "r-g-b-a" option to "RGBA" and "r-g-b(-a)" to "RGB(A)"
+
 ### 2021-11-28
 * fixed a glitch in "remove duplicates" in the "list utilities" library 
 
