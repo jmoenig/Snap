@@ -1733,7 +1733,8 @@ Process.prototype.compile = function (codeBlockName, body, gen_cont) {
             this.context.addInput(body);
             this.context.addInput(gen_code);
             this.pushContext('doYield');
-            this.pushContext();
+            this.pushContext(); // Empty context, places doYield -> Compile
+                                //  next in line on popContext
         }
     }
 };
