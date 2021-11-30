@@ -70,6 +70,7 @@
 
 ### 2021-11-30
 * blocks, threads: block-assembly support, experimental
+* gui: fixed #2920
 
 ### 2021-11-29
 * renamed "r-g-b-a" option to "RGBA" and "r-g-b(-a)" to "RGB(A)"
