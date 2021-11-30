@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-27';
+modules.threads = '2021-November-30';
 
 var ThreadManager;
 var Process;
@@ -7007,6 +7007,20 @@ Context.prototype.isInCustomBlock = function () {
         return this.parentContext.isInCustomBlock();
     }
     return false;
+};
+
+// Context components - EXPERIMENTAL
+
+Context.prototype.components = function () {
+    var expr = this.expression.components(),
+        parts;
+    if (!this.inputs.length) {
+        return expr;
+    }
+    parts = new List();
+    parts.add(expr); // blocks / other
+    this.inputs.forEach(name => parts.add(name));
+    return parts;
 };
 
 // Variable /////////////////////////////////////////////////////////////////

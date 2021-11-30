@@ -153,14 +153,14 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, SymbolMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
-isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
+isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-27';
+modules.blocks = '2021-November-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3614,6 +3614,8 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     return leftOver;
 };
 
+// BlockMorph helpscreens
+
 BlockMorph.prototype.showHelp = function () {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
@@ -3700,6 +3702,41 @@ BlockMorph.prototype.exportResultPic = function () {
             stage.threads.startProcess(top, receiver, false, true);
         }
     }
+};
+
+// BlockMorph components - EXPERIMENTAL
+
+BlockMorph.prototype.components = function () { // +++
+    throw new Error('subclass responsility');
+};
+
+BlockMorph.prototype.copyWithInputs = function (inputs) {
+    var cpy = this.fullCopy(),
+        slots = cpy.inputs(),
+        dta = inputs.itemsArray().map(inp =>
+            inp instanceof Context ? inp.expression : inp
+        );
+    slots.forEach(slt => {
+        if (slt instanceof BlockMorph) {
+            cpy.revertToDefaultInput(slt);
+        }
+    });
+    dta.forEach((inp, i) => {
+        if (inp instanceof BlockMorph) {
+            if (inp instanceof CommandBlockMorph && slots[i].nestedBlock) {
+                slots[i].nestedBlock(inp);
+            } else {
+                cpy.replaceInput(slots[i], inp);
+            }
+        } else {
+            if (inp instanceof List && inp.length() === 0) {
+                nop(); // ignore, i.e. leave slot as is
+            } else {
+                slots[i].setContents(inp);
+            }
+        }
+    });
+    return cpy;
 };
 
 // BlockMorph code mapping
@@ -5417,6 +5454,46 @@ CommandBlockMorph.prototype.extract = function () {
     }
 };
 
+// CommandBlockMorph components - EXPERIMENTAL
+
+CommandBlockMorph.prototype.components = function () { // +++
+    var seq = new List(this.blockSequence()).map(block => {
+        var expr = block.fullCopy(),
+            nb = expr.nextBlock(),
+            inputs, parts;
+        if (nb) {
+            nb.destroy();
+        }
+        expr.fixBlockColor(null, true);
+        inputs = expr.inputs();
+        if (!inputs.length) {
+            return expr;
+        }
+        parts = new List([expr]);
+        inputs.forEach(inp => {
+            var val;
+            if (inp instanceof BlockMorph) {
+                parts.add(inp.components());
+            } else {
+                val = inp.evaluate();
+                parts.add(val instanceof BlockMorph ? val.components() : val);
+            
+            }
+            expr.revertToDefaultInput(inp, true); // empty
+        });
+        return parts;
+    });
+    return seq.length() === 1 ? seq.at(1) : seq;
+};
+
+CommandBlockMorph.prototype.copyWithNext = function (next) {
+    var exp = this.fullCopy(),
+        bottom = exp.bottomBlock(),
+        top = next.fullCopy().topBlock();
+        bottom.nextBlock(top);
+        return exp;
+};
+
 // CommandBlockMorph drawing:
 
 CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
@@ -6178,6 +6255,32 @@ ReporterBlockMorph.prototype.userDestroy = function () {
     this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
+};
+
+// ReporterBlockMorph components - EXPERIMENTAL
+
+ReporterBlockMorph.prototype.components = function () { // +++
+    var expr = this.fullCopy(),
+        inputs = expr.inputs(),
+        parts;
+    expr.fixBlockColor(null, true);
+    if (!inputs.length ||
+            inputs.every(slot => slot.isEmptySlot && slot.isEmptySlot())) {
+        return expr;
+    }
+    parts = new List([expr]);
+    inputs.forEach(inp => {
+        var val;
+        if (inp instanceof BlockMorph) {
+            parts.add(inp.components());
+        } else {
+            val = inp.evaluate();
+            parts.add(val instanceof BlockMorph ? val.components() : val);
+        
+        }
+        expr.revertToDefaultInput(inp, true); // empty
+    });
+    return parts;
 };
 
 // ReporterBlockMorph drawing:
