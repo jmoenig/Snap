@@ -149,7 +149,26 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (body) {
             while_body = "\n" + this.compileSequence(body);
         }
-        return "while (!local_process.isInterrupted) {\n" + while_body + "\n;yield 'forever';\n}";
+        return "while (true) {\n" +
+                    while_body + "\n" +
+                    "yield;\n" +
+               "}";
+    case 'doRepeat':
+        var counter, body;
+        counter = this.compileInput(inputs[0]);
+        body = inputs[1].inputs()[0];
+        if (isNaN(counter) || counter < 1) {
+            counter = 0;
+        }
+
+        var repeat_body = "";
+        if (body) {
+            repeat_body = "\n" + this.compileSequence(body);
+        }
+        return "for (let i = 0; i < " + counter + "; i++) {\n" +
+                    repeat_body + "\n" + 
+                    "yield;\n" +
+                "}";
     case 'doFor':
         throw "For loops unsupported";
     default:
