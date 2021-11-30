@@ -3706,7 +3706,7 @@ BlockMorph.prototype.exportResultPic = function () {
 
 // BlockMorph components - EXPERIMENTAL
 
-BlockMorph.prototype.components = function () { // +++
+BlockMorph.prototype.components = function () {
     throw new Error('subclass responsility');
 };
 
@@ -5456,7 +5456,7 @@ CommandBlockMorph.prototype.extract = function () {
 
 // CommandBlockMorph components - EXPERIMENTAL
 
-CommandBlockMorph.prototype.components = function () { // +++
+CommandBlockMorph.prototype.components = function () {
     var seq = new List(this.blockSequence()).map(block => {
         var expr = block.fullCopy(),
             nb = expr.nextBlock(),
@@ -6259,7 +6259,7 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 
 // ReporterBlockMorph components - EXPERIMENTAL
 
-ReporterBlockMorph.prototype.components = function () { // +++
+ReporterBlockMorph.prototype.components = function () {
     var expr = this.fullCopy(),
         inputs = expr.inputs(),
         parts;
