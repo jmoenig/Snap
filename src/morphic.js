@@ -11669,7 +11669,6 @@ HandMorph.prototype.processDrop = function (event) {
          *      2. Process the script as an image and load it into the costumes
          *  - Base code credit given do Snap-Forum user Dardoro
          */
-
         function arr2Str(arr) { 
             return arr.reduce((acc, b) => acc + String.fromCharCode(b), "");
         };
@@ -11683,10 +11682,6 @@ HandMorph.prototype.processDrop = function (event) {
             canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
 
-            // console.log(this, this.morphAtPointer?.(), ide);
-            // console.log("file: ", file);
-            // console.log("url: ", url);
-
             (async () => {
                 if (!file && url) {
                     file = await fetch("https://api.allorigins.win/raw?url="+url)
@@ -11695,8 +11690,6 @@ HandMorph.prototype.processDrop = function (event) {
                     strBuff = arr2Str(buff),
                     blocks;
                 
-                // console.log("buff: ", strBuff);
-
                 strBuff.includes("Snap\tBlocks\tEmbedded") 
                     ? blocks = decodeURIComponent(escape((strBuff)?.split("Snap\tBlocks\tEmbedded")[1]))
                     : blocks = null;
