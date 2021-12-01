@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-November-30';
+modules.blocks = '2021-December-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3736,7 +3736,30 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
             }
         }
     });
-    return cpy;
+    return cpy.reify();
+};
+
+BlockMorph.prototype.reify = function () {
+    // private - assumes that I've already been deep copied
+    var context = new Context();
+    context.expression = this;
+    context.emptySlots = this.markEmptySlots();
+    return context;
+};
+
+BlockMorph.prototype.markEmptySlots = function () {
+    // private - mark all empty slots with an identifier
+    // and return the count
+    var count = 0;
+    this.allEmptySlots().forEach(slot => {
+        count += 1;
+        if (slot instanceof MultiArgMorph) {
+            slot.bindingID = Symbol.for('arguments');
+        } else {
+            slot.bindingID = count;
+        }
+    });
+    return count;
 };
 
 // BlockMorph code mapping
@@ -5467,9 +5490,9 @@ CommandBlockMorph.prototype.components = function () {
         expr.fixBlockColor(null, true);
         inputs = expr.inputs();
         if (!inputs.length) {
-            return expr;
+            return expr.reify();
         }
-        parts = new List([expr]);
+        parts = new List([expr.reify()]);
         inputs.forEach(inp => {
             var val;
             if (inp instanceof BlockMorph) {
@@ -5481,6 +5504,7 @@ CommandBlockMorph.prototype.components = function () {
             }
             expr.revertToDefaultInput(inp, true); // empty
         });
+        parts.at(1).updateEmptySlots();
         return parts;
     });
     return seq.length() === 1 ? seq.at(1) : seq;
@@ -5491,7 +5515,7 @@ CommandBlockMorph.prototype.copyWithNext = function (next) {
         bottom = exp.bottomBlock(),
         top = next.fullCopy().topBlock();
         bottom.nextBlock(top);
-        return exp;
+        return exp.reify();
 };
 
 // CommandBlockMorph drawing:
@@ -6266,9 +6290,9 @@ ReporterBlockMorph.prototype.components = function () {
     expr.fixBlockColor(null, true);
     if (!inputs.length ||
             inputs.every(slot => slot.isEmptySlot && slot.isEmptySlot())) {
-        return expr;
+        return expr.reify();
     }
-    parts = new List([expr]);
+    parts = new List([expr.reify()]);
     inputs.forEach(inp => {
         var val;
         if (inp instanceof BlockMorph) {
@@ -6280,6 +6304,7 @@ ReporterBlockMorph.prototype.components = function () {
         }
         expr.revertToDefaultInput(inp, true); // empty
     });
+    parts.at(1).updateEmptySlots();
     return parts;
 };
 

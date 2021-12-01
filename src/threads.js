@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-30';
+modules.threads = '2021-December-01';
 
 var ThreadManager;
 var Process;
@@ -7021,6 +7021,18 @@ Context.prototype.components = function () {
     parts.add(expr); // blocks / other
     this.inputs.forEach(name => parts.add(name));
     return parts;
+};
+
+Context.prototype.copyWithInputs = function (inputs) {
+    return this.expression.copyWithInputs(inputs);
+};
+
+Context.prototype.copyWithNext = function (next) {
+    return this.expression.copyWithNext(next.expression);
+};
+
+Context.prototype.updateEmptySlots = function () {
+    this.emptySlots = this.expression.markEmptySlots();
 };
 
 // Variable /////////////////////////////////////////////////////////////////

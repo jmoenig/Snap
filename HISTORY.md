@@ -68,6 +68,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-01
+* blocks, threads: block-assembly support refactorings, experimental
+
 ### 2021-11-30
 * blocks, threads: block-assembly support, experimental
 * gui: fixed #2920
