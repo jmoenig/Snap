@@ -70,6 +70,7 @@
 
 ### 2021-12-01
 * blocks, threads: block-assembly support refactorings, experimental
+* blocks, threads: equality testing for scripts, experimental
 
 ### 2021-11-30
 * blocks, threads: block-assembly support, experimental

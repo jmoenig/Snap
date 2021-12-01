@@ -3710,7 +3710,15 @@ BlockMorph.prototype.components = function () {
     throw new Error('subclass responsility');
 };
 
+BlockMorph.prototype.equalTo = function (other) {
+    // private - only to be called from a Context
+    return this.constructor.name === other.constructor.name &&
+        this.selector === other.selector &&
+        this.blockSpec === other.blockSpec;
+};
+
 BlockMorph.prototype.copyWithInputs = function (inputs) {
+    // private - only to be called from a Context
     var cpy = this.fullCopy(),
         slots = cpy.inputs(),
         dta = inputs.itemsArray().map(inp =>
@@ -5489,7 +5497,8 @@ CommandBlockMorph.prototype.components = function () {
         }
         expr.fixBlockColor(null, true);
         inputs = expr.inputs();
-        if (!inputs.length) {
+        if (!inputs.length ||
+                inputs.every(slot => slot.isEmptySlot && slot.isEmptySlot())) {
             return expr.reify();
         }
         parts = new List([expr.reify()]);

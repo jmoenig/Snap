@@ -87,8 +87,9 @@ const NONNUMBERS = [true, false, ''];
 })();
 
 function snapEquals(a, b) {
-    if (a instanceof List || (b instanceof List)) {
-        if (a instanceof List && (b instanceof List)) {
+    // lists, functions and blocks
+    if (a.equalTo || b.equalTo) {
+        if (a.constructor.name === b.constructor.name) {
             return a.equalTo(b);
         }
         return false;
@@ -7012,7 +7013,8 @@ Context.prototype.isInCustomBlock = function () {
 // Context components - EXPERIMENTAL
 
 Context.prototype.components = function () {
-    var expr = this.expression.components(),
+    var expr = this.expression.components ?
+            this.expression.components() : new Context(),
         parts;
     if (!this.inputs.length) {
         return expr;
@@ -7021,6 +7023,15 @@ Context.prototype.components = function () {
     parts.add(expr); // blocks / other
     this.inputs.forEach(name => parts.add(name));
     return parts;
+};
+
+Context.prototype.equalTo = function (other) {
+    var c1 = this.components(),
+        c2 = other.components();
+    if (c1 instanceof Context && (c2 instanceof Context)) {
+        return snapEquals(c1.expression, c2.expression);
+    }
+    return snapEquals(c1, c2);
 };
 
 Context.prototype.copyWithInputs = function (inputs) {
