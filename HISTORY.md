@@ -68,6 +68,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-02
+* blocks, threads: block-assembly support refactorings, experimental
+
 ### 2021-12-01
 * blocks, threads: block-assembly support refactorings, experimental
 * blocks, threads: equality testing for scripts, experimental

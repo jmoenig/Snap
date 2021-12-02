@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-01';
+modules.blocks = '2021-December-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5497,15 +5497,13 @@ CommandBlockMorph.prototype.components = function () {
         }
         expr.fixBlockColor(null, true);
         inputs = expr.inputs();
-        if (!inputs.length ||
-                inputs.every(slot => slot.isEmptySlot && slot.isEmptySlot())) {
-            return expr.reify();
-        }
         parts = new List([expr.reify()]);
         inputs.forEach(inp => {
             var val;
             if (inp instanceof BlockMorph) {
                 parts.add(inp.components());
+            } else if (inp.isEmptySlot()) {
+                parts.add(); // empty
             } else {
                 val = inp.evaluate();
                 parts.add(val instanceof BlockMorph ? val.components() : val);
@@ -6297,15 +6295,13 @@ ReporterBlockMorph.prototype.components = function () {
         inputs = expr.inputs(),
         parts;
     expr.fixBlockColor(null, true);
-    if (!inputs.length ||
-            inputs.every(slot => slot.isEmptySlot && slot.isEmptySlot())) {
-        return expr.reify();
-    }
     parts = new List([expr.reify()]);
     inputs.forEach(inp => {
         var val;
         if (inp instanceof BlockMorph) {
             parts.add(inp.components());
+        } else if (inp.isEmptySlot()) {
+            parts.add(); // empty
         } else {
             val = inp.evaluate();
             parts.add(val instanceof BlockMorph ? val.components() : val);

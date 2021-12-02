@@ -62,9 +62,9 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
-modules.threads = '2021-December-01';
+modules.threads = '2021-December-02';
 
 var ThreadManager;
 var Process;
@@ -88,7 +88,7 @@ const NONNUMBERS = [true, false, ''];
 
 function snapEquals(a, b) {
     // lists, functions and blocks
-    if (a.equalTo || b.equalTo) {
+    if (a?.equalTo || b?.equalTo) {
         if (a.constructor.name === b.constructor.name) {
             return a.equalTo(b);
         }
@@ -7017,7 +7017,7 @@ Context.prototype.components = function () {
             this.expression.components() : new Context(),
         parts;
     if (!this.inputs.length) {
-        return expr;
+        return expr instanceof Context ? new List([expr]) : expr;
     }
     parts = new List();
     parts.add(expr); // blocks / other
@@ -7028,8 +7028,8 @@ Context.prototype.components = function () {
 Context.prototype.equalTo = function (other) {
     var c1 = this.components(),
         c2 = other.components();
-    if (c1 instanceof Context && (c2 instanceof Context)) {
-        return snapEquals(c1.expression, c2.expression);
+    if (snapEquals(c1.cdr(), c2.cdr())) {
+        return snapEquals(this.expression, other.expression);
     }
     return snapEquals(c1, c2);
 };
