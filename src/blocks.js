@@ -444,7 +444,9 @@ SyntaxElementMorph.prototype.labelParts = {
             'tab' : ['tab'],
             'cr' : ['cr'],
             'csv' : ['csv'],
-            'json' : ['json']
+            'json' : ['json'],
+            '~' : null,
+            'blocks' : ['blocks']
             /*
             'csv records' : ['csv records'],
             'csv fields' : ['csv fields']
@@ -3760,6 +3762,10 @@ BlockMorph.prototype.markEmptySlots = function () {
     // private - mark all empty slots with an identifier
     // and return the count
     var count = 0;
+
+    this.allInputs().forEach(input =>
+        delete input.bindingID
+    );
     this.allEmptySlots().forEach(slot => {
         count += 1;
         if (slot instanceof MultiArgMorph) {

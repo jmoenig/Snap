@@ -4283,9 +4283,23 @@ Process.prototype.reportJoin = function (a, b) {
 
 Process.prototype.reportJoinWords = function (aList) {
     if (aList instanceof List) {
+        if (this.isAST(aList)) {
+            return this.assemble(aList);
+        }
         return aList.asText();
     }
     return (aList || '').toString();
+};
+
+Process.prototype.isAST = function (aList) {
+    var first = aList.at(1);
+    if (first instanceof Context) {
+        return true;
+    }
+    if (first instanceof List) {
+        return first.at(1) instanceof Context;
+    }
+    return false;
 };
 
 // Process string ops - hyper-monadic/dyadic
@@ -4360,6 +4374,10 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
+    if (this.inputOption(delimiter) === 'blocks') {
+        this.assertType(string, ['command', 'reporter', 'predicate']);
+        return string.components();
+    }
     return this.hyperDyadic(
         (str, delim) => this.reportBasicTextSplit(str, delim),
         string,
@@ -4528,6 +4546,24 @@ Process.prototype.parseJSON = function (string) {
     }
 
     return listify(JSON.parse(string));
+};
+
+// Process script components - EXPERIMENTAL
+
+Process.prototype.assemble = function (blocks) {
+    var first;
+    if (!(blocks instanceof List)) {
+        return blocks;
+    }
+    first = blocks.at(1);
+    if (first instanceof Context) {
+        return first.copyWithInputs(
+            blocks.cdr().map(each => this.assemble(each))
+        );
+    }
+    return blocks.map(each => this.assemble(each)).itemsArray().reduce(
+        (a, b) => a.copyWithNext(b)
+    );
 };
 
 // Process debugging
