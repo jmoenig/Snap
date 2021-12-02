@@ -62,7 +62,7 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
-/*jshint esversion: 11*/
+/*jshint esversion: 6*/
 
 modules.threads = '2021-December-02';
 
@@ -87,8 +87,13 @@ const NONNUMBERS = [true, false, ''];
 })();
 
 function snapEquals(a, b) {
+    // nil
+    if (isNil(a) || isNil(b)) {
+        return a === b;
+    }
+
     // lists, functions and blocks
-    if (a?.equalTo || b?.equalTo) {
+    if (a.equalTo || b.equalTo) {
         if (a.constructor.name === b.constructor.name) {
             return a.equalTo(b);
         }
