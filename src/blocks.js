@@ -3733,7 +3733,8 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         if (inp instanceof BlockMorph) {
             if (inp instanceof CommandBlockMorph && slots[i].nestedBlock) {
                 slots[i].nestedBlock(inp);
-            } else {
+            } else if (inp instanceof ReporterBlockMorph &&
+                    !slots[i].isStatic) {
                 cpy.replaceInput(slots[i], inp);
             }
         } else {
@@ -5521,8 +5522,11 @@ CommandBlockMorph.prototype.copyWithNext = function (next) {
     var exp = this.fullCopy(),
         bottom = exp.bottomBlock(),
         top = next.fullCopy().topBlock();
+
+    if (top instanceof CommandBlockMorph) {
         bottom.nextBlock(top);
-        return exp.reify();
+    }
+    return exp.reify();
 };
 
 // CommandBlockMorph drawing:
@@ -6311,6 +6315,10 @@ ReporterBlockMorph.prototype.components = function () {
     });
     parts.at(1).updateEmptySlots();
     return parts;
+};
+
+ReporterBlockMorph.prototype.copyWithNext = function (next) {
+    return this.fullCopy().reify();
 };
 
 // ReporterBlockMorph drawing:
