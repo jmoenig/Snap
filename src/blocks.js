@@ -3793,30 +3793,11 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     return cpy.reify();
 };
 
-/*
-            } else if (inp instanceof MultiArgMorph) {
-                inp.inputs().forEach((slot, i) => {
-                    var entry;
-                    if (slot instanceof BlockMorph) {
-                        parts.add(slot.components());
-                    } else if (slot.isEmptySlot()) {
-                        parts.add();
-                    } else {
-                        entry = slot.evaluate();
-                        parts.add(entry instanceof BlockMorph ?
-                            entry.components() : entry);
-                    }
-                    inp.revertToDefaultInput(slot, true);
-                });
-            } else if (inp instanceof ArgLabelMorph) {
-                parts.add(inp.argMorph().components());
-                expr.revertToDefaultInput(inp, true).collapseAll();
-*/
-
-BlockMorph.prototype.reify = function () {
+BlockMorph.prototype.reify = function (inputNames = []) {
     // private - assumes that I've already been deep copied
     var context = new Context();
     context.expression = this;
+    context.inputs = inputNames;
     context.emptySlots = this.markEmptySlots();
     return context;
 };
