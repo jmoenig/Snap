@@ -7064,16 +7064,15 @@ Context.prototype.isInCustomBlock = function () {
 // Context components - EXPERIMENTAL
 
 Context.prototype.components = function () {
-    var expr = this.expression.components ?
-            this.expression.components() : new Context(),
-        parts;
-    if (!this.inputs.length) {
-        return expr instanceof Context ? new List([expr]) : expr;
+    var expr;
+    
+    if (this.expression.components) {
+        expr = this.expression.components(this.inputs.slice());
+    } else {
+        expr = new Context();
+        expr.inputs = this.inputs.slice();
     }
-    parts = new List();
-    parts.add(expr); // blocks / other
-    this.inputs.forEach(name => parts.add(name));
-    return parts;
+    return expr instanceof Context ? new List([expr]) : expr;
 };
 
 Context.prototype.equalTo = function (other) {
@@ -7086,11 +7085,13 @@ Context.prototype.equalTo = function (other) {
 };
 
 Context.prototype.copyWithInputs = function (inputs) {
-    return this.expression.copyWithInputs(inputs);
+    return this.expression ?
+        this.expression.copyWithInputs(inputs, this.inputs.slice())
+        : this;
 };
 
 Context.prototype.copyWithNext = function (next) {
-    return this.expression.copyWithNext(next.expression);
+    return this.expression.copyWithNext(next.expression, this.inputs.slice());
 };
 
 Context.prototype.updateEmptySlots = function () {

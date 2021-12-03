@@ -3720,7 +3720,7 @@ BlockMorph.prototype.equalTo = function (other) {
         this.blockSpec === other.blockSpec;
 };
 
-BlockMorph.prototype.copyWithInputs = function (inputs) {
+BlockMorph.prototype.copyWithInputs = function (inputs, parameterNames) {
     // private - only to be called from a Context
     var cpy = this.fullCopy(),
         slots = cpy.inputs(),
@@ -3800,14 +3800,14 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     });
 
     // create a function to return
-    return cpy.reify();
+    return cpy.reify(parameterNames);
 };
 
-BlockMorph.prototype.reify = function (inputNames = []) {
+BlockMorph.prototype.reify = function (inputNames) {
     // private - assumes that I've already been deep copied
     var context = new Context();
     context.expression = this;
-    context.inputs = inputNames;
+    context.inputs = inputNames || [];
     context.emptySlots = this.markEmptySlots();
     return context;
 };
@@ -5548,7 +5548,7 @@ CommandBlockMorph.prototype.extract = function () {
 
 // CommandBlockMorph components - EXPERIMENTAL
 
-CommandBlockMorph.prototype.components = function () {
+CommandBlockMorph.prototype.components = function (parameterNames) {
     var seq = new List(this.blockSequence()).map(block => {
         var expr = block.fullCopy(),
             nb = expr.nextBlock(),
@@ -5558,7 +5558,7 @@ CommandBlockMorph.prototype.components = function () {
         }
         expr.fixBlockColor(null, true);
         inputs = expr.inputs();
-        parts = new List([expr.reify()]);
+        parts = new List([expr.reify(parameterNames)]);
         inputs.forEach(inp => {
             var val;
             if (inp instanceof BlockMorph) {
@@ -5600,7 +5600,7 @@ CommandBlockMorph.prototype.components = function () {
     return seq.length() === 1 ? seq.at(1) : seq;
 };
 
-CommandBlockMorph.prototype.copyWithNext = function (next) {
+CommandBlockMorph.prototype.copyWithNext = function (next, parameterNames) {
     var exp = this.fullCopy(),
         bottom = exp.bottomBlock(),
         top = next.fullCopy().topBlock();
@@ -5608,7 +5608,7 @@ CommandBlockMorph.prototype.copyWithNext = function (next) {
     if (top instanceof CommandBlockMorph) {
         bottom.nextBlock(top);
     }
-    return exp.reify();
+    return exp.reify(parameterNames);
 };
 
 // CommandBlockMorph drawing:
@@ -6376,12 +6376,12 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 
 // ReporterBlockMorph components - EXPERIMENTAL
 
-ReporterBlockMorph.prototype.components = function () {
+ReporterBlockMorph.prototype.components = function (parameterNames) {
     var expr = this.fullCopy(),
         inputs = expr.inputs(),
         parts;
     expr.fixBlockColor(null, true);
-    parts = new List([expr.reify()]);
+    parts = new List([expr.reify(parameterNames)]);
     inputs.forEach(inp => {
         var val;
         if (inp instanceof BlockMorph) {
