@@ -3740,7 +3740,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         } else if (slt instanceof MultiArgMorph) {
             slt.inputs().forEach(entry => {
                 if (entry instanceof BlockMorph) {
-                    slt.revertToDefaultInput(entry); // does this work?
+                    slt.revertToDefaultInput(entry);
                 }
             });
         }
@@ -3764,7 +3764,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     if (inp instanceof List && inp.length() === 0) {
                         nop(); // ignore, i.e. leave slot as is
                     } else {
-                        entry.setContents(inp);
+                        if (entry instanceof InputSlotMorph ||
+                                entry instanceof BooleanSlotMorph) {
+                            entry.setContents(inp);
+                        }
                     }
                 }
                 count += 1;
@@ -3776,8 +3779,11 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                 if (inp instanceof CommandBlockMorph && slot.nestedBlock) {
                     slot.nestedBlock(inp);
                 } else if (inp instanceof ReporterBlockMorph &&
-                        !slot.isStatic) {
+                        (!slot.isStatic || slot instanceof RingMorph)) {
                     cpy.replaceInput(slot, inp);
+                } else if (inp instanceof ReporterBlockMorph &&
+                        slot.nestedBlock) {
+                    slot.nestedBlock(inp);
                 }
             } else {
                 if (inp instanceof List && inp.length() === 0) {
