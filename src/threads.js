@@ -7078,6 +7078,9 @@ Context.prototype.components = function () {
 Context.prototype.equalTo = function (other) {
     var c1 = this.components(),
         c2 = other.components();
+    if (!(new List(this.inputs).equalTo(new List(other.inputs)))) {
+        return false;
+    }
     if (snapEquals(c1.cdr(), c2.cdr())) {
         return snapEquals(this.expression, other.expression);
     }
