@@ -3771,6 +3771,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
             });
         } else {
             inp = dta[count];
+            if (inp === undefined) {return; }
             if (inp instanceof BlockMorph) {
                 if (inp instanceof CommandBlockMorph && slot.nestedBlock) {
                     slot.nestedBlock(inp);
@@ -3782,7 +3783,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                 if (inp instanceof List && inp.length() === 0) {
                     nop(); // ignore, i.e. leave slot as is
                 } else {
-                    slot.setContents(inp);
+                    if (slot instanceof InputSlotMorph ||
+                            slot instanceof BooleanSlotMorph) {
+                        slot.setContents(inp);
+                    }
                 }
             }
         }
@@ -5555,8 +5559,10 @@ CommandBlockMorph.prototype.components = function () {
                 parts.add(inp.components());
                 expr.revertToDefaultInput(inp, true);
             } else if (inp.isEmptySlot()) {
-                parts.add();
-                expr.revertToDefaultInput(inp, true);
+                if (!inp.isStatic) {
+                    parts.add();
+                    expr.revertToDefaultInput(inp, true);
+                }
             } else if (inp instanceof MultiArgMorph) {
                 inp.inputs().forEach((slot, i) => {
                     var entry;
@@ -5569,7 +5575,9 @@ CommandBlockMorph.prototype.components = function () {
                         parts.add(entry instanceof BlockMorph ?
                             entry.components() : entry);
                     }
-                    inp.revertToDefaultInput(slot, true);
+                    if (!(slot instanceof TemplateSlotMorph)) {
+                        inp.revertToDefaultInput(slot, true);
+                    }
                 });
             } else if (inp instanceof ArgLabelMorph) {
                 parts.add(inp.argMorph().components());
@@ -6374,8 +6382,10 @@ ReporterBlockMorph.prototype.components = function () {
             parts.add(inp.components());
             expr.revertToDefaultInput(inp, true);
         } else if (inp.isEmptySlot()) {
-            parts.add();
-            expr.revertToDefaultInput(inp, true);
+            if (!inp.isStatic) {
+                parts.add();
+                expr.revertToDefaultInput(inp, true);
+            }
         } else if (inp instanceof MultiArgMorph) {
             inp.inputs().forEach((slot, i) => {
                 var entry;
@@ -6388,7 +6398,9 @@ ReporterBlockMorph.prototype.components = function () {
                     parts.add(entry instanceof BlockMorph ?
                         entry.components() : entry);
                 }
-                inp.revertToDefaultInput(slot, true);
+                if (!(slot instanceof TemplateSlotMorph)) {
+                    inp.revertToDefaultInput(slot, true);
+                }
             });
         } else if (inp instanceof ArgLabelMorph) {
             parts.add(inp.argMorph().components());
