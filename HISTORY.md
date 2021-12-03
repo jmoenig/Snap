@@ -68,6 +68,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-03
+* blocks, threads: block-assembly support for multi-args, experimental
+
 ### 2021-12-02
 * blocks, threads: block-assembly support refactorings, experimental
 
