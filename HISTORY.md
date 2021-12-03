@@ -70,6 +70,7 @@
 
 ### 2021-12-03
 * blocks, threads: block-assembly support for multi-args, experimental
+* threads: changed the visualization for an empty context to reporter-ring 
 
 ### 2021-12-02
 * blocks, threads: block-assembly support refactorings, experimental

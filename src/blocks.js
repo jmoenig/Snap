@@ -9934,6 +9934,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         dict['temporary?'] = ['temporary?'];
     }
     dict.name = ['name'];
+    // dict.scripts = ['scripts']; // not yet ready
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];

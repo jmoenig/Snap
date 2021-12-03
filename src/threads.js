@@ -5613,6 +5613,16 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
+        /* // not yet ready
+        case 'scripts':
+            return new List(
+                thisObj.scripts.children.filter(
+                    each => each instanceof BlockMorph
+                ).map(
+                    each => each.fullCopy().reify()
+                )
+            );
+        */
         case 'costume':
             return thisObj.costume;
         case 'costumes':
@@ -6924,7 +6934,7 @@ Context.prototype.image = function () {
 
     // otherwise show an empty ring
     ring.color = SpriteMorph.prototype.blockColor.other;
-    ring.setSpec('%rc %ringparms');
+    ring.setSpec('%rr %ringparms');
 
     // also show my inputs, unless I'm a continuation
     if (!this.isContinuation) {
