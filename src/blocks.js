@@ -2828,57 +2828,6 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
-
-    /* UCB Script Pic Edit:
-     *  - Incorporated new method to userMenu to integrate scriptPic's and XML code.
-     *  - Code credited to Snap! Forum user Dardoro.
-     */
-    if (this.isTemplate || !this.definition) {
-		menu.addLine();
-		menu.addItem("script pic and xml...", 
-			() => {
-				const inbDelim = "Snap\tBlocks\tEmbedded"; //in-band XML delimeter
-				function crc32(str, crc) {
-					let table = [...Array(256).keys()].map(it => 
-						[...Array(8)].reduce((cc) => 
-						(cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
-						);
-						crc = [...str].reduce((crc, ch) => { 
-							return (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff]
-						}, (crc ||= 0) ^ (-1));
-						return ( crc ^ (-1) ) >>> 0;
-					};
-				function arr2Str(arr) { 
-					return arr.reduce((res, byte) => res + String.fromCharCode(byte), '');
-				};
-				function int2BStr(val) { 
-					return arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse());
-				};
-				function buildChunk(type , data) { 
-					let res = type + data; 
-					return int2BStr(data.length) + res + int2BStr(crc32(res));
-				};
-				function SaveData(dataURL, name) { 
-					return Object.assign(document.createElement("a"), 
-					{download: name, href: dataURL}).click(); 
-				};
-					
-				var ide = this.parentThatIsA(IDE_Morph),
-					top = this.definition || this.topBlock();
-				let xml = unescape(encodeURIComponent(ide.serializer.serialize(top))),
-				    pic = top.scriptsPicture?.() || top.scriptPic?.(),
-                    parts = pic.toDataURL("image/png").split(","),
-                    bPart = atob(parts[1]).split("");
-				if (this.isTemplate) { xml = "<blocks>" + xml + "</blocks>" };
-				let newChunk = buildChunk("iTXt", "Snap!_XML\0\0\0\0\0"+inbDelim+xml+inbDelim),
-				    name = top?.definition?.spec || top.selector;
-				bPart.splice(-12, 0, ...newChunk);
-				parts[1] = btoa(bPart.join(""));
-				SaveData(parts.join(','), name + ".png");
-			}
-		);
-	}
-
     if (this.isTemplate) {
         if (this.parent instanceof SyntaxElementMorph) { // in-line
             if (this.selector === 'reportGetVar') { // script var definition
