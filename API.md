@@ -1,12 +1,23 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, January 07, 2021
+Jens Mönig, Bernat Romagosa, November 17, 2021
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
 This experimental Snap! API is a set of methods for an IDE_Morph containing a Snap! project. These methods are maintained to work with future versions of Snap! They can be used to trigger scripts, get feedback from running scripts, and access the project's global variables.
 
 Currently the API consists of the following methods:
+
+#### Navigate Scenes
+
+* IDE_Morph.prototype.getScenes()
+* IDE_Morph.prototype.getCurrentScene()
+* IDE_Morph.prototype.switchTo()
+
+#### Control Processes
+
+* IDE_Morph.prototype.isRunning()
+* IDE_Morph.prototype.stop()
 
 #### Broadcast Messages (and optionally wait)
 
@@ -93,6 +104,60 @@ Note that `e.data.selector` carries the original selector back, so you can tie i
 request, while `e.data.response` carries the return value of the API method call.
 
 ## Interacting with the IDE
+
+### IDE_Morph.prototype.getScenes()
+The getScenes() method returns an array with the names of all scenes in the projects. The minimum number of elements is 1, since there is always at least one scene per project. The scene names are unique strings within the array. Note that the empty string ('') is a valid scene identifier.
+
+#### syntax
+    ide.getScenes();
+
+#### return value
+an Array of Strings, minimum length 1
+
+
+### IDE_Morph.prototype.getCurrentScene()
+The getCurrentScene() method returns a string representing the name of the currently active scene in the project. If the scene is unnamed and empty string is returned.
+
+#### syntax
+    ide.getCurrentScene();
+
+#### return value
+a String, can be an empty String
+
+
+### IDE_Morph.prototype.switchTo()
+The switchTo() method displays the specified scene. It suspends all processes and clones of the previously active scene and passes control to the new scene.
+
+#### syntax
+    ide.switchTo(sceneName);
+
+#### parameters
+* sceneName
+    - string, the name of the scene to be activated
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.isRunning()
+The isRunning() method returns `true` if the active scene is currently running one or more threads, `false` if the scene is idle.
+
+#### syntax
+    ide.isRunning();
+
+#### return value
+a Boolean
+
+
+### IDE_Morph.prototype.stop()
+The stop() method immediately terminates all currently running threads in the active scene and removes all temporary clones. It does not trigger a "When I am stopped" event.
+
+#### syntax
+    ide.stop();
+
+#### return value
+undefined
+
 
 ### IDE_Morph.prototype.broadcast()
 The broadcast() method triggers all scripts whose hat block listens to the specified message. An optional callback can be added to be run after all triggered scripts have terminated.
@@ -209,7 +274,7 @@ the loadProjectXML() method replaces the current project of the IDE with another
 #### parameters
 * projectData
     * XML string representing a serialized project
-    
+
 #### return value
 unefined
 
@@ -219,7 +284,7 @@ the unsavedChanges() method return a Boolean value indicating whether the curren
 
 #### syntax
     ide.unsavedChanges();
-    
+
 #### return value
 a Boolean
 

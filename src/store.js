@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-12';
+modules.store = '2021-November-24';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -253,7 +253,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -380,6 +380,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     scene.unifiedPalette = model.scene.attributes.palette === 'single';
     scene.showCategories = model.scene.attributes.categories !== 'false';
+    scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
@@ -397,7 +398,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     /* Stage */
 
     model.stage = model.scene.require('stage');
-    StageMorph.prototype.frameRate = 0;
     scene.stage.remixID = remixID;
 
     if (Object.prototype.hasOwnProperty.call(
@@ -414,10 +414,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         scene.stage.cachedColorDimensions = scene.stage.color[
             SpriteMorph.prototype.penColorModel
         ]();
-    }
-    if (model.stage.attributes.scheduled === 'true') {
-        scene.stage.fps = 30;
-        StageMorph.prototype.frameRate = 30;
     }
     if (model.stage.attributes.volume) {
         scene.stage.volume = +model.stage.attributes.volume;
@@ -1738,7 +1734,7 @@ Scene.prototype.toXML = function (serializer) {
     }
 
     xml = serializer.format(
-        '<scene name="@"%%%%>' +
+        '<scene name="@"%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1752,6 +1748,8 @@ Scene.prototype.toXML = function (serializer) {
         this.unifiedPalette ? ' palette="single"' : '',
         this.unifiedPalette && !this.showCategories ?
             ' categories="false"' : '',
+        this.unifiedPalette && !this.showPaletteButtons ?
+            ' buttons="false"' : '',
         this.disableClickToRun ? ' clickrun="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.notes || '',
@@ -1787,8 +1785,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'hyperops="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
-            'sublistIDs="@" ' +
-            'scheduled="@" ~>' +
+            'sublistIDs="@" ~>' +
             '<pentrails>$</pentrails>' +
             '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
@@ -1818,7 +1815,6 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,
-        StageMorph.prototype.frameRate !== 0,
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
 
         // current costume, if it's not in the wardrobe

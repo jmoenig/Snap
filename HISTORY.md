@@ -15,9 +15,13 @@
     * BROADCAST blocks are expandable to feature a second input for message receivers, default is "all"
     * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
     * added "enter" key to key-pressed dropdown
-    * added "green flag" symbol to message drop-down
+    * added green flag symbol to message drop-down
+    * the green flag button's background color indicates whether the current scene is running or idle
+    * empty categories are indicated by half-tone buttons
+    * added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter 
     * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
     * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
+    * new Signada hardware library, thanks, Citilab Barcelona!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
@@ -28,12 +32,18 @@
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
     * changed the scale of the graphics color effect from 0-200 to 0-100
     * result-bubbles (when clicking on a reporter) now stay visible until the next click
+    * took out "Hyper blocks support" setting from the gears menu (it's now hidden behind shift-click)
     * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
     * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
     * blocked xhr requests to from Snap! to s.b.e
     * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
+    * updated the Snap! API and documentation with methods to navigate among scenes and control processes
+    * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
+    * removed old hidden "virtual keyboard" setting (was no longer used for the last years)
+    * removed old hidden "project urls" setting
+    * removed hidden "cache inputs" setting (only used for debugging the evaluator)
 * **Notable Fixes:**
     * made scrollbars in the wardrobe and jukebox more responsive
     * fixed centering of menus, thanks, Brian Broll!
@@ -46,7 +56,10 @@
     * fixed outdated blocks specs for "When I am ..." hat block in many translations
     * fixed duplicating custom block definitions that don't have a body
     * allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
+    * fixed an infinite loop in the FILL block when the pen colors have been set to an invalid color (via a bad library)
     * fixed some minor variable-renaming issues
+    * fixed STOP OTHER SCRIPTS for use inside TELL
+    * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
 * **Documentation Updates:**
     * updated manual, thanks Brian!
     * updated readme, thanks, Michael!
@@ -55,7 +68,79 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
-### 2021-11-12
+### 2021-12-03
+* blocks, threads: block-assembly support for multi-args, experimental
+* threads: changed the visualization for an empty context to reporter-ring 
+
+### 2021-12-02
+* blocks, threads: block-assembly support refactorings, experimental
+
+### 2021-12-01
+* blocks, threads: block-assembly support refactorings, experimental
+* blocks, threads: equality testing for scripts, experimental
+
+### 2021-11-30
+* blocks, threads: block-assembly support, experimental
+* gui: fixed #2920
+
+### 2021-11-29
+* renamed "r-g-b-a" option to "RGBA" and "r-g-b(-a)" to "RGB(A)"
+
+### 2021-11-28
+* fixed a glitch in "remove duplicates" in the "list utilities" library 
+
+### 2021-11-27
+* blocks, threads: tweaked SET / CHANGE PEN dropdown option to "r-g-b(-a)"
+* made "remove duplicates" reporter in the "list utilities" library (a lot) faster
+
+### 2021-11-26
+* added signada extension files to the pwa cache
+* blocks, treads, objects: added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter 
+
+### 2021-11-25
+* gui: rearranged and amended the project menu
+* German translation update for project menu entries
+* objects: fixed a FILL issue when the pen color has been set to an invalid color via a bad library
+
+### 2021-11-24
+* threads: fixed #2918
+* gui, objects, scenes: added scene-setting to hide/show buttons in the unified palette
+* store: made "show buttons" setting for unified palette persistent in the XML
+* German translation update for "Show buttons" setting
+* added indented sub-preferences to the settings menu
+
+### 2021-11-23
+* byob: refresh category buttons when hiding / showing blocks
+* gui: refresh category buttons when switching to dev mode and back
+* gui: refresh category buttons when turning built-in extensions on and off
+
+### 2021-11-19
+* objects, byob, gui: visually indicate empty categories by half-toning their buttons
+
+### 2021-11-18
+* gui: only pause generic hat blocks when loading a new project, not when switching to a new scene
+
+### 2021-11-17
+* gui: set the green-flag button's background color to "active" while a thread is running
+* api: changed "processes" method to "isRunning"
+* updated api documentation
+* gui: refresh stop button when switching scenes
+
+### 2021-11-16
+* store, gui: updated serializer app tag to v7
+* api: removed incomplete api documentation from the source code
+* updated api documentation
+
+### 2021-11-15
+* German translation update
+* gui: made "Hyper blocks support" setting hidden in the gears menu
+* gui, objects, threads, store, translations: Removed old hidden "prefer smooth animations" setting
+* gui: removed experimental hidden "add scenes" option from the settings menus
+* gui, translations: removed old hidden "virtual keyboard" setting
+* gui: removed old hidden "project urls" setting
+* gui: removed hidden "cache inputs" setting (only used for debugging the evaluator)
+
+### 2021-11-14
 * locale: contextualize translations
 * gui: refresh IDE when changing the pen color model
 

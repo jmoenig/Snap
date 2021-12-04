@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2021-November-14';
+modules.locale = '2021-November-29';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -122,6 +122,10 @@ Localizer.prototype.contextualize = function (string) {
     case 'brightness':
         return SpriteMorph.prototype.penColorModel === 'hsl' ?
             'lightness' : string;
+    case 'r-g-b-a':
+        return 'RGBA';
+    case 'r-g-b(-a)':
+        return 'RGB(A)';
     default:
         return string;
     }
@@ -181,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2021-11-14'
+        '2021-11-25'
 };
 
 SnapTranslator.dict.it = {

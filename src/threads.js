@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-November-11';
+modules.threads = '2021-December-02';
 
 var ThreadManager;
 var Process;
@@ -87,8 +87,14 @@ const NONNUMBERS = [true, false, ''];
 })();
 
 function snapEquals(a, b) {
-    if (a instanceof List || (b instanceof List)) {
-        if (a instanceof List && (b instanceof List)) {
+    // nil
+    if (isNil(a) || isNil(b)) {
+        return a === b;
+    }
+
+    // lists, functions and blocks
+    if (a.equalTo || b.equalTo) {
+        if (a.constructor.name === b.constructor.name) {
             return a.equalTo(b);
         }
         return false;
@@ -2447,7 +2453,8 @@ Process.prototype.doStopOthers = function (choice) {
                 break;
             case 'other scripts in sprite':
                 stage.threads.stopAllForReceiver(
-                    this.homeContext.receiver,
+                    this.context.outerContext.receiver,
+                    // this.homeContext.receiver,
                     this
                 );
                 break;
@@ -2473,9 +2480,6 @@ Process.prototype.doWarp = function (body) {
                 this.homeContext.receiver.startWarp();
             }
             stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-            if (stage) {
-                stage.fps = 0; // variable frame rate
-            }
         }
 
         // this.pushContext('doYield'); // no longer needed in Morphic2
@@ -2503,9 +2507,6 @@ Process.prototype.doStopWarping = function () {
             this.homeContext.receiver.endWarp();
         }
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            stage.fps = stage.frameRate; //  back to fixed frame rate
-        }
     }
 };
 
@@ -4282,9 +4283,23 @@ Process.prototype.reportJoin = function (a, b) {
 
 Process.prototype.reportJoinWords = function (aList) {
     if (aList instanceof List) {
+        if (this.isAST(aList)) {
+            return this.assemble(aList);
+        }
         return aList.asText();
     }
     return (aList || '').toString();
+};
+
+Process.prototype.isAST = function (aList) {
+    var first = aList.at(1);
+    if (first instanceof Context) {
+        return true;
+    }
+    if (first instanceof List) {
+        return first.at(1) instanceof Context;
+    }
+    return false;
 };
 
 // Process string ops - hyper-monadic/dyadic
@@ -4359,6 +4374,10 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
+    if (this.inputOption(delimiter) === 'blocks') {
+        this.assertType(string, ['command', 'reporter', 'predicate']);
+        return string.components();
+    }
     return this.hyperDyadic(
         (str, delim) => this.reportBasicTextSplit(str, delim),
         string,
@@ -4527,6 +4546,24 @@ Process.prototype.parseJSON = function (string) {
     }
 
     return listify(JSON.parse(string));
+};
+
+// Process script components - EXPERIMENTAL
+
+Process.prototype.assemble = function (blocks) {
+    var first;
+    if (!(blocks instanceof List)) {
+        return blocks;
+    }
+    first = blocks.at(1);
+    if (first instanceof Context) {
+        return first.copyWithInputs(
+            blocks.cdr().map(each => this.assemble(each))
+        );
+    }
+    return blocks.map(each => this.assemble(each)).itemsArray().reduce(
+        (a, b) => a.copyWithNext(b)
+    );
 };
 
 // Process debugging
@@ -4780,17 +4817,27 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
 // Process color primitives
 
 Process.prototype.setColorDimension = function (name, num) {
-    var options = ['hue', 'saturation', 'brightness', 'transparency'];
+    var options = ['hue', 'saturation', 'brightness', 'transparency'],
+        choice = this.inputOption(name);
+    if (choice === 'r-g-b(-a)') {
+        this.blockReceiver().setColorRGBA(num);
+        return;
+    }
     this.blockReceiver().setColorDimension(
-        options.indexOf(this.inputOption(name)),
+        options.indexOf(choice),
         +num
     );
 };
 
 Process.prototype.changeColorDimension = function (name, num) {
-    var options = ['hue', 'saturation', 'brightness', 'transparency'];
+    var options = ['hue', 'saturation', 'brightness', 'transparency'],
+        choice = this.inputOption(name);
+    if (choice === 'r-g-b(-a)') {
+        this.blockReceiver().changeColorRGBA(num);
+        return;
+    }
     this.blockReceiver().changeColorDimension(
-        options.indexOf(this.inputOption(name)),
+        options.indexOf(choice),
         +num
     );
 };
@@ -5566,6 +5613,16 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
+        /* // not yet ready
+        case 'scripts':
+            return new List(
+                thisObj.scripts.children.filter(
+                    each => each instanceof BlockMorph
+                ).map(
+                    each => each.fullCopy().reify()
+                )
+            );
+        */
         case 'costume':
             return thisObj.costume;
         case 'costumes':
@@ -6877,7 +6934,7 @@ Context.prototype.image = function () {
 
     // otherwise show an empty ring
     ring.color = SpriteMorph.prototype.blockColor.other;
-    ring.setSpec('%rc %ringparms');
+    ring.setSpec('%rr %ringparms');
 
     // also show my inputs, unless I'm a continuation
     if (!this.isContinuation) {
@@ -7002,6 +7059,46 @@ Context.prototype.isInCustomBlock = function () {
         return this.parentContext.isInCustomBlock();
     }
     return false;
+};
+
+// Context components - EXPERIMENTAL
+
+Context.prototype.components = function () {
+    var expr;
+    
+    if (this.expression.components) {
+        expr = this.expression.components(this.inputs.slice());
+    } else {
+        expr = new Context();
+        expr.inputs = this.inputs.slice();
+    }
+    return expr instanceof Context ? new List([expr]) : expr;
+};
+
+Context.prototype.equalTo = function (other) {
+    var c1 = this.components(),
+        c2 = other.components();
+    if (!(new List(this.inputs).equalTo(new List(other.inputs)))) {
+        return false;
+    }
+    if (snapEquals(c1.cdr(), c2.cdr())) {
+        return snapEquals(this.expression, other.expression);
+    }
+    return snapEquals(c1, c2);
+};
+
+Context.prototype.copyWithInputs = function (inputs) {
+    return this.expression ?
+        this.expression.copyWithInputs(inputs, this.inputs.slice())
+        : this;
+};
+
+Context.prototype.copyWithNext = function (next) {
+    return this.expression.copyWithNext(next.expression, this.inputs.slice());
+};
+
+Context.prototype.updateEmptySlots = function () {
+    this.emptySlots = this.expression.markEmptySlots();
 };
 
 // Variable /////////////////////////////////////////////////////////////////
