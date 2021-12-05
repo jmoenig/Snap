@@ -6018,6 +6018,17 @@ HatBlockMorph.prototype.blockSequence = function () {
     return result;
 };
 
+// HatBlockMorph components - EXPERIMENTAL
+
+HatBlockMorph.prototype.reify = function () {
+    // private - assumes that I've already been deep copied
+    var nb = this.nextBlock();
+    if (!nb) {
+        return new Context();
+    }
+    return nb.reify();
+};
+
 // HatBlockMorph drawing:
 
 HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
