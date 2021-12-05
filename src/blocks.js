@@ -5589,6 +5589,10 @@ CommandBlockMorph.prototype.components = function (parameterNames) {
                 inp.inputs().forEach((slot, i) => {
                     var entry;
                     if (slot instanceof BlockMorph) {
+                        if (slot instanceof RingMorph && slot.isEmptySlot()) {
+                            parts.add();
+                            return;
+                        }
                         parts.add(slot.components());
                     } else if (slot.isEmptySlot()) {
                         parts.add();
@@ -6427,6 +6431,10 @@ ReporterBlockMorph.prototype.components = function (parameterNames) {
             inp.inputs().forEach((slot, i) => {
                 var entry;
                 if (slot instanceof BlockMorph) {
+                    if (slot instanceof RingMorph && slot.isEmptySlot()) {
+                        parts.add();
+                        return;
+                    }
                     parts.add(slot.components());
                 } else if (slot.isEmptySlot()) {
                     parts.add();
