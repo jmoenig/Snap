@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-26';
+modules.objects = '2021-November-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -1070,6 +1070,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'microphone %audio',
             defaults: [['volume']]
+        },
+        reportBlockAttribute: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: '%block of block %repRing',
+            defaults: [['definition']]
         },
 
         // Operators
@@ -2623,6 +2629,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportBlockAttribute'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -9033,6 +9040,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportBlockAttribute'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

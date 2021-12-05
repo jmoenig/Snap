@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-02';
+modules.threads = '2021-December-05';
 
 var ThreadManager;
 var Process;
@@ -5437,6 +5437,43 @@ Process.prototype.reportDirectionTo = function (name) {
     return 0;
 };
 
+Process.prototype.reportBlockAttribute = function (attribute, block) {
+    // hyper-dyadic
+    // note: specifying strings in the left input only accesses
+    // sprite-local variables. Attributes such as "width", "direction" etc.
+    // can only be queried via the dropdown menu and are, therefore, not
+    // reachable as dyadic inputs
+    return this.hyperDyadic(
+        (att, obj) => this.reportBasicBlockAttribute(att, obj),
+        attribute,
+        block
+    );
+};
+
+Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
+    // experimental - under construction
+    var choice = this.inputOption(attribute),
+        expr;
+    this.assertType(block, ['command', 'reporter', 'predicate']);
+    expr = block.expression;
+    switch (choice) {
+    case 'definition':
+        if (expr.isCustomBlock) {
+            if (expr.isGlobal) {
+                return expr.definition.body;
+            }
+            return this.blockReceiver().getMethod(expr.semanticSpec).body ||
+                new Context();
+        }
+        return new Context();
+    case 'is primitive':
+        return !expr.isCustomBlock;
+    case 'is global':
+        return expr.isGlobal;
+    }
+    return '';
+};
+
 Process.prototype.reportAttributeOf = function (attribute, name) {
     // hyper-dyadic
     // note: specifying strings in the left input only accesses
@@ -5613,7 +5650,6 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
-        /* // not yet ready
         case 'scripts':
             return new List(
                 thisObj.scripts.children.filter(
@@ -5622,7 +5658,30 @@ Process.prototype.reportGet = function (query) {
                     each => each.fullCopy().reify()
                 )
             );
-        */
+        case 'primitives':
+            return new List(
+                SpriteMorph.prototype.allCategories().reduce(
+                    (blocks, category) =>
+                        blocks.concat(thisObj.getPrimitiveTemplates(category)),
+                    []
+                ).filter(
+                    each => each instanceof BlockMorph
+                ).map(block => {
+                    let instance = block.fullCopy();
+                    instance.isTemplate = false;
+                    return instance.reify();
+                })
+            );
+        case 'custom blocks':
+            return new List(
+                thisObj.parentThatIsA(StageMorph).globalBlocks.concat(
+                    thisObj.allBlocks(true)
+                //).filter(
+                //    def => !def.isHelper
+                ).map(
+                    def => def.blockInstance().reify()
+                )
+            );
         case 'costume':
             return thisObj.costume;
         case 'costumes':
@@ -7064,10 +7123,9 @@ Context.prototype.isInCustomBlock = function () {
 // Context components - EXPERIMENTAL
 
 Context.prototype.components = function () {
-    var expr;
-    
-    if (this.expression.components) {
-        expr = this.expression.components(this.inputs.slice());
+    var expr = this.expression;
+    if (expr && expr.components) {
+        expr = expr.components(this.inputs.slice());
     } else {
         expr = new Context();
         expr.inputs = this.inputs.slice();

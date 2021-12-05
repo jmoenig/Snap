@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-03';
+modules.blocks = '2021-December-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -790,6 +790,18 @@ SyntaxElementMorph.prototype.labelParts = {
             'snap': ['snap'],
             'motion': ['motion'],
             'direction': ['direction']
+        }
+    },
+
+    // block
+
+    '%block': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'definition': ['definition'],
+            'is primitive': ['is primitive'],
+            'is global': ['is global']
         }
     },
 
@@ -5562,6 +5574,10 @@ CommandBlockMorph.prototype.components = function (parameterNames) {
         inputs.forEach(inp => {
             var val;
             if (inp instanceof BlockMorph) {
+                if (inp instanceof RingMorph && inp.isEmptySlot()) {
+                    parts.add();
+                    return;
+                }
                 parts.add(inp.components());
                 expr.revertToDefaultInput(inp, true);
             } else if (inp.isEmptySlot()) {
@@ -6385,6 +6401,10 @@ ReporterBlockMorph.prototype.components = function (parameterNames) {
     inputs.forEach(inp => {
         var val;
         if (inp instanceof BlockMorph) {
+            if (inp instanceof RingMorph && inp.isEmptySlot()) {
+                parts.add();
+                return;
+            }
             parts.add(inp.components());
             expr.revertToDefaultInput(inp, true);
         } else if (inp.isEmptySlot()) {
@@ -7034,6 +7054,11 @@ RingMorph.prototype.dataType = function () {
     default:
         return 'reporter';
     }
+};
+
+RingMorph.prototype.isEmptySlot = function () {
+    return this.contents() === null &&
+        (this.getSlotSpec().indexOf('Ring') > 0);
 };
 
 // RingMorph zebra coloring
@@ -9933,10 +9958,12 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         dict['temporary?'] = ['temporary?'];
     }
     dict.name = ['name'];
-    // dict.scripts = ['scripts']; // not yet ready
+    dict.scripts = ['scripts']; // experimental
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
+    dict.primitives = ['primitives']; // experimental
+    dict['custom blocks'] = ['custom blocks']; // experimental
     dict['dangling?'] = ['dangling?'];
     dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
