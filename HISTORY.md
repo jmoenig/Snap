@@ -68,6 +68,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-06
+* blocks, threads: refactored block assembly, experimental
+
 ### 2021-12-05
 * blocks, threads, objects: introspection & syntax analysis, experimental
 

@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-05';
+modules.blocks = '2021-December-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3732,7 +3732,7 @@ BlockMorph.prototype.equalTo = function (other) {
         this.blockSpec === other.blockSpec;
 };
 
-BlockMorph.prototype.copyWithInputs = function (inputs, parameterNames) {
+BlockMorph.prototype.copyWithInputs = function (inputs) {
     // private - only to be called from a Context
     var cpy = this.fullCopy(),
         slots = cpy.inputs(),
@@ -3812,7 +3812,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs, parameterNames) {
     });
 
     // create a function to return
-    return cpy.reify(parameterNames);
+    return cpy.reify(dta.slice(count));
 };
 
 BlockMorph.prototype.reify = function (inputNames) {
@@ -5560,7 +5560,7 @@ CommandBlockMorph.prototype.extract = function () {
 
 // CommandBlockMorph components - EXPERIMENTAL
 
-CommandBlockMorph.prototype.components = function (parameterNames) {
+CommandBlockMorph.prototype.components = function (parameterNames = []) {
     var seq = new List(this.blockSequence()).map(block => {
         var expr = block.fullCopy(),
             nb = expr.nextBlock(),
@@ -5570,7 +5570,7 @@ CommandBlockMorph.prototype.components = function (parameterNames) {
         }
         expr.fixBlockColor(null, true);
         inputs = expr.inputs();
-        parts = new List([expr.reify(parameterNames)]);
+        parts = new List([expr.reify()]);
         inputs.forEach(inp => {
             var val;
             if (inp instanceof BlockMorph) {
@@ -5615,6 +5615,7 @@ CommandBlockMorph.prototype.components = function (parameterNames) {
             }
         });
         parts.at(1).updateEmptySlots();
+        parameterNames.forEach(name => parts.add(name));
         return parts;
     });
     return seq.length() === 1 ? seq.at(1) : seq;
@@ -6407,12 +6408,12 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 
 // ReporterBlockMorph components - EXPERIMENTAL
 
-ReporterBlockMorph.prototype.components = function (parameterNames) {
+ReporterBlockMorph.prototype.components = function (parameterNames = []) {
     var expr = this.fullCopy(),
         inputs = expr.inputs(),
         parts;
     expr.fixBlockColor(null, true);
-    parts = new List([expr.reify(parameterNames)]);
+    parts = new List([expr.reify()]);
     inputs.forEach(inp => {
         var val;
         if (inp instanceof BlockMorph) {
@@ -6456,6 +6457,7 @@ ReporterBlockMorph.prototype.components = function (parameterNames) {
             expr.revertToDefaultInput(inp, true);
         }
     });
+    parameterNames.forEach(name => parts.add(name));
     parts.at(1).updateEmptySlots();
     return parts;
 };
