@@ -4561,6 +4561,9 @@ Process.prototype.assemble = function (blocks) {
             blocks.cdr().map(each => this.assemble(each))
         );
     }
+    if (blocks.isEmpty()) {
+        return blocks;
+    }
     return blocks.map(each => this.assemble(each)).itemsArray().reduce(
         (a, b) => a.copyWithNext(b)
     );
