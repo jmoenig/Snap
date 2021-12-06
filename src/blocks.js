@@ -800,8 +800,8 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'definition': ['definition'],
-            'is custom': ['is custom'],
-            'is global': ['is global']
+            'custom?': ['custom?'],
+            'global?': ['global?']
         }
     },
 

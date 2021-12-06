@@ -70,6 +70,7 @@
 
 ### 2021-12-06
 * blocks, threads: refactored block assembly, experimental
+* German translation update
 
 ### 2021-12-05
 * blocks, threads, objects: introspection & syntax analysis, experimental

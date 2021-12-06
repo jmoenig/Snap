@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-25', // this, too, will appear in the Translators tab
+        '2021-12-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -725,6 +725,14 @@ SnapTranslator.dict.de = {
         'Rahmenz\u00e4hler',
     'log pen vectors':
         'Vektoraufzeichnung',
+    '%block of block %repRing':
+        '%block von Block %repRing',
+    'definition':
+        'Definition',
+    'custom?':
+        'benutzerdefiniert?',
+    'global':
+        'global?',
 
     // operators:
     '%n mod %n':
