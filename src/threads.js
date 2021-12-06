@@ -5467,9 +5467,9 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         }
         return new Context();
     case 'custom?':
-        return expr.isCustomBlock;
+        return expr ? !!expr.isCustomBlock : false;
     case 'global?':
-        return expr.isGlobal;
+        return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
     }
     return '';
 };
