@@ -5466,8 +5466,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 new Context();
         }
         return new Context();
-    case 'is primitive':
-        return !expr.isCustomBlock;
+    case 'is custom':
+        return expr.isCustomBlock;
     case 'is global':
         return expr.isGlobal;
     }
@@ -5658,28 +5658,30 @@ Process.prototype.reportGet = function (query) {
                     each => each.fullCopy().reify()
                 )
             );
-        case 'primitives':
-            return new List(
-                SpriteMorph.prototype.allCategories().reduce(
-                    (blocks, category) =>
-                        blocks.concat(thisObj.getPrimitiveTemplates(category)),
-                    []
-                ).filter(
-                    each => each instanceof BlockMorph
-                ).map(block => {
-                    let instance = block.fullCopy();
-                    instance.isTemplate = false;
-                    return instance.reify();
-                })
-            );
-        case 'custom blocks':
+        case 'blocks': // palette unoordered without inherited methods
             return new List(
                 thisObj.parentThatIsA(StageMorph).globalBlocks.concat(
                     thisObj.allBlocks(true)
-                //).filter(
-                //    def => !def.isHelper
+                ).filter(
+                    def => !def.isHelper
                 ).map(
                     def => def.blockInstance().reify()
+                ).concat(
+                    SpriteMorph.prototype.allCategories().reduce(
+                        (blocks, category) => blocks.concat(
+                            thisObj.getPrimitiveTemplates(
+                                category
+                            ).filter(
+                                each => each instanceof BlockMorph &&
+                                    !(each instanceof HatBlockMorph)
+                            ).map(block => {
+                                let instance = block.fullCopy();
+                                instance.isTemplate = false;
+                                return instance.reify();
+                            })
+                        ),
+                        []
+                    )
                 )
             );
         case 'costume':

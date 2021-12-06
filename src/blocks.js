@@ -800,7 +800,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'definition': ['definition'],
-            'is primitive': ['is primitive'],
+            'is custom': ['is custom'],
             'is global': ['is global']
         }
     },
@@ -9983,8 +9983,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
-    dict.primitives = ['primitives']; // experimental
-    dict['custom blocks'] = ['custom blocks']; // experimental
+    dict.blocks = ['blocks']; // experimental
     dict['dangling?'] = ['dangling?'];
     dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
