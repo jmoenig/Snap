@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-06';
+modules.threads = '2021-December-07';
 
 var ThreadManager;
 var Process;
@@ -5670,7 +5670,7 @@ Process.prototype.reportGet = function (query) {
                 ).map(
                     def => def.blockInstance().reify()
                 ).concat(
-                    SpriteMorph.prototype.allCategories().reduce(
+                    SpriteMorph.prototype.categories.reduce(
                         (blocks, category) => blocks.concat(
                             thisObj.getPrimitiveTemplates(
                                 category

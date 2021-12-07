@@ -71,6 +71,7 @@
 
 ### 2021-12-07
 * objects: backwards-compatibility fix for key-event hat blocks
+* store, objects: load category-less custom blocks into "other"
 
 ### 2021-12-06
 * blocks, threads: refactored block assembly, experimental

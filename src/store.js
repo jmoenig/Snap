@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-November-24';
+modules.store = '2021-December-07';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -971,6 +971,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             object
         );
         definition.category = child.attributes.category || 'other';
+        if (!SpriteMorph.prototype.allCategories().includes(
+            definition.category
+        )) {
+            definition.category = 'other';
+        }
         definition.type = child.attributes.type || 'command';
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.isGlobal = (isGlobal === true);
