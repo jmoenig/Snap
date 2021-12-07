@@ -9,6 +9,7 @@
     * hide any block, including variables and custom helper blocks in palette, also use "hide/show var" primitive on custom blocks (same as on primitives)
     * generate Parsons Problems from projects: Hide all unused blocks from the scripting area in the palette
     * user defined custom block palettes
+    * introspection, syntax analysis and assembly (new block-attribute reporter, split & join scripts)
     * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
     * new "blocksZoom=n" url parameter, thanks, Bernat!
     * message and key hat blocks can be expanded to show an optional upvar referencing their event data
@@ -67,6 +68,9 @@
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+
+### 2021-12-07
+* objects: backwards-compatibility fix for key-event hat blocks
 
 ### 2021-12-06
 * blocks, threads: refactored block assembly, experimental
