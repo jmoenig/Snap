@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-06';
+modules.blocks = '2021-December-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3721,8 +3721,72 @@ BlockMorph.prototype.exportResultPic = function () {
 
 // BlockMorph components - EXPERIMENTAL
 
-BlockMorph.prototype.components = function () {
-    throw new Error('subclass responsility');
+BlockMorph.prototype.components = function (parameterNames = []) {
+    if (this instanceof ReporterBlockMorph) {
+        return this.syntaxTree(parameterNames);
+    }
+    var seq = new List(this.blockSequence()).map((block, i) =>
+        block.syntaxTree(i < 1 ? parameterNames : [])
+    );
+    return seq.length() === 1 ? seq.at(1) : seq;
+};
+
+BlockMorph.prototype.syntaxTree = function (parameterNames) {
+    var expr = this.fullCopy(),
+        nb = expr.nextBlock ? expr.nextBlock() : null,
+        inputs, parts;
+    if (nb) {
+        nb.destroy();
+    }
+    expr.fixBlockColor(null, true);
+    inputs = expr.inputs();
+    parts = new List([expr.reify()]);
+    inputs.forEach(inp => {
+        var val;
+        if (inp instanceof BlockMorph) {
+            if (inp instanceof RingMorph && inp.isEmptySlot()) {
+                parts.add();
+                return;
+            }
+            parts.add(inp.components());
+            expr.revertToDefaultInput(inp, true);
+        } else if (inp.isEmptySlot()) {
+            if (!inp.isStatic) {
+                parts.add();
+                expr.revertToDefaultInput(inp, true);
+            }
+        } else if (inp instanceof MultiArgMorph) {
+            inp.inputs().forEach((slot, i) => {
+                var entry;
+                if (slot instanceof BlockMorph) {
+                    if (slot instanceof RingMorph && slot.isEmptySlot()) {
+                        parts.add();
+                        return;
+                    }
+                    parts.add(slot.components());
+                } else if (slot.isEmptySlot()) {
+                    parts.add();
+                } else {
+                    entry = slot.evaluate();
+                    parts.add(entry instanceof BlockMorph ?
+                        entry.components() : entry);
+                }
+                if (!(slot instanceof TemplateSlotMorph)) {
+                    inp.revertToDefaultInput(slot, true);
+                }
+            });
+        } else if (inp instanceof ArgLabelMorph) {
+            parts.add(inp.argMorph().components());
+            expr.revertToDefaultInput(inp, true).collapseAll();
+        } else {
+            val = inp.evaluate();
+            parts.add(val instanceof BlockMorph ? val.components() : val);
+            expr.revertToDefaultInput(inp, true);
+        }
+    });
+    parts.at(1).updateEmptySlots();
+    parameterNames.forEach(name => parts.add(name));
+    return parts;
 };
 
 BlockMorph.prototype.equalTo = function (other) {
@@ -3813,6 +3877,19 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
 
     // create a function to return
     return cpy.reify(dta.slice(count));
+};
+
+BlockMorph.prototype.copyWithNext = function (next, parameterNames) {
+    var expr = this.fullCopy(),
+        top;
+    if (this instanceof ReporterBlockMorph) {
+        return expr.reify();
+    }
+    top = next.fullCopy().topBlock();
+    if (top instanceof CommandBlockMorph) {
+        expr.bottomBlock().nextBlock(top);
+    }
+    return expr.reify(parameterNames);
 };
 
 BlockMorph.prototype.reify = function (inputNames) {
@@ -5558,80 +5635,6 @@ CommandBlockMorph.prototype.extract = function () {
     }
 };
 
-// CommandBlockMorph components - EXPERIMENTAL
-
-CommandBlockMorph.prototype.components = function (parameterNames = []) {
-    var seq = new List(this.blockSequence()).map(block => {
-        var expr = block.fullCopy(),
-            nb = expr.nextBlock(),
-            inputs, parts;
-        if (nb) {
-            nb.destroy();
-        }
-        expr.fixBlockColor(null, true);
-        inputs = expr.inputs();
-        parts = new List([expr.reify()]);
-        inputs.forEach(inp => {
-            var val;
-            if (inp instanceof BlockMorph) {
-                if (inp instanceof RingMorph && inp.isEmptySlot()) {
-                    parts.add();
-                    return;
-                }
-                parts.add(inp.components());
-                expr.revertToDefaultInput(inp, true);
-            } else if (inp.isEmptySlot()) {
-                if (!inp.isStatic) {
-                    parts.add();
-                    expr.revertToDefaultInput(inp, true);
-                }
-            } else if (inp instanceof MultiArgMorph) {
-                inp.inputs().forEach((slot, i) => {
-                    var entry;
-                    if (slot instanceof BlockMorph) {
-                        if (slot instanceof RingMorph && slot.isEmptySlot()) {
-                            parts.add();
-                            return;
-                        }
-                        parts.add(slot.components());
-                    } else if (slot.isEmptySlot()) {
-                        parts.add();
-                    } else {
-                        entry = slot.evaluate();
-                        parts.add(entry instanceof BlockMorph ?
-                            entry.components() : entry);
-                    }
-                    if (!(slot instanceof TemplateSlotMorph)) {
-                        inp.revertToDefaultInput(slot, true);
-                    }
-                });
-            } else if (inp instanceof ArgLabelMorph) {
-                parts.add(inp.argMorph().components());
-                expr.revertToDefaultInput(inp, true).collapseAll();
-            } else {
-                val = inp.evaluate();
-                parts.add(val instanceof BlockMorph ? val.components() : val);
-                expr.revertToDefaultInput(inp, true);
-            }
-        });
-        parts.at(1).updateEmptySlots();
-        parameterNames.forEach(name => parts.add(name));
-        return parts;
-    });
-    return seq.length() === 1 ? seq.at(1) : seq;
-};
-
-CommandBlockMorph.prototype.copyWithNext = function (next, parameterNames) {
-    var exp = this.fullCopy(),
-        bottom = exp.bottomBlock(),
-        top = next.fullCopy().topBlock();
-
-    if (top instanceof CommandBlockMorph) {
-        bottom.nextBlock(top);
-    }
-    return exp.reify(parameterNames);
-};
-
 // CommandBlockMorph drawing:
 
 CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
@@ -6404,66 +6407,6 @@ ReporterBlockMorph.prototype.userDestroy = function () {
     this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
-};
-
-// ReporterBlockMorph components - EXPERIMENTAL
-
-ReporterBlockMorph.prototype.components = function (parameterNames = []) {
-    var expr = this.fullCopy(),
-        inputs = expr.inputs(),
-        parts;
-    expr.fixBlockColor(null, true);
-    parts = new List([expr.reify()]);
-    inputs.forEach(inp => {
-        var val;
-        if (inp instanceof BlockMorph) {
-            if (inp instanceof RingMorph && inp.isEmptySlot()) {
-                parts.add();
-                return;
-            }
-            parts.add(inp.components());
-            expr.revertToDefaultInput(inp, true);
-        } else if (inp.isEmptySlot()) {
-            if (!inp.isStatic) {
-                parts.add();
-                expr.revertToDefaultInput(inp, true);
-            }
-        } else if (inp instanceof MultiArgMorph) {
-            inp.inputs().forEach((slot, i) => {
-                var entry;
-                if (slot instanceof BlockMorph) {
-                    if (slot instanceof RingMorph && slot.isEmptySlot()) {
-                        parts.add();
-                        return;
-                    }
-                    parts.add(slot.components());
-                } else if (slot.isEmptySlot()) {
-                    parts.add();
-                } else {
-                    entry = slot.evaluate();
-                    parts.add(entry instanceof BlockMorph ?
-                        entry.components() : entry);
-                }
-                if (!(slot instanceof TemplateSlotMorph)) {
-                    inp.revertToDefaultInput(slot, true);
-                }
-            });
-        } else if (inp instanceof ArgLabelMorph) {
-            parts.add(inp.argMorph().components());
-            expr.revertToDefaultInput(inp, true).collapseAll();
-        } else {
-            val = inp.evaluate();
-            parts.add(val instanceof BlockMorph ? val.components() : val);
-            expr.revertToDefaultInput(inp, true);
-        }
-    });
-    parameterNames.forEach(name => parts.add(name));
-    parts.at(1).updateEmptySlots();
-    return parts;
-};
-
-ReporterBlockMorph.prototype.copyWithNext = function (next) {
-    return this.fullCopy().reify();
 };
 
 // ReporterBlockMorph drawing:

@@ -69,6 +69,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-08
+* blocks: refactored syntax trees
+
 ### 2021-12-07
 * objects: backwards-compatibility fix for key-event hat blocks
 * store, objects: load category-less custom blocks into "other"
