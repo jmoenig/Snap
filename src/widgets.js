@@ -2083,10 +2083,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
         emlLabel = labelText('foo');
         inp.add(emlLabel);
         inp.add(eml);
-        inp.add(labelText('Password:'));
-        inp.add(pw1);
-        inp.add(labelText('Repeat Password:'));
-        inp.add(pw2);
     }
 
     if (purpose === 'login') {
@@ -2179,7 +2175,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'login') {
             checklist = [usr, pw1];
         } else if (purpose === 'signup') {
-            checklist = [usr, bmn, byr, eml, pw1, pw2];
+            checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
         } else if (purpose === 'resetPassword' ||
@@ -2211,7 +2207,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
                 return false;
             }
         }
-        if (purpose === 'changePassword' || purpose === 'signup') {
+        if (purpose === 'changePassword') {
             if (pw1.getValue().length < 6) {
                 indicate(pw1, 'password must be six\ncharacters or longer');
                 return false;
