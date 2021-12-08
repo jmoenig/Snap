@@ -3751,10 +3751,7 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
             parts.add(inp.components());
             expr.revertToDefaultInput(inp, true);
         } else if (inp.isEmptySlot()) {
-            if (!inp.isStatic) {
-                parts.add();
-                expr.revertToDefaultInput(inp, true);
-            }
+            parts.add();
         } else if (inp instanceof MultiArgMorph) {
             inp.inputs().forEach((slot, i) => {
                 var entry;
@@ -3867,8 +3864,8 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     slot.setContents(inp);
                 }
             }
+            count += 1;
         }
-        count += 1;
     });
 
     // create a function to return
