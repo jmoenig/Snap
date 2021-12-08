@@ -3893,7 +3893,8 @@ IDE_Morph.prototype.loadExtension = async function (url) {
 };
 
 IDE_Morph.prototype.isTrustedExtension = async function (url) {
-    const isAutoTrusted = url.startsWith('/') || url.startsWith(window.location.origin);
+    const trustedSources = [ '/', window.location.origin, 'https://extensions.netsblox.org'];
+    const isAutoTrusted = trustedSources.some(source => url.startsWith(source));
     if (isAutoTrusted) {
         return true;
     }
