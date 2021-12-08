@@ -3771,9 +3771,7 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
                     parts.add(entry instanceof BlockMorph ?
                         entry.components() : entry);
                 }
-                if (!(slot instanceof TemplateSlotMorph)) {
-                    inp.revertToDefaultInput(slot, true);
-                }
+                inp.revertToDefaultInput(slot, true);
             });
         } else if (inp instanceof ArgLabelMorph) {
             parts.add(inp.argMorph().components());
@@ -3840,7 +3838,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     if (inp instanceof List && inp.length() === 0) {
                         nop(); // ignore, i.e. leave slot as is
                     } else if (entry instanceof InputSlotMorph ||
-                            slot instanceof TemplateSlotMorph ||
+                            entry instanceof TemplateSlotMorph ||
                             entry instanceof BooleanSlotMorph) {
                         entry.setContents(inp);
                     }
