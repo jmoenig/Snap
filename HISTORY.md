@@ -71,6 +71,7 @@
 
 ### 2021-12-08
 * blocks: refactored syntax trees
+* rc1
 
 ### 2021-12-07
 * objects: backwards-compatibility fix for key-event hat blocks
