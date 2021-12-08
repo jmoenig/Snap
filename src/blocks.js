@@ -3821,7 +3821,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     slots = cpy.inputs();
     slots.forEach((slot) => {
         var inp;
-        if (slot instanceof MultiArgMorph && !slot.isEmptySlot()) {
+        if (slot instanceof MultiArgMorph && slot.inputs().length) {
             slot.inputs().forEach(entry => {
                 inp = dta[count];
                 if (inp instanceof BlockMorph) {
