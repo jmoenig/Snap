@@ -3828,7 +3828,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     if (inp instanceof CommandBlockMorph && entry.nestedBlock) {
                         entry.nestedBlock(inp);
                     } else if (inp instanceof ReporterBlockMorph &&
-                            !entry.isStatic) {
+                            (!entry.isStatic || entry instanceof RingMorph)) {
                         slot.replaceInput(entry, inp);
                     }
                 } else {
