@@ -42,7 +42,6 @@
 
         onNewProject() {
             this.registry.forEach(ext => ext.onNewProject());
-            this.onOpenRole();
         }
 
         onOpenRole() {

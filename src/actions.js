@@ -2655,7 +2655,8 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
     this.completeAction(null, blocks);
 };
 
-ActionManager.prototype.onOpenProject = async function(str) {
+ActionManager.prototype.onOpenProject = async function (str) {
+    
     var myself = this,
         project = null,
         event = this.currentEvent,
@@ -2666,13 +2667,13 @@ ActionManager.prototype.onOpenProject = async function(str) {
 
     if (str) {
         if (str.indexOf('<project') === 0) {
-            project = this.ide().rawOpenProjectString(str);
+            project = ide.rawOpenProjectString(str);
         } else if (str.indexOf('<snapdata') === 0) {
-            project = this.ide().rawOpenCloudDataString(str);
+            project = ide.rawOpenCloudDataString(str);
         }
 
     } else {
-        this.ide().newRole();
+        ide.newRole();
     }
 
     // Load the owners
@@ -2683,7 +2684,7 @@ ActionManager.prototype.onOpenProject = async function(str) {
     this.lastSeen = event.id;  // don't reset lastSeen
     this.completeAction(null, project);
 
-    if (!this.ide().isReplayMode) {
+    if (!ide.isReplayMode) {
         // Load the replay and action manager state from project
         var len = SnapUndo.allEvents.length;
 
@@ -2699,11 +2700,13 @@ ActionManager.prototype.onOpenProject = async function(str) {
             this.lastSeen = project.collabStartIndex;
         }
 
-        var roomName = this.ide().room.name,
-            roleName = this.ide().projectName;
+        var roomName = ide.room.name,
+            roleName = ide.projectName;
 
         await SnapCloud.setClientState(roomName, roleName, this.lastSeen);
         this.requestMissingActions();
+
+        ide.extensions.onOpenRole();
     }
 };
 

@@ -599,11 +599,9 @@ RoomMorph.prototype.moveToRole = function(role) {
                     this.ide.droppedText(project.SourceCode);
                 } else {  // newly created role
                     await SnapActions.openProject();
-                    this.ide.extensions.onOpenRole();
                 }
             } else {  // Empty the project FIXME
                 await SnapActions.openProject();
-                this.ide.extensions.onOpenRole();
             }
         },
         (err, lbl) => {

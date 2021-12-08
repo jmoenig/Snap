@@ -501,8 +501,7 @@ IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
         '</snapdata>'
     ].join('');
 
-    return SnapActions.openProject(projectXml)
-        .then(() => this.extensions.onOpenRole());
+    return SnapActions.openProject(projectXml);
 };
 
 // Events ///////////////////////////////////////////
