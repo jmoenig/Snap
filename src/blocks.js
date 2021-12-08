@@ -3839,11 +3839,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                 } else {
                     if (inp instanceof List && inp.length() === 0) {
                         nop(); // ignore, i.e. leave slot as is
-                    } else {
-                        if (entry instanceof InputSlotMorph ||
-                                entry instanceof BooleanSlotMorph) {
-                            entry.setContents(inp);
-                        }
+                    } else if (entry instanceof InputSlotMorph ||
+                            slot instanceof TemplateSlotMorph ||
+                            entry instanceof BooleanSlotMorph) {
+                        entry.setContents(inp);
                     }
                 }
                 count += 1;
@@ -3864,11 +3863,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
             } else {
                 if (inp instanceof List && inp.length() === 0) {
                     nop(); // ignore, i.e. leave slot as is
-                } else {
-                    if (slot instanceof InputSlotMorph ||
-                            slot instanceof BooleanSlotMorph) {
-                        slot.setContents(inp);
-                    }
+                } else if (slot instanceof InputSlotMorph ||
+                        slot instanceof TemplateSlotMorph ||
+                        slot instanceof BooleanSlotMorph) {
+                    slot.setContents(inp);
                 }
             }
         }
