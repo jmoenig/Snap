@@ -463,14 +463,14 @@ SnapTranslator.dict.nl = {
         'maak penkleur %clr',
     'set background color to %clr':
         'maak achtergrondkleur %clr',
-    'change pen %hsva by %n':
-        'verander pen %hsva met %n',
-    'set pen %hsva to %n':
-        'maak pen %hsva %n',
-    'change achtergrondkleur %hsva by %n':
-        'verander pen %hsva met %n',
-    'set achtergrondkleur %hsva to %n':
-        'maak pen %hsva %n',
+    'change pen %clrdim by %n':
+        'verander pen %clrdim met %n',
+    'set pen %clrdim to %n':
+        'maak pen %clrdim %n',
+    'change achtergrondkleur %clrdim by %n':
+        'verander pen %clrdim met %n',
+    'set achtergrondkleur %clrdim to %n':
+        'maak pen %clrdim %n',
     'pen %pen':
         'pen %pen',
     'change pen size by %n':
@@ -493,8 +493,8 @@ SnapTranslator.dict.nl = {
     // control:
     'when %greenflag clicked':
         'wanneer %greenflag wordt aangeklikt',
-    'when %keyHat key pressed':
-        'wanneer %keyHat wordt ingedrukt',
+    'when %keyHat key pressed %keyName':
+        'wanneer %keyHat wordt ingedrukt %keyName',
     'when I am %interaction':
         'wanneer ik %interaction word',
     'clicked':
@@ -515,12 +515,14 @@ SnapTranslator.dict.nl = {
         'gestopt',
     'when %b':
         'wanneer %b',
-    'when I receive %msgHat':
-        'wanneer ik %msgHat ontvang',
-    'broadcast %msg':
-        'zend signaal %msg',
-    'broadcast %msg and wait':
-        'zend signaal %msg en wacht',
+    'when I receive %msgHat %message':
+        'wanneer ik %msgHat ontvang %message',
+    'broadcast %msg %receive':
+        'zend signaal %msg %receive',
+    'broadcast %msg %receive and wait':
+        'zend signaal %msg %receive en wacht',
+    'to':
+        'naar',
     'send %msg to %spr':
         'zend %msg naar %spr',
     'Message name':

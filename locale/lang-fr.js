@@ -417,14 +417,14 @@ SnapTranslator.dict.fr = {
         'mettre la couleur %clr pour le stylo',
     'change pen color by %n':
         'ajouter %n \u00E0 la couleur du stylo',
-    'set pen %hsva to %n':
-        'mettre la %hsva du stylo à %n',
+    'set pen %clrdim to %n':
+        'mettre la %clrdim du stylo à %n',
     'hue':
         'teinte',
     'transparency':
         'transparence',
-    'change pen %hsva by %n':
-        'ajouter à la %hsva du stylo %n',
+    'change pen %clrdim by %n':
+        'ajouter à la %clrdim du stylo %n',
 
     'change pen shade by %n':
         'ajouter %n \u00E0 l\u0027intensit\u00E9 du stylo ',
@@ -442,18 +442,20 @@ SnapTranslator.dict.fr = {
       // control:
     'when %greenflag clicked':
         'Quand %greenflag est press\u00E9',
-    'when %keyHat key pressed':
-        'Quand %keyHat est press\u00E9',
+    'when %keyHat key pressed %keyName':
+        'Quand %keyHat est press\u00E9 %keyName',
     'when I am clicked':
         'Quand je suis press\u00E9 ',
   'when I am %interaction':
     'Quand je suis %interaction',
-    'when I receive %msgHat':
-        'Quand je re\u00E7ois %msgHat',
-    'broadcast %msg':
-        'envoyer \u00E0 tous %msg',
-    'broadcast %msg and wait':
-        'envoyer \u00E0 tous %msg et attendre',
+    'when I receive %msgHat %message':
+        'Quand je re\u00E7ois %msgHat %message',
+    'broadcast %msg %receive':
+        'envoyer %msg %receive',
+    'broadcast %msg %receive and wait':
+        'envoyer %msg %receive et attendre',
+    'to':
+        '\u00E0',
     'Message name':
         'Nom du message',
     'wait %n secs':
@@ -1045,7 +1047,7 @@ SnapTranslator.dict.fr = {
     'select':
         's\u00E9lectionner',
     'all':
-        'tout',
+        'tous',
     'none':
         'aucun',
 

@@ -576,18 +576,20 @@ SnapTranslator.dict.es = {
     // control:
     'when %greenflag clicked':
         'cuando se pulse %greenflag',
-    'when %keyHat key pressed':
-        'cuando se pulse la tecla %keyHat',
+    'when %keyHat key pressed %keyName':
+        'cuando se pulse la tecla %keyHat %keyName',
     'when I am %interaction':
         'cuando me %interaction',
     'when %b':
         'cuando %b',
-    'when I receive %msgHat':
-        'cuando me llegue %msgHat',
-    'broadcast %msg':
-        'enviar mensaje %msg',
-    'broadcast %msg and wait':
-        'enviar mensaje %msg y esperar',
+    'when I receive %msgHat %message':
+        'cuando me llegue %msgHat %message',
+    'broadcast %msg %receive':
+        'enviar mensaje %msg %receive',
+    'broadcast %msg %receive and wait':
+        'enviar mensaje %msg %receive y esperar',
+    'to':
+        'a',
     'message':
         'mensaje',
     'warp %c':
@@ -2779,10 +2781,10 @@ SnapTranslator.dict.es = {
         '¿lápiz bajado?',
     'hue':
         'tonalidad',
-    'change pen %hsva by %n':
-        'cambiar %hsva del lápiz en %n',
-    'set pen %hsva to %n':
-        'fijar %hsva del lápiz a %n',
+    'change pen %clrdim by %n':
+        'cambiar %clrdim del lápiz en %n',
+    'set pen %clrdim to %n':
+        'fijar %clrdim del lápiz a %n',
     'write %s size %n':
         'escribir %s con tamaño %n',
     'paste on %spr':

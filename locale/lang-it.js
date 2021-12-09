@@ -468,14 +468,14 @@ SnapTranslator.dict.it = {
         'usa penna di colore %clr',
     'set background color to %clr':
         'porta colore sfondo a %clr',
-    'change pen %hsva by %n':
-        'cambia %hsva della penna di %n',
-    'change background %hsva by %n':
-        'cambia %hsva sfondo di %n',
-    'set pen %hsva to %n':
-        'porta %hsva della penna a %n',
-    'set background %hsva to %n':
-        'porta %hsva sfondo a %n',
+    'change pen %clrdim by %n':
+        'cambia %clrdim della penna di %n',
+    'change background %clrdim by %n':
+        'cambia %clrdim sfondo di %n',
+    'set pen %clrdim to %n':
+        'porta %clrdim della penna a %n',
+    'set background %clrdim to %n':
+        'porta %clrdim sfondo a %n',
     'pen %pen':
         '%pen della penna',
     'change pen size by %n':
@@ -498,8 +498,8 @@ SnapTranslator.dict.it = {
     // control:
     'when %greenflag clicked':
         'quando si clicca su %greenflag',
-    'when %keyHat key pressed':
-        'quando si preme il tasto %keyHat',
+    'when %keyHat key pressed %keyName':
+        'quando si preme il tasto %keyHat %keyName',
     'when I am %interaction':
         'quando sono %interaction',
     'clicked':
@@ -520,12 +520,14 @@ SnapTranslator.dict.it = {
         'fermo',
     'when %b':
         'quando %b',
-    'when I receive %msgHat':
-        'quando ricevo %msgHat',
-    'broadcast %msg':
-        'invia a tutti %msg',
-    'broadcast %msg and wait':
-        'invia a tutti %msg e attendi',
+    'when I receive %msgHat %message':
+        'quando ricevo %msgHat %message',
+    'broadcast %msg %receive':
+        'invia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'invia %msg %receive e attendi',
+    'to':
+        'a',
     'send %msg to %spr':
         'invia %msg a %spr',
     'Message name':

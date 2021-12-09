@@ -416,8 +416,8 @@ SnapTranslator.dict.cs = {
     // control:
     'when %greenflag clicked':
         'Po klepnutí na %greenflag',
-    'when %keyHat key pressed':
-        'po stisku klávesy %keyHat',
+    'when %keyHat key pressed %keyName':
+        'po stisku klávesy %keyHat %keyName',
     'when I am %interaction':
         'když %interaction',
     'clicked':
@@ -430,12 +430,12 @@ SnapTranslator.dict.cs = {
         'na mě najede myš',
     'mouse-departed':
         'ze mě sjede myš',
-    'when I receive %msgHat':
-        'po přijetí zprávy %msgHat',
-    'broadcast %msg':
-        'poslat všem %msg',
-    'broadcast %msg and wait':
-        'poslat všem %msg a čekat',
+    'when I receive %msgHat %message':
+        'po přijetí zprávy %msgHat %message',
+    'broadcast %msg %receive':
+        'poslat %msg %receive',
+    'broadcast %msg %receive and wait':
+        'poslat %msg %receive a čekat',
     'Message name':
         'název zprávy',
     'message':

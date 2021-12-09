@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-August-6';
+modules.extensions = '2021-November-22';
 
 // Global stuff
 
@@ -166,7 +166,7 @@ var SnapExtensions = {
     menus) using the very same conventions described herein, and then to offer
     a library of custom blocks that make calls to your additional operations.
 
-    publishing an extension
+    developing an extension
     -----------------------
     Running the "src_load(url)" primitive will throw an error unless you first
     check the "Enable JavaScript extensions" setting in Snap's preferences menu,
@@ -176,6 +176,10 @@ var SnapExtensions = {
     then to turn it off again, so you can make sure your custom blocks are not
     using any "JS Function" blocks (because those will be caught if the
     preference is turned off).
+
+    publishing an extension
+    -----------------------
+
     When you're ready to publish your extension you can contact us to allow-list
     the url hosting your JS file, or you can send me a Github pull-request to
     include it in the main Snap branch.
@@ -696,9 +700,26 @@ SnapExtensions.primitives.set(
 );
 
 // IDE (ide_):
-// not needed right now, commented out for possibly later
+
+SnapExtensions.primitives.set(
+    'ide_hide(block)',
+    function (context, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, true);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_show(block)',
+    function (context, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, false);
+    }
+);
+
 /*
 SnapExtensions.primitives.set(
+    // not needed right now, commented out for possibly later
     'ide_refreshpalette(name)',
     function (name) {
         var ide = this.parentThatIsA(IDE_Morph);
@@ -742,6 +763,22 @@ SnapExtensions.primitives.set(
     function (h, s, v) {
         var c = new Color();
         c.set_hsv(h, s, v);
+        return c;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_hsl(clr)',
+    function (clr) {
+        return new List(clr.hsl());
+    }
+);
+
+SnapExtensions.primitives.set(
+    'clr_hsl(h, s, l)',
+    function (h, s, l) {
+        var c = new Color();
+        c.set_hsl(h, s, l);
         return c;
     }
 );

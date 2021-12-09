@@ -425,8 +425,8 @@ SnapTranslator.dict.ia = {
     // control:
     'when %greenflag clicked':
         'cuando %greenflag clic',
-    'when %keyHat key pressed':
-        'cuando %keyHat clave pressa',
+    'when %keyHat key pressed %keyName':
+        'cuando %keyHat clave pressa %keyName',
     'when I am %interaction':
         'cuando io es %interaction',
     'clicked':
@@ -439,12 +439,14 @@ SnapTranslator.dict.ia = {
         'mure entra',
     'mouse-departed':
         'mure parti',  // 'quita'
-    'when I receive %msgHat':
-        'cuando io recipe %msgHat',
-    'broadcast %msg':
-        'mitte %msg a omne',
-    'broadcast %msg and wait':
-        'mitte %msg a omni e attende',
+    'when I receive %msgHat %message':
+        'cuando io recipe %msgHat %message',
+    'broadcast %msg %receive':
+        'mitte %msg %receive',
+    'broadcast %msg %receive and wait':
+        'mitte %msg %receive e attende',
+    'to':
+        'a',
     'Message name':
         'Nomine de message',
     'message':

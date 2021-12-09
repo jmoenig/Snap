@@ -468,14 +468,14 @@ SnapTranslator.dict.no = {
         'sett pennfarge til %clr',
     'set background color to %clr':
         'sett bakgrunnsfarge til %clr',
-    'change pen %hsva by %n':
-        'endre penn %hsva med %n',
-    'change background %hsva by %n':
-        'endre bakgrunn %hsva med %n',
-    'set pen %hsva to %n':
-        'sett penn %hsva til %n',
-    'set background %hsva to %n':
-        'sett bakgrunn %hsva til %n',
+    'change pen %clrdim by %n':
+        'endre penn %clrdim med %n',
+    'change background %clrdim by %n':
+        'endre bakgrunn %clrdim med %n',
+    'set pen %clrdim to %n':
+        'sett penn %clrdim til %n',
+    'set background %clrdim to %n':
+        'sett bakgrunn %clrdim til %n',
     'pen %pen':
         'penn %pen',
     'change pen size by %n':
@@ -496,8 +496,8 @@ SnapTranslator.dict.no = {
     // control:
     'when %greenflag clicked':
         'n\u00E5r %greenflag klikket',
-    'when %keyHat key pressed':
-        'n\u00E5r tast %keyHat trykket',
+    'when %keyHat key pressed %keyName':
+        'n\u00E5r tast %keyHat trykket %keyName',
     'when I am %interaction':
         'n\u00E5r jeg blir %interaction',
     'clicked':
@@ -518,12 +518,14 @@ SnapTranslator.dict.no = {
         'stoppet',
     'when %b':
         'n\u00E5r %b',
-    'when I receive %msgHat':
-        'n\u00E5r jeg mottar %msgHat',
-    'broadcast %msg':
-        'kringkast %msg',
-    'broadcast %msg and wait':
-        'kringkast %msg og vent',
+    'when I receive %msgHat %message':
+        'n\u00E5r jeg mottar %msgHat %message',
+    'broadcast %msg %receive':
+        'kringkast %msg %receive',
+    'broadcast %msg %receive and wait':
+        'kringkast %msg %receive og vent',
+    'to':
+        'til',
     'send %msg to %spr':
         'send %msg til %spr',
     'Message name':

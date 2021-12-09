@@ -433,10 +433,10 @@ SnapTranslator.dict.ca = {
         'augmenta en %n el color del llapis',
     'set pen color to %n':
         'fixa el color del llapis a %n',
-    'change pen %hsva by %n':
-        'augmenta %hsva del llapis en %n',
-    'set pen %hsva to %n':
-        'fixa %hsva del llapis a %n',
+    'change pen %clrdim by %n':
+        'augmenta %clrdim del llapis en %n',
+    'set pen %clrdim to %n':
+        'fixa %clrdim del llapis a %n',
     'change pen shade by %n':
         'augmenta en %n la intensitat del llapis',
     'set pen shade to %n':
@@ -447,10 +447,10 @@ SnapTranslator.dict.ca = {
         'fixa la mida del llapis en %n',
     'set background color to %clr':
         'fixa el color del fons a %clr',
-    'change background %hsva by %n':
-        'augmenta %hsva del fons en %n',
-    'set background %hsva to %n':
-        'fixa %hsva del fons a %n',
+    'change background %clrdim by %n':
+        'augmenta %clrdim del fons en %n',
+    'set background %clrdim to %n':
+        'fixa %clrdim del fons a %n',
     'stamp':
         'estampa',
     'fill':
@@ -463,8 +463,8 @@ SnapTranslator.dict.ca = {
     // control:
     'when %greenflag clicked':
         'Quan la %greenflag es premi',
-    'when %keyHat key pressed':
-        'Quan la tecla %keyHat es premi',
+    'when %keyHat key pressed %keyName':
+        'Quan la tecla %keyHat es premi %keyName',
     'when I am %interaction':
         'Quan %interaction aquest personatge',
     'clicked':
@@ -479,12 +479,14 @@ SnapTranslator.dict.ca = {
         'el ratolí surti d\'',
     'when %b':
         'quan %b',
-    'when I receive %msgHat':
-        'Quan rebi %msgHat',
-    'broadcast %msg':
-        'Envia a tots %msg',
-    'broadcast %msg and wait':
-        'Envia a tots %msg i espera',
+    'when I receive %msgHat %message':
+        'Quan rebi %msgHat %message',
+    'broadcast %msg %receive':
+        'Envia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'Envia %msg %receive i espera',
+    'to':
+        'a',
     'send %msg to %spr':
         'envia %msg a %spr',
     'Message name':
@@ -516,7 +518,7 @@ SnapTranslator.dict.ca = {
     'stop %stopChoices':
         'atura %stopChoices',
     'all':
-        'tot',
+        'tots',
     'this script':
         'aquest programa',
     'this block':

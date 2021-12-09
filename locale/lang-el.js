@@ -464,10 +464,10 @@ SnapTranslator.dict.el = {
         'θέσε το χρώμα του στυλού να είναι %clr',
     'set background color to %clr':
         'θέσε το χρώμα του υπόβαθρου να έιναι %clr',
-    'change pen %hsva by %n':
-         'άλλαξε %hsva του στυλού κατά %n',
-    'change background %hsva by %n':
-        'άλλαξε υπόβαθρο %hsva κατά %n',
+    'change pen %clrdim by %n':
+         'άλλαξε %clrdim του στυλού κατά %n',
+    'change background %clrdim by %n':
+        'άλλαξε υπόβαθρο %clrdim κατά %n',
     'hue':
         'απόχρωση',
     'saturation':
@@ -476,14 +476,14 @@ SnapTranslator.dict.el = {
          'φωτεινότητα' ,
     'transparency':
          'διαφάνεια',
-    'set pen %hsva to %n':
-        'θέσε %hsva του στυλού να είναι %n',
+    'set pen %clrdim to %n':
+        'θέσε %clrdim του στυλού να είναι %n',
     'change pen shade by %n':
         'άλλαξε την σκιά του στυλού κατά %n',
     'set pen shade to %n':
         'θέσε την σκιά του στυλού να είναι %n',
-    'set background %hsva to %n':
-        'θέσε υπόβαθρο %hsva να είναι %n',
+    'set background %clrdim to %n':
+        'θέσε υπόβαθρο %clrdim να είναι %n',
     'pen %pen':
         'στυλό %pen',
     'change pen size by %n':
@@ -504,8 +504,8 @@ SnapTranslator.dict.el = {
     // control:
     'when %greenflag clicked':
         'όταν το %greenflag πατηθεί',
-    'when %keyHat key pressed':
-        'όταν το %keyHat πλήκτρο πατηθεί',
+    'when %keyHat key pressed %keyName':
+        'όταν το %keyHat πλήκτρο πατηθεί %keyName',
     'when I am %interaction':
         'όταν μου συμβεί %interaction',
     'clicked':
@@ -526,12 +526,14 @@ SnapTranslator.dict.el = {
         'σταματημένο',
     'when %b':
         'όταν %b',
-    'when I receive %msgHat':
-        'όταν δεχτώ %msgHat',
-    'broadcast %msg':
-        'στείλε το %msg',
-    'broadcast %msg and wait':
-        'στείλε το %msg και περίμενε',
+    'when I receive %msgHat %message':
+        'όταν δεχτώ %msgHat %message',
+    'broadcast %msg %receive':
+        'στείλε το %msg %receive',
+    'broadcast %msg %receive and wait':
+        'στείλε το %msg %receive και περίμενε',
+    'to':
+        'στο',
     'send %msg to %spr':
         'αποστολή του %msg στο %spr',
     'Message name':

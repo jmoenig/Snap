@@ -469,14 +469,14 @@ SnapTranslator.dict.tr = {
         'kalemin rengini %clr yap',
     'set background color to %clr':
         'arka plan rengini %clr yap',
-    'change pen %hsva by %n':
-        'Kalemin %hsva  %n değiştir',
-    'change background %hsva by %n':
-        'arka plan %hsva  %n değiştir',
-    'set pen %hsva to %n':
-        'Kalemin %hsva  %n yap',
-    'set background %hsva to %n':
-        'arka plan %hsva  %n yap',
+    'change pen %clrdim by %n':
+        'Kalemin %clrdim  %n değiştir',
+    'change background %clrdim by %n':
+        'arka plan %clrdim  %n değiştir',
+    'set pen %clrdim to %n':
+        'Kalemin %clrdim  %n yap',
+    'set background %clrdim to %n':
+        'arka plan %clrdim  %n yap',
     'pen %pen':
         'kalemin %pen',
     'change pen size by %n':
@@ -496,8 +496,8 @@ SnapTranslator.dict.tr = {
     // control:
     'when %greenflag clicked':
         '%greenflag tıklanınca',
-    'when %keyHat key pressed':
-        '%keyHat tuşuna basılınca',
+    'when %keyHat key pressed %keyName':
+        '%keyHat tuşuna basılınca %keyName',
     'when I am %interaction':
         'kukla %interaction zaman','clicked':
         'tıklandığı',
@@ -517,12 +517,12 @@ SnapTranslator.dict.tr = {
         'durdurulduğu',
     'when %b':
         '%b olunca',
-    'when I receive %msgHat':
-        '%msgHat haberi gelince',
-    'broadcast %msg':
-        '%msg yayımla',
-    'broadcast %msg and wait':
-        '%msg yayımla ve bekle',
+    'when I receive %msgHat %message':
+        '%msgHat haberi gelince %message',
+    'broadcast %msg %receive':
+        '%msg %receive yayımla',
+    'broadcast %msg %receive and wait':
+        '%msg %receive yayımla ve bekle',
     'send %msg to %spr':
         '%msg mesajını %spr yolla',
     'Message name':

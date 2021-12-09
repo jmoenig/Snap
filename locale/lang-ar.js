@@ -415,8 +415,8 @@ SnapTranslator.dict.ar = {
     // control:
     'when %greenflag clicked':
         'الأخضر العـَلم %greenflag نقر عنـد',
-    'when %keyHat key pressed':
-        '%keyHat مفتـاح ضغط عند',
+    'when %keyHat key pressed %keyName':
+        '%keyHat %keyName مفتـاح ضغط عند',
     'when I am %interaction':
         'الفـأرة مـؤشْـر %interaction لـ أتعرض عندما',
     'clicked':
@@ -431,12 +431,12 @@ SnapTranslator.dict.ar = {
         'مغـادرة',
     'when %b':
         '%b عندما',
-    'when I receive %msgHat':
-        '%msgHat رسـالة أستقبال عند',
-    'broadcast %msg':
-        '  %msg بث',
-    'broadcast %msg and wait':
-        'إنتظـر ثم %msg بِـث',
+    'when I receive %msgHat %message':
+        '%msgHat %message رسـالة أستقبال عند',
+    'broadcast %msg %receive':
+        '  %msg %receive بث',
+    'broadcast %msg %receive and wait':
+        'إنتظـر ثم %msg %receive بِـث',
     'Message name':
         'اسم الرسالة',
     'message':

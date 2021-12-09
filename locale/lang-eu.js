@@ -538,8 +538,8 @@ SnapTranslator.dict.eu = {
     // control:
     'when %greenflag clicked':
         '%greenflag klik egitean',
-    'when %keyHat key pressed':
-        '%keyHat tekla sakatzean',
+    'when %keyHat key pressed %keyName':
+        '%keyHat tekla sakatzean %keyName',
     'when I am %interaction':
         'niri %interaction',
     'clicked':
@@ -558,12 +558,12 @@ SnapTranslator.dict.eu = {
         'gorantz korritzean',
     'when %b':
         '%b denean',
-    'when I receive %msgHat':
-        '%msgHat jasotzen dudanean',
-    'broadcast %msg':
-        'igorri %msg',
-    'broadcast %msg and wait':
-        'igorri %msg eta itxaron',
+    'when I receive %msgHat %message':
+        '%msgHat jasotzen dudanean %message',
+    'broadcast %msg %receive':
+        'igorri %msg %receive',
+    'broadcast %msg %receive and wait':
+        'igorri %msg %receive eta itxaron',
     'Message name':
         'Mezuaren izena',
     'message':
