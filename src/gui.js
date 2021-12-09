@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-December-08';
+modules.gui = '2021-December-09';
 
 // Declarations
 
@@ -4770,7 +4770,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - rc1 -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7 - rc2 -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5912,6 +5912,9 @@ IDE_Morph.prototype.switchToScene = function (
         }
     });
     scene.applyGlobalSettings();
+    if (!SpriteMorph.prototype.allCategories().includes(this.currentCategory)) {
+        this.currentCategory = 'motion';
+    }
     if (!this.setUnifiedPalette(scene.unifiedPalette)) {
         this.createCategories();
         this.createPaletteHandle();
