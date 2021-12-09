@@ -598,11 +598,11 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
-Process.prototype.enableHyperOps = true; // experimental hyper operations
+Process.prototype.enableHyperOps = true;
 Process.prototype.enableLiveCoding = false; // experimental
-Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.enableSingleStepping = false;
 Process.prototype.enableCompiling = false; // experimental
-Process.prototype.flashTime = 0; // experimental
+Process.prototype.flashTime = 0;
 Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
@@ -631,8 +631,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.exportResult = false;
     this.onComplete = onComplete || null;
     this.procedureCount = 0;
-    this.flashingContext = null; // experimental, for single-stepping
-    this.isInterrupted = false; // experimental, for single-stepping
+    this.flashingContext = null; // for single-stepping
+    this.isInterrupted = false; // for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
 
     if (topBlock) {
@@ -1613,7 +1613,7 @@ Process.prototype.evaluateCustomBlock = function () {
 
     outer.variables.parentFrame = block.variables;
 
-    // block (instance) var support, experimental:
+    // block (instance) var support:
     // only splice in block vars if any are defined, because block vars
     // can cause race conditions in global block definitions that
     // access sprite-local variables at the same time.
@@ -1899,7 +1899,7 @@ Process.prototype.doDeleteAttr = function (attrName) {
     }
 };
 
-// experimental message passing primitives
+// message passing primitives
 
 Process.prototype.doTellTo = function (sprite, context, args) {
     this.doRun(
@@ -2034,7 +2034,7 @@ Process.prototype.reportListItem = function (index, list) {
     return list.at(index);
 };
 
-// Process - experimental tabular list ops
+// Process - tabular list ops
 
 Process.prototype.reportTranspose = function (list) {
     this.assertType(list, 'list');
@@ -4548,7 +4548,7 @@ Process.prototype.parseJSON = function (string) {
     return listify(JSON.parse(string));
 };
 
-// Process script components - EXPERIMENTAL
+// Process syntax analysis
 
 Process.prototype.assemble = function (blocks) {
     var first;
@@ -5442,8 +5442,7 @@ Process.prototype.reportDirectionTo = function (name) {
 
 Process.prototype.reportBlockAttribute = function (attribute, block) {
     // hyper-dyadic
-    // note: specifying strings in the left input only accesses
-    // sprite-local variables. Attributes such as "width", "direction" etc.
+    // note: attributes in the left slot
     // can only be queried via the dropdown menu and are, therefore, not
     // reachable as dyadic inputs
     return this.hyperDyadic(
@@ -5454,7 +5453,6 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 };
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
-    // experimental - under construction
     var choice = this.inputOption(attribute),
         expr;
     this.assertType(block, ['command', 'reporter', 'predicate']);
@@ -5738,7 +5736,7 @@ Process.prototype.reportObject = function (name) {
 };
 
 Process.prototype.doSet = function (attribute, value) {
-    // experimental, manipulate sprites' attributes
+    // manipulate sprites' attributes
     var name, rcvr, ide;
     rcvr = this.blockReceiver();
     this.assertAlive(rcvr);
@@ -7096,7 +7094,7 @@ Context.prototype.stopMusic = function () {
 // Context single-stepping:
 
 Context.prototype.lastFlashable = function () {
-    // for experimental single-stepping when pausing
+    // for single-stepping when pausing
     if (this.expression instanceof SyntaxElementMorph &&
             !(this.expression instanceof CommandSlotMorph)) {
         return this;
@@ -7125,7 +7123,7 @@ Context.prototype.isInCustomBlock = function () {
     return false;
 };
 
-// Context components - EXPERIMENTAL
+// Context syntax analysis
 
 Context.prototype.components = function () {
     var expr = this.expression;

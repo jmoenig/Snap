@@ -418,7 +418,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'mouse-departed' : ['mouse-departed'],
             'scrolled-up' : ['scrolled-up'],
             'scrolled-down' : ['scrolled-down'],
-            'stopped' : ['stopped'] // experimental
+            'stopped' : ['stopped']
         }
     },
     '%dates': {
@@ -3738,7 +3738,7 @@ BlockMorph.prototype.exportResultPic = function () {
     }
 };
 
-// BlockMorph components - EXPERIMENTAL
+// BlockMorph syntax analysis
 
 BlockMorph.prototype.components = function (parameterNames = []) {
     if (this instanceof ReporterBlockMorph) {
@@ -6046,7 +6046,7 @@ HatBlockMorph.prototype.blockSequence = function () {
     return result;
 };
 
-// HatBlockMorph components - EXPERIMENTAL
+// HatBlockMorph syntax analysis
 
 HatBlockMorph.prototype.reify = function () {
     // private - assumes that I've already been deep copied
@@ -9942,11 +9942,11 @@ InputSlotMorph.prototype.gettablesMenu = function () {
         dict['temporary?'] = ['temporary?'];
     }
     dict.name = ['name'];
-    dict.scripts = ['scripts']; // experimental
+    dict.scripts = ['scripts'];
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
-    dict.blocks = ['blocks']; // experimental
+    dict.blocks = ['blocks'];
     dict['dangling?'] = ['dangling?'];
     dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
