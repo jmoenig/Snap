@@ -72,6 +72,7 @@
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything
 * gui: select motion category when switching to a scene that doesn't have the current custom category
+* objects: worked around an asynchronous rendering issue
 
 ### 2021-12-08
 * blocks: refactored syntax trees
