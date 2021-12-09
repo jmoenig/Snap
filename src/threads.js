@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-07';
+modules.threads = '2021-December-09';
 
 var ThreadManager;
 var Process;
@@ -5463,7 +5463,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
-                return expr.definition.body;
+                return expr.definition.body || new Context();
             }
             return this.blockReceiver().getMethod(expr.semanticSpec).body ||
                 new Context();

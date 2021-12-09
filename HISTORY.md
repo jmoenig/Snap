@@ -69,6 +69,9 @@
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
 
+### 2021-12-09
+* blocks, threads: never push untested last minute changes that might break everything
+
 ### 2021-12-08
 * blocks: refactored syntax trees
 * rc1

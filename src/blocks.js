@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-08';
+modules.blocks = '2021-December-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1279,28 +1279,61 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
 };
 
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
+    var deflt = this.revertToEmptyInput(arg),
+        inp = this.inputs().indexOf(deflt),
+        def;
+    if (noValues || inp < 0) {
+        return deflt;
+    }
+    if (this instanceof BlockMorph) {
+        if (this.isCustomBlock) {
+            def = this.isGlobal ? this.definition
+                    : this.scriptTarget().getMethod(this.blockSpec);
+            if (!noValues &&
+                (deflt instanceof InputSlotMorph ||
+                deflt instanceof BooleanSlotMorph)
+            ) {
+                deflt.setContents(
+                    def.defaultValueOfInputIdx(inp)
+                );
+            }
+        }
+    }
+    if (deflt instanceof MultiArgMorph && !inp) {
+        // first - and only - input is variadic
+        deflt.setContents(this.defaults);
+        deflt.defaults = this.defaults;
+    } else if (!isNil(this.defaults[inp])) {
+        deflt.setContents(this.defaults[inp]);
+        if (deflt instanceof MultiArgMorph) {
+            deflt.defaults = this.defaults[inp];
+        }
+    }
+    return deflt;
+};
+
+SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
     var idx = this.parts().indexOf(arg),
         inp = this.inputs().indexOf(arg),
         deflt = new InputSlotMorph(),
-        def;
+        rcvr, def;
 
     if (idx !== -1) {
         if (this instanceof BlockMorph) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
             if (this.isCustomBlock) {
-                def = this.isGlobal ? this.definition
-                        : this.scriptTarget().getMethod(this.blockSpec);
-                if (deflt instanceof InputSlotMorph) {
+                if (this.isGlobal) {
+                    def = this.definition;
+                } else {
+                    rcvr = this.scriptTarget(true);
+                    if (rcvr) {
+                        def = rcvr.getMethod(this.blockSpec);
+                    }
+                }
+                if (def && deflt instanceof InputSlotMorph) {
                     deflt.setChoices.apply(
                         deflt,
                         def.inputOptionsOfIdx(inp)
-                    );
-                }
-                if (deflt instanceof InputSlotMorph ||
-                    (deflt instanceof BooleanSlotMorph)
-                ) {
-                    deflt.setContents(
-                        def.defaultValueOfInputIdx(inp)
                     );
                 }
             }
@@ -1308,21 +1341,6 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             deflt = this.labelPart(this.slotSpec);
         } else if (this instanceof ReporterSlotMorph) {
             deflt = this.emptySlot();
-        }
-    }
-    // set default value
-    if (!noValues) {
-        if (inp !== -1) {
-            if (deflt instanceof MultiArgMorph && !inp) {
-                // first - and only - input is variadic
-                deflt.setContents(this.defaults);
-                deflt.defaults = this.defaults;
-            } else if (!isNil(this.defaults[inp])) {
-                deflt.setContents(this.defaults[inp]);
-                if (deflt instanceof MultiArgMorph) {
-                    deflt.defaults = this.defaults[inp];
-                }
-            }
         }
     }
     if (deflt.icon || deflt instanceof BooleanSlotMorph) {
@@ -2625,7 +2643,7 @@ BlockMorph.prototype.init = function () {
     this.cachedInputs = null;
 };
 
-BlockMorph.prototype.scriptTarget = function () {
+BlockMorph.prototype.scriptTarget = function (noError) {
     // answer the sprite or stage that this block acts on,
     // if the user clicks on it.
     // NOTE: since scripts can be shared by more than a single sprite
@@ -2650,6 +2668,7 @@ BlockMorph.prototype.scriptTarget = function () {
             return dlg.target.currentSprite;
         }
     }
+    if (noError) {return null; }
     throw new Error('script target cannot be found for orphaned block');
 };
 
@@ -3749,10 +3768,13 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
                 return;
             }
             parts.add(inp.components());
-            expr.revertToDefaultInput(inp, true);
+            expr.revertToEmptyInput(inp);
         } else if (inp.isEmptySlot()) {
             parts.add();
         } else if (inp instanceof MultiArgMorph) {
+            if (!inp.inputs().length) {
+                parts.add();
+            }
             inp.inputs().forEach((slot, i) => {
                 var entry;
                 if (slot instanceof BlockMorph) {
@@ -3768,15 +3790,18 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
                     parts.add(entry instanceof BlockMorph ?
                         entry.components() : entry);
                 }
-                inp.revertToDefaultInput(slot, true);
+                inp.revertToEmptyInput(slot);
             });
         } else if (inp instanceof ArgLabelMorph) {
             parts.add(inp.argMorph().components());
-            expr.revertToDefaultInput(inp, true).collapseAll();
+            expr.revertToEmptyInput(inp).collapseAll();
         } else {
             val = inp.evaluate();
+            if (inp instanceof ColorSlotMorph) {
+                val = val.toString();
+            }
             parts.add(val instanceof BlockMorph ? val.components() : val);
-            expr.revertToDefaultInput(inp, true);
+            expr.revertToEmptyInput(inp, true);
         }
     });
     parts.at(1).updateEmptySlots();
@@ -3804,14 +3829,14 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     // restore input slots
     slots.forEach(slt => {
         if (slt instanceof BlockMorph) {
-            dflt = cpy.revertToDefaultInput(slt);
+            dflt = cpy.revertToEmptyInput(slt);
             if (dflt instanceof MultiArgMorph) {
                 dflt.collapseAll();
             }
         } else if (slt instanceof MultiArgMorph) {
             slt.inputs().forEach(entry => {
                 if (entry instanceof BlockMorph) {
-                    slt.revertToDefaultInput(entry);
+                    slt.revertToEmptyInput(entry);
                 }
             });
         }
@@ -3858,6 +3883,8 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
             } else {
                 if (inp instanceof List && inp.length() === 0) {
                     nop(); // ignore, i.e. leave slot as is
+                } else if (slot instanceof ColorSlotMorph) {
+                    slot.setColor(Color.fromString(inp));
                 } else if (slot instanceof InputSlotMorph ||
                         slot instanceof TemplateSlotMorph ||
                         slot instanceof BooleanSlotMorph) {
