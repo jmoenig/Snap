@@ -11691,8 +11691,7 @@ HandMorph.prototype.processDrop = function (event) {
         src,
         target = this.morphAtPointer(),
         img = new Image(),
-        canvas,
-        i;
+        canvas;
 
     function readSVG(aFile) {
         var pic = new Image(),
@@ -11700,10 +11699,13 @@ HandMorph.prototype.processDrop = function (event) {
         while (!target.droppedSVG) {
             target = target.parent;
         }
-        pic.onload = () => target.droppedSVG(pic, aFile.name);
+        const promise = new Promise(
+            resolve => pic.onload = () => resolve(target.droppedSVG(pic, aFile.name))
+        );
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
+        return promise;
     }
 
     function readImage(aFile) {
@@ -11712,14 +11714,20 @@ HandMorph.prototype.processDrop = function (event) {
         while (!target.droppedImage) {
             target = target.parent;
         }
-        pic.onload = () => {
-            canvas = newCanvas(new Point(pic.width, pic.height), true);
-            canvas.getContext('2d').drawImage(pic, 0, 0);
-            target.droppedImage(canvas, aFile.name);
-        };
+
+        const promise = new Promise(resolve => {
+            pic.onload = () => {
+                canvas = newCanvas(new Point(pic.width, pic.height), true);
+                canvas.getContext('2d').drawImage(pic, 0, 0);
+                resolve(target.droppedImage(canvas, aFile.name));
+            };
+        });
+
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
+
+        return promise;
     }
 
     function readAudio(aFile) {
@@ -11728,6 +11736,7 @@ HandMorph.prototype.processDrop = function (event) {
         while (!target.droppedAudio) {
             target = target.parent;
         }
+
         frd.onloadend = (e) => {
             snd.src = e.target.result;
             target.droppedAudio(snd, aFile.name);
@@ -11789,31 +11798,37 @@ HandMorph.prototype.processDrop = function (event) {
         return null;
     }
 
-    if (files.length > 0) {
-        for (i = 0; i < files.length; i += 1) {
-            file = files[i];
-            suffix = file.name.slice(
-                file.name.lastIndexOf('.') + 1
-            ).toLowerCase();
-            if (file.type.indexOf("svg") !== -1
-                    && !MorphicPreferences.rasterizeSVGs) {
-                readSVG(file);
-            } else if (file.type.indexOf("image") === 0) {
-                readImage(file);
-            } else if (file.type.indexOf("audio") === 0 ||
-                    file.type.indexOf("ogg") > -1) {
-                    // check the file-extension because Firefox
-                    // thinks OGGs are videos
-                readAudio(file);
-            } else if ((file.type.indexOf("text") === 0) ||
-                    contains(['txt', 'csv', 'json'], suffix)) {
-                    // check the file-extension because Windows
-                    // doesn't specify CSVs to be text/csv, sigh
-                readText(file);
-            } else { // assume it's meant to be binary
-                readBinary(file);
-            }
+    function loadFile(file) {
+        const suffix = file.name.slice(
+            file.name.lastIndexOf('.') + 1
+        ).toLowerCase();
+
+        if (file.type.indexOf("svg") !== -1
+                && !MorphicPreferences.rasterizeSVGs) {
+            return readSVG(file);
+        } else if (file.type.indexOf("image") === 0) {
+            return readImage(file);
+        } else if (file.type.indexOf("audio") === 0 ||
+                file.type.indexOf("ogg") > -1) {
+                // check the file-extension because Firefox
+                // thinks OGGs are videos
+            return readAudio(file);
+        } else if ((file.type.indexOf("text") === 0) ||
+                contains(['txt', 'csv', 'json'], suffix)) {
+                // check the file-extension because Windows
+                // doesn't specify CSVs to be text/csv, sigh
+            return readText(file);
+        } else { // assume it's meant to be binary
+            return readBinary(file);
         }
+    }
+
+    if (files.length > 0) {
+        return Array.prototype.reduce.call(
+            files,
+            (promise, file) => promise.then(() => loadFile(file), () => loadFile(file)),
+            Promise.resolve()
+        );
     } else if (url) {
         suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase();
         if (
