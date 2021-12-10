@@ -42,7 +42,6 @@
         Context
         Variable
         VariableFrame
-        JSCompiler
 
     credits
     -------
@@ -71,7 +70,6 @@ var Process;
 var Context;
 var Variable;
 var VariableFrame;
-var JSCompiler;
 
 const NONNUMBERS = [true, false, ''];
 
@@ -1721,10 +1719,16 @@ Process.prototype.compile = function (codeBlockName, body, gen_cont) {
     }
 
     if (gen_code) {
-        var gen_output = gen_code.next();
-        console.log(gen_output);
-        
+        try {
+            var gen_output = gen_code.next();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
         if (!gen_output.done) {
+            // Not done, prepare for rerun of next section of code
+            //  after allowing GUI to refresh
             this.popContext();
             this.pushContext(block, outer);
             this.context.isCustomBlock = isCustomBlock;
@@ -1735,6 +1739,9 @@ Process.prototype.compile = function (codeBlockName, body, gen_cont) {
             this.pushContext('doYield');
             this.pushContext(); // Empty context, places doYield -> Compile
                                 //  next in line on popContext
+        } else {
+            // Done, return any value given
+            return gen_output.value;
         }
     }
 };
