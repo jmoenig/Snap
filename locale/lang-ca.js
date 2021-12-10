@@ -641,7 +641,7 @@ SnapTranslator.dict.ca = {
         'definició',
     'custom?':
         'personalitzat?',
-    'global':
+    'global?':
         'global?',
 
     // operators:

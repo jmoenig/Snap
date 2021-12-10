@@ -731,7 +731,7 @@ SnapTranslator.dict.de = {
         'Definition',
     'custom?':
         'benutzerdefiniert?',
-    'global':
+    'global?':
         'global?',
 
     // operators:
