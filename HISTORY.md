@@ -61,6 +61,7 @@
     * fixed some minor variable-renaming issues
     * fixed STOP OTHER SCRIPTS for use inside TELL
     * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
+    * fixed translation support for the libraries list, thanks, Joan!
 * **Documentation Updates:**
     * updated manual, thanks, Brian!
     * updated readme, thanks, Michael!
@@ -71,6 +72,7 @@
 
 ### 2021-12-10
 * Catalan and German translation updates, thanks, Joan!
+* translation support for the libraries list, thanks, Joan!
 
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything

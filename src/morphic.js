@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-July-09';
+var morphicVersion = '2021-December-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -10764,7 +10764,14 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format, onDoubleClick, separator, verbatim) {
+function ListMorph(
+    elements,
+    labelGetter,
+    format,
+    onDoubleClick,
+    separator,
+    verbatim
+) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -10826,7 +10833,7 @@ ListMorph.prototype.init = function (
     this.action = null;
     this.doubleClickAction = onDoubleClick || null;
     this.separator = separator || '';
-    this.verbatim = typeof verbatim === 'undefined' ? true : verbatim;
+    this.verbatim = isNil(verbatim) ? true : verbatim;
     this.acceptsDrops = false;
     this.buildListContents();
 };
