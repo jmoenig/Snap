@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2021-03-14', // this, too, will appear in the Translators tab
+        '2021-12-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -465,6 +465,8 @@ SnapTranslator.dict.ca = {
         'Quan la %greenflag es premi',
     'when %keyHat key pressed %keyName':
         'Quan la tecla %keyHat es premi %keyName',
+    'key':
+        'tecla',
     'when I am %interaction':
         'Quan %interaction aquest personatge',
     'clicked':
@@ -553,6 +555,14 @@ SnapTranslator.dict.ca = {
         'mi mateix',
     'delete this clone':
         'esborra aquest clon',
+    'switch to scene %scn %send':
+        'canvia a l\'escena %scn %send',
+    'and send':
+        'i envia',
+    'next':
+        'següent',
+    'previous':
+        'prèvia',
     'tell %spr to %cmdRing %inputs':
         'digues a %spr que faci %cmdRing %inputs',
     'ask %spr for %repRing %inputs':
@@ -625,6 +635,14 @@ SnapTranslator.dict.ca = {
         'objecte %self',
     'r-g-b-a':
         'color RGBA',
+    '%block of block %repRing':
+        '%block del bloc %repRing',
+    'definition':
+        'definició',
+    'custom?':
+        'personalitzat?',
+    'global?':
+        'global?',
 
     // operators:
     '%n mod %n':
@@ -838,6 +856,18 @@ SnapTranslator.dict.ca = {
         'no hi ha cap bloc\npersonalitzat no utilitzat\nen aquest projecte',
     'unused block(s) removed':
         'bloc(s) personalitzats no utilitzats esborrats',
+    'Hide blocks...':
+        'Amaga blocs...',
+    'New category...':
+        'Nova categoria...',
+    'Remove a category...':
+        'Esborra una categoria...',
+    'Scenes...':
+        'Escenes...',
+    'New scene':
+        'Nova escena',
+    'Add scene...':
+        'Afegeix una escena...',
     'Export summary...':
         'Exporta el resum...',
     'save a summary\nof this project':
@@ -927,14 +957,6 @@ SnapTranslator.dict.ca = {
         'marqueu per a mostrar sempre\nel diàleg de selecció de tipus\nen afegir paràmetres als blocs\npersonalitzats',
     'uncheck to use the input\ndialog in short form':
         'desmarqueu per a no mostrar\nautomàticament el diàleg de selecció\nde tipus en afegir paràmetres\nals blocs personalitzats',
-    'Virtual keyboard':
-        'Teclat virtual',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'desmarqueu per inhabilitar\nel suport per al teclat virtual\nen dispositius mòbils',
-
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marqueu per habilitar\nel suport per al teclat virtual\nen dispositius mòbils',
-
     'Input sliders':
         'Lliscadors d\'entrada',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -977,12 +999,6 @@ SnapTranslator.dict.ca = {
         'desmarqueu per permetre\nla re-entrada als programes',
     'check to disallow\nscript reentrance':
         'marqueu per no permetre\nla re-entrada als programes',
-    'Prefer smooth animations':
-        'Suavitza les animacions',
-    'uncheck for greater speed\nat variable frame rates':
-        'desmarqueu per augmentar la velocitat de\nles animacions fins la màxima capacitat d\'aquesta màquina',
-    'check for smooth, predictable\nanimations across computers':
-        'marqueu per aconseguir unes animacions\nmés suaus i a velocitat previsible en màquines diferents',
     'Flat line ends':
         'Puntes de llapis planes',
     'check for flat ends of lines':
@@ -1013,10 +1029,28 @@ SnapTranslator.dict.ca = {
     // palette:
     'find blocks':
         'Cerca blocs',
-    'hide primitives':
-        'amaga els blocs primitius',
-    'show primitives':
-        'mostra els blocs primitius',
+    'hide blocks...':
+        'amaga blocs...',
+    'Hide blocks in palette':
+        'Amaga blocs de la paleta',
+    'unused':
+        'no utilitzats',
+    'make a category...':
+        'crea una categoria...',
+    'New Category':
+        'Nova Categoria',
+    'Blocks category name:':
+        'Nom de la categoria de blocs:',
+    'Category color':
+        'Color de la categoria',
+    'red':
+        'vermell',
+    'green':
+        'verd',
+    'blue':
+        'blau',
+    'delete a category...':
+        'esborra una categoria...',
 
     // blocks:
     'help...':
@@ -1057,6 +1091,8 @@ SnapTranslator.dict.ca = {
         'activeu l\'opció per evitar que els continguts\nes desin',
     'new line':
         'nova línia',
+    'open a new window\nwith a picture of this script':
+        'obre una nova finestra\namb la imatge del programa',
 
     // custom blocks:
     'delete block definition...':
@@ -1467,6 +1503,8 @@ SnapTranslator.dict.ca = {
         'saturació',
     'brightness':
         'brillantor',
+    'lightness':
+        'lluminositat',
     'ghost':
         'fantasma',
     'negative':
@@ -1479,6 +1517,8 @@ SnapTranslator.dict.ca = {
     // keys
     'space':
         'espai',
+    'enter':
+        'retorn',
     'any key':
         'qualsevol tecla',
     'up arrow':
@@ -1877,6 +1917,36 @@ SnapTranslator.dict.ca = {
         'Suport pel mapeig de codi',
     'check for block\nto text mapping features':
         'marqueu per habilitar les funcionalitats\nde mapeig de blocs en codi',
+    'Single palette':
+        'Paleta única',
+    'check to show all blocks in a single palette':
+        'marqueu per mostrar tots els blocs\nen una paleta única',
+    'uncheck to show only the selected category\'s blocks':
+        'demarqueu per mostrar només el blocs\nde la categoria seleccionada',
+    'Show categories':
+        'Mostra les categories',
+    'uncheck to hide\ncategory names\nin the palette':
+        'desmarqueu per amagar\nel nom de les categories\na la paleta',
+    'check to show\ncategory names\nin the palette':
+        'marqueu per mostrar\nel nom de les categories\na la paleta',
+    'Show buttons':
+        'Mostra els botons',
+    'uncheck to hide buttons\nin the palette':
+        'desmarqeu per amagar els botons\na la paleta',
+    'check to show buttons\nin the palette':
+        'marqueu per mostrar els botons\na la paleta',
+    'HSL pen color model':
+        'Model de color HSL',
+     'uncheck to switch pen colors\nand graphic effects to HSV':
+        'desmarqueu per canviar el model de color del llapis\ni dels efectes gràfics a HSV',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'marqueu per canviar el model de color del llapis\ni dels efectes gràfics a HSL',
+    'Disable click-to-run':
+        'Deshabilita l\'execució directa',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'desmarqueu per habilitar\nl\'execució directa dels blocs\nen clicar-los',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'marqueu per a deshabilitar\nl\'execució directa dels blocs\nen clicar-los',
     'saved.':
         'desat.',
     'options...':
@@ -2512,13 +2582,21 @@ SnapTranslator.dict.ca = {
 	'animation demo':
 		'exemple d\'animació',
 
-//future JS options
+//JS options
+    'JavaScript extensions':
+        'Extensions de Javascript',
 	'uncheck to disable support for\nnative JavaScript functions':
 		'desmarqueu per deshabilitar\nl\'execució de Javascript',
 	'check to support\nnative JavaScript functions':
 		'marqueu per habilitar\nl\'execució de Javascript',
-	'JavaScript is not enabled':
-		'l\'execució de Javascript està deshabilitada',
+	'JavaScript extensions for Snap!\nare turned off':
+		'Les extensions de JavaScript estan deshabilitades',
+    'Extension blocks':
+        'Blocs per Extensions',
+    'uncheck to hide extension\nprimitives in the palette':
+        'desmarqueu per amagar els blocs de primitives\nper a les extensions de la paleta',
+    'check to show extension\nprimitives in the palette':
+        'marqueu per mostrar els blocs de primitives\nper a les exensions a la paleta',
 
 //Libraries
 	'Loading':
@@ -2747,6 +2825,12 @@ SnapTranslator.dict.ca = {
 //
     'translations...':
          'traduccions...',
+    'in palette':
+        'a la paleta',
+    'check to\nshow in palette':
+        'marqueu per mostrar-lo\na la paleta de blocs',
+    'uncheck to\nhide in palette':
+        'desmarqueu per ocultar-lo\na la paleta de blocs',
     'width':
         'amplada',
     'height':
