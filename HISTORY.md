@@ -74,11 +74,14 @@
 * Catalan and German translation updates, thanks, Joan!
 * translation support for the libraries list, thanks, Joan!
 * objects: fixed categories cache invalidation for duplicated sprites
+* rc4
 
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything
 * gui: select motion category when switching to a scene that doesn't have the current custom category
+* rc2
 * objects: worked around an asynchronous rendering issue
+* rc3
 
 ### 2021-12-08
 * blocks: refactored syntax trees
