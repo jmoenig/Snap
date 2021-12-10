@@ -62,12 +62,15 @@
     * fixed STOP OTHER SCRIPTS for use inside TELL
     * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
 * **Documentation Updates:**
-    * updated manual, thanks Brian!
+    * updated manual, thanks, Brian!
     * updated readme, thanks, Michael!
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+
+### 2021-12-10
+* Catalan and German translation updates, thanks, Joan!
 
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything
