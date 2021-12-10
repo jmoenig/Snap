@@ -1,3 +1,49 @@
+/*
+
+    compiler.js
+
+    written by Jens Mönig and Oscar Chan
+    jens@moenig.org
+    ochan2@berkeley.edu
+
+    Copyright (C) 2021 by Jens Mönig
+
+    This file is part of Snap!.
+
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+    prerequisites:
+    --------------
+    needs blocks.js, objects.js, and threads.js
+
+
+    toc
+    ---
+    the following list shows the order in which all constructors are
+    defined. Use this list to locate code in this document:
+
+        JSCompiler
+
+    credits
+    -------
+    John Maloney and Dave Feinberg designed the original Scratch evaluator
+    Ivan Motyashov contributed initial porting from Squeak
+    Oscar Chan for development of the Snap! to JavaScript compiler
+
+*/
+
 // JSCompiler /////////////////////////////////////////////////////////////////
 
 /*
@@ -6,6 +52,8 @@
     implicit formal parameters mapped to empty input slots
 	*** highly experimental and heavily under construction ***
 */
+
+var JSCompiler;
 
 function JSCompiler(aProcess) {
 	this.process = aProcess;
@@ -116,13 +164,13 @@ JSCompiler.prototype.compileExpression = function (block) {
 
     // special command forms
     case 'doSetVar': // redirect var to process
-        return 'local_process.setVarNamed(' +
+        return 'current_process.setVarNamed(' +
             this.compileInput(inputs[0]) +
             ',' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doChangeVar': // redirect var to process
-        return 'local_process.incrementVarNamed(' +
+        return 'current_process.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
             ',' +
             this.compileInput(inputs[1]) +
@@ -170,7 +218,28 @@ JSCompiler.prototype.compileExpression = function (block) {
                     "yield;\n" +
                 "}";
     case 'doFor':
-        throw "For loops unsupported";
+        var upvar, start, end, pre_body;
+        [upvar, start, end, pre_body] = inputs;
+        upvar = upvar.inputs()[0].blockSpec;
+        start = this.compileInput(start);
+        end = this.compileInput(end);
+        var body = pre_body.inputs()[0];
+        var step = start < end ? 1 : -1
+        var test_sign = +start < +end ? "<=" : ">=";
+
+        var for_body = "";
+        if (body) {
+            for_body = "\n" + this.compileSequence(body);
+        }
+        // vars.changeVar(upvar, dta.step);
+        var proc_vars = "current_process.context.variables"
+        return `${proc_vars}.addVar("${upvar}");
+for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar("${upvar}") ${test_sign} ${end}; ${proc_vars}.changeVar("${upvar}", ${step})) {
+    current_process.pushContext(null, current_process.context);
+    ${for_body}
+    yield;
+    current_process.popContext();
+}`;
     default:
         target = null;
         if (this.process[selector]) {
@@ -188,16 +257,15 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (isSnapObject(target)) {
             return rcvr + '.' + selector + '.apply('+ rcvr_var_name + ', [' + args +'])';
         } else {
-            return 'arguments[arguments.length - 1].' +
-                selector +
-                '.apply(arguments[arguments.length - 1], [' + args +'])';
+            return 'current_process.' + selector +
+                '.apply(current_process, [' + args +'])';
         }
     }
 };
 
 JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
     var body = this.compileSequence(commandBlock);
-    return "function* (SpriteMorph_prototype, local_process) {\n" + body + "}\n";
+    return "function* (SpriteMorph_prototype, current_process) {\n" + body + "}\n";
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
@@ -277,7 +345,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             	return this.gensyms[inp.blockSpec];
         	}
          	// redirect var query to process
-            return 'arguments[arguments.length - 1].getVarNamed("' +
+            return 'current_process.getVarNamed("' +
             	inp.blockSpec +
             	'")';
         }
