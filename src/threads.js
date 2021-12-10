@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-09';
+modules.threads = '2021-December-10';
 
 var ThreadManager;
 var Process;
@@ -3699,6 +3699,11 @@ Process.prototype.doBroadcast = function (message, receivers) {
         procs = [];
     if (!this.canBroadcast) {
         return [];
+    }
+
+    // remove all clones when the green flag event is broadcast to all
+    if (msg === '__shout__go__' && target === 'all') {
+        stage.removeAllClones();
     }
 
     // determine the receivers

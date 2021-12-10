@@ -25,7 +25,7 @@
     * new Signada hardware library, thanks, Citilab Barcelona!
 * **Notable Changes:**
     * saved projects remember the last edited sprite
-    * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
+    * libraries no longer rely on the JSF primitive, projects may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
     * hidden blocks don't appear in search results / keyboard input options
     * codification and js-func blocks don't appear in search results unless enabled
@@ -38,7 +38,7 @@
     * retired Leap Motion library
     * display blocks with their error messages for custom blocks, thanks, Michael!
     * made scrollbars thinner by default and slightly transparent in flat design mode
-    * blocked xhr requests to from Snap! to s.b.e
+    * blocked xhr requests from Snap! to s.b.e
     * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
     * updated the Snap! API and documentation with methods to navigate among scenes and control processes
     * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
@@ -69,12 +69,15 @@
     * German
     * Chinese, thanks, Simon!
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+    * Catalan, thanks, Joan!
 
 ### 2021-12-10
 * Catalan and German translation updates, thanks, Joan!
 * translation support for the libraries list, thanks, Joan!
 * objects: fixed categories cache invalidation for duplicated sprites
 * rc4
+* threads: remove all clones when the green flag is broadcast to all
+* rc5
 
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything
