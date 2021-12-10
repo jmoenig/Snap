@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-09';
+modules.objects = '2021-December-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -1942,7 +1942,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.freqPlayer = null;
     c.primitivesCache = {};
     c.paletteCache = {};
-    c.categoriesCache = {};
+    c.categoriesCache = null;
     c.imageData = {};
     c.cachedColorDimensions = c.color[this.penColorModel]();
     arr = [];

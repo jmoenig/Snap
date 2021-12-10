@@ -73,6 +73,7 @@
 ### 2021-12-10
 * Catalan and German translation updates, thanks, Joan!
 * translation support for the libraries list, thanks, Joan!
+* objects: fixed categories cache invalidation for duplicated sprites
 
 ### 2021-12-09
 * blocks, threads: never push untested last minute changes that might break everything
