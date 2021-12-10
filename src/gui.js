@@ -8970,7 +8970,8 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         element => element.name,
         null,
         () => this.importLibrary(),
-        '~' // separator
+        '~', // separator
+        false // verbatim
     );
 
     this.fixListFieldItemColors();
