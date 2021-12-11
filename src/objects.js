@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-December-10';
+modules.objects = '2021-December-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -8660,6 +8660,11 @@ StageMorph.prototype.inspectKeyEvent
 
 StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
     var procs = [];
+
+    // remove all clones when the green flag event is broadcast
+    if (message === '__shout__go__') {
+        this.removeAllClones();
+    }
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {

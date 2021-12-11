@@ -71,6 +71,10 @@
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
     * Catalan, thanks, Joan!
 
+### 2021-12-11
+* objects: remove all clones when the green flag is sent to a scene
+* rc6
+
 ### 2021-12-10
 * Catalan and German translation updates, thanks, Joan!
 * translation support for the libraries list, thanks, Joan!
