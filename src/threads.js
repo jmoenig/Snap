@@ -4421,7 +4421,7 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         del = /\s+/;
         break;
     case 'letter':
-        return Array.from(str);
+        return new List(Array.from(str));
     case 'csv':
         return this.parseCSV(string);
     case 'json':
