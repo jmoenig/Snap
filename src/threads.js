@@ -4352,7 +4352,7 @@ Process.prototype.reportUnicode = function (string) {
         }
         str = isNil(string) ? '\u0000' : string.toString();
         if (str.length > 1) {
-            return this.reportUnicode(new List(str.split('')));
+            return this.reportUnicode(new List(Array.from(str)));
         }
     } else {
         str = isNil(string) ? '\u0000' : string.toString();
@@ -4421,8 +4421,7 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         del = /\s+/;
         break;
     case 'letter':
-        del = '';
-        break;
+        return Array.from(str);
     case 'csv':
         return this.parseCSV(string);
     case 'json':
