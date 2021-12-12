@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-10';
+modules.threads = '2021-December-12';
 
 var ThreadManager;
 var Process;
@@ -7145,6 +7145,10 @@ Context.prototype.equalTo = function (other) {
     var c1 = this.components(),
         c2 = other.components();
     if (snapEquals(c1.cdr(), c2.cdr())) {
+        if (this.expression && this.expression.length === 1 &&
+                other.expression && other.expression.length === 1) {
+            return snapEquals(this.expression[0], other.expression[0]);
+        }
         return snapEquals(this.expression, other.expression);
     }
     return false;
