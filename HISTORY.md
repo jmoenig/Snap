@@ -1,6 +1,6 @@
 # Snap! (BYOB) History
 
-## in development for v7:
+## 7.0.0:
 * **New Features:**
     * scenes
     * extensions
@@ -74,6 +74,7 @@
 ### 2021-12-13
 * objects: tweaked asynchronous costume loading/rendering issue
 * rc7
+* v7 release
 
 ### 2021-12-12
 * threads: fixed #2932
