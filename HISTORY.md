@@ -71,6 +71,9 @@
     * Brazilian Portuguese, thank you, Cassiano D'Andrea!
     * Catalan, thanks, Joan!
 
+### 2021-12-13
+* objects: tweaked asynchronous costume loading/rendering issue
+
 ### 2021-12-12
 * threads: fixed #2932
 

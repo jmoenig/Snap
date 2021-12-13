@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-December-11';
+modules.objects = '2021-December-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -8076,10 +8076,7 @@ StageMorph.prototype.render = function (ctx) {
     ctx.save();
     ctx.fillStyle = this.color.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
-    if (this.costume &&
-        this.costume.contents.width &&
-        this.costume.contents.height
-    ) {
+    if (this.costume && !(this.costume.loaded instanceof Function)) {
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
             this.costume.contents,
@@ -8087,9 +8084,6 @@ StageMorph.prototype.render = function (ctx) {
             (this.height() / this.scale - this.costume.height()) / 2
         );
         this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
-    } else { // deal with async asset creation
-        this.costume = null;
-        this.cachedImage = null;
     }
     ctx.restore();
     this.version = Date.now(); // for observer optimization
