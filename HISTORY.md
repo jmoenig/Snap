@@ -73,6 +73,7 @@
 
 ### 2021-12-13
 * objects: tweaked asynchronous costume loading/rendering issue
+* rc7
 
 ### 2021-12-12
 * threads: fixed #2932
