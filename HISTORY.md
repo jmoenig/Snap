@@ -4,13 +4,15 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
-    * keep the order of sprites in the corral for newly created projects
+    * keep the order of sprites in the corral when saving newly created projects
+    * allow parens in project names
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-14
 * new dev version
-* store: keep the order of sprites in the corral for newly created projects
+* store: keep the order of sprites in the corral when saving newly created projects
+* gui: allow parens in project names
 
 ## 7.0.0:
 * **New Features:**

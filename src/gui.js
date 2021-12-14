@@ -3506,6 +3506,9 @@ IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
     return this.newName(sName, all);
 };
 
+
+/* // nicer version, commented out because some teachers
+   // require parens in project names. Sigh.
 IDE_Morph.prototype.newName = function (name, elements) {
     var ix = name.indexOf('('),
         stem = (ix < 0) ? name : name.substring(0, ix),
@@ -3515,6 +3518,18 @@ IDE_Morph.prototype.newName = function (name, elements) {
     while (contains(elements, newName)) {
         count += 1;
         newName = stem + '(' + count + ')';
+    }
+    return newName;
+};
+*/
+
+IDE_Morph.prototype.newName = function (name, elements) {
+    var count = 1,
+        newName = name;
+
+    while (contains(elements, newName)) {
+        count += 1;
+        newName = name + '(' + count + ')';
     }
     return newName;
 };
