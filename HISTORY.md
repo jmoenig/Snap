@@ -4,11 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * keep the order of sprites in the corral for newly created projects
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-14
 * new dev version
+* store: keep the order of sprites in the corral for newly created projects
 
 ## 7.0.0:
 * **New Features:**

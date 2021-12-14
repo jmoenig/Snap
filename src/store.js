@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-December-07';
+modules.store = '2021-December-14';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1737,6 +1737,8 @@ Scene.prototype.toXML = function (serializer) {
         );
         return str;
     }
+
+    serializer.scene = this; // keep the order of sprites in the corral
 
     xml = serializer.format(
         '<scene name="@"%%%%%>' +
