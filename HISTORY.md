@@ -1,13 +1,18 @@
 # Snap! (BYOB) History
 
-## in development:
+## in development for 7.0.1:
+
 * **New Features:**
 * **Notable Changes:**
+    * better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
 * **Notable Fixes:**
     * keep the order of sprites in the corral when saving newly created projects
-    * allow parens in project names
+    * allow parens in project names (again)
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2021-12-14
+* threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
 
 ### 2021-12-14
 * new dev version

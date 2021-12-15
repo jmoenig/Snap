@@ -65,7 +65,7 @@ ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2021-July-19';
+modules.lists = '2021-December-15';
 
 var List;
 var ListWatcherMorph;

@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-12';
+modules.threads = '2021-December-15';
 
 var ThreadManager;
 var Process;
