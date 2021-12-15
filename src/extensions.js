@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-November-22';
+modules.extensions = '2021-December-15';
 
 // Global stuff
 
@@ -41,9 +41,10 @@ var SnapExtensions = {
     primitives: new Map(),
     menus: new Map(),
     scripts: [],
-    urls: [
+    urls: [ // allow-list of trusted servers
         'libraries/',
-        'https://snap.berkeley.edu/'
+        'https://snap.berkeley.edu/',
+        'https://ecraft2learn.github.io/ai/' // Uni-Oxford, Ken Kahn
     ]
 };
 

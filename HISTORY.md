@@ -5,6 +5,7 @@
 * **New Features:**
 * **Notable Changes:**
     * better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
+    * added support for Uni Oxford (Ken Kahn's) ecraft2learn extension 
 * **Notable Fixes:**
     * keep the order of sprites in the corral when saving newly created projects
     * allow parens in project names (again)
@@ -13,6 +14,7 @@
 
 ### 2021-12-14
 * threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
+* extensions: added support for Uni Oxford (Ken Kahn's) ecraft2learn extension 
 
 ### 2021-12-14
 * new dev version
