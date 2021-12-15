@@ -4421,7 +4421,6 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         str = str.trim();
         del = /\s+/;
         break;
-    case isNil(delimiter):
     case '':
     case 'letter':
         return new List(Array.from(str));
