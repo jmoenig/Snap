@@ -110,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-November-23';
+modules.byob = '2021-December-16';
 
 // Declarations
 
@@ -4291,7 +4291,10 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '</blocks>';
         ide.saveXMLAs(
             str,
-            (ide.projectName || localize('untitled')) + ' ' + localize('blocks')
+            (ide.getProjectName() || localize('untitled')) +
+                ' ' +
+                localize('blocks'
+            )
         );
     } else {
         new DialogBoxMorph().inform(
