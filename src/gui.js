@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-December-14';
+modules.gui = '2021-December-16';
 
 // Declarations
 
@@ -3505,23 +3505,6 @@ IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
         ).map(each => each.name);
     return this.newName(sName, all);
 };
-
-
-/* // nicer version, commented out because some teachers
-   // require parens in project names. Sigh.
-IDE_Morph.prototype.newName = function (name, elements) {
-    var ix = name.indexOf('('),
-        stem = (ix < 0) ? name : name.substring(0, ix),
-        count = 1,
-        newName = stem;
-
-    while (contains(elements, newName)) {
-        count += 1;
-        newName = stem + '(' + count + ')';
-    }
-    return newName;
-};
-*/
 
 IDE_Morph.prototype.newName = function (name, elements) {
     var count = 1,

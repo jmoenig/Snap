@@ -13,6 +13,9 @@
 * **Translation Updates:**
 
 ### 2021-12-14
+* gui: removed some commented out code
+
+### 2021-12-14
 * threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
 * extensions: added support for Uni Oxford (Ken Kahn's) ecraft2learn extension 
 
