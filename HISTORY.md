@@ -9,11 +9,13 @@
 * **Notable Fixes:**
     * keep the order of sprites in the corral when saving newly created projects
     * allow parens in project names (again)
+    * dropping a library or sprite file into presentation mode switches back to edit mode
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-14
 * gui: removed some commented out code
+* gui: fixed #2941
 
 ### 2021-12-14
 * threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!

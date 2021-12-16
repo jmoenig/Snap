@@ -5682,9 +5682,11 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
+IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) { // +++
     // name is optional (string), so is silently (bool)
     var blocks;
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             blocks = this.serializer.loadBlocks(str, this.stage);
@@ -5728,6 +5730,8 @@ IDE_Morph.prototype.openSpritesString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenSpritesString = function (str) {
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.loadSprites(str, this);
