@@ -1,25 +1,32 @@
 # Snap! (BYOB) History
 
-## in development for 7.0.1:
+## in development:
 
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 7.0.1:
 * **Notable Changes:**
     * better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
     * added support for Uni Oxford (Ken Kahn's) ecraft2learn extension 
 * **Notable Fixes:**
     * keep the order of sprites in the corral when saving newly created projects
-    * allow parens in project names (again)
+    * allow parentheses in project names (again)
     * dropping a library or sprite file into presentation mode switches back to edit mode
     * exporting blocks uses the project name as file name, followed by "blocks"
-* **Documentation Updates:**
-* **Translation Updates:**
 
-### 2021-12-14
+### 2021-12-17
+* prepared patch
+
+### 2021-12-16
 * gui: removed some commented out code
 * gui: fixed #2941
 * byob: fixed #2945
 
-### 2021-12-14
+### 2021-12-15
 * threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
 * extensions: added support for Uni Oxford (Ken Kahn's) ecraft2learn extension 
 
