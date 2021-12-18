@@ -5,11 +5,14 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * setting a clone's rotation coordinates shadows its inherited costumes
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-18
 * new dev version
+* objects: shadow (a clone's) costumes when setting its rotation coordinates 
+
 
 ## 7.0.1:
 * **Notable Changes:**
