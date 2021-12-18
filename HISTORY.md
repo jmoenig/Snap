@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2021-12-18
+* new dev version
+
 ## 7.0.1:
 * **Notable Changes:**
     * better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
