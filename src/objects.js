@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-December-18';
+modules.objects = '2021-December-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -172,7 +172,9 @@ SpriteMorph.prototype.allCategories = function () {
 };
 
 SpriteMorph.prototype.blockColorFor = function (category) {
-    return this.blockColor[category] || this.customCategories.get(category);
+    return this.blockColor[category] ||
+        this.customCategories.get(category) ||
+        this.blockColor.other;
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);

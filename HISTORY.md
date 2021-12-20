@@ -7,11 +7,13 @@
 * **Notable Fixes:**
     * setting a clone's rotation coordinates shadows its inherited costumes
     * preserve embedded inputs when JOINing a nested expression with an empty list
+    * improved loading custom block categories
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-20
 * blocks, threads: preserve embedded inputs when JOINing a nested expression with an empty list
+* objects: improved loading custom block categories
 
 ### 2021-12-18
 * new dev version
