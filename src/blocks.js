@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-09';
+modules.blocks = '2021-December-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3825,6 +3825,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         ),
         count = 0,
         dflt;
+
+    if (dta.length === 0) {
+        return cpy.reify();
+    }
 
     // restore input slots
     slots.forEach(slt => {

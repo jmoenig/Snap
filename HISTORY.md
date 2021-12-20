@@ -6,8 +6,12 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * setting a clone's rotation coordinates shadows its inherited costumes
+    * preserve embedded inputs when JOINing a nested expression with an empty list
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2021-12-20
+* blocks, threads: preserve embedded inputs when JOINing a nested expression with an empty list
 
 ### 2021-12-18
 * new dev version
