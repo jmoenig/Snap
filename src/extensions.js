@@ -199,6 +199,12 @@ var SnapExtensions = {
 // Primitives
 
 // errors & exceptions (err_):
+SnapExtensions.primitives.set(
+    'alert(thingalert)',
+    function (thingalert) {
+        alert(thingalert);
+    }
+);
 
 SnapExtensions.primitives.set(
     'err_error(msg)',
