@@ -8,6 +8,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2021-12-22
+
+* new dev version 
+
 ## 7.0.2:
 * **Notable Fixes:**
     * setting a clone's rotation coordinates shadows its inherited costumes
