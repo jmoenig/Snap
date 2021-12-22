@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-20';
+modules.threads = '2021-December-22';
 
 var ThreadManager;
 var Process;
@@ -7145,7 +7145,7 @@ Context.prototype.components = function () {
 Context.prototype.equalTo = function (other) {
     var c1 = this.components(),
         c2 = other.components();
-    if (snapEquals(c1.cdr(), c2.cdr())) {
+    if (this.emptyOrEqual(c1.cdr(), c2.cdr())) {
         if (this.expression && this.expression.length === 1 &&
                 other.expression && other.expression.length === 1) {
             return snapEquals(this.expression[0], other.expression[0]);
@@ -7153,6 +7153,15 @@ Context.prototype.equalTo = function (other) {
         return snapEquals(this.expression, other.expression);
     }
     return false;
+};
+
+Context.prototype.emptyOrEqual = function (list1, list2) {
+    // private - return TRUE if both lists are either equal
+    // or only contain empty items
+    return list1.equalTo(list2) || (
+        list1.itemsArray().every(item => !item) &&
+        list2.itemsArray().every(item => !item)
+    );
 };
 
 Context.prototype.copyWithInputs = function (inputs) {

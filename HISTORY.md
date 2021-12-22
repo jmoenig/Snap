@@ -4,13 +4,15 @@
 
 * **New Features:**
 * **Notable Changes:**
+    * same blocks with empty variadic inputs compare as equal regardless of their arity
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2021-12-22
-
-* new dev version 
+* new dev version
+* threads: same blocks with empty variadic inputs compare as equal regardless of their arity 
+ 
 
 ## 7.0.2:
 * **Notable Fixes:**
