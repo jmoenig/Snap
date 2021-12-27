@@ -6,7 +6,7 @@
 
 	written by Jens MÃ¶nig
 
-        Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
 	This file is part of Snap!.
 
@@ -522,14 +522,14 @@ SnapTranslator.dict.it = {
         'fermo',
     'when %b':
         'quando %b',
-    'when I receive %msgHat':
-        'quando ricevo %msgHat',
-    'broadcast %msg':
-        'invia %msg',
-    'broadcast %msg and wait':
-        'invia %msg e attendi',
-    'send %msg to %spr':
-        'invia %msg a %spr',
+    'when I receive %msgHat %message':
+        'quando ricevo %msgHat %message',
+    'broadcast %msg %receive':
+        'invia %msg %receive',
+    'broadcast %msg %receive and wait':
+        'invia %msg %receive e attendi',
+    'to':
+        'a',
     'Message name':
         'Nome messaggio',
     'message':
